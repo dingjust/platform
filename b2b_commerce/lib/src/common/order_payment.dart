@@ -32,6 +32,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       print('========Fluwx response');
       if (data.errCode == 0) {
         Future.delayed(const Duration(seconds: 1), () {
+          print('has wechat');
           afterPaid();
         });
       } else if (data.errCode == -1) {
@@ -406,26 +407,27 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     //先查询订单支付状态
     String orderPaymentStatus = await checkOrder(paymentWay);
 
-    switch (orderPaymentStatus) {
-      //未支付
-      case 'ORDER_PAY_NOT':
-        mappingPayWay();
-        break;
-      case 'ORDER_PAY_SUCCESS':
-        onPaymentSucess();
-        break;
-      case 'ORDER_PAY_FAIL':
-        onPaymentError();
-        break;
-      case 'ORDER_PAYING':
-        //TODO :
-        onPaymentPaying();
-        break;
-      case 'ORDER_INTERFACE_FAIL':
-        onPaymentError();
-        break;
-      default:
-        mappingPayWay();
+    PaymentStatus paymentStatus = PaymentStatusMap[orderPaymentStatus];
+
+    if (paymentStatus == PaymentStatus.ORDER_PAY_NOT) {
+      print('1');
+      mappingPayWay();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_SUCCESS) {
+      print('2');
+      onPaymentSucess();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
+      print('3');
+      onPaymentError();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
+      //TODO :
+      print('4');
+      onPaymentPaying();
+    } else if (paymentStatus == PaymentStatus.ORDER_INTERFACE_FAIL) {
+      print('5');
+      onPaymentError();
+    } else {
+      print('6');
+      mappingPayWay();
     }
   }
 
@@ -536,6 +538,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPaymentSucess() {
+    print('${widget.order.code}');
+
     Navigator.of(context).pop();
     //成功
     showDialog<void>(
@@ -550,14 +554,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               onPressed: () async {
                 ///打样订单
                 if (widget.order is ProofingModel) {
-                  //查询明细
-                  ProofingModel detailModel = await ProofingOrderRepository()
-                      .proofingDetail(widget.order.code);
-
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => ProofingOrderDetailPage(
-                                model: detailModel,
+                                widget.order.code,
                               )),
                       ModalRoute.withName('/'));
 
@@ -636,25 +636,28 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   //支付后确认订单操作，延时1秒
   void afterPaid() async {
     String orderPaymentStatus = await checkOrder(paymentWay);
-    switch (orderPaymentStatus) {
-      case 'ORDER_PAY_NOT':
-        onPaymentPaying();
-        break;
-      case 'ORDER_PAY_SUCCESS':
-        onPaymentSucess();
-        break;
-      case 'ORDER_PAY_FAIL':
-        onPaymentError();
-        break;
-      case 'ORDER_PAYING':
-        //TODO :
-        onPaymentPaying();
-        break;
-      case 'ORDER_INTERFACE_FAIL':
-        onPaymentError();
-        break;
-      default:
-        onPaymentError();
+
+    print('after ${orderPaymentStatus}');
+
+    PaymentStatus paymentStatus = PaymentStatusMap[orderPaymentStatus];
+
+    print('after ${paymentStatus}');
+
+    if (paymentStatus == PaymentStatus.ORDER_PAY_NOT) {
+      print('after 1');
+      onPaymentPaying();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_SUCCESS) {
+      print('after 2');
+      onPaymentSucess();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
+      print('after 3');
+      onPaymentError();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
+      print('after 4');
+      onPaymentPaying();
+    } else {
+      print('after 5');
+      onPaymentError();
     }
   }
 }

@@ -9,7 +9,7 @@ class OrderPaymentServiceImpl implements OrderPaymentService {
   @override
 
   ///支付确认
-  Future<String> paymentConfirm(OrderModel order,String type,
+  Future<String> paymentConfirm(OrderModel order, String type,
       {PaymentFor paymentFor = PaymentFor.DEFAULT}) async {
     Response response;
 
@@ -18,15 +18,15 @@ class OrderPaymentServiceImpl implements OrderPaymentService {
     //按类型调用不同接口
     if (order is ProofingModel && paymentFor == PaymentFor.DEFAULT) {
       //打样单
-      apiUrl = PaymentApis.proofingPaidConfirm(order.code,type);
+      apiUrl = PaymentApis.proofingPaidConfirm(order.code, type);
     } else if (order is PurchaseOrderModel &&
         paymentFor == PaymentFor.DEPOSIT) {
       //生产单-定金
-      apiUrl = PaymentApis.purchaseDepositPaidConfirm(order.code,type);
+      apiUrl = PaymentApis.purchaseDepositPaidConfirm(order.code, type);
     } else if (order is PurchaseOrderModel &&
         paymentFor == PaymentFor.BALANCE) {
       //生产单-定金
-      apiUrl = PaymentApis.purchaseBalancePaidConfirm(order.code,type);
+      apiUrl = PaymentApis.purchaseBalancePaidConfirm(order.code, type);
     } else {
       return null;
     }
@@ -38,8 +38,10 @@ class OrderPaymentServiceImpl implements OrderPaymentService {
     }
 
     if (response != null && response.statusCode == 200) {
-      return "success";
+      print('@@@@@@@@@@@@${response.data}');
+      return response.data;
     } else {
+      print('!!!!!!');
       return null;
     }
   }

@@ -4,7 +4,6 @@ import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dar
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/request_data_loading.dart';
-import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -76,22 +75,22 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text('创建打样订单'),
-      ),
-      body: Container(
-          margin: EdgeInsets.only(bottom: 70),
-          child: ListView(
-            children: <Widget>[
-              _buildCompanyInfo(),
-              product == null ? _buildProductSelect() : _buildProduct(),
-              _buildProofingInfo(),
-            ],
-          )),
+        key: _scaffoldKey,
+        appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
+          title: Text('创建打样订单'),
+        ),
+        body: Container(
+            margin: EdgeInsets.only(bottom: 70),
+            child: ListView(
+              children: <Widget>[
+                _buildCompanyInfo(),
+                product == null ? _buildProductSelect() : _buildProduct(),
+                _buildProofingInfo(),
+              ],
+            )),
         bottomNavigationBar: Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -102,7 +101,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               widget.update ? '修改订单' : '提交订单',
               style: TextStyle(
                 color: Colors.black,
-
                 fontSize: 18,
               ),
             ),
@@ -110,8 +108,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: widget.update ? onUpdate : onCreate,
           ),
-        )
-    );
+        ));
   }
 
   Widget _buildCompanyInfo() {
@@ -130,53 +127,49 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               Container(
                 child: Row(
                   children: <Widget>[
-                    widget.quoteModel.requirementOrder
-                        .belongTo ==
-                        null ||
-                        widget.quoteModel.requirementOrder.belongTo
-                            .profilePicture ==
-                            null
-                        ?
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: AssetImage(
+                    widget.quoteModel.requirementOrder.belongTo == null ||
+                            widget.quoteModel.requirementOrder.belongTo
+                                    .profilePicture ==
+                                null
+                        ? Container(
+                            margin: EdgeInsets.all(10),
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  image: AssetImage(
                                     'temp/picture.png',
                                     package: "assets",
                                   ),
-                            fit: BoxFit.cover,
-                          )),
-                    ):
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      width: 80,
-                      height: 80,
-                      child: CachedNetworkImage(
-                          width: 100,
-                          height: 100,
-                          imageUrl: '${widget.quoteModel.requirementOrder.belongTo.profilePicture.previewUrl()}',
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              ),
-                          errorWidget: (context, url, error) =>
-                              SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              )
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                                  fit: BoxFit.cover,
+                                )),
+                          )
+                        : Container(
+                            margin: EdgeInsets.all(10),
+                            width: 80,
+                            height: 80,
+                            child: CachedNetworkImage(
+                                width: 100,
+                                height: 100,
+                                imageUrl:
+                                    '${widget.quoteModel.requirementOrder.belongTo.profilePicture.previewUrl()}',
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => SpinKitRing(
+                                      color: Colors.black12,
+                                      lineWidth: 2,
+                                      size: 30,
+                                    ),
+                                errorWidget: (context, url, error) =>
+                                    SpinKitRing(
+                                      color: Colors.black12,
+                                      lineWidth: 2,
+                                      size: 30,
+                                    )),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                    ),
                     Container(
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,14 +228,19 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           child: TextFieldComponent(
             focusNode: _costOfSamplesFocusNode,
             controller: _unitPriceController,
-            leadingText: Text('打样费',style: TextStyle(fontSize: 16,),),
+            leadingText: Text(
+              '打样费',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
             hintText: '请输入打样费（数字）',
             prefix: '￥',
             inputFormatters: [
               DecimalInputFormat(),
             ],
             hideDivider: true,
-            onChanged: (value){
+            onChanged: (value) {
               _countTotalPrice(value);
             },
           ),
@@ -285,7 +283,9 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   Widget _buildRemarks(BuildContext context) {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 3,),
+      margin: EdgeInsets.only(
+        top: 3,
+      ),
       padding: EdgeInsets.all(15),
       child: Column(children: <Widget>[
         Align(
@@ -311,7 +311,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             maxLines: null,
             maxLength: 120,
             controller: _remarksController,
-            onChanged: (val){
+            onChanged: (val) {
               remarks = _remarksController.text;
             },
           ),
@@ -434,8 +434,8 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   Widget _buildSampleNum() {
     return Container(
       color: Colors.white,
-      margin: EdgeInsets.only(top:5,bottom: 3),
-      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+      margin: EdgeInsets.only(top: 5, bottom: 3),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: InkWell(
         onTap: onSampleNumTap,
         child: Row(
@@ -445,8 +445,15 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             Expanded(
               child: Wrap(
                 children: <Widget>[
-                  Text('样衣数量',style: TextStyle(fontSize: 16,)),
-                  Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+                  Text('样衣数量',
+                      style: TextStyle(
+                        fontSize: 16,
+                      )),
+                  Text(' *',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.red,
+                      )),
                 ],
               ),
             ),
@@ -494,8 +501,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               contentText2: '请选择产品和数量',
               outsideDismiss: true,
             );
-          }
-      );
+          });
     } else if (totalQuantity == 0 || _unitPriceController.text == "") {
       showDialog(
           context: context,
@@ -506,8 +512,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               contentText2: '请填写打样费',
               outsideDismiss: true,
             );
-          }
-      );
+          });
     } else {
       showDialog(
           context: context,
@@ -520,16 +525,15 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               isNeedConfirmButton: true,
               dialogHeight: 200,
               outsideDismiss: false,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
                 submitSave();
               },
-              cancelAction: (){
+              cancelAction: () {
                 Navigator.of(context).pop();
               },
             );
-          }
-      );
+          });
     }
   }
 
@@ -545,19 +549,18 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             outsideDismiss: false,
             isNeedCancelButton: true,
             isNeedConfirmButton: true,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
               submitUpdate();
             },
-            cancelAction: (){
+            cancelAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    );
+        });
   }
 
-  void submitSave(){
+  void submitSave() {
     //拼装数据
     ProofingModel model = ProofingModel();
     model.entries = productEntries.where((entry) {
@@ -574,8 +577,9 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
       );
     }).toList();
     String unitPrice = _unitPriceController.text;
-    if(unitPrice != null && unitPrice != ''){
-      unitPrice = unitPrice.substring(unitPrice.indexOf('￥')+1,unitPrice.length);
+    if (unitPrice != null && unitPrice != '') {
+      unitPrice =
+          unitPrice.substring(unitPrice.indexOf('￥') + 1, unitPrice.length);
     }
     model
       ..unitPrice = double.parse(unitPrice)
@@ -593,10 +597,9 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             loadingText: '保存中。。。',
             entrance: '',
           );
-        }
-    ).then((value){
+        }).then((value) {
       bool result = false;
-      if(value!=null){
+      if (value != null) {
         result = true;
       }
       showDialog(
@@ -608,24 +611,24 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               failTips: '创建打样单失败',
               successTips: '创建打样单成功',
               callbackResult: result,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
                 getOrderDetail(value);
               },
             );
-          }
-      );
-    });;
+          });
+    });
+    ;
   }
 
-  void submitUpdate(){
+  void submitUpdate() {
     print(_unitPriceController.text);
     ProofingModel model = ProofingModel();
     model
       ..code = widget.model.code
       ..totalPrice = totalPrice
       ..remarks = remarks;
-    if(_unitPriceController.text !=null && _unitPriceController.text != ''){
+    if (_unitPriceController.text != null && _unitPriceController.text != '') {
       _unitPriceController.text = _unitPriceController.text.replaceAll('￥', '');
       model.unitPrice = double.parse(_unitPriceController.text);
     }
@@ -640,10 +643,9 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             loadingText: '保存中。。。',
             entrance: 'proofingOrder',
           );
-        }
-    ).then((value){
+        }).then((value) {
       bool result = false;
-      if(value!=null){
+      if (value != null) {
         result = true;
       }
       showDialog(
@@ -655,28 +657,26 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               failTips: '修改打样单失败',
               successTips: '修改打样单成功',
               callbackResult: result,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
                 getOrderDetail(value);
               },
             );
-          }
-      );
+          });
     });
   }
 
-  void getOrderDetail(String code) async{
+  void getOrderDetail(String code) async {
     if (code != null && code != '') {
-    ProofingModel detailModel = await ProofingOrderRepository()
-        .proofingDetail(code);
+      // ProofingModel detailModel = await ProofingOrderRepository()
+      //     .proofingDetail(code);
 
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>
-              ProofingOrderDetailPage(model: detailModel)
-          ), ModalRoute.withName('/'));
+          MaterialPageRoute(
+              builder: (context) => ProofingOrderDetailPage(code)),
+          ModalRoute.withName('/'));
     }
   }
-
 
   void onSampleNumTap() async {
     if (widget.update) {
@@ -708,18 +708,20 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         if (returnEntries != null) {
           productEntries = returnEntries;
         }
-      }else{
-        showDialog(context: context,builder: (context){
-          return AlertDialog(
-            title: Text('请先选择产品'),
-          );
-        });
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('请先选择产品'),
+              );
+            });
         return;
       }
     }
 
     int sum = 0;
-    if(productEntries != null && productEntries.length > 0){
+    if (productEntries != null && productEntries.length > 0) {
       productEntries.forEach((entry) {
         if (entry.controller.text != '') {
           sum = sum + int.parse(entry.controller.text);
@@ -730,9 +732,9 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     setState(() {
       totalQuantity = sum;
       if (_unitPriceController.text != '') {
-        totalPrice = sum * ClassHandleUtil.removeSymbolRMBToDouble(_unitPriceController.text);
+        totalPrice = sum *
+            ClassHandleUtil.removeSymbolRMBToDouble(_unitPriceController.text);
       }
     });
   }
 }
-

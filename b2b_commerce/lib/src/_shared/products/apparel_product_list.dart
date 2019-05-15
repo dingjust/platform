@@ -2,6 +2,8 @@ import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -203,7 +205,6 @@ class _ApparelProductListState extends State<ApparelProductList> {
   }
 
   void _onProudctProduction(ApparelProductModel product) {
-    // TODO: 带到产品，跳到需求页面
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -214,9 +215,40 @@ class _ApparelProductListState extends State<ApparelProductList> {
   }
 
   void _onProductShlefing(ApparelProductModel product) {
-    //TODO:产品上下架
     if (product.approvalStatus == ArticleApprovalStatus.approved) {
-      ProductRepositoryImpl().off(product.code).then((a) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoadingPage(
+              requestCallBack:  ProductRepositoryImpl().off(product.code),
+              outsideDismiss: false,
+              loadingText: '正在保存。。。',
+              entrance: '',
+            );
+          }
+      ).then((value){
+        bool result = false;
+        if(value!=null&&value!=''){
+          result = false;
+        }else{
+          result = true;
+        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialogPage(
+                dialogType: DialogType.RESULT_DIALOG,
+                successTips: '下架成功',
+                failTips: '下架失败',
+                callbackResult: result,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
         if (widget.keyword == null) {
           ApparelProductBLoC.instance.filterByStatuses(widget.status);
         } else {
@@ -224,7 +256,39 @@ class _ApparelProductListState extends State<ApparelProductList> {
         }
       });
     } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
-      ProductRepositoryImpl().on(product.code).then((a) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoadingPage(
+              requestCallBack:  ProductRepositoryImpl().on(product.code),
+              outsideDismiss: false,
+              loadingText: '正在保存。。。',
+              entrance: '',
+            );
+          }
+      ).then((value){
+        bool result = false;
+        if(value!=null&&value!=''){
+          result = false;
+        }else{
+          result = true;
+        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialogPage(
+                dialogType: DialogType.RESULT_DIALOG,
+                successTips: '上架成功',
+                failTips: '上架失败',
+                callbackResult: result,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
         if (widget.keyword == null) {
           ApparelProductBLoC.instance.filterByStatuses(widget.status);
         } else {

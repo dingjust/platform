@@ -13,10 +13,9 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProofingOrderDetailPage extends StatefulWidget {
-   ProofingOrderDetailPage({Key key, this.model, this.code})
-      : super(key: key);
+  ProofingOrderDetailPage(this.code, {Key key, this.model}) : super(key: key);
 
-   ProofingModel model;
+  ProofingModel model;
 
   final String code;
 
@@ -83,7 +82,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     // 查询明细
     ProofingModel detailModel =
         await ProofingOrderRepository().proofingDetail(widget.code);
-        widget.model=detailModel;
+    widget.model = detailModel;
     return detailModel;
   }
 
