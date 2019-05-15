@@ -40,7 +40,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 
   @override
   void initState() {
-    print(widget.item.code);
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
@@ -52,16 +51,16 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
 
   @override
   Widget build(BuildContext context) {
-//    var bloc = BLoCProvider.of<ApparelProductBLoC>(context);
-//    debugPrint(bloc.currentProduct.toString());
-//    return StreamBuilder(
-//        stream: bloc.detailStream,
-//        initialData: bloc.currentProduct,
-//        builder: (BuildContext context,
-//            AsyncSnapshot<ApparelProductModel> snapshot) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pop(context);
+        ShowDialogUtil.showAlertDialog2(context, '退出前是否保留数据', (){
+          _clearProductData();
+          Navigator.pop(context);
+        },(){
+          Navigator.pop(context);
+        }).then((a){
+          Navigator.pop(context);
+        });
         return Future.value(false);
       },
       child: Scaffold(
@@ -101,7 +100,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                         builder: (_) {
                           return RequestDataLoadingPage(
                             requestCallBack: ProductRepositoryImpl().create(
-                                widget.item),
+                                widget.item).then((a){
+                              _clearProductData();
+                            }),
                             outsideDismiss: false,
                             loadingText: '保存中。。。',
                             entrance: 'apparelProduct',
@@ -109,7 +110,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                           );
                         }
                     );
-//                  widget.item = new ApparelProductModel();
+
                   } else {
                     showDialog(
                         context: context,
@@ -117,7 +118,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                         builder: (_) {
                           return RequestDataLoadingPage(
                             requestCallBack: ProductRepositoryImpl().update(
-                                widget.item),
+                                widget.item).then((a){
+                              _clearProductData();
+                            }),
                             outsideDismiss: false,
                             loadingText: '保存中。。。',
                             entrance: 'apparelProduct',
@@ -126,6 +129,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                         }
                     );
                   }
+
                 }
                 if(widget.keyword == null){
                   ApparelProductBLoC.instance.filterByStatuses(widget.status);
@@ -273,6 +277,25 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
     );
 //        }
 //        );
+  }
+
+  void _clearProductData() {
+    widget.item.name = null;
+    widget.item.code = null;
+    widget.item.brand = null;
+    widget.item.images = null;
+    widget.item.category = null;
+    widget.item.id = null;
+    widget.item.attributes = null;
+    widget.item.price = null;
+    widget.item.maxPrice = null;
+    widget.item.approvalStatus = null;
+    widget.item.variants = null;
+    widget.item.thumbnail = null;
+    widget.item.thumbnails = null;
+    widget.item.minPrice = null;
+    widget.item.skuID = null;
+    widget.item.gramWeight = null;
   }
 
   //非空提示
