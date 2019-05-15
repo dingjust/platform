@@ -53,14 +53,18 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        ShowDialogUtil.showAlertDialog2(context, '退出前是否保留数据', (){
-          _clearProductData();
+        if(widget.isCreate){
+          ShowDialogUtil.showAlertDialog2(context, '退出前是否要保留已填写的数据', (){
+            _clearProductData();
+            Navigator.pop(context);
+          },(){
+            Navigator.pop(context);
+          }).then((a){
+            Navigator.pop(context);
+          });
+        }else{
           Navigator.pop(context);
-        },(){
-          Navigator.pop(context);
-        }).then((a){
-          Navigator.pop(context);
-        });
+        }
         return Future.value(false);
       },
       child: Scaffold(
@@ -76,15 +80,19 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               ),
               onPressed: () async {
                 bool isSubmit = false;
-
+                print('${ApparelProductModel.toJson(widget.item)}');
                 if (widget.item.images == null || widget.item.images.length <= 0) {
-                  isSubmit = _showValidateMsg(context, '请上传主图');
+                  ShowDialogUtil.showSimapleDialog(context, '请上传主图');
+//                  isSubmit = _showValidateMsg(context, '请上传主图');
                 } else if (widget.item.name == null)  {
-                  isSubmit = _showValidateMsg(context, '请输入产品名称');
+                  ShowDialogUtil.showSimapleDialog(context, '请输入产品名称');
+//                  isSubmit = _showValidateMsg(context, '请输入产品名称');
                 } else if (widget.item.skuID == null) {
-                  isSubmit = _showValidateMsg(context, '请输入产品货号');
+                  ShowDialogUtil.showSimapleDialog(context, '请输入产品货号');
+//                  isSubmit = _showValidateMsg(context, '请输入产品货号');
                 } else if (widget.item.category == null) {
-                  isSubmit = _showValidateMsg(context, '请输入产品类别');
+                  ShowDialogUtil.showSimapleDialog(context, '请输入产品类别');
+//                  isSubmit = _showValidateMsg(context, '请输入产品类别');
                 }else{
                   isSubmit = true;
                 }

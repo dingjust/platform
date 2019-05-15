@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/order/PageEntry.dart';
 
 class ApparelProductBLoC extends BLoCBase {
   ProductsResponse productsResponse;
@@ -17,6 +18,12 @@ class ApparelProductBLoC extends BLoCBase {
 
   static ApparelProductBLoC get instance => _getInstance();
   static ApparelProductBLoC _instance;
+
+  static final Map<String, PageEntry> _productsMap = {
+    'ALL': PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+    'approved': PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+    'unapproved': PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+  };
 
   ApparelProductBLoC._internal() {
     // 初始化
@@ -46,20 +53,28 @@ class ApparelProductBLoC extends BLoCBase {
   Stream<ApparelProductModel> get detailStream => _detailController.stream;
 
   filterByStatuses(String status) async {
-    print(status);
-    if(status == null) status = 'ALL';
-    Map<String, dynamic> data = {};
-    if (status != 'ALL') {
-      data = {
-        'approvalStatuses': [status]
-      };
+    if(!lock){
+      lock = true;
+      print('${_productsMap[status].data}');
+      if(_productsMap[status].data.isEmpty){
+        if(status == null) status = 'ALL';
+        Map<String, dynamic> data = {};
+        if (status != 'ALL') {
+          data = {
+            'approvalStatuses': [status]
+          };
+        }
+
+        productsResponse = await ProductRepositoryImpl().list(data, {});
+        _productsMap[status].totalPages = productsResponse.totalPages;
+        _productsMap[status].totalElements = productsResponse.totalElements;
+        _productsMap[status].data.clear();
+        _productsMap[status].data.addAll(productsResponse.content);
+
+      }
+      _controller.sink.add(_productsMap[status].data);
+      lock = false;
     }
-    products.clear();
-    print(data);
-    productsResponse = await ProductRepositoryImpl().list(data, {});
-    print(productsResponse.content);
-    products.addAll(productsResponse.content);
-    _controller.sink.add(products);
   }
 
   loadingMoreByStatuses(String status) async {
