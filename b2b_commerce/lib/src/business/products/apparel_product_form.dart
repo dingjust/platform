@@ -14,8 +14,13 @@ import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';
 
 class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({Key key, @required this.item, this.isCreate = false,this.status = 'ALL',this.keyword,})
-      : super(key: const Key('__apparelProductFormPage__'));
+  ApparelProductFormPage({
+    Key key,
+    @required this.item,
+    this.isCreate = false,
+    this.status = 'ALL',
+    this.keyword,
+  }) : super(key: const Key('__apparelProductFormPage__'));
 
   ApparelProductModel item;
   final bool isCreate;
@@ -53,16 +58,13 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if(widget.isCreate){
-          ShowDialogUtil.showAlertDialog2(context, '退出前是否要保留已填写的数据', (){
+        if (widget.isCreate) {
+          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
             _clearProductData();
             Navigator.pop(context);
-          },(){
-            Navigator.pop(context);
-          }).then((a){
             Navigator.pop(context);
           });
-        }else{
+        } else {
           Navigator.pop(context);
         }
         return Future.value(false);
@@ -71,7 +73,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         appBar: AppBar(
           elevation: 0.5,
           centerTitle: true,
-          title: Text(widget.isCreate ? '新建产品':'编辑产品'),
+          title: Text(widget.isCreate ? '新建产品' : '编辑产品'),
           actions: <Widget>[
             IconButton(
               icon: Text(
@@ -81,34 +83,40 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               onPressed: () async {
                 bool isSubmit = false;
                 print('${ApparelProductModel.toJson(widget.item)}');
-                if (widget.item.images == null || widget.item.images.length <= 0) {
-                  ShowDialogUtil.showSimapleDialog(context, '请上传主图');
+                if (widget.item.images == null ||
+                    widget.item.images.length <= 0) {
 //                  isSubmit = _showValidateMsg(context, '请上传主图');
-                } else if (widget.item.name == null)  {
+                  ShowDialogUtil.showSimapleDialog(context, '请上传主图');
+                  ShowDialogUtil.showSimapleDialog(context, '请上传主图');
+                } else if (widget.item.name == null) {
+                  ShowDialogUtil.showSimapleDialog(context, '请输入产品名称');
                   ShowDialogUtil.showSimapleDialog(context, '请输入产品名称');
 //                  isSubmit = _showValidateMsg(context, '请输入产品名称');
                 } else if (widget.item.skuID == null) {
                   ShowDialogUtil.showSimapleDialog(context, '请输入产品货号');
+                  ShowDialogUtil.showSimapleDialog(context, '请输入产品货号');
 //                  isSubmit = _showValidateMsg(context, '请输入产品货号');
                 } else if (widget.item.category == null) {
                   ShowDialogUtil.showSimapleDialog(context, '请输入产品类别');
+                  ShowDialogUtil.showSimapleDialog(context, '请输入产品类别');
 //                  isSubmit = _showValidateMsg(context, '请输入产品类别');
-                }else{
+                } else {
                   isSubmit = true;
                 }
-                if (widget.item.attributes == null){
+                if (widget.item.attributes == null) {
                   widget.item.attributes = ApparelProductAttributesModel();
                 }
                 Navigator.pop(context);
-                if(isSubmit) {
+                if (isSubmit) {
                   if (widget.isCreate) {
                     showDialog(
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
                           return RequestDataLoadingPage(
-                            requestCallBack: ProductRepositoryImpl().create(
-                                widget.item).then((a){
+                            requestCallBack: ProductRepositoryImpl()
+                                .create(widget.item)
+                                .then((a) {
                               _clearProductData();
                             }),
                             outsideDismiss: false,
@@ -116,17 +124,16 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                             entrance: 'apparelProduct',
                             keyword: widget.keyword,
                           );
-                        }
-                    );
-
+                        });
                   } else {
                     showDialog(
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
                           return RequestDataLoadingPage(
-                            requestCallBack: ProductRepositoryImpl().update(
-                                widget.item).then((a){
+                            requestCallBack: ProductRepositoryImpl()
+                                .update(widget.item)
+                                .then((a) {
                               _clearProductData();
                             }),
                             outsideDismiss: false,
@@ -134,14 +141,14 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                             entrance: 'apparelProduct',
                             keyword: widget.keyword,
                           );
-                        }
-                    );
+                        });
                   }
-
                 }
-                if(widget.keyword == null){
+                if (widget.keyword == null) {
+                  ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
                   ApparelProductBLoC.instance.filterByStatuses(widget.status);
-                }else{
+                } else {
+                  ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
                   ApparelProductBLoC.instance.getData(widget.keyword);
                 }
 //              print(widget.item.attributes.styles[0]);
@@ -156,51 +163,70 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               NormalPictureField(widget.item),
 //            DetailPictureField(widget.item),
               TextFieldComponent(
-                style: TextStyle(fontSize: 16,color: Colors.grey,),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
                 isRequired: true,
                 focusNode: _nameFocusNode,
                 controller: _nameController,
-                leadingText: Text('产品名称',style: TextStyle(fontSize: 16,)),
+                leadingText: Text('产品名称',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
                 hintText: '请输入产品名称',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   widget.item.name = value;
                 },
-                onEditingComplete: (){
+                onEditingComplete: () {
                   FocusScope.of(context).requestFocus(_skuIDFocusNode);
                 },
               ),
               TextFieldComponent(
-                style: TextStyle(fontSize: 16,color: Colors.grey,),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
                 isRequired: true,
                 focusNode: _skuIDFocusNode,
                 controller: _skuIDController,
-                leadingText: Text('产品货号',style: TextStyle(fontSize: 16,)),
+                leadingText: Text('产品货号',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
                 hintText: '请输入产品货号',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   widget.item.skuID = value;
                 },
-                onEditingComplete: (){
+                onEditingComplete: () {
                   FocusScope.of(context).requestFocus(_brandFocusNode);
                 },
               ),
               MinorCategoryField(widget.item),
               ColorSizeStockField(widget.item),
               TextFieldComponent(
-                style: TextStyle(fontSize: 16,color: Colors.grey,),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
                 focusNode: _brandFocusNode,
                 controller: _brandController,
-                leadingText: Text('品牌',style: TextStyle(fontSize: 16,)),
+                leadingText: Text('品牌',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
                 hintText: '请输入品牌',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   widget.item.brand = value;
                 },
-                onEditingComplete: (){
-                  if(UserBLoC.instance.currentUser.type == UserType.BRAND) {
+                onEditingComplete: () {
+                  if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
                     FocusScope.of(context).requestFocus(_priceFocusNode);
-                  }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+                  } else if (UserBLoC.instance.currentUser.type ==
+                      UserType.FACTORY) {
                     FocusScope.of(context).requestFocus(_gramWeightFocusNode);
                   }
                 },
@@ -208,10 +234,16 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               Offstage(
                 offstage: UserBLoC.instance.currentUser.type != UserType.BRAND,
                 child: TextFieldComponent(
-                  style: TextStyle(fontSize: 16,color: Colors.grey,),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
                   focusNode: _priceFocusNode,
                   controller: _priceController,
-                  leadingText: Text('供货价',style: TextStyle(fontSize: 16,)),
+                  leadingText: Text('供货价',
+                      style: TextStyle(
+                        fontSize: 16,
+                      )),
                   hintText: '请输入供货价（数字）',
                   textInputAction: TextInputAction.next,
                   prefix: '￥',
@@ -219,23 +251,31 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     DecimalInputFormat(),
                   ],
                   onChanged: (value) {
-                    widget.item.price = ClassHandleUtil.removeSymbolRMBToDouble(value);
+                    widget.item.price =
+                        ClassHandleUtil.removeSymbolRMBToDouble(value);
                   },
-                  onEditingComplete: (){
+                  onEditingComplete: () {
                     FocusScope.of(context).requestFocus(_gramWeightFocusNode);
                   },
                 ),
               ),
               Offstage(
-                offstage: UserBLoC.instance.currentUser.type != UserType.FACTORY,
+                offstage:
+                    UserBLoC.instance.currentUser.type != UserType.FACTORY,
                 child: PricesField(widget.item),
               ),
               TextFieldComponent(
-                style: TextStyle(fontSize: 16,color: Colors.grey,),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
                 focusNode: _gramWeightFocusNode,
                 controller: _gramWeightController,
 //                inputType: TextInputType.number,
-                leadingText: Text('重量（kg）',style: TextStyle(fontSize: 16,)),
+                leadingText: Text('重量（kg）',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
                 hintText: '请输入重量（数字）',
                 inputFormatters: [
                   DecimalInputFormat(),
@@ -307,12 +347,12 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   }
 
   //非空提示
-  bool _showValidateMsg(BuildContext context,String message){
+  bool _showValidateMsg(BuildContext context, String message) {
     _validateMessage(context, '${message}');
     return false;
   }
 
-  Future<void> _validateMessage(BuildContext context,String message) async {
+  Future<void> _validateMessage(BuildContext context, String message) async {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -322,7 +362,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
             contentText2: '${message}',
             outsideDismiss: true,
           );
-        }
-    );
+        });
   }
 }
