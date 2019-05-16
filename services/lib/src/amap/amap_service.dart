@@ -2,11 +2,7 @@ import 'package:amap_base/amap_base.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:services/src/amap/amap_response.dart';
-import 'package:services/src/net/http_managerpermissions.dart';
-
-class AmapService {
-  // 工厂模式
-  factory AmapService() => _getInstance();
+import 'package:services/src/net/http_managertory AmapService() => _getInstance();
 
   static AmapService get instance => _getInstance();
   static AmapService _instance;
