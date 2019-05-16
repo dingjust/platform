@@ -17,7 +17,7 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 ``
 ### 持续生成
 ``
-flutter packages pub run build_runner watch
+flutter packages pub run build_runner watch   //
 ``
 
 ### export PATH=`pwd`/flutter/bin:$PATH
