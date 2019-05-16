@@ -58,6 +58,14 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
   }
 
   @override
+  void dispose() {
+    //清除缓存
+    ApparelProductBLoC.instance.clearProductsMap();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BLoCProvider<ApparelProductBLoC>(
       bloc: ApparelProductBLoC.instance,
