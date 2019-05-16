@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
@@ -23,7 +24,7 @@ class FactoryPage extends StatefulWidget {
 
   List<LabelModel> labels;
 
-  final String route;
+  String route;
 
   // 邀请工厂报价的需求订单号
   final String requirementCode;
@@ -49,13 +50,17 @@ class _FactoryPageState extends State<FactoryPage> {
     checked: true,
   );
 
-  bool showDateFilterMenu = false;
+  FilterConditionEntry currentLocalCondition = FilterConditionEntry();
+
+  bool showDateFilterMenu = true;
+  bool showLocalFilterMenu = true;
   bool showMachineTypeFilterMenu = false;
   bool showCategoriesFilterMenu = false;
 
   String labText = '综合';
   String _categorySelectText = '分类';
   String _areaSelectText = '地区';
+  String _localSelectText = '距离';
 
   List<CategoryModel> _category;
   List<CategoryModel> _categorySelected = [];
@@ -63,6 +68,17 @@ class _FactoryPageState extends State<FactoryPage> {
   List<RegionModel> _regions = [];
   RegionModel _regionSelect = RegionModel();
   List<CityModel> _citySelects = [];
+
+  List<FilterConditionEntry> filterLocalEntries = <FilterConditionEntry>[
+    FilterConditionEntry(label: '全部', value: '0', checked: true),
+    FilterConditionEntry(label: '10公里内', value: '10000'),
+    FilterConditionEntry(label: '20公里内', value: '20000'),
+    FilterConditionEntry(label: '30公里内', value: '30000'),
+  ];
+  double xLocal;
+  double yLocal;
+
+  AMapLocation aMapLocation;
 
   @override
   void initState() {
@@ -76,9 +92,63 @@ class _FactoryPageState extends State<FactoryPage> {
           labels: [],
           cooperationModes: []);
     }
+    if(widget.route == '就近找厂'){
+      _initLocation();
+      currentLocalCondition = FilterConditionEntry(
+        label: '全部',
+        value: '0',
+        checked: true,
+      );
+    }
     getCategories();
 
     super.initState();
+  }
+
+//  void _checkPersmission() async{
+//    bool hasPermission = await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+//    if(!hasPermission){
+//      bool requestPermissionResult = await SimplePermissions.requestPermission(Permission.WhenInUseLocation);
+//      if(!requestPermissionResult){
+//        Alert.alert(context,title: "申请定位权限失败");
+//        return;
+//      }
+//    }
+//    AMapLocationClient.onLocationUpate.listen((AMapLocation loc) {
+//      if (!mounted) return;
+//      setState(() {
+//        location = getLocationStr(loc);
+//      });
+//    });
+//
+//    AMapLocationClient.startLocation();
+//  }
+
+  //初始化定位监听，
+  void _initLocation() async {
+    AMapLocationClient.startup(new AMapLocationOption(
+        desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
+
+    aMapLocation = await AMapLocationClient.getLocation(true);
+
+    factoryCondition.latitude = aMapLocation.latitude;
+    factoryCondition.longitude = aMapLocation.longitude;
+
+    print('定位！！！！'+aMapLocation.latitude.toString());
+
+
+
+//    //监听坐标实时变换
+//    AMapLocationClient.onLocationUpate.listen((AMapLocation loc) {
+//      if (!mounted) return;
+//      setState(() {
+//        xLocal = loc.latitude;
+//        yLocal = loc.longitude;
+//      });
+//    });
+//
+//    print(xLocal.toString()+','+yLocal.toString());
+//    AMapLocationClient.startLocation();
   }
 
   getCategories()async{
@@ -90,6 +160,13 @@ class _FactoryPageState extends State<FactoryPage> {
       currentCondition = condition;
     });
     FactoryBLoC.instance.clear();
+  }
+
+  @override
+  void dispose() {
+    //注意这里关闭
+    AMapLocationClient.shutdown();
+    super.dispose();
   }
 
   @override
@@ -131,8 +208,6 @@ class _FactoryPageState extends State<FactoryPage> {
                     FilterEntry('${labText}⇂', () {
                       setState(() {
                         showDateFilterMenu = !showDateFilterMenu;
-                        showCategoriesFilterMenu = false;
-                        showMachineTypeFilterMenu = false;
                       });
                     }),
                     FilterEntry(_categorySelectText, () async{
@@ -168,6 +243,15 @@ class _FactoryPageState extends State<FactoryPage> {
                         showDateFilterMenu = false;
                       });
                     }),
+                    widget.route == '就近找厂'?
+                    FilterEntry(
+                      _localSelectText,(){
+                      setState(() {
+                        showLocalFilterMenu = !showLocalFilterMenu;
+                        showDateFilterMenu = true;
+                      });
+                    }
+                    ):
                     FilterEntry(_areaSelectText, () {
                       setState(() {
                         showDateFilterMenu = false;
@@ -204,7 +288,8 @@ class _FactoryPageState extends State<FactoryPage> {
                         });
                       });
 
-                    })
+                    }
+                    )
                   ],
                   action: Container(),
                 ),
@@ -219,27 +304,59 @@ class _FactoryPageState extends State<FactoryPage> {
               ),
               body: Column(
                 children: <Widget>[
-                  FilterSelectMenu(
-                    color: Color.fromRGBO(255, 214, 12, 1),
-                    height: showDateFilterMenu ? 150 : 0,
-                    entries: filterConditionEntries,
-                    streamController:
-                    RequirementPoolBLoC.instance.conditionController,
-                    afterPressed: (String str) {
-                      print(str);
-                      setState(() {
-                        labText = str;
-                       FilterConditionEntry selected;
-                       for(int i =0;i<filterConditionEntries.length;i++){
-                         if(str == filterConditionEntries[i].label){
-                           currentCondition = filterConditionEntries[i];
-                         }
-                       }
-                        changeCondition(currentCondition);
+                  Offstage(
+                    offstage: showDateFilterMenu,
+                    child: FilterSelectMenu(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      height: 150,
+                      entries: filterConditionEntries,
+                      streamController:
+                      RequirementPoolBLoC.instance.conditionController,
+                      afterPressed: (String str) {
+                        print(str);
+                        setState(() {
+                          labText = str;
+                          FilterConditionEntry selected;
+                          for(int i =0;i<filterConditionEntries.length;i++){
+                            if(str == filterConditionEntries[i].label){
+                              currentCondition = filterConditionEntries[i];
+                            }
+                          }
+                          changeCondition(currentCondition);
 //                        currentCondition
-                        showDateFilterMenu = !showDateFilterMenu;
-                      });
-                    },
+                          showDateFilterMenu = !showDateFilterMenu;
+                        });
+                      },
+                    ),
+                  ),
+                  Offstage(
+                    offstage: showLocalFilterMenu,
+                    child: FilterSelectMenu(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      height: 200,
+                      entries: filterLocalEntries,
+                      streamController:
+                      RequirementPoolBLoC.instance.conditionController,
+                      afterPressed: (String str) {
+                        print(str);
+                        setState(() {
+                          if(str == '全部'){
+                            _localSelectText = '${aMapLocation.latitude}';
+                          }else{
+                            _localSelectText = str;
+                          }
+                          FilterConditionEntry selected;
+                          for(int i =0;i<filterLocalEntries.length;i++){
+                            if(str == filterLocalEntries[i].label){
+                              currentLocalCondition = filterLocalEntries[i];
+                            }
+                          }
+                          changeCondition(currentLocalCondition);
+//                        currentCondition
+                          showLocalFilterMenu = !showLocalFilterMenu;
+                        });
+                      },
+                    ),
                   ),
                   Expanded(
                     child: FactoryListView(
@@ -247,6 +364,7 @@ class _FactoryPageState extends State<FactoryPage> {
                       showButton: widget.requirementCode != null,
                       requirementCode: widget.requirementCode,
                       currentCondition: currentCondition,
+                      currentLocalCondition: currentLocalCondition,
                     )
                   )
                 ],
@@ -308,6 +426,7 @@ class FactoryListView extends StatefulWidget {
       {this.showButton = false,
       this.factoryCondition,
       this.requirementCode,
+        this.currentLocalCondition,
       @required this.currentCondition});
 
   FactoryCondition factoryCondition;
@@ -318,6 +437,9 @@ class FactoryListView extends StatefulWidget {
 
   /// 当前选中头部排序条件
   FilterConditionEntry currentCondition;
+
+  //距离排序
+  FilterConditionEntry currentLocalCondition;
 
   @override
   State<StatefulWidget> createState() => _FactoryListViewState();
@@ -348,12 +470,21 @@ class _FactoryListViewState extends State<FactoryListView> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByCondition(
-          widget.factoryCondition,
-          condition: widget.currentCondition.value,
-          sort: widget.currentCondition.isDESC ? 'desc' : 'asc',
-          requirementCode: widget.requirementCode,
-        );
+        if(widget.currentLocalCondition != null){
+          bloc.loadingMoreByCondition(
+            widget.factoryCondition,
+            condition: widget.currentCondition.value,
+            sort: widget.currentCondition.isDESC ? 'desc' : 'asc',
+            requirementCode: widget.requirementCode,
+          );
+        }else{
+          bloc.loadingMoreByCondition(
+            widget.factoryCondition,
+            condition: widget.currentCondition.value,
+            sort: widget.currentCondition.isDESC ? 'desc' : 'asc',
+            requirementCode: widget.requirementCode,
+          );
+        }
       }
     });
 
