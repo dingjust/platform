@@ -78,23 +78,30 @@ class ApparelProductBLoC extends BLoCBase {
   }
 
   loadingMoreByStatuses(String status) async {
-    if(status == null) status = 'ALL';
-    Map<String, dynamic> data = {};
-    if (status != 'ALL') {
-      data = {
-        'approvalStatuses': [status],
-      };
+    if(!lock) {
+      lock = true;
+      if (status == null) status = 'ALL';
+      Map<String, dynamic> data = {};
+      if (status != 'ALL') {
+        data = {
+          'approvalStatuses': [status],
+        };
+      }
+      if (_productsMap[status].currentPage <
+          _productsMap[status].totalPages - 1) {
+        productsResponse = await ProductRepositoryImpl().list(data, {
+          'page': productsResponse.number + 1,
+        });
+        _productsMap[status].totalPages = productsResponse.totalPages;
+        _productsMap[status].totalElements = productsResponse.totalElements;
+        _productsMap[status].data.addAll(productsResponse.content);
+      } else {
+        bottomController.sink.add(true);
+      }
+      loadingController.sink.add(false);
+      _controller.sink.add(_productsMap[status].data);
+      lock = false;
     }
-    if (productsResponse.number < productsResponse.totalPages - 1) {
-      productsResponse = await ProductRepositoryImpl().list(data,{
-        'page':productsResponse.number+1,
-      });
-      products.addAll(productsResponse.content);
-    } else {
-      bottomController.sink.add(true);
-    }
-    loadingController.sink.add(false);
-    _controller.sink.add(products);
   }
 
   getData(String keyword) async {
@@ -130,6 +137,12 @@ class ApparelProductBLoC extends BLoCBase {
 
   clear(){
     _controller.sink.add(null);
+  }
+
+  clearProductsMap(){
+    _productsMap.forEach((key,value){
+      _productsMap[key] = PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>());
+    });
   }
 
   //下拉刷新
