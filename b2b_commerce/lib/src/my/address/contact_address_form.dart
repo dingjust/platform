@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -20,13 +21,23 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
   FocusNode _line1FocusNode = FocusNode();
   String regionCityAndDistrict;
 
+  List<Widget> tipsWidget;
+
+  String location;
+
   @override
   void initState() {
     super.initState();
     _line1Controller = TextEditingController(text: widget.address?.line1);
-    if(widget.address != null && widget.address.region!=null && widget.address.city !=null && widget.address.cityDistrict != null){
-      regionCityAndDistrict =  widget.address.region.name+widget.address.city.name+widget.address.cityDistrict.name ;
-    }else{
+    tipsWidget = [];
+    if (widget.address != null &&
+        widget.address.region != null &&
+        widget.address.city != null &&
+        widget.address.cityDistrict != null) {
+      regionCityAndDistrict = widget.address.region.name +
+          widget.address.city.name +
+          widget.address.cityDistrict.name;
+    } else {
       regionCityAndDistrict = '';
     }
   }
@@ -47,7 +58,9 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
     widget.address.city = result.city;
     widget.address.region = result.city.region;
 
-    regionCityAndDistrict = widget.address.region.name + widget.address.city.name + widget.address.cityDistrict.name;
+    regionCityAndDistrict = widget.address.region.name +
+        widget.address.city.name +
+        widget.address.cityDistrict.name;
   }
 
   @override
@@ -71,37 +84,143 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
       TextFieldComponent(
         focusNode: _line1FocusNode,
         controller: _line1Controller,
-        leadingText: Text('详细地址',style: TextStyle(fontSize: 16,)),
+        leadingText: Text('详细地址',
+            style: TextStyle(
+              fontSize: 16,
+            )),
         hintText: '道路、门牌号、小区、楼栋号、单元室等',
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         dividerPadding: EdgeInsets.symmetric(),
       ),
+      // ListTile(
+      //   contentPadding: EdgeInsets.symmetric(horizontal: 0),
+      //   onTap: onLocation,
+      //   title: Text(
+      //     '工厂定位',
+      //     style: TextStyle(fontSize: 16, color: Colors.black),
+      //   ),
+      //   subtitle: location == null
+      //       ? Icon(Icons.location_city)
+      //       : Text(
+      //           '${location}',
+      //           style: TextStyle(color: Colors.red, fontSize: 12),
+      //         ),
+      //   trailing: Icon(Icons.chevron_right),
+      // ),
+      Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FlatButton(
+              onPressed: onLocation,
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Row(
+                children: <Widget>[Icon(B2BIcons.location), Text('工厂坐标定位')],
+              ),
+            )
+          ],
+        ),
+      )
     ];
 
-
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-        centerTitle: true,
-        title: Text("编辑地址"),
-        actions: <Widget>[
-          IconButton(
-            icon: Text('确定',style: TextStyle(),),
-            onPressed: () async{
-              widget.address.line1 = _line1Controller.text;
-              Navigator.of(context).pop(widget.address);
-            },
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-        child: new SingleChildScrollView(
+        appBar: AppBar(
+          elevation: 0.5,
+          centerTitle: true,
+          title: Text("编辑地址"),
+          actions: <Widget>[
+            IconButton(
+              icon: Text(
+                '确定',
+                style: TextStyle(),
+              ),
+              onPressed: () async {
+                widget.address.line1 = _line1Controller.text;
+                Navigator.of(context).pop(widget.address);
+              },
+            )
+          ],
+        ),
+        body: Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: Column(
             children: widgets,
           ),
-        ),
-      ),
+        ));
+  }
+
+  void onLocation() async {
+    Tip tip =
+        await showSearch(context: context, delegate: AmapSearchDelegatePage());
+    setState(() {
+      location = '${tip.address}(${tip.location})';
+    });
+  }
+
+  // void onAmapTip(String keyword) async {
+  //   AmapResponse amapResponse = await AmapService.instance.inputtips(keyword);
+  //   setState(() {
+  //     tipsWidget = amapResponse.tips
+  //         .map((tip) => TipRow(
+  //               name: tip.name,
+  //               address: tip.address,
+  //               location: tip.location,
+  //             ))
+  //         .toList();
+  //   });
+  // }
+}
+
+class TipRow extends StatelessWidget {
+  final String name;
+
+  final String address;
+
+  final String location;
+
+  const TipRow({Key key, this.name, this.address, this.location})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+          width: double.infinity,
+          // height: 80,
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border:
+                  Border(bottom: BorderSide(color: Colors.grey, width: 0.5))),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '${name}',
+                      style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black),
+                    ),
+                    Text(
+                      '${address}',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                B2BIcons.arrow_left_bottom,
+                color: Colors.grey,
+              )
+            ],
+          )),
     );
   }
 }

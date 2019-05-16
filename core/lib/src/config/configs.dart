@@ -58,4 +58,9 @@ class GlobalConfigs {
   // static const B2B_API_PREFIX = 'b2b-apparel-zh';
   static const B2B_CLIENT_ID = 'nbyjy';
   static const B2B_CLIENT_SECRET = 'password';
+
+  static const String AMAP_TIP_API =
+      'https://restapi.amap.com/v3/assistant/inputtips';
+
+  static const String AMAP_TIP_KEY = '16019b7f1babc4b2d81010730bad2504';
 }
