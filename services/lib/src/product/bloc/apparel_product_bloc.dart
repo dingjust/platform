@@ -66,11 +66,13 @@ class ApparelProductBLoC extends BLoCBase {
         }
 
         productsResponse = await ProductRepositoryImpl().list(data, {});
-        _productsMap[status].totalPages = productsResponse.totalPages;
-        _productsMap[status].totalElements = productsResponse.totalElements;
-        _productsMap[status].data.clear();
-        _productsMap[status].data.addAll(productsResponse.content);
-
+        if(productsResponse != null){
+          _productsMap[status].currentPage = productsResponse.number;
+          _productsMap[status].totalPages = productsResponse.totalPages;
+          _productsMap[status].totalElements = productsResponse.totalElements;
+          _productsMap[status].data.clear();
+          _productsMap[status].data.addAll(productsResponse.content);
+        }
       }
       _controller.sink.add(_productsMap[status].data);
       lock = false;
@@ -90,8 +92,9 @@ class ApparelProductBLoC extends BLoCBase {
       if (_productsMap[status].currentPage <
           _productsMap[status].totalPages - 1) {
         productsResponse = await ProductRepositoryImpl().list(data, {
-          'page': productsResponse.number + 1,
+          'page': _productsMap[status].currentPage + 1,
         });
+        _productsMap[status].currentPage = productsResponse.number;
         _productsMap[status].totalPages = productsResponse.totalPages;
         _productsMap[status].totalElements = productsResponse.totalElements;
         _productsMap[status].data.addAll(productsResponse.content);
@@ -143,6 +146,9 @@ class ApparelProductBLoC extends BLoCBase {
     _productsMap.forEach((key,value){
       _productsMap[key] = PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>());
     });
+  }
+  clearProductsMapByStatus(String status){
+    _productsMap[status] = PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>());
   }
 
   //下拉刷新

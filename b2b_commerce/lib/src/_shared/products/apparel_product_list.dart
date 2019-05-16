@@ -66,8 +66,10 @@ class _ApparelProductListState extends State<ApparelProductList> {
         child: RefreshIndicator(
           onRefresh: () async {
             if (widget.keyword == null) {
+              bloc.clearProductsMapByStatus(widget.status);
               return await bloc.filterByStatuses(widget.status);
             } else {
+              bloc.clearProductsMapByStatus(widget.status);
               return await bloc.getData(widget.keyword);
             }
           },
@@ -180,8 +182,10 @@ class _ApparelProductListState extends State<ApparelProductList> {
         ),
       ));
       if (widget.keyword == null) {
+        ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
         ApparelProductBLoC.instance.filterByStatuses(widget.status);
       } else {
+        ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
         ApparelProductBLoC.instance.getData(widget.keyword);
       }
     });
@@ -250,8 +254,10 @@ class _ApparelProductListState extends State<ApparelProductList> {
             }
         );
         if (widget.keyword == null) {
+          ApparelProductBLoC.instance.clearProductsMap();
           ApparelProductBLoC.instance.filterByStatuses(widget.status);
         } else {
+          ApparelProductBLoC.instance.clearProductsMap();
           ApparelProductBLoC.instance.getData(widget.keyword);
         }
       });
@@ -290,8 +296,10 @@ class _ApparelProductListState extends State<ApparelProductList> {
             }
         );
         if (widget.keyword == null) {
+          ApparelProductBLoC.instance.clearProductsMap();
           ApparelProductBLoC.instance.filterByStatuses(widget.status);
         } else {
+          ApparelProductBLoC.instance.clearProductsMap();
           ApparelProductBLoC.instance.getData(widget.keyword);
         }
       });
