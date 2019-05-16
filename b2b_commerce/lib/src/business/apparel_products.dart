@@ -18,7 +18,7 @@ class ApparelProductsPage extends StatefulWidget {
   _ApparelProductsPageState createState() => _ApparelProductsPageState();
 }
 
-class _ApparelProductsPageState extends State<ApparelProductsPage>{
+class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTickerProviderStateMixin{
   final List<EnumModel> _statuses = UserBLoC.instance.currentUser.type == UserType.FACTORY ? <EnumModel>[
     EnumModel('approved', '上架产品'),
     EnumModel('unapproved', '下架产品'),
@@ -27,6 +27,43 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>{
   ];
 
   String _keyword;
+  TabController _tabController;
+  bool isChangeTab = false;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: _statuses.length, vsync: this);
+    _tabController.addListener((){
+      if(_tabController.index.toDouble() == _tabController.animation.value){
+        setState(() {
+          isChangeTab = true;
+        });
+//        switch (_tabController.index) {
+//          case 0:
+//            print(1);
+//            break;
+//          case 1:
+//            print(2);
+//            break;
+//          case 2:
+//            print(3);
+//            break;
+//        }
+      }
+
+    });
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    //清除缓存
+    ApparelProductBLoC.instance.clearProductsMap();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,32 +101,33 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>{
               ),
             ],
           ),
-          body:DefaultTabController(
-            length: _statuses.length,
-            child: Scaffold(
-              appBar: TabBar(
-                unselectedLabelColor: Colors.black26,
-                indicatorSize: TabBarIndicatorSize.label,
-                tabs: _statuses.map((status) {
-                  return Tab(text: status.name);
-                }).toList(),
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black),
-                isScrollable: false,
-              ),
-              body: TabBarView(
-                children: _statuses
-                    .map((status) => Container(
+          body:Scaffold(
+            appBar: TabBar(
+              controller: _tabController,
+              unselectedLabelColor: Colors.black26,
+              indicatorSize: TabBarIndicatorSize.label,
+              tabs: _statuses.map((status) {
+                return Tab(text: status.name);
+              }).toList(),
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
+              isScrollable: false,
+            ),
+            body: TabBarView(
+              controller: _tabController,
+              children: _statuses
+                  .map((status) {
+                return Container(
                   padding: EdgeInsets.only(top: 10),
                   child:ApparelProductList(
-                  isSelectOption: widget.isSelectOption,
-                  status:status.code,
-                  keyword: _keyword,
-                ),))
-                    .toList(),
-              ),
+                    isSelectOption: widget.isSelectOption,
+                    status: status.code,
+                    keyword: _keyword,
+                  ),);
+              })
+                  .toList(),
             ),
           ),
 

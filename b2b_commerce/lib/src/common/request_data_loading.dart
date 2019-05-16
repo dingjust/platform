@@ -32,20 +32,18 @@ class RequestDataLoadingPage extends StatefulWidget {
     this.callbackExecution,
     @required this.entrance,
     this.keyword,
-    })
-      : super(key: key);
+  }) : super(key: key);
 
   @override
   _RequestDataLoadingPageState createState() => _RequestDataLoadingPageState();
 }
 
 class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
-
   _dismissDialog() {
     if (widget.dismissCallback != null) {
       widget.dismissCallback();
     }
-    print('1231'+widget.callbackResult.toString());
+    print('1231' + widget.callbackResult.toString());
     Navigator.of(context).pop();
   }
 
@@ -53,20 +51,21 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
   void initState() {
     super.initState();
     if (widget.requestCallBack != null) {
-        widget.requestCallBack.then((value) {
+      widget.requestCallBack.then((value) {
         Navigator.of(context).pop(value);
 
-        if(widget.entrance == 'production'){
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) =>
-                ProductionProgressesPage(
-                  order: value,
-                ),
-          ),
+        if (widget.entrance == 'production') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductionProgressesPage(
+                    order: value,
+                  ),
+            ),
           );
         }
 
-        if(widget.entrance == 'createPurchaseOrder'){
+        if (widget.entrance == 'createPurchaseOrder') {
           ProductionBLoC.instance.refreshData();
           PurchaseOrderBLoC.instance.refreshData('ALL');
 //          if(value != null){
@@ -76,92 +75,89 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
 //          }
         }
 
-        if(widget.entrance == 'purchaseOrders'){
+        if (widget.entrance == 'purchaseOrders') {
           returnPurchaseOrders();
         }
 
-        if(widget.entrance == 'returnProofingOrders'){
+        if (widget.entrance == 'returnProofingOrders') {
           returnProofingOrders();
         }
 
-        if(widget.entrance == 'quoteOrder'){
+        if (widget.entrance == 'quoteOrder') {
           QuoteOrdersBLoC.instance.refreshData('ALL');
         }
 
-        if(widget.entrance == 'proofingOrder'){
+        if (widget.entrance == 'proofingOrder') {
           ProofingOrdersBLoC.instance.refreshData('ALL');
-          if(value != null){
-          }else{
+          if (value != null) {
+          } else {
             Navigator.of(context).pop();
           }
         }
 
-        if(widget.entrance == 'apparelProduct'){
-          if(widget.keyword == null){
+        if (widget.entrance == 'apparelProduct') {
+          if (widget.keyword == null) {
             ApparelProductBLoC.instance.filterByStatuses('ALL');
-          }else{
+          } else {
             ApparelProductBLoC.instance.getData(widget.keyword);
           }
         }
-
-
       });
     }
   }
 
-  Future<void> _requestMessage(BuildContext context,String message,String code) async {
+  Future<void> _requestMessage(
+      BuildContext context, String message, String code) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (context) {
         return AlertDialog(
-          title: Text('提示',
-            style: TextStyle(
-                fontSize: 16
-            ),),
+          title: Text(
+            '提示',
+            style: TextStyle(fontSize: 16),
+          ),
           content: SingleChildScrollView(
               child: Text(
-                '${message}',
-                style: TextStyle(
-                  fontSize: 22,
-                ),
-              )
-          ),
+            '${message}',
+            style: TextStyle(
+              fontSize: 22,
+            ),
+          )),
           actions: <Widget>[
             FlatButton(
               child: Text(
                 '确定',
-                style: TextStyle(
-                    color: Colors.black
-                ),
+                style: TextStyle(color: Colors.black),
               ),
               onPressed: () async {
                 Navigator.of(context).pop();
-                if(code!= null){
-                  if(widget.entrance == 'createPurchaseOrder'){
-                    PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+                if (code != null) {
+                  if (widget.entrance == 'createPurchaseOrder') {
+                    PurchaseOrderModel model = await PurchaseOrderRepository()
+                        .getPurchaseOrderDetail(code);
                     Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) =>
-                            PurchaseOrderDetailPage(order: model)
-                        ), ModalRoute.withName('/'));
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PurchaseOrderDetailPage(order: model)),
+                        ModalRoute.withName('/'));
                   }
-                  if(widget.entrance == 'quoteOrder'){
+                  if (widget.entrance == 'quoteOrder') {
                     //查询明细
                   }
-                  if(widget.entrance == 'proofingOrder'){
-                    ProofingModel detailModel = await ProofingOrderRepository()
-                        .proofingDetail(code);
-                    if (detailModel != null) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => ProofingOrderDetailPage(
-                                model: detailModel,
-                              )),
-                          ModalRoute.withName('/'));
-                    }
+                  if (widget.entrance == 'proofingOrder') {
+                    // ProofingModel detailModel = await ProofingOrderRepository()
+                    //     .proofingDetail(code);
+                    // if (detailModel != null) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => ProofingOrderDetailPage(
+                                  code,
+                                )),
+                        ModalRoute.withName('/'));
+                    // }
                   }
-
-                }else{
+                } else {
                   Navigator.of(context).pop();
                 }
               },
@@ -173,35 +169,33 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
   }
 
   Future<void> getPurchaseOrderDetail(String code) async {
-    PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+    PurchaseOrderModel model =
+        await PurchaseOrderRepository().getPurchaseOrderDetail(code);
     PurchaseOrderBLoC.instance.refreshData('ALL');
-    if(model!=null){
+    if (model != null) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>
-              PurchaseOrderDetailPage(order: model)
-          ), ModalRoute.withName('/'));
-    }else{
+          MaterialPageRoute(
+              builder: (context) => PurchaseOrderDetailPage(order: model)),
+          ModalRoute.withName('/'));
+    } else {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>
-              PurchaseOrdersPage()
-          ), ModalRoute.withName('/'));
+          MaterialPageRoute(builder: (context) => PurchaseOrdersPage()),
+          ModalRoute.withName('/'));
     }
   }
 
-  Future<void> returnPurchaseOrders(){
+  Future<void> returnPurchaseOrders() {
     PurchaseOrderBLoC.instance.refreshData('ALL');
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) =>
-            PurchaseOrdersPage()
-        ), ModalRoute.withName('/'));
+        MaterialPageRoute(builder: (context) => PurchaseOrdersPage()),
+        ModalRoute.withName('/'));
   }
 
-  Future<void> returnProofingOrders(){
+  Future<void> returnProofingOrders() {
     ProofingOrdersBLoC().refreshData('ALL');
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) =>
-            ProofingOrdersPage()), ModalRoute.withName('/'));
-
+        MaterialPageRoute(builder: (context) => ProofingOrdersPage()),
+        ModalRoute.withName('/'));
   }
 
   @override
@@ -247,10 +241,9 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
   }
 }
 
-
 class LoadingUtil {
-
-  static Future loadingDialog(BuildContext context,Future future,String loadingText,String entrance) {
+  static Future loadingDialog(BuildContext context, Future future,
+      String loadingText, String entrance) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -261,7 +254,6 @@ class LoadingUtil {
             loadingText: loadingText,
             entrance: entrance,
           );
-        }
-    );
+        });
   }
 }

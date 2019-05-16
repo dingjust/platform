@@ -407,36 +407,27 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     //先查询订单支付状态
     String orderPaymentStatus = await checkOrder(paymentWay);
 
-    switch (orderPaymentStatus) {
-      //未支付
-      case 'ORDER_PAY_NOT':
-        print('1');
-        mappingPayWay();
-        break;
-      case 'ORDER_PAY_SUCCESS':
-        print('2');
+    PaymentStatus paymentStatus = PaymentStatusMap[orderPaymentStatus];
 
-        onPaymentSucess();
-        break;
-      case 'ORDER_PAY_FAIL':
-        print('3');
-
-        onPaymentError();
-        break;
-      case 'ORDER_PAYING':
-        //TODO :
-        print('4');
-        onPaymentPaying();
-        break;
-      case 'ORDER_INTERFACE_FAIL':
-        print('5');
-
-        onPaymentError();
-        break;
-      default:
-        print('6');
-
-        mappingPayWay();
+    if (paymentStatus == PaymentStatus.ORDER_PAY_NOT) {
+      print('1');
+      mappingPayWay();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_SUCCESS) {
+      print('2');
+      onPaymentSucess();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
+      print('3');
+      onPaymentError();
+    } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
+      //TODO :
+      print('4');
+      onPaymentPaying();
+    } else if (paymentStatus == PaymentStatus.ORDER_INTERFACE_FAIL) {
+      print('5');
+      onPaymentError();
+    } else {
+      print('6');
+      mappingPayWay();
     }
   }
 
@@ -547,6 +538,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPaymentSucess() {
+    print('${widget.order.code}');
+
     Navigator.of(context).pop();
     //成功
     showDialog<void>(
@@ -561,14 +554,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               onPressed: () async {
                 ///打样订单
                 if (widget.order is ProofingModel) {
-                  //查询明细
-                  ProofingModel detailModel = await ProofingOrderRepository()
-                      .proofingDetail(widget.order.code);
-
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => ProofingOrderDetailPage(
-                                model: detailModel,
+                                widget.order.code,
                               )),
                       ModalRoute.withName('/'));
 
@@ -648,7 +637,11 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void afterPaid() async {
     String orderPaymentStatus = await checkOrder(paymentWay);
 
+    print('after ${orderPaymentStatus}');
+
     PaymentStatus paymentStatus = PaymentStatusMap[orderPaymentStatus];
+
+    print('after ${paymentStatus}');
 
     if (paymentStatus == PaymentStatus.ORDER_PAY_NOT) {
       print('after 1');
