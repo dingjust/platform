@@ -1,3 +1,4 @@
+import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:core/core.dart';
@@ -37,6 +38,7 @@ void main() async {
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 
+  AMapLocationClient.setApiKey(GlobalConfigs.AMAP_TIP_KEY);
 
   //强制竖屏
   SystemChrome.setPreferredOrientations(

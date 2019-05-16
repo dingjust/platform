@@ -1,7 +1,8 @@
+import 'package:amap_base/amap_base.dart';
+import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:services/src/amap/amap_response.dart';
-import 'package:services/src/net/http_manager.dart';
-import 'package:core/core.dart';
+import 'package:services/src/net/http_managerpermissions.dart';
 
 class AmapService {
   // 工厂模式
@@ -9,6 +10,8 @@ class AmapService {
 
   static AmapService get instance => _getInstance();
   static AmapService _instance;
+
+  var options;
 
   /// 初始化
   AmapService._internal() {}
@@ -38,5 +41,25 @@ class AmapService {
     } else {
       return null;
     }
+  }
+
+  Future<AMapLocation> location() async {
+    AMapLocationClient.startup(AMapLocationOption(
+        desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
+    bool hasPermission =
+        await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+    if (!hasPermission) {
+      PermissionStatus requestPermissionResult =
+          await SimplePermissions.requestPermission(
+              Permission.WhenInUseLocation);
+      if (requestPermissionResult != PermissionStatus.authorized) {
+        print('定位权限失败');
+        return null;
+      }
+    }
+    AMapLocation aMapLocation = await AMapLocationClient.getLocation(true);
+    AMapLocationClient.stopLocation();
+    print('${aMapLocation.longitude}           ${aMapLocation.latitude}');
+    return aMapLocation;
   }
 }

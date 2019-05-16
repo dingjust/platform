@@ -63,4 +63,6 @@ class GlobalConfigs {
       'https://restapi.amap.com/v3/assistant/inputtips';
 
   static const String AMAP_TIP_KEY = '16019b7f1babc4b2d81010730bad2504';
+
+  // static const String AMAP_LOCATION_KEY = '182003d072a475cb3ec6712e6a978612';
 }
