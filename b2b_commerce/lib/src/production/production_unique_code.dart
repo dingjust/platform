@@ -362,7 +362,7 @@ class UniqueCodeItem extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   userType != null && userType == 'brand'?
-                  '工厂：${order.belongTo==null?'':order.belongTo.name}':'品牌：${order.purchaser==null?'':order.purchaser.name}',
+                  '工厂：${order.belongTo.name}':'品牌：${order.purchaser==null?'':order.purchaser.name}',
                   style: TextStyle(fontSize: 15),
                 ),
               ),

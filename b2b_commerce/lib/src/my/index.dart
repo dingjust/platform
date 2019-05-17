@@ -51,9 +51,6 @@ class MyHomePage extends StatelessWidget {
         MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服',
             AppRoutes.ROUTE_MY_CLIENT_SERVICES),
         menuSeparator,
-        MenuItem(B2BImage.help(width: 25, height: 24), '问题与帮助',
-            AppRoutes.ROUTE_MY_HELP),
-        menuSeparator,
         MenuItem(B2BImage.setting(width: 25, height: 24), '设置',
             AppRoutes.ROUTE_MY_SETTINGS),
       ]),
@@ -297,9 +294,9 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => MyFactoryPage(
-                      factory,
-                      isCompanyIntroduction: true,
-                    ),
+                  factory,
+                  isCompanyIntroduction: true,
+                ),
               ),
             );
           });

@@ -237,32 +237,12 @@ class BrandSecondMenuSection extends StatelessWidget {
 
   Widget _buildFindFactoriesByMapMenuItem(BuildContext context) {
     return AdvanceIconButton(
-      onPressed: () async{
-        List<CategoryModel> categories =
-            await ProductRepositoryImpl().majorCategories();
-        List<LabelModel> labels = await UserRepositoryImpl().labels();
-        labels = labels
-            .where((label) =>
-        label.group == 'FACTORY' || label.group == 'PLATFORM')
-            .toList();
-//        labels.add(LabelModel(name: '已认证', id: 1000000));
-        if (categories != null && labels != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    labels: [],
-                    cooperationModes: []),
-                route: '就近找厂',
-                categories: categories,
-                labels: labels,
-              ),
-            ),
-          );
-        }
+      onPressed: () {
+        Navigator.push(
+          context,
+          // MaterialPageRoute(builder: (context) => FindFactoryByMap()),
+          MaterialPageRoute(builder: (context) => ComingSoonPage()),
+        );
       },
       title: '就近找厂',
       isHot: true,

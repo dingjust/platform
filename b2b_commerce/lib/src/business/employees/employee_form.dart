@@ -1,6 +1,11 @@
+import 'dart:ui';
+
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class EmployeeFormPage extends StatefulWidget {
@@ -20,8 +25,10 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
   FocusNode _mobileNumberFocusNode = FocusNode();
 
   B2BCustomerModel _beforeItem;
-  List<EnumModel> enumModels;
+  List<RegionModel> _regionSelects = [];
+  List<RoleModel> _roleSelects = [];
   bool _enabled = true;
+
 
   @override
   void initState() {
@@ -29,153 +36,281 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
     _nameController.text = widget.item?.name;
     _mobileNumberController.text = widget.item?.mobileNumber;
 
-    enumModels = [];
-    if (widget.item?.roles != null)
-      enumModels.addAll(widget.item.roles
-          .map((role) => EnumModel(role.uid, role.name))
-          .toList());
-    print(enumModels);
+//    if (widget.item?.roles != null)
+//      enumModels.addAll(widget.item.roles
+//          .map((role) => EnumModel(role.uid, role.name))
+//          .toList());
+    if (widget.item?.roles != null) {
+      for (int i = 0; i < widget.item.roles.length; i++) {
+        _roleSelects.add(widget.item.roles[i]);
+        _regionSelects.add(RegionModel(isocode: widget.item.roles[i].uid,name: widget.item.roles[i].name));
+      }
+    }
+
     // TODO: implement initState
 
     super.initState();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    if(widget.newlyCreated){
+      clearData();
+    }
+
   }
 
   //格式选中的角色
   String formatRoleSelectsText() {
     String text = '';
 
-    if (enumModels != null) {
+    if (_roleSelects != null) {
       text = '';
-      for (int i = 0; i < enumModels.length; i++) {
+      for (int i = 0; i < _roleSelects.length; i++) {
         if (i > 2) {
           text += '...';
           break;
         }
 
-        if (i == enumModels.length - 1) {
-          text += enumModels[i].name;
+        if (i == _roleSelects.length - 1) {
+          text += _roleSelects[i].name;
         } else {
-          text += enumModels[i].name + '、';
+          text += _roleSelects[i].name + '、';
         }
       }
     }
 
     return text;
   }
+  
+  _getData(){
+    if(!widget.newlyCreated)
+    UserRepositoryImpl().getEmployee(widget.item.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
-    _nameFocusNode.addListener((){
-      if(_nameFocusNode.hasFocus){
-        print(enumModels);
-      }
-    });
-
-    return WillPopScope(
-      onWillPop: () {
-        if(_enabled){
-          Navigator.pop(context, _beforeItem);
-        }else{
-          Navigator.pop(context);
-        }
-        return Future.value(false);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0.5,
-          centerTitle: true,
-          title: Text(widget.newlyCreated ? '添加员工' : '员工明细'),
-          actions: <Widget>[
-            IconButton(
-              icon: Text(_enabled ? '确定':'编辑',style: TextStyle(color: Color(0xffFF9516)),),
-              onPressed: () {
-                setState(() {
-                  _enabled = !_enabled;
-                  FocusScope.of(context).requestFocus(_nameFocusNode);
-                });
-                if(_enabled){
-                  _beforeItem = B2BCustomerModel(
-                    name: widget.item.name,
-                    mobileNumber: widget.item.mobileNumber,
-                    roles: widget.item.roles,
-                  );
-                }
-
-                if (widget.newlyCreated) {
-                  widget.item.roles = null;
-                  widget.item.name = null;
-                  widget.item.mobileNumber = null;
-
-                }
-              },
-            )
-          ],
-        ),
-        body: Container(
-          color: Colors.grey[200],
-          padding: EdgeInsets.symmetric(horizontal: 5),
-          child: ListView(
-            children: <Widget>[
-              TextFieldComponent(
-                controller: _nameController,
-                focusNode: _nameFocusNode,
-                leadingText: Text('姓名',style: TextStyle(fontSize: 16,)),
-                hintText: '请输入姓名',
-                onChanged: (value) {
-                  widget.item.name = value;
-                },
-                onEditingComplete: () {
-                  FocusScope.of(context).requestFocus(_mobileNumberFocusNode);
-                },
-                enabled: _enabled,
-                autofocus: widget.newlyCreated,
-                textInputAction: TextInputAction.next,
-              ),
-              TextFieldComponent(
-                controller: _mobileNumberController,
-                focusNode: _mobileNumberFocusNode,
-                leadingText: Text('手机号码',style: TextStyle(fontSize: 16,)),
-                hintText: '请输入手机号码（数字）',
-                inputFormatters: [
-                  WhitelistingTextInputFormatter.digitsOnly,
-                ],
-                onChanged: (value) {
-                  widget.item.mobileNumber = value;
-                },
-                enabled: _enabled,
-              ),
-              InkWell(
-                  onTap: () async {
-                    if (_enabled) {
-                      dynamic result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EnumSelectPage(
-                                title: '选择角色/岗位',
-                                items: <EnumModel>[
-                                  EnumModel('R001', '超级管理员'),
-                                  EnumModel('R002', '会计'),
-                                ],
-                                models: enumModels,
-                                multiple: true,
-                              ),
+    return FutureBuilder(
+        future: _getData(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 0.5,
+              centerTitle: true,
+              title: Text(widget.newlyCreated ? '添加员工' : '员工明细'),
+              actions: <Widget>[
+                Offstage(
+                  offstage: _enabled,
+                  child: IconButton(
+                    icon: Text(
+                      '编辑',
+//                style: TextStyle(color: Color(0xffFF9516)),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _enabled = !_enabled;
+//                  FocusScope.of(context).requestFocus(_nameFocusNode);
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+            body: Container(
+              color: Colors.grey[200],
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    color: Colors.white,
+                    child: TextFieldComponent(
+                      controller: _nameController,
+                      focusNode: _nameFocusNode,
+                      leadingText: Text('姓名',
+                          style: TextStyle(
+                            fontSize: 16,
+                          )),
+                      hintText: '请输入姓名',
+                      onEditingComplete: () {
+                        FocusScope.of(context)
+                            .requestFocus(_mobileNumberFocusNode);
+                      },
+                      enabled: _enabled,
+                      autofocus: widget.newlyCreated,
+                      textInputAction: TextInputAction.next,
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: TextFieldComponent(
+                      controller: _mobileNumberController,
+                      focusNode: _mobileNumberFocusNode,
+                      leadingText: Text('手机号码',
+                          style: TextStyle(
+                            fontSize: 16,
+                          )),
+                      hintText: '请输入手机号码（数字）',
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
+                      enabled: _enabled && widget.newlyCreated,
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: InkWell(
+                        onTap: () async {
+                          if (_enabled) {
+                            //获取所有角色
+                            UserRepositoryImpl().roles().then((roles) {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return RegionSelector(
+                                    regions: roles.map((role) => RegionModel(isocode: role.uid,name: role.name)).toList(),
+                                    regionSelects: _regionSelects,
+                                    multiple: true,
+                                  );
+                                },
+                              ).then((val) {
+                                setState(() {
+                                  _roleSelects = _regionSelects.map((region) => RoleModel(uid: region.isocode,name: region.name)).toList();
+                                });
+                              });
+                            });
+                          }
+                        },
+                        child: ShowSelectTile(
+                          leadingText: '角色/岗位',
+                          tralingText: formatRoleSelectsText(),
+                        )),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 15),
+                    child: Center(
+                      child: Text(
+                        '初始密码为随机密码，创建后请员工尽快修改密码',
+                        style: TextStyle(
+                          color: Colors.red,
                         ),
-                      );
-                      if (result != null) enumModels = result;
-                      widget.item.roles = enumModels
-                          .map((model) =>
-                              RoleModel(uid: model.code, name: model.name))
-                          .toList();
-                    }
-                  },
-                  child: ShowSelectTile(
-                    leadingText: '角色/岗位',
-                    tralingText: formatRoleSelectsText(),
-                  )),
-            ],
-          ),
-        ),
-      ),
-    );
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Offstage(
+                      offstage: !_enabled,
+                      child: Center(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pop(context, widget.item);
+                          },
+                          child: InkWell(
+                            onTap: () {
+                              widget.item.name = _nameController.text;
+                              widget.item.mobileNumber =
+                                  _mobileNumberController.text;
+                              widget.item.uid = _mobileNumberController.text;
+                              widget.item.roles = _roleSelects;
+                              if(widget.newlyCreated){
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (_) {
+                                      return RequestDataLoadingPage(
+                                        requestCallBack: UserRepositoryImpl()
+                                            .employeeCreate(widget.item),
+                                        outsideDismiss: false,
+                                        loadingText: '保存中。。。',
+//                                        entrance: 'createPurchaseOrder',
+                                      );
+                                    }).then((value) {
+                                  bool result = false;
+                                  if (value != null) {
+                                    result = true;
+                                  }
+
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (_) {
+                                        return CustomizeDialogPage(
+                                          dialogType: DialogType.RESULT_DIALOG,
+                                          failTips: '创建员工失败',
+                                          successTips: '创建员工成功',
+                                          callbackResult: result,
+                                          confirmAction: () {
+                                            Navigator.of(context).pop();
+                                            Navigator.pop(context);
+                                            EmployeeBLoC.instance.getB2BCustomerData();
+                                          },
+                                        );
+                                      });
+                                });
+                              }else{
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (_) {
+                                      return RequestDataLoadingPage(
+                                        requestCallBack: UserRepositoryImpl()
+                                            .employeeUpdate(widget.item,widget.item.uid),
+                                        outsideDismiss: false,
+                                        loadingText: '保存中。。。',
+//                                        entrance: 'updatePurchaseOrder',
+                                      );
+                                    }).then((value) {
+                                  bool result = false;
+                                  if (value != null) {
+                                    result = true;
+                                  }
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (_) {
+                                        return CustomizeDialogPage(
+                                          dialogType: DialogType.RESULT_DIALOG,
+                                          failTips: '编辑员工失败',
+                                          successTips: '编辑员工成功',
+                                          callbackResult: result,
+                                          confirmAction: () {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                            EmployeeBLoC.instance.getB2BCustomerData();
+                                          },
+                                        );
+                                      });
+                                });
+                              }
+                            },
+                            child: Container(
+                              height: 40,
+                              width:
+                                  MediaQueryData.fromWindow(window).size.width -
+                                      100,
+                              child: Center(child: Text('确定')),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color.fromRGBO(255, 214, 12, 1),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+
+  }
+
+  clearData(){
+    widget.item.id = null;
+    widget.item.name = null;
+    widget.item.mobileNumber = null;
+//    widget.item.uid = null;
+    widget.item.roles = [];
   }
 }

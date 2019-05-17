@@ -345,15 +345,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void formValidate() {
-    if (!RegexUtil.isMobile(_phoneController.text)) {
-      setState(() {
-        phoneValidateStr = '输入正确手机号';
-      });
-    } else {
-      setState(() {
-        phoneValidateStr = '';
-      });
-    }
     setState(() {
       validate = _phoneController.text.trim().length > 0 &&
           _captchaController.text.trim().length > 0 &&
