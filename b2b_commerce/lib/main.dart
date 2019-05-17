@@ -10,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:amap_location/amap_location.dart';
 
 import 'src/business/orders/requirement_order_from.dart';
 import 'src/common/app_bloc.dart';
@@ -28,6 +29,8 @@ void main() async {
 
   // 初始化,检测是否有用户登录信息
   await UserBLoC.instance.checkLocalUser();
+
+  AMapLocationClient.setApiKey("7ff2f1b6002d0aaa2ef2cb40f76e7c4a");
 
   //头部状态栏阴影
   TargetPlatform platform = defaultTargetPlatform;
