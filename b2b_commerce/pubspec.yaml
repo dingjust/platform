@@ -29,7 +29,6 @@ dependencies:
   services:
     path: ../services/
 
-
   json_annotation: ^2.0.0
   cupertino_icons: ^0.1.2
   font_awesome_flutter: 8.2.0
@@ -132,6 +131,7 @@ flutter:
     - packages/assets/temp/my/invoice_manage.png
     - packages/assets/temp/my/my_account.png
     - packages/assets/temp/my/setting.png
+    - packages/assets/temp/my/help.png
     - packages/assets/temp/common/address_under_line.png
     - packages/assets/temp/business/partner_manage_factory.png
     - packages/assets/temp/business/product_manage_factory.png
