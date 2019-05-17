@@ -8,9 +8,11 @@ import 'package:widgets/widgets.dart';
 import 'region_select.dart';
 
 class ContactAddressFormPage extends StatefulWidget {
-  ContactAddressFormPage({this.address});
+  ContactAddressFormPage({this.address, this.company});
 
   final AddressModel address;
+
+  final B2BUnitModel company;
 
   @override
   ContactAddressFormPageState createState() => ContactAddressFormPageState();
@@ -22,8 +24,6 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
   String regionCityAndDistrict;
 
   List<Widget> tipsWidget;
-
-  String location;
 
   String gps;
 
@@ -130,7 +130,9 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
         margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Text(location == null ? '请选择定位' : '${location}')],
+          children: <Widget>[
+            Text('${widget.company.longitude},${widget.company.latitude}')
+          ],
         ),
       ),
       Container(
@@ -139,7 +141,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
             Expanded(
               flex: 1,
               child: Text(
-                '定位工厂坐标后，品牌可以通过"就近找厂"快速找到您的工厂${gps}',
+                '定位工厂坐标后，品牌可以通过"就近找厂"快速找到您的工厂',
                 style: TextStyle(color: Colors.grey),
               ),
             )
@@ -183,7 +185,9 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
     Tip tip =
         await showSearch(context: context, delegate: AmapSearchDelegatePage());
     setState(() {
-      location = '${tip.address}(${tip.location})';
+      List<String> locationArray = tip.location.split(',');
+      widget.company.longitude = double.parse(locationArray[0]);
+      widget.company.latitude = double.parse(locationArray[1]);
     });
   }
 
