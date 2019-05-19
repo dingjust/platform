@@ -45,12 +45,12 @@ class InvoiceTitleRepositoryImpl implements InvoiceTitleRepository{
   Future<String> create(InvoiceTitleModel form) async{
     Response response;
     String result;
-//    try {
+    try {
     print(InvoiceTitleModel.toJson(form));
       response = await http$.post(UserApis.invoiceTitles,data: InvoiceTitleModel.toJson(form));
-//    } catch (e) {
-//      print(e);
-//    }
+    } catch (e) {
+      print(e);
+    }
     if(response != null && response.statusCode == 200){
       result = response.data;
     }

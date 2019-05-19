@@ -42,16 +42,6 @@ class FactoryCondition {
   ///关键字
   String keyword;
 
-  //距离筛选 (米)
-  double distance;
-
-  //纬度
-  double latitude;
-
-  //经度
-  double longitude;
-
-
   FactoryCondition(
       {this.starLevel,
       this.historyOrdersCount,
@@ -63,8 +53,6 @@ class FactoryCondition {
       @required this.cooperationModes,
       this.industrialCuster,
       this.cities,
-        this.latitude,
-        this.longitude,
       this.keyword});
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) =>

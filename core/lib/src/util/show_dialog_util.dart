@@ -92,6 +92,17 @@ class ShowDialogUtil extends StatelessWidget{
       );
   }
 
+  static showSnakeBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message),duration: Duration(seconds: 1),);
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  // 如果弹不出请用这个
+  static showSnakeBarByKey(final GlobalKey<ScaffoldState> key, BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message),duration: Duration(seconds: 1),);
+    key.currentState.showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
 

@@ -16,20 +16,20 @@ class EmployeeItemState extends State<EmployeeItem>{
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: (){
-        ShowDialogUtil.showAlertDialog(context, '是否删除该员工', ()async{
-          String result = await UserRepositoryImpl().employeeDelete(widget.item.id);
-          if(result != null){
-            Navigator.pop(context);
-            ShowDialogUtil.showSnakeBar(context, '删除员工成功');
-            EmployeeBLoC.instance.getB2BCustomerData();
-          }else{
-            Navigator.pop(context);
-            ShowDialogUtil.showSnakeBar(context, '删除员工失败');
-            EmployeeBLoC.instance.getB2BCustomerData();
-          }
-        });
-      },
+//      onLongPress: (){
+//        ShowDialogUtil.showAlertDialog(context, '是否删除该员工', ()async{
+//          String result = await UserRepositoryImpl().employeeDelete(widget.item.id);
+//          if(result != null){
+//            Navigator.pop(context);
+//            ShowDialogUtil.showSnakeBar(context, '删除员工成功');
+//            EmployeeBLoC.instance.getB2BCustomerData();
+//          }else{
+//            Navigator.pop(context);
+//            ShowDialogUtil.showSnakeBar(context, '删除员工失败');
+//            EmployeeBLoC.instance.getB2BCustomerData();
+//          }
+//        });
+//      },
       child: SizedBox(
         height: 75,
         child: Card(

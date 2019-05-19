@@ -50,17 +50,28 @@ class FactoryBLoC extends BLoCBase {
     String condition = '',
     String sort = '',
     String requirementCode,
-    double longitude,
-    double latitude,
   }) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
       Response<Map<String, dynamic>> response;
-      if(longitude != null && longitude > 0){
+      if (requirementCode != null && requirementCode != '') {
         try {
-          response = await http$.post(Apis.factoriesForMap,
+          response = await http$.post(
+              Apis.requestQuoteFactories(requirementCode),
+              data: factoryCondition.toDataJson(),
+              queryParameters: {
+                'page': currentPage,
+                'size': pageSize,
+                'sort': '${condition},${sort}'
+              });
+        } on DioError catch (e) {
+          print(e);
+        }
+      } else {
+        try {
+          response = await http$.post(Apis.factories,
               data: factoryCondition.toDataJson(),
               // data:{},
               queryParameters: {
@@ -71,36 +82,7 @@ class FactoryBLoC extends BLoCBase {
         } on DioError catch (e) {
           print(e);
         }
-      }else{
-        if (requirementCode != null && requirementCode != '') {
-          try {
-            response = await http$.post(
-                Apis.requestQuoteFactories(requirementCode),
-                data: factoryCondition.toDataJson(),
-                queryParameters: {
-                  'page': currentPage,
-                  'size': pageSize,
-                  'sort': '${condition},${sort}'
-                });
-          } on DioError catch (e) {
-            print(e);
-          }
-        } else {
-          try {
-            response = await http$.post(Apis.factories,
-                data: factoryCondition.toDataJson(),
-                // data:{},
-                queryParameters: {
-                  'page': currentPage,
-                  'size': pageSize,
-                  'sort': '${condition},${sort}'
-                });
-          } on DioError catch (e) {
-            print(e);
-          }
-        }
       }
-
 
       if (response != null && response.statusCode == 200) {
         FactoriesResponse factoriesResponse =

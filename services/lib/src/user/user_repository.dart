@@ -1,6 +1,7 @@
 import 'package:models/models.dart';
 import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:services/src/supplier/brands_response.dart';
+import 'package:services/src/user/response/b2b_customer_response.dart';
 
 abstract class UserRepository {
   //注册
@@ -47,4 +48,19 @@ abstract class UserRepository {
 
   ///短信验证重置密码
   Future<bool> resetPassword(String phone, String newPassword, String captcha);
+
+  //获取所有角色
+  Future<List<RoleModel>> roles();
+
+  //获取员工列表
+  Future<B2BCustomerResponse> employees(Map<String, Object> params,dynamic data);
+  //获取员工明细
+  Future<B2BCustomerModel> getEmployee(String uid);
+  //获取员工列表
+  Future<String> employeeCreate(B2BCustomerModel model);
+  //更新员工列表
+  Future<String> employeeUpdate(B2BCustomerModel model,String uid);
+  //删除员工列表
+  Future<String> employeeDelete(int id);
+
 }

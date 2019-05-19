@@ -55,10 +55,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
   @override
   void dispose(){
     super.dispose();
-    if(widget.newlyCreated){
-      clearData();
-    }
-
+    clearData();
   }
 
   //格式选中的角色
@@ -85,7 +82,6 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
   }
   
   _getData(){
-    if(!widget.newlyCreated)
     UserRepositoryImpl().getEmployee(widget.item.uid);
   }
 
@@ -153,7 +149,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                       inputFormatters: [
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
-                      enabled: _enabled && widget.newlyCreated,
+                      enabled: _enabled,
                     ),
                   ),
                   Container(

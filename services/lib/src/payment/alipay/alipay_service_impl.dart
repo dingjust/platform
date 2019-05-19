@@ -1,6 +1,5 @@
 import 'package:alipay_me/alipay_me.dart';
 import 'package:services/src/payment/alipay/alipay_constants.dart';
-import 'package:services/src/payment/alipay/alipay_response.dart';
 import 'package:services/src/payment/alipay/alipay_service.dart';
 import 'package:services/src/payment/payment_for.dart';
 
@@ -32,17 +31,19 @@ class AlipayServiceImpl implements AlipayService {
   }
 
   @override
-  Future<AlipayResponse> pay(String orderCode, {PaymentFor paymentFor}) async {
-    AlipayResponse response;
+  Future<dynamic> pay(String orderCode, {PaymentFor paymentFor}) async {
+    var result;
     //通过Helper获取预支付信息
     String payInfo =
         await AlipayHelper.prepay(orderCode, paymentFor: paymentFor);
     if (payInfo != null) {
-      Map payResponse = await AlipayMe.pay(payInfo);
-      response = AlipayResponse.generate(payResponse);
+      result = await AlipayMe.pay(payInfo);
     } else {
       return null;
     }
-    return response;
+    print('====');
+    print(result);
+    print('====');
+    return result;
   }
 }

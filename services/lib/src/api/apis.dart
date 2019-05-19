@@ -58,9 +58,6 @@ class Apis {
   /// 全部工厂列表Z
   static get factories => '/{baseSiteId}/factories';
 
-  /// 经纬度
-  static get factoriesForMap => '/{baseSiteId}/factories/map';
-
   //邀请报价工厂列表 传入需求单号
   static get requestQuoteFactories => (String code) {
         return '/{baseSiteId}/factories/requirement/$code';

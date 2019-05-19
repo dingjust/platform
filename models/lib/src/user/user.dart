@@ -22,7 +22,10 @@ class UserModel extends PrincipalModel {
   UserStatus status;
 
   /// 角色
+  @JsonKey(toJson: _rolesToJson)
   List<RoleModel> roles;
+//  List<String> roles;
+//  String roleNames;
 
   /// 公司id
   String companyCode;
@@ -80,6 +83,10 @@ class UserModel extends PrincipalModel {
 
   static Map<String, dynamic> toJson(UserModel model) =>
       _$UserModelToJson(model);
+
+  static List<Map<String, dynamic>> _rolesToJson(
+      List<RoleModel> models) =>
+      models.map((model) => RoleModel.toJson(model)).toList();
 }
 
 /// 客户
@@ -113,6 +120,7 @@ class CustomerModel extends UserModel {
 @JsonSerializable()
 class B2BCustomerModel extends CustomerModel {
   bool active;
+  @JsonKey(toJson: _b2bUnitToJson)
   B2BUnitModel defaultB2BUnit;
 
   B2BCustomerModel({
@@ -138,6 +146,9 @@ class B2BCustomerModel extends CustomerModel {
 
   static Map<String, dynamic> toJson(B2BCustomerModel model) =>
       _$B2BCustomerModelToJson(model);
+
+  static Map<String, dynamic> _b2bUnitToJson(B2BUnitModel model) =>
+      B2BUnitModel.toJson(model);
 }
 
 /// 地址
@@ -272,8 +283,9 @@ class DistrictModel extends ItemModel {
 class RoleModel extends ItemModel {
   String uid;
   String name;
+  String description;
 
-  RoleModel({this.uid, this.name});
+  RoleModel({this.uid, this.name,this.description,});
 
   factory RoleModel.fromJson(Map<String, dynamic> json) =>
       _$RoleModelFromJson(json);
