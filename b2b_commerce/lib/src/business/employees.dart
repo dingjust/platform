@@ -1,13 +1,11 @@
 import 'package:b2b_commerce/src/_shared/users/employee_item.dart';
 import 'package:b2b_commerce/src/_shared/users/employee_list.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'employees/employee_form.dart';
-import 'search/employee_search.dart';
 
 class EmployeesPage extends StatefulWidget {
   @override
@@ -67,7 +65,8 @@ class _EmployeesPageState extends State<EmployeesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EmployeeFormPage(
+              builder: (context) =>
+                  EmployeeFormPage(
                     item: employee,
                     newlyCreated: true,
                   ),

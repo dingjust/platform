@@ -53,13 +53,18 @@ abstract class UserRepository {
   Future<List<RoleModel>> roles();
 
   //获取员工列表
-  Future<B2BCustomerResponse> employees(Map<String, Object> params,dynamic data);
+  Future<B2BCustomerResponse> employees(Map<String, Object> params,
+      dynamic data);
+
   //获取员工明细
   Future<B2BCustomerModel> getEmployee(String uid);
+
   //获取员工列表
   Future<String> employeeCreate(B2BCustomerModel model);
+
   //更新员工列表
-  Future<String> employeeUpdate(B2BCustomerModel model,String uid);
+  Future<String> employeeUpdate(B2BCustomerModel model, String uid);
+
   //删除员工列表
   Future<String> employeeDelete(int id);
 

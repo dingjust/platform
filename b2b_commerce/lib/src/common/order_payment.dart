@@ -417,7 +417,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       onPaymentSucess();
     } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
       print('3');
-      onPaymentError();
+      mappingPayWay();
     } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
       //TODO :
       print('4');
@@ -488,8 +488,15 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void aliPay() async {
-    AlipayServiceImpl.instance
+    AlipayResponse aliResponse = await AlipayServiceImpl.instance
         .pay(widget.order.code, paymentFor: widget.paymentFor);
+    //支付成功
+    if (aliResponse.resultStatus != null &&
+        aliResponse.resultStatus == '9000') {
+      afterPaid();
+    } else {
+      onPaymentError();
+    }
   }
 
   void onPaymentError() {
@@ -651,7 +658,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       onPaymentSucess();
     } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
       print('after 3');
-      onPaymentError();
+      mappingPayWay();
     } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
       print('after 4');
       onPaymentPaying();

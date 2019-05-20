@@ -24,6 +24,7 @@ class UserModel extends PrincipalModel {
   /// 角色
   @JsonKey(toJson: _rolesToJson)
   List<RoleModel> roles;
+
 //  List<String> roles;
 //  String roleNames;
 
@@ -84,8 +85,7 @@ class UserModel extends PrincipalModel {
   static Map<String, dynamic> toJson(UserModel model) =>
       _$UserModelToJson(model);
 
-  static List<Map<String, dynamic>> _rolesToJson(
-      List<RoleModel> models) =>
+  static List<Map<String, dynamic>> _rolesToJson(List<RoleModel> models) =>
       models.map((model) => RoleModel.toJson(model)).toList();
 }
 
@@ -285,7 +285,7 @@ class RoleModel extends ItemModel {
   String name;
   String description;
 
-  RoleModel({this.uid, this.name,this.description,});
+  RoleModel({this.uid, this.name, this.description,});
 
   factory RoleModel.fromJson(Map<String, dynamic> json) =>
       _$RoleModelFromJson(json);

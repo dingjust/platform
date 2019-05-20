@@ -58,6 +58,9 @@ class Apis {
   /// 全部工厂列表Z
   static get factories => '/{baseSiteId}/factories';
 
+  /// 经纬度
+  static get factoriesForMap => '/{baseSiteId}/factories/map';
+
   //邀请报价工厂列表 传入需求单号
   static get requestQuoteFactories => (String code) {
         return '/{baseSiteId}/factories/requirement/$code';
@@ -72,5 +75,13 @@ class Apis {
   /// 检测版本
   static get appVersions => (String name, String platform) {
         return '/{baseSiteId}/appVersions/$name/$platform';
+      };
+
+  ///问题与帮助信息
+  static get guideline => '/{baseSiteId}/guideline';
+
+  ///问题与帮助信息详情
+  static get guidelineDetail => (int id) {
+        return '/{baseSiteId}/guideline/${id}';
       };
 }

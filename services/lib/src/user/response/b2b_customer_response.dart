@@ -12,8 +12,8 @@ class B2BCustomerResponse {
   final int totalElements;
   final List<B2BCustomerModel> content;
 
-  B2BCustomerResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  B2BCustomerResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory B2BCustomerResponse.fromJson(Map<String, dynamic> json) =>
       _$B2BCustomerResponseFromJson(json);
@@ -21,4 +21,3 @@ class B2BCustomerResponse {
   static Map<String, dynamic> toJson(B2BCustomerResponse model) =>
       _$B2BCustomerResponseToJson(model);
 }
-

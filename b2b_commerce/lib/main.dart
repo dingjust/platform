@@ -1,3 +1,4 @@
+import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:core/core.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:amap_location/amap_location.dart';
 
 import 'src/business/orders/requirement_order_from.dart';
 import 'src/common/app_bloc.dart';
@@ -28,6 +30,8 @@ void main() async {
   // 初始化,检测是否有用户登录信息
   await UserBLoC.instance.checkLocalUser();
 
+  AMapLocationClient.setApiKey("7ff2f1b6002d0aaa2ef2cb40f76e7c4a");
+
   //头部状态栏阴影
   TargetPlatform platform = defaultTargetPlatform;
   if (platform != TargetPlatform.iOS) {
@@ -37,7 +41,7 @@ void main() async {
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 
-  //
+  AMapLocationClient.setApiKey(GlobalConfigs.AMAP_TIP_KEY);
 
   //强制竖屏
   SystemChrome.setPreferredOrientations(
@@ -133,14 +137,15 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   /// 发布需求
   void _onPublish(BuildContext context) {
-    requirementOrderModel = RequirementOrderModel(details: RequirementInfoModel(),attachments: []);
+    requirementOrderModel =
+        RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => RequirementOrderFrom(
-          isCreate: true,
-          order: requirementOrderModel,
-        ),
+              isCreate: true,
+              order: requirementOrderModel,
+            ),
       ),
     );
   }

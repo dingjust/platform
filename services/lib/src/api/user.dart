@@ -55,10 +55,13 @@ abstract class UserApis {
 
   //获取所有角色
   static get roles => '/{baseSiteId}/roles';
+
   //获取员工列表
   static get employees => '/{baseSiteId}/b2bCustomers';
+
   //创建员工
-    static get employeeCreate => '/{baseSiteId}/b2bCustomers/create';
+  static get employeeCreate => '/{baseSiteId}/b2bCustomers/create';
+
   //更新/删除员工(详情)
   static get employeeFromId => (uid) => '/{baseSiteId}/b2bCustomers/$uid';
 

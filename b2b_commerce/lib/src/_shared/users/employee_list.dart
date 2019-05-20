@@ -1,7 +1,5 @@
 import 'package:b2b_commerce/src/_shared/users/employee_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
-import 'package:b2b_commerce/src/business/employees/employee_form.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -10,11 +8,10 @@ import 'package:widgets/widgets.dart';
 class EmployeeList extends StatefulWidget {
   EmployeeList();
 
-
   EmployeeListState createState() => EmployeeListState();
 }
 
-class EmployeeListState extends State<EmployeeList>{
+class EmployeeListState extends State<EmployeeList> {
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -36,7 +33,7 @@ class EmployeeListState extends State<EmployeeList>{
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: ()async{
+      onRefresh: () async {
         return await EmployeeBLoC.instance.getB2BCustomerData();
       },
       child: ListView(
@@ -63,9 +60,7 @@ class EmployeeListState extends State<EmployeeList>{
               if (snapshot.hasData) {
                 return Column(
                   children: snapshot.data.map((employee) {
-                    return EmployeeItem(
-                      employee
-                    );
+                    return EmployeeItem(employee);
                   }).toList(),
                 );
               } else if (snapshot.hasError) {
@@ -107,5 +102,4 @@ class EmployeeListState extends State<EmployeeList>{
       ),
     );
   }
-
 }

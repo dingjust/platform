@@ -92,9 +92,62 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                       PurchaseOrderModel _purchaseOrder = await PurchaseOrderRepository().getDetailsForUniqueCode(unique);
 
                                       if (_purchaseOrder != null) {
-                                        setState(() {
-                                          uniqueCodeEntry = _purchaseOrder;
-                                        });
+
+                                      if((_purchaseOrder.purchaser != null && _purchaseOrder.purchaser.uid != null && _purchaseOrder.purchaser.uid != '')
+                                      &&(_purchaseOrder.belongTo != null && _purchaseOrder.belongTo.uid != null && _purchaseOrder.belongTo.uid != '')){
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (_) {
+                                                return CustomizeDialogPage(
+                                                  dialogType: DialogType.RESULT_DIALOG,
+                                                  failTips: '该唯一码已被使用',
+                                                  callbackResult: false,
+                                                );
+                                              }
+                                          );
+                                      } else if(UserBLoC().isBrandUser){
+                                          if(_purchaseOrder.purchaser != null){
+                                            showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (_) {
+                                                  return CustomizeDialogPage(
+                                                    dialogType: DialogType.RESULT_DIALOG,
+                                                    failTips: '该唯一码仅限工厂查询',
+                                                    callbackResult: false,
+                                                  );
+                                                }
+                                            );
+                                          }else{
+                                            setState(() {
+                                              uniqueCodeEntry = _purchaseOrder;
+                                            });
+                                          }
+                                        } else if(UserBLoC().isFactoryUser){
+                                          if(_purchaseOrder.belongTo != null){
+                                            showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (_) {
+                                                  return CustomizeDialogPage(
+                                                    dialogType: DialogType.RESULT_DIALOG,
+                                                    failTips: '该唯一码仅限品牌查询',
+                                                    callbackResult: false,
+                                                  );
+                                                }
+                                            );
+                                          }else{
+                                            setState(() {
+                                              uniqueCodeEntry = _purchaseOrder;
+                                            });
+                                          }
+                                        } else{
+                                          setState(() {
+                                            uniqueCodeEntry = _purchaseOrder;
+                                          });
+                                        }
+
                                       }else{
                                         showDialog(
                                             context: context,
@@ -362,7 +415,7 @@ class UniqueCodeItem extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   userType != null && userType == 'brand'?
-                  '工厂：${order.belongTo.name}':'品牌：${order.purchaser==null?'':order.purchaser.name}',
+                  '工厂：${order.belongTo==null?'':order.belongTo.name}':'品牌：${order.purchaser==null?'':order.purchaser.name}',
                   style: TextStyle(fontSize: 15),
                 ),
               ),

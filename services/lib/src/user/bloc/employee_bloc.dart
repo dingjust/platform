@@ -19,7 +19,6 @@ class EmployeeBLoC extends BLoCBase {
   EmployeeBLoC._internal() {
     // 初始化
     b2bCustomers = List<B2BCustomerModel>();
-
   }
 
   static EmployeeBLoC _getInstance() {
@@ -46,10 +45,8 @@ class EmployeeBLoC extends BLoCBase {
       b2bCustomers.clear();
       b2bCustomerResponse = await UserRepositoryImpl().employees({
         //param
-
       }, {
         //data
-
       });
       if (b2bCustomerResponse != null) {
         b2bCustomers = b2bCustomerResponse.content;
@@ -62,18 +59,17 @@ class EmployeeBLoC extends BLoCBase {
   loadingMoreByStatuses() async {
     if (!lock) {
       lock = true;
-      if(b2bCustomerResponse.number < b2bCustomerResponse.totalPages-1){
+      if (b2bCustomerResponse.number < b2bCustomerResponse.totalPages - 1) {
         b2bCustomerResponse = await UserRepositoryImpl().employees({
           //param
-          'page':b2bCustomerResponse.number + 1,
+          'page': b2bCustomerResponse.number + 1,
         }, {
           //data
-
         });
         if (b2bCustomerResponse != null) {
           b2bCustomers.addAll(b2bCustomerResponse.content);
         }
-      }else{
+      } else {
         bottomController.sink.add(true);
       }
 

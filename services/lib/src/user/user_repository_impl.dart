@@ -186,7 +186,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<List<RoleModel>> roles() async{
+  Future<List<RoleModel>> roles() async {
     Response response = await http$.get(UserApis.roles);
     return response.data
         .map<RoleModel>((role) => RoleModel.fromJson(role))
@@ -194,38 +194,42 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<String> employeeCreate(B2BCustomerModel model) async{
+  Future<String> employeeCreate(B2BCustomerModel model) async {
     print('${B2BCustomerModel.toJson(model)}');
     Response response;
     String result;
     try {
-      response = await http$.post(UserApis.employeeCreate,data: B2BCustomerModel.toJson(model),);
+      response = await http$.post(
+        UserApis.employeeCreate, data: B2BCustomerModel.toJson(model),);
     } catch (e) {
       print(e);
     }
-    if(response != null && response.statusCode == 200){
-        result = response.data;
+    if (response != null && response.statusCode == 200) {
+      result = response.data;
     }
 
     return result;
   }
+
   @override
-  Future<String> employeeUpdate(B2BCustomerModel model,String uid) async{
+  Future<String> employeeUpdate(B2BCustomerModel model, String uid) async {
     Response response;
     String result;
     try {
-      response = await http$.put(UserApis.employeeFromId(uid),data: B2BCustomerModel.toJson(model),);
+      response = await http$.put(
+        UserApis.employeeFromId(uid), data: B2BCustomerModel.toJson(model),);
     } catch (e) {
       print(e);
     }
-    if(response != null && response.statusCode == 200){
-        result = response.data;
+    if (response != null && response.statusCode == 200) {
+      result = response.data;
     }
 
     return result;
   }
+
   @override
-  Future<String> employeeDelete(int id) async{
+  Future<String> employeeDelete(int id) async {
     Response response;
     String result;
     try {
@@ -233,23 +237,25 @@ class UserRepositoryImpl implements UserRepository {
     } catch (e) {
       print(e);
     }
-    if(response != null && response.statusCode == 200){
-        result = response.data;
+    if (response != null && response.statusCode == 200) {
+      result = response.data;
     }
 
     return result;
   }
 
   @override
-  Future<B2BCustomerResponse> employees(Map<String, Object> params, dynamic data) async{
+  Future<B2BCustomerResponse> employees(Map<String, Object> params,
+      dynamic data) async {
     Response response;
     B2BCustomerResponse result;
     try {
-      response = await http$.post(UserApis.employees,queryParameters: params,data: data);
+      response =
+      await http$.post(UserApis.employees, queryParameters: params, data: data);
     } catch (e) {
       print(e);
     }
-    if(response != null && response.statusCode == 200){
+    if (response != null && response.statusCode == 200) {
       result = B2BCustomerResponse.fromJson(response.data);
     }
 
@@ -257,7 +263,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<B2BCustomerModel> getEmployee(String uid) async{
+  Future<B2BCustomerModel> getEmployee(String uid) async {
     Response response;
     B2BCustomerModel result;
     try {
@@ -265,7 +271,7 @@ class UserRepositoryImpl implements UserRepository {
     } catch (e) {
       print(e);
     }
-    if(response != null && response.statusCode == 200){
+    if (response != null && response.statusCode == 200) {
       result = B2BCustomerModel.fromJson(response.data);
     }
 
