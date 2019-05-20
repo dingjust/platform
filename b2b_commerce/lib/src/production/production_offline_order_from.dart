@@ -1053,10 +1053,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   //生成日期选择器
   Future<Null> _selectDate(BuildContext context) async {
+    DateTime first = DateTime.now();
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(2019),
+        firstDate: first,
         lastDate: DateTime(2999));
 
     if (_picked != null) {
