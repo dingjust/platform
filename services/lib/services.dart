@@ -11,6 +11,8 @@ export 'src/home/factory/response/factory_condition.dart';
 export 'src/home/product/bloc/order_product_bloc.dart';
 export 'src/message/message_bloc.dart';
 export 'src/my/bloc/my_bill_bloc.dart';
+export 'src/my/bloc/my_help_bloc.dart';
+export 'src/my/repository/user_guideline_repository.dart';
 export 'src/net/http_manager.dart';
 export 'src/order/bloc/proofing_orders_bloc.dart';
 export 'src/order/bloc/purchase_order_bloc.dart';

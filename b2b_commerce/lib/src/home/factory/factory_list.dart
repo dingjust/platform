@@ -144,9 +144,30 @@ class _FactoryPageState extends State<FactoryPage> {
 //  }
 
   //初始化定位监听，
-  void _initLocation() async {
-    aMapLocation = await AmapService.instance.location();
-  }
+  // void _initLocation() async {
+  //   AMapLocationClient.startup(new AMapLocationOption(
+  //       desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
+
+  //   aMapLocation = await AMapLocationClient.getLocation(true);
+
+//    factoryCondition.latitude = aMapLocation.latitude;
+//    factoryCondition.longitude = aMapLocation.longitude;
+
+  // print('定位！！！！'+aMapLocation.latitude.toString());
+
+
+//    //监听坐标实时变换
+//    AMapLocationClient.onLocationUpate.listen((AMapLocation loc) {
+//      if (!mounted) return;
+//      setState(() {
+//        xLocal = loc.latitude;
+//        yLocal = loc.longitude;
+//      });
+//    });
+//
+//    print(xLocal.toString()+','+yLocal.toString());
+//    AMapLocationClient.startLocation();
+  // }
 
   getCategories()async{
     _category = await ProductRepositoryImpl().cascadedCategories();

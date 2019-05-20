@@ -73,12 +73,12 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           }
         },
         initialData: null,
-        future: _gerData(),
+        future: _getData(),
       ),
     );
   }
 
-  Future<ProofingModel> _gerData() async {
+  Future<ProofingModel> _getData() async {
     // 查询明细
     ProofingModel detailModel =
         await ProofingOrderRepository().proofingDetail(widget.code);

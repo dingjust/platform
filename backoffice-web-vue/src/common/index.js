@@ -333,6 +333,21 @@ let TENANT_APIS = {
   getProofings() {
     return '/b2b/orders/proofing/all';
   },
+  createOperationCourse() {
+    return '/b2b/guideline/create';
+  },
+  updateOperationCourse() {
+    return '/b2b/guideline/update';
+  },
+  deleteOperationCourse(id) {
+    return '/b2b/guideline/delete'+id;
+  },
+  getOperationCourses() {
+    return '/b2b/guideline';
+  },
+  getOperationCourse(id) {
+    return '/b2b/guideline/'+id;
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

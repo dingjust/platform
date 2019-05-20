@@ -5,6 +5,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:services/src/supplier/brands_response.dart';
+import 'package:services/src/user/response/b2b_customer_response.dart';
 
 import 'user_repository.dart';
 
@@ -183,4 +184,99 @@ class UserRepositoryImpl implements UserRepository {
       return false;
     }
   }
+
+  @override
+  Future<List<RoleModel>> roles() async {
+    Response response = await http$.get(UserApis.roles);
+    return response.data
+        .map<RoleModel>((role) => RoleModel.fromJson(role))
+        .toList();
+  }
+
+  @override
+  Future<String> employeeCreate(B2BCustomerModel model) async {
+    print('${B2BCustomerModel.toJson(model)}');
+    Response response;
+    String result;
+    try {
+      response = await http$.post(
+        UserApis.employeeCreate, data: B2BCustomerModel.toJson(model),);
+    } catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = response.data;
+    }
+
+    return result;
+  }
+
+  @override
+  Future<String> employeeUpdate(B2BCustomerModel model, String uid) async {
+    Response response;
+    String result;
+    try {
+      response = await http$.put(
+        UserApis.employeeFromId(uid), data: B2BCustomerModel.toJson(model),);
+    } catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = response.data;
+    }
+
+    return result;
+  }
+
+  @override
+  Future<String> employeeDelete(int id) async {
+    Response response;
+    String result;
+    try {
+      response = await http$.delete(UserApis.employeeFromId(id));
+    } catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = response.data;
+    }
+
+    return result;
+  }
+
+  @override
+  Future<B2BCustomerResponse> employees(Map<String, Object> params,
+      dynamic data) async {
+    Response response;
+    B2BCustomerResponse result;
+    try {
+      response =
+      await http$.post(UserApis.employees, queryParameters: params, data: data);
+    } catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = B2BCustomerResponse.fromJson(response.data);
+    }
+
+    return result;
+  }
+
+  @override
+  Future<B2BCustomerModel> getEmployee(String uid) async {
+    Response response;
+    B2BCustomerModel result;
+    try {
+      response = await http$.get(UserApis.employeeFromId(uid));
+    } catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = B2BCustomerModel.fromJson(response.data);
+    }
+
+    return result;
+  }
+
+
 }
