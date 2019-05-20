@@ -4,7 +4,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
@@ -269,6 +268,8 @@ class BrandMenusSection extends StatelessWidget {
               children: <Widget>[
                 buildChild(context,MenuItemImage.productFactory, '产品管理',
                     AppRoutes.ROUTE_PRODUCTS),
+                buildChild(context, MenuItemImage.employeeManage, '员工管理',
+                    AppRoutes.ROUTE_EMPLOYEES),
                 buildChild(context,MenuItemImage.partnerFactory, '合作商管理',
                     AppRoutes.ROUTE_SUPPLIERS),
                 buildChild(context,MenuItemImage.clothesManage, '样衣借还',
@@ -422,6 +423,8 @@ class FactoryMenusSection extends StatelessWidget {
               children: <Widget>[
                 buildChild(context,MenuItemImage.productFactory, '产品管理',
                     AppRoutes.ROUTE_PRODUCTS),
+                buildChild(context, MenuItemImage.employeeManage, '员工管理',
+                    AppRoutes.ROUTE_EMPLOYEES),
                 buildChild(context,MenuItemImage.partnerFactory, '合作商管理',
                     AppRoutes.ROUTE_SUPPLIERS),
                 buildChild(context,MenuItemImage.clothesManage, '样衣借还',
