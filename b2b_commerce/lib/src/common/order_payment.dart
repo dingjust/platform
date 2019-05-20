@@ -417,7 +417,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       onPaymentSucess();
     } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
       print('3');
-      onPaymentError();
+      mappingPayWay();
     } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
       //TODO :
       print('4');
@@ -658,7 +658,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       onPaymentSucess();
     } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
       print('after 3');
-      onPaymentError();
+      mappingPayWay();
     } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
       print('after 4');
       onPaymentPaying();

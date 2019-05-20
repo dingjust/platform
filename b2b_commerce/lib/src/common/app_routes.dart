@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/my_bill.dart';
+import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -29,15 +30,19 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
   static const ROUTE_PRODUCT_STOCKS = '/business/product_stocks';
-  static const ROUTE_PRODUCT_STOCK_ADJUST_HISTORY = '/business/product_stock_adjust_history';
+  static const ROUTE_PRODUCT_STOCK_ADJUST_HISTORY =
+      '/business/product_stock_adjust_history';
   static const ROUTE_PRODUCTION_ORDERS = '/business/production_orders';
   static const ROUTE_PRODUCTS = '/business/products';
-  static const ROUTE_PRODUCTS_OFF_THE_SHELF = '/business/products_off_the_shelf';
+  static const ROUTE_PRODUCTS_OFF_THE_SHELF =
+      '/business/products_off_the_shelf';
   static const ROUTE_PURCHASE_ORDERS = '/business/purchase_orders';
   static const ROUTE_QUOTES = '/business/quotes';
   static const ROUTE_REQUIREMENT_ORDERS = '/business/requirement_orders';
-  static const ROUTE_REQUIREMENT_ORDERS_DETAIL = '/business/orders/requirement_orders_detail';
-  static const ROUTE_REQUIREMENT_QUOTE_DETAIL = '/business/orders/requirement_quote_detail';
+  static const ROUTE_REQUIREMENT_ORDERS_DETAIL =
+      '/business/orders/requirement_orders_detail';
+  static const ROUTE_REQUIREMENT_QUOTE_DETAIL =
+      '/business/orders/requirement_quote_detail';
   static const ROUTE_PROOFING_ORDERS = '/business/proofing_orders';
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
@@ -52,6 +57,8 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_COLLECTIONS = '/my/my_collections';
   static const ROUTE_MY_CLIENT_SERVICES = '/my/my_client_services';
   static const ROUTE_MY_SETTINGS = '/my/my_settings';
+  static const ROUTE_MY_HELP = '/my/my_helps';
+
   static const ROUTE_MY_REGISTER = '/my/account/register';
   static const ROUTE_MY_REGISTER_BRAND = '/my/account/register_brand';
   static const ROUTE_MY_REGISTER_FACTORY = '/my/account/register_factory';
@@ -80,6 +87,7 @@ class AppRoutes with GlobalRoutes {
     // ROUTE_HOT_CATEGORY_FACTORY: (context) => FactoryHotCategoryPage(),
     ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
     ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage(),
-    ROUTE_MY_BILL: (context) => MyBillPage()
+    ROUTE_MY_BILL: (context) => MyBillPage(),
+    ROUTE_MY_HELP: (context) => MyHelpPage()
   };
 }
