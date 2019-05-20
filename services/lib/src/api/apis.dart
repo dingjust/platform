@@ -76,4 +76,12 @@ class Apis {
   static get appVersions => (String name, String platform) {
         return '/{baseSiteId}/appVersions/$name/$platform';
       };
+
+  ///问题与帮助信息
+  static get guideline => '/{baseSiteId}/guideline';
+
+  ///问题与帮助信息详情
+  static get guidelineDetail => (int id) {
+        return '/{baseSiteId}/guideline/${id}';
+      };
 }
