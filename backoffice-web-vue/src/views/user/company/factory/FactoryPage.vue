@@ -67,16 +67,23 @@
 
       onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getFactories();
+        const url = this.apis().getFactories()+"?sort=creationtime,desc";
         this.search({url, keyword, page, size});
       },
       onAdvancedSearch(page, size) {
         const queryFormData = this.queryFormData;
-        const url = this.apis().getFactories();
+        let url = this.apis().getFactories();
+        if(this.isTenant()){
+          url += "?sort=creationtime,desc";
+        }
+
         this.advancedSearch({url, queryFormData, page, size});
       },
       async onDetails(item) {
-        const url = this.apis().getFactory(item.uid);
+        let url = this.apis().getFactory(item.uid);
+        if(this.isTenant()){
+          url += "?sort=creationtime,desc";
+        }
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
