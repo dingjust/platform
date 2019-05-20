@@ -150,6 +150,30 @@ class _FactoryPageState extends State<FactoryPage> {
 //    AMapLocationClient.startLocation();
   // }
 
+//  void _checkPersmission() async{
+//    bool hasPermission = await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+//    if(!hasPermission){
+//      bool requestPermissionResult = await SimplePermissions.requestPermission(Permission.WhenInUseLocation);
+//      if(!requestPermissionResult){
+//        Alert.alert(context,title: "申请定位权限失败");
+//        return;
+//      }
+//    }
+//    AMapLocationClient.onLocationUpate.listen((AMapLocation loc) {
+//      if (!mounted) return;
+//      setState(() {
+//        location = getLocationStr(loc);
+//      });
+//    });
+//
+//    AMapLocationClient.startLocation();
+//  }
+
+  //初始化定位监听，
+  void _initLocation() async {
+    aMapLocation = await AmapService.instance.location();
+  }
+
   getCategories()async{
     _category = await ProductRepositoryImpl().cascadedCategories();
   }
@@ -324,6 +348,35 @@ class _FactoryPageState extends State<FactoryPage> {
                           changeCondition(currentCondition);
 //                        currentCondition
                           showDateFilterMenu = !showDateFilterMenu;
+                        });
+                      },
+                    ),
+                  ),
+                  Offstage(
+                    offstage: showLocalFilterMenu,
+                    child: FilterSelectMenu(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      height: 200,
+                      entries: filterLocalEntries,
+                      streamController:
+                      RequirementPoolBLoC.instance.conditionController,
+                      afterPressed: (String str) {
+                        print(str);
+                        setState(() {
+                          if (str == '全部') {
+                            _localSelectText = '${aMapLocation.latitude}';
+                          } else {
+                            _localSelectText = str;
+                          }
+                          FilterConditionEntry selected;
+                          for (int i = 0; i < filterLocalEntries.length; i++) {
+                            if (str == filterLocalEntries[i].label) {
+                              currentLocalCondition = filterLocalEntries[i];
+                            }
+                          }
+                          changeCondition(currentLocalCondition);
+//                        currentCondition
+                          showLocalFilterMenu = !showLocalFilterMenu;
                         });
                       },
                     ),
