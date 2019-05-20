@@ -138,6 +138,11 @@ export default {
           url: '/miscs/label',
           icon: 'iconNone'
         },
+        {
+          name: '使用教程',
+          url: '/miscs/operationCourse',
+          icon: 'iconNone'
+        },
       ]
     }
   ]

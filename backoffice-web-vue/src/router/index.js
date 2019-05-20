@@ -206,6 +206,10 @@ const router = new Router({
               path: '/miscs/supplier',
               name: '供应商',
               component: () => import(/* webpackChunkName: 'supplier' */ '@/views/miscs/supplier/SupplierPage')
+            },{
+              path: '/miscs/operationCourse',
+              name: '使用教程',
+              component: () => import(/* webpackChunkName: 'operationCourse' */ '@/views/miscs/operation-course/OperationCoursePage')
             }
           ]
         }
