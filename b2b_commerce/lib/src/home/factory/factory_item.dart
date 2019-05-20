@@ -14,6 +14,7 @@ class FactoryItem extends StatelessWidget {
     this.requirementCode,
     this.showButton = false,
     this.hasInvited = false,
+    this.isLocalFind = false,
   }) : super(key: key);
 
   final FactoryModel model;
@@ -25,6 +26,9 @@ class FactoryItem extends StatelessWidget {
 
   ///是否已经邀请
   final bool hasInvited;
+
+  //是否就近找厂路由过来的页面
+  final bool isLocalFind;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +53,7 @@ class FactoryItem extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  FactoryNameText(model: model),
+                  FactoryNameText(model: model,isLocalFind: isLocalFind,),
                   showButton
                       ? InviteFactoryButton(
                           factoryModel: model,
@@ -107,16 +111,43 @@ class FactoryItem extends StatelessWidget {
 }
 
 class FactoryNameText extends StatelessWidget {
-  FactoryNameText({Key key, @required this.model}) : super(key: key);
+  FactoryNameText({Key key, @required this.model,this.isLocalFind = false}) : super(key: key);
 
   final FactoryModel model;
 
+  final bool isLocalFind;
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Text('${model.name}', style: TextStyle(fontSize: 18)),
-    );
+    if(isLocalFind){
+      return Expanded(
+        flex: 1,
+        child: Row(
+          children: <Widget>[
+        model.distance == null ?
+            Container():
+            Container(
+              margin: EdgeInsets.only(right: 10),
+              child: Text(
+                  '${(model.distance.toInt()/1000).toStringAsFixed(1)}'+'km',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.red
+                  )
+              ),
+            ),
+            Text(
+                '${model.name}', style: TextStyle(fontSize: 18))
+          ],
+        ),
+      );
+    }else {
+      return Expanded(
+        flex: 1,
+        child: Text(
+            '${model.name}', style: TextStyle(fontSize: 18)),
+      );
+    }
   }
 }
 
