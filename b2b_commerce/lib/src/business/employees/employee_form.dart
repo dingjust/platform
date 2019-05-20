@@ -55,6 +55,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
   @override
   void dispose(){
     super.dispose();
+    if(widget.newlyCreated)
     clearData();
   }
 
@@ -82,6 +83,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
   }
   
   _getData(){
+    if(!widget.newlyCreated)
     UserRepositoryImpl().getEmployee(widget.item.uid);
   }
 
@@ -149,7 +151,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                       inputFormatters: [
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
-                      enabled: _enabled,
+                      enabled: _enabled && widget.newlyCreated,
                     ),
                   ),
                   Container(
@@ -185,7 +187,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                     padding: EdgeInsets.only(top: 15),
                     child: Center(
                       child: Text(
-                        '初始密码为随机密码，创建后请员工尽快修改密码',
+                        '初始密码为手机号码，创建后请员工尽快修改密码',
                         style: TextStyle(
                           color: Colors.red,
                         ),
@@ -198,96 +200,95 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                       child: Center(
                         child: InkWell(
                           onTap: () {
-                            Navigator.pop(context, widget.item);
-                          },
-                          child: InkWell(
-                            onTap: () {
-                              widget.item.name = _nameController.text;
-                              widget.item.mobileNumber =
-                                  _mobileNumberController.text;
-                              widget.item.uid = _mobileNumberController.text;
-                              widget.item.roles = _roleSelects;
-                              if(widget.newlyCreated){
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (_) {
-                                      return RequestDataLoadingPage(
-                                        requestCallBack: UserRepositoryImpl()
-                                            .employeeCreate(widget.item),
-                                        outsideDismiss: false,
-                                        loadingText: '保存中。。。',
+                            widget.item.name = _nameController.text;
+                            widget.item.mobileNumber =
+                                _mobileNumberController.text;
+                            widget.item.uid = _mobileNumberController.text;
+                            widget.item.roles = _roleSelects;
+                            if(widget.newlyCreated){
+                              print('aaaaaaaaaaaaaaaaaaa---------');
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (_) {
+                                    return RequestDataLoadingPage(
+                                      requestCallBack:test(),
+//                                      UserRepositoryImpl()
+//                                          .employeeCreate(widget.item),
+                                      outsideDismiss: false,
+                                      loadingText: '保存中。。。',
 //                                        entrance: 'createPurchaseOrder',
-                                      );
-                                    }).then((value) {
-                                  bool result = false;
-                                  if (value != null) {
-                                    result = true;
-                                  }
+                                    );
+                                  }).then((value) {
+                                bool result = false;
+                                if (value != null) {
+                                  result = true;
+                                  clearData();
+                                }
 
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (_) {
-                                        return CustomizeDialogPage(
-                                          dialogType: DialogType.RESULT_DIALOG,
-                                          failTips: '创建员工失败',
-                                          successTips: '创建员工成功',
-                                          callbackResult: result,
-                                          confirmAction: () {
-                                            Navigator.of(context).pop();
-                                            Navigator.pop(context);
-                                            EmployeeBLoC.instance.getB2BCustomerData();
-                                          },
-                                        );
-                                      });
-                                });
-                              }else{
                                 showDialog(
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (_) {
-                                      return RequestDataLoadingPage(
-                                        requestCallBack: UserRepositoryImpl()
-                                            .employeeUpdate(widget.item,widget.item.uid),
-                                        outsideDismiss: false,
-                                        loadingText: '保存中。。。',
-//                                        entrance: 'updatePurchaseOrder',
+                                      return CustomizeDialogPage(
+                                        dialogType: DialogType.RESULT_DIALOG,
+                                        failTips: '创建员工失败',
+                                        successTips: '创建员工成功',
+                                        callbackResult: result,
+                                        confirmAction: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.pop(context);
+                                          EmployeeBLoC.instance.getB2BCustomerData();
+                                        },
                                       );
-                                    }).then((value) {
-                                  bool result = false;
-                                  if (value != null) {
-                                    result = true;
-                                  }
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (_) {
-                                        return CustomizeDialogPage(
-                                          dialogType: DialogType.RESULT_DIALOG,
-                                          failTips: '编辑员工失败',
-                                          successTips: '编辑员工成功',
-                                          callbackResult: result,
-                                          confirmAction: () {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pop();
-                                            EmployeeBLoC.instance.getB2BCustomerData();
-                                          },
-                                        );
-                                      });
-                                });
-                              }
-                            },
-                            child: Container(
-                              height: 40,
-                              width:
-                                  MediaQueryData.fromWindow(window).size.width -
-                                      100,
-                              child: Center(child: Text('确定')),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color.fromRGBO(255, 214, 12, 1),
-                              ),
+                                    });
+                              });
+                            }else{
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (_) {
+                                    return RequestDataLoadingPage(
+                                      requestCallBack: UserRepositoryImpl()
+                                          .employeeUpdate(widget.item,widget.item.uid),
+                                      outsideDismiss: false,
+                                      loadingText: '保存中。。。',
+//                                        entrance: 'updatePurchaseOrder',
+                                    );
+                                  }).then((value) {
+                                bool result = false;
+                                if (value != null) {
+                                  result = true;
+                                  clearData();
+                                }
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (_) {
+                                      return CustomizeDialogPage(
+                                        dialogType: DialogType.RESULT_DIALOG,
+                                        failTips: '编辑员工失败',
+                                        successTips: '编辑员工成功',
+                                        callbackResult: result,
+                                        confirmAction: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                          EmployeeBLoC.instance.getB2BCustomerData();
+                                        },
+                                      );
+                                    });
+                              });
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            width:
+                                MediaQueryData.fromWindow(window).size.width -
+                                    100,
+                            child: Center(child: Text('确定')),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color.fromRGBO(255, 214, 12, 1),
                             ),
                           ),
                         ),
@@ -299,14 +300,17 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
             ),
           );
         });
+  }
 
+  Future<void> test(){
+    print('======');
   }
 
   clearData(){
     widget.item.id = null;
     widget.item.name = null;
     widget.item.mobileNumber = null;
-//    widget.item.uid = null;
+    widget.item.uid = null;
     widget.item.roles = [];
   }
 }

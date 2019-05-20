@@ -195,6 +195,7 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<String> employeeCreate(B2BCustomerModel model) async{
+    print('${B2BCustomerModel.toJson(model)}');
     Response response;
     String result;
     try {
@@ -213,7 +214,7 @@ class UserRepositoryImpl implements UserRepository {
     Response response;
     String result;
     try {
-      response = await http$.post(UserApis.employeeFromId(uid),data: B2BCustomerModel.toJson(model),);
+      response = await http$.put(UserApis.employeeFromId(uid),data: B2BCustomerModel.toJson(model),);
     } catch (e) {
       print(e);
     }
@@ -228,7 +229,7 @@ class UserRepositoryImpl implements UserRepository {
     Response response;
     String result;
     try {
-      response = await http$.post(UserApis.employeeFromId(id));
+      response = await http$.delete(UserApis.employeeFromId(id));
     } catch (e) {
       print(e);
     }

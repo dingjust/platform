@@ -44,15 +44,15 @@ class EmployeeBLoC extends BLoCBase {
     if (!lock) {
       lock = true;
       b2bCustomers.clear();
-      B2BCustomerResponse result = await UserRepositoryImpl().employees({
+      b2bCustomerResponse = await UserRepositoryImpl().employees({
         //param
 
       }, {
         //data
 
       });
-      if (result != null) {
-        b2bCustomers = result.content;
+      if (b2bCustomerResponse != null) {
+        b2bCustomers = b2bCustomerResponse.content;
       }
       _controller.sink.add(b2bCustomers);
       lock = false;
@@ -62,21 +62,22 @@ class EmployeeBLoC extends BLoCBase {
   loadingMoreByStatuses() async {
     if (!lock) {
       lock = true;
-      b2bCustomers.clear();
-      B2BCustomerResponse result;
-      if(b2bCustomerResponse.number <= b2bCustomerResponse.totalPages){
-        result = await UserRepositoryImpl().employees({
+      if(b2bCustomerResponse.number < b2bCustomerResponse.totalPages-1){
+        b2bCustomerResponse = await UserRepositoryImpl().employees({
           //param
           'page':b2bCustomerResponse.number + 1,
         }, {
           //data
 
         });
+        if (b2bCustomerResponse != null) {
+          b2bCustomers.addAll(b2bCustomerResponse.content);
+        }
+      }else{
+        bottomController.sink.add(true);
       }
 
-      if (result != null) {
-        b2bCustomers = result.content;
-      }
+      loadingController.sink.add(false);
       _controller.sink.add(b2bCustomers);
       lock = false;
     }

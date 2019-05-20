@@ -131,8 +131,8 @@ class _FactoryPageState extends State<FactoryPage> {
 
     aMapLocation = await AMapLocationClient.getLocation(true);
 
-    factoryCondition.latitude = aMapLocation.latitude;
-    factoryCondition.longitude = aMapLocation.longitude;
+//    factoryCondition.latitude = aMapLocation.latitude;
+//    factoryCondition.longitude = aMapLocation.longitude;
 
     print('定位！！！！'+aMapLocation.latitude.toString());
 
