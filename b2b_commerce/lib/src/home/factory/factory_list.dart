@@ -60,7 +60,7 @@ class _FactoryPageState extends State<FactoryPage> {
   String labText = '综合';
   String _categorySelectText = '分类';
   String _areaSelectText = '地区';
-  String _localSelectText = '距离';
+  String _localSelectText = '50公里内';
 
   List<CategoryModel> _category;
   List<CategoryModel> _categorySelected = [];
@@ -70,35 +70,54 @@ class _FactoryPageState extends State<FactoryPage> {
   List<CityModel> _citySelects = [];
 
   List<FilterConditionEntry> filterLocalEntries = <FilterConditionEntry>[
-    FilterConditionEntry(label: '全部', value: '0', checked: true),
-    FilterConditionEntry(label: '10公里内', value: '10000'),
-    FilterConditionEntry(label: '20公里内', value: '20000'),
-    FilterConditionEntry(label: '30公里内', value: '30000'),
+    FilterConditionEntry(label: '50公里内', value: '50000', checked: true),
+    FilterConditionEntry(label: '100公里内', value: '100000'),
+    FilterConditionEntry(label: '200公里内', value: '200000'),
   ];
   double xLocal;
   double yLocal;
+
+  bool isLocalFind = false;
 
   AMapLocation aMapLocation;
 
   @override
   void initState() {
-
+    print(isLocalFind);
     if (widget.factoryCondition != null) {
-      factoryCondition = widget.factoryCondition;
+      if(widget.route == '就近找厂'){
+        isLocalFind = true;
+        _initLocation();
+        factoryCondition = FactoryCondition(
+            starLevel: 0,
+            adeptAtCategories: [],
+            labels: [],
+            cooperationModes: [],
+            longitude : 113.32106,
+            latitude : 23.10625,
+            distance : 50000);
+      }else{
+        factoryCondition = widget.factoryCondition;
+      }
     } else {
-      factoryCondition = FactoryCondition(
-          starLevel: 0,
-          adeptAtCategories: [],
-          labels: [],
-          cooperationModes: []);
-    }
-    if(widget.route == '就近找厂'){
-      _initLocation();
-      currentLocalCondition = FilterConditionEntry(
-        label: '全部',
-        value: '0',
-        checked: true,
-      );
+      if(widget.route == '就近找厂'){
+        isLocalFind = true;
+        _initLocation();
+        factoryCondition = FactoryCondition(
+            starLevel: 0,
+            adeptAtCategories: [],
+            labels: [],
+            cooperationModes: [],
+            longitude : 113.32106,
+            latitude : 23.10625,
+            distance : 50000);
+      }else{
+        factoryCondition = FactoryCondition(
+            starLevel: 0,
+            adeptAtCategories: [],
+            labels: [],
+            cooperationModes: []);
+      }
     }
     getCategories();
 
@@ -218,7 +237,8 @@ class _FactoryPageState extends State<FactoryPage> {
                         });
                       });
                       setState(() {
-                        showDateFilterMenu = false;
+                        showDateFilterMenu = true;
+                        showLocalFilterMenu = true;
                       });
                     }),
                     widget.route == '就近找厂'?
@@ -311,7 +331,7 @@ class _FactoryPageState extends State<FactoryPage> {
                     offstage: showLocalFilterMenu,
                     child: FilterSelectMenu(
                       color: Color.fromRGBO(255, 214, 12, 1),
-                      height: 200,
+                      height: 150,
                       entries: filterLocalEntries,
                       streamController:
                       RequirementPoolBLoC.instance.conditionController,
@@ -319,7 +339,7 @@ class _FactoryPageState extends State<FactoryPage> {
                         print(str);
                         setState(() {
                           if(str == '全部'){
-                            _localSelectText = '${aMapLocation.latitude}';
+                            _localSelectText = '距离';
                           }else{
                             _localSelectText = str;
                           }
@@ -329,9 +349,15 @@ class _FactoryPageState extends State<FactoryPage> {
                               currentLocalCondition = filterLocalEntries[i];
                             }
                           }
-                          changeCondition(currentLocalCondition);
+                          factoryCondition.distance = double.parse(currentLocalCondition.value);
+//                          print(currentLocalCondition.value);
+//                          changeCondition(currentLocalCondition);
 //                        currentCondition
                           showLocalFilterMenu = !showLocalFilterMenu;
+                          FactoryBLoC.instance.filterByCondition(
+                            factoryCondition,
+                            requirementCode: widget.requirementCode,
+                          );
                         });
                       },
                     ),
@@ -343,6 +369,7 @@ class _FactoryPageState extends State<FactoryPage> {
                       requirementCode: widget.requirementCode,
                       currentCondition: currentCondition,
                       currentLocalCondition: currentLocalCondition,
+                      isLocalFind: isLocalFind,
                     )
                   )
                 ],
@@ -405,6 +432,7 @@ class FactoryListView extends StatefulWidget {
       this.factoryCondition,
       this.requirementCode,
         this.currentLocalCondition,
+        this.isLocalFind = false,
       @required this.currentCondition});
 
   FactoryCondition factoryCondition;
@@ -412,6 +440,8 @@ class FactoryListView extends StatefulWidget {
   final String requirementCode;
 
   final bool showButton;
+
+  bool isLocalFind;
 
   /// 当前选中头部排序条件
   FilterConditionEntry currentCondition;
@@ -530,6 +560,7 @@ class _FactoryListViewState extends State<FactoryListView> {
                         model: item,
                         requirementCode: widget.requirementCode,
                         showButton: widget.showButton,
+                        isLocalFind: widget.isLocalFind,
                       );
                     }).toList(),
                   );

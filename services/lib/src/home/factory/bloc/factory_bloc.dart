@@ -52,18 +52,24 @@ class FactoryBLoC extends BLoCBase {
     String requirementCode,
     double longitude,
     double latitude,
+    double distance,
   }) async {
     if (!lock) {
       lock = true;
       //重置参数
       reset();
       Response<Map<String, dynamic>> response;
-      if(longitude != null && longitude > 0){
+      if ((factoryCondition.longitude != null && factoryCondition.longitude > 0) &&
+          (factoryCondition.latitude != null && factoryCondition.latitude > 0) &&
+          (factoryCondition.distance != null && factoryCondition.distance > 0)) {
         try {
+          print(11);
           response = await http$.post(Apis.factoriesForMap,
               data: factoryCondition.toDataJson(),
               // data:{},
               queryParameters: {
+//                'longitude':113.32106,
+//                'latitude':23.10625,
                 'page': currentPage,
                 'size': pageSize,
                 'sort': '${condition},${sort}'
@@ -74,6 +80,7 @@ class FactoryBLoC extends BLoCBase {
       }else{
         if (requirementCode != null && requirementCode != '') {
           try {
+            print(22);
             response = await http$.post(
                 Apis.requestQuoteFactories(requirementCode),
                 data: factoryCondition.toDataJson(),
