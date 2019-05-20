@@ -13,12 +13,12 @@ import 'package:widgets/widgets.dart';
 
 class FactoryPage extends StatefulWidget {
   FactoryPage(
-    this.factoryCondition, {
-    this.route,
-    this.requirementCode,
-    this.categories,
-    this.labels,
-  });
+      this.factoryCondition, {
+        this.route,
+        this.requirementCode,
+        this.categories,
+        this.labels,
+      });
 
   final List<CategoryModel> categories;
 
@@ -144,51 +144,6 @@ class _FactoryPageState extends State<FactoryPage> {
 //  }
 
   //初始化定位监听，
-  // void _initLocation() async {
-  //   AMapLocationClient.startup(new AMapLocationOption(
-  //       desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
-
-  //   aMapLocation = await AMapLocationClient.getLocation(true);
-
-//    factoryCondition.latitude = aMapLocation.latitude;
-//    factoryCondition.longitude = aMapLocation.longitude;
-
-  // print('定位！！！！'+aMapLocation.latitude.toString());
-
-
-//    //监听坐标实时变换
-//    AMapLocationClient.onLocationUpate.listen((AMapLocation loc) {
-//      if (!mounted) return;
-//      setState(() {
-//        xLocal = loc.latitude;
-//        yLocal = loc.longitude;
-//      });
-//    });
-//
-//    print(xLocal.toString()+','+yLocal.toString());
-//    AMapLocationClient.startLocation();
-  // }
-
-//  void _checkPersmission() async{
-//    bool hasPermission = await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
-//    if(!hasPermission){
-//      bool requestPermissionResult = await SimplePermissions.requestPermission(Permission.WhenInUseLocation);
-//      if(!requestPermissionResult){
-//        Alert.alert(context,title: "申请定位权限失败");
-//        return;
-//      }
-//    }
-//    AMapLocationClient.onLocationUpate.listen((AMapLocation loc) {
-//      if (!mounted) return;
-//      setState(() {
-//        location = getLocationStr(loc);
-//      });
-//    });
-//
-//    AMapLocationClient.startLocation();
-//  }
-
-  //初始化定位监听，
   void _initLocation() async {
     aMapLocation = await AmapService.instance.location();
   }
@@ -242,201 +197,172 @@ class _FactoryPageState extends State<FactoryPage> {
             ],
           ),
           body: Scaffold(
-              appBar: AppBar(
-                elevation: 0,
-                title: RequirementFilterBar(
-                  horizontalPadding: 20,
-                  entries: [
-                    FilterEntry('${labText}⇂', () {
+            appBar: AppBar(
+              elevation: 0,
+              title: RequirementFilterBar(
+                horizontalPadding: 20,
+                entries: [
+                  FilterEntry('${labText}⇂', () {
+                    setState(() {
+                      showDateFilterMenu = !showDateFilterMenu;
+                    });
+                  }),
+                  FilterEntry(_categorySelectText, () async{
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          child: CategorySelect(
+                            categories: _category,
+                            multiple: false,
+                            verticalDividerOpacity: 1,
+                            categorySelect: _categorySelected,
+                            categoryActionType: CategoryActionType.TO_POP,
+                          ),
+                        );
+                      },
+                    ).then((a) {
                       setState(() {
-                        showDateFilterMenu = !showDateFilterMenu;
+                        if (_categorySelected.isEmpty) {
+                          factoryCondition.categories = null;
+                          _categorySelectText = '分类';
+                        } else {
+                          _categorySelectText = _categorySelected[0].name;
+                          factoryCondition.adeptAtCategories = _categorySelected;
+                        }
+                        FactoryBLoC.instance.filterByCondition(
+                          factoryCondition,
+                          requirementCode: widget.requirementCode,
+                        );
                       });
-                    }),
-                    FilterEntry(_categorySelectText, () async{
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            child: CategorySelect(
-                              categories: _category,
-                              multiple: false,
-                              verticalDividerOpacity: 1,
-                              categorySelect: _categorySelected,
-                              categoryActionType: CategoryActionType.TO_POP,
-                            ),
-                          );
-                        },
-                      ).then((a) {
+                    });
+                    setState(() {
+                      showDateFilterMenu = true;
+                      showLocalFilterMenu = true;
+                    });
+                  }),
+                  widget.route == '就近找厂'?
+                  FilterEntry(
+                      _localSelectText,(){
+                    setState(() {
+                      showLocalFilterMenu = !showLocalFilterMenu;
+                      showDateFilterMenu = true;
+                    });
+                  }
+                  ):
+                  FilterEntry(_areaSelectText, () {
+                    setState(() {
+                      showDateFilterMenu = false;
+                    });
+                    //获取所有省份
+                    rootBundle.loadString('data/province.json').then((v) {
+                      List data = json.decode(v);
+                      _regions = data
+                          .map<RegionModel>((region) => RegionModel.fromJson(region))
+                          .toList();
+
+                      showModalBottomSheet(context: context, builder: (context){
+                        //地区选择器
+                        return RegionCitySelector(
+                          regions: _regions,
+                          regionSelect: _regionSelect,
+                          citySelects: _citySelects,
+                        );
+                      }).then((a){
                         setState(() {
-                          if (_categorySelected.isEmpty) {
-                            factoryCondition.categories = null;
-                            _categorySelectText = '分类';
-                          } else {
-                            _categorySelectText = _categorySelected[0].name;
-                            factoryCondition.adeptAtCategories = _categorySelected;
+                          if(_regionSelect.isocode != null){
+                            _areaSelectText = _regionSelect.name;
+                          }else{
+                            _areaSelectText = '地区';
                           }
+
+                          factoryCondition.productiveOrientations = _regionSelect;
+                          factoryCondition.cities = _citySelects;
                           FactoryBLoC.instance.filterByCondition(
                             factoryCondition,
                             requirementCode: widget.requirementCode,
                           );
                         });
                       });
-                      setState(() {
-                        showDateFilterMenu = true;
-                        showLocalFilterMenu = true;
-                      });
-                    }),
-                    widget.route == '就近找厂'?
-                    FilterEntry(
-                      _localSelectText,(){
-                      setState(() {
-                        showLocalFilterMenu = !showLocalFilterMenu;
-                        showDateFilterMenu = true;
-                      });
-                    }
-                    ):
-                    FilterEntry(_areaSelectText, () {
-                      setState(() {
-                        showDateFilterMenu = false;
-                      });
-                      //获取所有省份
-                      rootBundle.loadString('data/province.json').then((v) {
-                        List data = json.decode(v);
-                        _regions = data
-                            .map<RegionModel>((region) => RegionModel.fromJson(region))
-                            .toList();
+                    });
 
-                        showModalBottomSheet(context: context, builder: (context){
-                          //地区选择器
-                          return RegionCitySelector(
-                            regions: _regions,
-                            regionSelect: _regionSelect,
-                            citySelects: _citySelects,
-                          );
-                        }).then((a){
-                          setState(() {
-                            if(_regionSelect.isocode != null){
-                              _areaSelectText = _regionSelect.name;
-                            }else{
-                              _areaSelectText = '地区';
-                            }
-
-                            factoryCondition.productiveOrientations = _regionSelect;
-                            factoryCondition.cities = _citySelects;
-                            FactoryBLoC.instance.filterByCondition(
-                              factoryCondition,
-                              requirementCode: widget.requirementCode,
-                            );
-                          });
-                        });
-                      });
-
-                    }
-                    )
-                  ],
-                  action: Container(),
-                ),
-                automaticallyImplyLeading: false,
+                  }
+                  )
+                ],
+                action: Container(),
               ),
-              endDrawer: Drawer(
-                child: ConditionPage(
-                  factoryCondition: factoryCondition,
-                  categories: widget.categories,
-                  labels: widget.labels,
-                ),
+              automaticallyImplyLeading: false,
+            ),
+            endDrawer: Drawer(
+              child: ConditionPage(
+                factoryCondition: factoryCondition,
+                categories: widget.categories,
+                labels: widget.labels,
               ),
-              body: Column(
-                children: <Widget>[
-                  Offstage(
-                    offstage: showDateFilterMenu,
-                    child: FilterSelectMenu(
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      height: 150,
-                      entries: filterConditionEntries,
-                      streamController:
-                      RequirementPoolBLoC.instance.conditionController,
-                      afterPressed: (String str) {
-                        print(str);
-                        setState(() {
-                          labText = str;
-                          FilterConditionEntry selected;
-                          for(int i =0;i<filterConditionEntries.length;i++){
-                            if(str == filterConditionEntries[i].label){
-                              currentCondition = filterConditionEntries[i];
-                            }
+            ),
+            body: Column(
+              children: <Widget>[
+                Offstage(
+                  offstage: showDateFilterMenu,
+                  child: FilterSelectMenu(
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    height: 150,
+                    entries: filterConditionEntries,
+                    streamController:
+                    RequirementPoolBLoC.instance.conditionController,
+                    afterPressed: (String str) {
+                      print(str);
+                      setState(() {
+                        labText = str;
+                        FilterConditionEntry selected;
+                        for(int i =0;i<filterConditionEntries.length;i++){
+                          if(str == filterConditionEntries[i].label){
+                            currentCondition = filterConditionEntries[i];
                           }
-                          changeCondition(currentCondition);
+                        }
+                        changeCondition(currentCondition);
 //                        currentCondition
-                          showDateFilterMenu = !showDateFilterMenu;
-                        });
-                      },
-                    ),
+                        showDateFilterMenu = !showDateFilterMenu;
+                      });
+                    },
                   ),
-                  Offstage(
-                    offstage: showLocalFilterMenu,
-                    child: FilterSelectMenu(
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      height: 150,
-                      entries: filterLocalEntries,
-                      streamController:
-                      RequirementPoolBLoC.instance.conditionController,
-                      afterPressed: (String str) {
-                        print(str);
-                        setState(() {
-                          if (str == '全部') {
-                            _localSelectText = '${aMapLocation.latitude}';
-                          } else {
-                            _localSelectText = str;
+                ),
+                Offstage(
+                  offstage: showLocalFilterMenu,
+                  child: FilterSelectMenu(
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    height: 150,
+                    entries: filterLocalEntries,
+                    streamController:
+                    RequirementPoolBLoC.instance.conditionController,
+                    afterPressed: (String str) {
+                      print(str);
+                      setState(() {
+                        if(str == '全部'){
+                          _localSelectText = '距离';
+                        }else{
+                          _localSelectText = str;
+                        }
+                        FilterConditionEntry selected;
+                        for(int i =0;i<filterLocalEntries.length;i++){
+                          if(str == filterLocalEntries[i].label){
+                            currentLocalCondition = filterLocalEntries[i];
                           }
-                          FilterConditionEntry selected;
-                          for (int i = 0; i < filterLocalEntries.length; i++) {
-                            if (str == filterLocalEntries[i].label) {
-                              currentLocalCondition = filterLocalEntries[i];
-                            }
-                          }
-                          changeCondition(currentLocalCondition);
-//                        currentCondition
-                          showLocalFilterMenu = !showLocalFilterMenu;
-                        });
-                      },
-                    ),
-                  ),
-                  Offstage(
-                    offstage: showLocalFilterMenu,
-                    child: FilterSelectMenu(
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      height: 200,
-                      entries: filterLocalEntries,
-                      streamController:
-                      RequirementPoolBLoC.instance.conditionController,
-                      afterPressed: (String str) {
-                        print(str);
-                        setState(() {
-                          if(str == '全部'){
-                            _localSelectText = '距离';
-                          }else{
-                            _localSelectText = str;
-                          }
-                          FilterConditionEntry selected;
-                          for(int i =0;i<filterLocalEntries.length;i++){
-                            if(str == filterLocalEntries[i].label){
-                              currentLocalCondition = filterLocalEntries[i];
-                            }
-                          }
-                          factoryCondition.distance = double.parse(currentLocalCondition.value);
+                        }
+                        factoryCondition.distance = double.parse(currentLocalCondition.value);
 //                          print(currentLocalCondition.value);
 //                          changeCondition(currentLocalCondition);
 //                        currentCondition
-                          showLocalFilterMenu = !showLocalFilterMenu;
-                          FactoryBLoC.instance.filterByCondition(
-                            factoryCondition,
-                            requirementCode: widget.requirementCode,
-                          );
-                        });
-                      },
-                    ),
+                        showLocalFilterMenu = !showLocalFilterMenu;
+                        FactoryBLoC.instance.filterByCondition(
+                          factoryCondition,
+                          requirementCode: widget.requirementCode,
+                        );
+                      });
+                    },
                   ),
-                  Expanded(
+                ),
+                Expanded(
                     child: FactoryListView(
                       factoryCondition: factoryCondition,
                       showButton: widget.requirementCode != null,
@@ -445,10 +371,10 @@ class _FactoryPageState extends State<FactoryPage> {
                       currentLocalCondition: currentLocalCondition,
                       isLocalFind: isLocalFind,
                     )
-                  )
-                ],
-              ),
-              ),
+                )
+              ],
+            ),
+          ),
         ));
   }
 
@@ -481,11 +407,11 @@ class ConditionPageButton extends StatelessWidget {
             .majorCategories()
             .then((categories) async {
           FactoryCondition newFactoryCondition =
-              await Navigator.of(context).push(
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ConditionPage(
-                    factoryCondition: factoryCondition,
-                  ),
+                factoryCondition: factoryCondition,
+              ),
             ),
           );
 
@@ -503,11 +429,11 @@ class ConditionPageButton extends StatelessWidget {
 class FactoryListView extends StatefulWidget {
   FactoryListView(
       {this.showButton = false,
-      this.factoryCondition,
-      this.requirementCode,
+        this.factoryCondition,
+        this.requirementCode,
         this.currentLocalCondition,
         this.isLocalFind = false,
-      @required this.currentCondition});
+        @required this.currentCondition});
 
   FactoryCondition factoryCondition;
 
