@@ -12,7 +12,7 @@ class ContactWayField extends StatefulWidget{
 class ContactWayFieldState extends State<ContactWayField>{
   formatContactWayText(){
     StringBuffer text = StringBuffer();
-    if(widget.item.details?.contactPerson == null){
+    if(widget.item.details?.contactPerson == null && widget.item.details?.contactPhone == null){
       text.write('填写');
     }else{
       text.write(widget.item.details?.contactPerson ?? '');

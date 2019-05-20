@@ -36,7 +36,6 @@ class MaxExpectedPriceFieldState extends State<MaxExpectedPriceField>{
             MaterialPageRoute(
               builder: (context) => PopupWindowPage(
                 fieldText: '期望价格',
-                inputType: TextInputType.number,
                 text:widget.item.details.maxExpectedPrice == null ? null : widget.item.details.maxExpectedPrice.toString(),
               ),
             ),

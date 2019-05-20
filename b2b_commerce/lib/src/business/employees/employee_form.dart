@@ -212,9 +212,8 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                   barrierDismissible: false,
                                   builder: (_) {
                                     return RequestDataLoadingPage(
-                                      requestCallBack:test(),
-//                                      UserRepositoryImpl()
-//                                          .employeeCreate(widget.item),
+                                      requestCallBack: UserRepositoryImpl()
+                                          .employeeCreate(widget.item),
                                       outsideDismiss: false,
                                       loadingText: '保存中。。。',
 //                                        entrance: 'createPurchaseOrder',
@@ -300,10 +299,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
             ),
           );
         });
-  }
 
-  Future<void> test(){
-    print('======');
   }
 
   clearData(){
