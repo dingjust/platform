@@ -29,6 +29,7 @@ import SuppliersModule from './miscs/suppliers';
 import IndustrialClustersModule from './miscs/industrial-clusters';
 import LabelsModule from './miscs/labels';
 import CarouselsModule from './miscs/carousels';
+import OperationCoursesModule from './miscs/operationCourses';
 
 export {
   // shared
@@ -60,4 +61,5 @@ export {
   SampleProductModule,
   SampleCheckoutHistModule,
   SuppliersModule,
+  OperationCoursesModule,
 }
