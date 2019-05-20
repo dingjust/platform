@@ -172,11 +172,20 @@ class _LoginPageState extends State<LoginPage> {
                   InputDecoration(hintText: '请输入', border: InputBorder.none),
             ),
             surfix: Container(
-              child: Text(
-                phoneValidateStr,
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
+                child: Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.close,color: Colors.grey,),
+                  onPressed: () {
+                    _phoneController.clear();
+                  },
+                ),
+                Text(
+                  phoneValidateStr,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+            )),
           ),
           _isPasswordLogin
               ? InputRow(
@@ -354,6 +363,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void formValidate() {
+    if (!RegexUtil.isMobile(_phoneController.text)) {
+      setState(() {
+        phoneValidateStr = '输入正确手机号';
+      });
+    } else {
+      setState(() {
+        phoneValidateStr = '';
+      });
+    }
     setState(() {
       if (_isPasswordLogin) {
         validate = _phoneController.text.trim().length == 11 &&

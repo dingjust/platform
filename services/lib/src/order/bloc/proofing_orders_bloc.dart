@@ -26,11 +26,15 @@ class ProofingOrdersBLoC extends BLoCBase {
 
   static final Map<String, PageEntry> _quotesMap = {
     'ALL': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'PENDING_PAYMENT': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'PENDING_DELIVERY': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'PENDING_PAYMENT':
+        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'PENDING_DELIVERY':
+        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
     'SHIPPED': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'COMPLETED': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'CANCELLED': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>())
+    'COMPLETED':
+        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'CANCELLED':
+        PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>())
   };
 
   List<ProofingModel> quotes(String status) => _quotesMap[status].data;
@@ -58,13 +62,18 @@ class ProofingOrdersBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.proofing,
-              data: data, queryParameters: {'page': _quotesMap[status].currentPage, 'size': _quotesMap[status].size});
+              data: data,
+              queryParameters: {
+                'page': _quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          ProofingOrdersResponse ordersResponse = ProofingOrdersResponse.fromJson(response.data);
+          ProofingOrdersResponse ordersResponse =
+              ProofingOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.clear();
@@ -77,29 +86,34 @@ class ProofingOrdersBLoC extends BLoCBase {
   }
 
   filterByKeyword(String keyword) async {
-        //  分页拿数据，response.data;
-        //请求参数
-        Map data = {
-          'code': keyword,
-          'skuID': keyword,
-          'belongto': keyword,
-        };
-        Response<Map<String, dynamic>> response;
-        try {
-          response = await http$.post(OrderApis.proofing,
-              data: data, queryParameters: {'page': _quotesMap['ALL'].currentPage, 'size': _quotesMap['ALL'].size});
-        } on DioError catch (e) {
-          print(e);
-        }
+    //  分页拿数据，response.data;
+    //请求参数
+    Map data = {
+      'code': keyword,
+      'skuID': keyword,
+      'belongto': keyword,
+    };
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.post(OrderApis.proofing,
+          data: data,
+          queryParameters: {
+            'page': _quotesMap['ALL'].currentPage,
+            'size': _quotesMap['ALL'].size
+          });
+    } on DioError catch (e) {
+      print(e);
+    }
 
-        if (response != null && response.statusCode == 200) {
-          ProofingOrdersResponse ordersResponse = ProofingOrdersResponse.fromJson(response.data);
-          _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
-          _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
-          _quotesMap['ALL'].data.clear();
-          _quotesMap['ALL'].data.addAll(ordersResponse.content);
-        }
-      _controller.sink.add(_quotesMap['ALL'].data);
+    if (response != null && response.statusCode == 200) {
+      ProofingOrdersResponse ordersResponse =
+          ProofingOrdersResponse.fromJson(response.data);
+      _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
+      _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
+      _quotesMap['ALL'].data.clear();
+      _quotesMap['ALL'].data.addAll(ordersResponse.content);
+    }
+    _controller.sink.add(_quotesMap['ALL'].data);
   }
 
   loadingMoreByStatuses(String status) async {
@@ -121,20 +135,24 @@ class ProofingOrdersBLoC extends BLoCBase {
           response = await http$.post(
             OrderApis.proofing,
             data: data,
-            queryParameters: {'page': ++_quotesMap[status].currentPage, 'size': _quotesMap[status].size},
+            queryParameters: {
+              'page': ++_quotesMap[status].currentPage,
+              'size': _quotesMap[status].size
+            },
           );
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          ProofingOrdersResponse ordersResponse = ProofingOrdersResponse.fromJson(response.data);
+          ProofingOrdersResponse ordersResponse =
+              ProofingOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.addAll(ordersResponse.content);
         }
       }
-//    loadingController.sink.add(false);
+      loadingController.sink.add(false);
       _controller.sink.add(_quotesMap[status].data);
       lock = false;
     }
@@ -149,23 +167,27 @@ class ProofingOrdersBLoC extends BLoCBase {
         'skuID': keyword,
         'belongto': keyword,
       };
-        Response<Map<String, dynamic>> response;
-        try {
-          response = await http$.post(
-            OrderApis.proofing,
-            data: data,
-            queryParameters: {'page': ++_quotesMap['ALL'].currentPage, 'size': _quotesMap['ALL'].size},
-          );
-        } on DioError catch (e) {
-          print(e);
-        }
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$.post(
+          OrderApis.proofing,
+          data: data,
+          queryParameters: {
+            'page': ++_quotesMap['ALL'].currentPage,
+            'size': _quotesMap['ALL'].size
+          },
+        );
+      } on DioError catch (e) {
+        print(e);
+      }
 
-        if (response != null && response.statusCode == 200) {
-          ProofingOrdersResponse ordersResponse = ProofingOrdersResponse.fromJson(response.data);
-          _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
-          _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
-          _quotesMap['ALL'].data.addAll(ordersResponse.content);
-        }
+      if (response != null && response.statusCode == 200) {
+        ProofingOrdersResponse ordersResponse =
+            ProofingOrdersResponse.fromJson(response.data);
+        _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
+        _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
+        _quotesMap['ALL'].data.addAll(ordersResponse.content);
+      }
       _controller.sink.add(_quotesMap['ALL'].data);
       lock = false;
     }

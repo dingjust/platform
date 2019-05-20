@@ -19,13 +19,13 @@ class ProductionUniqueCodePage extends StatefulWidget {
 
 class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
   TextEditingController _textEditingController = TextEditingController();
+  TextEditingController controller = new TextEditingController();
 
   PurchaseOrderModel uniqueCodeEntry;
   String userType;
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = new TextEditingController();
     return Scaffold(
         appBar: AppBar(
           title: Text('导入唯一码'),
@@ -362,7 +362,7 @@ class UniqueCodeItem extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   userType != null && userType == 'brand'?
-                  '工厂：${order.belongTo.name}':'品牌：${order.purchaser==null?'':order.purchaser.name}',
+                  '工厂：${order.belongTo==null?'':order.belongTo.name}':'品牌：${order.purchaser==null?'':order.purchaser.name}',
                   style: TextStyle(fontSize: 15),
                 ),
               ),

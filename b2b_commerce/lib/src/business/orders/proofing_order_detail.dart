@@ -13,9 +13,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProofingOrderDetailPage extends StatefulWidget {
-  const ProofingOrderDetailPage({Key key, this.model}) : super(key: key);
+  ProofingOrderDetailPage(this.code, {Key key, this.model}) : super(key: key);
 
-  final ProofingModel model;
+  ProofingModel model;
+
+  final String code;
 
   _ProofingOrderDetailPageState createState() =>
       _ProofingOrderDetailPageState();
@@ -34,34 +36,54 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: Container(
-        color: Color.fromRGBO(245, 245, 245, 1),
-        child: ListView(
-          children: <Widget>[
+      body: FutureBuilder<ProofingModel>(
+        builder: (BuildContext context, AsyncSnapshot<ProofingModel> snapshot) {
+          if (snapshot.data != null) {
+            return Container(
+              color: Color.fromRGBO(245, 245, 245, 1),
+              child: ListView(
+                children: <Widget>[
 //            _buildCompanyInfo(),
-            _buildEntries(),
-            _buildNumRow(),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: ColorSizeNumTable(
-                data: widget.model.entries
-                    .map((entry) => ApparelSizeVariantProductEntry(
-                        quantity: entry.quantity, model: entry.product))
-                    .toList(),
+                  _buildEntries(),
+                  _buildNumRow(),
+                  Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: ColorSizeNumTable(
+                      data: widget.model.entries
+                          .map((entry) => ApparelSizeVariantProductEntry(
+                              quantity: entry.quantity, model: entry.product))
+                          .toList(),
+                    ),
+                  ),
+                  _buildCostRow(),
+                  _buildRemarks(),
+                  _buildDeliveryAddress(context),
+                  _buildBrandInfo(context),
+                  _buildFactory(),
+                  _buildOrderInfoRow(),
+                  _buildButtonGroup(),
+                ],
               ),
-            ),
-            _buildCostRow(),
-            _buildRemarks(),
-            _buildDeliveryAddress(context),
-            _buildBrandInfo(context),
-            _buildFactory(),
-            _buildOrderInfoRow(),
-            _buildButtonGroup(),
-          ],
-        ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+        initialData: null,
+        future: _gerData(),
       ),
     );
+  }
+
+  Future<ProofingModel> _gerData() async {
+    // 查询明细
+    ProofingModel detailModel =
+        await ProofingOrderRepository().proofingDetail(widget.code);
+    widget.model = detailModel;
+    return detailModel;
   }
 
   Widget _buildEntries() {
@@ -82,52 +104,49 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     alignment: const Alignment(0.6, 1.1),
                     children: <Widget>[
                       widget.model.product != null &&
-                          widget.model.product.thumbnail != null &&
-                          widget.model.product.thumbnail.url != null ?
-                      Container(
-                        margin: EdgeInsets.only(right: 15),
-                        padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-                        width: 80,
-                        height: 80,
-                        child: CachedNetworkImage(
-                            width: 100,
-                            height: 100,
-                            imageUrl: '${widget.model.product.thumbnail
-                                .previewUrl()}',
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                SpinKitRing(
-                                  color: Colors.black12,
-                                  lineWidth: 2,
-                                  size: 30,
-                                ),
-                            errorWidget: (context, url, error) =>
-                                SpinKitRing(
-                                  color: Colors.black12,
-                                  lineWidth: 2,
-                                  size: 30,
-                                )
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ) :
-                      Container(
-                        margin: EdgeInsets.only(right: 15),
-                        padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: AssetImage(
+                              widget.model.product.thumbnail != null &&
+                              widget.model.product.thumbnail.url != null
+                          ? Container(
+                              margin: EdgeInsets.only(right: 15),
+                              padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                              width: 80,
+                              height: 80,
+                              child: CachedNetworkImage(
+                                  width: 100,
+                                  height: 100,
+                                  imageUrl:
+                                      '${widget.model.product.thumbnail.previewUrl()}',
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => SpinKitRing(
+                                        color: Colors.black12,
+                                        lineWidth: 2,
+                                        size: 30,
+                                      ),
+                                  errorWidget: (context, url, error) =>
+                                      SpinKitRing(
+                                        color: Colors.black12,
+                                        lineWidth: 2,
+                                        size: 30,
+                                      )),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            )
+                          : Container(
+                              margin: EdgeInsets.only(right: 15),
+                              padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image: AssetImage(
                                       'temp/picture.png',
                                       package: "assets",
                                     ),
-                              fit: BoxFit.cover,
-                            )),
-                      )
-                      ,
+                                    fit: BoxFit.cover,
+                                  )),
+                            ),
                       Container(
                         child: Icon(
                           Icons.photo_size_select_actual,
@@ -409,47 +428,45 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               Row(
                 children: <Widget>[
                   widget.model.supplier == null ||
-                      widget.model.supplier.profilePicture == null?
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: AssetImage(
+                          widget.model.supplier.profilePicture == null
+                      ? Container(
+                          margin: EdgeInsets.all(10),
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: AssetImage(
                                   'temp/picture.png',
                                   package: "assets",
                                 ),
-                          fit: BoxFit.cover,
-                        )),
-                  ):
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    width: 80,
-                    height: 80,
-                    child: CachedNetworkImage(
-                        width: 100,
-                        height: 100,
-                        imageUrl: '${widget.model.supplier.profilePicture.previewUrl()}',
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            ),
-                        errorWidget: (context, url, error) =>
-                            SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            )
-                    ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                                fit: BoxFit.cover,
+                              )),
+                        )
+                      : Container(
+                          margin: EdgeInsets.all(10),
+                          width: 80,
+                          height: 80,
+                          child: CachedNetworkImage(
+                              width: 100,
+                              height: 100,
+                              imageUrl:
+                                  '${widget.model.supplier.profilePicture.previewUrl()}',
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => SpinKitRing(
+                                    color: Colors.black12,
+                                    lineWidth: 2,
+                                    size: 30,
+                                  ),
+                              errorWidget: (context, url, error) => SpinKitRing(
+                                    color: Colors.black12,
+                                    lineWidth: 2,
+                                    size: 30,
+                                  )),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                  ),
                   Container(
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -492,7 +509,6 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-
           //TODO跳转详细页
           Navigator.push(
               context,

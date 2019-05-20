@@ -13,7 +13,7 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = '3'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
@@ -44,10 +44,12 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode flutterVersionCode.toInteger()
-//        versionCode 2
+        versionCode 3
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        manifestPlaceholders = [
+                AMAP_KEY: "182003d072a475cb3ec6712e6a978612", /// 高德地图key
+        ]
     }
     buildTypes {
         release {
@@ -87,7 +89,9 @@ android {
         testImplementation 'junit:junit:4.12'
         androidTestImplementation 'com.android.support.test:runner:1.0.2'
         androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-        //    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-//    implementation 'com.android.support:support-v4:28.0.0-alpha3'
+        // compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+//      implementation 'com.android.support:support-v4:28.0.0-alpha3'
+        /// 注意这里需要在主项目增加一条依赖，否则可能发生编译不通过的情况-----高德
+        implementation 'com.amap.api:location:latest.integration'
     }
 }

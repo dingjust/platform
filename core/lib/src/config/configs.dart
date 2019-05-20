@@ -4,6 +4,9 @@ class GlobalConfigs {
   //测试
   static const CONTEXT_PATH = 'http://sc.nbyjy.net';
   static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+  // static const CONTEXT_PATH = 'https://192.168.1.132:9002/djwebservices/v2';
+  // static const MEDIA_CONTEXT_PATH =
+  //     'https://192.168.1.132:9002/djwebservices/v2';
   // static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
   // static const CONTEXT_PATH = 'https://192.168.1.191:9002';
   // 生产
@@ -18,6 +21,8 @@ class GlobalConfigs {
   static const REFRESH_TOKEN_KEY = 'refresh_token';
   static const BASIC_AUTH_TOKEN_KEY = 'basic_auth_token';
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
+  // static const AUTH_SERVER_URL =
+  //     'https://192.168.1.132:9002/authorizationserver';
   static const AUTH_TOKEN_URL = '$AUTH_SERVER_URL/oauth/token';
   static const AUTH_CHECK_TOKEN_URL = '$AUTH_SERVER_URL/oauth/check_token';
   static const AUTH_CLIENT_ID_KEY = 'client_id';
@@ -50,6 +55,14 @@ class GlobalConfigs {
 
   /// 通过nginx代理所有b2b前缀的请求
   static const B2B_API_PREFIX = 'b2b';
+  // static const B2B_API_PREFIX = 'b2b-apparel-zh';
   static const B2B_CLIENT_ID = 'nbyjy';
   static const B2B_CLIENT_SECRET = 'password';
+
+  static const String AMAP_TIP_API =
+      'https://restapi.amap.com/v3/assistant/inputtips';
+
+  static const String AMAP_TIP_KEY = '16019b7f1babc4b2d81010730bad2504';
+
+  // static const String AMAP_LOCATION_KEY = '182003d072a475cb3ec6712e6a978612';
 }
