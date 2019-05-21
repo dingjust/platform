@@ -30,6 +30,7 @@
         <el-col :span="10">
           <el-button v-if="readOnly" @click.prevent="removeDomain(info)">删除</el-button>
         </el-col>
+      <span>推荐图片上传分辨率为1920*1080</span>
       </el-form-item>
     </el-form>
   </div>

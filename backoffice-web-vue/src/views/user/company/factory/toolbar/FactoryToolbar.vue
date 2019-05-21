@@ -167,8 +167,6 @@
           this.queryFormData.cities = [];
           this.cities = [];
         }
-        console.log(current);
-        console.log(this.queryFormData.productiveOrientations);
         if(this.queryFormData.productiveOrientations.length==0){
           this.queryFormData.productiveOrientations.push(current);
         }else {
