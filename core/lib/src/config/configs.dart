@@ -65,4 +65,6 @@ class GlobalConfigs {
   static const String AMAP_TIP_KEY = '16019b7f1babc4b2d81010730bad2504';
 
    static const String AMAP_LOCATION_KEY_IOS = '7ff2f1b6002d0aaa2ef2cb40f76e7c4a';
+
+   static const String ALIPAY_URL_SCHEME="yijiayi";
 }

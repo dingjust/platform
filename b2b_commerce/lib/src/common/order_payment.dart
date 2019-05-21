@@ -487,15 +487,15 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void aliPay() async {
-//    AlipayResponse aliResponse = await AlipayServiceImpl.instance
-//        .pay(widget.order.code, paymentFor: widget.paymentFor);
-//    //支付成功
-//    if (aliResponse.resultStatus != null &&
-//        aliResponse.resultStatus == '9000') {
-//      afterPaid();
-//    } else {
-//      onPaymentError();
-//    }
+    AlipayResponse aliResponse = await AlipayServiceImpl.instance
+        .pay(widget.order.code, paymentFor: widget.paymentFor);
+    //支付成功
+    if (aliResponse.resultStatus != null &&
+        aliResponse.resultStatus == '9000') {
+      afterPaid();
+    } else {
+      onPaymentError();
+    }
   }
 
   void onPaymentError() {
