@@ -189,7 +189,7 @@ class HelpViewPage extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(50, 20, 50, 40),
                   child: CachedNetworkImage(
                       imageUrl: '${media.workingUrl()}',
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       placeholder: (context, url) => SpinKitRing(
                             color: Colors.black12,
                             lineWidth: 2,
