@@ -2,6 +2,8 @@ library app_services;
 
 import 'dart:async';
 
+export 'src/amap/amap_response.dart';
+export 'src/amap/amap_service.dart';
 export 'src/api/apis.dart';
 export 'src/api/order.dart';
 export 'src/api/product.dart';
@@ -11,6 +13,8 @@ export 'src/home/factory/response/factory_condition.dart';
 export 'src/home/product/bloc/order_product_bloc.dart';
 export 'src/message/message_bloc.dart';
 export 'src/my/bloc/my_bill_bloc.dart';
+export 'src/my/bloc/my_help_bloc.dart';
+export 'src/my/repository/user_guideline_repository.dart';
 export 'src/net/http_manager.dart';
 export 'src/order/bloc/proofing_orders_bloc.dart';
 export 'src/order/bloc/purchase_order_bloc.dart';
@@ -23,6 +27,11 @@ export 'src/order/repository/purchase_order_repository.dart';
 export 'src/order/repository/quote_order_respository.dart';
 export 'src/order/repository/requirement_order_repository.dart';
 export 'src/order/response/order_response.dart';
+export 'src/payment/alipay/alipay_response.dart';
+export 'src/payment/alipay/alipay_service_impl.dart';
+export 'src/payment/order_payment_service_impl.dart';
+export 'src/payment/payment_for.dart';
+export 'src/payment/wechat/wechat_service_impl.dart';
 export 'src/product/bloc/apparel_product_bloc.dart';
 export 'src/product/bloc/apparel_product_search_result_bloc.dart';
 export 'src/product/bloc/sample_product_bloc.dart';
@@ -44,6 +53,7 @@ export 'src/system/version/app_version.dart';
 export 'src/user/address_repository.dart';
 export 'src/user/address_repository_impl.dart';
 export 'src/user/bloc/address_bloc.dart';
+export 'src/user/bloc/employee_bloc.dart';
 export 'src/user/bloc/login.dart';
 export 'src/user/bloc/user_bloc.dart';
 export 'src/user/city_repository.dart';
@@ -57,13 +67,7 @@ export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
-export 'src/payment/payment_for.dart';
-export 'src/payment/wechat/wechat_service_impl.dart';
-export 'src/payment/alipay/alipay_service_impl.dart';
-export 'src/payment/order_payment_service_impl.dart';
-export 'src/payment/alipay/alipay_response.dart';
-export 'src/amap/amap_service.dart';
-export 'src/amap/amap_response.dart';
+
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

@@ -157,15 +157,18 @@ class CategorySelectPageState extends State<CategorySelectPage> {
                       style: TextStyle(color: Colors.black),
                     ),
                   )
-                : IconButton(
-                    icon: Text(
-                      '确定',
-                      // style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+                : Offstage(
+              offstage: !widget.multiple,
+              child: IconButton(
+                icon: Text(
+                  '确定',
+                  // style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
           ],
         ),
         body: Column(

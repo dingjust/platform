@@ -45,8 +45,14 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
                     ),
                   ),
                   onTap: () async {
-                    widget.item.minPrice = ClassHandleUtil.removeSymbolRMBToDouble(_minPriceController.text);
-                    widget.item.maxPrice = ClassHandleUtil.removeSymbolRMBToDouble(_maxPriceController.text);
+                    double min = ClassHandleUtil.removeSymbolRMBToDouble(_minPriceController.text);
+                    double max = ClassHandleUtil.removeSymbolRMBToDouble(_maxPriceController.text);
+                    if(min > max){
+                      ShowDialogUtil.showSimapleDialog(context, '价格上限不可小于价格下限');
+                      return;
+                    }
+                    widget.item.minPrice = min;
+                    widget.item.maxPrice = max;
                     Navigator.pop(context);
                   }
               )
