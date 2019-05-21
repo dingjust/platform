@@ -23,13 +23,13 @@ dependencies:
   dio: ^2.0.18
   json_annotation: ^2.0.0
   shared_preferences: ^0.4.2
-  fluwx: ^0.5.4
+  fluwx: ^0.6.2
   rxdart: ^0.20.0
   open_file: 1.1.1
   store_redirect: ^1.0.1
   amap_location: ^0.2.0
   simple_permissions: ^0.1.9
-#  alipay_me: ^1.0.0
+  alipay_me: ^1.0.0
 
 
 
