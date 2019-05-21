@@ -447,7 +447,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void wechatPay() async {
     //检查是否安装微信
     bool result = await WechatServiceImpl.instance.isWeChatInstalled();
-
     if (result) {
       showDialog(
           context: context,

@@ -177,7 +177,7 @@
         brands:[],
         keyword: this.$store.state.PurchaseOrdersModule.keyword,
         formData: this.$store.state.PurchaseOrdersModule.formData,
-        queryFormData: this.$store.state.RequirementOrdersModule.queryFormData,
+        queryFormData: this.$store.state.PurchaseOrdersModule.queryFormData,
         purchaseOrderStatuses: this.$store.state.EnumsModule.purchaseOrderStatuses,
       }
     },

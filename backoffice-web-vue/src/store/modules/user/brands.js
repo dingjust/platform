@@ -2,6 +2,7 @@ import http from '@/common/js/http';
 
 const state = {
   keyword: '',
+  isAdvancedSearch: false,
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -91,7 +92,8 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch
 };
 
 const actions = {
@@ -144,7 +146,9 @@ const getters = {
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  isAdvancedSearch: state => state.isAdvancedSearch
+
 };
 
 export default {

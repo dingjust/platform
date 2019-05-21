@@ -18,7 +18,6 @@ dependencies:
     path: ../services/
 
   json_annotation: ^2.0.0
-#  cached_network_image: ^0.4.1+1
   cupertino_icons: ^0.1.2
   dio: ^2.0.18
   shared_preferences: ^0.4.2

@@ -72,7 +72,7 @@
       onPageSizeChanged(val) {
         this._reset();
 
-        if (this.isAdvancedSearch) {
+        if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val);
           return;
         }
@@ -80,7 +80,7 @@
         this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
-        if (this.isAdvancedSearch) {
+        if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
         }
@@ -99,7 +99,6 @@
     data() {
       return {
         statuses: this.$store.state.PurchaseOrdersModule.statuses,
-        isAdvancedSearch: this.$store.state.PurchaseOrdersModule.isAdvancedSearch,
       }
     }
   }

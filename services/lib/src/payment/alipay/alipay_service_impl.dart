@@ -1,4 +1,5 @@
 import 'package:alipay_me/alipay_me.dart';
+import 'package:core/core.dart';
 import 'package:services/src/payment/alipay/alipay_constants.dart';
 import 'package:services/src/payment/alipay/alipay_response.dart';
 import 'package:services/src/payment/alipay/alipay_service.dart';
@@ -38,7 +39,7 @@ class AlipayServiceImpl implements AlipayService {
     String payInfo =
         await AlipayHelper.prepay(orderCode, paymentFor: paymentFor);
     if (payInfo != null) {
-      Map payResponse = await AlipayMe.pay(payInfo);
+      Map payResponse = await AlipayMe.pay(payInfo,urlScheme: GlobalConfigs.ALIPAY_URL_SCHEME);
       response = AlipayResponse.generate(payResponse);
     } else {
       return null;

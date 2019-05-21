@@ -15,7 +15,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('PurchaseOrdersModule');
+  const {mapGetters, mapActions,mapMutations} = createNamespacedHelpers('PurchaseOrdersModule');
 
   import PurchaseOrderToolbar from './toolbar/PurchaseOrderToolbar';
   import PurchaseOrderSearchResultList from './list/PurchaseOrderSearchResultList';
@@ -39,15 +39,18 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
+      ...mapMutations({
+        setIsAdvancedSearch: 'isAdvancedSearch'
+      }),
       onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
         const url = this.apis().getPurchaseOrders();
+        this.setIsAdvancedSearch(false);
         this.search({url, keyword, statuses, page, size});
       },
       onAdvancedSearch(page, size) {
-        this.isAdvancedSearch = true;
-
+        this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getPurchaseOrders();
         this.searchAdvanced({url, query, page, size});
@@ -69,7 +72,6 @@
     data() {
       return {
         formData: this.$store.state.PurchaseOrdersModule.formData,
-        isAdvancedSearch: this.$store.state.PurchaseOrdersModule.isAdvancedSearch,
       }
     },
     created() {

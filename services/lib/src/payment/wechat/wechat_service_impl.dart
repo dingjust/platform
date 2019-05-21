@@ -20,7 +20,7 @@ class WechatServiceImpl implements WechatService {
     // 初始化
     // //注册微信信息
     fluwx.register(
-        appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: false);
+        appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: true);
 
     //全局监听微信回调
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) {
