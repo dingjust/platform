@@ -63,6 +63,19 @@ class MediaModel extends ItemModel {
 
   String get actualUrl => '${GlobalConfigs.MEDIA_CONTEXT_PATH}${url}';
 
+  ///workingUrl
+  String workingUrl() {
+    MediaModel mediaModel =
+        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_WORKING_FORMAT]);
+
+    if (mediaModel != null) {
+      // print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
+      return '${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}';
+    } else {
+      return actualUrl;
+    }
+  }
+
   ///预览图
   String previewUrl() {
     MediaModel mediaModel =

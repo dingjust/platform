@@ -209,12 +209,14 @@ class _ApparelProductListState extends State<ApparelProductList> {
   }
 
   void _onProudctProduction(ApparelProductModel product) {
+    RequirementOrderModel orderModel = RequirementOrderModel(details: RequirementInfoModel(),attachments: []);
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => RequirementOrderFrom(
                   product: product,
                   isCreate: true,
+                  order: orderModel,
                 )));
   }
 
@@ -262,6 +264,16 @@ class _ApparelProductListState extends State<ApparelProductList> {
         }
       });
     } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
+      if(product.variants == null || product.variants.isEmpty){
+        ShowDialogUtil.showSimapleDialog(context, '颜色尺码为空不可上架');
+        return;
+      }
+      if(product.maxPrice == null || product.minPrice == null || product.price == null){
+        ShowDialogUtil.showSimapleDialog(context, '产品价格为空不可上架');
+        return;
+      }
+
+
       showDialog(
           context: context,
           barrierDismissible: false,

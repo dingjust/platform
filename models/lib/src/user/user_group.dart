@@ -218,36 +218,42 @@ class B2BUnitModel extends OrgUnitModel {
   String email;
   String phone;
 
-  B2BUnitModel({
-    MediaModel profilePicture,
-    String uid,
-    String name,
-    List<PrincipalModel> members,
-    String path,
-    int starLevel,
-    AddressModel contactAddress,
-    String address,
-    String describe,
-    DateTime creationTime,
-    String taxNumber,
-    String bankOfDeposit,
-    List<MediaModel> certificates,
-    String contactPerson,
-    String contactPhone,
-    String cooperativeBrand,
-    String qq,
-    String wechat,
-    String businessRegistrationNo,
-    String legalRepresentative,
-    String certificateOfLegal,
-    CompanyType type,
-    ArticleApprovalStatus approvalStatus,
-    List<CompanyProfileModel> companyProfiles,
-    List<LabelModel> labels,
-    this.active,
-    this.email,
-    this.phone,
-  }) : super(
+  double longitude;
+
+  double latitude;
+
+  B2BUnitModel(
+      {MediaModel profilePicture,
+      String uid,
+      String name,
+      List<PrincipalModel> members,
+      String path,
+      int starLevel,
+      AddressModel contactAddress,
+      String address,
+      String describe,
+      DateTime creationTime,
+      String taxNumber,
+      String bankOfDeposit,
+      List<MediaModel> certificates,
+      String contactPerson,
+      String contactPhone,
+      String cooperativeBrand,
+      String qq,
+      String wechat,
+      String businessRegistrationNo,
+      String legalRepresentative,
+      String certificateOfLegal,
+      CompanyType type,
+      ArticleApprovalStatus approvalStatus,
+      List<CompanyProfileModel> companyProfiles,
+      List<LabelModel> labels,
+      this.active,
+      this.email,
+      this.phone,
+      this.longitude,
+      this.latitude})
+      : super(
           profilePicture: profilePicture,
           uid: uid,
           name: name,
@@ -428,11 +434,16 @@ class FactoryModel extends B2BUnitModel {
   @JsonKey(toJson: _productToJson)
   List<ProductModel> products;
 
+  //经度
   double locationX;
 
+  //纬度
   double locationY;
 
   bool invited;
+
+  //距离
+  double distance;
 
   //产业集群
   @JsonKey(toJson: _industrialClusterToJson)
@@ -480,6 +491,7 @@ class FactoryModel extends B2BUnitModel {
       this.locationY,
       this.industrialCluster,
       this.invited,
+        this.distance,
       this.populationScale})
       : super(
           profilePicture: profilePicture,

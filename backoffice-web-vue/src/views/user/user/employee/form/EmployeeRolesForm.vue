@@ -3,11 +3,15 @@
     <el-form ref="form" label-position="top" :model="slotData" :disabled="!readOnly">
       <el-row :gutter="10">
         <el-form-item label="角色" prop="roles">
-          <el-checkbox-group v-model="slotData.roles">
-            <el-checkbox v-for="item in roles" :label="item.uid" :key="item.uid">
-              {{item.name}}
-            </el-checkbox>
-          </el-checkbox-group>
+          <el-select class="w-100" v-model="slotData.roles" multiple placeholder="请选择"
+                     value-key="id">
+            <el-option
+              v-for="item in roles"
+              :key="item.id"
+              :label="item.name"
+              :value="item">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-row>
     </el-form>

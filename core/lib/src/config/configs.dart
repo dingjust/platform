@@ -2,36 +2,19 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
   //测试
-  // static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
   // static const CONTEXT_PATH = 'https://192.168.1.132:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH =
   //     'https://192.168.1.132:9002/djwebservices/v2';
   // static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
   // static const CONTEXT_PATH = 'https://192.168.1.191:9002';
   // 生产
-//  static const CONTEXT_PATH = 'http://ht.nbyjy.net';
-//  static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
-//  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
-  static const CONTEXT_PATH = 'http://47.106.112.137';
-  //本地
-//   static const CONTEXT_PATH = 'https://192.168.1.103:9002';
-//  static const CONTEXT_PATH = 'http://test.dingjust.cn';
-//  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-//  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
-  // static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
-  // static const CONTEXT_PATH = 'https://192.168.1.191:9002';
-  // 生产
-//   static const CONTEXT_PATH = 'http://120.78.211.86';
+  // static const CONTEXT_PATH = 'http://ht.nbyjy.net';
+  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
   // static const CONTEXT_PATH = 'http://platform.dingjust.cn';
-//  static const CONTEXT_PATH = 'http://ht.nbyjy.net';
-//  static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
   // static const IMAGE_BASIC_URL = 'http://120.78.211.86:9001/djwebservices/v2';
 
-  //本地
-//  static const BASE_URL = '$CONTEXT_PATH/djwebservices/v2';
-  //测试
   static const BASE_URL = '$CONTEXT_PATH';
   static const ACCESS_TOKEN_KEY = 'access_token';
   static const USER_KEY = 'user';
@@ -71,8 +54,15 @@ class GlobalConfigs {
   static const APP_NAME = 'dingjust_platform';
 
   /// 通过nginx代理所有b2b前缀的请求
-//  static const B2B_API_PREFIX = 'b2b-apparel-zh';//本地
-  static const B2B_API_PREFIX = 'b2b';//测试
+  static const B2B_API_PREFIX = 'b2b';
+  // static const B2B_API_PREFIX = 'b2b-apparel-zh';
   static const B2B_CLIENT_ID = 'nbyjy';
   static const B2B_CLIENT_SECRET = 'password';
+
+  static const String AMAP_TIP_API =
+      'https://restapi.amap.com/v3/assistant/inputtips';
+
+  static const String AMAP_TIP_KEY = '16019b7f1babc4b2d81010730bad2504';
+
+  // static const String AMAP_LOCATION_KEY = '182003d072a475cb3ec6712e6a978612';
 }

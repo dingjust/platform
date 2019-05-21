@@ -101,6 +101,7 @@ class UserBLoC extends BLoCBase {
       }
 
       if (infoResponse != null && infoResponse.statusCode == 200) {
+        print(infoResponse.data);
         _user = UserModel.fromJson(infoResponse.data);
         _user.name = infoResponse.data['username'];
         _user.status = UserStatus.ONLINE;
