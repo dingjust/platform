@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-card>
       <factory-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
-      <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch">
+      <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
         <template slot="operations" slot-scope="props">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
           <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">标签</el-button>
@@ -22,7 +22,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('FactoriesModule');
+  const {mapGetters, mapActions,mapMutations} = createNamespacedHelpers('FactoriesModule');
 
   import FactoryToolbar from './toolbar/FactoryToolbar';
   import FactoryList from './list/FactoryList';
@@ -49,6 +49,9 @@
         search: 'search',
         advancedSearch: 'advancedSearch',
       }),
+      ...mapMutations({
+        setIsAdvancedSearch: 'isAdvancedSearch'
+      }),
       handleClose(done) {
         this.dialogFormVisible = false;
       },
@@ -66,11 +69,13 @@
       },
 
       onSearch(page, size) {
+        this.setIsAdvancedSearch(false);
         const keyword = this.keyword;
         const url = this.apis().getFactories()+"?sort=creationtime,desc";
         this.search({url, keyword, page, size});
       },
       onAdvancedSearch(page, size) {
+        this.setIsAdvancedSearch(true);
         const queryFormData = this.queryFormData;
         let url = this.apis().getFactories();
         if(this.isTenant()){

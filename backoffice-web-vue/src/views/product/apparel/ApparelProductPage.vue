@@ -46,6 +46,7 @@
         setAdvancedSearch: 'isAdvancedSearch'
       }),
       onSearch(page, size) {
+        this.setAdvancedSearch(false);
         const keyword = this.keyword;
         const url = this.apis().getApparelProducts();
         this.search({url, keyword, page, size});

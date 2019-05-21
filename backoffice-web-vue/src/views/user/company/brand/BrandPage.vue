@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-card>
       <brand-toolbar @onNew="onNew" @onSearch="onSearch"  @onAdvancedSearch="onAdvancedSearch"/>
-      <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch">
+      <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
         <template slot="operations" slot-scope="props">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
           <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">标签评级</el-button>
@@ -23,7 +23,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('BrandsModule');
+  const {mapGetters, mapActions,mapMutations} = createNamespacedHelpers('BrandsModule');
 
   import BrandToolbar from './toolbar/BrandToolbar';
   import BrandList from './list/BrandList';
@@ -52,6 +52,9 @@
         search: 'search',
         advancedSearch: 'advancedSearch',
       }),
+      ...mapMutations({
+        setIsAdvancedSearch: 'isAdvancedSearch'
+      }),
       handleClose(done) {
         this.dialogFormVisible = false;
       },
@@ -69,14 +72,14 @@
       },
       onSearch(page, size) {
         const keyword = this.keyword;
+        this.setIsAdvancedSearch(false);
         const url = this.apis().getBrands();
         this.search({url, keyword, page, size});
       },
       onAdvancedSearch(page, size) {
         const queryFormData = this.queryFormData;
         const url = this.apis().getBrands();
-        console.log("lhj");
-        console.log(this.queryFormData);
+        this.setIsAdvancedSearch(true);
         this.advancedSearch({url, queryFormData, page, size});
       },
       async onDetails(item) {
