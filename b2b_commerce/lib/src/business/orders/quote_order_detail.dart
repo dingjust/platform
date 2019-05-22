@@ -290,14 +290,31 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-          //TODO跳转详细页
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyFactoryPage(
-                        pageItem.belongTo,
-                        isFactoryDetail: true,
-                      )));
+          if(pageItem.belongTo != null) {
+            //TODO跳转详细页
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyFactoryPage(
+                          pageItem.belongTo,
+                          isFactoryDetail: true,
+                        )));
+          }else{
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) {
+                  return CustomizeDialog(
+                    dialogType: DialogType.CONFIRM_DIALOG,
+                    contentText2: '该订单没有工厂信息',
+                    isNeedConfirmButton: true,
+                    confirmButtonText: '确定',
+                    dialogHeight: 180,
+                  );
+                }
+            );
+          }
         },
         child: Container(
             color: Colors.white,
@@ -944,55 +961,52 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
 
   void alertMessage(String message) {
     showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[Text(message)],
-            ),
-          ),
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
     );
   }
 
   void onReject() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入拒绝原因?'),
-          content: TextField(
-            controller: rejectController,
-            autofocus: true,
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                '取消',
-                style: TextStyle(color: Colors.grey),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                int statusCode = await QuoteOrderRepository()
-                    .quoteReject(pageItem.code, rejectController.text);
-                Navigator.of(context).pop();
-                if (statusCode == 200) {
-                  //触发刷新
-                  refreshData();
-                } else {
-                  alertMessage('拒绝失败');
-                }
-              },
-            ),
-          ],
-        );
-      },
+    TextEditingController inputController = TextEditingController();
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.INPUTS_DIALOG,
+            inputController1: inputController,
+            title: '填写拒绝原因',
+            focusNode1: FocusNode(),
+          );
+        }
+    ).then((value){
+      if (value != null && value != '') {
+        rejectQuote(pageItem,value);
+      }
+    });
+  }
+
+  rejectQuote(QuoteModel model,String rejectText) async{
+    int statusCode = await QuoteOrderRepository().quoteReject(
+      model.code,
+      rejectText,
     );
+    if (statusCode == 200) {
+      // 触发刷新
+      refreshData();
+    } else {
+      alertMessage('拒绝失败');
+    }
   }
 
   void onApprove() {
