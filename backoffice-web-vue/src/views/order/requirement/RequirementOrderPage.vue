@@ -19,7 +19,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
+  const {mapGetters, mapActions,mapMutations} = createNamespacedHelpers('RequirementOrdersModule');
 
   import RequirementOrderToolbar from "./toolbar/RequirementOrderToolbar";
   import RequirementOrderSearchResultList from './list/RequirementOrderSearchResultList';
@@ -44,8 +44,11 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced'
       }),
+      ...mapMutations({
+        setIsAdvancedSearch: 'isAdvancedSearch'
+      }),
       onSearch(page, size) {
-        console.log(this.keyword);
+        this.setIsAdvancedSearch(false);
         const keyword = this.keyword;
         const statuses = this.statuses;
 
@@ -53,7 +56,7 @@
         this.search({url, keyword, statuses, page, size});
       },
       onAdvancedSearch(page, size) {
-        this.isAdvancedSearch = true;
+        this.setIsAdvancedSearch(true);
 
         const query = this.queryFormData;
         const url = this.apis().getRequirementOrders();

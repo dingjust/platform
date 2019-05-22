@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
+import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -41,8 +43,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
     if (widget.item?.roles != null) {
       for (int i = 0; i < widget.item.roles.length; i++) {
         _roleSelects.add(widget.item.roles[i]);
-        _regionSelects.add(RegionModel(isocode: widget.item.roles[i].uid,
-            name: widget.item.roles[i].name));
+        _regionSelects.add(RegionModel(isocode: widget.item.roles[i].uid,name: widget.item.roles[i].name));
       }
     }
 
@@ -52,10 +53,10 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
   }
 
   @override
-  void dispose() {
+  void dispose(){
     super.dispose();
-    if (widget.newlyCreated)
-      clearData();
+    if(widget.newlyCreated)
+    clearData();
   }
 
   //格式选中的角色
@@ -81,9 +82,9 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
     return text;
   }
 
-  _getData() {
-    if (!widget.newlyCreated)
-      UserRepositoryImpl().getEmployee(widget.item.uid);
+  _getData(){
+    if(!widget.newlyCreated)
+    UserRepositoryImpl().getEmployee(widget.item.uid);
   }
 
   @override
@@ -164,18 +165,14 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return RegionSelector(
-                                    regions: roles.map((role) => RegionModel(
-                                        isocode: role.uid, name: role.name))
-                                        .toList(),
+                                    regions: roles.map((role) => RegionModel(isocode: role.uid,name: role.name)).toList(),
                                     regionSelects: _regionSelects,
                                     multiple: true,
                                   );
                                 },
                               ).then((val) {
                                 setState(() {
-                                  _roleSelects = _regionSelects.map((region) =>
-                                      RoleModel(uid: region.isocode,
-                                          name: region.name)).toList();
+                                  _roleSelects = _regionSelects.map((region) => RoleModel(uid: region.isocode,name: region.name)).toList();
                                 });
                               });
                             });
@@ -208,16 +205,15 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                 _mobileNumberController.text;
                             widget.item.uid = _mobileNumberController.text;
                             widget.item.roles = _roleSelects;
-                            if (widget.newlyCreated) {
+                            if(widget.newlyCreated){
                               print('aaaaaaaaaaaaaaaaaaa---------');
                               showDialog(
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (_) {
                                     return RequestDataLoading(
-                                      requestCallBack: test(),
-//                                      UserRepositoryImpl()
-//                                          .employeeCreate(widget.item),
+                                      requestCallBack: UserRepositoryImpl()
+                                          .employeeCreate(widget.item),
                                       outsideDismiss: false,
                                       loadingText: '保存中。。。',
 //                                        entrance: 'createPurchaseOrder',
@@ -241,21 +237,19 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                         confirmAction: () {
                                           Navigator.of(context).pop();
                                           Navigator.pop(context);
-                                          EmployeeBLoC.instance
-                                              .getB2BCustomerData();
+                                          EmployeeBLoC.instance.getB2BCustomerData();
                                         },
                                       );
                                     });
                               });
-                            } else {
+                            }else{
                               showDialog(
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (_) {
                                     return RequestDataLoading(
                                       requestCallBack: UserRepositoryImpl()
-                                          .employeeUpdate(
-                                          widget.item, widget.item.uid),
+                                          .employeeUpdate(widget.item,widget.item.uid),
                                       outsideDismiss: false,
                                       loadingText: '保存中。。。',
 //                                        entrance: 'updatePurchaseOrder',
@@ -278,8 +272,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                         confirmAction: () {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
-                                          EmployeeBLoC.instance
-                                              .getB2BCustomerData();
+                                          EmployeeBLoC.instance.getB2BCustomerData();
                                         },
                                       );
                                     });
@@ -289,11 +282,8 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                           child: Container(
                             height: 40,
                             width:
-                            MediaQueryData
-                                .fromWindow(window)
-                                .size
-                                .width -
-                                100,
+                                MediaQueryData.fromWindow(window).size.width -
+                                    100,
                             child: Center(child: Text('确定')),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
@@ -309,13 +299,10 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
             ),
           );
         });
+
   }
 
-  Future<void> test() {
-    print('======');
-  }
-
-  clearData() {
+  clearData(){
     widget.item.id = null;
     widget.item.name = null;
     widget.item.mobileNumber = null;

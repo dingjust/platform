@@ -36,10 +36,17 @@
     methods: {
       onPageSizeChanged(val) {
         this._reset();
-
+        if (this.$store.state.FactoriesModule.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val);
+          return;
+        }
         this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
+        if (this.$store.state.FactoriesModule.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val - 1);
+          return;
+        }
         this.$emit('onSearch', val - 1);
       },
       _reset() {
@@ -52,7 +59,8 @@
       },
     },
     data() {
-      return {}
+      return {
+      }
     }
   }
 </script>

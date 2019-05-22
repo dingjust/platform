@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -66,6 +67,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       }
     }
 
+    //联系方式取当前登陆人信息
+    print('${UserBLoC.instance}');
+//    widget.order.details.contactPerson = UserBLoC.instance.currentUser.name;
+    widget.order.details.contactPhone = UserBLoC.instance.currentUser.name;
+
     if (widget.product != null) {
       widget.order.details.category = widget.product.category;
       widget.order.details.pictures = widget.product.images;
@@ -78,36 +84,24 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      onWillPop: (){
+        if (widget.isCreate) {
+          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
+//            _clearProductData();
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+        } else {
+          Navigator.pop(context);
+        }
+        return Future.value(false);
+      },
       child: Scaffold(
           appBar: AppBar(
             title: Text('需求发布'),
             elevation: 0.5,
             brightness: Brightness.light,
             centerTitle: true,
-            leading: IconButton(
-                icon: Icon(Icons.keyboard_arrow_left),
-                onPressed: (){
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return CustomizeDialog(
-                          dialogType: DialogType.CONFIRM_DIALOG,
-                          contentText2: '正在创建订单，是否确认退出',
-                          isNeedConfirmButton: true,
-                          isNeedCancelButton: true,
-                          confirmButtonText: '退出',
-                          cancelButtonText: '再看看',
-                          dialogHeight: 180,
-                          confirmAction: (){
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      }
-                  );
-                }
-            ),
             actions: <Widget>[
               /*IconButton(
                   icon: Icon(Icons.play_for_work),
@@ -181,29 +175,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 onPublish(widget.factoryUid);
               },
             ),
-          )
-      ),
-      onWillPop: (){
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.CONFIRM_DIALOG,
-                contentText2: '正在创建订单，是否确认退出',
-                isNeedConfirmButton: true,
-                isNeedCancelButton: true,
-                confirmButtonText: '退出',
-                cancelButtonText: '再看看',
-                dialogHeight: 180,
-                confirmAction: (){
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-              );
-            }
-        );
-      },
+          )),
     );
   }
 
@@ -292,7 +264,6 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           TextFieldComponent(
             focusNode: _priceFocusNode,
             controller: _priceController,
-            inputType: TextInputType.number,
             leadingText: Text('期望价格',
                 style: TextStyle(
                   fontSize: 16,

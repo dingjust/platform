@@ -201,9 +201,15 @@ class ProofingOrdersBLoC extends BLoCBase {
     await filterByStatuses(status);
   }
 
-  dispose() {
-    _controller.close();
+  ///重置数据
+  void clean() {
+    _quotesMap.forEach((statu, entry) {
+      entry.data.clear();
+      entry.currentPage = 0;
+    });
+  }
 
+  dispose() {
     super.dispose();
   }
 }
