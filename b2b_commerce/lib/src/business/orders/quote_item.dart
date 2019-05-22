@@ -232,86 +232,83 @@ class _QuoteItemState extends State<QuoteItem> {
 
   void alertMessage(String message) {
     showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[Text(message)],
-            ),
-          ),
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
     );
   }
 
   void onReject() {
-    showDialog<void>(
-      context: widget.pageContext,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('请输入拒绝原因?'),
-          content: TextField(
-            controller: rejectController,
-            autofocus: true,
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                '取消',
-                style: TextStyle(color: Colors.grey),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('确定', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                int statusCode = await QuoteOrderRepository().quoteReject(widget.model.code, rejectController.text);
-                Navigator.of(context).pop();
-                if (statusCode == 200) {
-                  //触发刷新
-                  widget.onRefresh();
-                } else {
-                  alertMessage('拒绝失败');
-                }
-              },
-            ),
-          ],
-        );
-      },
+    TextEditingController inputController = TextEditingController();
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.INPUTS_DIALOG,
+            inputController1: inputController,
+            title: '填写拒绝原因',
+            focusNode1: FocusNode(),
+          );
+        }
+    ).then((value){
+      if (value != null && value != '') {
+        rejectQuote(widget.model,value);
+      }
+    });
+  }
+
+  rejectQuote(QuoteModel model,String rejectText) async{
+    int statusCode = await QuoteOrderRepository().quoteReject(
+      model.code,
+      rejectText,
     );
+    if (statusCode == 200) {
+      // 触发刷新
+      widget.onRefresh();
+    } else {
+      alertMessage('拒绝失败');
+    }
   }
 
   void onApprove() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('是否确认?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('否', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('是', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                int statusCode = await QuoteOrderRepository().quoteApprove(widget.model.code);
-                Navigator.of(context).pop();
-                if (statusCode == 200) {
-                  //触发刷新
-                  widget.onRefresh();
-                } else {
-                  alertMessage('确认失败');
-                }
-              },
-            ),
-          ],
-        );
-      },
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '是否确认该工厂报价?',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            dialogHeight: 180,
+            confirmAction: (){
+              Navigator.of(context).pop();
+              confirmFactory();
+            },
+          );
+        }
     );
+  }
+
+  confirmFactory() async {
+    int statusCode = await QuoteOrderRepository().quoteApprove(widget.model.code);
+    if (statusCode == 200) {
+      //触发刷新
+      widget.onRefresh();
+    } else {
+      alertMessage('确认失败');
+    }
   }
 }

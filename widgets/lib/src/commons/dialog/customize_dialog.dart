@@ -462,13 +462,13 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                           ),
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              margin: EdgeInsets.symmetric(horizontal: 10,vertical: 13),
                               child: Text(
                                 '${widget.title == null || widget.title == ''
                                     ? ''
                                     : widget.title}',
                                 style: TextStyle(
-
+                                      fontSize: 18,
                                 ),
                               ),
                             ),
