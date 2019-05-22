@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
-import 'package:b2b_commerce/src/my/account/reset_password.dart';
 import 'package:b2b_commerce/src/my/address/region_select.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +72,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                   children: <Widget>[
                     InputRow(
                       label: '公司名称（店铺名）',
+                      isRequired: true,
                       field: TextField(
                         autofocus: false,
                         onChanged: (value) {
@@ -85,6 +85,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                     ),
                     InputRow(
                         label: '联系人',
+                        isRequired: true,
                         field: TextField(
                           autofocus: false,
                           onChanged: (value) {
@@ -96,6 +97,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                         )),
                     InputRow(
                         label: '联系方式',
+                        isRequired: true,
                         field: TextField(
                           autofocus: false,
                           onChanged: (value) {
@@ -124,7 +126,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                           children: <Widget>[
                             Container(
                               width: 100,
-                              margin: EdgeInsets.only(right: 20),
+                              // margin: EdgeInsets.only(right: 20),
                               child: Text(
                                 '经营地址',
                                 style: TextStyle(
@@ -133,22 +135,37 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                               ),
                             ),
                             Expanded(
-                              flex: 1,
-                              child: Text(
-                                districtModel != null
-                                    ? '${districtModel.city.region.name}  ${districtModel.city.name} ${districtModel.name}'
-                                    : '选择省市区',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(150, 150, 150, 1),
-                                    fontSize: 18),
-                              ),
-                            ),
+                                flex: 1,
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(right: 10),
+                                      child: Text(
+                                        '*',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.red),
+                                      ),
+                                    ),
+                                    Text(
+                                      districtModel != null
+                                          ? '${districtModel.city.region
+                                          .name}  ${districtModel.city
+                                          .name} ${districtModel.name}'
+                                          : '选择省市区',
+                                      style: TextStyle(
+                                          color:
+                                          Color.fromRGBO(150, 150, 150, 1),
+                                          fontSize: 18),
+                                    ),
+                                  ],
+                                )),
                           ],
                         ),
                       ),
                     ),
                     InputRow(
                         label: '详细地址',
+                        isRequired: true,
                         field: TextField(
                           autofocus: false,
                           onChanged: (value) {
