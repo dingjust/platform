@@ -25,7 +25,8 @@ class MyFactoryPage extends StatefulWidget {
   bool isCompanyIntroduction;
   bool isFactoryDetail;
 
-  MyFactoryPage(this.factory, {
+  MyFactoryPage(
+    this.factory, {
     this.products,
     this.purchaseOrder,
     this.quoteModel,
@@ -37,12 +38,10 @@ class MyFactoryPage extends StatefulWidget {
 }
 
 class _MyFactoryPageState extends State<MyFactoryPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   RequirementOrderModel orderModel =
-  RequirementOrderModel(details: RequirementInfoModel());
-  ScrollController _scrollController = ScrollController();
+      RequirementOrderModel(details: RequirementInfoModel());
   TabController _tabController;
-  bool _becomeTab = false;
 
   List<EnumModel> _states = [
     EnumModel('a', '资料介绍'),
@@ -51,51 +50,40 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     EnumModel('d', '公司认证'),
   ];
 
-  List<ApparelProductModel> products = [];
   var _getFactoryFuture;
+  List<CompanyProfileModel> _profiles = [];
+
 
   @override
   void initState() {
     _getFactoryFuture = _getFactoryData();
     _tabController = TabController(vsync: this, length: _states.length);
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _getProductData());
-    _scrollController.addListener(() {
-      if ((_scrollController.position.pixels > 187 &&
-          _scrollController.position.pixels < 189) ||
-          _scrollController.position.pixels ==
-              _scrollController.position.maxScrollExtent
-      ) {
-        setState(() {
-          _becomeTab = true;
-        });
-      }
-    });
     super.initState();
   }
 
+  //获取工厂数据
   _getFactoryData() {
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return UserRepositoryImpl()
           .getFactory(UserBLoC.instance.currentUser.companyCode);
     } else {
-      return UserRepositoryImpl()
-          .getFactory(widget.factory.uid);
+      return UserRepositoryImpl().getFactory(widget.factory.uid);
     }
   }
 
+  //获取工厂现款产品数据
   _getProductData() {
-    UserBLoC.instance.currentUser.type == UserType.FACTORY
+    return UserBLoC.instance.currentUser.type == UserType.FACTORY
         ? ProductRepositoryImpl().list({
-      'approvalStatuses': ['approved'],
-    }, {
-      'size': 6
-    }).then((value) => products = value.content)
+            'approvalStatuses': ['approved'],
+          }, {
+            'size': 6
+          })
         : ProductRepositoryImpl().getProductsOfFactory({
-      'approvalStatuses': ['approved'],
-    }, {
-      'size': 6
-    }, widget.factory.uid).then((value) => products = value.content);
+            'approvalStatuses': ['approved'],
+          }, {
+            'size': 6
+          }, widget.factory.uid);
   }
 
   Widget _buildView(String code) {
@@ -120,6 +108,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   @override
   Widget build(BuildContext context) {
+    _profiles = widget.factory.profiles.where((profile) {
+      return profile.medias.isNotEmpty;
+    }).toList();
 //    List<Widget> _widgets = [
 //      _buildCarousel(),
 //      _buildBaseInfo(),
@@ -196,230 +187,214 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 //    _widgets.add(_buildCompanyCertificate());
 //    _widgets.add(_buildRegisterDate());
 
-    return NotificationListener(
-      onNotification: (TopNotification notification) {
-        print(notification.isToTop);
-        if (notification.isToTop) {
-          setState(() {
-            _becomeTab = false;
-            _tabController.animateTo(notification.index);
-          });
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('公司介绍'),
-          centerTitle: true,
-          elevation: 0.5,
-          actions: <Widget>[
-            Offstage(
-              offstage: widget.isFactoryDetail,
-              child: IconButton(icon: Text('编辑'), onPressed: () {
-                switch (_tabController.index) {
-                  case 0:
-                    return Navigator.push(context, MaterialPageRoute(
-                        builder: (context) =>
-                            MyFactoryBaseFormPage(widget.factory)));
-                    break;
-                  case 1:
-                    return Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => MyCompanyContactFromPage(
-                          company: widget.factory, isEditing: true,)));
-                    break;
-                  case 2:
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return CustomizeDialog(
-                            dialogType: DialogType.RESULT_DIALOG,
-                            failTips: '现款产品不可以编辑',
-                            callbackResult: false,
-                            confirmAction: () {
-                              Navigator.of(context).pop();
-                            },
-                          );
-                        }
-                    );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('公司介绍'),
+        centerTitle: true,
+        elevation: 0.5,
+        actions: <Widget>[
+          Offstage(
+            offstage: widget.isFactoryDetail,
+            child: IconButton(
+                icon: Text('编辑'),
+                onPressed: () {
+                  switch (_tabController.index) {
+                    case 0:
+                      return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyFactoryBaseFormPage(widget.factory)));
+                      break;
+                    case 1:
+                      return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyCompanyContactFromPage(
+                                    company: widget.factory,
+                                    isEditing: true,
+                                  )));
+                      break;
+                    case 2:
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return CustomizeDialog(
+                              dialogType: DialogType.RESULT_DIALOG,
+                              failTips: '现款产品不可以编辑',
+                              callbackResult: false,
+                              confirmAction: () {
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          });
 //                  ShowDialogUtil.showSimapleDialog(context, '现款产品不可以编辑');
-                    break;
-                  case 3:
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return CustomizeDialog(
-                            dialogType: DialogType.RESULT_DIALOG,
-                            failTips: '认证请移步`我的认证`进行认证',
-                            callbackResult: false,
-                            confirmAction: () {
-                              Navigator.of(context).pop();
-                            },
-                          );
-                        }
-                    );
+                      break;
+                    case 3:
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return CustomizeDialog(
+                              dialogType: DialogType.RESULT_DIALOG,
+                              failTips: '认证请移步`我要认证`进行认证',
+                              callbackResult: false,
+                              confirmAction: () {
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          });
 //                  ShowDialogUtil.showSimapleDialog(context, '认证请移步`我的认证`进行认证');
-                    break;
-                  default :
-                    return Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => MyCompanyContactFromPage(
-                          company: widget.factory, isEditing: true,)));
-                    break;
-                }
-              }),
-            ),
-          ],
-        ),
-        body: FutureBuilder(
-            future: _getFactoryFuture,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 200),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-              return _becomeTab ? MyCompanyTabbar(
-                  widget.factory, isFactoryDetail: widget.isFactoryDetail,
-                  tabIndex: _tabController.index,
-                  products: products) : Container(
-                color: Colors.white,
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  slivers: <Widget>[
-                    SliverToBoxAdapter(
-                      child: Offstage(
-                        offstage: widget.isFactoryDetail &&
-                            !widget.factory.profiles.map((profile) => profile
-                                .medias.length > 0).toList().contains(true),
-                        child: InkWell(
-                          onTap: () {
-                            if (!widget.isFactoryDetail) {
-                              showMenu(
-                                  context: context,
-                                  items: [
-                                    PopupMenuItem(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MyCompanyProfileFormPage(
-                                                      widget.factory
-                                                  ),
-                                            ),
-                                          );
-                                        },
-                                        child: ListTile(
-                                          title: Text('更换轮播图'),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  position: RelativeRect.fromLTRB(
-                                      (MediaQueryData
-                                          .fromWindow(window)
-                                          .size
-                                          .width - 180) / 2, 100,
-                                      (MediaQueryData
-                                          .fromWindow(window)
-                                          .size
-                                          .width) / 2, (MediaQueryData
-                                      .fromWindow(window)
-                                      .size
-                                      .height - 60) / 2)
-                              );
-                            }
-                          },
-                          child: Container(
-                            height: 188,
-                            child: _buildCarousel(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SliverAppBar(
-                      expandedHeight: MediaQueryData
-                          .fromWindow(window)
-                          .size
-                          .height,
-                      leading: Container(),
-                      brightness: Brightness.dark,
-                      pinned: true,
-                      flexibleSpace: Scaffold(
-                        backgroundColor: Colors.white,
-                        appBar: TabBar(
-                          controller: _tabController,
-                          labelColor: Colors.black,
-                          indicatorSize: TabBarIndicatorSize.label,
-                          indicatorPadding: EdgeInsets.only(
-                              left: 10, right: 10, top: 0, bottom: 10),
-                          tabs: _states.map((status) {
-                            return Tab(text: status.name);
-                          }).toList(),
-                          labelStyle: TextStyle(
-                              fontSize: 16, color: Colors.black),
-                          isScrollable: false,
-
-                        ),
-                        body: TabBarView(
-                          physics: AlwaysScrollableScrollPhysics(),
-                          controller: _tabController,
-                          children: _states.map((state) {
-                            return _buildView(state.code);
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                      break;
+                    default:
+                      return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyCompanyContactFromPage(
+                                    company: widget.factory,
+                                    isEditing: true,
+                                  )));
+                      break;
+                  }
+                }),
+          ),
+        ],
+      ),
+      body: FutureBuilder(
+          future: _getFactoryFuture,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 200),
+                child: Center(child: CircularProgressIndicator()),
               );
-            }),
-        bottomNavigationBar: Offstage(
-          offstage: !widget.isFactoryDetail,
-          child: Container(
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            height: 50,
-            child: RaisedButton(
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '发需求',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
+            }
+            return Container(
+              color: Colors.white,
+              child: NestedScrollView(
+                headerSliverBuilder: _sliverBuilder,
+                body: TabBarView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  controller: _tabController,
+                  children: _states.map((state) {
+                    return _buildView(state.code);
+                  }).toList(),
                 ),
               ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              onPressed: () {
-                RequirementOrderModel orderModel = RequirementOrderModel(
-                    details: RequirementInfoModel(), attachments: []);
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                    RequirementOrderFrom(
-                      order: orderModel,
-                      isCreate: true,
-                      factoryUid: widget.factory.uid,
-                    )));
-              },
+            );
+          }),
+      bottomNavigationBar: Offstage(
+        offstage: !widget.isFactoryDetail,
+        child: Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              '发需求',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+              ),
             ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: () {
+              RequirementOrderModel orderModel = RequirementOrderModel(
+                  details: RequirementInfoModel(), attachments: []);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RequirementOrderFrom(
+                            order: orderModel,
+                            isCreate: true,
+                            factoryUid: widget.factory.uid,
+                          )));
+            },
           ),
         ),
       ),
     );
   }
 
+  List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {
+    return <Widget>[
+      SliverAppBar(
+        backgroundColor: Color(0xFFC8C8C8),
+        expandedHeight: widget.isFactoryDetail && _profiles.length <= 0 ? 0 :188,
+        leading: Container(),
+        brightness: Brightness.dark,
+        pinned: false,
+        title: _profiles.length <= 0 ? Text(widget.isFactoryDetail ? '该工厂无轮播图' : '点击此处，添加或更换轮播图'):null,
+        centerTitle: true,
+        flexibleSpace: Offstage(
+          offstage: widget.isFactoryDetail && _profiles.length <= 0,
+          child: InkWell(
+            onTap: () {
+              if (!widget.isFactoryDetail) {
+                showMenu(
+                    context: context,
+                    items: [
+                      PopupMenuItem(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    MyCompanyProfileFormPage(widget.factory),
+                              ),
+                            );
+                          },
+                          child: ListTile(
+                            title: Text('更换轮播图'),
+                          ),
+                        ),
+                      ),
+                    ],
+                    position: RelativeRect.fromLTRB(
+                        (MediaQueryData.fromWindow(window).size.width - 180) /
+                            2,
+                        100,
+                        (MediaQueryData.fromWindow(window).size.width) / 2,
+                        (MediaQueryData.fromWindow(window).size.height - 60) /
+                            2));
+              }
+            },
+            child: Container(
+              height: 188,
+              child: _buildCarousel(),
+            ),
+          ),
+        ),
+      ),
+      SliverPersistentHeader(
+          pinned: true,
+          delegate: _SliverAppBarDelegate(
+            TabBar(
+              controller: _tabController,
+              labelColor: Colors.black,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorPadding:
+                  EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
+              tabs: _states.map((status) {
+                return Tab(text: status.name);
+              }).toList(),
+              labelStyle: TextStyle(fontSize: 16, color: Colors.black),
+              isScrollable: false,
+            ),
+          )),
+    ];
+  }
+
   //轮播图
   Widget _buildCarousel() {
-    List<CompanyProfileModel> profiles = [];
-    widget.factory.profiles.forEach((profile) {
-      if (profile.medias.isNotEmpty) {
-        profiles.add(profile);
-      }
-    });
-    return CarouselStackText(profiles,);
+    return CarouselStackText(
+      _profiles,
+    );
   }
 
   //联系方式
@@ -435,8 +410,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  MyCompanyContactFromPage(
+              builder: (context) => MyCompanyContactFromPage(
                     company: widget.factory,
                     isEditing: true,
                   ),
@@ -449,17 +423,23 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   //基本资料
   Widget _buildBaseInfo() {
-    return MyFactoryBaseInfo(widget.factory,);
+    return MyFactoryBaseInfo(
+      widget.factory,
+    );
   }
 
   Widget _buildContactWay() {
-    return Container(color: Colors.white,
-      child: MyCompanyContactFromWidgetPage(company: widget.factory,),);
+    return Container(
+      color: Colors.white,
+      child: MyCompanyContactFromWidgetPage(
+        company: widget.factory,
+      ),
+    );
   }
 
   //现款产品
   Widget _buildCashProducts() {
-    return MyCompanyCashProducts(widget.factory, products);
+    return MyCompanyCashProducts(widget.factory,getProductsFuture: _getProductData(),);
   }
 
   Widget _buildCompanyCertificate() {
@@ -543,6 +523,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
   }
 }
 
+//到顶的回调监听
 class TopNotification extends Notification {
   TopNotification({
     @required this.isToTop,
@@ -551,4 +532,40 @@ class TopNotification extends Notification {
 
   final int index;
   final bool isToTop;
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this._tabBar);
+
+  final TabBar _tabBar;
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height + 10;
+
+  @override
+  double get maxExtent => _tabBar.preferredSize.height + 10;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Column(
+      children: <Widget>[
+        Container(
+          color: Colors.white,
+          child: _tabBar,
+        ),
+        SizedBox(
+          height: 10,
+          child: Container(
+            color: Colors.grey[Constants.SIZEDBOX_COLOR],
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
+  }
 }
