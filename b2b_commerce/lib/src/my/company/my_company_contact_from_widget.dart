@@ -13,8 +13,9 @@ import 'package:widgets/widgets.dart';
 class MyCompanyContactFromWidgetPage extends StatefulWidget{
   B2BUnitModel company;
   bool isEditing;
+  bool isScroll;
 
-  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false});
+  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false,this.isScroll = false});
 
   _MyCompanyContactFromWidgetPageState createState() => _MyCompanyContactFromWidgetPageState();
 }
@@ -38,9 +39,16 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
   FocusNode QQFocusNode = FocusNode();
   FocusNode weCharFocusNode = FocusNode();
 
+  ScrollPhysics _physics;
+
   @override
   void initState() {
     super.initState();
+    if(widget.isScroll){
+      _physics = AlwaysScrollableScrollPhysics();
+    }else{
+      _physics = NeverScrollableScrollPhysics();
+    }
     if(widget.company.contactAddress != null){
       addressModel = widget.company.contactAddress;
     }
@@ -48,12 +56,11 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
+      physics: _physics,
       children: <Widget>[
         SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+        Column(
           children: <Widget>[
             _buildContactPerson(context),
             Padding(

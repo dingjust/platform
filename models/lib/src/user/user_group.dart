@@ -42,7 +42,7 @@ class CompanyModel extends UserGroupModel {
   String describe;
 
   //注册时间
-  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
+  @JsonKey(name: "creationTime", fromJson: _dateTimefromMilliseconds)
   DateTime creationTime;
 
   //开户税号
