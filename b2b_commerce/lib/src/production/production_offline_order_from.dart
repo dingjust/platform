@@ -1021,7 +1021,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             builder: (_) {
               return CustomizeDialog(
                 dialogType: DialogType.CONFIRM_DIALOG,
-                contentText2: '确定要保存线下订单吗？',
+                contentText2: '确定要创建线下订单吗？',
                 outsideDismiss: false,
                 dialogHeight: 180,
                 isNeedConfirmButton: true,

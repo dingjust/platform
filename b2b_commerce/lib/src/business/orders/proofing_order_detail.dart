@@ -314,32 +314,32 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               title: Row(
                 children: <Widget>[
                   widget.model.deliveryAddress == null ||
-                          widget.model.deliveryAddress.fullname == null
+                      widget.model.deliveryAddress.fullname == null
                       ? Container()
                       : Text(widget.model.deliveryAddress.fullname),
                   widget.model.deliveryAddress == null ||
-                          widget.model.deliveryAddress.cellphone == null
+                      widget.model.deliveryAddress.cellphone == null
                       ? Container()
                       : Container(
-                          margin: EdgeInsets.only(left: 10),
-                          child: Text(widget.model.deliveryAddress.cellphone),
-                        )
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text(widget.model.deliveryAddress.cellphone),
+                  )
                 ],
               ),
               subtitle: widget.model.deliveryAddress == null ||
-                      widget.model.deliveryAddress.region == null ||
-                      widget.model.deliveryAddress.city == null ||
-                      widget.model.deliveryAddress.cityDistrict == null ||
-                      widget.model.deliveryAddress.line1 == null
+                  widget.model.deliveryAddress.region == null ||
+                  widget.model.deliveryAddress.city == null ||
+                  widget.model.deliveryAddress.cityDistrict == null ||
+                  widget.model.deliveryAddress.line1 == null
                   ? Container()
                   : Text(
-                      widget.model.deliveryAddress.region.name +
-                          widget.model.deliveryAddress.city.name +
-                          widget.model.deliveryAddress.cityDistrict.name +
-                          widget.model.deliveryAddress.line1,
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
+                  widget.model.deliveryAddress.region.name +
+                      widget.model.deliveryAddress.city.name +
+                      widget.model.deliveryAddress.cityDistrict.name +
+                      widget.model.deliveryAddress.line1,
+                  style: TextStyle(
+                    color: Colors.black,
+                  )),
             ),
             SizedBox(
               child: Image.asset(
@@ -363,13 +363,21 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     children: <Widget>[
                       Container(
                         child: Text(
-                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null && widget.model.consignment.carrierDetails.name != null ? widget.model.consignment.carrierDetails.name : ''}',
+                          '${widget.model.consignment != null &&
+                              widget.model.consignment.carrierDetails != null &&
+                              widget.model.consignment.carrierDetails.name !=
+                                  null ? widget.model.consignment.carrierDetails
+                              .name : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
                       Container(
                         child: Text(
-                          '${widget.model.consignment != null && widget.model.consignment.carrierDetails != null && widget.model.consignment.trackingID != null ? widget.model.consignment.trackingID : ''}',
+                          '${widget.model.consignment != null &&
+                              widget.model.consignment.carrierDetails != null &&
+                              widget.model.consignment.trackingID != null
+                              ? widget.model.consignment.trackingID
+                              : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -398,21 +406,50 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       onTap: () async {
         UserBLoC.instance.currentUser.type == UserType.BRAND
             ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyAddressesPage(isJumpSource: true)),
-                //接收返回数据并处理
-              ).then((value) async {
-                if (value != null) {
-                  setState(() {
-                    widget.model.deliveryAddress = value;
-                  });
-                  bool result = await ProofingOrderRepository()
-                      .updateAddress(widget.model.code, widget.model);
-                  _showMessage(context, result, '地址修改');
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyAddressesPage(isJumpSource: true)),
+          //接收返回数据并处理
+        ).then((value) {
+          print(value);
+          if (value != null) {
+            setState(() {
+              widget.model.deliveryAddress = new AddressModel();
+              widget.model.deliveryAddress = value;
+            });
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) {
+                  return RequestDataLoading(
+                    requestCallBack: ProofingOrderRepository()
+                        .updateAddress(widget.model.code, widget.model),
+                    outsideDismiss: false,
+                    loadingText: '保存中。。。',
+                    entrance: '0',
+                  );
                 }
-              })
+            ).then((value){
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) {
+                    return CustomizeDialog(
+                      dialogType: DialogType.RESULT_DIALOG,
+                      successTips: '地址修改成功',
+                      failTips: '地址修改失败',
+                      callbackResult: value,
+                      confirmAction: () {
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  }
+              );
+            });
+          }
+        })
             : null;
+        ProofingOrdersBLoC().refreshData('ALL');
       },
     );
   }
@@ -509,14 +546,31 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-          //TODO跳转详细页
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyFactoryPage(
-                        widget.model.belongTo,
-                        isFactoryDetail: true,
-                      )));
+          if(widget.model.belongTo != null) {
+            //TODO跳转详细页
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyFactoryPage(
+                          widget.model.belongTo,
+                          isFactoryDetail: true,
+                        )));
+          }else{
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) {
+                  return CustomizeDialog(
+                    dialogType: DialogType.CONFIRM_DIALOG,
+                    contentText2: '该订单没有工厂信息',
+                    isNeedConfirmButton: true,
+                    confirmButtonText: '确定',
+                    dialogHeight: 180,
+                  );
+                }
+            );
+          }
         },
         child: Container(
           color: Colors.white,
@@ -680,10 +734,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             height: 30,
             child: FlatButton(
                 onPressed: () async {
-                  bool result = false;
-                  result = await ProofingOrderRepository()
-                      .shipped(widget.model.code);
-                  _showMessage(context, result, '确认收货');
+                  _onProofingConfirm(widget.model);
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
@@ -771,70 +822,91 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
     );
   }
 
+  void _onProofingConfirm(ProofingModel model) async {
+    bool result =
+    await ProofingOrderRepository().proofingConfirm(model.code, model);
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '确认成功',
+            failTips: '确认失败',
+            callbackResult: result,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
+    );
+    ProofingOrdersBLoC.instance.refreshData('ALL');
+    Navigator.of(context).pop();
+  }
+
   copyToClipboard(final String text) {
     if (text != null) {
       Clipboard.setData(ClipboardData(text: text));
-      showDialog<void>(
-        context: context,
-        barrierDismissible: true, // user must tap button!
-        builder: (context) {
-          return SimpleDialog(
-            title: const Text(
-              '提示',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            children: <Widget>[
-              SimpleDialogOption(
-                child: Text('复制成功'),
-              ),
-            ],
-          );
-        },
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              successTips: '复制成功',
+              callbackResult: false,
+              confirmAction: (){
+                Navigator.of(context).pop();
+              },
+            );
+          }
       );
     }
   }
 
   void onCancelling() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('确认取消？'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('取消'),
-              onPressed: () {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 200,
+            contentText2: '是否取消订单？',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: (){
+              Navigator.of(context).pop();
+              cancelOrder(widget.model);
+            },
+          );
+        }
+    );
+  }
+
+  void cancelOrder(ProofingModel model) async{
+    String response = await ProofingOrderRepository()
+        .proofingCancelling(model.code);
+    if (response != null) {
+      ProofingOrdersBLoC.instance.refreshData('ALL');
+      Navigator.of(context).pop();
+    } else {
+      Navigator.of(context).pop();
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '取消失败',
+              callbackResult: false,
+              confirmAction: (){
                 Navigator.of(context).pop();
               },
-            ),
-            FlatButton(
-              child: Text('确定'),
-              onPressed: () async {
-                String response = await ProofingOrderRepository()
-                    .proofingCancelling(widget.model.code);
-                if (response != null) {
-                  Navigator.of(context).pop();
-                } else {
-                  Navigator.of(context).pop();
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[Text('取消失败')],
-                          ),
-                        ),
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+            );
+          }
+      );
+    }
   }
 
   void onUpdate() async {

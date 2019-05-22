@@ -72,7 +72,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
             builder: (_) {
               return CustomizeDialog(
                 dialogType: DialogType.CONFIRM_DIALOG,
-                contentText2: '正在创建订单，是否确认退出',
+                contentText2: '正在创建产品，是否确认退出',
                 isNeedConfirmButton: true,
                 isNeedCancelButton: true,
                 confirmButtonText: '退出',
