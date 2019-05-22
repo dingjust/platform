@@ -42,6 +42,7 @@ class AlipayServiceImpl implements AlipayService {
       Map payResponse = await AlipayMe.pay(payInfo,urlScheme: GlobalConfigs.ALIPAY_URL_SCHEME);
       response = AlipayResponse.generate(payResponse);
     } else {
+      print('ali no response');
       return null;
     }
     return response;
