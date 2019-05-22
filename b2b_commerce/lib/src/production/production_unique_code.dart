@@ -1,6 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +97,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                               context: context,
                                               barrierDismissible: false,
                                               builder: (_) {
-                                                return CustomizeDialogPage(
+                                                return CustomizeDialog(
                                                   dialogType: DialogType.RESULT_DIALOG,
                                                   failTips: '该唯一码已被使用',
                                                   callbackResult: false,
@@ -112,7 +110,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                                 context: context,
                                                 barrierDismissible: false,
                                                 builder: (_) {
-                                                  return CustomizeDialogPage(
+                                                  return CustomizeDialog(
                                                     dialogType: DialogType.RESULT_DIALOG,
                                                     failTips: '该唯一码仅限工厂查询',
                                                     callbackResult: false,
@@ -130,7 +128,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                                 context: context,
                                                 barrierDismissible: false,
                                                 builder: (_) {
-                                                  return CustomizeDialogPage(
+                                                  return CustomizeDialog(
                                                     dialogType: DialogType.RESULT_DIALOG,
                                                     failTips: '该唯一码仅限品牌查询',
                                                     callbackResult: false,
@@ -153,10 +151,11 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                             context: context,
                                             barrierDismissible: false,
                                             builder: (_) {
-                                              return CustomizeDialogPage(
+                                              return CustomizeDialog(
                                                 dialogType: DialogType.RESULT_DIALOG,
                                                 failTips: '唯一码不正确',
                                                 callbackResult: false,
+                                                confirmButtonText: '重新输入',
                                               );
                                             }
                                         );
@@ -166,7 +165,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                           context: context,
                                           barrierDismissible: false,
                                           builder: (_) {
-                                            return CustomizeDialogPage(
+                                            return CustomizeDialog(
                                               dialogType: DialogType.RESULT_DIALOG,
                                               failTips: '请输入唯一码',
                                               callbackResult: false,
@@ -271,7 +270,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                               context: context,
                               barrierDismissible: false,
                               builder: (_) {
-                                return CustomizeDialogPage(
+                                return CustomizeDialog(
                                     dialogType: DialogType.RESULT_DIALOG,
                                     failTips: '绑定唯一码失败',
                                     successTips: '绑定唯一码成功',
@@ -297,7 +296,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return RequestDataLoadingPage(
+          return RequestDataLoading(
             requestCallBack:  PurchaseOrderRepository().getPurchaseOrderDetail(code),
             outsideDismiss: false,
             loadingText: '加载中。。。',

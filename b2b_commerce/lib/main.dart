@@ -30,8 +30,6 @@ void main() async {
   // 初始化,检测是否有用户登录信息
   await UserBLoC.instance.checkLocalUser();
 
-  AMapLocationClient.setApiKey("7ff2f1b6002d0aaa2ef2cb40f76e7c4a");
-
   //头部状态栏阴影
   TargetPlatform platform = defaultTargetPlatform;
   if (platform != TargetPlatform.iOS) {
@@ -39,9 +37,10 @@ void main() async {
       statusBarColor: Colors.transparent,
     );
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }else{
+    //IOS高德定位注册KEY
+    AMapLocationClient.setApiKey(GlobalConfigs.AMAP_LOCATION_KEY_IOS);
   }
-
-  AMapLocationClient.setApiKey(GlobalConfigs.AMAP_TIP_KEY);
 
   //强制竖屏
   SystemChrome.setPreferredOrientations(

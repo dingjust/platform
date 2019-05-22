@@ -1,10 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
@@ -686,7 +684,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       context: context,
                       barrierDismissible: false,
                       builder: (_) {
-                        return RequestDataLoadingPage(
+                        return RequestDataLoading(
                           requestCallBack: PurchaseOrderRepository()
                               .updateAddress(order.code, order),
                           outsideDismiss: false,
@@ -1450,7 +1448,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (_) {
-                                        return RequestDataLoadingPage(
+                                        return RequestDataLoading(
                                           requestCallBack: PurchaseOrderRepository()
                                               .purchaseOrderCancelling(
                                               widget.order.code),
@@ -1530,7 +1528,18 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     bool result = await PurchaseOrderRepository()
                         .confirmProduction(
                         widget.order.code, widget.order);
-                    _showMessage(context, result, '确认生产');
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            successTips: '确认生产成功',
+                            failTips: '确认生产失败',
+                            callbackResult: result,
+                          );
+                        }
+                    );
                   }
               )
           ),
@@ -1614,7 +1623,18 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         bool result = false;
                         result = await PurchaseOrderRepository()
                             .purchaseOrderShipped(widget.order.code, widget.order);
-                        _showMessage(context, result, '确认收货');
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) {
+                              return CustomizeDialog(
+                                dialogType: DialogType.RESULT_DIALOG,
+                                successTips: '确认收货成功',
+                                failTips: '确认收货失败',
+                                callbackResult: result,
+                              );
+                            }
+                        );
                       }
                   )
               ),
@@ -1652,7 +1672,18 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         bool result = false;
                         result = await PurchaseOrderRepository()
                             .purchaseOrderShipped(widget.order.code, widget.order);
-                        _showMessage(context, result, '确认收货');
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) {
+                              return CustomizeDialog(
+                                dialogType: DialogType.RESULT_DIALOG,
+                                successTips: '确认收货成功',
+                                failTips: '确认收货失败',
+                                callbackResult: result,
+                              );
+                            }
+                        );
                       }
                   )
               ),
@@ -1703,7 +1734,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return CustomizeDialogPage(
+                          return CustomizeDialog(
                             dialogType: DialogType.PRICE_INPUT_DIALOG,
                             outsideDismiss: false,
                             inputController: con,
@@ -1873,7 +1904,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return RequestDataLoadingPage(
+              return RequestDataLoading(
                 requestCallBack: PurchaseOrderRepository().productionProgressUpload(
                     widget.order.code, model.id.toString(), model),
                 outsideDismiss: false,
@@ -1945,7 +1976,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return RequestDataLoadingPage(
+                          return RequestDataLoading(
                             requestCallBack: PurchaseOrderRepository()
                                 .productionProgressUpload(
                                 widget.order.code, model.id.toString(), model),
@@ -2064,7 +2095,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return RequestDataLoadingPage(
+                          return RequestDataLoading(
                             requestCallBack: PurchaseOrderRepository()
                                 .productionProgressUpload(
                                 order.code, model.id.toString(), model),
@@ -2165,7 +2196,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                               context: context,
                               barrierDismissible: false,
                               builder: (_) {
-                                return RequestDataLoadingPage(
+                                return RequestDataLoading(
                                   requestCallBack: PurchaseOrderRepository()
                                       .purchaseOrderBalanceUpdate(model.code, model),
                                   outsideDismiss: false,
@@ -2296,7 +2327,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
-                            return RequestDataLoadingPage(
+                            return RequestDataLoading(
                               requestCallBack: PurchaseOrderRepository()
                                   .purchaseOrderDepositUpdate(model.code, model),
                               outsideDismiss: false,
@@ -2340,7 +2371,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.BALANCE_INPUT_DIALOG,
             outsideDismiss: false,
             inputController: con,
@@ -2377,7 +2408,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return RequestDataLoadingPage(
+              return RequestDataLoading(
                 requestCallBack: PurchaseOrderRepository()
                     .purchaseOrderBalanceUpdate(model.code, model),
                 outsideDismiss: false,
@@ -2433,7 +2464,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack: PurchaseOrderRepository()
                   .purchaseOrderDepositUpdate(model.code, model),
               outsideDismiss: false,
@@ -2452,7 +2483,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
             dialogHeight: 200,
             contentText2: '是否无需付款直接跳过？',
@@ -2476,7 +2507,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack: PurchaseOrderRepository()
                   .purchaseOrderBalanceUpdate(model.code, model),
               outsideDismiss: false,
@@ -2549,7 +2580,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
+            return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
               successTips: '复制成功',
               callbackResult: true,

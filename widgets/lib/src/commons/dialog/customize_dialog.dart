@@ -1,13 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/business/proofing_orders.dart';
-import 'package:b2b_commerce/src/business/purchase_orders.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 
@@ -19,7 +10,7 @@ typedef void CancelAction();
 typedef void JumpAction();
 
 
-class CustomizeDialogPage extends StatefulWidget {
+class CustomizeDialog extends StatefulWidget {
   //是否允许点击空白处关闭dialog
   bool outsideDismiss;
   //回调结果
@@ -85,7 +76,7 @@ class CustomizeDialogPage extends StatefulWidget {
   //跳过的动作
   JumpAction jumpAction;
 
-  CustomizeDialogPage({
+  CustomizeDialog({
     Key key,
     this.outsideDismiss = true,
     this.confirmAction,
@@ -144,7 +135,7 @@ enum DialogType {
 
 }
 
-class _CustomizeDialogPageState extends State<CustomizeDialogPage> {
+class _CustomizeDialogPageState extends State<CustomizeDialog> {
 
   _dismissDialog() {
     Navigator.of(context).pop();
@@ -1032,7 +1023,7 @@ class DialogUtil {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
           );
         }

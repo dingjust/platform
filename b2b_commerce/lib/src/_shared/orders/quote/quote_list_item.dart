@@ -1,12 +1,11 @@
-import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 import '../../../business/orders/quote_order_detail.dart';
 import '../../widgets/image_factory.dart';
@@ -376,7 +375,7 @@ class QuoteListItem extends StatelessWidget {
                             context: context,
                             barrierDismissible: false,
                             builder: (_) {
-                              return CustomizeDialogPage(
+                              return CustomizeDialog(
                                 dialogType: DialogType.CONFIRM_DIALOG,
                                 dialogHeight: 200,
                                 contentText2: '该订单已被取消',
@@ -436,7 +435,7 @@ class QuoteListItem extends StatelessWidget {
                             context: context,
                             barrierDismissible: false,
                             builder: (_) {
-                              return CustomizeDialogPage(
+                              return CustomizeDialog(
                                 dialogType: DialogType.CONFIRM_DIALOG,
                                 dialogHeight: 200,
                                 contentText2: '该订单已被取消',

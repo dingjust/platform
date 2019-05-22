@@ -1,6 +1,4 @@
 import 'package:b2b_commerce/src/business/products/form/prices_field.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,16 +56,35 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (widget.isCreate) {
-          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
-            _clearProductData();
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
-        } else {
-          Navigator.pop(context);
-        }
-        return Future.value(false);
+//        if (widget.isCreate) {
+//          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
+//            _clearProductData();
+//            Navigator.pop(context);
+//            Navigator.pop(context);
+//          });
+//        } else {
+//          Navigator.pop(context);
+//        }
+//        return Future.value(false);
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
       },
       child: Scaffold(
         appBar: AppBar(
@@ -117,7 +134,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return RequestDataLoadingPage(
+                          return RequestDataLoading(
                             requestCallBack: ProductRepositoryImpl()
                                 .create(widget.item)
                                 .then((a) {
@@ -134,7 +151,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return RequestDataLoadingPage(
+                          return RequestDataLoading(
                             requestCallBack: ProductRepositoryImpl()
                                 .update(widget.item)
                                 .then((a) {
@@ -360,9 +377,10 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
-            dialogType: DialogType.CONFIRM_DIALOG,
-            contentText2: '${message}',
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
             outsideDismiss: true,
           );
         });

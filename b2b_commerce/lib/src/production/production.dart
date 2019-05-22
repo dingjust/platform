@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -33,7 +32,7 @@ class ProductionItem extends StatelessWidget {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return RequestDataLoadingPage(
+              return RequestDataLoading(
                 requestCallBack: PurchaseOrderRepository().getPurchaseOrderDetail(order.code),
                 outsideDismiss: false,
                 loadingText: '加载中。。。',

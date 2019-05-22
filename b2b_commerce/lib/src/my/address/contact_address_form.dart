@@ -25,8 +25,6 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
 
   List<Widget> tipsWidget;
 
-  String gps;
-
   @override
   void initState() {
     super.initState();
@@ -206,9 +204,18 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
 
   void getGpsLocation() async {
     AMapLocation location = await AmapService.instance.location();
-    setState(() {
-      gps = location.POIName;
-    });
+    if(location==null){
+      showDialog(context: context,builder: (_){
+        return CustomizeDialog(
+          dialogType: DialogType.CONFIRM_DIALOG,
+          contentText1: '获取位置授权失败，请设置应用位置服务',
+          callbackResult: false,
+          confirmAction: (){
+            Navigator.of(context).pop();
+          },
+        );
+      });
+    }
   }
 }
 

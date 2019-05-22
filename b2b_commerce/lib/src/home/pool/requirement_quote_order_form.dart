@@ -1,6 +1,4 @@
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -73,43 +71,66 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(widget.update ? '修改报价' : '填写报价'),
-      ),
-      body: Container(
-          child: ListView(
-        children: <Widget>[
-          _buildRequirementInfo(),
-          _buildQuoteInfo(),
-          _buildProofingInfo(),
-          _buildConfirmationDeliveryDate(),
-          _buildAccessory(),
-          _buildRemarks()
-        ],
-      )),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        height: 50,
-        child: RaisedButton(
-          color: Color.fromRGBO(255, 214, 12, 1),
-          child: Text(
-            widget.update ? '修改报价' : '提交报价',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
+    return WillPopScope(
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
+          title: Text(widget.update ? '修改报价' : '填写报价'),
+        ),
+        body: Container(
+            child: ListView(
+          children: <Widget>[
+            _buildRequirementInfo(),
+            _buildQuoteInfo(),
+            _buildProofingInfo(),
+            _buildConfirmationDeliveryDate(),
+            _buildAccessory(),
+            _buildRemarks()
+          ],
+        )),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              widget.update ? '修改报价' : '提交报价',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+              ),
             ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: onSubmit,
           ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5))),
-          onPressed: onSubmit,
         ),
       ),
+      onWillPop: (){
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
+      },
     );
   }
 
@@ -324,7 +345,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(left: 20),
+            padding: EdgeInsets.only(left: 50),
             child: TextFieldComponent(
               padding: EdgeInsets.symmetric(vertical: 5),
               dividerPadding: EdgeInsets.only(),
@@ -344,7 +365,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 20),
+            padding: EdgeInsets.only(left: 50),
             child: TextFieldComponent(
               padding: EdgeInsets.symmetric(vertical: 5),
               dividerPadding: EdgeInsets.only(),
@@ -364,7 +385,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 20),
+            padding: EdgeInsets.only(left: 50),
             child: TextFieldComponent(
               padding: EdgeInsets.symmetric(vertical: 5),
               dividerPadding: EdgeInsets.only(),
@@ -384,7 +405,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 20),
+            padding: EdgeInsets.only(left: 50),
             child: TextFieldComponent(
               padding: EdgeInsets.symmetric(vertical: 5),
               dividerPadding: EdgeInsets.only(),
@@ -577,9 +598,10 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText2: '请输入订单报价',
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '请输入订单报价',
+              callbackResult: false,
               outsideDismiss: true,
             );
           }
@@ -589,9 +611,10 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText2: '请选择交货日期',
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '请选择交货日期',
+              callbackResult: false,
               outsideDismiss: true,
             );
           }
@@ -601,7 +624,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
+            return CustomizeDialog(
               dialogType: DialogType.CONFIRM_DIALOG,
               contentText2: '是否提交报价？',
               isNeedConfirmButton: true,
@@ -698,7 +721,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack:  QuoteOrderRepository().quoteUpdate(model),
               outsideDismiss: false,
               loadingText: '保存中。。。',
@@ -714,7 +737,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return CustomizeDialogPage(
+              return CustomizeDialog(
                 dialogType: DialogType.RESULT_DIALOG,
                 failTips: '修改报价失败',
                 successTips: '修改报价成功',
@@ -733,7 +756,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack: QuoteOrderRepository().quoteCreate(model),
               outsideDismiss: false,
               loadingText: '保存中。。。',
@@ -749,7 +772,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return CustomizeDialogPage(
+              return CustomizeDialog(
                 dialogType: DialogType.RESULT_DIALOG,
                 failTips: '创建报价单失败',
                 successTips: '创建报价单成功',

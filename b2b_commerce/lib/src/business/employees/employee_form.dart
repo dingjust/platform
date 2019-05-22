@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -81,7 +79,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
 
     return text;
   }
-  
+
   _getData(){
     if(!widget.newlyCreated)
     UserRepositoryImpl().getEmployee(widget.item.uid);
@@ -211,7 +209,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (_) {
-                                    return RequestDataLoadingPage(
+                                    return RequestDataLoading(
                                       requestCallBack: UserRepositoryImpl()
                                           .employeeCreate(widget.item),
                                       outsideDismiss: false,
@@ -229,7 +227,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (_) {
-                                      return CustomizeDialogPage(
+                                      return CustomizeDialog(
                                         dialogType: DialogType.RESULT_DIALOG,
                                         failTips: '创建员工失败',
                                         successTips: '创建员工成功',
@@ -247,7 +245,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (_) {
-                                    return RequestDataLoadingPage(
+                                    return RequestDataLoading(
                                       requestCallBack: UserRepositoryImpl()
                                           .employeeUpdate(widget.item,widget.item.uid),
                                       outsideDismiss: false,
@@ -264,7 +262,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (_) {
-                                      return CustomizeDialogPage(
+                                      return CustomizeDialog(
                                         dialogType: DialogType.RESULT_DIALOG,
                                         failTips: '编辑员工失败',
                                         successTips: '编辑员工成功',
