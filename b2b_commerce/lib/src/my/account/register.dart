@@ -373,8 +373,24 @@ class _RegisterPageState extends State<RegisterPage> {
                 password: _passwordController.text,
               )));
     } else {
-      (_scaffoldKey.currentState)
-          .showSnackBar(SnackBar(content: Text('验证不正确')));
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '验证不正确',
+              outsideDismiss: false,
+              dialogHeight: 180,
+              isNeedConfirmButton: true,
+              confirmAction: (){
+                Navigator.of(context).pop();
+              },
+            );
+          }
+      );
+//      (_scaffoldKey.currentState)
+//          .showSnackBar(SnackBar(content: Text('验证不正确')));
     }
   }
 

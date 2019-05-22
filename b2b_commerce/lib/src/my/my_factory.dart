@@ -4,7 +4,6 @@ import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_ite
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
 import 'package:b2b_commerce/src/my/company/form/my_company_contact_from.dart';
@@ -184,7 +183,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
                       context: context,
                       barrierDismissible: false,
                       builder: (_) {
-                        return CustomizeDialogPage(
+                        return CustomizeDialog(
                           dialogType: DialogType.RESULT_DIALOG,
                           failTips: '现款产品不可以编辑',
                           callbackResult: false,
@@ -201,7 +200,7 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
                       context: context,
                       barrierDismissible: false,
                       builder: (_) {
-                        return CustomizeDialogPage(
+                        return CustomizeDialog(
                           dialogType: DialogType.RESULT_DIALOG,
                           failTips: '认证请移步`我的认证`进行认证',
                           callbackResult: false,

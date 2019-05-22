@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -78,86 +77,134 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('需求发布'),
-          elevation: 0.5,
-          brightness: Brightness.light,
-          centerTitle: true,
-          actions: <Widget>[
-            /*IconButton(
-                icon: Icon(Icons.play_for_work),
-                color: Color.fromRGBO(255, 149, 22, 1),
-                onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RequirementImportProduct(),
+    return WillPopScope(
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text('需求发布'),
+            elevation: 0.5,
+            brightness: Brightness.light,
+            centerTitle: true,
+            leading: IconButton(
+                icon: Icon(Icons.keyboard_arrow_left),
+                onPressed: (){
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return CustomizeDialog(
+                          dialogType: DialogType.CONFIRM_DIALOG,
+                          contentText2: '正在创建订单，是否确认退出',
+                          isNeedConfirmButton: true,
+                          isNeedCancelButton: true,
+                          confirmButtonText: '退出',
+                          cancelButtonText: '再看看',
+                          dialogHeight: 180,
+                          confirmAction: (){
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }
+                  );
+                }
+            ),
+            actions: <Widget>[
+              /*IconButton(
+                  icon: Icon(Icons.play_for_work),
+                  color: Color.fromRGBO(255, 149, 22, 1),
+                  onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RequirementImportProduct(),
+                        ),
+                      )),*/
+              GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    child: Center(
+                      child: Text(
+                        '导入产品',
+                        style: TextStyle(color: Colors.black),
                       ),
-                    )),*/
-            GestureDetector(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  child: Center(
-                    child: Text(
-                      '导入产品',
-                      style: TextStyle(color: Colors.black),
                     ),
                   ),
-                ),
-                onTap: () async {
-                  dynamic result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ApparelProductsPage(
-                            isSelectOption: true,
-                            item: widget.product,
-                          ),
-                    ),
-                  );
-                  //TODO：导入产品后的一系列操作
-                  widget.product = result;
-                  if (result != null) {
-                    setState(() {
-                      widget.order.details.pictures = widget.product.images;
-                      widget.order.details.productName = widget.product.name;
-                      widget.order.details.productSkuID = widget.product.skuID;
-                      if (widget.product.category != null) {
-                        widget.order.details.category = widget.product.category;
-                      }
-                    });
-                  }
-                })
-          ],
-        ),
-        body: Container(
-          child: ListView(
-            children: <Widget>[
-              _buildBody(context),
+                  onTap: () async {
+                    dynamic result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ApparelProductsPage(
+                              isSelectOption: true,
+                              item: widget.product,
+                            ),
+                      ),
+                    );
+                    //TODO：导入产品后的一系列操作
+                    widget.product = result;
+                    if (result != null) {
+                      setState(() {
+                        widget.order.details.pictures = widget.product.images;
+                        widget.order.details.productName = widget.product.name;
+                        widget.order.details.productSkuID = widget.product.skuID;
+                        if (widget.product.category != null) {
+                          widget.order.details.category = widget.product.category;
+                        }
+                      });
+                    }
+                  })
             ],
           ),
-        ),
-        bottomNavigationBar: Container(
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          height: 50,
-          child: RaisedButton(
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: Text(
-              !widget.isCreate
-                  ? '修改需求'
-                  : '确认发布',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-              ),
+          body: Container(
+            child: ListView(
+              children: <Widget>[
+                _buildBody(context),
+              ],
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: () {
-              onPublish(widget.factoryUid);
-            },
           ),
-        ));
+          bottomNavigationBar: Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            height: 50,
+            child: RaisedButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                !widget.isCreate
+                    ? '修改需求'
+                    : '确认发布',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () {
+                onPublish(widget.factoryUid);
+              },
+            ),
+          )
+      ),
+      onWillPop: (){
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
+      },
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -520,9 +567,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
-            dialogType: DialogType.CONFIRM_DIALOG,
-            contentText2: '${message}',
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
             outsideDismiss: true,
           );
         }

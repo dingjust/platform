@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -74,7 +73,7 @@ class _ProofingListState extends State<ProofingList> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
             dialogHeight: 200,
             contentText2: '是否取消订单？',
@@ -101,7 +100,7 @@ class _ProofingListState extends State<ProofingList> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
+            return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
               failTips: '取消失败',
               callbackResult: false,
@@ -121,7 +120,7 @@ class _ProofingListState extends State<ProofingList> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.RESULT_DIALOG,
             successTips: '确认收货成功',
             failTips: '确认收货失败',
@@ -167,7 +166,7 @@ class _ProofingListState extends State<ProofingList> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.RESULT_DIALOG,
             successTips: '确认成功',
             failTips: '确认成功',

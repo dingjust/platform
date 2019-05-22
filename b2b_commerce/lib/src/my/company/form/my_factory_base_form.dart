@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/products/product_category.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -85,7 +84,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (_) {
-                      return RequestDataLoadingPage(
+                      return RequestDataLoading(
                         requestCallBack: UserRepositoryImpl()
                             .factoryUpdate(widget.factory)
                             .then((a) => Navigator.pop(context)),

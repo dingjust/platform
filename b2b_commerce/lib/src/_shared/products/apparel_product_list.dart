@@ -2,8 +2,6 @@ import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -224,7 +222,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack:  ProductRepositoryImpl().off(product.code),
               outsideDismiss: false,
               loadingText: '正在保存。。。',
@@ -242,7 +240,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return CustomizeDialogPage(
+              return CustomizeDialog(
                 dialogType: DialogType.RESULT_DIALOG,
                 successTips: '下架成功',
                 failTips: '下架失败',
@@ -266,7 +264,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack:  ProductRepositoryImpl().on(product.code),
               outsideDismiss: false,
               loadingText: '正在保存。。。',
@@ -284,7 +282,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return CustomizeDialogPage(
+              return CustomizeDialog(
                 dialogType: DialogType.RESULT_DIALOG,
                 successTips: '上架成功',
                 failTips: '上架失败',

@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -320,7 +318,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (_) {
-                                  return CustomizeDialogPage(
+                                  return CustomizeDialog(
                                     dialogType: DialogType.CONFIRM_DIALOG,
                                     contentText2: '是否取消订单？',
                                     contentTextStyle2: TextStyle(color: Colors.black),
@@ -424,7 +422,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                         context: context,
                                         barrierDismissible: false,
                                         builder: (_) {
-                                          return RequestDataLoadingPage(
+                                          return RequestDataLoading(
                                             requestCallBack: PurchaseOrderRepository()
                                                 .purchaseOrderCancelling(
                                                 widget.order.code),
@@ -466,7 +464,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                               context: context,
                               barrierDismissible: false,
                               builder: (_) {
-                                return RequestDataLoadingPage(
+                                return RequestDataLoading(
                                   requestCallBack: PurchaseOrderRepository()
                                       .confirmProduction(
                                       widget.order.code, widget.order),
@@ -562,7 +560,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             context: context,
                             barrierDismissible: false,
                             builder: (_) {
-                              return RequestDataLoadingPage(
+                              return RequestDataLoading(
                                 requestCallBack: PurchaseOrderRepository()
                                     .purchaseOrderShipped(widget.order.code, widget.order),
                                 outsideDismiss: false,
@@ -610,7 +608,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             context: context,
                             barrierDismissible: false,
                             builder: (_) {
-                              return RequestDataLoadingPage(
+                              return RequestDataLoading(
                                 requestCallBack: PurchaseOrderRepository()
                                     .purchaseOrderShipped(widget.order.code, widget.order),
                                 outsideDismiss: false,
@@ -669,7 +667,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
-                            return CustomizeDialogPage(
+                            return CustomizeDialog(
                               dialogType: DialogType.PRICE_INPUT_DIALOG,
                               outsideDismiss: false,
                               inputController: con,
@@ -853,7 +851,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.BALANCE_INPUT_DIALOG,
             outsideDismiss: false,
             inputController: con,
@@ -886,7 +884,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return RequestDataLoadingPage(
+              return RequestDataLoading(
                 requestCallBack: PurchaseOrderRepository()
                     .purchaseOrderBalanceUpdate(model.code, model),
                 outsideDismiss: false,
@@ -988,7 +986,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (_) {
-                                  return RequestDataLoadingPage(
+                                  return RequestDataLoading(
                                     requestCallBack: PurchaseOrderRepository()
                                         .purchaseOrderBalanceUpdate(model.code, model),
                                     outsideDismiss: false,
@@ -1115,7 +1113,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
-                            return RequestDataLoadingPage(
+                            return RequestDataLoading(
                               requestCallBack: PurchaseOrderRepository()
                                   .purchaseOrderDepositUpdate(model.code, model),
                               outsideDismiss: false,
@@ -1164,7 +1162,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack: PurchaseOrderRepository()
                   .purchaseOrderDepositUpdate(model.code, model),
               outsideDismiss: false,
@@ -1183,7 +1181,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
             dialogHeight: 200,
             contentText2: '是否无需付款直接跳过？',
@@ -1207,7 +1205,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack: PurchaseOrderRepository()
                   .purchaseOrderBalanceUpdate(model.code, model),
               outsideDismiss: false,
@@ -1246,7 +1244,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return RequestDataLoadingPage(
+          return RequestDataLoading(
             requestCallBack: PurchaseOrderRepository()
                 .purchaseOrderCancelling(code),
             outsideDismiss: false,

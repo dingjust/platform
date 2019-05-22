@@ -2,8 +2,6 @@ import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -74,41 +72,88 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: true,
-          elevation: 0.5,
-          title: Text('创建打样订单'),
-        ),
-        body: Container(
-            margin: EdgeInsets.only(bottom: 70),
-            child: ListView(
-              children: <Widget>[
-                _buildCompanyInfo(),
-                product == null ? _buildProductSelect() : _buildProduct(),
-                _buildProofingInfo(),
-              ],
-            )),
-        bottomNavigationBar: Container(
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          height: 50,
-          child: RaisedButton(
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: Text(
-              widget.update ? '修改订单' : '提交订单',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-              ),
+    return WillPopScope(
+      child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: true,
+            elevation: 0.5,
+            title: Text('创建打样订单'),
+            leading: IconButton(
+                icon: Icon(Icons.keyboard_arrow_left),
+                onPressed: (){
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return CustomizeDialog(
+                          dialogType: DialogType.CONFIRM_DIALOG,
+                          contentText2: '正在创建订单，是否确认退出',
+                          isNeedConfirmButton: true,
+                          isNeedCancelButton: true,
+                          confirmButtonText: '退出',
+                          cancelButtonText: '再看看',
+                          dialogHeight: 180,
+                          confirmAction: (){
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }
+                  );
+                }
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: widget.update ? onUpdate : onCreate,
           ),
-        ));
+          body: Container(
+              margin: EdgeInsets.only(bottom: 70),
+              child: ListView(
+                children: <Widget>[
+                  _buildCompanyInfo(),
+                  product == null ? _buildProductSelect() : _buildProduct(),
+                  _buildProofingInfo(),
+                ],
+              )),
+          bottomNavigationBar: Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            height: 50,
+            child: RaisedButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                widget.update ? '修改订单' : '提交订单',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: widget.update ? onUpdate : onCreate,
+            ),
+          )),
+      onWillPop: (){
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
+      },
+    );
   }
 
   Widget _buildCompanyInfo() {
@@ -496,9 +541,10 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText2: '请选择产品和数量',
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '请选择产品和数量',
+              callbackResult: false,
               outsideDismiss: true,
             );
           });
@@ -507,9 +553,10 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText2: '请填写打样费',
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '请填写打样费',
+              callbackResult: false,
               outsideDismiss: true,
             );
           });
@@ -518,7 +565,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
+            return CustomizeDialog(
               dialogType: DialogType.CONFIRM_DIALOG,
               contentText2: '是否保存该订单？',
               isNeedCancelButton: true,
@@ -542,7 +589,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
             contentText2: '确定修改该订单吗？',
             dialogHeight: 200,
@@ -590,7 +637,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return RequestDataLoadingPage(
+          return RequestDataLoading(
             requestCallBack: ProofingOrderRepository()
                 .proofingCreate(widget.quoteModel.code, model),
             outsideDismiss: false,
@@ -606,7 +653,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
+            return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
               failTips: '创建打样单失败',
               successTips: '创建打样单成功',
@@ -637,7 +684,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return RequestDataLoadingPage(
+          return RequestDataLoading(
             requestCallBack: ProofingOrderRepository().proofingUpdate(model),
             outsideDismiss: false,
             loadingText: '保存中。。。',
@@ -652,7 +699,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
+            return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
               failTips: '修改打样单失败',
               successTips: '修改打样单成功',
