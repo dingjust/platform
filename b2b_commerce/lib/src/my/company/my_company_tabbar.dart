@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/products/existing_product_item.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +70,7 @@ class _MyCompanyTabbarPageState extends State<MyCompanyTabbarPage>
                       context: context,
                       barrierDismissible: false,
                       builder: (_) {
-                        return CustomizeDialogPage(
+                        return CustomizeDialog(
                           dialogType: DialogType.RESULT_DIALOG,
                           failTips: '现款产品不可以编辑',
                           callbackResult: false,
@@ -88,7 +87,7 @@ class _MyCompanyTabbarPageState extends State<MyCompanyTabbarPage>
                       context: context,
                       barrierDismissible: false,
                       builder: (_) {
-                        return CustomizeDialogPage(
+                        return CustomizeDialog(
                           dialogType: DialogType.RESULT_DIALOG,
                           failTips: '认证请移步`我的认证`进行认证',
                           callbackResult: false,

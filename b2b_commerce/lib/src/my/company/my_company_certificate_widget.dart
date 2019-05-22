@@ -36,7 +36,7 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
   @override
   void initState() {
     if(widget.isScroll){
-      _physics = AlwaysScrollableScrollPhysics();
+      _physics = ClampingScrollPhysics();
     }else{
       _physics = NeverScrollableScrollPhysics();
     }

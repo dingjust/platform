@@ -91,10 +91,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
               child: Divider(height: 0,),
             ),
             _buildWeChar(context),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,),
-            ),
+//            Padding(
           ],
         ),
       ],

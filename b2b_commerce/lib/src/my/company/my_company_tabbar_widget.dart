@@ -155,7 +155,7 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
   Widget _buildCashProducts(){
     return NotificationListener(
       onNotification: (ScrollEndNotification notification) {
-        if (notification.metrics.extentAfter == 0.0) {
+        if (notification.metrics.extentBefore == 0.0) {
           TopNotification(
             isToTop: true,
             index: 2,
@@ -173,7 +173,7 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
       color: Colors.white,
       child: NotificationListener(
         onNotification: (ScrollEndNotification notification) {
-          if (notification.metrics.extentAfter == 0.0) {
+          if (notification.metrics.extentBefore == 0.0) {
             TopNotification(
               isToTop: true,
               index: 3,
@@ -185,18 +185,6 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
           onlyRead: true,
           isScroll: _isScroll,
         ),
-      ),
-    );
-  }
-
-  Card _buildRegisterDate() {
-    return Card(
-      elevation: 0,
-      margin: EdgeInsets.only(top: 10),
-      child: ListTile(
-        title: Text('注册时间'),
-        trailing:
-            Text(DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''),
       ),
     );
   }
