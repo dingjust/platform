@@ -32,7 +32,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       print('========Fluwx response');
       if (data.errCode == 0) {
         Future.delayed(const Duration(seconds: 1), () {
-          print('has wechat');
           afterPaid();
         });
       } else if (data.errCode == -1) {
@@ -447,7 +446,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void wechatPay() async {
     //检查是否安装微信
     bool result = await WechatServiceImpl.instance.isWeChatInstalled();
-
     if (result) {
       showDialog(
           context: context,
@@ -493,8 +491,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     //支付成功
     if (aliResponse.resultStatus != null &&
         aliResponse.resultStatus == '9000') {
+      print('!!!!!!!!!!!!!!!!!!!!!!!');
       afterPaid();
     } else {
+      print('no result==============');
       onPaymentError();
     }
   }
@@ -545,8 +545,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPaymentSucess() {
-    print('${widget.order.code}');
-
     Navigator.of(context).pop();
     //成功
     showDialog<void>(
@@ -561,11 +559,13 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               onPressed: () async {
                 ///打样订单
                 if (widget.order is ProofingModel) {
+                  ProofingOrdersBLoC.instance.clean();
+
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => ProofingOrderDetailPage(
-                                widget.order.code,
-                              )),
+                            widget.order.code,
+                          )),
                       ModalRoute.withName('/'));
 
                   ///TODO:生产单
@@ -644,26 +644,17 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void afterPaid() async {
     String orderPaymentStatus = await checkOrder(paymentWay);
 
-    print('after ${orderPaymentStatus}');
-
     PaymentStatus paymentStatus = PaymentStatusMap[orderPaymentStatus];
 
-    print('after ${paymentStatus}');
-
     if (paymentStatus == PaymentStatus.ORDER_PAY_NOT) {
-      print('after 1');
       onPaymentPaying();
     } else if (paymentStatus == PaymentStatus.ORDER_PAY_SUCCESS) {
-      print('after 2');
       onPaymentSucess();
     } else if (paymentStatus == PaymentStatus.ORDER_PAY_FAIL) {
-      print('after 3');
       mappingPayWay();
     } else if (paymentStatus == PaymentStatus.ORDER_PAYING) {
-      print('after 4');
       onPaymentPaying();
     } else {
-      print('after 5');
       onPaymentError();
     }
   }

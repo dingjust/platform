@@ -344,22 +344,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       } else {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
-        showDialog<void>(
-          context: context,
-          barrierDismissible: true, // user must tap button!
-          builder: (context) {
-            return AlertDialog(
-              title: Text('重置密码失败'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('确定'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '重置密码失败',
+                callbackResult: false,
+              );
+            }
         );
       }
     });

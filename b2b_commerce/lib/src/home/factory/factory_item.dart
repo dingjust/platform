@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -126,18 +125,18 @@ class FactoryNameText extends StatelessWidget {
           children: <Widget>[
         model.distance == null ?
             Container():
-            Container(
-              margin: EdgeInsets.only(right: 10),
-              child: Text(
-                  '${(model.distance.toInt()/1000).toStringAsFixed(1)}'+'km',
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.red
-                  )
-              ),
-            ),
+        Expanded(
+          child:
             Text(
                 '${model.name}', style: TextStyle(fontSize: 18))
+    ),
+        Text(
+            '${(model.distance.toInt() / 1000).toStringAsFixed(1)}' + 'km',
+            style: TextStyle(
+                fontSize: 18,
+                color: Colors.red
+            )
+        ),
           ],
         ),
       );
@@ -345,7 +344,7 @@ class InviteFactoryButton extends StatelessWidget {
                 context: context,
                 barrierDismissible: false,
                 builder: (_) {
-                  return RequestDataLoadingPage(
+                  return RequestDataLoading(
                     requestCallBack: RequirementOrderRepository()
                         .doRecommendation(requirementCode, factoryModel.uid),
                     outsideDismiss: false,

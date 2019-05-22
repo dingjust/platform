@@ -1,29 +1,20 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
-import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
-import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
-import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/home/product/order_product.dart';
-import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
 import 'package:b2b_commerce/src/my/company/form/my_company_contact_from.dart';
+import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_from_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './company/form/my_company_profile_form.dart';
 import './company/form/my_factory_base_form.dart';
-import '../_shared/widgets/image_factory.dart';
 import '../business/orders/requirement_order_from.dart';
-import '../business/products/existing_product_item.dart';
-import '../home/factory/factory_item.dart';
+import 'company/my_company_cash_products_widget.dart';
+import 'company/my_company_tabbar_widget.dart';
 
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {
@@ -34,8 +25,7 @@ class MyFactoryPage extends StatefulWidget {
   bool isCompanyIntroduction;
   bool isFactoryDetail;
 
-  MyFactoryPage(
-    this.factory, {
+  MyFactoryPage(this.factory, {
     this.products,
     this.purchaseOrder,
     this.quoteModel,
@@ -46,11 +36,13 @@ class MyFactoryPage extends StatefulWidget {
   _MyFactoryPageState createState() => _MyFactoryPageState();
 }
 
-class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProviderStateMixin {
+class _MyFactoryPageState extends State<MyFactoryPage>
+    with SingleTickerProviderStateMixin {
   RequirementOrderModel orderModel =
-      RequirementOrderModel(details: RequirementInfoModel());
+  RequirementOrderModel(details: RequirementInfoModel());
   ScrollController _scrollController = ScrollController();
   TabController _tabController;
+  bool _becomeTab = false;
 
   List<EnumModel> _states = [
     EnumModel('a', '资料介绍'),
@@ -59,14 +51,55 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
     EnumModel('d', '公司认证'),
   ];
 
+  List<ApparelProductModel> products = [];
+  var _getFactoryFuture;
+
   @override
   void initState() {
+    _getFactoryFuture = _getFactoryData();
     _tabController = TabController(vsync: this, length: _states.length);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _getProductData());
+    _scrollController.addListener(() {
+      if ((_scrollController.position.pixels > 187 &&
+          _scrollController.position.pixels < 189) ||
+          _scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent
+      ) {
+        setState(() {
+          _becomeTab = true;
+        });
+      }
+    });
     super.initState();
   }
 
-  Widget _buildView(String code){
-    switch(code){
+  _getFactoryData() {
+    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      return UserRepositoryImpl()
+          .getFactory(UserBLoC.instance.currentUser.companyCode);
+    } else {
+      return UserRepositoryImpl()
+          .getFactory(widget.factory.uid);
+    }
+  }
+
+  _getProductData() {
+    UserBLoC.instance.currentUser.type == UserType.FACTORY
+        ? ProductRepositoryImpl().list({
+      'approvalStatuses': ['approved'],
+    }, {
+      'size': 6
+    }).then((value) => products = value.content)
+        : ProductRepositoryImpl().getProductsOfFactory({
+      'approvalStatuses': ['approved'],
+    }, {
+      'size': 6
+    }, widget.factory.uid).then((value) => products = value.content);
+  }
+
+  Widget _buildView(String code) {
+    switch (code) {
       case 'a':
         return _buildBaseInfo();
         break;
@@ -87,214 +120,292 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _widgets = [
-      _buildCarousel(),
-      _buildBaseInfo(),
-    ];
-    if (widget.quoteModel != null) {
-      _widgets.add(Column(
-        children: <Widget>[
-          QuoteListItem(
-            model: widget.quoteModel,
-            showActions: false,
-          ),
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Center(
-              child: GestureDetector(
-                child: Text(
-                  '查看全部>>',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
-                  ),
-                ),
-                onTap: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CompanyQuoteListPage(
-                                companyUid: widget.factory.uid,
-                              )));
-                },
-              ),
+//    List<Widget> _widgets = [
+//      _buildCarousel(),
+//      _buildBaseInfo(),
+//    ];
+//    if (widget.quoteModel != null) {
+//      _widgets.add(Column(
+//        children: <Widget>[
+//          QuoteListItem(
+//            model: widget.quoteModel,
+//            showActions: false,
+//          ),
+//          Container(
+//            color: Colors.white,
+//            padding: const EdgeInsets.only(bottom: 10),
+//            child: Center(
+//              child: GestureDetector(
+//                child: Text(
+//                  '查看全部>>',
+//                  style: TextStyle(
+//                    color: Colors.red,
+//                    fontSize: 18,
+//                  ),
+//                ),
+//                onTap: () async {
+//                  Navigator.push(
+//                      context,
+//                      MaterialPageRoute(
+//                          builder: (context) => CompanyQuoteListPage(
+//                                companyUid: widget.factory.uid,
+//                              )));
+//                },
+//              ),
+//            ),
+//          )
+//        ],
+//      ));
+//    }
+//    if (widget.purchaseOrder != null) {
+//      _widgets.add(
+//        Column(
+//          children: <Widget>[
+//            PurchaseOrderItem(
+//              order: widget.purchaseOrder,
+//            ),
+//            Container(
+//              color: Colors.white,
+//              padding: const EdgeInsets.only(bottom: 10),
+//              child: Center(
+//                child: GestureDetector(
+//                  child: Text(
+//                    '查看全部>>',
+//                    style: TextStyle(
+//                      color: Colors.red,
+//                      fontSize: 18,
+//                    ),
+//                  ),
+//                  onTap: () async {
+//                    Navigator.push(
+//                        context,
+//                        MaterialPageRoute(
+//                            builder: (context) => CompanyPurchaseListPage(
+//                                  companyUid: widget.factory.uid,
+//                                )));
+//                  },
+//                ),
+//              ),
+//            )
+//          ],
+//        ),
+//      );
+//    }
+//    _widgets.add(_buildCashProducts());
+//    _widgets.add(_buildFactoryWorkPicInfo());
+//    _widgets.add(_buildCompanyCertificate());
+//    _widgets.add(_buildRegisterDate());
+
+    return NotificationListener(
+      onNotification: (TopNotification notification) {
+        print(notification.isToTop);
+        if (notification.isToTop) {
+          setState(() {
+            _becomeTab = false;
+            _tabController.animateTo(notification.index);
+          });
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('公司介绍'),
+          centerTitle: true,
+          elevation: 0.5,
+          actions: <Widget>[
+            Offstage(
+              offstage: widget.isFactoryDetail,
+              child: IconButton(icon: Text('编辑'), onPressed: () {
+                switch (_tabController.index) {
+                  case 0:
+                    return Navigator.push(context, MaterialPageRoute(
+                        builder: (context) =>
+                            MyFactoryBaseFormPage(widget.factory)));
+                    break;
+                  case 1:
+                    return Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => MyCompanyContactFromPage(
+                          company: widget.factory, isEditing: true,)));
+                    break;
+                  case 2:
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            failTips: '现款产品不可以编辑',
+                            callbackResult: false,
+                            confirmAction: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        }
+                    );
+//                  ShowDialogUtil.showSimapleDialog(context, '现款产品不可以编辑');
+                    break;
+                  case 3:
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            failTips: '认证请移步`我的认证`进行认证',
+                            callbackResult: false,
+                            confirmAction: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        }
+                    );
+//                  ShowDialogUtil.showSimapleDialog(context, '认证请移步`我的认证`进行认证');
+                    break;
+                  default :
+                    return Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => MyCompanyContactFromPage(
+                          company: widget.factory, isEditing: true,)));
+                    break;
+                }
+              }),
             ),
-          )
-        ],
-      ));
-    }
-    if (widget.purchaseOrder != null) {
-      _widgets.add(
-        Column(
-          children: <Widget>[
-            PurchaseOrderItem(
-              order: widget.purchaseOrder,
-            ),
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Center(
-                child: GestureDetector(
-                  child: Text(
-                    '查看全部>>',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
-                  ),
-                  onTap: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CompanyPurchaseListPage(
-                                  companyUid: widget.factory.uid,
-                                )));
-                  },
-                ),
-              ),
-            )
           ],
         ),
-      );
-    }
-    _widgets.add(_buildCashProducts());
-    _widgets.add(_buildFactoryWorkPicInfo());
-    _widgets.add(_buildCompanyCertificate());
-    _widgets.add(_buildRegisterDate());
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('公司介绍'),
-        centerTitle: true,
-        elevation: 0.5,
-        actions: <Widget>[
-          Offstage(
-            offstage: widget.isFactoryDetail,
-            child: IconButton(icon: Text('编辑'), onPressed: (){
-              switch(_tabController.index){
-                case 0:
-                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryBaseFormPage(widget.factory)));
-                  break;
-                case 1:
-                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyContactFromPage(company:widget.factory,isEditing: true,)));
-                  break;
-                case 2:
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return CustomizeDialogPage(
-                          dialogType: DialogType.RESULT_DIALOG,
-                          failTips: '现款产品不可以编辑',
-                          callbackResult: false,
-                          confirmAction: (){
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      }
-                  );
-//                  ShowDialogUtil.showSimapleDialog(context, '现款产品不可以编辑');
-                  break;
-                case 3:
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return CustomizeDialogPage(
-                          dialogType: DialogType.RESULT_DIALOG,
-                          failTips: '认证请移步`我的认证`进行认证',
-                          callbackResult: false,
-                          confirmAction: (){
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      }
-                  );
-//                  ShowDialogUtil.showSimapleDialog(context, '认证请移步`我的认证`进行认证');
-                  break;
-                default :
-                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyContactFromPage(company:widget.factory,isEditing: true,)));
-                  break;
+        body: FutureBuilder(
+            future: _getFactoryFuture,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 200),
+                  child: Center(child: CircularProgressIndicator()),
+                );
               }
-            }),
-          ),
-        ],
-      ),
-      body: Container(
-        color: Colors.white,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-          SliverToBoxAdapter(
-            child: Offstage(
-              offstage: widget.isFactoryDetail && !widget.factory.profiles.map((profile) => profile.medias.length > 0).toList().contains(true),
-              child: InkWell(
-                onTap: () {
-                  if(!widget.isFactoryDetail){
-                    showMenu(
-                        context: context,
-                        items:[
-                          PopupMenuItem(
-                            child: GestureDetector(
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MyCompanyProfileFormPage(
-                                        widget.factory
+              return _becomeTab ? MyCompanyTabbar(
+                  widget.factory, isFactoryDetail: widget.isFactoryDetail,
+                  tabIndex: _tabController.index,
+                  products: products) : Container(
+                color: Colors.white,
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: <Widget>[
+                    SliverToBoxAdapter(
+                      child: Offstage(
+                        offstage: widget.isFactoryDetail &&
+                            !widget.factory.profiles.map((profile) => profile
+                                .medias.length > 0).toList().contains(true),
+                        child: InkWell(
+                          onTap: () {
+                            if (!widget.isFactoryDetail) {
+                              showMenu(
+                                  context: context,
+                                  items: [
+                                    PopupMenuItem(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MyCompanyProfileFormPage(
+                                                      widget.factory
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        child: ListTile(
+                                          title: Text('更换轮播图'),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                              child: ListTile(
-                                title: Text('更换轮播图'),
-                              ),
-                            ),
+                                  ],
+                                  position: RelativeRect.fromLTRB(
+                                      (MediaQueryData
+                                          .fromWindow(window)
+                                          .size
+                                          .width - 180) / 2, 100,
+                                      (MediaQueryData
+                                          .fromWindow(window)
+                                          .size
+                                          .width) / 2, (MediaQueryData
+                                      .fromWindow(window)
+                                      .size
+                                      .height - 60) / 2)
+                              );
+                            }
+                          },
+                          child: Container(
+                            height: 188,
+                            child: _buildCarousel(),
                           ),
-                        ],
-                        position: RelativeRect.fromLTRB((MediaQueryData.fromWindow(window).size.width-180)/2, 100, (MediaQueryData.fromWindow(window).size.width)/2, (MediaQueryData.fromWindow(window).size.height-60)/2)
-                    );
-                  }
+                        ),
+                      ),
+                    ),
+                    SliverAppBar(
+                      expandedHeight: MediaQueryData
+                          .fromWindow(window)
+                          .size
+                          .height,
+                      leading: Container(),
+                      brightness: Brightness.dark,
+                      pinned: true,
+                      flexibleSpace: Scaffold(
+                        backgroundColor: Colors.white,
+                        appBar: TabBar(
+                          controller: _tabController,
+                          labelColor: Colors.black,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          indicatorPadding: EdgeInsets.only(
+                              left: 10, right: 10, top: 0, bottom: 10),
+                          tabs: _states.map((status) {
+                            return Tab(text: status.name);
+                          }).toList(),
+                          labelStyle: TextStyle(
+                              fontSize: 16, color: Colors.black),
+                          isScrollable: false,
 
-                },
-                child: Container(
-                  height: 188,
-                  child: _buildCarousel(),
+                        ),
+                        body: TabBarView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          controller: _tabController,
+                          children: _states.map((state) {
+                            return _buildView(state.code);
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+        bottomNavigationBar: Offstage(
+          offstage: !widget.isFactoryDetail,
+          child: Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            height: 50,
+            child: RaisedButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '发需求',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
                 ),
               ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () {
+                RequirementOrderModel orderModel = RequirementOrderModel(
+                    details: RequirementInfoModel(), attachments: []);
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    RequirementOrderFrom(
+                      order: orderModel,
+                      isCreate: true,
+                      factoryUid: widget.factory.uid,
+                    )));
+              },
             ),
           ),
-            SliverAppBar(
-              expandedHeight: MediaQueryData.fromWindow(window).size.height,
-              leading: Container(),
-              brightness: Brightness.dark,
-              pinned: true,
-              flexibleSpace: Scaffold(
-                backgroundColor: Colors.white,
-                appBar: TabBar(
-                  controller: _tabController,
-                  labelColor: Colors.black,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorPadding: EdgeInsets.only(left: 10,right: 10,top: 0,bottom: 10),
-                  tabs: _states.map((status) {
-                    return Tab(text: status.name);
-                  }).toList(),
-                  labelStyle: TextStyle( fontSize: 16, color: Colors.black),
-                  isScrollable: false,
-
-                ),
-                body: TabBarView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  controller: _tabController,
-                  children: _states.map((state) {
-                    return _buildView(state.code);
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -303,40 +414,12 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
   //轮播图
   Widget _buildCarousel() {
     List<CompanyProfileModel> profiles = [];
-    widget.factory.profiles.forEach((profile){
-      if(profile.medias.isNotEmpty){
+    widget.factory.profiles.forEach((profile) {
+      if (profile.medias.isNotEmpty) {
         profiles.add(profile);
       }
     });
-    return CarouselStackText( profiles,);
-  }
-
-  // 发布需求按钮
-  Widget _buildRequestOrderButton(BuildContext context) {
-    return FloatingActionButton.extended(
-      icon: Icon(
-        Icons.add,
-        color: Colors.white,
-      ),
-      label: Text(
-        '发布需求',
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RequirementOrderFrom(
-                  factoryUid: widget.factory.uid,
-                  isCreate: true,
-                ),
-          ),
-        );
-      },
-      backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-    );
+    return CarouselStackText(profiles,);
   }
 
   //联系方式
@@ -352,7 +435,8 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactFromPage(
+              builder: (context) =>
+                  MyCompanyContactFromPage(
                     company: widget.factory,
                     isEditing: true,
                   ),
@@ -365,216 +449,17 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
 
   //基本资料
   Widget _buildBaseInfo() {
-    return MyFactoryBaseInfo(widget.factory);
+    return MyFactoryBaseInfo(widget.factory,);
   }
 
-  Widget _buildContactWay(){
-    return Container(color:Colors.white,child: MyCompanyContactFromWidgetPage(company: widget.factory,),);
+  Widget _buildContactWay() {
+    return Container(color: Colors.white,
+      child: MyCompanyContactFromWidgetPage(company: widget.factory,),);
   }
 
   //现款产品
   Widget _buildCashProducts() {
-    return FutureBuilder(
-        future: UserBLoC.instance.currentUser.type == UserType.FACTORY
-            ? ProductRepositoryImpl().list({
-          'approvalStatuses': ['approved'],
-        }, {'size': 3})
-            : ProductRepositoryImpl()
-                .getProductsOfFactory({
-          'approvalStatuses': ['approved'],
-        }, {'size': 3}, widget.factory.uid),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 200),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-          return Container(
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
-                InkWell(
-                  onTap: () async {
-                    // 加载条
-                    showDialog(
-                      context: context,
-                      builder: (context) =>
-                          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-                    );
-                    Navigator.of(context).pop();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ProductsPage(
-                              factoryUid: widget.factory.uid,
-                            ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 10, 10),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          width: 110,
-                          child: Text(
-                            '现款产品',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                              margin: const EdgeInsets.all(5),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: const Icon(Icons.chevron_right),
-                              )),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 150,
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: GridView.count(
-                    controller: ScrollController(),
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: 3,
-                    childAspectRatio: 2.5 / 5,
-                    children: List.generate(
-                      snapshot.data.content.length,
-                      (index) {
-                        return ExistingProductItem(
-                          snapshot.data.content[index],
-                          isFactoryDetail: true,
-                        );
-                      },
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        });
-  }
-
-  //图文详情
-  Widget _buildFactoryWorkPicInfo() {
-    return Card(
-      elevation: 0,
-      margin: const EdgeInsets.only(top: 10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 5, right: 5, bottom: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    '图文详情',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  Offstage(
-                    offstage: !widget.isCompanyIntroduction,
-                    child: GestureDetector(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(255, 214, 12, 1),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: const Text('编辑'),
-                      ),
-                      onTap: () {
-                        if (widget.factory.profiles == null)
-                          widget.factory.profiles = [];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                MyCompanyProfileFormPage(widget.factory),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: widget.factory.profiles.map((profile) {
-                    return Column(
-                      children: <Widget>[
-                        profile.medias != null && profile.medias.length > 0
-                            ? Container(
-                                margin: EdgeInsets.only(bottom: 5),
-                                child: CachedNetworkImage(
-                                    imageUrl:
-                                        '${profile.medias[0].detailUrl()}',
-                                    width: double.infinity,
-                                    height: 200,
-                                    fit: BoxFit.fill,
-                                    placeholder: (context, url) => SpinKitRing(
-                                          color: Colors.black12,
-                                          lineWidth: 2,
-                                          size: 30,
-                                        ),
-                                    errorWidget: (context, url, error) =>
-                                        SpinKitRing(
-                                          color: Colors.black12,
-                                          lineWidth: 2,
-                                          size: 30,
-                                        )),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.black38, width: 1)),
-                              )
-                            : Container(),
-                        Offstage(
-                          offstage: profile.description == null,
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                '${profile.description}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
-    );
+    return MyCompanyCashProducts(widget.factory, products);
   }
 
   Widget _buildCompanyCertificate() {
@@ -583,18 +468,6 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
       child: MyCompanyCertificateWidget(
         widget.factory,
         onlyRead: true,
-      ),
-    );
-  }
-
-  Card _buildRegisterDate() {
-    return Card(
-      elevation: 0,
-      margin: EdgeInsets.only(top: 10),
-      child: ListTile(
-        title: Text('注册时间'),
-        trailing:
-            Text(DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''),
       ),
     );
   }
@@ -668,4 +541,14 @@ class _MyFactoryPageState extends State<MyFactoryPage> with SingleTickerProvider
 
     return text;
   }
+}
+
+class TopNotification extends Notification {
+  TopNotification({
+    @required this.isToTop,
+    @required this.index,
+  });
+
+  final int index;
+  final bool isToTop;
 }

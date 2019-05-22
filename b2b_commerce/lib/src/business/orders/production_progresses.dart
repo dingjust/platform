@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -465,7 +463,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return RequestDataLoadingPage(
+              return RequestDataLoading(
                 requestCallBack: PurchaseOrderRepository().productionProgressUpload(order.code,model.id.toString(),model),
                 outsideDismiss: false,
                 loadingText: '保存中。。。',
@@ -489,7 +487,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
             dialogHeight: 200,
             contentText2: '确定完成当前生产进度吗？',
@@ -505,11 +503,12 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   void submit(ProductionProgressModel model) {
+    model.updateOnly = false;
      showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return RequestDataLoadingPage(
+          return RequestDataLoading(
             requestCallBack: PurchaseOrderRepository().productionProgressUpload(
                 order.code, model.id.toString(), model),
             outsideDismiss: false,
@@ -542,7 +541,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.INPUTS_DIALOG,
             inputController1: inputController,
             inputType1: TextInputType.number,
@@ -558,7 +557,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               context: context,
               barrierDismissible: false,
               builder: (_) {
-                return RequestDataLoadingPage(
+                return RequestDataLoading(
                   requestCallBack: PurchaseOrderRepository()
                       .productionProgressUpload(
                       order.code, model.id.toString(), model),
@@ -608,7 +607,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.INPUTS_DIALOG,
             inputController1: inputController,
             focusNode1: FocusNode(),
@@ -623,7 +622,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               context: context,
               barrierDismissible: false,
               builder: (_) {
-                return RequestDataLoadingPage(
+                return RequestDataLoading(
                   requestCallBack: PurchaseOrderRepository()
                       .productionProgressUpload(
                       order.code, model.id.toString(), model),
@@ -747,7 +746,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.BALANCE_INPUT_DIALOG,
             outsideDismiss: false,
             inputController: con,
@@ -780,7 +779,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return RequestDataLoadingPage(
+              return RequestDataLoading(
                 requestCallBack: PurchaseOrderRepository()
                     .purchaseOrderBalanceUpdate(model.code, model),
                 outsideDismiss: false,
@@ -883,7 +882,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (_) {
-                                  return RequestDataLoadingPage(
+                                  return RequestDataLoading(
                                     requestCallBack: PurchaseOrderRepository()
                                         .purchaseOrderBalanceUpdate(model.code, model),
                                     outsideDismiss: false,
@@ -941,7 +940,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
             dialogHeight: 200,
             contentText2: '是否无需付款直接跳过？',
@@ -965,7 +964,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return RequestDataLoadingPage(
+            return RequestDataLoading(
               requestCallBack: PurchaseOrderRepository()
                   .purchaseOrderBalanceUpdate(model.code, model),
               outsideDismiss: false,

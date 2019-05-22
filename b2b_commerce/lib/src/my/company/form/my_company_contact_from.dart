@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -171,7 +170,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
-                            return RequestDataLoadingPage(
+                            return RequestDataLoading(
                               requestCallBack: UserRepositoryImpl()
                                   .brandUpdateContact(widget.company)
                                   .then((a) {}), //
@@ -186,7 +185,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
-                            return RequestDataLoadingPage(
+                            return RequestDataLoading(
                               requestCallBack: UserRepositoryImpl()
                                   .factoryUpdateContact(widget.company),
                               loadingText: '保存中。。。',

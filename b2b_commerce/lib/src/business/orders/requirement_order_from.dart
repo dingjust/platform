@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -85,16 +84,35 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        if (widget.isCreate) {
-          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
-//            _clearProductData();
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
-        } else {
-          Navigator.pop(context);
-        }
-        return Future.value(false);
+//        if (widget.isCreate) {
+//          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
+////            _clearProductData();
+//            Navigator.pop(context);
+//            Navigator.pop(context);
+//          });
+//        } else {
+//          Navigator.pop(context);
+//        }
+//        return Future.value(false);
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
       },
       child: Scaffold(
           appBar: AppBar(
@@ -468,8 +486,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       isSubmit = _showValidateMsg(context, '交货时间不可以为空');
     }else if(widget.order.details.expectedDeliveryDate.isBefore(DateTime.now())){
       isSubmit = _showValidateMsg(context, '交货时间不可比当前时间小');
-    }else if (widget.order.details.contactPerson == null &&
-        widget.order.details.contactPhone == null) {
+    }else if (widget.order.details.contactPerson == null || widget.order.details.contactPerson == '' ||
+        widget.order.details.contactPhone == null || widget.order.details.contactPhone == '') {
       isSubmit = _showValidateMsg(context, '联系方式不可以为空');
     }else{
       isSubmit = true;
@@ -522,10 +540,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           );
         }
       }
-
-
     }
-
   }
 
   bool _showValidateMsg(BuildContext context,String message){
@@ -538,9 +553,10 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
-            dialogType: DialogType.CONFIRM_DIALOG,
-            contentText2: '${message}',
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
             outsideDismiss: true,
           );
         }

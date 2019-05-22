@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -293,7 +292,7 @@ class MyCompanyContactWayPageState extends State<MyCompanyContactWayPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.RESULT_DIALOG,
             successTips: '复制成功',
             callbackResult: true,

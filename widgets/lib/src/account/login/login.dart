@@ -60,15 +60,32 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.of(context).pop();
       showDialog(
           context: context,
-          child: SimpleDialog(
-            title: Text('登陆失败'),
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Text('${result}'),
-              ),
-            ],
-          ));
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText1: '登陆失败',
+              contentText2: '${result}',
+              outsideDismiss: false,
+              dialogHeight: 180,
+              isNeedConfirmButton: true,
+              confirmAction: (){
+                Navigator.of(context).pop();
+              },
+            );
+          }
+      );
+//      showDialog(
+//          context: context,
+//          child: SimpleDialog(
+//            title: Text('登陆失败'),
+//            children: <Widget>[
+//              Container(
+//                padding: EdgeInsets.all(10),
+//                child: Text('${result}'),
+//              ),
+//            ],
+//          ));
     });
 
     return Material(
@@ -412,39 +429,88 @@ class _LoginPageState extends State<LoginPage> {
     return isExist;
   }
 
+  doLogin(UserBLoC bloc){
+
+  }
+
   void onLogin(UserBLoC bloc) {
-    //加载条
-    showDialog(
-      context: context,
-      builder: (context) =>
-          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-    );
+//    //加载条
+//    showDialog(
+//      context: context,
+//      builder: (context) =>
+//          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+//    );
     if (_isPasswordLogin) {
-      bloc
-          .login(
-              username: _phoneController.text,
-              password: _passwordController.text,
-              remember: _isRemember)
-          .then((result) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoading(
+              requestCallBack: bloc
+                  .login(
+                  username: _phoneController.text,
+                  password: _passwordController.text,
+                  remember: _isRemember),
+              outsideDismiss: false,
+              loadingText: '登录中。。。',
+              entrance: '',
+            );
+          }
+      ).then((result) {
+        print(result);
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
           Navigator.of(context).pop();
         }
       });
+//      bloc
+//          .login(
+//              username: _phoneController.text,
+//              password: _passwordController.text,
+//              remember: _isRemember)
+//          .then((result) {
+//        if (result == LoginResult.SUCCESS) {
+//          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+//        } else if (result == LoginResult.DIO_ERROR) {
+//          Navigator.of(context).pop();
+//        }
+//      });
     } else {
-      bloc
-          .loginByCaptcha(
-              username: _phoneController.text,
-              captcha: _smsCaptchaController.text,
-              remember: _isRemember)
-          .then((result) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoading(
+              requestCallBack: bloc
+                  .loginByCaptcha(
+                  username: _phoneController.text,
+                  captcha: _smsCaptchaController.text,
+                  remember: _isRemember),
+              outsideDismiss: false,
+              loadingText: '登录中。。。',
+              entrance: '',
+            );
+          }
+      ).then((result) {
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
           Navigator.of(context).pop();
         }
       });
+//      bloc
+//          .loginByCaptcha(
+//              username: _phoneController.text,
+//              captcha: _smsCaptchaController.text,
+//              remember: _isRemember)
+//          .then((result) {
+//        if (result == LoginResult.SUCCESS) {
+//          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+//        } else if (result == LoginResult.DIO_ERROR) {
+//          Navigator.of(context).pop();
+//        }
+//      });
     }
   }
 
