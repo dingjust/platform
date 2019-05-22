@@ -79,30 +79,6 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           centerTitle: true,
           elevation: 0.5,
           title: Text(widget.update ? '修改报价' : '填写报价'),
-          leading: IconButton(
-              icon: Icon(Icons.keyboard_arrow_left),
-              onPressed: (){
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) {
-                      return CustomizeDialog(
-                        dialogType: DialogType.CONFIRM_DIALOG,
-                        contentText2: '正在创建订单，是否确认退出',
-                        isNeedConfirmButton: true,
-                        isNeedCancelButton: true,
-                        confirmButtonText: '退出',
-                        cancelButtonText: '再看看',
-                        dialogHeight: 180,
-                        confirmAction: (){
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    }
-                );
-              }
-          ),
         ),
         body: Container(
             child: ListView(

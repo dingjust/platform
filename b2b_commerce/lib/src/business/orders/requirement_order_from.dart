@@ -5,7 +5,6 @@ import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -85,16 +84,35 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        if (widget.isCreate) {
-          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
-//            _clearProductData();
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
-        } else {
-          Navigator.pop(context);
-        }
-        return Future.value(false);
+//        if (widget.isCreate) {
+//          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
+////            _clearProductData();
+//            Navigator.pop(context);
+//            Navigator.pop(context);
+//          });
+//        } else {
+//          Navigator.pop(context);
+//        }
+//        return Future.value(false);
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
       },
       child: Scaffold(
           appBar: AppBar(

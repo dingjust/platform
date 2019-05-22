@@ -56,16 +56,35 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (widget.isCreate) {
-          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
-            _clearProductData();
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
-        } else {
-          Navigator.pop(context);
-        }
-        return Future.value(false);
+//        if (widget.isCreate) {
+//          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
+//            _clearProductData();
+//            Navigator.pop(context);
+//            Navigator.pop(context);
+//          });
+//        } else {
+//          Navigator.pop(context);
+//        }
+//        return Future.value(false);
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
       },
       child: Scaffold(
         appBar: AppBar(

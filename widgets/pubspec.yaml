@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   b2b_commerce:
-      path: ../b2b_commerce/
+    path: ../b2b_commerce/
   models:
     path: ../models/
   services:
