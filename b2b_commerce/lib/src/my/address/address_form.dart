@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -141,7 +139,7 @@ class AddressFormState extends State<AddressFormPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (_) {
-                      return CustomizeDialogPage(
+                      return CustomizeDialog(
                         dialogType: DialogType.CONFIRM_DIALOG,
                         contentText2: '是否要删除地址？',
                         isNeedConfirmButton: true,
@@ -174,7 +172,7 @@ class AddressFormState extends State<AddressFormPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (_) {
-                      return CustomizeDialogPage(
+                      return CustomizeDialog(
                         dialogType: DialogType.RESULT_DIALOG,
                         failTips: '联系人和联系电话不可为空',
                         callbackResult: false,
@@ -191,7 +189,7 @@ class AddressFormState extends State<AddressFormPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (_) {
-                      return CustomizeDialogPage(
+                      return CustomizeDialog(
                         dialogType: DialogType.RESULT_DIALOG,
                         failTips: '省市区不可为空',
                         callbackResult: false,
@@ -208,7 +206,7 @@ class AddressFormState extends State<AddressFormPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (_) {
-                      return CustomizeDialogPage(
+                      return CustomizeDialog(
                         dialogType: DialogType.RESULT_DIALOG,
                         failTips: '详细地址不可为空',
                         callbackResult: false,
@@ -252,7 +250,7 @@ class AddressFormState extends State<AddressFormPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return RequestDataLoadingPage(
+          return RequestDataLoading(
             requestCallBack: AddressRepositoryImpl().delete(widget.address.id.toString()),
             outsideDismiss: false,
             loadingText: '删除。。。',

@@ -1,7 +1,3 @@
-import 'package:b2b_commerce/src/business/proofing_orders.dart';
-import 'package:b2b_commerce/src/business/purchase_orders.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -107,7 +103,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                     context: context,
                     barrierDismissible: false,
                     builder: (_) {
-                      return CustomizeDialogPage(
+                      return CustomizeDialog(
                         dialogType: DialogType.RESULT_DIALOG,
                         failTips: '获取物流公司失败',
                         callbackResult: false,
@@ -176,7 +172,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
-                            return RequestDataLoadingPage(
+                            return RequestDataLoading(
                               requestCallBack: PurchaseOrderRepository()
                                   .purchaseOrderDelivering(
                                   widget.purchaseOrderModel.code,
@@ -195,7 +191,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                           context: context,
                           barrierDismissible: false,
                           builder: (_) {
-                            return RequestDataLoadingPage(
+                            return RequestDataLoading(
                               requestCallBack: ProofingOrderRepository()
                                   .proofingDelivering(
                                   widget.proofingModel.code,
@@ -213,7 +209,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return CustomizeDialogPage(
+                          return CustomizeDialog(
                             dialogType: DialogType.RESULT_DIALOG,
                             failTips: '请选择物流公司和填写物流单号',
                             callbackResult: false,
@@ -250,7 +246,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return RequestDataLoadingPage(
+                          return RequestDataLoading(
                             requestCallBack: PurchaseOrderRepository()
                                 .purchaseOrderDelivering(
                                 widget.purchaseOrderModel.code,
@@ -266,7 +262,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return RequestDataLoadingPage(
+                          return RequestDataLoading(
                             requestCallBack: ProofingOrderRepository()
                                 .proofingDelivering(
                                 widget.proofingModel.code,

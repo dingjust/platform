@@ -1,5 +1,4 @@
 import 'package:amap_location/amap_location.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -207,7 +206,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
     AMapLocation location = await AmapService.instance.location();
     if(location==null){
       showDialog(context: context,builder: (_){
-        return CustomizeDialogPage(
+        return CustomizeDialog(
           dialogType: DialogType.CONFIRM_DIALOG,
           contentText1: '获取位置授权失败，请设置应用位置服务',
           callbackResult: false,

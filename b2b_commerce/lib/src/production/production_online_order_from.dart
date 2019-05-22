@@ -1,10 +1,6 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/common/request_data_loading.dart';
-import 'package:b2b_commerce/src/production/offline_order_input_page.dart';
-import 'package:b2b_commerce/src/production/offline_order_input_remarks.dart';
 import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -60,50 +56,73 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('创建生产订单'),
-        centerTitle: true,
-        elevation: 0.5,
-      ),
-      body: ListView(
-        physics: AlwaysScrollableScrollPhysics(),
-        children: <Widget>[
-          _buildBrandInfo(context),
-          productModel == null || productModel.name == null
-              ? _buildSelectionProduct(context)
-              : _buildProduct(context),
-          _buildProcessCount(context),
-          _buildExpectPrice(context),
-          _buildEarnestMoney(context),
-          _buildDeliveryDate(context),
-          _buildCooperationModes(context),
-          _buildInvoice(context),
-          _buildAnnex(context),
-          _buildRemarks(context),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('创建生产订单'),
+          centerTitle: true,
+          elevation: 0.5,
+        ),
+        body: ListView(
+          physics: AlwaysScrollableScrollPhysics(),
+          children: <Widget>[
+            _buildBrandInfo(context),
+            productModel == null || productModel.name == null
+                ? _buildSelectionProduct(context)
+                : _buildProduct(context),
+            _buildProcessCount(context),
+            _buildExpectPrice(context),
+            _buildEarnestMoney(context),
+            _buildDeliveryDate(context),
+            _buildCooperationModes(context),
+            _buildInvoice(context),
+            _buildAnnex(context),
+            _buildRemarks(context),
 //          _buildCommitButton(context),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-        height: 50,
-        child: RaisedButton(
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: Text(
-              '提交订单',
-              style: TextStyle(
-                color: Colors.black,
-                
-                fontSize: 18,
+          ],
+        ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+          height: 50,
+          child: RaisedButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '提交订单',
+                style: TextStyle(
+                  color: Colors.black,
+
+                  fontSize: 18,
+                ),
               ),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: () async {
-              onSubmit();
-            }),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () async {
+                onSure();
+              }),
+        ),
       ),
+      onWillPop: (){
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
+      },
     );
   }
 
@@ -761,7 +780,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                   ),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                  onPressed: onSubmit)),
+                  onPressed: onSure)),
       decoration: BoxDecoration(
         color: Color.fromRGBO(242, 242, 242, 1),
       ),
@@ -836,55 +855,6 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     );
   }
 
-  void onSubmit() {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomizeDialogPage(
-            dialogType: DialogType.CONFIRM_DIALOG,
-            contentText2: '是否提交？',
-            isNeedConfirmButton: true,
-            isNeedCancelButton: true,
-            dialogHeight: 200,
-            confirmAction: (){
-              onSure();
-            },
-          );
-        }
-    );
-//    showDialog<void>(
-//      context: context,
-//      barrierDismissible: true, // user must tap button!
-//      builder: (context) {
-//        return AlertDialog(
-//          title: Text('确定提交？'),
-//          actions: <Widget>[
-//            FlatButton(
-//              child: Text(
-//                '取消',
-//                style: TextStyle(
-//                  color: Colors.grey
-//                ),
-//              ),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//            FlatButton(
-//              child: Text(
-//                  '确定',
-//                style: TextStyle(
-//                  color:Colors.black
-//                ),
-//              ),
-//              onPressed: onSure,
-//            ),
-//          ],
-//        );
-//      },
-//    );
-  }
 
   void onSure() async {
     bool isSubmit = false;
@@ -964,63 +934,70 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
       }
 
       if(isSubmit){
-        Navigator.of(context).pop();
         showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return RequestDataLoadingPage(
-                requestCallBack: PurchaseOrderRepository()
-                    .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder),
-                outsideDismiss: false,
-                loadingText: '保存中。。。',
-                entrance: 'createPurchaseOrder',
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '是否提交？',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                dialogHeight: 200,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                  onSubmit(purchaseOrder);
+                },
               );
             }
-        ).then((value){
-          bool result = false;
-          if(value!=null){
-            result = true;
-          }
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return CustomizeDialogPage(
-                  dialogType: DialogType.RESULT_DIALOG,
-                  failTips: '创建生产订单失败',
-                  successTips: '创建生产订单成功',
-                  callbackResult: result,
-                  confirmAction: (){
-                    Navigator.of(context).pop();
-                    getPurchaseOrderDetail(value);
-                  },
-                );
-              }
-          );
+        );
 
-        });
 
-//        String response = await PurchaseOrderRepository()
-//            .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder);
-//        if (response != null && response != '') {
-//          //根据code查询明
-//          PurchaseOrderModel model =
-//          await PurchaseOrderRepository().getPurchaseOrderDetail(response);
-//          if (model != null) {
-//            Navigator.of(context).pushAndRemoveUntil(
-//                MaterialPageRoute(
-//                    builder: (context) => PurchaseOrderDetailPage(
-//                      order: model,
-//                    )),
-//                ModalRoute.withName('/'));
-//          }
-//        }
       }
     } catch (e) {
       print(e);
     }
   }
+
+  void onSubmit(PurchaseOrderModel purchaseOrder) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: PurchaseOrderRepository()
+                .onlinePurchaseOrder(widget.quoteModel.code, purchaseOrder),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: 'createPurchaseOrder',
+          );
+        }
+    ).then((value){
+      bool result = false;
+      if(value!=null){
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '创建生产订单失败',
+              successTips: '创建生产订单成功',
+              callbackResult: result,
+              confirmAction: (){
+                Navigator.of(context).pop();
+                getPurchaseOrderDetail(value);
+              },
+            );
+          }
+      );
+
+    });
+  }
+
+
 
   void getPurchaseOrderDetail(String code) async{
     if(code != null && code != ''){
@@ -1044,9 +1021,10 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
-            dialogType: DialogType.CONFIRM_DIALOG,
-            contentText2: '${message}',
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
             outsideDismiss: true,
           );
         }

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:b2b_commerce/src/my/account/register_info.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -373,7 +372,7 @@ class _RegisterPageState extends State<RegisterPage> {
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return CustomizeDialogPage(
+              return CustomizeDialog(
                 dialogType: DialogType.RESULT_DIALOG,
                 failTips: '密码限定数字加字母，6-20位',
                 callbackResult: false,
@@ -384,20 +383,17 @@ class _RegisterPageState extends State<RegisterPage> {
             });
       } else {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                RegisterInfoPage(
+            builder: (context) => RegisterInfoPage(
                   phone: _phoneController.text,
                   password: _passwordController.text,
                 )));
       }
     } else {
-      // (_scaffoldKey.currentState)
-      //     .showSnackBar(SnackBar(content: Text('验证不正确')));
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) {
-            return CustomizeDialogPage(
+            return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
               failTips: '验证不正确',
               callbackResult: false,
@@ -406,6 +402,8 @@ class _RegisterPageState extends State<RegisterPage> {
               },
             );
           });
+//      (_scaffoldKey.currentState)
+//          .showSnackBar(SnackBar(content: Text('验证不正确')));
     }
   }
 

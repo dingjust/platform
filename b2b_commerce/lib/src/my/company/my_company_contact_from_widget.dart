@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,8 +11,9 @@ import 'package:widgets/widgets.dart';
 class MyCompanyContactFromWidgetPage extends StatefulWidget{
   B2BUnitModel company;
   bool isEditing;
+  bool isScroll;
 
-  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false});
+  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false,this.isScroll = false});
 
   _MyCompanyContactFromWidgetPageState createState() => _MyCompanyContactFromWidgetPageState();
 }
@@ -38,9 +37,16 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
   FocusNode QQFocusNode = FocusNode();
   FocusNode weCharFocusNode = FocusNode();
 
+  ScrollPhysics _physics;
+
   @override
   void initState() {
     super.initState();
+    if(widget.isScroll){
+      _physics = AlwaysScrollableScrollPhysics();
+    }else{
+      _physics = NeverScrollableScrollPhysics();
+    }
     if(widget.company.contactAddress != null){
       addressModel = widget.company.contactAddress;
     }
@@ -48,12 +54,11 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
+      physics: _physics,
       children: <Widget>[
         SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
-        ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+        Column(
           children: <Widget>[
             _buildContactPerson(context),
             Padding(
@@ -86,10 +91,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
               child: Divider(height: 0,),
             ),
             _buildWeChar(context),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,),
-            ),
+//            Padding(
           ],
         ),
       ],
@@ -463,7 +465,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.RESULT_DIALOG,
             successTips: '复制成功',
             callbackResult: true,

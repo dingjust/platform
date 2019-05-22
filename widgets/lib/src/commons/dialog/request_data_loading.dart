@@ -9,7 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-class RequestDataLoadingPage extends StatefulWidget {
+class RequestDataLoading extends StatefulWidget {
   final bool loading;
   Function dismissCallback;
   String loadingText;
@@ -21,7 +21,7 @@ class RequestDataLoadingPage extends StatefulWidget {
   String keyword;
   String Function() onPress;
 
-  RequestDataLoadingPage({
+  RequestDataLoading({
     Key key,
     this.loading,
     this.loadingText = "loading...",
@@ -38,7 +38,7 @@ class RequestDataLoadingPage extends StatefulWidget {
   _RequestDataLoadingPageState createState() => _RequestDataLoadingPageState();
 }
 
-class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
+class _RequestDataLoadingPageState extends State<RequestDataLoading> {
   _dismissDialog() {
     if (widget.dismissCallback != null) {
       widget.dismissCallback();
@@ -104,6 +104,11 @@ class _RequestDataLoadingPageState extends State<RequestDataLoadingPage> {
         }
       });
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> _requestMessage(
@@ -248,7 +253,7 @@ class LoadingUtil {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return RequestDataLoadingPage(
+          return RequestDataLoading(
             requestCallBack: future,
             outsideDismiss: false,
             loadingText: loadingText,

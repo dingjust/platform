@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:widgets/widgets.dart';
 
 /// 我的客服
 class MyClientServicesPage extends StatefulWidget {
@@ -184,7 +183,7 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.RESULT_DIALOG,
             successTips: '复制成功',
             callbackResult: true,

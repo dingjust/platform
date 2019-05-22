@@ -1,5 +1,4 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:b2b_commerce/src/common/customize_dialog.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -303,7 +302,7 @@ class _ProductionGenerateUniqueCodePageState
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialogPage(
+          return CustomizeDialog(
             dialogType: DialogType.RESULT_DIALOG,
             successTips: '复制成功',
             callbackResult: true,
