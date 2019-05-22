@@ -7,9 +7,12 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class MyFactoryBaseInfo extends StatefulWidget {
-  MyFactoryBaseInfo(this.factory);
+import '../my_factory.dart';
 
+class MyFactoryBaseInfo extends StatefulWidget {
+  MyFactoryBaseInfo(this.factory,{this.isScroll = false});
+
+  bool isScroll;
   final FactoryModel factory;
 
   @override
@@ -17,9 +20,15 @@ class MyFactoryBaseInfo extends StatefulWidget {
 }
 
 class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
+  ScrollPhysics _physics;
 
   @override
   void initState() {
+    if(widget.isScroll){
+      _physics = AlwaysScrollableScrollPhysics();
+    }else{
+      _physics = NeverScrollableScrollPhysics();
+    }
 
     // TODO: implement initState
     super.initState();
@@ -51,14 +60,13 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
         ),
       );
     });
-    return Column(
+    return ListView(
+      physics: _physics,
       children: <Widget>[
         SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 15),
-          child: ListView(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
+          child: Column(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
@@ -258,6 +266,22 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                 ),
               ),
               Divider(height: 0,),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '注册时间',
+                      style: const TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                    Text(
+                      '${DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''}',
+                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

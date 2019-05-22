@@ -486,8 +486,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       isSubmit = _showValidateMsg(context, '交货时间不可以为空');
     }else if(widget.order.details.expectedDeliveryDate.isBefore(DateTime.now())){
       isSubmit = _showValidateMsg(context, '交货时间不可比当前时间小');
-    }else if (widget.order.details.contactPerson == null &&
-        widget.order.details.contactPhone == null) {
+    }else if (widget.order.details.contactPerson == null || widget.order.details.contactPerson == '' ||
+        widget.order.details.contactPhone == null || widget.order.details.contactPhone == '') {
       isSubmit = _showValidateMsg(context, '联系方式不可以为空');
     }else{
       isSubmit = true;
@@ -540,10 +540,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           );
         }
       }
-
-
     }
-
   }
 
   bool _showValidateMsg(BuildContext context,String message){

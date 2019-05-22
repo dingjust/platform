@@ -65,7 +65,8 @@ const state = {
       },
       line1: ''
     },
-    progresses: []
+    progresses: [],
+    targetPurchaseOrderCode:'',
   },
   queryFormData: {
     code: '',

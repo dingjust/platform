@@ -66,6 +66,10 @@
       <el-card class="box-card" v-if="showProgress">
         <div slot="header" class="clearfix">
           <span>生产进度</span>
+          <el-button v-if="isTenant()" style="float: right; padding: 3px 0" type="text" icon="el-icon-edit"
+                     @click="synchronizeVisible = true">
+            生产进度同步
+          </el-button>
         </div>
         <el-timeline>
           <template v-for="progress in slotData.progresses">
@@ -78,6 +82,19 @@
         </el-timeline>
       </el-card>
     </template>
+
+    <el-dialog title="生产订单同步" width="600px" :visible.sync="this.synchronizeVisible" :before-close="handleClose"
+               append-to-body>
+      <el-form>
+        <el-form-item label="目标生产单号：">
+          <el-input v-model="slotData.targetPurchaseOrderCode" placeholder="请输入目标生产单号" clearable autosize></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="onSynchronizeProgress()">同步</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -111,10 +128,15 @@
       }
     },
     methods: {
+      handleClose(done) {
+        this.synchronizeVisible = false;
+      },
+      submit() {
+        this.$emit('onSubmit', this.slotData);
+        this.synchronizeVisible = false;
+      },
       async progressSubmit(data) {
         let formData = data;
-        console.log(formData);
-
         const estimatedDate = formData.estimatedDate;
         if (this.compareDate(new Date(), new Date(estimatedDate))) {
           this.$message.error('预计完成时间不能小于当前时间');
@@ -129,10 +151,23 @@
 
         this.$message.success('更新成功');
 
+      },
+      async onSynchronizeProgress() {
+        const url = this.apis().synchronizeProgress(this.slotData.code, this.slotData.targetPurchaseOrderCode);
+        const result = await this.$http.put(url, {});
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('同步成功');
+        this.fn.closeSlider();
       }
     },
     data() {
-      return {}
+      return {
+        synchronizeVisible:false,
+      }
     },
     created() {
     }
