@@ -223,8 +223,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                     break;
                   case 1:
                     return Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => MyCompanyContactFromPage(
-                          company: widget.factory, isEditing: true,)));
+                        builder: (context) =>
+                            MyCompanyContactFromPage(
+                              company: widget.factory, isEditing: true,)));
                     break;
                   case 2:
                     showDialog(
@@ -262,8 +263,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                     break;
                   default :
                     return Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => MyCompanyContactFromPage(
-                          company: widget.factory, isEditing: true,)));
+                        builder: (context) =>
+                            MyCompanyContactFromPage(
+                              company: widget.factory, isEditing: true,)));
                     break;
                 }
               }),
@@ -290,7 +292,8 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                     SliverToBoxAdapter(
                       child: Offstage(
                         offstage: widget.isFactoryDetail &&
-                            !widget.factory.profiles.map((profile) => profile
+                            !widget.factory.profiles.map((profile) =>
+                            profile
                                 .medias.length > 0).toList().contains(true),
                         child: InkWell(
                           onTap: () {

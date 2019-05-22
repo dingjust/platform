@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               outsideDismiss: false,
               dialogHeight: 180,
               isNeedConfirmButton: true,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
               },
             );
@@ -432,7 +432,7 @@ class _LoginPageState extends State<LoginPage> {
     return isExist;
   }
 
-  doLogin(UserBLoC bloc){
+  doLogin(UserBLoC bloc) {
 
   }
 

@@ -15,7 +15,8 @@ class MyCompanyTabbar extends StatefulWidget {
   int tabIndex;
   List<ApparelProductModel> products;
 
-  MyCompanyTabbar(this.factory, {this.isFactoryDetail, this.tabIndex = 0,this.products});
+  MyCompanyTabbar(this.factory,
+      {this.isFactoryDetail, this.tabIndex = 0, this.products});
 
   _MyCompanyTabbarState createState() => _MyCompanyTabbarState();
 }
@@ -75,7 +76,7 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
         labelColor: Colors.black,
         indicatorSize: TabBarIndicatorSize.label,
         indicatorPadding:
-            EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
+        EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
         tabs: _states.map((status) {
           return Tab(text: status.name);
         }).toList(),
@@ -105,7 +106,8 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactFromPage(
+              builder: (context) =>
+                  MyCompanyContactFromPage(
                     company: widget.factory,
                     isEditing: true,
                   ),
@@ -152,7 +154,7 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
   }
 
   //现款产品
-  Widget _buildCashProducts(){
+  Widget _buildCashProducts() {
     return NotificationListener(
       onNotification: (ScrollEndNotification notification) {
         if (notification.metrics.extentBefore == 0.0) {
@@ -162,7 +164,8 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
           ).dispatch(context);
         }
       },
-      child: MyCompanyCashProducts(widget.factory,widget.products,isScroll: true,),
+      child: MyCompanyCashProducts(
+        widget.factory, widget.products, isScroll: true,),
     );
   }
 

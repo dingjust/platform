@@ -17,7 +17,7 @@ class MyCompanyTabbarPage extends StatefulWidget {
   FactoryModel factory;
   bool isFactoryDetail;
 
-  MyCompanyTabbarPage(this.factory,{this.isFactoryDetail = false});
+  MyCompanyTabbarPage(this.factory, {this.isFactoryDetail = false});
 
   _MyCompanyTabbarPageState createState() => _MyCompanyTabbarPageState();
 }
@@ -49,65 +49,74 @@ class _MyCompanyTabbarPageState extends State<MyCompanyTabbarPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text('公司介绍'),
-        centerTitle: true,
-        elevation: 0.5,
-        actions: <Widget>[
-          Offstage(
-            offstage: widget.isFactoryDetail,
-            child: IconButton(icon: Text('编辑'), onPressed: (){
-              switch(_tabController.index){
-                case 0:
-                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryBaseFormPage(widget.factory)));
-                  break;
-                case 1:
-                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyContactFromPage(company:widget.factory,isEditing: true,)));
-                  break;
-                case 2:
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return CustomizeDialog(
-                          dialogType: DialogType.RESULT_DIALOG,
-                          failTips: '现款产品不可以编辑',
-                          callbackResult: false,
-                          confirmAction: (){
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      }
-                  );
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text('公司介绍'),
+          centerTitle: true,
+          elevation: 0.5,
+          actions: <Widget>[
+            Offstage(
+              offstage: widget.isFactoryDetail,
+              child: IconButton(icon: Text('编辑'), onPressed: () {
+                switch (_tabController.index) {
+                  case 0:
+                    return Navigator.push(context, MaterialPageRoute(
+                        builder: (context) =>
+                            MyFactoryBaseFormPage(widget.factory)));
+                    break;
+                  case 1:
+                    return Navigator.push(context, MaterialPageRoute(
+                        builder: (context) =>
+                            MyCompanyContactFromPage(
+                              company: widget.factory, isEditing: true,)));
+                    break;
+                  case 2:
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            failTips: '现款产品不可以编辑',
+                            callbackResult: false,
+                            confirmAction: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        }
+                    );
 //                  ShowDialogUtil.showSimapleDialog(context, '现款产品不可以编辑');
-                  break;
-                case 3:
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return CustomizeDialog(
-                          dialogType: DialogType.RESULT_DIALOG,
-                          failTips: '认证请移步`我的认证`进行认证',
-                          callbackResult: false,
-                          confirmAction: (){
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      }
-                  );
+                    break;
+                  case 3:
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            failTips: '认证请移步`我的认证`进行认证',
+                            callbackResult: false,
+                            confirmAction: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        }
+                    );
 //                  ShowDialogUtil.showSimapleDialog(context, '认证请移步`我的认证`进行认证');
-                  break;
-                default :
-                  return Navigator.push(context, MaterialPageRoute(builder: (context) => MyCompanyContactFromPage(company:widget.factory,isEditing: true,)));
-                  break;
-              }
-            }),
-          ),
-        ],
-      ),
-      body: MyCompanyTabbar(widget.factory,isFactoryDetail: widget.isFactoryDetail,)
+                    break;
+                  default :
+                    return Navigator.push(context, MaterialPageRoute(
+                        builder: (context) =>
+                            MyCompanyContactFromPage(
+                              company: widget.factory, isEditing: true,)));
+                    break;
+                }
+              }),
+            ),
+          ],
+        ),
+        body: MyCompanyTabbar(
+          widget.factory, isFactoryDetail: widget.isFactoryDetail,)
     );
   }
 
@@ -124,7 +133,8 @@ class _MyCompanyTabbarPageState extends State<MyCompanyTabbarPage>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactFromPage(
+              builder: (context) =>
+                  MyCompanyContactFromPage(
                     company: widget.factory,
                     isEditing: true,
                   ),
@@ -154,15 +164,15 @@ class _MyCompanyTabbarPageState extends State<MyCompanyTabbarPage>
     return FutureBuilder(
         future: UserBLoC.instance.currentUser.type == UserType.FACTORY
             ? ProductRepositoryImpl().list({
-                'approvalStatuses': ['approved'],
-              }, {
-                'size': 3
-              })
+          'approvalStatuses': ['approved'],
+        }, {
+          'size': 3
+        })
             : ProductRepositoryImpl().getProductsOfFactory({
-                'approvalStatuses': ['approved'],
-              }, {
-                'size': 3
-              }, widget.factory.uid),
+          'approvalStatuses': ['approved'],
+        }, {
+          'size': 3
+        }, widget.factory.uid),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Padding(
@@ -185,13 +195,15 @@ class _MyCompanyTabbarPageState extends State<MyCompanyTabbarPage>
                     // 加载条
                     showDialog(
                       context: context,
-                      builder: (context) => ProgressIndicatorFactory
-                          .buildDefaultProgressIndicator(),
+                      builder: (context) =>
+                          ProgressIndicatorFactory
+                              .buildDefaultProgressIndicator(),
                     );
                     Navigator.of(context).pop();
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => ProductsPage(
+                        builder: (context) =>
+                            ProductsPage(
                               factoryUid: widget.factory.uid,
                             ),
                       ),
@@ -234,7 +246,7 @@ class _MyCompanyTabbarPageState extends State<MyCompanyTabbarPage>
                     childAspectRatio: 2.5 / 5,
                     children: List.generate(
                       snapshot.data.content.length,
-                      (index) {
+                          (index) {
                         return ExistingProductItem(
                           snapshot.data.content[index],
                           isFactoryDetail: true,
@@ -268,7 +280,7 @@ class _MyCompanyTabbarPageState extends State<MyCompanyTabbarPage>
       child: ListTile(
         title: Text('注册时间'),
         trailing:
-            Text(DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''),
+        Text(DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''),
       ),
     );
   }

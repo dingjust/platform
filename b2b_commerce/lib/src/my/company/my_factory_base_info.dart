@@ -10,7 +10,7 @@ import 'package:widgets/widgets.dart';
 import '../my_factory.dart';
 
 class MyFactoryBaseInfo extends StatefulWidget {
-  MyFactoryBaseInfo(this.factory,{this.isScroll = false});
+  MyFactoryBaseInfo(this.factory, {this.isScroll = false});
 
   bool isScroll;
   final FactoryModel factory;
@@ -24,9 +24,9 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
 
   @override
   void initState() {
-    if(widget.isScroll){
+    if (widget.isScroll) {
       _physics = AlwaysScrollableScrollPhysics();
-    }else{
+    } else {
       _physics = NeverScrollableScrollPhysics();
     }
 
@@ -276,8 +276,9 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     Text(
-                      '${DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''}',
-                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                      '${DateFormatUtil.formatYMD(
+                          widget.factory.creationTime) ?? ''}',
+                      style: const TextStyle(fontSize: 16, color: Colors.grey,),
                     ),
                   ],
                 ),

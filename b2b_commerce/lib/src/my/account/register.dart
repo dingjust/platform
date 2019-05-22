@@ -383,7 +383,8 @@ class _RegisterPageState extends State<RegisterPage> {
             });
       } else {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => RegisterInfoPage(
+            builder: (context) =>
+                RegisterInfoPage(
                   phone: _phoneController.text,
                   password: _passwordController.text,
                 )));

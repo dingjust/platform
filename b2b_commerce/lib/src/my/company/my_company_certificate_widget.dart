@@ -13,7 +13,7 @@ class MyCompanyCertificateWidget extends StatefulWidget {
   MyCompanyCertificateWidget(
     this.company, {
     this.onlyRead = false,
-    this.isScroll = false,
+        this.isScroll = false,
   });
 
   MyCompanyCertificateWidgetState createState() =>
@@ -35,9 +35,9 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
 
   @override
   void initState() {
-    if(widget.isScroll){
+    if (widget.isScroll) {
       _physics = ClampingScrollPhysics();
-    }else{
+    } else {
       _physics = NeverScrollableScrollPhysics();
     }
     _nameController.text = widget.company.name;

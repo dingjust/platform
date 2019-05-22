@@ -5,23 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-class MyCompanyCashProducts extends StatefulWidget{
+class MyCompanyCashProducts extends StatefulWidget {
   FactoryModel factory;
   List<ProductModel> products;
   bool isScroll;
-  MyCompanyCashProducts(this.factory,this.products,{this.isScroll = false});
+
+  MyCompanyCashProducts(this.factory, this.products, {this.isScroll = false});
 
   _MyCompanyCashProductsState createState() => _MyCompanyCashProductsState();
 }
 
-class _MyCompanyCashProductsState extends State<MyCompanyCashProducts>{
+class _MyCompanyCashProductsState extends State<MyCompanyCashProducts> {
   ScrollPhysics _physics;
 
   @override
   void initState() {
-    if(widget.isScroll){
+    if (widget.isScroll) {
       _physics = AlwaysScrollableScrollPhysics();
-    }else{
+    } else {
       _physics = NeverScrollableScrollPhysics();
     }
     // TODO: implement initState
@@ -46,15 +47,17 @@ class _MyCompanyCashProductsState extends State<MyCompanyCashProducts>{
               // 加载条
               showDialog(
                 context: context,
-                builder: (context) => ProgressIndicatorFactory
-                    .buildDefaultProgressIndicator(),
+                builder: (context) =>
+                    ProgressIndicatorFactory
+                        .buildDefaultProgressIndicator(),
               );
               Navigator.of(context).pop();
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => ProductsPage(
-                    factoryUid: widget.factory.uid,
-                  ),
+                  builder: (context) =>
+                      ProductsPage(
+                        factoryUid: widget.factory.uid,
+                      ),
                 ),
               );
             },
