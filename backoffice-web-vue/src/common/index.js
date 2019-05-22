@@ -348,6 +348,9 @@ let TENANT_APIS = {
   getOperationCourse(id) {
     return '/b2b/guideline/'+id;
   },
+  synchronizeProgress(code,targetCode){
+    return '/b2b/orders/purchase/' + code + '/synchronizeProgress/'+targetCode;
+  }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
