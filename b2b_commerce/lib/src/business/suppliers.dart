@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -128,32 +129,7 @@ class SuppliersList extends StatelessWidget {
                         Container(
                           child: FlatButton(
                             onPressed: () async {
-                              List<CategoryModel> categories =
-                                  await ProductRepositoryImpl()
-                                      .majorCategories();
-                              List<LabelModel> labels =
-                                  await UserRepositoryImpl().labels();
-                              labels = labels
-                                  .where((label) =>
-                                      label.group == 'FACTORY' ||
-                                      label.group == 'PLATFORM')
-                                  .toList();
-                              if (categories != null && labels != null) {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                      builder: (context) => FactoryPage(
-                                            FactoryCondition(
-                                                starLevel: 0,
-                                                adeptAtCategories: [],
-                                                labels: [],
-                                                cooperationModes: []),
-                                            route: '全部工厂',
-                                            categories: categories,
-                                            labels: labels,
-                                          ),
-                                    ),
-                                    ModalRoute.withName('/'));
-                              }
+                              selectSuppliers(context);
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
@@ -161,7 +137,7 @@ class SuppliersList extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 vertical: 0, horizontal: 15),
                             child: Text(
-                              '查看工厂',
+                              '挑选合作商',
                               style: TextStyle(
                                   color: Color.fromRGBO(36, 38, 41, 1),
                                   fontSize: 16),
@@ -211,6 +187,54 @@ class SuppliersList extends StatelessWidget {
             ],
           ),
         ));
+  }
+
+  void _jumpToQualityFactory(BuildContext context) async {
+    List<CategoryModel> categories =
+    await ProductRepositoryImpl().majorCategories();
+    List<LabelModel> labels = await UserRepositoryImpl().labels();
+    List<LabelModel> conditionLabels =
+    labels.where((label) => label.name == '优选工厂').toList();
+    labels = labels
+        .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
+        .toList();
+    labels.add(LabelModel(name: '已认证', id: 1000000));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) =>
+            FactoryPage(
+              FactoryCondition(
+                  starLevel: 0,
+                  adeptAtCategories: [],
+                  labels: conditionLabels,
+                  cooperationModes: []),
+              route: '优选工厂',
+              categories: categories,
+              labels: labels,
+            ),
+      ),
+    );
+  }
+
+  void _jumpToRequirementPool(BuildContext context) async {
+    await ProductRepositoryImpl().majorCategories().then((categories) {
+      if (categories != null) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                RequirementPoolRecommend(
+                  categories: categories,
+                )));
+      }
+    });
+  }
+
+  void selectSuppliers(BuildContext context) {
+    //品牌跳转到优选工厂
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      _jumpToQualityFactory(context);
+    } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      _jumpToRequirementPool(context);
+    }
   }
 
   Container _buildBrandContainer(SuppliersBloc bloc) {
