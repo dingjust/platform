@@ -47,14 +47,20 @@ class B2BListTitle extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      suffix ?? Container(),
-                      Icon(
-                        Icons.chevron_right,
-                        color: Colors.grey,
-                      )
-                    ],
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: suffix ?? Container(),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Colors.grey,
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),

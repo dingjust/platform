@@ -25,7 +25,7 @@ class CompanyRegisterDTO {
 
   double latitude;
 
-  String localAddress;
+  String locationAddress;
 
   ///地址
   @JsonKey(toJson: _addressToJson)
@@ -39,7 +39,7 @@ class CompanyRegisterDTO {
       this.contactPhone,
         this.latitude,
         this.longitude,
-        this.localAddress,
+        this.locationAddress,
       this.contactAddress});
 
   static Map<String, dynamic> _addressToJson(AddressModel contactAddress) =>

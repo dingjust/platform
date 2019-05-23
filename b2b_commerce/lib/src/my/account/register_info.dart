@@ -35,7 +35,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
 
   double latitude;
 
-  String localAddress;
+  String locationAddress;
 
   @override
   void initState() {
@@ -221,8 +221,8 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                                     Expanded(
                                       flex: 1,
                                       child: Text(
-                                        localAddress != null
-                                            ? '${localAddress}'
+                                        locationAddress != null
+                                            ? '${locationAddress}'
                                             : '点击选择定位',
                                         style: TextStyle(
                                             color: Color.fromRGBO(
@@ -284,7 +284,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
       List<String> locationArray = tip.location.split(',');
       longitude = double.parse(locationArray[0]);
       latitude = double.parse(locationArray[1]);
-      localAddress = tip.address;
+      locationAddress = tip.address;
     });
   }
 
@@ -305,7 +305,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
       ..password = widget.password
       ..longitude = longitude
       ..latitude = latitude
-      ..localAddress = localAddress
+      ..locationAddress = locationAddress
       ..contactAddress = contactAddress;
 
     // 加载条

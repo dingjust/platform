@@ -78,6 +78,8 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
         suffix: Text(
           regionCityAndDistrict,
           style: TextStyle(fontSize: 16, color: Colors.grey),
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.right,
         ),
       ),
       B2BListTitle(
@@ -88,8 +90,11 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           style: TextStyle(fontSize: 16),
         ),
         suffix: Text(
-          '${widget.company.longitude},${widget.company.latitude}',
+          widget.company.locationAddress != null
+              ? '${widget.company.locationAddress}'
+              : '请选择定位',
           style: TextStyle(fontSize: 16, color: Colors.grey),
+          textAlign: TextAlign.right,
         ),
       ),
       TextFieldComponent(
@@ -153,7 +158,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
       List<String> locationArray = tip.location.split(',');
       widget.company.longitude = double.parse(locationArray[0]);
       widget.company.latitude = double.parse(locationArray[1]);
-      widget.company.localAddress = tip.address;
+      widget.company.locationAddress = tip.address;
     });
   }
 

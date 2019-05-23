@@ -42,7 +42,10 @@ class CompanyModel extends UserGroupModel {
   String describe;
 
   //注册时间
-  @JsonKey(name: "creationTime", fromJson: _dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
+  @JsonKey(
+      name: "creationTime",
+      fromJson: _dateTimefromMilliseconds,
+      toJson: _dateTimetoMilliseconds)
   DateTime creationTime;
 
   //开户税号
@@ -224,7 +227,7 @@ class B2BUnitModel extends OrgUnitModel {
 
   double latitude;
 
-  String localAddress;
+  String locationAddress;
 
   B2BUnitModel(
       {MediaModel profilePicture,
@@ -255,7 +258,7 @@ class B2BUnitModel extends OrgUnitModel {
       this.active,
       this.email,
       this.phone,
-        this.localAddress,
+        this.locationAddress,
       this.longitude,
       this.latitude})
       : super(
