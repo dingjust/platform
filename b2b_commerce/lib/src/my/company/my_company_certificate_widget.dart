@@ -8,12 +8,10 @@ import 'package:models/models.dart';
 class MyCompanyCertificateWidget extends StatefulWidget {
   CompanyModel company;
   bool onlyRead;
-  bool isScroll;
 
   MyCompanyCertificateWidget(
     this.company, {
     this.onlyRead = false,
-        this.isScroll = false,
   });
 
   MyCompanyCertificateWidgetState createState() =>
@@ -31,15 +29,9 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
   FocusNode _legalRepresentativeFocusNode = FocusNode();
   TextEditingController _certificateOfLegalController = TextEditingController();
   FocusNode _certificateOfLegalFocusNode = FocusNode();
-  ScrollPhysics _physics;
 
   @override
   void initState() {
-    if (widget.isScroll) {
-      _physics = ClampingScrollPhysics();
-    } else {
-      _physics = NeverScrollableScrollPhysics();
-    }
     _nameController.text = widget.company.name;
     _businessRegistrationNoController.text =
         widget.company.businessRegistrationNo;
@@ -53,9 +45,7 @@ class MyCompanyCertificateWidgetState extends State<MyCompanyCertificateWidget> 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      physics: _physics,
       children: <Widget>[
-        SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
         Column(
           children: <Widget>[
             Container(

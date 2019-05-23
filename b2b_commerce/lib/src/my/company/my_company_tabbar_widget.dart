@@ -15,8 +15,7 @@ class MyCompanyTabbar extends StatefulWidget {
   int tabIndex;
   List<ApparelProductModel> products;
 
-  MyCompanyTabbar(this.factory,
-      {this.isFactoryDetail, this.tabIndex = 0, this.products});
+  MyCompanyTabbar(this.factory, {this.isFactoryDetail, this.tabIndex = 0,this.products,});
 
   _MyCompanyTabbarState createState() => _MyCompanyTabbarState();
 }
@@ -30,20 +29,11 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
     EnumModel('d', '公司认证'),
   ];
   TabController _tabController;
-  bool _isScroll = true;
 
   @override
   void initState() {
     _tabController = TabController(
         vsync: this, length: _states.length, initialIndex: widget.tabIndex);
-//    _scrollController.addListener((){
-//      if(_scrollController.offset == 188){
-//        setState(() {
-//          _becomeTab = true;
-//        });
-//      }
-//      print(_scrollController.offset);
-//    });
     super.initState();
   }
 
@@ -76,7 +66,7 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
         labelColor: Colors.black,
         indicatorSize: TabBarIndicatorSize.label,
         indicatorPadding:
-        EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
+            EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
         tabs: _states.map((status) {
           return Tab(text: status.name);
         }).toList(),
@@ -106,8 +96,7 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  MyCompanyContactFromPage(
+              builder: (context) => MyCompanyContactFromPage(
                     company: widget.factory,
                     isEditing: true,
                   ),
@@ -120,74 +109,32 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
 
   //基本资料
   Widget _buildBaseInfo() {
-    return NotificationListener(
-      onNotification: (ScrollEndNotification notification) {
-        if (notification.metrics.extentBefore == 0.0) {
-          TopNotification(isToTop: true, index: 0).dispatch(context);
-        }
-      },
-      child: MyFactoryBaseInfo(
-        widget.factory,
-        isScroll: _isScroll,
-      ),
+    return MyFactoryBaseInfo(
+      widget.factory,
     );
   }
 
   Widget _buildContactWay() {
     return Container(
       color: Colors.white,
-      child: NotificationListener(
-        onNotification: (ScrollEndNotification notification) {
-          if (notification.metrics.extentBefore == 0.0) {
-            TopNotification(
-              isToTop: true,
-              index: 1,
-            ).dispatch(context);
-          }
-        },
-        child: MyCompanyContactFromWidgetPage(
-          company: widget.factory,
-          isScroll: _isScroll,
-        ),
+      child: MyCompanyContactFromWidgetPage(
+        company: widget.factory,
       ),
     );
   }
 
   //现款产品
-  Widget _buildCashProducts() {
-    return NotificationListener(
-      onNotification: (ScrollEndNotification notification) {
-        if (notification.metrics.extentBefore == 0.0) {
-          TopNotification(
-            isToTop: true,
-            index: 2,
-          ).dispatch(context);
-        }
-      },
-      child: MyCompanyCashProducts(
-        widget.factory, widget.products, isScroll: true,),
-    );
+  Widget _buildCashProducts(){
+    return MyCompanyCashProducts(widget.factory,);
   }
 
-  //图文详情
 
   Widget _buildCompanyCertificate() {
     return Container(
       color: Colors.white,
-      child: NotificationListener(
-        onNotification: (ScrollEndNotification notification) {
-          if (notification.metrics.extentBefore == 0.0) {
-            TopNotification(
-              isToTop: true,
-              index: 3,
-            ).dispatch(context);
-          }
-        },
-        child: MyCompanyCertificateWidget(
-          widget.factory,
-          onlyRead: true,
-          isScroll: _isScroll,
-        ),
+      child: MyCompanyCertificateWidget(
+        widget.factory,
+        onlyRead: true,
       ),
     );
   }

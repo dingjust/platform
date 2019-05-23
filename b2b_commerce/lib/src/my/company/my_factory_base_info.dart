@@ -10,9 +10,8 @@ import 'package:widgets/widgets.dart';
 import '../my_factory.dart';
 
 class MyFactoryBaseInfo extends StatefulWidget {
-  MyFactoryBaseInfo(this.factory, {this.isScroll = false});
+  MyFactoryBaseInfo(this.factory);
 
-  bool isScroll;
   final FactoryModel factory;
 
   @override
@@ -20,16 +19,9 @@ class MyFactoryBaseInfo extends StatefulWidget {
 }
 
 class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
-  ScrollPhysics _physics;
 
   @override
   void initState() {
-    if (widget.isScroll) {
-      _physics = AlwaysScrollableScrollPhysics();
-    } else {
-      _physics = NeverScrollableScrollPhysics();
-    }
-
     // TODO: implement initState
     super.initState();
   }
@@ -61,9 +53,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
       );
     });
     return ListView(
-      physics: _physics,
       children: <Widget>[
-        SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Column(
@@ -276,9 +266,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     Text(
-                      '${DateFormatUtil.formatYMD(
-                          widget.factory.creationTime) ?? ''}',
-                      style: const TextStyle(fontSize: 16, color: Colors.grey,),
+                      '${DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''}',
+                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
                     ),
                   ],
                 ),

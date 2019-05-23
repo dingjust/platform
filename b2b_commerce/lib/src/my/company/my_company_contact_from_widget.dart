@@ -13,8 +13,7 @@ class MyCompanyContactFromWidgetPage extends StatefulWidget{
   bool isEditing;
   bool isScroll;
 
-  MyCompanyContactFromWidgetPage(
-      {this.company, this.isEditing = false, this.isScroll = false});
+  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false,this.isScroll = false});
 
   _MyCompanyContactFromWidgetPageState createState() => _MyCompanyContactFromWidgetPageState();
 }
@@ -38,16 +37,9 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
   FocusNode QQFocusNode = FocusNode();
   FocusNode weCharFocusNode = FocusNode();
 
-  ScrollPhysics _physics;
-
   @override
   void initState() {
     super.initState();
-    if (widget.isScroll) {
-      _physics = AlwaysScrollableScrollPhysics();
-    } else {
-      _physics = NeverScrollableScrollPhysics();
-    }
     if(widget.company.contactAddress != null){
       addressModel = widget.company.contactAddress;
     }
@@ -56,9 +48,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
   @override
   Widget build(BuildContext context) {
     return ListView(
-      physics: _physics,
       children: <Widget>[
-        SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
         Column(
           children: <Widget>[
             _buildContactPerson(context),

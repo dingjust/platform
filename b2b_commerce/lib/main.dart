@@ -10,7 +10,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:amap_location/amap_location.dart';
 
 import 'src/business/orders/requirement_order_from.dart';
 import 'src/common/app_bloc.dart';
