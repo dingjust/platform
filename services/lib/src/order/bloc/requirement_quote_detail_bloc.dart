@@ -50,12 +50,14 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
     // TODO: 分页拿数据;
     Response<Map<String, dynamic>> response;
     try {
-      response = await http$.get(OrderApis.requirementOrderQuotes(code), data: {'page': currentPage, 'size': size});
+      response = await http$.get(OrderApis.requirementOrderQuotes(code),
+          data: {'page': currentPage, 'size': size});
     } on DioError catch (e) {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+      QuoteOrdersResponse ordersResponse =
+      QuoteOrdersResponse.fromJson(response.data);
       quotes = ordersResponse.content;
       totalPages = ordersResponse.totalPages;
       totalElements = ordersResponse.totalElements;
@@ -72,12 +74,14 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
     } else {
       Response<Map<String, dynamic>> response;
       try {
-        response = await http$.get(OrderApis.requirementOrderQuotes(code), data: {'page': ++currentPage, 'size': size});
+        response = await http$.get(OrderApis.requirementOrderQuotes(code),
+            data: {'page': ++currentPage, 'size': size});
       } on DioError catch (e) {
         print(e);
       }
       if (response != null && response.statusCode == 200) {
-        QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+        QuoteOrdersResponse ordersResponse =
+        QuoteOrdersResponse.fromJson(response.data);
         quotes.addAll(ordersResponse.content);
       }
       loadingController.sink.add(false);
@@ -93,18 +97,28 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
     // TODO: 分页拿数据;
     Response<Map<String, dynamic>> response;
     try {
-      response = await http$.get(OrderApis.requirementOrderQuotes(code), data: {'page': currentPage, 'size': size});
+      response = await http$.get(OrderApis.requirementOrderQuotes(code),
+          data: {'page': currentPage, 'size': size});
     } on DioError catch (e) {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+      QuoteOrdersResponse ordersResponse =
+      QuoteOrdersResponse.fromJson(response.data);
       quotes = ordersResponse.content;
       totalPages = ordersResponse.totalPages;
       totalElements = ordersResponse.totalElements;
     } else
       quotes = null;
     _controller.sink.add(this.quotesList);
+  }
+
+  void reset() {
+    quotes.clear();
+    currentPage = 0;
+    totalPages = 0;
+    size = 10;
+    totalElements = 0;
   }
 
   dispose() {

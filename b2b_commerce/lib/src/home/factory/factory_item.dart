@@ -126,10 +126,10 @@ class FactoryNameText extends StatelessWidget {
         model.distance == null ?
             Container():
         Expanded(
-          child:
+            child:
             Text(
                 '${model.name}', style: TextStyle(fontSize: 18))
-    ),
+        ),
         Text(
             '${(model.distance.toInt() / 1000).toStringAsFixed(1)}' + 'km',
             style: TextStyle(

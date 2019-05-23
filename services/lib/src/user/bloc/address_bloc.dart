@@ -73,6 +73,10 @@ class AddressBLoC extends BLoCBase {
 //    _controller.sink.add(addressResponse.content);
 //  }
 
+  void reset() {
+    addresses.clear();
+  }
+
   dispose() {
     _controller.close();
     _detailController.close();

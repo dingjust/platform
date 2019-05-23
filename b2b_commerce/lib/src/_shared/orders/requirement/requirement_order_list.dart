@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -89,6 +90,43 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
                   }
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
+                }
+                if (snapshot.data.length <= 0) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 200),
+                        child: Image.asset(
+                          'temp/logo2.png',
+                          package: 'assets',
+                          width: 80,
+                          height: 80,
+                        ),
+                      ),
+                      Container(
+                          child: Text(
+                            '没有相关订单数据',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          )),
+                      Container(
+                        child: FlatButton(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MyHelpPage()));
+                          },
+                          child: Text('如何发布需求？'),
+                        ),
+                      )
+                    ],
+                  );
                 }
                 if (snapshot.hasData) {
                   return Column(

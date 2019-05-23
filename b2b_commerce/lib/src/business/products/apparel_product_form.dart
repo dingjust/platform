@@ -78,7 +78,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 confirmButtonText: '退出',
                 cancelButtonText: '再看看',
                 dialogHeight: 180,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },

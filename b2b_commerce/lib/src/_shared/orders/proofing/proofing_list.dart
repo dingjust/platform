@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -137,10 +138,10 @@ class _ProofingListState extends State<ProofingList> {
   void _onProofingUpdating(ProofingModel model) async {
     //查询明细
     ProofingModel detailModel =
-        await ProofingOrderRepository().proofingDetail(model.code);
+    await ProofingOrderRepository().proofingDetail(model.code);
 
     QuoteModel quoteModel =
-        await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
+    await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
 
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -161,7 +162,7 @@ class _ProofingListState extends State<ProofingList> {
 
   void _onProofingConfirm(ProofingModel model) async {
     bool result =
-        await ProofingOrderRepository().proofingConfirm(model.code, model);
+    await ProofingOrderRepository().proofingConfirm(model.code, model);
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -239,11 +240,23 @@ class _ProofingListState extends State<ProofingList> {
                       ),
                       Container(
                           child: Text(
-                        '没有相关订单数据',
-                        style: TextStyle(
-                          color: Colors.grey,
+                            '没有相关订单数据',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          )),
+                      Container(
+                        child: FlatButton(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MyHelpPage()));
+                          },
+                          child: Text('如何创建订单？'),
                         ),
-                      )),
+                      )
                     ],
                   );
                 }

@@ -63,6 +63,7 @@ class SuppliersBloc extends BLoCBase {
       Response response = await http$.get(
         Apis.brandsSuppliers,
         data: {
+          'keyword':'',
           'page': brandsResponse.number + 1,
         },
       );
@@ -74,6 +75,11 @@ class SuppliersBloc extends BLoCBase {
     }
     loadingController.sink.add(false);
     _brandController.sink.add(this._brands);
+  }
+
+  void reset() {
+    _factories.clear();
+    _brands.clear();
   }
 
   dispose() {

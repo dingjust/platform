@@ -83,7 +83,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
         ),
         bottomNavigationBar: Container(
           margin: EdgeInsets.all(10),
-          padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           height: 50,
           child: RaisedButton(
               color: Color.fromRGBO(255, 214, 12, 1),
@@ -102,7 +102,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               }),
         ),
       ),
-      onWillPop: (){
+      onWillPop: () {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -115,7 +115,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                 confirmButtonText: '退出',
                 cancelButtonText: '再看看',
                 dialogHeight: 180,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
@@ -944,15 +944,13 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                 isNeedConfirmButton: true,
                 isNeedCancelButton: true,
                 dialogHeight: 200,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                   onSubmit(purchaseOrder);
                 },
               );
             }
         );
-
-
       }
     } catch (e) {
       print(e);
@@ -972,9 +970,9 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             entrance: 'createPurchaseOrder',
           );
         }
-    ).then((value){
+    ).then((value) {
       bool result = false;
-      if(value!=null){
+      if (value != null) {
         result = true;
       }
       showDialog(
@@ -986,14 +984,13 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               failTips: '创建生产订单失败',
               successTips: '创建生产订单成功',
               callbackResult: result,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
                 getPurchaseOrderDetail(value);
               },
             );
           }
       );
-
     });
   }
 

@@ -366,29 +366,43 @@ class _RegisterPageState extends State<RegisterPage> {
     bool result = await UserRepositoryImpl()
         .validateCaptcha(_phoneController.text, _captchaController.text);
     if (result) {
-      //TODOS验证验证码
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => RegisterInfoPage(
-                phone: _phoneController.text,
-                password: _passwordController.text,
-              )));
+      //验证密码
+      if (!RegexUtil.password(_passwordController.text)) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '密码限定数字加字母，6-20位',
+                callbackResult: false,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            });
+      } else {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                RegisterInfoPage(
+                  phone: _phoneController.text,
+                  password: _passwordController.text,
+                )));
+      }
     } else {
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) {
             return CustomizeDialog(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText2: '验证不正确',
-              outsideDismiss: false,
-              dialogHeight: 180,
-              isNeedConfirmButton: true,
-              confirmAction: (){
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '验证不正确',
+              callbackResult: false,
+              confirmAction: () {
                 Navigator.of(context).pop();
               },
             );
-          }
-      );
+          });
 //      (_scaffoldKey.currentState)
 //          .showSnackBar(SnackBar(content: Text('验证不正确')));
     }

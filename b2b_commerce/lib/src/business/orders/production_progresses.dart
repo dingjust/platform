@@ -504,7 +504,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   void submit(ProductionProgressModel model) {
     model.updateOnly = false;
-     showDialog(
+    showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
