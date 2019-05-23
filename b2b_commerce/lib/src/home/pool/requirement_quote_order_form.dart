@@ -82,15 +82,15 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
         ),
         body: Container(
             child: ListView(
-          children: <Widget>[
-            _buildRequirementInfo(),
-            _buildQuoteInfo(),
-            _buildProofingInfo(),
-            _buildConfirmationDeliveryDate(),
-            _buildAccessory(),
-            _buildRemarks()
-          ],
-        )),
+              children: <Widget>[
+                _buildRequirementInfo(),
+                _buildQuoteInfo(),
+                _buildProofingInfo(),
+                _buildConfirmationDeliveryDate(),
+                _buildAccessory(),
+                _buildRemarks()
+              ],
+            )),
         bottomNavigationBar: Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -110,20 +110,20 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
           ),
         ),
       ),
-      onWillPop: (){
+      onWillPop: () {
         showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) {
               return CustomizeDialog(
                 dialogType: DialogType.CONFIRM_DIALOG,
-                contentText2: '正在创建订单，是否确认退出',
+                contentText2: '正在创建报价单，是否确认退出',
                 isNeedConfirmButton: true,
                 isNeedCancelButton: true,
                 confirmButtonText: '退出',
                 cancelButtonText: '再看看',
                 dialogHeight: 180,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },

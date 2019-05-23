@@ -29,13 +29,20 @@ class PurchaseOrderBLoC extends BLoCBase {
   }
 
   static final Map<String, PageEntry> _ordersMap = {
-    'ALL': PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
-    'PENDING_PAYMENT': PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
-    'IN_PRODUCTION': PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
-    'WAIT_FOR_OUT_OF_STORE': PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
-    'OUT_OF_STORE': PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
-    'COMPLETED': PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
-    'CANCELLED': PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    'ALL':
+    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    'PENDING_PAYMENT':
+    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    'IN_PRODUCTION':
+    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    'WAIT_FOR_OUT_OF_STORE':
+    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    'OUT_OF_STORE':
+    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    'COMPLETED':
+    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    'CANCELLED':
+    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
   };
 
   List<PurchaseOrderModel> orders(String status) => _ordersMap[status].data;
@@ -66,13 +73,18 @@ class PurchaseOrderBLoC extends BLoCBase {
 
       try {
         response = await http$.post(OrderApis.purchaseOrders,
-            data: data, queryParameters: {'page': _ordersMap[status].currentPage, 'size': _ordersMap[status].size});
+            data: data,
+            queryParameters: {
+              'page': _ordersMap[status].currentPage,
+              'size': _ordersMap[status].size
+            });
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response.data);
+        PurchaseOrdersResponse ordersResponse =
+        PurchaseOrdersResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
         _ordersMap[status].totalElements = ordersResponse.totalElements;
         _ordersMap[status].data.clear();
@@ -97,13 +109,18 @@ class PurchaseOrderBLoC extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(OrderApis.purchaseOrders,
-            data: data, queryParameters: {'page': ++_ordersMap[status].currentPage, 'size': _ordersMap[status].size});
+            data: data,
+            queryParameters: {
+              'page': ++_ordersMap[status].currentPage,
+              'size': _ordersMap[status].size
+            });
       } on DioError catch (e) {
         print(e);
       }
 
       if (response.statusCode == 200) {
-        PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response.data);
+        PurchaseOrdersResponse ordersResponse =
+        PurchaseOrdersResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
         _ordersMap[status].totalElements = ordersResponse.totalElements;
         _ordersMap[status].data.addAll(ordersResponse.content);
@@ -116,7 +133,8 @@ class PurchaseOrderBLoC extends BLoCBase {
 
   // 获取订单明细
   Future<PurchaseOrderModel> getPurchaseOrderDetail(String code) async {
-    Response<Map<String, dynamic>> response = await http$.get(OrderApis.purchaseOrderDetail(code));
+    Response<Map<String, dynamic>> response =
+    await http$.get(OrderApis.purchaseOrderDetail(code));
 
     if (response.statusCode == 200) {
       PurchaseOrderModel model = PurchaseOrderModel.fromJson(response.data);
@@ -138,11 +156,15 @@ class PurchaseOrderBLoC extends BLoCBase {
         'statuses': [status]
       };
     }
-    Response<Map<String, dynamic>> response = await http$.post(OrderApis.purchaseOrders,
-        data: data, queryParameters: {'page': _ordersMap[status].currentPage, 'size': _ordersMap[status].size});
+    Response<Map<String, dynamic>> response = await http$
+        .post(OrderApis.purchaseOrders, data: data, queryParameters: {
+      'page': _ordersMap[status].currentPage,
+      'size': _ordersMap[status].size
+    });
 
     if (response.statusCode == 200) {
-      PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response.data);
+      PurchaseOrdersResponse ordersResponse =
+      PurchaseOrdersResponse.fromJson(response.data);
       _ordersMap[status].totalPages = ordersResponse.totalPages;
       _ordersMap[status].totalElements = ordersResponse.totalElements;
       _ordersMap[status].data.addAll(ordersResponse.content);
@@ -151,14 +173,16 @@ class PurchaseOrderBLoC extends BLoCBase {
   }
 
   //获取供应商的相关全部生产单
-  getPurchaseDataByCompany(String companyUid)async{
+  getPurchaseDataByCompany(String companyUid) async {
     purchaseOrderModels.clear();
     if (!lock) {
       lock = true;
-      if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
-        purchaseOrdersResponse = await PurchaseOrderRepository().getPurchaseOrdersByFactory(companyUid, {});
-      }else if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-        purchaseOrdersResponse = await PurchaseOrderRepository().getPurchaseOrdersByBrand(companyUid, {});
+      if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+        purchaseOrdersResponse = await PurchaseOrderRepository()
+            .getPurchaseOrdersByFactory(companyUid, {});
+      } else if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+        purchaseOrdersResponse = await PurchaseOrderRepository()
+            .getPurchaseOrdersByBrand(companyUid, {});
       }
       purchaseOrderModels.addAll(purchaseOrdersResponse.content);
       _controller.sink.add(purchaseOrderModels);
@@ -167,21 +191,22 @@ class PurchaseOrderBLoC extends BLoCBase {
   }
 
   //获取供应商的相关全部生产单
-  lodingMoreByCompany(String companyUid)async{
+  lodingMoreByCompany(String companyUid) async {
     if (!lock) {
       lock = true;
-      if(purchaseOrdersResponse.number < purchaseOrdersResponse.totalPages - 1){
-        if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
-          purchaseOrdersResponse = await PurchaseOrderRepository().getPurchaseOrdersByFactory(companyUid, {
-            'page':purchaseOrdersResponse.number + 1
-          });
-        }else if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-          purchaseOrdersResponse = await PurchaseOrderRepository().getPurchaseOrdersByBrand(companyUid, {
-            'page':purchaseOrdersResponse.number + 1
-          });
+      if (purchaseOrdersResponse.number <
+          purchaseOrdersResponse.totalPages - 1) {
+        if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+          purchaseOrdersResponse = await PurchaseOrderRepository()
+              .getPurchaseOrdersByFactory(
+              companyUid, {'page': purchaseOrdersResponse.number + 1});
+        } else if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+          purchaseOrdersResponse = await PurchaseOrderRepository()
+              .getPurchaseOrdersByBrand(
+              companyUid, {'page': purchaseOrdersResponse.number + 1});
         }
         purchaseOrderModels.addAll(purchaseOrdersResponse.content);
-      }else{
+      } else {
         bottomController.sink.add(true);
       }
 
@@ -190,6 +215,14 @@ class PurchaseOrderBLoC extends BLoCBase {
       _controller.sink.add(purchaseOrderModels);
       lock = false;
     }
+  }
+
+  ///重置数据
+  void reset() {
+    _ordersMap.forEach((statu, entry) {
+      entry.data.clear();
+      entry.currentPage = 0;
+    });
   }
 
   dispose() {

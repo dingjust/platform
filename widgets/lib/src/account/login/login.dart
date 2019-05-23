@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               outsideDismiss: false,
               dialogHeight: 180,
               isNeedConfirmButton: true,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
               },
             );
@@ -192,7 +192,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Row(
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.close,color: Colors.grey,),
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.grey,
+                  ),
                   onPressed: () {
                     _phoneController.clear();
                   },
@@ -429,7 +432,7 @@ class _LoginPageState extends State<LoginPage> {
     return isExist;
   }
 
-  doLogin(UserBLoC bloc){
+  doLogin(UserBLoC bloc) {
 
   }
 
@@ -547,7 +550,14 @@ class InputRow extends StatelessWidget {
 
   final Widget surfix;
 
-  const InputRow({Key key, this.label, this.field, this.surfix, this.leading})
+  final bool isRequired;
+
+  const InputRow({Key key,
+    this.label,
+    this.field,
+    this.surfix,
+    this.leading,
+    this.isRequired = false})
       : super(key: key);
 
   @override
@@ -564,7 +574,6 @@ class InputRow extends StatelessWidget {
           label != null
               ? Container(
                   width: 100,
-                  margin: EdgeInsets.only(right: 20),
                   child: Text(
                     label,
                     style: TextStyle(
@@ -572,6 +581,17 @@ class InputRow extends StatelessWidget {
                   ),
                 )
               : Container(),
+          isRequired
+              ? Container(
+            margin: EdgeInsets.only(right: 10),
+            child: Text(
+              '*',
+              style: TextStyle(color: Colors.red, fontSize: 20),
+            ),
+          )
+              : Container(
+            margin: EdgeInsets.only(right: 20),
+          ),
           leading != null ? leading : Container(),
           Expanded(
             flex: 1,

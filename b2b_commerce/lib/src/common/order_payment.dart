@@ -559,7 +559,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               onPressed: () async {
                 ///打样订单
                 if (widget.order is ProofingModel) {
-                  ProofingOrdersBLoC.instance.clean();
+                  //刷新数据
+                  ProofingOrdersBLoC.instance.reset();
 
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(

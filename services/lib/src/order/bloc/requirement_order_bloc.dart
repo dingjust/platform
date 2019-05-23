@@ -26,10 +26,14 @@ class RequirementOrderBLoC extends BLoCBase {
   }
 
   static final Map<String, PageEntry> _ordersMap = {
-    'ALL': PageEntry(currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
-    'PENDING_QUOTE': PageEntry(currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
-    'COMPLETED': PageEntry(currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
-    'CANCELLED': PageEntry(currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
+    'ALL': PageEntry(
+        currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
+    'PENDING_QUOTE': PageEntry(
+        currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
+    'COMPLETED': PageEntry(
+        currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
+    'CANCELLED': PageEntry(
+        currentPage: 0, size: 10, data: List<RequirementOrderModel>()),
   };
 
   List<RequirementOrderModel> orders(String status) => _ordersMap[status].data;
@@ -57,13 +61,18 @@ class RequirementOrderBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.requirementOrders,
-              data: data, queryParameters: {'page': _ordersMap[status].currentPage, 'size': _ordersMap[status].size});
+              data: data,
+              queryParameters: {
+                'page': _ordersMap[status].currentPage,
+                'size': _ordersMap[status].size
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
+          RequirementOrdersResponse ordersResponse =
+          RequirementOrdersResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
           _ordersMap[status].data.clear();
@@ -76,26 +85,31 @@ class RequirementOrderBLoC extends BLoCBase {
   }
 
   filterByKeyword(String keyword) async {
-        //请求参数
-        Map data = {
-          'code': keyword,
-        };
-        Response<Map<String, dynamic>> response;
-        try {
-          response = await http$.post(OrderApis.requirementOrders,
-              data: data, queryParameters: {'page': _ordersMap['ALL'].currentPage, 'size': _ordersMap['ALL'].size});
-        } on DioError catch (e) {
-          print(e);
-        }
+    //请求参数
+    Map data = {
+      'code': keyword,
+    };
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.post(OrderApis.requirementOrders,
+          data: data,
+          queryParameters: {
+            'page': _ordersMap['ALL'].currentPage,
+            'size': _ordersMap['ALL'].size
+          });
+    } on DioError catch (e) {
+      print(e);
+    }
 
-        if (response != null && response.statusCode == 200) {
-          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
-          _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
-          _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
-          _ordersMap['ALL'].data.clear();
-          _ordersMap['ALL'].data.addAll(ordersResponse.content);
-        }
-      _controller.sink.add(_ordersMap['ALL'].data);
+    if (response != null && response.statusCode == 200) {
+      RequirementOrdersResponse ordersResponse =
+      RequirementOrdersResponse.fromJson(response.data);
+      _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
+      _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
+      _ordersMap['ALL'].data.clear();
+      _ordersMap['ALL'].data.addAll(ordersResponse.content);
+    }
+    _controller.sink.add(_ordersMap['ALL'].data);
   }
 
   loadingMoreByStatuses(String status) async {
@@ -115,13 +129,18 @@ class RequirementOrderBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.requirementOrders,
-              data: data, queryParameters: {'page': ++_ordersMap[status].currentPage, 'size': _ordersMap[status].size});
+              data: data,
+              queryParameters: {
+                'page': ++_ordersMap[status].currentPage,
+                'size': _ordersMap[status].size
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
+          RequirementOrdersResponse ordersResponse =
+          RequirementOrdersResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
           _ordersMap[status].data.addAll(ordersResponse.content);
@@ -134,26 +153,31 @@ class RequirementOrderBLoC extends BLoCBase {
   }
 
   loadingMoreByKeyword(String keyword) async {
-      //数据到底
-      Map data = {
-        'code': keyword,
-      };
-        Response<Map<String, dynamic>> response;
-        try {
-          response = await http$.post(OrderApis.requirementOrders,
-              data: data, queryParameters: {'page': ++_ordersMap['ALL'].currentPage, 'size': _ordersMap['ALL'].size});
-        } on DioError catch (e) {
-          print(e);
-        }
+    //数据到底
+    Map data = {
+      'code': keyword,
+    };
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.post(OrderApis.requirementOrders,
+          data: data,
+          queryParameters: {
+            'page': ++_ordersMap['ALL'].currentPage,
+            'size': _ordersMap['ALL'].size
+          });
+    } on DioError catch (e) {
+      print(e);
+    }
 
-        if (response != null && response.statusCode == 200) {
-          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
-          _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
-          _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
-          _ordersMap['ALL'].data.addAll(ordersResponse.content);
-        }
-      loadingController.sink.add(false);
-      _controller.sink.add(_ordersMap['ALL'].data);
+    if (response != null && response.statusCode == 200) {
+      RequirementOrdersResponse ordersResponse =
+      RequirementOrdersResponse.fromJson(response.data);
+      _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
+      _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
+      _ordersMap['ALL'].data.addAll(ordersResponse.content);
+    }
+    loadingController.sink.add(false);
+    _controller.sink.add(_ordersMap['ALL'].data);
   }
 
   //下拉刷新
@@ -166,7 +190,13 @@ class RequirementOrderBLoC extends BLoCBase {
     }
   }
 
-  //页面控制
+  ///重置数据
+  void reset() {
+    _ordersMap.forEach((statu, entry) {
+      entry.data.clear();
+      entry.currentPage = 0;
+    });
+  }
 
   dispose() {
     _controller.close();

@@ -108,7 +108,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               onPressed: widget.update ? onUpdate : onCreate,
             ),
           )),
-      onWillPop: (){
+      onWillPop: () {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -121,7 +121,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 confirmButtonText: '退出',
                 cancelButtonText: '再看看',
                 dialogHeight: 180,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },

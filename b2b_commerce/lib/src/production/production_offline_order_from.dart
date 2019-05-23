@@ -83,27 +83,27 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     return WillPopScope(
       child: Scaffold(
         backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: Text('创建线下订单'),
-            elevation: 0.5,
-            brightness: Brightness.light,
-            centerTitle: true,
-          ),
-          body: Container(
-              child: ListView(
-                children: <Widget>[
-                  _buildCenter(context),
-                  Divider(
-                    height: 0,
-                  ),
-                  _buildBottom(context),
+        appBar: AppBar(
+          title: Text('创建线下订单'),
+          elevation: 0.5,
+          brightness: Brightness.light,
+          centerTitle: true,
+        ),
+        body: Container(
+            child: ListView(
+              children: <Widget>[
+                _buildCenter(context),
+                Divider(
+                  height: 0,
+                ),
+                _buildBottom(context),
 //                _buildCommitButton(context),
-                ],
-              )
-          ),
+              ],
+            )
+        ),
         bottomNavigationBar: Container(
           margin: EdgeInsets.all(10),
-          padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           height: 50,
           child: RaisedButton(
               color: Color.fromRGBO(255, 214, 12, 1),
@@ -122,26 +122,26 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               }),
         ),
       ),
-      onWillPop: (){
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return CustomizeDialog(
-                  dialogType: DialogType.CONFIRM_DIALOG,
-                  contentText2: '正在创建订单，是否确认退出',
-                  isNeedConfirmButton: true,
-                  isNeedCancelButton: true,
-                  confirmButtonText: '退出',
-                  cancelButtonText: '再看看',
-                  dialogHeight: 180,
-                  confirmAction: (){
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                );
-              }
-          );
+      onWillPop: () {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '正在创建订单，是否确认退出',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '退出',
+                cancelButtonText: '再看看',
+                dialogHeight: 180,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
       },
     );
   }
@@ -1021,40 +1021,39 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             builder: (_) {
               return CustomizeDialog(
                 dialogType: DialogType.CONFIRM_DIALOG,
-                contentText2: '确定要保存线下订单吗？',
+                contentText2: '确定要创建线下订单吗？',
                 outsideDismiss: false,
                 dialogHeight: 180,
                 isNeedConfirmButton: true,
                 isNeedCancelButton: true,
-                confirmAction: (){
+                confirmAction: () {
                   doSave(purchaseOrder);
                 },
               );
             }
         );
-
       }
-
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
-  doSave(PurchaseOrderModel purchaseOrder){
+  doSave(PurchaseOrderModel purchaseOrder) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder),
+            requestCallBack: PurchaseOrderRepository().offlinePurchaseOrder(
+                purchaseOrder),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: 'createPurchaseOrder',
           );
         }
-    ).then((value){
+    ).then((value) {
       bool result = false;
-      if(value!=null){
+      if (value != null) {
         result = true;
       }
       showDialog(
@@ -1066,14 +1065,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
               failTips: '创建线下单失败',
               successTips: '创建线下单成功',
               callbackResult: result,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
                 getPurchaseOrderDetail(value);
               },
             );
           }
       );
-
     });
   }
 

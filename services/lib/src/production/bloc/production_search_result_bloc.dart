@@ -51,7 +51,8 @@ class ProductionSearchResultBLoC extends BLoCBase {
       }
 
       if (response != null && response.statusCode == 200) {
-        PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response.data);
+        PurchaseOrdersResponse ordersResponse =
+        PurchaseOrdersResponse.fromJson(response.data);
         _purchaseOrders.clear();
         _purchaseOrders.addAll(ordersResponse.content);
       }
@@ -74,7 +75,8 @@ class ProductionSearchResultBLoC extends BLoCBase {
     }
 
     if (response != null && response.statusCode == 200) {
-      PurchaseOrdersResponse ordersResponse = PurchaseOrdersResponse.fromJson(response.data);
+      PurchaseOrdersResponse ordersResponse =
+      PurchaseOrdersResponse.fromJson(response.data);
       _purchaseOrders.clear();
       _purchaseOrders.addAll(ordersResponse.content);
     }
@@ -85,6 +87,10 @@ class ProductionSearchResultBLoC extends BLoCBase {
     //清空
     _purchaseOrders.clear();
     _controller.sink.add(null);
+  }
+
+  void reset() {
+    _purchaseOrders.clear();
   }
 
   dispose() {

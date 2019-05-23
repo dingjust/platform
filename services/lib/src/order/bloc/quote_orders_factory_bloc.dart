@@ -29,9 +29,12 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   static final Map<String, PageEntry> _quotesMap = {
     'ALL': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
-    'SELLER_SUBMITTED': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
-    'BUYER_APPROVED': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
-    'BUYER_REJECTED': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+    'SELLER_SUBMITTED':
+    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+    'BUYER_APPROVED':
+    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+    'BUYER_REJECTED':
+    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
   };
 
   List<QuoteModel> quotes(String status) => _quotesMap[status].data;
@@ -56,13 +59,18 @@ class QuoteOrdersBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.quotes,
-              data: data, queryParameters: {'page': _quotesMap[status].currentPage, 'size': _quotesMap[status].size});
+              data: data,
+              queryParameters: {
+                'page': _quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+          QuoteOrdersResponse ordersResponse =
+          QuoteOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.clear();
@@ -91,13 +99,18 @@ class QuoteOrdersBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.quotes,
-              data: data, queryParameters: {'page': ++_quotesMap[status].currentPage, 'size': _quotesMap[status].size});
+              data: data,
+              queryParameters: {
+                'page': ++_quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+          QuoteOrdersResponse ordersResponse =
+          QuoteOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.addAll(ordersResponse.content);
@@ -110,11 +123,12 @@ class QuoteOrdersBLoC extends BLoCBase {
   }
 
   //获取供应商的相关全部报价
-  getData(String factoryUid)async{
+  getData(String factoryUid) async {
     if (!lock) {
       lock = true;
       //获取与该工厂全部的报价单
-      QuoteOrdersResponse quoteResponse = await QuoteOrderRepository().getQuotesByFactory(factoryUid, {});
+      QuoteOrdersResponse quoteResponse =
+      await QuoteOrderRepository().getQuotesByFactory(factoryUid, {});
       _controller.sink.add(quoteResponse.content);
       lock = false;
     }
@@ -125,6 +139,14 @@ class QuoteOrdersBLoC extends BLoCBase {
     _quotesMap[status].data.clear();
     _quotesMap[status].currentPage = 0;
     await filterByStatuses(status);
+  }
+
+  ///重置数据
+  void reset() {
+    _quotesMap.forEach((statu, entry) {
+      entry.data.clear();
+      entry.currentPage = 0;
+    });
   }
 
   dispose() {

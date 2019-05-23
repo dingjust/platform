@@ -64,6 +64,9 @@ class MyHelpBLoC extends BLoCBase {
     }
   }
 
+  void reset() {
+    _guideLines.clear();
+  }
   // //下拉刷新
   // refreshData(String status) async {
   //   if (!lock) {

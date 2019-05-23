@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -74,76 +75,66 @@ class _QuoteListState extends State<QuoteList> {
   }
 
   void _onQuoteRejecting(QuoteModel model) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('请输入拒绝原因?'),
-          content: TextField(
-            controller: widget.rejectController,
-            autofocus: true,
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child:
-                  const Text('取消', style: const TextStyle(color: Colors.grey)),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            FlatButton(
-              child: Text('确定', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                int statusCode = await QuoteOrderRepository().quoteReject(
-                  model.code,
-                  widget.rejectController.text,
-                );
-                Navigator.of(context).pop();
-                if (statusCode == 200) {
-                  // 触发刷新
-                  _handleRefresh();
-                } else {
-                  _alertMessage('拒绝失败');
-                }
-              },
-            ),
-          ],
-        );
-      },
+    TextEditingController inputController = TextEditingController();
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.INPUTS_DIALOG,
+            inputController1: inputController,
+            title: '填写拒绝原因',
+            focusNode1: FocusNode(),
+          );
+        }).then((value) {
+      if (value != null && value != '') {
+        rejectQuote(model, value);
+      }
+    });
+  }
+
+  rejectQuote(QuoteModel model, String rejectText) async {
+    int statusCode = await QuoteOrderRepository().quoteReject(
+      model.code,
+      rejectText,
     );
+    if (statusCode == 200) {
+      // 触发刷新
+      _handleRefresh();
+    } else {
+      _alertMessage('拒绝失败');
+    }
   }
 
   void _onQuoteConfirming(QuoteModel model) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('是否确认?'),
-          actions: <Widget>[
-            FlatButton(
-              child:
-                  const Text('否', style: const TextStyle(color: Colors.grey)),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            FlatButton(
-              child:
-                  const Text('是', style: const TextStyle(color: Colors.black)),
-              onPressed: () async {
-                int statusCode =
-                    await QuoteOrderRepository().quoteApprove(model.code);
-                Navigator.of(context).pop();
-                if (statusCode == 200) {
-                  // 触发刷新
-                  _handleRefresh();
-                } else {
-                  _alertMessage('确认失败');
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '是否确认该工厂报价?',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            dialogHeight: 180,
+            confirmAction: () {
+              Navigator.of(context).pop();
+              confirmFactory(model);
+            },
+          );
+        });
+  }
+
+  confirmFactory(QuoteModel model) async {
+    int statusCode = await QuoteOrderRepository().quoteApprove(model.code);
+    if (statusCode == 200) {
+      //触发刷新
+      _handleRefresh();
+    } else {
+      _alertMessage('确认失败');
+    }
   }
 
   void _onQuoteUpdating(QuoteModel model) async {
@@ -151,10 +142,10 @@ class _QuoteListState extends State<QuoteList> {
     bool success = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RequirementQuoteOrderForm(
-              model: model.requirementOrder,
-              quoteModel: model,
-              update: true,
-            ),
+          model: model.requirementOrder,
+          quoteModel: model,
+          update: true,
+        ),
       ),
     );
 
@@ -167,7 +158,7 @@ class _QuoteListState extends State<QuoteList> {
   void _onProofingCreating(QuoteModel model) async {
     //查询明细
     QuoteModel detailModel =
-        await QuoteOrderRepository().getQuoteDetails(model.code);
+    await QuoteOrderRepository().getQuoteDetails(model.code);
 
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -206,14 +197,18 @@ class _QuoteListState extends State<QuoteList> {
 
   void _alertMessage(String message) {
     showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[Text(message)],
-            ),
-          ),
-    );
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            confirmAction: () {
+              Navigator.of(context).pop();
+            },
+          );
+        });
   }
 
   @override
@@ -264,11 +259,23 @@ class _QuoteListState extends State<QuoteList> {
                       ),
                       Container(
                           child: Text(
-                        '没有相关订单数据',
-                        style: TextStyle(
-                          color: Colors.grey,
+                            '没有相关订单数据',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          )),
+                      Container(
+                        child: FlatButton(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MyHelpPage()));
+                          },
+                          child: Text('如何获取报价？'),
                         ),
-                      )),
+                      )
                     ],
                   );
                 }

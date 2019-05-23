@@ -62,7 +62,8 @@ class UserBLoC extends BLoCBase {
 
   Stream<bool> get loginJumpStream => loginJumpController.stream;
 
-  Future<LoginResult> login({String username, String password, bool remember}) async {
+  Future<LoginResult> login(
+      {String username, String password, bool remember}) async {
     Response loginResponse;
     try {
       //校验账号存在
@@ -215,6 +216,8 @@ class UserBLoC extends BLoCBase {
     LocalStorage.remove(GlobalConfigs.REFRESH_TOKEN_KEY);
     // 清除授权
     http$.removeAuthorization();
+    //所有Bloc重置
+    BLocBus.systemBlocReset();
     _controller.sink.add(_user);
   }
 
@@ -292,7 +295,7 @@ class UserBLoC extends BLoCBase {
   }
 }
 
-enum LoginResult{
+enum LoginResult {
   ///登录成功
   SUCCESS,
 

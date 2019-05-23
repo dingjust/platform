@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
+import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:b2b_commerce/src/production/production.dart';
 import 'package:b2b_commerce/src/production/production_filter.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
@@ -77,9 +78,7 @@ class _ProductionPageState extends State<ProductionPage> {
                 child: ProductionFilterPage(
                   bloc: ProductionBLoC.instance,
                 ),
-                onTap: (){
-
-                },
+                onTap: () {},
               ),
             ),
             body: ProductionListView(),
@@ -211,12 +210,20 @@ class ProductionListView extends StatelessWidget {
                               height: 80,
                             ),
                           ),
+                          Container(child: Text('您尚无在生产中的订单')),
+                          Container(child: Text('点击右下角添加订单')),
                           Container(
-                              child: Text('您尚无在生产中的订单')
-                          ),
-                          Container(
-                              child: Text('点击右下角添加订单')
-                          ),
+                            child: FlatButton(
+                              color: Color.fromRGBO(255, 214, 12, 1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => MyHelpPage()));
+                              },
+                              child: Text('如何创建订单？'),
+                            ),
+                          )
                         ],
                       );
                     }
