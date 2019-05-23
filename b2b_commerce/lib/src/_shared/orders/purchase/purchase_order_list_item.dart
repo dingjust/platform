@@ -116,7 +116,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       ],
                     )
                   : Container(
-                      child: widget.order.delayed
+                      child: widget.order.delayedDays != null && widget.order.delayedDays > 0
                           ? Text('已延期',
                               textAlign: TextAlign.start,
                               style: const TextStyle(
