@@ -461,10 +461,8 @@ class _FactoryPageState extends State<FactoryPage> {
       List<String> locationArray = tip.location.split(',');
       addressLine = tip.name;
 
-      factoryCondition = FactoryCondition(
-          longitude: double.parse(locationArray[0]),
-          latitude: double.parse(locationArray[1]),
-      );
+      factoryCondition.longitude = double.parse(locationArray[0]);
+      factoryCondition.latitude = double.parse(locationArray[1]);
 
       FactoryBLoC.instance.filterByCondition(
         factoryCondition,
