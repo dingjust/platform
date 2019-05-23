@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
             return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
               failTips: '${result}',
-              outsideDismiss: false,
+              outsideDismiss: true,
               callbackResult: false,
             );
           }
