@@ -63,15 +63,10 @@ class _LoginPageState extends State<LoginPage> {
           barrierDismissible: false,
           builder: (_) {
             return CustomizeDialog(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText1: '登陆失败',
-              contentText2: '${result}',
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '${result}',
               outsideDismiss: false,
-              dialogHeight: 180,
-              isNeedConfirmButton: true,
-              confirmAction: () {
-                Navigator.of(context).pop();
-              },
+              callbackResult: false,
             );
           }
       );
