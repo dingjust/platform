@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -85,15 +86,14 @@ class _QuoteListState extends State<QuoteList> {
             title: '填写拒绝原因',
             focusNode1: FocusNode(),
           );
-        }
-    ).then((value){
+        }).then((value) {
       if (value != null && value != '') {
-        rejectQuote(model,value);
+        rejectQuote(model, value);
       }
     });
   }
 
-  rejectQuote(QuoteModel model,String rejectText) async{
+  rejectQuote(QuoteModel model, String rejectText) async {
     int statusCode = await QuoteOrderRepository().quoteReject(
       model.code,
       rejectText,
@@ -119,13 +119,12 @@ class _QuoteListState extends State<QuoteList> {
             confirmButtonText: '是',
             cancelButtonText: '否',
             dialogHeight: 180,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
               confirmFactory(model);
             },
           );
-        }
-    );
+        });
   }
 
   confirmFactory(QuoteModel model) async {
@@ -143,10 +142,10 @@ class _QuoteListState extends State<QuoteList> {
     bool success = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RequirementQuoteOrderForm(
-              model: model.requirementOrder,
-              quoteModel: model,
-              update: true,
-            ),
+          model: model.requirementOrder,
+          quoteModel: model,
+          update: true,
+        ),
       ),
     );
 
@@ -159,7 +158,7 @@ class _QuoteListState extends State<QuoteList> {
   void _onProofingCreating(QuoteModel model) async {
     //查询明细
     QuoteModel detailModel =
-        await QuoteOrderRepository().getQuoteDetails(model.code);
+    await QuoteOrderRepository().getQuoteDetails(model.code);
 
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -205,12 +204,11 @@ class _QuoteListState extends State<QuoteList> {
             dialogType: DialogType.RESULT_DIALOG,
             failTips: '${message}',
             callbackResult: false,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    );
+        });
   }
 
   @override
@@ -261,11 +259,23 @@ class _QuoteListState extends State<QuoteList> {
                       ),
                       Container(
                           child: Text(
-                        '没有相关订单数据',
-                        style: TextStyle(
-                          color: Colors.grey,
+                            '没有相关订单数据',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          )),
+                      Container(
+                        child: FlatButton(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MyHelpPage()));
+                          },
+                          child: Text('如何获取报价？'),
                         ),
-                      )),
+                      )
                     ],
                   );
                 }

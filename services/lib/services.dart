@@ -67,7 +67,7 @@ export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
-
+export 'src/system/bloc/bloc_bus.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

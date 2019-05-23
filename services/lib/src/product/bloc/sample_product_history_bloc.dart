@@ -35,15 +35,25 @@ class SampleProductHistoryBLoC extends BLoCBase {
   //TODO 清空表单数据
   void clearNewProduct() {}
 
-  var _controller = StreamController<List<SampleBorrowReturnHistoryModel>>.broadcast();
+  var _controller =
+      StreamController < List < SampleBorrowReturnHistoryModel
+
+  >
+
+  >
+
+      .
+
+  broadcast();
 
   var _detailController = StreamController<SampleBorrowReturnHistoryModel>();
 
   Stream<List<SampleBorrowReturnHistoryModel>> get stream => _controller.stream;
 
-  Stream<SampleBorrowReturnHistoryModel> get detailStream => _detailController.stream;
+  Stream<SampleBorrowReturnHistoryModel> get detailStream =>
+      _detailController.stream;
 
-  filterByStatuses(String state,String type) async {
+  filterByStatuses(String state, String type) async {
     Map<String, dynamic> data = {};
     if (state != 'ALL') {
       data = {
@@ -54,23 +64,24 @@ class SampleProductHistoryBLoC extends BLoCBase {
     products.clear();
     productsResponse = await ProductRepositoryImpl().sampleHistorys(data, {});
     products.addAll(productsResponse.content);
-    products.forEach((product){
+    products.forEach((product) {
       print(SampleBorrowReturnHistoryModel.toJson(product));
     });
     _controller.sink.add(products);
   }
 
-  loadingMoreByStatuses(String state,String type) async {
+  loadingMoreByStatuses(String state, String type) async {
     Map<String, dynamic> data = {};
     if (state != 'ALL') {
       data = {
         'state': state,
-        'type':type,
+        'type': type,
       };
     }
     print('${productsResponse.number}、${productsResponse.totalPages}');
     if (productsResponse.number < productsResponse.totalPages - 1) {
-      productsResponse = await ProductRepositoryImpl().sampleHistorys(data, {'page': productsResponse.number + 1});
+      productsResponse = await ProductRepositoryImpl()
+          .sampleHistorys(data, {'page': productsResponse.number + 1});
       print(productsResponse.content);
       products.addAll(productsResponse.content);
     } else {
@@ -85,6 +96,13 @@ class SampleProductHistoryBLoC extends BLoCBase {
 //    productsResponse = await ProductRepositoryImpl().list({},{});
 //    _controller.sink.add(productsResponse.content);
 //  }
+  void reset() {
+    // 初始化
+    products = List<SampleBorrowReturnHistoryModel>();
+    currentProduct = SampleBorrowReturnHistoryModel();
+    productsResponse = SampleProductHistorysResponse(0, 10, 0, 0, []);
+    newProduct = SampleBorrowReturnHistoryModel();
+  }
 
   dispose() {
     _controller.close();

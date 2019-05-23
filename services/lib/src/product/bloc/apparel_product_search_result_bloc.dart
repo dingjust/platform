@@ -43,13 +43,12 @@ class ApparelProductSearchResultBLoC extends BLoCBase {
 
   getData(String keyword) async {
     print(lock);
-    if(!lock){
+    if (!lock) {
       print(keyword);
-      lock=true;
+      lock = true;
       products.clear();
-      productsResponse = await ProductRepositoryImpl().list({
-        'keyword':keyword
-      }, {});
+      productsResponse =
+      await ProductRepositoryImpl().list({'keyword': keyword}, {});
       print(productsResponse.content);
       products.addAll(productsResponse.content);
       _controller.sink.add(products);
@@ -60,9 +59,9 @@ class ApparelProductSearchResultBLoC extends BLoCBase {
   loadingMore(String keyword) async {
     if (productsResponse.number < productsResponse.totalPages - 1) {
       productsResponse = await ProductRepositoryImpl().list({
-        'keyword':keyword
-      },{
-        'page':productsResponse.number+1,
+        'keyword': keyword
+      }, {
+        'page': productsResponse.number + 1,
       });
       products.addAll(productsResponse.content);
     } else {
@@ -70,6 +69,14 @@ class ApparelProductSearchResultBLoC extends BLoCBase {
     }
     loadingController.sink.add(false);
     _controller.sink.add(products);
+  }
+
+  ///重置数据
+  void reset() {
+    products = List<ApparelProductModel>();
+    currentProduct = ApparelProductModel.empty();
+    productsResponse = ProductsResponse(0, 10, 0, 0, []);
+    newProduct = ApparelProductModel();
   }
 
   dispose() {

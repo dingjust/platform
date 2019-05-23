@@ -64,7 +64,7 @@ class FactorySearchDelegate extends SearchDelegate<String> {
       LocalStorage.save(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
           json.encode(history_keywords));
     }
-    Navigator.pop(context, query);
+    Navigator.of(context).pop(query);
   }
 
   @override

@@ -77,6 +77,11 @@ class SuppliersBloc extends BLoCBase {
     _brandController.sink.add(this._brands);
   }
 
+  void reset() {
+    _factories.clear();
+    _brands.clear();
+  }
+
   dispose() {
     _factoryController.close();
     _brandController.close();

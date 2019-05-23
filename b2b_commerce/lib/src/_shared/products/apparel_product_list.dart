@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
+import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -110,6 +111,18 @@ class _ApparelProductListState extends State<ApparelProductList> {
                         Container(child: Text('您当前未有产品')),
                         Container(
                           child: Text('请点击右下角创建产品'),
+                        ),
+                        Container(
+                          child: FlatButton(
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => MyHelpPage()));
+                            },
+                            child: Text('如何创建产品？'),
+                          ),
                         )
                       ],
                     );
@@ -207,7 +220,8 @@ class _ApparelProductListState extends State<ApparelProductList> {
   }
 
   void _onProudctProduction(ApparelProductModel product) {
-    RequirementOrderModel orderModel = RequirementOrderModel(details: RequirementInfoModel(),attachments: []);
+    RequirementOrderModel orderModel =
+    RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -225,17 +239,16 @@ class _ApparelProductListState extends State<ApparelProductList> {
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack:  ProductRepositoryImpl().off(product.code),
+              requestCallBack: ProductRepositoryImpl().off(product.code),
               outsideDismiss: false,
               loadingText: '正在保存。。。',
               entrance: '',
             );
-          }
-      ).then((value){
+          }).then((value) {
         bool result = false;
-        if(value!=null&&value!=''){
+        if (value != null && value != '') {
           result = false;
-        }else{
+        } else {
           result = true;
         }
         showDialog(
@@ -247,12 +260,11 @@ class _ApparelProductListState extends State<ApparelProductList> {
                 successTips: '下架成功',
                 failTips: '下架失败',
                 callbackResult: result,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                 },
               );
-            }
-        );
+            });
         if (widget.keyword == null) {
           ApparelProductBLoC.instance.clearProductsMap();
           ApparelProductBLoC.instance.filterByStatuses(widget.status);
@@ -262,32 +274,32 @@ class _ApparelProductListState extends State<ApparelProductList> {
         }
       });
     } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
-      if(product.variants == null || product.variants.isEmpty){
+      if (product.variants == null || product.variants.isEmpty) {
         ShowDialogUtil.showSimapleDialog(context, '颜色尺码为空不可上架');
         return;
       }
-      if(product.maxPrice == null || product.minPrice == null || product.price == null){
+      if (product.maxPrice == null ||
+          product.minPrice == null ||
+          product.price == null) {
         ShowDialogUtil.showSimapleDialog(context, '产品价格为空不可上架');
         return;
       }
-
 
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack:  ProductRepositoryImpl().on(product.code),
+              requestCallBack: ProductRepositoryImpl().on(product.code),
               outsideDismiss: false,
               loadingText: '正在保存。。。',
               entrance: '',
             );
-          }
-      ).then((value){
+          }).then((value) {
         bool result = false;
-        if(value!=null&&value!=''){
+        if (value != null && value != '') {
           result = false;
-        }else{
+        } else {
           result = true;
         }
         showDialog(
@@ -299,12 +311,11 @@ class _ApparelProductListState extends State<ApparelProductList> {
                 successTips: '上架成功',
                 failTips: '上架失败',
                 callbackResult: result,
-                confirmAction: (){
+                confirmAction: () {
                   Navigator.of(context).pop();
                 },
               );
-            }
-        );
+            });
         if (widget.keyword == null) {
           ApparelProductBLoC.instance.clearProductsMap();
           ApparelProductBLoC.instance.filterByStatuses(widget.status);

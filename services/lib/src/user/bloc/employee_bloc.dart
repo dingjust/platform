@@ -85,6 +85,10 @@ class EmployeeBLoC extends BLoCBase {
 //    _controller.sink.add(addressResponse.content);
 //  }
 
+  void reset() {
+    b2bCustomers.clear();
+  }
+
   dispose() {
     _controller.close();
     _detailController.close();

@@ -222,6 +222,14 @@ class QuoteOrdersBLoC extends BLoCBase {
     }
   }
 
+  ///重置数据
+  void reset() {
+    _quotesMap.forEach((statu, entry) {
+      entry.data.clear();
+      entry.currentPage = 0;
+    });
+  }
+
   dispose() {
     _controller.close();
 
