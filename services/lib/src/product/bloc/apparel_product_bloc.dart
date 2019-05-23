@@ -20,9 +20,12 @@ class ApparelProductBLoC extends BLoCBase {
   static ApparelProductBLoC _instance;
 
   static final Map<String, PageEntry> _productsMap = {
-    'ALL': PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
-    'approved': PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
-    'unapproved': PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+    'ALL':
+    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+    'approved':
+    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+    'unapproved':
+    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
   };
 
   ApparelProductBLoC._internal() {
@@ -53,11 +56,11 @@ class ApparelProductBLoC extends BLoCBase {
   Stream<ApparelProductModel> get detailStream => _detailController.stream;
 
   filterByStatuses(String status) async {
-    if(!lock){
+    if (!lock) {
       lock = true;
       print('${_productsMap[status].data}');
-      if(_productsMap[status].data.isEmpty){
-        if(status == null) status = 'ALL';
+      if (_productsMap[status].data.isEmpty) {
+        if (status == null) status = 'ALL';
         Map<String, dynamic> data = {};
         if (status != 'ALL') {
           data = {
@@ -66,7 +69,7 @@ class ApparelProductBLoC extends BLoCBase {
         }
 
         productsResponse = await ProductRepositoryImpl().list(data, {});
-        if(productsResponse != null){
+        if (productsResponse != null) {
           _productsMap[status].currentPage = productsResponse.number;
           _productsMap[status].totalPages = productsResponse.totalPages;
           _productsMap[status].totalElements = productsResponse.totalElements;
@@ -80,7 +83,7 @@ class ApparelProductBLoC extends BLoCBase {
   }
 
   loadingMoreByStatuses(String status) async {
-    if(!lock) {
+    if (!lock) {
       lock = true;
       if (status == null) status = 'ALL';
       Map<String, dynamic> data = {};
@@ -109,13 +112,12 @@ class ApparelProductBLoC extends BLoCBase {
 
   getData(String keyword) async {
     print(lock);
-    if(!lock){
+    if (!lock) {
       print(keyword);
-      lock=true;
+      lock = true;
       products.clear();
-      productsResponse = await ProductRepositoryImpl().list({
-        'keyword':keyword
-      }, {});
+      productsResponse =
+      await ProductRepositoryImpl().list({'keyword': keyword}, {});
       print(productsResponse.content);
       products.addAll(productsResponse.content);
       _controller.sink.add(products);
@@ -126,9 +128,9 @@ class ApparelProductBLoC extends BLoCBase {
   loadingMore(String keyword) async {
     if (productsResponse.number < productsResponse.totalPages - 1) {
       productsResponse = await ProductRepositoryImpl().list({
-        'keyword':keyword
-      },{
-        'page':productsResponse.number+1,
+        'keyword': keyword
+      }, {
+        'page': productsResponse.number + 1,
       });
       products.addAll(productsResponse.content);
     } else {
@@ -138,17 +140,21 @@ class ApparelProductBLoC extends BLoCBase {
     _controller.sink.add(products);
   }
 
-  clear(){
+  clear() {
     _controller.sink.add(null);
   }
 
-  clearProductsMap(){
-    _productsMap.forEach((key,value){
-      _productsMap[key] = PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>());
+  ///重置数据
+  clearProductsMap() {
+    _productsMap.forEach((key, value) {
+      value.data.clear();
+      value.currentPage = 0;
     });
   }
-  clearProductsMapByStatus(String status){
-    _productsMap[status] = PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>());
+
+  clearProductsMapByStatus(String status) {
+    _productsMap[status] =
+        PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>());
   }
 
   //下拉刷新

@@ -202,6 +202,10 @@ class ProductionBLoC extends BLoCBase {
     }
   }
 
+  void reset() {
+    _purchaseOrders.clear();
+  }
+
   dispose() {
     _controller.close();
     conditionController.close();

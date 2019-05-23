@@ -560,7 +560,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 ///打样订单
                 if (widget.order is ProofingModel) {
                   //刷新数据
-                  ProofingOrdersBLoC.instance.clean();
+                  ProofingOrdersBLoC.instance.reset();
 
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(

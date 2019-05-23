@@ -58,7 +58,7 @@ class SampleProductBLoC extends BLoCBase {
   loadingMoreByStatuses() async {
     if (productsResponse.number < productsResponse.totalPages - 1) {
       productsResponse = await ProductRepositoryImpl().samples({
-        'page':productsResponse.number+1,
+        'page': productsResponse.number + 1,
       });
       products.addAll(productsResponse.content);
     } else {
@@ -74,6 +74,13 @@ class SampleProductBLoC extends BLoCBase {
 //    productsResponse = await ProductRepositoryImpl().list({},{});
 //    _controller.sink.add(productsResponse.content);
 //  }
+
+  void reset() {
+    products = List<SampleProductModel>();
+    currentProduct = SampleProductModel();
+    productsResponse = SampleProductsResponse(0, 10, 0, 0, []);
+    newProduct = SampleProductModel();
+  }
 
   dispose() {
     _controller.close();

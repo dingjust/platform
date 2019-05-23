@@ -202,7 +202,7 @@ class ProofingOrdersBLoC extends BLoCBase {
   }
 
   ///重置数据
-  void clean() {
+  void reset() {
     _quotesMap.forEach((statu, entry) {
       entry.data.clear();
       entry.currentPage = 0;
