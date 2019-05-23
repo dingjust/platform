@@ -42,7 +42,7 @@ class CompanyModel extends UserGroupModel {
   String describe;
 
   //注册时间
-  @JsonKey(name: "creationTime", fromJson: _dateTimefromMilliseconds)
+  @JsonKey(name: "creationTime", fromJson: _dateTimefromMilliseconds,toJson: _dateTimetoMilliseconds)
   DateTime creationTime;
 
   //开户税号
@@ -146,6 +146,8 @@ class CompanyModel extends UserGroupModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+  static int _dateTimetoMilliseconds(DateTime date) =>
+      date.millisecondsSinceEpoch;
 }
 
 @JsonSerializable()

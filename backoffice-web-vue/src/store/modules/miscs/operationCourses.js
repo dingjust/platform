@@ -14,6 +14,7 @@ const state = {
   },
   formData: {
     id: null,
+    index:'',
     name: '',
     description: '',
     group:"B2B",

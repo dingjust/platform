@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/_shared/widgets/global_search_input.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/search/factory_search.dart';
+import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -81,6 +83,8 @@ class _FactoryPageState extends State<FactoryPage> {
   bool inited = false;
 
   AMapLocation aMapLocation;
+
+  String addressLine;
 
   @override
   void initState() {
@@ -166,26 +170,87 @@ class _FactoryPageState extends State<FactoryPage> {
         child: Scaffold(
           appBar: AppBar(
             brightness: Brightness.light,
-            centerTitle: true,
+            automaticallyImplyLeading: false,
             elevation: 0.5,
-            title: Text(
-              '${generateTitle()}',
-              style: TextStyle(color: Colors.black),
+            title:  Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      child: Icon(
+                        Icons.keyboard_arrow_left,
+                        size: 32,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child:GestureDetector(
+                      onTap: () async{
+                        String keyword = await showSearch(
+                          context: context,
+                          delegate: FactorySearchDelegate(),
+                        );
+                        factoryCondition.setKeyword(keyword);
+                        FactoryBLoC.instance.clear();
+                      },
+                      child: Container(
+                      height: 28,
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          const Icon(B2BIcons.search, color: Colors.grey, size: 18),
+                          Text(
+                            '   ${generateTitle()}',
+                            style: const TextStyle(color: Colors.grey, fontSize: 16),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  ),
+                ],
             ),
             actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    B2BIcons.search,
-                    size: 22,
-                  ),
-                  onPressed: () async {
-                    String keyword = await showSearch(
-                      context: context,
-                      delegate: FactorySearchDelegate(),
-                    );
-                    factoryCondition.setKeyword(keyword);
-                    FactoryBLoC.instance.clear();
-                  }),
+              GestureDetector(
+                child: widget.route == '就近找厂'?
+                Container(
+                    width: addressLine != null && addressLine != '' && addressLine.length < 5
+                        ? (15 * addressLine.length + 5).toDouble()
+                        : 80,
+                    child: Center(
+                        child: Text(
+                          '${addressLine != null ? addressLine : ''}',
+                          overflow: TextOverflow.ellipsis,
+                        )
+                    )
+                ):Container(),
+                onTap: (){
+                  if(widget.route == '就近找厂'){
+                    onLocation();
+                  }
+                },
+              ),
+              GestureDetector(
+                child: widget.route == '就近找厂'?
+                Container(
+                  padding: EdgeInsets.only(right: 5),
+                    child: Icon(
+                      Icons.location_on,
+                    ),
+                ):Container(),
+                onTap: (){
+                  if(widget.route == '就近找厂'){
+                    onLocation();
+                  }
+                },
+              ),
             ],
           ),
           body: FutureBuilder<bool>(
@@ -195,7 +260,7 @@ class _FactoryPageState extends State<FactoryPage> {
                   appBar: AppBar(
                     elevation: 0,
                     title: RequirementFilterBar(
-                      horizontalPadding: 20,
+                      horizontalPadding: 10,
                       entries: [
                         FilterEntry('${labText}⇂', () {
                           setState(() {
@@ -389,6 +454,23 @@ class _FactoryPageState extends State<FactoryPage> {
         ));
   }
 
+  void onLocation() async {
+    Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
+    print(tip.name);
+    setState(() {
+      List<String> locationArray = tip.location.split(',');
+      addressLine = tip.name;
+
+      factoryCondition.longitude = double.parse(locationArray[0]);
+      factoryCondition.latitude = double.parse(locationArray[1]);
+
+      FactoryBLoC.instance.filterByCondition(
+        factoryCondition,
+        requirementCode: widget.requirementCode,
+      );
+    });
+  }
+
   Future<bool> _initData() async {
     if (!inited) {
       aMapLocation = await AmapService.instance.location();
@@ -406,6 +488,7 @@ class _FactoryPageState extends State<FactoryPage> {
               longitude: aMapLocation.longitude,
               latitude: aMapLocation.latitude,
               distance: 50000);
+          addressLine = aMapLocation.AOIName;
         } else {
           factoryCondition = widget.factoryCondition;
         }
@@ -421,6 +504,7 @@ class _FactoryPageState extends State<FactoryPage> {
               longitude: aMapLocation.longitude,
               latitude: aMapLocation.latitude,
               distance: 50000);
+          addressLine = aMapLocation.AOIName;
         } else {
           factoryCondition = FactoryCondition(
               starLevel: 0,
