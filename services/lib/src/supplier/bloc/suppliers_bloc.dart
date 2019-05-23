@@ -63,6 +63,7 @@ class SuppliersBloc extends BLoCBase {
       Response response = await http$.get(
         Apis.brandsSuppliers,
         data: {
+          'keyword':'',
           'page': brandsResponse.number + 1,
         },
       );
