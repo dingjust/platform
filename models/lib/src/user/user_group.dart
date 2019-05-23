@@ -222,6 +222,8 @@ class B2BUnitModel extends OrgUnitModel {
 
   double latitude;
 
+  String localAddress;
+
   B2BUnitModel(
       {MediaModel profilePicture,
       String uid,
@@ -251,6 +253,7 @@ class B2BUnitModel extends OrgUnitModel {
       this.active,
       this.email,
       this.phone,
+        this.localAddress,
       this.longitude,
       this.latitude})
       : super(

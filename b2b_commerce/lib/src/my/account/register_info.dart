@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
+import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
 import 'package:b2b_commerce/src/my/address/region_select.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,12 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
 
   GlobalKey _scaffoldKey = GlobalKey();
 
+  double longitude;
+
+  double latitude;
+
+  String localAddress;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,7 +59,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
           ),
         ),
         body: Container(
-          color: Colors.white,
+          color: Color.fromRGBO(242, 242, 242, 1),
           child: ListView(
             padding: const EdgeInsets.all(10.0),
             children: <Widget>[
@@ -66,7 +73,8 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(bottom: 50),
+                color: Colors.white,
+                margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
                 padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
                 child: Column(
                   children: <Widget>[
@@ -112,10 +120,19 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                           decoration: InputDecoration(
                               hintText: '请输入', border: InputBorder.none),
                         )),
+                  ],
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
+                child: Column(
+                  children: <Widget>[
                     GestureDetector(
                       onTap: _selectRegionCityAndDistrict,
                       child: Container(
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
                         decoration: BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(
@@ -146,17 +163,73 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                                             fontSize: 20, color: Colors.red),
                                       ),
                                     ),
-                                    Text(
-                                      districtModel != null
-                                          ? '${districtModel.city.region
-                                          .name}  ${districtModel.city
-                                          .name} ${districtModel.name}'
-                                          : '选择省市区',
-                                      style: TextStyle(
-                                          color:
-                                          Color.fromRGBO(150, 150, 150, 1),
-                                          fontSize: 18),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        districtModel != null
+                                            ? '${districtModel.city.region
+                                            .name}  ${districtModel.city
+                                            .name} ${districtModel.name}'
+                                            : '选择省市区',
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(
+                                                150, 150, 150, 1),
+                                            fontSize: 18),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: onLocation,
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    width: 0.5,
+                                    color: Color.fromRGBO(200, 200, 200, 1)))),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              width: 100,
+                              // margin: EdgeInsets.only(right: 20),
+                              child: Text(
+                                '选择定位',
+                                style: TextStyle(
+                                    color: Color.fromRGBO(36, 38, 41, 1),
+                                    fontSize: 18),
+                              ),
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(right: 20),
+                                      child: Text(
+                                        '',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.red),
+                                      ),
                                     ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        localAddress != null
+                                            ? '${localAddress}'
+                                            : '点击选择定位',
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(
+                                                150, 150, 150, 1),
+                                            fontSize: 18),
+                                      ),
+                                    )
                                   ],
                                 )),
                           ],
@@ -173,7 +246,7 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                           },
                           controller: _line1Controller,
                           decoration: InputDecoration(
-                              hintText: '请输入', border: InputBorder.none),
+                              hintText: '请输入详细门牌号信息', border: InputBorder.none),
                         )),
                   ],
                 ),
@@ -204,6 +277,17 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
     });
   }
 
+  void onLocation() async {
+    Tip tip =
+    await showSearch(context: context, delegate: AmapSearchDelegatePage());
+    setState(() {
+      List<String> locationArray = tip.location.split(',');
+      longitude = double.parse(locationArray[0]);
+      latitude = double.parse(locationArray[1]);
+      localAddress = tip.address;
+    });
+  }
+
   void onSubmit() async {
     AddressModel contactAddress = AddressModel();
     contactAddress
@@ -219,6 +303,9 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
       ..contactPhone = _contactPhoneController.text
       ..mobileNumber = widget.phone
       ..password = widget.password
+      ..longitude = longitude
+      ..latitude = latitude
+      ..localAddress = localAddress
       ..contactAddress = contactAddress;
 
     // 加载条

@@ -66,20 +66,31 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgets = <Widget>[
-      ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 0),
+      B2BListTitle(
+        isRequired: true,
         onTap: () {
           _selectRegionCityAndDistrict(context);
         },
-        title: Text(
-          '省市区',
-          style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+        prefix: Text(
+          '选择省市区',
+          style: TextStyle(fontSize: 16),
         ),
-        subtitle: Text(
+        suffix: Text(
           regionCityAndDistrict,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
-        trailing: Icon(Icons.chevron_right),
+      ),
+      B2BListTitle(
+        isRequired: true,
+        onTap: onLocation,
+        prefix: Text(
+          '选择定位',
+          style: TextStyle(fontSize: 16),
+        ),
+        suffix: Text(
+          '${widget.company.longitude},${widget.company.latitude}',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
       ),
       TextFieldComponent(
         focusNode: _line1FocusNode,
@@ -92,64 +103,20 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         dividerPadding: EdgeInsets.symmetric(),
       ),
-      // ListTile(
-      //   contentPadding: EdgeInsets.symmetric(horizontal: 0),
-      //   onTap: onLocation,
-      //   title: Text(
-      //     '工厂定位',
-      //     style: TextStyle(fontSize: 16, color: Colors.black),
-      //   ),
-      //   subtitle: location == null
-      //       ? Icon(Icons.location_city)
-      //       : Text(
-      //           '${location}',
-      //           style: TextStyle(color: Colors.red, fontSize: 12),
-      //         ),
-      //   trailing: Icon(Icons.chevron_right),
-      // ),
       Container(
-        margin: EdgeInsets.fromLTRB(0, 30, 0, 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            FlatButton(
-              onPressed: onLocation,
-              color: Color.fromRGBO(255, 214, 12, 1),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              child: Row(
-                children: <Widget>[Icon(B2BIcons.location), Text('工厂坐标定位')],
-              ),
-            )
-          ],
-        ),
-      ),
-      Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('${widget.company.longitude},${widget.company.latitude}')
-          ],
-        ),
-      ),
-      Container(
+        margin: EdgeInsets.only(top: 20),
         child: Row(
           children: <Widget>[
             Expanded(
               flex: 1,
               child: Text(
                 '定位工厂坐标后，品牌可以通过"就近找厂"快速找到您的工厂',
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: Colors.red),
               ),
             )
           ],
         ),
       ),
-      FlatButton(
-        onPressed: getGpsLocation,
-        child: Text('获取GPS'),
-      )
     ];
 
     return Scaffold(
@@ -186,6 +153,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
       List<String> locationArray = tip.location.split(',');
       widget.company.longitude = double.parse(locationArray[0]);
       widget.company.latitude = double.parse(locationArray[1]);
+      widget.company.localAddress = tip.address;
     });
   }
 
@@ -204,17 +172,19 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
 
   void getGpsLocation() async {
     AMapLocation location = await AmapService.instance.location();
-    if(location==null){
-      showDialog(context: context,builder: (_){
-        return CustomizeDialog(
-          dialogType: DialogType.CONFIRM_DIALOG,
-          contentText1: '获取位置授权失败，请设置应用位置服务',
-          callbackResult: false,
-          confirmAction: (){
-            Navigator.of(context).pop();
-          },
-        );
-      });
+    if (location == null) {
+      showDialog(
+          context: context,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText1: '获取位置授权失败，请设置应用位置服务',
+              callbackResult: false,
+              confirmAction: () {
+                Navigator.of(context).pop();
+              },
+            );
+          });
     }
   }
 }
