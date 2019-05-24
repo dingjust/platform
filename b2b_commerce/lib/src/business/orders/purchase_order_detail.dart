@@ -567,6 +567,30 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
+                    child: Text(
+                      '${order.contactPersonOfSeller == null || order.contactPersonOfSeller == '' ? '未填写联系人':order.contactPersonOfSeller }',
+                      style: order.contactPersonOfSeller == null || order.contactPersonOfSeller == '' ? TextStyle(
+                        color: Colors.grey
+                      ):TextStyle(),
+                    ),
+                  ),
+                  Text(
+                    '${order.contactOfSeller == null || order.contactOfSeller == '' ? '未填写联系电话':order.contactOfSeller }',
+                    style: order.contactOfSeller == null || order.contactOfSeller == '' ? TextStyle(
+                        color: Colors.grey
+                    ):TextStyle(),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              height: 1,
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
                     child: Container(
                       child: Text('合作方式'),
                     ),
