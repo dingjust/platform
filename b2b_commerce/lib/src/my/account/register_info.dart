@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
+import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:b2b_commerce/src/my/address/region_select.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -278,8 +279,12 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
   }
 
   void onLocation() async {
-    Tip tip =
-    await showSearch(context: context, delegate: AmapSearchDelegatePage());
+    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            AmapSearchPage(
+                city: districtModel?.city != null
+                    ? districtModel.city.name
+                    : '')));
     setState(() {
       List<String> locationArray = tip.location.split(',');
       longitude = double.parse(locationArray[0]);
