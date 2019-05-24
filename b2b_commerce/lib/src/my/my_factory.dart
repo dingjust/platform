@@ -88,22 +88,22 @@ class _MyFactoryPageState extends State<MyFactoryPage>
           }, widget.factory.uid);
   }
 
-  Widget _buildView(String code) {
+  Widget _buildView(String code,FactoryModel factory) {
     switch (code) {
       case 'a':
-        return _buildBaseInfo(code);
+        return _buildBaseInfo(factory);
         break;
       case 'b':
-        return _buildContactWay(code);
+        return _buildContactWay(factory);
         break;
       case 'c':
-        return _buildCashProducts(code);
+        return _buildCashProducts(factory);
         break;
       case 'd':
-        return _buildCompanyCertificate(code);
+        return _buildCompanyCertificate(factory);
         break;
       default:
-        return _buildBaseInfo(code);
+        return _buildBaseInfo(factory);
         break;
     }
   }
@@ -201,15 +201,8 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                 icon: Text('编辑'),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryFormPage(factory: widget.factory,))).then((v){
-                    print('-===========================');
                     setState(() {
-                      _factoryKey.currentState.build(context);
-                      if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-                        _getFactoryFuture = UserRepositoryImpl()
-                            .getFactory(UserBLoC.instance.currentUser.companyCode);
-                      } else {
-                        _getFactoryFuture =  UserRepositoryImpl().getFactory(widget.factory.uid);
-                      };
+                      _getFactoryFuture = _getFactoryData();
                     });
                   });
 //                  switch (_tabController.index) {
@@ -275,8 +268,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
           ),
         ],
       ),
-      body: FutureBuilder(
-        key: _factoryKey,
+      body: FutureBuilder<FactoryModel>(
           future: _getFactoryFuture,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -284,19 +276,20 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                 padding: EdgeInsets.symmetric(vertical: 200),
                 child: Center(child: CircularProgressIndicator()),
               );
-            }
-            return Container(
-              color: Colors.white,
-              child: NestedScrollView(
-                headerSliverBuilder: _sliverBuilder,
-                body: TabBarView(
-                  controller: _tabController,
-                  children: _states.map((state) {
-                    return _buildView(state.code);
-                  }).toList(),
+            }else{
+              return Container(
+                color: Colors.white,
+                child: NestedScrollView(
+                  headerSliverBuilder: _sliverBuilder,
+                  body: TabBarView(
+                    controller: _tabController,
+                    children: _states.map((state) {
+                      return _buildView(state.code,snapshot.data);
+                    }).toList(),
+                  ),
                 ),
-              ),
-            );
+              );
+            }
           }),
       bottomNavigationBar: Offstage(
         offstage: !widget.isFactoryDetail,
@@ -435,32 +428,31 @@ class _MyFactoryPageState extends State<MyFactoryPage>
   }
 
   //基本资料
-  Widget _buildBaseInfo(String code) {
+  Widget _buildBaseInfo(FactoryModel factory) {
     return MyFactoryBaseInfo(
-      widget.factory,
-      key: PageStorageKey<String>(code),
+      factory,
     );
   }
 
-  Widget _buildContactWay(String code) {
+  Widget _buildContactWay(FactoryModel factory) {
     return Container(
       color: Colors.white,
       child: MyCompanyContactFromWidgetPage(
-        company: widget.factory,
+        company: factory,
       ),
     );
   }
 
   //现款产品
-  Widget _buildCashProducts(String code) {
-    return MyCompanyCashProducts(widget.factory,getProductsFuture: _getProductData(),);
+  Widget _buildCashProducts(FactoryModel factory) {
+    return MyCompanyCashProducts(factory,getProductsFuture: _getProductData(),);
   }
 
-  Widget _buildCompanyCertificate(String code) {
+  Widget _buildCompanyCertificate(FactoryModel factory) {
     return Container(
       color: Colors.white,
       child: MyCompanyCertificateWidget(
-        widget.factory,
+        factory,
         onlyRead: true,
       ),
     );
@@ -582,4 +574,9 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
     return false;
   }
+}
+
+class RefreshNotification extends ScrollNotification{
+  bool refresh;
+  RefreshNotification(this.refresh);
 }
