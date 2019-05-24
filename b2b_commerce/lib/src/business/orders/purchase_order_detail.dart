@@ -534,7 +534,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     Container(
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller : order.purchaser.name}',
+                        '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller == null || order.companyOfSeller == '' ? '':order.companyOfSeller : order.purchaser.name}',
                         textScaleFactor: 1.3,
                       ),
                     ),
