@@ -41,6 +41,9 @@ abstract class UserApis {
   ///全部需求/推荐需求报表
   static get requirementReports => '/{baseSiteId}/company/reports/requirement';
 
+  ///未登录时全部需求报表
+  static get offlineRequirementReports => '/{baseSiteId}/orders/requirement/countByStatuses';
+
   ///手机号是否注册
   static get phoneExists => (code) {
         return '/{baseSiteId}/companies/register/$code';

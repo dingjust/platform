@@ -38,4 +38,18 @@ class ReportsRepository {
     }
     return result;
   }
+
+  //未登录的全部需求
+  Future<int> offlineRequirementCount() async {
+    Response response;
+    Reports result;
+    try {
+      response = await http$.post(UserApis.offlineRequirementReports, data: {
+        "OrderStatus":["PENDING_QUOTE"]
+      });
+    } on DioError catch (e) {
+      print(e);
+    }
+    return response.data;
+  }
 }

@@ -83,6 +83,8 @@ class B2BIcons {
       const IconData(0xe6d4, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData question =
       const IconData(0xe639, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData aim =
+  const IconData(0xe68d, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

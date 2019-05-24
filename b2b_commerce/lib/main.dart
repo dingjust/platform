@@ -36,7 +36,7 @@ void main() async {
       statusBarColor: Colors.transparent,
     );
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-  }else{
+  } else {
     //IOS高德定位注册KEY
     AMapLocationClient.setApiKey(GlobalConfigs.AMAP_LOCATION_KEY_IOS);
   }

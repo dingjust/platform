@@ -30,7 +30,7 @@ class B2BListTitle extends StatelessWidget {
             child: Container(
               decoration:
               BoxDecoration(border: Border(bottom: bottomBorderSide)),
-              padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,7 +39,7 @@ class B2BListTitle extends StatelessWidget {
                     children: <Widget>[
                       prefix ?? Container(),
                       Container(
-                        margin: EdgeInsets.only(left: 10),
+                        margin: EdgeInsets.only(left: 20),
                         child: Text(
                           isRequired ? '*' : '',
                           style: TextStyle(color: Colors.red, fontSize: 20),

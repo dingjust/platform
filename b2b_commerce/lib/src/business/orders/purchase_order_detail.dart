@@ -534,7 +534,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     Container(
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller : order.purchaser.name}',
+                        '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller == null || order.companyOfSeller == '' ? '':order.companyOfSeller : order.purchaser.name}',
                         textScaleFactor: 1.3,
                       ),
                     ),
@@ -558,6 +558,30 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   ],
                 ))
               ],
+            ),
+            Divider(
+              height: 1,
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      '${order.contactPersonOfSeller == null || order.contactPersonOfSeller == '' ? '未填写联系人':order.contactPersonOfSeller }',
+                      style: order.contactPersonOfSeller == null || order.contactPersonOfSeller == '' ? TextStyle(
+                        color: Colors.grey
+                      ):TextStyle(),
+                    ),
+                  ),
+                  Text(
+                    '${order.contactOfSeller == null || order.contactOfSeller == '' ? '未填写联系电话':order.contactOfSeller }',
+                    style: order.contactOfSeller == null || order.contactOfSeller == '' ? TextStyle(
+                        color: Colors.grey
+                    ):TextStyle(),
+                  ),
+                ],
+              ),
             ),
             Divider(
               height: 1,

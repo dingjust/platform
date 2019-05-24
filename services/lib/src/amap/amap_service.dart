@@ -1,10 +1,10 @@
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:services/src/amap/amap_response.dart';
+import 'package:services/src/api/apis.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:amap_location/amap_location.dart';
 import 'package:simple_permissions/simple_permissions.dart';
-
 
 class AmapService {
   // 工厂模式
@@ -26,19 +26,43 @@ class AmapService {
   }
 
   ///获取高德地址输入提示
-  Future<AmapResponse> inputtips(String keywords) async {
+  Future<AmapResponse> inputtips(String keywords, {String city}) async {
     Response<Map<String, dynamic>> response;
     try {
-      response = await http$.get(GlobalConfigs.AMAP_TIP_API, data: {
+      response = await http$.get(Apis.AMAP_TIP_API, data: {
         'output': 'json',
         'key': GlobalConfigs.AMAP_TIP_KEY,
-        'keywords': keywords ?? ''
+        'keywords': keywords ?? '',
+        'city': city ?? ''
       });
     } on DioError catch (e) {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
       AmapResponse amapResponse = AmapResponse.fromJson(response.data);
+      return amapResponse;
+    } else {
+      return null;
+    }
+  }
+
+  ///获取高德周边提示
+  Future<AmapAroundResponse> aroundTips(String location,
+      {int radius = 50}) async {
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(Apis.AMAP_AROUND_API, data: {
+        'key': GlobalConfigs.AMAP_TIP_KEY,
+        'location': location,
+        'radius': radius,
+        'extensions': 'base'
+      });
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      AmapAroundResponse amapResponse = AmapAroundResponse.fromJson(
+          response.data);
       return amapResponse;
     } else {
       return null;
