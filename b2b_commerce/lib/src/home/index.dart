@@ -513,7 +513,11 @@ class BrandTrackingProgressSection extends StatelessWidget {
   }
 }
 
-class FactoryRequirementPoolSection extends StatelessWidget {
+class FactoryRequirementPoolSection extends StatefulWidget{
+  _FactoryRequirementPoolSection createState() => _FactoryRequirementPoolSection();
+}
+
+class _FactoryRequirementPoolSection extends State<FactoryRequirementPoolSection> {
   int requirementAll = 0;
   int requirementRecommend = 0;
   final StreamController _reportsStreamController =
@@ -528,11 +532,22 @@ class FactoryRequirementPoolSection extends StatelessWidget {
     }
   }
 
+  void getAllRequirementCount() async {
+    int count = await ReportsRepository().offlineRequirementCount();
+    if (count != null) {
+      setState(() {
+        requirementAll = count;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
     if (bloc.currentUser.status != UserStatus.OFFLINE) {
       queryReports();
+    }else if(bloc.currentUser.status == UserStatus.OFFLINE && requirementAll == 0){
+      getAllRequirementCount();
     }
     return Container(
       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -561,7 +576,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                 child:Container(
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 30,vertical: 20),
-                  child: AllRequirementMenuItem(count: snapshot.data.ordersCount8),
+                  child: AllRequirementMenuItem(count: requirementAll),
                 ),
               );
             },
@@ -588,7 +603,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 30,vertical: 20),
                   color: Colors.white,
                   child: RecommendedRequirementMenuItem(
-                      count: snapshot.data.ordersCount9),
+                      count: requirementRecommend),
                 ),
               );
             },
@@ -597,6 +612,7 @@ class FactoryRequirementPoolSection extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class AllRequirementMenuItem extends StatelessWidget {

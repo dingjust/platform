@@ -45,9 +45,6 @@ class UserRepositoryImpl implements UserRepository {
 
   Future<FactoryModel> getFactory(String uid) async {
     Response response = await http$.get(Apis.factory(uid));
-    print(FactoryModel
-        .fromJson(response.data)
-        .creationTime);
     return FactoryModel.fromJson(response.data);
   }
 

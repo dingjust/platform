@@ -59,12 +59,10 @@ class GlobalConfigs {
   static const B2B_CLIENT_ID = 'nbyjy';
   static const B2B_CLIENT_SECRET = 'password';
 
-  static const String AMAP_TIP_API =
-      'https://restapi.amap.com/v3/assistant/inputtips';
-
   static const String AMAP_TIP_KEY = '16019b7f1babc4b2d81010730bad2504';
 
-   static const String AMAP_LOCATION_KEY_IOS = '7ff2f1b6002d0aaa2ef2cb40f76e7c4a';
+  static const String AMAP_LOCATION_KEY_IOS =
+      '7ff2f1b6002d0aaa2ef2cb40f76e7c4a';
 
-   static const String ALIPAY_URL_SCHEME="nbyijiayi";
+  static const String ALIPAY_URL_SCHEME = "nbyijiayi";
 }

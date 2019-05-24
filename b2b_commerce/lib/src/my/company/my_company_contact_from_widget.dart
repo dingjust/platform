@@ -13,7 +13,7 @@ class MyCompanyContactFromWidgetPage extends StatefulWidget{
   bool isEditing;
   bool isScroll;
 
-  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false,this.isScroll = false});
+  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false,this.isScroll = false,Key key,}):super(key:key);
 
   _MyCompanyContactFromWidgetPageState createState() => _MyCompanyContactFromWidgetPageState();
 }
@@ -188,7 +188,6 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
       padding: EdgeInsets.only(left: 15,right: 15,top: 20,bottom: 20),
       child: GestureDetector(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
               width: 100,
@@ -199,8 +198,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
                 ),
               ),
             ),
-            Container(
-              width: MediaQueryData.fromWindow(window).size.width - 130,
+            Expanded(
               child: Text(
                 '${widget.company.contactAddress!=null && widget.company.contactAddress.details != null? widget.company.contactAddress.details:''}',
                 style: TextStyle(

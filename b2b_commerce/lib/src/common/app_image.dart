@@ -111,4 +111,8 @@ class B2BImage {
   static Image help({double width, double height}) {
     return getImage('temp/my/help.png', width: width, height: height);
   }
+
+  static Image qrCode({double width, double height}) {
+    return getImage('temp/QRCode.png', width: width, height: height);
+  }
 }

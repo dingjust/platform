@@ -6,9 +6,10 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class MyFactoryBaseFormPage extends StatefulWidget {
-  MyFactoryBaseFormPage(this.factory);
+  MyFactoryBaseFormPage(this.factory, {this.medias});
 
   final FactoryModel factory;
+  List<MediaModel> medias;
 
   @override
   State createState() => MyFactoryBaseFormPageState();
@@ -20,7 +21,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _cooperativeBrandFocusNode = FocusNode();
 
-  List<MediaModel> medias = [];
+  List<MediaModel> _medias = [];
   List<String> _scaleRange = [];
   List<String> _monthlyCapacityRanges = [];
   List<String> _populationScale = [];
@@ -47,57 +48,57 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             .map((cooperationMode) => cooperationMode.toString().split('.')[1]),
       );
     }
-    if (widget.factory.profilePicture != null)
-      medias = [widget.factory.profilePicture];
+    if (widget.factory.profilePicture != null) {
+      _medias = [widget.factory.profilePicture];
+    }
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.factory.monthlyCapacityRange);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('基本资料'),
-        centerTitle: true,
-        elevation: 0.5,
-        actions: <Widget>[
-          IconButton(
-              icon: Text(
-                '确定',
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                if (medias.length > 0) {
-                  widget.factory.profilePicture = medias[0];
-                } else {
-                  widget.factory.profilePicture = null;
-                }
-                widget.factory.name =
-                    _nameController.text == '' ? null : _nameController.text;
-                widget.factory.cooperativeBrand =
-                    _cooperativeBrandController.text == ''
-                        ? null
-                        : _cooperativeBrandController.text;
-
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (_) {
-                      return RequestDataLoading(
-                        requestCallBack: UserRepositoryImpl()
-                            .factoryUpdate(widget.factory)
-                            .then((a) => Navigator.pop(context)),
-                        outsideDismiss: false,
-                        loadingText: '保存中。。。',
-                        entrance: 'createPurchaseOrder',
-                      );
-                    }
-                );
-
-              })
-        ],
-      ),
+//      appBar: AppBar(
+//        title: Text('基本资料'),
+//        centerTitle: true,
+//        elevation: 0.5,
+//        actions: <Widget>[
+//          IconButton(
+//              icon: Text(
+//                '确定',
+//                style: TextStyle(),
+//              ),
+//              onPressed: () {
+//                if (medias.length > 0) {
+//                  widget.factory.profilePicture = medias[0];
+//                } else {
+//                  widget.factory.profilePicture = null;
+//                }
+//                widget.factory.name =
+//                    _nameController.text == '' ? null : _nameController.text;
+//                widget.factory.cooperativeBrand =
+//                    _cooperativeBrandController.text == ''
+//                        ? null
+//                        : _cooperativeBrandController.text;
+//
+//                showDialog(
+//                    context: context,
+//                    barrierDismissible: false,
+//                    builder: (_) {
+//                      return RequestDataLoading(
+//                        requestCallBack: UserRepositoryImpl()
+//                            .factoryUpdate(widget.factory)
+//                            .then((a) => Navigator.pop(context)),
+//                        outsideDismiss: false,
+//                        loadingText: '保存中。。。',
+//                        entrance: 'createPurchaseOrder',
+//                      );
+//                    }
+//                );
+//
+//              })
+//        ],
+//      ),
       body: Container(
         color: Colors.grey[200],
         child: ListView(
@@ -108,21 +109,28 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 '上传图片',
                 style: TextStyle(
                   fontSize: 17,
-                  color: Colors.grey,
                 ),
               ),
             ),
             EditableAttachments(
-              list: medias,
+              list: widget.medias,
               maxNum: 1,
             ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _nameFocusNode,
-                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,)),
+                leadingText: Text('公司名称',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                isRequired: true,
                 controller: _nameController,
                 hintText: '请输入公司名称',
+                onChanged: (v) {
+                  widget.factory.name =
+                      _nameController.text == '' ? null : _nameController.text;
+                },
               ),
             ),
             InkWell(
@@ -138,11 +146,17 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         fontSize: 16,
                       ),
                     )),
-                    Text(widget.factory.monthlyCapacityRange == null
-                        ? ''
-                        : MonthlyCapacityRangesLocalizedMap[
-                            widget.factory.monthlyCapacityRange],style: TextStyle(color: Colors.grey),),
-                    Icon(Icons.chevron_right,color:Colors.grey,),
+                    Text(
+                      widget.factory.monthlyCapacityRange == null
+                          ? ''
+                          : MonthlyCapacityRangesLocalizedMap[
+                              widget.factory.monthlyCapacityRange],
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
@@ -174,7 +188,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+              child: Divider(
+                height: 0,
+                color: Color(Constants.DIVIDER_COLOR),
+              ),
             ),
             InkWell(
               child: Container(
@@ -189,10 +206,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         fontSize: 16,
                       ),
                     )),
-                    Text(widget.factory.scaleRange == null
-                        ? ''
-                        : ScaleRangesLocalizedMap[widget.factory.scaleRange],style: TextStyle(color: Colors.grey),),
-                    Icon(Icons.chevron_right,color:Colors.grey,),
+                    Text(
+                      widget.factory.scaleRange == null
+                          ? ''
+                          : ScaleRangesLocalizedMap[widget.factory.scaleRange],
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
@@ -222,7 +245,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+              child: Divider(
+                height: 0,
+                color: Color(Constants.DIVIDER_COLOR),
+              ),
             ),
             InkWell(
               child: Container(
@@ -237,11 +263,17 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         fontSize: 16,
                       ),
                     )),
-                    Text(widget.factory.populationScale == null
-                        ? ''
-                        : PopulationScaleLocalizedMap[
-                            widget.factory.populationScale],style: TextStyle(color: Colors.grey),),
-                    Icon(Icons.chevron_right,color:Colors.grey,),
+                    Text(
+                      widget.factory.populationScale == null
+                          ? ''
+                          : PopulationScaleLocalizedMap[
+                              widget.factory.populationScale],
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
@@ -273,7 +305,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+              child: Divider(
+                height: 0,
+                color: Color(Constants.DIVIDER_COLOR),
+              ),
             ),
             InkWell(
               child: Container(
@@ -288,9 +323,15 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         fontSize: 16,
                       ),
                     )),
-                    Text(formatCooperationModesSelectText(
-                        widget.factory.cooperationModes),style: TextStyle(color: Colors.grey),),
-                    Icon(Icons.chevron_right,color:Colors.grey,),
+                    Text(
+                      formatCooperationModesSelectText(
+                          widget.factory.cooperationModes),
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
@@ -324,7 +365,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+              child: Divider(
+                height: 0,
+                color: Color(Constants.DIVIDER_COLOR),
+              ),
             ),
             InkWell(
               child: Container(
@@ -340,9 +384,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatCategorySelectText(widget.factory.categories, 5),style: TextStyle(color: Colors.grey),
+                      formatCategorySelectText(widget.factory.categories, 5),
+                      style: TextStyle(color: Colors.grey),
                     ),
-                    Icon(Icons.chevron_right,color:Colors.grey,),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
@@ -369,7 +417,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+              child: Divider(
+                height: 0,
+                color: Color(Constants.DIVIDER_COLOR),
+              ),
             ),
             InkWell(
               child: Container(
@@ -386,9 +437,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     )),
                     Text(
                       formatCategorySelectText(
-                          widget.factory.adeptAtCategories, 2),style: TextStyle(color: Colors.grey),
+                          widget.factory.adeptAtCategories, 2),
+                      style: TextStyle(color: Colors.grey),
                     ),
-                    Icon(Icons.chevron_right,color:Colors.grey,),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
@@ -413,19 +468,34 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+              child: Divider(
+                height: 0,
+                color: Color(Constants.DIVIDER_COLOR),
+              ),
             ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
                 focusNode: _cooperativeBrandFocusNode,
-                leadingText: Text('合作品牌商',style: TextStyle(fontSize: 16,)),
+                leadingText: Text('合作品牌商',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
                 controller: _cooperativeBrandController,
+                onChanged: (v) {
+                  widget.factory.cooperativeBrand =
+                      _cooperativeBrandController.text == ''
+                          ? null
+                          : _cooperativeBrandController.text;
+                },
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+              child: Divider(
+                height: 0,
+                color: Color(Constants.DIVIDER_COLOR),
+              ),
             ),
             InkWell(
               child: Container(
@@ -441,9 +511,13 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatLabelsSelectText(widget.factory.labels),style: TextStyle(color: Colors.grey),
+                      formatLabelsSelectText(widget.factory.labels),
+                      style: TextStyle(color: Colors.grey),
                     ),
-                    Icon(Icons.chevron_right,color:Colors.grey,),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),

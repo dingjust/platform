@@ -4,19 +4,29 @@ import 'package:widgets/widgets.dart';
 
 /// 产品搜索页
 class AmapSearchDelegatePage extends SearchDelegate<Tip> {
+  final String city;
+
+  AmapSearchDelegatePage({this.city});
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    // TODO: implement appBarTheme
+    return super.appBarTheme(context);
+  }
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       query != ''
           ? IconButton(
-              icon: Icon(
-                B2BIcons.del_blank_card,
-                size: 15,
-              ),
-              onPressed: () {
-                query = '';
-              },
-            )
+        icon: Icon(
+          B2BIcons.del_blank_card,
+          size: 15,
+        ),
+        onPressed: () {
+          query = '';
+        },
+      )
           : Container(),
     ];
   }
@@ -68,24 +78,24 @@ class AmapSearchDelegatePage extends SearchDelegate<Tip> {
               children: snapshot.data.tips
                   .map(
                     (tip) => SuggestionsRow(
-                          value: tip.name,
-                          address: tip.address,
-                          location: tip.location,
-                          onIconPressed: () {
-                            query = tip.name;
-                          },
-                          onTap: () {
-                            Navigator.of(context).pop(tip);
-                          },
-                        ),
-                  )
+                  value: tip.name,
+                  address: tip.address,
+                  location: tip.location,
+                  onIconPressed: () {
+                    query = tip.name;
+                  },
+                  onTap: () {
+                    Navigator.of(context).pop(tip);
+                  },
+                ),
+              )
                   .toList());
         } else {
           return Container();
         }
       },
       initialData: null,
-      future: AmapService.instance.inputtips(query),
+      future: AmapService.instance.inputtips(query, city: city),
     );
   }
 }

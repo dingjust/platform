@@ -12,7 +12,8 @@ class MyCompanyCertificateWidget extends StatefulWidget {
   MyCompanyCertificateWidget(
     this.company, {
     this.onlyRead = false,
-  });
+        Key key,
+  }):super(key:key);
 
   MyCompanyCertificateWidgetState createState() =>
       MyCompanyCertificateWidgetState();

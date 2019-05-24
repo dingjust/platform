@@ -10,7 +10,7 @@ import 'package:widgets/widgets.dart';
 import '../my_factory.dart';
 
 class MyFactoryBaseInfo extends StatefulWidget {
-  MyFactoryBaseInfo(this.factory);
+  MyFactoryBaseInfo(this.factory,{Key key}):super(key:key);
 
   final FactoryModel factory;
 

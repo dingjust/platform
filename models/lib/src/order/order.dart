@@ -807,7 +807,7 @@ class PurchaseOrderModel extends OrderModel {
       this.uniqueCode,
       this.delayed,
       this.quoteRef,
-        this.delayedDays,
+      this.delayedDays,
       DateTime modifiedtime,
       SalesApplication salesApplication,
       ConsignmentModel consignment})

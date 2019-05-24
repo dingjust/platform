@@ -70,3 +70,33 @@ class Tip {
     }
   }
 }
+
+
+/// 高德输入提示响应
+@JsonSerializable()
+class AmapAroundResponse {
+  @JsonKey(fromJson: _stringToInt)
+  final int status;
+
+  @JsonKey(fromJson: _stringToInt)
+  final int count;
+
+  final String info;
+
+  final String infocode;
+
+  final List<Tip> pois;
+
+  AmapAroundResponse(this.status, this.count, this.info, this.infocode,
+      this.pois);
+
+  factory AmapAroundResponse.fromJson(Map<String, dynamic> json) =>
+      _$AmapAroundResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(AmapAroundResponse model) =>
+      _$AmapAroundResponseToJson(model);
+
+  static int _stringToInt(String str) {
+    return int.parse(str);
+  }
+}

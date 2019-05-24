@@ -279,38 +279,55 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //底部订单信息
   Widget _buildBottom(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child:
-                order.code == null ? Container() : Text('生产订单号：${order.code}'),
-          ),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: order.requirementOrderCode == null
-                  ? Container()
-                  : Text('需求订单号：${order.requirementOrderCode}')),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: order.creationTime == null
-                  ? Container()
-                  : Text(
-                      '订单生成时间：${DateFormatUtil.formatYMD(order.creationTime)}')),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: order.expectedDeliveryDate == null
-                  ? Container()
-                  : Text(
-                      '预计交货时间：${DateFormatUtil.formatYMD(order.expectedDeliveryDate)}')),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
+    return GestureDetector(
+      onTap: (){
+        copyToClipboard(order.code);
+      },
+      child: Container(
+        padding: EdgeInsets.all(15),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child:
+                        order.code == null ? Container() : Text('生产订单号：${order.code}'),
+                  ),
+                ),
+                Text(
+                  '复制',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                )
+              ],
+            ),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: order.requirementOrderCode == null
+                    ? Container()
+                    : Text('需求订单号：${order.requirementOrderCode}')),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: order.creationTime == null
+                    ? Container()
+                    : Text(
+                        '订单生成时间：${DateFormatUtil.formatYMD(order.creationTime)}')),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: order.expectedDeliveryDate == null
+                    ? Container()
+                    : Text(
+                        '预计交货时间：${DateFormatUtil.formatYMD(order.expectedDeliveryDate)}')),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
     );
   }
@@ -517,7 +534,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     Container(
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller : order.purchaser.name}',
+                        '${order.purchaser == null || order.purchaser.name == null ? order.companyOfSeller == null || order.companyOfSeller == '' ? '':order.companyOfSeller : order.purchaser.name}',
                         textScaleFactor: 1.3,
                       ),
                     ),
@@ -541,6 +558,30 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   ],
                 ))
               ],
+            ),
+            Divider(
+              height: 1,
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      '${order.contactPersonOfSeller == null || order.contactPersonOfSeller == '' ? '未填写联系人':order.contactPersonOfSeller }',
+                      style: order.contactPersonOfSeller == null || order.contactPersonOfSeller == '' ? TextStyle(
+                        color: Colors.grey
+                      ):TextStyle(),
+                    ),
+                  ),
+                  Text(
+                    '${order.contactOfSeller == null || order.contactOfSeller == '' ? '未填写联系电话':order.contactOfSeller }',
+                    style: order.contactOfSeller == null || order.contactOfSeller == '' ? TextStyle(
+                        color: Colors.grey
+                    ):TextStyle(),
+                  ),
+                ],
+              ),
             ),
             Divider(
               height: 1,

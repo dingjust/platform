@@ -51,6 +51,7 @@ class CategorySelectState extends State<CategorySelect> {
 
   @override
   void initState() {
+
     _multiple = widget.multiple;
     if (widget.categorySelect.isNotEmpty) {
       _selectLeft = widget.categorySelect[0].parent?.code;

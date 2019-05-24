@@ -3,7 +3,6 @@ import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:b2b_commerce/src/my/company/form/my_company_certificate.dart';
-import 'package:b2b_commerce/src/my/company/form/my_company_contact_from.dart';
 import 'package:b2b_commerce/src/my/company/form/my_personal_certificate.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -14,7 +13,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './company/form/my_brand_base_form.dart';
-import './company/my_company_contact_way.dart';
+import 'company/form/my_company_contact_form.dart';
 
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
@@ -48,7 +47,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactFromPage(
+              builder: (context) => MyCompanyContactFormPage(
                 company:widget.brand,
                 isDetail: widget.isDetail,
               ),

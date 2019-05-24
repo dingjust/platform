@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/search/factory_search.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
+import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -172,30 +173,30 @@ class _FactoryPageState extends State<FactoryPage> {
             brightness: Brightness.light,
             automaticallyImplyLeading: false,
             elevation: 0.5,
-            title:  Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      child: Icon(
-                        Icons.keyboard_arrow_left,
-                        size: 32,
-                      ),
+            title: Row(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    child: Icon(
+                      Icons.keyboard_arrow_left,
+                      size: 32,
                     ),
                   ),
-                  Expanded(
-                    child:GestureDetector(
-                      onTap: () async{
-                        String keyword = await showSearch(
-                          context: context,
-                          delegate: FactorySearchDelegate(),
-                        );
-                        factoryCondition.setKeyword(keyword);
-                        FactoryBLoC.instance.clear();
-                      },
-                      child: Container(
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      String keyword = await showSearch(
+                        context: context,
+                        delegate: FactorySearchDelegate(),
+                      );
+                      factoryCondition.setKeyword(keyword);
+                      FactoryBLoC.instance.clear();
+                    },
+                    child: Container(
                       height: 28,
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       decoration: BoxDecoration(
@@ -205,48 +206,52 @@ class _FactoryPageState extends State<FactoryPage> {
                       ),
                       child: Row(
                         children: <Widget>[
-                          const Icon(B2BIcons.search, color: Colors.grey, size: 18),
+                          const Icon(B2BIcons.search,
+                              color: Colors.grey, size: 18),
                           Text(
                             '   ${generateTitle()}',
-                            style: const TextStyle(color: Colors.grey, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 16),
                           )
                         ],
                       ),
                     ),
                   ),
-                  ),
-                ],
+                ),
+              ],
             ),
             actions: <Widget>[
               GestureDetector(
-                child: widget.route == '就近找厂'?
-                Container(
-                    width: addressLine != null && addressLine != '' && addressLine.length < 5
+                child: widget.route == '就近找厂'
+                    ? Container(
+                    width: addressLine != null &&
+                        addressLine != '' &&
+                        addressLine.length < 5
                         ? (15 * addressLine.length + 5).toDouble()
                         : 80,
                     child: Center(
                         child: Text(
                           '${addressLine != null ? addressLine : ''}',
                           overflow: TextOverflow.ellipsis,
-                        )
-                    )
-                ):Container(),
-                onTap: (){
-                  if(widget.route == '就近找厂'){
+                        )))
+                    : Container(),
+                onTap: () {
+                  if (widget.route == '就近找厂') {
                     onLocation();
                   }
                 },
               ),
               GestureDetector(
-                child: widget.route == '就近找厂'?
-                Container(
+                child: widget.route == '就近找厂'
+                    ? Container(
                   padding: EdgeInsets.only(right: 5),
-                    child: Icon(
-                      Icons.location_on,
-                    ),
-                ):Container(),
-                onTap: (){
-                  if(widget.route == '就近找厂'){
+                  child: Icon(
+                    Icons.location_on,
+                  ),
+                )
+                    : Container(),
+                onTap: () {
+                  if (widget.route == '就近找厂') {
                     onLocation();
                   }
                 },
@@ -455,7 +460,9 @@ class _FactoryPageState extends State<FactoryPage> {
   }
 
   void onLocation() async {
-    Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
+    // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
+    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => AmapSearchPage(city: aMapLocation.city)));
     print(tip.name);
     setState(() {
       List<String> locationArray = tip.location.split(',');
