@@ -38,9 +38,9 @@ class ProductionSearchResultBLoC extends BLoCBase {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-        'code': keyword,
-        'skuID': keyword,
-        'belongto': keyword,
+        'keyword': keyword,
+//        'skuID': keyword,
+//        'belongto': keyword,
       };
       Response<Map<String, dynamic>> response;
 

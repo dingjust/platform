@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -248,46 +249,52 @@ class _RequirementOrderDetailPageState
   }
 
   Widget _buildHeader() {
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Row(
+    return GestureDetector(
+      onTap: (){
+        copyToClipboard(widget.order.code);
+      },
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Text('需求订单号：' + widget.order.code),
+                    flex: 1,
+                  ),
+                  Text(
+                    '复制',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                  child: Text('需求订单号：' + widget.order.code),
+                  child: Text('发布时间: ' +
+                      DateFormatUtil.format(widget.order.creationTime)),
                   flex: 1,
                 ),
-                Text(
-                  RequirementOrderStatusLocalizedMap[widget.order.status],
-                  style: TextStyle(
-                      fontSize: 15, color: _statusColors[widget.order.status]),
-                )
+                UserBLoC.instance.currentUser.type == UserType.BRAND
+                    ? Text(
+                        '已报价 ${widget.order.totalQuotesCount}',
+                        style: TextStyle(fontSize: 15, color: Colors.red),
+                      )
+                    : Container()
               ],
-            ),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: Text('发布时间: ' +
-                    DateFormatUtil.format(widget.order.creationTime)),
-                flex: 1,
-              ),
-              UserBLoC.instance.currentUser.type == UserType.BRAND
-                  ? Text(
-                      '已报价 ${widget.order.totalQuotesCount}',
-                      style: TextStyle(fontSize: 15, color: Colors.red),
-                    )
-                  : Container()
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -829,6 +836,26 @@ class _RequirementOrderDetailPageState
         );
       },
     );
+  }
+
+  copyToClipboard(final String text) {
+    if (text != null) {
+      Clipboard.setData(ClipboardData(text: text));
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              successTips: '复制成功',
+              callbackResult: true,
+              confirmAction: (){
+                Navigator.of(context).pop();
+              },
+            );
+          }
+      );
+    }
   }
 
   //格式选中的地区（多选）

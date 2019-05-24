@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/production/production_online_order_from.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -96,37 +97,42 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   }
 
   Widget _buildOrderState() {
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+    return GestureDetector(
+      onTap: (){
+        copyToClipboard(pageItem.code);
+      },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: Text('需求订单号：${pageItem.requirementOrder.code}'),
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text('报价单号：${pageItem.code}'),
-                ),
-                Text(
-                  QuoteStateLocalizedMap[pageItem.state],
-                  style: TextStyle(
-                    color: _statesColor[pageItem.state],
+        color: Colors.white,
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: Text('需求订单号：${pageItem.requirementOrder.code}'),
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text('报价单号：${pageItem.code}'),
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Text(
-                  '报价时间：' + pageItem.creationTime.toString().substring(0, 10)),
-            )
-          ],
+                  Text(
+                    '复制',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  )
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                    '报价时间：' + pageItem.creationTime.toString().substring(0, 10)),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -1115,5 +1121,25 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         );
       },
     );
+  }
+
+  copyToClipboard(final String text) {
+    if (text != null) {
+      Clipboard.setData(ClipboardData(text: text));
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              successTips: '复制成功',
+              callbackResult: true,
+              confirmAction: (){
+                Navigator.of(context).pop();
+              },
+            );
+          }
+      );
+    }
   }
 }

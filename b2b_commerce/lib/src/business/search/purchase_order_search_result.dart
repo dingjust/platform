@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/_shared/orders/proofing/proofing_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
@@ -8,59 +7,56 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class ProofingSearchResultPage extends StatefulWidget {
-  ProofingSearchResultPage({Key key, this.keyword}) : super(key: key);
+class PurchaseOrderSearchResultPage extends StatefulWidget {
+  PurchaseOrderSearchResultPage({Key key, this.keyword}) : super(key: key);
 
-  _ProofingSearchResultPageState createState() => _ProofingSearchResultPageState();
+  _PurchaseOrderSearchResultPageState createState() => _PurchaseOrderSearchResultPageState();
 
   String keyword;
 }
 
-class _ProofingSearchResultPageState extends State<ProofingSearchResultPage> {
+class _PurchaseOrderSearchResultPageState extends State<PurchaseOrderSearchResultPage> {
   GlobalKey _productionOrderBlocProviderKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return BLoCProvider<ProofingOrdersBLoC>(
+    return BLoCProvider<ProductionSearchResultBLoC>(
         key: _productionOrderBlocProviderKey,
-        bloc: ProofingOrdersBLoC.instance,
-        child: WillPopScope(
-          child: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              title: Text('${widget.keyword}'),
-              brightness: Brightness.dark,
-            ),
-            body: ProofListView(
-              keyword: widget.keyword,
-            ),
-            floatingActionButton: ScrollToTopButton<ProofingOrdersBLoC>(),
+        bloc: ProductionSearchResultBLoC.instance,
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text('${widget.keyword}'),
+            brightness: Brightness.dark,
           ),
-          onWillPop: (){
-            Navigator.of(context).pop();
-            ProofingOrdersBLoC().refreshData('ALL');
-          },
-        ),
-    );
+          body: ProductionListView(
+            keyword: widget.keyword,
+          ),
+          floatingActionButton: ScrollToTopButton<ProductionSearchResultBLoC>(),
+        ));
   }
 }
 
-class ProofListView extends StatelessWidget {
+class ProductionListView extends StatelessWidget {
   String keyword;
 
   ScrollController _scrollController = new ScrollController();
 
-  ProofListView({Key key, @required this.keyword}) : super(key: key);
+  ///当前选中条件
+  FilterConditionEntry currentCondition = FilterConditionEntry(
+      label: '当前生产', value: 'comprehensive', checked: true);
+
+  ProductionListView({Key key, @required this.keyword}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<ProofingOrdersBLoC>(context);
+    var bloc = BLoCProvider.of<ProductionSearchResultBLoC>(context);
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByKeyword(keyword);
+        bloc.loadingMore(keyword);
       }
     });
 
@@ -88,21 +84,21 @@ class ProofListView extends StatelessWidget {
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
-            StreamBuilder<List<ProofingModel>>(
+            StreamBuilder<List<PurchaseOrderModel>>(
                 initialData: null,
                 stream: bloc.stream,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<ProofingModel>> snapshot) {
+                    AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByKeyword(keyword);
+                    bloc.getData(keyword);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((order) {
-                        return ProofingOrderItem(
-                          model: order,
+                        return PurchaseOrderItem(
+                          order: order,
                         );
                       }).toList(),
                     );
@@ -130,7 +126,7 @@ class ProofListView extends StatelessWidget {
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                 return ProgressIndicatorFactory
                     .buildPaddedOpacityProgressIndicator(
-                    opacity: snapshot.data ? 1.0 : 0);
+                        opacity: snapshot.data ? 1.0 : 0);
               },
             ),
           ],
