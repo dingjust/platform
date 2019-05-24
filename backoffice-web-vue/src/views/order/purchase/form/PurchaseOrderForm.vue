@@ -66,7 +66,7 @@
       <el-card class="box-card" v-if="showProgress">
         <div slot="header" class="clearfix">
           <span>生产进度</span>
-          <el-button v-if="isTenant()" style="float: right; padding: 3px 0" type="text" icon="el-icon-edit"
+          <el-button v-if="isTenant()&&slotData.belongTo!=null&&slotData.belongTo.uid == 'GC00000001'" style="float: right; padding: 3px 0" type="text" icon="el-icon-edit"
                      @click="synchronizeVisible = true">
             生产进度同步
           </el-button>
