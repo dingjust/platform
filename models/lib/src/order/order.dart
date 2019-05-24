@@ -768,6 +768,8 @@ class PurchaseOrderModel extends OrderModel {
   //报价单号
   String quoteRef;
 
+  int delayedDays;
+
   // @JsonKey(fromJson: _dateTimefromMilliseconds)
   // DateTime modifiedtime;
 
@@ -805,6 +807,7 @@ class PurchaseOrderModel extends OrderModel {
       this.uniqueCode,
       this.delayed,
       this.quoteRef,
+        this.delayedDays,
       DateTime modifiedtime,
       SalesApplication salesApplication,
       ConsignmentModel consignment})
