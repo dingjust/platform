@@ -1,5 +1,6 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -83,7 +84,6 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
         ),
       ),
       B2BListTitle(
-        isRequired: true,
         onTap: onLocation,
         prefix: Text(
           '选择定位',
@@ -97,18 +97,29 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           textAlign: TextAlign.right,
         ),
       ),
-      TextFieldComponent(
-        focusNode: _line1FocusNode,
-        controller: _line1Controller,
-        leadingText: Text('详细地址',
-            style: TextStyle(
-              fontSize: 16,
-            )),
-        hintText: '道路、门牌号、小区、楼栋号、单元室等',
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-        dividerPadding: EdgeInsets.symmetric(),
-      ),
-      Container(
+      // TextFieldComponent(
+      //   focusNode: _line1FocusNode,
+      //   controller: _line1Controller,
+      //   leadingText: Text('详细地址',
+      //       style: TextStyle(
+      //         fontSize: 16,
+      //       )),
+      //   hintText: '道路、门牌号、小区、楼栋号、单元室等',
+      //   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+      //   dividerPadding: EdgeInsets.symmetric(),
+      // ),
+      InputRow(
+          label: '详细地址',
+          isRequired: true,
+          field: TextField(
+            autofocus: false,
+            controller: _line1Controller,
+            textAlign: TextAlign.right,
+            decoration: InputDecoration(
+                hintText: '道路、门牌号、小区、楼栋号、单元室等', border: InputBorder.none),
+          )),
+      UserBLoC.instance.currentUser.type == UserType.FACTORY
+          ? Container(
         margin: EdgeInsets.only(top: 20),
         child: Row(
           children: <Widget>[
@@ -121,7 +132,8 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
             )
           ],
         ),
-      ),
+      )
+          : Container()
     ];
 
     return Scaffold(

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,12 +25,12 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         child: ListView(
           children: <Widget>[
             _buildTelephone(context),
-            const Divider(height: 0),
+            const Divider(height: 5),
             _buildWechat(context),
-            const Divider(height: 0),
+            const Divider(height: 5),
             _buildQQ(context),
-            const Divider(height: 0),
-            _buildEmail(context),
+            const Divider(height: 5),
+            _buildQRCode(),
             _buildTips(context),
           ],
         ),
@@ -44,13 +45,12 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         child: ListTile(
           leading: const Text(
             '客服电话',
-            style: const TextStyle(fontSize: 16,  color: Colors.grey),
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
           trailing: const Text(
             '020-81682620',
             style: const TextStyle(
               fontSize: 16,
-              
             ),
           ),
         ),
@@ -68,19 +68,17 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         child: ListTile(
           leading: Text(
             '客服微信',
-            style: const TextStyle(fontSize: 16,  color: Colors.grey),
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
           trailing: const Text(
-            '',
+            '15202020805',
             style: const TextStyle(
               fontSize: 16,
-              
             ),
           ),
         ),
       ),
-      onTap: () {
-      },
+      onTap: () {},
     );
   }
 
@@ -91,13 +89,12 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
         child: ListTile(
           leading: const Text(
             '客服QQ',
-            style: const TextStyle(fontSize: 16,  color: Colors.grey),
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
           trailing: Text(
             '1498868394',
             style: const TextStyle(
               fontSize: 16,
-              
             ),
           ),
         ),
@@ -108,33 +105,13 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
     );
   }
 
-  Widget _buildEmail(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        color: Colors.white,
-        child: ListTile(
-          leading: Text(
-            '客服邮箱',
-            style: const TextStyle(fontSize: 16,  color: Colors.grey),
-          ),
-          trailing: Text(
-            'xiaoyongkuang@nbyjy.net',
-            style: const TextStyle(
-              fontSize: 16,
-              
-            ),
-          ),
-        ),
-      ),
-      onTap: () {
-        copyToClipboard('xiaoyongkuang@nbyjy.net');
-      },
-    );
+  Widget _buildQRCode() {
+    return Container(child: Image.asset('temp/QRCode.png', package: 'assets'));
   }
 
   Widget _buildTips(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 100),
+      margin: const EdgeInsets.only(top: 10),
       child: Center(
         child: Text(
           '上班时间：工作日 9:00 - 18:00',
@@ -187,12 +164,10 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
             dialogType: DialogType.RESULT_DIALOG,
             successTips: '复制成功',
             callbackResult: true,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    );
+        });
   }
-
 }
