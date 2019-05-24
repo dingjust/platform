@@ -8,29 +8,29 @@ part 'media.g.dart';
 class MediaModel extends ItemModel {
   /// id
 
-  final int id;
+  int id;
 
   /// 文件名
-  final String name;
+  String name;
 
   /// URL地址
-  final String url;
+  String url;
 
   /// 文件类型
-  final String mediaType;
+  String mediaType;
 
   /// mime
-  final String mime;
+  String mime;
 
   /// mediaFormat
-  final String mediaFormat;
+  String mediaFormat;
 
   /// 多格式图片组
   @JsonKey(
     toJson: convertedMediasToJson,
     // fromJson: _fromConvertedMedias
   )
-  final List<MediaModel> convertedMedias;
+  List<MediaModel> convertedMedias;
 
   MediaModel(
       {this.id,
@@ -49,6 +49,26 @@ class MediaModel extends ItemModel {
 
   static List<String> convertedMediasToJson(List<MediaModel> convertedMedias) =>
       null;
+
+  static void populatorMedia(MediaModel source,MediaModel target){
+    source.name = target.name;
+    source.id = target.id;
+    source.url = target.url;
+    source.convertedMedias = target.convertedMedias;
+    source.mime = target.mime;
+    source.mediaFormat = target.mediaFormat;
+    source.mediaType = target.mediaType;
+  }
+
+  static void clearMedia(MediaModel source,MediaModel target){
+    source.name = null;
+    source.id = null;
+    source.url = null;
+    source.convertedMedias = null;
+    source.mime = null;
+    source.mediaFormat = null;
+    source.mediaType = null;
+  }
 
   // static List<MediaModel> _fromConvertedMedias(List<dynamic> medias) =>
   //     medias.map((media) {

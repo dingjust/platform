@@ -19,6 +19,7 @@ class ApparelProductsPage extends StatefulWidget {
 }
 
 class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTickerProviderStateMixin{
+
   final List<EnumModel> _statuses = UserBLoC.instance.currentUser.type == UserType.FACTORY ? <EnumModel>[
     EnumModel('approved', '上架产品'),
     EnumModel('unapproved', '下架产品'),
@@ -34,21 +35,12 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
   void initState() {
     _tabController = TabController(length: _statuses.length, vsync: this);
     _tabController.addListener((){
+      print('${_tabController.index}------------------------');
+      print('${_tabController.indexIsChanging}------------------------');
       if(_tabController.index.toDouble() == _tabController.animation.value){
-        setState(() {
-          isChangeTab = true;
-        });
-//        switch (_tabController.index) {
-//          case 0:
-//            print(1);
-//            break;
-//          case 1:
-//            print(2);
-//            break;
-//          case 2:
-//            print(3);
-//            break;
-//        }
+//        setState(() {
+//          isChangeTab = true;
+//        });
       }
 
     });
@@ -122,6 +114,7 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
                 return Container(
                   padding: EdgeInsets.only(top: 10),
                   child:ApparelProductList(
+                    key: PageStorageKey(status),
                     isSelectOption: widget.isSelectOption,
                     status: status.code,
                     keyword: _keyword,

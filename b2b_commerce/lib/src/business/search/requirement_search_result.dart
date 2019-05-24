@@ -23,14 +23,20 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
     return BLoCProvider<RequirementOrderBLoC>(
       key: _globalKey,
       bloc: RequirementOrderBLoC.instance,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('查询结果'),
-          elevation: 0.5,
-          centerTitle: true,
+      child: WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('查询结果'),
+            elevation: 0.5,
+            centerTitle: true,
+          ),
+          body: RequirementOrderList(keyword: widget.keyword,),
+          floatingActionButton: ScrollToTopButton<RequirementOrderBLoC>(),
         ),
-        body: RequirementOrderList(keyword: widget.keyword,),
-        floatingActionButton: ScrollToTopButton<RequirementOrderBLoC>(),
+        onWillPop: (){
+          Navigator.of(context).pop();
+          RequirementOrderBLoC().refreshData('ALL');
+        },
       ),
     );
   }

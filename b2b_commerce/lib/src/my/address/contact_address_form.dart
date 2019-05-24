@@ -10,9 +10,9 @@ import 'package:widgets/widgets.dart';
 import 'region_select.dart';
 
 class ContactAddressFormPage extends StatefulWidget {
-  ContactAddressFormPage({this.address, this.company});
-
   final AddressModel address;
+
+  ContactAddressFormPage({this.address, this.company});
 
   final B2BUnitModel company;
 

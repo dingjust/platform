@@ -343,7 +343,7 @@ const PriceRangesEnum = <EnumModel>[
 const MonthlyCapacityRangesEnum = <EnumModel>[
   EnumModel('MCR001', '0-5000件'),
   EnumModel('MCR002', '5000-10000件'),
-  EnumModel('MCR003', '5000-10000件'),
+  EnumModel('MCR003', '10000-30000件'),
   EnumModel('MCR004', '30000件以上'),
 ];
 
