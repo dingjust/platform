@@ -47,8 +47,18 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
                   onTap: () async {
                     double min = ClassHandleUtil.removeSymbolRMBToDouble(_minPriceController.text);
                     double max = ClassHandleUtil.removeSymbolRMBToDouble(_maxPriceController.text);
+                    print(min);
+                    print(max);
+                    if(min == null){
+                      _showValidateMsg(context, '请填写价格下限');
+                      return;
+                    }
+                    if(max == null){
+                      _showValidateMsg(context, '请填写价格上限');
+                      return;
+                    }
                     if(min > max){
-                      ShowDialogUtil.showSimapleDialog(context, '价格上限不可小于价格下限');
+                      _showValidateMsg(context, '价格上限不可小于价格下限');
                       return;
                     }
                     widget.item.minPrice = min;
@@ -104,6 +114,26 @@ class _ApparelProductPricesInputPageState extends State<ApparelProductPricesInpu
         ],
       ),
     );
+  }
+
+  //非空提示
+  bool _showValidateMsg(BuildContext context, String message) {
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context, String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            outsideDismiss: true,
+          );
+        });
   }
 
 }

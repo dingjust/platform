@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/my/company/form/my_company_contact_from.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_from_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
@@ -11,11 +10,10 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './company/form/my_company_profile_form.dart';
-import './company/form/my_factory_base_form.dart';
 import '../business/orders/requirement_order_from.dart';
+import 'company/form/my_factory_contact_form.dart';
 import 'company/form/my_factory_form.dart';
 import 'company/my_company_cash_products_widget.dart';
-import 'company/my_company_tabbar_widget.dart';
 
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {
@@ -51,7 +49,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     EnumModel('d', '公司认证'),
   ];
 
-  GlobalKey _factoryKey = GlobalKey();
+  FactoryModel _factory;
   var _getFactoryFuture;
   List<CompanyProfileModel> _profiles = [];
 
@@ -67,9 +65,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
   _getFactoryData() {
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return UserRepositoryImpl()
-          .getFactory(UserBLoC.instance.currentUser.companyCode);
+          .getFactory(UserBLoC.instance.currentUser.companyCode).then((v) => _factory = v);
     } else {
-      return UserRepositoryImpl().getFactory(widget.factory.uid);
+      return UserRepositoryImpl().getFactory(widget.factory.uid).then((v) => _factory = v);
     }
   }
 
@@ -184,10 +182,6 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 //        ),
 //      );
 //    }
-//    _widgets.add(_buildCashProducts());
-//    _widgets.add(_buildFactoryWorkPicInfo());
-//    _widgets.add(_buildCompanyCertificate());
-//    _widgets.add(_buildRegisterDate());
 
     return Scaffold(
       appBar: AppBar(
@@ -200,7 +194,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             child: IconButton(
                 icon: Text('编辑'),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryFormPage(factory: widget.factory,))).then((v){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryFormPage(factory: _factory,))).then((v){
                     setState(() {
                       _getFactoryFuture = _getFactoryData();
                     });
@@ -416,7 +410,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactFromPage(
+              builder: (context) => MyFactoryContactFormPage(
                     company: widget.factory,
                     isEditing: true,
                   ),

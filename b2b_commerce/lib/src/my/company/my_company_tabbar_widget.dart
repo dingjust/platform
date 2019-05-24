@@ -1,9 +1,7 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-import '../my_factory.dart';
-import 'form/my_company_contact_from.dart';
+import 'form/my_company_contact_form.dart';
 import 'my_company_cash_products_widget.dart';
 import 'my_company_certificate_widget.dart';
 import 'my_company_contact_from_widget.dart';
@@ -96,7 +94,7 @@ class _MyCompanyTabbarState extends State<MyCompanyTabbar>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactFromPage(
+              builder: (context) => MyCompanyContactFormPage(
                     company: widget.factory,
                     isEditing: true,
                   ),

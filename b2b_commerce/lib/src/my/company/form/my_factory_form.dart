@@ -4,8 +4,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'my_company_contact_from.dart';
 import 'my_factory_base_form.dart';
+import 'my_factory_contact_form.dart';
 
 class MyFactoryFormPage extends StatefulWidget {
   FactoryModel factory;
@@ -28,7 +28,6 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: _states.length);
-    print('${FactoryModel.toJson(widget.factory)}');
     _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
     _factory.contactAddress = widget.factory.contactAddress;
     if (widget.factory.profilePicture != null) {
@@ -65,7 +64,7 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
                 return MyFactoryBaseFormPage(_factory,medias: _medias,);
                 break;
               case 'contact':
-                return MyCompanyContactFromPage(
+                return MyFactoryContactFormPage(
                   company: _factory,
                   isEditing: true,
                 );

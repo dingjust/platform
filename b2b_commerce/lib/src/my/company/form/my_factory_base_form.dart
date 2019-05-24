@@ -109,7 +109,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 '上传图片',
                 style: TextStyle(
                   fontSize: 17,
-                  color: Colors.grey,
                 ),
               ),
             ),
@@ -125,6 +124,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     style: TextStyle(
                       fontSize: 16,
                     )),
+                isRequired: true,
                 controller: _nameController,
                 hintText: '请输入公司名称',
                 onChanged: (v) {
