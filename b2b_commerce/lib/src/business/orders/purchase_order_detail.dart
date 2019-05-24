@@ -279,38 +279,55 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //底部订单信息
   Widget _buildBottom(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child:
-                order.code == null ? Container() : Text('生产订单号：${order.code}'),
-          ),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: order.requirementOrderCode == null
-                  ? Container()
-                  : Text('需求订单号：${order.requirementOrderCode}')),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: order.creationTime == null
-                  ? Container()
-                  : Text(
-                      '订单生成时间：${DateFormatUtil.formatYMD(order.creationTime)}')),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: order.expectedDeliveryDate == null
-                  ? Container()
-                  : Text(
-                      '预计交货时间：${DateFormatUtil.formatYMD(order.expectedDeliveryDate)}')),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
+    return GestureDetector(
+      onTap: (){
+        copyToClipboard(order.code);
+      },
+      child: Container(
+        padding: EdgeInsets.all(15),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child:
+                        order.code == null ? Container() : Text('生产订单号：${order.code}'),
+                  ),
+                ),
+                Text(
+                  '复制',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                )
+              ],
+            ),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: order.requirementOrderCode == null
+                    ? Container()
+                    : Text('需求订单号：${order.requirementOrderCode}')),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: order.creationTime == null
+                    ? Container()
+                    : Text(
+                        '订单生成时间：${DateFormatUtil.formatYMD(order.creationTime)}')),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: order.expectedDeliveryDate == null
+                    ? Container()
+                    : Text(
+                        '预计交货时间：${DateFormatUtil.formatYMD(order.expectedDeliveryDate)}')),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
     );
   }

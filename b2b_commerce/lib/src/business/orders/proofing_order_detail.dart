@@ -652,28 +652,45 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
   }
 
   Widget _buildOrderInfoRow() {
-    return Container(
-      color: Colors.white,
-      height: 100,
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            '打样单号：${widget.model.code}',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            '发布时间：${DateFormatUtil.format(widget.model.creationTime)}',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            '需求订单号：${widget.model.requirementOrderRef}',
-            style: TextStyle(color: Colors.black),
-          )
-        ],
+    return GestureDetector(
+      onTap: (){
+        copyToClipboard(widget.model.code);
+      },
+      child: Container(
+        color: Colors.white,
+        height: 100,
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    '打样单号：${widget.model.code}',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                Text(
+                  '复制',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                )
+              ],
+            ),
+            Text(
+              '发布时间：${DateFormatUtil.format(widget.model.creationTime)}',
+              style: TextStyle(color: Colors.black),
+            ),
+            Text(
+              '需求订单号：${widget.model.requirementOrderRef}',
+              style: TextStyle(color: Colors.black),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -854,7 +871,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
               successTips: '复制成功',
-              callbackResult: false,
+              callbackResult: true,
               confirmAction: (){
                 Navigator.of(context).pop();
               },

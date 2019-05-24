@@ -23,14 +23,20 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
     return BLoCProvider<QuoteOrdersBLoC>(
       key: _globalKey,
       bloc: QuoteOrdersBLoC.instance,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('查询结果'),
-          elevation: 0.5,
-          centerTitle: true,
+      child: WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('查询结果'),
+            elevation: 0.5,
+            centerTitle: true,
+          ),
+          body: QuoteList(keyword: widget.keyword,),
+          floatingActionButton: ScrollToTopButton<QuoteOrdersBLoC>(),
         ),
-        body: QuoteList(keyword: widget.keyword,),
-        floatingActionButton: ScrollToTopButton<QuoteOrdersBLoC>(),
+        onWillPop: (){
+          Navigator.of(context).pop();
+          QuoteOrdersBLoC().refreshData('ALL');
+        },
       ),
     );
   }
