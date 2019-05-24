@@ -8,7 +8,7 @@ import 'package:widgets/widgets.dart';
 class MyCompanyCashProducts extends StatefulWidget{
   FactoryModel factory;
   Future getProductsFuture;
-  MyCompanyCashProducts(this.factory,{this.getProductsFuture,});
+  MyCompanyCashProducts(this.factory,{this.getProductsFuture,Key key}):super(key:key);
 
   _MyCompanyCashProductsState createState() => _MyCompanyCashProductsState();
 }

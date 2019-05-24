@@ -13,7 +13,7 @@ class MyCompanyContactFromWidgetPage extends StatefulWidget{
   bool isEditing;
   bool isScroll;
 
-  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false,this.isScroll = false});
+  MyCompanyContactFromWidgetPage({this.company,this.isEditing = false,this.isScroll = false,Key key,}):super(key:key);
 
   _MyCompanyContactFromWidgetPageState createState() => _MyCompanyContactFromWidgetPageState();
 }

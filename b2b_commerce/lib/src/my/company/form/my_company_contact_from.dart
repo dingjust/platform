@@ -28,7 +28,6 @@ class MyCompanyContactFromPage extends StatefulWidget {
 class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
   String btnText = '编辑';
   bool isEditing = false;
-  AddressModel addressModel;
 
   TextEditingController personController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -51,47 +50,49 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
     personController.text = widget.company.contactPerson;
     phoneController.text = widget.company.contactPhone;
     telController.text = widget.company.phone;
-    emailController.text = widget.company.email;
+    if(widget.company.email == 'xiaoyongkuang@nbyjy.net'){
+      emailController.text = null;
+    }else{
+      emailController.text = widget.company.email;
+    }
+
     QQController.text = widget.company.qq;
     weCharController.text = widget.company.wechat;
-    if (widget.company.contactAddress != null) {
-      addressModel = widget.company.contactAddress;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('联系方式'),
-        centerTitle: true,
-        elevation: 0.5,
-        actions: <Widget>[
-          Offstage(
-            offstage: isEditing || widget.isDetail,
-            child: Container(
-                width: 80,
-                child: ActionChip(
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide.none,
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  label: Text('编辑'),
-                  onPressed: () async {
-                    setState(() {
-                      isEditing = !isEditing;
-                      personController.text = widget.company.contactPerson;
-                      phoneController.text = widget.company.contactPhone;
-                      telController.text = widget.company.phone;
-                      emailController.text = widget.company.email;
-                      QQController.text = widget.company.qq;
-                      weCharController.text = widget.company.wechat;
-                    });
-                  },
-                  backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-                )),
-          )
-        ],
-      ),
+//      appBar: AppBar(
+//        title: Text('联系方式'),
+//        centerTitle: true,
+//        elevation: 0.5,
+//        actions: <Widget>[
+//          Offstage(
+//            offstage: isEditing || widget.isDetail,
+//            child: Container(
+//                width: 80,
+//                child: ActionChip(
+//                  shape: RoundedRectangleBorder(
+//                      side: BorderSide.none,
+//                      borderRadius: BorderRadius.all(Radius.circular(5))),
+//                  label: Text('编辑'),
+//                  onPressed: () async {
+//                    setState(() {
+//                      isEditing = !isEditing;
+//                      personController.text = widget.company.contactPerson;
+//                      phoneController.text = widget.company.contactPhone;
+//                      telController.text = widget.company.phone;
+//                      emailController.text = widget.company.email;
+//                      QQController.text = widget.company.qq;
+//                      weCharController.text = widget.company.wechat;
+//                    });
+//                  },
+//                  backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+//                )),
+//          )
+//        ],
+//      ),
       body: Container(
         color: Colors.white,
         child: ListView(
@@ -127,75 +128,75 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
           ],
         ),
       ),
-      bottomNavigationBar: isEditing
-          ? Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              height: 50,
-              child: RaisedButton(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  child: Text(
-                    '保存',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  onPressed: () async {
-                    setState(() {
-                      isEditing = false;
-                    });
-                    widget.company.contactAddress = addressModel;
-                    widget.company.contactPerson = personController.text == ''
-                        ? null
-                        : personController.text;
-                    widget.company.contactPhone = phoneController.text == ''
-                        ? null
-                        : phoneController.text;
-                    widget.company.email = emailController.text == ''
-                        ? null
-                        : emailController.text;
-                    widget.company.qq =
-                        QQController.text == '' ? null : QQController.text;
-                    widget.company.wechat = weCharController.text == ''
-                        ? null
-                        : weCharController.text;
-                    widget.company.phone =
-                        telController.text == '' ? null : telController.text;
-                    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) {
-                            return RequestDataLoading(
-                              requestCallBack: UserRepositoryImpl()
-                                  .brandUpdateContact(widget.company)
-                                  .then((a) {}), //
-                              outsideDismiss: false,
-                              loadingText: '保存中。。。',
-                              entrance: '00',
-                            );
-                          });
-                    } else if (UserBLoC.instance.currentUser.type ==
-                        UserType.FACTORY) {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) {
-                            return RequestDataLoading(
-                              requestCallBack: UserRepositoryImpl()
-                                  .factoryUpdateContact(widget.company),
-                              loadingText: '保存中。。。',
-                              entrance: '00',
-                            );
-                          });
-                    }
-                  }),
-            )
-          : null,
+//      bottomNavigationBar: isEditing
+//          ? Container(
+//              margin: EdgeInsets.all(10),
+//              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+//              height: 50,
+//              child: RaisedButton(
+//                  color: Color.fromRGBO(255, 214, 12, 1),
+//                  child: Text(
+//                    '保存',
+//                    style: TextStyle(
+//                      color: Colors.black,
+//                      fontWeight: FontWeight.w500,
+//                      fontSize: 18,
+//                    ),
+//                  ),
+//                  shape: RoundedRectangleBorder(
+//                      borderRadius: BorderRadius.all(Radius.circular(5))),
+//                  onPressed: () async {
+//                    setState(() {
+//                      isEditing = false;
+//                    });
+//                    widget.company.contactAddress = addressModel;
+//                    widget.company.contactPerson = personController.text == ''
+//                        ? null
+//                        : personController.text;
+//                    widget.company.contactPhone = phoneController.text == ''
+//                        ? null
+//                        : phoneController.text;
+//                    widget.company.email = emailController.text == ''
+//                        ? null
+//                        : emailController.text;
+//                    widget.company.qq =
+//                        QQController.text == '' ? null : QQController.text;
+//                    widget.company.wechat = weCharController.text == ''
+//                        ? null
+//                        : weCharController.text;
+//                    widget.company.phone =
+//                        telController.text == '' ? null : telController.text;
+//                    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+//                      showDialog(
+//                          context: context,
+//                          barrierDismissible: false,
+//                          builder: (_) {
+//                            return RequestDataLoading(
+//                              requestCallBack: UserRepositoryImpl()
+//                                  .brandUpdateContact(widget.company)
+//                                  .then((a) {}), //
+//                              outsideDismiss: false,
+//                              loadingText: '保存中。。。',
+//                              entrance: '00',
+//                            );
+//                          });
+//                    } else if (UserBLoC.instance.currentUser.type ==
+//                        UserType.FACTORY) {
+//                      showDialog(
+//                          context: context,
+//                          barrierDismissible: false,
+//                          builder: (_) {
+//                            return RequestDataLoading(
+//                              requestCallBack: UserRepositoryImpl()
+//                                  .factoryUpdateContact(widget.company),
+//                              loadingText: '保存中。。。',
+//                              entrance: '00',
+//                            );
+//                          });
+//                    }
+//                  }),
+//            )
+//          : null,
     );
   }
 
@@ -218,6 +219,11 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                 inputType: TextInputType.text,
                 textAlign: TextAlign.right,
                 controller: personController,
+                onChanged: (v){
+                  widget.company.contactPerson = personController.text == ''
+                        ? null
+                        : personController.text;
+                },
               ),
             )
           : Container(
@@ -259,6 +265,11 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                 inputType: TextInputType.phone,
                 textAlign: TextAlign.right,
                 controller: phoneController,
+                onChanged: (v){
+                  widget.company.contactPhone = phoneController.text == ''
+                      ? null
+                      : phoneController.text;
+                },
               ),
             )
           : GestureDetector(
@@ -324,9 +335,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                     address: widget.company.contactAddress,
                     company: widget.company),
               ),
-            ).then((value) {
-              addressModel = value;
-            });
+            );
           }
         },
       ),
@@ -353,6 +362,11 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                 inputType: TextInputType.phone,
                 textAlign: TextAlign.right,
                 controller: telController,
+                onChanged: (v){
+                  widget.company.phone = telController.text == ''
+                      ? null
+                      : telController.text;
+                },
               ),
             )
           : GestureDetector(
@@ -399,6 +413,11 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                 inputType: TextInputType.emailAddress,
                 textAlign: TextAlign.right,
                 controller: emailController,
+                onChanged: (v){
+                  widget.company.email = emailController.text == ''
+                      ? null
+                      : emailController.text;
+                },
               ),
             )
           : GestureDetector(
@@ -413,7 +432,7 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                 ),
                 trailing: Container(
                   child: Text(
-                    '${widget.company.email == null ? '' : widget.company.email}',
+                    '${widget.company.email == null  || widget.company.email == 'xiaoyongkuang@nbyjy.net' ? '' : widget.company.email}',
                     style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
@@ -445,6 +464,11 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                 inputType: TextInputType.text,
                 textAlign: TextAlign.right,
                 controller: QQController,
+                onChanged: (v){
+                  widget.company.qq = QQController.text == ''
+                      ? null
+                      : QQController.text;
+                },
               ),
             )
           : GestureDetector(
@@ -492,6 +516,11 @@ class _MyCompanyContactFromPageState extends State<MyCompanyContactFromPage> {
                   inputType: TextInputType.text,
                   textAlign: TextAlign.right,
                   controller: weCharController,
+                  onChanged: (v){
+                    widget.company.wechat = weCharController.text == ''
+                        ? null
+                        : weCharController.text;
+                  },
                 ),
               )
             : GestureDetector(
