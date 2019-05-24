@@ -48,3 +48,4 @@ export 'src/commons/input_format/decimal_input_format.dart';
 export 'src/commons/select/region_selector.dart';
 export 'src/commons/dialog/customize_dialog.dart';
 export 'src/commons/dialog/request_data_loading.dart';
+export 'src/commons/list_tile/list_title.dart';
