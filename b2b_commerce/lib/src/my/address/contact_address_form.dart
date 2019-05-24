@@ -1,5 +1,6 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
+import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -164,8 +165,12 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
   }
 
   void onLocation() async {
-    Tip tip =
-        await showSearch(context: context, delegate: AmapSearchDelegatePage());
+    // Tip tip = await showSearch(
+    //     context: context,
+    //     delegate: AmapSearchDelegatePage(city: widget.address.city.name));
+    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => AmapSearchPage(city: widget.address.city.name)));
+
     setState(() {
       List<String> locationArray = tip.location.split(',');
       widget.company.longitude = double.parse(locationArray[0]);

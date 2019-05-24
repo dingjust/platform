@@ -84,4 +84,10 @@ class Apis {
   static get guidelineDetail => (int id) {
         return '/{baseSiteId}/guideline/${id}';
       };
+
+  static const String AMAP_TIP_API =
+      'https://restapi.amap.com/v3/assistant/inputtips';
+
+  static const String AMAP_AROUND_API =
+      'https://restapi.amap.com/v3/place/around';
 }
