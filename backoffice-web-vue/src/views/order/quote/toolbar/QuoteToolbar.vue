@@ -10,12 +10,19 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapMutations} = createNamespacedHelpers('QuotesModule');
   export default {
     name: 'QuoteToolbar',
     components: {},
     computed: {},
     methods: {
+      ...mapMutations({
+        setKeyword: 'keyword',
+      }),
       onSearch() {
+        this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
@@ -30,7 +37,7 @@
     },
     data() {
       return {
-        keyword: this.$store.state.QuotesModule.keyword,
+        keyword: '',
         formData: this.$store.state.QuotesModule.formData,
       }
     }

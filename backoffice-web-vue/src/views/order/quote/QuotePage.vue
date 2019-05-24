@@ -48,6 +48,7 @@
     },
     computed: {
       ...mapGetters({
+        keyword: 'keyword',
         page: 'page'
       })
     },
@@ -105,7 +106,6 @@
     },
     data() {
       return {
-        keyword: this.$store.state.QuotesModule.keyword,
         formData: this.$store.state.QuotesModule.formData,
         queryFormData: this.$store.state.QuotesModule.queryFormData,
         purchaseOrderFormData: this.$store.state.PurchaseOrdersModule.formData,
