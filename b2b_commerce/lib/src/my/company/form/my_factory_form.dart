@@ -92,9 +92,11 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
               _factory.profilePicture = _medias.isNotEmpty ? _medias[0] : null;
               if(_factory.contactPerson == null){
                 _showValidateMsg(context, '请填写联系人');
+                return;
               }
               if(_factory.contactPhone == null){
                 _showValidateMsg(context, '请填写联系电话');
+                return;
               }
               if(_factory.contactAddress == null || _factory.contactAddress.region == null || _factory.contactAddress.line1 == null){
                 _showValidateMsg(context, '请填写经营地址');

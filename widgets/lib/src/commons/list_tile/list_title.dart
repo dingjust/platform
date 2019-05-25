@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:core/core.dart';
 
 class B2BListTitle extends StatelessWidget {
-  final BorderSide bottomBorderSide;
 
   final Widget prefix;
 
@@ -12,7 +12,6 @@ class B2BListTitle extends StatelessWidget {
   final VoidCallback onTap;
 
   const B2BListTitle({Key key,
-    this.bottomBorderSide = const BorderSide(color: Colors.grey, width: 0.3),
     this.prefix,
     this.suffix,
     this.isRequired = false,
@@ -28,15 +27,13 @@ class B2BListTitle extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              decoration:
-              BoxDecoration(border: Border(bottom: bottomBorderSide)),
               padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
               child: Row(
                 children: <Widget>[
                   Expanded(
                       child:Wrap(
                         children: <Widget>[
-                          suffix ?? Text(''),
+                          prefix ?? Text(''),
                           isRequired ? Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)) : Text(''),
                         ],
                       )
