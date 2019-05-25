@@ -5,8 +5,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 class MyFactoryContactFormPage extends StatefulWidget {
@@ -236,12 +234,14 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
             style: TextStyle(
               fontSize: 16,
             )),
-        hintText: '填写',
+        hintText: '填写(数字)',
         autofocus: false,
         isRequired: true,
-        inputType: TextInputType.phone,
         textAlign: TextAlign.right,
         controller: phoneController,
+        inputFormatters: [
+          WhitelistingTextInputFormatter.digitsOnly,
+        ],
         onChanged: (v) {
           widget.company.contactPhone =
               phoneController.text == '' ? null : phoneController.text;
@@ -266,7 +266,7 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
                   ),
                 ),
                 Text(
-                  '*',
+                  ' *',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.red,
@@ -310,11 +310,13 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
             style: TextStyle(
               fontSize: 16,
             )),
-        hintText: '填写',
+        hintText: '填写(数字)',
         autofocus: false,
-        inputType: TextInputType.phone,
         textAlign: TextAlign.right,
         controller: telController,
+        inputFormatters: [
+          WhitelistingTextInputFormatter.digitsOnly,
+        ],
         onChanged: (v) {
           widget.company.phone =
               telController.text == '' ? null : telController.text;
@@ -357,11 +359,13 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
                   style: TextStyle(
                     fontSize: 16,
                   )),
-              hintText: '填写',
+              hintText: '填写(数字)',
               autofocus: false,
-              inputType: TextInputType.text,
               textAlign: TextAlign.right,
               controller: QQController,
+              inputFormatters: [
+                WhitelistingTextInputFormatter.digitsOnly,
+              ],
               onChanged: (v) {
                 widget.company.qq =
                     QQController.text == '' ? null : QQController.text;

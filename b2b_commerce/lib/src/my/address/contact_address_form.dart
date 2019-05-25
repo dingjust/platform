@@ -98,27 +98,28 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           textAlign: TextAlign.right,
         ),
       ),
-      // TextFieldComponent(
-      //   focusNode: _line1FocusNode,
-      //   controller: _line1Controller,
-      //   leadingText: Text('详细地址',
-      //       style: TextStyle(
-      //         fontSize: 16,
-      //       )),
-      //   hintText: '道路、门牌号、小区、楼栋号、单元室等',
-      //   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-      //   dividerPadding: EdgeInsets.symmetric(),
-      // ),
-      InputRow(
-          label: '详细地址',
-          isRequired: true,
-          field: TextField(
-            autofocus: false,
-            controller: _line1Controller,
-            textAlign: TextAlign.right,
-            decoration: InputDecoration(
-                hintText: '道路、门牌号、小区、楼栋号、单元室等', border: InputBorder.none),
-          )),
+       TextFieldComponent(
+         isRequired: true,
+         focusNode: _line1FocusNode,
+         controller: _line1Controller,
+         leadingText: Text('详细地址',
+             style: TextStyle(
+               fontSize: 16,
+             )),
+         hintText: '道路、门牌号、小区、楼栋号、单元室等',
+         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+         dividerPadding: EdgeInsets.symmetric(),
+       ),
+//      InputRow(
+//          label: '详细地址',
+//          isRequired: true,
+//          field: TextField(
+//            autofocus: false,
+//            controller: _line1Controller,
+//            textAlign: TextAlign.right,
+//            decoration: InputDecoration(
+//                hintText: '道路、门牌号、小区、楼栋号、单元室等', border: InputBorder.none),
+//          )),
       UserBLoC.instance.currentUser.type == UserType.FACTORY
           ? Container(
         margin: EdgeInsets.only(top: 20),

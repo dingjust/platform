@@ -90,6 +90,16 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
               _factory.profilePicture = _medias.isNotEmpty ? _medias[0] : null;
+              if(_factory.contactPerson == null){
+                _showValidateMsg(context, '请填写联系人');
+              }
+              if(_factory.contactPhone == null){
+                _showValidateMsg(context, '请填写联系电话');
+              }
+              if(_factory.contactAddress == null || _factory.contactAddress.region == null || _factory.contactAddress.line1 == null){
+                _showValidateMsg(context, '请填写经营地址');
+                return;
+              }
               showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -106,5 +116,25 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
             }),
       ),
     );
+  }
+
+  //非空提示
+  bool _showValidateMsg(BuildContext context, String message) {
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context, String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            outsideDismiss: true,
+          );
+        });
   }
 }
