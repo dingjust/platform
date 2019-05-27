@@ -134,7 +134,7 @@ class ProductionBLoC extends BLoCBase {
     if (status == 'delayWarning') {
       List<PurchaseOrderModel> orders = [];
       for (int i = 0; i < _purchaseOrders.length; i++) {
-        if (_purchaseOrders[i].delayed) {
+        if (_purchaseOrders[i].delayedDays > 0) {
           orders.add(_purchaseOrders[i]);
         }
       }
@@ -192,7 +192,7 @@ class ProductionBLoC extends BLoCBase {
     if (status == 'delayWarning') {
       List<PurchaseOrderModel> orders = [];
       for (int i = 0; i < _purchaseOrders.length; i++) {
-        if (_purchaseOrders[i].delayed) {
+        if (_purchaseOrders[i].delayedDays > 0) {
           orders.add(_purchaseOrders[i]);
         }
       }
