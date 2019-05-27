@@ -340,7 +340,7 @@ let TENANT_APIS = {
     return '/b2b/guideline/update';
   },
   deleteOperationCourse(id) {
-    return '/b2b/guideline/delete'+id;
+    return '/b2b/guideline/delete/'+id;
   },
   getOperationCourses() {
     return '/b2b/guideline';
