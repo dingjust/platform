@@ -118,18 +118,19 @@ class FactoryNameText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(model.distance);
     if(isLocalFind){
       return Expanded(
         flex: 1,
         child: Row(
           children: <Widget>[
-        model.distance == null ?
-            Container():
         Expanded(
             child:
             Text(
                 '${model.name}', style: TextStyle(fontSize: 18))
         ),
+        model.distance == null ?
+        Container():
         Text(
             '${(model.distance.toInt() / 1000).toStringAsFixed(1)}' + 'km',
             style: TextStyle(

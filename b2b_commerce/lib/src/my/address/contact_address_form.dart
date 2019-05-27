@@ -1,5 +1,4 @@
 import 'package:amap_location/amap_location.dart';
-import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -190,6 +189,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
       widget.company.longitude = double.parse(locationArray[0]);
       widget.company.latitude = double.parse(locationArray[1]);
       widget.company.locationAddress = tip.address;
+      _line1Controller.text = tip.address;
     });
   }
 
