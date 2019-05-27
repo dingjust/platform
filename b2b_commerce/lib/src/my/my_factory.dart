@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/my/company/form/my_company_contact_from.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_from_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
@@ -11,23 +10,22 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './company/form/my_company_profile_form.dart';
-import './company/form/my_factory_base_form.dart';
 import '../business/orders/requirement_order_from.dart';
+import 'company/form/my_factory_contact_form.dart';
 import 'company/form/my_factory_form.dart';
 import 'company/my_company_cash_products_widget.dart';
-import 'company/my_company_tabbar_widget.dart';
 
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {
-  FactoryModel factory;
+  String factoryUid;
   List<ApparelProductModel> products;
   PurchaseOrderModel purchaseOrder;
   QuoteModel quoteModel;
   bool isCompanyIntroduction;
   bool isFactoryDetail;
 
-  MyFactoryPage(
-    this.factory, {
+  MyFactoryPage({
+    this.factoryUid,
     this.products,
     this.purchaseOrder,
     this.quoteModel,
@@ -51,7 +49,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     EnumModel('d', '公司认证'),
   ];
 
-  GlobalKey _factoryKey = GlobalKey();
+  FactoryModel _factory;
   var _getFactoryFuture;
   List<CompanyProfileModel> _profiles = [];
 
@@ -65,12 +63,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   //获取工厂数据
   _getFactoryData() {
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return UserRepositoryImpl()
-          .getFactory(UserBLoC.instance.currentUser.companyCode);
-    } else {
-      return UserRepositoryImpl().getFactory(widget.factory.uid);
-    }
+      return UserRepositoryImpl().getFactory(widget.factoryUid).then((v) => _factory = v);
   }
 
   //获取工厂现款产品数据
@@ -85,7 +78,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             'approvalStatuses': ['approved'],
           }, {
             'size': 6
-          }, widget.factory.uid);
+          }, widget.factoryUid);
   }
 
   Widget _buildView(String code,FactoryModel factory) {
@@ -110,9 +103,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   @override
   Widget build(BuildContext context) {
-    _profiles = widget.factory.profiles.where((profile) {
-      return profile.medias.isNotEmpty;
-    }).toList();
+      bool complete = false;
 //    List<Widget> _widgets = [
 //      _buildCarousel(),
 //      _buildBaseInfo(),
@@ -184,10 +175,6 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 //        ),
 //      );
 //    }
-//    _widgets.add(_buildCashProducts());
-//    _widgets.add(_buildFactoryWorkPicInfo());
-//    _widgets.add(_buildCompanyCertificate());
-//    _widgets.add(_buildRegisterDate());
 
     return Scaffold(
       appBar: AppBar(
@@ -200,7 +187,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             child: IconButton(
                 icon: Text('编辑'),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryFormPage(factory: widget.factory,))).then((v){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryFormPage(factory: _factory,))).then((v){
                     setState(() {
                       _getFactoryFuture = _getFactoryData();
                     });
@@ -277,6 +264,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                 child: Center(child: CircularProgressIndicator()),
               );
             }else{
+              _profiles = _factory.profiles.where((profile) {
+                return profile.medias.isNotEmpty;
+              }).toList();
               return Container(
                 color: Colors.white,
                 child: NestedScrollView(
@@ -317,7 +307,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                       builder: (context) => RequirementOrderFrom(
                             order: orderModel,
                             isCreate: true,
-                            factoryUid: widget.factory.uid,
+                            factoryUid: widget.factoryUid,
                           )));
             },
           ),
@@ -348,7 +338,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  MyCompanyProfileFormPage(widget.factory),
+                                  MyCompanyProfileFormPage(_factory),
                             ),
                           );
                         },
@@ -416,8 +406,8 @@ class _MyFactoryPageState extends State<MyFactoryPage>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => MyCompanyContactFromPage(
-                    company: widget.factory,
+              builder: (context) => MyFactoryContactFormPage(
+                    company: _factory,
                     isEditing: true,
                   ),
             ),

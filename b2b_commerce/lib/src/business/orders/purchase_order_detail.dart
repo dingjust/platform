@@ -342,7 +342,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => MyFactoryPage(
-                    order.belongTo,
+                    factoryUid:order.belongTo.uid,
                     isFactoryDetail: true,
                   )));
         }else{

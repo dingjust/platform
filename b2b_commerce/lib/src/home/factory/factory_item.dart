@@ -37,7 +37,7 @@ class FactoryItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => MyFactoryPage(
-                  model,
+              factoryUid:model.uid,
                   isFactoryDetail: true,
                 ),
           ),

@@ -4,8 +4,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'my_company_contact_from.dart';
 import 'my_factory_base_form.dart';
+import 'my_factory_contact_form.dart';
 
 class MyFactoryFormPage extends StatefulWidget {
   FactoryModel factory;
@@ -28,7 +28,6 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: _states.length);
-    print('${FactoryModel.toJson(widget.factory)}');
     _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
     _factory.contactAddress = widget.factory.contactAddress;
     if (widget.factory.profilePicture != null) {
@@ -65,7 +64,7 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
                 return MyFactoryBaseFormPage(_factory,medias: _medias,);
                 break;
               case 'contact':
-                return MyCompanyContactFromPage(
+                return MyFactoryContactFormPage(
                   company: _factory,
                   isEditing: true,
                 );
@@ -91,6 +90,18 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
               _factory.profilePicture = _medias.isNotEmpty ? _medias[0] : null;
+              if(_factory.contactPerson == null){
+                _showValidateMsg(context, '请填写联系人');
+                return;
+              }
+              if(_factory.contactPhone == null){
+                _showValidateMsg(context, '请填写联系电话');
+                return;
+              }
+              if(_factory.contactAddress == null || _factory.contactAddress.region == null || _factory.contactAddress.line1 == null){
+                _showValidateMsg(context, '请填写经营地址');
+                return;
+              }
               showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -107,5 +118,25 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
             }),
       ),
     );
+  }
+
+  //非空提示
+  bool _showValidateMsg(BuildContext context, String message) {
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context, String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            outsideDismiss: true,
+          );
+        });
   }
 }

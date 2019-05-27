@@ -29,6 +29,7 @@ class _PricesFieldState extends State<PricesField> {
             Navigator.push(context, MaterialPageRoute(builder: (context)=>ApparelProductPricesInputPage(widget.item)));
           },
           child: ShowSelectTile(
+            isRequired: true,
             leadingText: '价格',
             tralingText: widget.item.minPrice == null && widget.item.maxPrice == null ? '' : '￥${widget.item.minPrice ?? ''} ~ ￥${widget.item.maxPrice ?? ''}',
           ),

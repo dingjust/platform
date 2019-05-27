@@ -98,6 +98,7 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
 
           },
           child: ShowSelectTile(
+            isRequired: true,
             leadingText: '颜色/尺码',
             tralingText: colorSizeSelectText(),
           ),

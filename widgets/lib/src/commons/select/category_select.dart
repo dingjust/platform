@@ -51,12 +51,18 @@ class CategorySelectState extends State<CategorySelect> {
 
   @override
   void initState() {
+
     _multiple = widget.multiple;
     if (widget.categorySelect.isNotEmpty) {
       _selectLeft = widget.categorySelect[0].parent?.code;
       _selectRights =
           widget.categorySelect.map((category) => category.code).toList();
-      _valueItem = widget.categories[0].children;
+      if(widget.categorySelect[0].parent != null){
+        _valueItem = widget.categories.firstWhere((category) => category.code == widget.categorySelect[0].parent.code,orElse: ()=>null).children;
+      }else{
+        _valueItem = widget.categories[0].children;
+      }
+
     } else {
       _selectLeft = widget.categories[0].code;
       _valueItem = widget.categories[0].children;

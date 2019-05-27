@@ -79,6 +79,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 cancelButtonText: '再看看',
                 dialogHeight: 180,
                 confirmAction: () {
+                  //退出清空表单数据
+                  _clearProductData();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
@@ -99,29 +101,27 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               ),
               onPressed: () async {
                 if (widget.item.images == null ||
-                    widget.item.images.length <= 0) {
+                    widget.item.images.isEmpty) {
                   _showValidateMsg(context, '请上传主图');
-//                  ShowDialogUtil.showSimapleDialog(context, '请上传主图');
                   return;
                 } else if (widget.item.name == null) {
-//                  ShowDialogUtil.showSimapleDialog(context, '请填写产品标题');
                   _showValidateMsg(context, '请填写产品标题');
                   return;
                 } else if (widget.item.skuID == null) {
-//                  ShowDialogUtil.showSimapleDialog(context, '请填写产品货号');
                   _showValidateMsg(context, '请填写产品货号');
                   return;
                 } else if (widget.item.category == null) {
-//                  ShowDialogUtil.showSimapleDialog(context, '请选择产品类别');
                   _showValidateMsg(context, '请选择产品类别');
                   return;
                 }
+                if(widget.item.variants == null || widget.item.variants.isEmpty){
+                  _showValidateMsg(context, '请选择颜色尺码');
+                  return;
+                }
                 if(UserBLoC.instance.currentUser.type == UserType.BRAND && widget.item.price == null){
-//                  ShowDialogUtil.showSimapleDialog(context, '请填写产品价格');
                   _showValidateMsg(context, '请填写产品价格');
                   return;
                 }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY && (widget.item.minPrice == null || widget.item.maxPrice == null)){
-//                  ShowDialogUtil.showSimapleDialog(context, '请填写产品价格');
                   _showValidateMsg(context, '请填写产品价格');
                   return;
                 }
@@ -258,6 +258,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     fontSize: 16,
                     color: Colors.grey,
                   ),
+                  isRequired: true,
                   focusNode: _priceFocusNode,
                   controller: _priceController,
                   leadingText: Text('供货价',
