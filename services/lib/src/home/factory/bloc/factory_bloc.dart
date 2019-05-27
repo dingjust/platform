@@ -164,6 +164,9 @@ class FactoryBLoC extends BLoCBase {
     String condition,
     String sort,
     String requirementCode,
+    double longitude,
+    double latitude,
+    double distance,
   }) async {
     if (!lock) {
       lock = true;
@@ -174,11 +177,13 @@ class FactoryBLoC extends BLoCBase {
         _bottomController.sink.add(true);
       } else {
         Response<Map<String, dynamic>> response;
-        if (requirementCode != null && requirementCode != '') {
+        if ((factoryCondition.longitude != null && factoryCondition.longitude > 0) &&
+            (factoryCondition.latitude != null && factoryCondition.latitude > 0) &&
+            (factoryCondition.distance != null && factoryCondition.distance > 0)) {
           try {
+            print(11);
             currentPage++;
-            response = await http$.post(
-                Apis.requestQuoteFactories(requirementCode),
+            response = await http$.post(Apis.factoriesForMap,
                 data: factoryCondition.toDataJson(),
                 queryParameters: {
                   'page': currentPage,
@@ -188,21 +193,36 @@ class FactoryBLoC extends BLoCBase {
           } on DioError catch (e) {
             print(e);
           }
-        } else {
-          try {
-            currentPage++;
-            response = await http$.post(Apis.factories,
-                data: factoryCondition.toDataJson(),
-                queryParameters: {
-                  'page': currentPage,
-                  'size': pageSize,
-                  'sort': '${condition},${sort}'
-                });
-          } on DioError catch (e) {
-            print(e);
+        }else {
+          if (requirementCode != null && requirementCode != '') {
+            try {
+              currentPage++;
+              response = await http$.post(
+                  Apis.requestQuoteFactories(requirementCode),
+                  data: factoryCondition.toDataJson(),
+                  queryParameters: {
+                    'page': currentPage,
+                    'size': pageSize,
+                    'sort': '${condition},${sort}'
+                  });
+            } on DioError catch (e) {
+              print(e);
+            }
+          } else {
+            try {
+              currentPage++;
+              response = await http$.post(Apis.factories,
+                  data: factoryCondition.toDataJson(),
+                  queryParameters: {
+                    'page': currentPage,
+                    'size': pageSize,
+                    'sort': '${condition},${sort}'
+                  });
+            } on DioError catch (e) {
+              print(e);
+            }
           }
         }
-
         if (response != null && response.statusCode == 200) {
           FactoriesResponse factoriesResponse =
               FactoriesResponse.fromJson(response.data);
