@@ -234,7 +234,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       title: AppConstants.appTitle,
       theme: ThemeData(
         primaryColor: Colors.white,
-        textSelectionColor: Colors.black,
+        // textSelectionColor: Colors.black,
         accentColor: Color.fromRGBO(255, 214, 12, 1),
         bottomAppBarColor: Colors.grey,
       ),

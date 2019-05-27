@@ -4,9 +4,10 @@ class GlobalConfigs {
   //测试
   static const CONTEXT_PATH = 'http://sc.nbyjy.net';
   static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
-  // static const CONTEXT_PATH = 'https://192.168.1.132:9002/djwebservices/v2';
+
+  // static const CONTEXT_PATH = 'https://192.168.1.58:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH =
-  //     'https://192.168.1.132:9002/djwebservices/v2';
+  //     'https://192.168.1.58:9002/djwebservices/v2';
   // static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
   // static const CONTEXT_PATH = 'https://192.168.1.191:9002';
   // 生产

@@ -68,8 +68,7 @@ class _LoginPageState extends State<LoginPage> {
               outsideDismiss: true,
               callbackResult: false,
             );
-          }
-      );
+          });
 //      showDialog(
 //          context: context,
 //          child: SimpleDialog(
@@ -180,6 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                 WhitelistingTextInputFormatter.digitsOnly,
               ],
               controller: _phoneController,
+
               decoration:
                   InputDecoration(hintText: '请输入', border: InputBorder.none),
             ),
@@ -427,9 +427,7 @@ class _LoginPageState extends State<LoginPage> {
     return isExist;
   }
 
-  doLogin(UserBLoC bloc) {
-
-  }
+  doLogin(UserBLoC bloc) {}
 
   void onLogin(UserBLoC bloc) {
 //    //加载条
@@ -444,8 +442,7 @@ class _LoginPageState extends State<LoginPage> {
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack: bloc
-                  .login(
+              requestCallBack: bloc.login(
                   username: _phoneController.text,
                   password: _passwordController.text,
                   remember: _isRemember),
@@ -453,8 +450,7 @@ class _LoginPageState extends State<LoginPage> {
               loadingText: '登录中。。。',
               entrance: '',
             );
-          }
-      ).then((result) {
+          }).then((result) {
         print(result);
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
@@ -480,8 +476,7 @@ class _LoginPageState extends State<LoginPage> {
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack: bloc
-                  .loginByCaptcha(
+              requestCallBack: bloc.loginByCaptcha(
                   username: _phoneController.text,
                   captcha: _smsCaptchaController.text,
                   remember: _isRemember),
@@ -489,8 +484,7 @@ class _LoginPageState extends State<LoginPage> {
               loadingText: '登录中。。。',
               entrance: '',
             );
-          }
-      ).then((result) {
+          }).then((result) {
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
