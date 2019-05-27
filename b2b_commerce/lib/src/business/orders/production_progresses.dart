@@ -158,6 +158,46 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     );
   }
 
+  //生产状态
+  Widget _buildPhaseText(BuildContext context, ProductionProgressModel progress,
+      String currentPhase, int sequence, int _index, String phase) {
+      if(sequence < _index && order.status == PurchaseOrderStatus.IN_PRODUCTION ){
+        return Text('▼ ${ProductionProgressPhaseLocalizedMap[progress.phase]}（已完成）' ,
+          style: TextStyle(
+              color:  Colors.black,
+              fontSize: 18)
+      );
+    }else if(sequence == _index){
+      if(phase == '验货'){
+        return Text('■ ${ProductionProgressPhaseLocalizedMap[progress.phase]}（当前进行中）' ,
+            style: TextStyle(
+                color:  Colors.black,
+                fontSize: 18)
+        );
+      }else{
+        return Text('▼ ${ProductionProgressPhaseLocalizedMap[progress.phase]}（当前进行中）' ,
+            style: TextStyle(
+                color:  Colors.black,
+                fontSize: 18)
+        );
+      }
+    }else{
+        if(phase == '验货'){
+          return Text('■ ${ProductionProgressPhaseLocalizedMap[progress.phase]}' ,
+              style: TextStyle(
+                  color:  Colors.black,
+                  fontSize: 18)
+          );
+        }else{
+          return Text('▼ ${ProductionProgressPhaseLocalizedMap[progress.phase]}' ,
+              style: TextStyle(
+                  color:  Colors.black,
+                  fontSize: 18)
+          );
+        }
+      }
+  }
+
 //TimeLineUI右边的Card部分
   Widget _buildProgressTimeLine(BuildContext context,ProductionProgressModel progress,String currentPhase,int sequence,int _index) {
     phase = ProductionProgressPhaseLocalizedMap[progress.phase];
@@ -170,23 +210,23 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child:
-            phase == '验货'?
-            Text('■ ${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index   && order.status == PurchaseOrderStatus.IN_PRODUCTION ?'（当前进行中）':''}' ,
-                style: TextStyle(
-                    color:  Colors.black,
-                    fontSize: 18)
-            ):
-                  Text('▼ ${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index   && order.status == PurchaseOrderStatus.IN_PRODUCTION ?'（当前进行中）':''}' ,
-                      style: TextStyle(
-                          color:  Colors.black,
-                          fontSize: 18)
-                  ),
+                  child:_buildPhaseText(context,progress,currentPhase,sequence,_index,phase)
+//            phase == '验货'?
+//            Text('■ ${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index   && order.status == PurchaseOrderStatus.IN_PRODUCTION ?'（当前进行中）':''}' ,
+//                style: TextStyle(
+//                    color:  Colors.black,
+//                    fontSize: 18)
+//            ):
+//                  Text('▼ ${ProductionProgressPhaseLocalizedMap[progress.phase]} ${sequence == _index   && order.status == PurchaseOrderStatus.IN_PRODUCTION ?'（当前进行中）':''}' ,
+//                      style: TextStyle(
+//                          color:  Colors.black,
+//                          fontSize: 18)
+//                  ),
                 ),
                 Container(
                   padding: EdgeInsets.only(right: 10),
                   child: Text(
-                    '${progress.delayedDays >0 ? '已延期${progress.delayedDays}天': '' }',
+                    '${progress.delayedDays != null && progress.delayedDays >0 ? '已延期${progress.delayedDays}天': '' }',
                     style: TextStyle(color: Colors.red, fontSize: 18),
                   ),
                 ),
