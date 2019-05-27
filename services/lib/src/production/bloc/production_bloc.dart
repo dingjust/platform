@@ -111,12 +111,13 @@ class ProductionBLoC extends BLoCBase {
       }
       //请求参数
       Map data = {
-        'salesApplications': typeList,
+        'salesApplications':typeList,
         'phases': phasesList,
         'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,
         'expectedDeliveryDateTo': endDate == null ? null : endDate.millisecondsSinceEpoch,
         'statuses': 'IN_PRODUCTION',
       };
+
       Response<Map<String, dynamic>> response;
 
       try {
@@ -155,6 +156,7 @@ class ProductionBLoC extends BLoCBase {
     _purchaseOrders.clear();
 
     if (orderType != null && orderType.length > 0) {
+      typeList.clear();
       for (int i = 0; i < orderType.length; i++) {
         if (orderType[i].checked && orderType[i].value != 'ALL') {
           typeList.add(orderType[i].value);
@@ -162,6 +164,7 @@ class ProductionBLoC extends BLoCBase {
       }
     }
     if (currentStatus != null && currentStatus.length > 0) {
+      phasesList.clear();
       for (int i = 0; i < currentStatus.length; i++) {
         if (currentStatus[i].checked && currentStatus[i].value != 'ALL') {
           phasesList.add(currentStatus[i].value);

@@ -279,7 +279,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: double.infinity,
               margin: EdgeInsets.only(top: 10),
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-              child: phase == currentPhase && progress.finishDate == null && userType != null && userType == 'factory'
+              child: phase == currentPhase && progress.finishDate == null && userType != null && userType == 'factory' && order.status == PurchaseOrderStatus.IN_PRODUCTION
                   ? RaisedButton(
                 color: Colors.white,
                 child: Text('${ProductionProgressPhaseLocalizedMap[progress.phase]}完成',
@@ -451,7 +451,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: nowTime,
-        firstDate: DateTime(2019),
+        firstDate: nowTime,
         lastDate: DateTime(2999)
     );
 
