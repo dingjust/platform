@@ -141,7 +141,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => MyFactoryPage(
-                              factory,
+                          factoryUid:factory.uid,
                               isFactoryDetail: true,
                             ),
                       ),

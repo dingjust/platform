@@ -152,6 +152,7 @@ class ProductRepositoryImpl extends ProductRepository{
     }
     if(response != null && response.statusCode == 200){
       return response.data.map<CategoryModel>((category){
+        print(category);
         return CategoryModel.fromJson(category);
       }).toList();
     }else{

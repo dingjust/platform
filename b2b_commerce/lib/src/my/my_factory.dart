@@ -17,15 +17,15 @@ import 'company/my_company_cash_products_widget.dart';
 
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {
-  FactoryModel factory;
+  String factoryUid;
   List<ApparelProductModel> products;
   PurchaseOrderModel purchaseOrder;
   QuoteModel quoteModel;
   bool isCompanyIntroduction;
   bool isFactoryDetail;
 
-  MyFactoryPage(
-    this.factory, {
+  MyFactoryPage({
+    this.factoryUid,
     this.products,
     this.purchaseOrder,
     this.quoteModel,
@@ -63,12 +63,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   //获取工厂数据
   _getFactoryData() {
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return UserRepositoryImpl()
-          .getFactory(UserBLoC.instance.currentUser.companyCode).then((v) => _factory = v);
-    } else {
-      return UserRepositoryImpl().getFactory(widget.factory.uid).then((v) => _factory = v);
-    }
+      return UserRepositoryImpl().getFactory(widget.factoryUid).then((v) => _factory = v);
   }
 
   //获取工厂现款产品数据
@@ -83,7 +78,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             'approvalStatuses': ['approved'],
           }, {
             'size': 6
-          }, widget.factory.uid);
+          }, widget.factoryUid);
   }
 
   Widget _buildView(String code,FactoryModel factory) {
@@ -108,9 +103,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   @override
   Widget build(BuildContext context) {
-    _profiles = widget.factory.profiles.where((profile) {
-      return profile.medias.isNotEmpty;
-    }).toList();
+      bool complete = false;
 //    List<Widget> _widgets = [
 //      _buildCarousel(),
 //      _buildBaseInfo(),
@@ -271,6 +264,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                 child: Center(child: CircularProgressIndicator()),
               );
             }else{
+              _profiles = _factory.profiles.where((profile) {
+                return profile.medias.isNotEmpty;
+              }).toList();
               return Container(
                 color: Colors.white,
                 child: NestedScrollView(
@@ -311,7 +307,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                       builder: (context) => RequirementOrderFrom(
                             order: orderModel,
                             isCreate: true,
-                            factoryUid: widget.factory.uid,
+                            factoryUid: widget.factoryUid,
                           )));
             },
           ),
@@ -342,7 +338,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  MyCompanyProfileFormPage(widget.factory),
+                                  MyCompanyProfileFormPage(_factory),
                             ),
                           );
                         },
@@ -411,7 +407,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             context,
             MaterialPageRoute(
               builder: (context) => MyFactoryContactFormPage(
-                    company: widget.factory,
+                    company: _factory,
                     isEditing: true,
                   ),
             ),

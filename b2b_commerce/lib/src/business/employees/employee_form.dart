@@ -198,13 +198,25 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                       child: Center(
                         child: InkWell(
                           onTap: () {
+                            if(_nameController.text == null || _nameController.text == ''){
+                              _showValidateMsg(context, '请填写员工名称');
+                              return;
+                            }
+                            if(_mobileNumberController.text == null ||  _mobileNumberController.text == ''){
+                              _showValidateMsg(context, '请填写手机号码');
+                              return;
+                            }
+                            if(_roleSelects == null || _roleSelects.isEmpty){
+                              _showValidateMsg(context, '请选择角色');
+                              return;
+                            }
                             widget.item.name = _nameController.text;
                             widget.item.mobileNumber =
                                 _mobileNumberController.text;
                             widget.item.uid = _mobileNumberController.text;
                             widget.item.roles = _roleSelects;
                             if(widget.newlyCreated){
-                              print('aaaaaaaaaaaaaaaaaaa---------');
+
                               showDialog(
                                   context: context,
                                   barrierDismissible: false,
@@ -306,5 +318,25 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
     widget.item.mobileNumber = null;
     widget.item.uid = null;
     widget.item.roles = [];
+  }
+
+  //非空提示
+  bool _showValidateMsg(BuildContext context, String message) {
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context, String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            outsideDismiss: true,
+          );
+        });
   }
 }

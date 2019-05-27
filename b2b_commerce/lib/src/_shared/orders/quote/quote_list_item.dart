@@ -234,7 +234,7 @@ class QuoteListItem extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
-                                  model.belongTo,
+                                  factoryUid:model.belongTo.uid,
                                   isFactoryDetail: true,
                                 )));
                   },
@@ -245,7 +245,7 @@ class QuoteListItem extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
-                                  model.belongTo,
+                                  factoryUid:model.belongTo.uid,
                                   isFactoryDetail: true,
                                 )));
                   },
@@ -292,7 +292,7 @@ class QuoteListItem extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
-                                  model.belongTo,
+                              factoryUid:model.belongTo.uid,
                                   isFactoryDetail: true,
                                 )));
                   },
@@ -303,7 +303,7 @@ class QuoteListItem extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
-                                  model.belongTo,
+                              factoryUid:model.belongTo.uid,
                                   isFactoryDetail: true,
                                 )));
                   },

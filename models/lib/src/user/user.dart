@@ -37,6 +37,9 @@ class UserModel extends PrincipalModel {
   /// 公司信息
   B2BUnitModel b2bUnit;
 
+  ///手机号
+  String mobileNumber;
+
   Image get avatar =>
       profilePicture ??
       CachedNetworkImage(
@@ -63,6 +66,7 @@ class UserModel extends PrincipalModel {
       this.type,
       this.roles,
       this.status,
+        this.mobileNumber,
       this.b2bUnit})
       : super(
           profilePicture: profilePicture,
@@ -92,7 +96,7 @@ class UserModel extends PrincipalModel {
 /// 客户
 @JsonSerializable()
 class CustomerModel extends UserModel {
-  String mobileNumber;
+  // String mobileNumber;
 
   CustomerModel({
     MediaModel profilePicture,
@@ -100,14 +104,14 @@ class CustomerModel extends UserModel {
     String name,
     bool loginDisabled,
     List<RoleModel> roles,
-    @required this.mobileNumber,
+    String mobileNumber,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          loginDisabled: loginDisabled,
-          roles: roles,
-        );
+      profilePicture: profilePicture,
+      uid: uid,
+      name: name,
+      loginDisabled: loginDisabled,
+      roles: roles,
+      mobileNumber: mobileNumber);
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) =>
       _$CustomerModelFromJson(json);
@@ -225,7 +229,13 @@ class RegionModel extends ItemModel {
   String countryIso;
   List<CityModel> cities;
 
-  RegionModel({this.isocode, this.name, this.isocodeShort, this.countryIso,this.cities,});
+  RegionModel({
+    this.isocode,
+    this.name,
+    this.isocodeShort,
+    this.countryIso,
+    this.cities,
+  });
 
   factory RegionModel.fromJson(Map<String, dynamic> json) =>
       _$RegionModelFromJson(json);
@@ -285,7 +295,11 @@ class RoleModel extends ItemModel {
   String name;
   String description;
 
-  RoleModel({this.uid, this.name, this.description,});
+  RoleModel({
+    this.uid,
+    this.name,
+    this.description,
+  });
 
   factory RoleModel.fromJson(Map<String, dynamic> json) =>
       _$RoleModelFromJson(json);

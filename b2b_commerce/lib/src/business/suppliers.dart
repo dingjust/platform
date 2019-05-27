@@ -398,7 +398,7 @@ class SuppliersItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => MyFactoryPage(
-                  supplierModel,
+              factoryUid:supplierModel.uid,
 //                  quoteModel: quoteModel,
 //                  purchaseOrder: purchaseOrderModel,
 //                  products: productsResponse.content,

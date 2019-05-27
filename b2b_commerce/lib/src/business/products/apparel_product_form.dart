@@ -79,6 +79,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 cancelButtonText: '再看看',
                 dialogHeight: 180,
                 confirmAction: () {
+                  //退出清空表单数据
+                  _clearProductData();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
@@ -112,7 +114,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   _showValidateMsg(context, '请选择产品类别');
                   return;
                 }
-                if(widget.item.variants == null && widget.item.variants.isEmpty){
+                if(widget.item.variants == null || widget.item.variants.isEmpty){
                   _showValidateMsg(context, '请选择颜色尺码');
                   return;
                 }

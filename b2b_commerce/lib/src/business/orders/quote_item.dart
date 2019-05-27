@@ -71,7 +71,7 @@ class _QuoteItemState extends State<QuoteItem> {
               context,
               MaterialPageRoute(
                   builder: (context) => MyFactoryPage(
-                    widget.model.belongTo,
+                    factoryUid:widget.model.belongTo.uid,
                     isFactoryDetail: true,
                   )));
         },

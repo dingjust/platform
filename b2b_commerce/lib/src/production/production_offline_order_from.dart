@@ -1027,6 +1027,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 isNeedConfirmButton: true,
                 isNeedCancelButton: true,
                 confirmAction: () {
+                  Navigator.of(context).pop();
                   doSave(purchaseOrder);
                 },
               );
@@ -1077,11 +1078,26 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   void getPurchaseOrderDetail(String code) async{
     if(code != null && code != ''){
-      PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>
-              PurchaseOrderDetailPage(order: model)
-          ), ModalRoute.withName('/'));
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoading(
+              requestCallBack: PurchaseOrderRepository().getPurchaseOrderDetail(code),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: 'createPurchaseOrder',
+            );
+          }
+      ).then((value){
+        if(value != null){
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) =>
+                  PurchaseOrderDetailPage(order: value)
+              ), ModalRoute.withName('/'));
+        }
+      });
+
     }
 
   }

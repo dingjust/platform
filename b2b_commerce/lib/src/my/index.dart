@@ -290,19 +290,19 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
         }
         // 工厂详情
         if (bloc.currentUser.type == UserType.FACTORY) {
-          UserRepositoryImpl()
-              .getFactory(bloc.currentUser.companyCode)
-              .then((factory) {
+//          UserRepositoryImpl()
+//              .getFactory(bloc.currentUser.companyCode)
+//              .then((factory) {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => MyFactoryPage(
-                      factory,
+                      factoryUid: UserBLoC.instance.currentUser.companyCode,
                       isCompanyIntroduction: true,
                     ),
               ),
             );
-          });
+//          });
         }
       },
     );

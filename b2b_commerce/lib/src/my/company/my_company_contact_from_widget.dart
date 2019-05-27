@@ -188,6 +188,7 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
       padding: EdgeInsets.only(left: 15,right: 15,top: 20,bottom: 20),
       child: GestureDetector(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
               width: 100,
@@ -198,12 +199,13 @@ class _MyCompanyContactFromWidgetPageState extends State<MyCompanyContactFromWid
                 ),
               ),
             ),
-            Expanded(
-              child: Text(
-                '${widget.company.contactAddress!=null && widget.company.contactAddress.details != null? widget.company.contactAddress.details:''}',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey
+            Container(
+              width: MediaQueryData.fromWindow(window).size.width - 130,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '${widget.company.contactAddress != null && widget.company.contactAddress.details != null ? widget.company.contactAddress.details : ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ),
             ),

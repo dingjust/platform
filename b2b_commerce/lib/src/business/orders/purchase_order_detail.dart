@@ -342,7 +342,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               context,
               MaterialPageRoute(
                   builder: (context) => MyFactoryPage(
-                    order.belongTo,
+                    factoryUid:order.belongTo.uid,
                     isFactoryDetail: true,
                   )));
         }else{
@@ -1944,11 +1944,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 //生成日期选择器
   Future<Null> _selectDate(
       BuildContext context, ProductionProgressModel model) async {
+    DateTime nowDate = DateTime.now();
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
-        firstDate: new DateTime(1990),
-        lastDate: new DateTime(2999));
+        initialDate: nowDate,
+        firstDate: nowDate,
+        lastDate: DateTime(2999));
 
     if (_picked != null) {
       setState(() {
