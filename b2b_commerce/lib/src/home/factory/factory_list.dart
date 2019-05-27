@@ -718,15 +718,15 @@ class _FactoryListViewState extends State<FactoryListView> {
               stream: bloc.bottomStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data) {
-                  _scrollController.animateTo(
-                    _scrollController.offset - 70,
-                    duration: new Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                  );
-                }
+//                if (snapshot.data) {
+//                  _scrollController.animateTo(
+//                    _scrollController.offset - 70,
+//                    duration: new Duration(milliseconds: 500),
+//                    curve: Curves.easeOut,
+//                  );
+//                }
 
-                return ScrolledToEndTips(hasContent: snapshot.data);
+                return ScrolledToEndTips(hasContent: snapshot.data,scrollController: _scrollController,);
               },
             ),
             StreamBuilder<bool>(
