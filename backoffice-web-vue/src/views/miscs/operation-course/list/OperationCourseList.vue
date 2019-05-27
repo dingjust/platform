@@ -6,6 +6,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -42,6 +43,9 @@
       },
       onDetails(row) {
         this.$emit('onDetails', row);
+      },
+      onDelete(row) {
+        this.$emit('onDelete', row);
       },
     },
     data() {
