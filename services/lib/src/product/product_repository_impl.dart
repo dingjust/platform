@@ -155,17 +155,6 @@ class ProductRepositoryImpl extends ProductRepository{
         print(category);
         return CategoryModel.fromJson(category);
       }).toList();
-//      List<CategoryModel> categoris = response.data.map<CategoryModel>((category){
-//        print(category);
-//        return CategoryModel.fromJson(category);
-//      }).toList();
-//      categoris = categoris.map((category1){
-//        category1.children.forEach((category2){
-//          category2.parent = category1;
-//        });
-//        return category1;
-//      }).toList();
-//      return categoris;
     }else{
       return null;
     }

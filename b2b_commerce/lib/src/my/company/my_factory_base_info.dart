@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
@@ -189,10 +191,17 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       '生产大类',
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
-                    Text(
-                      formatCategoriesSelectText(widget.factory.categories, 5),
-                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                    Container(
+                      width: MediaQueryData.fromWindow(window).size.width - 130,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          formatCategoriesSelectText(widget.factory.categories, widget.factory.categories.length),
+                          style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                        ),
+                      ),
                     ),
+
                   ],
                 ),
               ),
@@ -206,35 +215,47 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       '优势品类',
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: (context),
-                            builder: (context) {
-                              return SimpleDialog(
-                                children: <Widget>[
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                      left: 10,
-                                      right: 5,
-                                    ),
-                                    child: Text(
-                                      formatCategoriesSelectText(
-                                          widget.factory.adeptAtCategories,
-                                          widget.factory.adeptAtCategories.length),
-                                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
-                                    ),
-                                  )
-                                ],
-                              );
-                            });
-                      },
-                      child: Text(
-                        formatCategoriesSelectText(
-                            widget.factory.adeptAtCategories, 2),
-                        style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                    Container(
+                      width: MediaQueryData.fromWindow(window).size.width - 130,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          formatCategoriesSelectText(
+                              widget.factory.adeptAtCategories,
+                              widget.factory.adeptAtCategories.length),
+                          style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                        ),
                       ),
                     ),
+//                    GestureDetector(
+//                      onTap: () {
+//                        showDialog(
+//                            context: (context),
+//                            builder: (context) {
+//                              return SimpleDialog(
+//                                children: <Widget>[
+//                                  Container(
+//                                    padding: EdgeInsets.only(
+//                                      left: 10,
+//                                      right: 5,
+//                                    ),
+//                                    child: Text(
+//                                      formatCategoriesSelectText(
+//                                          widget.factory.adeptAtCategories,
+//                                          widget.factory.adeptAtCategories.length),
+//                                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+//                                    ),
+//                                  )
+//                                ],
+//                              );
+//                            });
+//                      },
+//                      child: Text(
+//                        formatCategoriesSelectText(
+//                            widget.factory.adeptAtCategories, 2),
+//                        style: const TextStyle(fontSize: 16,color: Colors.grey,),
+//                      ),
+//                    ),
                   ],
                 ),
               ),
