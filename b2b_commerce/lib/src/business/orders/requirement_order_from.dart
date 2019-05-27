@@ -31,13 +31,8 @@ class RequirementOrderFrom extends StatefulWidget {
   //是否重新发布
   bool isReview;
 
-  RequirementOrderFrom({
-    this.product,
-    this.order,
-    this.factoryUid,
-    this.isReview: false,
-    this.isCreate = false,
-  });
+  RequirementOrderFrom(
+      {this.product, this.order, this.factoryUid, this.isReview: false,this.isCreate = false,});
 
   _RequirementOrderFromState createState() => _RequirementOrderFromState();
 }
@@ -60,13 +55,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     if (!widget.isCreate || widget.isReview) {
 //      model.details = widget.order.details;
       _nameController.text = widget.order.details.productName;
-      _quantityController.text =
-          widget.order.details.expectedMachiningQuantity.toString();
+      _quantityController.text = widget.order.details.expectedMachiningQuantity.toString();
       _remarksController.text = widget.order.remarks;
-      _priceController.text =
-      widget.order.details.maxExpectedPrice.toString() == 'null'
-          ? '0'
-          : widget.order.details.maxExpectedPrice.toString();
+      _priceController.text = widget.order.details.maxExpectedPrice.toString() == 'null' ? '0' : widget.order.details.maxExpectedPrice.toString();
       if (widget.order.attachments == null) {
         widget.order.attachments = [];
       }
@@ -76,9 +67,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     }
 
     //联系方式取当前登陆人信息
+    print('${UserBLoC.instance}');
     widget.order.details.contactPerson = UserBLoC.instance.currentUser.name;
-    widget.order.details.contactPhone =
-        UserBLoC.instance.currentUser.mobileNumber;
+    widget.order.details.contactPhone = UserBLoC.instance.currentUser.mobileNumber;
 
     if (widget.product != null) {
       widget.order.details.category = widget.product.category;
@@ -92,7 +83,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: (){
 //        if (widget.isCreate) {
 //          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
 ////            _clearProductData();
@@ -120,7 +111,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                   Navigator.of(context).pop();
                 },
               );
-            });
+            }
+        );
       },
       child: Scaffold(
           appBar: AppBar(
@@ -164,11 +156,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                       setState(() {
                         widget.order.details.pictures = widget.product.images;
                         widget.order.details.productName = widget.product.name;
-                        widget.order.details.productSkuID =
-                            widget.product.skuID;
+                        widget.order.details.productSkuID = widget.product.skuID;
                         if (widget.product.category != null) {
-                          widget.order.details.category =
-                              widget.product.category;
+                          widget.order.details.category = widget.product.category;
                         }
                       });
                     }
@@ -189,7 +179,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             child: RaisedButton(
               color: Color.fromRGBO(255, 214, 12, 1),
               child: Text(
-                !widget.isCreate ? '修改需求' : '确认发布',
+                !widget.isCreate
+                    ? '修改需求'
+                    : '确认发布',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
@@ -488,30 +480,29 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
 
     if (widget.order.details.category == null) {
       isSubmit = _showValidateMsg(context, '产品品类不可以为空');
-    } else if (widget.order.details.expectedMachiningQuantity == null) {
+    }else if (widget.order.details.expectedMachiningQuantity == null) {
       isSubmit = _showValidateMsg(context, '订单数量不可以为空');
-    } else if (widget.order.details.expectedDeliveryDate == null) {
+    }else if (widget.order.details.expectedDeliveryDate == null) {
       isSubmit = _showValidateMsg(context, '交货时间不可以为空');
-    } else if (widget.order.details.expectedDeliveryDate
-        .isBefore(DateTime.now())) {
+    }else if(widget.order.details.expectedDeliveryDate.isBefore(DateTime.now())){
       isSubmit = _showValidateMsg(context, '交货时间不可比当前时间小');
     } else if (widget.order.details.contactPerson == null ||
         widget.order.details.contactPerson == '' ||
         widget.order.details.contactPhone == null ||
         widget.order.details.contactPhone == '') {
       isSubmit = _showValidateMsg(context, '联系方式不可以为空');
-    } else {
+    }else{
       isSubmit = true;
     }
-    if (isSubmit) {
-      if (widget.isCreate) {
+    if(isSubmit){
+      if(widget.isCreate){
         String code = await RequirementOrderRepository().publishNewRequirement(
             widget.order, factoryUid, factoryUid != null ? true : false);
         if (code != null && code != '') {
           widget.order.code = code;
           //根据code查询明
-          RequirementOrderModel model = await RequirementOrderRepository()
-              .getRequirementOrderDetail(code);
+          RequirementOrderModel model =
+          await RequirementOrderRepository().getRequirementOrderDetail(code);
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => PublishRequirementSuccessDialog(
@@ -520,13 +511,12 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               ),
               ModalRoute.withName('/'));
         }
-      } else {
-        String code =
-        await RequirementOrderRepository().updateRequirement(widget.order);
+      }else{
+        String code = await RequirementOrderRepository().updateRequirement(widget.order);
         if (code != null) {
           //根据code查询明
-          RequirementOrderModel model = await RequirementOrderRepository()
-              .getRequirementOrderDetail(code);
+          RequirementOrderModel model =
+          await RequirementOrderRepository().getRequirementOrderDetail(code);
 
           List<QuoteModel> quotes = await RequirementOrderRepository()
               .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
@@ -555,12 +545,12 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     }
   }
 
-  bool _showValidateMsg(BuildContext context, String message) {
+  bool _showValidateMsg(BuildContext context,String message){
     _validateMessage(context, '${message}');
     return false;
   }
 
-  Future<void> _validateMessage(BuildContext context, String message) async {
+  Future<void> _validateMessage(BuildContext context,String message) async {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -571,7 +561,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
             callbackResult: false,
             outsideDismiss: true,
           );
-        });
+        }
+    );
   }
 
   ///完善信息

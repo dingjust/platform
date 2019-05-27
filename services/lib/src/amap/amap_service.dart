@@ -61,8 +61,8 @@ class AmapService {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      AmapAroundResponse amapResponse = AmapAroundResponse.fromJson(
-          response.data);
+      AmapAroundResponse amapResponse =
+          AmapAroundResponse.fromJson(response.data);
       return amapResponse;
     } else {
       return null;
@@ -72,12 +72,19 @@ class AmapService {
   Future<AMapLocation> location() async {
     AMapLocationClient.startup(AMapLocationOption(
         desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
+    print('check==============');
     bool hasPermission =
         await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+    print('check==============');
+
     if (!hasPermission) {
+      print('request==============');
+
       PermissionStatus requestPermissionResult =
           await SimplePermissions.requestPermission(
               Permission.WhenInUseLocation);
+      print('request==============');
+
       if (requestPermissionResult != PermissionStatus.authorized) {
         print('定位权限失败');
         return null;
