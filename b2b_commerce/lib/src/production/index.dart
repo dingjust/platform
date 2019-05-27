@@ -21,6 +21,14 @@ class _ProductionPageState extends State<ProductionPage> {
   GlobalKey _productionOrderBlocProviderKey = GlobalKey();
 
   @override
+  void initState() {
+    super.initState();
+    ProductionBLoC().clear();
+    ProductionBLoC().setStatus('ALL');
+    ProductionBLoC().getData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BLoCProvider<ProductionBLoC>(
         key: _productionOrderBlocProviderKey,
