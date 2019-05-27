@@ -553,7 +553,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 MaterialPageRoute(
                     builder: (context) =>
                         MyFactoryPage(
-                          widget.model.belongTo,
+                          factoryUid:widget.model.belongTo.uid,
                           isFactoryDetail: true,
                         )));
           }else{

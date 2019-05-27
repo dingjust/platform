@@ -127,9 +127,9 @@ class ProductionItem extends StatelessWidget {
                 child: _buildCompanyName(context),
               ),
               Expanded(
-                child: order.delayed == true
+                child: order.delayedDays != null && order.delayedDays > 0
                     ? Text(
-                        '已延期',
+                        '已延期${order.delayedDays}天',
                         style: TextStyle(
                           color: Colors.red,
                           fontSize: 16,

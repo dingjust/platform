@@ -303,7 +303,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 MaterialPageRoute(
                     builder: (context) =>
                         MyFactoryPage(
-                          pageItem.belongTo,
+                          factoryUid:pageItem.belongTo.uid,
                           isFactoryDetail: true,
                         )));
           }else{

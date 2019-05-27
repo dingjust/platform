@@ -83,6 +83,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           textAlign: TextAlign.right,
         ),
       ),
+      Divider(),
       B2BListTitle(
         onTap: onLocation,
         prefix: Text(
@@ -97,27 +98,33 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           textAlign: TextAlign.right,
         ),
       ),
-      // TextFieldComponent(
-      //   focusNode: _line1FocusNode,
-      //   controller: _line1Controller,
-      //   leadingText: Text('详细地址',
-      //       style: TextStyle(
-      //         fontSize: 16,
-      //       )),
-      //   hintText: '道路、门牌号、小区、楼栋号、单元室等',
-      //   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-      //   dividerPadding: EdgeInsets.symmetric(),
-      // ),
-      InputRow(
-          label: '详细地址',
-          isRequired: true,
-          field: TextField(
-            autofocus: false,
-            controller: _line1Controller,
-            textAlign: TextAlign.right,
-            decoration: InputDecoration(
-                hintText: '道路、门牌号、小区、楼栋号、单元室等', border: InputBorder.none),
-          )),
+      Divider(),
+       TextFieldComponent(
+         isRequired: true,
+         focusNode: _line1FocusNode,
+         controller: _line1Controller,
+         leadingText: Text('详细地址',
+             style: TextStyle(
+               fontSize: 16,
+             )),
+         hintText: '道路、门牌号、小区、楼栋号、单元室等',
+         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+         dividerPadding: EdgeInsets.symmetric(),
+         onChanged: (v){
+           widget.address.line1=
+           _line1Controller.text == '' ? null : _line1Controller.text;
+         },
+       ),
+//      InputRow(
+//          label: '详细地址',
+//          isRequired: true,
+//          field: TextField(
+//            autofocus: false,
+//            controller: _line1Controller,
+//            textAlign: TextAlign.right,
+//            decoration: InputDecoration(
+//                hintText: '道路、门牌号、小区、楼栋号、单元室等', border: InputBorder.none),
+//          )),
       UserBLoC.instance.currentUser.type == UserType.FACTORY
           ? Container(
         margin: EdgeInsets.only(top: 20),
@@ -148,7 +155,14 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
                 style: TextStyle(),
               ),
               onPressed: () async {
-                widget.address.line1 = _line1Controller.text;
+                if(widget.address.region == null){
+                  _showValidateMsg(context, '请选择省市区');
+                  return;
+                }
+                if(_line1Controller.text == ''){
+                  _showValidateMsg(context, '请填写详细地址');
+                  return;
+                }
                 Navigator.of(context).pop(widget.address);
               },
             )
@@ -156,7 +170,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
         ),
         body: Container(
           color: Colors.white,
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Column(
             children: widgets,
           ),
@@ -208,6 +222,25 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
             );
           });
     }
+  }
+  //非空提示
+  bool _showValidateMsg(BuildContext context, String message) {
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context, String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            outsideDismiss: true,
+          );
+        });
   }
 }
 
@@ -262,4 +295,5 @@ class TipRow extends StatelessWidget {
           )),
     );
   }
+
 }
