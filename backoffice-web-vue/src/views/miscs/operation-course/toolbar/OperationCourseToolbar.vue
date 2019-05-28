@@ -29,6 +29,7 @@
       },
       onNew() {
         let formData = {};
+        this.formData.infos=[];
         Object.assign(formData, this.formData);
 
         this.$emit('onNew', formData);
