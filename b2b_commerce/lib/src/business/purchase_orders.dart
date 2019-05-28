@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/business/search/purchase_order_search.dart';
+import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:models/models.dart';
@@ -31,10 +35,40 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
   String statusColor;
   String userType;
 
+  List<String> history_keywords;
+
   Widget _buildSearchButton() {
     return IconButton(
       icon: const Icon(B2BIcons.search, size: 20),
-      onPressed: () => showSearch(context: context, delegate: PurchaseOrderSearchDelegate()),
+      onPressed: (){
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoading(
+                requestCallBack: LocalStorage.get(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY),
+                outsideDismiss: false,
+                loadingText: '加载中。。。',
+                entrance: 'createPurchaseOrder',
+              );
+            }
+        ).then((value){
+          if (value != null && value != '') {
+            List<dynamic> list = json.decode(value);
+            history_keywords = list.map((item) => item as String).toList();
+
+          } else {
+            history_keywords = [];
+          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchModelPage(historyKeywords: history_keywords,searchModel: SearchModel.PURCHASE_ORDER,),
+            ),
+          );
+        });
+      },
+//      onPressed: () => showSearch(context: context, delegate: PurchaseOrderSearchDelegate()),
     );
   }
 

@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:b2b_commerce/src/business/search/search_model.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -7,7 +11,6 @@ import '../_shared/widgets/app_bar_factory.dart';
 import '../_shared/widgets/tab_factory.dart';
 import '../_shared/widgets/scroll_to_top_button.dart';
 import '../_shared/orders/proofing/proofing_list.dart';
-import '../business/search/proofing_search.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -24,11 +27,42 @@ class ProofingOrdersPage extends StatefulWidget {
 
   class _ProofingOrdersPageState extends State<ProofingOrdersPage> {
   final GlobalKey _globalKey = GlobalKey<_ProofingOrdersPageState>();
+  List<String> historyKeywords;
 
   Widget _buildSearchButton() {
     return IconButton(
       icon: const Icon(B2BIcons.search, size: 20),
-      onPressed: () => showSearch(context: context, delegate: ProofingSearchDelegate()),
+      onPressed: (){
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoading(
+                requestCallBack: LocalStorage.get(
+                    GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY),
+                outsideDismiss: false,
+                loadingText: '加载中。。。',
+                entrance: 'createPurchaseOrder',
+              );
+            }
+        ).then((value) {
+          if (value != null && value != '') {
+            List<dynamic> list = json.decode(value);
+            historyKeywords = list.map((item) => item as String).toList();
+          } else {
+            historyKeywords = [];
+          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  SearchModelPage(historyKeywords: historyKeywords,
+                    searchModel: SearchModel.PROOFING_ORDER,),
+            ),
+          );
+        });
+      },
+//      onPressed: () => showSearch(context: context, delegate: ProofingSearchDelegate()),
     );
   }
 

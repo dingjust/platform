@@ -1,6 +1,10 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/proofing/proofing_list_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list.dart';
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
+import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
+import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
@@ -10,26 +14,26 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class QuoteSearchResultPage extends StatefulWidget{
-  QuoteSearchResultPage({
+class ProductSearchResultPage extends StatefulWidget{
+  ProductSearchResultPage({
     Key key,
     @required this.keyword,
   }) : super(key: key);
 
   final String keyword;
 
-  _QuoteSearchResultPageState createState() => _QuoteSearchResultPageState();
+  _ProductSearchResultPageState createState() => _ProductSearchResultPageState();
 }
 
-class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
-  final GlobalKey _globalKey = GlobalKey<_QuoteSearchResultPageState>();
+class _ProductSearchResultPageState extends State<ProductSearchResultPage>{
+  final GlobalKey _globalKey = GlobalKey<_ProductSearchResultPageState>();
   List<String> historyKeywords;
 
   @override
   Widget build(BuildContext context) {
-    return BLoCProvider<QuoteOrdersBLoC>(
+    return BLoCProvider<ApparelProductBLoC>(
       key: _globalKey,
-      bloc: QuoteOrdersBLoC.instance,
+      bloc: ApparelProductBLoC.instance,
       child: WillPopScope(
         child: Scaffold(
           appBar: AppBar(
@@ -65,13 +69,13 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
               ],
             ),
           ),
-          body: QuoteOrderListView(
+          body: ProductListView(
             keyword: widget.keyword,
           ),
         ),
         onWillPop: (){
           Navigator.of(context).pop();
-          QuoteOrdersBLoC().refreshData('ALL');
+          ApparelProductBLoC().filterByStatuses('ALL');
         },
       ),
     );
@@ -109,22 +113,23 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
 
 }
 
-class QuoteOrderListView extends StatelessWidget {
+
+class ProductListView extends StatelessWidget {
   String keyword;
 
   ScrollController _scrollController = new ScrollController();
 
-  QuoteOrderListView({Key key, @required this.keyword}) : super(key: key);
+  ProductListView({Key key, @required this.keyword}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
-    bloc.reset();
+    var bloc = BLoCProvider.of<ApparelProductBLoC>(context);
+    bloc.clear();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByKeyword(keyword);
+        bloc.loadingMore(keyword);
       }
     });
 
@@ -152,13 +157,13 @@ class QuoteOrderListView extends StatelessWidget {
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
-            StreamBuilder<List<QuoteModel>>(
+            StreamBuilder<List<ProductModel>>(
                 initialData: null,
                 stream: bloc.stream,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<QuoteModel>> snapshot) {
+                    AsyncSnapshot<List<ProductModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.filterByKeyword(keyword);
+                    bloc.getData(keyword);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
@@ -177,13 +182,10 @@ class QuoteOrderListView extends StatelessWidget {
                             height: 80,
                           ),
                         ),
+                        Container(child: Text('您当前未有产品')),
                         Container(
-                            child: Text(
-                              '没有相关订单数据',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            )),
+                          child: Text('请点击右下角创建产品'),
+                        ),
                         Container(
                           child: FlatButton(
                             color: Color.fromRGBO(255, 214, 12, 1),
@@ -193,7 +195,7 @@ class QuoteOrderListView extends StatelessWidget {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => MyHelpPage()));
                             },
-                            child: Text('如何创建订单？'),
+                            child: Text('如何创建产品？'),
                           ),
                         )
                       ],
@@ -201,9 +203,9 @@ class QuoteOrderListView extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     return Column(
-                      children: snapshot.data.map((order) {
-                        return QuoteListItem(
-                          model: order,
+                      children: snapshot.data.map((item) {
+                        return ApparelProductItem(
+                          item: item,
                         );
                       }).toList(),
                     );

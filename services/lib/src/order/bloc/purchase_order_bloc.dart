@@ -94,6 +94,30 @@ class PurchaseOrderBLoC extends BLoCBase {
     _controller.sink.add(_ordersMap[status].data);
   }
 
+  filterByKeyword(String keyword) async {
+    //若没有数据则查询
+    //请求参数
+    Map data = {
+      'keyword': keyword,
+    };
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.post(OrderApis.purchaseOrders,
+          data: data, queryParameters: {'page': _ordersMap['ALL'].currentPage, 'size': _ordersMap['ALL'].size});
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response.statusCode == 200) {
+      PurchaseOrdersResponse ordersResponse =
+      PurchaseOrdersResponse.fromJson(response.data);
+      _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
+      _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
+      _ordersMap['ALL'].data.addAll(ordersResponse.content);
+    }
+    _controller.sink.add(_ordersMap['ALL'].data);
+  }
+
   loadingMoreByStatuses(String status) async {
     //数据到底
     if (_ordersMap[status].currentPage + 1 == _ordersMap[status].totalPages) {
@@ -129,6 +153,34 @@ class PurchaseOrderBLoC extends BLoCBase {
 
     loadingController.sink.add(false);
     _controller.sink.add(_ordersMap[status].data);
+  }
+
+  loadingMoreByKeyword(String keyword) async {
+    if (!lock) {
+      lock = true;
+      //数据到底
+      Map data = {
+        'keyword': keyword,
+      };
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$.post(OrderApis.purchaseOrders,
+            data: data, queryParameters: {'page': ++_ordersMap['ALL'].currentPage, 'size': _ordersMap['ALL'].size});
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (response != null && response.statusCode == 200) {
+        PurchaseOrdersResponse ordersResponse =
+        PurchaseOrdersResponse.fromJson(response.data);
+        _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
+        _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
+        _ordersMap['ALL'].data.addAll(ordersResponse.content);
+      }
+      loadingController.sink.add(false);
+      _controller.sink.add(_ordersMap['ALL'].data);
+      lock = false;
+    }
   }
 
   // 获取订单明细
