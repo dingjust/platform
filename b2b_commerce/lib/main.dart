@@ -1,6 +1,7 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
+import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -134,9 +135,11 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   }
 
   /// 发布需求
-  void _onPublish(BuildContext context) {
+  void _onPublish(BuildContext context) async {
     requirementOrderModel =
         RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
+    RequirementOrderModel model = await RequirementOrderRepository()
+        .getRequirementOrderDetail('TRO00021002');
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -263,6 +266,12 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         GlobalWidgetsLocalizations.delegate,
         ChineseCupertinoLocalizations.delegate
       ],
+      builder: (ctx, w) {
+        return MaxScaleTextWidget(
+          max: 1.0,
+          child: w,
+        );
+      },
       supportedLocales: AppConstants.supportedLocales(),
     );
   }
@@ -288,6 +297,28 @@ class PublishRequirementButton extends StatelessWidget {
         size: 45,
       ),
       onPressed: onPublish,
+    );
+  }
+}
+
+class MaxScaleTextWidget extends StatelessWidget {
+  final double max;
+  final Widget child;
+
+  const MaxScaleTextWidget({
+    Key key,
+    this.max = 1.2,
+    @required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var data = MediaQuery.of(context);
+    return MediaQuery(
+      data: data.copyWith(
+          textScaleFactor:
+          max > data.textScaleFactor ? data.textScaleFactor : max),
+      child: child,
     );
   }
 }

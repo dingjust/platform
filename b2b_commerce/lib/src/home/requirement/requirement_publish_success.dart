@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
+import 'package:b2b_commerce/src/business/suppliers.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -136,17 +137,17 @@ class _PublishRequirementSuccessDialogState
           child: CachedNetworkImage(
               imageUrl: '${widget.model.details.pictures[0].previewUrl()}',
               fit: BoxFit.cover,
-              placeholder: (context, url) =>  SpinKitRing(
-                color: Colors.black12,
-                lineWidth: 2,
-                size: 30,
-              ),
+              placeholder: (context, url) =>
+                  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
               errorWidget: (context, url, error) => SpinKitRing(
                 color: Colors.black12,
                 lineWidth: 2,
                 size: 30,
-              )
-          ),
+              )),
         );
       }
     }
@@ -241,42 +242,75 @@ class _PublishRequirementSuccessDialogState
 
   Widget _buildButtonGroup() {
     return Container(
-        margin: EdgeInsets.only(top: 100),
+        margin: EdgeInsets.only(top: 20),
         child: Column(
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              width: double.infinity,
-              height: 45,
-              child: FlatButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FactoryPage(
-                            FactoryCondition(
-                                starLevel: 0,
-                                labels: [],
-                                adeptAtCategories: [],
-                                cooperationModes: []),
-                            route: '全部工厂',
-                            requirementCode: widget.model.code,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    height: 45,
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                FactoryPage(
+                                  FactoryCondition(
+                                      starLevel: 0,
+                                      labels: [],
+                                      adeptAtCategories: [],
+                                      cooperationModes: []),
+                                  route: '全部工厂',
+                                  requirementCode: widget.model.code,
+                                ),
                           ),
+                        );
+                      },
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        '邀请工厂',
+                        style: TextStyle(
+                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                      ),
                     ),
-                  );
-                },
-                color: Color.fromRGBO(255, 214, 12, 1),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text(
-                  '邀请工厂',
-                  style: TextStyle(
-                      color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                  ),
                 ),
-              ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: 45,
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SuppliersPage(
+                                      quoteInviting: true,
+                                      requirementCode: widget.model.code,
+                                    )),
+                            ModalRoute.withName('/'));
+                      },
+                      color: Color.fromRGBO(178, 235, 242, 1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        '邀请合作商',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 20),
+              margin: EdgeInsets.only(top: 20),
               width: double.infinity,
               height: 45,
               child: FlatButton(
@@ -297,24 +331,6 @@ class _PublishRequirementSuccessDialogState
                   '完善需求',
                   style: TextStyle(
                       color: Color.fromRGBO(255, 45, 45, 1), fontSize: 18),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              width: double.infinity,
-              height: 45,
-              child: FlatButton(
-                onPressed: () {
-                  Navigator.of(context).popUntil(ModalRoute.withName('/'));
-                },
-                color: Color.fromRGBO(255, 245, 193, 1),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                child: Text(
-                  '回到首页',
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 169, 0, 1), fontSize: 18),
                 ),
               ),
             ),
