@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
 import 'package:b2b_commerce/src/_shared/products/product_search_delegate_page.dart';
+import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -12,8 +15,9 @@ class ApparelProductsPage extends StatefulWidget {
 //  final List<ApparelProductModel> items = <ApparelProductModel>[];
   final bool isSelectOption;
   final ApparelProductModel item;
+  String keyword;
 
-  ApparelProductsPage({this.isSelectOption = false, this.item,});
+  ApparelProductsPage({this.isSelectOption = false, this.item,this.keyword});
 
   _ApparelProductsPageState createState() => _ApparelProductsPageState();
 }
@@ -27,9 +31,10 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
     EnumModel('ALL', '全部产品'),
   ];
 
-  String _keyword;
+
   TabController _tabController;
   bool isChangeTab = false;
+  List<String> historyKeywords;
 
   @override
   void initState() {
@@ -60,26 +65,56 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
           appBar: AppBar(
             elevation: 0.5,
             centerTitle: true,
-            title: Text(_keyword == null ? '产品管理' : _keyword),
+            title: Text(widget.keyword == null ? '产品管理' : widget.keyword),
             actions: <Widget>[
               IconButton(
                 icon: Icon(
                   B2BIcons.search,
                   size: 20,
                 ),
-                onPressed: () {
-                  showSearch(
-                    context: context,
-                    delegate: ProductSearchDelegatePage(
-                        isSelectOption:widget.isSelectOption
-                    ),
-                  ).then((a){
-                    setState(() {
-                      _keyword = a?.name;
-                      ApparelProductBLoC.instance.clear();
-                    });
+                onPressed: (){
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoading(
+                          requestCallBack: LocalStorage.get(
+                              GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
+                          outsideDismiss: false,
+                          loadingText: '加载中。。。',
+                          entrance: 'createPurchaseOrder',
+                        );
+                      }
+                  ).then((value) {
+                    if (value != null && value != '') {
+                      List<dynamic> list = json.decode(value);
+                      historyKeywords = list.map((item) => item as String).toList();
+                    } else {
+                      historyKeywords = [];
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SearchModelPage(historyKeywords: historyKeywords,
+                              searchModel: SearchModel.PRODUCT,),
+                      ),
+                    );
                   });
                 },
+//                onPressed: () {
+//                  showSearch(
+//                    context: context,
+//                    delegate: ProductSearchDelegatePage(
+//                        isSelectOption:widget.isSelectOption
+//                    ),
+//                  ).then((a){
+//                    setState(() {
+//                      _keyword = a?.name;
+//                      ApparelProductBLoC.instance.clear();
+//                    });
+//                  });
+//                },
               ),
             ],
           ),
@@ -107,7 +142,7 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
                     key: PageStorageKey(status),
                     isSelectOption: widget.isSelectOption,
                     status: status.code,
-                    keyword: _keyword,
+                    keyword: widget.keyword,
                   ),);
               })
                   .toList(),
