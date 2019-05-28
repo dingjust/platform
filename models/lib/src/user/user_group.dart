@@ -547,6 +547,58 @@ class FactoryModel extends B2BUnitModel {
   static Map<String, dynamic> _industrialClusterToJson(
           IndustrialClusterModel model) =>
       IndustrialClusterModel.toJson(model);
+
+  static void populator(FactoryModel source,FactoryModel target){
+    target.id = source.id;
+    target.uid = source.uid;
+    target.name = source.name;
+    target.phone = source.phone;
+    target.email = source.email;
+    target.address = source.address;
+    target.contactAddress = source.contactAddress;
+    target.contactPerson = source.contactPerson;
+    target.contactPhone = source.contactPhone;
+    target.categories = source.categories;
+    target.profilePicture = source.profilePicture;
+    target.profiles = source.profiles;
+    target.creationTime = source.creationTime;
+    target.type = source.type;
+    target.products = source.products;
+    target.approvalStatus = source.approvalStatus;
+    target.labels = source.labels;
+    target.taxNumber = source.taxNumber;
+    target.bankOfDeposit = source.bankOfDeposit;
+    target.adeptAtCategories = source.adeptAtCategories;
+    target.cooperationModes = source.cooperationModes;
+    target.cooperativeBrand = source.cooperativeBrand;
+    target.populationScale = source.populationScale;
+    target.scaleRange = source.scaleRange;
+    target.wechat = source.wechat;
+    target.certificates = source.certificates;
+    target..starLevel = source.starLevel;
+    target.certificateOfLegal = source.certificateOfLegal;
+    target.legalRepresentative = source.legalRepresentative;
+    target.businessRegistrationNo = source.businessRegistrationNo;
+    target.qq = source.qq;
+    target.active = source.active;
+    target.responseQuotedTime = source.responseQuotedTime;
+    target.describe = source.describe;
+    target.historyOrdersCount = source.historyOrdersCount;
+    target.developmentCapacity = source.developmentCapacity;
+    target.distance = source.distance;
+    target.industrialCluster = source.industrialCluster;
+    target.invited = source.invited;
+    target.latheQuantity = source.latheQuantity;
+    target.latitude = source.latitude;
+    target.locationAddress = source.locationAddress;
+    target.locationX = source.locationX;
+    target.locationY = source.locationY;
+    target.longitude = source.longitude;
+    target.members = source.members;
+    target.monthlyCapacityRange = source.monthlyCapacityRange;
+    target.orderedSuccessRate = source.orderedSuccessRate;
+    target.path = source.path;
+  }
 }
 
 @JsonSerializable()

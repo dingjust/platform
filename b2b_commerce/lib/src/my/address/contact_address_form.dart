@@ -110,6 +110,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
          hintText: '道路、门牌号、小区、楼栋号、单元室等',
          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
          dividerPadding: EdgeInsets.symmetric(),
+         maxLines: 1,
          onChanged: (v){
            widget.address.line1=
            _line1Controller.text == '' ? null : _line1Controller.text;

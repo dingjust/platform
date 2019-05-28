@@ -39,16 +39,6 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
   @override
   void initState() {
     _tabController = TabController(length: _statuses.length, vsync: this);
-    _tabController.addListener((){
-      print('${_tabController.index}------------------------');
-      print('${_tabController.indexIsChanging}------------------------');
-      if(_tabController.index.toDouble() == _tabController.animation.value){
-//        setState(() {
-//          isChangeTab = true;
-//        });
-      }
-
-    });
 
     // TODO: implement initState
     super.initState();

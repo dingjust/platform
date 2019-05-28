@@ -258,6 +258,9 @@ const COMMON_APIS = {
   getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },
+  cancelledRequirementOrder(code) {
+    return '/b2b/orders/requirement/cancelled/' + code;
+  },
   recommendRequirementOrderToFactory(code,uid) {
     return '/b2b/orders/requirement/' + code+"/factory/"+uid+"/recommend";
   },
@@ -340,7 +343,7 @@ let TENANT_APIS = {
     return '/b2b/guideline/update';
   },
   deleteOperationCourse(id) {
-    return '/b2b/guideline/delete'+id;
+    return '/b2b/guideline/delete/'+id;
   },
   getOperationCourses() {
     return '/b2b/guideline';

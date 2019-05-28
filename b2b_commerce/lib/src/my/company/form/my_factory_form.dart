@@ -22,14 +22,14 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
     EnumModel('contact', '联系方式'),
   ];
   TabController _tabController;
-  FactoryModel _factory;
+  FactoryModel _factory = FactoryModel();
   List<MediaModel> _medias = [];
 
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: _states.length);
-    _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
-    _factory.contactAddress = widget.factory.contactAddress;
+//    _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
+    FactoryModel.populator(widget.factory, _factory);
     if (widget.factory.profilePicture != null) {
       _medias = [widget.factory.profilePicture];
     }
@@ -90,6 +90,7 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
               _factory.profilePicture = _medias.isNotEmpty ? _medias[0] : null;
+
               if(_factory.contactPerson == null){
                 _showValidateMsg(context, '请填写联系人');
                 return;

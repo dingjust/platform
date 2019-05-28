@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/users/employee_item.dart';
 import 'package:b2b_commerce/src/_shared/users/employee_list.dart';
+import 'package:b2b_commerce/src/_shared/users/employee_search_delegate_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -20,6 +21,7 @@ class _EmployeesPageState extends State<EmployeesPage> {
         {'uid': 'zhan1', 'name': '湛红波1', 'mobileNumber': '13556179554'})
   ];
   B2BCustomerModel employee;
+  String _keyword;
 
   @override
   void initState() {
@@ -31,9 +33,9 @@ class _EmployeesPageState extends State<EmployeesPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<EmployeeItem> _items = items.map((item) {
-      return EmployeeItem(item);
-    }).toList();
+//    List<EmployeeItem> _items = items.map((item) {
+//      return EmployeeItem(item);
+//    }).toList();
 
     return new Scaffold(
       appBar: AppBar(
@@ -42,21 +44,30 @@ class _EmployeesPageState extends State<EmployeesPage> {
         elevation: 0.5,
         title: const Text('员工管理'),
         actions: <Widget>[
-//          IconButton(
-//            icon: Icon(
-//              B2BIcons.search,
-//              size: 20,
-//            ),
-//            onPressed: () => showSearch(
-//                context: context, delegate: EmployeeSearchDelegate()),
-//          ),
+          IconButton(
+            icon: Icon(
+              B2BIcons.search,
+              size: 20,
+            ),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: EmployeeSearchDelegatePage(),
+              ).then((a){
+                setState(() {
+                  _keyword = a?.name;
+                  EmployeeBLoC.instance.clear();
+                });
+              });
+            },
+          ),
         ],
       ),
       body: Container(
         color: Colors.grey[200],
         child: BLoCProvider<EmployeeBLoC>(
           bloc: EmployeeBLoC.instance,
-          child: EmployeeList(),
+          child: EmployeeList(keyword: _keyword,),
         ),
       ),
       floatingActionButton: FloatingActionButton(
