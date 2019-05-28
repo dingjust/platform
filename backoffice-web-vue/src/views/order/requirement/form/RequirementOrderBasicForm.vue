@@ -15,7 +15,16 @@
             <el-input v-model="slotData.remarks"></el-input>
           </el-form-item>
         </el-col>
-
+        <el-col :span="6">
+          <el-form-item label="自动关闭时间" prop="cancelledDate">
+            <el-date-picker class="w-100"
+                            type="date"
+                            v-model="slotData.cancelledDate"
+                            placeholder="选择日期"
+                            value-format="timestamp">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row>
         <el-col :span="6">

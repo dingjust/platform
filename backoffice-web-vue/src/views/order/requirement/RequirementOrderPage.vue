@@ -10,6 +10,7 @@
                                             @onAdvancedSearch="onAdvancedSearch">
         <template slot="operations" slot-scope="props">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
+          <el-button type="text" v-if="isBrand()&&props.item.status=='PENDING_QUOTE'" icon="el-icon-delete" @click="onCancelled(props.item)">关闭</el-button>
         </template>
       </requirement-order-search-result-list>
     </el-card>
@@ -71,6 +72,16 @@
         }
 
         this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
+      },
+      async onCancelled(item) {
+        const url = this.apis().cancelledRequirementOrder(item.code);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('需求关闭成功，订单编号： ' + result);
+        this.onSearch();
       },
       onNew(formData) {
         this.fn.openSlider('发布需求', RequirementOrderDetailsPage, formData);
