@@ -12,7 +12,7 @@ import 'package:widgets/widgets.dart';
 import '../my_factory.dart';
 
 class MyFactoryBaseInfo extends StatefulWidget {
-  MyFactoryBaseInfo(this.factory,{Key key}):super(key:key);
+  MyFactoryBaseInfo(this.factory, {Key key}) : super(key: key);
 
   final FactoryModel factory;
 
@@ -21,7 +21,6 @@ class MyFactoryBaseInfo extends StatefulWidget {
 }
 
 class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -33,15 +32,15 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
     List<Widget> _buildFactoryHeaderRow = [
       widget.factory.approvalStatus == ArticleApprovalStatus.approved
           ? Tag(
-        label: '  已认证  ',
-        color: Colors.black,
-        backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-      )
+              label: '  已认证  ',
+              color: Colors.black,
+              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+            )
           : Tag(
-        label: '  未认证  ',
-        color: Colors.black,
-        backgroundColor: Colors.grey[300],
-      )
+              label: '  未认证  ',
+              color: Colors.black,
+              backgroundColor: Colors.grey[300],
+            )
     ];
     widget.factory.labels.forEach((label) {
       return _buildFactoryHeaderRow.add(
@@ -64,7 +63,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
                   children: <Widget>[
-                    ImageFactory.buildThumbnailImage(widget.factory.profilePicture),
+                    ImageFactory.buildThumbnailImage(
+                        widget.factory.profilePicture),
                     Expanded(
                       child: Container(
                         height: 80,
@@ -95,7 +95,9 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -109,7 +111,9 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -121,14 +125,19 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     ),
                     Text(
                       MonthlyCapacityRangesLocalizedMap[
-                      widget.factory.monthlyCapacityRange] ??
+                              widget.factory.monthlyCapacityRange] ??
                           '',
-                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -140,12 +149,17 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     ),
                     Text(
                       "${ScaleRangesLocalizedMap[widget.factory.scaleRange] ?? ''}",
-                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -156,14 +170,20 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     Text(
-                      PopulationScaleLocalizedMap[widget.factory.populationScale] ??
+                      PopulationScaleLocalizedMap[
+                              widget.factory.populationScale] ??
                           '',
-                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -176,12 +196,17 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     Text(
                       formatCooperationModesSelectText(
                           widget.factory.cooperationModes),
-                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -196,16 +221,21 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          formatCategoriesSelectText(widget.factory.categories, widget.factory.categories.length),
-                          style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                          formatCategoriesSelectText(widget.factory.categories,
+                              widget.factory.categories.length),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -223,7 +253,10 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                           formatCategoriesSelectText(
                               widget.factory.adeptAtCategories,
                               widget.factory.adeptAtCategories.length),
-                          style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ),
@@ -259,7 +292,9 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -269,14 +304,25 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       '合作品牌商',
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
-                    Text(
-                      widget.factory.cooperativeBrand ?? '',
-                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                    Container(
+                      width: MediaQueryData.fromWindow(window).size.width - 130,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          widget.factory.cooperativeBrand ?? '',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-              Divider(height: 0,),
+              Divider(
+                height: 0,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
@@ -288,7 +334,10 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     ),
                     Text(
                       '${DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''}',
-                      style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -303,22 +352,34 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
   //格式化类别
   String formatCategoriesSelectText(List<CategoryModel> categories, int count) {
     String text = '';
-
-    if (categories != null) {
-      text = '';
-      for (int i = 0; i < categories.length; i++) {
-        if (i > count - 1) {
-          text += '...';
-          break;
-        }
-
-        if (i == categories.length - 1) {
-          text += categories[i].name;
-        } else {
-          text += categories[i].name + '、';
-        }
-      }
-    }
+//    Map<String, List<String>> map = Map();
+//    if (categories != null) {
+//      text = '';
+//      for (int i = 0; i < categories.length; i++) {
+//        if (map[categories[i].parent.name] == null) {
+//          map[categories[i].parent.name] = [categories[i].name];
+//        } else {
+//          map[categories[i].parent.name].add(categories[i].name);
+//        }
+//      }
+//
+//      map.forEach((key, value) {
+//        if(key != '大类'){
+//          text += key;
+//          text += '--';
+//        }
+//        for (int i = 0; i < value.length; i++) {
+//          if (i == value.length - 1) {
+//            text += value[i];
+//            if(map.keys.last != key){
+//              text += '\n';
+//            }
+//          } else {
+//            text += value[i] + '、';
+//          }
+//        }
+//      });
+//    }
 
     return text;
   }
