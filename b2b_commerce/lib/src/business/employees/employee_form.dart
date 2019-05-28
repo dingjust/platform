@@ -152,40 +152,40 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                       enabled: _enabled && widget.newlyCreated,
                     ),
                   ),
-                  Container(
-                    color: Colors.white,
-                    child: InkWell(
-                        onTap: () async {
-                          if (_enabled) {
-                            //获取所有角色
-                            UserRepositoryImpl().roles().then((roles) {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return RegionSelector(
-                                    regions: roles.map((role) => RegionModel(isocode: role.uid,name: role.name)).toList(),
-                                    regionSelects: _regionSelects,
-                                    multiple: true,
-                                  );
-                                },
-                              ).then((val) {
-                                setState(() {
-                                  _roleSelects = _regionSelects.map((region) => RoleModel(uid: region.isocode,name: region.name)).toList();
-                                });
-                              });
-                            });
-                          }
-                        },
-                        child: ShowSelectTile(
-                          leadingText: '角色/岗位',
-                          tralingText: formatRoleSelectsText(),
-                        )),
-                  ),
+//                  Container(
+//                    color: Colors.white,
+//                    child: InkWell(
+//                        onTap: () async {
+//                          if (_enabled) {
+//                            //获取所有角色
+//                            UserRepositoryImpl().roles().then((roles) {
+//                              showModalBottomSheet(
+//                                context: context,
+//                                builder: (BuildContext context) {
+//                                  return RegionSelector(
+//                                    regions: roles.map((role) => RegionModel(isocode: role.uid,name: role.name)).toList(),
+//                                    regionSelects: _regionSelects,
+//                                    multiple: true,
+//                                  );
+//                                },
+//                              ).then((val) {
+//                                setState(() {
+//                                  _roleSelects = _regionSelects.map((region) => RoleModel(uid: region.isocode,name: region.name)).toList();
+//                                });
+//                              });
+//                            });
+//                          }
+//                        },
+//                        child: ShowSelectTile(
+//                          leadingText: '角色/岗位',
+//                          tralingText: formatRoleSelectsText(),
+//                        )),
+//                  ),
                   Container(
                     padding: EdgeInsets.only(top: 15),
                     child: Center(
                       child: Text(
-                        '初始密码为手机号码，创建后请员工尽快修改密码',
+                        widget.newlyCreated?'初始密码为手机号码，创建后请员工尽快修改密码':'可在此修改姓名，下次将直接显示出姓名',
                         style: TextStyle(
                           color: Colors.red,
                         ),
@@ -206,17 +206,16 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                               _showValidateMsg(context, '请填写手机号码');
                               return;
                             }
-                            if(_roleSelects == null || _roleSelects.isEmpty){
-                              _showValidateMsg(context, '请选择角色');
-                              return;
-                            }
+//                            if(_roleSelects == null || _roleSelects.isEmpty){
+//                              _showValidateMsg(context, '请选择角色');
+//                              return;
+//                            }
                             widget.item.name = _nameController.text;
                             widget.item.mobileNumber =
                                 _mobileNumberController.text;
                             widget.item.uid = _mobileNumberController.text;
-                            widget.item.roles = _roleSelects;
+//                            widget.item.roles = _roleSelects;
                             if(widget.newlyCreated){
-
                               showDialog(
                                   context: context,
                                   barrierDismissible: false,
@@ -247,7 +246,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                         confirmAction: () {
                                           Navigator.of(context).pop();
                                           Navigator.pop(context);
-                                          EmployeeBLoC.instance.getB2BCustomerData();
+                                          EmployeeBLoC.instance.getB2BCustomerData(null);
                                         },
                                       );
                                     });
@@ -282,7 +281,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                                         confirmAction: () {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
-                                          EmployeeBLoC.instance.getB2BCustomerData();
+                                          EmployeeBLoC.instance.getB2BCustomerData(null);
                                         },
                                       );
                                     });

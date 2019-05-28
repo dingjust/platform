@@ -90,6 +90,7 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
               _factory.profilePicture = _medias.isNotEmpty ? _medias[0] : null;
+
               if(_factory.contactPerson == null){
                 _showValidateMsg(context, '请填写联系人');
                 return;
