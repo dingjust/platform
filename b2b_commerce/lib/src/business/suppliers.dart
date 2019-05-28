@@ -14,6 +14,16 @@ import '../my/my_brand.dart';
 import '../my/my_factory.dart';
 
 class SuppliersPage extends StatefulWidget {
+  ///发布需求的邀请合作商报价
+  final bool quoteInviting;
+
+  ///邀请报价需求单号
+  final String requirementCode;
+
+  const SuppliersPage(
+      {Key key, this.quoteInviting = false, this.requirementCode})
+      : super(key: key);
+
   _SuppliersPageState createState() => _SuppliersPageState();
 }
 
@@ -39,7 +49,10 @@ class _SuppliersPageState extends State<SuppliersPage> {
         ],
       ),
       body: Container(
-        child: SuppliersList(),
+        child: SuppliersList(
+          widget.quoteInviting,
+          requirementCode: widget.requirementCode,
+        ),
       ),
       floatingActionButton: ToTopBtn(),
     ));
@@ -47,7 +60,13 @@ class _SuppliersPageState extends State<SuppliersPage> {
 }
 
 class SuppliersList extends StatelessWidget {
-  SuppliersList();
+  ///发布需求的邀请合作商报价
+  final bool quoteInviting;
+
+  ///邀请报价需求单号
+  final String requirementCode;
+
+  SuppliersList(this.quoteInviting, {this.requirementCode});
 
   final ScrollController _scrollController = new ScrollController();
 
@@ -152,6 +171,8 @@ class SuppliersList extends StatelessWidget {
                       children: snapshot.data.map((supplierModel) {
                         return SuppliersItem(
                           supplierModel,
+                          quoteInviting: quoteInviting,
+                          requirementCode: requirementCode,
                         );
                       }).toList(),
                     );
@@ -354,10 +375,24 @@ class SuppliersList extends StatelessWidget {
   }
 }
 
-class SuppliersItem extends StatelessWidget {
+class SuppliersItem extends StatefulWidget {
   final FactoryModel supplierModel;
 
-  SuppliersItem(this.supplierModel);
+  ///邀请合作商报价
+  bool quoteInviting;
+
+  ///邀请报价需求单号
+  String requirementCode;
+
+  SuppliersItem(this.supplierModel, {this.quoteInviting, this.requirementCode});
+
+  @override
+  _SuppliersItemState createState() => _SuppliersItemState();
+}
+
+class _SuppliersItemState extends State<SuppliersItem> {
+  ///是否已邀请
+  bool invited = false;
 
   @override
   Widget build(BuildContext context) {
@@ -398,7 +433,7 @@ class SuppliersItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => MyFactoryPage(
-              factoryUid:supplierModel.uid,
+              factoryUid: widget.supplierModel.uid,
 //                  quoteModel: quoteModel,
 //                  purchaseOrder: purchaseOrderModel,
 //                  products: productsResponse.content,
@@ -413,7 +448,7 @@ class SuppliersItem extends StatelessWidget {
   Widget _buildList(BuildContext context) {
     return ListTile(
       title: Text(
-        supplierModel.name,
+        widget.supplierModel.name,
         style: TextStyle(
           fontSize: 18,
         ),
@@ -429,7 +464,34 @@ class SuppliersItem extends StatelessWidget {
 //                supplierModel.contactAddress.cityDistrict.name,
 //            style: TextStyle(fontSize: 16, color: Colors.black26),
 //          ),
-          Icon(
+          widget.quoteInviting
+              ? FlatButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: invited ? Text('已邀请报价') : Text('邀请报价'),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)),
+            onPressed: invited
+                ? null
+                : () {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) {
+                    return RequestDataLoading(
+                      requestCallBack: RequirementOrderRepository()
+                          .doRecommendation(widget.requirementCode,
+                          widget.supplierModel.uid),
+                      outsideDismiss: false,
+                      loadingText: '邀请中。。。',
+                      entrance: '0',
+                    );
+                  });
+              setState(() {
+                invited = true;
+              });
+            },
+          )
+              : Icon(
             Icons.chevron_right,
             color: Colors.black26,
           )

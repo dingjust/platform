@@ -39,7 +39,8 @@ const state = {
       productiveOrientations: []
     },
     attachments: [],
-    labels: []
+    labels: [],
+    cancelledDate:''
   },
   queryFormData: {
     code: '',

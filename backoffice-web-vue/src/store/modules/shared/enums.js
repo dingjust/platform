@@ -43,7 +43,7 @@ const state = {
   requirementOrderStatuses: [
     {code: 'PENDING_QUOTE', name: '报价中'},
     {code: 'COMPLETED', name: '已完成'},
-    {code: 'CANCELLED', name: '已失效'}
+    {code: 'CANCELLED', name: '已关闭'}
   ],
   requirementOrderStatusFlow: {
     PENDING_QUOTE: 0,
