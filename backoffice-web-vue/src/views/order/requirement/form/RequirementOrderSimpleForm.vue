@@ -2,6 +2,28 @@
   <div class="animated fadeIn">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
+        <span>基本信息</span>
+      </div>
+      <el-form ref="basicForm"
+               label-position="top"
+               :model="slotData">
+        <el-form-item label="自动关闭时间" prop="cancelledDate">
+          <el-row :gutter="10">
+            <el-col :span="6">
+              <el-date-picker class="w-100"
+                              type="date"
+                              v-model="slotData.cancelledDate"
+                              placeholder="选择日期"
+                              value-format="timestamp">
+              </el-date-picker>
+            </el-col>
+
+          </el-row>
+        </el-form-item>
+      </el-form>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
         <span>需求信息</span>
       </div>
         <el-form ref="simpleRequestForm"
@@ -118,6 +140,7 @@
       },
       async _onSubmit() {
         let formData = this.slotData;
+        console.log(this.slotData);
 
         const url = this.apis().createRequirementOrder();
         const result = await this.$http.post(url, formData);
