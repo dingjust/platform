@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +23,25 @@ class MyFactoryBaseInfo extends StatefulWidget {
 }
 
 class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
+  Future _getQuoteFuture;
+
   @override
   void initState() {
+    _getQuoteFuture = _getQuoteData();
     // TODO: implement initState
     super.initState();
+  }
+
+  //获取与该工厂最新的报价单
+  Future<QuoteModel> _getQuoteData()async{
+    QuoteModel quoteModel;
+    QuoteOrdersResponse quoteResponse = await QuoteOrderRepository().getQuotesByFactory(widget.factory.uid, {
+      'size': 1,
+    });
+    if (quoteResponse.content.length > 0){
+      quoteModel = quoteResponse.content[0];
+    }
+    return Future.value(quoteModel);
   }
 
   @override
@@ -32,15 +49,15 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
     List<Widget> _buildFactoryHeaderRow = [
       widget.factory.approvalStatus == ArticleApprovalStatus.approved
           ? Tag(
-              label: '  已认证  ',
-              color: Colors.black,
-              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-            )
+        label: '  已认证  ',
+        color: Colors.black,
+        backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+      )
           : Tag(
-              label: '  未认证  ',
-              color: Colors.black,
-              backgroundColor: Colors.grey[300],
-            )
+        label: '  未认证  ',
+        color: Colors.black,
+        backgroundColor: Colors.grey[300],
+      )
     ];
     widget.factory.labels.forEach((label) {
       return _buildFactoryHeaderRow.add(
@@ -125,7 +142,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     ),
                     Text(
                       MonthlyCapacityRangesLocalizedMap[
-                              widget.factory.monthlyCapacityRange] ??
+                      widget.factory.monthlyCapacityRange] ??
                           '',
                       style: const TextStyle(
                         fontSize: 16,
@@ -148,7 +165,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       style: TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     Text(
-                      "${ScaleRangesLocalizedMap[widget.factory.scaleRange] ?? ''}",
+                      "${ScaleRangesLocalizedMap[widget.factory.scaleRange] ??
+                          ''}",
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -171,7 +189,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     ),
                     Text(
                       PopulationScaleLocalizedMap[
-                              widget.factory.populationScale] ??
+                      widget.factory.populationScale] ??
                           '',
                       style: const TextStyle(
                         fontSize: 16,
@@ -217,7 +235,10 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     Container(
-                      width: MediaQueryData.fromWindow(window).size.width - 130,
+                      width: MediaQueryData
+                          .fromWindow(window)
+                          .size
+                          .width - 130,
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
@@ -246,7 +267,10 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     Container(
-                      width: MediaQueryData.fromWindow(window).size.width - 130,
+                      width: MediaQueryData
+                          .fromWindow(window)
+                          .size
+                          .width - 130,
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
@@ -305,7 +329,10 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     Container(
-                      width: MediaQueryData.fromWindow(window).size.width - 130,
+                      width: MediaQueryData
+                          .fromWindow(window)
+                          .size
+                          .width - 130,
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
@@ -333,7 +360,8 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                       style: const TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     Text(
-                      '${DateFormatUtil.formatYMD(widget.factory.creationTime) ?? ''}',
+                      '${DateFormatUtil.formatYMD(
+                          widget.factory.creationTime) ?? ''}',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -341,6 +369,88 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     ),
                   ],
                 ),
+              ),
+              Divider(
+                height: 0,
+              ),
+              FutureBuilder<QuoteModel>(
+                future: _getQuoteFuture,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 200),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  } else {
+                    return Column(
+                      children: <Widget>[
+                        QuoteListItem(
+                          model: snapshot.data,
+                          showActions: false,
+                        ),
+                        Container(
+                          color: Colors.white,
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Center(
+                            child: GestureDetector(
+                              child: Text(
+                                '查看全部>>',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              onTap: () async {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CompanyQuoteListPage(
+                                              companyUid: widget.factory.uid,
+                                            )));
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+//                  if (widget.purchaseOrder != null) {
+//                    _widgets.add(
+//                      Column(
+//                        children: <Widget>[
+//                          PurchaseOrderItem(
+//                            order: widget.purchaseOrder,
+//                          ),
+//                          Container(
+//                            color: Colors.white,
+//                            padding: const EdgeInsets.only(bottom: 10),
+//                            child: Center(
+//                              child: GestureDetector(
+//                                child: Text(
+//                                  '查看全部>>',
+//                                  style: TextStyle(
+//                                    color: Colors.red,
+//                                    fontSize: 18,
+//                                  ),
+//                                ),
+//                                onTap: () async {
+//                                  Navigator.push(
+//                                      context,
+//                                      MaterialPageRoute(
+//                                          builder: (context) =>
+//                                              CompanyPurchaseListPage(
+//                                                companyUid: widget.factory.uid,
+//                                              )));
+//                                },
+//                              ),
+//                            ),
+//                          )
+//                        ],
+//                      ),
+//                    );
+//                  }
+                },
               ),
             ],
           ),
@@ -364,14 +474,14 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
       }
 
       map.forEach((key, value) {
-        if(key != '大类'){
+        if (key != '大类') {
           text += key;
           text += '--';
         }
         for (int i = 0; i < value.length; i++) {
           if (i == value.length - 1) {
             text += value[i];
-            if(map.keys.last != key){
+            if (map.keys.last != key) {
               text += '\n';
             }
           } else {

@@ -407,15 +407,6 @@ class _SuppliersItemState extends State<SuppliersItem> {
         ),
       ),
       onTap: () async {
-        //获取与该工厂最新的报价单
-//        QuoteModel quoteModel;
-//        QuoteOrdersResponse quoteResponse =
-//            await QuoteOrderRepository().getQuotesByFactory(supplierModel.uid, {
-//          'size': 1,
-//        });
-//        if (quoteResponse.content.length > 0)
-//          quoteModel = quoteResponse.content[0];
-//
 //        //获取与该工厂最新的生产订单
 //        PurchaseOrderModel purchaseOrderModel;
 //        PurchaseOrdersResponse ordersResponse = await PurchaseOrderRepository()
@@ -434,9 +425,6 @@ class _SuppliersItemState extends State<SuppliersItem> {
           MaterialPageRoute(
             builder: (context) => MyFactoryPage(
               factoryUid: widget.supplierModel.uid,
-//                  quoteModel: quoteModel,
-//                  purchaseOrder: purchaseOrderModel,
-//                  products: productsResponse.content,
                   isFactoryDetail: true,
                 ),
           ),
