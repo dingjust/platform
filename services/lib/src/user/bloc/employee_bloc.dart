@@ -39,15 +39,17 @@ class EmployeeBLoC extends BLoCBase {
 
   Stream<B2BCustomerModel> get detailStream => _detailController.stream;
 
-  getB2BCustomerData() async {
+  getB2BCustomerData(String keyword) async {
     if (!lock) {
       lock = true;
       b2bCustomers.clear();
+      Map data = {};
+      if(keyword != null){
+        data['keyword'] = keyword;
+      }
       b2bCustomerResponse = await UserRepositoryImpl().employees({
         //param
-      }, {
-        //data
-      });
+      }, data);
       if (b2bCustomerResponse != null) {
         b2bCustomers = b2bCustomerResponse.content;
       }
@@ -56,16 +58,18 @@ class EmployeeBLoC extends BLoCBase {
     }
   }
 
-  loadingMoreByStatuses() async {
+  loadingMoreByStatuses(String keyword) async {
     if (!lock) {
       lock = true;
+      Map data = {};
+      if(keyword != null){
+        data['keyword'] = keyword;
+      }
       if (b2bCustomerResponse.number < b2bCustomerResponse.totalPages - 1) {
         b2bCustomerResponse = await UserRepositoryImpl().employees({
           //param
           'page': b2bCustomerResponse.number + 1,
-        }, {
-          //data
-        });
+        }, data);
         if (b2bCustomerResponse != null) {
           b2bCustomers.addAll(b2bCustomerResponse.content);
         }
@@ -87,6 +91,10 @@ class EmployeeBLoC extends BLoCBase {
 
   void reset() {
     b2bCustomers.clear();
+  }
+
+  clear() {
+    _controller.sink.add(null);
   }
 
   dispose() {

@@ -6,7 +6,9 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class EmployeeList extends StatefulWidget {
-  EmployeeList();
+  String keyword;
+
+  EmployeeList({this.keyword});
 
   EmployeeListState createState() => EmployeeListState();
 }
@@ -22,7 +24,7 @@ class EmployeeListState extends State<EmployeeList> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses();
+        bloc.loadingMoreByStatuses(widget.keyword);
       }
     });
 
@@ -34,7 +36,8 @@ class EmployeeListState extends State<EmployeeList> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        return await EmployeeBLoC.instance.getB2BCustomerData();
+        EmployeeBLoC.instance.clear();
+        return await EmployeeBLoC.instance.getB2BCustomerData(widget.keyword);
       },
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -47,7 +50,7 @@ class EmployeeListState extends State<EmployeeList> {
                 AsyncSnapshot<List<B2BCustomerModel>> snapshot) {
               if (snapshot.data == null) {
 //              if (widget.keyword == null) {
-                EmployeeBLoC.instance.getB2BCustomerData();
+                EmployeeBLoC.instance.getB2BCustomerData(widget.keyword);
 //              } else {
 //                print('${widget.keyword}------------');
 //                bloc.getData(widget.keyword);
@@ -55,6 +58,28 @@ class EmployeeListState extends State<EmployeeList> {
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: 200),
                   child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (widget.keyword != null && snapshot.data.length <= 0) {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 200),
+                      child: Image.asset(
+                        'temp/logo2.png',
+                        package: 'assets',
+                        width: 80,
+                        height: 80,
+                      ),
+                    ),
+                    Container(child: Text('未找到含有该关键词的员工')),
+//                    Container(
+//                      child: Text('请点击右下角创建员工'),
+//                    ),
+                  ],
                 );
               }
               if (snapshot.hasData) {
