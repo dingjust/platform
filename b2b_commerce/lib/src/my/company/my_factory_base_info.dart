@@ -352,34 +352,34 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
   //格式化类别
   String formatCategoriesSelectText(List<CategoryModel> categories, int count) {
     String text = '';
-//    Map<String, List<String>> map = Map();
-//    if (categories != null) {
-//      text = '';
-//      for (int i = 0; i < categories.length; i++) {
-//        if (map[categories[i].parent.name] == null) {
-//          map[categories[i].parent.name] = [categories[i].name];
-//        } else {
-//          map[categories[i].parent.name].add(categories[i].name);
-//        }
-//      }
-//
-//      map.forEach((key, value) {
-//        if(key != '大类'){
-//          text += key;
-//          text += '--';
-//        }
-//        for (int i = 0; i < value.length; i++) {
-//          if (i == value.length - 1) {
-//            text += value[i];
-//            if(map.keys.last != key){
-//              text += '\n';
-//            }
-//          } else {
-//            text += value[i] + '、';
-//          }
-//        }
-//      });
-//    }
+    Map<String, List<String>> map = Map();
+    if (categories != null) {
+      text = '';
+      for (int i = 0; i < categories.length; i++) {
+        if (map[categories[i].parent.name] == null) {
+          map[categories[i].parent.name] = [categories[i].name];
+        } else {
+          map[categories[i].parent.name].add(categories[i].name);
+        }
+      }
+
+      map.forEach((key, value) {
+        if(key != '大类'){
+          text += key;
+          text += '--';
+        }
+        for (int i = 0; i < value.length; i++) {
+          if (i == value.length - 1) {
+            text += value[i];
+            if(map.keys.last != key){
+              text += '\n';
+            }
+          } else {
+            text += value[i] + '、';
+          }
+        }
+      });
+    }
 
     return text;
   }
