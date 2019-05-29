@@ -78,12 +78,6 @@ class _MyBrandPageState extends State<MyBrandPage> {
         ),
       ),
       _buildBrandBaseInfo(context),
-      SizedBox(
-        height: 10,
-        child: Container(
-          color: Colors.grey[Constants.SIZEDBOX_COLOR],
-        ),
-      ),
     ];
     //获取与该品牌最新的报价单
     _widgets.add(Offstage(
@@ -96,7 +90,10 @@ class _MyBrandPageState extends State<MyBrandPage> {
               color: Colors.grey[Constants.SIZEDBOX_COLOR],
             ),
           ),
-          buildQuoteItem(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: buildQuoteItem(),
+          ),
         ],
       ),
     ));
@@ -111,7 +108,10 @@ class _MyBrandPageState extends State<MyBrandPage> {
               color: Colors.grey[Constants.SIZEDBOX_COLOR],
             ),
           ),
-          buildPurchaseOrderItem(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: buildPurchaseOrderItem(),
+          ),
         ],
       ),
     ));
