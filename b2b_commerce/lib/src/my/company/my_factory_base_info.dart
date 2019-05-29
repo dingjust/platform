@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
@@ -12,8 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-
-import '../my_factory.dart';
 
 class MyFactoryBaseInfo extends StatefulWidget {
   MyFactoryBaseInfo(this.factory, {Key key}) : super(key: key);
@@ -571,7 +568,6 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
   //格式化合作方式
   String formatCooperationModesSelectText(
       List<CooperationModes> cooperationModes) {
-    cooperationModes.s
     String text = '';
 
     if (cooperationModes != null) {
