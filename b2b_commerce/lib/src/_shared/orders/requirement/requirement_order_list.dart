@@ -131,7 +131,10 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
                 if (snapshot.hasData) {
                   return Column(
                     children: snapshot.data.map((order) {
-                      return RequirementOrderItem(model: order);
+                      return RequirementOrderItem(
+                        model: order,
+                        onRequirementCancle: () => onOrderCancle(order.code),
+                      );
                     }).toList(),
                   );
                 } else if (snapshot.hasError) {
@@ -170,5 +173,39 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
         ),
       ),
     );
+  }
+
+  void onOrderCancle(String code) async {
+    String result =
+    await RequirementOrderRepository().requirementOrderCancle(code);
+    if (result != null && result == 'success') {
+      //触发刷新
+      _handleRefresh();
+    }
+  }
+
+  // 子组件刷新数据方法
+  void _handleRefresh() {
+    var bloc = BLoCProvider.of<RequirementOrderBLoC>(context);
+    //全部数据重置
+    bloc.reset();
+    //当前状态订单刷新
+    bloc.refreshData(widget.status.code);
+  }
+
+  void _alertMessage(String message) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            confirmAction: () {
+              Navigator.of(context).pop();
+            },
+          );
+        });
   }
 }
