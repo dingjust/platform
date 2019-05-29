@@ -7,13 +7,25 @@ import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:services/src/supplier/brands_response.dart';
 
 class SuppliersBloc extends BLoCBase {
-  SuppliersBloc();
+
+  // 工厂模式
+  factory SuppliersBloc() => _getInstance();
+
+  static SuppliersBloc get instance => _getInstance();
+  static SuppliersBloc _instance;
+
+  static SuppliersBloc _getInstance() {
+    if (_instance == null) {
+      _instance = SuppliersBloc._internal();
+    }
+    return _instance;
+  }
 
   FactoriesResponse factoriesResponse;
   BrandsResponse brandsResponse;
 
-  List<FactoryModel> _factories = new List();
-  List<BrandModel> _brands = new List();
+  List<FactoryModel> _factories;
+  List<BrandModel> _brands;
 
   var _factoryController = StreamController<List<FactoryModel>>.broadcast();
   var _brandController = StreamController<List<BrandModel>>.broadcast();
@@ -21,6 +33,14 @@ class SuppliersBloc extends BLoCBase {
   Stream<List<FactoryModel>> get factoryStream => _factoryController.stream;
 
   Stream<List<BrandModel>> get brandStream => _brandController.stream;
+
+  SuppliersBloc._internal() {
+    // 初始化
+    _brands = List<BrandModel>();
+    _factories = List<FactoryModel>();
+    brandsResponse = BrandsResponse(0, 10, 0, 0, []);
+    factoriesResponse = FactoriesResponse(0, 10, 0, 0, []);
+  }
 
   filterfactories() async {
     factoriesResponse = await UserRepositoryImpl().factorySuppliers({});

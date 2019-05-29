@@ -298,7 +298,6 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => MyFactoryPage(
                       factoryUid: UserBLoC.instance.currentUser.companyCode,
-                      isCompanyIntroduction: true,
                     ),
               ),
             );

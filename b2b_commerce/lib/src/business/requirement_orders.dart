@@ -7,17 +7,16 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../_shared/widgets/app_bar_factory.dart';
-import '../_shared/widgets/tab_factory.dart';
-import '../_shared/widgets/scroll_to_top_button.dart';
 import '../_shared/orders/requirement/requirement_order_list.dart';
-
+import '../_shared/widgets/app_bar_factory.dart';
+import '../_shared/widgets/scroll_to_top_button.dart';
+import '../_shared/widgets/tab_factory.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
   EnumModel('PENDING_QUOTE', '报价中'),
   EnumModel('COMPLETED', '已完成'),
-  EnumModel('CANCELLED', '已失效')
+  EnumModel('CANCELLED', '已关闭')
 ];
 
 class RequirementOrdersPage extends StatefulWidget {
@@ -43,8 +42,7 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
                 loadingText: '加载中。。。',
                 entrance: '',
               );
-            }
-        ).then((value) {
+            }).then((value) {
           if (value != null && value != '') {
             List<dynamic> list = json.decode(value);
             historyKeywords = list.map((item) => item as String).toList();
@@ -55,8 +53,10 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  SearchModelPage(historyKeywords: historyKeywords,
-                    searchModel: SearchModel.REQUIREMENT_ORDER,),
+                  SearchModelPage(
+                    historyKeywords: historyKeywords,
+                    searchModel: SearchModel.REQUIREMENT_ORDER,
+                  ),
             ),
           );
         });
@@ -92,5 +92,3 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
     );
   }
 }
-
-

@@ -6,26 +6,25 @@ import 'package:services/services.dart';
 
 class RequirementOrderRepository {
   /// 发布需求
-  Future<String> publishNewRequirement(RequirementOrderModel form, String factoryUid , bool privacy) async {
+  Future<String> publishNewRequirement(RequirementOrderModel form,
+      String factoryUid, bool privacy) async {
     Response response;
     try {
-      if(factoryUid != null){
+      if (factoryUid != null) {
         response = await http$.post(OrderApis.requirementOrderNew,
             data: RequirementOrderModel.toJson(form),
             queryParameters: {'factory': factoryUid},
             options: Options(responseType: ResponseType.plain));
-      }
-      else if(factoryUid != null && privacy){
+      } else if (factoryUid != null && privacy) {
         response = await http$.post(OrderApis.requirementOrderNew,
             data: RequirementOrderModel.toJson(form),
-            queryParameters: {'factory': factoryUid,'privacy':'true'},
+            queryParameters: {'factory': factoryUid, 'privacy': 'true'},
             options: Options(responseType: ResponseType.plain));
-      }else{
+      } else {
         response = await http$.post(OrderApis.requirementOrderNew,
             data: RequirementOrderModel.toJson(form),
             options: Options(responseType: ResponseType.plain));
       }
-
     } on DioError catch (e) {
       print(e);
     }
@@ -87,12 +86,11 @@ class RequirementOrderRepository {
     }
   }
 
-
   //邀请报价（推荐需求）
-  Future<bool> doRecommendation(String code,String factoryId) async {
+  Future<bool> doRecommendation(String code, String factoryId) async {
     Response response;
     try {
-      response = await http$.put(OrderApis.doRecommendation(code,factoryId),
+      response = await http$.put(OrderApis.doRecommendation(code, factoryId),
           options: Options(responseType: ResponseType.plain));
     } on DioError catch (e) {
       print(e);
@@ -104,4 +102,17 @@ class RequirementOrderRepository {
     }
   }
 
+  /// 订单关闭
+  Future<String> requirementOrderCancle(String code) async {
+    Response response;
+    try {
+      response = await http$.delete(OrderApis.requirementOrderCancle(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return 'success';
+    } else
+      return null;
+  }
 }

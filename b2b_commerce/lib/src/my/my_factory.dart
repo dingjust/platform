@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
@@ -19,17 +20,13 @@ import 'company/my_company_cash_products_widget.dart';
 class MyFactoryPage extends StatefulWidget {
   String factoryUid;
   List<ApparelProductModel> products;
-  PurchaseOrderModel purchaseOrder;
-  QuoteModel quoteModel;
-  bool isCompanyIntroduction;
+  bool isSupplier;
   bool isFactoryDetail;
 
   MyFactoryPage({
     this.factoryUid,
     this.products,
-    this.purchaseOrder,
-    this.quoteModel,
-    this.isCompanyIntroduction = false,
+    this.isSupplier = false,
     this.isFactoryDetail = false,
   });
 
@@ -50,9 +47,15 @@ class _MyFactoryPageState extends State<MyFactoryPage>
   ];
 
   FactoryModel _factory;
-  var _getFactoryFuture;
+  Future<FactoryModel> _getFactoryFuture;
   List<CompanyProfileModel> _profiles = [];
+  StreamController<bool> _showEidtIconStreamController = StreamController();
 
+  @override
+  void dispose(){
+    super.dispose();
+    _showEidtIconStreamController.close();
+  }
 
   @override
   void initState() {
@@ -63,7 +66,10 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   //获取工厂数据
   _getFactoryData() {
-      return UserRepositoryImpl().getFactory(widget.factoryUid).then((v) => _factory = v);
+      return UserRepositoryImpl().getFactory(widget.factoryUid).then((v) {
+        _showEidtIconStreamController.sink.add(true);
+        return _factory = v;
+      });
   }
 
   //获取工厂现款产品数据
@@ -103,79 +109,6 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   @override
   Widget build(BuildContext context) {
-      bool complete = false;
-//    List<Widget> _widgets = [
-//      _buildCarousel(),
-//      _buildBaseInfo(),
-//    ];
-//    if (widget.quoteModel != null) {
-//      _widgets.add(Column(
-//        children: <Widget>[
-//          QuoteListItem(
-//            model: widget.quoteModel,
-//            showActions: false,
-//          ),
-//          Container(
-//            color: Colors.white,
-//            padding: const EdgeInsets.only(bottom: 10),
-//            child: Center(
-//              child: GestureDetector(
-//                child: Text(
-//                  '查看全部>>',
-//                  style: TextStyle(
-//                    color: Colors.red,
-//                    fontSize: 18,
-//                  ),
-//                ),
-//                onTap: () async {
-//                  Navigator.push(
-//                      context,
-//                      MaterialPageRoute(
-//                          builder: (context) => CompanyQuoteListPage(
-//                                companyUid: widget.factory.uid,
-//                              )));
-//                },
-//              ),
-//            ),
-//          )
-//        ],
-//      ));
-//    }
-//    if (widget.purchaseOrder != null) {
-//      _widgets.add(
-//        Column(
-//          children: <Widget>[
-//            PurchaseOrderItem(
-//              order: widget.purchaseOrder,
-//            ),
-//            Container(
-//              color: Colors.white,
-//              padding: const EdgeInsets.only(bottom: 10),
-//              child: Center(
-//                child: GestureDetector(
-//                  child: Text(
-//                    '查看全部>>',
-//                    style: TextStyle(
-//                      color: Colors.red,
-//                      fontSize: 18,
-//                    ),
-//                  ),
-//                  onTap: () async {
-//                    Navigator.push(
-//                        context,
-//                        MaterialPageRoute(
-//                            builder: (context) => CompanyPurchaseListPage(
-//                                  companyUid: widget.factory.uid,
-//                                )));
-//                  },
-//                ),
-//              ),
-//            )
-//          ],
-//        ),
-//      );
-//    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('公司介绍'),
@@ -184,15 +117,24 @@ class _MyFactoryPageState extends State<MyFactoryPage>
         actions: <Widget>[
           Offstage(
             offstage: widget.isFactoryDetail,
-            child: IconButton(
-                icon: Text('编辑'),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryFormPage(factory: _factory,))).then((v){
-                    setState(() {
-                      _getFactoryFuture = _getFactoryData();
-                    });
-                  });
-                }),
+            child: StreamBuilder(
+              stream: _showEidtIconStreamController.stream,
+              builder:(context,snapshot){
+                if(snapshot.hasData && snapshot.data){
+                  return IconButton(
+                      icon: Text('编辑'),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryFormPage(factory: _factory,))).then((v){
+                          setState(() {
+                            _getFactoryFuture = _getFactoryData();
+                          });
+                        });
+                      });
+                }else{
+                  return Container();
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -362,6 +304,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
   Widget _buildBaseInfo(FactoryModel factory) {
     return MyFactoryBaseInfo(
       factory,
+      isSupplier:widget.isSupplier
     );
   }
 

@@ -5,14 +5,22 @@ class OrderApis {
   /// 根据条件获取需求订单列表 POST
   static get requirementOrders => '/{baseSiteId}/orders/requirement';
 
+  ///关闭需求订单
+  static get requirementOrderCancle =>
+          (code) {
+        return '/{baseSiteId}/orders/requirement/cancelled/$code';
+      };
+
   /// 根据条件获取需求订单列表 POST
   static get requirementOrdersAll => '/{baseSiteId}/orders/requirement/all';
 
   //全部需求列表 POST
-  static get allOrdersForFactory => '/{baseSiteId}/orders/requirement/factory/all';
+  static get allOrdersForFactory =>
+      '/{baseSiteId}/orders/requirement/factory/all';
 
   //推荐需求列表 POST
-  static get allRecommendedOrders => '/{baseSiteId}/orders/requirement/factory/recommended';
+  static get allRecommendedOrders =>
+      '/{baseSiteId}/orders/requirement/factory/recommended';
 
   /// 急速发布需求/发布需求 POST
   static get requirementOrderNew => '/{baseSiteId}/orders/requirement/new';
@@ -49,8 +57,7 @@ class OrderApis {
       };
 
   //创建线下采购订单 POST
-  static get purchaseOfflineOrders =>
-      '/{baseSiteId}/orders/purchase/create';
+  static get purchaseOfflineOrders => '/{baseSiteId}/orders/purchase/create';
 
   //创建线上生产订单
   static get purchaseOnlineOrders => (quote) {
@@ -177,9 +184,10 @@ class OrderApis {
       };
 
   //邀请工厂（推荐需求）
-  static get doRecommendation => (code,uid) {
-    return '/{baseSiteId}/orders/requirement/$code/factory/$uid/recommend';
-  };
+  static get doRecommendation =>
+          (code, uid) {
+        return '/{baseSiteId}/orders/requirement/$code/factory/$uid/recommend';
+      };
 
   //确认打样订单
   static get proofingConfirm => (code) {

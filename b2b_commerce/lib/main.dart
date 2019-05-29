@@ -1,7 +1,6 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
-import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -70,6 +69,12 @@ class _MyAppState extends State<MyApp> {
             if (snapshot.data.type == UserType.ANONYMOUS) {
               return MaterialApp(
                 home: ClientSelectPage(),
+                builder: (ctx, w) {
+                  return MaxScaleTextWidget(
+                    max: 1.0,
+                    child: w,
+                  );
+                },
               );
             }
             return MyAppHomeDelegate(userType: snapshot.data.type);
@@ -307,7 +312,7 @@ class MaxScaleTextWidget extends StatelessWidget {
 
   const MaxScaleTextWidget({
     Key key,
-    this.max = 1.2,
+    this.max = 1.0,
     @required this.child,
   }) : super(key: key);
 

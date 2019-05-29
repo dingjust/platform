@@ -35,7 +35,7 @@ enum RequirementOrderStatus {
   /// 已完成
   COMPLETED,
 
-  /// 已失效
+  /// 已关闭
   CANCELLED
 }
 
@@ -43,7 +43,7 @@ enum RequirementOrderStatus {
 const RequirementOrderStatusLocalizedMap = {
   RequirementOrderStatus.PENDING_QUOTE: "报价中",
   RequirementOrderStatus.COMPLETED: "已完成",
-  RequirementOrderStatus.CANCELLED: "已失效"
+  RequirementOrderStatus.CANCELLED: "已关闭"
 };
 
 /// 采购订单状态
