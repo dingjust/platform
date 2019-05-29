@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 class ProductionProgressesPage extends StatefulWidget{
@@ -70,6 +71,35 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           borderRadius: BorderRadius.circular(5),
         ),
       ),
+      bottomNavigationBar: UserBLoC().isBrandUser?Container(
+        padding: EdgeInsets.fromLTRB(100, 10, 100, 10),
+        child: RaisedButton(
+            color: Color.fromRGBO(15,213,30,1),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.phone,
+                  color: Colors.white,
+                ),
+                Text(
+                  '一键核实',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: () async {
+              if(order.salesApplication == SalesApplication.ONLINE) {
+                _selectActionButton(order.belongTo.contactPhone);
+              }else{
+                _selectActionButton(order.contactOfSeller);
+              }
+            }),
+      ):null,
     );
   }
 
@@ -711,7 +741,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     }else{
       _requestMessage(context,'操作失败');
     }
-    ProductionBLoC.instance.refreshData();
+    ProductionBLoC.instance.refreshData('');
   }
 
 //  Future<void> _requestMessage(BuildContext context,String message) async {
@@ -969,6 +999,27 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 ),
               ],
             )
+          ],
+        );
+      },
+    );
+  }
+
+  void _selectActionButton(String tel) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.phone),
+              title: const Text('拨打电话'),
+              onTap: () async {
+                var url = 'tel:' + tel;
+                await launch(url);
+              },
+            ),
           ],
         );
       },

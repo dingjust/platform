@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
@@ -19,13 +22,17 @@ class ProductionPage extends StatefulWidget {
 
 class _ProductionPageState extends State<ProductionPage> {
   GlobalKey _productionOrderBlocProviderKey = GlobalKey();
+  String keyword;
+  List<String> historyKeywords;
+  FilterConditionEntry currentCondition = FilterConditionEntry(
+      label: '当前生产', value: 'comprehensive', checked: true);
 
   @override
   void initState() {
     super.initState();
     ProductionBLoC().clear();
     ProductionBLoC().setStatus('ALL');
-    ProductionBLoC().getData();
+    ProductionBLoC().getData(keyword);
   }
 
   @override
@@ -36,7 +43,51 @@ class _ProductionPageState extends State<ProductionPage> {
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: ProductionSearchInputBox(),
+            title: Row(
+              children: <Widget>[
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      String jsonStr = await LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
+                      if (jsonStr != null && jsonStr != '') {
+                        List<dynamic> list = json.decode(jsonStr);
+                        historyKeywords = list.map((item) => item as String).toList();
+                      } else {
+                        historyKeywords = [];
+                      }
+                      keyword = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SearchModelPage(historyKeywords: historyKeywords,keyword: keyword,
+                                searchModel: SearchModel.PRODUCTION_ORDER,),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 28,
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          const Icon(B2BIcons.search,
+                              color: Colors.grey, size: 18),
+                          Text(
+                            '${keyword != null && keyword != '' ? keyword : '请输入订单号，名称，货号搜索'}',
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 16),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             brightness: Brightness.light,
             automaticallyImplyLeading: false,
             actions: <Widget>[
@@ -82,14 +133,11 @@ class _ProductionPageState extends State<ProductionPage> {
               ),
             ),
             endDrawer: Drawer(
-              child: GestureDetector(
-                child: ProductionFilterPage(
+              child:  ProductionFilterPage(
                   bloc: ProductionBLoC.instance,
                 ),
-                onTap: () {},
-              ),
             ),
-            body: ProductionListView(),
+            body: ProductionListView(keyword),
           ),
           floatingActionButton: SpeedDial(
             // animatedIcon: AnimatedIcons.menu_close,
@@ -164,6 +212,9 @@ class _ProductionPageState extends State<ProductionPage> {
 
 class ProductionListView extends StatelessWidget {
   ScrollController _scrollController = new ScrollController();
+  String keyword;
+
+  ProductionListView(this.keyword);
 
   ///当前选中条件
   FilterConditionEntry currentCondition = FilterConditionEntry(
@@ -185,7 +236,7 @@ class ProductionListView extends StatelessWidget {
         color: Color.fromRGBO(242, 242, 242, 1),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.refreshData();
+            return await bloc.refreshData(keyword);
           },
           child: ListView(
             children: <Widget>[
@@ -196,7 +247,7 @@ class ProductionListView extends StatelessWidget {
                     if (snapshot.data == null) {
                       if (UserBLoC.instance.currentUser.status ==
                           UserStatus.ONLINE) {
-                        bloc.getData();
+                        bloc.getData(keyword);
                         return ProgressIndicatorFactory
                             .buildPaddedProgressIndicator();
                       } else {

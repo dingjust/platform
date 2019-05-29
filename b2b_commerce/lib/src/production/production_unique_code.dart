@@ -304,7 +304,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
           );
         }
     ).then((value){
-      ProductionBLoC.instance.refreshData();
+      ProductionBLoC.instance.refreshData('');
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) =>
               PurchaseOrderDetailPage(order: value)
@@ -337,7 +337,7 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
               child: Text('确定'),
               onPressed: () async {
                 PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
-                ProductionBLoC.instance.refreshData();
+                ProductionBLoC.instance.refreshData('');
 
                 Navigator.of(context).pop();
                 result == true ?
