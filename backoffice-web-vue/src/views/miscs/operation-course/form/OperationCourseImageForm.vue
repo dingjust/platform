@@ -1,11 +1,11 @@
 <template>
   <div class="animated fadeIn">
     <el-form :model="slotData" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
-        <el-form-item :disabled="!readOnly">
-        <el-input v-model="slotData.description" size="mini" ></el-input>
+        <el-form-item  label="描述">
+        <el-input v-model="slotData.description" size="mini" :disabled="!readOnly"></el-input>
         </el-form-item>
-      <el-form-item :disabled="!readOnly">
-        <el-input v-model="slotData.index" size="mini" label="序号"></el-input>
+      <el-form-item  label="序号">
+        <el-input v-model="slotData.index" size="mini" :disabled="!readOnly"></el-input>
       </el-form-item>
 
       <el-form-item>
