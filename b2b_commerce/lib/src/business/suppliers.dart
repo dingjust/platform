@@ -407,19 +407,6 @@ class _SuppliersItemState extends State<SuppliersItem> {
         ),
       ),
       onTap: () async {
-//        //获取与该工厂最新的生产订单
-//        PurchaseOrderModel purchaseOrderModel;
-//        PurchaseOrdersResponse ordersResponse = await PurchaseOrderRepository()
-//            .getPurchaseOrdersByFactory(supplierModel.uid, {
-//          'size': 1,
-//        });
-//        if (ordersResponse.content.length > 0)
-//          purchaseOrderModel = ordersResponse.content[0];
-//
-//        //获取该工厂的现款产品
-//        ProductsResponse productsResponse = await ProductRepositoryImpl()
-//            .getProductsOfFactory({}, {'size': 3}, supplierModel.uid);
-
         Navigator.push(
           context,
           MaterialPageRoute(
