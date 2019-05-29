@@ -8,13 +8,19 @@ import '../../../business/orders/requirement_order_detail.dart';
 import '../../widgets/image_factory.dart';
 import '../../widgets/text_factory.dart';
 
+/// 关闭生产订单
+typedef void RequirementOrderCancleCallback();
+
 class RequirementOrderItem extends StatelessWidget {
   const RequirementOrderItem({
     Key key,
     @required this.model,
+    this.onRequirementCancle,
   }) : super(key: key);
 
   final RequirementOrderModel model;
+
+  final RequirementOrderCancleCallback onRequirementCancle;
 
   static Map<RequirementOrderStatus, Color> _statusColors = {
     RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
@@ -52,7 +58,11 @@ class RequirementOrderItem extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) =>
-                RequirementOrderDetailPage(order: detail, quotes: quotes),
+                RequirementOrderDetailPage(
+                  order: detail,
+                  quotes: quotes,
+                  onRequirementCancle: onRequirementCancle,
+                ),
           ),
         );
       }
@@ -65,6 +75,10 @@ class RequirementOrderItem extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
           children: <Widget>[
+            FlatButton(
+              child: Text('asda'),
+              onPressed: onRequirementCancle,
+            ),
             _buildHeader(),
             _buildEntries(),
             _buildSummary(model.totalQuotesCount),
@@ -217,8 +231,7 @@ class ItemPicture extends StatelessWidget {
                 ),
               ),
               order.labels != null && order.labels.isNotEmpty
-                  ? 
-                  Positioned(
+                  ? Positioned(
                       left: 0,
                       bottom: 0,
                       child: Container(
@@ -246,8 +259,7 @@ class ItemPicture extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             image: DecorationImage(
-              image: NetworkImage(
-                  '${order.details.pictures[0].previewUrl()}'),
+              image: NetworkImage('${order.details.pictures[0].previewUrl()}'),
               fit: BoxFit.cover,
             )),
         child: Stack(

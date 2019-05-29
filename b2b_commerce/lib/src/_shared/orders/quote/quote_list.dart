@@ -27,7 +27,10 @@ class QuoteList extends StatefulWidget {
   final TextEditingController rejectController = TextEditingController();
 
   @override
-  _QuoteListState createState() => _QuoteListState();
+  _QuoteListState createState() {
+    print('==========${status.name}');
+    return _QuoteListState();
+  }
 }
 
 class _QuoteListState extends State<QuoteList> {
