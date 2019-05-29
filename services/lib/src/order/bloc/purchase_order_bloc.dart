@@ -229,10 +229,10 @@ class PurchaseOrderBLoC extends BLoCBase {
     purchaseOrderModels.clear();
     if (!lock) {
       lock = true;
-      if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
         purchaseOrdersResponse = await PurchaseOrderRepository()
             .getPurchaseOrdersByFactory(companyUid, {});
-      } else if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
         purchaseOrdersResponse = await PurchaseOrderRepository()
             .getPurchaseOrdersByBrand(companyUid, {});
       }
