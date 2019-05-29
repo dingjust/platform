@@ -13,9 +13,14 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class MyFactoryBaseInfo extends StatefulWidget {
-  MyFactoryBaseInfo(this.factory, {Key key}) : super(key: key);
+  MyFactoryBaseInfo(
+    this.factory, {
+    Key key,
+    this.isSupplier,
+  }) : super(key: key);
 
   final FactoryModel factory;
+  final bool isSupplier;
 
   @override
   State createState() => MyFactoryBaseInfoState();
@@ -36,10 +41,20 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
   //获取与该工厂最新的报价单
   Future<QuoteModel> _getQuoteData() async {
     QuoteModel quoteModel;
-    QuoteOrdersResponse quoteResponse =
-        await QuoteOrderRepository().getQuotesByFactory(widget.factory.uid, {
-      'size': 1,
-    });
+    QuoteOrdersResponse quoteResponse;
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      //获取与该工厂全部的报价单
+      quoteResponse =
+          await QuoteOrderRepository().getQuotesByFactory(widget.factory.uid, {
+        'size': 1,
+      });
+    } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      //获取与该品牌全部的报价单
+      quoteResponse =
+          await QuoteOrderRepository().getQuotesByBrand(widget.factory.uid, {
+        'size': 1,
+      });
+    }
     if (quoteResponse.content.length > 0) {
       quoteModel = quoteResponse.content[0];
     }
@@ -49,11 +64,18 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
   //获取与该工厂最新的生产单
   Future<PurchaseOrderModel> _getPurchaseData() async {
     PurchaseOrderModel purchaseOrderModel;
-    PurchaseOrdersResponse purchaseOrdersResponse =
-        await PurchaseOrderRepository()
-            .getPurchaseOrdersByFactory(widget.factory.uid, {
-      'size': 1,
-    });
+    PurchaseOrdersResponse purchaseOrdersResponse;
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      purchaseOrdersResponse = await PurchaseOrderRepository()
+          .getPurchaseOrdersByFactory(widget.factory.uid, {
+        'size': 1,
+      });
+    } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      purchaseOrdersResponse = await PurchaseOrderRepository()
+          .getPurchaseOrdersByBrand(widget.factory.uid, {
+        'size': 1,
+      });
+    }
     if (purchaseOrdersResponse.content.length > 0) {
       purchaseOrderModel = purchaseOrdersResponse.content[0];
     }
@@ -149,8 +171,14 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
             ],
           ),
         ),
-        _buildNewestQuote(),
-        _buildNewestPurchase(),
+        Offstage(
+          offstage: !widget.isSupplier,
+          child: _buildNewestQuote(),
+        ),
+        Offstage(
+          offstage: !widget.isSupplier,
+          child: _buildNewestPurchase(),
+        ),
       ],
     );
   }

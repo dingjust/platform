@@ -212,18 +212,17 @@ class SuppliersList extends StatelessWidget {
 
   void _jumpToQualityFactory(BuildContext context) async {
     List<CategoryModel> categories =
-    await ProductRepositoryImpl().majorCategories();
+        await ProductRepositoryImpl().majorCategories();
     List<LabelModel> labels = await UserRepositoryImpl().labels();
     List<LabelModel> conditionLabels =
-    labels.where((label) => label.name == '优选工厂').toList();
+        labels.where((label) => label.name == '优选工厂').toList();
     labels = labels
         .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
         .toList();
     labels.add(LabelModel(name: '已认证', id: 1000000));
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) =>
-            FactoryPage(
+        builder: (context) => FactoryPage(
               FactoryCondition(
                   starLevel: 0,
                   adeptAtCategories: [],
@@ -241,8 +240,7 @@ class SuppliersList extends StatelessWidget {
     await ProductRepositoryImpl().majorCategories().then((categories) {
       if (categories != null) {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                RequirementPoolRecommend(
+            builder: (context) => RequirementPoolRecommend(
                   categories: categories,
                 )));
       }
@@ -411,8 +409,9 @@ class _SuppliersItemState extends State<SuppliersItem> {
           context,
           MaterialPageRoute(
             builder: (context) => MyFactoryPage(
-              factoryUid: widget.supplierModel.uid,
+                  factoryUid: widget.supplierModel.uid,
                   isFactoryDetail: true,
+                  isSupplier: true,
                 ),
           ),
         );
@@ -441,35 +440,35 @@ class _SuppliersItemState extends State<SuppliersItem> {
 //          ),
           widget.quoteInviting
               ? FlatButton(
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: invited ? Text('已邀请报价') : Text('邀请报价'),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)),
-            onPressed: invited
-                ? null
-                : () {
-              showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) {
-                    return RequestDataLoading(
-                      requestCallBack: RequirementOrderRepository()
-                          .doRecommendation(widget.requirementCode,
-                          widget.supplierModel.uid),
-                      outsideDismiss: false,
-                      loadingText: '邀请中。。。',
-                      entrance: '0',
-                    );
-                  });
-              setState(() {
-                invited = true;
-              });
-            },
-          )
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  child: invited ? Text('已邀请报价') : Text('邀请报价'),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  onPressed: invited
+                      ? null
+                      : () {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) {
+                                return RequestDataLoading(
+                                  requestCallBack: RequirementOrderRepository()
+                                      .doRecommendation(widget.requirementCode,
+                                          widget.supplierModel.uid),
+                                  outsideDismiss: false,
+                                  loadingText: '邀请中。。。',
+                                  entrance: '0',
+                                );
+                              });
+                          setState(() {
+                            invited = true;
+                          });
+                        },
+                )
               : Icon(
-            Icons.chevron_right,
-            color: Colors.black26,
-          )
+                  Icons.chevron_right,
+                  color: Colors.black26,
+                )
         ],
       ),
     );

@@ -178,7 +178,6 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   //获取供应商的相关全部报价
   getQuoteDataByCompany(String companyUid)async{
-    print(companyUid);
     quoteModels.clear();
     if (!lock) {
       lock = true;
