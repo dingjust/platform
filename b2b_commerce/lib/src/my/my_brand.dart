@@ -17,10 +17,15 @@ import 'company/form/my_company_contact_form.dart';
 
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
-  MyBrandPage(this.brand,{this.isDetail = false});
+  MyBrandPage(
+    this.brand, {
+    this.isDetail = false,
+    this.isSupplier = false,
+  });
 
   final BrandModel brand;
   final bool isDetail;
+  final bool isSupplier;
 
   _MyBrandPageState createState() => _MyBrandPageState();
 }
@@ -48,9 +53,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
             context,
             MaterialPageRoute(
               builder: (context) => MyCompanyContactFormPage(
-                company:widget.brand,
-                isDetail: widget.isDetail,
-              ),
+                    company: widget.brand,
+                    isDetail: widget.isDetail,
+                  ),
             ),
           );
         },
@@ -66,18 +71,59 @@ class _MyBrandPageState extends State<MyBrandPage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgets = [
-      SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
+      SizedBox(
+        height: 10,
+        child: Container(
+          color: Colors.grey[Constants.SIZEDBOX_COLOR],
+        ),
+      ),
       _buildBrandBaseInfo(context),
-      SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),
+      SizedBox(
+        height: 10,
+        child: Container(
+          color: Colors.grey[Constants.SIZEDBOX_COLOR],
+        ),
+      ),
     ];
-
     //获取与该品牌最新的报价单
-//    _widgets.add(buildQuoteItem());
+    _widgets.add(Offstage(
+      offstage: !widget.isSupplier,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 10,
+            child: Container(
+              color: Colors.grey[Constants.SIZEDBOX_COLOR],
+            ),
+          ),
+          buildQuoteItem(),
+        ],
+      ),
+    ));
     //获取与该品牌最新的生产订单
-//    _widgets.add(buildPurchaseOrderItem());
-
+    _widgets.add(Offstage(
+      offstage: !widget.isSupplier,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 10,
+            child: Container(
+              color: Colors.grey[Constants.SIZEDBOX_COLOR],
+            ),
+          ),
+          buildPurchaseOrderItem(),
+        ],
+      ),
+    ));
     _widgets.add(_buildBrandCertificate(context));
-    _widgets.add(SizedBox(height: 10,child: Container(color: Colors.grey[Constants.SIZEDBOX_COLOR],),),);
+    _widgets.add(
+      SizedBox(
+        height: 10,
+        child: Container(
+          color: Colors.grey[Constants.SIZEDBOX_COLOR],
+        ),
+      ),
+    );
     _widgets.add(_buildBrandRegisterDate());
 
     return Scaffold(
@@ -101,38 +147,37 @@ class _MyBrandPageState extends State<MyBrandPage> {
       future: getPurchaseOrderItem(),
       builder: (context, snapshot) {
         return Offstage(
-          offstage: !(snapshot.hasData && snapshot.data != null),
-          child: Column(
-            children: <Widget>[
-              PurchaseOrderItem(
-                order: snapshot.data,
-              ),
-              Container(
-                color: Colors.white,
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Center(
-                  child: GestureDetector(
-                    child: Text(
-                      '查看全部>>',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 18,
-                      ),
-                    ),
-                    onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CompanyPurchaseListPage(
-                                companyUid: widget.brand.uid,
-                              )));
-                    },
-                  ),
+            offstage: !(snapshot.hasData && snapshot.data != null),
+            child: Column(
+              children: <Widget>[
+                PurchaseOrderItem(
+                  order: snapshot.data,
                 ),
-              )
-            ],
-          )
-        );
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Center(
+                    child: GestureDetector(
+                      child: Text(
+                        '查看全部>>',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 18,
+                        ),
+                      ),
+                      onTap: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CompanyPurchaseListPage(
+                                      companyUid: widget.brand.uid,
+                                    )));
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ));
       },
     );
   }
@@ -143,39 +188,38 @@ class _MyBrandPageState extends State<MyBrandPage> {
       builder: (context, snapshot) {
         print(snapshot.data);
         return Offstage(
-          offstage: !(snapshot.hasData && snapshot.data != null),
-          child: Column(
-            children: <Widget>[
-              QuoteListItem(
-                model: snapshot.data,
-                showActions: false,
-              ),
-              Container(
-                color: Colors.white,
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Center(
-                  child: GestureDetector(
-                    child: Text(
-                      '查看全部>>',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 18,
-                      ),
-                    ),
-                    onTap: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CompanyQuoteListPage(
-                                companyUid: widget.brand.uid,
-                              )));
-                    },
-                  ),
+            offstage: !(snapshot.hasData && snapshot.data != null),
+            child: Column(
+              children: <Widget>[
+                QuoteListItem(
+                  model: snapshot.data,
+                  showActions: false,
                 ),
-              )
-            ],
-          )
-        );
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Center(
+                    child: GestureDetector(
+                      child: Text(
+                        '查看全部>>',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 18,
+                        ),
+                      ),
+                      onTap: () async {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CompanyQuoteListPage(
+                                      companyUid: widget.brand.uid,
+                                    )));
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ));
       },
     );
   }
@@ -206,7 +250,6 @@ class _MyBrandPageState extends State<MyBrandPage> {
     if (quoteOrdersResponse != null && quoteOrdersResponse.content.length > 0) {
       quoteModel = quoteOrdersResponse.content[0];
     }
-    print('${QuoteOrdersResponse.toJson(quoteOrdersResponse)}${quoteModel}');
     return Future(() => quoteModel);
   }
 
@@ -272,8 +315,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                                 MyBrandBaseFormPage(widget.brand)));
                   },
                   child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(255, 214, 12, 1),
                       borderRadius: BorderRadius.circular(5),
@@ -288,45 +330,43 @@ class _MyBrandPageState extends State<MyBrandPage> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               children: <Widget>[
-                widget.brand.profilePicture != null ?
-                Container(
-                  width: 80,
-                  height: 80,
-                  child: CachedNetworkImage(
-                      width: 100,
-                      height: 100,
-                      imageUrl: '${widget.brand.profilePicture.previewUrl()}',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          ),
-                      errorWidget: (context, url, error) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          )
-                  ),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                     ),
-                ):
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
+                widget.brand.profilePicture != null
+                    ? Container(
+                        width: 80,
+                        height: 80,
+                        child: CachedNetworkImage(
+                            width: 100,
+                            height: 100,
+                            imageUrl:
+                                '${widget.brand.profilePicture.previewUrl()}',
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => SpinKitRing(
+                                  color: Colors.black12,
+                                  lineWidth: 2,
+                                  size: 30,
+                                ),
+                            errorWidget: (context, url, error) => SpinKitRing(
+                                  color: Colors.black12,
+                                  lineWidth: 2,
+                                  size: 30,
+                                )),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        fit: BoxFit.cover,
-                      )),
-                ),
+                      )
+                    : Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'temp/picture.png',
+                                package: "assets",
+                              ),
+                              fit: BoxFit.cover,
+                            )),
+                      ),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
@@ -377,12 +417,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 ),
                 Text(
                   '${widget.brand.brand ?? ''}',
-                  style: TextStyle(fontSize: 16,color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Divider(height:0),
+          Divider(height: 0),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Row(
@@ -396,12 +436,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 ),
                 Text(
                   "${widget.brand.cooperativeBrand ?? ''}",
-                  style: TextStyle(fontSize: 16,color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Divider(height:0),
+          Divider(height: 0),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Row(
@@ -417,12 +457,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   widget.brand.scaleRange == null
                       ? ''
                       : ScaleRangesLocalizedMap[widget.brand.scaleRange],
-                  style: TextStyle(fontSize: 16,color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Divider(height:0),
+          Divider(height: 0),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Row(
@@ -450,7 +490,10 @@ class _MyBrandPageState extends State<MyBrandPage> {
                                   formatCategoriesSelectText(
                                       widget.brand.adeptAtCategories,
                                       widget.brand.adeptAtCategories.length),
-                                  style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               )
                             ],
@@ -460,13 +503,16 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   child: Text(
                     formatCategoriesSelectText(
                         widget.brand.adeptAtCategories, 2),
-                    style: const TextStyle(fontSize: 16,color: Colors.grey,),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          Divider(height:0),
+          Divider(height: 0),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Row(
@@ -480,12 +526,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 ),
                 Text(
                   formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),
-                  style: TextStyle(fontSize: 16,color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Divider(height:0),
+          Divider(height: 0),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Row(
@@ -499,12 +545,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 ),
                 Text(
                   formatAgeRangesText(widget.brand.ageRanges),
-                  style: TextStyle(fontSize: 16,color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Divider(height:0),
+          Divider(height: 0),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Row(
@@ -518,12 +564,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 ),
                 Text(
                   formatPriceRangesText(widget.brand.priceRange1s),
-                  style: TextStyle(fontSize: 16,color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Divider(height:0),
+          Divider(height: 0),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Row(
@@ -537,12 +583,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 ),
                 Text(
                   formatPriceRangesText(widget.brand.priceRange2s),
-                  style: TextStyle(fontSize: 16,color: Colors.grey),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
           ),
-          Divider(height:0),
+          Divider(height: 0),
         ],
       ),
     );
