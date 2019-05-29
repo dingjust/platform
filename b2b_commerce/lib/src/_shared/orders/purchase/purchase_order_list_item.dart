@@ -21,6 +21,8 @@ class PurchaseOrderItem extends StatefulWidget {
 
 class _PurchaseOrderItemState extends State<PurchaseOrderItem>
     with AutomaticKeepAliveClientMixin {
+      
+
   static Map<PurchaseOrderStatus, Color> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
     PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Color(0xFFFFD600),

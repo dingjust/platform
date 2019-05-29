@@ -62,9 +62,7 @@ class ProductionSearchResultBLoC extends BLoCBase {
 
   loadingMore(String keyword) async {
     Map data = {
-      'code': keyword,
-      'skuID': keyword,
-      'belongto': keyword,
+      'keyword': keyword,
     };
     Response<Map<String, dynamic>> response;
 

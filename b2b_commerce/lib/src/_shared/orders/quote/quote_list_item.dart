@@ -40,10 +40,12 @@ class QuoteListItem extends StatelessWidget {
     this.onProofingCreating,
     this.onProductionOrderCreating,
     this.showActions = true,
+    this.companyUid,
   }) : super(key: ObjectKey(model));
 
   final QuoteModel model;
   final bool showActions;
+  final String companyUid;
 
   final QuoteRejectingCallback onQuoteRejecting;
   final QuoteConfirmingCallback onQuoteConfirming;
