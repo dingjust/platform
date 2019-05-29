@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/my/my_help.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -28,14 +27,17 @@ class QuoteList extends StatefulWidget {
 
   @override
   _QuoteListState createState() {
-    print('==========${status.name}');
+    print('==========${status.name}    ${this.hashCode}');
     return _QuoteListState();
   }
 }
 
-class _QuoteListState extends State<QuoteList> {
+class _QuoteListState extends State<QuoteList>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
+    print('!!!!!${widget.status.name}');
+
     super.initState();
 
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
@@ -215,6 +217,8 @@ class _QuoteListState extends State<QuoteList> {
 
   @override
   Widget build(BuildContext context) {
+    print('${widget.status.name}');
+
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
 
     return Container(
@@ -293,7 +297,7 @@ class _QuoteListState extends State<QuoteList> {
                         onProductionOrderCreating: () =>
                             _onProductionOrderCreating(item),
                         onQuoteAgain: () => _onQuoteAgain(item),
-                        companyUid:widget.companyUid,
+                        companyUid: widget.companyUid,
                       );
                     }).toList(),
                   );
@@ -334,4 +338,8 @@ class _QuoteListState extends State<QuoteList> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => false;
 }
