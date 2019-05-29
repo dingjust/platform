@@ -19,16 +19,12 @@ import 'company/my_company_cash_products_widget.dart';
 class MyFactoryPage extends StatefulWidget {
   String factoryUid;
   List<ApparelProductModel> products;
-  PurchaseOrderModel purchaseOrder;
-  QuoteModel quoteModel;
   bool isCompanyIntroduction;
   bool isFactoryDetail;
 
   MyFactoryPage({
     this.factoryUid,
     this.products,
-    this.purchaseOrder,
-    this.quoteModel,
     this.isCompanyIntroduction = false,
     this.isFactoryDetail = false,
   });
@@ -103,79 +99,6 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   @override
   Widget build(BuildContext context) {
-      bool complete = false;
-//    List<Widget> _widgets = [
-//      _buildCarousel(),
-//      _buildBaseInfo(),
-//    ];
-//    if (widget.quoteModel != null) {
-//      _widgets.add(Column(
-//        children: <Widget>[
-//          QuoteListItem(
-//            model: widget.quoteModel,
-//            showActions: false,
-//          ),
-//          Container(
-//            color: Colors.white,
-//            padding: const EdgeInsets.only(bottom: 10),
-//            child: Center(
-//              child: GestureDetector(
-//                child: Text(
-//                  '查看全部>>',
-//                  style: TextStyle(
-//                    color: Colors.red,
-//                    fontSize: 18,
-//                  ),
-//                ),
-//                onTap: () async {
-//                  Navigator.push(
-//                      context,
-//                      MaterialPageRoute(
-//                          builder: (context) => CompanyQuoteListPage(
-//                                companyUid: widget.factory.uid,
-//                              )));
-//                },
-//              ),
-//            ),
-//          )
-//        ],
-//      ));
-//    }
-//    if (widget.purchaseOrder != null) {
-//      _widgets.add(
-//        Column(
-//          children: <Widget>[
-//            PurchaseOrderItem(
-//              order: widget.purchaseOrder,
-//            ),
-//            Container(
-//              color: Colors.white,
-//              padding: const EdgeInsets.only(bottom: 10),
-//              child: Center(
-//                child: GestureDetector(
-//                  child: Text(
-//                    '查看全部>>',
-//                    style: TextStyle(
-//                      color: Colors.red,
-//                      fontSize: 18,
-//                    ),
-//                  ),
-//                  onTap: () async {
-//                    Navigator.push(
-//                        context,
-//                        MaterialPageRoute(
-//                            builder: (context) => CompanyPurchaseListPage(
-//                                  companyUid: widget.factory.uid,
-//                                )));
-//                  },
-//                ),
-//              ),
-//            )
-//          ],
-//        ),
-//      );
-//    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('公司介绍'),

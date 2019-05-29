@@ -178,13 +178,14 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   //获取供应商的相关全部报价
   getQuoteDataByCompany(String companyUid)async{
+    print(companyUid);
     quoteModels.clear();
     if (!lock) {
       lock = true;
-        if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+        if(UserBLoC.instance.currentUser.type == UserType.BRAND){
           //获取与该工厂全部的报价单
           quoteResponse = await QuoteOrderRepository().getQuotesByFactory(companyUid, {});
-        }else if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+        }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
           //获取与该品牌全部的报价单
           quoteResponse = await QuoteOrderRepository().getQuotesByBrand(companyUid, {});
         }
@@ -201,12 +202,12 @@ class QuoteOrdersBLoC extends BLoCBase {
       lock = true;
       //获取与该工厂全部的报价单
       if(quoteResponse.number < quoteResponse.totalPages - 1){
-        if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+        if(UserBLoC.instance.currentUser.type == UserType.BRAND){
           //获取与该工厂全部的报价单
           quoteResponse = await QuoteOrderRepository().getQuotesByFactory(companyUid, {
             'page':quoteResponse.number + 1
           });
-        }else if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+        }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
           //获取与该品牌全部的报价单
           quoteResponse = await QuoteOrderRepository().getQuotesByBrand(companyUid, {
             'page':quoteResponse.number + 1

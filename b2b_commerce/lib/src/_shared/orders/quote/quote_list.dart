@@ -44,8 +44,7 @@ class _QuoteListState extends State<QuoteList> {
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        if (widget.companyUid != null &&
-            UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+        if (widget.companyUid != null) {
           bloc.lodingMoreByCompany(widget.companyUid);
         } else if (widget.keyword != null) {
           bloc.loadingMoreByKeyword(widget.keyword);
@@ -294,6 +293,7 @@ class _QuoteListState extends State<QuoteList> {
                         onProductionOrderCreating: () =>
                             _onProductionOrderCreating(item),
                         onQuoteAgain: () => _onQuoteAgain(item),
+                        companyUid:widget.companyUid,
                       );
                     }).toList(),
                   );
