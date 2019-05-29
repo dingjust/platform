@@ -286,8 +286,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               GestureDetector(
                 child: progress.medias == null || progress.medias.isEmpty?
                 Container(
-                  margin: EdgeInsets.fromLTRB(20,15,15,0),
-                  padding: EdgeInsets.fromLTRB(5,10, 15,0),
+                  margin: EdgeInsets.fromLTRB(10,15,5,0),
+                  padding: EdgeInsets.fromLTRB(5,10, 15,10),
                   child: Center(
                     child: Icon(
                       B2BIcons.noPicture,
@@ -295,16 +295,16 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                       size: 60,
                     ),
                   ),
-                  width: 100,
-                  height: 100,
+                  width: 80,
+                  height: 80,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Color.fromRGBO(243, 243, 243, 1)),
                 ) :
                 Container(
                     margin: EdgeInsets.fromLTRB(20, 15, 15, 0),
-                    width: 100,
-                    height: 100,
+                    width: 80,
+                    height: 80,
                     child: CachedNetworkImage(
                         imageUrl: '${progress.medias[0].previewUrl()}',
                         fit: BoxFit.cover,
