@@ -499,6 +499,7 @@ class BrandSuppliersItem extends StatelessWidget {
             builder: (context) => MyBrandPage(
                   supplierModel,
                   isDetail: true,
+                  isSupplier: true,
                 ),
           ),
         );

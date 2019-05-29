@@ -46,10 +46,10 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
             barrierDismissible: false,
             builder: (_) {
               return RequestDataLoading(
-                requestCallBack: LocalStorage.get(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY),
+                requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
                 outsideDismiss: false,
                 loadingText: '加载中。。。',
-                entrance: 'createPurchaseOrder',
+                entrance: '',
               );
             }
         ).then((value){

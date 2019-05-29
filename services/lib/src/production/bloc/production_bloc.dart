@@ -89,7 +89,7 @@ class ProductionBLoC extends BLoCBase {
 
   Stream<FilterConditionEntry> get conditionStream => conditionController.stream;
 
-  getData() async {
+  getData(String keyword) async {
     //若没有数据则查询
     if (_purchaseOrders.isEmpty) {
       //  分页拿数据，response.data;
@@ -111,6 +111,7 @@ class ProductionBLoC extends BLoCBase {
       }
       //请求参数
       Map data = {
+        'keyword': keyword,
         'salesApplications':typeList,
         'phases': phasesList,
         'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,
@@ -152,7 +153,7 @@ class ProductionBLoC extends BLoCBase {
   }
 
   //下拉刷新
-  Future refreshData() async {
+  Future refreshData(String keyword) async {
     _purchaseOrders.clear();
 
     if (orderType != null && orderType.length > 0) {
@@ -173,6 +174,7 @@ class ProductionBLoC extends BLoCBase {
     }
     //请求参数
     Map data = {
+      'keyword': keyword,
       'salesApplications': typeList,
       'phases': phasesList,
       'expectedDeliveryDateFrom': startDate == null ? null : startDate.millisecondsSinceEpoch,

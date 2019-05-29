@@ -66,7 +66,7 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
         }
 
         if (widget.entrance == 'createPurchaseOrder') {
-          ProductionBLoC.instance.refreshData();
+          ProductionBLoC.instance.refreshData('');
           PurchaseOrderBLoC.instance.refreshData('ALL');
 //          if(value != null){
 //            _requestMessage(context, '保存成功', value);
@@ -111,68 +111,6 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
     super.dispose();
   }
 
-  Future<void> _requestMessage(
-      BuildContext context, String message, String code) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            '提示',
-            style: TextStyle(fontSize: 16),
-          ),
-          content: SingleChildScrollView(
-              child: Text(
-            '${message}',
-            style: TextStyle(
-              fontSize: 22,
-            ),
-          )),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                '确定',
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                if (code != null) {
-                  if (widget.entrance == 'createPurchaseOrder') {
-                    PurchaseOrderModel model = await PurchaseOrderRepository()
-                        .getPurchaseOrderDetail(code);
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PurchaseOrderDetailPage(order: model)),
-                        ModalRoute.withName('/'));
-                  }
-                  if (widget.entrance == 'quoteOrder') {
-                    //查询明细
-                  }
-                  if (widget.entrance == 'proofingOrder') {
-                    // ProofingModel detailModel = await ProofingOrderRepository()
-                    //     .proofingDetail(code);
-                    // if (detailModel != null) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => ProofingOrderDetailPage(
-                                  code,
-                                )),
-                        ModalRoute.withName('/'));
-                    // }
-                  }
-                } else {
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> getPurchaseOrderDetail(String code) async {
     PurchaseOrderModel model =
         await PurchaseOrderRepository().getPurchaseOrderDetail(code);
@@ -205,15 +143,15 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return  GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(
         type: MaterialType.transparency,
-        child: new Center(
-          child: new SizedBox(
+        child:  Center(
+          child:  SizedBox(
             width: 120.0,
             height: 120.0,
-            child: new Container(
+            child:  Container(
               decoration: ShapeDecoration(
                 color: Color(0xffffffff),
                 shape: RoundedRectangleBorder(
@@ -222,18 +160,18 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
                   ),
                 ),
               ),
-              child: new Column(
+              child:  Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  new CircularProgressIndicator(),
-                  new Padding(
+                   CircularProgressIndicator(),
+                   Padding(
                     padding: const EdgeInsets.only(
                       top: 20.0,
                     ),
-                    child: new Text(
+                    child:  Text(
                       widget.loadingText,
-                      style: new TextStyle(fontSize: 12.0),
+                      style:  TextStyle(fontSize: 12.0),
                     ),
                   ),
                 ],

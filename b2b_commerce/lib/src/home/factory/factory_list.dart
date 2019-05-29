@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/global_search_input.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/search/factory_search.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -86,6 +88,8 @@ class _FactoryPageState extends State<FactoryPage> {
   AMapLocation aMapLocation;
 
   String addressLine;
+
+  List<String> historyKeywords;
 
   @override
   void initState() {
@@ -189,12 +193,27 @@ class _FactoryPageState extends State<FactoryPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
-                      String keyword = await showSearch(
-                        context: context,
-                        delegate: FactorySearchDelegate(),
-                      );
-                      factoryCondition.setKeyword(keyword);
-                      FactoryBLoC.instance.clear();
+                      String jsonStr = await LocalStorage.get(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
+                        if (jsonStr != null && jsonStr != '') {
+                          List<dynamic> list = json.decode(jsonStr);
+                          historyKeywords = list.map((item) => item as String).toList();
+                        } else {
+                          historyKeywords = [];
+                        }
+                        String result=await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SearchModelPage(historyKeywords: historyKeywords,keyword: factoryCondition.keyword,
+                                  searchModel: SearchModel.FACTORY,factoryCondition: factoryCondition,),
+                          ),
+                        );
+//                      String keyword = await showSearch(
+//                        context: context,
+//                        delegate: FactorySearchDelegate(),
+//                      );
+//                      factoryCondition.setKeyword(keyword);
+//                      FactoryBLoC.instance.clear();
                     },
                     child: Container(
                       height: 28,
@@ -272,41 +291,6 @@ class _FactoryPageState extends State<FactoryPage> {
                             showDateFilterMenu = !showDateFilterMenu;
                           });
                         }),
-                        FilterEntry(_categorySelectText, () async {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                child: CategorySelect(
-                                  categories: _category,
-                                  multiple: false,
-                                  verticalDividerOpacity: 1,
-                                  categorySelect: _categorySelected,
-                                  categoryActionType: CategoryActionType.TO_POP,
-                                ),
-                              );
-                            },
-                          ).then((a) {
-                            setState(() {
-                              if (_categorySelected.isEmpty) {
-                                factoryCondition.categories = null;
-                                _categorySelectText = '分类';
-                              } else {
-                                _categorySelectText = _categorySelected[0].name;
-                                factoryCondition.adeptAtCategories =
-                                    _categorySelected;
-                              }
-                              FactoryBLoC.instance.filterByCondition(
-                                factoryCondition,
-                                requirementCode: widget.requirementCode,
-                              );
-                            });
-                          });
-                          setState(() {
-                            showDateFilterMenu = true;
-                            showLocalFilterMenu = true;
-                          });
-                        }),
                         widget.route == '就近找厂'
                             ? FilterEntry(_localSelectText, () {
                           setState(() {
@@ -355,7 +339,42 @@ class _FactoryPageState extends State<FactoryPage> {
                               });
                             });
                           });
-                        })
+                        }),
+                        FilterEntry(_categorySelectText, () async {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                child: CategorySelect(
+                                  categories: _category,
+                                  multiple: false,
+                                  verticalDividerOpacity: 1,
+                                  categorySelect: _categorySelected,
+                                  categoryActionType: CategoryActionType.TO_POP,
+                                ),
+                              );
+                            },
+                          ).then((a) {
+                            setState(() {
+                              if (_categorySelected.isEmpty) {
+                                factoryCondition.categories = null;
+                                _categorySelectText = '分类';
+                              } else {
+                                _categorySelectText = _categorySelected[0].name;
+                                factoryCondition.adeptAtCategories =
+                                    _categorySelected;
+                              }
+                              FactoryBLoC.instance.filterByCondition(
+                                factoryCondition,
+                                requirementCode: widget.requirementCode,
+                              );
+                            });
+                          });
+                          setState(() {
+                            showDateFilterMenu = true;
+                            showLocalFilterMenu = true;
+                          });
+                        }),
                       ],
                       action: Container(),
                     ),

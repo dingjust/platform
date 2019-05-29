@@ -80,7 +80,7 @@ class _ProductionFilterBarState extends State<ProductionFilterBar> {
                   entry.checked = !entry.checked;
                   ProductionBLoC().setStatus(entry.value);
                   ProductionBLoC().clear();
-                  ProductionBLoC().getData();
+                  ProductionBLoC().getData('');
                   //stream通知状态更改
                   widget.streamController.add(entry);
                 });
