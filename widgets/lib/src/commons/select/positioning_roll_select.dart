@@ -12,6 +12,7 @@ class PositioningRollPage extends StatefulWidget {
   double mainAxisSpacing;
   double crossAxisSpacing;
   int crossAxisCount;
+  bool enabled;
 
   PositioningRollPage({
     this.attributes,
@@ -20,6 +21,7 @@ class PositioningRollPage extends StatefulWidget {
     this.mainAxisSpacing = 5.0,
     this.crossAxisSpacing = 5.0,
     this.crossAxisCount = 3,
+    this.enabled = true,
   });
 
   _PositioningRollPageState createState() => _PositioningRollPageState();
@@ -62,14 +64,17 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          IconButton(
-              icon: Text('确定'),
-              onPressed: () {
-                widget.attributes.forEach((attribute) {
-                  map[attribute.code] = attribute.valueSelects;
-                });
-                Navigator.pop(context, map);
-              })
+          Offstage(
+            offstage: !widget.enabled,
+            child: IconButton(
+                icon: Text('确定'),
+                onPressed: () {
+                  widget.attributes.forEach((attribute) {
+                    map[attribute.code] = attribute.valueSelects;
+                  });
+                  Navigator.pop(context, map);
+                }),
+          )
         ],
       ),
       body: Container(
@@ -154,7 +159,7 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
           crossAxisCount: widget.crossAxisCount,
           children: item.values.map((valueItem) {
             return GestureDetector(
-              onTap: () {
+              onTap: !widget.enabled ? null : () {
                 setState(() {
                   if (item.valueSelects.contains(valueItem.code)) {
                     item.valueSelects.remove(valueItem.code);
@@ -165,8 +170,6 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
                     item.valueSelects.add(valueItem.code);
                   }
                 });
-
-                print(item.valueSelects);
               },
               child: Container(
                 decoration: BoxDecoration(

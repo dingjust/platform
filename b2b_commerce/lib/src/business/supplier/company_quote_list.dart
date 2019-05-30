@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -29,7 +30,7 @@ class _CompanyQuoteListPageState extends State<CompanyQuoteListPage>{
           elevation: 0.5,
           centerTitle: true,
         ),
-        body: QuoteList(companyUid: widget.companyUid,),
+        body: QuoteList(companyUid: widget.companyUid,status: EnumModel('allQuoteBySupplier','全部报价单'),),
         floatingActionButton: ScrollToTopButton<QuoteOrdersBLoC>(),
       ),
     );

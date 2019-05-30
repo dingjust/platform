@@ -380,7 +380,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     List<Widget> widgetList = [];
 
     //是否已达限制数量，添加图片按钮
-    if (widget.list.length < widget.maxNum) {
+    if (widget.list.length < widget.maxNum && widget.editable) {
       widgetList.add(GestureDetector(
         onTap: () {
           _selectPapersImages();

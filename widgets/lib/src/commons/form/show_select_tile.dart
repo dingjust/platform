@@ -7,6 +7,7 @@ class ShowSelectTile extends StatelessWidget {
   TextStyle leadingTextStyle;
   TextStyle tralingTextStyle;
   bool isRequired;
+  bool isShowIcon;
 
   ShowSelectTile({
     this.leadingText,
@@ -14,6 +15,7 @@ class ShowSelectTile extends StatelessWidget {
     this.leadingTextStyle,
     this.tralingTextStyle,
     this.isRequired = false,
+    this.isShowIcon = true,
   }) {
     leadingTextStyle = TextStyle(
       fontSize: 16,
@@ -29,7 +31,7 @@ class ShowSelectTile extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15,),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -49,10 +51,10 @@ class ShowSelectTile extends StatelessWidget {
                       style: tralingTextStyle,
                     )
                   : Text(''),
-              Icon(
+              isShowIcon ? Icon(
                 Icons.chevron_right,
                 color: Colors.grey[600],
-              ),
+              ):SizedBox(height: 22),
             ],
           ),
         ),

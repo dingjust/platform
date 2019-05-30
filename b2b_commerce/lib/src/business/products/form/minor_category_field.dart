@@ -37,10 +37,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: () async {
-            if(!widget.enabled){
-              return;
-            }
+          onTap:  !widget.enabled ? null : () async {
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
@@ -66,6 +63,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
             isRequired: true,
             leadingText: '产品品类',
             tralingText: _minorCategoryText,
+            isShowIcon: widget.enabled,
           ),
         ),
       ],

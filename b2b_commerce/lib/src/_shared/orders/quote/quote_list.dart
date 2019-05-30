@@ -233,7 +233,7 @@ class _QuoteListState extends State<QuoteList>
           controller: widget.scrollController,
           children: <Widget>[
             StreamBuilder<List<QuoteModel>>(
-              stream: bloc.stream,
+              stream: bloc.stream ,
               builder: (BuildContext context,
                   AsyncSnapshot<List<QuoteModel>> snapshot) {
                 if (snapshot.data == null) {
