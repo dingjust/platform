@@ -173,28 +173,26 @@ class BrandFirstMenuSection extends StatelessWidget {
       GridItem(
           title: '看款下单',
           onPressed: () async {
-            // 加载条
-            showDialog(
-              context: context,
-              builder: (context) =>
-                  ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-            );
-            await ProductRepositoryImpl()
-                .cascadedCategories()
-                .then((categories) {
-              Navigator.of(context).pop();
+//            showDialog(
+//                context: context,
+//                barrierDismissible: false,
+//                builder: (_) {
+//                  return RequestDataLoading(
+//                    requestCallBack: ProductRepositoryImpl()
+//                        .cascadedCategories(),
+//                    outsideDismiss: false,
+//                    loadingText: '加载中。。。',
+//                    entrance: '',
+//                  );
+//                }
+//            ).then((value){
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) =>
-                      // CategorySelectPage(
-                      //       minCategorySelect: [],
-                      //       categories: categories,
-                      //       categoryActionType: CategoryActionType.TO_PRODUCTS,
-                      //     ),
-                      ProductsPage(),
+                  ProductsPage(),
                 ),
               );
-            });
+//            });
           },
           icon: B2BImage.order(width: 60, height: 80)),
     ];

@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_se
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -45,7 +46,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   String _productionAreaSelectText = '生产地区';
 
   ///当前选中条件
-  RequirementFilterCondition currentCodition;
+  RequirementFilterCondition currentCondition;
 
   List<FilterConditionEntry> dateRangeConditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(
@@ -83,6 +84,8 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   List<String> _regionCodeSelects = [];
   List<RegionModel> _regions = [];
 
+  List<String> historyKeywords;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -92,9 +95,9 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
         .toList());
 
     if (widget.requirementFilterCondition != null) {
-      currentCodition = widget.requirementFilterCondition;
+      currentCondition = widget.requirementFilterCondition;
     } else {
-      currentCodition = RequirementFilterCondition(
+      currentCondition = RequirementFilterCondition(
           categories: [],
           dateRange: RequirementOrderDateRange.ALL,
           machiningType: null);
@@ -122,9 +125,38 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                   B2BIcons.search,
                   size: 22,
                 ),
-                onPressed: () => showSearch(
-                    context: context,
-                    delegate: RequirementOrderSearchDelegatePage()),
+                onPressed: (){
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoading(
+                          requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+                          outsideDismiss: false,
+                          loadingText: '加载中。。。',
+                          entrance: '',
+                        );
+                      }
+                  ).then((value){
+                    if (value != null && value != '') {
+                      List<dynamic> list = json.decode(value);
+                      historyKeywords = list.map((item) => item as String).toList();
+
+                    } else {
+                      historyKeywords = [];
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchModelPage(historyKeywords: historyKeywords,
+                          searchModel: SearchModel.REQUIREMENT_QUOTE,requirementCondition: currentCondition,),
+                      ),
+                    );
+                  });
+                },
+//                onPressed: () => showSearch(
+//                    context: context,
+//                    delegate: RequirementOrderSearchDelegatePage()),
               ),
             ],
           ),
@@ -183,11 +215,11 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                         setState(() {
                           if (_regionSelects.length > 0) {
                             _productionAreaSelectText = _regionSelects[0].name;
-                            currentCodition.productiveOrientations =
+                            currentCondition.productiveOrientations =
                                 _regionSelects;
                           } else {
                             _productionAreaSelectText = '生产地区';
-                            currentCodition.productiveOrientations = null;
+                            currentCondition.productiveOrientations = null;
                           }
                           RequirementPoolBLoC.instance.clear();
                         });
@@ -255,7 +287,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                 ),
                 Expanded(
                   child: OrdersListView(
-                    currentCodition: currentCodition,
+                    currentCondition: currentCondition,
                   ),
                 )
               ],
@@ -265,10 +297,10 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   }
 
   String generateTitle() {
-    if (currentCodition.keyword == null || currentCodition.keyword == '') {
+    if (currentCondition.keyword == null || currentCondition.keyword == '') {
       return '全部需求';
     } else {
-      return '${currentCodition.keyword}';
+      return '${currentCondition.keyword}';
     }
   }
 }
@@ -276,9 +308,9 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
 class OrdersListView extends StatelessWidget {
   ScrollController _scrollController = ScrollController();
 
-  final RequirementFilterCondition currentCodition;
+  final RequirementFilterCondition currentCondition;
 
-  OrdersListView({Key key, this.currentCodition}) : super(key: key);
+  OrdersListView({Key key, this.currentCondition}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -287,32 +319,32 @@ class OrdersListView extends StatelessWidget {
     //监听筛选条件更改
     bloc.conditionStream.listen((condition) {
       if (condition.value is RequirementOrderDateRange && condition.checked) {
-        currentCodition.dateRange = condition.value;
+        currentCondition.dateRange = condition.value;
       }
 
       if (condition.value is MachiningType && condition.checked) {
-        currentCodition.machiningType = condition.value;
+        currentCondition.machiningType = condition.value;
       }
 
       if (condition.value is CategoryModel) {
         if (condition.checked) {
-          if (!currentCodition.categories.contains(condition.value)) {
-            currentCodition.categories.add(condition.value);
+          if (!currentCondition.categories.contains(condition.value)) {
+            currentCondition.categories.add(condition.value);
           }
         } else {
-          currentCodition.categories.remove(condition.value);
+          currentCondition.categories.remove(condition.value);
         }
       }
 
       if (condition.value == "ALL2") {
-        currentCodition.categories.clear();
+        currentCondition.categories.clear();
       }
 
       if (condition.value == "ALL1") {
-        currentCodition.machiningType = null;
+        currentCondition.machiningType = null;
       }
 
-      // bloc.filterByCondition(currentCodition);
+      // bloc.filterByCondition(currentCondition);
       bloc.clear();
     });
 
@@ -320,7 +352,7 @@ class OrdersListView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByCondition(currentCodition, false);
+        bloc.loadingMoreByCondition(currentCondition, false);
       }
     });
 
@@ -343,7 +375,7 @@ class OrdersListView extends StatelessWidget {
                     AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     //默认条件查询
-                    bloc.filterByCondition(currentCodition, false);
+                    bloc.filterByCondition(currentCondition, false);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }

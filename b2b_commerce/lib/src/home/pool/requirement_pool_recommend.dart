@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_search_delegate_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -74,6 +76,8 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
   List<String> _regionCodeSelects = [];
   List<RegionModel> _regions = [];
 
+  List<String> historyKeywords;
+
   @override
   void initState() {
     //获取所有省份
@@ -120,10 +124,39 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                   B2BIcons.search,
                   size: 22,
                 ),
-                onPressed: () => showSearch(
-                    context: context,
-                    delegate:
-                        RequirementOrderSearchDelegatePage(isRecommend: true)),
+                onPressed: (){
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoading(
+                          requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+                          outsideDismiss: false,
+                          loadingText: '加载中。。。',
+                          entrance: '',
+                        );
+                      }
+                  ).then((value){
+                    if (value != null && value != '') {
+                      List<dynamic> list = json.decode(value);
+                      historyKeywords = list.map((item) => item as String).toList();
+
+                    } else {
+                      historyKeywords = [];
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchModelPage(historyKeywords: historyKeywords,
+                          searchModel: SearchModel.REQUIREMENT_QUOTE,requirementCondition: currentCodition,),
+                      ),
+                    );
+                  });
+                },
+//                onPressed: () => showSearch(
+//                    context: context,
+//                    delegate:
+//                        RequirementOrderSearchDelegatePage(isRecommend: true)),
               ),
             ],
           ),

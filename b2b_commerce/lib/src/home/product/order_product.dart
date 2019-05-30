@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/business/search/search_model.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -34,6 +38,8 @@ class _ProductsPageState extends State<ProductsPage> {
   String _title = '看款下单';
   String _textSelect = '全部品类';
 
+  List<String> historyKeywords;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,34 +63,64 @@ class _ProductsPageState extends State<ProductsPage> {
       child: Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,
-          centerTitle: true,
+          automaticallyImplyLeading: false,
           elevation: 0.5,
-          title: Text(
-            _title,
-            style: TextStyle(color: Colors.black),
-            overflow: TextOverflow.ellipsis,
-          ),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                  B2BIcons.search,
-                  size: 22,
+          title: Row(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  child: Icon(
+                    Icons.keyboard_arrow_left,
+                    size: 32,
+                  ),
                 ),
-                onPressed: () async {
-                  String keyword = await showSearch(
-                    context: context,
-                    delegate: OrderProductSearchDelegate(),
-                  );
-                  setState(() {
-                    productCondition.keyword = keyword;
-                  });
-                  if(widget.factoryUid == null){
-                    OrderByProductBLoc.instance.getData(productCondition);
-                  }else{
-                    OrderByProductBLoc.instance.getCashProducts(widget.factoryUid);
-                  }
-                }),
-          ],
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () async {
+                    String jsonStr = await LocalStorage.get(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY);
+                    if (jsonStr != null && jsonStr != '') {
+                      List<dynamic> list = json.decode(jsonStr);
+                      historyKeywords = list.map((item) => item as String).toList();
+                    } else {
+                      historyKeywords = [];
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SearchModelPage(historyKeywords: historyKeywords,keyword: productCondition.keyword,
+                              searchModel: SearchModel.EXIST_PRODUCT,productCondition: productCondition,),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 28,
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.grey[300], width: 0.5),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        const Icon(B2BIcons.search,
+                            color: Colors.grey, size: 18),
+                        Text(
+                          '${productCondition.keyword != null && productCondition.keyword != ''? productCondition.keyword : '请输入编码，名称，货号搜索'}',
+                          style: const TextStyle(
+                              color: Colors.grey, fontSize: 16),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           bottom: PreferredSize(
               preferredSize: Size(200, 30),
               child: Row(

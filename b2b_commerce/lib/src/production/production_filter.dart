@@ -103,7 +103,7 @@ class _ProductionFilterPageState extends State<ProductionFilterPage> {
                             widget.bloc.setStartDate(widget._startDate);
                             widget.bloc.setEndDate(widget._endDate);
                             widget.bloc.clear();
-                            widget.bloc.getData();
+                            widget.bloc.getData('');
                             Navigator.pop(context);
                           }),
                     )),

@@ -79,10 +79,10 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
                       builder: (_) {
                         return RequestDataLoading(
                           requestCallBack: LocalStorage.get(
-                              GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
+                              GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY),
                           outsideDismiss: false,
                           loadingText: '加载中。。。',
-                          entrance: 'createPurchaseOrder',
+                          entrance: '',
                         );
                       }
                   ).then((value) {
