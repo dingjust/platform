@@ -479,7 +479,6 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   }
                   if(widget.searchModel.searchModelType == SearchModelType.PRODUCTION_ORDER){
                     ProductionBLoC.instance.clear();
-//                    ProductionBLoC.instance.getData(keyword);
                     Navigator.of(context).pop(keyword);
                   }
                   if(widget.searchModel.searchModelType == SearchModelType.EXIST_PRODUCT){
