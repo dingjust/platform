@@ -27,7 +27,6 @@ class QuoteList extends StatefulWidget {
 
   @override
   _QuoteListState createState() {
-    print('==========${status.name}    ${this.hashCode}');
     return _QuoteListState();
   }
 }
@@ -36,8 +35,6 @@ class _QuoteListState extends State<QuoteList>
     with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
-    print('!!!!!${widget.status.name}');
-
     super.initState();
 
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
@@ -217,8 +214,6 @@ class _QuoteListState extends State<QuoteList>
 
   @override
   Widget build(BuildContext context) {
-    print('${widget.status.name}');
-
     var bloc = BLoCProvider.of<QuoteOrdersBLoC>(context);
 
     return Container(
@@ -232,10 +227,11 @@ class _QuoteListState extends State<QuoteList>
           physics: const AlwaysScrollableScrollPhysics(),
           controller: widget.scrollController,
           children: <Widget>[
-            StreamBuilder<List<QuoteModel>>(
-              stream: bloc.stream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<QuoteModel>> snapshot) {
+            StreamBuilder<QuoteData>(
+              stream: bloc.stream
+                  .where((quoteData) => quoteData.status == widget.status.code),
+              builder:
+                  (BuildContext context, AsyncSnapshot<QuoteData> snapshot) {
                 if (snapshot.data == null) {
                   if (widget.companyUid != null) {
                     bloc.getQuoteDataByCompany(widget.companyUid);
@@ -244,11 +240,10 @@ class _QuoteListState extends State<QuoteList>
                   } else {
                     bloc.filterByStatuses(widget.status.code);
                   }
-
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
                 }
-                if (snapshot.data.length <= 0) {
+                if (snapshot.data.data.length <= 0) {
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -287,7 +282,7 @@ class _QuoteListState extends State<QuoteList>
                 }
                 if (snapshot.hasData) {
                   return Column(
-                    children: snapshot.data.map((item) {
+                    children: snapshot.data.data.map((item) {
                       return QuoteListItem(
                         model: item,
                         onQuoteRejecting: () => _onQuoteRejecting(item),
@@ -341,5 +336,5 @@ class _QuoteListState extends State<QuoteList>
 
   @override
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 }

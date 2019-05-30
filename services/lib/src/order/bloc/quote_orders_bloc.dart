@@ -33,16 +33,26 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   static final Map<String, PageEntry> _quotesMap = {
     'ALL': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
-    'SELLER_SUBMITTED': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
-    'BUYER_APPROVED': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
-    'BUYER_REJECTED': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+    'SELLER_SUBMITTED':
+    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+    'BUYER_APPROVED':
+    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+    'BUYER_REJECTED':
+    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+    'SEARCH': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
   };
 
   List<QuoteModel> quotes(String status) => _quotesMap[status].data;
 
-  var _controller = StreamController<List<QuoteModel>>.broadcast();
+  var _controller = StreamController < QuoteData
 
-  Stream<List<QuoteModel>> get stream => _controller.stream;
+  >
+
+      .
+
+  broadcast();
+
+  Stream<QuoteData> get stream => _controller.stream;
 
   filterByStatuses(String status) async {
     if (!lock) {
@@ -60,48 +70,60 @@ class QuoteOrdersBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.quotes,
-              data: data, queryParameters: {'page': _quotesMap[status].currentPage, 'size': _quotesMap[status].size});
+              data: data,
+              queryParameters: {
+                'page': _quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+          QuoteOrdersResponse ordersResponse =
+          QuoteOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.clear();
           _quotesMap[status].data.addAll(ordersResponse.content);
         }
       }
-      _controller.sink.add(_quotesMap[status].data);
+      _controller.sink
+          .add(QuoteData(status: status, data: _quotesMap[status].data));
       lock = false;
     }
   }
 
   filterByKeyword(String keyword) async {
-      //若没有数据则查询
-        //请求参数
-        Map data = {
-          'keyword': keyword,
+    //若没有数据则查询
+    //请求参数
+    Map data = {
+      'keyword': keyword,
 //          'skuID': keyword,
 //          'belongto': keyword,
-        };
-        Response<Map<String, dynamic>> response;
-        try {
-          response = await http$.post(OrderApis.quotes,
-              data: data, queryParameters: {'page': _quotesMap['ALL'].currentPage, 'size': _quotesMap['ALL'].size});
-        } on DioError catch (e) {
-          print(e);
-        }
+    };
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.post(OrderApis.quotes,
+          data: data,
+          queryParameters: {
+            'page': _quotesMap['ALL'].currentPage,
+            'size': _quotesMap['ALL'].size
+          });
+    } on DioError catch (e) {
+      print(e);
+    }
 
-        if (response != null && response.statusCode == 200) {
-          QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
-          _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
-          _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
-          _quotesMap['ALL'].data.clear();
-          _quotesMap['ALL'].data.addAll(ordersResponse.content);
-        }
-      _controller.sink.add(_quotesMap['ALL'].data);
+    if (response != null && response.statusCode == 200) {
+      QuoteOrdersResponse ordersResponse =
+      QuoteOrdersResponse.fromJson(response.data);
+      _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
+      _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
+      _quotesMap['ALL'].data.clear();
+      _quotesMap['ALL'].data.addAll(ordersResponse.content);
+    }
+    _controller.sink
+        .add(QuoteData(status: 'ALL', data: _quotesMap['ALL'].data));
   }
 
   loadingMoreByStatuses(String status) async {
@@ -121,20 +143,26 @@ class QuoteOrdersBLoC extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           response = await http$.post(OrderApis.quotes,
-              data: data, queryParameters: {'page': ++_quotesMap[status].currentPage, 'size': _quotesMap[status].size});
+              data: data,
+              queryParameters: {
+                'page': ++_quotesMap[status].currentPage,
+                'size': _quotesMap[status].size
+              });
         } on DioError catch (e) {
           print(e);
         }
 
         if (response != null && response.statusCode == 200) {
-          QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
+          QuoteOrdersResponse ordersResponse =
+          QuoteOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.addAll(ordersResponse.content);
         }
       }
       loadingController.sink.add(false);
-      _controller.sink.add(_quotesMap[status].data);
+      _controller.sink
+          .add(QuoteData(status: status, data: _quotesMap[status].data));
       lock = false;
     }
   }
@@ -143,27 +171,33 @@ class QuoteOrdersBLoC extends BLoCBase {
     if (!lock) {
       lock = true;
       //数据到底
-        Map data = {
-          'code': keyword,
-          'skuID': keyword,
-          'belongto': keyword,
-        };
-        Response<Map<String, dynamic>> response;
-        try {
-          response = await http$.post(OrderApis.quotes,
-              data: data, queryParameters: {'page': ++_quotesMap['ALL'].currentPage, 'size': _quotesMap['ALL'].size});
-        } on DioError catch (e) {
-          print(e);
-        }
+      Map data = {
+        'code': keyword,
+        'skuID': keyword,
+        'belongto': keyword,
+      };
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$.post(OrderApis.quotes,
+            data: data,
+            queryParameters: {
+              'page': ++_quotesMap['ALL'].currentPage,
+              'size': _quotesMap['ALL'].size
+            });
+      } on DioError catch (e) {
+        print(e);
+      }
 
-        if (response != null && response.statusCode == 200) {
-          QuoteOrdersResponse ordersResponse = QuoteOrdersResponse.fromJson(response.data);
-          _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
-          _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
-          _quotesMap['ALL'].data.addAll(ordersResponse.content);
-        }
+      if (response != null && response.statusCode == 200) {
+        QuoteOrdersResponse ordersResponse =
+        QuoteOrdersResponse.fromJson(response.data);
+        _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
+        _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
+        _quotesMap['ALL'].data.addAll(ordersResponse.content);
+      }
       loadingController.sink.add(false);
-      _controller.sink.add(_quotesMap['ALL'].data);
+      _controller.sink
+          .add(QuoteData(status: 'ALL', data: _quotesMap['ALL'].data));
       lock = false;
     }
   }
@@ -175,49 +209,48 @@ class QuoteOrdersBLoC extends BLoCBase {
     await filterByStatuses(status);
   }
 
-
   //获取供应商的相关全部报价
-  getQuoteDataByCompany(String companyUid)async{
+  getQuoteDataByCompany(String companyUid) async {
     quoteModels.clear();
     if (!lock) {
       lock = true;
-        if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-          //获取与该工厂全部的报价单
-          quoteResponse = await QuoteOrderRepository().getQuotesByFactory(companyUid, {});
-        }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
-          //获取与该品牌全部的报价单
-          quoteResponse = await QuoteOrderRepository().getQuotesByBrand(companyUid, {});
-        }
+      if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+        //获取与该工厂全部的报价单
+        quoteResponse =
+        await QuoteOrderRepository().getQuotesByFactory(companyUid, {});
+      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+        //获取与该品牌全部的报价单
+        quoteResponse =
+        await QuoteOrderRepository().getQuotesByBrand(companyUid, {});
+      }
 
       quoteModels.addAll(quoteResponse.content);
-      _controller.sink.add(quoteModels);
+      _controller.sink.add(QuoteData(data: quoteModels));
       lock = false;
     }
   }
 
   //获取供应商的相关全部报价
-  lodingMoreByCompany(String companyUid)async{
+  lodingMoreByCompany(String companyUid) async {
     if (!lock) {
       lock = true;
       //获取与该工厂全部的报价单
-      if(quoteResponse.number < quoteResponse.totalPages - 1){
-        if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+      if (quoteResponse.number < quoteResponse.totalPages - 1) {
+        if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
           //获取与该工厂全部的报价单
-          quoteResponse = await QuoteOrderRepository().getQuotesByFactory(companyUid, {
-            'page':quoteResponse.number + 1
-          });
-        }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+          quoteResponse = await QuoteOrderRepository().getQuotesByFactory(
+              companyUid, {'page': quoteResponse.number + 1});
+        } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           //获取与该品牌全部的报价单
-          quoteResponse = await QuoteOrderRepository().getQuotesByBrand(companyUid, {
-            'page':quoteResponse.number + 1
-          });
+          quoteResponse = await QuoteOrderRepository()
+              .getQuotesByBrand(companyUid, {'page': quoteResponse.number + 1});
         }
         quoteModels.addAll(quoteResponse.content);
-      }else{
+      } else {
         bottomController.sink.add(true);
       }
       loadingController.sink.add(false);
-      _controller.sink.add(quoteModels);
+      _controller.sink.add(QuoteData(data: quoteModels));
       lock = false;
     }
   }
@@ -235,4 +268,12 @@ class QuoteOrdersBLoC extends BLoCBase {
 
     super.dispose();
   }
+}
+
+class QuoteData {
+  String status;
+
+  List<QuoteModel> data;
+
+  QuoteData({this.status, this.data});
 }

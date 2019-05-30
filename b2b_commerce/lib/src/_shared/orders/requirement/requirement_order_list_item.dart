@@ -75,10 +75,6 @@ class RequirementOrderItem extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
           children: <Widget>[
-            FlatButton(
-              child: Text('asda'),
-              onPressed: onRequirementCancle,
-            ),
             _buildHeader(),
             _buildEntries(),
             _buildSummary(model.totalQuotesCount),

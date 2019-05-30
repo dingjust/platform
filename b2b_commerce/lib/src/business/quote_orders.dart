@@ -78,10 +78,6 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    tabViewList.forEach((item) {
-      print('${item.hashCode}');
-    });
-
     return BLoCProvider<QuoteOrdersBLoC>(
       key: _globalKey,
       bloc: QuoteOrdersBLoC.instance,
