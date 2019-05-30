@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
-import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
@@ -10,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-
-import '../purchase_orders.dart';
 
 class PurchaseOrderSearchResultPage extends StatefulWidget {
   PurchaseOrderSearchResultPage({Key key, this.keyword}) : super(key: key);
@@ -153,7 +150,7 @@ class ProductionListView extends StatelessWidget {
           children: <Widget>[
             StreamBuilder<List<PurchaseOrderModel>>(
                 initialData: null,
-                stream: bloc.stream,
+                stream: bloc.purchaseStream,
                 builder: (BuildContext context,
                     AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
                   if (snapshot.data == null) {

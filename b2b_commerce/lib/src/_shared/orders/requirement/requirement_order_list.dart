@@ -21,7 +21,8 @@ class RequirementOrderList extends StatefulWidget {
   _RequirementOrderListState createState() => _RequirementOrderListState();
 }
 
-class _RequirementOrderListState extends State<RequirementOrderList> {
+class _RequirementOrderListState extends State<RequirementOrderList>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -77,11 +78,12 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
           physics: const AlwaysScrollableScrollPhysics(),
           controller: widget.scrollController,
           children: <Widget>[
-            StreamBuilder<List<RequirementOrderModel>>(
-              stream: bloc.stream,
+            StreamBuilder<RequirementData>(
+              stream: bloc.stream.where((requirementData) =>
+              requirementData.status == widget.status.code),
               // initialData: null,
               builder: (BuildContext context,
-                  AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
+                  AsyncSnapshot<RequirementData> snapshot) {
                 if (snapshot.data == null) {
                   if (widget.keyword != null) {
                     bloc.filterByKeyword(widget.keyword);
@@ -91,7 +93,7 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
                 }
-                if (snapshot.data.length <= 0) {
+                if (snapshot.data.data.length <= 0) {
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +132,7 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
                 }
                 if (snapshot.hasData) {
                   return Column(
-                    children: snapshot.data.map((order) {
+                    children: snapshot.data.data.map((order) {
                       return RequirementOrderItem(
                         model: order,
                         onRequirementCancle: () => onOrderCancle(order.code),
@@ -208,4 +210,8 @@ class _RequirementOrderListState extends State<RequirementOrderList> {
           );
         });
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

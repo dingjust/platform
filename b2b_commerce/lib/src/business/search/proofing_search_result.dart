@@ -1,15 +1,11 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/orders/proofing/proofing_list_item.dart';
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list.dart';
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
-import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -156,17 +152,17 @@ class ProofingOrderListView extends StatelessWidget {
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
-            StreamBuilder<List<ProofingModel>>(
+            StreamBuilder<ProofingData>(
                 initialData: null,
                 stream: bloc.stream,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<ProofingModel>> snapshot) {
+                    AsyncSnapshot<ProofingData> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByKeyword(keyword);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
-                  if (snapshot.data.length <= 0) {
+                  if (snapshot.data.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -205,7 +201,7 @@ class ProofingOrderListView extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     return Column(
-                      children: snapshot.data.map((order) {
+                      children: snapshot.data.data.map((order) {
                         return ProofingOrderItem(
                           model: order,
                         );

@@ -47,9 +47,28 @@ class PurchaseOrderBLoC extends BLoCBase {
 
   List<PurchaseOrderModel> orders(String status) => _ordersMap[status].data;
 
-  var _controller = StreamController<List<PurchaseOrderModel>>.broadcast();
+  var _controller = StreamController < PurchaseData
 
-  Stream<List<PurchaseOrderModel>> get stream => _controller.stream;
+  >
+
+      .
+
+  broadcast();
+
+  Stream<PurchaseData> get stream => _controller.stream;
+
+  var _purchaseController = StreamController < List < PurchaseOrderModel
+
+  >
+
+  >
+
+      .
+
+  broadcast();
+
+  Stream<List<PurchaseOrderModel>> get purchaseStream =>
+      _purchaseController.stream;
 
   filterByStatuses(String status) async {
     //若没有数据则查询
@@ -91,7 +110,8 @@ class PurchaseOrderBLoC extends BLoCBase {
         _ordersMap[status].data.addAll(ordersResponse.content);
       }
     }
-    _controller.sink.add(_ordersMap[status].data);
+    _controller.sink
+        .add(PurchaseData(status: status, data: _ordersMap[status].data));
   }
 
   filterByKeyword(String keyword) async {
@@ -103,7 +123,11 @@ class PurchaseOrderBLoC extends BLoCBase {
     Response<Map<String, dynamic>> response;
     try {
       response = await http$.post(OrderApis.purchaseOrders,
-          data: data, queryParameters: {'page': _ordersMap['ALL'].currentPage, 'size': _ordersMap['ALL'].size});
+          data: data,
+          queryParameters: {
+            'page': _ordersMap['ALL'].currentPage,
+            'size': _ordersMap['ALL'].size
+          });
     } on DioError catch (e) {
       print(e);
     }
@@ -115,7 +139,8 @@ class PurchaseOrderBLoC extends BLoCBase {
       _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
       _ordersMap['ALL'].data.addAll(ordersResponse.content);
     }
-    _controller.sink.add(_ordersMap['ALL'].data);
+    _controller.sink.add(
+        PurchaseData(status: 'ALL', data: _ordersMap['ALL'].data));
   }
 
   loadingMoreByStatuses(String status) async {
@@ -152,7 +177,8 @@ class PurchaseOrderBLoC extends BLoCBase {
     }
 
     loadingController.sink.add(false);
-    _controller.sink.add(_ordersMap[status].data);
+    _controller.sink.add(
+        PurchaseData(status: status, data: _ordersMap[status].data));
   }
 
   loadingMoreByKeyword(String keyword) async {
@@ -165,7 +191,11 @@ class PurchaseOrderBLoC extends BLoCBase {
       Response<Map<String, dynamic>> response;
       try {
         response = await http$.post(OrderApis.purchaseOrders,
-            data: data, queryParameters: {'page': ++_ordersMap['ALL'].currentPage, 'size': _ordersMap['ALL'].size});
+            data: data,
+            queryParameters: {
+              'page': ++_ordersMap['ALL'].currentPage,
+              'size': _ordersMap['ALL'].size
+            });
       } on DioError catch (e) {
         print(e);
       }
@@ -178,7 +208,8 @@ class PurchaseOrderBLoC extends BLoCBase {
         _ordersMap['ALL'].data.addAll(ordersResponse.content);
       }
       loadingController.sink.add(false);
-      _controller.sink.add(_ordersMap['ALL'].data);
+      _controller.sink.add(
+          PurchaseData(status: 'ALL', data: _ordersMap['ALL'].data));
       lock = false;
     }
   }
@@ -221,7 +252,8 @@ class PurchaseOrderBLoC extends BLoCBase {
       _ordersMap[status].totalElements = ordersResponse.totalElements;
       _ordersMap[status].data.addAll(ordersResponse.content);
     }
-    _controller.sink.add(_ordersMap[status].data);
+    _controller.sink.add(
+        PurchaseData(status: status, data: _ordersMap[status].data));
   }
 
   //获取供应商的相关全部生产单
@@ -237,7 +269,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             .getPurchaseOrdersByBrand(companyUid, {});
       }
       purchaseOrderModels.addAll(purchaseOrdersResponse.content);
-      _controller.sink.add(purchaseOrderModels);
+      _purchaseController.sink.add(purchaseOrderModels);
       lock = false;
     }
   }
@@ -264,7 +296,7 @@ class PurchaseOrderBLoC extends BLoCBase {
 
       loadingController.sink.add(false);
 
-      _controller.sink.add(purchaseOrderModels);
+      _purchaseController.sink.add(purchaseOrderModels);
       lock = false;
     }
   }
@@ -282,4 +314,12 @@ class PurchaseOrderBLoC extends BLoCBase {
 
     super.dispose();
   }
+}
+
+class PurchaseData {
+  String status;
+
+  List<PurchaseOrderModel> data;
+
+  PurchaseData({this.status, this.data});
 }

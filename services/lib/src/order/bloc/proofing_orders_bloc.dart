@@ -39,9 +39,15 @@ class ProofingOrdersBLoC extends BLoCBase {
 
   List<ProofingModel> quotes(String status) => _quotesMap[status].data;
 
-  var _controller = StreamController<List<ProofingModel>>.broadcast();
+  var _controller = StreamController < ProofingData
 
-  Stream<List<ProofingModel>> get stream => _controller.stream;
+  >
+
+      .
+
+  broadcast();
+
+  Stream<ProofingData> get stream => _controller.stream;
 
   //锁
   bool lock = false;
@@ -80,7 +86,8 @@ class ProofingOrdersBLoC extends BLoCBase {
           _quotesMap[status].data.addAll(ordersResponse.content);
         }
       }
-      _controller.sink.add(_quotesMap[status].data);
+      _controller.sink
+          .add(ProofingData(status: status, data: _quotesMap[status].data));
       lock = false;
     }
   }
@@ -113,7 +120,8 @@ class ProofingOrdersBLoC extends BLoCBase {
       _quotesMap['ALL'].data.clear();
       _quotesMap['ALL'].data.addAll(ordersResponse.content);
     }
-    _controller.sink.add(_quotesMap['ALL'].data);
+    _controller.sink.add(
+        ProofingData(status: 'ALL', data: _quotesMap['ALL'].data));
   }
 
   loadingMoreByStatuses(String status) async {
@@ -153,7 +161,8 @@ class ProofingOrdersBLoC extends BLoCBase {
         }
       }
       loadingController.sink.add(false);
-      _controller.sink.add(_quotesMap[status].data);
+      _controller.sink.add(
+          ProofingData(status: status, data: _quotesMap[status].data));
       lock = false;
     }
   }
@@ -188,7 +197,8 @@ class ProofingOrdersBLoC extends BLoCBase {
         _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
         _quotesMap['ALL'].data.addAll(ordersResponse.content);
       }
-      _controller.sink.add(_quotesMap['ALL'].data);
+      _controller.sink.add(
+          ProofingData(status: 'ALL', data: _quotesMap['ALL'].data));
       lock = false;
     }
   }
@@ -212,4 +222,12 @@ class ProofingOrdersBLoC extends BLoCBase {
   dispose() {
     super.dispose();
   }
+}
+
+class ProofingData {
+  String status;
+
+  List<ProofingModel> data;
+
+  ProofingData({this.status, this.data});
 }

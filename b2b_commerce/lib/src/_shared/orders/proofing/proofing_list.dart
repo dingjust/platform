@@ -21,7 +21,8 @@ class ProofingList extends StatefulWidget {
   _ProofingListState createState() => _ProofingListState();
 }
 
-class _ProofingListState extends State<ProofingList> {
+class _ProofingListState extends State<ProofingList>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -80,18 +81,17 @@ class _ProofingListState extends State<ProofingList> {
             contentText2: '是否取消订单？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
               cancelOrder(model);
             },
           );
-        }
-    );
+        });
   }
 
-  void cancelOrder(ProofingModel model) async{
-    String response = await ProofingOrderRepository()
-        .proofingCancelling(model.code);
+  void cancelOrder(ProofingModel model) async {
+    String response =
+    await ProofingOrderRepository().proofingCancelling(model.code);
     if (response != null) {
       _handleRefresh();
       Navigator.of(context).pop();
@@ -105,12 +105,11 @@ class _ProofingListState extends State<ProofingList> {
               dialogType: DialogType.RESULT_DIALOG,
               failTips: '取消失败',
               callbackResult: false,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
               },
             );
-          }
-      );
+          });
     }
   }
 
@@ -126,12 +125,11 @@ class _ProofingListState extends State<ProofingList> {
             successTips: '确认收货成功',
             failTips: '确认收货失败',
             callbackResult: result,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    );
+        });
     _handleRefresh();
   }
 
@@ -172,12 +170,11 @@ class _ProofingListState extends State<ProofingList> {
             successTips: '确认成功',
             failTips: '确认成功',
             callbackResult: result,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    );
+        });
     _handleRefresh();
   }
 
@@ -210,10 +207,12 @@ class _ProofingListState extends State<ProofingList> {
           physics: const AlwaysScrollableScrollPhysics(),
           controller: widget.scrollController,
           children: <Widget>[
-            StreamBuilder<List<ProofingModel>>(
-              stream: bloc.stream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<ProofingModel>> snapshot) {
+            StreamBuilder<ProofingData>(
+              stream: bloc.stream.where(
+                      (proofingData) =>
+                  proofingData.status == widget.status.code),
+              builder:
+                  (BuildContext context, AsyncSnapshot<ProofingData> snapshot) {
                 if (snapshot.data == null) {
                   if (widget.keyword != null) {
                     bloc.filterByKeyword(widget.keyword);
@@ -223,7 +222,7 @@ class _ProofingListState extends State<ProofingList> {
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
                 }
-                if (snapshot.data.length <= 0) {
+                if (snapshot.data.data.length <= 0) {
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -262,7 +261,7 @@ class _ProofingListState extends State<ProofingList> {
                 }
                 if (snapshot.hasData) {
                   return Column(
-                    children: snapshot.data.map((order) {
+                    children: snapshot.data.data.map((order) {
                       return ProofingOrderItem(
                         model: order,
                         onProofingPaying: () => _onProofingPaying(order),
@@ -313,4 +312,8 @@ class _ProofingListState extends State<ProofingList> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
