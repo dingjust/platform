@@ -491,7 +491,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     //支付成功
     if (aliResponse.resultStatus != null &&
         aliResponse.resultStatus == '9000') {
-      print('!!!!!!!!!!!!!!!!!!!!!!!');
       afterPaid();
     } else {
       print('no result==============');

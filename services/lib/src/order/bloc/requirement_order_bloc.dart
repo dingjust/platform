@@ -38,9 +38,15 @@ class RequirementOrderBLoC extends BLoCBase {
 
   List<RequirementOrderModel> orders(String status) => _ordersMap[status].data;
 
-  var _controller = StreamController<List<RequirementOrderModel>>.broadcast();
+  var _controller = StreamController < RequirementData
 
-  Stream<List<RequirementOrderModel>> get stream => _controller.stream;
+  >
+
+      .
+
+  broadcast();
+
+  Stream<RequirementData> get stream => _controller.stream;
 
   //锁
   bool lock = false;
@@ -79,7 +85,8 @@ class RequirementOrderBLoC extends BLoCBase {
           _ordersMap[status].data.addAll(ordersResponse.content);
         }
       }
-      _controller.sink.add(_ordersMap[status].data);
+      _controller.sink.add(
+          RequirementData(status: status, data: _ordersMap[status].data));
       lock = false;
     }
   }
@@ -109,7 +116,8 @@ class RequirementOrderBLoC extends BLoCBase {
       _ordersMap['ALL'].data.clear();
       _ordersMap['ALL'].data.addAll(ordersResponse.content);
     }
-    _controller.sink.add(_ordersMap['ALL'].data);
+    _controller.sink.add(
+        RequirementData(status: 'ALL', data: _ordersMap['ALL'].data));
   }
 
   loadingMoreByStatuses(String status) async {
@@ -147,7 +155,8 @@ class RequirementOrderBLoC extends BLoCBase {
         }
       }
       loadingController.sink.add(false);
-      _controller.sink.add(_ordersMap[status].data);
+      _controller.sink.add(
+          RequirementData(status: status, data: _ordersMap[status].data));
       lock = false;
     }
   }
@@ -177,7 +186,8 @@ class RequirementOrderBLoC extends BLoCBase {
       _ordersMap['ALL'].data.addAll(ordersResponse.content);
     }
     loadingController.sink.add(false);
-    _controller.sink.add(_ordersMap['ALL'].data);
+    _controller.sink.add(
+        RequirementData(status: 'ALL', data: _ordersMap['ALL'].data));
   }
 
   //下拉刷新
@@ -203,4 +213,12 @@ class RequirementOrderBLoC extends BLoCBase {
 
     super.dispose();
   }
+}
+
+class RequirementData {
+  String status;
+
+  List<RequirementOrderModel> data;
+
+  RequirementData({this.status, this.data});
 }

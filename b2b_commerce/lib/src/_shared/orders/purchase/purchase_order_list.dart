@@ -76,11 +76,13 @@ class _PurchaseOrderListState extends State<PurchaseOrderList>
           physics: const AlwaysScrollableScrollPhysics(),
           controller: widget.scrollController,
           children: <Widget>[
-            StreamBuilder<List<PurchaseOrderModel>>(
-              stream: bloc.stream,
+            StreamBuilder<PurchaseData>(
+              stream: bloc.stream
+                  .where((purchaseData) =>
+              purchaseData.status == widget.status.code),
               // initialData: null,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+              builder:
+                  (BuildContext context, AsyncSnapshot<PurchaseData> snapshot) {
                 if (snapshot.data == null) {
                   if (widget.companyUid != null) {
                     bloc.getPurchaseDataByCompany(widget.companyUid);
@@ -91,7 +93,7 @@ class _PurchaseOrderListState extends State<PurchaseOrderList>
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
                 }
-                if (snapshot.data.length <= 0) {
+                if (snapshot.data.data.length <= 0) {
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +132,7 @@ class _PurchaseOrderListState extends State<PurchaseOrderList>
                 }
                 if (snapshot.hasData) {
                   return Column(
-                    children: snapshot.data.map((order) {
+                    children: snapshot.data.data.map((order) {
                       return PurchaseOrderItem(
                         order: order,
                       );
@@ -175,5 +177,5 @@ class _PurchaseOrderListState extends State<PurchaseOrderList>
   }
 
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 }

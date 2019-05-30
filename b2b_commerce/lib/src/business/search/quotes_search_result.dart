@@ -6,11 +6,10 @@ import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class QuoteSearchResultPage extends StatefulWidget{
+class QuoteSearchResultPage extends StatefulWidget {
   QuoteSearchResultPage({
     Key key,
     @required this.keyword,
@@ -21,7 +20,7 @@ class QuoteSearchResultPage extends StatefulWidget{
   _QuoteSearchResultPageState createState() => _QuoteSearchResultPageState();
 }
 
-class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
+class _QuoteSearchResultPageState extends State<QuoteSearchResultPage> {
   final GlobalKey _globalKey = GlobalKey<_QuoteSearchResultPageState>();
   List<String> historyKeywords;
 
@@ -38,7 +37,7 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
               children: <Widget>[
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       onClick();
                     },
                     child: Container(
@@ -69,7 +68,7 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
             keyword: widget.keyword,
           ),
         ),
-        onWillPop: (){
+        onWillPop: () {
           Navigator.of(context).pop();
           QuoteOrdersBLoC().refreshData('ALL');
         },
@@ -77,36 +76,39 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
     );
   }
 
-  void onClick(){
+  void onClick() {
     Navigator.pop(context);
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
+            requestCallBack:
+            LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
             outsideDismiss: false,
             loadingText: '加载中。。。',
             entrance: 'createPurchaseOrder',
           );
-        }
-    ).then((value){
+        }).then((value) {
       if (value != null && value != '') {
         List<dynamic> list = json.decode(value);
         historyKeywords = list.map((item) => item as String).toList();
-
       } else {
         historyKeywords = [];
       }
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchModelPage(historyKeywords: historyKeywords,keyword: widget.keyword,searchModel: SearchModel.QUOTE_ORDER,),
+          builder: (context) =>
+              SearchModelPage(
+                historyKeywords: historyKeywords,
+                keyword: widget.keyword,
+                searchModel: SearchModel.QUOTE_ORDER,
+              ),
         ),
       );
     });
   }
-
 }
 
 class QuoteOrderListView extends StatelessWidget {
@@ -152,17 +154,17 @@ class QuoteOrderListView extends StatelessWidget {
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
-            StreamBuilder<List<QuoteModel>>(
+            StreamBuilder<QuoteData>(
                 initialData: null,
                 stream: bloc.stream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<QuoteModel>> snapshot) {
+                builder:
+                    (BuildContext context, AsyncSnapshot<QuoteData> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByKeyword(keyword);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
-                  if (snapshot.data.length <= 0) {
+                  if (snapshot.data.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +203,7 @@ class QuoteOrderListView extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     return Column(
-                      children: snapshot.data.map((order) {
+                      children: snapshot.data.data.map((order) {
                         return QuoteListItem(
                           model: order,
                         );
