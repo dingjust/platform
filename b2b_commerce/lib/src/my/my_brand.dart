@@ -115,6 +115,14 @@ class _MyBrandPageState extends State<MyBrandPage> {
         ],
       ),
     ));
+    _widgets.add(
+      SizedBox(
+        height: 10,
+        child: Container(
+          color: Colors.grey[Constants.SIZEDBOX_COLOR],
+        ),
+      ),
+    );
     _widgets.add(_buildBrandCertificate(context));
     _widgets.add(
       SizedBox(

@@ -19,17 +19,21 @@ class ColorSizeSelectPage extends StatefulWidget {
 class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
   List<String> _colorCodes = [];
   List<String> _sizeCodes = [];
-  List<ColorModel> _beforeColors = [];
-  List<SizeModel> _beforeSizes = [];
+  List<ColorModel> _colorsTemp = [];
+  List<SizeModel> _sizesTemp = [];
 
-  bool isOpen = false;
+  bool _isOpen = false;
 
   @override
   void initState() {
-    _colorCodes = widget.colorFilters.map((color) => color.code).toList();
-    _sizeCodes = widget.sizeFilters.map((size) => size.code).toList();
-    _beforeColors.addAll(widget.colorFilters);
-    _beforeSizes.addAll(widget.sizeFilters);
+    widget.colorFilters.forEach((color){
+      _colorCodes.add(color.code);
+      _colorsTemp.add(color);
+    });
+    widget.sizeFilters.forEach((size){
+      _sizeCodes.add(size.code);
+      _sizesTemp.add(size);
+    });
 
     // TODO: implement initState
     super.initState();
@@ -53,7 +57,7 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
   Widget build(BuildContext context) {
     List<ColorModel> _colors;
 
-    if(isOpen){
+    if(_isOpen){
       _colors = widget.colors;
     }else{
       _colors = widget.colors.sublist(0,25);
@@ -98,10 +102,10 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
           onSelected: (value) {
             setState(() {
               if (value) {
-                widget.colorFilters.add(color);
+                _colorsTemp.add(color);
                 _colorCodes.add(color.code);
               } else {
-                widget.colorFilters
+                _colorsTemp
                     .removeWhere((model) => model.code == color.code);
                 _colorCodes.remove(color.code);
               }
@@ -122,10 +126,10 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
         onSelected: (value) {
           setState(() {
             if (value) {
-              widget.sizeFilters.add(size);
+              _sizesTemp.add(size);
               _sizeCodes.add(size.code);
             } else {
-              widget.sizeFilters
+              _sizesTemp
                   .removeWhere((model) => model.code == size.code);
               _sizeCodes.remove(size.code);
             }
@@ -134,106 +138,100 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
       );
     }).toList();
 
-    return WillPopScope(
-      onWillPop: () {
-        Navigator.pop(context, [_beforeColors, _beforeSizes]);
-        return Future.value(false);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0.5,
-          title: Text('颜色/尺码'),
-          leading: IconButton(icon: Text('取消',style: TextStyle(color: Colors.grey,),), onPressed: () => Navigator.pop(context,[_beforeColors,_beforeSizes])),
-          actions: <Widget>[
-            IconButton(
-              icon: Text('确定'),
-              onPressed: () {
-                if(widget.colorFilters.length <= 0 && widget.sizeFilters.length <= 0){
-                  showDialog(
-                      context: (context),
-                      builder: (context) => AlertDialog(
-                        content: Text('颜色和尺码不能为空'),
-                      ));
-                  return;
-                }
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0.5,
+        title: Text('颜色/尺码'),
+        leading: IconButton(icon: Text('取消',style: TextStyle(color: Colors.grey,),), onPressed: () => Navigator.pop(context,[_colorsTemp,_sizesTemp])),
+        actions: <Widget>[
+          IconButton(
+            icon: Text('确定'),
+            onPressed: () {
+              if(_colorsTemp.length <= 0 && _sizesTemp.length <= 0){
+                showDialog(
+                    context: (context),
+                    builder: (context) => AlertDialog(
+                      content: Text('颜色和尺码不能为空'),
+                    ));
+                return;
+              }
 
-                if(widget.colorFilters.length <= 0){
-                  showDialog(
-                      context: (context),
-                      builder: (context) => AlertDialog(
-                        content: Text('颜色不能为空'),
-                      ));
-                  return;
-                }
+              if(_colorsTemp.length <= 0){
+                showDialog(
+                    context: (context),
+                    builder: (context) => AlertDialog(
+                      content: Text('颜色不能为空'),
+                    ));
+                return;
+              }
 
-                if(widget.sizeFilters.length <= 0){
-                  showDialog(
-                      context: (context),
-                      builder: (context) => AlertDialog(
-                        content: Text('尺码不能为空'),
-                      ));
-                  return;
-                }
+              if(_sizesTemp.length <= 0){
+                showDialog(
+                    context: (context),
+                    builder: (context) => AlertDialog(
+                      content: Text('尺码不能为空'),
+                    ));
+                return;
+              }
 
-                Navigator.pop(context);
-              },
-            )
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView(
-            children: <Widget>[
-              Text('选择颜色'),
-              GridView.count(
-                primary: false,
-                shrinkWrap: true,
-                crossAxisCount: 5,
-                padding: const EdgeInsets.all(5),
-                children: colorFilterChips,
-                mainAxisSpacing: 0.5,
-              ),
-              GestureDetector(
-                child: isOpen ?
-                Center(
-                  child: Column(
-                    children: <Widget>[
-                      Icon(Icons.keyboard_arrow_up),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 30,),
-                        child: Text('收起',style: TextStyle(color: Colors.grey,fontSize: 18,),),
-                      ),
-                    ],
-                  ),
-                ):
-                Center(
-                  child: Column(
-                    children: <Widget>[
-                      Icon(Icons.keyboard_arrow_down),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 30,),
-                        child: Text('显示全部颜色',style: TextStyle(color: Colors.grey,fontSize: 18,),),
-                      ),
-                    ],
-                  ),
+              Navigator.pop(context,[_colorsTemp,_sizesTemp]);
+            },
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: <Widget>[
+            Text('选择颜色'),
+            GridView.count(
+              primary: false,
+              shrinkWrap: true,
+              crossAxisCount: 5,
+              padding: const EdgeInsets.all(5),
+              children: colorFilterChips,
+              mainAxisSpacing: 0.5,
+            ),
+            GestureDetector(
+              child: _isOpen ?
+              Center(
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.keyboard_arrow_up),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30,),
+                      child: Text('收起',style: TextStyle(color: Colors.grey,fontSize: 18,),),
+                    ),
+                  ],
                 ),
-                onTap: (){
-                  setState(() {
-                    isOpen = !isOpen;
-                  });
-                },
+              ):
+              Center(
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.keyboard_arrow_down),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30,),
+                      child: Text('显示全部颜色',style: TextStyle(color: Colors.grey,fontSize: 18,),),
+                    ),
+                  ],
+                ),
               ),
-              Text('选择尺码'),
-              GridView.count(
-                primary: false,
-                shrinkWrap: true,
-                crossAxisCount: 5,
-                padding: const EdgeInsets.all(5),
-                children: sizeFilterChips,
-              ),
-            ],
-          ),
+              onTap: (){
+                setState(() {
+                  _isOpen = !_isOpen;
+                });
+              },
+            ),
+            Text('选择尺码'),
+            GridView.count(
+              primary: false,
+              shrinkWrap: true,
+              crossAxisCount: 5,
+              padding: const EdgeInsets.all(5),
+              children: sizeFilterChips,
+            ),
+          ],
         ),
       ),
     );

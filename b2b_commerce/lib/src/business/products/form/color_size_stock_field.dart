@@ -1,12 +1,15 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ColorSizeStockField extends StatefulWidget {
-  ColorSizeStockField(this.item);
+  ColorSizeStockField(this.item,{this.enabled});
 
   final ApparelProductModel item;
+  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _ColorSizeStockFieldState();
@@ -22,6 +25,8 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
 
   @override
   void initState() {
+    ProductRepositoryImpl().colors().then((colors)=>_colors = colors);
+    ProductRepositoryImpl().sizes().then((sizes)=>_sizes = sizes);
     List<String> colorCodes = [];
     List<String> sizeCodes = [];
     _colorFilters.clear();
@@ -47,12 +52,8 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        InkWell(
+        !widget.enabled ? _buildColorSizeSelectedInfo() : InkWell(
           onTap: () async{
-
-            await ProductRepositoryImpl().colors().then((colors)=>_colors = colors);
-            await ProductRepositoryImpl().sizes().then((sizes)=>_sizes = sizes);
-
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
@@ -64,9 +65,6 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
               _colorFilters = result[0];
               _sizeFilters = result[1];
             }
-
-//            print(_colorFilters);
-//            print(_sizeFilters);
 
             List<ApparelSizeVariantProductModel> variants = [];
             _colorFilters.forEach((color){
@@ -101,6 +99,7 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
             isRequired: true,
             leadingText: '颜色/尺码',
             tralingText: colorSizeSelectText(),
+            isShowIcon: widget.enabled,
           ),
         ),
 //        InkWell(
@@ -145,6 +144,50 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
     );
   }
 
+  Widget _buildColorSizeSelectedInfo() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 17,),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Wrap(
+                children: <Widget>[
+                  Text(
+                    '颜色/尺码',
+                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  Text(
+                    ' *',
+                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                  ),
+                ],
+              ),
+              Container(
+                width: MediaQueryData.fromWindow(window).size.width - 130,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    colorSizeSelectInfo(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Divider(height: 0,),
+        ),
+      ],
+    );
+  }
+
   //格式化选中的颜色尺码
   String colorSizeSelectText() {
     String text = '';
@@ -171,6 +214,34 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
           break;
         }
 
+        if(i == _sizeFilters.length-1){
+          text += _sizeFilters[i].name;
+        }else{
+          text += _sizeFilters[i].name + '、';
+        }
+      }
+    }
+
+    return text;
+  }
+
+  //格式化选中的颜色尺码(明细)
+  String colorSizeSelectInfo() {
+    String text = '';
+    if(_colorFilters.length > 0){
+      text += '颜色--';
+      for(int i=0;i < _colorFilters.length;i++){
+        if(i == _colorFilters.length-1){
+          text += _colorFilters[i].name + '\n';
+        }else{
+          text += _colorFilters[i].name + '、';
+        }
+      }
+    }
+
+    if(_sizeFilters.length > 0){
+      text += '尺码--';
+      for(int i=0;i<_sizeFilters.length;i++){
         if(i == _sizeFilters.length-1){
           text += _sizeFilters[i].name;
         }else{

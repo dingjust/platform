@@ -4,9 +4,10 @@ import '../apparel_product_prices_input.dart';
 import 'package:widgets/widgets.dart';
 
 class PricesField extends StatefulWidget {
-  PricesField(this.item);
+  PricesField(this.item,{this.enabled = false});
 
   final ApparelProductModel item;
+  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _PricesFieldState();
@@ -25,11 +26,12 @@ class _PricesFieldState extends State<PricesField> {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: (){
+          onTap: !widget.enabled ? null : (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>ApparelProductPricesInputPage(widget.item)));
           },
           child: ShowSelectTile(
             isRequired: true,
+            isShowIcon: widget.enabled,
             leadingText: '价格',
             tralingText: widget.item.minPrice == null && widget.item.maxPrice == null ? '' : '￥${widget.item.minPrice ?? ''} ~ ￥${widget.item.maxPrice ?? ''}',
           ),
