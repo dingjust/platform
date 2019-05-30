@@ -147,8 +147,14 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SearchModelPage(historyKeywords: historyKeywords,
-                          searchModel: SearchModel.REQUIREMENT_QUOTE,requirementCondition: currentCodition,),
+                        builder: (context) => SearchModelPage(
+                          searchModel: SearchModel(
+                              historyKeywords: historyKeywords,
+                              searchModelType: SearchModelType.REQUIREMENT_QUOTE,
+                              requirementCondition: currentCodition,
+                              route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY
+                          ),
+                        ),
                       ),
                     );
                   });

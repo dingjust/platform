@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
+import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
@@ -10,15 +11,13 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class PurchaseOrderSearchResultPage extends StatefulWidget {
-  PurchaseOrderSearchResultPage({Key key, this.keyword}) : super(key: key);
+import '../purchase_orders.dart';
 
-  _PurchaseOrderSearchResultPageState createState() => _PurchaseOrderSearchResultPageState();
 
-  String keyword;
-}
+class PurchaseOrderSearchResultPage extends StatelessWidget {
 
-class _PurchaseOrderSearchResultPageState extends State<PurchaseOrderSearchResultPage> {
+  PurchaseOrderSearchResultPage({Key key, this.searchModel}) : super(key: key);
+  SearchModel searchModel;
   GlobalKey _productionOrderBlocProviderKey = GlobalKey();
   List<String> historyKeywords;
 
@@ -36,7 +35,7 @@ class _PurchaseOrderSearchResultPageState extends State<PurchaseOrderSearchResul
                     Expanded(
                       child: GestureDetector(
                         onTap: (){
-                          onClick();
+                          onClick(context);
                         },
                         child: Container(
                           height: 35,
@@ -49,7 +48,7 @@ class _PurchaseOrderSearchResultPageState extends State<PurchaseOrderSearchResul
                           child: Container(
                             padding: EdgeInsets.only(left: 10),
                             child: Text(
-                              '${widget.keyword}',
+                              '${searchModel.keyword}',
                               style: TextStyle(
                                   color: Colors.grey,
                                 fontSize: 16,
@@ -63,7 +62,7 @@ class _PurchaseOrderSearchResultPageState extends State<PurchaseOrderSearchResul
                 ),
               ),
               body: ProductionListView(
-                keyword: widget.keyword,
+                keyword: searchModel.keyword,
               ),
             ),
           onWillPop: (){
@@ -74,17 +73,17 @@ class _PurchaseOrderSearchResultPageState extends State<PurchaseOrderSearchResul
     );
   }
 
-  void onClick(){
+  void onClick(BuildContext context){
     Navigator.pop(context);
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
+            requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
             outsideDismiss: false,
             loadingText: '加载中。。。',
-            entrance: 'createPurchaseOrder',
+            entrance: '',
           );
         }
     ).then((value){
@@ -95,10 +94,18 @@ class _PurchaseOrderSearchResultPageState extends State<PurchaseOrderSearchResul
       } else {
         historyKeywords = [];
       }
+      Navigator.of(context).pop();
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchModelPage(historyKeywords: historyKeywords,keyword: widget.keyword,),
+          builder: (context) => SearchModelPage(
+            searchModel: SearchModel(
+              historyKeywords: historyKeywords,
+              keyword: searchModel.keyword,
+              searchModelType: SearchModelType.PURCHASE_ORDER,
+              route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY
+            ),
+          ),
         ),
       );
     });
@@ -114,6 +121,9 @@ class ProductionListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('=======');
+
+
     var bloc = BLoCProvider.of<PurchaseOrderBLoC>(context);
     bloc.reset();
     _scrollController.addListener(() {
@@ -121,24 +131,6 @@ class ProductionListView extends StatelessWidget {
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByKeyword(keyword);
-      }
-    });
-
-    //监听滚动事件，打印滚动位置
-    _scrollController.addListener(() {
-      if (_scrollController.offset < 500) {
-        bloc.hideToTopBtn();
-      } else if (_scrollController.offset >= 500) {
-        bloc.showToTopBtn();
-      }
-    });
-
-    //状态管理触发的返回顶部
-    bloc.returnToTopStream.listen((data) {
-      //返回到顶部时执行动画
-      if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
 

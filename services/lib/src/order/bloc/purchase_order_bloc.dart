@@ -30,42 +30,35 @@ class PurchaseOrderBLoC extends BLoCBase {
 
   static final Map<String, PageEntry> _ordersMap = {
     'ALL':
-    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'PENDING_PAYMENT':
-    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'IN_PRODUCTION':
-    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'WAIT_FOR_OUT_OF_STORE':
-    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'OUT_OF_STORE':
-    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'COMPLETED':
-    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'CANCELLED':
-    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    'SEARCH':
+        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
   };
 
   List<PurchaseOrderModel> orders(String status) => _ordersMap[status].data;
 
-  var _controller = StreamController < PurchaseData
-
-  >
-
-      .
-
-  broadcast();
+  var _controller = StreamController<PurchaseData>.broadcast();
 
   Stream<PurchaseData> get stream => _controller.stream;
 
-  var _purchaseController = StreamController < List < PurchaseOrderModel
+//  var _purchaseController = StreamController<List<PurchaseOrderModel>>.broadcast();
+//
+//  Stream<List<PurchaseOrderModel>> get purchasestream => _controller.stream;
 
-  >
-
-  >
-
-      .
-
-  broadcast();
+  var _purchaseController =
+      StreamController<List<PurchaseOrderModel>>.broadcast();
 
   Stream<List<PurchaseOrderModel>> get purchaseStream =>
       _purchaseController.stream;
@@ -103,7 +96,7 @@ class PurchaseOrderBLoC extends BLoCBase {
 
       if (response != null && response.statusCode == 200) {
         PurchaseOrdersResponse ordersResponse =
-        PurchaseOrdersResponse.fromJson(response.data);
+            PurchaseOrdersResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
         _ordersMap[status].totalElements = ordersResponse.totalElements;
         _ordersMap[status].data.clear();
@@ -115,32 +108,39 @@ class PurchaseOrderBLoC extends BLoCBase {
   }
 
   filterByKeyword(String keyword) async {
-    //若没有数据则查询
-    //请求参数
-    Map data = {
-      'keyword': keyword,
-    };
-    Response<Map<String, dynamic>> response;
-    try {
-      response = await http$.post(OrderApis.purchaseOrders,
-          data: data,
-          queryParameters: {
-            'page': _ordersMap['ALL'].currentPage,
-            'size': _ordersMap['ALL'].size
-          });
-    } on DioError catch (e) {
-      print(e);
-    }
+    print(keyword);
+    if (!lock) {
+      lock = true;
+      _ordersMap['SEARCH'].data.clear();
+      //若没有数据则查询
+      if (_ordersMap['SEARCH'].data.length == 0) {
+        //请求参数
+        Map data = {
+          'keyword': keyword,
+        };
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(OrderApis.purchaseOrders,
+              data: data,
+              queryParameters: {
+                'page': _ordersMap['SEARCH'].currentPage,
+                'size': _ordersMap['SEARCH'].size
+              });
+        } on DioError catch (e) {
+          print(e);
+        }
 
-    if (response.statusCode == 200) {
-      PurchaseOrdersResponse ordersResponse =
-      PurchaseOrdersResponse.fromJson(response.data);
-      _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
-      _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
-      _ordersMap['ALL'].data.addAll(ordersResponse.content);
+        if (response.statusCode == 200) {
+          PurchaseOrdersResponse ordersResponse =
+              PurchaseOrdersResponse.fromJson(response.data);
+          _ordersMap['SEARCH'].totalPages = ordersResponse.totalPages;
+          _ordersMap['SEARCH'].totalElements = ordersResponse.totalElements;
+          _ordersMap['SEARCH'].data.addAll(ordersResponse.content);
+        }
+      }
+      lock = false;
     }
-    _controller.sink.add(
-        PurchaseData(status: 'ALL', data: _ordersMap['ALL'].data));
+    _purchaseController.sink.add(_ordersMap['SEARCH'].data);
   }
 
   loadingMoreByStatuses(String status) async {
@@ -169,7 +169,7 @@ class PurchaseOrderBLoC extends BLoCBase {
 
       if (response.statusCode == 200) {
         PurchaseOrdersResponse ordersResponse =
-        PurchaseOrdersResponse.fromJson(response.data);
+            PurchaseOrdersResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
         _ordersMap[status].totalElements = ordersResponse.totalElements;
         _ordersMap[status].data.addAll(ordersResponse.content);
@@ -177,8 +177,8 @@ class PurchaseOrderBLoC extends BLoCBase {
     }
 
     loadingController.sink.add(false);
-    _controller.sink.add(
-        PurchaseData(status: status, data: _ordersMap[status].data));
+    _controller.sink
+        .add(PurchaseData(status: status, data: _ordersMap[status].data));
   }
 
   loadingMoreByKeyword(String keyword) async {
@@ -202,14 +202,14 @@ class PurchaseOrderBLoC extends BLoCBase {
 
       if (response != null && response.statusCode == 200) {
         PurchaseOrdersResponse ordersResponse =
-        PurchaseOrdersResponse.fromJson(response.data);
+            PurchaseOrdersResponse.fromJson(response.data);
         _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
         _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
         _ordersMap['ALL'].data.addAll(ordersResponse.content);
       }
       loadingController.sink.add(false);
-      _controller.sink.add(
-          PurchaseData(status: 'ALL', data: _ordersMap['ALL'].data));
+      _controller.sink
+          .add(PurchaseData(status: 'ALL', data: _ordersMap['ALL'].data));
       lock = false;
     }
   }
@@ -217,7 +217,7 @@ class PurchaseOrderBLoC extends BLoCBase {
   // 获取订单明细
   Future<PurchaseOrderModel> getPurchaseOrderDetail(String code) async {
     Response<Map<String, dynamic>> response =
-    await http$.get(OrderApis.purchaseOrderDetail(code));
+        await http$.get(OrderApis.purchaseOrderDetail(code));
 
     if (response.statusCode == 200) {
       PurchaseOrderModel model = PurchaseOrderModel.fromJson(response.data);
@@ -247,13 +247,13 @@ class PurchaseOrderBLoC extends BLoCBase {
 
     if (response.statusCode == 200) {
       PurchaseOrdersResponse ordersResponse =
-      PurchaseOrdersResponse.fromJson(response.data);
+          PurchaseOrdersResponse.fromJson(response.data);
       _ordersMap[status].totalPages = ordersResponse.totalPages;
       _ordersMap[status].totalElements = ordersResponse.totalElements;
       _ordersMap[status].data.addAll(ordersResponse.content);
     }
-    _controller.sink.add(
-        PurchaseData(status: status, data: _ordersMap[status].data));
+    _controller.sink
+        .add(PurchaseData(status: status, data: _ordersMap[status].data));
   }
 
   //获取供应商的相关全部生产单
@@ -283,11 +283,11 @@ class PurchaseOrderBLoC extends BLoCBase {
         if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
               .getPurchaseOrdersByFactory(
-              companyUid, {'page': purchaseOrdersResponse.number + 1});
+                  companyUid, {'page': purchaseOrdersResponse.number + 1});
         } else if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
               .getPurchaseOrdersByBrand(
-              companyUid, {'page': purchaseOrdersResponse.number + 1});
+                  companyUid, {'page': purchaseOrdersResponse.number + 1});
         }
         purchaseOrderModels.addAll(purchaseOrdersResponse.content);
       } else {
@@ -303,7 +303,7 @@ class PurchaseOrderBLoC extends BLoCBase {
 
   ///重置数据
   void reset() {
-    _ordersMap.forEach((statu, entry) {
+    _ordersMap.forEach((status, entry) {
       entry.data.clear();
       entry.currentPage = 0;
     });

@@ -1,10 +1,6 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/orders/proofing/proofing_list_item.dart';
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list.dart';
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
-import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
@@ -17,10 +13,10 @@ import 'package:widgets/widgets.dart';
 class ProductSearchResultPage extends StatefulWidget{
   ProductSearchResultPage({
     Key key,
-    @required this.keyword,
+    @required this.searchModel,
   }) : super(key: key);
 
-  final String keyword;
+  SearchModel searchModel;
 
   _ProductSearchResultPageState createState() => _ProductSearchResultPageState();
 }
@@ -56,7 +52,7 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage>{
                       child: Container(
                         padding: EdgeInsets.only(left: 10),
                         child: Text(
-                          '${widget.keyword}',
+                          '${widget.searchModel.keyword}',
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -70,7 +66,7 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage>{
             ),
           ),
           body: ProductListView(
-            keyword: widget.keyword,
+            keyword: widget.searchModel.keyword,
           ),
         ),
         onWillPop: (){
@@ -88,10 +84,10 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage>{
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
+            requestCallBack: LocalStorage.get(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY),
             outsideDismiss: false,
             loadingText: '加载中。。。',
-            entrance: 'createPurchaseOrder',
+            entrance: '',
           );
         }
     ).then((value){
@@ -102,10 +98,18 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage>{
       } else {
         historyKeywords = [];
       }
+      Navigator.of(context).pop();
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchModelPage(historyKeywords: historyKeywords,keyword: widget.keyword,searchModel: SearchModel.QUOTE_ORDER,),
+          builder: (context) => SearchModelPage(
+            searchModel: SearchModel(
+              historyKeywords: historyKeywords,
+              keyword: widget.searchModel.keyword,
+              searchModelType: SearchModelType.PRODUCT,
+              route: GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY
+            ),
+          ),
         ),
       );
     });

@@ -92,8 +92,14 @@ class _ProductsPageState extends State<ProductsPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            SearchModelPage(historyKeywords: historyKeywords,keyword: productCondition.keyword,
-                              searchModel: SearchModel.EXIST_PRODUCT,productCondition: productCondition,),
+                            SearchModelPage(
+                              searchModel: SearchModel(
+                                  historyKeywords: historyKeywords,
+                                  searchModelType: SearchModelType.EXIST_PRODUCT,
+                                  productCondition: productCondition,
+                                  route: GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY
+                              ),
+                            ),
                       ),
                     );
                   },

@@ -641,7 +641,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             );
           });
     });
-    ;
   }
 
   void submitUpdate() {

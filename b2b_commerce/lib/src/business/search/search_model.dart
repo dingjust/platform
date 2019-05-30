@@ -12,10 +12,10 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class SearchModelPage extends StatefulWidget {
+class SearchModel {
   List<String> historyKeywords;
 
-  SearchModel searchModel;
+  SearchModelType searchModelType;
 
   FactoryCondition factoryCondition;
 
@@ -23,22 +23,36 @@ class SearchModelPage extends StatefulWidget {
 
   RequirementFilterCondition requirementCondition;
 
-  SearchModelPage({
+  String route;
+
+  String keyword;
+
+  SearchModel({
     Key key,
     this.keyword,
     this.historyKeywords,
-    this.searchModel,
+    this.searchModelType,
     this.factoryCondition,
     this.productCondition,
     this.requirementCondition,
+    this.route,
+});
+}
+
+class SearchModelPage extends StatefulWidget {
+  SearchModel searchModel;
+
+  SearchModelPage({
+    Key key,
+    this.searchModel,
   }) : super(key: key);
 
   _SearchModelPageState createState() => _SearchModelPageState();
 
-  String keyword;
+
 }
 
-enum SearchModel {
+enum SearchModelType {
   /// 生产订单管理
   PURCHASE_ORDER,
 
@@ -75,8 +89,8 @@ class _SearchModelPageState extends State<SearchModelPage> {
 
   @override
   void initState() {
-    if(widget.keyword != null && widget.keyword != ''){
-      controller.text = widget.keyword;
+    if(widget.searchModel.keyword != null && widget.searchModel.keyword != ''){
+      controller.text = widget.searchModel.keyword;
     }
     super.initState();
 //    getHistory();
@@ -89,10 +103,10 @@ class _SearchModelPageState extends State<SearchModelPage> {
     await LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
-      widget.historyKeywords = list.map((item) => item as String).toList();
-      print(widget.historyKeywords);
+      widget.searchModel.historyKeywords = list.map((item) => item as String).toList();
+      print(widget.searchModel.historyKeywords);
     } else {
-      widget.historyKeywords = [];
+      widget.searchModel.historyKeywords = [];
     }
   }
 
@@ -133,6 +147,9 @@ class _SearchModelPageState extends State<SearchModelPage> {
                             focusedBorder: InputBorder.none,
                             border: InputBorder.none,
                           ),
+                          onChanged: (value){
+                            widget.searchModel.keyword = value;
+                          },
                         ),
                       ),
                       Container(
@@ -168,7 +185,6 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
-                    Navigator.pop(context);
                     onSubmit();
                   }),
             ),
@@ -183,78 +199,78 @@ class _SearchModelPageState extends State<SearchModelPage> {
     );
   }
 
-  onSubmit() async{
-    if(widget.searchModel == SearchModel.PURCHASE_ORDER) {
+  onSubmit() {
+    if(widget.searchModel.searchModelType == SearchModelType.PURCHASE_ORDER) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   PurchaseOrderSearchResultPage(
-                    keyword: controller.text,
+                    searchModel: widget.searchModel,
                   )));
         if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.historyKeywords.add(controller.text);
+          widget.searchModel.historyKeywords.add(controller.text);
           LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-              json.encode(widget.historyKeywords));
+              json.encode(widget.searchModel.historyKeywords));
         }
     }
-    if (widget.searchModel == SearchModel.QUOTE_ORDER) {
+    if (widget.searchModel.searchModelType == SearchModelType.QUOTE_ORDER) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   QuoteSearchResultPage(
-                    keyword: controller.text,
+                    searchModel: widget.searchModel,
                   )));
         if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.historyKeywords.add(controller.text);
+          widget.searchModel.historyKeywords.add(controller.text);
           LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-              json.encode(widget.historyKeywords));
+              json.encode(widget.searchModel.historyKeywords));
         }
     }
-    if (widget.searchModel == SearchModel.REQUIREMENT_ORDER) {
+    if (widget.searchModel.searchModelType == SearchModelType.REQUIREMENT_ORDER) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   RequirementSearchResultPage(
-                    keyword: controller.text,
+                    searchModel: widget.searchModel,
                   )));
         if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.historyKeywords.add(controller.text);
+          widget.searchModel.historyKeywords.add(controller.text);
           LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-              json.encode(widget.historyKeywords));
+              json.encode(widget.searchModel.historyKeywords));
         }
     }
-    if (widget.searchModel == SearchModel.PROOFING_ORDER) {
+    if (widget.searchModel.searchModelType == SearchModelType.PROOFING_ORDER) {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   ProofingSearchResultPage(
-                    keyword: controller.text,
+                    searchModel: widget.searchModel,
                   )));
         if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.historyKeywords.add(controller.text);
+          widget.searchModel.historyKeywords.add(controller.text);
           LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-              json.encode(widget.historyKeywords));
+              json.encode(widget.searchModel.historyKeywords));
         }
     }
-    if(widget.searchModel == SearchModel.PRODUCT){
+    if(widget.searchModel.searchModelType == SearchModelType.PRODUCT){
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   ProductSearchResultPage(
-                    keyword: controller.text,
+                    searchModel: widget.searchModel,
                   )));
         if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.historyKeywords.add(controller.text);
+          widget.searchModel.historyKeywords.add(controller.text);
           LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
-              json.encode(widget.historyKeywords));
+              json.encode(widget.searchModel.historyKeywords));
         }
     }
-    if(widget.searchModel == SearchModel.FACTORY){
+    if(widget.searchModel.searchModelType == SearchModelType.FACTORY){
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -267,38 +283,27 @@ class _SearchModelPageState extends State<SearchModelPage> {
             );
           }
       ).then((value){
-        FactoryCondition condition = widget.factoryCondition;
+        FactoryCondition condition = widget.searchModel.factoryCondition;
         condition.keyword = controller.text;
         FactoryBLoC.instance.clear();
       });
         if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.historyKeywords.add(controller.text);
+          widget.searchModel.historyKeywords.add(controller.text);
           LocalStorage.save(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-              json.encode(widget.historyKeywords));
+              json.encode(widget.searchModel.historyKeywords));
         }
       Navigator.of(context).pop();
     }
-    if(widget.searchModel == SearchModel.PRODUCTION_ORDER){
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: ProductionBLoC.instance.refreshData(controller.text),
-              outsideDismiss: false,
-              loadingText: '加载中。。。',
-              entrance: '',
-            );
-          }
-      ).then((value){
-        if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.historyKeywords.add(controller.text);
-          LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
-              json.encode(widget.historyKeywords));
-        }
-      });
+    if(widget.searchModel.searchModelType == SearchModelType.PRODUCTION_ORDER){
+      ProductionBLoC.instance.clear();
+      Navigator.of(context).pop(controller.text);
+      if (controller.text != '' && controller.text.isNotEmpty) {
+        widget.searchModel.historyKeywords.add(controller.text);
+        LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
+            json.encode(widget.searchModel.historyKeywords));
+      }
     }
-    if(widget.searchModel == SearchModel.EXIST_PRODUCT){
+    if(widget.searchModel.searchModelType == SearchModelType.EXIST_PRODUCT){
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -311,20 +316,20 @@ class _SearchModelPageState extends State<SearchModelPage> {
             );
           }
       ).then((value){
-        ProductCondition condition = widget.productCondition;
+        ProductCondition condition = widget.searchModel.productCondition;
         condition.keyword = controller.text;
         OrderByProductBLoc.instance.clear();
         OrderByProductBLoc.instance.getData(condition);
 
         if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.historyKeywords.add(controller.text);
+          widget.searchModel.historyKeywords.add(controller.text);
           LocalStorage.save(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
-              json.encode(widget.historyKeywords));
+              json.encode(widget.searchModel.historyKeywords));
         }
       });
       Navigator.of(context).pop();
     }
-    if(widget.searchModel == SearchModel.REQUIREMENT_QUOTE){
+    if(widget.searchModel.searchModelType == SearchModelType.REQUIREMENT_QUOTE){
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -337,14 +342,14 @@ class _SearchModelPageState extends State<SearchModelPage> {
             );
           }
       ).then((value){
-        RequirementFilterCondition condition = widget.requirementCondition;
+        RequirementFilterCondition condition = widget.searchModel.requirementCondition;
         condition.keyword = controller.text;
         RequirementPoolBLoC.instance.clear();
       });
       if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.historyKeywords.add(controller.text);
+        widget.searchModel.historyKeywords.add(controller.text);
         LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.historyKeywords));
+            json.encode(widget.searchModel.historyKeywords));
       }
       Navigator.of(context).pop();
     }
@@ -376,9 +381,9 @@ class _SearchModelPageState extends State<SearchModelPage> {
                 child: FlatButton.icon(
                     onPressed: (){
                       setState(() {
-                        widget.historyKeywords = [];
-                        LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
-                            json.encode(widget.historyKeywords));
+                        List<String> historyKeywords = List();
+                        LocalStorage.save(widget.searchModel.route,
+                            json.encode(historyKeywords));
                       });
                     },
                     icon: Icon(
@@ -402,56 +407,57 @@ class _SearchModelPageState extends State<SearchModelPage> {
               spacing: 8.0, // 主轴(水平)方向间距
               runSpacing: 4.0, // 纵轴（垂直）方向间距
               alignment: WrapAlignment.start, //沿主轴方向居中
-              children: widget.historyKeywords.map((keyword) => HistoryTag(
+              children: widget.searchModel.historyKeywords.map((keyword) => HistoryTag(
                 value: keyword,
                 onTap: () {
-                  Navigator.pop(context);
-                  if(widget.searchModel == SearchModel.PURCHASE_ORDER) {
+                  widget.searchModel.keyword = keyword;
+//                  Navigator.pop(context);
+                  if(widget.searchModel.searchModelType == SearchModelType.PURCHASE_ORDER) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 PurchaseOrderSearchResultPage(
-                                  keyword: keyword,
+                                  searchModel: widget.searchModel,
                                 )));
                   }
-                  if (widget.searchModel == SearchModel.QUOTE_ORDER) {
+                  if(widget.searchModel.searchModelType == SearchModelType.QUOTE_ORDER) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 QuoteSearchResultPage(
-                                  keyword: keyword,
+                                  searchModel: widget.searchModel,
                                 )));
                   }
-                  if (widget.searchModel == SearchModel.REQUIREMENT_ORDER) {
+                  if(widget.searchModel.searchModelType == SearchModelType.REQUIREMENT_ORDER) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 RequirementSearchResultPage(
-                                  keyword: keyword,
+                                  searchModel: widget.searchModel,
                                 )));
                   }
-                  if (widget.searchModel == SearchModel.PROOFING_ORDER) {
+                  if(widget.searchModel.searchModelType == SearchModelType.PROOFING_ORDER) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 ProofingSearchResultPage(
-                                  keyword: keyword,
+                                  searchModel: widget.searchModel,
                                 )));
                   }
-                  if(widget.searchModel == SearchModel.PRODUCT){
+                  if(widget.searchModel.searchModelType == SearchModelType.PRODUCT){
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
                                 ProductSearchResultPage(
-                                  keyword: keyword,
+                                  searchModel: widget.searchModel,
                                 )));
                   }
-                  if(widget.searchModel == SearchModel.FACTORY){
+                  if(widget.searchModel.searchModelType == SearchModelType.FACTORY){
                     showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -464,28 +470,19 @@ class _SearchModelPageState extends State<SearchModelPage> {
                           );
                         }
                     ).then((value){
-                      FactoryCondition condition = widget.factoryCondition;
+                      FactoryCondition condition = widget.searchModel.factoryCondition;
                       condition.keyword = keyword;
                       FactoryBLoC.instance.clear();
+                      Navigator.of(context).pop();
                     });
                     Navigator.of(context).pop();
                   }
-                  if(widget.searchModel == SearchModel.PRODUCTION_ORDER){
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoading(
-                            requestCallBack: ProductionBLoC.instance.refreshData(keyword),
-                            outsideDismiss: false,
-                            loadingText: '加载中。。。',
-                            entrance: '',
-                          );
-                        }
-                    );
-
+                  if(widget.searchModel.searchModelType == SearchModelType.PRODUCTION_ORDER){
+                    ProductionBLoC.instance.clear();
+//                    ProductionBLoC.instance.getData(keyword);
+                    Navigator.of(context).pop(keyword);
                   }
-                  if(widget.searchModel == SearchModel.EXIST_PRODUCT){
+                  if(widget.searchModel.searchModelType == SearchModelType.EXIST_PRODUCT){
                     showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -498,15 +495,15 @@ class _SearchModelPageState extends State<SearchModelPage> {
                           );
                         }
                     ).then((value){
-                      ProductCondition condition = widget.productCondition;
+                      ProductCondition condition = widget.searchModel.productCondition;
                       condition.keyword = keyword;
                       OrderByProductBLoc.instance.clear();
                       OrderByProductBLoc.instance.getData(condition);
-
+                      Navigator.of(context).pop();
                     });
                     Navigator.of(context).pop();
                   }
-                  if(widget.searchModel == SearchModel.REQUIREMENT_QUOTE){
+                  if(widget.searchModel.searchModelType == SearchModelType.REQUIREMENT_QUOTE){
                     showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -519,9 +516,10 @@ class _SearchModelPageState extends State<SearchModelPage> {
                           );
                         }
                     ).then((value){
-                      RequirementFilterCondition condition = widget.requirementCondition;
+                      RequirementFilterCondition condition = widget.searchModel.requirementCondition;
                       condition.keyword = keyword;
                       RequirementPoolBLoC.instance.clear();
+                      Navigator.of(context).pop();
                     });
                     Navigator.of(context).pop();
                   }

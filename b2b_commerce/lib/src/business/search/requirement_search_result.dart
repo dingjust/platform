@@ -6,16 +6,17 @@ import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementSearchResultPage extends StatefulWidget{
   RequirementSearchResultPage({
     Key key,
-    @required this.keyword,
+    @required this.searchModel,
   }) : super(key: key);
 
-  final String keyword;
+  SearchModel searchModel;
 
   _RequirementSearchResultPageState createState() => _RequirementSearchResultPageState();
 }
@@ -51,7 +52,7 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
                       child: Container(
                         padding: EdgeInsets.only(left: 10),
                         child: Text(
-                          '${widget.keyword}',
+                          '${widget.searchModel.keyword}',
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -65,7 +66,7 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
             ),
           ),
           body: RequirementOrderListView(
-            keyword: widget.keyword,
+            keyword: widget.searchModel.keyword,
           ),
         ),
         onWillPop: (){
@@ -83,10 +84,10 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
+            requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
             outsideDismiss: false,
             loadingText: '加载中。。。',
-            entrance: 'createPurchaseOrder',
+            entrance: '',
           );
         }
     ).then((value){
@@ -97,10 +98,18 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
       } else {
         historyKeywords = [];
       }
+      Navigator.of(context).pop();
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchModelPage(historyKeywords: historyKeywords,keyword: widget.keyword,searchModel: SearchModel.QUOTE_ORDER,),
+          builder: (context) => SearchModelPage(
+            searchModel: SearchModel(
+              historyKeywords: historyKeywords,
+              keyword: widget.searchModel.keyword,
+              searchModelType: SearchModelType.QUOTE_ORDER,
+              route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+            ),
+          ),
         ),
       );
     });
@@ -152,17 +161,17 @@ class RequirementOrderListView extends StatelessWidget {
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
-            StreamBuilder<RequirementData>(
+            StreamBuilder<List<RequirementOrderModel>>(
                 initialData: null,
-                stream: bloc.stream,
+                stream: bloc.requirementStream,
                 builder: (BuildContext context,
-                    AsyncSnapshot<RequirementData> snapshot) {
+                    AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByKeyword(keyword);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
-                  if (snapshot.data.data.length <= 0) {
+                  if (snapshot.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +210,7 @@ class RequirementOrderListView extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     return Column(
-                      children: snapshot.data.data.map((order) {
+                      children: snapshot.data.map((order) {
                         return RequirementOrderItem(
                           model: order,
                         );

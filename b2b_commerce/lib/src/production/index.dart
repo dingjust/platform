@@ -30,13 +30,14 @@ class _ProductionPageState extends State<ProductionPage> {
   @override
   void initState() {
     super.initState();
-    ProductionBLoC().clear();
-    ProductionBLoC().setStatus('ALL');
-    ProductionBLoC().getData(keyword);
+//    ProductionBLoC().clear();
+//    ProductionBLoC().setStatus('ALL');
+//    ProductionBLoC().getData(keyword);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(keyword);
     return BLoCProvider<ProductionBLoC>(
         key: _productionOrderBlocProviderKey,
         bloc: ProductionBLoC.instance,
@@ -59,8 +60,14 @@ class _ProductionPageState extends State<ProductionPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              SearchModelPage(historyKeywords: historyKeywords,keyword: keyword,
-                                searchModel: SearchModel.PRODUCTION_ORDER,),
+                              SearchModelPage(
+                                searchModel: SearchModel(
+                                  historyKeywords: historyKeywords,
+                                  keyword: keyword,
+                                  route: GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
+                                  searchModelType: SearchModelType.PRODUCTION_ORDER,
+                                ),
+                              ),
                         ),
                       );
                     },
