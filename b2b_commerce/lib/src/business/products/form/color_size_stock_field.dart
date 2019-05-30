@@ -4,9 +4,10 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ColorSizeStockField extends StatefulWidget {
-  ColorSizeStockField(this.item);
+  ColorSizeStockField(this.item,{this.enabled});
 
   final ApparelProductModel item;
+  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _ColorSizeStockFieldState();
@@ -49,7 +50,9 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
       children: <Widget>[
         InkWell(
           onTap: () async{
-
+            if(!widget.enabled){
+              return;
+            }
             await ProductRepositoryImpl().colors().then((colors)=>_colors = colors);
             await ProductRepositoryImpl().sizes().then((sizes)=>_sizes = sizes);
 

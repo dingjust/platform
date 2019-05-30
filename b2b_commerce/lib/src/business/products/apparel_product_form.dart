@@ -6,6 +6,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'apparel_product_prices_input.dart';
 import 'form/attributes_field.dart';
 import 'form/color_size_stock_field.dart';
 import 'form/minor_category_field.dart';
@@ -18,12 +19,14 @@ class ApparelProductFormPage extends StatefulWidget {
     this.isCreate = false,
     this.status = 'ALL',
     this.keyword,
+    this.enabled = false,
   }) : super(key: const Key('__apparelProductFormPage__'));
 
   ApparelProductModel item;
   final bool isCreate;
-  String status;
-  String keyword;
+  final String status;
+  final String keyword;
+  final bool enabled;
 
   ApparelProductFormState createState() => ApparelProductFormState();
 }
@@ -41,8 +44,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   FocusNode _gramWeightFocusNode = FocusNode();
   TextEditingController _gramWeightController = TextEditingController();
 
+  bool _enabled = false;
+
   @override
   void initState() {
+    _enabled = widget.enabled;
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
@@ -92,95 +98,106 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         appBar: AppBar(
           elevation: 0.5,
           centerTitle: true,
-          title: Text(widget.isCreate ? '新建产品' : '编辑产品'),
+          title: Text(widget.isCreate ? '新建产品' : _enabled ? '编辑产品' : '产品明细'),
           actions: <Widget>[
-            IconButton(
-              icon: Text(
-                '确定',
-                style: TextStyle(),
+            Offstage(
+              offstage: _enabled,
+              child: IconButton(
+                icon: Text('编辑'),
+                onPressed: (){
+                  setState(() {
+                    _enabled = true;
+                  });
+                },
               ),
-              onPressed: () async {
-                if (widget.item.images == null ||
-                    widget.item.images.isEmpty) {
-                  _showValidateMsg(context, '请上传主图');
-                  return;
-                } else if (widget.item.name == null) {
-                  _showValidateMsg(context, '请填写产品标题');
-                  return;
-                } else if (widget.item.skuID == null) {
-                  _showValidateMsg(context, '请填写产品货号');
-                  return;
-                } else if (widget.item.category == null) {
-                  _showValidateMsg(context, '请选择产品类别');
-                  return;
-                }
-                if(widget.item.variants == null || widget.item.variants.isEmpty){
-                  _showValidateMsg(context, '请选择颜色尺码');
-                  return;
-                }
-                if(UserBLoC.instance.currentUser.type == UserType.BRAND && widget.item.price == null){
-                  _showValidateMsg(context, '请填写产品价格');
-                  return;
-                }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY && (widget.item.minPrice == null || widget.item.maxPrice == null)){
-                  _showValidateMsg(context, '请填写产品价格');
-                  return;
-                }
-                if (widget.item.attributes == null) {
-                  widget.item.attributes = ApparelProductAttributesModel();
-                }
-                Navigator.pop(context);
-                  if (widget.isCreate) {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoading(
-                            requestCallBack: ProductRepositoryImpl()
-                                .create(widget.item)
-                                .then((a) {
-                              _clearProductData();
-                            }),
-                            outsideDismiss: false,
-                            loadingText: '保存中。。。',
-                            entrance: 'apparelProduct',
-                            keyword: widget.keyword,
-                          );
-                        });
-                  } else {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoading(
-                            requestCallBack: ProductRepositoryImpl()
-                                .update(widget.item)
-                                .then((a) {
-                              _clearProductData();
-                            }),
-                            outsideDismiss: false,
-                            loadingText: '保存中。。。',
-                            entrance: 'apparelProduct',
-                            keyword: widget.keyword,
-                          );
-                        });
-                  }
-                if (widget.keyword == null) {
-                  ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-                  ApparelProductBLoC.instance.filterByStatuses(widget.status);
-                } else {
-                  ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-                  ApparelProductBLoC.instance.getData(widget.keyword);
-                }
-//              print(widget.item.attributes.styles[0]);
-              },
-            )
+            ),
+//            IconButton(
+//              icon: Text(
+//                '确定',
+//                style: TextStyle(),
+//              ),
+//              onPressed: () async {
+//                if (widget.item.images == null ||
+//                    widget.item.images.isEmpty) {
+//                  _showValidateMsg(context, '请上传主图');
+//                  return;
+//                } else if (widget.item.name == null) {
+//                  _showValidateMsg(context, '请填写产品标题');
+//                  return;
+//                } else if (widget.item.skuID == null) {
+//                  _showValidateMsg(context, '请填写产品货号');
+//                  return;
+//                } else if (widget.item.category == null) {
+//                  _showValidateMsg(context, '请选择产品类别');
+//                  return;
+//                }
+//                if(widget.item.variants == null || widget.item.variants.isEmpty){
+//                  _showValidateMsg(context, '请选择颜色尺码');
+//                  return;
+//                }
+//                if(UserBLoC.instance.currentUser.type == UserType.BRAND && widget.item.price == null){
+//                  _showValidateMsg(context, '请填写产品价格');
+//                  return;
+//                }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY && (widget.item.minPrice == null || widget.item.maxPrice == null)){
+//                  _showValidateMsg(context, '请填写产品价格');
+//                  return;
+//                }
+//                if (widget.item.attributes == null) {
+//                  widget.item.attributes = ApparelProductAttributesModel();
+//                }
+//                Navigator.pop(context);
+//                  if (widget.isCreate) {
+//                    showDialog(
+//                        context: context,
+//                        barrierDismissible: false,
+//                        builder: (_) {
+//                          return RequestDataLoading(
+//                            requestCallBack: ProductRepositoryImpl()
+//                                .create(widget.item)
+//                                .then((a) {
+//                              _clearProductData();
+//                            }),
+//                            outsideDismiss: false,
+//                            loadingText: '保存中。。。',
+//                            entrance: 'apparelProduct',
+//                            keyword: widget.keyword,
+//                          );
+//                        });
+//                  } else {
+//                    showDialog(
+//                        context: context,
+//                        barrierDismissible: false,
+//                        builder: (_) {
+//                          return RequestDataLoading(
+//                            requestCallBack: ProductRepositoryImpl()
+//                                .update(widget.item)
+//                                .then((a) {
+//                              _clearProductData();
+//                            }),
+//                            outsideDismiss: false,
+//                            loadingText: '保存中。。。',
+//                            entrance: 'apparelProduct',
+//                            keyword: widget.keyword,
+//                          );
+//                        });
+//                  }
+//                if (widget.keyword == null) {
+//                  ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+//                  ApparelProductBLoC.instance.filterByStatuses(widget.status);
+//                } else {
+//                  ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+//                  ApparelProductBLoC.instance.getData(widget.keyword);
+//                }
+////              print(widget.item.attributes.styles[0]);
+//              },
+//            )
           ],
         ),
         body: Form(
           key: _apparelProductForm,
           child: ListView(
             children: <Widget>[
-              NormalPictureField(widget.item),
+              NormalPictureField(widget.item,enabled: _enabled,),
 //            DetailPictureField(widget.item),
               TextFieldComponent(
                 style: TextStyle(
@@ -202,6 +219,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 onEditingComplete: () {
                   FocusScope.of(context).requestFocus(_skuIDFocusNode);
                 },
+                enabled: _enabled,
               ),
               TextFieldComponent(
                 style: TextStyle(
@@ -223,6 +241,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 onEditingComplete: () {
                   FocusScope.of(context).requestFocus(_brandFocusNode);
                 },
+                enabled: _enabled,
               ),
               MinorCategoryField(widget.item),
               ColorSizeStockField(widget.item),
@@ -250,6 +269,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     FocusScope.of(context).requestFocus(_gramWeightFocusNode);
                   }
                 },
+                enabled: _enabled,
               ),
               Offstage(
                 offstage: UserBLoC.instance.currentUser.type != UserType.BRAND,
@@ -278,6 +298,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   onEditingComplete: () {
                     FocusScope.of(context).requestFocus(_gramWeightFocusNode);
                   },
+                  enabled: _enabled,
                 ),
               ),
               Offstage(
@@ -304,6 +325,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 onChanged: (value) {
                   widget.item.gramWeight = double.parse(value);
                 },
+                enabled: _enabled,
               ),
               AttributesField(widget.item),
 //            PrivacyField(widget.item),
@@ -346,6 +368,19 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
     );
 //        }
 //        );
+  }
+
+  _onCategoryTap(){
+
+  }
+  _onColorSizeTap(){
+
+  }
+  _onPriceTap(){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>ApparelProductPricesInputPage(widget.item)));
+  }
+  _onAttributeTap(){
+
   }
 
   void _clearProductData() {

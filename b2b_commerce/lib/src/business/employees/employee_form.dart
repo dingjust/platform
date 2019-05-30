@@ -198,7 +198,7 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                       offstage: !_enabled,
                       child: Center(
                         child: InkWell(
-                          onTap: () {},
+                          onTap: onSubmit,
                           child: Container(
                             height: 40,
                             width:

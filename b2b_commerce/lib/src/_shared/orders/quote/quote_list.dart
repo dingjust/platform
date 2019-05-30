@@ -28,7 +28,6 @@ class QuoteList extends StatefulWidget {
 
   @override
   _QuoteListState createState() {
-    print('==========${status.name}');
     return _QuoteListState();
   }
 }

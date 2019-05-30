@@ -6,9 +6,10 @@ import 'package:widgets/widgets.dart';
 import '../product_category.dart';
 
 class MinorCategoryField extends StatefulWidget {
-  MinorCategoryField(this.item);
+  MinorCategoryField(this.item,{this.enabled});
 
   final ApparelProductModel item;
+  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _MinorCategoryFieldState();
@@ -37,6 +38,9 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
       children: <Widget>[
         InkWell(
           onTap: () async {
+            if(!widget.enabled){
+              return;
+            }
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(

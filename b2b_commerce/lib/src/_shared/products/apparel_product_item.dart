@@ -27,25 +27,20 @@ class ApparelProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (isSelectOption) Navigator.pop(context, item);
-        // if(widget.isSelectOption)
-      },
-      child: GestureDetector(
-        onLongPress: onPrdouctDeleting,
-        child: Card(
-          margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-          elevation: 0,
-          child: Column(
-            children: <Widget>[
-              _buildProduct(context),
-              Offstage(
-                offstage: isSelectOption,
-                child: _buildButtons(context),
-              ),
-            ],
-          ),
+    return InkWell(
+      onLongPress: isSelectOption ? null : onPrdouctDeleting,
+      onTap: isSelectOption ? (){
+        if(isSelectOption){
+          Navigator.pop(context,item);
+        }
+      } : onPrdouctUpdating,
+      child: Card(
+        margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+        elevation: 0,
+        child: Column(
+          children: <Widget>[
+            _buildProduct(context),
+          ],
         ),
       ),
     );
@@ -139,6 +134,10 @@ class ApparelProductItem extends StatelessWidget {
               ),
             ),
           ),
+          Offstage(
+            offstage: isSelectOption,
+            child: _buildButtons(context),
+          ),
         ],
       ),
     );
@@ -158,34 +157,6 @@ class ApparelProductItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-//            ActionChip(
-////              shape: StadiumBorder(side: BorderSide(color: Colors.grey)),
-////              labelPadding: EdgeInsets.symmetric(horizontal: 15),
-////              backgroundColor: Colors.white,
-////              label: Text('删除'),
-////              labelStyle: TextStyle(color: Colors.grey),
-////              onPressed: onPrdouctDeleting,
-////            ),
-            GestureDetector(
-              child: Container(
-                width: 60,
-                height: 25,
-                decoration: BoxDecoration(
-                  color: Colors.grey[350],
-                  borderRadius: BorderRadius.circular(5)
-                ),
-                child: Center(child: Text('编辑')),
-              ),
-              onTap: onPrdouctUpdating,
-            ),
-//            ActionChip(
-//              shape: StadiumBorder(side: BorderSide()),
-//              labelPadding: EdgeInsets.symmetric(horizontal: 15),
-//              backgroundColor: Colors.white,
-//              label: Text('编辑'),
-//              labelStyle: TextStyle(color: Colors.black),
-//              onPressed: onPrdouctUpdating,
-//            ),
             UserBLoC.instance.currentUser.type != UserType.FACTORY
                 ? GestureDetector(
                     child: Container(

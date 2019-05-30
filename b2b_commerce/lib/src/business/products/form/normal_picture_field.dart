@@ -6,9 +6,10 @@ import 'package:widgets/widgets.dart';
 
 /// 主图
 class NormalPictureField extends StatefulWidget {
-  NormalPictureField(this.item);
+  NormalPictureField(this.item,{this.enabled = false});
 
   final ApparelProductModel item;
+  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _NormalPictureFieldState();
@@ -53,7 +54,7 @@ class _NormalPictureFieldState extends State<NormalPictureField> {
 //          iconSize: 100,
 //          count: 5,
 //        ),
-          EditableAttachments(list: widget.item.images)
+          EditableAttachments(list: widget.item.images,editable: widget.enabled,)
       ],
     );
   }
