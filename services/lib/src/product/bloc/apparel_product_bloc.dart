@@ -21,11 +21,11 @@ class ApparelProductBLoC extends BLoCBase {
 
   static final Map<String, PageEntry> _productsMap = {
     'ALL':
-    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>(),status: 'ALL'),
     'approved':
-    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>(),status: 'approved'),
     'unapproved':
-    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>()),
+    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>(),status: 'unapproved'),
   };
 
   ApparelProductBLoC._internal() {
@@ -47,18 +47,18 @@ class ApparelProductBLoC extends BLoCBase {
   //TODO 清空表单数据
   void clearNewProduct() {}
 
-  var _controller = StreamController<List<ApparelProductModel>>.broadcast();
+  var _controller = StreamController<PageEntry>.broadcast();
 
   var _detailController = StreamController<ApparelProductModel>();
 
-  Stream<List<ApparelProductModel>> get stream => _controller.stream;
+  Stream<PageEntry> get stream => _controller.stream;
 
   Stream<ApparelProductModel> get detailStream => _detailController.stream;
 
   filterByStatuses(String status) async {
     if (!lock) {
       lock = true;
-      print('${_productsMap[status].data}');
+      print('==================${_productsMap[status].data}');
       if (_productsMap[status].data.isEmpty) {
         if (status == null) status = 'ALL';
         Map<String, dynamic> data = {};
@@ -77,7 +77,7 @@ class ApparelProductBLoC extends BLoCBase {
           _productsMap[status].data.addAll(productsResponse.content);
         }
       }
-      _controller.sink.add(_productsMap[status].data);
+      _controller.sink.add(_productsMap[status]);
       lock = false;
     }
   }
@@ -105,13 +105,12 @@ class ApparelProductBLoC extends BLoCBase {
         bottomController.sink.add(true);
       }
       loadingController.sink.add(false);
-      _controller.sink.add(_productsMap[status].data);
+      _controller.sink.add(_productsMap[status]);
       lock = false;
     }
   }
 
   getData(String keyword) async {
-    print(lock);
     if (!lock) {
       print(keyword);
       lock = true;
@@ -120,7 +119,8 @@ class ApparelProductBLoC extends BLoCBase {
       await ProductRepositoryImpl().list({'keyword': keyword}, {});
       print(productsResponse.content);
       products.addAll(productsResponse.content);
-      _controller.sink.add(products);
+      print('-------======${products}');
+      _controller.sink.add(PageEntry(data: products));
       lock = false;
     }
   }
@@ -137,7 +137,7 @@ class ApparelProductBLoC extends BLoCBase {
       bottomController.sink.add(true);
     }
     loadingController.sink.add(false);
-    _controller.sink.add(products);
+    _controller.sink.add(PageEntry(data: products));
   }
 
   clear() {
@@ -153,8 +153,8 @@ class ApparelProductBLoC extends BLoCBase {
   }
 
   clearProductsMapByStatus(String status) {
-    _productsMap[status] =
-        PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>());
+    _productsMap[status].data.clear();
+    _productsMap[status].currentPage = 0;
   }
 
   //下拉刷新

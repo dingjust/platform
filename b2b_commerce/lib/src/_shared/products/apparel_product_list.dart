@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/src/order/PageEntry.dart';
 
 class ApparelProductList extends StatefulWidget {
   ApparelProductList({
@@ -76,16 +77,14 @@ class _ApparelProductListState extends State<ApparelProductList> {
             physics: const AlwaysScrollableScrollPhysics(),
             controller: widget.scrollController,
             children: <Widget>[
-              StreamBuilder<List<ApparelProductModel>>(
-                stream: bloc.stream,
-                // initialData: null,
+              StreamBuilder<PageEntry>(
+                stream: widget.status == null ? bloc.stream : bloc.stream.where((pageEntry) => pageEntry.status == widget.status),
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<ApparelProductModel>> snapshot) {
+                    AsyncSnapshot<PageEntry> snapshot) {
                   if (snapshot.data == null) {
-                    if (widget.keyword == null) {
+                    if (widget.status != null) {
                       bloc.filterByStatuses(widget.status);
-                    } else {
-                      print('${widget.keyword}------------');
+                    } else if(widget.keyword != null){
                       bloc.getData(widget.keyword);
                     }
                     return Padding(
@@ -93,7 +92,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
                       child: Center(child: CircularProgressIndicator()),
                     );
                   }
-                  if (snapshot.data.length <= 0) {
+                  if (snapshot.data.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -129,7 +128,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
                   }
                   if (snapshot.hasData) {
                     return Column(
-                      children: snapshot.data.map((product) {
+                      children: snapshot.data.data.map((product) {
                         return ApparelProductItem(
                           item: product,
                           isSelectOption: widget.isSelectOption,
