@@ -59,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     bloc.loginStream.listen((result) {
+      Navigator.of(context).pop();
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -68,9 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               failTips: '${result}',
               callbackResult: false,
             );
-          }).then((_) {
-        Navigator.of(context).pop();
-      });
+          });
 //      showDialog(
 //          context: context,
 //          child: SimpleDialog(

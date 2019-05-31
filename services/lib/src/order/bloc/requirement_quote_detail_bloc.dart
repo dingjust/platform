@@ -91,7 +91,7 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
 
   //下拉刷新
   Future refreshData(code) async {
-    quotes.clear();
+    quotes = null;
     //重置当前页计数
     currentPage = 0;
     // TODO: 分页拿数据;
@@ -114,7 +114,7 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
   }
 
   void reset() {
-    quotes.clear();
+    quotes = null;
     currentPage = 0;
     totalPages = 0;
     size = 10;

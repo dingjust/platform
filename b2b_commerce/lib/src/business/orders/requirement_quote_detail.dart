@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/requirement_orders.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -46,7 +47,7 @@ class _RequirementQuoteDetailPageState
   }
 }
 
-class QuotesListView extends StatelessWidget {
+class QuotesListView extends StatefulWidget {
   final RequirementOrderModel order;
 
   /// 顶级页面context
@@ -57,27 +58,37 @@ class QuotesListView extends StatelessWidget {
   QuotesListView({Key key, @required this.order, @required this.pageContext})
       : super(key: key);
 
+  QuotesListViewState createState() =>
+      QuotesListViewState();
+}
+
+class QuotesListViewState extends State<QuotesListView>{
+
   @override
   Widget build(BuildContext context) {
     final bloc = BLoCProvider.of<RequirementQuoteDetailBLoC>(context);
 
-    void _handleRefresh() {
-      bloc.refreshData(order.code);
+    void _handleRefresh() async {
+        RequirementOrderBLoC().refreshData('ALL');
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) =>
+                RequirementOrdersPage()
+            ), ModalRoute.withName('/'));
     }
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+    widget._scrollController.addListener(() {
+      if (widget._scrollController.position.pixels ==
+          widget._scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore(order.code);
+        bloc.loadingMore(widget.order.code);
       }
     });
 
     //监听滚动事件，打印滚动位置
-    _scrollController.addListener(() {
-      if (_scrollController.offset < 500) {
+    widget._scrollController.addListener(() {
+      if (widget._scrollController.offset < 500) {
         bloc.hideToTopBtn();
-      } else if (_scrollController.offset >= 500) {
+      } else if (widget._scrollController.offset >= 500) {
         bloc.showToTopBtn();
       }
     });
@@ -86,7 +97,7 @@ class QuotesListView extends StatelessWidget {
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        _scrollController.animateTo(.0,
+        widget._scrollController.animateTo(.0,
             duration: Duration(milliseconds: 200), curve: Curves.ease);
       }
     });
@@ -96,11 +107,11 @@ class QuotesListView extends StatelessWidget {
       color: Colors.grey[100],
       child: RefreshIndicator(
         onRefresh: () async {
-          bloc.refreshData(order.code);
+          bloc.refreshData(widget.order.code);
         },
         child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
-            controller: _scrollController,
+            controller: widget._scrollController,
             children: <Widget>[
               StreamBuilder<List<QuoteModel>>(
                 stream: bloc.stream,
@@ -108,7 +119,7 @@ class QuotesListView extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<QuoteModel>> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.getData(order.code);
+                    bloc.getData(widget.order.code);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
@@ -125,8 +136,10 @@ class QuotesListView extends StatelessWidget {
                                 padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                                 child: QuoteItem(
                                   model: quote,
-                                  onRefresh: _handleRefresh,
-                                  pageContext: pageContext,
+                                  onRefresh: (){
+                                    _handleRefresh();
+                                  },
+                                  pageContext: widget.pageContext,
                                 ),
                               ))
                           .toList(),
@@ -146,7 +159,7 @@ class QuotesListView extends StatelessWidget {
                   // }
                   return ScrolledToEndTips(
                     hasContent: snapshot.data,
-                    scrollController: _scrollController,
+                    scrollController: widget._scrollController,
                   );
                 },
               ),

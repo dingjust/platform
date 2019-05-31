@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
+import 'package:b2b_commerce/src/business/requirement_orders.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -33,7 +34,8 @@ class RequirementOrderDetailPage extends StatefulWidget {
       _RequirementOrderDetailPageState();
 }
 
-class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage> {
+class _RequirementOrderDetailPageState
+    extends State<RequirementOrderDetailPage> {
   static Map<RequirementOrderStatus, Color> _statusColors = {
     RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
     RequirementOrderStatus.COMPLETED: Colors.green,
@@ -319,13 +321,12 @@ class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                  child: Text('发布时间: ' +
-                      DateFormatUtil.format(widget.order.creationTime)),
+                  child: Text('发布时间: ${widget.order.creationTime != null ?DateFormatUtil.format(widget.order.creationTime):''}'),
                   flex: 1,
                 ),
                 UserBLoC.instance.currentUser.type == UserType.BRAND
                     ? Text(
-                  '已报价 ${widget.order.totalQuotesCount}',
+                  '已报价 ${widget.order.totalQuotesCount != null? widget.order.totalQuotesCount:''}',
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 )
                     : Container()
@@ -631,18 +632,23 @@ class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage>
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: widget.quotes.isNotEmpty
+      child: widget.quotes != null && widget.quotes.length > 0
           ? Column(
         children: <Widget>[
           QuoteItem(
             model: widget.quotes[0],
+            onRefresh: (){
+              onRefreshData();
+            },
+            pageContext: context,
           ),
           FlatButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => RequirementQuoteDetailPage(
-                    order: widget.order,
-                  )));
+                  builder: (context) =>
+                      RequirementQuoteDetailPage(
+                        order: widget.order,
+                      )));
             },
             child: Text(
               '查看全部报价>>',
@@ -658,6 +664,16 @@ class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage>
         ),
       ),
     );
+  }
+
+  onRefreshData() async{
+
+    RequirementOrderBLoC().refreshData('ALL');
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) =>
+            RequirementOrdersPage()
+        ), ModalRoute.withName('/'));
+
   }
 
   Widget _buildAttachments() {
@@ -848,10 +864,11 @@ class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage>
               onPressed: () async {
                 QuoteModel newQuote =
                 await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RequirementQuoteOrderForm(
-                      model: widget.order,
-                      quoteModel: QuoteModel(attachments: []),
-                    )));
+                    builder: (context) =>
+                        RequirementQuoteOrderForm(
+                          model: widget.order,
+                          quoteModel: QuoteModel(attachments: []),
+                        )));
 
                 if (newQuote != null) {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -903,6 +920,22 @@ class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage>
 
   ///TODO分享
   void onShare() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Opacity(
+          opacity: 0,
+          child: Container(
+            height: 200,
+            // decoration: BoxDecoration(gradient: Gra),
+            color: Colors.green,
+            child: Center(
+              child: Text('asdad'),
+            ),
+          ),
+        );
+      },
+    );
     print('share');
   }
 

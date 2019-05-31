@@ -194,10 +194,14 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
                         widget.item.supplier == null ||
-                                widget.item.supplier.name == null
+                            widget.item.supplier.name == null
                             ? ''
                             : '${widget.item.supplier?.name}',
-                        textScaleFactor: 1.3,
+                        softWrap: true,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500
+                        ),
                       ),
                     ),
                     widget.item.supplier == null ||
@@ -236,11 +240,11 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   ),
                   Container(
                     child: Text(
-                      widget.item.supplier.contactAddress == null ||
-                              widget.item.supplier.contactAddress.fullname ==
+                      widget.item.supplier == null ||
+                              widget.item.supplier.contactPerson ==
                                   null
                           ? ''
-                          : '${widget.item.supplier.contactAddress.fullname}',
+                          : '${widget.item.supplier.contactPerson}',
                       style: TextStyle(
                           color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                     ),
@@ -263,11 +267,11 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     ),
                     Container(
                       child: Text(
-                        widget.item.supplier.contactAddress == null ||
-                                widget.item.supplier.contactAddress.cellphone ==
+                        widget.item.supplier == null ||
+                                widget.item.supplier.contactPhone ==
                                     null
                             ? ''
-                            : '${widget.item.supplier.contactAddress.cellphone}',
+                            : '${widget.item.supplier.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
@@ -276,11 +280,11 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 ),
               ),
               onTap: () {
-                widget.item.supplier.contactAddress == null ||
-                        widget.item.supplier.contactAddress.cellphone == null
+                widget.item.supplier == null ||
+                        widget.item.supplier.contactPhone == null
                     ? null
                     : _selectActionButton(
-                        widget.item.supplier.contactAddress.cellphone);
+                        widget.item.supplier.contactPhone);
               },
             ),
           ],
@@ -337,19 +341,21 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                             children: <Widget>[
                               Expanded(
                                 child: pageItem.belongTo == null ||
-                                        pageItem.belongTo.name == null
+                                    pageItem.belongTo.name == null
                                     ? Text(
-                                        '',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500),
-                                      )
+                                  '',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                )
                                     : Text(
-                                        pageItem.belongTo.name,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                  pageItem.belongTo.name,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
                               pageItem.belongTo == null ||
                                       pageItem.belongTo.starLevel == null
@@ -776,7 +782,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           Container(
             height: 30,
             child: FlatButton(
-                color: Colors.grey,
+                color: Colors.red,
                 onPressed: onUpdateQuote,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
