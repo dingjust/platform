@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/src/order/PageEntry.dart';
 
 class ProductSearchResultPage extends StatefulWidget{
   ProductSearchResultPage({
@@ -21,7 +22,7 @@ class ProductSearchResultPage extends StatefulWidget{
   _ProductSearchResultPageState createState() => _ProductSearchResultPageState();
 }
 
-class _ProductSearchResultPageState extends State<ProductSearchResultPage>{
+class _ProductSearchResultPageState extends State<ProductSearchResultPage> {
   final GlobalKey _globalKey = GlobalKey<_ProductSearchResultPageState>();
   List<String> historyKeywords;
 
@@ -71,7 +72,8 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage>{
         ),
         onWillPop: (){
           Navigator.of(context).pop();
-          ApparelProductBLoC().filterByStatuses('ALL');
+//          ApparelProductBLoC().filterByStatuses('ALL');
+          return Future.value(false);
         },
       ),
     );
@@ -161,17 +163,17 @@ class ProductListView extends StatelessWidget {
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
-            StreamBuilder<List<ProductModel>>(
+            StreamBuilder<PageEntry>(
                 initialData: null,
                 stream: bloc.stream,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<ProductModel>> snapshot) {
+                    AsyncSnapshot<PageEntry> snapshot) {
                   if (snapshot.data == null) {
                     bloc.getData(keyword);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
-                  if (snapshot.data.length <= 0) {
+                  if (snapshot.data.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -207,7 +209,7 @@ class ProductListView extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     return Column(
-                      children: snapshot.data.map((item) {
+                      children: snapshot.data.data.map((item) {
                         return ApparelProductItem(
                           item: item,
                         );

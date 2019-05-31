@@ -15,5 +15,8 @@ class PageEntry {
   /// 总数
   int totalElements;
 
-  PageEntry({this.currentPage, this.size, this.data, this.totalPages,this.totalElements});
+  ///状态
+  String status;
+
+  PageEntry({this.currentPage, this.size, this.data, this.totalPages,this.totalElements,this.status,});
 }
