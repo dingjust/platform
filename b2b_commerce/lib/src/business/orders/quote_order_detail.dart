@@ -194,10 +194,14 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
                         widget.item.supplier == null ||
-                                widget.item.supplier.name == null
+                            widget.item.supplier.name == null
                             ? ''
                             : '${widget.item.supplier?.name}',
-                        textScaleFactor: 1.3,
+                        softWrap: true,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500
+                        ),
                       ),
                     ),
                     widget.item.supplier == null ||
@@ -337,19 +341,21 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                             children: <Widget>[
                               Expanded(
                                 child: pageItem.belongTo == null ||
-                                        pageItem.belongTo.name == null
+                                    pageItem.belongTo.name == null
                                     ? Text(
-                                        '',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500),
-                                      )
+                                  '',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                )
                                     : Text(
-                                        pageItem.belongTo.name,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                  pageItem.belongTo.name,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
                               pageItem.belongTo == null ||
                                       pageItem.belongTo.starLevel == null
@@ -776,7 +782,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           Container(
             height: 30,
             child: FlatButton(
-                color: Colors.grey,
+                color: Colors.red,
                 onPressed: onUpdateQuote,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),

@@ -268,16 +268,33 @@ class _QuoteItemState extends State<QuoteItem> {
   }
 
   rejectQuote(QuoteModel model,String rejectText) async{
+    bool result = false;
     int statusCode = await QuoteOrderRepository().quoteReject(
       model.code,
       rejectText,
     );
     if (statusCode == 200) {
-      // 触发刷新
-      widget.onRefresh();
-    } else {
-      alertMessage('拒绝失败');
+      result = true;
     }
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '拒绝成功',
+            failTips: '拒绝失败',
+            callbackResult: result,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
+    ).then((_){
+      //触发刷新
+      widget.onRefresh();
+    });
   }
 
   void onApprove() {
@@ -303,13 +320,30 @@ class _QuoteItemState extends State<QuoteItem> {
   }
 
   confirmFactory() async {
+    bool result = false;
     int statusCode = await QuoteOrderRepository().quoteApprove(widget.model.code);
 
     if (statusCode == 200) {
+      result = true;
+    }
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            successTips: '确认成功',
+            failTips: '确认失败',
+            callbackResult: result,
+            confirmAction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        }
+    ).then((_){
       //触发刷新
       widget.onRefresh();
-    } else {
-      alertMessage('确认失败');
-    }
+    });
   }
 }

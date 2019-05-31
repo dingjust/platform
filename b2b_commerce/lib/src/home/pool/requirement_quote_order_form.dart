@@ -593,6 +593,17 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
   }
 
   void onSubmit() {
+    double fabric = _fabricController.text != null && _fabricController.text != '' ? double.parse(_fabricController.text.substring(
+        _fabricController.text.indexOf('￥') + 1, _fabricController.text.length)):0 ;
+    double excipients = _excipientsController.text != null && _excipientsController.text != '' ? double.parse(_excipientsController.text.substring(
+        _excipientsController.text.indexOf('￥') + 1, _excipientsController.text.length)):0 ;
+    double processing = _processingController.text != null && _processingController.text != '' ? double.parse(_processingController.text.substring(
+        _processingController.text.indexOf('￥') + 1, _processingController.text.length)):0 ;
+    double other = _otherController.text != null && _otherController.text != '' ? double.parse(_otherController.text.substring(
+        _otherController.text.indexOf('￥') + 1, _otherController.text.length)):0 ;
+    double unitPrice = _unitPriceController.text != null && _unitPriceController.text != '' ? double.parse(_unitPriceController.text.substring(
+        _unitPriceController.text.indexOf('￥') + 1, _unitPriceController.text.length)):0 ;
+
     if (_unitPriceController.text.isEmpty) {
       showDialog(
           context: context,
@@ -619,7 +630,22 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
             );
           }
       );
-    } else {
+    } else if((excipients + fabric + processing + other) > unitPrice){
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '报价明细总金额大于订单报价金额',
+                callbackResult: false,
+                confirmAction: (){
+                  Navigator.of(context).pop();
+                },
+              );
+            }
+        );
+    }else {
       showDialog(
           context: context,
           barrierDismissible: false,

@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/requirement_orders.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -67,8 +68,12 @@ class QuotesListViewState extends State<QuotesListView>{
   Widget build(BuildContext context) {
     final bloc = BLoCProvider.of<RequirementQuoteDetailBLoC>(context);
 
-    void _handleRefresh() {
-      bloc.refreshData(widget.order.code);
+    void _handleRefresh() async {
+        RequirementOrderBLoC().refreshData('ALL');
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) =>
+                RequirementOrdersPage()
+            ), ModalRoute.withName('/'));
     }
 
     widget._scrollController.addListener(() {
@@ -131,7 +136,9 @@ class QuotesListViewState extends State<QuotesListView>{
                                 padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                                 child: QuoteItem(
                                   model: quote,
-                                  onRefresh: _handleRefresh,
+                                  onRefresh: (){
+                                    _handleRefresh();
+                                  },
                                   pageContext: widget.pageContext,
                                 ),
                               ))
