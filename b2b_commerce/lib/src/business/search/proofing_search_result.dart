@@ -6,16 +6,17 @@ import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProofingSearchResultPage extends StatefulWidget{
   ProofingSearchResultPage({
     Key key,
-    @required this.keyword,
+    @required this.searchModel,
   }) : super(key: key);
 
-  final String keyword;
+  SearchModel searchModel;
 
   _ProofingSearchResultPageState createState() => _ProofingSearchResultPageState();
 }
@@ -51,7 +52,7 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
                       child: Container(
                         padding: EdgeInsets.only(left: 10),
                         child: Text(
-                          '${widget.keyword}',
+                          '${widget.searchModel.keyword}',
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -65,7 +66,7 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
             ),
           ),
           body: ProofingOrderListView(
-            keyword: widget.keyword,
+            keyword: widget.searchModel.keyword,
           ),
         ),
         onWillPop: (){
@@ -97,10 +98,18 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
       } else {
         historyKeywords = [];
       }
+      Navigator.of(context).pop();
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SearchModelPage(historyKeywords: historyKeywords,keyword: widget.keyword,searchModel: SearchModel.QUOTE_ORDER,),
+          builder: (context) => SearchModelPage(
+            searchModel: SearchModel(
+              historyKeywords: historyKeywords,
+              keyword: widget.searchModel.keyword,
+              searchModelType: SearchModelType.QUOTE_ORDER,
+              route: GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY
+            ),
+          ),
         ),
       );
     });
@@ -128,41 +137,23 @@ class ProofingOrderListView extends StatelessWidget {
       }
     });
 
-    //监听滚动事件，打印滚动位置
-    _scrollController.addListener(() {
-      if (_scrollController.offset < 500) {
-        bloc.hideToTopBtn();
-      } else if (_scrollController.offset >= 500) {
-        bloc.showToTopBtn();
-      }
-    });
-
-    //状态管理触发的返回顶部
-    bloc.returnToTopStream.listen((data) {
-      //返回到顶部时执行动画
-      if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
-      }
-    });
-
     return Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
         color: Colors.grey[200],
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
-            StreamBuilder<ProofingData>(
+            StreamBuilder<List<ProofingModel>>(
                 initialData: null,
-                stream: bloc.stream,
+                stream: bloc.proofingStream,
                 builder: (BuildContext context,
-                    AsyncSnapshot<ProofingData> snapshot) {
+                    AsyncSnapshot<List<ProofingModel>> snapshot) {
                   if (snapshot.data == null) {
                     bloc.filterByKeyword(keyword);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }
-                  if (snapshot.data.data.length <= 0) {
+                  if (snapshot.data.length <= 0) {
                     return Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +192,7 @@ class ProofingOrderListView extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     return Column(
-                      children: snapshot.data.data.map((order) {
+                      children: snapshot.data.map((order) {
                         return ProofingOrderItem(
                           model: order,
                         );

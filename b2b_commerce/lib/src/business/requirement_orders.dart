@@ -54,8 +54,11 @@ class _RequirementOrdersPageState extends State<RequirementOrdersPage> {
             MaterialPageRoute(
               builder: (context) =>
                   SearchModelPage(
-                    historyKeywords: historyKeywords,
-                    searchModel: SearchModel.REQUIREMENT_ORDER,
+                      searchModel: SearchModel(
+                        historyKeywords: historyKeywords,
+                        searchModelType: SearchModelType.REQUIREMENT_ORDER,
+                        route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+                      )
                   ),
             ),
           );

@@ -50,6 +50,14 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  doRequestData(){
     if (widget.requestCallBack != null) {
       widget.requestCallBack.then((value) {
         Navigator.of(context).pop(value);
@@ -58,7 +66,8 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductionProgressesPage(
+              builder: (context) =>
+                  ProductionProgressesPage(
                     order: value,
                   ),
             ),
@@ -68,11 +77,6 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
         if (widget.entrance == 'createPurchaseOrder') {
           ProductionBLoC.instance.refreshData('');
           PurchaseOrderBLoC.instance.refreshData('ALL');
-//          if(value != null){
-//            _requestMessage(context, '保存成功', value);
-//          }else{
-//            Navigator.of(context).pop(value);
-//          }
         }
 
         if (widget.entrance == 'purchaseOrders') {
@@ -89,8 +93,7 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
 
         if (widget.entrance == 'proofingOrder') {
           ProofingOrdersBLoC.instance.refreshData('ALL');
-          if (value != null) {
-          } else {
+          if (value != null) {} else {
             Navigator.of(context).pop();
           }
         }
@@ -106,26 +109,6 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future<void> getPurchaseOrderDetail(String code) async {
-    PurchaseOrderModel model =
-        await PurchaseOrderRepository().getPurchaseOrderDetail(code);
-    PurchaseOrderBLoC.instance.refreshData('ALL');
-    if (model != null) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) => PurchaseOrderDetailPage(order: model)),
-          ModalRoute.withName('/'));
-    } else {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => PurchaseOrdersPage()),
-          ModalRoute.withName('/'));
-    }
-  }
 
   Future<void> returnPurchaseOrders() {
     PurchaseOrderBLoC.instance.refreshData('ALL');
@@ -143,6 +126,11 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.requestCallBack != null) {
+      widget.requestCallBack.then((value)async{
+        Navigator.of(context).pop(value);
+      });
+    }
     return  GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(

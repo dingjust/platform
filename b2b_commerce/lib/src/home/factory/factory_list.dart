@@ -204,8 +204,15 @@ class _FactoryPageState extends State<FactoryPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                SearchModelPage(historyKeywords: historyKeywords,keyword: factoryCondition.keyword,
-                                  searchModel: SearchModel.FACTORY,factoryCondition: factoryCondition,),
+                                SearchModelPage(
+                                  searchModel: SearchModel(
+                                    historyKeywords: historyKeywords,
+                                    keyword: factoryCondition.keyword,
+                                    searchModelType: SearchModelType.FACTORY,
+                                    factoryCondition: factoryCondition,
+                                    route: GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
+                                  ),
+                                ),
                           ),
                         );
 //                      String keyword = await showSearch(

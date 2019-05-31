@@ -197,8 +197,10 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
                     child: Offstage(
                       offstage: !_enabled,
                       child: Center(
-                        child: InkWell(
-                          onTap: onSubmit,
+                        child: FlatButton(
+                          onPressed: () {
+                            onSubmit();
+                          },
                           child: Container(
                             height: 40,
                             width:
@@ -219,6 +221,22 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
             ),
           );
         });
+  }
+
+  callback(bool result){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '创建员工失败',
+            successTips: '创建员工成功',
+            callbackResult: result,
+          );
+        }
+    );
+
   }
 
   void onSubmit() {
@@ -248,30 +266,14 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
               requestCallBack: UserRepositoryImpl().employeeCreate(widget.item),
               outsideDismiss: false,
               loadingText: '保存中。。。',
-//                                        entrance: 'createPurchaseOrder',
             );
           }).then((value) {
+        Navigator.pop(context);
         bool result = false;
         if (value != null) {
           result = true;
           clearData();
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return CustomizeDialog(
-                  dialogType: DialogType.RESULT_DIALOG,
-                  failTips: '创建员工失败',
-                  successTips: '创建员工成功',
-                  callbackResult: result,
-                  confirmAction: () {
-                    Navigator.pop(context);
-                    EmployeeBLoC.instance.getB2BCustomerData(null);
-                  },
-                );
-              }).then((_) {
-            Navigator.pop(context);
-          });
+          callback(result);
         }
       });
     } else {
@@ -291,27 +293,11 @@ class EmployeeFormPageState extends State<EmployeeFormPage> {
         if (value != null) {
           result = true;
           clearData();
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return CustomizeDialog(
-                  dialogType: DialogType.RESULT_DIALOG,
-                  failTips: '编辑员工失败',
-                  successTips: '编辑员工成功',
-                  callbackResult: result,
-                  confirmAction: () {
-                    // Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    EmployeeBLoC.instance.getB2BCustomerData(null);
-                  },
-                );
-              }).then((_) {
-            Navigator.of(context).pop();
-          });
+          callback(result);
         }
       });
     }
+    EmployeeBLoC.instance.getB2BCustomerData(null);
   }
 
   clearData() {

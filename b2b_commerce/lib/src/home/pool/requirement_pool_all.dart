@@ -148,8 +148,14 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SearchModelPage(historyKeywords: historyKeywords,
-                          searchModel: SearchModel.REQUIREMENT_QUOTE,requirementCondition: currentCondition,),
+                        builder: (context) => SearchModelPage(
+                          searchModel: SearchModel(
+                            historyKeywords: historyKeywords,
+                            searchModelType: SearchModelType.REQUIREMENT_QUOTE,
+                            requirementCondition: currentCondition,
+                            route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY
+                          ),
+                        ),
                       ),
                     );
                   });

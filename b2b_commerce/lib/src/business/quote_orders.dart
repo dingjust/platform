@@ -65,8 +65,11 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
             MaterialPageRoute(
               builder: (context) =>
                   SearchModelPage(
-                    historyKeywords: historyKeywords,
-                    searchModel: SearchModel.QUOTE_ORDER,
+                      searchModel:SearchModel(
+                        historyKeywords: historyKeywords,
+                        searchModelType: SearchModelType.QUOTE_ORDER,
+                        route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+                      )
                   ),
             ),
           );

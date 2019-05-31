@@ -56,8 +56,13 @@ class ProofingOrdersPage extends StatefulWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  SearchModelPage(historyKeywords: historyKeywords,
-                    searchModel: SearchModel.PROOFING_ORDER,),
+                  SearchModelPage(
+                      searchModel: SearchModel(
+                        historyKeywords: historyKeywords,
+                        searchModelType: SearchModelType.PROOFING_ORDER,
+                        route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+                      )
+                  ),
             ),
           );
         });

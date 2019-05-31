@@ -96,8 +96,13 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            SearchModelPage(historyKeywords: historyKeywords,
-                              searchModel: SearchModel.PRODUCT,),
+                            SearchModelPage(
+                                searchModel: SearchModel(
+                                  historyKeywords: historyKeywords,
+                                  searchModelType: SearchModelType.PRODUCT,
+                                  route: GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
+                                )
+                            ),
                       ),
                     );
                   });
