@@ -221,7 +221,12 @@ class _QuoteListState extends State<QuoteList>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: RefreshIndicator(
         onRefresh: () async {
-          return await bloc.refreshData(widget.status.code);
+          if (widget.status != null) {
+            return await bloc.refreshData(widget.status.code);
+          } else if(widget.companyUid != null){
+            bloc.reset();
+            return await bloc.getQuoteDataByCompany(widget.companyUid);
+          }
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),

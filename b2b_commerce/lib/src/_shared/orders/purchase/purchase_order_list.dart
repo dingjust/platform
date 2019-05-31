@@ -31,7 +31,7 @@ class _PurchaseOrderListState extends State<PurchaseOrderList>
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        if (widget.companyUid != null) {
+        if (widget.status == null) {
           bloc.lodingMoreByCompany(widget.companyUid);
         } else {
           bloc.loadingMoreByStatuses(widget.status.code);
@@ -77,7 +77,7 @@ class _PurchaseOrderListState extends State<PurchaseOrderList>
           controller: widget.scrollController,
           children: <Widget>[
             StreamBuilder<PurchaseData>(
-              stream: bloc.stream
+              stream: widget.status == null ? bloc.stream : bloc.stream
                   .where((purchaseData) =>
               purchaseData.status == widget.status.code),
               // initialData: null,
