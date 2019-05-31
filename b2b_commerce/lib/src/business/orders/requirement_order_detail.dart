@@ -33,7 +33,8 @@ class RequirementOrderDetailPage extends StatefulWidget {
       _RequirementOrderDetailPageState();
 }
 
-class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage> {
+class _RequirementOrderDetailPageState
+    extends State<RequirementOrderDetailPage> {
   static Map<RequirementOrderStatus, Color> _statusColors = {
     RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
     RequirementOrderStatus.COMPLETED: Colors.green,
@@ -640,9 +641,10 @@ class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage>
           FlatButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => RequirementQuoteDetailPage(
-                    order: widget.order,
-                  )));
+                  builder: (context) =>
+                      RequirementQuoteDetailPage(
+                        order: widget.order,
+                      )));
             },
             child: Text(
               '查看全部报价>>',
@@ -848,10 +850,11 @@ class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage>
               onPressed: () async {
                 QuoteModel newQuote =
                 await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RequirementQuoteOrderForm(
-                      model: widget.order,
-                      quoteModel: QuoteModel(attachments: []),
-                    )));
+                    builder: (context) =>
+                        RequirementQuoteOrderForm(
+                          model: widget.order,
+                          quoteModel: QuoteModel(attachments: []),
+                        )));
 
                 if (newQuote != null) {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -903,6 +906,22 @@ class _RequirementOrderDetailPageState extends State<RequirementOrderDetailPage>
 
   ///TODO分享
   void onShare() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Opacity(
+          opacity: 0,
+          child: Container(
+            height: 200,
+            // decoration: BoxDecoration(gradient: Gra),
+            color: Colors.green,
+            child: Center(
+              child: Text('asdad'),
+            ),
+          ),
+        );
+      },
+    );
     print('share');
   }
 

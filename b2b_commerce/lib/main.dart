@@ -157,7 +157,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   }
 
   bool _isBrand() {
-    return widget.userType == UserType.BRAND;
+    return UserBLoC.instance.currentUser.type == UserType.BRAND;
   }
 
   /// 获取导航菜单
@@ -235,6 +235,8 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   @override
   Widget build(BuildContext context) {
+    print('===================Build${widget.userType}');
+
     final List<NavigationMenu> menus = _getNavigationMenus();
 
     return MaterialApp(
@@ -248,21 +250,21 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       ),
       home: Builder(
         builder: (context) => Scaffold(
-              key: AppKeys.appPage,
-              body: menus[_currentIndex].page,
-              bottomNavigationBar: BottomNavigation(
-                currentIndex: _currentIndex,
-                onChanged: _handleNavigation,
-                items: menus.map((menu) => menu.item).toList(),
-              ),
-              floatingActionButton: _isBrand()
-                  ? PublishRequirementButton(
-                      onPublish: () => _onPublish(context),
-                    )
-                  : null,
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-            ),
+          key: AppKeys.appPage,
+          body: menus[_currentIndex].page,
+          bottomNavigationBar: BottomNavigation(
+            currentIndex: _currentIndex,
+            onChanged: _handleNavigation,
+            items: menus.map((menu) => menu.item).toList(),
+          ),
+          floatingActionButton: _isBrand()
+              ? PublishRequirementButton(
+            onPublish: () => _onPublish(context),
+          )
+              : null,
+          floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked,
+        ),
       ),
       routes: AppRoutes.allRoutes,
       localizationsDelegates: [
