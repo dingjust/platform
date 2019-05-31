@@ -431,52 +431,53 @@ class _LoginPageState extends State<LoginPage> {
   doLogin(UserBLoC bloc) {}
 
   void onLogin(UserBLoC bloc) {
-//    //加载条
-//    showDialog(
-//      context: context,
-//      builder: (context) =>
-//          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-//    );
+    //加载条
+    showDialog(
+      context: context,
+      builder: (context) =>
+          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    );
     if (_isPasswordLogin) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: bloc.login(
-                  username: _phoneController.text,
-                  password: _passwordController.text,
-                  remember: _isRemember),
-              loadingText: '登录中。。。',
-              entrance: '',
-            );
-          }).then((result) {
-        print(result);
-        if (result == LoginResult.SUCCESS) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MyAppHomeDelegate(
-                          userType: UserBLoC.instance.currentUser.type)),
-              ModalRoute.withName('/'));
-//          Navigator.pop(context);
-//          Navigator.of(context).popUntil(ModalRoute.withName('/'));
-        } else if (result == LoginResult.DIO_ERROR) {
-          Navigator.of(context).pop();
-        }
-      });
-//      bloc
-//          .login(
-//              username: _phoneController.text,
-//              password: _passwordController.text,
-//              remember: _isRemember)
-//          .then((result) {
+//      showDialog(
+//          context: context,
+//          barrierDismissible: false,
+//          builder: (_) {
+//            return RequestDataLoading(
+//              requestCallBack: null,
+//              loginCallBack: bloc.login(
+//                  username: _phoneController.text,
+//                  password: _passwordController.text,
+//                  remember: _isRemember),
+//              loadingText: '登录中。。。',
+//              entrance: '',
+//            );
+//          }).then((result) {
+//        print(result);
 //        if (result == LoginResult.SUCCESS) {
+////          Navigator.of(context).pushAndRemoveUntil(
+////              MaterialPageRoute(
+////                  builder: (context) =>
+////                      MyAppHomeDelegate(
+////                          userType: UserBLoC.instance.currentUser.type)),
+////              ModalRoute.withName('/'));
+////          Navigator.pop(context);
 //          Navigator.of(context).popUntil(ModalRoute.withName('/'));
 //        } else if (result == LoginResult.DIO_ERROR) {
 //          Navigator.of(context).pop();
 //        }
 //      });
+      bloc
+          .login(
+              username: _phoneController.text,
+              password: _passwordController.text,
+              remember: _isRemember)
+          .then((result) {
+        if (result == LoginResult.SUCCESS) {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        } else if (result == LoginResult.DIO_ERROR) {
+          Navigator.of(context).pop();
+        }
+      });
     } else {
       showDialog(
           context: context,

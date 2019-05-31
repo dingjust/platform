@@ -20,12 +20,17 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   DateTime _blDate;
   String _blNumber;
   TextEditingController dialogText;
-  FocusNode _dialogFocusNode;
   String userType;
   PurchaseOrderModel order;
   String phase;
   String remarks;
   DateTime nowTime;
+
+  DateTime materialDate;
+  DateTime cuttingDate;
+  DateTime stitchingDate;
+  DateTime afterDate;
+  DateTime inspectionDate;
 
   _ProductionProgressesPageState({this.order});
 
@@ -37,6 +42,18 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       userType = 'brand';
     }else{
       userType = 'factory';
+
+      if(order != null && order.progresses != null ){
+
+        materialDate = order.progresses[0].estimatedDate;
+        cuttingDate = order.progresses[1].estimatedDate;
+        stitchingDate = order.progresses[2].estimatedDate;
+        afterDate = order.progresses[3].estimatedDate;
+        inspectionDate = order.progresses[4].estimatedDate;
+
+      }
+
+
     }
     super.initState();
   }
@@ -48,20 +65,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         centerTitle: true,
         elevation: 0.5,
         title: Text('生产进度明细'),
-//        actions: <Widget>[
-//          Container(
-//            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-//            child: Center(
-//              child: Text(
-//                '${ProductionProgressPhaseLocalizedMap[order.currentPhase]}',
-//                style: TextStyle(
-//                  color: Color(0xFFFFD600),
-//                  fontWeight: FontWeight.w500,
-//                ),
-//              ),
-//            ),
-//          ),
-//        ],
       ),
       body: Container(
         margin: EdgeInsets.only(bottom: 10),

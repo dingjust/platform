@@ -186,6 +186,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
                     onSubmit();
+                    widget.searchModel.keyword = controller.text;
                   }),
             ),
           ],
@@ -283,6 +284,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
             );
           }
       ).then((value){
+        Navigator.of(context).pop();
         FactoryCondition condition = widget.searchModel.factoryCondition;
         condition.keyword = controller.text;
         FactoryBLoC.instance.clear();
@@ -382,6 +384,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
                     onPressed: (){
                       setState(() {
                         List<String> historyKeywords = List();
+                        widget.searchModel.historyKeywords = historyKeywords;
                         LocalStorage.save(widget.searchModel.route,
                             json.encode(historyKeywords));
                       });
