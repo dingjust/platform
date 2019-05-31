@@ -105,6 +105,11 @@ export default {
           name: '供应商',
           url: '/miscs/supplier',
           icon: 'iconNone',
+        },
+        {
+          name: '钱包',
+          url: '/miscs/wallet',
+          icon: 'iconNone',
         }
       ]
     }
