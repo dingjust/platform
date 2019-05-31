@@ -479,41 +479,41 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
     } else {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: bloc.loginByCaptcha(
-                  username: _phoneController.text,
-                  captcha: _smsCaptchaController.text,
-                  remember: _isRemember),
-              outsideDismiss: false,
-              loadingText: '登录中。。。',
-              entrance: '',
-            );
-          }).then((result) {
-        if (result == LoginResult.SUCCESS) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
-              ModalRoute.withName('/'));
-//          Navigator.of(context).popUntil(ModalRoute.withName('/'));
-        } else if (result == LoginResult.DIO_ERROR) {
-          Navigator.of(context).pop();
-        }
-      });
-//      bloc
-//          .loginByCaptcha(
-//              username: _phoneController.text,
-//              captcha: _smsCaptchaController.text,
-//              remember: _isRemember)
-//          .then((result) {
+//      showDialog(
+//          context: context,
+//          barrierDismissible: false,
+//          builder: (_) {
+//            return RequestDataLoading(
+//              requestCallBack: bloc.loginByCaptcha(
+//                  username: _phoneController.text,
+//                  captcha: _smsCaptchaController.text,
+//                  remember: _isRemember),
+//              outsideDismiss: false,
+//              loadingText: '登录中。。。',
+//              entrance: '',
+//            );
+//          }).then((result) {
 //        if (result == LoginResult.SUCCESS) {
-//          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+//          Navigator.of(context).pushAndRemoveUntil(
+//              MaterialPageRoute(builder: (context) => HomePage()),
+//              ModalRoute.withName('/'));
+////          Navigator.of(context).popUntil(ModalRoute.withName('/'));
 //        } else if (result == LoginResult.DIO_ERROR) {
 //          Navigator.of(context).pop();
 //        }
 //      });
+      bloc
+          .loginByCaptcha(
+              username: _phoneController.text,
+              captcha: _smsCaptchaController.text,
+              remember: _isRemember)
+          .then((result) {
+        if (result == LoginResult.SUCCESS) {
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        } else if (result == LoginResult.DIO_ERROR) {
+          Navigator.of(context).pop();
+        }
+      });
     }
   }
 
