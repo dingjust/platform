@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
+import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
@@ -130,7 +132,6 @@ class ProductListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<ApparelProductBLoC>(context);
-    bloc.clear();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -164,7 +165,6 @@ class ProductListView extends StatelessWidget {
           controller: _scrollController,
           children: <Widget>[
             StreamBuilder<PageEntry>(
-                initialData: null,
                 stream: bloc.stream,
                 builder: (BuildContext context,
                     AsyncSnapshot<PageEntry> snapshot) {
@@ -212,6 +212,9 @@ class ProductListView extends StatelessWidget {
                       children: snapshot.data.data.map((item) {
                         return ApparelProductItem(
                           item: item,
+                          onPrdouctUpdating: () => _onProudctUpdating(item,context),
+                          onProductShlefing: () => _onProductShlefing(item,context),
+                          onPrdouctProduction: () => _onProudctProduction(item,context),
                         );
                       }).toList(),
                     );
@@ -240,5 +243,128 @@ class ProductListView extends StatelessWidget {
             ),
           ],
         ));
+  }
+  void _onProudctUpdating(ApparelProductModel product,BuildContext context) {
+    ProductRepositoryImpl().detail(product.code).then((product) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BLoCProvider(
+            bloc: ApparelProductBLoC.instance,
+            child: ApparelProductFormPage(
+              item: product,
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  void _onProudctProduction(ApparelProductModel product,BuildContext context) {
+    RequirementOrderModel orderModel =
+    RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RequirementOrderFrom(
+              product: product,
+              isCreate: true,
+              order: orderModel,
+            )));
+  }
+
+  void _onProductShlefing(ApparelProductModel product,BuildContext context) {
+    if (product.approvalStatus == ArticleApprovalStatus.approved) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoading(
+              requestCallBack: ProductRepositoryImpl().off(product.code),
+              outsideDismiss: false,
+              loadingText: '正在保存。。。',
+              entrance: '',
+            );
+          }).then((value) {
+        bool result = false;
+        if (value != null && value != '') {
+          result = false;
+        } else {
+          result = true;
+        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                successTips: '下架成功',
+                failTips: '下架失败',
+                callbackResult: result,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            });
+//        if (widget.keyword == null) {
+//          ApparelProductBLoC.instance.clearProductsMap();
+//          ApparelProductBLoC.instance.filterByStatuses(widget.status);
+//        } else {
+//          ApparelProductBLoC.instance.clearProductsMap();
+//          ApparelProductBLoC.instance.getData(widget.keyword);
+//        }
+      });
+    } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
+      if (product.variants == null || product.variants.isEmpty) {
+        ShowDialogUtil.showSimapleDialog(context, '颜色尺码为空不可上架');
+        return;
+      }
+      if (product.maxPrice == null ||
+          product.minPrice == null ||
+          product.price == null) {
+        ShowDialogUtil.showSimapleDialog(context, '产品价格为空不可上架');
+        return;
+      }
+
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoading(
+              requestCallBack: ProductRepositoryImpl().on(product.code),
+              outsideDismiss: false,
+              loadingText: '正在保存。。。',
+              entrance: '',
+            );
+          }).then((value) {
+        bool result = false;
+        if (value != null && value != '') {
+          result = false;
+        } else {
+          result = true;
+        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                successTips: '上架成功',
+                failTips: '上架失败',
+                callbackResult: result,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            });
+//        if (widget.keyword == null) {
+//          ApparelProductBLoC.instance.clearProductsMap();
+//          ApparelProductBLoC.instance.filterByStatuses(widget.status);
+//        } else {
+//          ApparelProductBLoC.instance.clearProductsMap();
+//          ApparelProductBLoC.instance.getData(widget.keyword);
+//        }
+      });
+    }
   }
 }
