@@ -134,16 +134,16 @@ class QuoteOrderListView extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         controller: _scrollController,
         children: <Widget>[
-          StreamBuilder<List<QuoteModel>>(
-            stream: bloc.quoteStream,
+          StreamBuilder<QuoteData>(
+            stream: bloc.stream,
             builder: (BuildContext context,
-                AsyncSnapshot<List<QuoteModel>> snapshot) {
+                AsyncSnapshot<QuoteData> snapshot) {
               if (snapshot.data == null) {
                 bloc.filterByKeyword(keyword);
                 return ProgressIndicatorFactory
                     .buildPaddedProgressIndicator();
               }
-              if (snapshot.data.length <= 0) {
+              if (snapshot.data.data.length <= 0) {
                 return Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +182,7 @@ class QuoteOrderListView extends StatelessWidget {
               }
               if (snapshot.hasData) {
                 return Column(
-                  children: snapshot.data.map((order) {
+                  children: snapshot.data.data.map((order) {
                     return QuoteListItem(
                       model: order,
                     );

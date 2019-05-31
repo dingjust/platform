@@ -90,6 +90,13 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    PurchaseOrderBLoC.instance.reset();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BLoCProvider<PurchaseOrderBLoC>(
       bloc: PurchaseOrderBLoC.instance,

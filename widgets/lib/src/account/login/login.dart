@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/main.dart';
+import 'package:b2b_commerce/src/home/index.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +9,6 @@ import 'package:services/services.dart'
     show LoginResult, UserBLoC, UserRepositoryImpl;
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 import 'package:widgets/widgets.dart';
-import 'package:b2b_commerce/src/home/index.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -454,9 +455,11 @@ class _LoginPageState extends State<LoginPage> {
         print(result);
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) =>
-                  HomePage()
-              ), ModalRoute.withName('/'));
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MyAppHomeDelegate(
+                          userType: UserBLoC.instance.currentUser.type)),
+              ModalRoute.withName('/'));
 //          Navigator.pop(context);
 //          Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
@@ -492,9 +495,8 @@ class _LoginPageState extends State<LoginPage> {
           }).then((result) {
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) =>
-                  HomePage()
-              ), ModalRoute.withName('/'));
+              MaterialPageRoute(builder: (context) => HomePage()),
+              ModalRoute.withName('/'));
 //          Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
           Navigator.of(context).pop();

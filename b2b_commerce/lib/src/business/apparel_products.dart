@@ -163,6 +163,7 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
                     builder: (context) => ApparelProductFormPage(
                           item: ApparelProductBLoC.instance.newProduct,
                           isCreate: true,
+                          enabled: true,
                         )),
               );
             },
