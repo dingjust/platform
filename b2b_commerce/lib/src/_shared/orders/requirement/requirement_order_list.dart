@@ -72,7 +72,8 @@ class _RequirementOrderListState extends State<RequirementOrderList>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: RefreshIndicator(
         onRefresh: () async {
-          if (!bloc.lock) bloc.refreshData(widget.status.code);
+          // if (!bloc.lock)
+          await bloc.refreshData(widget.status.code);
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
