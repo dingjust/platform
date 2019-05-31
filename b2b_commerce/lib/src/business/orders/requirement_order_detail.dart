@@ -320,13 +320,12 @@ class _RequirementOrderDetailPageState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                  child: Text('发布时间: ' +
-                      DateFormatUtil.format(widget.order.creationTime)),
+                  child: Text('发布时间: ${widget.order.creationTime != null ?DateFormatUtil.format(widget.order.creationTime):''}'),
                   flex: 1,
                 ),
                 UserBLoC.instance.currentUser.type == UserType.BRAND
                     ? Text(
-                  '已报价 ${widget.order.totalQuotesCount}',
+                  '已报价 ${widget.order.totalQuotesCount != null? widget.order.totalQuotesCount:''}',
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 )
                     : Container()
@@ -632,11 +631,15 @@ class _RequirementOrderDetailPageState
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: widget.quotes.isNotEmpty
+      child: widget.quotes != null && widget.quotes.length > 0
           ? Column(
         children: <Widget>[
           QuoteItem(
             model: widget.quotes[0],
+            onRefresh: (){
+              onRefreshData(widget.quotes[0].code);
+            },
+            pageContext: context,
           ),
           FlatButton(
             onPressed: () {
@@ -660,6 +663,13 @@ class _RequirementOrderDetailPageState
         ),
       ),
     );
+  }
+
+  onRefreshData(String code){
+    print(widget.quotes[0].code);
+
+    print('++++${code}');
+    RequirementQuoteDetailBLoC.instance.refreshData(code);
   }
 
   Widget _buildAttachments() {

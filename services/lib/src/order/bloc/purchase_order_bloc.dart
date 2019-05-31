@@ -258,18 +258,20 @@ class PurchaseOrderBLoC extends BLoCBase {
 
   //获取供应商的相关全部生产单
   getPurchaseDataByCompany(String companyUid) async {
-    purchaseOrderModels.clear();
     if (!lock) {
       lock = true;
-      if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-        purchaseOrdersResponse = await PurchaseOrderRepository()
-            .getPurchaseOrdersByFactory(companyUid, {});
-      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-        purchaseOrdersResponse = await PurchaseOrderRepository()
-            .getPurchaseOrdersByBrand(companyUid, {});
+      if(purchaseOrderModels.isEmpty){
+        if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+          purchaseOrdersResponse = await PurchaseOrderRepository()
+              .getPurchaseOrdersByFactory(companyUid, {});
+        } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+          purchaseOrdersResponse = await PurchaseOrderRepository()
+              .getPurchaseOrdersByBrand(companyUid, {});
+        }
+        purchaseOrderModels.addAll(purchaseOrdersResponse.content);
       }
-      purchaseOrderModels.addAll(purchaseOrdersResponse.content);
-      _purchaseController.sink.add(purchaseOrderModels);
+
+      _controller.sink.add(PurchaseData(data: purchaseOrderModels));
       lock = false;
     }
   }
@@ -296,13 +298,14 @@ class PurchaseOrderBLoC extends BLoCBase {
 
       loadingController.sink.add(false);
 
-      _purchaseController.sink.add(purchaseOrderModels);
+      _controller.sink.add(PurchaseData(data: purchaseOrderModels));
       lock = false;
     }
   }
 
   ///重置数据
   void reset() {
+    purchaseOrderModels.clear();
     _ordersMap.forEach((status, entry) {
       entry.data.clear();
       entry.currentPage = 0;

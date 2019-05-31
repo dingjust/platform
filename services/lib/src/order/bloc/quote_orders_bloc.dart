@@ -48,10 +48,6 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   Stream<QuoteData> get stream => _controller.stream;
 
-  var _quoteController = StreamController<List<QuoteModel>>.broadcast();
-
-  Stream<List<QuoteModel>> get quoteStream => _quoteController.stream;
-
   filterByStatuses(String status) async {
     if (!lock) {
       lock = true;
@@ -94,35 +90,34 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   filterByKeyword(String keyword) async {
     //若没有数据则查询
-    if (!lock) {
-      lock = true;
-      //请求参数
-      Map data = {
-        'keyword': keyword,
-      };
-      Response<Map<String, dynamic>> response;
-      try {
-        response = await http$.post(OrderApis.quotes,
-            data: data,
-            queryParameters: {
-              'page': _quotesMap['SEARCH'].currentPage,
-              'size': _quotesMap['SEARCH'].size
-            });
-      } on DioError catch (e) {
-        print(e);
-      }
-
-      if (response != null && response.statusCode == 200) {
-        QuoteOrdersResponse ordersResponse =
-        QuoteOrdersResponse.fromJson(response.data);
-        _quotesMap['SEARCH'].totalPages = ordersResponse.totalPages;
-        _quotesMap['SEARCH'].totalElements = ordersResponse.totalElements;
-        _quotesMap['SEARCH'].data.clear();
-        _quotesMap['SEARCH'].data.addAll(ordersResponse.content);
-      }
-      lock = false;
+    //请求参数
+    Map data = {
+      'keyword': keyword,
+//          'skuID': keyword,
+//          'belongto': keyword,
+    };
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.post(OrderApis.quotes,
+          data: data,
+          queryParameters: {
+            'page': _quotesMap['ALL'].currentPage,
+            'size': _quotesMap['ALL'].size
+          });
+    } on DioError catch (e) {
+      print(e);
     }
-    _quoteController.sink.add(_quotesMap['SEARCH'].data);
+
+    if (response != null && response.statusCode == 200) {
+      QuoteOrdersResponse ordersResponse =
+          QuoteOrdersResponse.fromJson(response.data);
+      _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
+      _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
+      _quotesMap['ALL'].data.clear();
+      _quotesMap['ALL'].data.addAll(ordersResponse.content);
+    }
+    _controller.sink
+        .add(QuoteData(status: 'ALL', data: _quotesMap['ALL'].data));
   }
 
   loadingMoreByStatuses(String status) async {
@@ -171,7 +166,9 @@ class QuoteOrdersBLoC extends BLoCBase {
       lock = true;
       //数据到底
       Map data = {
-        'keyword': keyword,
+        'code': keyword,
+        'skuID': keyword,
+        'belongto': keyword,
       };
       Response<Map<String, dynamic>> response;
       try {
@@ -208,21 +205,24 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   //获取供应商的相关全部报价
   getQuoteDataByCompany(String companyUid) async {
-    quoteModels.clear();
+//    quoteModels.clear();
     if (!lock) {
       lock = true;
-      if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-        //获取与该工厂全部的报价单
-        quoteResponse =
-            await QuoteOrderRepository().getQuotesByFactory(companyUid, {});
-      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-        //获取与该品牌全部的报价单
-        quoteResponse =
-            await QuoteOrderRepository().getQuotesByBrand(companyUid, {});
+      if(quoteModels.isEmpty){
+        if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+          //获取与该工厂全部的报价单
+          quoteResponse =
+          await QuoteOrderRepository().getQuotesByFactory(companyUid, {});
+        } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+          //获取与该品牌全部的报价单
+          quoteResponse =
+          await QuoteOrderRepository().getQuotesByBrand(companyUid, {});
+        }
+
+        quoteModels.addAll(quoteResponse.content);
       }
 
-      quoteModels.addAll(quoteResponse.content);
-      _quoteController.sink.add(quoteModels);
+      _controller.sink.add(QuoteData(data: quoteModels));
       lock = false;
     }
   }
@@ -247,13 +247,14 @@ class QuoteOrdersBLoC extends BLoCBase {
         bottomController.sink.add(true);
       }
       loadingController.sink.add(false);
-      _quoteController.sink.add(quoteModels);
+      _controller.sink.add(QuoteData(data: quoteModels));
       lock = false;
     }
   }
 
   ///重置数据
   void reset() {
+    quoteModels.clear();
     _quotesMap.forEach((statu, entry) {
       entry.data.clear();
       entry.currentPage = 0;

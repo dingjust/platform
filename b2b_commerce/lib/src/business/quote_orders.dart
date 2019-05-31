@@ -80,6 +80,12 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+    QuoteOrdersBLoC.instance.reset();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BLoCProvider<QuoteOrdersBLoC>(
       key: _globalKey,

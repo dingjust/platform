@@ -7,7 +7,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class QuoteItem extends StatefulWidget {
-  final QuoteModel model;
+  QuoteModel model;
 
   /// 更新方法
   final VoidCallback onRefresh;
@@ -304,6 +304,7 @@ class _QuoteItemState extends State<QuoteItem> {
 
   confirmFactory() async {
     int statusCode = await QuoteOrderRepository().quoteApprove(widget.model.code);
+
     if (statusCode == 200) {
       //触发刷新
       widget.onRefresh();

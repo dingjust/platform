@@ -67,6 +67,11 @@ class _MyBrandPageState extends State<MyBrandPage> {
   void initState() {
     super.initState();
   }
+  @override
+  void dispose() {
+    super.dispose();
+    QuoteOrdersBLoC.instance.reset();
+  }
 
   @override
   Widget build(BuildContext context) {

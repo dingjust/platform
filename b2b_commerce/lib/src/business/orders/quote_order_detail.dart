@@ -236,11 +236,11 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   ),
                   Container(
                     child: Text(
-                      widget.item.supplier.contactAddress == null ||
-                              widget.item.supplier.contactAddress.fullname ==
+                      widget.item.supplier == null ||
+                              widget.item.supplier.contactPerson ==
                                   null
                           ? ''
-                          : '${widget.item.supplier.contactAddress.fullname}',
+                          : '${widget.item.supplier.contactPerson}',
                       style: TextStyle(
                           color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                     ),
@@ -263,11 +263,11 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     ),
                     Container(
                       child: Text(
-                        widget.item.supplier.contactAddress == null ||
-                                widget.item.supplier.contactAddress.cellphone ==
+                        widget.item.supplier == null ||
+                                widget.item.supplier.contactPhone ==
                                     null
                             ? ''
-                            : '${widget.item.supplier.contactAddress.cellphone}',
+                            : '${widget.item.supplier.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
@@ -276,11 +276,11 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 ),
               ),
               onTap: () {
-                widget.item.supplier.contactAddress == null ||
-                        widget.item.supplier.contactAddress.cellphone == null
+                widget.item.supplier == null ||
+                        widget.item.supplier.contactPhone == null
                     ? null
                     : _selectActionButton(
-                        widget.item.supplier.contactAddress.cellphone);
+                        widget.item.supplier.contactPhone);
               },
             ),
           ],

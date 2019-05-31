@@ -13,6 +13,8 @@ class PrincipalModel extends ItemModel {
   String uid;
   String name;
   String phone;
+  String contactPhone;
+  String contactPerson;
   ArticleApprovalStatus approvalStatus;
   @JsonKey(toJson: addressToJson)
   AddressModel contactAddress;
@@ -24,6 +26,8 @@ class PrincipalModel extends ItemModel {
     this.phone,
     this.approvalStatus,
     this.contactAddress,
+    this.contactPerson,
+    this.contactPhone,
   });
 
   factory PrincipalModel.fromJson(Map<String, dynamic> json) =>

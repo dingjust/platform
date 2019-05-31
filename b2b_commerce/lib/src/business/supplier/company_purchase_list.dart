@@ -19,6 +19,13 @@ class _CompanyPurchaseListPageState extends State<CompanyPurchaseListPage>{
   final GlobalKey _globalKey = GlobalKey<_CompanyPurchaseListPageState>();
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    PurchaseOrderBLoC.instance.reset();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BLoCProvider<PurchaseOrderBLoC>(
       key: _globalKey,
