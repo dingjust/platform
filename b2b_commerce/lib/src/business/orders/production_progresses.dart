@@ -67,7 +67,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         title: Text('生产进度明细'),
       ),
       body: Container(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: EdgeInsets.only(bottom: 0),
         child: _buildProgresses(context),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -75,7 +75,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         ),
       ),
       bottomNavigationBar: UserBLoC().isBrandUser?Container(
-        padding: EdgeInsets.fromLTRB(100, 10, 100, 10),
+        padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
         child: RaisedButton(
             color: Color.fromRGBO(15,213,30,1),
             child: Row(
