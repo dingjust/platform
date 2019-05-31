@@ -107,7 +107,7 @@ class QuoteListItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               RichText(
-                text: TextSpan(
+                  text: TextSpan(
                   text: '报价：',
                   style: TextStyle(fontSize: 18, color: Colors.black),
                   children: <TextSpan>[

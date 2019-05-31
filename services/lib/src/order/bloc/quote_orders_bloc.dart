@@ -34,23 +34,17 @@ class QuoteOrdersBLoC extends BLoCBase {
   static final Map<String, PageEntry> _quotesMap = {
     'ALL': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
     'SELLER_SUBMITTED':
-    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
     'BUYER_APPROVED':
-    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
     'BUYER_REJECTED':
-    PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
+        PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
     'SEARCH': PageEntry(currentPage: 0, size: 10, data: List<QuoteModel>()),
   };
 
   List<QuoteModel> quotes(String status) => _quotesMap[status].data;
 
-  var _controller = StreamController < QuoteData
-
-  >
-
-      .
-
-  broadcast();
+  var _controller = StreamController<QuoteData>.broadcast();
 
   Stream<QuoteData> get stream => _controller.stream;
 
@@ -81,7 +75,7 @@ class QuoteOrdersBLoC extends BLoCBase {
 
         if (response != null && response.statusCode == 200) {
           QuoteOrdersResponse ordersResponse =
-          QuoteOrdersResponse.fromJson(response.data);
+              QuoteOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.clear();
@@ -116,7 +110,7 @@ class QuoteOrdersBLoC extends BLoCBase {
 
     if (response != null && response.statusCode == 200) {
       QuoteOrdersResponse ordersResponse =
-      QuoteOrdersResponse.fromJson(response.data);
+          QuoteOrdersResponse.fromJson(response.data);
       _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
       _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
       _quotesMap['ALL'].data.clear();
@@ -154,7 +148,7 @@ class QuoteOrdersBLoC extends BLoCBase {
 
         if (response != null && response.statusCode == 200) {
           QuoteOrdersResponse ordersResponse =
-          QuoteOrdersResponse.fromJson(response.data);
+              QuoteOrdersResponse.fromJson(response.data);
           _quotesMap[status].totalPages = ordersResponse.totalPages;
           _quotesMap[status].totalElements = ordersResponse.totalElements;
           _quotesMap[status].data.addAll(ordersResponse.content);
@@ -190,7 +184,7 @@ class QuoteOrdersBLoC extends BLoCBase {
 
       if (response != null && response.statusCode == 200) {
         QuoteOrdersResponse ordersResponse =
-        QuoteOrdersResponse.fromJson(response.data);
+            QuoteOrdersResponse.fromJson(response.data);
         _quotesMap['ALL'].totalPages = ordersResponse.totalPages;
         _quotesMap['ALL'].totalElements = ordersResponse.totalElements;
         _quotesMap['ALL'].data.addAll(ordersResponse.content);
@@ -211,20 +205,23 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   //获取供应商的相关全部报价
   getQuoteDataByCompany(String companyUid) async {
-    quoteModels.clear();
+//    quoteModels.clear();
     if (!lock) {
       lock = true;
-      if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-        //获取与该工厂全部的报价单
-        quoteResponse =
-        await QuoteOrderRepository().getQuotesByFactory(companyUid, {});
-      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-        //获取与该品牌全部的报价单
-        quoteResponse =
-        await QuoteOrderRepository().getQuotesByBrand(companyUid, {});
+      if(quoteModels.isEmpty){
+        if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+          //获取与该工厂全部的报价单
+          quoteResponse =
+          await QuoteOrderRepository().getQuotesByFactory(companyUid, {});
+        } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+          //获取与该品牌全部的报价单
+          quoteResponse =
+          await QuoteOrderRepository().getQuotesByBrand(companyUid, {});
+        }
+
+        quoteModels.addAll(quoteResponse.content);
       }
 
-      quoteModels.addAll(quoteResponse.content);
       _controller.sink.add(QuoteData(data: quoteModels));
       lock = false;
     }
@@ -257,6 +254,7 @@ class QuoteOrdersBLoC extends BLoCBase {
 
   ///重置数据
   void reset() {
+    quoteModels.clear();
     _quotesMap.forEach((statu, entry) {
       entry.data.clear();
       entry.currentPage = 0;

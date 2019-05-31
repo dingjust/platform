@@ -30,9 +30,14 @@ class _CompanyQuoteListPageState extends State<CompanyQuoteListPage>{
           elevation: 0.5,
           centerTitle: true,
         ),
-        body: QuoteList(companyUid: widget.companyUid,status: EnumModel('allQuoteBySupplier','全部报价单'),),
+        body: QuoteList(companyUid: widget.companyUid),
         floatingActionButton: ScrollToTopButton<QuoteOrdersBLoC>(),
       ),
     );
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
   }
 }
