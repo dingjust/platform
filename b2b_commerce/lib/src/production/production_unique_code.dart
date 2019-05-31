@@ -54,10 +54,10 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                   controller: _textEditingController,
                                   autofocus: true,
                                   onChanged: (value){
-                                    if(_textEditingController.text.length>7){
+                                    if (value.length > 7) {
                                       _textEditingController.text = controller.text;
                                     }else{
-                                      controller.text = _textEditingController.text;
+                                      controller.text = value.trim();
                                     }
                                   },
                                   decoration: InputDecoration(
