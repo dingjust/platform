@@ -7,6 +7,7 @@ import 'package:services/services.dart'
     show LoginResult, UserBLoC, UserRepositoryImpl;
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 import 'package:widgets/widgets.dart';
+import 'package:b2b_commerce/src/home/index.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -57,7 +58,6 @@ class _LoginPageState extends State<LoginPage> {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     bloc.loginStream.listen((result) {
-      Navigator.of(context).pop();
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -65,10 +65,11 @@ class _LoginPageState extends State<LoginPage> {
             return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
               failTips: '${result}',
-              outsideDismiss: true,
               callbackResult: false,
             );
-          });
+          }).then((_) {
+        Navigator.of(context).pop();
+      });
 //      showDialog(
 //          context: context,
 //          child: SimpleDialog(
@@ -446,14 +447,18 @@ class _LoginPageState extends State<LoginPage> {
                   username: _phoneController.text,
                   password: _passwordController.text,
                   remember: _isRemember),
-              outsideDismiss: false,
               loadingText: '登录中。。。',
               entrance: '',
             );
           }).then((result) {
         print(result);
         if (result == LoginResult.SUCCESS) {
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) =>
+                  HomePage()
+              ), ModalRoute.withName('/'));
+//          Navigator.pop(context);
+//          Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
           Navigator.of(context).pop();
         }
@@ -486,7 +491,11 @@ class _LoginPageState extends State<LoginPage> {
             );
           }).then((result) {
         if (result == LoginResult.SUCCESS) {
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) =>
+                  HomePage()
+              ), ModalRoute.withName('/'));
+//          Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
           Navigator.of(context).pop();
         }
