@@ -58,7 +58,6 @@ class ApparelProductBLoC extends BLoCBase {
   filterByStatuses(String status) async {
     if (!lock) {
       lock = true;
-      print('==================${_productsMap[status].data}');
       if (_productsMap[status].data.isEmpty) {
         if (status == null) status = 'ALL';
         Map<String, dynamic> data = {};
@@ -119,7 +118,6 @@ class ApparelProductBLoC extends BLoCBase {
       await ProductRepositoryImpl().list({'keyword': keyword}, {});
       print(productsResponse.content);
       products.addAll(productsResponse.content);
-      print('-------======${products}');
       _controller.sink.add(PageEntry(data: products));
       lock = false;
     }

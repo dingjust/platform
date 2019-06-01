@@ -38,14 +38,14 @@ class _SuppliersPageState extends State<SuppliersPage> {
         elevation: 0.5,
         title: Text('合作商管理'),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              B2BIcons.search,
-              size: 20,
-            ),
-            onPressed: () => showSearch(
-                context: context, delegate: SuppliersSearchDelegate()),
-          ),
+//          IconButton(
+//            icon: Icon(
+//              B2BIcons.search,
+//              size: 20,
+//            ),
+//            onPressed: () => showSearch(
+//                context: context, delegate: SuppliersSearchDelegate()),
+//          ),
         ],
       ),
       body: Container(
