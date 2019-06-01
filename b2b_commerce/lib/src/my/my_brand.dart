@@ -70,7 +70,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
   @override
   void dispose() {
     super.dispose();
+    //退出品牌详情页清空全部报价单和全部生产单的缓存数据
     QuoteOrdersBLoC.instance.reset();
+    PurchaseOrderBLoC.instance.reset();
   }
 
   @override
