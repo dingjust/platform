@@ -6,7 +6,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'apparel_product_prices_input.dart';
 import 'form/attributes_field.dart';
 import 'form/color_size_stock_field.dart';
 import 'form/minor_category_field.dart';

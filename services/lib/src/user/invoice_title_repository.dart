@@ -7,9 +7,9 @@ abstract class InvoiceTitleRepository {
   //获取发票抬头明细
   Future<InvoiceTitleModel> detail(int id);
   //创建发票抬头
-  Future<String> create(InvoiceTitleModel form);
+  Future<bool> create(InvoiceTitleModel form);
   //更新发票抬头
-  Future<String> update(InvoiceTitleModel form);
+  Future<bool> update(InvoiceTitleModel form);
   //删除发票抬头
-  Future<String> delete(int id);
+  Future<bool> delete(int id);
 }

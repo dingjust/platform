@@ -306,9 +306,6 @@ class _FactoryPageState extends State<FactoryPage> {
                           });
                         })
                             : FilterEntry(_areaSelectText, () {
-                          setState(() {
-                            showDateFilterMenu = false;
-                          });
                           //获取所有省份
                           rootBundle
                               .loadString('data/province.json')
