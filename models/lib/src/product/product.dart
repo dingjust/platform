@@ -396,6 +396,7 @@ class ApparelProductModel extends ProductModel {
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
       CategoryModel.toJson(model);
+
 }
 
 @JsonSerializable()

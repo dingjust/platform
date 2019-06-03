@@ -106,17 +106,20 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   Widget build(BuildContext context) {
-    widget.controller.value = TextEditingValue(
-      // 设置内容
-      text: widget.controller.text,
-      // 保持光标在最后
-      selection: TextSelection.fromPosition(
-        TextPosition(
-          affinity: TextAffinity.upstream,
-          offset: widget.controller.text.length,
+    if(widget.textAlign == TextAlign.right){
+      widget.controller.value = TextEditingValue(
+        // 设置内容
+        text: widget.controller.text,
+        // 保持光标在最后
+        selection: TextSelection.fromPosition(
+          TextPosition(
+            affinity: TextAffinity.upstream,
+            offset: widget.controller.text.length,
+          ),
         ),
-      ),
-    );
+      );
+    }
+
     return Column(
       children: <Widget>[
         Container(
