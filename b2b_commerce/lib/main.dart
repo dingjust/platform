@@ -235,8 +235,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   @override
   Widget build(BuildContext context) {
-    print('===================Build${widget.userType}');
-
     final List<NavigationMenu> menus = _getNavigationMenus();
 
     return MaterialApp(
