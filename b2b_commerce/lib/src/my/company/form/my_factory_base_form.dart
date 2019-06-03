@@ -576,6 +576,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     if (labels != null) {
       text = '';
       for (int i = 0; i < labels.length; i++) {
+        if(labels[i].group != 'FACTORY'){
+          continue;
+        }
         if (i > 1) {
           text += '...';
           break;

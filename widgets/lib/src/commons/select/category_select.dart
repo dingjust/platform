@@ -199,10 +199,12 @@ class CategorySelectState extends State<CategorySelect> {
           padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Container(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            height: 40,
-            child: Text(
-              category.name,
-              style: TextStyle(color: _color),
+            height: 60,
+            child: Center(
+              child: Text(
+                category.name,
+                style: TextStyle(color: _color),
+              ),
             ),
           ),
         ),

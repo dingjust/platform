@@ -12,6 +12,15 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  models:
+    path: ../models/
+  widgets:
+    path: ../widgets/
+  assets:
+    path: ../assets/
+  services:
+    path: ../services/
+
   json_annotation: ^2.0.0
   flutter_redux: ^0.5.2
   shared_preferences: ^0.4.2

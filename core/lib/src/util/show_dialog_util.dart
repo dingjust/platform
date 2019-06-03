@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
-class ShowDialogUtil extends StatelessWidget{
+class ShowDialogUtil{
 
   //操作提示弹框
   static Future<void> showAlertDialog(BuildContext context,String text,VoidCallback onPressed){
@@ -106,8 +109,54 @@ class ShowDialogUtil extends StatelessWidget{
     key.currentState.showSnackBar(snackBar);
   }
 
-  @override
-  Widget build(BuildContext context) {
-
+  //错误提示（带红色叉号）
+  static Future<void> showValidateMsg(BuildContext context, String message) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            outsideDismiss: true,
+          );
+        });
   }
+
+  //操作结果提示
+  static Future<void> showResultMsg(BuildContext context, String successTips,String failTips,bool result) {
+    return  showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: failTips,
+            successTips: successTips,
+            callbackResult: result,
+          );
+        }
+    );
+  }
+
+  //是否操作选择提示框
+  static Future<void> showChoseDiglog(BuildContext context, String tips,VoidCallback action) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 200,
+            contentText2: tips,
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: action,
+          );
+        }
+    );
+  }
+
+
 }
