@@ -1234,6 +1234,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
     } catch (e) {
       print(e);
     }
+    PurchaseOrderBLoC.instance.refreshData('ALL');
   }
 
   void _showMessage(BuildContext context, bool result, String message) {
