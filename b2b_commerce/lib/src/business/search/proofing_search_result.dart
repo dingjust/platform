@@ -87,7 +87,7 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
             requestCallBack: LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
             outsideDismiss: false,
             loadingText: '加载中。。。',
-            entrance: 'createPurchaseOrder',
+            entrance: '',
           );
         }
     ).then((value){
