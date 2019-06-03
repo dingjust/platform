@@ -109,7 +109,7 @@ class ShowDialogUtil{
     key.currentState.showSnackBar(snackBar);
   }
 
-  //非空提示
+  //错误提示（带红色叉号）
   static Future<void> showValidateMsg(BuildContext context, String message) {
     return showDialog(
         context: context,
@@ -123,4 +123,40 @@ class ShowDialogUtil{
           );
         });
   }
+
+  //操作结果提示
+  static Future<void> showResultMsg(BuildContext context, String successTips,String failTips,bool result) {
+    return  showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: failTips,
+            successTips: successTips,
+            callbackResult: result,
+          );
+        }
+    );
+  }
+
+  //是否操作选择提示框
+  static Future<void> showChoseDiglog(BuildContext context, String tips,VoidCallback action) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 200,
+            contentText2: tips,
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: action,
+          );
+        }
+    );
+  }
+
+
 }
