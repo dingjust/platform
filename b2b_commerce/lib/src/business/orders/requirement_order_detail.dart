@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
+import 'package:b2b_commerce/src/_shared/widgets/share.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
@@ -321,12 +322,16 @@ class _RequirementOrderDetailPageState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                  child: Text('发布时间: ${widget.order.creationTime != null ?DateFormatUtil.format(widget.order.creationTime):''}'),
+                  child: Text(
+                      '发布时间: ${widget.order.creationTime != null
+                          ? DateFormatUtil.format(widget.order.creationTime)
+                          : ''}'),
                   flex: 1,
                 ),
                 UserBLoC.instance.currentUser.type == UserType.BRAND
                     ? Text(
-                  '已报价 ${widget.order.totalQuotesCount != null? widget.order.totalQuotesCount:''}',
+                  '已报价 ${widget.order.totalQuotesCount != null ? widget.order
+                      .totalQuotesCount : ''}',
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 )
                     : Container()
@@ -637,7 +642,7 @@ class _RequirementOrderDetailPageState
         children: <Widget>[
           QuoteItem(
             model: widget.quotes[0],
-            onRefresh: (){
+            onRefresh: () {
               onRefreshData();
             },
             pageContext: context,
@@ -666,14 +671,11 @@ class _RequirementOrderDetailPageState
     );
   }
 
-  onRefreshData() async{
-
+  onRefreshData() async {
     RequirementOrderBLoC().refreshData('ALL');
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) =>
-            RequirementOrdersPage()
-        ), ModalRoute.withName('/'));
-
+        MaterialPageRoute(builder: (context) => RequirementOrdersPage()),
+        ModalRoute.withName('/'));
   }
 
   Widget _buildAttachments() {
@@ -899,10 +901,26 @@ class _RequirementOrderDetailPageState
         onEdit();
         break;
       case 'close':
-        widget.onRequirementCancle();
-        setState(() {
-          widget.order.status = RequirementOrderStatus.CANCELLED;
-        });
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '确定关闭订单？',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                dialogHeight: 180,
+                confirmAction: () async {
+                  await widget.onRequirementCancle();
+                  setState(() {
+                    widget.order.status = RequirementOrderStatus.CANCELLED;
+                  });
+                },
+              );
+            });
         break;
       case 'share':
         onShare();
@@ -920,23 +938,7 @@ class _RequirementOrderDetailPageState
 
   ///TODO分享
   void onShare() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Opacity(
-          opacity: 0,
-          child: Container(
-            height: 200,
-            // decoration: BoxDecoration(gradient: Gra),
-            color: Colors.green,
-            child: Center(
-              child: Text('asdad'),
-            ),
-          ),
-        );
-      },
-    );
-    print('share');
+    ShareDialog.showShareDialog(context);
   }
 
   void onReview() {
