@@ -41,9 +41,9 @@ class InvoiceTitleRepositoryImpl implements InvoiceTitleRepository{
   }
 
   @override
-  Future<String> create(InvoiceTitleModel form) async{
+  Future<bool> create(InvoiceTitleModel form) async{
     Response response;
-    String result;
+    bool result = false;
     try {
     print(InvoiceTitleModel.toJson(form));
       response = await http$.post(UserApis.invoiceTitles,data: InvoiceTitleModel.toJson(form));
@@ -51,16 +51,16 @@ class InvoiceTitleRepositoryImpl implements InvoiceTitleRepository{
       print(e);
     }
     if(response != null && response.statusCode == 200){
-      result = response.data;
+      result = true;
     }
 
     return result;
   }
 
   @override
-  Future<String> update(InvoiceTitleModel form) async{
+  Future<bool> update(InvoiceTitleModel form) async{
     Response response;
-    String result;
+    bool result = false;
     print(InvoiceTitleModel.toJson(form));
     try {
       response = await http$.put(UserApis.invoiceTitleFromId(form.id),data: InvoiceTitleModel.toJson(form));
@@ -68,23 +68,23 @@ class InvoiceTitleRepositoryImpl implements InvoiceTitleRepository{
       print(e);
     }
     if(response != null && response.statusCode == 200){
-      result = response.data;
+      result = true;
     }
 
     return result;
   }
 
   @override
-  Future<String> delete(int id) async{
+  Future<bool> delete(int id) async{
     Response response;
-    String result;
+    bool result = false;
     try {
       response = await http$.delete(UserApis.invoiceTitleFromId(id));
     } catch (e) {
       print(e);
     }
     if(response != null && response.statusCode == 200){
-      result = response.data;
+      result = true;
     }
 
     return result;

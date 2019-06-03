@@ -1,16 +1,33 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'invoice_title_form.dart';
 
-class InvoiceTitleDetailPage extends StatelessWidget {
+class InvoiceTitleDetailPage extends StatefulWidget {
   final InvoiceTitleModel invoiceTitle;
 
   InvoiceTitleDetailPage({this.invoiceTitle});
 
+  _InvoiceTitleDetailPageState createState() => _InvoiceTitleDetailPageState();
+}
+
+class _InvoiceTitleDetailPageState extends State<InvoiceTitleDetailPage>{
+
+  Future _invoiceTitleDetailFuture;
+
+  @override
+  void initState(){
+    _invoiceTitleDetailFuture = _getInvoiceTitleDetailData();
+    super.initState();
+  }
+
+  _getInvoiceTitleDetailData(){
+    return InvoiceTitleRepositoryImpl().detail(widget.invoiceTitle.id);
+  }
+
   @override
   Widget build(BuildContext context) {
-    String _operation;
 
     return Scaffold(
       appBar: AppBar(
@@ -19,66 +36,42 @@ class InvoiceTitleDetailPage extends StatelessWidget {
         title: Text('发票抬头'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: ()async{
-              await showMenu(
-                context: context,
-                position: RelativeRect.fromLTRB(1000, 80,0,0),
-                items: <PopupMenuItem<String>>[
-                  PopupMenuItem(
-                    child: GestureDetector(
-                      onTap: (){
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => InvoiceTitleFormPage(
-                              invoiceTitle: invoiceTitle,
-                            ),
-                          ),
-                        );
-                      },
-                      child: ListTile(
-                        title: Text('修改'),
-                      ),
-                    ),
+            icon: Text('编辑'),
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InvoiceTitleFormPage(
+                    invoiceTitle: widget.invoiceTitle,
                   ),
-                  PopupMenuItem(
-                    child: GestureDetector(
-                      onTap: () {
-                        InvoiceTitleRepositoryImpl().delete(invoiceTitle.id);
-                        Navigator.pop(context);
-                      },
-                      child: ListTile(
-                        title: Text('删除'),
-                      ),
-                    ),
-                  )
-                ],
-              );
+                ),
+              ).then((_){
+                setState(() {
+                  _invoiceTitleDetailFuture = _getInvoiceTitleDetailData();
+                });
+              });
             },
           ),
         ],
       ),
-//      body: FutureBuilder(
-//        future: InvoiceTitleRepositoryImpl().detail(invoiceTitle.id),
-//        builder:(context,snapshot) {
-//          if (!snapshot.hasData) {
-//            return Padding(
-//              padding: EdgeInsets.symmetric(vertical: 200),
-//              child: Center(child: CircularProgressIndicator()),
-//            );
-//          }
-//          if(snapshot.hasData){
-//            return buildDetail();
-//          }
-//        }
-//      ),
-    body: buildDetail(),
+      body: FutureBuilder(
+        future: _invoiceTitleDetailFuture,
+        builder:(context,snapshot) {
+          if (!snapshot.hasData) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 200),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          if(snapshot.hasData){
+            return buildDetail(snapshot.data);
+          }
+        }
+      ),
     );
   }
 
-  Card buildDetail() {
+  Card buildDetail(InvoiceTitleModel invoiceTitle) {
     return Card(
             margin: EdgeInsets.all(0),
             child: Container(

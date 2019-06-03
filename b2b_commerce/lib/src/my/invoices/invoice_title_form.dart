@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -55,26 +56,26 @@ class InvoiceTitleFormState extends State<InvoiceTitleFormPage> {
         centerTitle: true,
         title: Text(widget.isCreate ? '新建发票抬头':'编辑发票抬头'),
         actions: <Widget>[
-          IconButton(
-            icon: Text('保存'),
-            onPressed: () {
-              widget.invoiceTitle.company = _companyController.text;
-              widget.invoiceTitle.phone = _phoneController.text;
-              widget.invoiceTitle.address = _adressController.text;
-              widget.invoiceTitle.bankAccount = _bankAccountController.text;
-              widget.invoiceTitle.bankOfDeposit = _bankOfDepositController.text;
-              widget.invoiceTitle.taxNumber = _taxNumController.text;
-              widget.invoiceTitle.defaultTitle = _isDefault;
-
-              if(widget.isCreate){
-                InvoiceTitleRepositoryImpl().create(widget.invoiceTitle);
-              }else{
-                InvoiceTitleRepositoryImpl().update(widget.invoiceTitle);
-              }
-              Navigator.pop(context);
-            },
-          )
         ],
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        height: 50,
+        child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              '保存',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: () => _onSumbit(),
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -138,5 +139,54 @@ class InvoiceTitleFormState extends State<InvoiceTitleFormPage> {
         ),
       ),
     );
+  }
+
+  void _onSumbit(){
+    if(_companyController.text == ''){
+      ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
+      return;
+    }
+    if(_taxNumController.text == ''){
+      ShowDialogUtil.showValidateMsg(context, '请填写税号');
+      return;
+    }
+    if(_adressController.text == ''){
+      ShowDialogUtil.showValidateMsg(context, '请填写单位地址');
+      return;
+    }
+    if(_phoneController.text == ''){
+      ShowDialogUtil.showValidateMsg(context, '请填写电话号码');
+      return;
+    }
+    if(_bankOfDepositController.text == ''){
+      ShowDialogUtil.showValidateMsg(context, '请填写开户银行');
+      return;
+    }
+    if(_bankAccountController.text == ''){
+      ShowDialogUtil.showValidateMsg(context, '请填写银行账户');
+      return;
+    }
+    widget.invoiceTitle.company = _companyController.text;
+    widget.invoiceTitle.phone = _phoneController.text;
+    widget.invoiceTitle.address = _adressController.text;
+    widget.invoiceTitle.bankAccount = _bankAccountController.text;
+    widget.invoiceTitle.bankOfDeposit = _bankOfDepositController.text;
+    widget.invoiceTitle.taxNumber = _taxNumController.text;
+    widget.invoiceTitle.defaultTitle = _isDefault;
+
+    if(widget.isCreate){
+      InvoiceTitleRepositoryImpl().create(widget.invoiceTitle).then((result){
+        ShowDialogUtil.showResultMsg(context, '创建发票抬头成功', '创建发票抬头失败', result).then((_){
+          Navigator.pop(context);
+        });
+      });
+    }else{
+      InvoiceTitleRepositoryImpl().update(widget.invoiceTitle).then((result){
+        ShowDialogUtil.showResultMsg(context, '编辑发票抬头成功', '编辑发票抬头失败', result).then((_){
+          Navigator.pop(context);
+        });
+      });
+    }
+
   }
 }
