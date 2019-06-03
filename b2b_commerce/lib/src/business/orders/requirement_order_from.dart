@@ -66,10 +66,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       }
     }
 
-    //联系方式取当前登陆人信息
-    print('${UserBLoC.instance}');
-    widget.order.details.contactPerson = UserBLoC.instance.currentUser.name;
-    widget.order.details.contactPhone = UserBLoC.instance.currentUser.mobileNumber;
+    //联系方式取当前登陆人信息（只在新建的时候取）
+    if(widget.isCreate && !widget.isReview){
+      widget.order.details.contactPerson = UserBLoC.instance.currentUser.name;
+      widget.order.details.contactPhone = UserBLoC.instance.currentUser.mobileNumber;
+    }
 
     if (widget.product != null) {
       widget.order.details.category = widget.product.category;
