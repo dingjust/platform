@@ -645,7 +645,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               height: 30,
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: FlatButton(
-                    color: Colors.grey,
+                    color: Colors.red,
                     child: const Text(
                       '修改价格',
                       style: const TextStyle(
@@ -783,7 +783,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                 height: 30,
                 padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: FlatButton(
-                  color: Colors.grey,
+                  color: Colors.red,
                   child: const Text(
                     '修改价格',
                     style: const TextStyle(

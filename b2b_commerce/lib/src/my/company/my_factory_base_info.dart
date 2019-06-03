@@ -521,6 +521,9 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
     if (categories != null) {
       text = '';
       for (int i = 0; i < categories.length; i++) {
+        if (categories[i].parent == null) {
+          return formatCategoriesSelectText2(categories, categories.length);
+        }
         if (map[categories[i].parent.name] == null) {
           map[categories[i].parent.name] = [categories[i].name];
         } else {
@@ -544,6 +547,30 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
           }
         }
       });
+    }
+
+    return text;
+  }
+
+  //格式化类别
+  String formatCategoriesSelectText2(List<CategoryModel> categories,
+      int count) {
+    String text = '';
+
+    if (categories != null) {
+      text = '';
+      for (int i = 0; i < categories.length; i++) {
+        if (i > count - 1) {
+          text += '...';
+          break;
+        }
+
+        if (i == categories.length - 1) {
+          text += categories[i].name;
+        } else {
+          text += categories[i].name + '、';
+        }
+      }
     }
 
     return text;

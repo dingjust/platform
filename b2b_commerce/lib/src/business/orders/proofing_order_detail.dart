@@ -776,7 +776,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 onPressed: onUpdate,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
-                color: Colors.grey,
+                color: Colors.red,
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 140),
                 child: Text(
                   '修改订单',

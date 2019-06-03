@@ -394,7 +394,7 @@ class ProofingOrderItem extends StatelessWidget {
               onPressed: onProofingUpdating,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)),
-              color: Colors.grey,
+              color: Colors.red,
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: const Text('修改订单',
                   style: const TextStyle(color: Colors.white, fontSize: 16)),

@@ -143,8 +143,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   void _onPublish(BuildContext context) async {
     requirementOrderModel =
         RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
-    RequirementOrderModel model = await RequirementOrderRepository()
-        .getRequirementOrderDetail('TRO00021002');
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -235,8 +234,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   @override
   Widget build(BuildContext context) {
-    print('===================Build${widget.userType}');
-
     final List<NavigationMenu> menus = _getNavigationMenus();
 
     return MaterialApp(

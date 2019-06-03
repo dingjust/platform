@@ -1767,7 +1767,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               padding: const EdgeInsets.symmetric(
                   vertical: 0, horizontal: 30),
               child: FlatButton(
-                  color: Colors.grey,
+                  color: Colors.red,
                   child: const Text(
                     '修改价格',
                     style: const TextStyle(
@@ -1893,7 +1893,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 0, horizontal: 30),
                 child: FlatButton(
-                  color: Colors.grey,
+                  color: Colors.red,
                   child: const Text(
                     '修改金额',
                     style: const TextStyle(
