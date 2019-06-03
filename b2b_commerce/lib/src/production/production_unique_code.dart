@@ -18,6 +18,7 @@ class ProductionUniqueCodePage extends StatefulWidget {
 class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
   TextEditingController _textEditingController = TextEditingController();
   TextEditingController controller = new TextEditingController();
+  FocusNode focusNode = new FocusNode();
 
   PurchaseOrderModel uniqueCodeEntry;
   String userType;
@@ -53,13 +54,6 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                 child: TextField(
                                   controller: _textEditingController,
                                   autofocus: true,
-                                  onChanged: (value){
-                                    if (value.length > 7) {
-                                      _textEditingController.text = controller.text;
-                                    }else{
-                                      controller.text = value.trim();
-                                    }
-                                  },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: '请输入7位唯一码'
@@ -86,79 +80,108 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
                                   onPressed: () async{
                                     String unique = _textEditingController.text;
                                     if(unique != null && unique != ''){
-
-                                      PurchaseOrderModel _purchaseOrder = await PurchaseOrderRepository().getDetailsForUniqueCode(unique);
-
-                                      if (_purchaseOrder != null) {
-
-                                      if((_purchaseOrder.purchaser != null && _purchaseOrder.purchaser.uid != null && _purchaseOrder.purchaser.uid != '')
-                                      &&(_purchaseOrder.belongTo != null && _purchaseOrder.belongTo.uid != null && _purchaseOrder.belongTo.uid != '')){
-                                          showDialog(
-                                              context: context,
-                                              barrierDismissible: false,
-                                              builder: (_) {
-                                                return CustomizeDialog(
-                                                  dialogType: DialogType.RESULT_DIALOG,
-                                                  failTips: '该唯一码已被使用',
-                                                  callbackResult: false,
-                                                );
-                                              }
-                                          );
-                                      } else if(UserBLoC().isBrandUser){
-                                          if(_purchaseOrder.purchaser != null){
-                                            showDialog(
-                                                context: context,
-                                                barrierDismissible: false,
-                                                builder: (_) {
-                                                  return CustomizeDialog(
-                                                    dialogType: DialogType.RESULT_DIALOG,
-                                                    failTips: '该唯一码仅限工厂查询',
-                                                    callbackResult: false,
-                                                  );
-                                                }
-                                            );
-                                          }else{
-                                            setState(() {
-                                              uniqueCodeEntry = _purchaseOrder;
-                                            });
-                                          }
-                                        } else if(UserBLoC().isFactoryUser){
-                                          if(_purchaseOrder.belongTo != null){
-                                            showDialog(
-                                                context: context,
-                                                barrierDismissible: false,
-                                                builder: (_) {
-                                                  return CustomizeDialog(
-                                                    dialogType: DialogType.RESULT_DIALOG,
-                                                    failTips: '该唯一码仅限品牌查询',
-                                                    callbackResult: false,
-                                                  );
-                                                }
-                                            );
-                                          }else{
-                                            setState(() {
-                                              uniqueCodeEntry = _purchaseOrder;
-                                            });
-                                          }
-                                        } else{
-                                          setState(() {
-                                            uniqueCodeEntry = _purchaseOrder;
-                                          });
-                                        }
-
-                                      }else{
+                                      if(unique.trim().length != 7){
                                         showDialog(
                                             context: context,
                                             barrierDismissible: false,
                                             builder: (_) {
                                               return CustomizeDialog(
                                                 dialogType: DialogType.RESULT_DIALOG,
-                                                failTips: '唯一码不正确',
+                                                failTips: '请输入长度为7位的唯一码检索！',
                                                 callbackResult: false,
-                                                confirmButtonText: '重新输入',
                                               );
                                             }
                                         );
+                                      }else {
+                                        PurchaseOrderModel _purchaseOrder = await PurchaseOrderRepository()
+                                            .getDetailsForUniqueCode(unique);
+                                        if (_purchaseOrder != null) {
+                                          if ((_purchaseOrder.purchaser !=
+                                              null &&
+                                              _purchaseOrder.purchaser.uid !=
+                                                  null &&
+                                              _purchaseOrder.purchaser.uid !=
+                                                  '')
+                                              && (_purchaseOrder.belongTo !=
+                                                  null &&
+                                                  _purchaseOrder.belongTo.uid !=
+                                                      null &&
+                                                  _purchaseOrder.belongTo.uid !=
+                                                      '')) {
+                                            showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (_) {
+                                                  return CustomizeDialog(
+                                                    dialogType: DialogType
+                                                        .RESULT_DIALOG,
+                                                    failTips: '该唯一码已被使用',
+                                                    callbackResult: false,
+                                                  );
+                                                }
+                                            );
+                                          } else if (UserBLoC().isBrandUser) {
+                                            if (_purchaseOrder.purchaser !=
+                                                null) {
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (_) {
+                                                    return CustomizeDialog(
+                                                      dialogType: DialogType
+                                                          .RESULT_DIALOG,
+                                                      failTips: '该唯一码仅限工厂查询',
+                                                      callbackResult: false,
+                                                    );
+                                                  }
+                                              );
+                                            } else {
+                                              setState(() {
+                                                uniqueCodeEntry =
+                                                    _purchaseOrder;
+                                              });
+                                            }
+                                          } else if (UserBLoC().isFactoryUser) {
+                                            if (_purchaseOrder.belongTo !=
+                                                null) {
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (_) {
+                                                    return CustomizeDialog(
+                                                      dialogType: DialogType
+                                                          .RESULT_DIALOG,
+                                                      failTips: '该唯一码仅限品牌查询',
+                                                      callbackResult: false,
+                                                    );
+                                                  }
+                                              );
+                                            } else {
+                                              setState(() {
+                                                uniqueCodeEntry =
+                                                    _purchaseOrder;
+                                              });
+                                            }
+                                          } else {
+                                            setState(() {
+                                              uniqueCodeEntry = _purchaseOrder;
+                                            });
+                                          }
+                                        } else {
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (_) {
+                                                return CustomizeDialog(
+                                                  dialogType: DialogType
+                                                      .RESULT_DIALOG,
+                                                  failTips: '唯一码不正确',
+                                                  callbackResult: false,
+                                                  confirmButtonText: '重新输入',
+                                                );
+                                              }
+                                          );
+                                        }
                                       }
                                     }else{
                                       showDialog(

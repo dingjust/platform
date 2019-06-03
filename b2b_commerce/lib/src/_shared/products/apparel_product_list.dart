@@ -274,13 +274,17 @@ class _ApparelProductListState extends State<ApparelProductList> {
       });
     } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
       if (product.variants == null || product.variants.isEmpty) {
-        ShowDialogUtil.showSimapleDialog(context, '颜色尺码为空不可上架');
+        _showValidateMsg(context, '颜色尺码为空不可上架');
         return;
       }
-      if (product.maxPrice == null ||
-          product.minPrice == null ||
+
+      if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
           product.price == null) {
-        ShowDialogUtil.showSimapleDialog(context, '产品价格为空不可上架');
+        _showValidateMsg(context, '产品价格为空不可上架');
+        return;
+      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY &&
+          (product.minPrice == null || product.maxPrice == null)) {
+        _showValidateMsg(context, '产品价格为空不可上架');
         return;
       }
 
@@ -295,6 +299,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
               entrance: '',
             );
           }).then((value) {
+            print('value${value}');
         bool result = false;
         if (value != null && value != '') {
           result = false;
@@ -324,6 +329,26 @@ class _ApparelProductListState extends State<ApparelProductList> {
         }
       });
     }
+  }
+
+  //非空提示
+  bool _showValidateMsg(BuildContext context, String message) {
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context, String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            outsideDismiss: true,
+          );
+        });
   }
 }
 

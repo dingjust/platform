@@ -45,10 +45,30 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   TextEditingController _gramWeightController = TextEditingController();
 
   bool _enabled = false;
+  ApparelProductModel _product = ApparelProductModel();
 
   @override
   void initState() {
     _enabled = widget.enabled;
+    _product
+      ..id = widget.item.id
+      ..name = widget.item.name
+      ..code = widget.item.code
+      ..attributes = widget.item.attributes
+      ..category = widget.item.category
+      ..approvalStatus = widget.item.approvalStatus
+      ..thumbnail = widget.item.thumbnail
+      ..variants = widget.item.variants
+      ..maxPrice = widget.item.maxPrice
+      ..minPrice = widget.item.minPrice
+      ..price = widget.item.price
+      ..belongTo = widget.item.belongTo
+      ..gramWeight = widget.item.gramWeight
+      ..skuID = widget.item.skuID
+      ..thumbnails = widget.item.thumbnails
+      ..images = widget.item.images
+      ..brand = widget.item.brand
+      ..salesVolume = widget.item.salesVolume;
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
@@ -62,36 +82,31 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-//        if (widget.isCreate) {
-//          ShowDialogUtil.showAlertDialog(context, '是否确定退出', () {
-//            _clearProductData();
-//            Navigator.pop(context);
-//            Navigator.pop(context);
-//          });
-//        } else {
-//          Navigator.pop(context);
-//        }
-//        return Future.value(false);
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.CONFIRM_DIALOG,
-                contentText2: '正在创建产品，是否确认退出',
-                isNeedConfirmButton: true,
-                isNeedCancelButton: true,
-                confirmButtonText: '退出',
-                cancelButtonText: '再看看',
-                dialogHeight: 180,
-                confirmAction: () {
-                  //退出清空表单数据
-                  _clearProductData();
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-              );
-            });
+        if (_enabled) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.CONFIRM_DIALOG,
+                  contentText2:
+                      widget.isCreate ? '正在创建产品，是否确认退出' : '正在编辑产品，是否确认退出',
+                  isNeedConfirmButton: true,
+                  isNeedCancelButton: true,
+                  confirmButtonText: '退出',
+                  cancelButtonText: '再看看',
+                  dialogHeight: 180,
+                  confirmAction: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+              }).then((_) {
+            Navigator.of(context).pop();
+          });
+        } else {
+          Navigator.pop(context);
+        }
+
         return Future.value(false);
       },
       child: Scaffold(
@@ -113,28 +128,30 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
             ),
           ],
         ),
-        bottomNavigationBar: !_enabled ? null : Container(
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          height: 50,
-          child: RaisedButton(
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: Text(
-              '确定',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
+        bottomNavigationBar: !_enabled
+            ? null
+            : Container(
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                height: 50,
+                child: RaisedButton(
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  child: Text(
+                    '确定',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  onPressed: onPublish,
+                ),
               ),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: onPublish,
-          ),
-        ),
         body: ListView(
           children: <Widget>[
             NormalPictureField(
-              widget.item,
+              _product,
               enabled: _enabled,
             ),
 //            DetailPictureField(widget.item),
@@ -160,7 +177,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               hintText: !_enabled ? '' : '请填写产品标题',
               textInputAction: TextInputAction.next,
               onChanged: (value) {
-                widget.item.name = value;
+                _product.name = value;
               },
               onEditingComplete: () {
                 FocusScope.of(context).requestFocus(_skuIDFocusNode);
@@ -182,7 +199,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               hintText: !_enabled ? '' : '请填写产品货号',
               textInputAction: TextInputAction.next,
               onChanged: (value) {
-                widget.item.skuID = value;
+                _product.skuID = value;
               },
               onEditingComplete: () {
                 FocusScope.of(context).requestFocus(_brandFocusNode);
@@ -190,11 +207,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               enabled: _enabled,
             ),
             MinorCategoryField(
-              widget.item,
+              _product,
               enabled: _enabled,
             ),
             ColorSizeStockField(
-              widget.item,
+              _product,
               enabled: _enabled,
             ),
             TextFieldComponent(
@@ -211,7 +228,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               hintText: !_enabled ? '' : '请填写品牌',
               textInputAction: TextInputAction.next,
               onChanged: (value) {
-                widget.item.brand = value;
+                _product.brand = value;
               },
               onEditingComplete: () {
                 if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
@@ -244,7 +261,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   DecimalInputFormat(),
                 ],
                 onChanged: (value) {
-                  widget.item.price =
+                  _product.price =
                       ClassHandleUtil.removeSymbolRMBToDouble(value);
                 },
                 onEditingComplete: () {
@@ -254,10 +271,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               ),
             ),
             Offstage(
-              offstage:
-                  UserBLoC.instance.currentUser.type != UserType.FACTORY,
+              offstage: UserBLoC.instance.currentUser.type != UserType.FACTORY,
               child: PricesField(
-                widget.item,
+                _product,
                 enabled: _enabled,
               ),
             ),
@@ -278,11 +294,14 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 DecimalInputFormat(),
               ],
               onChanged: (value) {
-                widget.item.gramWeight = double.parse(value);
+                _product.gramWeight = double.parse(value);
               },
               enabled: _enabled,
             ),
-            AttributesField(widget.item,enabled: _enabled,),
+            AttributesField(
+              _product,
+              enabled: _enabled,
+            ),
 //            PrivacyField(widget.item),
 //            PostageFreeField(widget.item),
             /*Container(
@@ -325,34 +344,34 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   }
 
   onPublish() {
-    if (widget.item.images == null || widget.item.images.isEmpty) {
+    if (_product.images == null || _product.images.isEmpty) {
       _showValidateMsg(context, '请上传主图');
       return;
-    } else if (widget.item.name == null) {
+    } else if (_product.name == null) {
       _showValidateMsg(context, '请填写产品标题');
       return;
-    } else if (widget.item.skuID == null) {
+    } else if (_product.skuID == null) {
       _showValidateMsg(context, '请填写产品货号');
       return;
-    } else if (widget.item.category == null) {
+    } else if (_product.category == null) {
       _showValidateMsg(context, '请选择产品类别');
       return;
     }
-    if (widget.item.variants == null || widget.item.variants.isEmpty) {
+    if (_product.variants == null || _product.variants.isEmpty) {
       _showValidateMsg(context, '请选择颜色尺码');
       return;
     }
     if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        widget.item.price == null) {
+        _product.price == null) {
       _showValidateMsg(context, '请填写产品价格');
       return;
     } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY &&
-        (widget.item.minPrice == null || widget.item.maxPrice == null)) {
+        (_product.minPrice == null || _product.maxPrice == null)) {
       _showValidateMsg(context, '请填写产品价格');
       return;
     }
-    if (widget.item.attributes == null) {
-      widget.item.attributes = ApparelProductAttributesModel();
+    if (_product.attributes == null) {
+      _product.attributes = ApparelProductAttributesModel();
     }
     Navigator.pop(context);
     if (widget.isCreate) {
@@ -361,10 +380,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack:
-                  ProductRepositoryImpl().create(widget.item).then((a) {
-                _clearProductData();
-              }),
+              requestCallBack: ProductRepositoryImpl().create(_product),
               outsideDismiss: false,
               loadingText: '保存中。。。',
               entrance: 'apparelProduct',
@@ -377,10 +393,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack:
-                  ProductRepositoryImpl().update(widget.item).then((a) {
-                _clearProductData();
-              }),
+              requestCallBack: ProductRepositoryImpl().update(_product),
               outsideDismiss: false,
               loadingText: '保存中。。。',
               entrance: 'apparelProduct',
@@ -395,25 +408,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
       ApparelProductBLoC.instance.getData(widget.keyword);
     }
-  }
-
-  void _clearProductData() {
-    widget.item.name = null;
-    widget.item.code = null;
-    widget.item.brand = null;
-    widget.item.images = null;
-    widget.item.category = null;
-    widget.item.id = null;
-    widget.item.attributes = null;
-    widget.item.price = null;
-    widget.item.maxPrice = null;
-    widget.item.approvalStatus = null;
-    widget.item.variants = null;
-    widget.item.thumbnail = null;
-    widget.item.thumbnails = null;
-    widget.item.minPrice = null;
-    widget.item.skuID = null;
-    widget.item.gramWeight = null;
   }
 
   //非空提示
