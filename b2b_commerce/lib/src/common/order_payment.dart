@@ -209,7 +209,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                       width: 100,
                       height: 100,
                       imageUrl:
-                          '${GlobalConfigs.CONTEXT_PATH}${model.product.thumbnail.url}',
+                      '${model.product.thumbnail.previewUrl()}',
                       fit: BoxFit.cover,
                       placeholder: (context, url) => SpinKitRing(
                             color: Colors.black12,
