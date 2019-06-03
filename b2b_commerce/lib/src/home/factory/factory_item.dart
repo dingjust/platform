@@ -75,7 +75,10 @@ class FactoryItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             PopulationScaleText(model: model),
-                            CertifiedTagsAndLabelsText(model: model),
+                            Expanded(
+                              flex: 1,
+                              child: CertifiedTagsAndLabelsText(model: model),
+                            ),
                             StarLevelAndOrdersCountText(model: model),
                           ],
                         ),
@@ -203,7 +206,8 @@ class CertifiedTagsAndLabelsText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row(
+      child: ListView(
+        scrollDirection: Axis.horizontal,
         children: _buildTags(),
       ),
     );
