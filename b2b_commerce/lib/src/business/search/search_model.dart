@@ -186,7 +186,9 @@ class _SearchModelPageState extends State<SearchModelPage> {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   onPressed: () async {
                     onSubmit();
-                    widget.searchModel.keyword = controller.text;
+                    setState(() {
+                      widget.searchModel.keyword = controller.text;
+                    });
                   }),
             ),
           ],
@@ -413,7 +415,9 @@ class _SearchModelPageState extends State<SearchModelPage> {
               children: widget.searchModel.historyKeywords.map((keyword) => HistoryTag(
                 value: keyword,
                 onTap: () {
-                  widget.searchModel.keyword = keyword;
+                  setState(() {
+                    widget.searchModel.keyword = keyword;
+                  });
 //                  Navigator.pop(context);
                   if(widget.searchModel.searchModelType == SearchModelType.PURCHASE_ORDER) {
                     Navigator.push(
