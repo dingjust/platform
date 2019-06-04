@@ -115,4 +115,14 @@ class B2BImage {
   static Image qrCode({double width, double height}) {
     return getImage('temp/QRCode.png', width: width, height: height);
   }
+
+  static Image wechatLogo({double width, double height}) {
+    return getImage('temp/common/icon64_wx_logo.png',
+        width: width, height: height);
+  }
+
+  static Image wechatFriend({double width, double height}) {
+    return getImage('temp/common/wechat_friend.png',
+        width: width, height: height);
+  }
 }

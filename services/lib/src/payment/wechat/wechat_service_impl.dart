@@ -1,9 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:models/models.dart';
-import 'package:services/src/api/payment.dart';
-import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/payment/payment_for.dart';
 import 'package:services/src/payment/wechat/wechat_pay_helper.dart';
 import 'package:services/src/payment/wechat/wechat_service.dart';
@@ -60,13 +57,12 @@ class WechatServiceImpl implements WechatService {
   }
 
   @override
-  Future shareText(String content) {
-    // TODO: implement shareText
+  Future shareText(String content, WeChatScene scene) {
     fluwx
         .share(fluwx.WeChatShareTextModel(
             text: content,
             transaction: "text${DateTime.now().millisecondsSinceEpoch}",
-            scene: fluwx.WeChatScene.SESSION))
+        scene: scene))
         .then((data) {
       print(data);
     });
@@ -79,5 +75,24 @@ class WechatServiceImpl implements WechatService {
   @override
   Future<bool> isWeChatInstalled() async {
     return await fluwx.isWeChatInstalled() as bool;
+  }
+
+  @override
+  Future shareWeb(String url, WeChatScene scene) {
+    fluwx
+        .share(fluwx.WeChatShareWebPageModel(
+        webPage: url,
+        description: '衣加衣',
+        title: '分享测试',
+        thumbnail:
+        'http://file.market.xiaomi.com/thumbnail/PNG/l114/AppStore/0a0ba5bdc893fbd96f4f38ccb46d38e81c6435902',
+        scene: scene))
+        .then((data) {
+      print(data);
+    });
+    //监听微信回调
+    fluwx.responseFromShare.listen((data) {
+      print('>>>>>' + data.toString());
+    });
   }
 }
