@@ -1,9 +1,13 @@
 import 'package:package_info/package_info.dart';
 import 'package:services/services.dart';
+import 'package:connectivity/connectivity.dart';
 
 class AppBLoC extends BLoCBase {
   //包信息
   PackageInfo packageInfo;
+
+  ///网络连接状态
+  ConnectivityResult _connectivityResult;
 
   // 工厂模式
   factory AppBLoC() => _getInstance();
@@ -25,6 +29,12 @@ class AppBLoC extends BLoCBase {
       _instance = AppBLoC._internal();
     }
     return _instance;
+  }
+
+  ConnectivityResult get getConnectivityResult => _connectivityResult;
+
+  void setConnectivityResult(ConnectivityResult result) {
+    _connectivityResult = result;
   }
 
   @override

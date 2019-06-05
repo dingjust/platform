@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
-import 'package:b2b_commerce/src/common/app_bloc.dart';
-import 'package:b2b_commerce/src/common/coming_soon_page.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
@@ -73,13 +71,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    MessageBLoC.instance.snackMessageStream.listen((value) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('$value'),
+      ));
+    });
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {
     WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
-            homePageKey.currentContext,
-            ignoreVersionNotification:
-                UserBLoC.instance.ignoreVersionNotification)
+        homePageKey.currentContext,
+        ignoreVersionNotification:
+        UserBLoC.instance.ignoreVersionNotification)
         .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy'));
     // }
     super.initState();
@@ -186,12 +189,11 @@ class BrandFirstMenuSection extends StatelessWidget {
 //                  );
 //                }
 //            ).then((value){
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                  ProductsPage(),
-                ),
-              );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ProductsPage(),
+              ),
+            );
 //            });
           },
           icon: B2BImage.order(width: 60, height: 80)),
@@ -235,7 +237,7 @@ class BrandSecondMenuSection extends StatelessWidget {
 
   Widget _buildFindFactoriesByMapMenuItem(BuildContext context) {
     return AdvanceIconButton(
-      onPressed: () async{
+      onPressed: () async {
         List<CategoryModel> categories =
             await ProductRepositoryImpl().majorCategories();
         List<LabelModel> labels = await UserRepositoryImpl().labels();
@@ -511,11 +513,13 @@ class BrandTrackingProgressSection extends StatelessWidget {
   }
 }
 
-class FactoryRequirementPoolSection extends StatefulWidget{
-  _FactoryRequirementPoolSection createState() => _FactoryRequirementPoolSection();
+class FactoryRequirementPoolSection extends StatefulWidget {
+  _FactoryRequirementPoolSection createState() =>
+      _FactoryRequirementPoolSection();
 }
 
-class _FactoryRequirementPoolSection extends State<FactoryRequirementPoolSection> {
+class _FactoryRequirementPoolSection
+    extends State<FactoryRequirementPoolSection> {
   int requirementAll = 0;
   int requirementRecommend = 0;
   final StreamController _reportsStreamController =
@@ -544,7 +548,8 @@ class _FactoryRequirementPoolSection extends State<FactoryRequirementPoolSection
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
     if (bloc.currentUser.status != UserStatus.OFFLINE) {
       queryReports();
-    }else if(bloc.currentUser.status == UserStatus.OFFLINE && requirementAll == 0){
+    } else if (bloc.currentUser.status == UserStatus.OFFLINE &&
+        requirementAll == 0) {
       getAllRequirementCount();
     }
     return Container(
@@ -571,9 +576,9 @@ class _FactoryRequirementPoolSection extends State<FactoryRequirementPoolSection
                     }
                   });
                 },
-                child:Container(
+                child: Container(
                   color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   child: AllRequirementMenuItem(count: requirementAll),
                 ),
               );
@@ -598,7 +603,7 @@ class _FactoryRequirementPoolSection extends State<FactoryRequirementPoolSection
                   });
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   color: Colors.white,
                   child: RecommendedRequirementMenuItem(
                       count: requirementRecommend),
@@ -610,7 +615,6 @@ class _FactoryRequirementPoolSection extends State<FactoryRequirementPoolSection
       ),
     );
   }
-
 }
 
 class AllRequirementMenuItem extends StatelessWidget {

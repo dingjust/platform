@@ -53,7 +53,6 @@ dependencies:
   city_pickers: 0.1.12
   autocomplete_textfield: ^1.6.4
   pulltorefresh_flutter: "^0.1.9"
-  package_info: ^0.4.0+2
   cached_network_image: ^0.7.0
   flutter_spinkit: ^3.1.0
   store_redirect: ^1.0.1
