@@ -110,6 +110,27 @@ class PurchaseOrderRepository {
     }
   }
 
+  //批量修改生产进度预计完成时间
+  Future<bool> progressEstimatedDateUploads(String code, String id, List<ProductionProgressModel> forms) async {
+    List<Map<String, dynamic>> entriesToJson(
+    List<PurchaseOrderEntryModel> entries) =>
+    entries.map((entry) => PurchaseOrderEntryModel.toJson(entry)).toList();
+    Response response;
+    try {
+      response = await http$.put(OrderApis.progressEstimatedDateUploads(code, id),
+          data: entriesToJson,
+          options: Options(responseType: ResponseType.plain));
+
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /// 修改订单尾款金额
   Future<bool> purchaseOrderBalanceUpdate(
       String code, PurchaseOrderModel form) async {

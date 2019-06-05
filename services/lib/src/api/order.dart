@@ -69,6 +69,11 @@ class OrderApis {
         return '/{baseSiteId}/orders/purchase/$code/progress/$id';
       };
 
+  //批量修改生产进度预计完成时间
+  static get progressEstimatedDateUploads => (code, id) {
+    return '/{baseSiteId}/orders/purchase/$code/progress/$id';
+  };
+
   //修改生产订单尾款金额
   static get purchaseOrderBalanceUpdate => (code) {
         return '/{baseSiteId}/orders/purchase/$code/balance';

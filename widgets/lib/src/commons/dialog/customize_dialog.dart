@@ -1,4 +1,7 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 
@@ -75,6 +78,21 @@ class CustomizeDialog extends StatefulWidget {
   TextInputType inputType2;
   //跳过的动作
   JumpAction jumpAction;
+  //预计完成时间1
+  DateTime estimatedDate1;
+  //预计完成时间2
+  DateTime estimatedDate2;
+  //预计完成时间3
+  DateTime estimatedDate3;
+  //预计完成时间4
+  DateTime estimatedDate4;
+  //预计完成时间5
+  DateTime estimatedDate5;
+  //生产订单
+  PurchaseOrderModel orderModel;
+  //当前节点序号
+  int currentNode;
+
 
   CustomizeDialog({
     Key key,
@@ -110,6 +128,13 @@ class CustomizeDialog extends StatefulWidget {
     this.inputController,
     this.focusNode,
     this.jumpAction,
+    this.estimatedDate1,
+    this.estimatedDate2,
+    this.estimatedDate3,
+    this.estimatedDate4,
+    this.estimatedDate5,
+    this.orderModel,
+    this.currentNode,
     })
       : super(key: key);
 
@@ -132,6 +157,9 @@ enum DialogType {
 
   //尾款修改弹窗
   BALANCE_INPUT_DIALOG,
+
+  //弹框输入预计完成时间
+  ESTIMATED_DATE
 
 }
 
@@ -158,6 +186,17 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
       return buildManyInputsDialog(context);
     }else if(widget.dialogType == DialogType.BALANCE_INPUT_DIALOG){
       return buildManyInputsBalanceDialog(context);
+    }else if(widget.dialogType == DialogType.ESTIMATED_DATE){
+      return WillPopScope(
+        child: buildEstimatedDateDialog(context),
+        onWillPop: (){
+          if(widget.estimatedDate1 != null && widget.estimatedDate2 != null
+              && widget.estimatedDate3 != null && widget.estimatedDate4 != null
+              && widget.estimatedDate5 != null){
+            Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          }
+        },
+      );
     }
   }
 
@@ -941,6 +980,408 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     );
   }
 
+  Widget buildEstimatedDateDialog(BuildContext context){
+    return GestureDetector(
+      onTap: null,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: SizedBox(
+            width: 300.0,
+            height: 400.0,
+            child: Container(
+              decoration: ShapeDecoration(
+                color: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 30,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 0, 5),
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(top: 5),
+                              child: Center(
+                                child: Text(
+                                  '预计排产日期',
+                                  style: TextStyle(
+                                    fontSize: 18
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 5),
+//                        alignment: Alignment.topLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: (){
+                                if(widget.currentNode <= 0) {
+                                  _showDatePicker(widget.estimatedDate1, 0);
+                                }
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  RichText(
+                                    text: TextSpan(
+                                        text: '',
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: '备料',
+                                            style: TextStyle(
+                                                color: Colors.black
+                                            ),
+                                          ),
+                                          TextSpan(
+                                              text: '*',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              )
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      height: 35,
+                                      margin: const EdgeInsets.all(10),
+                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${widget.estimatedDate1 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate1)}',
+                                          style: TextStyle(
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                if (widget.currentNode <= 1) {
+                                  _showDatePicker(widget.estimatedDate2, 1);
+                                }
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  RichText(
+                                    text: TextSpan(
+                                        text: '',
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: '裁剪',
+                                            style: TextStyle(
+                                                color: Colors.black
+                                            ),
+                                          ),
+                                          TextSpan(
+                                              text: '*',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              )
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      height: 35,
+                                      margin: const EdgeInsets.all(10),
+                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${widget.estimatedDate2 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate2)}',
+                                          style: TextStyle(
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                if (widget.currentNode <= 2) {
+                                  _showDatePicker(widget.estimatedDate3, 2);
+                                }
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  RichText(
+                                    text: TextSpan(
+                                        text: '',
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: '车缝',
+                                            style: TextStyle(
+                                                color: Colors.black
+                                            ),
+                                          ),
+                                          TextSpan(
+                                              text: '*',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              )
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      height: 35,
+                                      margin: const EdgeInsets.all(10),
+                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${widget.estimatedDate3 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate3)}',
+                                          style: TextStyle(
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                if (widget.currentNode <= 3) {
+                                  _showDatePicker(widget.estimatedDate4, 3);
+                                }
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  RichText(
+                                    text: TextSpan(
+                                        text: '',
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: '后整',
+                                            style: TextStyle(
+                                                color: Colors.black
+                                            ),
+                                          ),
+                                          TextSpan(
+                                              text: '*',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              )
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      height: 35,
+                                      margin: const EdgeInsets.all(10),
+                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${widget.estimatedDate4 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate4)}',
+                                          style: TextStyle(
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                if (widget.currentNode <= 4) {
+                                  _showDatePicker(widget.estimatedDate5, 4);
+                                }
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  RichText(
+                                    text: TextSpan(
+                                        text: '',
+                                        style: TextStyle(
+                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: '验货',
+                                            style: TextStyle(
+                                                color: Colors.black
+                                            ),
+                                          ),
+                                          TextSpan(
+                                              text: '*',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              )
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      height: 35,
+                                      margin: const EdgeInsets.all(10),
+                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${widget.estimatedDate5 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate5)}',
+                                          style: TextStyle(
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          '提交所有生产节点排期，才可进行生产报工',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                                child: FlatButton(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 55),
+                                    child: Text(
+                                      '取消',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    onPressed: (){
+
+//                                        Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                                      Navigator.of(context).pop();
+                                    }
+                                )
+                            ),
+                          ),
+                          Center(
+                            child: Container(
+                              child: FlatButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 55),
+                                  child: Text(
+                                    '提交',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                  onPressed: (){
+                                    onSubmitDate();
+                                  }
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border(left: BorderSide(
+                                      color: Colors.grey, width: 0.5))
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              top: BorderSide(color: Colors.grey, width: 0.5))
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   doSomething(){
     print('按按钮了！');
@@ -952,6 +1393,105 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
 //      });
     }else{
       Navigator.of(context).pop();
+    }
+  }
+
+  //打开日期选择器
+  void _showDatePicker(DateTime date,int index) {
+    _selectDate(context,date,index);
+  }
+  //生成日期选择器
+  Future<Null> _selectDate(BuildContext context,DateTime date,int index) async {
+    DateTime nowTime = DateTime.now();
+    final DateTime _picked = await showDatePicker(
+        context: context,
+        initialDate: nowTime,
+        firstDate: nowTime,
+        lastDate: DateTime(2999)
+    );
+
+    setState(() {
+      if (index == 0) {
+        widget.estimatedDate1 = _picked;
+      } else if (index == 1) {
+        widget.estimatedDate2 = _picked;
+      } else if (index == 2) {
+        widget.estimatedDate3 = _picked;
+      } else if (index == 3) {
+        widget.estimatedDate4 = _picked;
+      } else if (index == 4) {
+        widget.estimatedDate5 = _picked;
+      }
+
+    });
+  }
+
+  onSubmitDate() {
+    if (widget.estimatedDate1 != null && widget.estimatedDate2 != null
+        && widget.estimatedDate3 != null && widget.estimatedDate4 != null
+        && widget.estimatedDate5 != null) {
+
+      if(widget.orderModel != null){
+        print(widget.estimatedDate1);
+        ProductionProgressModel model1 = widget.orderModel.progresses[0];
+        model1.estimatedDate = widget.estimatedDate1;
+        model1.updateOnly = true;
+
+        ProductionProgressModel model2 = widget.orderModel.progresses[1];
+        model2.estimatedDate = widget.estimatedDate2;
+        model2.updateOnly = true;
+
+        ProductionProgressModel model3 = widget.orderModel.progresses[2];
+        model3.estimatedDate = widget.estimatedDate3;
+        model3.updateOnly = true;
+
+        ProductionProgressModel model4 = widget.orderModel.progresses[3];
+        model4.estimatedDate = widget.estimatedDate4;
+        model4.updateOnly = true;
+
+        ProductionProgressModel model5 = widget.orderModel.progresses[4];
+        model5.estimatedDate = widget.estimatedDate5;
+        model5.updateOnly = true;
+
+        for(int i=0;i<widget.orderModel.progresses.length;i++){
+          if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.MATERIAL_PREPARATION){
+            model1.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
+          }else if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.CUTTING){
+            model2.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
+          }else if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.STITCHING){
+            model3.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
+          }else if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.AFTER_FINISHING){
+            model4.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
+          }else if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.INSPECTION){
+            model5.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
+          }
+        }
+
+        List<ProductionProgressModel> modelList = List();
+        modelList.add(model1);
+        modelList.add(model2);
+        modelList.add(model3);
+        modelList.add(model4);
+        modelList.add(model5);
+
+        try{
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return RequestDataLoading(
+                  requestCallBack: PurchaseOrderRepository().progressEstimatedDateUploads(widget.orderModel.code,model5.id.toString(),modelList),
+                  outsideDismiss: false,
+                  loadingText: '保存中。。。',
+                  entrance: '',
+                );
+              }
+          );
+        }catch(e){
+          print(e);
+        }
+        Navigator.of(context).pop(widget.orderModel);
+      }
     }
   }
 
