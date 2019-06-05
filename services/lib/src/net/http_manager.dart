@@ -95,7 +95,9 @@ class HttpManager {
         //   MessageBLoC.instance.errorMessageController
         //       .add('${errorResponse.errors[0].message}');
         // }
-        MessageBLoC.instance.errorMessageController.add('网络异常');
+        if (e.request.headers['ignoreAlert'] ?? 0 == 0) {
+          MessageBLoC.instance.errorMessageController.add('网络异常');
+        }
         // 当请求失败时做一些预处理
         if (GlobalConfigs.DEBUG) {
           print(e.toString());

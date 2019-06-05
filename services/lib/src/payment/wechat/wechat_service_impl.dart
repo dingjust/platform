@@ -78,14 +78,14 @@ class WechatServiceImpl implements WechatService {
   }
 
   @override
-  Future shareWeb(String url, WeChatScene scene) {
+  Future shareWeb(String url, WeChatScene scene, String title,
+      String description, String thumbnail) {
     fluwx
         .share(fluwx.WeChatShareWebPageModel(
         webPage: url,
-        description: '衣加衣',
-        title: '分享测试',
-        thumbnail:
-        'http://file.market.xiaomi.com/thumbnail/PNG/l114/AppStore/0a0ba5bdc893fbd96f4f38ccb46d38e81c6435902',
+        description: '$description',
+        title: '$title',
+        thumbnail: '$thumbnail',
         scene: scene))
         .then((data) {
       print(data);

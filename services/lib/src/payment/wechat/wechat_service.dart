@@ -8,8 +8,9 @@ abstract class WechatService {
   ///微信文字分享
   Future shareText(String content, WeChatScene scene);
 
-  ///微信文字分享
-  Future shareWeb(String content, WeChatScene scene);
+  ///微信WEB分享
+  Future shareWeb(String url, WeChatScene scene, String title,
+      String description, String thumbnail);
 
   ///检测微信是否安装
   Future<bool> isWeChatInstalled();

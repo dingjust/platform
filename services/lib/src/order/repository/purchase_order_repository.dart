@@ -77,7 +77,8 @@ class PurchaseOrderRepository {
   Future<PurchaseOrderModel> getDetailsForUniqueCode(String code) async {
     Response<Map<String, dynamic>> response;
     try {
-      response = await http$.get(OrderApis.getDetailsForUniqueCode(code));
+      response = await http$.get(OrderApis.getDetailsForUniqueCode(code),
+          options: Options(headers: {'ignoreAlert': 1}));
     } on DioError catch (e) {
       return null;
     }
