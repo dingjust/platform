@@ -45,7 +45,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
       userType = 'brand';
     }else{
       userType = 'factory';
-//      WidgetsBinding.instance.addPostFrameCallback((_) => setEstimatedDate(context));
+      WidgetsBinding.instance.addPostFrameCallback((_) => setEstimatedDate(context));
     }
     super.initState();
   }
@@ -122,7 +122,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
           borderRadius: BorderRadius.circular(5),
         ),
       ),
-      bottomNavigationBar: UserBLoC().isFactoryUser?Container(
+      bottomNavigationBar: UserBLoC().isBrandUser?Container(
         padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
         child: RaisedButton(
             color: Color.fromRGBO(15,213,30,1),
@@ -144,12 +144,12 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
-              setEstimatedDate(context);
-//              if(order.salesApplication == SalesApplication.ONLINE) {
-//                _selectActionButton(order.belongTo.contactPhone);
-//              }else{
-//                _selectActionButton(order.contactOfSeller);
-//              }
+//              setEstimatedDate(context);
+              if(order.salesApplication == SalesApplication.ONLINE) {
+                _selectActionButton(order.belongTo.contactPhone);
+              }else{
+                _selectActionButton(order.contactOfSeller);
+              }
             }),
       ):null,
     );
