@@ -34,29 +34,77 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   _ProductionProgressesPageState({this.order});
 
+
+
   @override
   void initState() {
+
     nowTime = DateTime.now();
     final bloc = BLoCProvider.of<UserBLoC>(context);
     if(bloc.isBrandUser){
       userType = 'brand';
     }else{
       userType = 'factory';
-
-      if(order != null && order.progresses != null ){
-
-        materialDate = order.progresses[0].estimatedDate;
-        cuttingDate = order.progresses[1].estimatedDate;
-        stitchingDate = order.progresses[2].estimatedDate;
-        afterDate = order.progresses[3].estimatedDate;
-        inspectionDate = order.progresses[4].estimatedDate;
-
-      }
-
-
+      WidgetsBinding.instance.addPostFrameCallback((_) => setEstimatedDate(context));
     }
     super.initState();
   }
+
+  setEstimatedDate(BuildContext context) async{
+    if(order != null && order.progresses != null && order.status == PurchaseOrderStatus.IN_PRODUCTION){
+      for(int i=0;i<order.progresses.length;i++){
+        if(order.progresses[i].phase == ProductionProgressPhase.MATERIAL_PREPARATION){
+          materialDate = order.progresses[i].estimatedDate;
+        }else if(order.progresses[i].phase == ProductionProgressPhase.CUTTING){
+          cuttingDate = order.progresses[i].estimatedDate;
+        }else if(order.progresses[i].phase == ProductionProgressPhase.STITCHING){
+          stitchingDate = order.progresses[i].estimatedDate;
+        }else if(order.progresses[i].phase == ProductionProgressPhase.AFTER_FINISHING){
+          afterDate = order.progresses[i].estimatedDate;
+        }else if(order.progresses[i].phase == ProductionProgressPhase.INSPECTION){
+          inspectionDate = order.progresses[i].estimatedDate;
+        }
+      }
+
+      if (materialDate == null || cuttingDate == null
+          || stitchingDate == null || afterDate == null
+          || inspectionDate == null) {
+        int _index = 0;
+        for(int i =0; i< order.progresses.length; i++){
+          if (ProductionProgressPhaseLocalizedMap[order.progresses[i].phase] == ProductionProgressPhaseLocalizedMap[order.currentPhase]) {
+            _index = order.progresses[i].sequence;
+          }
+        }
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.ESTIMATED_DATE,
+                orderModel: order,
+                estimatedDate1: materialDate,
+                estimatedDate2: cuttingDate,
+                estimatedDate3: stitchingDate,
+                estimatedDate4: afterDate,
+                estimatedDate5: inspectionDate,
+                currentNode: _index,
+              );
+            }
+        ).then((value){
+          if(value != null) {
+            setState(() {
+              order = value;
+            });
+          }else{
+            Navigator.of(context).pop();
+          }
+        });
+      }
+
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +144,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
+//              setEstimatedDate(context);
               if(order.salesApplication == SalesApplication.ONLINE) {
                 _selectActionButton(order.belongTo.contactPhone);
               }else{

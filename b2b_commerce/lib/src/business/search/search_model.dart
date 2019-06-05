@@ -87,12 +87,24 @@ class _SearchModelPageState extends State<SearchModelPage> {
   TextEditingController controller = TextEditingController();
   FocusNode focusNode = FocusNode();
 
+  String searchText = '';
+
   @override
   void initState() {
     if(widget.searchModel.keyword != null && widget.searchModel.keyword != ''){
       controller.text = widget.searchModel.keyword;
     }
     super.initState();
+
+    if(SearchModelType.EXIST_PRODUCT == widget.searchModel.searchModelType
+        || SearchModelType.PRODUCT == widget.searchModel.searchModelType){
+      searchText = '请输入编码，名称，货号搜索';
+    }else if(SearchModelType.FACTORY == widget.searchModel.searchModelType){
+      searchText = '请输入编码，名称搜索';
+    }else{
+      searchText = '请输入订单号，名称，货号搜索';
+    }
+
 //    getHistory();
   }
 
@@ -128,6 +140,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   border: Border.all(color: Colors.grey[300], width: 0.5),
                 ),
                 child: Container(
+                  margin: EdgeInsets.only(bottom: 5),
                   padding: EdgeInsets.only(left: 10),
                   child: Row(
                     children: <Widget>[
@@ -137,7 +150,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
                           focusNode: focusNode,
                           autofocus: true,
                           decoration: InputDecoration(
-                            hintText: '请输入订单号，名称，货号搜索',
+                            hintText: '${searchText}',
                             hintStyle: TextStyle(
                               color: Colors.grey
                             ),
