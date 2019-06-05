@@ -112,13 +112,13 @@ class PurchaseOrderRepository {
 
   //批量修改生产进度预计完成时间
   Future<bool> progressEstimatedDateUploads(String code, String id, List<ProductionProgressModel> forms) async {
-    List<Map<String, dynamic>> entriesToJson(
-    List<PurchaseOrderEntryModel> entries) =>
-    entries.map((entry) => PurchaseOrderEntryModel.toJson(entry)).toList();
+//    List<Map<String, dynamic>> entriesToJson(List<PurchaseOrderEntryModel> entries) =>
+//    entries.map((entry) => PurchaseOrderEntryModel.toJson(entry)).toList();
+    List<Map<String,dynamic>> data = forms.map((progress) => ProductionProgressModel.toJson(progress)).toList();
     Response response;
     try {
       response = await http$.put(OrderApis.progressEstimatedDateUploads(code, id),
-          data: entriesToJson,
+          data: data,
           options: Options(responseType: ResponseType.plain));
 
     } on DioError catch (e) {

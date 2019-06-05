@@ -1432,7 +1432,6 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         && widget.estimatedDate5 != null) {
 
       if(widget.orderModel != null){
-        print(widget.estimatedDate1);
         ProductionProgressModel model1 = widget.orderModel.progresses[0];
         model1.estimatedDate = widget.estimatedDate1;
         model1.updateOnly = true;
@@ -1474,22 +1473,23 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         modelList.add(model4);
         modelList.add(model5);
 
-        try{
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) {
-                return RequestDataLoading(
-                  requestCallBack: PurchaseOrderRepository().progressEstimatedDateUploads(widget.orderModel.code,model5.id.toString(),modelList),
-                  outsideDismiss: false,
-                  loadingText: '保存中。。。',
-                  entrance: '',
-                );
-              }
-          );
-        }catch(e){
-          print(e);
-        }
+        PurchaseOrderRepository().progressEstimatedDateUploads(widget.orderModel.code,model5.id.toString(),modelList);
+//        try{
+//          showDialog(
+//              context: context,
+//              barrierDismissible: false,
+//              builder: (_) {
+//                return RequestDataLoading(
+//                  requestCallBack: PurchaseOrderRepository().progressEstimatedDateUploads(widget.orderModel.code,model5.id.toString(),modelList),
+//                  outsideDismiss: false,
+//                  loadingText: '保存中。。。',
+//                  entrance: '',
+//                );
+//              }
+//          );
+//        }catch(e){
+//          print(e);
+//        }
         Navigator.of(context).pop(widget.orderModel);
       }
     }

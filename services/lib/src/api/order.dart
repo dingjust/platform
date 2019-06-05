@@ -71,7 +71,7 @@ class OrderApis {
 
   //批量修改生产进度预计完成时间
   static get progressEstimatedDateUploads => (code, id) {
-    return '/{baseSiteId}/orders/purchase/$code/progress/$id';
+    return '/{baseSiteId}/orders/purchase/$code/progresses';
   };
 
   //修改生产订单尾款金额
