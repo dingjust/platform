@@ -4,13 +4,14 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class RequirementSearchResultPage extends StatefulWidget{
+class RequirementSearchResultPage extends StatefulWidget {
   RequirementSearchResultPage({
     Key key,
     @required this.searchModel,
@@ -18,10 +19,12 @@ class RequirementSearchResultPage extends StatefulWidget{
 
   SearchModel searchModel;
 
-  _RequirementSearchResultPageState createState() => _RequirementSearchResultPageState();
+  _RequirementSearchResultPageState createState() =>
+      _RequirementSearchResultPageState();
 }
 
-class _RequirementSearchResultPageState extends State<RequirementSearchResultPage>{
+class _RequirementSearchResultPageState
+    extends State<RequirementSearchResultPage> {
   final GlobalKey _globalKey = GlobalKey<_RequirementSearchResultPageState>();
   List<String> historyKeywords;
 
@@ -38,7 +41,7 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
               children: <Widget>[
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       onClick();
                     },
                     child: Container(
@@ -69,7 +72,7 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
             keyword: widget.searchModel.keyword,
           ),
         ),
-        onWillPop: (){
+        onWillPop: () {
           Navigator.of(context).pop();
           RequirementOrderBLoC().refreshData('ALL');
         },
@@ -77,24 +80,23 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
     );
   }
 
-  void onClick(){
+  void onClick() {
     Navigator.pop(context);
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+            requestCallBack:
+            LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
             outsideDismiss: false,
             loadingText: '加载中。。。',
             entrance: '',
           );
-        }
-    ).then((value){
+        }).then((value) {
       if (value != null && value != '') {
         List<dynamic> list = json.decode(value);
         historyKeywords = list.map((item) => item as String).toList();
-
       } else {
         historyKeywords = [];
       }
@@ -114,9 +116,7 @@ class _RequirementSearchResultPageState extends State<RequirementSearchResultPag
       );
     });
   }
-
 }
-
 
 class RequirementOrderListView extends StatelessWidget {
   String keyword;
@@ -188,23 +188,31 @@ class RequirementOrderListView extends StatelessWidget {
                         ),
                         Container(
                             child: Text(
-                              '没有相关订单数据',
+                              AppBLoC.instance.getConnectivityResult ==
+                                  ConnectivityResult.none
+                                  ? '网络链接不可用请重试'
+                                  : '没有相关订单数据',
                               style: TextStyle(
                                 color: Colors.grey,
                               ),
                             )),
-                        Container(
+                        AppBLoC.instance.getConnectivityResult !=
+                            ConnectivityResult.none
+                            ? Container(
                           child: FlatButton(
                             color: Color.fromRGBO(255, 214, 12, 1),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MyHelpPage()));
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MyHelpPage()));
                             },
                             child: Text('如何创建订单？'),
                           ),
                         )
+                            : Container()
                       ],
                     );
                   }

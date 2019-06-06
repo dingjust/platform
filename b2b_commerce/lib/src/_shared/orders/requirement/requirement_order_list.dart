@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/my/my_help.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -111,12 +112,17 @@ class _RequirementOrderListState extends State<RequirementOrderList>
                       ),
                       Container(
                           child: Text(
-                            '没有相关订单数据',
+                            AppBLoC.instance.getConnectivityResult ==
+                                ConnectivityResult.none
+                                ? '网络链接不可用请重试'
+                                : '没有相关订单数据',
                             style: TextStyle(
                               color: Colors.grey,
                             ),
                           )),
-                      Container(
+                      AppBLoC.instance.getConnectivityResult !=
+                          ConnectivityResult.none
+                          ? Container(
                         child: FlatButton(
                           color: Color.fromRGBO(255, 214, 12, 1),
                           shape: RoundedRectangleBorder(
@@ -128,6 +134,7 @@ class _RequirementOrderListState extends State<RequirementOrderList>
                           child: Text('如何发布需求？'),
                         ),
                       )
+                          : Container()
                     ],
                   );
                 }
