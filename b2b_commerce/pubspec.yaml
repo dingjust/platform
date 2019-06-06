@@ -60,6 +60,8 @@ dependencies:
   alipay_me: ^1.0.0
   amap_location: ^0.2.0
   simple_permissions: ^0.1.9
+  flutter_qq: ^0.0.4
+
 
 dev_dependencies:
   flutter_test:

@@ -31,7 +31,8 @@ dependencies:
   simple_permissions: ^0.1.9
   alipay_me: ^1.0.0
   package_info: ^0.4.0+2
-
+  flutter_qq: ^0.0.4
+    
 
 
 

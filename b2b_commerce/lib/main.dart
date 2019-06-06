@@ -144,18 +144,19 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   /// 发布需求
   void _onPublish(BuildContext context) async {
-    requirementOrderModel =
-        RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
+    QQService().share();
+    // requirementOrderModel =
+    //     RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => RequirementOrderFrom(
-              isCreate: true,
-              order: requirementOrderModel,
-            ),
-      ),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => RequirementOrderFrom(
+    //           isCreate: true,
+    //           order: requirementOrderModel,
+    //         ),
+    //   ),
+    // );
   }
 
   bool _isBrand() {
