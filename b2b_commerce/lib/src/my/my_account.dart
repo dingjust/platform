@@ -5,128 +5,167 @@ import 'package:widgets/widgets.dart';
 
 /// 我的账户
 class MyAccountPage extends StatelessWidget {
+  ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: ListView(
-          children: <Widget>[
-            _buildTitle(context),
-            _buildBill(context),
-            _buildBlankCard(context),
+        color: Color.fromRGBO(245, 245, 245, 1),
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: <Widget>[
+            SliverAppBar(
+              expandedHeight: 200,
+              pinned: true,
+              elevation: 0.5,
+              backgroundColor: const Color.fromRGBO(255, 219, 0, 1),
+              centerTitle: true,
+              title: Text(
+                '我的账户',
+                style: TextStyle(
+                  color: Color.fromRGBO(36, 38, 41, 1),
+                  fontSize: 22,
+                ),
+              ),
+              actions: <Widget>[_buildAction(context)],
+              brightness: Brightness.dark,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[_buildHeader(context)],
+                ),
+              ),
+            ),
+            SliverList(
+                delegate: SliverChildListDelegate([
+                  _buildBill(context),
+                  _buildBlankCard(context),
+                ])),
           ],
+        ),
+      ),
+      bottomSheet: Container(
+        height: 50,
+        width: double.infinity,
+        child: FlatButton(
+          onPressed: () {},
+          color: const Color.fromRGBO(255, 219, 0, 1),
+          child: Text(
+            '提现',
+            style: TextStyle(fontSize: 20),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTitle(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Center(
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      child: IconButton(
-                        icon: Icon(Icons.chevron_left),
-                        color: Color.fromRGBO(36, 38, 41, 1),
-                        iconSize: 30,
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Container(
-                          child: Text(
-                            '我的账户',
-                            style: TextStyle(
-                              color: Color.fromRGBO(36, 38, 41, 1),
-                              fontSize: 22,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                        child: Center(
-                          child: const Text(
-                            '提现',
-                            style: const TextStyle(
-                              color: const Color.fromRGBO(36, 38, 41, 1),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => WithdrawCash()),
-                        );
-                      },
-                    )
-                  ],
-                ),
-              ),
+  Widget _buildAction(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+        child: Center(
+          child: const Text(
+            '交易明细',
+            style: const TextStyle(
+              color: const Color.fromRGBO(36, 38, 41, 1),
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                        child: Text(
-                      "￥",
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                        color: const Color.fromRGBO(36, 38, 41, 1),
-                      ),
-                    )),
-                    Container(
-                        child: Text(
-                      "987652.00",
-                      style: const TextStyle(
-                        fontSize: 44,
-                        fontWeight: FontWeight.w500,
-                        color: const Color.fromRGBO(36, 38, 41, 1),
-                      ),
-                    ))
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
-              child: Text(
-                '余额',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: const Color.fromRGBO(36, 38, 41, 1),
-                ),
-              ),
-            )
-          ],
+          ),
         ),
       ),
-      decoration: const BoxDecoration(color: const Color.fromRGBO(255, 219, 0, 1)),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WithdrawCash()),
+        );
+      },
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 50),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          _buildTotal(),
+          Text(
+            '总金额',
+            style: TextStyle(color: Colors.black45),
+          ),
+          Divider(
+            color: Colors.white,
+          ),
+          _buildAmountRow()
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTotal() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                      child: Text(
+                        "￥",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: const Color.fromRGBO(36, 38, 41, 1),
+                        ),
+                      )),
+                  Container(
+                      child: Text(
+                        "987652.00",
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w500,
+                          color: const Color.fromRGBO(36, 38, 41, 1),
+                        ),
+                      ))
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAmountRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        AmountBlock(
+          amount: 5899.00,
+          text: '可取金额',
+        ),
+        AmountBlock(
+          amount: 5899.00,
+          text: '提现中金额',
+        ),
+        AmountBlock(
+          amount: 5899.00,
+          text: '未结算金额',
+        )
+      ],
     );
   }
 
   Widget _buildBill(BuildContext context) {
     return Container(
-      color: Color.fromRGBO(245, 245, 245, 1),
+      padding: EdgeInsets.only(top: 20),
       child: Column(
         children: <Widget>[
           Container(
@@ -135,7 +174,10 @@ class MyAccountPage extends StatelessWidget {
                 margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
                 child: Text(
                   "账单",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Colors.black45),
                 ),
               ),
             ),
@@ -153,9 +195,9 @@ class MyAccountPage extends StatelessWidget {
                       children: <Widget>[
                         Expanded(
                             child: Text(
-                          '本月收支',
-                          style: TextStyle(fontSize: 20),
-                        )),
+                              '本月收支',
+                              style: TextStyle(fontSize: 20),
+                            )),
                         Icon(
                           Icons.chevron_right,
                           color: Colors.grey,
@@ -228,20 +270,25 @@ class MyAccountPage extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          FlatButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: BorderSide(color: Colors.black26, width: 0.5)),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            onPressed: () {},
             child: Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
                       child: Text(
-                    '＋ 添加银行卡',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: Color(0xFFFF9516),
-                    ),
-                  )),
+                        '＋ 添加银行卡',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          color: Color(0xFFFF9516),
+                        ),
+                      )),
                   Container(
                     child: Text(
                       '支持农行、工行、招行和建行',
@@ -254,17 +301,45 @@ class MyAccountPage extends StatelessWidget {
                 ],
               ),
             ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black26, width: 0.5),
-              borderRadius: BorderRadius.circular(5),
-            ),
-          ),
+          )
         ],
       ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
+      ),
+    );
+  }
+}
+
+class AmountBlock extends StatelessWidget {
+  final String text;
+
+  final double amount;
+
+  final double width;
+
+  final double height;
+
+  const AmountBlock(
+      {Key key, this.text, this.amount, this.width = 50, this.height = 50})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            '￥$amount',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            '$text',
+            style: TextStyle(color: Colors.black54),
+          )
+        ],
       ),
     );
   }
