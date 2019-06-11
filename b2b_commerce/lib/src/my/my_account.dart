@@ -1,10 +1,16 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
 /// 我的账户
-class MyAccountPage extends StatelessWidget {
+class MyAccountPage extends StatefulWidget {
+  @override
+  _MyAccountPageState createState() => _MyAccountPageState();
+}
+
+class _MyAccountPageState extends State<MyAccountPage> {
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -275,7 +281,7 @@ class MyAccountPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
                 side: BorderSide(color: Colors.black26, width: 0.5)),
             padding: EdgeInsets.symmetric(vertical: 10),
-            onPressed: () {},
+            onPressed: onAddCard,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -309,6 +315,11 @@ class MyAccountPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
     );
+  }
+
+  void onAddCard() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
   }
 }
 
