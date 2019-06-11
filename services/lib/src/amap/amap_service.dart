@@ -4,7 +4,6 @@ import 'package:services/src/amap/amap_response.dart';
 import 'package:services/src/api/apis.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:amap_location/amap_location.dart';
-import 'package:simple_permissions/simple_permissions.dart';
 
 class AmapService {
   // 工厂模式
@@ -73,23 +72,25 @@ class AmapService {
     AMapLocationClient.startup(AMapLocationOption(
         desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
     print('check==============');
-    bool hasPermission =
-        await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
-    print('check==============');
 
-    if (!hasPermission) {
-      print('request==============');
+    // PermissionStatus permission =
+    //     await LocationPermissions().checkPermissionStatus();
 
-      PermissionStatus requestPermissionResult =
-          await SimplePermissions.requestPermission(
-              Permission.WhenInUseLocation);
-      print('request==============');
+    // print('check==============');
 
-      if (requestPermissionResult != PermissionStatus.authorized) {
-        print('定位权限失败');
-        return null;
-      }
-    }
+    // if (permission != PermissionStatus.granted) {
+    //   print('request==============');
+
+    //   PermissionStatus permission =
+    //       await LocationPermissions().requestPermissions();
+
+    //   print('request==============');
+
+    //   if (permission != PermissionStatus.granted) {
+    //     print('定位权限失败');
+    //     return null;
+    //   }
+    // }
     AMapLocation aMapLocation = await AMapLocationClient.getLocation(true);
     AMapLocationClient.stopLocation();
     print('${aMapLocation.longitude}           ${aMapLocation.latitude}');

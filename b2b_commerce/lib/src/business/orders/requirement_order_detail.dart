@@ -938,7 +938,26 @@ class _RequirementOrderDetailPageState
 
   ///TODO分享
   void onShare() {
-    ShareDialog.showShareDialog(context);
+    String title = '';
+    String description =
+        " ${widget.order.details.category?.name}   ${widget.order.details
+        .expectedMachiningQuantity}件\n 交货时间:${DateFormatUtil.formatYMD(
+        widget.order.details.expectedDeliveryDate)}";
+
+    if (widget.order.details.productName != null &&
+        widget.order.details.productName != '') {
+      title = widget.order.details.productName;
+    } else {
+      title = widget.order.details.category.name;
+    }
+
+    ShareDialog.showShareDialog(context,
+        title: '$title',
+        description: '$description',
+        imageUrl: widget.order.details.pictures.isEmpty
+            ? '${GlobalConfigs.LOGO_URL}'
+            : '${widget.order.details.pictures[0].previewUrl()}',
+        url: Apis.shareRequirement(widget.order.code));
   }
 
   void onReview() {

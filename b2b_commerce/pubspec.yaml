@@ -59,8 +59,9 @@ dependencies:
   # image_gallery_saver: ^1.1.0
   alipay_me: ^1.0.0
   amap_location: ^0.2.0
-  simple_permissions: ^0.1.9
+  # simple_permissions: ^0.1.9
   flutter_qq: ^0.0.4
+  # permission_handler: ^3.1.0
 
 
 dev_dependencies:
@@ -146,6 +147,8 @@ flutter:
     - packages/assets/temp/QRCode.png
     - packages/assets/temp/common/icon64_wx_logo.png
     - packages/assets/temp/common/wechat_friend.png
+    - packages/assets/temp/common/qq_logo.png
+    - packages/assets/temp/common/qq_zone.png
 
   fonts:
     - family: b2bIcons

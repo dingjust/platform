@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_from_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
@@ -52,7 +53,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
   StreamController<bool> _showEidtIconStreamController = StreamController();
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _showEidtIconStreamController.close();
   }
@@ -66,10 +67,10 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   //获取工厂数据
   _getFactoryData() {
-      return UserRepositoryImpl().getFactory(widget.factoryUid).then((v) {
-        _showEidtIconStreamController.sink.add(true);
-        return _factory = v;
-      });
+    return UserRepositoryImpl().getFactory(widget.factoryUid).then((v) {
+      _showEidtIconStreamController.sink.add(true);
+      return _factory = v;
+    });
   }
 
   //获取工厂现款产品数据
@@ -87,7 +88,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
           }, widget.factoryUid);
   }
 
-  Widget _buildView(String code,FactoryModel factory) {
+  Widget _buildView(String code, FactoryModel factory) {
     switch (code) {
       case 'a':
         return _buildBaseInfo(factory);
@@ -115,26 +116,65 @@ class _MyFactoryPageState extends State<MyFactoryPage>
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          Offstage(
-            offstage: widget.isFactoryDetail,
-            child: StreamBuilder(
-              stream: _showEidtIconStreamController.stream,
-              builder:(context,snapshot){
-                if(snapshot.hasData && snapshot.data){
-                  return IconButton(
-                      icon: Text('编辑'),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyFactoryFormPage(factory: _factory,))).then((v){
-                          setState(() {
-                            _getFactoryFuture = _getFactoryData();
-                          });
-                        });
-                      });
-                }else{
-                  return Container();
-                }
-              },
-            ),
+          StreamBuilder(
+            stream: _showEidtIconStreamController.stream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data) {
+                return PopupMenuButton<String>(
+                  onSelected: (v) => onMenuSelect(v),
+                  padding: EdgeInsets.only(right: 10),
+                  icon: Icon(
+                    B2BIcons.more,
+                    size: 5,
+                  ),
+                  offset: Offset(0, 50),
+                  itemBuilder: (BuildContext context) =>
+                  widget.isFactoryDetail
+                      ? <PopupMenuItem<String>>[
+                    PopupMenuItem<String>(
+                      value: 'share',
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(right: 20),
+                            child: Icon(Icons.share),
+                          ),
+                          Text('分享')
+                        ],
+                      ),
+                    ),
+                  ]
+                      : <PopupMenuItem<String>>[
+                    PopupMenuItem<String>(
+                      value: 'edit',
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(right: 20),
+                            child: Icon(Icons.edit),
+                          ),
+                          Text('编辑')
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'share',
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(right: 20),
+                            child: Icon(Icons.share),
+                          ),
+                          Text('分享')
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Container();
+              }
+            },
           ),
         ],
       ),
@@ -146,7 +186,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                 padding: EdgeInsets.symmetric(vertical: 200),
                 child: Center(child: CircularProgressIndicator()),
               );
-            }else{
+            } else {
               _profiles = _factory.profiles.where((profile) {
                 return profile.medias.isNotEmpty;
               }).toList();
@@ -157,7 +197,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                   body: TabBarView(
                     controller: _tabController,
                     children: _states.map((state) {
-                      return _buildView(state.code,snapshot.data);
+                      return _buildView(state.code, snapshot.data);
                     }).toList(),
                   ),
                 ),
@@ -203,7 +243,8 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     return <Widget>[
       SliverAppBar(
         backgroundColor: Color.fromRGBO(232, 232, 232, 1),
-        expandedHeight: widget.isFactoryDetail && _profiles.length <= 0 ? 0 :188,
+        expandedHeight:
+        widget.isFactoryDetail && _profiles.length <= 0 ? 0 : 188,
         leading: Container(),
         brightness: Brightness.dark,
         pinned: false,
@@ -232,8 +273,10 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                     ),
                   ],
                   position: RelativeRect.fromLTRB(
-                      (MediaQueryData.fromWindow(window).size.width - 180) /
-                          2,
+                      (MediaQueryData
+                          .fromWindow(window)
+                          .size
+                          .width - 180) / 2,
                       100,
                       (MediaQueryData.fromWindow(window).size.width) / 2,
                       (MediaQueryData.fromWindow(window).size.height - 60) /
@@ -242,11 +285,19 @@ class _MyFactoryPageState extends State<MyFactoryPage>
           },
           child: Container(
             height: 188,
-            child: _profiles.isEmpty ? Center(child: Stack(
-              children: <Widget>[
-                Text(widget.isFactoryDetail ? '该工厂无轮播图' : '点击此处，添加或更换轮播图',style: TextStyle(fontSize: 17,color: Colors.grey[700]),),
-              ],
-            ),) : _buildCarousel(),
+            child: _profiles.isEmpty
+                ? Center(
+              child: Stack(
+                children: <Widget>[
+                  Text(
+                    widget.isFactoryDetail ? '该工厂无轮播图' : '点击此处，添加或更换轮播图',
+                    style:
+                    TextStyle(fontSize: 17, color: Colors.grey[700]),
+                  ),
+                ],
+              ),
+            )
+                : _buildCarousel(),
           ),
         ),
       ),
@@ -302,10 +353,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   //基本资料
   Widget _buildBaseInfo(FactoryModel factory) {
-    return MyFactoryBaseInfo(
-      factory,
-      isSupplier:widget.isSupplier
-    );
+    return MyFactoryBaseInfo(factory, isSupplier: widget.isSupplier);
   }
 
   Widget _buildContactWay(FactoryModel factory) {
@@ -319,7 +367,10 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   //现款产品
   Widget _buildCashProducts(FactoryModel factory) {
-    return MyCompanyCashProducts(factory,getProductsFuture: _getProductData(),);
+    return MyCompanyCashProducts(
+      factory,
+      getProductsFuture: _getProductData(),
+    );
   }
 
   Widget _buildCompanyCertificate(FactoryModel factory) {
@@ -330,6 +381,53 @@ class _MyFactoryPageState extends State<MyFactoryPage>
         onlyRead: true,
       ),
     );
+  }
+
+  onMenuSelect(String value) async {
+    switch (value) {
+      case 'edit':
+        onEdit();
+        break;
+      case 'share':
+        onShare();
+        break;
+      default:
+    }
+  }
+
+  void onEdit() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                MyFactoryFormPage(
+                  factory: _factory,
+                ))).then((v) {
+      setState(() {
+        _getFactoryFuture = _getFactoryData();
+      });
+    });
+  }
+
+  ///TODO分享
+  void onShare() {
+    String description = "";
+    int i = 0;
+
+    _factory.adeptAtCategories.forEach((v) {
+      if (i < 4) {
+        description = "${description} ${v.name}";
+        i++;
+      }
+    });
+
+    ShareDialog.showShareDialog(context,
+        title: '${_factory.name}',
+        description: '$description ...',
+        imageUrl: _factory.profilePicture == null
+            ? '${GlobalConfigs.LOGO_URL}'
+            : '${_factory.profilePicture.previewUrl()}',
+        url: Apis.shareFactory(widget.factoryUid));
   }
 }
 
@@ -380,7 +478,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class RefreshNotification extends ScrollNotification{
+class RefreshNotification extends ScrollNotification {
   bool refresh;
   RefreshNotification(this.refresh);
 }
