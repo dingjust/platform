@@ -1085,8 +1085,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             return RequestDataLoading(
               requestCallBack: PurchaseOrderRepository().getPurchaseOrderDetail(code),
               outsideDismiss: false,
-              loadingText: '保存中。。。',
-              entrance: 'createPurchaseOrder',
+              loadingText: '加载中。。。',
+              entrance: '',
             );
           }
       ).then((value){
@@ -1099,7 +1099,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       });
 
     }
-
+    ProductionBLoC.instance.refreshData('');
+    PurchaseOrderBLoC.instance.refreshData('ALL');
   }
 
   //打开日期选择器
