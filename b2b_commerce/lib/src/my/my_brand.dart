@@ -161,6 +161,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
     return FutureBuilder(
       future: getPurchaseOrderItem(),
       builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 200),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
         return Offstage(
             offstage: !(snapshot.hasData && snapshot.data != null),
             child: Column(
@@ -316,29 +322,32 @@ class _MyBrandPageState extends State<MyBrandPage> {
       padding: EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                MyBrandBaseFormPage(widget.brand)));
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      borderRadius: BorderRadius.circular(5),
+          Offstage(
+            offstage: UserBLoC.instance.currentUser.b2bUnit.uid != widget.brand.uid,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MyBrandBaseFormPage(widget.brand)));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text('编辑'),
                     ),
-                    child: Text('编辑'),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
           Padding(
