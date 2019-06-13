@@ -1805,8 +1805,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     ).then((value){
                       if(value != null && value != ''){
                         String str = value;
+                        str = str.replaceAll('￥', '');
+                        print(str);
                         String deposit = str.substring(0,str.indexOf(','));
+                        print(deposit);
                         String unitPrice = str.substring(str.indexOf(',')+1,str.length);
+                        print(unitPrice);
                         _showDepositDialog(context, widget.order,deposit,unitPrice);
                       }
                     });
