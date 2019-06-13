@@ -53,14 +53,15 @@ dependencies:
   city_pickers: 0.1.12
   autocomplete_textfield: ^1.6.4
   pulltorefresh_flutter: "^0.1.9"
-  package_info: ^0.4.0+2
   cached_network_image: ^0.7.0
   flutter_spinkit: ^3.1.0
   store_redirect: ^1.0.1
   # image_gallery_saver: ^1.1.0
   alipay_me: ^1.0.0
   amap_location: ^0.2.0
+  # IOS不用
   simple_permissions: ^0.1.9
+  flutter_qq: ^0.0.4
 
 dev_dependencies:
   flutter_test:
@@ -145,6 +146,8 @@ flutter:
     - packages/assets/temp/QRCode.png
     - packages/assets/temp/common/icon64_wx_logo.png
     - packages/assets/temp/common/wechat_friend.png
+    - packages/assets/temp/common/qq_logo.png
+    - packages/assets/temp/common/qq_zone.png
 
   fonts:
     - family: b2bIcons

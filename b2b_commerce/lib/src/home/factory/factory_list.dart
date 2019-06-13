@@ -1,13 +1,10 @@
 import 'dart:convert';
 
 import 'package:amap_location/amap_location.dart';
-import 'package:b2b_commerce/src/_shared/widgets/global_search_input.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
-import 'package:b2b_commerce/src/home/search/factory_search.dart';
-import 'package:b2b_commerce/src/my/address/amap_search_delegate.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +87,8 @@ class _FactoryPageState extends State<FactoryPage> {
   String addressLine;
 
   List<String> historyKeywords;
+
+  bool lock = false;
 
   @override
   void initState() {
@@ -502,7 +501,9 @@ class _FactoryPageState extends State<FactoryPage> {
   }
 
   Future<bool> _initData() async {
-    if (!inited) {
+    if (!inited && !lock) {
+      lock = true;
+      print('----------------------');
       aMapLocation = await AmapService.instance.location();
       _category = await ProductRepositoryImpl().cascadedCategories();
       print(isLocalFind);
@@ -546,6 +547,7 @@ class _FactoryPageState extends State<FactoryPage> {
       setState(() {
         inited = true;
       });
+      lock = false;
     }
     return inited;
   }

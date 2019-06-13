@@ -4,13 +4,14 @@ import 'package:b2b_commerce/src/_shared/orders/proofing/proofing_list_item.dart
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class ProofingSearchResultPage extends StatefulWidget{
+class ProofingSearchResultPage extends StatefulWidget {
   ProofingSearchResultPage({
     Key key,
     @required this.searchModel,
@@ -18,10 +19,11 @@ class ProofingSearchResultPage extends StatefulWidget{
 
   SearchModel searchModel;
 
-  _ProofingSearchResultPageState createState() => _ProofingSearchResultPageState();
+  _ProofingSearchResultPageState createState() =>
+      _ProofingSearchResultPageState();
 }
 
-class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
+class _ProofingSearchResultPageState extends State<ProofingSearchResultPage> {
   final GlobalKey _globalKey = GlobalKey<_ProofingSearchResultPageState>();
   List<String> historyKeywords;
 
@@ -38,7 +40,7 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
               children: <Widget>[
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       onClick();
                     },
                     child: Container(
@@ -69,7 +71,7 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
             keyword: widget.searchModel.keyword,
           ),
         ),
-        onWillPop: (){
+        onWillPop: () {
           Navigator.of(context).pop();
           ProofingOrdersBLoC().refreshData('ALL');
         },
@@ -77,24 +79,23 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
     );
   }
 
-  void onClick(){
+  void onClick() {
     Navigator.pop(context);
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
+            requestCallBack:
+            LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
             outsideDismiss: false,
             loadingText: '加载中。。。',
             entrance: '',
           );
-        }
-    ).then((value){
+        }).then((value) {
       if (value != null && value != '') {
         List<dynamic> list = json.decode(value);
         historyKeywords = list.map((item) => item as String).toList();
-
       } else {
         historyKeywords = [];
       }
@@ -104,19 +105,16 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage>{
         MaterialPageRoute(
           builder: (context) => SearchModelPage(
             searchModel: SearchModel(
-              historyKeywords: historyKeywords,
-              keyword: widget.searchModel.keyword,
-              searchModelType: SearchModelType.QUOTE_ORDER,
-              route: GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY
-            ),
+                historyKeywords: historyKeywords,
+                keyword: widget.searchModel.keyword,
+                searchModelType: SearchModelType.QUOTE_ORDER,
+                route: GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY),
           ),
         ),
       );
     });
   }
-
 }
-
 
 class ProofingOrderListView extends StatelessWidget {
   String keyword;
@@ -170,23 +168,31 @@ class ProofingOrderListView extends StatelessWidget {
                         ),
                         Container(
                             child: Text(
-                              '没有相关订单数据',
+                              AppBLoC.instance.getConnectivityResult ==
+                                  ConnectivityResult.none
+                                  ? '网络链接不可用请重试'
+                                  : '没有相关订单数据',
                               style: TextStyle(
                                 color: Colors.grey,
                               ),
                             )),
-                        Container(
+                        AppBLoC.instance.getConnectivityResult !=
+                            ConnectivityResult.none
+                            ? Container(
                           child: FlatButton(
                             color: Color.fromRGBO(255, 214, 12, 1),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MyHelpPage()));
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MyHelpPage()));
                             },
                             child: Text('如何创建订单？'),
                           ),
                         )
+                            : Container()
                       ],
                     );
                   }

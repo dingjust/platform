@@ -68,6 +68,10 @@ export 'src/user/response/address_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/system/bloc/bloc_bus.dart';
+export 'src/system/bloc/app_bloc.dart';
+export 'src/qq/qq_service.dart';
+export 'src/bank/bank_service.dart';
+export 'src/bank/bank_response.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

@@ -4,13 +4,14 @@ import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class QuoteSearchResultPage extends StatefulWidget{
+class QuoteSearchResultPage extends StatefulWidget {
   QuoteSearchResultPage({
     Key key,
     @required this.searchModel,
@@ -21,7 +22,7 @@ class QuoteSearchResultPage extends StatefulWidget{
   _QuoteSearchResultPageState createState() => _QuoteSearchResultPageState();
 }
 
-class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
+class _QuoteSearchResultPageState extends State<QuoteSearchResultPage> {
   final GlobalKey _globalKey = GlobalKey<_QuoteSearchResultPageState>();
   List<String> historyKeywords;
 
@@ -38,7 +39,7 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
               children: <Widget>[
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       onClick();
                     },
                     child: Container(
@@ -69,7 +70,7 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
             keyword: widget.searchModel.keyword,
           ),
         ),
-        onWillPop: (){
+        onWillPop: () {
           Navigator.of(context).pop();
           QuoteOrdersBLoC().refreshData('ALL');
         },
@@ -77,24 +78,23 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
     );
   }
 
-  void onClick(){
+  void onClick() {
     Navigator.pop(context);
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+            requestCallBack:
+            LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
             outsideDismiss: false,
             loadingText: '加载中。。。',
             entrance: '',
           );
-        }
-    ).then((value){
+        }).then((value) {
       if (value != null && value != '') {
         List<dynamic> list = json.decode(value);
         historyKeywords = list.map((item) => item as String).toList();
-
       } else {
         historyKeywords = [];
       }
@@ -114,7 +114,6 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage>{
       );
     });
   }
-
 }
 
 class QuoteOrderListView extends StatelessWidget {
@@ -130,18 +129,16 @@ class QuoteOrderListView extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),
-      child:  ListView(
+      child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: _scrollController,
         children: <Widget>[
           StreamBuilder<QuoteData>(
             stream: bloc.stream,
-            builder: (BuildContext context,
-                AsyncSnapshot<QuoteData> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<QuoteData> snapshot) {
               if (snapshot.data == null) {
                 bloc.filterByKeyword(keyword);
-                return ProgressIndicatorFactory
-                    .buildPaddedProgressIndicator();
+                return ProgressIndicatorFactory.buildPaddedProgressIndicator();
               }
               if (snapshot.data.data.length <= 0) {
                 return Column(
@@ -160,12 +157,17 @@ class QuoteOrderListView extends StatelessWidget {
                     ),
                     Container(
                         child: Text(
-                          '没有相关订单数据',
+                          AppBLoC.instance.getConnectivityResult ==
+                              ConnectivityResult.none
+                              ? '网络链接不可用请重试'
+                              : '没有相关订单数据',
                           style: TextStyle(
                             color: Colors.grey,
                           ),
                         )),
-                    Container(
+                    AppBLoC.instance.getConnectivityResult !=
+                        ConnectivityResult.none
+                        ? Container(
                       child: FlatButton(
                         color: Color.fromRGBO(255, 214, 12, 1),
                         shape: RoundedRectangleBorder(
@@ -177,6 +179,7 @@ class QuoteOrderListView extends StatelessWidget {
                         child: Text('如何创建订单？'),
                       ),
                     )
+                        : Container()
                   ],
                 );
               }
@@ -217,5 +220,4 @@ class QuoteOrderListView extends StatelessWidget {
       ),
     );
   }
-
 }

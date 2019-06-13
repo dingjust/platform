@@ -12,7 +12,6 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'src/business/orders/requirement_order_from.dart';
-import 'src/common/app_bloc.dart';
 import 'src/common/app_constants.dart';
 import 'src/common/app_keys.dart';
 import 'src/common/app_routes.dart';
@@ -123,7 +122,11 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       final dialog = AlertDialog(
         content: Text('$value'),
       );
-      showDialog(context: appContext, builder: (x) => dialog);
+      try {
+        showDialog(context: appContext, builder: (x) => dialog);
+      } catch (e) {
+        print(e);
+      }
     });
   }
 
@@ -147,7 +150,8 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RequirementOrderFrom(
+        builder: (context) =>
+            RequirementOrderFrom(
               isCreate: true,
               order: requirementOrderModel,
             ),

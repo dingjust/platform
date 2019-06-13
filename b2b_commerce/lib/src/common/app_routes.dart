@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
-import 'package:b2b_commerce/src/my/my_bill.dart';
+import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';

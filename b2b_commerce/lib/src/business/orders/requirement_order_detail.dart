@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
-import 'package:b2b_commerce/src/_shared/widgets/share.dart';
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
@@ -59,14 +59,9 @@ class _RequirementOrderDetailPageState
           style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
-          widget.order.editable != null &&
-              widget.order.editable &&
-              UserBLoC.instance.currentUser.type == UserType.BRAND &&
-              widget.order.status == RequirementOrderStatus.PENDING_QUOTE
-              ? Container(
+          Container(
             width: 60,
-            margin:
-            const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
             child: PopupMenuButton<String>(
               onSelected: (v) => onMenuSelect(v),
               icon: Icon(
@@ -74,48 +69,9 @@ class _RequirementOrderDetailPageState
                 size: 5,
               ),
               offset: Offset(0, 50),
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuItem<String>>[
-                PopupMenuItem<String>(
-                  value: 'edit',
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.edit),
-                      ),
-                      Text('编辑')
-                    ],
-                  ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'close',
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.close),
-                      ),
-                      Text('关闭')
-                    ],
-                  ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'share',
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.share),
-                      ),
-                      Text('分享')
-                    ],
-                  ),
-                ),
-              ],
+              itemBuilder: (BuildContext context) => _buildPopupMenu(),
             ),
           )
-              : Container()
         ],
       ),
       body: Container(
@@ -895,6 +851,79 @@ class _RequirementOrderDetailPageState
     }
   }
 
+  List<PopupMenuItem<String>> _buildPopupMenu() {
+    if (widget.order.editable != null &&
+        widget.order.editable &&
+        UserBLoC.instance.currentUser.type == UserType.BRAND &&
+        widget.order.status == RequirementOrderStatus.PENDING_QUOTE) {
+      return <PopupMenuItem<String>>[
+        PopupMenuItem<String>(
+          value: 'edit',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.edit),
+              ),
+              Text('编辑')
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'close',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.close),
+              ),
+              Text('关闭')
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'share',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.share),
+              ),
+              Text('分享')
+            ],
+          ),
+        ),
+      ];
+    } else {
+      return <PopupMenuItem<String>>[
+        PopupMenuItem<String>(
+          value: 'close',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.close),
+              ),
+              Text('关闭')
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'share',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.share),
+              ),
+              Text('分享')
+            ],
+          ),
+        ),
+      ];
+    }
+  }
+
   onMenuSelect(String value) async {
     switch (value) {
       case 'edit':
@@ -938,7 +967,26 @@ class _RequirementOrderDetailPageState
 
   ///TODO分享
   void onShare() {
-    ShareDialog.showShareDialog(context);
+    String title = '';
+    String description =
+        " ${widget.order.details.category?.name}   ${widget.order.details
+        .expectedMachiningQuantity}件\n 交货时间:${DateFormatUtil.formatYMD(
+        widget.order.details.expectedDeliveryDate)}";
+
+    if (widget.order.details.productName != null &&
+        widget.order.details.productName != '') {
+      title = widget.order.details.productName;
+    } else {
+      title = widget.order.details.category.name;
+    }
+
+    ShareDialog.showShareDialog(context,
+        title: '$title',
+        description: '$description',
+        imageUrl: widget.order.details.pictures.isEmpty
+            ? '${GlobalConfigs.LOGO_URL}'
+            : '${widget.order.details.pictures[0].previewUrl()}',
+        url: Apis.shareRequirement(widget.order.code));
   }
 
   void onReview() {

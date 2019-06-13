@@ -90,4 +90,34 @@ class Apis {
 
   static const String AMAP_AROUND_API =
       'https://restapi.amap.com/v3/place/around';
+
+  ///分享-需求订单
+  static get shareRequirement =>
+          (String code) {
+        return 'http://sc.nbyjy.net:9091/RequirementSharePage.html?code=$code';
+      };
+
+  ///分享-生产进度
+  static get shareProductionProgress =>
+          (String code) {
+        return 'https://www.nbyjy.net/loading.html?code=$code&type=productionProgress';
+      };
+
+  ///分享-工厂
+  static get shareFactory =>
+          (String code) {
+        return 'https://www.nbyjy.net/loading.html?code=$code&type=factory';
+      };
+
+  ///银行卡号查询
+  static get cnBankCard =>
+          (String cardNO) {
+        return 'https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?_input_charset=utf-8&cardNo=$cardNO&cardBinCheck=true';
+      };
+
+  ///银行LOGOAPI
+  static get cnBankLOGO =>
+          (String code) {
+        return 'https://apimg.alipay.com/combo.png?d=cashier&t=$code';
+      };
 }

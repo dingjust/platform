@@ -1,9 +1,9 @@
+import 'package:amap_location/amap_location.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:services/src/amap/amap_response.dart';
 import 'package:services/src/api/apis.dart';
 import 'package:services/src/net/http_manager.dart';
-import 'package:amap_location/amap_location.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 
 class AmapService {
@@ -62,7 +62,7 @@ class AmapService {
     }
     if (response != null && response.statusCode == 200) {
       AmapAroundResponse amapResponse =
-          AmapAroundResponse.fromJson(response.data);
+      AmapAroundResponse.fromJson(response.data);
       return amapResponse;
     } else {
       return null;
@@ -72,18 +72,14 @@ class AmapService {
   Future<AMapLocation> location() async {
     AMapLocationClient.startup(AMapLocationOption(
         desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
-    print('check==============');
+
     bool hasPermission =
-        await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
-    print('check==============');
+    await SimplePermissions.checkPermission(Permission.AccessFineLocation);
 
     if (!hasPermission) {
-      print('request==============');
-
       PermissionStatus requestPermissionResult =
-          await SimplePermissions.requestPermission(
-              Permission.WhenInUseLocation);
-      print('request==============');
+      await SimplePermissions.requestPermission(
+          Permission.AccessFineLocation);
 
       if (requestPermissionResult != PermissionStatus.authorized) {
         print('定位权限失败');
