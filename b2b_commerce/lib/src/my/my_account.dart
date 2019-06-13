@@ -16,40 +16,50 @@ class _MyAccountPageState extends State<MyAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Color.fromRGBO(245, 245, 245, 1),
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            SliverAppBar(
-              expandedHeight: 200,
-              pinned: true,
-              elevation: 0.5,
-              backgroundColor: const Color.fromRGBO(255, 219, 0, 1),
-              centerTitle: true,
-              title: Text(
-                '我的账户',
-                style: TextStyle(
-                  color: Color.fromRGBO(36, 38, 41, 1),
-                  fontSize: 22,
-                ),
+      body: FutureBuilder<String>(
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.data != null) {
+            return Container(
+              color: Color.fromRGBO(245, 245, 245, 1),
+              child: CustomScrollView(
+                controller: _scrollController,
+                slivers: <Widget>[
+                  SliverAppBar(
+                    expandedHeight: 200,
+                    pinned: true,
+                    elevation: 0.5,
+                    backgroundColor: const Color.fromRGBO(255, 219, 0, 1),
+                    centerTitle: true,
+                    title: Text(
+                      '我的账户',
+                      style: TextStyle(
+                        color: Color.fromRGBO(36, 38, 41, 1),
+                        fontSize: 22,
+                      ),
+                    ),
+                    actions: <Widget>[_buildAction(context)],
+                    brightness: Brightness.dark,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[_buildHeader(context)],
+                      ),
+                    ),
+                  ),
+                  SliverList(
+                      delegate: SliverChildListDelegate([
+                        _buildBill(context),
+                        _buildBlankCard(context),
+                      ])),
+                ],
               ),
-              actions: <Widget>[_buildAction(context)],
-              brightness: Brightness.dark,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[_buildHeader(context)],
-                ),
-              ),
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-                  _buildBill(context),
-                  _buildBlankCard(context),
-                ])),
-          ],
-        ),
+            );
+          } else {
+            return _buildLoadingPage();
+          }
+        },
+        initialData: null,
+        future: _getData(),
       ),
       bottomSheet: Container(
         height: 50,
@@ -317,9 +327,46 @@ class _MyAccountPageState extends State<MyAccountPage> {
     );
   }
 
+  Widget _buildLoadingPage() {
+    return Container(
+      color: Color.fromRGBO(245, 245, 245, 1),
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            elevation: 0.5,
+            backgroundColor: const Color.fromRGBO(255, 219, 0, 1),
+            centerTitle: true,
+            title: Text(
+              '我的账户',
+              style: TextStyle(
+                color: Color.fromRGBO(36, 38, 41, 1),
+                fontSize: 22,
+              ),
+            ),
+            actions: <Widget>[_buildAction(context)],
+            brightness: Brightness.dark,
+          ),
+          SliverFillRemaining(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   void onAddCard() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
+  }
+
+  Future<String> _getData() async {
+    return Future.delayed(const Duration(seconds: 1), () {
+      return '1';
+    });
   }
 }
 

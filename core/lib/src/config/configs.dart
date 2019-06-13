@@ -5,9 +5,9 @@ class GlobalConfigs {
   static const CONTEXT_PATH = 'http://sc.nbyjy.net';
   static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
 
-  // static const CONTEXT_PATH = 'https://192.168.1.186:9002/djwebservices/v2';
+  // static const CONTEXT_PATH = 'https://192.168.1.105:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH =
-  //     'https://192.168.1.233:9002/djwebservices/v2';
+  //     'https://192.168.1.105:9002/djwebservices/v2';
   // static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
   // static const CONTEXT_PATH = 'https://192.168.1.191:9002';
   // 生产
@@ -23,7 +23,7 @@ class GlobalConfigs {
   static const BASIC_AUTH_TOKEN_KEY = 'basic_auth_token';
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
   // static const AUTH_SERVER_URL =
-  //     'https://192.168.1.186:9002/authorizationserver';
+  //     'https://192.168.1.105:9002/authorizationserver';
   static const AUTH_TOKEN_URL = '$AUTH_SERVER_URL/oauth/token';
   static const AUTH_CHECK_TOKEN_URL = '$AUTH_SERVER_URL/oauth/check_token';
   static const AUTH_CLIENT_ID_KEY = 'client_id';

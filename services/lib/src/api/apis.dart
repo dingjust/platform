@@ -94,7 +94,7 @@ class Apis {
   ///分享-需求订单
   static get shareRequirement =>
           (String code) {
-        return 'https://www.nbyjy.net/RequirementSharePage.html?code=$code&type=requirement';
+        return 'http://sc.nbyjy.net:9091/RequirementSharePage.html?code=$code';
       };
 
   ///分享-生产进度

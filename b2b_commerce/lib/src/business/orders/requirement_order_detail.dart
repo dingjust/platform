@@ -59,14 +59,9 @@ class _RequirementOrderDetailPageState
           style: TextStyle(color: Colors.black),
         ),
         actions: <Widget>[
-          widget.order.editable != null &&
-              widget.order.editable &&
-              UserBLoC.instance.currentUser.type == UserType.BRAND &&
-              widget.order.status == RequirementOrderStatus.PENDING_QUOTE
-              ? Container(
+          Container(
             width: 60,
-            margin:
-            const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
             child: PopupMenuButton<String>(
               onSelected: (v) => onMenuSelect(v),
               icon: Icon(
@@ -74,48 +69,9 @@ class _RequirementOrderDetailPageState
                 size: 5,
               ),
               offset: Offset(0, 50),
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuItem<String>>[
-                PopupMenuItem<String>(
-                  value: 'edit',
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.edit),
-                      ),
-                      Text('编辑')
-                    ],
-                  ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'close',
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.close),
-                      ),
-                      Text('关闭')
-                    ],
-                  ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'share',
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.share),
-                      ),
-                      Text('分享')
-                    ],
-                  ),
-                ),
-              ],
+              itemBuilder: (BuildContext context) => _buildPopupMenu(),
             ),
           )
-              : Container()
         ],
       ),
       body: Container(
@@ -892,6 +848,79 @@ class _RequirementOrderDetailPageState
       );
     } else {
       return Container();
+    }
+  }
+
+  List<PopupMenuItem<String>> _buildPopupMenu() {
+    if (widget.order.editable != null &&
+        widget.order.editable &&
+        UserBLoC.instance.currentUser.type == UserType.BRAND &&
+        widget.order.status == RequirementOrderStatus.PENDING_QUOTE) {
+      return <PopupMenuItem<String>>[
+        PopupMenuItem<String>(
+          value: 'edit',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.edit),
+              ),
+              Text('编辑')
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'close',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.close),
+              ),
+              Text('关闭')
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'share',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.share),
+              ),
+              Text('分享')
+            ],
+          ),
+        ),
+      ];
+    } else {
+      return <PopupMenuItem<String>>[
+        PopupMenuItem<String>(
+          value: 'close',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.close),
+              ),
+              Text('关闭')
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'share',
+          child: Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: Icon(Icons.share),
+              ),
+              Text('分享')
+            ],
+          ),
+        ),
+      ];
     }
   }
 

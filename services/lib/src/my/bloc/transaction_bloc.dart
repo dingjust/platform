@@ -3,20 +3,20 @@ import 'dart:async';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-class MyBillBLoC extends BLoCBase {
+class TransactionBLoC extends BLoCBase {
   // 工厂模式
-  factory MyBillBLoC() => _getInstance();
+  factory TransactionBLoC() => _getInstance();
 
-  static MyBillBLoC get instance => _getInstance();
-  static MyBillBLoC _instance;
+  static TransactionBLoC get instance => _getInstance();
+  static TransactionBLoC _instance;
 
-  MyBillBLoC._internal() {
+  TransactionBLoC._internal() {
     // 初始化
   }
 
-  static MyBillBLoC _getInstance() {
+  static TransactionBLoC _getInstance() {
     if (_instance == null) {
-      _instance = new MyBillBLoC._internal();
+      _instance = new TransactionBLoC._internal();
     }
     return _instance;
   }

@@ -1,9 +1,10 @@
+import 'package:amap_location/amap_location.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:services/src/amap/amap_response.dart';
 import 'package:services/src/api/apis.dart';
 import 'package:services/src/net/http_manager.dart';
-import 'package:amap_location/amap_location.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class AmapService {
   // 工厂模式
@@ -61,7 +62,7 @@ class AmapService {
     }
     if (response != null && response.statusCode == 200) {
       AmapAroundResponse amapResponse =
-          AmapAroundResponse.fromJson(response.data);
+      AmapAroundResponse.fromJson(response.data);
       return amapResponse;
     } else {
       return null;
@@ -71,26 +72,20 @@ class AmapService {
   Future<AMapLocation> location() async {
     AMapLocationClient.startup(AMapLocationOption(
         desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
-    print('check==============');
 
-    // PermissionStatus permission =
-    //     await LocationPermissions().checkPermissionStatus();
+    bool hasPermission =
+    await SimplePermissions.checkPermission(Permission.AccessFineLocation);
 
-    // print('check==============');
+    if (!hasPermission) {
+      PermissionStatus requestPermissionResult =
+      await SimplePermissions.requestPermission(
+          Permission.AccessFineLocation);
 
-    // if (permission != PermissionStatus.granted) {
-    //   print('request==============');
-
-    //   PermissionStatus permission =
-    //       await LocationPermissions().requestPermissions();
-
-    //   print('request==============');
-
-    //   if (permission != PermissionStatus.granted) {
-    //     print('定位权限失败');
-    //     return null;
-    //   }
-    // }
+      if (requestPermissionResult != PermissionStatus.authorized) {
+        print('定位权限失败');
+        return null;
+      }
+    }
     AMapLocation aMapLocation = await AMapLocationClient.getLocation(true);
     AMapLocationClient.stopLocation();
     print('${aMapLocation.longitude}           ${aMapLocation.latitude}');
