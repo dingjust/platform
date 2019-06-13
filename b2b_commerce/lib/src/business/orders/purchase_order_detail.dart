@@ -2534,7 +2534,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               entrance: '0',
             );
           }
-      );
+      ).then((_){
+        PurchaseOrderBLoC.instance.refreshData('ALL');
+      });
     } catch (e) {
       print(e);
     }
