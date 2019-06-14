@@ -683,6 +683,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       ).then((value){
                         if(value != null && value != ''){
                           String str = value;
+                          str = str.replaceAll('￥', '');
                           print(str);
                           String deposit = str.substring(0,str.indexOf(','));
                           String unitPrice = str.substring(str.indexOf(',')+1,str.length);
@@ -869,6 +870,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
     ).then((value){
       if(value != null && value != ''){
         String str = value;
+        str = str.replaceAll('￥', '');
         _updateBalance(context, widget.order,str);
       }
     });
