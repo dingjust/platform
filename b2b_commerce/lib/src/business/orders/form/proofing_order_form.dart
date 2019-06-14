@@ -54,6 +54,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
       remarks = widget.model.remarks;
       _remarksController.text = widget.model.remarks;
       _unitPriceController.text = widget.model.unitPrice.toString();
+      _countTotalNum();
     } else {
       if (widget.quoteModel.unitPrice != null &&
           widget.quoteModel.unitPrice >= 0) {
@@ -65,8 +66,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   @override
   Widget build(BuildContext context) {
-    _countTotalNum();
-
     return WillPopScope(
       child: Scaffold(
           key: _scaffoldKey,

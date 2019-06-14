@@ -7,6 +7,7 @@ class WebSocketService {
 
   WebSocketService._internal() {
     // 初始化
+
   }
 
   static WebSocketService _getInstance() {

@@ -897,18 +897,6 @@ class _RequirementOrderDetailPageState
     } else {
       return <PopupMenuItem<String>>[
         PopupMenuItem<String>(
-          value: 'close',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.close),
-              ),
-              Text('关闭')
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
           value: 'share',
           child: Row(
             children: <Widget>[
