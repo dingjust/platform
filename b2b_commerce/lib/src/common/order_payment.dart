@@ -12,12 +12,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class OrderPaymentPage extends StatefulWidget {
-  final OrderModel order;
+  OrderModel order;
 
-  final PaymentFor paymentFor;
+  PaymentFor paymentFor;
 
-  const OrderPaymentPage(
-      {Key key, this.order, this.paymentFor = PaymentFor.DEFAULT})
+  OrderPaymentPage({Key key, this.order, this.paymentFor = PaymentFor.DEFAULT})
       : super(key: key);
 
   @override
@@ -208,8 +207,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                   child: CachedNetworkImage(
                       width: 100,
                       height: 100,
-                      imageUrl:
-                      '${model.product.thumbnail.previewUrl()}',
+                      imageUrl: '${model.product.thumbnail.previewUrl()}',
                       fit: BoxFit.cover,
                       placeholder: (context, url) => SpinKitRing(
                             color: Colors.black12,
@@ -294,10 +292,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
           ),
-          Text(
-            '订单创建时间：${DateFormatUtil.format(widget.order.creationTime)}',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
-          )
+          // Text(
+          //   '订单创建时间：${DateFormatUtil.format(widget.order.creationTime)}',
+          //   style: TextStyle(color: Colors.grey, fontSize: 16),
+          // )
         ],
       ),
     );

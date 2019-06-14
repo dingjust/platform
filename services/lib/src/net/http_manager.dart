@@ -217,6 +217,8 @@ class HttpManager {
     authorization = null;
     _updateInstance();
   }
+
+  String get token => authorization;
 }
 
 var http$ = HttpManager(GlobalConfigs.B2B_API_PREFIX);
