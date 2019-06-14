@@ -1203,6 +1203,7 @@ class ProofingModel extends OrderModel {
       String remarks,
       PrincipalModel supplier,
       this.order,
+        this.entries,
       double unitPrice,
       this.requirementOrderRef,
       this.quoteRef})

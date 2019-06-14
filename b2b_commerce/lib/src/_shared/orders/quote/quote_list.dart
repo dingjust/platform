@@ -164,7 +164,11 @@ class _QuoteListState extends State<QuoteList>
 
     Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => ProofingOrderForm(quoteModel: detailModel)),
+          builder: (context) =>
+              ProofingOrderForm(
+                quoteModel: detailModel,
+                model: ProofingModel(unitPrice: 0,),
+              )),
     );
   }
 

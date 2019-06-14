@@ -100,13 +100,13 @@ class Apis {
   ///分享-生产进度
   static get shareProductionProgress =>
           (String code) {
-        return 'https://www.nbyjy.net/loading.html?code=$code&type=productionProgress';
+        return 'http://sc.nbyjy.net:9091/productionProgressShare.html?code=$code';
       };
 
   ///分享-工厂
   static get shareFactory =>
           (String code) {
-        return 'https://www.nbyjy.net/loading.html?code=$code&type=factory';
+        return 'http://sc.nbyjy.net:9091/factoryInfo.html?code=$code';
       };
 
   ///银行卡号查询

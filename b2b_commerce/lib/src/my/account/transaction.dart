@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
-import 'package:b2b_commerce/src/my/account/bill_detail.dart';
+import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -87,11 +87,11 @@ class BillListView extends StatelessWidget {
               expenditure: 20134.00,
               lineHeight: 8,
             ),
-            StreamBuilder<List<BillModel>>(
+            StreamBuilder<List<AmountFlowModel>>(
               stream: bloc.stream,
               initialData: null,
               builder: (BuildContext context,
-                  AsyncSnapshot<List<BillModel>> snapshot) {
+                  AsyncSnapshot<List<AmountFlowModel>> snapshot) {
                 if (snapshot.data == null) {
                   //默认条件查询
                   bloc.filterByDate(date: selectedDate);
@@ -145,98 +145,3 @@ class BillListView extends StatelessWidget {
   }
 }
 
-class BillCard extends StatelessWidget {
-  BillCard({Key key, this.height = 150, this.model}) : super(key: key);
-
-  final double height;
-  final BillModel model;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        children: <Widget>[
-          Text(
-            model.date.day == DateTime.now().day
-                ? '今日'
-                : '${model.date.month}-${model.date.day}',
-            style: const TextStyle(
-                color: const Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
-          ),
-          GestureDetector(
-            onTap: () => _onTap(context),
-            child: Container(
-              height: height,
-              margin: const EdgeInsets.only(top: 10),
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        '${BillTypeLocalizedMap[model.type]}',
-                        style: const TextStyle(
-                            fontSize: 18,
-                            color: const Color.fromRGBO(100, 100, 100, 1)),
-                      ),
-                      Text(
-                        '成功',
-                        style: const TextStyle(
-                            fontSize: 18,
-                            color: const Color.fromRGBO(100, 100, 100, 1)),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        '- ￥ ${model.amount}',
-                        style: const TextStyle(
-                            fontSize: 20,
-                            color: const Color.fromRGBO(255, 68, 68, 1)),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        model.order != null
-                            ? '生产订单${model.order.code}'
-                            : '提现到银行卡${model.bankAccount}',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        '余额￥${model.balance}',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  ///详情页跳转
-  void _onTap(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => BillDetailPage(
-              code: model.code,
-            )));
-  }
-}

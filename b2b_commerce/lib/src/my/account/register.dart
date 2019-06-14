@@ -247,6 +247,22 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 )),
           ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  child: Text(
+                    '6~20位字母与数字组合，首位为字母',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )
         ],
       ),
     );
@@ -374,7 +390,7 @@ class _RegisterPageState extends State<RegisterPage> {
             builder: (_) {
               return CustomizeDialog(
                 dialogType: DialogType.RESULT_DIALOG,
-                failTips: '密码限定数字加字母，6-20位',
+                failTips: '首字符为字母，长度6-20位的数字加字母',
                 callbackResult: false,
                 confirmAction: () {
                   Navigator.of(context).pop();
