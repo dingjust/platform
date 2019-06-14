@@ -947,6 +947,7 @@ class _RequirementOrderDetailPageState
                   setState(() {
                     widget.order.status = RequirementOrderStatus.CANCELLED;
                   });
+                  Navigator.of(context).pop();
                 },
               );
             });

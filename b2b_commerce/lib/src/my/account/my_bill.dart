@@ -94,11 +94,11 @@ class BillListView extends StatelessWidget {
               expenditure: 20134.00,
               lineHeight: 8,
             ),
-            StreamBuilder<List<BillModel>>(
+            StreamBuilder<List<AmountFlowModel>>(
               stream: bloc.stream,
               initialData: null,
               builder: (BuildContext context,
-                  AsyncSnapshot<List<BillModel>> snapshot) {
+                  AsyncSnapshot<List<AmountFlowModel>> snapshot) {
                 if (snapshot.data == null) {
                   //默认条件查询
                   bloc.filterByDate(date: selectedDate);
@@ -156,7 +156,7 @@ class BillCard extends StatelessWidget {
   BillCard({Key key, this.height = 150, this.model}) : super(key: key);
 
   final double height;
-  final BillModel model;
+  final AmountFlowModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -165,9 +165,11 @@ class BillCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(
-            model.date.day == DateTime.now().day
+            model.creationtime.day == DateTime
+                .now()
+                .day
                 ? '今日'
-                : '${model.date.month}-${model.date.day}',
+                : '${model.creationtime.month}-${model.creationtime.day}',
             style: const TextStyle(
                 color: const Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
           ),
@@ -187,7 +189,7 @@ class BillCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        '${BillTypeLocalizedMap[model.type]}',
+                        '${AmountFlowTypeLocalizedMap[model.amountFlowType]}',
                         style: const TextStyle(
                             fontSize: 18,
                             color: const Color.fromRGBO(100, 100, 100, 1)),
@@ -215,7 +217,7 @@ class BillCard extends StatelessWidget {
                       Text(
                         model.order != null
                             ? '生产订单${model.order.code}'
-                            : '提现到银行卡${model.bankAccount}',
+                            : '提现到银行卡${model.account}',
                         style:
                             const TextStyle(fontSize: 18, color: Colors.black),
                       )
@@ -224,7 +226,7 @@ class BillCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        '余额￥${model.balance}',
+                        '余额￥222222.333',
                         style:
                             const TextStyle(fontSize: 18, color: Colors.black),
                       )

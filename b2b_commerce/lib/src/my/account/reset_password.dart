@@ -97,7 +97,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
       validator: (value) {
         if (!RegexUtil.password(value)) {
-          return '限定数字加字母，6-20位';
+          return '6~20位字母与数字组合，首位为字母';
         } else {
           return null;
         }
@@ -186,10 +186,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 100,
+                  width: 85,
                   margin: EdgeInsets.only(right: 20),
                   child: Text(
-                    '再次输入',
+                    '密码',
                     style: TextStyle(
                         color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
                   ),
@@ -211,7 +211,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: 100,
+                  width: 85,
                   margin: EdgeInsets.only(right: 20),
                   child: Text(
                     '再次输入',

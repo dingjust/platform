@@ -62,6 +62,8 @@ dependencies:
   # IOS不用
   simple_permissions: ^0.1.9
   flutter_qq: ^0.0.4
+  web_socket_channel: ^1.0.13
+
 
 dev_dependencies:
   flutter_test:

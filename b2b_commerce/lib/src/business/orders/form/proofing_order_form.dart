@@ -54,13 +54,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
       remarks = widget.model.remarks;
       _remarksController.text = widget.model.remarks;
       _unitPriceController.text = widget.model.unitPrice.toString();
-
-      int sum = 0;
-      widget.model.entries.forEach((entry) {
-        sum = sum + entry.quantity;
-      });
-      totalQuantity = sum;
-      totalPrice = sum * widget.model.unitPrice;
     } else {
       if (widget.quoteModel.unitPrice != null &&
           widget.quoteModel.unitPrice >= 0) {
@@ -72,6 +65,8 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   @override
   Widget build(BuildContext context) {
+    _countTotalNum();
+
     return WillPopScope(
       child: Scaffold(
           key: _scaffoldKey,
@@ -126,8 +121,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                   Navigator.of(context).pop();
                 },
               );
-            }
-        );
+            });
       },
     );
   }
@@ -511,6 +505,17 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     });
   }
 
+  void _countTotalNum() {
+    int sum = 0;
+    if (widget.model.entries != null) {
+      widget.model.entries.forEach((entry) {
+        sum = sum + entry.quantity;
+      });
+    }
+    totalQuantity = sum;
+    totalPrice = sum * widget.model.unitPrice;
+  }
+
   void onCreate() {
     if (productEntries == null || product == null) {
       showDialog(
@@ -702,16 +707,16 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   void onSampleNumTap() async {
     if (widget.update) {
-//      if (productEntries != null) {
-//        List<EditApparelSizeVariantProductEntry> returnEntries =
-//        await Navigator.of(context).push(MaterialPageRoute(
-//            builder: (context) => ProductSizeColorNum(
-//              editData: productEntries,
-//            )));
-//        if (returnEntries != null) {
-//          productEntries = returnEntries;
-//        }
-//      }
+      // if (productEntries != null) {
+      //   List<EditApparelSizeVariantProductEntry> returnEntries =
+      //       await Navigator.of(context).push(MaterialPageRoute(
+      //           builder: (context) => ProductSizeColorNum(
+      //                 editData: productEntries,
+      //               )));
+      //   if (returnEntries != null) {
+      //     productEntries = returnEntries;
+      //   }
+      // }
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ProductSizeColorNum(
                 update: true,

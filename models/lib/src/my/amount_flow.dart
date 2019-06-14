@@ -1,56 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:models/models.dart';
 
-part 'bill.g.dart';
-
-enum BillType {
-  ///提现
-  WITHDRAWAL,
-
-  ///付款
-  PAYMENT,
-
-  ///收款
-  RECEIVABLES
-}
-
-// TODO: i18n处理
-const BillTypeLocalizedMap = {
-  BillType.WITHDRAWAL: "提现",
-  BillType.PAYMENT: "付款",
-  BillType.RECEIVABLES: "收款"
-};
-
-@JsonSerializable()
-class BillModel extends ItemModel {
-  ///账单类型
-  String code;
-  BillType type;
-  double amount;
-  double balance;
-  String bankAccount;
-  DateTime date;
-  String remarks;
-  OrderModel order;
-
-  BillModel({this.code,
-    this.type,
-    this.amount,
-    this.balance,
-    this.bankAccount,
-    this.remarks,
-    this.order,
-    this.date});
-
-  factory BillModel.fromJson(Map<String, dynamic> json) =>
-      _$BillModelFromJson(json);
-
-  static Map<String, dynamic> toJson(BillModel model) =>
-      _$BillModelToJson(model);
-}
+part 'amount_flow.g.dart';
 
 @JsonSerializable()
 class AmountFlowModel extends ItemModel {
+  ///交易单号
+  String code;
+
   ///公司
   CompanyModel company;
 
@@ -81,7 +38,11 @@ class AmountFlowModel extends ItemModel {
   ///订单
   OrderModel order;
 
-  AmountFlowModel({this.company,
+  ///日期
+  DateTime creationtime;
+
+  AmountFlowModel({this.code,
+    this.company,
     this.account,
     this.amount,
     this.flowSource,
@@ -90,6 +51,7 @@ class AmountFlowModel extends ItemModel {
     this.description,
     this.remark,
     this.platformRemark,
+    this.creationtime,
     this.order});
 
   factory AmountFlowModel.fromJson(Map<String, dynamic> json) =>
@@ -114,6 +76,13 @@ enum FlowSource {
   PURCHASE_BALANCE
 }
 
+const FlowSourceLocalizedMap = {
+  FlowSource.CASH_OUT: '提现',
+  FlowSource.PROOFING: '收款',
+  FlowSource.PURCHASE_BALANCE: '收款',
+  FlowSource.PURCHASE_DEPOSIT: '收款',
+};
+
 ///资金流水类型
 enum AmountFlowType {
   ///流入
@@ -122,6 +91,15 @@ enum AmountFlowType {
   ///流出
   OUTFLOW
 }
+
+///资金流水
+const AmountFlowTypeLocalizedMap = {
+  ///流入
+  AmountFlowType.INFLOW: '流入',
+
+  ///流出
+  AmountFlowType.OUTFLOW: '流出'
+};
 
 ///资金状态
 enum AmountStatus {
@@ -137,3 +115,10 @@ enum AmountStatus {
   ///拒绝
   REJECTED,
 }
+
+const AmountStatusLocalizedMap = {
+  AmountStatus.AUDITING: '审核中',
+  AmountStatus.COMPLETED: '成功',
+  AmountStatus.CANCELED: '已取消',
+  AmountStatus.REJECTED: '失败'
+};

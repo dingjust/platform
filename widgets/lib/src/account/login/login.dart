@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/main.dart';
-import 'package:b2b_commerce/src/home/index.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -573,7 +571,7 @@ class InputRow extends StatelessWidget {
         children: <Widget>[
           label != null
               ? Container(
-                  width: 100,
+            width: 85,
                   child: Text(
                     label,
                     style: TextStyle(

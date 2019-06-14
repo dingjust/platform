@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:widgets/widgets.dart';
 
 /// 我的账户
@@ -12,6 +13,19 @@ class MyAccountPage extends StatefulWidget {
 
 class _MyAccountPageState extends State<MyAccountPage> {
   ScrollController _scrollController = ScrollController();
+  IOWebSocketChannel channel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // channel = IOWebSocketChannel.connect(
+    //     "ws://192.168.1.137/message?f51b422e-ef77-4a37-a15f-1a67d9c196f4");
+
+    // channel.stream.listen((message) {
+    //   print('+++++++++++++${message}');
+    //   channel.sink.add("received!");
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -367,6 +381,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
     return Future.delayed(const Duration(seconds: 1), () {
       return '1';
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    channel.sink.close();
+    super.dispose();
   }
 }
 

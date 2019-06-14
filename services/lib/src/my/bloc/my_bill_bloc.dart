@@ -21,13 +21,21 @@ class MyBillBLoC extends BLoCBase {
     return _instance;
   }
 
-  List<BillModel> _bills = [];
+  List<AmountFlowModel> _bills = [];
 
-  List<BillModel> get factories => _bills;
+  List<AmountFlowModel> get factories => _bills;
 
-  var _controller = StreamController<List<BillModel>>.broadcast();
+  var _controller = StreamController < List < AmountFlowModel
 
-  Stream<List<BillModel>> get stream => _controller.stream;
+  >
+
+  >
+
+      .
+
+  broadcast();
+
+  Stream<List<AmountFlowModel>> get stream => _controller.stream;
 
   var conditionController = StreamController<DateTime>.broadcast();
 
@@ -39,12 +47,11 @@ class MyBillBLoC extends BLoCBase {
     if (_bills.isEmpty) {
       // TODO: 分页拿数据，response.data;
       _bills = (await Future.delayed(const Duration(seconds: 1), () {
-        List<BillModel> list = [];
+        List<AmountFlowModel> list = [];
         for (int i = 10; i >= 0; i--) {
-          BillModel model = BillModel.fromJson(mockBill);
-          model.type = BillType.PAYMENT;
-          model.date = date;
-          model.balance = model.balance + 100000;
+          AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
+          model.amountFlowType = AmountFlowType.INFLOW;
+          model.creationtime = date;
           list.add(model);
         }
         return list;
@@ -57,10 +64,9 @@ class MyBillBLoC extends BLoCBase {
     //模拟数据到底
     if (_bills.length < 15) {
       _bills.add(await Future.delayed(const Duration(seconds: 1), () {
-        BillModel model = BillModel.fromJson(mockBill);
-        model.type = BillType.RECEIVABLES;
-        model.date = date;
-        model.balance = model.balance + 100000;
+        AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
+        model.amountFlowType = AmountFlowType.OUTFLOW;
+        model.creationtime = date;
         return model;
       }));
     } else {
@@ -81,12 +87,11 @@ class MyBillBLoC extends BLoCBase {
   Future refreshData({DateTime date}) async {
     _bills.clear();
     _bills = (await Future.delayed(const Duration(seconds: 1), () {
-      List<BillModel> list = [];
+      List<AmountFlowModel> list = [];
       for (int i = 10; i >= 0; i--) {
-        BillModel model = BillModel.fromJson(mockBill);
-        model.type = BillType.WITHDRAWAL;
-        model.date = date;
-        model.balance = model.balance + 100000;
+        AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
+        model.amountFlowType = AmountFlowType.OUTFLOW;
+        model.creationtime = date;
         list.add(model);
       }
       return list;
@@ -105,7 +110,8 @@ class MyBillBLoC extends BLoCBase {
   ///TODO：mock数据待删除
   Map<String, dynamic> mockBill = {
     'amount': 12392.00,
-    'balance': 200.00,
-    'bankAccount': '89080***********28',
+    'account': '89080***********28',
+    'amountStatus': 'AUDITING',
+    'flowSource': 'CASH_OUT'
   };
 }
