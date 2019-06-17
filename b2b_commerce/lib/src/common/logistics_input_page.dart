@@ -152,7 +152,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 shape: RoundedRectangleBorder(
                     borderRadius:
                     BorderRadius.all(Radius.circular(5))),
-                onPressed: () async{
+                onPressed: (){
                   //把选中的物流公司放到Model
                   CarrierModel carrier = new CarrierModel();
                   carrier.code = carrierCode;
@@ -165,45 +165,11 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                       && carrierCode != null && carrierCode != '') {
                     //生产单的确认发货
                     if (widget.isProductionOrder && widget.purchaseOrderModel != null) {
-                      //把内容放到生产订单里
-                      widget.purchaseOrderModel.consignment = consignment;
-
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) {
-                            return RequestDataLoading(
-                              requestCallBack: PurchaseOrderRepository()
-                                  .purchaseOrderDelivering(
-                                  widget.purchaseOrderModel.code,
-                                  widget.purchaseOrderModel),
-                              outsideDismiss: false,
-                              loadingText: '保存中。。。',
-                              entrance: 'purchaseOrders',
-                            );
-                          }
-                      );
+                      savePurchaseOrder(consignment);
                     }
                     //打样单的确认发货
                     else if(!widget.isProductionOrder && widget.proofingModel != null) {
-                      widget.proofingModel.consignment = consignment;
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) {
-                            return RequestDataLoading(
-                              requestCallBack: ProofingOrderRepository()
-                                  .proofingDelivering(
-                                  widget.proofingModel.code,
-                                  widget.proofingModel),
-                              outsideDismiss: false,
-                              loadingText: '保存中。。。',
-                              entrance: 'returnProofingOrders',
-                            );
-                          }
-                      );
-                    }
-
+                      saveProofingOrder(consignment);
                   }else{
                     showDialog(
                         context: context,
@@ -242,37 +208,9 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 onPressed: () async{
                   bool result = false;
                   if(widget.isProductionOrder){
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoading(
-                            requestCallBack: PurchaseOrderRepository()
-                                .purchaseOrderDelivering(
-                                widget.purchaseOrderModel.code,
-                                widget.purchaseOrderModel),
-                            outsideDismiss: false,
-                            loadingText: '保存中。。。',
-                            entrance: 'purchaseOrders',
-                          );
-                        }
-                    );
+                    saveOfflinePurchaseOrder();
                   }else{
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoading(
-                            requestCallBack: ProofingOrderRepository()
-                                .proofingDelivering(
-                                widget.proofingModel.code,
-                                widget.proofingModel),
-                            outsideDismiss: false,
-                            loadingText: '保存中。。。',
-                            entrance: 'returnProofingOrders',
-                          );
-                        }
-                    );
+                    saveOfflineProofingOrder();
                   }
                 }
             ),
@@ -282,7 +220,157 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
     );
   }
 
+  void saveOfflineProofingOrder(){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: ProofingOrderRepository()
+                .proofingDelivering(
+                widget.proofingModel.code,
+                widget.proofingModel),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: '',
+          );
+        }
+    ).then((value){
+      bool result = false;
+      if(value != null){
+        result = value;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              successTips: '确认发货成功',
+              failTips: '确认发货失败',
+              callbackResult: result,
+            );
+          }
+      );
+      ProofingOrdersBLoC.instance.refreshData('ALL');
+    });
+  }
 
+  void saveOfflinePurchaseOrder(){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: PurchaseOrderRepository()
+                .purchaseOrderDelivering(
+                widget.purchaseOrderModel.code,
+                widget.purchaseOrderModel),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: '',
+          );
+        }
+    ).then((value){
+      bool result = false;
+      if(value != null){
+        result = value;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                successTips: '确认发货成功',
+                failTips: '确认发货失败',
+                callbackResult: result
+            );
+          }
+      );
+      PurchaseOrderBLoC.instance.refreshData('ALL');
+    });
+  }
+
+  void savePurchaseOrder(ConsignmentModel consignment) {
+    //把内容放到生产订单里
+    widget.purchaseOrderModel.consignment = consignment;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: PurchaseOrderRepository()
+                .purchaseOrderDelivering(
+                widget.purchaseOrderModel.code,
+                widget.purchaseOrderModel),
+            outsideDismiss: false,
+            loadingText: '加载中。。。',
+            entrance: '',
+          );
+        }
+    ).then((value) {
+      Navigator.of(context).pop();
+      bool result = false;
+      if (value != null) {
+        result = value;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              successTips: '确认发货成功',
+              failTips: '确认发货失败',
+              callbackResult: result,
+            );
+          }
+      );
+    });
+
+    PurchaseOrderBLoC.instance.refreshData('ALL');
+  }
+
+  void saveProofingOrder(ConsignmentModel consignment){
+    widget.proofingModel.consignment = consignment;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: ProofingOrderRepository()
+                .proofingDelivering(
+                widget.proofingModel.code,
+                widget.proofingModel),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: '',
+          );
+        }
+    ).then((value){
+      Navigator.of(context).pop();
+      bool result = false;
+      if(value != null){
+        result = value;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              successTips: '确认发货成功',
+              failTips: '确认发货失败',
+              callbackResult: result,
+            );
+          }
+      );
+      ProofingOrdersBLoC.instance.refreshData('ALL');
+    });
+  }
+
+  }
 
   void _showLogisticsSelect(List<CarrierModel> list) async {
     showModalBottomSheet(

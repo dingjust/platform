@@ -917,6 +917,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
       } catch (e) {
         print(e);
       }
+      PurchaseOrderBLoC.instance.refreshData('ALL');
     }
   }
 
@@ -1022,6 +1023,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                               print(e);
                             }
                           }
+                          PurchaseOrderBLoC.instance.refreshData('ALL');
                         }
                       }),
                 ),
@@ -1178,6 +1180,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
     } catch (e) {
       print(e);
     }
+    PurchaseOrderBLoC.instance.refreshData('ALL');
   }
 
   Future<void> _showTips(BuildContext context, PurchaseOrderModel model) {
@@ -1214,7 +1217,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                   .purchaseOrderBalanceUpdate(model.code, model),
               outsideDismiss: false,
               loadingText: '保存中。。。',
-              entrance: 'purchaseOrders',
+              entrance: '',
             );
           }
       );
@@ -1258,6 +1261,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
           );
         }
     );
+    PurchaseOrderBLoC.instance.refreshData('ALL');
   }
 
   Future<void> _requestMessage(BuildContext context, String message) async {
