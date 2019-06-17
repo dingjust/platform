@@ -314,6 +314,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
           );
         }
     ).then((value) {
+      PurchaseOrderBLoC.instance.refreshData('ALL');
       Navigator.of(context).pop();
       bool result = false;
       if (value != null) {
@@ -332,8 +333,6 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
           }
       );
     });
-
-    PurchaseOrderBLoC.instance.refreshData('ALL');
   }
 
   void saveProofingOrder(ConsignmentModel consignment){
@@ -353,6 +352,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
           );
         }
     ).then((value){
+      ProofingOrdersBLoC.instance.refreshData('ALL');
       Navigator.of(context).pop();
       bool result = false;
       if(value != null){
@@ -370,7 +370,6 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
             );
           }
       );
-      ProofingOrdersBLoC.instance.refreshData('ALL');
     });
   }
 
