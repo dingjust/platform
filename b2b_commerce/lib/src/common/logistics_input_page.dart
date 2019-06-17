@@ -152,7 +152,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 shape: RoundedRectangleBorder(
                     borderRadius:
                     BorderRadius.all(Radius.circular(5))),
-                onPressed: (){
+                onPressed: () {
                   //把选中的物流公司放到Model
                   CarrierModel carrier = new CarrierModel();
                   carrier.code = carrierCode;
@@ -161,30 +161,34 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                   ConsignmentModel consignment = new ConsignmentModel();
                   consignment.trackingID = _orderNumberController.text;
                   consignment.carrierDetails = carrier;
-                  if(_orderNumberController.text != null && _orderNumberController.text != ''
+                  if (_orderNumberController.text != null &&
+                      _orderNumberController.text != ''
                       && carrierCode != null && carrierCode != '') {
                     //生产单的确认发货
-                    if (widget.isProductionOrder && widget.purchaseOrderModel != null) {
+                    if (widget.isProductionOrder &&
+                        widget.purchaseOrderModel != null) {
                       savePurchaseOrder(consignment);
                     }
                     //打样单的确认发货
-                    else if(!widget.isProductionOrder && widget.proofingModel != null) {
+                    else if (!widget.isProductionOrder &&
+                        widget.proofingModel != null) {
                       saveProofingOrder(consignment);
-                  }else{
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return CustomizeDialog(
-                            dialogType: DialogType.RESULT_DIALOG,
-                            failTips: '请选择物流公司和填写物流单号',
-                            callbackResult: false,
-                            confirmAction: (){
-                              Navigator.of(context).pop();
-                            },
-                          );
-                        }
-                    );
+                    } else {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) {
+                            return CustomizeDialog(
+                              dialogType: DialogType.RESULT_DIALOG,
+                              failTips: '请选择物流公司和填写物流单号',
+                              callbackResult: false,
+                              confirmAction: () {
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          }
+                      );
+                    }
                   }
                 }
             ),
@@ -368,8 +372,6 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
       );
       ProofingOrdersBLoC.instance.refreshData('ALL');
     });
-  }
-
   }
 
   void _showLogisticsSelect(List<CarrierModel> list) async {
