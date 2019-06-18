@@ -362,6 +362,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
         RequirementFilterCondition condition = widget.searchModel.requirementCondition;
         condition.keyword = controller.text;
         RequirementPoolBLoC.instance.clear();
+        Navigator.of(context).pop();
       });
       if (controller.text != '' && controller.text.isNotEmpty) {
         widget.searchModel.historyKeywords.add(controller.text);
@@ -370,6 +371,9 @@ class _SearchModelPageState extends State<SearchModelPage> {
       }
       Navigator.of(context).pop();
     }
+//    if(widget.searchModel.searchModelType == SearchModelType.){
+//
+//    }
   }
 
   delayedLoading(){
