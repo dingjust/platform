@@ -200,6 +200,7 @@ class PurchaseOrderRepository {
       );
     } on DioError catch (e) {
       print(e);
+      return false;
     }
 
     if (response != null && response.statusCode == 200) {
