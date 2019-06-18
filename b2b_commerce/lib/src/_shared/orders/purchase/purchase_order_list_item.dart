@@ -21,8 +21,6 @@ class PurchaseOrderItem extends StatefulWidget {
 
 class _PurchaseOrderItemState extends State<PurchaseOrderItem>
     with AutomaticKeepAliveClientMixin {
-      
-
   static Map<PurchaseOrderStatus, Color> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
     PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Color(0xFFFFD600),
@@ -118,7 +116,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       ],
                     )
                   : Container(
-                      child: widget.order.delayedDays != null && widget.order.delayedDays > 0
+                  child: widget.order.delayedDays != null &&
+                      widget.order.delayedDays > 0
                           ? Text('已延期',
                               textAlign: TextAlign.start,
                               style: const TextStyle(
@@ -152,16 +151,21 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             children: <Widget>[
               Expanded(
                 child: Container(
-                  child:
-                UserBLoC.instance.currentUser.type == UserType.BRAND?
-                  Text(
-                    '${widget.order.belongTo == null ? widget.order.companyOfSeller !=null? widget.order.companyOfSeller:'': widget.order.belongTo.name}',
+                  child: UserBLoC.instance.currentUser.type == UserType.BRAND
+                      ? Text(
+                    '${widget.order.belongTo == null ? widget.order
+                        .companyOfSeller != null
+                        ? widget.order.companyOfSeller
+                        : '' : widget.order.belongTo.name}',
                     style: const TextStyle(fontSize: 16),
-                  ):
-                Text(
-                  '${widget.order.purchaser == null ? widget.order.companyOfSeller !=null? widget.order.companyOfSeller:'': widget.order.purchaser.name}',
-                  style: const TextStyle(fontSize: 16),
-                ),
+                  )
+                      : Text(
+                    '${widget.order.purchaser == null ? widget.order
+                        .companyOfSeller != null
+                        ? widget.order.companyOfSeller
+                        : '' : widget.order.purchaser.name}',
+                    style: const TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
               Text(
@@ -297,8 +301,9 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    height: 30,
-                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                      height: 30,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 40),
                       child: widget.order.status ==
                           PurchaseOrderStatus.PENDING_PAYMENT
                           ? FlatButton(
@@ -323,24 +328,24 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                   return CustomizeDialog(
                                     dialogType: DialogType.CONFIRM_DIALOG,
                                     contentText2: '是否取消订单？',
-                                    contentTextStyle2: TextStyle(color: Colors.black),
+                                    contentTextStyle2:
+                                    TextStyle(color: Colors.black),
                                     isNeedConfirmButton: true,
                                     isNeedCancelButton: true,
-                                    confirmAction: (){
+                                    confirmAction: () {
                                       Navigator.of(context).pop();
                                       cancelOrder(widget.order.code);
                                     },
                                   );
-                                }
-                            );
-
+                                });
                           })
                           : Container()),
                 ),
                 Expanded(
                   child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
-                    height: 30,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 40),
+                      height: 30,
                       child: FlatButton(
                           color: Color(0xFFFFD600),
                           child: Text(
@@ -375,7 +380,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                   height: 30,
                   child: FlatButton(
                       color: Colors.red,
@@ -394,8 +400,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       onPressed: () async {
                         showDialog<void>(
                           context: context,
-                          barrierDismissible:
-                          true, // user must tap button!
+                          barrierDismissible: true, // user must tap button!
                           builder: (context) {
                             return AlertDialog(
                               title: Text(
@@ -425,15 +430,15 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                         barrierDismissible: false,
                                         builder: (_) {
                                           return RequestDataLoading(
-                                            requestCallBack: PurchaseOrderRepository()
+                                            requestCallBack:
+                                            PurchaseOrderRepository()
                                                 .purchaseOrderCancelling(
                                                 widget.order.code),
                                             outsideDismiss: false,
                                             loadingText: '正在取消。。。',
                                             entrance: 'purchaseOrders',
                                           );
-                                        }
-                                    );
+                                        });
                                   },
                                 ),
                               ],
@@ -445,8 +450,9 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               ),
               Expanded(
                 child: Container(
-                  height: 30,
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                    height: 30,
+                    padding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                     child: FlatButton(
                         color: Color(0xFFFFD600),
                         child: Text(
@@ -474,11 +480,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                   loadingText: '保存中。。。',
                                   entrance: 'purchaseOrders',
                                 );
-                              }
-                          );
-                        }
-                    )
-                ),
+                              });
+                        })),
               ),
             ],
           );
@@ -498,8 +501,9 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               ),
               Expanded(
                 child: Container(
-                  height: 30,
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                    height: 30,
+                    padding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                     child: FlatButton(
                         color: Color(0xFFFFD600),
                         child: Text(
@@ -523,9 +527,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                 order: widget.order,
                                 paymentFor: PaymentFor.BALANCE,
                               )));
-                        }
-                    )
-                ),
+                        })),
               ),
             ],
           );
@@ -541,8 +543,9 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             ),
             Expanded(
               child: Container(
-                height: 30,
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                  height: 30,
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                   child: FlatButton(
                       color: Color(0xFFFFD600),
                       child: Text(
@@ -564,16 +567,16 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             builder: (_) {
                               return RequestDataLoading(
                                 requestCallBack: PurchaseOrderRepository()
-                                    .purchaseOrderShipped(widget.order.code, widget.order),
+                                    .purchaseOrderShipped(
+                                    widget.order.code, widget.order),
                                 outsideDismiss: false,
                                 loadingText: '保存中。。。',
                                 entrance: 'purchaseOrders',
                               );
-                            }
-                        );
-                      }
-                  )
-              ),
+                            }).then((value) {
+                          PurchaseOrderBLoC.instance.refreshData('ALL');
+                        });
+                      })),
             ),
           ],
         );
@@ -589,8 +592,9 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             ),
             Expanded(
               child: Container(
-                height: 30,
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                  height: 30,
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                   child: FlatButton(
                       color: Color(0xFFFFD600),
                       child: Text(
@@ -612,16 +616,14 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             builder: (_) {
                               return RequestDataLoading(
                                 requestCallBack: PurchaseOrderRepository()
-                                    .purchaseOrderShipped(widget.order.code, widget.order),
+                                    .purchaseOrderShipped(
+                                    widget.order.code, widget.order),
                                 outsideDismiss: false,
                                 loadingText: '保存中。。。',
                                 entrance: 'purchaseOrders',
                               );
-                            }
-                        );
-                      }
-                  )
-              ),
+                            });
+                      })),
             ),
           ],
         );
@@ -644,54 +646,54 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             child: Container(
               height: 30,
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
-                child: FlatButton(
-                    color: Colors.red,
-                    child: const Text(
-                      '修改价格',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+              child: FlatButton(
+                  color: Colors.red,
+                  child: const Text(
+                    '修改价格',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
                     ),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(Radius.circular(5))),
-                    onPressed: () {
-                      TextEditingController con = new TextEditingController();
-                      TextEditingController con1 = new TextEditingController();
-                      TextEditingController con2 = new TextEditingController();
-                      FocusNode node = new FocusNode();
-                      FocusNode node1 = new FocusNode();
-                      FocusNode node2 = new FocusNode();
-                      con.text = widget.order.totalPrice.toString();
-                      con1.text = widget.order.deposit.toString();
-                      con2.text = widget.order.unitPrice.toString();
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) {
-                            return CustomizeDialog(
-                              dialogType: DialogType.PRICE_INPUT_DIALOG,
-                              outsideDismiss: false,
-                              inputController: con,
-                              inputController1: con1,
-                              inputController2: con2,
-                              focusNode: node,
-                              focusNode1: node1,
-                              focusNode2: node2,
-                            );
-                          }
-                      ).then((value){
-                        if(value != null && value != ''){
-                          String str = value;
-                          str = str.replaceAll('￥', '');
-                          print(str);
-                          String deposit = str.substring(0,str.indexOf(','));
-                          String unitPrice = str.substring(str.indexOf(',')+1,str.length);
-                          _showDepositDialog(context, widget.order,deposit,unitPrice);
-                        }
-                      });
-
-                    }),
+                  ),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(5))),
+                  onPressed: () {
+                    TextEditingController con = new TextEditingController();
+                    TextEditingController con1 = new TextEditingController();
+                    TextEditingController con2 = new TextEditingController();
+                    FocusNode node = new FocusNode();
+                    FocusNode node1 = new FocusNode();
+                    FocusNode node2 = new FocusNode();
+                    con.text = widget.order.totalPrice.toString();
+                    con1.text = widget.order.deposit.toString();
+                    con2.text = widget.order.unitPrice.toString();
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.PRICE_INPUT_DIALOG,
+                            outsideDismiss: false,
+                            inputController: con,
+                            inputController1: con1,
+                            inputController2: con2,
+                            focusNode: node,
+                            focusNode1: node1,
+                            focusNode2: node2,
+                          );
+                        }).then((value) {
+                      if (value != null && value != '') {
+                        String str = value;
+                        str = str.replaceAll('￥', '');
+                        print(str);
+                        String deposit = str.substring(0, str.indexOf(','));
+                        String unitPrice =
+                        str.substring(str.indexOf(',') + 1, str.length);
+                        _showDepositDialog(
+                            context, widget.order, deposit, unitPrice);
+                      }
+                    });
+                  }),
             ),
           ),
         ],
@@ -742,7 +744,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             Expanded(
               child: Container(
                 height: 30,
-                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                padding:
+                const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: FlatButton(
                   color: const Color(0xFFFFD600),
                   child: const Text(
@@ -752,8 +755,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                       fontSize: 16,
                     ),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0, horizontal: 20),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(5))),
                   onPressed: () {
@@ -782,7 +785,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             Expanded(
               child: Container(
                 height: 30,
-                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+                padding:
+                const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                 child: FlatButton(
                   color: Colors.red,
                   child: const Text(
@@ -838,7 +842,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
   }
 
   //打开修改尾款金额弹框
-  void _showBalanceDialog(BuildContext context,PurchaseOrderModel model){
+  void _showBalanceDialog(BuildContext context, PurchaseOrderModel model) {
     TextEditingController con = new TextEditingController();
     TextEditingController con1 = new TextEditingController();
     TextEditingController con2 = new TextEditingController();
@@ -866,17 +870,17 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             focusNode2: node2,
             focusNode3: node3,
           );
-        }
-    ).then((value){
-      if(value != null && value != ''){
+        }).then((value) {
+      if (value != null && value != '') {
         String str = value;
         str = str.replaceAll('￥', '');
-        _updateBalance(context, widget.order,str);
+        _updateBalance(context, widget.order, str);
       }
     });
   }
 
-  void _updateBalance(BuildContext context,PurchaseOrderModel model,String balanceText) async {
+  void _updateBalance(BuildContext context, PurchaseOrderModel model,
+      String balanceText) async {
     bool result = false;
     Navigator.of(context).pop();
     if (balanceText != null && balanceText != '') {
@@ -895,15 +899,15 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                 loadingText: '保存中。。。',
                 entrance: 'purchaseOrders',
               );
-            }
-        ).then((value)async{
-          if(value) {
-            if (model.status ==
-                PurchaseOrderStatus.IN_PRODUCTION) {
+            }).then((value) async {
+          if (value) {
+            if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
               try {
                 for (int i = 0; i < widget.order.progresses.length; i++) {
-                  if (widget.order.currentPhase == widget.order.progresses[i].phase) {
-                    await PurchaseOrderRepository() .productionProgressUpload(widget.order.code,
+                  if (widget.order.currentPhase ==
+                      widget.order.progresses[i].phase) {
+                    await PurchaseOrderRepository().productionProgressUpload(
+                        widget.order.code,
                         widget.order.progresses[i].id.toString(),
                         widget.order.progresses[i]);
                   }
@@ -992,13 +996,13 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                 builder: (_) {
                                   return RequestDataLoading(
                                     requestCallBack: PurchaseOrderRepository()
-                                        .purchaseOrderBalanceUpdate(model.code, model),
+                                        .purchaseOrderBalanceUpdate(
+                                        model.code, model),
                                     outsideDismiss: false,
                                     loadingText: '保存中。。。',
                                     entrance: 'purchaseOrders',
                                   );
-                                }
-                            );
+                                });
                           } catch (e) {
                             print(e);
                           }
@@ -1096,8 +1100,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                     ),
                   ),
                   shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5))),
+                      borderRadius: const BorderRadius.all(Radius.circular(5))),
                   onPressed: () async {
                     double unit = unitText.text == null || unitText.text == ''
                         ? model.unitPrice
@@ -1119,13 +1122,13 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           builder: (_) {
                             return RequestDataLoading(
                               requestCallBack: PurchaseOrderRepository()
-                                  .purchaseOrderDepositUpdate(model.code, model),
+                                  .purchaseOrderDepositUpdate(
+                                  model.code, model),
                               outsideDismiss: false,
                               loadingText: '保存中。。。',
                               entrance: '0',
                             );
-                          }
-                      );
+                          });
                     } catch (e) {
                       print(e);
                     }
@@ -1143,16 +1146,17 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
 //  }
 
   //打开修改定金金额弹框
-  void _showDepositDialog(BuildContext context, PurchaseOrderModel model,String depositText,String unitPriceText) {
+  void _showDepositDialog(BuildContext context, PurchaseOrderModel model,
+      String depositText, String unitPriceText) {
     double deposit = model.deposit;
     double unit = model.unitPrice;
-    if(depositText != null && depositText != ''){
-      if(depositText.indexOf('￥')!= 0){
+    if (depositText != null && depositText != '') {
+      if (depositText.indexOf('￥') != 0) {
         deposit = double.parse(depositText.replaceAll('￥', ''));
       }
     }
-    if(unitPriceText != null && unitPriceText != ''){
-      if(unitPriceText.indexOf('￥')!= 0){
+    if (unitPriceText != null && unitPriceText != '') {
+      if (unitPriceText.indexOf('￥') != 0) {
         unit = double.parse(unitPriceText.replaceAll('￥', ''));
       }
     }
@@ -1173,8 +1177,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               loadingText: '保存中。。。',
               entrance: '0',
             );
-          }
-      );
+          });
     } catch (e) {
       print(e);
     }
@@ -1191,17 +1194,17 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
             contentText2: '是否无需付款直接跳过？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
-              _neverComplete(context,widget.order);
+              _neverComplete(context, widget.order);
             },
           );
-        }
-    );
+        });
   }
 
   //确认跳过按钮
-  Future<void> _neverComplete(BuildContext context, PurchaseOrderModel model) async {
+  Future<void> _neverComplete(BuildContext context,
+      PurchaseOrderModel model) async {
     model.balance = 0;
     model.skipPayBalance = true;
     try {
@@ -1216,14 +1219,12 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
               loadingText: '保存中。。。',
               entrance: 'purchaseOrders',
             );
-          }
-      );
+          });
       if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
         try {
           for (int i = 0; i < widget.order.progresses.length; i++) {
             if (widget.order.currentPhase == widget.order.progresses[i].phase) {
-              await PurchaseOrderRepository()
-                  .productionProgressUpload(
+              await PurchaseOrderRepository().productionProgressUpload(
                   widget.order.code,
                   widget.order.progresses[i].id.toString(),
                   widget.order.progresses[i]);
@@ -1250,14 +1251,13 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: PurchaseOrderRepository()
-                .purchaseOrderCancelling(code),
+            requestCallBack:
+            PurchaseOrderRepository().purchaseOrderCancelling(code),
             outsideDismiss: false,
             loadingText: '正在取消。。。',
             entrance: 'purchaseOrders',
           );
-        }
-    );
+        });
   }
 
   Future<void> _requestMessage(BuildContext context, String message) async {

@@ -65,7 +65,12 @@ class _MyAccountPageState extends State<MyAccountPage> {
         height: 50,
         width: double.infinity,
         child: FlatButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WithdrawCash()),
+            );
+          },
           color: const Color.fromRGBO(255, 219, 0, 1),
           child: Text(
             '提现',
@@ -91,12 +96,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
           ),
         ),
       ),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => WithdrawCash()),
-        );
-      },
+      onTap: () {},
     );
   }
 

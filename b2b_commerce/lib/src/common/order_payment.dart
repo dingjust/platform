@@ -28,7 +28,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) => initCheck());
     //监听微信回调
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) async {
-      print('========Fluwx response');
+      print('========Fluwx response ${widget.hashCode}');
       if (data.errCode == 0) {
         Future.delayed(const Duration(seconds: 1), () {
           afterPaid();
@@ -36,7 +36,6 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       } else if (data.errCode == -1) {
         onPaymentError();
       } else {
-        // onPaymentError();
         Navigator.of(context).pop();
       }
     });
@@ -558,7 +557,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 if (widget.order is ProofingModel) {
                   //刷新数据
                   ProofingOrdersBLoC.instance.reset();
-
+                  this.dispose();
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => ProofingOrderDetailPage(
@@ -640,6 +639,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   //支付后确认订单操作，延时1秒
   void afterPaid() async {
+    print('========After ${widget.hashCode}     ${this.hashCode}');
+
     String orderPaymentStatus = await checkOrder(paymentWay);
 
     PaymentStatus paymentStatus = PaymentStatusMap[orderPaymentStatus];
@@ -655,5 +656,12 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     } else {
       onPaymentError();
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    fluwx.dispose();
+    super.dispose();
   }
 }

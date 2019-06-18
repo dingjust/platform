@@ -66,7 +66,11 @@ class _ProofingListState extends State<ProofingList>
 
   void _onProofingPaying(ProofingModel model) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => OrderPaymentPage(order: model)),
+      MaterialPageRoute(
+          builder: (context) =>
+              OrderPaymentPage(
+                order: model,
+              )),
     );
   }
 
