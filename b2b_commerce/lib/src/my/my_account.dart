@@ -4,6 +4,8 @@ import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
+import 'account/amount_flow_list.dart';
+
 /// 我的账户
 class MyAccountPage extends StatefulWidget {
   @override
@@ -96,7 +98,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
           ),
         ),
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AmountFlowsPage()));
+      },
     );
   }
 

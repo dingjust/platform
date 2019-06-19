@@ -213,7 +213,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                   bool result = false;
                   if(widget.isProductionOrder){
                     saveOfflinePurchaseOrder();
-                  }else{
+                  } else {
                     saveOfflineProofingOrder();
                   }
                 }
@@ -224,7 +224,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
     );
   }
 
-  void saveOfflineProofingOrder(){
+  void saveOfflineProofingOrder() {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -239,9 +239,9 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
             entrance: '',
           );
         }
-    ).then((value){
+    ).then((value) {
       bool result = false;
-      if(value != null){
+      if (value != null) {
         result = value;
       }
       showDialog(
@@ -260,7 +260,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
     });
   }
 
-  void saveOfflinePurchaseOrder(){
+  void saveOfflinePurchaseOrder() {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -275,9 +275,9 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
             entrance: '',
           );
         }
-    ).then((value){
+    ).then((value) {
       bool result = false;
-      if(value != null){
+      if (value != null) {
         result = value;
       }
       showDialog(
@@ -335,7 +335,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
     });
   }
 
-  void saveProofingOrder(ConsignmentModel consignment){
+  void saveProofingOrder(ConsignmentModel consignment) {
     widget.proofingModel.consignment = consignment;
     showDialog(
         context: context,
@@ -351,11 +351,11 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
             entrance: '',
           );
         }
-    ).then((value){
+    ).then((value) {
       ProofingOrdersBLoC.instance.refreshData('ALL');
       Navigator.of(context).pop();
       bool result = false;
-      if(value != null){
+      if (value != null) {
         result = value;
       }
       showDialog(

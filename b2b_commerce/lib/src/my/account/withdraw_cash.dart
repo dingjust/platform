@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:widgets/widgets.dart';
 
 /// 提现页面
 class WithdrawCash extends StatelessWidget {
   ScrollController _scrollController = ScrollController();
+  TextEditingController _numController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,43 @@ class WithdrawCash extends StatelessWidget {
                 ),
               ),
             ),
-            SliverList(delegate: SliverChildListDelegate([])),
+            SliverList(
+                delegate: SliverChildListDelegate([
+                  _buildRow1(),
+                  Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Center(
+                        child: Text(
+                          '提现到帐户',
+                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                      )),
+                  _buildRow2(),
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Center(
+                      child: Text(
+                        '预计3天后到账',
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ])),
           ],
+        ),
+      ),
+      bottomSheet: Container(
+        height: 50,
+        width: double.infinity,
+        child: FlatButton(
+          onPressed: () {
+            //TODO
+          },
+          color: const Color.fromRGBO(255, 219, 0, 1),
+          child: Text(
+            '确认提交',
+            style: TextStyle(fontSize: 20),
+          ),
         ),
       ),
     );
@@ -42,17 +80,16 @@ class WithdrawCash extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 50),
+      margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           _buildTotal(),
           Text(
-            '可取奖金额',
-            style: TextStyle(color: Colors.black45),
+            '可取金额',
+            style: TextStyle(color: Colors.black),
           ),
-          // _buildAmountRow()
         ],
       ),
     );
@@ -60,11 +97,12 @@ class WithdrawCash extends StatelessWidget {
 
   Widget _buildTotal() {
     return Container(
+      margin: EdgeInsets.fromLTRB(0, 50, 0, 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            margin: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+            margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -85,12 +123,99 @@ class WithdrawCash extends StatelessWidget {
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
                           color: const Color.fromRGBO(36, 38, 41, 1),
-                    ),
+                        ),
                       ))
                 ],
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRow1() {
+    TextField _numField = TextField(
+      autofocus: false,
+      keyboardType: TextInputType.number,
+      controller: _numController,
+      onChanged: (value) {},
+      decoration: InputDecoration(
+        hintText: '输入金额',
+        border: InputBorder.none,
+      ),
+      textAlign: TextAlign.right,
+    );
+
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Column(
+        children: <Widget>[
+          InputRow(
+            label: '提现金额￥',
+            labelWidth: 95,
+            field: _numField,
+          ),
+          InfoRow(
+            label: '手续费(自动计算)',
+            value: '0.00',
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRow2() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Column(
+        children: <Widget>[
+          InfoRow(
+            label: '户名',
+            value: '刘少立',
+          ),
+          InfoRow(
+            label: '银行卡号',
+            value: '6229293939309309',
+          ),
+          InfoRow(
+            label: '银行',
+            value: '工商银行',
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class InfoRow extends StatelessWidget {
+  final String label;
+
+  final String value;
+
+  const InfoRow({Key key, this.label, this.value}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            child: Text(
+              label,
+              style:
+              TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+            ),
+          ),
+          Text(
+            '$value',
+            style: TextStyle(color: Colors.grey),
+          )
         ],
       ),
     );

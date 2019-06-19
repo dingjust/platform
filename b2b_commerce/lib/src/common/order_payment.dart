@@ -96,7 +96,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 )
               ],
             ),
-            ListTile(
+            widget.order.deliveryAddress != null
+                ? ListTile(
               leading: Icon(
                 B2BIcons.location,
                 color: Colors.black,
@@ -104,32 +105,45 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               title: Row(
                 children: <Widget>[
                   widget.order.deliveryAddress == null ||
-                          widget.order.deliveryAddress.fullname == null
+                      widget.order.deliveryAddress.fullname == null
                       ? Container()
                       : Text(widget.order.deliveryAddress.fullname),
                   widget.order.deliveryAddress == null ||
-                          widget.order.deliveryAddress.cellphone == null
+                      widget.order.deliveryAddress.cellphone == null
                       ? Container()
                       : Container(
-                          margin: EdgeInsets.only(left: 10),
-                          child: Text(widget.order.deliveryAddress.cellphone),
-                        )
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text(
+                        widget.order.deliveryAddress.cellphone),
+                  )
                 ],
               ),
               subtitle: widget.order.deliveryAddress == null ||
-                      widget.order.deliveryAddress.region == null ||
-                      widget.order.deliveryAddress.city == null ||
-                      widget.order.deliveryAddress.cityDistrict == null ||
-                      widget.order.deliveryAddress.line1 == null
+                  widget.order.deliveryAddress.region == null ||
+                  widget.order.deliveryAddress.city == null ||
+                  widget.order.deliveryAddress.cityDistrict == null ||
+                  widget.order.deliveryAddress.line1 == null
                   ? Container()
                   : Text(
-                      widget.order.deliveryAddress.region.name +
-                          widget.order.deliveryAddress.city.name +
-                          widget.order.deliveryAddress.cityDistrict.name +
-                          widget.order.deliveryAddress.line1,
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
+                  widget.order.deliveryAddress.region.name +
+                      widget.order.deliveryAddress.city.name +
+                      widget.order.deliveryAddress.cityDistrict.name +
+                      widget.order.deliveryAddress.line1,
+                  style: TextStyle(
+                    color: Colors.black,
+                  )),
+            )
+                : Container(
+              height: 100,
+              child: Center(
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        border:
+                        Border.all(width: 0.5, color: Colors.grey[300])),
+                    child: Text('点击选择收货地址',
+                        style: TextStyle(color: Colors.red, fontSize: 20)),
+                  )),
             ),
             SizedBox(
               child: Image.asset(
@@ -388,6 +402,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             child: FlatButton(
               color: Color.fromRGBO(255, 214, 12, 1),
               onPressed: widget.order.deliveryAddress == null ? null : onPay,
+              disabledColor: Colors.grey[300],
               child: Text(
                 '支付',
                 style: TextStyle(fontSize: 18),

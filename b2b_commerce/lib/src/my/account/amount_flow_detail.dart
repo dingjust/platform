@@ -1,23 +1,24 @@
+import 'package:b2b_commerce/src/my/account/bill_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-class BillDetailPage extends StatefulWidget {
+class AmountFlowDetailPage extends StatefulWidget {
   final String code;
 
-  const BillDetailPage({Key key, this.code}) : super(key: key);
+  const AmountFlowDetailPage({Key key, this.code}) : super(key: key);
 
   @override
-  _BillDetailPageState createState() => _BillDetailPageState();
+  _AmountFlowDetailPageState createState() => _AmountFlowDetailPageState();
 }
 
-class _BillDetailPageState extends State<BillDetailPage> {
+class _AmountFlowDetailPageState extends State<AmountFlowDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('账单明细'),
+        title: Text('交易明细'),
         elevation: 0.5,
       ),
       body: FutureBuilder<AmountFlowModel>(
@@ -52,21 +53,21 @@ class _BillDetailPageState extends State<BillDetailPage> {
                       children: <Widget>[
                         Container(
                           child: snapshot.data.amountFlowType ==
-                              AmountFlowType.OUTFLOW
+                                  AmountFlowType.OUTFLOW
                               ? Text(
-                            '-￥${snapshot.data.amount}',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold),
-                          )
+                                  '-￥${snapshot.data.amount}',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold),
+                                )
                               : Text(
-                            '+￥${snapshot.data.amount}',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold),
-                          ),
+                                  '+￥${snapshot.data.amount}',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold),
+                                ),
                         )
                       ],
                     ),
@@ -78,27 +79,8 @@ class _BillDetailPageState extends State<BillDetailPage> {
                       color: Colors.grey[400],
                     ),
                   ),
-                  Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-                    child: DetailRow(
-                      label: '银行卡',
-                      value: '${snapshot.data.account}',
-                    ),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Divider(
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                  _buildDetailRow('状态',
-                      '${AmountStatusLocalizedMap[snapshot.data
-                          .amountStatus]}'),
                   _buildDetailRow('类型',
-                      '${AmountFlowTypeLocalizedMap[snapshot.data
-                          .amountFlowType]}'),
+                      '${AmountFlowTypeLocalizedMap[snapshot.data.amountFlowType]}'),
                   _buildDetailRow('时间',
                       '${DateFormatUtil.format(snapshot.data.creationtime)}'),
                   _buildDetailRow('剩余总额', '￥12222222'),
@@ -142,32 +124,5 @@ class _BillDetailPageState extends State<BillDetailPage> {
           amountStatus: AmountStatus.AUDITING,
           amountFlowType: AmountFlowType.INFLOW);
     });
-  }
-}
-
-class DetailRow extends StatelessWidget {
-  final String label;
-
-  final String value;
-
-  const DetailRow({Key key, this.label, this.value}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: 80,
-          child: Text(
-            '$label',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
-          ),
-        ),
-        Text(
-          '$value',
-          style: TextStyle(fontSize: 16),
-        )
-      ],
-    );
   }
 }

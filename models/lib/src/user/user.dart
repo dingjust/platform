@@ -89,8 +89,7 @@ class UserModel extends PrincipalModel {
   static Map<String, dynamic> toJson(UserModel model) =>
       _$UserModelToJson(model);
 
-  static List<Map<String, dynamic>> _rolesToJson(
-      List<RoleModel> models) =>
+  static List<Map<String, dynamic>> _rolesToJson(List<RoleModel> models) =>
       models.map((model) => RoleModel.toJson(model)).toList();
 }
 
