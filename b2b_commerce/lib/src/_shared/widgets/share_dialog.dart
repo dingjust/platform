@@ -5,7 +5,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ShareDialog {
-  static void showShareDialog(BuildContext context) {
+  static void showShareDialog(BuildContext context,
+      {@required String url,
+        @required String title,
+        @required String description,
+        @required String imageUrl}) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -18,9 +22,8 @@ class ShareDialog {
                   flex: 3,
                   child: Container(
                     color: Color.fromRGBO(245, 245, 245, 1),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
                       children: <Widget>[
                         FlatButton(
                           child: Column(
@@ -39,11 +42,11 @@ class ShareDialog {
                           ),
                           onPressed: () {
                             WechatServiceImpl.instance.shareWeb(
-                                'https://www.nbyjy.net/',
+                                '$url',
                                 WeChatScene.SESSION,
-                                '分享测试',
-                                '分享描述',
-                                'https://g-search1.alicdn.com/img/bao/uploaded/i4/i3/4103014183/O1CN01H35VRQ1glrGidMD6U_!!0-item_pic.jpg_460x460Q90.jpg_.webp');
+                                '$title',
+                                '$description',
+                                '$imageUrl');
                           },
                         ),
                         FlatButton(
@@ -55,8 +58,42 @@ class ShareDialog {
                             ],
                           ),
                           onPressed: () {
-                            // WechatServiceImpl.instance
-                            //     .shareWeb('https://www.nbyjy.net/',WeChatScene.TIMELINE);
+                            WechatServiceImpl.instance.shareWeb(
+                                '$url',
+                                WeChatScene.TIMELINE,
+                                '$title',
+                                '$description',
+                                '$imageUrl');
+                          },
+                        ),
+                        FlatButton(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              B2BImage.qq(height: 50, width: 50),
+                              Text('发送给好友')
+                            ],
+                          ),
+                          onPressed: () {
+                            QQService.instance.share('$url',
+                                imageUrl: '$imageUrl',
+                                summary: '$description',
+                                title: '$title');
+                          },
+                        ),
+                        FlatButton(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              B2BImage.qqZone(height: 50, width: 50),
+                              Text('分享到空间')
+                            ],
+                          ),
+                          onPressed: () {
+                            QQService.instance.shareQQzone('$url',
+                                imageUrl: '$imageUrl',
+                                summary: '$description',
+                                title: '$title');
                           },
                         )
                       ],

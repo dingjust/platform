@@ -2,8 +2,8 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
   //测试
-  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+  // static const CONTEXT_PATH = 'http://sc.nbyjy.net';
+  // static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
 
   // static const CONTEXT_PATH = 'https://192.168.1.186:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH =
@@ -11,8 +11,8 @@ class GlobalConfigs {
   // static const IMAGE_BASIC_URL = 'http://47.106.112.137:9001/djwebservices/v2';
   // static const CONTEXT_PATH = 'https://192.168.1.191:9002';
   // 生产
-  // static const CONTEXT_PATH = 'http://ht.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+  static const CONTEXT_PATH = 'http://ht.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
   // static const CONTEXT_PATH = 'http://platform.dingjust.cn';
   // static const IMAGE_BASIC_URL = 'http://120.78.211.86:9001/djwebservices/v2';
 
@@ -66,4 +66,7 @@ class GlobalConfigs {
       '7ff2f1b6002d0aaa2ef2cb40f76e7c4a';
 
   static const String ALIPAY_URL_SCHEME = "nbyijiayi";
+
+  static const String LOGO_URL =
+      'http://img.nbyjy.net/resource/h01/h57/8797905813534.jpg';
 }

@@ -6,7 +6,6 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:services/src/message/message_bloc.dart';
-import 'package:services/src/net/error_response.dart';
 import 'package:services/src/system/bloc/app_bloc.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 

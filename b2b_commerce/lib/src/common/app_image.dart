@@ -125,4 +125,12 @@ class B2BImage {
     return getImage('temp/common/wechat_friend.png',
         width: width, height: height);
   }
+
+  static Image qq({double width, double height}) {
+    return getImage('temp/common/qq_logo.png', width: width, height: height);
+  }
+
+  static Image qqZone({double width, double height}) {
+    return getImage('temp/common/qq_zone.png', width: width, height: height);
+  }
 }

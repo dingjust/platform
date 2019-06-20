@@ -90,4 +90,22 @@ class Apis {
 
   static const String AMAP_AROUND_API =
       'https://restapi.amap.com/v3/place/around';
+
+  ///分享-需求订单
+  static get shareRequirement =>
+          (String code) {
+        return 'https://www.nbyjy.net/RequirementSharePage.html?code=$code&type=requirement';
+      };
+
+  ///分享-生产进度
+  static get shareProductionProgress =>
+          (String code) {
+        return 'https://www.nbyjy.net/productionProgressShare.html?code=$code&type=productionProgress';
+      };
+
+  ///分享-工厂
+  static get shareFactory =>
+          (String code) {
+        return 'https://www.nbyjy.net/factoryInfo.html?code=$code&type=factory';
+      };
 }
