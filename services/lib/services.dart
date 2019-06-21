@@ -73,8 +73,8 @@ export 'src/qq/qq_service.dart';
 export 'src/bank/bank_service.dart';
 export 'src/bank/bank_response.dart';
 export 'src/my/bloc/amount_flow_bloc.dart';
-
-
+export 'src/websocket/websocket_service.dart';
+export 'src/message/notifications_service.dart';
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();
   var _bottomController = StreamController<bool>.broadcast();

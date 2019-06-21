@@ -106,7 +106,10 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
   }
 
   Widget _buildQRCode() {
-    return Container(child: Image.asset('temp/QRCode.png', package: 'assets'));
+    return Container(
+        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+        child: Image.asset('temp/QRCode.png', package: 'assets'));
   }
 
   Widget _buildTips(BuildContext context) {

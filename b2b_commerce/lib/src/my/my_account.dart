@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
+import 'package:b2b_commerce/src/my/account/socket.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
@@ -14,7 +15,6 @@ class MyAccountPage extends StatefulWidget {
 
 class _MyAccountPageState extends State<MyAccountPage> {
   ScrollController _scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -364,8 +364,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
   }
 
   void onAddCard() {
+    // Navigator.of(context)
+    //     .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
+        .push(MaterialPageRoute(builder: (context) => WebSocketRoute()));
   }
 
   Future<String> _getData() async {
