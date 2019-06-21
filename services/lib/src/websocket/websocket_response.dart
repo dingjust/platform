@@ -6,22 +6,22 @@ part 'websocket_response.g.dart';
 
 ///Socket消息 class WebsocketResponse {
   ///消息主题
-  final String body;
+  String body;
 
   ///标题
-  final String title;
+  String title;
 
   ///类型
-  final String type;
+  String type;
 
   ///HTML URL
-  final String openUrl;
+  String openUrl;
 
   ///app跳转
-  final String openTarget;
+  String openTarget;
 
   ///额外消息
-  final String extra;
+  String extra;
 
   WebsocketResponse({
     this.body,
