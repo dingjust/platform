@@ -3,8 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'websocket_response.g.dart';
 
 @JsonSerializable()
-
-///Socket消息 class WebsocketResponse {
+class WebsocketResponse {
   ///消息主题
   String body;
 
