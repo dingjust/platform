@@ -63,6 +63,9 @@ dependencies:
   simple_permissions: ^0.1.9
   flutter_qq: ^0.0.4
   flutter_local_notifications: ^0.7.1+3
+  image_picker_saver: ^0.3.0
+
+
 
 dev_dependencies:
   flutter_test:
