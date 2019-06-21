@@ -4,6 +4,8 @@ import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
+import 'account/amount_flow_list.dart';
+
 /// 我的账户
 class MyAccountPage extends StatefulWidget {
   @override
@@ -65,7 +67,12 @@ class _MyAccountPageState extends State<MyAccountPage> {
         height: 50,
         width: double.infinity,
         child: FlatButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WithdrawCash()),
+            );
+          },
           color: const Color.fromRGBO(255, 219, 0, 1),
           child: Text(
             '提现',
@@ -92,10 +99,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
         ),
       ),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => WithdrawCash()),
-        );
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AmountFlowsPage()));
       },
     );
   }

@@ -960,7 +960,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     FocusNode node3 = new FocusNode();
     con.text = widget.order.totalPrice.toString();
     con1.text = widget.order.deposit.toString();
-    con2.text = widget.order.unitPrice.toString();
+    con2.text = '${widget.order.totalPrice - widget.order.deposit}';
     showDialog(
         context: context,
         barrierDismissible: false,

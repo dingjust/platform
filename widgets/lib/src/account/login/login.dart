@@ -550,11 +550,14 @@ class InputRow extends StatelessWidget {
 
   final bool isRequired;
 
+  final double labelWidth;
+
   const InputRow({Key key,
     this.label,
     this.field,
     this.surfix,
     this.leading,
+    this.labelWidth = 85,
     this.isRequired = false})
       : super(key: key);
 
@@ -571,7 +574,7 @@ class InputRow extends StatelessWidget {
         children: <Widget>[
           label != null
               ? Container(
-            width: 85,
+            width: labelWidth,
                   child: Text(
                     label,
                     style: TextStyle(
