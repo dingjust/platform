@@ -44,7 +44,7 @@ class NotificationsService {
                   isDefaultAction: true,
                   child: new Text('Ok'),
                   onPressed: () async {
-                    print('======================CCCCCCCCCCCCCCCc');
+                    print('=========消息通知点击事件=============');
                   })
             ],
           ),
@@ -57,7 +57,7 @@ class NotificationsService {
     }
     //payload 可作为通知的一个标记，区分点击的通知。
     if (payload != null && payload == "complete") {
-      print('===============Click');
+      print('=========消息通知点击事件=============');
     }
   }
 
@@ -77,7 +77,7 @@ class NotificationsService {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
-        id, 'plain $title', '$body', platformChannelSpecifics,
+        id, '$title', '$body', platformChannelSpecifics,
         payload: '$payload');
   }
 }

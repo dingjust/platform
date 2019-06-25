@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/socket.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,7 @@ import 'package:widgets/widgets.dart';
 
 import 'account/amount_flow_list.dart';
 
-/// 我的账户
+/// 我的账户   TODO:屏幕适配
 class MyAccountPage extends StatefulWidget {
   @override
   _MyAccountPageState createState() => _MyAccountPageState();
@@ -52,6 +51,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       delegate: SliverChildListDelegate([
                         _buildBill(context),
                         _buildBlankCard(context),
+                        Container(
+                          height: 100,
+                        )
                       ])),
                 ],
               ),

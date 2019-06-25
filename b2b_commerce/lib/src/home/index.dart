@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
+import 'package:b2b_commerce/src/home/search/notifications_icon.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,8 @@ class _HomePageState extends State<HomePage> {
         content: Text('$value'),
       ));
     });
+    ws$.send('connect');
+    ns$.init(context);
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {
@@ -103,7 +106,9 @@ class _HomePageState extends State<HomePage> {
               expandedHeight: 188.0,
               pinned: true,
               elevation: 0.5,
-              title: widget.searchInputWidgetsByUserType,
+              title: HomeTitle(
+                leading: widget.searchInputWidgetsByUserType,
+              ),
               brightness: Brightness.dark,
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
@@ -120,6 +125,28 @@ class _HomePageState extends State<HomePage> {
                 delegate: SliverChildListDelegate(widget.widgetsByUserType)),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class HomeTitle extends StatelessWidget {
+  final Widget leading;
+
+  const HomeTitle({Key key, this.leading}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: leading,
+          ),
+          NotificationsIcon()
+        ],
       ),
     );
   }
