@@ -56,11 +56,11 @@ class RequirementPoolBLoC extends BLoCBase {
         if (isRecommend) {
           response = await http$.post(OrderApis.allRecommendedOrders,
               data: data,
-              queryParameters: {'page': currentPage, 'size': pageSize});
+              queryParameters: {'page': currentPage, 'size': pageSize,'fields':RequirementOrderOptions.DEFAULT});
         } else {
           response = await http$.post(OrderApis.allOrdersForFactory,
               data: data,
-              queryParameters: {'page': currentPage, 'size': pageSize});
+              queryParameters: {'page': currentPage, 'size': pageSize,'fields':RequirementOrderOptions.DEFAULT});
         }
       } on DioError catch (e) {
         print(e);

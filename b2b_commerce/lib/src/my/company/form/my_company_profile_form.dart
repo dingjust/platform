@@ -27,8 +27,6 @@ class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
       }
     }
 
-    print(_companyProfiles);
-
     // TODO: implement initState
     super.initState();
   }

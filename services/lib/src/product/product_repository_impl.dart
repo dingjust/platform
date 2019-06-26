@@ -56,7 +56,7 @@ class ProductRepositoryImpl extends ProductRepository{
   Future<ApparelProductModel> detail(String code) async{
     Response response;
     try{
-      response = response = await http$.get(ProductApis.detail(code));
+      response = response = await http$.get(ProductApis.detail(code),data: {'fields':ApparelProductOptions.DEFAULT});
     } on DioError catch (e) {
       print(e);
     }

@@ -67,7 +67,8 @@ class QuoteOrdersBLoC extends BLoCBase {
               data: data,
               queryParameters: {
                 'page': _quotesMap[status].currentPage,
-                'size': _quotesMap[status].size
+                'size': _quotesMap[status].size,
+                'fields':QuoteOrderOptions.BASIC_LESS
               });
         } on DioError catch (e) {
           print(e);
@@ -140,7 +141,8 @@ class QuoteOrdersBLoC extends BLoCBase {
               data: data,
               queryParameters: {
                 'page': ++_quotesMap[status].currentPage,
-                'size': _quotesMap[status].size
+                'size': _quotesMap[status].size,
+                'fields':QuoteOrderOptions.BASIC_LESS,
               });
         } on DioError catch (e) {
           print(e);
@@ -212,11 +214,11 @@ class QuoteOrdersBLoC extends BLoCBase {
         if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
           //获取与该工厂全部的报价单
           quoteResponse =
-          await QuoteOrderRepository().getQuotesByFactory(companyUid, {});
+          await QuoteOrderRepository().getQuotesByFactory(companyUid, { 'fields':QuoteOrderOptions.BASIC_LESS,});
         } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           //获取与该品牌全部的报价单
           quoteResponse =
-          await QuoteOrderRepository().getQuotesByBrand(companyUid, {});
+          await QuoteOrderRepository().getQuotesByBrand(companyUid, { 'fields':QuoteOrderOptions.BASIC_LESS,});
         }
 
         quoteModels.addAll(quoteResponse.content);
@@ -236,11 +238,11 @@ class QuoteOrdersBLoC extends BLoCBase {
         if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
           //获取与该工厂全部的报价单
           quoteResponse = await QuoteOrderRepository().getQuotesByFactory(
-              companyUid, {'page': quoteResponse.number + 1});
+              companyUid, {'page': quoteResponse.number + 1, 'fields':QuoteOrderOptions.BASIC_LESS,});
         } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           //获取与该品牌全部的报价单
           quoteResponse = await QuoteOrderRepository()
-              .getQuotesByBrand(companyUid, {'page': quoteResponse.number + 1});
+              .getQuotesByBrand(companyUid, {'page': quoteResponse.number + 1, 'fields':QuoteOrderOptions.BASIC_LESS,});
         }
         quoteModels.addAll(quoteResponse.content);
       } else {

@@ -11,7 +11,7 @@ import 'package:widgets/src/commons/carousel/banner_jump_detail.dart';
 
 /// 文本轮播图
 class CarouselStackText extends StatefulWidget {
-  CarouselStackText(this.items, {this.height = 188,});
+  CarouselStackText(this.items, {this.height = 240,});
 
   final List<CompanyProfileModel> items;
   final double height;
@@ -158,7 +158,8 @@ class _CarouselStackTextState extends State<CarouselStackText> {
           children: <Widget>[
             CachedNetworkImage(
                 imageUrl: item.medias[0].detailUrl(),
-                fit: BoxFit.cover,
+                fit: BoxFit.fitWidth,
+//                height: widget.height,
                 placeholder: (context, url) => SpinKitRing(
                       color: Colors.black12,
                       lineWidth: 2,

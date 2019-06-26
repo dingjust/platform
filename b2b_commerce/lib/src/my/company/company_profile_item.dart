@@ -37,7 +37,7 @@ class CompanyProfileItemState extends State<CompanyProfileItem> {
 //            ),
 //          ),
 //        ),
-        EditableAttachments(list: widget.companyProfile.medias,),
+        EditableAttachments(list: widget.companyProfile.medias,isCut:true),
         TextFieldComponent(
           focusNode: _descriptionFocusNode,
           controller: _descriptionController,

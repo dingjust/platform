@@ -384,3 +384,56 @@ class PaginationData {
   static Map<String, dynamic> toJson(PaginationData model) =>
       _$PaginationDataToJson(model);
 }
+
+//对应接口的fields参数
+class QuoteOrderOptions {
+  static const BASIC = "BASIC";
+  static const DEFAULT = "DEFAULT";
+  static const FULL = "FULL";
+  static const BASIC_LESS = "BASIC_LESS";
+}
+
+class PurchaseOrderOptions {
+  static const BASIC = "BASIC";
+  static const DEFAULT = "DEFAULT";
+  static const FULL = "FULL";
+  static const BASIC_LESS = "BASIC_LESS";
+}
+class RequirementOrderOptions {
+  static const BASIC = "BASIC";
+  static const DEFAULT = "DEFAULT";
+  static const FULL = "FULL";
+  static const BASIC_LESS = "BASIC_LESS";
+}
+class ProofingOrderOptions {
+  static const BASIC = "BASIC";
+  static const DEFAULT = "DEFAULT";
+  static const FULL = "FULL";
+  static const BASIC_LESS = "BASIC_LESS";
+}
+class ApparelProductOptions {
+  static const BASIC = "BASIC";
+  static const DEFAULT = "DEFAULT";
+  static const FULL = "FULL";
+  static const BASIC_FACTORIES = "BASIC_FACTORIES";
+  static const BASIC_FACTORIES_LESS = "BASIC_FACTORIES_LESS";
+  static const DETAIL_FACTORIES = "DETAIL_FACTORIES";
+  static const DETAIL = "DETAIL";
+}
+class FactoryOptions {
+  static const BASIC = "BASIC";
+  static const DEFAULT = "DEFAULT";
+  static const FULL = "FULL";
+  static const BASIC_UID_NAME = "BASIC_UID_NAME";
+  static const BASE = "BASE";
+  static const CONTACT = "CONTACT";
+  static const CERTIFICATE = "CERTIFICATE";
+}
+class BrandOptions {
+  static const BASIC = "BASIC";
+  static const DEFAULT = "DEFAULT";
+  static const FULL = "FULL";
+  static const BASIC_UID_NAME = "BASIC_UID_NAME";
+  static const CONTACT = "CONTACT";
+  static const CERTIFICATE = "CERTIFICATE";
+}
