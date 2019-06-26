@@ -78,5 +78,5 @@ class GlobalConfigs {
       'http://img.nbyjy.net/resource/h01/h57/8797905813534.jpg';
 
   ///Websocket心跳事件间隔
-  static const HEARTBEAT_DURATION = 5;
+  static const HEARTBEAT_DURATION = 3;
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
-import 'package:b2b_commerce/src/home/search/notifications_icon.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +20,7 @@ import '../home/pool/requirement_pool_recommend.dart';
 import '../home/requirement/fast_publish_requirement.dart';
 import '../production/production_offline_order_from.dart';
 import '../production/production_unique_code.dart';
+import '_shared/widgets/notifications.dart';
 
 /// 网站主页
 class HomePage extends StatefulWidget {

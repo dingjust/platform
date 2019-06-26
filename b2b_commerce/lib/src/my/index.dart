@@ -1,5 +1,5 @@
+import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
-import 'package:b2b_commerce/src/home/search/notifications_icon.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -22,7 +22,7 @@ var menuSeparator = Container(
 /// 我的
 class MyHomePage extends StatelessWidget {
   static final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState>();
 
   MyHomePage() : super(key: AppKeys.myHomePage);
 
@@ -73,7 +73,7 @@ class MyHomePage extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
                   child: NotificationsIcon(),
-                )
+                ),
               ],
               flexibleSpace: FlexibleSpaceBar(
                 key: AppKeys.myHomeSpaceBar,
@@ -82,7 +82,6 @@ class MyHomePage extends StatelessWidget {
                   initialData: bloc.currentUser,
                   builder: (BuildContext context,
                       AsyncSnapshot<UserModel> snapshot) {
-                    // debugPrint('${snapshot.data.type}');
                     return Container(
                       child: Column(
                         children: <Widget>[

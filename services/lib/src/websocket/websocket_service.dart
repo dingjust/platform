@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:core/core.dart';
 import 'package:services/src/message/notifications_pool.dart';
@@ -65,8 +66,17 @@ class WebSocketService {
             // ns$.showNotification(
             //     response.hashCode, '${response.title}', '${response.body}');
             //系统通知
-            notificationsPool$
-                .add(WebsocketResponse(title: '$message', body: '$message'));
+            int v = Random().nextInt(3);
+            if (v == 2) {
+              notificationsPool$.add(WebsocketResponse(
+                  title: '$message', body: '$message', group: 1));
+            } else if (v == 1) {
+              notificationsPool$.add(WebsocketResponse(
+                  title: '$message', body: '$message', group: 2));
+            } else {
+              notificationsPool$.add(WebsocketResponse(
+                  title: '$message', body: '$message', group: 3));
+            }
           } catch (e) {
             print(e);
           }
