@@ -16,8 +16,8 @@ class GlobalConfigs {
   ///websocket 连接
   static get WEBSOCKET_URL =>
           (String token, String uid) {
-        // return 'ws://192.168.1.137/message?token=$token&userId=$uid';
-        return 'ws://echo.websocket.org';
+        return 'ws://47.106.112.137:8088/message?token=$token&userId=$uid';
+        // return 'ws://echo.websocket.org';
       };
 
   static const BASE_URL = '$CONTEXT_PATH';
@@ -78,5 +78,5 @@ class GlobalConfigs {
       'http://img.nbyjy.net/resource/h01/h57/8797905813534.jpg';
 
   ///Websocket心跳事件间隔
-  static const HEARTBEAT_DURATION = 3;
+  static const HEARTBEAT_DURATION = 30;
 }

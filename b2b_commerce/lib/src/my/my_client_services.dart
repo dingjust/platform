@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker_saver/image_picker_saver.dart';
+
+// import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
@@ -196,12 +197,12 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
             FlatButton(
               child: const Text('确定'),
               onPressed: () async {
-                ByteData bytes =
-                await rootBundle.load('packages/assets/temp/QRCode.png');
-                ImagePickerSaver.saveFile(fileData: bytes.buffer.asUint8List())
-                    .then((v) {
-                  Navigator.pop(context);
-                });
+                // ByteData bytes =
+                // await rootBundle.load('packages/assets/temp/QRCode.png');
+                // ImagePickerSaver.saveFile(fileData: bytes.buffer.asUint8List())
+                //     .then((v) {
+                //   Navigator.pop(context);
+                // });
               },
             ),
           ],

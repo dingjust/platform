@@ -21,7 +21,7 @@ class _WebSocketRouteState extends State<WebSocketRoute> {
 
   @override
   void initState() {
-    ns$.init(context);
+    // ns$.init(context);
   }
 
   @override
