@@ -16,6 +16,13 @@ class GlobalConfigs {
   // static const CONTEXT_PATH = 'http://platform.dingjust.cn';
   // static const IMAGE_BASIC_URL = 'http://120.78.211.86:9001/djwebservices/v2';
 
+  ///websocket 连接
+  static get WEBSOCKET_URL =>
+          (String token, String uid) {
+        // return 'ws://192.168.1.137/message?token=$token&userId=$uid';
+        return 'ws://echo.websocket.org';
+      };
+
   static const BASE_URL = '$CONTEXT_PATH';
   static const ACCESS_TOKEN_KEY = 'access_token';
   static const USER_KEY = 'user';
@@ -57,6 +64,8 @@ class GlobalConfigs {
   /// 通过nginx代理所有b2b前缀的请求
   static const B2B_API_PREFIX = 'b2b';
 //   static const B2B_API_PREFIX = 'b2b-apparel-zh';
+
+  // static const B2B_API_PREFIX = 'b2b-apparel-zh';
   static const B2B_CLIENT_ID = 'nbyjy';
   static const B2B_CLIENT_SECRET = 'password';
 
@@ -69,4 +78,7 @@ class GlobalConfigs {
 
   static const String LOGO_URL =
       'http://img.nbyjy.net/resource/h01/h57/8797905813534.jpg';
+
+  ///Websocket心跳事件间隔
+  static const HEARTBEAT_DURATION = 3;
 }

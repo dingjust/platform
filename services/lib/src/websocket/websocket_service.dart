@@ -1,6 +1,12 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:math';
+
+import 'package:core/core.dart';
+import 'package:services/src/message/notifications_pool.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:services/src/websocket/websocket_response.dart';
 
 class WebSocketService {
   // 工厂模式
@@ -9,14 +15,16 @@ class WebSocketService {
   static WebSocketService get instance => _getInstance();
   static WebSocketService _instance;
 
-  IOWebSocketChannel channel;
+  WebSocket _socket;
+  Timer _timer;
+
+  ///心跳间隔
+  Duration _duration = Duration(seconds: GlobalConfigs.HEARTBEAT_DURATION);
 
   WebSocketService._internal() {
     // 初始化
-    //创建websocket连接
-    channel = new IOWebSocketChannel.connect(
-        'ws://192.168.1.137/message?token=${http$.token}&userId=${UserBLoC
-            .instance.currentUser.uid}');
+    _tryConnect();
+    _heartbeat();
   }
 
   static WebSocketService _getInstance() {
@@ -25,4 +33,78 @@ class WebSocketService {
     }
     return _instance;
   }
+
+  void _onDisconnected() {
+    print('========Socket连接中断=========');
+    print(
+        'Disconnected    ws:${this.hashCode}  ----  socket:${_socket
+            .hashCode}');
+    if (_socket != null) {
+      _socket.close();
+    }
+    _socket = null;
+    _tryConnect();
+  }
+
+  //创建websocket连接
+  void _tryConnect() {
+    print('========Socket连接=========');
+    print(
+        'Connecting........  ws:${this.hashCode}  ----  socket:${_socket
+            .hashCode} ');
+    WebSocket.connect(GlobalConfigs.WEBSOCKET_URL(
+        http$.getToken(), UserBLoC.instance.currentUser.mobileNumber))
+        .then((ws) {
+      _socket = ws;
+      _socket.listen(
+            (dynamic message) {
+          print('========收到推送=========');
+          print('$message');
+          try {
+            // WebsocketResponse response =
+            //     WebsocketResponse.fromJson(json.decode(message));
+            // ns$.showNotification(
+            //     response.hashCode, '${response.title}', '${response.body}');
+            //系统通知
+            int v = Random().nextInt(3);
+            if (v == 2) {
+              notificationsPool$.add(WebsocketResponse(
+                  title: '$message', body: '$message', group: 1));
+            } else if (v == 1) {
+              notificationsPool$.add(WebsocketResponse(
+                  title: '$message', body: '$message', group: 2));
+            } else {
+              notificationsPool$.add(WebsocketResponse(
+                  title: '$message', body: '$message', group: 3));
+            }
+          } catch (e) {
+            print(e);
+          }
+        },
+        onDone: _onDisconnected,
+        onError: (dynamic error) => _onDisconnected(),
+      );
+      _socket.done.then((dynamic _) => _onDisconnected());
+    });
+  }
+
+  ///推送消息
+  void send(dynamic message) {
+    if (_socket == null) {
+      _tryConnect();
+    } else {
+      print('======发送消息=======');
+      print('$message');
+      _socket.add(message);
+    }
+  }
+
+  //心跳检测
+  void _heartbeat() {
+    _timer = Timer.periodic(_duration, (timer) {
+      send('heartbeat test');
+    });
+  }
 }
+
+var ws$ = WebSocketService();

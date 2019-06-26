@@ -20,6 +20,7 @@ import '../home/pool/requirement_pool_recommend.dart';
 import '../home/requirement/fast_publish_requirement.dart';
 import '../production/production_offline_order_from.dart';
 import '../production/production_unique_code.dart';
+import '_shared/widgets/notifications.dart';
 
 /// 网站主页
 class HomePage extends StatefulWidget {
@@ -76,6 +77,8 @@ class _HomePageState extends State<HomePage> {
         content: Text('$value'),
       ));
     });
+    ws$.send('connect');
+    ns$.init(context);
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {
@@ -103,7 +106,9 @@ class _HomePageState extends State<HomePage> {
               expandedHeight: 188.0,
               pinned: true,
               elevation: 0.5,
-              title: widget.searchInputWidgetsByUserType,
+              title: HomeTitle(
+                leading: widget.searchInputWidgetsByUserType,
+              ),
               brightness: Brightness.dark,
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
@@ -120,6 +125,28 @@ class _HomePageState extends State<HomePage> {
                 delegate: SliverChildListDelegate(widget.widgetsByUserType)),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class HomeTitle extends StatelessWidget {
+  final Widget leading;
+
+  const HomeTitle({Key key, this.leading}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: leading,
+          ),
+          NotificationsIcon()
+        ],
       ),
     );
   }

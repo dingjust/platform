@@ -1,8 +1,6 @@
-import 'dart:async';
-
-import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
@@ -106,7 +104,15 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
   }
 
   Widget _buildQRCode() {
-    return Container(child: Image.asset('temp/QRCode.png', package: 'assets'));
+    return GestureDetector(
+      onLongPress: () {
+        _savedImage();
+      },
+      child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+          child: Image.asset('temp/QRCode.png', package: 'assets')),
+    );
   }
 
   Widget _buildTips(BuildContext context) {
@@ -169,5 +175,38 @@ class _MyClientServicesPageState extends State<MyClientServicesPage> {
             },
           );
         });
+  }
+
+  _savedImage() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          content: Text(
+            '是否保存图片?',
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('取消'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: const Text('确定'),
+              onPressed: () async {
+                ByteData bytes =
+                await rootBundle.load('packages/assets/temp/QRCode.png');
+                ImagePickerSaver.saveFile(fileData: bytes.buffer.asUint8List())
+                    .then((v) {
+                  Navigator.pop(context);
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

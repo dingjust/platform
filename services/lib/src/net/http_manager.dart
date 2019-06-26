@@ -13,6 +13,7 @@ import 'package:services/src/user/bloc/user_bloc.dart';
 class HttpManager {
   final String baseSiteId;
   static String authorization;
+  static String _token;
 
   HttpManager(this.baseSiteId);
 
@@ -209,16 +210,18 @@ class HttpManager {
   }
 
   void updateAuthorization(token) {
-    authorization = "Bearer $token";
+    _token = '$token';
+    authorization = "Bearer $_token";
     _updateInstance();
   }
 
   void removeAuthorization() {
     authorization = null;
+    _token = null;
     _updateInstance();
   }
 
-  String get token => authorization;
+  String getToken() => _token;
 }
 
 var http$ = HttpManager(GlobalConfigs.B2B_API_PREFIX);

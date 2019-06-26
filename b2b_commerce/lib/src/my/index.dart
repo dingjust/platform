@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ var menuSeparator = Container(
 /// 我的
 class MyHomePage extends StatelessWidget {
   static final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState>();
 
   MyHomePage() : super(key: AppKeys.myHomePage);
 
@@ -68,7 +69,12 @@ class MyHomePage extends StatelessWidget {
             SliverAppBar(
               expandedHeight: _appBarHeight,
               pinned: true,
-              actions: <Widget>[],
+              actions: <Widget>[
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  child: NotificationsIcon(),
+                ),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 key: AppKeys.myHomeSpaceBar,
                 title: StreamBuilder<UserModel>(
@@ -76,7 +82,6 @@ class MyHomePage extends StatelessWidget {
                   initialData: bloc.currentUser,
                   builder: (BuildContext context,
                       AsyncSnapshot<UserModel> snapshot) {
-                    // debugPrint('${snapshot.data.type}');
                     return Container(
                       child: Column(
                         children: <Widget>[
@@ -293,14 +298,15 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
 //          UserRepositoryImpl()
 //              .getFactory(bloc.currentUser.companyCode)
 //              .then((factory) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyFactoryPage(
-                      factoryUid: UserBLoC.instance.currentUser.companyCode,
-                    ),
-              ),
-            );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  MyFactoryPage(
+                    factoryUid: UserBLoC.instance.currentUser.companyCode,
+                  ),
+            ),
+          );
 //          });
         }
       },
