@@ -5,12 +5,20 @@ class GlobalConfigs {
   static const CONTEXT_PATH = 'http://sc.nbyjy.net';
   static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
 
-//   static const CONTEXT_PATH = 'https://192.168.1.182:9002/djwebservices/v2';
-//   static const MEDIA_CONTEXT_PATH =
-//       'https://192.168.1.182:9002/djwebservices/v2';
+  // static const CONTEXT_PATH = 'https://192.168.1.137:9002/djwebservices/v2';
+  // static const MEDIA_CONTEXT_PATH =
+  //     'https://192.168.1.137:9002/djwebservices/v2';
+
   // 生产
   // static const CONTEXT_PATH = 'http://ht.nbyjy.net';
   // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+
+  ///websocket 连接
+  static get WEBSOCKET_URL =>
+          (String token, String uid) {
+        // return 'ws://192.168.1.137/message?token=$token&userId=$uid';
+        return 'ws://echo.websocket.org';
+      };
 
   static const BASE_URL = '$CONTEXT_PATH';
   static const ACCESS_TOKEN_KEY = 'access_token';
@@ -20,8 +28,8 @@ class GlobalConfigs {
 
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
 
-//   static const AUTH_SERVER_URL =
-//       'https://192.168.1.182:9002/authorizationserver';
+  // static const AUTH_SERVER_URL =
+  //     'https://192.168.1.137:9002/authorizationserver';
   static const AUTH_TOKEN_URL = '$AUTH_SERVER_URL/oauth/token';
   static const AUTH_CHECK_TOKEN_URL = '$AUTH_SERVER_URL/oauth/check_token';
   static const AUTH_CLIENT_ID_KEY = 'client_id';
@@ -55,7 +63,7 @@ class GlobalConfigs {
   /// 通过nginx代理所有b2b前缀的请求
   static const B2B_API_PREFIX = 'b2b';
 
-//   static const B2B_API_PREFIX = 'b2b-apparel-zh';
+  // static const B2B_API_PREFIX = 'b2b-apparel-zh';
   static const B2B_CLIENT_ID = 'nbyjy';
   static const B2B_CLIENT_SECRET = 'password';
 
@@ -68,4 +76,7 @@ class GlobalConfigs {
 
   static const String LOGO_URL =
       'http://img.nbyjy.net/resource/h01/h57/8797905813534.jpg';
+
+  ///Websocket心跳事件间隔
+  static const HEARTBEAT_DURATION = 3;
 }

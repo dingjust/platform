@@ -1,12 +1,12 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
+import 'package:b2b_commerce/src/my/account/socket.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
 import 'account/amount_flow_list.dart';
 
-/// 我的账户
+/// 我的账户   TODO:屏幕适配
 class MyAccountPage extends StatefulWidget {
   @override
   _MyAccountPageState createState() => _MyAccountPageState();
@@ -14,7 +14,6 @@ class MyAccountPage extends StatefulWidget {
 
 class _MyAccountPageState extends State<MyAccountPage> {
   ScrollController _scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +51,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       delegate: SliverChildListDelegate([
                         _buildBill(context),
                         _buildBlankCard(context),
+                        Container(
+                          height: 100,
+                        )
                       ])),
                 ],
               ),
@@ -364,8 +366,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
   }
 
   void onAddCard() {
+    // Navigator.of(context)
+    //     .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
+        .push(MaterialPageRoute(builder: (context) => WebSocketRoute()));
   }
 
   Future<String> _getData() async {

@@ -93,6 +93,8 @@ class CustomizeDialog extends StatefulWidget {
   //当前节点序号
   int currentNode;
 
+  DateTime expectedDeliveryDate;
+
 
   CustomizeDialog({
     Key key,
@@ -135,6 +137,7 @@ class CustomizeDialog extends StatefulWidget {
     this.estimatedDate5,
     this.orderModel,
     this.currentNode,
+    this.expectedDeliveryDate,
     })
       : super(key: key);
 
@@ -1303,6 +1306,16 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          '预计交货日期：${widget.expectedDeliveryDate}',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
                         ),
                       ),
                     ),
