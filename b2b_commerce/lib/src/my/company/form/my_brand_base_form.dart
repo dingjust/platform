@@ -141,7 +141,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         fontSize: 16,
                       ),
                     )),
-                    Text(widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange]),
+                    Text(widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange],style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color: Colors.grey,),
                   ],
                 ),
@@ -188,7 +188,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatCategorySelectText(widget.brand.adeptAtCategories),
+                      formatCategorySelectText(widget.brand.adeptAtCategories),style: TextStyle(color: Colors.grey)
                     ),
                     Icon(Icons.chevron_right,color: Colors.grey),
                   ],
@@ -231,7 +231,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),
+                      formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),style: TextStyle(color: Colors.grey)
                     ),
                     Icon(Icons.chevron_right,color: Colors.grey),
                   ],
@@ -274,7 +274,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatEnumSelectsText(_ageRanges, AgeRangesEnum, 3),
+                      formatEnumSelectsText(_ageRanges, AgeRangesEnum, 3),style: TextStyle(color: Colors.grey)
                     ),
                     Icon(Icons.chevron_right,color: Colors.grey),
                   ],
@@ -324,7 +324,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatEnumSelectsText(_priceRange1s, PriceRangesEnum, 3),
+                      formatEnumSelectsText(_priceRange1s, PriceRangesEnum, 3),style: TextStyle(color: Colors.grey)
                     ),
                     Icon(Icons.chevron_right,color: Colors.grey),
                   ],
@@ -375,7 +375,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     )),
                     Text(
-                      formatEnumSelectsText(_priceRange2s, PriceRangesEnum, 3),
+                      formatEnumSelectsText(_priceRange2s, PriceRangesEnum, 3),style: TextStyle(color: Colors.grey)
                     ),
                     Icon(Icons.chevron_right,color: Colors.grey),
                   ],

@@ -1004,7 +1004,8 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
               PurchaseOrderDetailPage(order: model)
           ), ModalRoute.withName('/'));
     }
-
+    ProductionBLoC.instance.refreshData('');
+    PurchaseOrderBLoC.instance.refreshData('ALL');
   }
 
   //非空提示

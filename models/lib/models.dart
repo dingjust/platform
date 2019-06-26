@@ -3,7 +3,7 @@ library models;
 import 'package:json_annotation/json_annotation.dart';
 
 export 'src/media/media.dart';
-export 'src/my/bill.dart';
+export 'src/my/amount_flow.dart';
 export 'src/my/guideline.dart';
 export 'src/order/invoice.dart';
 export 'src/order/order.dart';

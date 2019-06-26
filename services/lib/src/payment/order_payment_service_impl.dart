@@ -25,7 +25,7 @@ class OrderPaymentServiceImpl implements OrderPaymentService {
       apiUrl = PaymentApis.purchaseDepositPaidConfirm(order.code, type);
     } else if (order is PurchaseOrderModel &&
         paymentFor == PaymentFor.BALANCE) {
-      //生产单-定金
+      //生产单-尾款
       apiUrl = PaymentApis.purchaseBalancePaidConfirm(order.code, type);
     } else {
       return null;
@@ -38,10 +38,8 @@ class OrderPaymentServiceImpl implements OrderPaymentService {
     }
 
     if (response != null && response.statusCode == 200) {
-      print('@@@@@@@@@@@@${response.data}');
       return response.data;
     } else {
-      print('!!!!!!');
       return null;
     }
   }

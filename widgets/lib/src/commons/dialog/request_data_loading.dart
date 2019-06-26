@@ -43,7 +43,6 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
     if (widget.dismissCallback != null) {
       widget.dismissCallback();
     }
-    print('1231' + widget.callbackResult.toString());
     Navigator.of(context).pop();
   }
 
@@ -61,67 +60,8 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
     if (widget.requestCallBack != null) {
       widget.requestCallBack.then((value) {
         Navigator.of(context).pop(value);
-
-        if (widget.entrance == 'production') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  ProductionProgressesPage(
-                    order: value,
-                  ),
-            ),
-          );
-        }
-
-        if (widget.entrance == 'createPurchaseOrder') {
-          ProductionBLoC.instance.refreshData('');
-          PurchaseOrderBLoC.instance.refreshData('ALL');
-        }
-
-        if (widget.entrance == 'purchaseOrders') {
-          returnPurchaseOrders();
-        }
-
-        if (widget.entrance == 'returnProofingOrders') {
-          returnProofingOrders();
-        }
-
-        if (widget.entrance == 'quoteOrder') {
-          QuoteOrdersBLoC.instance.refreshData('ALL');
-        }
-
-        if (widget.entrance == 'proofingOrder') {
-          ProofingOrdersBLoC.instance.refreshData('ALL');
-          if (value != null) {} else {
-            Navigator.of(context).pop();
-          }
-        }
-
-        if (widget.entrance == 'apparelProduct') {
-          if (widget.keyword == null) {
-            ApparelProductBLoC.instance.filterByStatuses('ALL');
-          } else {
-            ApparelProductBLoC.instance.getData(widget.keyword);
-          }
-        }
       });
     }
-  }
-
-
-  Future<void> returnPurchaseOrders() {
-    PurchaseOrderBLoC.instance.refreshData('ALL');
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => PurchaseOrdersPage()),
-        ModalRoute.withName('/'));
-  }
-
-  Future<void> returnProofingOrders() {
-    ProofingOrdersBLoC().refreshData('ALL');
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => ProofingOrdersPage()),
-        ModalRoute.withName('/'));
   }
 
   @override
