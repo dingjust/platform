@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:services/services.dart';
-import 'package:web_socket_channel/io.dart';
 
 class WebSocketRoute extends StatefulWidget {
   @override
@@ -13,7 +12,6 @@ class WebSocketRoute extends StatefulWidget {
 
 class _WebSocketRouteState extends State<WebSocketRoute> {
   TextEditingController _controller = new TextEditingController();
-  IOWebSocketChannel channel;
   String _text = "";
   WebSocket _socket;
   var flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
@@ -57,7 +55,6 @@ class _WebSocketRouteState extends State<WebSocketRoute> {
 
   @override
   void dispose() {
-    channel.sink.close();
     super.dispose();
   }
 }

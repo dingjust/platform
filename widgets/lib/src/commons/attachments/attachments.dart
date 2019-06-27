@@ -7,8 +7,8 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:models/models.dart';
 import 'package:open_file/open_file.dart';
@@ -622,6 +622,14 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
               onTap: () async {
                 var image =
                     await ImagePicker.pickImage(source: ImageSource.gallery);
+                File croppedFile = await ImageCropper.cropImage(
+                  sourcePath: image.path,
+                  // ratioX: 1.0,
+                  // ratioY: 1.0,
+                  // maxWidth: 512,
+                  // maxHeight: 512,
+                );
+
                 if (image != null) {
                   await _uploadFile(image);
                 }
