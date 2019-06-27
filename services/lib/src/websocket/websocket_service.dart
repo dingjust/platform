@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:core/core.dart';
 import 'package:services/src/message/notifications_pool.dart';
@@ -98,8 +97,10 @@ class WebSocketService {
   }
 
   void disconnect() {
-    _socket.close();
-    _socket = null;
+    if (_socket != null) {
+      _socket.close();
+      _socket = null;
+    }
   }
 }
 
