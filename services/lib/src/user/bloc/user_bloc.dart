@@ -125,6 +125,8 @@ class UserBLoC extends BLoCBase {
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
         LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
+      //重新连接
+      ws$.send('connect');
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
     }
@@ -203,6 +205,8 @@ class UserBLoC extends BLoCBase {
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
         LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
+      //重新连接
+      ws$.send('connect');
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
     }
@@ -218,6 +222,8 @@ class UserBLoC extends BLoCBase {
     http$.removeAuthorization();
     //所有Bloc重置
     BLocBus.systemBlocReset();
+    //断开Socket连接
+    ws$.disconnect();
     _controller.sink.add(_user);
   }
 

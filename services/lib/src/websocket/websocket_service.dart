@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:core/core.dart';
 import 'package:services/src/message/notifications_pool.dart';
@@ -61,22 +61,12 @@ class WebSocketService {
           print('========收到推送=========');
           print('$message');
           try {
-            // WebsocketResponse response =
-            //     WebsocketResponse.fromJson(json.decode(message));
-            // ns$.showNotification(
-            //     response.hashCode, '${response.title}', '${response.body}');
-            //系统通知
-            int v = Random().nextInt(3);
-            if (v == 2) {
-              notificationsPool$.add(WebsocketResponse(
-                  title: '$message', body: '$message', group: 1));
-            } else if (v == 1) {
-              notificationsPool$.add(WebsocketResponse(
-                  title: '$message', body: '$message', group: 2));
-            } else {
-              notificationsPool$.add(WebsocketResponse(
-                  title: '$message', body: '$message', group: 3));
+            WebsocketResponse response =
+            WebsocketResponse.fromJson(json.decode(message));
+            if (response != null) {
+              notificationsPool$.add(response);
             }
+            //系统通知
           } catch (e) {
             print(e);
           }
@@ -104,6 +94,13 @@ class WebSocketService {
     _timer = Timer.periodic(_duration, (timer) {
       send('heartbeat test');
     });
+  }
+
+  void disconnect() {
+    if (_socket != null) {
+      _socket.close();
+      _socket = null;
+    }
   }
 }
 

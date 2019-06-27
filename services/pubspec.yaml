@@ -25,7 +25,7 @@ dependencies:
   shared_preferences: ^0.4.2
   fluwx: ^0.6.2
   rxdart: ^0.20.0
-  open_file: 1.1.1
+  open_file: ^2.0.3
   store_redirect: ^1.0.1
   amap_location: ^0.2.0
   # IOS不用
