@@ -16,17 +16,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:services/services.dart';
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
+
+import '../../../widgets.dart';
 // import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 ///横向滚动图片列表
 class Attachments extends StatefulWidget {
   Attachments(
       {Key key,
-      @required this.list,
-      this.width = 320,
-      this.height = 100,
-      this.imageWidth = 80,
-      this.imageHeight = 80})
+        @required this.list,
+        this.width = 320,
+        this.height = 100,
+        this.imageWidth = 80,
+        this.imageHeight = 80})
       : super(key: key);
 
   final List<MediaModel> list;
@@ -110,7 +112,7 @@ class _AttachmentsState extends State<Attachments> {
         scrollDirection: Axis.horizontal,
         controller: _scrollController,
         children: widget.list.map(
-          (model) {
+              (model) {
             // 附件类型
             switch (model.mediaType) {
               case 'application/pdf':
@@ -157,15 +159,15 @@ class _AttachmentsState extends State<Attachments> {
                         imageUrl: '${model.previewUrl()}',
                         fit: BoxFit.cover,
                         placeholder: (context, url) => SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            ),
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
                         errorWidget: (context, url, error) => SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            )),
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey,
@@ -191,8 +193,8 @@ class _AttachmentsState extends State<Attachments> {
         return GestureDetector(
           child: Container(
               child: PhotoView(
-            imageProvider: NetworkImage(url),
-          )),
+                imageProvider: NetworkImage(url),
+              )),
           onTap: () {
             Navigator.of(context).pop();
           },
@@ -260,9 +262,9 @@ class _AttachmentsState extends State<Attachments> {
     try {
       Response response = await dio.download(url, filePath,
           onReceiveProgress: (received, total) {
-        print((received / total * 100).toStringAsFixed(0) + "%");
-        _streamController.sink.add(received / total);
-      });
+            print((received / total * 100).toStringAsFixed(0) + "%");
+            _streamController.sink.add(received / total);
+          });
       print(response.statusCode);
     } catch (e) {
       print(e);
@@ -278,15 +280,19 @@ class _AttachmentsState extends State<Attachments> {
 class EditableAttachments extends StatefulWidget {
   EditableAttachments(
       {Key key,
-      @required this.list,
-      this.editable = true,
-      this.width = 320,
-      this.height = 80,
-      this.imageWidth = 60,
-      this.imageHeight = 60,
-      this.maxNum = 5,
-      this.uploadURL,
-      this.deleteURL})
+        @required this.list,
+        this.editable = true,
+        this.width = 320,
+        this.height = 80,
+        this.imageWidth = 60,
+        this.imageHeight = 60,
+        this.maxNum = 5,
+        this.uploadURL,
+        this.deleteURL,
+        this.isCut = false,
+        this.ratioX,
+        this.ratioY,
+      })
       : super(key: key);
 
   final List<MediaModel> list;
@@ -311,6 +317,13 @@ class EditableAttachments extends StatefulWidget {
   ///删除URL
   final String deleteURL;
 
+  ///是否需要截图
+  final bool isCut;
+
+  ///截图的宽高比例
+  final double ratioX;
+  final double ratioY;
+
   _EditableAttachmentsState createState() => _EditableAttachmentsState();
 }
 
@@ -321,6 +334,21 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
 
   final StreamController _streamController =
       StreamController<double>.broadcast();
+
+  final StreamController _compressStreamController =
+      StreamController < double
+
+  >
+
+      .
+
+  broadcast();
+
+  @override
+  void dispose() {
+    _streamController.close();
+    _compressStreamController.close();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -404,7 +432,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     }
 
     widgetList.addAll(widget.list.reversed.map(
-      (model) {
+          (model) {
         // 附件类型
         switch (model.mediaType) {
           case 'application/pdf':
@@ -450,15 +478,15 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                   imageUrl: '${model.previewUrl()}',
                   fit: BoxFit.cover,
                   placeholder: (context, url) => SpinKitRing(
-                        color: Colors.black12,
-                        lineWidth: 2,
-                        size: 30,
-                      ),
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
                   errorWidget: (context, url, error) => SpinKitRing(
-                        color: Colors.black12,
-                        lineWidth: 2,
-                        size: 30,
-                      ),
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -505,8 +533,8 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
           },
           child: Container(
               child: PhotoView(
-            imageProvider: NetworkImage(url),
-          )),
+                imageProvider: NetworkImage(url),
+              )),
         );
       },
     );
@@ -569,9 +597,9 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     try {
       Response response = await dio.download(url, filePath,
           onReceiveProgress: (received, total) {
-        print((received / total * 100).toStringAsFixed(0) + "%");
-        _streamController.sink.add(received / total);
-      });
+            print((received / total * 100).toStringAsFixed(0) + "%");
+            _streamController.sink.add(received / total);
+          });
       print(response.statusCode);
     } catch (e) {
       print(e);
@@ -589,7 +617,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     var dio = new Dio();
 
     Response response =
-        await dio.get(url, options: Options(responseType: ResponseType.stream));
+    await dio.get(url, options: Options(responseType: ResponseType.stream));
 
     HttpClientResponse resp = response.data;
 
@@ -602,36 +630,52 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return new Column(
+        return Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.camera),
               title: Text('相机'),
               onTap: () async {
-                var image =
-                    await ImagePicker.pickImage(source: ImageSource.camera);
-                if (image != null) {
-                  await _uploadFile(image);
+                var imageFile = await ImagePicker.pickImage(
+                    source: ImageSource.camera);
+                if (imageFile != null) {
+                  if (widget.isCut) {
+                    var cropFile = await ImageCropper.cropImage(
+                      sourcePath: imageFile.path,
+                      ratioX: widget.ratioX,
+                      ratioY: widget.ratioY,
+                    );
+                    if (cropFile != null) {
+                      await _uploadFile(cropFile);
+                    }
+                  } else {
+                    await _uploadFile(imageFile);
+                  }
                 }
+
               },
             ),
             ListTile(
               leading: Icon(Icons.photo_album),
               title: Text('相册'),
               onTap: () async {
-                var image =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
-                File croppedFile = await ImageCropper.cropImage(
-                  sourcePath: image.path,
-                  // ratioX: 1.0,
-                  // ratioY: 1.0,
-                  // maxWidth: 512,
-                  // maxHeight: 512,
-                );
+                var imageFile = await ImagePicker.pickImage(
+                    source: ImageSource.gallery);
 
-                if (image != null) {
-                  await _uploadFile(image);
+                if (imageFile != null) {
+                  if (widget.isCut) {
+                    var cropFile = await ImageCropper.cropImage(
+                      sourcePath: imageFile.path,
+                      ratioX: widget.ratioX,
+                      ratioY: widget.ratioY,
+                    );
+                    if (cropFile != null) {
+                      await _uploadFile(cropFile);
+                    }
+                  } else {
+                    await _uploadFile(imageFile);
+                  }
                 }
               },
             ),
@@ -708,6 +752,85 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
         },
       );
 
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      setState(() {
+        ///  TODO:用上传图片回调的URL更新图片列表
+        widget.list.add(MediaModel.fromJson(response.data));
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future _uploadFileByBytes(List<int> bytes) async {
+    // TODO： 引入StreamBuilder实时更新进度条
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: <Widget>[
+            StreamBuilder<double>(
+                stream: _streamController.stream,
+                initialData: 0.0,
+                builder:
+                    (BuildContext context, AsyncSnapshot<double> snapshot) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: Text(
+                            '上传中',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                        Center(
+                          child: LinearProgressIndicator(
+                            value: snapshot.data,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('进度:', style: TextStyle(fontSize: 12)),
+                            Text('${((snapshot.data / 1) * 100).round()}%',
+                                style: TextStyle(fontSize: 12))
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                })
+          ],
+        );
+      },
+    );
+
+    // /// TODO: 调用上传接口,更新上传进度条
+    try {
+      FormData formData = FormData.from({
+        "file": UploadFileInfo.fromBytes(bytes, "file",
+            contentType: ContentType.parse('image/jpeg')),
+        "conversionGroup": "DefaultProductConversionGroup",
+        "imageFormat": "DefaultImageFormat"
+      });
+      Response<Map<String, dynamic>> response = await http$.post(
+        Apis.upload(),
+        data: formData,
+        // queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
+        // queryParameters: {'imageFormat': 'DefaultImageFormat'},
+        options: Options(
+          headers: {'Content-Type': 'application/json;charset=UTF-8'},
+        ),
+        onSendProgress: (int sent, int total) {
+          _streamController.sink.add(sent / total);
+        },
+      );
+
+      Navigator.of(context).pop();
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       setState(() {
