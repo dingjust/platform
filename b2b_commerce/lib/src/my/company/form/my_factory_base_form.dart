@@ -115,6 +115,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             EditableAttachments(
               list: widget.medias,
               maxNum: 1,
+              ratioX: 1,
+              ratioY: 1,
+              isCut: true,
+              circleShape: true,
             ),
             Container(
               color: Colors.white,

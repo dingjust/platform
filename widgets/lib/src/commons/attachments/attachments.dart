@@ -292,6 +292,7 @@ class EditableAttachments extends StatefulWidget {
         this.isCut = false,
         this.ratioX,
         this.ratioY,
+        this.circleShape = false,
       })
       : super(key: key);
 
@@ -319,6 +320,9 @@ class EditableAttachments extends StatefulWidget {
 
   ///是否需要截图
   final bool isCut;
+
+  ///是否需要圆形框
+  final bool circleShape;
 
   ///截图的宽高比例
   final double ratioX;
@@ -645,6 +649,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                       sourcePath: imageFile.path,
                       ratioX: widget.ratioX,
                       ratioY: widget.ratioY,
+                      circleShape: widget.circleShape,
                     );
                     if (cropFile != null) {
                       await _uploadFile(cropFile);
@@ -669,6 +674,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> {
                       sourcePath: imageFile.path,
                       ratioX: widget.ratioX,
                       ratioY: widget.ratioY,
+                      circleShape: widget.circleShape,
                     );
                     if (cropFile != null) {
                       await _uploadFile(cropFile);
