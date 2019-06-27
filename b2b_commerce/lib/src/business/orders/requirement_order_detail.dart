@@ -831,7 +831,7 @@ class _RequirementOrderDetailPageState
                 if (newQuote != null) {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          QuoteOrderDetailPage(item: newQuote)));
+                          QuoteOrderDetailPage(newQuote.code,)));
                 }
               },
               shape: RoundedRectangleBorder(

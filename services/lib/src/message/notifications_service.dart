@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'package:b2b_commerce/b2b_commerce.dart';
+
+
 class NotificationsService {
   final String channelId;
 
@@ -55,10 +58,10 @@ class NotificationsService {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
-    //payload 可作为通知的一个标记，区分点击的通知。
-    if (payload != null && payload == "complete") {
-      print('=========消息通知点击事件=============');
-    }
+    await Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => ProofingOrderDetailPage ('111')),
+    );
   }
 
   Future showNotification(int id, String title, String body,
@@ -78,7 +81,7 @@ class NotificationsService {
 
     await flutterLocalNotificationsPlugin.show(
         id, '$title', '$body', platformChannelSpecifics,
-        payload: '$payload');
+        payload: payload);
   }
 }
 

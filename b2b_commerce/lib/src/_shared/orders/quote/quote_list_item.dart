@@ -64,11 +64,11 @@ class QuoteListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     void _onQuoteDetails() async {
       // 查询明细
-      QuoteModel detailModel =
-          await QuoteOrderRepository().getQuoteDetails(model.code);
+//      QuoteModel detailModel =
+//          await QuoteOrderRepository().getQuoteDetails(model.code);
       Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (context) => QuoteOrderDetailPage(item: detailModel)),
+            builder: (context) => QuoteOrderDetailPage(model.code,)),
       );
     }
 
