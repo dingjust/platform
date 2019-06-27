@@ -92,10 +92,12 @@ class NotificationsPool {
         break;
       default:
     }
-    _notificationsNumController.add(notificationsNum);
-    //TODO 判断如生产订单类型、加入 _productionNotifications
-    ns$.showNotification(
-        noticication.hashCode, '${noticication.title}', '${noticication.body}');
+    if (noticication.module != MsgModule.DEFAULT) {
+      _notificationsNumController.add(notificationsNum);
+      //TODO 判断如生产订单类型、加入 _productionNotifications
+      ns$.showNotification(noticication.hashCode, '${noticication.title}',
+          '${noticication.body}');
+    }
   }
 
   ///点击消息置为已阅

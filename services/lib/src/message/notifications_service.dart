@@ -22,7 +22,7 @@ class NotificationsService {
     // 初始化
     this.context = context;
     var initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
+    new AndroidInitializationSettings('logo');
     var initializationSettingsIOS = new IOSInitializationSettings(
         onDidReceiveLocalNotification: onDidRecieveLocalNotification);
     var initializationSettings = new InitializationSettings(

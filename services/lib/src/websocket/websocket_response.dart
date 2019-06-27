@@ -59,6 +59,10 @@ class WebsocketResponse {
 
 enum MsgModule {
 
+///默认
+@JsonValue('default')
+DEFAULT,
+
 ///用户登录
 @JsonValue('userLogin')
 UserLogin,
