@@ -568,7 +568,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
 
             if (newQuote != null) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => QuoteOrderDetailPage(item: newQuote)));
+                  builder: (context) => QuoteOrderDetailPage(newQuote.code,)));
             }
           },
           child: Container(

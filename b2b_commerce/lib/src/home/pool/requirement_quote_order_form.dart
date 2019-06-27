@@ -817,10 +817,10 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
 
   void getOrderDetail(String code) async{
     if(code != null && code != ''){
-      QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(code);
+//      QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(code);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (context) => QuoteOrderDetailPage(item: detailModel)),
+              builder: (context) => QuoteOrderDetailPage( code,)),
           ModalRoute.withName('/'));
     }
 

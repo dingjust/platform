@@ -37,10 +37,10 @@ class _QuoteItemState extends State<QuoteItem> {
     return GestureDetector(
       onTap: () async {
         //查询明细
-        QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(widget.model.code);
-        if (detailModel != null) {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuoteOrderDetailPage(item: detailModel)));
-        }
+//        QuoteModel detailModel = await QuoteOrderRepository().getQuoteDetails(widget.model.code);
+//        if (detailModel != null) {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => QuoteOrderDetailPage( widget.model.code,)));
+//        }
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(10,0,10,0),

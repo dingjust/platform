@@ -26,13 +26,7 @@ class MessageBLoC extends BLoCBase {
   Stream<dynamic> get errorMessageStream => errorMessageController.stream;
 
   ///SnackBar消息流
-  var snackMessageController = StreamController < dynamic
-
-  >
-
-      .
-
-  broadcast();
+  var snackMessageController = StreamController<dynamic>.broadcast();
 
   Stream<dynamic> get snackMessageStream => snackMessageController.stream;
 
