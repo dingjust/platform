@@ -994,8 +994,6 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     });
   }
 
-
-
   void getPurchaseOrderDetail(String code) async{
     if(code != null && code != ''){
       PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);

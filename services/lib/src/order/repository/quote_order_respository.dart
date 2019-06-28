@@ -8,7 +8,7 @@ class QuoteOrderRepository {
   Future<QuoteModel> getQuoteDetails(String code) async {
     Response<Map<String, dynamic>> response;
     try {
-      response = await http$.get(OrderApis.quoteDetail(code));
+      response = await http$.get(OrderApis.quoteDetail(code),data: {'fields':QuoteOrderOptions.DEFAULT});
     } on DioError catch (e) {
       print(e);
     }

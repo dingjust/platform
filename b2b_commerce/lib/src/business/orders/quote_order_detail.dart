@@ -15,9 +15,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 class QuoteOrderDetailPage extends StatefulWidget {
-  QuoteModel item;
+//  QuoteModel item;
 
-  QuoteOrderDetailPage({this.item});
+  QuoteOrderDetailPage(this.code);
+
+  final String code;
 
   _QuoteOrderDetailPageState createState() => _QuoteOrderDetailPageState();
 }
@@ -38,7 +40,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     // TODO: implement initState
     super.initState();
     //页面缓存Model对象
-    pageItem = widget.item;
   }
 
   @override
@@ -55,38 +56,56 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: ListView(
-        children: <Widget>[
-          _buildRefuseMessage(),
-          _buildCompanyInfo(),
-          _buildFactory(),
-          Card(
-            elevation: 0,
-            margin: EdgeInsets.only(top: 15),
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: _buildProduct(),
-            ),
-          ),
-          _buildQuoteCost(),
-          _buildDeliveryDate(),
-          _buildAttachment(),
-          _buildRemark(),
-          _buildOrderState(),
-          _buildSummary()
-        ],
-      ),
+      body: FutureBuilder<QuoteModel>(
+          builder: (BuildContext context, AsyncSnapshot<QuoteModel> snapshot) {
+        if (snapshot.data != null) {
+          return ListView(
+            children: <Widget>[
+              _buildRefuseMessage(),
+              _buildCompanyInfo(),
+              _buildFactory(),
+              Card(
+                elevation: 0,
+                margin: EdgeInsets.only(top: 15),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: _buildProduct(),
+                ),
+              ),
+              _buildQuoteCost(),
+              _buildDeliveryDate(),
+              _buildAttachment(),
+              _buildRemark(),
+              _buildOrderState(),
+              _buildSummary()
+            ],
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },        initialData: null,
+        future: _getData(),),
     );
+  }
+
+  Future<QuoteModel> _getData() async {
+    // 查询明细
+    QuoteModel detailModel =
+    await QuoteOrderRepository().getQuoteDetails(widget.code);
+    pageItem = detailModel;
+    return detailModel;
   }
 
   Widget _buildRefuseMessage() {
     //拒绝状态
-    if (widget.item.state == QuoteState.BUYER_REJECTED) {
+    if (pageItem.state == QuoteState.BUYER_REJECTED) {
       return Container(
         padding: EdgeInsets.all(10),
         color: Color.fromRGBO(255, 245, 169, 1),
         child: Text(
-          '拒绝理由：${widget.item.comment}',
+          '拒绝理由：${pageItem.comment}',
           style: TextStyle(color: Color.fromRGBO(255, 70, 70, 1), fontSize: 16),
           overflow: TextOverflow.ellipsis,
         ),
@@ -98,7 +117,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
 
   Widget _buildOrderState() {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         copyToClipboard(pageItem.code);
       },
       child: Container(
@@ -128,8 +147,8 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               ),
               Padding(
                 padding: EdgeInsets.only(top: 10),
-                child: Text(
-                    '报价时间：' + pageItem.creationTime.toString().substring(0, 10)),
+                child: Text('报价时间：' +
+                    pageItem.creationTime.toString().substring(0, 10)),
               )
             ],
           ),
@@ -147,7 +166,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                widget.item.supplier?.profilePicture == null
+                pageItem.supplier?.profilePicture == null
                     ? Container(
                         margin: EdgeInsets.all(10),
                         width: 80,
@@ -170,7 +189,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                             width: 100,
                             height: 100,
                             imageUrl:
-                                '${widget.item.supplier.profilePicture.previewUrl()}',
+                                '${pageItem.supplier.profilePicture.previewUrl()}',
                             fit: BoxFit.cover,
                             placeholder: (context, url) => SpinKitRing(
                                   color: Colors.black12,
@@ -193,24 +212,22 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     Container(
                       margin: EdgeInsets.only(bottom: 5),
                       child: Text(
-                        widget.item.supplier == null ||
-                            widget.item.supplier.name == null
+                        pageItem.supplier == null ||
+                                pageItem.supplier.name == null
                             ? ''
-                            : '${widget.item.supplier?.name}',
+                            : '${pageItem.supplier?.name}',
                         softWrap: true,
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    widget.item.supplier == null ||
-                            widget.item.supplier.approvalStatus == null
+                    pageItem.supplier == null ||
+                            pageItem.supplier.approvalStatus == null
                         ? Container()
                         : Container(
                             margin: EdgeInsets.only(top: 5),
                             color: Color.fromRGBO(254, 252, 235, 1),
-                            child: widget.item.supplier.approvalStatus !=
+                            child: pageItem.supplier.approvalStatus !=
                                     ArticleApprovalStatus.approved
                                 ? Text('  未认证  ',
                                     style: TextStyle(
@@ -240,11 +257,10 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   ),
                   Container(
                     child: Text(
-                      widget.item.supplier == null ||
-                              widget.item.supplier.contactPerson ==
-                                  null
+                      pageItem.supplier == null ||
+                              pageItem.supplier.contactPerson == null
                           ? ''
-                          : '${widget.item.supplier.contactPerson}',
+                          : '${pageItem.supplier.contactPerson}',
                       style: TextStyle(
                           color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                     ),
@@ -267,11 +283,10 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     ),
                     Container(
                       child: Text(
-                        widget.item.supplier == null ||
-                                widget.item.supplier.contactPhone ==
-                                    null
+                        pageItem.supplier == null ||
+                                pageItem.supplier.contactPhone == null
                             ? ''
-                            : '${widget.item.supplier.contactPhone}',
+                            : '${pageItem.supplier.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
@@ -280,11 +295,10 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                 ),
               ),
               onTap: () {
-                widget.item.supplier == null ||
-                        widget.item.supplier.contactPhone == null
+                pageItem.supplier == null ||
+                        pageItem.supplier.contactPhone == null
                     ? null
-                    : _selectActionButton(
-                        widget.item.supplier.contactPhone);
+                    : _selectActionButton(pageItem.supplier.contactPhone);
               },
             ),
           ],
@@ -300,17 +314,16 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
     if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
       return GestureDetector(
         onTap: () async {
-          if(pageItem.belongTo != null) {
+          if (pageItem.belongTo != null) {
             //TODO跳转详细页
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        MyFactoryPage(
-                          factoryUid:pageItem.belongTo.uid,
+                    builder: (context) => MyFactoryPage(
+                          factoryUid: pageItem.belongTo.uid,
                           isFactoryDetail: true,
                         )));
-          }else{
+          } else {
             showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -322,8 +335,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     confirmButtonText: '确定',
                     dialogHeight: 180,
                   );
-                }
-            );
+                });
           }
         },
         child: Container(
@@ -341,21 +353,21 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                             children: <Widget>[
                               Expanded(
                                 child: pageItem.belongTo == null ||
-                                    pageItem.belongTo.name == null
+                                        pageItem.belongTo.name == null
                                     ? Text(
-                                  '',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                )
+                                        '',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      )
                                     : Text(
-                                  pageItem.belongTo.name,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                                        pageItem.belongTo.name,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
                               ),
                               pageItem.belongTo == null ||
                                       pageItem.belongTo.starLevel == null
@@ -980,12 +992,11 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             dialogType: DialogType.RESULT_DIALOG,
             failTips: '${message}',
             callbackResult: false,
-            confirmAction: (){
+            confirmAction: () {
               Navigator.of(context).pop();
             },
           );
-        }
-    );
+        });
   }
 
   void onReject() {
@@ -1000,15 +1011,14 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             title: '填写拒绝原因',
             focusNode1: FocusNode(),
           );
-        }
-    ).then((value){
+        }).then((value) {
       if (value != null && value != '') {
-        rejectQuote(pageItem,value);
+        rejectQuote(pageItem, value);
       }
     });
   }
 
-  rejectQuote(QuoteModel model,String rejectText) async{
+  rejectQuote(QuoteModel model, String rejectText) async {
     int statusCode = await QuoteOrderRepository().quoteReject(
       model.code,
       rejectText,
@@ -1140,12 +1150,11 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
               dialogType: DialogType.RESULT_DIALOG,
               successTips: '复制成功',
               callbackResult: true,
-              confirmAction: (){
+              confirmAction: () {
                 Navigator.of(context).pop();
               },
             );
-          }
-      );
+          });
     }
   }
 }

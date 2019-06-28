@@ -88,7 +88,8 @@ class PurchaseOrderBLoC extends BLoCBase {
             data: data,
             queryParameters: {
               'page': _ordersMap[status].currentPage,
-              'size': _ordersMap[status].size
+              'size': _ordersMap[status].size,
+              'fields':PurchaseOrderOptions.BASIC_LESS
             });
       } on DioError catch (e) {
         print(e);
@@ -124,7 +125,8 @@ class PurchaseOrderBLoC extends BLoCBase {
               data: data,
               queryParameters: {
                 'page': _ordersMap['SEARCH'].currentPage,
-                'size': _ordersMap['SEARCH'].size
+                'size': _ordersMap['SEARCH'].size,
+                'fields':PurchaseOrderOptions.BASIC_LESS,
               });
         } on DioError catch (e) {
           print(e);
@@ -161,7 +163,8 @@ class PurchaseOrderBLoC extends BLoCBase {
             data: data,
             queryParameters: {
               'page': ++_ordersMap[status].currentPage,
-              'size': _ordersMap[status].size
+              'size': _ordersMap[status].size,
+              'fields':PurchaseOrderOptions.BASIC_LESS,
             });
       } on DioError catch (e) {
         print(e);
@@ -194,7 +197,8 @@ class PurchaseOrderBLoC extends BLoCBase {
             data: data,
             queryParameters: {
               'page': ++_ordersMap['ALL'].currentPage,
-              'size': _ordersMap['ALL'].size
+              'size': _ordersMap['ALL'].size,
+              'fields':PurchaseOrderOptions.BASIC_LESS,
             });
       } on DioError catch (e) {
         print(e);
@@ -242,7 +246,8 @@ class PurchaseOrderBLoC extends BLoCBase {
     Response<Map<String, dynamic>> response = await http$
         .post(OrderApis.purchaseOrders, data: data, queryParameters: {
       'page': _ordersMap[status].currentPage,
-      'size': _ordersMap[status].size
+      'size': _ordersMap[status].size,
+      'fields':PurchaseOrderOptions.DEFAULT,
     });
 
     if (response.statusCode == 200) {
@@ -263,10 +268,14 @@ class PurchaseOrderBLoC extends BLoCBase {
       if(purchaseOrderModels.isEmpty){
         if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
-              .getPurchaseOrdersByFactory(companyUid, {});
+              .getPurchaseOrdersByFactory(companyUid, {
+            'fields':PurchaseOrderOptions.BASIC_LESS,
+          });
         } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
-              .getPurchaseOrdersByBrand(companyUid, {});
+              .getPurchaseOrdersByBrand(companyUid, {
+            'fields':PurchaseOrderOptions.BASIC_LESS,
+          });
         }
         purchaseOrderModels.addAll(purchaseOrdersResponse.content);
       }
@@ -285,11 +294,11 @@ class PurchaseOrderBLoC extends BLoCBase {
         if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
               .getPurchaseOrdersByFactory(
-                  companyUid, {'page': purchaseOrdersResponse.number + 1});
+                  companyUid, {'page': purchaseOrdersResponse.number + 1,'fields':PurchaseOrderOptions.BASIC_LESS});
         } else if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
               .getPurchaseOrdersByBrand(
-                  companyUid, {'page': purchaseOrdersResponse.number + 1});
+                  companyUid, {'page': purchaseOrdersResponse.number + 1, 'fields':QuoteOrderOptions.BASIC_LESS,});
         }
         purchaseOrderModels.addAll(purchaseOrdersResponse.content);
       } else {

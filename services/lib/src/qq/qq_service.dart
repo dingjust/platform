@@ -56,7 +56,7 @@ class QQService {
       {String title, String summary, String imageUrl}) async {
     ShareQzoneContent shareQzoneContent = ShareQzoneContent(
         title: "$title", targetUrl: "$url", summary: "$summary",
-        imageUrl: "$imageUrl",
+         imageUrl: "$imageUrl",
         imageUrls: ["$imageUrl"]);
     try {
       var qqResult = await FlutterQq.shareToQzone(shareQzoneContent);

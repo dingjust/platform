@@ -121,6 +121,12 @@ class Apis {
         return 'https://apimg.alipay.com/combo.png?d=cashier&t=$code';
       };
 
+  ///未读消息统计
+  static get countUnreadMsg =>
+          (String uid) {
+        return '/{baseSiteId}/user/$uid/unread/msg/count';
+      };
+
   ///获取消息列表（消息盒子）
   static get getMsgList =>
           (String uid) {

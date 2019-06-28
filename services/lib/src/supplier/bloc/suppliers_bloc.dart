@@ -43,7 +43,7 @@ class SuppliersBloc extends BLoCBase {
   }
 
   filterfactories() async {
-    factoriesResponse = await UserRepositoryImpl().factorySuppliers({});
+    factoriesResponse = await UserRepositoryImpl().factorySuppliers({ 'fields':BrandOptions.DEFAULT,});
     _factories.clear();
     _factories.addAll(factoriesResponse.content);
     _factoryController.sink.add(_factories);
@@ -51,7 +51,7 @@ class SuppliersBloc extends BLoCBase {
   }
 
   filterbrands() async {
-    brandsResponse = await UserRepositoryImpl().brandSuppliers({'keyword': ''});
+    brandsResponse = await UserRepositoryImpl().brandSuppliers({'keyword': '','fields':BrandOptions.DEFAULT});
     _brands.clear();
     _brands.addAll(brandsResponse.content);
     _brandController.sink.add(_brands);
@@ -65,6 +65,7 @@ class SuppliersBloc extends BLoCBase {
         Apis.factorySuppliers,
         data: {
           'page': factoriesResponse.number + 1,
+          'fields':BrandOptions.DEFAULT,
         },
       );
       factoriesResponse = FactoriesResponse.fromJson(response.data);
@@ -85,6 +86,7 @@ class SuppliersBloc extends BLoCBase {
         data: {
           'keyword':'',
           'page': brandsResponse.number + 1,
+          'fields':BrandOptions.DEFAULT,
         },
       );
       brandsResponse = BrandsResponse.fromJson(response.data);
