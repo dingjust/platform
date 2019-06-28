@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'message_detail.dart';
@@ -13,12 +14,16 @@ class MessageItemPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        if(model.groupCode != 1) {
+      onTap: () {
+        notificationsPool$.read(model.code);
+        NotifyBloC.instance.refreshData(model.groupCode.toString());
+        if (model.groupCode != 1) {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => MessageDetailPage(model: model,)
-            ),
+                builder: (context) =>
+                    MessageDetailPage(
+                      model: model,
+                    )),
           );
         }
       },
@@ -43,15 +48,12 @@ class MessageItemPage extends StatelessWidget {
     return Container(
       child: Row(
         children: <Widget>[
-          model.read?Container():_buildRedDot(),
+          model.read ? Container() : _buildRedDot(),
           Expanded(
             child: Container(
               child: Text(
                 '${model.title}',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -68,7 +70,7 @@ class MessageItemPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNoPic(){
+  Widget _buildNoPic() {
     if (model.groupCode == 2) {
       return Container(
         margin: EdgeInsets.fromLTRB(10, 15, 5, 0),
@@ -111,18 +113,17 @@ class MessageItemPage extends StatelessWidget {
     }
   }
 
-  Widget _buildItem(){
+  Widget _buildItem() {
     return Container(
       child: Row(
         children: <Widget>[
-          model.coverImgUrl==null||model.coverImgUrl==''?
-          _buildNoPic()
-           :
-          Container(
+          model.coverImgUrl == null || model.coverImgUrl == ''
+              ? _buildNoPic()
+              : Container(
             width: 60,
             height: 60,
             child: Image.network(
-                model.coverImgUrl,
+              model.coverImgUrl,
             ),
           ),
           Expanded(
@@ -138,7 +139,7 @@ class MessageItemPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRedDot(){
+  Widget _buildRedDot() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       width: 10,
@@ -149,5 +150,4 @@ class MessageItemPage extends StatelessWidget {
       ),
     );
   }
-
 }

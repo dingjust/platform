@@ -132,4 +132,10 @@ class Apis {
           (String uid) {
         return '/{baseSiteId}/user/$uid/msg/list';
       };
+
+  ///消息标记未读
+  static get readMsg =>
+          (String uid, String code) {
+        return '/{baseSiteId}/user/$uid/msg/read/$code';
+      };
 }

@@ -83,24 +83,19 @@ class NotificationsPool {
     if (noticication.module != MsgModule.DEFAULT) {
       //TODO 判断如生产订单类型、加入 _productionNotifications
       ns$.showNotification(noticication.hashCode, '${noticication.title}',
-          '${noticication.body}',payload: json.encode(WebsocketResponse.toJson(noticication)));
+          '${noticication.body}',
+          payload: json.encode(WebsocketResponse.toJson(noticication)));
     }
   }
 
   ///点击消息置为已阅
-  void read(WebsocketResponse noticication) {
-//    switch (noticication.group) {
-//      case 1:
-//        _orderNotifications.remove(noticication);
-//        break;
-//      case 2:
-//        _systemNotifications.remove(noticication);
-//        break;
-//      case 3:
-//        _financeNotifications.remove(noticication);
-//        break;
-//      default:
-//    }
+  Future<bool> read(String code) async {
+    bool result = await MessageRepository()
+        .readMessage(UserBLoC.instance.currentUser.mobileNumber, code);
+    if (result) {
+      checkUnread();
+    }
+    return result;
   }
 
   ///点击生产消息置为已阅
@@ -120,7 +115,7 @@ class NotificationsPool {
   }
 
   ///未读消息数
-  void checkUnread()async{
+  void checkUnread() async {
     CountUnreadResponse countUnreadResponse = await MessageRepository()
         .countUnread(UserBLoC.instance.currentUser.mobileNumber);
     _orderNotificationsNum = countUnreadResponse.order;
