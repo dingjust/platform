@@ -43,7 +43,7 @@ class MessageItemPage extends StatelessWidget {
     return Container(
       child: Row(
         children: <Widget>[
-          model.read?Container():_buildRedDot(),
+          model.read == null || model.read ? Container() : _buildRedDot(),
           Expanded(
             child: Container(
               child: Text(
