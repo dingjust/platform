@@ -122,7 +122,7 @@ class ProductionBLoC extends BLoCBase {
       Response<Map<String, dynamic>> response;
 
       try {
-        response = await http$.post(OrderApis.purchaseOrders, data: data, queryParameters: {'page': 0, 'size': 100});
+        response = await http$.post(OrderApis.purchaseOrders, data: data, queryParameters: {'page': 0, 'size': 100,'fields':PurchaseOrderOptions.DEFAULT});
       } on DioError catch (e) {
         print(e);
       }

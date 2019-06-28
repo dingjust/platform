@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/my/messages/index.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 
@@ -21,12 +22,12 @@ class NotificationsIcon extends StatelessWidget {
             color: Colors.white,
             tooltip: '通知',
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => MyClientServicesPage(),
-              //   ),
-              // );
+               Navigator.push(
+                 context,
+                 MaterialPageRoute(
+                   builder: (context) => MessagePage(),
+                 ),
+               );
             },
           ),
           Positioned(

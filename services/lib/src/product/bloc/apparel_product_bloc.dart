@@ -67,7 +67,7 @@ class ApparelProductBLoC extends BLoCBase {
           };
         }
 
-        productsResponse = await ProductRepositoryImpl().list(data, {});
+        productsResponse = await ProductRepositoryImpl().list(data, {'fields':ApparelProductOptions.DEFAULT});
         if (productsResponse != null) {
           _productsMap[status].currentPage = productsResponse.number;
           _productsMap[status].totalPages = productsResponse.totalPages;
@@ -95,6 +95,7 @@ class ApparelProductBLoC extends BLoCBase {
           _productsMap[status].totalPages - 1) {
         productsResponse = await ProductRepositoryImpl().list(data, {
           'page': _productsMap[status].currentPage + 1,
+          'fields':ApparelProductOptions.DEFAULT,
         });
         _productsMap[status].currentPage = productsResponse.number;
         _productsMap[status].totalPages = productsResponse.totalPages;

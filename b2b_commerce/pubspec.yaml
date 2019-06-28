@@ -151,6 +151,8 @@ flutter:
     - packages/assets/temp/common/wechat_friend.png
     - packages/assets/temp/common/qq_logo.png
     - packages/assets/temp/common/qq_zone.png
+    - packages/assets/temp/system_msg.png
+    - packages/assets/temp/money_msg.png
 
   fonts:
     - family: b2bIcons
