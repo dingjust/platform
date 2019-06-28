@@ -160,7 +160,6 @@ class _MessagePageListState extends State<MessagePageList>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: RefreshIndicator(
         onRefresh: () async {
-          // if (!bloc.lock)
           await bloc.refreshData(widget.status.code);
         },
         child: ListView(
