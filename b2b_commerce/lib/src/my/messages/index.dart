@@ -154,7 +154,6 @@ class _MessagePageListState extends State<MessagePageList>
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<NotifyBloC>(context);
-
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
