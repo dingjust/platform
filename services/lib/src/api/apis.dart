@@ -120,4 +120,10 @@ class Apis {
           (String code) {
         return 'https://apimg.alipay.com/combo.png?d=cashier&t=$code';
       };
+
+  ///获取消息列表（消息盒子）
+  static get getMsgList =>
+          (String uid) {
+        return '/{baseSiteId}/user/$uid/msg/list';
+      };
 }

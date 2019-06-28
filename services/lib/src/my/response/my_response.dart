@@ -22,3 +22,21 @@ class UserGuidelineResponse {
       _$UserGuidelineResponseToJson(model);
 }
 
+
+@JsonSerializable()
+class NotifyResponse {
+  final int number;
+  final int size;
+  final int totalPages;
+  final int totalElements;
+  final List<NotifyModel> content;
+
+  NotifyResponse(this.number, this.size, this.totalPages, this.totalElements,
+      this.content);
+
+  factory NotifyResponse.fromJson(Map<String, dynamic> json) =>
+      _$NotifyResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(NotifyResponse model) =>
+      _$NotifyResponseToJson(model);
+}

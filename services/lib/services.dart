@@ -77,6 +77,7 @@ export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_service.dart';
 export 'src/websocket/websocket_response.dart';
+export 'src/message/notify_bloc.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

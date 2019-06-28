@@ -96,6 +96,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 estimatedDate3: stitchingDate,
                 estimatedDate4: afterDate,
                 estimatedDate5: inspectionDate,
+                expectedDeliveryDate: widget.order.expectedDeliveryDate,
                 currentNode: _index,
               );
             }).then((value) {
