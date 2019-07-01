@@ -46,7 +46,7 @@ class NotifyBloC extends BLoCBase {
             'groupCode': status
           },
           queryParameters: {
-            'page': ++_dataMap[status].currentPage,
+            'page': _dataMap[status].currentPage,
             'size': _dataMap[status].size
           });
     } on DioError catch (e) {
@@ -98,7 +98,8 @@ class NotifyBloC extends BLoCBase {
     }
 
     loadingController.sink.add(false);
-    _controller.sink.add(MessageData(status: status, data: _dataMap[status].data));
+    _controller.sink.add(
+        MessageData(status: status, data: _dataMap[status].data));
   }
 
   refreshData(String status) async {

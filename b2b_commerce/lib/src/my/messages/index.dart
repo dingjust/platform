@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list.dart';
-import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:connectivity/connectivity.dart';
@@ -8,9 +6,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../my_help.dart';
 import 'message_item.dart';
-
 
 const statuses = <EnumModel>[
   EnumModel('1', '订单'),
@@ -18,11 +14,12 @@ const statuses = <EnumModel>[
   EnumModel('3', '账务'),
 ];
 
-class MessagePage extends StatefulWidget{
+class MessagePage extends StatefulWidget {
   _MessagePageState createState() => _MessagePageState();
 }
 
-class _MessagePageState extends State<MessagePage> with SingleTickerProviderStateMixin{
+class _MessagePageState extends State<MessagePage>
+    with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey<_MessagePageState>();
 
   @override
@@ -60,9 +57,11 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
             backgroundColor: Colors.white,
             appBar: TabFactory.buildDefaultTabBar(statuses),
             body: TabBarView(
-              children: statuses.map(
+              children: statuses
+                  .map(
                     (status) => MessagePageList(status: status),
-              ).toList(),
+              )
+                  .toList(),
             ),
           ),
         ),
@@ -102,6 +101,7 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
   onMenuSelect(String value) async {
     switch (value) {
       case 'read':
+        notificationsPool$.readAll();
         break;
       case 'notRead':
         showNotRead();
@@ -111,11 +111,9 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
     }
   }
 
-  showNotRead(){
+  showNotRead() {
     NotifyBloC.instance.showNotReadMsg();
   }
-
-
 }
 
 class MessagePageList extends StatefulWidget {
@@ -184,11 +182,12 @@ class _MessagePageListState extends State<MessagePageList>
           controller: widget.scrollController,
           children: <Widget>[
             StreamBuilder<MessageData>(
-              stream: bloc.stream.where((messageList) =>
-              messageList.status == widget.status.code),
+              stream: bloc.stream.where(
+                      (messageList) =>
+                  messageList.status == widget.status.code),
               // initialData: null,
-              builder: (BuildContext context,
-                  AsyncSnapshot<MessageData> snapshot) {
+              builder:
+                  (BuildContext context, AsyncSnapshot<MessageData> snapshot) {
                 if (snapshot.data == null) {
                   bloc.getData(widget.status.code);
                   return ProgressIndicatorFactory
