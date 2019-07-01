@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -24,6 +25,36 @@ class MessagePage extends StatefulWidget{
 
 class _MessagePageState extends State<MessagePage> with SingleTickerProviderStateMixin{
   final GlobalKey _globalKey = GlobalKey<_MessagePageState>();
+  var controller;
+  bool isShowNotRead = true;
+  String status ;
+
+  @override
+  void initState() {
+    controller = TabController(
+      length: statuses.length,
+      vsync: this, //动画效果的异步处理，默认格式
+    )..addListener((){
+      switch (controller.index) {
+        case 0:
+          setState(() {
+            status = statuses[0].code;
+          });
+          break;
+        case 1:
+          setState(() {
+            status = statuses[1].code;
+          });
+          break;
+        case 2:
+          setState(() {
+            status = statuses[2].code;
+          });
+          break;
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +85,114 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
             )
           ],
         ),
-        body: DefaultTabController(
-          length: statuses.length,
-          child: Scaffold(
+          body: Scaffold(
             backgroundColor: Colors.white,
-            appBar: TabFactory.buildDefaultTabBar(statuses),
+            appBar: TabBar(
+                controller: controller,
+                unselectedLabelColor: Colors.black26,
+                labelColor: Colors.black,
+                indicatorSize: TabBarIndicatorSize.label,
+                labelStyle: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+              tabs: <Widget>[
+                Tab(
+                  child: Container(
+                    width: 60,
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: <Widget>[
+                        Center(
+                          child: Container(
+                            child: Text(
+                              '订单',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
+                          child: NotificationBubble(
+                            fontSize: 11,
+                            width: 20,
+                            height: 16,
+                            msgGroup: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: Container(
+                    width: 60,
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: <Widget>[
+                         Center(
+                           child: Container(
+                              child: Text(
+                                '系统',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                        ),
+                         ),
+                         Container(
+                           margin: EdgeInsets.only(top: 5),
+                           child: NotificationBubble(
+                              fontSize: 11,
+                              width: 20,
+                              height: 16,
+                              msgGroup: 2,
+                            ),
+                         ),
+                      ],
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: Container(
+                    width: 60,
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: <Widget>[
+                        Center(
+                          child: Container(
+                            child: Text(
+                              '账务',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: NotificationBubble(
+                            fontSize: 11,
+                            width: 20,
+                            height: 20,
+                            msgGroup: 3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
             body: TabBarView(
+              controller: controller,
               children: statuses.map(
                     (status) => MessagePageList(status: status),
               ).toList(),
             ),
-          ),
-        ),
+          )
       ),
     );
   }
@@ -85,14 +212,14 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
         ),
       ),
       PopupMenuItem<String>(
-        value: 'notRead',
+        value: '${isShowNotRead? 'notRead':'showRead'}',
         child: Row(
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(right: 5),
-              child: Icon(Icons.fiber_new),
+              child: isShowNotRead?Icon(Icons.fiber_new):Icon(Icons.message),
             ),
-            Text('只看未读消息')
+            Text('${isShowNotRead? '只看未读消息': '查看全部消息'}')
           ],
         ),
       ),
@@ -106,26 +233,37 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
       case 'notRead':
         showNotRead();
         break;
+      case 'showRead':
+        showRead();
+        break;
       default:
         break;
     }
   }
 
   showNotRead(){
-    NotifyBloC.instance.showNotReadMsg();
+    setState(() {
+      isShowNotRead = !isShowNotRead;
+    });
+    NotifyBloC.instance.setReadStatus(isShowNotRead);
+    NotifyBloC.instance.getData(status);
   }
 
+  showRead(){
+    setState(() {
+      isShowNotRead = !isShowNotRead;
+    });
+    NotifyBloC.instance.setReadStatus(true);
+    NotifyBloC.instance.getData(status);
+  }
 
 }
 
 class MessagePageList extends StatefulWidget {
-  MessagePageList({Key key, @required this.status, this.keyword})
+  MessagePageList({Key key, @required this.status,})
       : super(key: key);
 
   final EnumModel status;
-  final String keyword;
-
-  final ScrollController scrollController = ScrollController();
 
   @override
   _MessagePageListState createState() => _MessagePageListState();
@@ -133,25 +271,27 @@ class MessagePageList extends StatefulWidget {
 
 class _MessagePageListState extends State<MessagePageList>
     with AutomaticKeepAliveClientMixin {
+  final ScrollController scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
 
     var bloc = BLoCProvider.of<NotifyBloC>(context);
 
-    widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels ==
-          widget.scrollController.position.maxScrollExtent) {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
         bloc.loadingMoreByStatuses(widget.status.code);
       }
     });
 
     // 监听滚动事件，打印滚动位置
-    widget.scrollController.addListener(() {
-      if (widget.scrollController.offset < 500) {
+    scrollController.addListener(() {
+      if (scrollController.offset < 500) {
         bloc.hideToTopBtn();
-      } else if (widget.scrollController.offset >= 500) {
+      } else if (scrollController.offset >= 500) {
         bloc.showToTopBtn();
       }
     });
@@ -160,7 +300,7 @@ class _MessagePageListState extends State<MessagePageList>
     bloc.returnToTopStream.listen((data) {
       //返回到顶部时执行动画
       if (data) {
-        widget.scrollController.animateTo(
+        scrollController.animateTo(
           .0,
           duration: const Duration(milliseconds: 200),
           curve: Curves.ease,
@@ -181,7 +321,7 @@ class _MessagePageListState extends State<MessagePageList>
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          controller: widget.scrollController,
+          controller: scrollController,
           children: <Widget>[
             StreamBuilder<MessageData>(
               stream: bloc.stream.where((messageList) =>
@@ -241,7 +381,7 @@ class _MessagePageListState extends State<MessagePageList>
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                 return ScrolledToEndTips(
                   hasContent: snapshot.data,
-                  scrollController: widget.scrollController,
+                  scrollController: scrollController,
                 );
               },
             ),
