@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'message_detail.dart';
@@ -14,6 +15,7 @@ class MessageItemPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
+        NotificationsPool.instance.read(model.code);
         if(model.groupCode != 1) {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -115,16 +117,27 @@ class MessageItemPage extends StatelessWidget {
     return Container(
       child: Row(
         children: <Widget>[
-          model.coverImgUrl==null||model.coverImgUrl==''?
+          model.images == null || model.images.length <= 0 ?
           _buildNoPic()
            :
           Container(
             width: 60,
             height: 60,
             child: Image.network(
-                model.coverImgUrl,
+                model.images[0].thumbnailUrl(),
             ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Color.fromRGBO(243, 243, 243, 1)),
           ),
+
+          //  Container(
+          //     width: 60,
+          //     height: 60,
+          //     child: Image.network(
+          //       model.coverImgUrl,
+          //     ),
+          //   ),
           Expanded(
             child: Container(
               child: Text(

@@ -32,9 +32,14 @@ class NotifyBloC extends BLoCBase {
     return _instance;
   }
 
+  bool isShowNotRead = true;
+
+  setReadStatus (bool isNotRead) => isShowNotRead = isNotRead;
+
   Stream<MessageData> get stream => _controller.stream;
 
   getData(String status) async {
+
 
     Response<Map<String, dynamic>> response;
 
@@ -43,10 +48,11 @@ class NotifyBloC extends BLoCBase {
     try {
       response = await http$.post(Apis.getMsgList(uid),
           data: {
-            'groupCode': status
+            'read' : !isShowNotRead? false:'',
+            'groupCode': status,
           },
           queryParameters: {
-            'page': ++_dataMap[status].currentPage,
+            'page': _dataMap[status].currentPage,
             'size': _dataMap[status].size
           });
     } on DioError catch (e) {
@@ -78,7 +84,8 @@ class NotifyBloC extends BLoCBase {
       try {
         response = await http$.post(Apis.getMsgList(uid),
             data: {
-              'groupCode': status
+              'read' : !isShowNotRead? false:'',
+              'groupCode': status,
             },
             queryParameters: {
               'page': ++_dataMap[status].currentPage,
@@ -104,51 +111,8 @@ class NotifyBloC extends BLoCBase {
   refreshData(String status) async {
       //重置信息
       _dataMap[status].data.clear();
+      _dataMap[status].currentPage = 0;
       await getData(status);
-  }
-
-  showNotReadMsg() async {
-    _dataMap['1'].data.clear();
-    _dataMap['2'].data.clear();
-    _dataMap['3'].data.clear();
-
-    Response<Map<String, dynamic>> response;
-
-    String uid = UserBLoC.instance.currentUser.mobileNumber;
-
-    print(uid);
-
-    try {
-      response = await http$.post(Apis.getMsgList(uid),
-          data: {
-            'read': false
-          });
-    } on DioError catch (e) {
-      print(e);
-    }
-    List<NotifyModel> data = List<NotifyModel>();
-    if (response != null && response.statusCode == 200) {
-      NotifyResponse notifyResponse =
-      NotifyResponse.fromJson(response.data);
-      data.addAll(notifyResponse.content);
-    }
-
-    if (data != null && data.length > 0) {
-//      _dataMap['1'].data.add(_dataMap['dll'].data.firstWhere((_dataMap['all'].data.)))
-      for (int i = 0; i < data.length; i++) {
-        if (data[i].groupCode.toString() == '1') {
-          _dataMap['1'].data.add(data[i]);
-        } else if (data[i].groupCode.toString() == '2') {
-          _dataMap['2'].data.add(data[i]);
-        } else if (data[i].groupCode.toString() == '3') {
-          _dataMap['3'].data.add(data[i]);
-        }
-      }
-    }
-
-    _controller.sink.add(MessageData(status: '1', data: _dataMap['1'].data));
-    _controller.sink.add(MessageData(status: '2', data: _dataMap['2'].data));
-    _controller.sink.add(MessageData(status: '3', data: _dataMap['3'].data));
   }
 
 

@@ -33,14 +33,14 @@ class MyHomePage extends StatelessWidget {
     final UserBLoC bloc = BLoCProvider.of<UserBLoC>(context);
 
     final List<Widget> menus = <Widget>[
-      Menu('', <Widget>[
-        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
-            AppRoutes.ROUTE_MY_ACCOUNT),
-        menuSeparator,
-        CompanyIntroductionMenuItem(),
-        menuSeparator,
-        CompanyCertificationMenuItem()
-      ]),
+      // Menu('', <Widget>[
+      //   MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
+      //       AppRoutes.ROUTE_MY_ACCOUNT),
+      //   menuSeparator,
+      //   CompanyIntroductionMenuItem(),
+      //   menuSeparator,
+      //   CompanyCertificationMenuItem()
+      // ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.addressManage(width: 24, height: 29), '地址管理',
             AppRoutes.ROUTE_MY_ADDRESSES),

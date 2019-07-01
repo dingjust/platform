@@ -28,7 +28,8 @@ class NotifyModel extends ItemModel {
   String body;
   String uid;
   String openTarget;
-  String coverImgUrl;
+  @JsonKey(toJson: _mediaToJson)
+  List<MediaModel> images;
   String openUrl;
   String moduleCode;
   int groupCode;
@@ -44,7 +45,7 @@ class NotifyModel extends ItemModel {
     this.body,
     this.uid,
     this.openTarget,
-    this.coverImgUrl,
+    this.images,
     this.openUrl,
     this.moduleCode,
     this.groupCode,
@@ -59,4 +60,7 @@ class NotifyModel extends ItemModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
+  static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
 }

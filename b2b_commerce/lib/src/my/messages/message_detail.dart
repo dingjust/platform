@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class MessageDetailPage extends StatefulWidget {
   NotifyModel model;
@@ -14,25 +15,31 @@ class MessageDetailPage extends StatefulWidget {
 class _MessageDetailPageState extends State<MessageDetailPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '${widget.model.groupCode == 2 ? '系统消息' : '账务消息'}',
-          style: TextStyle(color: Colors.black),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
+          title: Text(
+            '${widget.model.groupCode == 2 ? '系统消息' : '账务消息'}',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            _buildHead(),
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              _buildHead(),
 //            _buildOrderDetail(),
-          ],
+            ],
+          ),
         ),
+        backgroundColor: Colors.white,
       ),
-      backgroundColor: Colors.white,
+      onWillPop: (){
+        NotifyBloC.instance.refreshData(widget.model.groupCode.toString());
+        Navigator.pop(context);
+      },
     );
   }
 

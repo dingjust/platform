@@ -46,7 +46,13 @@ class NotificationBubble extends StatelessWidget {
   ///消息类型分组 1.订单 2.系统 3.财务
   final int msgGroup;
 
-  const NotificationBubble({Key key, this.msgGroup}) : super(key: key);
+  final double fontSize;
+
+  final double width;
+
+  final double height;
+
+  const NotificationBubble({Key key, this.msgGroup,this.width:20,this.height:20,this.fontSize:12}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +62,8 @@ class NotificationBubble extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
         return snapshot.data != 0
             ? Container(
-                width: 20,
-                height: 20,
+                width: width,
+                height: height,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color.fromRGBO(255, 38, 38, 1),
@@ -65,7 +71,7 @@ class NotificationBubble extends StatelessWidget {
                 child: Center(
                     child: Text(
                   snapshot.data > 99 ? '...' : '${snapshot.data}',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  style: TextStyle(color: Colors.white, fontSize: fontSize),
                 )),
               )
             : Container();

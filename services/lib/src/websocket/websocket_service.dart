@@ -60,6 +60,7 @@ class WebSocketService {
             (dynamic message) {
           print('========收到推送=========');
           print('$message');
+          notificationsPool$.checkUnread();
           try {
             WebsocketResponse response =
             WebsocketResponse.fromJson(json.decode(message));
