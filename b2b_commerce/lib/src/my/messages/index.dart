@@ -44,7 +44,7 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
               width: 60,
               margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
               child: PopupMenuButton<String>(
-//                onSelected: (v) => onMenuSelect(v),
+                onSelected: (v) => onMenuSelect(v),
                 icon: Icon(
                   Icons.more_vert,
                 ),
@@ -73,7 +73,7 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
   List<PopupMenuItem<String>> _buildPopupMenu() {
     return <PopupMenuItem<String>>[
       PopupMenuItem<String>(
-        value: 'reaies',
+        value: 'read',
         child: Row(
           children: <Widget>[
             Container(
@@ -98,6 +98,24 @@ class _MessagePageState extends State<MessagePage> with SingleTickerProviderStat
       ),
     ];
   }
+
+  onMenuSelect(String value) async {
+    switch (value) {
+      case 'read':
+        break;
+      case 'notRead':
+        showNotRead();
+        break;
+      default:
+        break;
+    }
+  }
+
+  showNotRead(){
+    NotifyBloC.instance.showNotReadMsg();
+  }
+
+
 }
 
 class MessagePageList extends StatefulWidget {
@@ -125,7 +143,7 @@ class _MessagePageListState extends State<MessagePageList>
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.getData(widget.status.code);
+        bloc.loadingMoreByStatuses(widget.status.code);
       }
     });
 
