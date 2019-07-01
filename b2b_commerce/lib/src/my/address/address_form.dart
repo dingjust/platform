@@ -225,12 +225,67 @@ class AddressFormState extends State<AddressFormPage> {
 //              widget.address.region.name=null;
 
               if(widget.newlyCreated){
-                await AddressRepositoryImpl().create(widget.address).then((a)=>Navigator.pop(context));
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return RequestDataLoading(
+                        requestCallBack: AddressRepositoryImpl().create(widget.address),
+                        outsideDismiss: false,
+                        loadingText: '保存中。。。',
+                        entrance: '0',
+                      );
+                    }).then((value) {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return CustomizeDialog(
+                          dialogType: DialogType.RESULT_DIALOG,
+                          successTips: '地址创建成功',
+                          failTips: '地址创建失败',
+                          callbackResult: value,
+                          confirmAction: () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }).then((v){
+                    Navigator.of(context).pop();
+                    AddressBLoC.instance.getAddressData();
+                  });
+                });
               }else{
-                await AddressRepositoryImpl().update(widget.address).then((a)=>Navigator.pop(context));
-              }
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (_) {
+                      return RequestDataLoading(
+                        requestCallBack: AddressRepositoryImpl().update(widget.address),
+                        outsideDismiss: false,
+                        loadingText: '保存中。。。',
+                        entrance: '0',
+                      );
+                    }).then((value) {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return CustomizeDialog(
+                          dialogType: DialogType.RESULT_DIALOG,
+                          successTips: '地址修改成功',
+                          failTips: '地址修改失败',
+                          callbackResult: value,
+                          confirmAction: () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }).then((v){
+                    Navigator.of(context).pop();
+                    AddressBLoC.instance.getAddressData();
+                  });
+                });
 
-              AddressBLoC.instance.getAddressData();
+              }
             },
           )
         ],

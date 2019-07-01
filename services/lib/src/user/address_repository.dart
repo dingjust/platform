@@ -7,9 +7,9 @@ abstract class AddressRepository {
   //获取地址明细
   Future<AddressModel> detail(String id);
   //创建地址
-  Future<String> create(AddressModel form);
+  Future<bool> create(AddressModel form);
   //更新地址
-  Future<String> update(AddressModel form);
+  Future<bool> update(AddressModel form);
   //删除地址
   Future<String> delete(String id);
 }

@@ -209,6 +209,7 @@ class AddressModel extends ItemModel {
 
   static Map<String, dynamic> addressToJson(AddressModel model) {
     return {
+      'id':model.id,
       'fullname': model.fullname,
       'cellphone': model.cellphone,
       'line1': model.line1,
