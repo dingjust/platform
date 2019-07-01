@@ -64,22 +64,6 @@ class NotificationsPool {
 
   ///新增通知
   void add(WebsocketResponse noticication) async {
-//    switch (noticication.group) {
-//      case 1:
-//        _orderNotifications.add(noticication);
-//        _orderNotificationsNumController.add(orderNotificationsNum);
-//        break;
-//      case 2:
-//        _systemNotifications.add(noticication);
-//        _systemNotificationsNumController.add(systemNotificationsNum);
-//        break;
-//      case 3:
-//        _financeNotifications.add(noticication);
-//        _financeNotificationsNumController.add(financeNotificationsNum);
-//        break;
-//      default:
-//    }
-    checkUnread();
     if (noticication.module != MsgModule.DEFAULT) {
       //TODO 判断如生产订单类型、加入 _productionNotifications
       ns$.showNotification(noticication.hashCode, '${noticication.title}',
@@ -98,6 +82,15 @@ class NotificationsPool {
     return result;
   }
 
+  Future<bool> readAll() async {
+    bool result = await MessageRepository()
+        .readAllMessage(UserBLoC.instance.currentUser.mobileNumber);
+    if (result) {
+      checkUnread();
+    }
+    return result;
+  }
+
   ///点击生产消息置为已阅
   void readProductionNotifications(String code) {
     _productionNotifications.remove(code);
@@ -108,23 +101,19 @@ class NotificationsPool {
     _productionNotifications.contains(code);
   }
 
-  void readAll() {
-//    _orderNotifications.clear();
-//    _systemNotifications.clear();
-//    _financeNotifications.clear();
-  }
-
   ///未读消息数
   void checkUnread() async {
     CountUnreadResponse countUnreadResponse = await MessageRepository()
         .countUnread(UserBLoC.instance.currentUser.mobileNumber);
-    _orderNotificationsNum = countUnreadResponse.order;
-    _systemNotificationsNum = countUnreadResponse.system;
-    _financeNotificationsNum = countUnreadResponse.finance;
-    _orderNotificationsNumController.add(orderNotificationsNum);
-    _systemNotificationsNumController.add(systemNotificationsNum);
-    _financeNotificationsNumController.add(financeNotificationsNum);
-    _notificationsNumController.add(notificationsNum);
+    if (countUnreadResponse != null) {
+      _orderNotificationsNum = countUnreadResponse.order;
+      _systemNotificationsNum = countUnreadResponse.system;
+      _financeNotificationsNum = countUnreadResponse.finance;
+      _orderNotificationsNumController.add(orderNotificationsNum);
+      _systemNotificationsNumController.add(systemNotificationsNum);
+      _financeNotificationsNumController.add(financeNotificationsNum);
+      _notificationsNumController.add(notificationsNum);
+    }
   }
 
   ///获取全部通知数

@@ -126,7 +126,18 @@ class MessageItemPage extends StatelessWidget {
             child: Image.network(
                 model.images[0].thumbnailUrl(),
             ),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Color.fromRGBO(243, 243, 243, 1)),
           ),
+
+          //  Container(
+          //     width: 60,
+          //     height: 60,
+          //     child: Image.network(
+          //       model.coverImgUrl,
+          //     ),
+          //   ),
           Expanded(
             child: Container(
               child: Text(

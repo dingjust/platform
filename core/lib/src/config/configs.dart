@@ -2,12 +2,12 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
   //测试
-   static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-   static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
 
-//  static const CONTEXT_PATH = 'https://192.168.1.137:9002/djwebservices/v2';
+//  static const CONTEXT_PATH = 'https://192.168.1.143:9002/djwebservices/v2';
 //  static const MEDIA_CONTEXT_PATH =
-//      'https://192.168.1.137:9002/djwebservices/v2';
+//      'https://192.168.1.143:9002/djwebservices/v2';
 
   // 生产
   // static const CONTEXT_PATH = 'http://ht.nbyjy.net';
@@ -16,8 +16,8 @@ class GlobalConfigs {
   ///websocket 连接
   static get WEBSOCKET_URL =>
           (String token, String uid) {
-         return 'ws://47.106.112.137:8088/message?token=$token&userId=$uid';
-//        return 'ws://192.168.1.137:8088/message?token=$token&userId=$uid';
+        return 'ws://47.106.112.137:8088/message?token=$token&userId=$uid';
+        //  return 'ws://192.168.1.143:8088/message?token=$token&userId=$uid';
         // return 'ws://echo.websocket.org';
       };
 
@@ -27,10 +27,10 @@ class GlobalConfigs {
   static const REFRESH_TOKEN_KEY = 'refresh_token';
   static const BASIC_AUTH_TOKEN_KEY = 'basic_auth_token';
 
-   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
+  static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
 
-//  static const AUTH_SERVER_URL =
-//      'https://192.168.1.137:9002/authorizationserver';
+  // static const AUTH_SERVER_URL =
+  //     'https://192.168.1.143:9002/authorizationserver';
   static const AUTH_TOKEN_URL = '$AUTH_SERVER_URL/oauth/token';
   static const AUTH_CHECK_TOKEN_URL = '$AUTH_SERVER_URL/oauth/check_token';
   static const AUTH_CLIENT_ID_KEY = 'client_id';
@@ -64,7 +64,7 @@ class GlobalConfigs {
   /// 通过nginx代理所有b2b前缀的请求
    static const B2B_API_PREFIX = 'b2b';
 
-//  static const B2B_API_PREFIX = 'b2b-apparel-zh';
+  // static const B2B_API_PREFIX = 'b2b-apparel-zh';
   static const B2B_CLIENT_ID = 'nbyjy';
   static const B2B_CLIENT_SECRET = 'password';
 

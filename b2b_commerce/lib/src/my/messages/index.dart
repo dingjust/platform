@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list.dart';
-import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
@@ -9,9 +7,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../my_help.dart';
 import 'message_item.dart';
-
 
 const statuses = <EnumModel>[
   EnumModel('1', '订单'),
@@ -19,11 +15,12 @@ const statuses = <EnumModel>[
   EnumModel('3', '账务'),
 ];
 
-class MessagePage extends StatefulWidget{
+class MessagePage extends StatefulWidget {
   _MessagePageState createState() => _MessagePageState();
 }
 
-class _MessagePageState extends State<MessagePage> with SingleTickerProviderStateMixin{
+class _MessagePageState extends State<MessagePage>
+    with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey<_MessagePageState>();
   var controller;
   bool isShowNotRead = true;

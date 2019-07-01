@@ -33,4 +33,18 @@ class MessageRepository {
     } else
       return false;
   }
+
+  ///消息标记未读
+  Future<bool> readAllMessage(String uid) async {
+    var response;
+    try {
+      response = await http$.post(Apis.readAllMsg(uid));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data as bool;
+    } else
+      return false;
+  }
 }

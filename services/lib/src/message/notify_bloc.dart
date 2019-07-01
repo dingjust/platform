@@ -52,7 +52,7 @@ class NotifyBloC extends BLoCBase {
             'groupCode': status,
           },
           queryParameters: {
-            'page': 0,
+            'page': _dataMap[status].currentPage,
             'size': _dataMap[status].size
           });
     } on DioError catch (e) {
