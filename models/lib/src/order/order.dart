@@ -770,6 +770,8 @@ class PurchaseOrderModel extends OrderModel {
 
   int delayedDays;
 
+  bool updated;
+
   // @JsonKey(fromJson: _dateTimefromMilliseconds)
   // DateTime modifiedtime;
 
@@ -807,6 +809,7 @@ class PurchaseOrderModel extends OrderModel {
       this.uniqueCode,
       this.delayed,
       this.quoteRef,
+      this.updated:false,
       this.delayedDays,
       DateTime modifiedtime,
       SalesApplication salesApplication,
