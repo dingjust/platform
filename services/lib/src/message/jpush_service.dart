@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/b2b_commerce.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:services/src/message/notifications_pool.dart';
@@ -36,6 +37,9 @@ class JPushService {
       // 接收自定义消息回调方法。
       onReceiveMessage: (Map<String, dynamic> message) async {
         print("flutter onReceiveMessage: $message");
+
+        ///更新未读消息数
+        notificationsPool$.checkUnread();
       },
     );
 
@@ -45,6 +49,9 @@ class JPushService {
       production: true,
       debug: true, // 设置是否打印 debug 日志
     );
+
+    _jpush.applyPushAuthority(
+        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
   }
 
   static JPushService _getInstance() {
@@ -68,13 +75,35 @@ class JPushService {
   }
 
   Widget pageRoute(Map<String, dynamic> message) {
-    JPushResponse response = JPushResponse.fromJson(message);
+    TargetPlatform platform = defaultTargetPlatform;
+    platform == TargetPlatform.iOS
+        ? pageRouteForIOS(message)
+        : pageRouteForAndroid(message);
+  }
+
+  ///安卓页面路由
+  Widget pageRouteForAndroid(Map<String, dynamic> message) {
+    JPushAndroidResponse response = JPushAndroidResponse.fromJson(message);
     switch (PAGE_ROUTE_MAP[response.extras.androidExtras.module]) {
       case 1:
         return QuoteOrderDetailPage(response.extras.androidExtras.params);
         break;
       case 2:
         return ProofingOrderDetailPage(response.extras.androidExtras.params);
+      default:
+        return null;
+    }
+  }
+
+  ///IOS页面路由
+  Widget pageRouteForIOS(Map<String, dynamic> message) {
+    JPushIOSResponse response = JPushIOSResponse.fromJson(message);
+    switch (PAGE_ROUTE_MAP[response.module]) {
+      case 1:
+        return QuoteOrderDetailPage(response.params);
+        break;
+      case 2:
+        return ProofingOrderDetailPage(response.params);
       default:
         return null;
     }
