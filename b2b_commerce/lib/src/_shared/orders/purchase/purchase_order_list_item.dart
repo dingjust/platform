@@ -59,16 +59,10 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
         ),
       ),
       onTap: () async {
-        //根据code查询
-        PurchaseOrderModel model = await PurchaseOrderRepository()
-            .getPurchaseOrderDetail(widget.order.code);
-
-        if (model != null) {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => PurchaseOrderDetailPage(order: model)),
+                builder: (context) => PurchaseOrderDetailPage(code: widget.order.code)),
           );
-        }
       },
     );
   }

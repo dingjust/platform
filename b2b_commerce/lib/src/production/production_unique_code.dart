@@ -315,24 +315,11 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
   }
 
   bindThenAction(String code) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return RequestDataLoading(
-            requestCallBack:  PurchaseOrderRepository().getPurchaseOrderDetail(code),
-            outsideDismiss: false,
-            loadingText: '加载中。。。',
-            entrance: '',
-          );
-        }
-    ).then((value){
-      ProductionBLoC.instance.refreshData('');
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>
-              PurchaseOrderDetailPage(order: value)
-          ), ModalRoute.withName('/'));
-    });
+    ProductionBLoC.instance.refreshData('');
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) =>
+            PurchaseOrderDetailPage(code: code)
+        ), ModalRoute.withName('/'));
   }
 
 
@@ -359,14 +346,13 @@ class _ProductionUniqueCodePageState extends State<ProductionUniqueCodePage> {
             FlatButton(
               child: Text('确定'),
               onPressed: () async {
-                PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
                 ProductionBLoC.instance.refreshData('');
 
                 Navigator.of(context).pop();
                 result == true ?
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) =>
-                        PurchaseOrderDetailPage(order: model)
+                        PurchaseOrderDetailPage(code: code)
                     ), ModalRoute.withName('/')) : null;
               },
             ),

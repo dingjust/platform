@@ -44,16 +44,16 @@ final List<OrderStatusModel> _statusList = [
 ];
 
 class PurchaseOrderDetailPage extends StatefulWidget {
-  final PurchaseOrderModel order;
+  final String code;
 
   final bool isProduction;
 
   PurchaseOrderDetailPage(
-      {Key key, @required this.order, this.isProduction = false})
+      {Key key, @required this.code, this.isProduction = false})
       : super(key: key);
 
   _PurchaseDetailPageState createState() =>
-      _PurchaseDetailPageState(order: order);
+      _PurchaseDetailPageState();
 }
 
 class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
@@ -67,46 +67,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   String remarks;
   bool isHide = true;
   int totalQuantity = 0;
+  SalesApplication salesApplication;
 
-  final PurchaseOrderModel order;
+  PurchaseOrderModel order;
   _PurchaseDetailPageState({this.order});
 
   @override
   void initState() {
-    mockData.clear();
-    //把颜色尺码封装成ApparelSizeVariantProductEntry
-    if (order.entries.isNotEmpty) {
-      for (int i = 0; i < order.entries.length; i++) {
-        if (order.entries[i].product.color != null &&
-            order.entries[i].product.size != null) {
-          ApparelSizeVariantProductEntry entry =
-              new ApparelSizeVariantProductEntry();
-          entry.quantity = order.entries[i].quantity;
-          totalQuantity += order.entries[i].quantity;
-          entry.model = order.entries[i].product;
-          mockData.add(entry);
-        }
-      }
-    }
-    //控制是否显示按钮
-    if (order.status == PurchaseOrderStatus.PENDING_PAYMENT ||
-        (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE &&
-            order.balancePaid == false)) {
-      isShowButton = true;
-    }
-
-    if (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
-        order.salesApplication == SalesApplication.ONLINE) {
-      isHide = false;
-    }
-
-    final bloc = BLoCProvider.of<UserBLoC>(context);
-    if (bloc.isBrandUser) {
-      userType = 'brand';
-    } else {
-      userType = 'factory';
-    }
-
     super.initState();
   }
 
@@ -119,71 +86,192 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     PurchaseOrderStatus.CANCELLED: Colors.grey,
   };
 
+//  Widget build(BuildContext context) {
+//    final bloc = BLoCProvider.of<UserBLoC>(context);
+//    return Scaffold(
+//        appBar: AppBar(
+//          brightness: Brightness.light,
+//          centerTitle: true,
+//          elevation: 0.5,
+//          title: Text('生产订单明细'),
+//          actions: <Widget>[
+//            order.salesApplication == null
+//                ? Container()
+//                : Container(
+//                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+//                    child: Center(
+//                      child: Text(
+//                          '${SalesApplicationLocalizedMap[order.salesApplication]}'),
+//                    ),
+//                  ),
+//          ],
+//        ),
+//        body: Container(
+//            child: ListView(
+//          children: <Widget>[
+////            Container(
+////              color: Colors.white,
+////              padding: EdgeInsets.only(left: 10),
+////              child: StatusStep(
+////                list: _statusList,
+////                currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
+////                isScroll: false,
+////              ),
+////            ),
+//            Container(
+//              color: Colors.white,
+//              padding: EdgeInsets.fromLTRB(0, 5, 10, 0),
+//              child: Align(
+//                alignment: Alignment.centerRight,
+//                child: Text(
+//                  '${PurchaseOrderStatusLocalizedMap[order.status]}',
+//                  style: TextStyle(
+//                      color: _statusColors[order.status],
+//                      fontSize: 18,
+//                      fontWeight: FontWeight.w500),
+//                ),
+//              ),
+//            ),
+//            _buildEntries(context),
+//            _buildProductHide(context),
+//            _buildProductInfo(context),
+//            (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
+//                        order.depositPaid == false) ||
+//                    order.status == PurchaseOrderStatus.CANCELLED
+//                ? _buildTipsPayment(context)
+//                : _buildPurchaseProductionProgresse(context),
+//            _buildDeliveryAddress(context),
+//            bloc.isBrandUser
+//                ? _buildFactoryInfo(context)
+//                : _buildBrandInfo(context),
+//            _buildDocutment(context),
+//            _buildRemarks(context),
+//            _buildBottom(context),
+//            _buildCommitButton(context),
+//          ],
+//        )));
+//  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BLoCProvider.of<UserBLoC>(context);
     return Scaffold(
-        appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: true,
-          elevation: 0.5,
-          title: Text('生产订单明细'),
-          actions: <Widget>[
-            order.salesApplication == null
-                ? Container()
-                : Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                    child: Center(
-                      child: Text(
-                          '${SalesApplicationLocalizedMap[order.salesApplication]}'),
-                    ),
-                  ),
-          ],
-        ),
-        body: Container(
-            child: ListView(
-          children: <Widget>[
-//            Container(
-//              color: Colors.white,
-//              padding: EdgeInsets.only(left: 10),
-//              child: StatusStep(
-//                list: _statusList,
-//                currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
-//                isScroll: false,
-//              ),
-//            ),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.fromLTRB(0, 5, 10, 0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '${PurchaseOrderStatusLocalizedMap[order.status]}',
-                  style: TextStyle(
-                      color: _statusColors[order.status],
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
+      appBar: AppBar(
+        brightness: Brightness.light,
+        centerTitle: true,
+        elevation: 0.5,
+        title: Text('生产订单明细'),
+        actions: <Widget>[
+          salesApplication == null
+              ? Container()
+              : Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: Center(
+              child: Text(
+                  '${SalesApplicationLocalizedMap[order.salesApplication]}'),
             ),
-            _buildEntries(context),
-            _buildProductHide(context),
-            _buildProductInfo(context),
-            (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
+          ),
+        ],
+      ),
+      body: FutureBuilder<PurchaseOrderModel>(
+        builder: (BuildContext context,
+            AsyncSnapshot<PurchaseOrderModel> snapshot) {
+          if (snapshot.data != null) {
+            return Container(
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.fromLTRB(0, 5, 10, 0),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${PurchaseOrderStatusLocalizedMap[order.status]}',
+                          style: TextStyle(
+                              color: _statusColors[order.status],
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                    _buildEntries(context),
+                    _buildProductHide(context),
+                    _buildProductInfo(context),
+                    (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
                         order.depositPaid == false) ||
-                    order.status == PurchaseOrderStatus.CANCELLED
-                ? _buildTipsPayment(context)
-                : _buildPurchaseProductionProgresse(context),
-            _buildDeliveryAddress(context),
-            bloc.isBrandUser
-                ? _buildFactoryInfo(context)
-                : _buildBrandInfo(context),
-            _buildDocutment(context),
-            _buildRemarks(context),
-            _buildBottom(context),
-            _buildCommitButton(context),
-          ],
-        )));
+                        order.status == PurchaseOrderStatus.CANCELLED
+                        ? _buildTipsPayment(context)
+                        : _buildPurchaseProductionProgresse(context),
+                    _buildDeliveryAddress(context),
+                    bloc.isBrandUser
+                        ? _buildFactoryInfo(context)
+                        : _buildBrandInfo(context),
+                    _buildDocutment(context),
+                    _buildRemarks(context),
+                    _buildBottom(context),
+                    _buildCommitButton(context),
+                  ],
+                )
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        }, initialData: null,
+        future: _getData(),
+      ),
+    );
+  }
+
+  Future<PurchaseOrderModel> _getData() async {
+    // 查询明细
+    PurchaseOrderModel detailModel = await PurchaseOrderBLoC().getPurchaseOrderDetail(widget.code);
+    order = detailModel;
+    if(order != null) {
+      initData(order);
+    }
+    return detailModel;
+  }
+
+  initData(PurchaseOrderModel order){
+    setState(() {
+    mockData.clear();
+    //把颜色尺码封装成ApparelSizeVariantProductEntry
+    if (order.entries.isNotEmpty) {
+    for (int i = 0; i < order.entries.length; i++) {
+    if (order.entries[i].product.color != null &&
+    order.entries[i].product.size != null) {
+    ApparelSizeVariantProductEntry entry =
+    new ApparelSizeVariantProductEntry();
+    entry.quantity = order.entries[i].quantity;
+    totalQuantity += order.entries[i].quantity;
+    entry.model = order.entries[i].product;
+    mockData.add(entry);
+    }
+    }
+    }
+    //控制是否显示按钮
+    if (order.status == PurchaseOrderStatus.PENDING_PAYMENT ||
+    (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE &&
+    order.balancePaid == false)) {
+    isShowButton = true;
+    }
+
+    if (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
+    order.salesApplication == SalesApplication.ONLINE) {
+    isHide = false;
+    }
+
+    final bloc = BLoCProvider.of<UserBLoC>(context);
+    if (bloc.isBrandUser) {
+    userType = 'brand';
+    } else {
+    userType = 'factory';
+    }
+      salesApplication = order.salesApplication;
+    });
+
   }
 
   //产品详情
@@ -885,7 +973,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     isCurrentStatus == true &&
-                            widget.order.status ==
+                            order.status ==
                                 PurchaseOrderStatus.IN_PRODUCTION
                         ? _buildEstimatedDate(
                             context, productionProgress, isCurrentStatus)
@@ -1430,7 +1518,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProductionGenerateUniqueCodePage(
-                                model: widget.order,
+                                model: order,
                               )));
                     })
             ),
@@ -1443,10 +1531,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   //品牌端支付按钮
   Widget _buildShowBrandButton(BuildContext context) {
     return isShowButton == true &&
-        widget.order.depositPaid == false &&
-        widget.order.deposit != null &&
-        widget.order.deposit > 0 &&
-        widget.order.salesApplication == SalesApplication.ONLINE
+        order.depositPaid == false &&
+        order.deposit != null &&
+        order.deposit > 0 &&
+        order.salesApplication == SalesApplication.ONLINE
         ? Container(
       margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Row(
@@ -1457,7 +1545,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 height: 30,
                 padding: const EdgeInsets.symmetric(
                     vertical: 0, horizontal: 30),
-                child: widget.order.status ==
+                child: order.status ==
                     PurchaseOrderStatus.PENDING_PAYMENT
                     ? FlatButton(
                     color: Colors.red,
@@ -1508,7 +1596,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                                         return RequestDataLoading(
                                           requestCallBack: PurchaseOrderRepository()
                                               .purchaseOrderCancelling(
-                                              widget.order.code),
+                                              order.code),
                                           outsideDismiss: false,
                                           loadingText: '取消中。。。',
                                           entrance: 'purchaseOrders',
@@ -1544,7 +1632,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ),
                     ),
                     onPressed: () {
-                      PurchaseOrderModel order = widget.order;
                       //将支付金额置为定金
                       order.totalPrice = order.deposit;
                       Navigator.of(context).push(MaterialPageRoute(
@@ -1584,7 +1671,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   onPressed: () async {
                     bool result = await PurchaseOrderRepository()
                         .confirmProduction(
-                        widget.order.code, widget.order);
+                        order.code, order);
                     showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -1638,7 +1725,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           ),
                         ),
                         onPressed: () async {
-                          PurchaseOrderModel order = widget.order;
                           //将支付金额置为定金
                           order.totalPrice = order.balance;
                           Navigator.of(context).push(MaterialPageRoute(
@@ -1679,7 +1765,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       onPressed: () async {
                         bool result = false;
                         result = await PurchaseOrderRepository()
-                            .purchaseOrderShipped(widget.order.code, widget.order);
+                            .purchaseOrderShipped(order.code, order);
                         showDialog(
                             context: context,
                             barrierDismissible: false,
@@ -1728,7 +1814,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       onPressed: () async {
                         bool result = false;
                         result = await PurchaseOrderRepository()
-                            .purchaseOrderShipped(widget.order.code, widget.order);
+                            .purchaseOrderShipped(order.code, order);
                         showDialog(
                             context: context,
                             barrierDismissible: false,
@@ -1784,9 +1870,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     FocusNode node = new FocusNode();
                     FocusNode node1 = new FocusNode();
                     FocusNode node2 = new FocusNode();
-                    con.text = widget.order.totalPrice.toString();
-                    con1.text = widget.order.deposit.toString();
-                    con2.text = widget.order.unitPrice.toString();
+                    con.text = order.totalPrice.toString();
+                    con1.text = order.deposit.toString();
+                    con2.text = order.unitPrice.toString();
                     showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -1811,7 +1897,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         print(deposit);
                         String unitPrice = str.substring(str.indexOf(',')+1,str.length);
                         print(unitPrice);
-                        _showDepositDialog(context, widget.order,deposit,unitPrice);
+                        _showDepositDialog(context, order,deposit,unitPrice);
                       }
                     });
                   }),
@@ -1876,7 +1962,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       MaterialPageRoute(
                         builder: (context) => LogisticsInputPage(
                             isProductionOrder: true,
-                            purchaseOrderModel: widget.order),
+                            purchaseOrderModel: order),
                       ),
                     );
                   },
@@ -1908,7 +1994,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(5))),
                   onPressed: () {
-                    _showBalanceDialog(context, widget.order);
+                    _showBalanceDialog(context, order);
                   },
                 ),
               ),
@@ -1968,7 +2054,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             builder: (_) {
               return RequestDataLoading(
                 requestCallBack: PurchaseOrderRepository().productionProgressUpload(
-                    widget.order.code, model.id.toString(), model),
+                    order.code, model.id.toString(), model),
                 outsideDismiss: false,
                 loadingText: '保存中。。。',
                 entrance: '0',
@@ -2041,7 +2127,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           return RequestDataLoading(
                             requestCallBack: PurchaseOrderRepository()
                                 .productionProgressUpload(
-                                widget.order.code, model.id.toString(), model),
+                                order.code, model.id.toString(), model),
                             outsideDismiss: false,
                             loadingText: '保存中。。。',
                             entrance: '0',
@@ -2426,9 +2512,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     FocusNode node1 = new FocusNode();
     FocusNode node2 = new FocusNode();
     FocusNode node3 = new FocusNode();
-    con.text = widget.order.totalPrice.toString();
-    con1.text = widget.order.deposit.toString();
-    con2.text = widget.order.unitPrice.toString();
+    con.text = order.totalPrice.toString();
+    con1.text = order.deposit.toString();
+    con2.text = order.unitPrice.toString();
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -2453,7 +2539,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     ).then((value){
       if(value != null && value != ''){
         String str = value;
-        _updateBalance(context, widget.order,str);
+        _updateBalance(context, order,str);
       }
     });
   }
@@ -2483,11 +2569,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             if (model.status ==
                 PurchaseOrderStatus.IN_PRODUCTION) {
               try {
-                for (int i = 0; i < widget.order.progresses.length; i++) {
-                  if (widget.order.currentPhase == widget.order.progresses[i].phase) {
-                    await PurchaseOrderRepository() .productionProgressUpload(widget.order.code,
-                        widget.order.progresses[i].id.toString(),
-                        widget.order.progresses[i]);
+                for (int i = 0; i < order.progresses.length; i++) {
+                  if (order.currentPhase == order.progresses[i].phase) {
+                    await PurchaseOrderRepository() .productionProgressUpload(order.code,
+                        order.progresses[i].id.toString(),
+                        order.progresses[i]);
                   }
                 }
               } catch (e) {
@@ -2555,7 +2641,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             isNeedCancelButton: true,
             confirmAction: (){
               Navigator.of(context).pop();
-              _neverComplete(context,widget.order);
+              _neverComplete(context,order);
             },
           );
         }
