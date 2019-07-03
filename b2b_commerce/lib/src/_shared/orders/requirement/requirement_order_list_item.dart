@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import '../../../business/orders/requirement_order_detail.dart';
@@ -43,24 +42,12 @@ class RequirementOrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _onOrderDetails() async {
-      // 根据code查询明
-      RequirementOrderModel detail = await RequirementOrderRepository()
-          .getRequirementOrderDetail(model.code);
-
-      List<QuoteModel> quotes =
-          await RequirementOrderRepository().getRequirementOrderQuotes(
-        code: detail.code,
-        page: 0,
-        size: 1,
-      );
-
-      if (detail != null) {
+      if (model.code != null) {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) =>
                 RequirementOrderDetailPage(
-                  order: detail,
-                  quotes: quotes,
+                  model.code,
                   onRequirementCancle: onRequirementCancle,
                 ),
           ),

@@ -18,17 +18,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 class RequirementOrderDetailPage extends StatefulWidget {
-  RequirementOrderModel order;
-
-  final List<QuoteModel> quotes;
+  String code;
 
   /// 关闭生产订单
   final RequirementOrderCancleCallback onRequirementCancle;
 
-  RequirementOrderDetailPage({Key key,
-    @required this.order,
-    @required this.quotes,
-    this.onRequirementCancle})
+  RequirementOrderDetailPage(this.code, {Key key, this.onRequirementCancle})
       : super(key: key);
 
   _RequirementOrderDetailPageState createState() =>
@@ -42,6 +37,10 @@ class _RequirementOrderDetailPageState
     RequirementOrderStatus.COMPLETED: Colors.green,
     RequirementOrderStatus.CANCELLED: Colors.grey,
   };
+
+  RequirementOrderModel orderModel;
+
+  List<QuoteModel> quotesList;
 
   void initState() {
     super.initState();
@@ -74,25 +73,55 @@ class _RequirementOrderDetailPageState
           )
         ],
       ),
-      body: Container(
-        color: Colors.grey[100],
-        child: ListView(
-          children: <Widget>[
-            _buildCompanyInfo(),
-            _buildMain(),
-            //品牌端显示
-            UserBLoC.instance.currentUser.type == UserType.BRAND
-                ? _buildQuote()
-                : Container(),
-            _buildAttachments(),
-            _buildRemarks(),
-            _buildAddress(),
-            _buildHeader(),
-            _buildButtonGroups()
-          ],
-        ),
+      body: FutureBuilder<RequirementOrderModel>(
+        builder: (BuildContext context,
+            AsyncSnapshot<RequirementOrderModel> snapshot) {
+          if (snapshot.data != null) {
+            return Container(
+              color: Colors.grey[100],
+              child: ListView(
+                children: <Widget>[
+                  _buildCompanyInfo(),
+                  _buildMain(),
+                  //品牌端显示
+                  UserBLoC.instance.currentUser.type == UserType.BRAND
+                      ? _buildQuote()
+                      : Container(),
+                  _buildAttachments(),
+                  _buildRemarks(),
+                  _buildAddress(),
+                  _buildHeader(),
+                  _buildButtonGroups()
+                ],
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+        initialData: null,
+        future: _getData(),
       ),
     );
+  }
+
+  Future<RequirementOrderModel> _getData() async {
+    // 查询明细
+    // 根据code查询明
+    RequirementOrderModel detail = await RequirementOrderRepository()
+        .getRequirementOrderDetail(widget.code);
+
+    orderModel = detail;
+
+    quotesList = await RequirementOrderRepository().getRequirementOrderQuotes(
+      code: detail.code,
+      page: 0,
+      size: 1,
+    );
+
+    return detail;
   }
 
   Widget _buildCompanyInfo() {
@@ -105,7 +134,7 @@ class _RequirementOrderDetailPageState
           children: <Widget>[
             Row(
               children: <Widget>[
-                widget.order.belongTo.profilePicture == null
+                orderModel.belongTo.profilePicture == null
                     ? Container(
                   margin: EdgeInsets.all(10),
                   width: 80,
@@ -128,7 +157,7 @@ class _RequirementOrderDetailPageState
                       width: 100,
                       height: 100,
                       imageUrl:
-                      '${widget.order.belongTo.profilePicture.previewUrl()}',
+                      '${orderModel.belongTo.profilePicture.previewUrl()}',
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
                           SpinKitRing(
@@ -153,20 +182,20 @@ class _RequirementOrderDetailPageState
                         Container(
                           margin: EdgeInsets.only(bottom: 5),
                           child: Text(
-                            widget.order.belongTo == null ||
-                                widget.order.belongTo == null
+                            orderModel.belongTo == null ||
+                                orderModel.belongTo == null
                                 ? ''
-                                : '${widget.order.belongTo.name}',
+                                : '${orderModel.belongTo.name}',
                             textScaleFactor: 1.3,
                           ),
                         ),
-                        widget.order.belongTo == null ||
-                            widget.order.belongTo.approvalStatus == null
+                        orderModel.belongTo == null ||
+                            orderModel.belongTo.approvalStatus == null
                             ? Container()
                             : Container(
                             margin: EdgeInsets.only(top: 5),
                             color: Color.fromRGBO(254, 252, 235, 1),
-                            child: widget.order.belongTo.approvalStatus !=
+                            child: orderModel.belongTo.approvalStatus !=
                                 ArticleApprovalStatus.approved
                                 ? Text('  未认证  ',
                                 style: TextStyle(
@@ -196,9 +225,9 @@ class _RequirementOrderDetailPageState
                   ),
                   Container(
                     child: Text(
-                      widget.order.details.contactPerson == null
+                      orderModel.details.contactPerson == null
                           ? ''
-                          : '${widget.order.details.contactPerson}',
+                          : '${orderModel.details.contactPerson}',
                       style: TextStyle(
                           color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                     ),
@@ -221,9 +250,9 @@ class _RequirementOrderDetailPageState
                     ),
                     Container(
                       child: Text(
-                        widget.order.details.contactPhone == null
+                        orderModel.details.contactPhone == null
                             ? ''
-                            : '${widget.order.details.contactPhone}',
+                            : '${orderModel.details.contactPhone}',
                         style: TextStyle(
                             color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
                       ),
@@ -232,9 +261,9 @@ class _RequirementOrderDetailPageState
                 ),
               ),
               onTap: () {
-                widget.order.details.contactPhone == null
+                orderModel.details.contactPhone == null
                     ? null
-                    : _selectActionButton(widget.order.details.contactPhone);
+                    : _selectActionButton(orderModel.details.contactPhone);
               },
             ),
           ],
@@ -248,7 +277,7 @@ class _RequirementOrderDetailPageState
   Widget _buildHeader() {
     return GestureDetector(
       onTap: () {
-        copyToClipboard(widget.order.code);
+        copyToClipboard(orderModel.code);
       },
       child: Container(
         color: Colors.white,
@@ -262,7 +291,7 @@ class _RequirementOrderDetailPageState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    child: Text('需求订单号：' + widget.order.code),
+                    child: Text('需求订单号：' + orderModel.code),
                     flex: 1,
                   ),
                   Text(
@@ -279,14 +308,13 @@ class _RequirementOrderDetailPageState
               children: <Widget>[
                 Expanded(
                   child: Text(
-                      '发布时间: ${widget.order.creationTime != null
-                          ? DateFormatUtil.format(widget.order.creationTime)
-                          : ''}'),
+                      '发布时间: ${orderModel.creationTime != null ? DateFormatUtil
+                          .format(orderModel.creationTime) : ''}'),
                   flex: 1,
                 ),
                 UserBLoC.instance.currentUser.type == UserType.BRAND
                     ? Text(
-                  '已报价 ${widget.order.totalQuotesCount != null ? widget.order
+                  '已报价 ${orderModel.totalQuotesCount != null ? orderModel
                       .totalQuotesCount : ''}',
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 )
@@ -315,7 +343,7 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '期望价格',
             value: Text(
-              '￥${widget.order.details.maxExpectedPrice ?? 0}',
+              '￥${orderModel.details.maxExpectedPrice ?? 0}',
               style: TextStyle(color: Colors.red, fontSize: 16),
             ),
           ),
@@ -325,10 +353,9 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '加工类型',
             value: Text(
-              widget.order.details.machiningType == null
+              orderModel.details.machiningType == null
                   ? ''
-                  : MachiningTypeLocalizedMap[
-              widget.order.details.machiningType],
+                  : MachiningTypeLocalizedMap[orderModel.details.machiningType],
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -341,7 +368,8 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '交货时间',
             value: Text(
-              '${DateFormatUtil.formatYMD(widget.order.details.expectedDeliveryDate)}',
+              '${DateFormatUtil.formatYMD(
+                  orderModel.details.expectedDeliveryDate)}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -354,9 +382,9 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '是否需要打样',
             value: Text(
-              widget.order.details.proofingNeeded == null
+              orderModel.details.proofingNeeded == null
                   ? ''
-                  : widget.order.details.proofingNeeded ? '是' : '否',
+                  : orderModel.details.proofingNeeded ? '是' : '否',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -369,9 +397,9 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '是否提供样衣',
             value: Text(
-              widget.order.details.samplesNeeded == null
+              orderModel.details.samplesNeeded == null
                   ? ''
-                  : widget.order.details.samplesNeeded ? '是' : '否',
+                  : orderModel.details.samplesNeeded ? '是' : '否',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -396,15 +424,12 @@ class _RequirementOrderDetailPageState
                               right: 5,
                             ),
                             child: Text(
-                              widget.order.details
-                                  ?.productiveOrientations ==
-                                  null
+                              orderModel.details?.productiveOrientations == null
                                   ? '选取'
                                   : formatAreaSelectsText(
-                                  widget
-                                      .order.details.productiveOrientations,
-                                  widget.order.details
-                                      .productiveOrientations.length),
+                                  orderModel.details.productiveOrientations,
+                                  orderModel.details.productiveOrientations
+                                      .length),
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.grey,
@@ -416,10 +441,10 @@ class _RequirementOrderDetailPageState
                     });
               },
               child: Text(
-                widget.order.details?.productiveOrientations == null
+                orderModel.details?.productiveOrientations == null
                     ? '选取'
                     : formatAreaSelectsText(
-                    widget.order.details.productiveOrientations, 2),
+                    orderModel.details.productiveOrientations, 2),
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -433,9 +458,9 @@ class _RequirementOrderDetailPageState
           InfoRow(
             label: '是否开票',
             value: Text(
-              widget.order.details.invoiceNeeded == null
+              orderModel.details.invoiceNeeded == null
                   ? ''
-                  : widget.order.details.invoiceNeeded ? '是' : '否',
+                  : orderModel.details.invoiceNeeded ? '是' : '否',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -454,7 +479,7 @@ class _RequirementOrderDetailPageState
   Widget _buildEntries() {
     Widget _pictureWidget;
 
-    if (widget.order.details.pictures == null) {
+    if (orderModel.details.pictures == null) {
       _pictureWidget = Container(
         width: 80,
         height: 80,
@@ -465,7 +490,7 @@ class _RequirementOrderDetailPageState
             color: Color.fromRGBO(200, 200, 200, 1), size: 60),
       );
     } else {
-      if (widget.order.details.pictures.isEmpty) {
+      if (orderModel.details.pictures.isEmpty) {
         _pictureWidget = Container(
           width: 80,
           height: 80,
@@ -486,8 +511,7 @@ class _RequirementOrderDetailPageState
                 child: CachedNetworkImage(
                     width: 100,
                     height: 100,
-                    imageUrl:
-                    '${widget.order.details.pictures[0].previewUrl()}',
+                    imageUrl: '${orderModel.details.pictures[0].previewUrl()}',
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
                         SpinKitRing(
@@ -517,7 +541,7 @@ class _RequirementOrderDetailPageState
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => PicturePickPreviewWidget(
-                  medias: widget.order.details.pictures,
+                  medias: orderModel.details.pictures,
                   isUpload: false,
                 )));
           },
@@ -539,9 +563,9 @@ class _RequirementOrderDetailPageState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  widget.order.details.productName != null
+                  orderModel.details.productName != null
                       ? Text(
-                    widget.order.details.productName,
+                    orderModel.details.productName,
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   )
@@ -549,7 +573,7 @@ class _RequirementOrderDetailPageState
                     ' ',
                     style: TextStyle(fontSize: 15, color: Colors.red),
                   ),
-                  widget.order.details.productSkuID != null
+                  orderModel.details.productSkuID != null
                       ? Container(
                     padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                     decoration: BoxDecoration(
@@ -557,7 +581,7 @@ class _RequirementOrderDetailPageState
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
-                      '货号：${widget.order.details.productSkuID}',
+                      '货号：${orderModel.details.productSkuID}',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   )
@@ -568,7 +592,9 @@ class _RequirementOrderDetailPageState
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${widget.order.details.majorCategoryName()}   ${widget.order.details.category?.name}   ${widget.order.details.expectedMachiningQuantity}件",
+                      "${orderModel.details.majorCategoryName()}   ${orderModel
+                          .details.category?.name}   ${orderModel.details
+                          .expectedMachiningQuantity}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -584,8 +610,8 @@ class _RequirementOrderDetailPageState
   }
 
   String _majorCategory() {
-    return widget.order.details.majorCategory != null
-        ? widget.order.details.majorCategory.name
+    return orderModel.details.majorCategory != null
+        ? orderModel.details.majorCategory.name
         : '';
   }
 
@@ -593,11 +619,11 @@ class _RequirementOrderDetailPageState
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: widget.quotes != null && widget.quotes.length > 0
+      child: quotesList != null && quotesList.length > 0
           ? Column(
         children: <Widget>[
           QuoteItem(
-            model: widget.quotes[0],
+            model: quotesList[0],
             onRefresh: () {
               onRefreshData();
             },
@@ -608,7 +634,7 @@ class _RequirementOrderDetailPageState
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
                       RequirementQuoteDetailPage(
-                        order: widget.order,
+                        order: orderModel,
                       )));
             },
             child: Text(
@@ -635,8 +661,7 @@ class _RequirementOrderDetailPageState
   }
 
   Widget _buildAttachments() {
-    return widget.order.attachments == null ||
-        widget.order.attachments.length <= 0
+    return orderModel.attachments == null || orderModel.attachments.length <= 0
         ? Container()
         : Container(
       color: Colors.white,
@@ -653,7 +678,7 @@ class _RequirementOrderDetailPageState
             ],
           ),
           Attachments(
-            list: widget.order.attachments,
+            list: orderModel.attachments,
           )
         ],
       ),
@@ -679,7 +704,7 @@ class _RequirementOrderDetailPageState
             ),
           ),
           Row(
-            children: <Widget>[Text(widget.order.remarks ?? '')],
+            children: <Widget>[Text(orderModel.remarks ?? '')],
           )
         ],
       ),
@@ -707,7 +732,7 @@ class _RequirementOrderDetailPageState
               ),
             ),
             Row(
-              children: <Widget>[Text(widget.order.deliveryAddress ?? '')],
+              children: <Widget>[Text(orderModel.deliveryAddress ?? '')],
             )
           ],
         ),
@@ -720,7 +745,7 @@ class _RequirementOrderDetailPageState
   Widget _buildButtonGroups() {
     //品牌端显示
     if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        widget.order.status == RequirementOrderStatus.PENDING_QUOTE) {
+        orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
       return Container(
         margin: EdgeInsets.only(bottom: 10),
         child: Row(
@@ -778,7 +803,7 @@ class _RequirementOrderDetailPageState
                                     adeptAtCategories: [],
                                     labels: [],
                                     cooperationModes: []),
-                                requirementCode: widget.order.code,
+                                requirementCode: orderModel.code,
                                 route: '全部工厂',
                               )),
                         );
@@ -788,7 +813,7 @@ class _RequirementOrderDetailPageState
         ),
       );
     } else if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        widget.order.status != RequirementOrderStatus.PENDING_QUOTE) {
+        orderModel.status != RequirementOrderStatus.PENDING_QUOTE) {
       return Container(
         child: Container(
             height: 30,
@@ -824,14 +849,16 @@ class _RequirementOrderDetailPageState
                 await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
                         RequirementQuoteOrderForm(
-                          model: widget.order,
+                          model: orderModel,
                           quoteModel: QuoteModel(attachments: []),
                         )));
 
                 if (newQuote != null) {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          QuoteOrderDetailPage(newQuote.code,)));
+                          QuoteOrderDetailPage(
+                            newQuote.code,
+                          )));
                 }
               },
               shape: RoundedRectangleBorder(
@@ -852,10 +879,10 @@ class _RequirementOrderDetailPageState
   }
 
   List<PopupMenuItem<String>> _buildPopupMenu() {
-    if (widget.order.editable != null &&
-        widget.order.editable &&
+    if (orderModel.editable != null &&
+        orderModel.editable &&
         UserBLoC.instance.currentUser.type == UserType.BRAND &&
-        widget.order.status == RequirementOrderStatus.PENDING_QUOTE) {
+        orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
       return <PopupMenuItem<String>>[
         PopupMenuItem<String>(
           value: 'edit',
@@ -933,7 +960,7 @@ class _RequirementOrderDetailPageState
                 confirmAction: () async {
                   await widget.onRequirementCancle();
                   setState(() {
-                    widget.order.status = RequirementOrderStatus.CANCELLED;
+                    orderModel.status = RequirementOrderStatus.CANCELLED;
                   });
                   Navigator.of(context).pop();
                 },
@@ -950,7 +977,7 @@ class _RequirementOrderDetailPageState
   void onEdit() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RequirementOrderFrom(
-          order: widget.order,
+          order: orderModel,
         )));
   }
 
@@ -958,30 +985,30 @@ class _RequirementOrderDetailPageState
   void onShare() {
     String title = '';
     String description =
-        " ${widget.order.details.category?.name}   ${widget.order.details
+        " ${orderModel.details.category?.name}   ${orderModel.details
         .expectedMachiningQuantity}件\n 交货时间:${DateFormatUtil.formatYMD(
-        widget.order.details.expectedDeliveryDate)}";
+        orderModel.details.expectedDeliveryDate)}";
 
-    if (widget.order.details.productName != null &&
-        widget.order.details.productName != '') {
-      title = widget.order.details.productName;
+    if (orderModel.details.productName != null &&
+        orderModel.details.productName != '') {
+      title = orderModel.details.productName;
     } else {
-      title = widget.order.details.category.name;
+      title = orderModel.details.category.name;
     }
 
     ShareDialog.showShareDialog(context,
         title: '$title',
         description: '$description',
-        imageUrl: widget.order.details.pictures.isEmpty
+        imageUrl: orderModel.details.pictures.isEmpty
             ? '${GlobalConfigs.LOGO_URL}'
-            : '${widget.order.details.pictures[0].previewUrl()}',
-        url: Apis.shareRequirement(widget.order.code));
+            : '${orderModel.details.pictures[0].previewUrl()}',
+        url: Apis.shareRequirement(orderModel.code));
   }
 
   void onReview() {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RequirementOrderFrom(
-          order: widget.order,
+          order: orderModel,
           isReview: true,
           isCreate: true,
         )));

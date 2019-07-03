@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_search_delegate_page.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
@@ -125,23 +124,23 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                   B2BIcons.search,
                   size: 22,
                 ),
-                onPressed: (){
+                onPressed: () {
                   showDialog(
                       context: context,
                       barrierDismissible: false,
                       builder: (_) {
                         return RequestDataLoading(
-                          requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+                          requestCallBack: LocalStorage.get(
+                              GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
                           outsideDismiss: false,
                           loadingText: '加载中。。。',
                           entrance: '',
                         );
-                      }
-                  ).then((value){
+                      }).then((value) {
                     if (value != null && value != '') {
                       List<dynamic> list = json.decode(value);
-                      historyKeywords = list.map((item) => item as String).toList();
-
+                      historyKeywords =
+                          list.map((item) => item as String).toList();
                     } else {
                       historyKeywords = [];
                     }
@@ -150,11 +149,12 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                       MaterialPageRoute(
                         builder: (context) => SearchModelPage(
                           searchModel: SearchModel(
-                            historyKeywords: historyKeywords,
-                            searchModelType: SearchModelType.REQUIREMENT_QUOTE,
-                            requirementCondition: currentCondition,
-                            route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY
-                          ),
+                              historyKeywords: historyKeywords,
+                              searchModelType:
+                              SearchModelType.REQUIREMENT_QUOTE,
+                              requirementCondition: currentCondition,
+                              route: GlobalConfigs
+                                  .Requirement_HISTORY_KEYWORD_KEY),
                         ),
                       ),
                     );
@@ -211,10 +211,10 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                         context: context,
                         builder: (BuildContext context) {
 //                          return StatefulBuilder(builder: (context, mSetState) {
-                            return RegionSelector(
-                              regions: _regions,
-                              regionSelects: _regionSelects,
-                            );
+                          return RegionSelector(
+                            regions: _regions,
+                            regionSelects: _regionSelects,
+                          );
 //                          });
                         },
                       ).then((val) {
@@ -246,9 +246,9 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                       RequirementPoolBLoC.instance.conditionController,
                   afterPressed: (String str) {
                     setState(() {
-                      if(str == '全部'){
+                      if (str == '全部') {
                         _newReleaseSelectText = '最新发布';
-                      }else{
+                      } else {
                         _newReleaseSelectText = str;
                       }
                       showDateFilterMenu = !showDateFilterMenu;
@@ -263,9 +263,9 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                       RequirementPoolBLoC.instance.conditionController,
                   afterPressed: (String str) {
                     setState(() {
-                      if(str == '全部'){
+                      if (str == '全部') {
                         _machineTypeSelectText = '加工方式';
-                      }else{
+                      } else {
                         _machineTypeSelectText = str;
                       }
                       showMachineTypeFilterMenu = !showMachineTypeFilterMenu;
@@ -281,9 +281,9 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
                       RequirementPoolBLoC.instance.conditionController,
                   afterPressed: (String str) {
                     setState(() {
-                      if(str == '全部'){
+                      if (str == '全部') {
                         _majorCategorySelectText = '面料类别';
-                      }else{
+                      } else {
                         _majorCategorySelectText = str;
                       }
 
@@ -441,19 +441,9 @@ class RequirementPoolOrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        //根据code查询明
-        RequirementOrderModel model = await RequirementOrderRepository()
-            .getRequirementOrderDetail(order.code);
-
-        List<QuoteModel> quotes = await RequirementOrderRepository()
-            .getRequirementOrderQuotes(code: model.code, page: 0, size: 1);
-
-        if (model != null) {
+        if (order.code != null) {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RequirementOrderDetailPage(
-                    order: model,
-                    quotes: quotes,
-                  )));
+              builder: (context) => RequirementOrderDetailPage(order.code)));
         }
       },
       child: Container(
@@ -568,7 +558,10 @@ class RequirementPoolOrderItem extends StatelessWidget {
 
             if (newQuote != null) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => QuoteOrderDetailPage(newQuote.code,)));
+                  builder: (context) =>
+                      QuoteOrderDetailPage(
+                        newQuote.code,
+                      )));
             }
           },
           child: Container(
