@@ -143,7 +143,16 @@ class ProductionItem extends StatelessWidget {
                   color: Colors.grey,
                   fontSize: 16,
                 ),
-              )
+              ),
+              order.updated !=null && order.updated?Container(
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Colors.red,
+                ),
+              ):Container()
             ],
           ),
         ],
