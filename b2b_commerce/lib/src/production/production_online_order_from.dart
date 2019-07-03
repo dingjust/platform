@@ -995,13 +995,10 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   }
 
   void getPurchaseOrderDetail(String code) async{
-    if(code != null && code != ''){
-      PurchaseOrderModel model = await PurchaseOrderRepository().getPurchaseOrderDetail(code);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) =>
-              PurchaseOrderDetailPage(order: model)
+              PurchaseOrderDetailPage(code: code)
           ), ModalRoute.withName('/'));
-    }
     ProductionBLoC.instance.refreshData('');
     PurchaseOrderBLoC.instance.refreshData('ALL');
   }
