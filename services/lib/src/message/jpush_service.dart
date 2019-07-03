@@ -45,6 +45,15 @@ class JPushService {
       production: true,
       debug: true, // 设置是否打印 debug 日志
     );
+
+    //IOS申请权限
+    _jpush.applyPushAuthority(new NotificationSettingsIOS(
+        sound: true,
+        alert: true,
+        badge: true));
+
+
+    getRegistrationID();
   }
 
   static JPushService _getInstance() {
