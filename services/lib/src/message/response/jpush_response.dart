@@ -76,7 +76,7 @@ class JPushIOSResponse extends JPushResponse {
 
   String params;
 
-  String module;
+  MsgModule module;
 
   JPushIOSResponse({this.params, this.module});
 
