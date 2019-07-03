@@ -39,7 +39,7 @@ void main() async {
     //IOS高德定位注册KEY
     AMapLocationClient.setApiKey(GlobalConfigs.AMAP_LOCATION_KEY_IOS);
   }
-  ws$.send('connect');
+  jpush$.getRegistrationID();
   //强制竖屏
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
@@ -56,7 +56,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return BLoCProvider<UserBLoC>(

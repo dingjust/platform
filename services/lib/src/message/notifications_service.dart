@@ -4,6 +4,7 @@ import 'package:b2b_commerce/b2b_commerce.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:services/src/message/jpush_service.dart';
 import 'package:services/src/websocket/websocket_response.dart';
 
 class NotificationsService {
@@ -62,6 +63,7 @@ class NotificationsService {
     //   new MaterialPageRoute(
     //       builder: (context) => ProofingOrderDetailPage('111')),
     // );
+
     Widget page = pageRoute(payload);
     if (page != null) {
       Navigator.push(
@@ -109,16 +111,16 @@ class NotificationsService {
 
 var ns$ = NotificationsService();
 
-const PAGE_ROUTE_MAP = <MsgModule, int>{
-  MsgModule.DEFAULT: 0,
-  MsgModule.UserLogin: 0,
-  MsgModule.REGISTER: 0,
-  MsgModule.QUOTE_NEW: 1,
-  MsgModule.QUOTE_REFUSE: 1,
-  MsgModule.QUOTE_ADOPTED: 1,
-  MsgModule.PROOFING_CREATE: 2,
-  MsgModule.PROOFING_DELIVER: 2,
-  MsgModule.PROOFING_RECEIVED: 2,
-  MsgModule.PURCHASE_DELIVER: 3,
-  MsgModule.PURCHASE_RECEIVED: 3
-};
+// const PAGE_ROUTE_MAP = <MsgModule, int>{
+//   MsgModule.DEFAULT: 0,
+//   MsgModule.UserLogin: 0,
+//   MsgModule.REGISTER: 0,
+//   MsgModule.QUOTE_NEW: 1,
+//   MsgModule.QUOTE_REFUSE: 1,
+//   MsgModule.QUOTE_ADOPTED: 1,
+//   MsgModule.PROOFING_CREATE: 2,
+//   MsgModule.PROOFING_DELIVER: 2,
+//   MsgModule.PROOFING_RECEIVED: 2,
+//   MsgModule.PURCHASE_DELIVER: 3,
+//   MsgModule.PURCHASE_RECEIVED: 3
+// };

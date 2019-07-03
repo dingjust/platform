@@ -77,7 +77,8 @@ class _HomePageState extends State<HomePage> {
         content: Text('$value'),
       ));
     });
-    ns$.init(context);
+    // ns$.init(context);
+    jpush$.setContext(context);
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {

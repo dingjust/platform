@@ -125,8 +125,10 @@ class UserBLoC extends BLoCBase {
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
         LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
-      //重新连接
-      ws$.send('connect');
+
+      //设置JPUSH别名
+      jpush$.setAlias(currentUser.mobileNumber);
+
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
     }
@@ -205,8 +207,10 @@ class UserBLoC extends BLoCBase {
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
         LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
-      //重新连接
-      ws$.send('connect');
+
+      //设置JPUSH别名
+      jpush$.setAlias(currentUser.mobileNumber);
+
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
     }
@@ -222,8 +226,10 @@ class UserBLoC extends BLoCBase {
     http$.removeAuthorization();
     //所有Bloc重置
     BLocBus.systemBlocReset();
-    //断开Socket连接
-    ws$.disconnect();
+
+    //JPUSH删除别名
+    jpush$.deleteAlias();
+
     _controller.sink.add(_user);
   }
 
@@ -285,6 +291,8 @@ class UserBLoC extends BLoCBase {
             _user.b2bUnit = factory;
           });
         }
+
+        jpush$.setAlias(currentUser.mobileNumber);
 
         //  记录refresh_token
         LocalStorage.save(
