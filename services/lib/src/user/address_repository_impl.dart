@@ -32,17 +32,33 @@ class AddressRepositoryImpl implements AddressRepository {
   }
 
   @override
-  Future<String> create(AddressModel form) async {
+  Future<bool> create(AddressModel form) async {
+    bool result = false;
+
     Response response = await http$.post(UserApis.addressCreate,
         data: AddressModel.toJson(form));
-    return response.data;
+    if (response != null && response.statusCode == 200) {
+      result = true;
+    } else {
+      result = false;
+    }
+
+    return result;
   }
 
   @override
-  Future<String> update(AddressModel form) async {
+  Future<bool> update(AddressModel form) async {
+    bool result = false;
+
     Response response = await http$.put(UserApis.addressUpdate(form.id),
         data: AddressModel.toJson(form));
-    return response.data;
+    if (response != null && response.statusCode == 200) {
+      result = true;
+    } else {
+      result = false;
+    }
+
+    return result;
   }
 
   @override

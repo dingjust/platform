@@ -62,7 +62,7 @@ class GlobalConfigs {
   static const APP_NAME = 'dingjust_platform';
 
   /// 通过nginx代理所有b2b前缀的请求
-   static const B2B_API_PREFIX = 'b2b';
+  static const B2B_API_PREFIX = 'b2b';
 
   // static const B2B_API_PREFIX = 'b2b-apparel-zh';
   static const B2B_CLIENT_ID = 'nbyjy';
@@ -77,6 +77,8 @@ class GlobalConfigs {
 
   static const String LOGO_URL =
       'http://img.nbyjy.net/resource/h01/h57/8797905813534.jpg';
+
+  static const JPUSH_APPKEY = '824c12a64440fbf70e767a3e';
 
   ///Websocket心跳事件间隔
   static const HEARTBEAT_DURATION = 30;

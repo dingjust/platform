@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:services/src/message/notifications_service.dart';
 import 'package:services/src/message/repository/message_respository.dart';
+import 'package:services/src/message/response/jpush_response.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 import 'package:services/src/websocket/websocket_response.dart';
 

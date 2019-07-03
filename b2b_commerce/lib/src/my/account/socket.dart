@@ -42,7 +42,6 @@ class _WebSocketRouteState extends State<WebSocketRoute> {
             ),
             RaisedButton(
               onPressed: () async {
-                ws$.send('asdsa');
                 // ns$.showNotification(0, 'title', 'body');
               },
               child: Text('發送'),

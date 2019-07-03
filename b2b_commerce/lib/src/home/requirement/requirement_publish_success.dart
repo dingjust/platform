@@ -82,7 +82,7 @@ class _PublishRequirementSuccessDialogState
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
-                  RequirementOrderDetailPage(order: widget.model)));
+                  RequirementOrderDetailPage(widget.model.code)));
         },
         child: Column(
           children: <Widget>[
