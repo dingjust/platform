@@ -583,13 +583,11 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                   ///TODO:生产单
                 } else if (widget.order is PurchaseOrderModel) {
                   //查询明细
-                  PurchaseOrderModel model = await PurchaseOrderRepository()
-                      .getPurchaseOrderDetail(widget.order.code);
 
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) =>
-                              PurchaseOrderDetailPage(order: model)),
+                              PurchaseOrderDetailPage(code: widget.order.code)),
                       ModalRoute.withName('/'));
                 }
               },

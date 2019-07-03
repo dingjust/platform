@@ -905,15 +905,9 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       QuoteModel quote = await QuoteOrderRepository()
                           .getQuoteDetails(pageItem.code);
                       if (quote.activePurchaseOrder?.code != null) {
-                        PurchaseOrderModel purchase =
-                            await PurchaseOrderRepository()
-                                .getPurchaseOrderDetail(
-                                    quote.activePurchaseOrder.code);
-                        if (purchase != null) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  PurchaseOrderDetailPage(order: purchase)));
-                        }
+                                  PurchaseOrderDetailPage(code: quote.activePurchaseOrder.code)));
                       } else {
                         showDialog<void>(
                           context: context,
