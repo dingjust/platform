@@ -548,6 +548,7 @@ class FactoryRequirementPoolSection extends StatefulWidget {
 class _FactoryRequirementPoolSection
     extends State<FactoryRequirementPoolSection> {
   int requirementAll = 0;
+  bool hasGetRequirementAll = false;
   int requirementRecommend = 0;
   final StreamController _reportsStreamController =
       StreamController<Reports>.broadcast();
@@ -566,6 +567,7 @@ class _FactoryRequirementPoolSection
     if (count != null) {
       setState(() {
         requirementAll = count;
+        hasGetRequirementAll = true;
       });
     }
   }
@@ -576,7 +578,8 @@ class _FactoryRequirementPoolSection
     if (bloc.currentUser.status != UserStatus.OFFLINE) {
       queryReports();
     } else if (bloc.currentUser.status == UserStatus.OFFLINE &&
-        requirementAll == 0) {
+        requirementAll == 0 &&
+        !hasGetRequirementAll) {
       getAllRequirementCount();
     }
     return Container(

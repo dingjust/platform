@@ -47,10 +47,10 @@ android {
         versionCode 6
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        ndk {
-            //选择要添加的对应 cpu 类型的 .so 库。
-            abiFilters 'armeabi-v7a'
-        }
+//        ndk {
+//            //选择要添加的对应 cpu 类型的 .so 库。
+//            abiFilters 'armeabi-v7a'
+//        }
         manifestPlaceholders = [
                 AMAP_KEY     : "182003d072a475cb3ec6712e6a978612", /// 高德地图key
                 JPUSH_PKGNAME: "net.nbyjy.b2b",
