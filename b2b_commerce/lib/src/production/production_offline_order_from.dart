@@ -1077,28 +1077,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   }
 
   void getPurchaseOrderDetail(String code) async{
-    if(code != null && code != ''){
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: PurchaseOrderRepository().getPurchaseOrderDetail(code),
-              outsideDismiss: false,
-              loadingText: '加载中。。。',
-              entrance: '',
-            );
-          }
-      ).then((value){
-        if(value != null){
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) =>
-                  PurchaseOrderDetailPage(order: value)
+                  PurchaseOrderDetailPage(code: code)
               ), ModalRoute.withName('/'));
-        }
-      });
-
-    }
     ProductionBLoC.instance.refreshData('');
     PurchaseOrderBLoC.instance.refreshData('ALL');
   }

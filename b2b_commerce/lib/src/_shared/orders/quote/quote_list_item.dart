@@ -423,15 +423,9 @@ class QuoteListItem extends StatelessWidget {
                       QuoteModel quote = await QuoteOrderRepository()
                           .getQuoteDetails(model.code);
                       if (quote.activePurchaseOrder?.code != null) {
-                        PurchaseOrderModel purchase =
-                            await PurchaseOrderRepository()
-                                .getPurchaseOrderDetail(
-                                    quote.activePurchaseOrder.code);
-                        if (purchase != null) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  PurchaseOrderDetailPage(order: purchase)));
-                        }
+                                  PurchaseOrderDetailPage(code: quote.activePurchaseOrder.code)));
                       } else {
                         showDialog(
                             context: context,

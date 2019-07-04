@@ -4,26 +4,28 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'jpush_response.g.dart';
 
-///JPush响应
+abstract class JPushResponse {}
+
+///JPush安卓响应
 @JsonSerializable()
-class JPushResponse {
+class JPushAndroidResponse extends JPushResponse {
   String alert;
 
   String title;
 
   @JsonKey(fromJson: extrasFromJson)
-  JPushResponseExtras extras;
+  JPushAndroidResponseExtras extras;
 
-  JPushResponse({this.alert, this.title, this.extras});
+  JPushAndroidResponse({this.alert, this.title, this.extras});
 
-  factory JPushResponse.fromJson(Map<String, dynamic> json) =>
-      _$JPushResponseFromJson(json);
+  factory JPushAndroidResponse.fromJson(Map<String, dynamic> json) =>
+      _$JPushAndroidResponseFromJson(json);
 
-  static Map<String, dynamic> toJson(JPushResponse model) =>
-      _$JPushResponseToJson(model);
+  static Map<String, dynamic> toJson(JPushAndroidResponse model) =>
+      _$JPushAndroidResponseToJson(model);
 
-  static JPushResponseExtras extrasFromJson(Map<dynamic, dynamic> map) {
-    return JPushResponseExtras(
+  static JPushAndroidResponseExtras extrasFromJson(Map<dynamic, dynamic> map) {
+    return JPushAndroidResponseExtras(
         alertType: map['cn.jpush.android.ALERT_TYPE'] as String,
         notificationId: map['cn.jpush.android.NOTIFICATION_ID'] as int,
         androidExtras: map['cn.jpush.android.EXTRA'] == null
@@ -34,7 +36,7 @@ class JPushResponse {
 }
 
 @JsonSerializable()
-class JPushResponseExtras {
+class JPushAndroidResponseExtras {
   @JsonValue('cn.jpush.android.ALERT_TYPE')
   String alertType;
 
@@ -44,14 +46,14 @@ class JPushResponseExtras {
   @JsonValue('cn.jpush.android.EXTRA')
   Extras androidExtras;
 
-  JPushResponseExtras(
+  JPushAndroidResponseExtras(
       {this.alertType, this.notificationId, this.androidExtras});
 
-  factory JPushResponseExtras.fromJson(Map<String, dynamic> json) =>
-      _$JPushResponseExtrasFromJson(json);
+  factory JPushAndroidResponseExtras.fromJson(Map<String, dynamic> json) =>
+      _$JPushAndroidResponseExtrasFromJson(json);
 
-  static Map<String, dynamic> toJson(JPushResponseExtras model) =>
-      _$JPushResponseExtrasToJson(model);
+  static Map<String, dynamic> toJson(JPushAndroidResponseExtras model) =>
+      _$JPushAndroidResponseExtrasToJson(model);
 }
 
 @JsonSerializable()
@@ -65,6 +67,24 @@ class Extras {
   factory Extras.fromJson(Map<String, dynamic> json) => _$ExtrasFromJson(json);
 
   static Map<String, dynamic> toJson(Extras model) => _$ExtrasToJson(model);
+}
+
+
+///JPush安卓响应
+@JsonSerializable()
+class JPushIOSResponse extends JPushResponse {
+
+  String params;
+
+  MsgModule module;
+
+  JPushIOSResponse({this.params, this.module});
+
+  factory JPushIOSResponse.fromJson(Map<String, dynamic> json) =>
+      _$JPushIOSResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(JPushIOSResponse model) =>
+      _$JPushIOSResponseToJson(model);
 }
 
 enum MsgModule {
