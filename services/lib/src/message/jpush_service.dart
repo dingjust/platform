@@ -76,7 +76,7 @@ class JPushService {
 
   Widget pageRoute(Map<String, dynamic> message) {
     TargetPlatform platform = defaultTargetPlatform;
-    platform == TargetPlatform.iOS
+    return platform == TargetPlatform.iOS
         ? pageRouteForIOS(message)
         : pageRouteForAndroid(message);
   }
@@ -86,11 +86,14 @@ class JPushService {
     JPushAndroidResponse response = JPushAndroidResponse.fromJson(message);
     switch (PAGE_ROUTE_MAP[response.extras.androidExtras.module]) {
       case 1:
+        print('1');
         return QuoteOrderDetailPage(response.extras.androidExtras.params);
         break;
       case 2:
+        print('2');
         return ProofingOrderDetailPage(response.extras.androidExtras.params);
       default:
+        print('3');
         return null;
     }
   }
