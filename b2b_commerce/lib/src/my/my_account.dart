@@ -1,7 +1,11 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/socket.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'account/amount_flow_list.dart';
@@ -17,8 +21,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<String>(
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      body: FutureBuilder<CompanyWalletModel>(
+        builder: (BuildContext context, AsyncSnapshot<CompanyWalletModel> snapshot) {
           if (snapshot.data != null) {
             return Container(
               color: Color.fromRGBO(245, 245, 245, 1),
@@ -43,7 +47,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     flexibleSpace: FlexibleSpaceBar(
                       background: Stack(
                         fit: StackFit.expand,
-                        children: <Widget>[_buildHeader(context)],
+                        children: <Widget>[_buildHeader(context,snapshot.data)],
                       ),
                     ),
                   ),
@@ -107,14 +111,14 @@ class _MyAccountPageState extends State<MyAccountPage> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context,CompanyWalletModel model) {
     return Container(
       margin: EdgeInsets.only(top: 50),
       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          _buildTotal(),
+          _buildTotal(model),
           Text(
             '总金额',
             style: TextStyle(color: Colors.black45),
@@ -122,13 +126,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
           Divider(
             color: Colors.white,
           ),
-          _buildAmountRow()
+          _buildAmountRow(model)
         ],
       ),
     );
   }
 
-  Widget _buildTotal() {
+  Widget _buildTotal(CompanyWalletModel model) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +154,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       )),
                   Container(
                       child: Text(
-                        "987652.00",
+                        (model.canCashOutDynamic + model.auditingDynamic + model.cashOutingDynamic).toString(),
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
@@ -166,20 +170,20 @@ class _MyAccountPageState extends State<MyAccountPage> {
     );
   }
 
-  Widget _buildAmountRow() {
+  Widget _buildAmountRow(model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         AmountBlock(
-          amount: 5899.00,
+          amount: model.canCashOutDynamic,
           text: '可取金额',
         ),
         AmountBlock(
-          amount: 5899.00,
+          amount: model.cashOutingDynamic,
           text: '提现中金额',
         ),
         AmountBlock(
-          amount: 5899.00,
+          amount: model.auditingDynamic,
           text: '未结算金额',
         )
       ],
@@ -366,16 +370,18 @@ class _MyAccountPageState extends State<MyAccountPage> {
   }
 
   void onAddCard() {
-    // Navigator.of(context)
-    //     .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => WebSocketRoute()));
+     Navigator.of(context)
+         .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
+//    Navigator.of(context)
+//        .push(MaterialPageRoute(builder: (context) => WebSocketRoute()));
   }
 
-  Future<String> _getData() async {
-    return Future.delayed(const Duration(seconds: 1), () {
-      return '1';
-    });
+  Future<CompanyWalletModel> _getData() async {
+//    return Future.delayed(const Duration(seconds: 1), () {
+//      return '1';
+//    });
+    Response response = await http$.get(UserApis.getCompanyWallet);
+    return CompanyWalletModel.fromJson(response.data);
   }
 
   @override

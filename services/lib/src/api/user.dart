@@ -72,4 +72,8 @@ abstract class UserApis {
   static get resetPassword => (id) {
         return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';
       };
+
+  ///获取钱包
+  static get getCompanyWallet => '/{baseSiteId}/companyWallet';
+
 }
