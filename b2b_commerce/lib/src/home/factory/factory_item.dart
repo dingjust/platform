@@ -359,7 +359,6 @@ class InviteFactoryButton extends StatelessWidget {
               FactoryBLoC().clear();
               FactoryBLoC().refreshData();
             });
-
           },
           color: Color.fromRGBO(255, 214, 12, 1),
           child: Text(

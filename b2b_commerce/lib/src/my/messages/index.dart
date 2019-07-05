@@ -24,7 +24,7 @@ class _MessagePageState extends State<MessagePage>
   final GlobalKey _globalKey = GlobalKey<_MessagePageState>();
   var controller;
   bool isShowNotRead = true;
-  String status ;
+  String status = '1';
 
   @override
   void initState() {

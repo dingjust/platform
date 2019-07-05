@@ -121,10 +121,10 @@ class MessageItemPage extends StatelessWidget {
           _buildNoPic()
            :
           Container(
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
             child: Image.network(
-                model.images[0].thumbnailUrl(),
+                '${GlobalConfigs.MEDIA_CONTEXT_PATH}${model.images[0].thumbnailUrl()}',
             ),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
