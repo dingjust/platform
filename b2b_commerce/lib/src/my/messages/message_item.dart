@@ -19,8 +19,7 @@ class MessageItemPage extends StatelessWidget {
         if (model.groupCode != 1) {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) =>
-                    MessageDetailPage(
+                builder: (context) => MessageDetailPage(
                       model: model,
                     )),
           );
@@ -120,18 +119,19 @@ class MessageItemPage extends StatelessWidget {
     return Container(
       child: Row(
         children: <Widget>[
-          model.images == null || model.images.length <= 0
+          // model.images == null || model.images.length <= 0
+          1 == 1
               ? _buildNoPic()
               : Container(
-            width: 60,
-            height: 60,
-            child: Image.network(
-              model.images[0].thumbnailUrl(),
-            ),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Color.fromRGBO(243, 243, 243, 1)),
-          ),
+                  width: 80,
+                  height: 80,
+                  child: Image.network(
+                    model.images[0].thumbnailUrl(),
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color.fromRGBO(243, 243, 243, 1)),
+                ),
 
           //  Container(
           //     width: 60,
