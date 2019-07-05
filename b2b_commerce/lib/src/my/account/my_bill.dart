@@ -88,12 +88,12 @@ class BillListView extends StatelessWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           controller: _scrollController,
           children: <Widget>[
-            IncomeComparison(
-              height: 120,
-              income: 8000.00,
-              expenditure: 20134.00,
-              lineHeight: 8,
-            ),
+            // IncomeComparison(
+            //   height: 120,
+            //   income: 8000.00,
+            //   expenditure: 20134.00,
+            //   lineHeight: 8,
+            // ),
             StreamBuilder<List<AmountFlowModel>>(
               stream: bloc.stream,
               initialData: null,

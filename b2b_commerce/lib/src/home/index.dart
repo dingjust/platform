@@ -78,7 +78,11 @@ class _HomePageState extends State<HomePage> {
       ));
     });
     // ns$.init(context);
+    ///极光初始化
     jpush$.setContext(context);
+
+    ///获取未读消息数
+    notificationsPool$.checkUnread();
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {

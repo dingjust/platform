@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:models/models.dart';
 import 'package:services/src/message/notifications_pool.dart';
 import 'package:services/src/message/response/jpush_response.dart';
 
@@ -61,6 +62,18 @@ class JPushService {
     return _instance;
   }
 
+  void onOpenMessage(NotifyModel message) async {
+    if (message != null) {
+      Widget page = pageRouteForMessageModel(message);
+      if (page != null) {
+        Navigator.push(
+          _context,
+          new MaterialPageRoute(builder: (context) => page),
+        );
+      }
+    }
+  }
+
   void onOpenNotification(Map<String, dynamic> message) async {
     if (message != null) {
       debugPrint('notification payload: $message');
@@ -86,14 +99,11 @@ class JPushService {
     JPushAndroidResponse response = JPushAndroidResponse.fromJson(message);
     switch (PAGE_ROUTE_MAP[response.extras.androidExtras.module]) {
       case 1:
-        print('1');
         return QuoteOrderDetailPage(response.extras.androidExtras.params);
         break;
       case 2:
-        print('2');
         return ProofingOrderDetailPage(response.extras.androidExtras.params);
       default:
-        print('3');
         return null;
     }
   }
@@ -107,6 +117,24 @@ class JPushService {
         break;
       case 2:
         return ProofingOrderDetailPage(response.params);
+      default:
+        return null;
+    }
+  }
+
+  ///IOS页面路由
+  Widget pageRouteForMessageModel(NotifyModel message) {
+    switch (PAGE_ROUTE_MAP[message.moduleCode]) {
+      case 1:
+        print('1');
+        return QuoteOrderDetailPage(message.params);
+        break;
+      case 2:
+        print('2');
+        return ProofingOrderDetailPage(message.params);
+      case 3:
+        print('3');
+        return PurchaseOrderDetailPage(code: message.params);
       default:
         return null;
     }
