@@ -127,7 +127,7 @@ class MessageItemPage extends StatelessWidget {
             width: 80,
             height: 80,
             child: Image.network(
-                '${GlobalConfigs.MEDIA_CONTEXT_PATH}${model.images[0].thumbnailUrl()}',
+                '${model.images[0].thumbnailUrl()}',
             ),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
