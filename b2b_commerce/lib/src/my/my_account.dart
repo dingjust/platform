@@ -1,7 +1,10 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/my/account/socket.dart';
+import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'account/amount_flow_list.dart';
@@ -17,8 +20,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<String>(
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      body: FutureBuilder<CompanyWalletModel>(
+        builder:
+            (BuildContext context, AsyncSnapshot<CompanyWalletModel> snapshot) {
           if (snapshot.data != null) {
             return Container(
               color: Color.fromRGBO(245, 245, 245, 1),
@@ -43,7 +47,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     flexibleSpace: FlexibleSpaceBar(
                       background: Stack(
                         fit: StackFit.expand,
-                        children: <Widget>[_buildHeader(context)],
+                        children: <Widget>[
+                          _buildHeader(context, snapshot.data)
+                        ],
                       ),
                     ),
                   ),
@@ -107,14 +113,14 @@ class _MyAccountPageState extends State<MyAccountPage> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, CompanyWalletModel model) {
     return Container(
       margin: EdgeInsets.only(top: 50),
       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          _buildTotal(),
+          _buildTotal(model),
           Text(
             '总金额',
             style: TextStyle(color: Colors.black45),
@@ -122,13 +128,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
           Divider(
             color: Colors.white,
           ),
-          _buildAmountRow()
+          _buildAmountRow(model)
         ],
       ),
     );
   }
 
-  Widget _buildTotal() {
+  Widget _buildTotal(CompanyWalletModel model) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +156,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       )),
                   Container(
                       child: Text(
-                        "987652.00",
+                        '${(model.canCashOut + model.auditing +
+                            model.cashOuting).roundToDouble()}',
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
@@ -166,20 +173,20 @@ class _MyAccountPageState extends State<MyAccountPage> {
     );
   }
 
-  Widget _buildAmountRow() {
+  Widget _buildAmountRow(CompanyWalletModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         AmountBlock(
-          amount: 5899.00,
+          amount: model.canCashOut,
           text: '可取金额',
         ),
         AmountBlock(
-          amount: 5899.00,
+          amount: model.cashOuting,
           text: '提现中金额',
         ),
         AmountBlock(
-          amount: 5899.00,
+          amount: model.auditing,
           text: '未结算金额',
         )
       ],
@@ -191,34 +198,35 @@ class _MyAccountPageState extends State<MyAccountPage> {
       padding: EdgeInsets.only(top: 20),
       child: Column(
         children: <Widget>[
-          Container(
-            child: Center(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
-                child: Text(
-                  "账单",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                      color: Colors.black45),
-                ),
-              ),
-            ),
-          ),
+          // Container(
+          //   child: Center(
+          //     child: Container(
+          //       margin: EdgeInsets.fromLTRB(0, 5, 0, 10),
+          //       child: Text(
+          //         "账单",
+          //         style: TextStyle(
+          //             fontWeight: FontWeight.w500,
+          //             fontSize: 18,
+          //             color: Colors.black45),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           GestureDetector(
             child: Container(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    margin: EdgeInsets.only(bottom: 15),
+                    // margin: EdgeInsets.only(bottom: 15),
                     child: Row(
                       children: <Widget>[
                         Expanded(
                             child: Text(
-                              '本月收支',
+                              '查看账单',
                               style: TextStyle(fontSize: 20),
                             )),
                         Icon(
@@ -229,11 +237,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       ],
                     ),
                   ),
-                  IncomeComparison(
-                    height: 120,
-                    income: 123456.00,
-                    expenditure: 789456.00,
-                  ),
+                  // IncomeComparison(
+                  //   height: 120,
+                  //   income: 123456.00,
+                  //   expenditure: 789456.00,
+                  // ),
                 ],
               ),
               decoration: BoxDecoration(
@@ -366,16 +374,18 @@ class _MyAccountPageState extends State<MyAccountPage> {
   }
 
   void onAddCard() {
-    // Navigator.of(context)
-    //     .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => WebSocketRoute()));
+        .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
+//    Navigator.of(context)
+//        .push(MaterialPageRoute(builder: (context) => WebSocketRoute()));
   }
 
-  Future<String> _getData() async {
-    return Future.delayed(const Duration(seconds: 1), () {
-      return '1';
-    });
+  Future<CompanyWalletModel> _getData() async {
+//    return Future.delayed(const Duration(seconds: 1), () {
+//      return '1';
+//    });
+    Response response = await http$.get(UserApis.getCompanyWallet);
+    return CompanyWalletModel.fromJson(response.data);
   }
 
   @override
@@ -405,7 +415,7 @@ class AmountBlock extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            '￥$amount',
+            '￥${amount.roundToDouble()}',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(

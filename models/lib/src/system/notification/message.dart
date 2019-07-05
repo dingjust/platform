@@ -14,11 +14,14 @@ class MessageModel extends ItemModel {
   MediaModel image;
   String code;
 
-  MessageModel(this.title, {this.type, this.date, this.description,this.image,this.code});
+  MessageModel(this.title,
+      {this.type, this.date, this.description, this.image, this.code});
 
-  factory MessageModel.fromJson(Map<String, dynamic> json) => _$MessageModelFromJson(json);
+  factory MessageModel.fromJson(Map<String, dynamic> json) =>
+      _$MessageModelFromJson(json);
 
-  static Map<String, dynamic> toJson(MessageModel model) => _$MessageModelToJson(model);
+  static Map<String, dynamic> toJson(MessageModel model) =>
+      _$MessageModelToJson(model);
 }
 
 @JsonSerializable()
@@ -31,7 +34,8 @@ class NotifyModel extends ItemModel {
   @JsonKey(toJson: _mediaToJson)
   List<MediaModel> images;
   String openUrl;
-  String moduleCode;
+  MsgModule moduleCode;
+  String params;
   int groupCode;
   bool read;
   @JsonKey(fromJson: _dateTimefromMilliseconds)
@@ -39,8 +43,7 @@ class NotifyModel extends ItemModel {
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime creationtime;
 
-  NotifyModel({
-    this.title,
+  NotifyModel({this.title,
     this.code,
     this.body,
     this.uid,
@@ -52,11 +55,13 @@ class NotifyModel extends ItemModel {
     this.read,
     this.readTime,
     this.creationtime,
-  });
+    this.params});
 
-  factory NotifyModel.fromJson(Map<String, dynamic> json) => _$NotifyModelFromJson(json);
+  factory NotifyModel.fromJson(Map<String, dynamic> json) =>
+      _$NotifyModelFromJson(json);
 
-  static Map<String, dynamic> toJson(NotifyModel model) => _$NotifyModelToJson(model);
+  static Map<String, dynamic> toJson(NotifyModel model) =>
+      _$NotifyModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
@@ -64,3 +69,49 @@ class NotifyModel extends ItemModel {
   static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
       models.map((model) => MediaModel.toJson(model)).toList();
 }
+
+enum MsgModule {
+
+///默认
+@JsonValue('default')
+DEFAULT,
+
+///用户登录
+@JsonValue('userLogin')
+UserLogin,
+
+///用户注册
+@JsonValue('register')
+REGISTER,
+
+///新报价
+@JsonValue('newQuote')
+QUOTE_NEW,
+
+///拒绝报价
+@JsonValue('refuseQuote')
+QUOTE_REFUSE,
+
+///通过报价
+@JsonValue('adoptedQuote')
+QUOTE_ADOPTED,
+
+///打样订单创建
+@JsonValue('proofingCreate')
+PROOFING_CREATE,
+
+///打样订单确认发货
+@JsonValue('proofingDeliver')
+PROOFING_DELIVER,
+
+///打样订单确认收货
+@JsonValue('proofingReceived')
+PROOFING_RECEIVED,
+
+///打样订单确认发货
+@JsonValue('purchaseDeliver')
+PURCHASE_DELIVER,
+
+///打样订单确认收货
+@JsonValue('purchaseReceived')
+PURCHASE_RECEIVED}

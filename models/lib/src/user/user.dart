@@ -308,3 +308,32 @@ class RoleModel extends ItemModel {
   static Map<String, dynamic> toJson(RoleModel model) =>
       _$RoleModelToJson(model);
 }
+
+
+///创建
+@JsonSerializable()
+class CompanyWalletModel extends ItemModel {
+  CompanyModel company;
+  double auditing;
+  double canCashOut;
+  double cashOuting;
+  double auditingDynamic;
+  double canCashOutDynamic;
+  double cashOutingDynamic;
+
+  CompanyWalletModel({
+    this.company,
+    this.auditing,
+    this.canCashOut,
+    this.cashOuting,
+    this.auditingDynamic,
+    this.canCashOutDynamic,
+    this.cashOutingDynamic,
+  });
+
+  factory CompanyWalletModel.fromJson(Map<String, dynamic> json) =>
+      _$CompanyWalletModelFromJson(json);
+
+  static Map<String, dynamic> toJson(CompanyWalletModel model) =>
+      _$CompanyWalletModelToJson(model);
+}

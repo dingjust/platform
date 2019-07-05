@@ -72,19 +72,21 @@ class AmapService {
     AMapLocationClient.startup(AMapLocationOption(
         desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
     //Android获取权限，IOS不需要
-//    bool hasPermission =
-//        await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+//    PermissionStatus permission = await PermissionHandler()
+//        .checkPermissionStatus(PermissionGroup.locationWhenInUse);
 //    print('check==============');
 //
-//    if (!hasPermission) {
+//    if (permission != PermissionStatus.granted) {
 //      print('request==============');
 //
-//      PermissionStatus requestPermissionResult =
-//          await SimplePermissions.requestPermission(
-//              Permission.WhenInUseLocation);
+//      Map<PermissionGroup, PermissionStatus> permissions =
+//      await PermissionHandler()
+//          .requestPermissions([PermissionGroup.locationWhenInUse]);
+//
 //      print('request==============');
 //
-//      if (requestPermissionResult != PermissionStatus.authorized) {
+//      if (permissions[PermissionGroup.locationWhenInUse] !=
+//          PermissionStatus.granted) {
 //        print('定位权限失败');
 //        return null;
 //      }

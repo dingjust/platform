@@ -39,7 +39,6 @@ void main() async {
     //IOS高德定位注册KEY
     AMapLocationClient.setApiKey(GlobalConfigs.AMAP_LOCATION_KEY_IOS);
   }
-  jpush$.getRegistrationID();
   //强制竖屏
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {

@@ -47,14 +47,15 @@ android {
         versionCode 6
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        ndk {
-            //选择要添加的对应 cpu 类型的 .so 库。
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'x86_64', 'mips', 'mips64', 'arm64-v8a'}
+//        ndk {
+//            //选择要添加的对应 cpu 类型的 .so 库。
+//            abiFilters 'armeabi-v7a'
+//        }
         manifestPlaceholders = [
-                AMAP_KEY: "182003d072a475cb3ec6712e6a978612", /// 高德地图key
-                JPUSH_PKGNAME : "net.nbyjy.b2b",
+                AMAP_KEY     : "182003d072a475cb3ec6712e6a978612", /// 高德地图key
+                JPUSH_PKGNAME: "net.nbyjy.b2b",
                 JPUSH_APPKEY : "824c12a64440fbf70e767a3e", // NOTE: JPush 上注册的包名对应的 Appkey.
-                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
         ]
     }
     buildTypes {

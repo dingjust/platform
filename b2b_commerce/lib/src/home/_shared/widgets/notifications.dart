@@ -22,12 +22,12 @@ class NotificationsIcon extends StatelessWidget {
             color: Colors.white,
             tooltip: '通知',
             onPressed: () {
-               Navigator.push(
-                 context,
-                 MaterialPageRoute(
-                   builder: (context) => MessagePage(),
-                 ),
-               );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MessagePage(),
+                ),
+              );
             },
           ),
           Positioned(
@@ -52,7 +52,12 @@ class NotificationBubble extends StatelessWidget {
 
   final double height;
 
-  const NotificationBubble({Key key, this.msgGroup,this.width:20,this.height:20,this.fontSize:12}) : super(key: key);
+  const NotificationBubble({Key key,
+    this.msgGroup,
+    this.width: 20,
+    this.height: 20,
+    this.fontSize: 12})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

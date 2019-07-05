@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:core/core.dart';
+import 'package:models/models.dart';
 import 'package:services/src/message/notifications_service.dart';
 import 'package:services/src/message/repository/message_respository.dart';
-import 'package:services/src/message/response/jpush_response.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 import 'package:services/src/websocket/websocket_response.dart';
 
@@ -16,6 +17,11 @@ class NotificationsPool {
 
   static NotificationsPool get instance => _getInstance();
   static NotificationsPool _instance;
+
+  Timer _timer;
+
+  ///轮询时间间隔
+  Duration _duration = Duration(seconds: GlobalConfigs.HEARTBEAT_DURATION);
 
   ///订单通知数
   int _orderNotificationsNum = 0;
@@ -54,6 +60,9 @@ class NotificationsPool {
 
   NotificationsPool._internal() {
     // 初始化
+    checkUnread();
+    //轮询
+    _pollingCheck();
   }
 
   static NotificationsPool _getInstance() {
@@ -104,17 +113,25 @@ class NotificationsPool {
 
   ///未读消息数
   void checkUnread() async {
-    CountUnreadResponse countUnreadResponse = await MessageRepository()
-        .countUnread(UserBLoC.instance.currentUser.mobileNumber);
-    if (countUnreadResponse != null) {
-      _orderNotificationsNum = countUnreadResponse.order;
-      _systemNotificationsNum = countUnreadResponse.system;
-      _financeNotificationsNum = countUnreadResponse.finance;
-      _orderNotificationsNumController.add(orderNotificationsNum);
-      _systemNotificationsNumController.add(systemNotificationsNum);
-      _financeNotificationsNumController.add(financeNotificationsNum);
-      _notificationsNumController.add(notificationsNum);
+    if (UserBLoC.instance.currentUser.status != UserStatus.OFFLINE) {
+      CountUnreadResponse countUnreadResponse = await MessageRepository()
+          .countUnread(UserBLoC.instance.currentUser.mobileNumber);
+      if (countUnreadResponse != null) {
+        _orderNotificationsNum = countUnreadResponse.order;
+        _systemNotificationsNum = countUnreadResponse.system;
+        _financeNotificationsNum = countUnreadResponse.finance;
+        _orderNotificationsNumController.add(orderNotificationsNum);
+        _systemNotificationsNumController.add(systemNotificationsNum);
+        _financeNotificationsNumController.add(financeNotificationsNum);
+        _notificationsNumController.add(notificationsNum);
+      }
     }
+  }
+
+  void _pollingCheck() {
+    _timer = Timer.periodic(_duration, (timer) {
+      checkUnread();
+    });
   }
 
   ///获取全部通知数

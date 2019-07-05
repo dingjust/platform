@@ -89,7 +89,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             queryParameters: {
               'page': _ordersMap[status].currentPage,
               'size': _ordersMap[status].size,
-              'fields':PurchaseOrderOptions.BASIC_LESS
+              'fields':PurchaseOrderOptions.DEFAULT
             });
       } on DioError catch (e) {
         print(e);
@@ -126,7 +126,7 @@ class PurchaseOrderBLoC extends BLoCBase {
               queryParameters: {
                 'page': _ordersMap['SEARCH'].currentPage,
                 'size': _ordersMap['SEARCH'].size,
-                'fields':PurchaseOrderOptions.BASIC_LESS,
+                'fields':PurchaseOrderOptions.DEFAULT,
               });
         } on DioError catch (e) {
           print(e);
@@ -164,7 +164,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             queryParameters: {
               'page': ++_ordersMap[status].currentPage,
               'size': _ordersMap[status].size,
-              'fields':PurchaseOrderOptions.BASIC_LESS,
+              'fields':PurchaseOrderOptions.DEFAULT,
             });
       } on DioError catch (e) {
         print(e);
@@ -198,7 +198,7 @@ class PurchaseOrderBLoC extends BLoCBase {
             queryParameters: {
               'page': ++_ordersMap['ALL'].currentPage,
               'size': _ordersMap['ALL'].size,
-              'fields':PurchaseOrderOptions.BASIC_LESS,
+              'fields':PurchaseOrderOptions.DEFAULT,
             });
       } on DioError catch (e) {
         print(e);
@@ -269,12 +269,12 @@ class PurchaseOrderBLoC extends BLoCBase {
         if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
               .getPurchaseOrdersByFactory(companyUid, {
-            'fields':PurchaseOrderOptions.BASIC_LESS,
+            'fields':PurchaseOrderOptions.DEFAULT,
           });
         } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
               .getPurchaseOrdersByBrand(companyUid, {
-            'fields':PurchaseOrderOptions.BASIC_LESS,
+            'fields':PurchaseOrderOptions.DEFAULT,
           });
         }
         purchaseOrderModels.addAll(purchaseOrdersResponse.content);
@@ -294,11 +294,11 @@ class PurchaseOrderBLoC extends BLoCBase {
         if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
               .getPurchaseOrdersByFactory(
-                  companyUid, {'page': purchaseOrdersResponse.number + 1,'fields':PurchaseOrderOptions.BASIC_LESS});
+                  companyUid, {'page': purchaseOrdersResponse.number + 1,'fields':PurchaseOrderOptions.DEFAULT});
         } else if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
           purchaseOrdersResponse = await PurchaseOrderRepository()
               .getPurchaseOrdersByBrand(
-                  companyUid, {'page': purchaseOrdersResponse.number + 1, 'fields':QuoteOrderOptions.BASIC_LESS,});
+                  companyUid, {'page': purchaseOrdersResponse.number + 1, 'fields':QuoteOrderOptions.DEFAULT,});
         }
         purchaseOrderModels.addAll(purchaseOrdersResponse.content);
       } else {
