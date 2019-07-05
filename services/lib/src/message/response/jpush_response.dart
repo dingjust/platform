@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:models/models.dart';
 
 part 'jpush_response.g.dart';
 
@@ -85,50 +86,4 @@ class JPushIOSResponse extends JPushResponse {
 
   static Map<String, dynamic> toJson(JPushIOSResponse model) =>
       _$JPushIOSResponseToJson(model);
-}
-
-enum MsgModule {
-  ///默认
-  @JsonValue('default')
-  DEFAULT,
-
-  ///用户登录
-  @JsonValue('userLogin')
-  UserLogin,
-
-  ///用户注册
-  @JsonValue('register')
-  REGISTER,
-
-  ///新报价
-  @JsonValue('newQuote')
-  QUOTE_NEW,
-
-  ///拒绝报价
-  @JsonValue('refuseQuote')
-  QUOTE_REFUSE,
-
-  ///通过报价
-  @JsonValue('adoptedQuote')
-  QUOTE_ADOPTED,
-
-  ///打样订单创建
-  @JsonValue('proofingCreate')
-  PROOFING_CREATE,
-
-  ///打样订单确认发货
-  @JsonValue('proofingDeliver')
-  PROOFING_DELIVER,
-
-  ///打样订单确认收货
-  @JsonValue('proofingReceived')
-  PROOFING_RECEIVED,
-
-  ///打样订单确认发货
-  @JsonValue('purchaseDeliver')
-  PURCHASE_DELIVER,
-
-  ///打样订单确认收货
-  @JsonValue('purchaseReceived')
-  PURCHASE_RECEIVED
 }

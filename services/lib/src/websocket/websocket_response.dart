@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:models/models.dart';
 import 'package:services/src/message/response/jpush_response.dart';
 
 part 'websocket_response.g.dart';

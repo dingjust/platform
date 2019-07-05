@@ -22,6 +22,9 @@ class MessageItemPage extends StatelessWidget {
                 builder: (context) => MessageDetailPage(model: model,)
             ),
           );
+        } else {
+          print('=====');
+          jpush$.onOpenMessage(model);
         }
       },
       child: Container(
