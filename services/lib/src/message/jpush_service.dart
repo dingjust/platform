@@ -27,6 +27,9 @@ class JPushService {
 
         ///更新未读消息数
         notificationsPool$.checkUnread();
+
+        ///是否生产消息
+        notificationsPool$.analysProductionMessage(message);
       },
       // 点击通知回调方法。
       onOpenNotification: (Map<String, dynamic> message) async {
@@ -103,6 +106,11 @@ class JPushService {
         break;
       case 2:
         return ProofingOrderDetailPage(response.extras.androidExtras.params);
+      case 3:
+        return PurchaseOrderDetailPage(
+            code: response.extras.androidExtras.params);
+      case 4:
+        return RequirementOrderDetailPage(response.extras.androidExtras.params);
       default:
         return null;
     }
@@ -117,24 +125,27 @@ class JPushService {
         break;
       case 2:
         return ProofingOrderDetailPage(response.params);
+      case 3:
+        return PurchaseOrderDetailPage(code: response.params);
+      case 4:
+        return RequirementOrderDetailPage(response.params);
       default:
         return null;
     }
   }
 
-  ///IOS页面路由
+  ///消息管理页面路由
   Widget pageRouteForMessageModel(NotifyModel message) {
     switch (PAGE_ROUTE_MAP[message.moduleCode]) {
       case 1:
-        print('1');
         return QuoteOrderDetailPage(message.params);
         break;
       case 2:
-        print('2');
         return ProofingOrderDetailPage(message.params);
       case 3:
-        print('3');
         return PurchaseOrderDetailPage(code: message.params);
+      case 4:
+        return RequirementOrderDetailPage(message.params);
       default:
         return null;
     }
@@ -186,6 +197,12 @@ const PAGE_ROUTE_MAP = <MsgModule, int>{
   MsgModule.PROOFING_CREATE: 2,
   MsgModule.PROOFING_DELIVER: 2,
   MsgModule.PROOFING_RECEIVED: 2,
+  MsgModule.PROOFING_PAY: 2,
   MsgModule.PURCHASE_DELIVER: 3,
-  MsgModule.PURCHASE_RECEIVED: 3
+  MsgModule.PURCHASE_RECEIVED: 3,
+  MsgModule.NEW_PURCHASE_ORDER: 3,
+  MsgModule.PROGRESS_UPDATED: 3,
+  MsgModule.PAY_DEPOSIT: 3,
+  MsgModule.PAY_THE_REST: 3,
+  MsgModule.RECOMMEND_REQUIRE_ORDER: 4,
 };

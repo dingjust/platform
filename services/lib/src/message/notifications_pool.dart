@@ -2,9 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:models/models.dart';
+import 'package:services/src/message/jpush_service.dart';
 import 'package:services/src/message/notifications_service.dart';
 import 'package:services/src/message/repository/message_respository.dart';
+import 'package:services/src/message/response/jpush_response.dart';
+import 'package:services/src/production/bloc/production_bloc.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 import 'package:services/src/websocket/websocket_response.dart';
 
@@ -132,6 +136,22 @@ class NotificationsPool {
     _timer = Timer.periodic(_duration, (timer) {
       checkUnread();
     });
+  }
+
+  ///分析推送消息生产进度是否刷新
+  void analysProductionMessage(Map<String, dynamic> message) {
+    TargetPlatform platform = defaultTargetPlatform;
+    if (platform == TargetPlatform.iOS) {
+      JPushIOSResponse response = JPushIOSResponse.fromJson(message);
+      if (PAGE_ROUTE_MAP[response.module] == 3) {
+        ProductionBLoC.instance.refreshData('');
+      }
+    } else {
+      JPushAndroidResponse response = JPushAndroidResponse.fromJson(message);
+      if (PAGE_ROUTE_MAP[response.extras.androidExtras.module] == 3) {
+        ProductionBLoC.instance.refreshData('');
+      }
+    }
   }
 
   ///获取全部通知数

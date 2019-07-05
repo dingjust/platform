@@ -78,8 +78,6 @@ class _HomePageState extends State<HomePage> {
       ));
     });
     // ns$.init(context);
-    ///极光初始化
-    jpush$.setContext(context);
 
     ///获取未读消息数
     notificationsPool$.checkUnread();
@@ -99,6 +97,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     ScrollController _scrollController = ScrollController();
 
+    ///极光初始化
+    jpush$.setContext(context);
+    
     return Scaffold(
       key: homePageKey,
       body: Container(

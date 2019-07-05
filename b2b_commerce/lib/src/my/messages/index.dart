@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
-import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
@@ -24,32 +23,36 @@ class _MessagePageState extends State<MessagePage>
   final GlobalKey _globalKey = GlobalKey<_MessagePageState>();
   var controller;
   bool isShowNotRead = true;
-  String status ;
+  String status;
 
   @override
   void initState() {
+    //默认status为订单
+    status = '1';
+
     controller = TabController(
       length: statuses.length,
       vsync: this, //动画效果的异步处理，默认格式
-    )..addListener((){
-      switch (controller.index) {
-        case 0:
-          setState(() {
-            status = statuses[0].code;
-          });
-          break;
-        case 1:
-          setState(() {
-            status = statuses[1].code;
-          });
-          break;
-        case 2:
-          setState(() {
-            status = statuses[2].code;
-          });
-          break;
-      }
-    });
+    )
+      ..addListener(() {
+        switch (controller.index) {
+          case 0:
+            setState(() {
+              status = statuses[0].code;
+            });
+            break;
+          case 1:
+            setState(() {
+              status = statuses[1].code;
+            });
+            break;
+          case 2:
+            setState(() {
+              status = statuses[2].code;
+            });
+            break;
+        }
+      });
     super.initState();
   }
 
@@ -59,38 +62,40 @@ class _MessagePageState extends State<MessagePage>
       key: _globalKey,
       bloc: NotifyBloC.instance,
       child: Scaffold(
-        appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: true,
-          elevation: 0.5,
-          title: Text(
-            '消息管理',
-            style: TextStyle(color: Colors.black),
-          ),
-          actions: <Widget>[
-            Container(
-              width: 60,
-              margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
-              child: PopupMenuButton<String>(
-                onSelected: (v) => onMenuSelect(v),
-                icon: Icon(
-                  Icons.more_vert,
+          appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: true,
+            elevation: 0.5,
+            title: Text(
+              '消息管理',
+              style: TextStyle(color: Colors.black),
+            ),
+            actions: <Widget>[
+              Container(
+                width: 60,
+                margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+                child: PopupMenuButton<String>(
+                  onSelected: (v) => onMenuSelect(v),
+                  icon: Icon(
+                    Icons.more_vert,
+                  ),
+                  offset: Offset(0, 50),
+                  itemBuilder: (BuildContext context) => _buildPopupMenu(),
                 ),
-                offset: Offset(0, 50),
-                itemBuilder: (BuildContext context) => _buildPopupMenu(),
-              ),
-            )
-          ],
-        ),
+              )
+            ],
+          ),
           body: Scaffold(
             backgroundColor: Colors.white,
             appBar: TabBar(
-                controller: controller,
-                unselectedLabelColor: Colors.black26,
-                labelColor: Colors.black,
-                indicatorSize: TabBarIndicatorSize.label,
-                labelStyle: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+              controller: controller,
+              unselectedLabelColor: Colors.black26,
+              labelColor: Colors.black,
+              indicatorSize: TabBarIndicatorSize.label,
+              labelStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
               tabs: <Widget>[
                 Tab(
                   child: Container(
@@ -128,26 +133,26 @@ class _MessagePageState extends State<MessagePage>
                     child: Stack(
                       alignment: Alignment.topRight,
                       children: <Widget>[
-                         Center(
-                           child: Container(
-                              child: Text(
-                                '系统',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black54,
-                                ),
+                        Center(
+                          child: Container(
+                            child: Text(
+                              '系统',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black54,
                               ),
-                        ),
-                         ),
-                         Container(
-                           margin: EdgeInsets.only(top: 5),
-                           child: NotificationBubble(
-                              fontSize: 11,
-                              width: 20,
-                              height: 16,
-                              msgGroup: 2,
                             ),
-                         ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
+                          child: NotificationBubble(
+                            fontSize: 11,
+                            width: 20,
+                            height: 16,
+                            msgGroup: 2,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -185,12 +190,13 @@ class _MessagePageState extends State<MessagePage>
             ),
             body: TabBarView(
               controller: controller,
-              children: statuses.map(
+              children: statuses
+                  .map(
                     (status) => MessagePageList(status: status),
-              ).toList(),
+              )
+                  .toList(),
             ),
-          )
-      ),
+          )),
     );
   }
 
@@ -209,14 +215,15 @@ class _MessagePageState extends State<MessagePage>
         ),
       ),
       PopupMenuItem<String>(
-        value: '${isShowNotRead? 'notRead':'showRead'}',
+        value: '${isShowNotRead ? 'notRead' : 'showRead'}',
         child: Row(
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(right: 5),
-              child: isShowNotRead?Icon(Icons.fiber_new):Icon(Icons.message),
+              child:
+              isShowNotRead ? Icon(Icons.fiber_new) : Icon(Icons.message),
             ),
-            Text('${isShowNotRead? '只看未读消息': '查看全部消息'}')
+            Text('${isShowNotRead ? '只看未读消息' : '查看全部消息'}')
           ],
         ),
       ),
@@ -226,6 +233,7 @@ class _MessagePageState extends State<MessagePage>
   onMenuSelect(String value) async {
     switch (value) {
       case 'read':
+        readAll();
         break;
       case 'notRead':
         showNotRead();
@@ -238,7 +246,17 @@ class _MessagePageState extends State<MessagePage>
     }
   }
 
-  showNotRead(){
+  ///全部设为已读
+  Future<bool> readAll() async {
+    bool result = await notificationsPool$.readAll();
+    if (result) {
+      isShowNotRead = true;
+      NotifyBloC.instance.setReadStatus(isShowNotRead);
+      NotifyBloC.instance.getData(status);
+    }
+  }
+
+  showNotRead() {
     setState(() {
       isShowNotRead = !isShowNotRead;
     });
@@ -246,19 +264,20 @@ class _MessagePageState extends State<MessagePage>
     NotifyBloC.instance.getData(status);
   }
 
-  showRead(){
+  showRead() {
     setState(() {
       isShowNotRead = !isShowNotRead;
     });
     NotifyBloC.instance.setReadStatus(true);
     NotifyBloC.instance.getData(status);
   }
-
 }
 
 class MessagePageList extends StatefulWidget {
-  MessagePageList({Key key, @required this.status,})
-      : super(key: key);
+  MessagePageList({
+    Key key,
+    @required this.status,
+  }) : super(key: key);
 
   final EnumModel status;
 
@@ -321,11 +340,12 @@ class _MessagePageListState extends State<MessagePageList>
           controller: scrollController,
           children: <Widget>[
             StreamBuilder<MessageData>(
-              stream: bloc.stream.where((messageList) =>
-              messageList.status == widget.status.code),
+              stream: bloc.stream.where(
+                      (messageList) =>
+                  messageList.status == widget.status.code),
               // initialData: null,
-              builder: (BuildContext context,
-                  AsyncSnapshot<MessageData> snapshot) {
+              builder:
+                  (BuildContext context, AsyncSnapshot<MessageData> snapshot) {
                 if (snapshot.data == null) {
                   bloc.getData(widget.status.code);
                   return ProgressIndicatorFactory

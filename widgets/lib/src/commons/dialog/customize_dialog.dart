@@ -1314,7 +1314,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                     Container(
                       child: Center(
                         child: Text(
-                          '预计交货日期：${widget.expectedDeliveryDate}',
+                          '预计交货日期：${DateFormatUtil.formatYMD(widget.expectedDeliveryDate)}',
                           style: TextStyle(
                             color: Colors.red,
                           ),
