@@ -4,7 +4,7 @@ import 'package:services/src/message/response/message_response.dart';
 import 'package:services/src/net/http_manager.dart';
 
 class MessageRepository {
-  /// 获取微读消息数
+  /// 获取未读消息数
   Future<CountUnreadResponse> countUnread(String uid) async {
     Response<Map<String, dynamic>> response;
     try {

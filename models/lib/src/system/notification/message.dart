@@ -108,10 +108,34 @@ PROOFING_DELIVER,
 @JsonValue('proofingReceived')
 PROOFING_RECEIVED,
 
-///打样订单确认发货
+///打样订单付款
+@JsonValue('proofingPay')
+PROOFING_PAY,
+
+///生产订单确认发货
 @JsonValue('purchaseDeliver')
 PURCHASE_DELIVER,
 
-///打样订单确认收货
+///生产订单确认收货
 @JsonValue('purchaseReceived')
-PURCHASE_RECEIVED}
+PURCHASE_RECEIVED,
+
+///推荐需求
+@JsonValue('recommendRequireOrder')
+RECOMMEND_REQUIRE_ORDER,
+
+///新的生产订单
+@JsonValue('newPurchaseOrder')
+NEW_PURCHASE_ORDER,
+
+///支付生产订单定金
+@JsonValue('payDeposit')
+PAY_DEPOSIT,
+
+//支付生产订单尾款
+@JsonValue('payTheRest')
+PAY_THE_REST,
+
+///生产订单流程更新
+@JsonValue('progressUpdated')
+PROGRESS_UPDATED}
