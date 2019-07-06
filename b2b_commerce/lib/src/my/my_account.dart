@@ -381,9 +381,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
   }
 
   Future<CompanyWalletModel> _getData() async {
-//    return Future.delayed(const Duration(seconds: 1), () {
-//      return '1';
-//    });
+
     Response response = await http$.get(UserApis.getCompanyWallet);
     return CompanyWalletModel.fromJson(response.data);
   }

@@ -39,6 +39,10 @@ class AmountFlowModel extends ItemModel {
   OrderModel order;
 
   ///日期
+  ///  //注册时间
+    @JsonKey(
+        fromJson: _dateTimefromMilliseconds,
+        toJson: _dateTimetoMilliseconds)
   DateTime creationtime;
 
   AmountFlowModel({this.code,
@@ -59,6 +63,11 @@ class AmountFlowModel extends ItemModel {
 
   static Map<String, dynamic> toJson(AmountFlowModel model) =>
       _$AmountFlowModelToJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
+  static int _dateTimetoMilliseconds(DateTime date) =>
+      date.millisecondsSinceEpoch;
 }
 
 ///账户流水类型

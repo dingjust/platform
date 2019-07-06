@@ -2,11 +2,12 @@ import 'package:b2b_commerce/src/my/account/bill_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class AmountFlowDetailPage extends StatefulWidget {
-  final String code;
+  final String id;
 
-  const AmountFlowDetailPage({Key key, this.code}) : super(key: key);
+  const AmountFlowDetailPage({Key key, this.id}) : super(key: key);
 
   @override
   _AmountFlowDetailPageState createState() => _AmountFlowDetailPageState();
@@ -82,9 +83,9 @@ class _AmountFlowDetailPageState extends State<AmountFlowDetailPage> {
                   _buildDetailRow('类型',
                       '${AmountFlowTypeLocalizedMap[snapshot.data.amountFlowType]}'),
                   _buildDetailRow('时间',
-                      '${DateFormatUtil.format(snapshot.data.creationtime)}'),
-                  _buildDetailRow('剩余总额', '￥12222222'),
-                  _buildDetailRow('交易单号', '${snapshot.data.order.code}'),
+                      '${DateFormatUtil.formatYMDHMS(snapshot.data.creationtime)}'),
+//                  _buildDetailRow('剩余总额', '￥12222222'),
+                  _buildDetailRow('交易单号', '${snapshot.data.order?.code}'),
                   _buildDetailRow('备注', '${snapshot.data.remark}'),
                 ],
               ),
@@ -113,16 +114,6 @@ class _AmountFlowDetailPageState extends State<AmountFlowDetailPage> {
   }
 
   Future<AmountFlowModel> _getData() {
-    return Future.delayed(const Duration(seconds: 1), () {
-      return AmountFlowModel(
-          code: 'B000000001',
-          amount: 1200020,
-          account: '988288882881892',
-          order: OrderModel(code: '120000002'),
-          creationtime: DateTime.now(),
-          remark: '备注23333',
-          amountStatus: AmountStatus.AUDITING,
-          amountFlowType: AmountFlowType.INFLOW);
-    });
+    return AmountFlowRepository().detail(widget.id);
   }
 }

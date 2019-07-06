@@ -76,4 +76,15 @@ abstract class UserApis {
   ///获取钱包
   static get getCompanyWallet => '/{baseSiteId}/companyWallet';
 
+  ///获取流水列表
+  static get getAmountFlows => '/{baseSiteId}/amountFlow';
+
+  ///获取流水明细
+  static get getAmountFlow =>(id) =>  '/{baseSiteId}/amountFlow/$id';
+
+  ///申请提现
+  static get cashOut =>(amount) =>  '/{baseSiteId}/amountFlow/cashOut/$amount';
+
+  ///提现取消
+  static get cashOutCanceled =>(id) =>  '/{baseSiteId}/amountFlow/cashOutCanceled/$id';
 }

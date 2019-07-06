@@ -151,7 +151,7 @@ class AmountFlowItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => AmountFlowDetailPage()));
+            MaterialPageRoute(builder: (context) => AmountFlowDetailPage(id:model.id.toString())));
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
@@ -174,7 +174,7 @@ class AmountFlowItem extends StatelessWidget {
                     text: TextSpan(
                         style: TextStyle(color: Colors.black, fontSize: 18),
                         text:
-                            model.flowSource == FlowSource.CASH_OUT ? '+' : '-',
+                            model.flowSource == FlowSource.CASH_OUT ? '-' : '+',
                         children: <TextSpan>[
                           TextSpan(text: '￥${model.amount}')
                         ]),
@@ -185,7 +185,7 @@ class AmountFlowItem extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  '${DateFormatUtil.format(model.creationtime)}',
+                  '${DateFormatUtil.formatYMDHMS(model.creationtime)}',
                   style: TextStyle(color: Colors.grey[500]),
                 )
               ],

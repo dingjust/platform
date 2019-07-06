@@ -8,7 +8,7 @@ class MessageRepository {
   Future<CountUnreadResponse> countUnread(String uid) async {
     Response<Map<String, dynamic>> response;
     try {
-      response = await http$.post(Apis.countUnreadMsg(uid));
+//      response = await http$.post(Apis.countUnreadMsg(uid));
     } on DioError catch (e) {
       print(e);
     }

@@ -310,7 +310,7 @@ class RoleModel extends ItemModel {
 }
 
 
-///创建
+///钱包
 @JsonSerializable()
 class CompanyWalletModel extends ItemModel {
   CompanyModel company;
