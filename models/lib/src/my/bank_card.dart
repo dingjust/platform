@@ -1,41 +1,24 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:models/models.dart';
 
-import 'bank_card.dart';
-
-part 'amount_flow.g.dart';
+part 'bank_card.g.dart';
 
 @JsonSerializable()
-class AmountFlowModel extends ItemModel {
-  ///交易单号
-  String code;
+class BankCardModel extends ItemModel {
+  ///银行卡编号
+  String bankCode;
 
   ///公司
   CompanyModel company;
 
-  ///账户
-  BankCardModel account;
+  ///银行名字
+  String bankName;
+  ///账户名
+  String accountName;
+  /// 卡号
+  String cardNumber;
 
-  ///金额
-  double amount;
-
-  ///流水来源
-  FlowSource flowSource;
-
-  ///资金流水类型
-  AmountFlowType amountFlowType;
-
-  ///描述
-  String description;
-
-  ///备注
-  String remark;
-
-  ///平台备注
-  String platformRemark;
-
-  ///剩余总额
-  double totalResidualAmount;
+  ArticleApprovalStatus approvalStatus;
 
   ///日期
   ///  //注册时间
@@ -44,23 +27,21 @@ class AmountFlowModel extends ItemModel {
         toJson: _dateTimetoMilliseconds)
   DateTime creationtime;
 
-  AmountFlowModel({this.code,
+  BankCardModel({this.code,
     this.company,
-    this.account,
-    this.amount,
-    this.flowSource,
-    this.amountFlowType,
-    this.description,
-    this.remark,
-    this.platformRemark,
+    this.bankCode,
+    this.bankName,
+    this.accountName,
+    this.cardNumber,
+    this.approvalStatus,
     this.creationtime,
-    this.totalResidualAmount});
+    });
 
-  factory AmountFlowModel.fromJson(Map<String, dynamic> json) =>
-      _$AmountFlowModelFromJson(json);
+  factory BankCardModel.fromJson(Map<String, dynamic> json) =>
+      _$BankCardModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AmountFlowModel model) =>
-      _$AmountFlowModelToJson(model);
+  static Map<String, dynamic> toJson(BankCardModel model) =>
+      _$BankCardModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
