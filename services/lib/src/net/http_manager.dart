@@ -104,7 +104,7 @@ class HttpManager {
         //   MessageBLoC.instance.errorMessageController
         //       .add('${errorResponse.errors[0].message}');
         // }
-        if (e.request.headers['ignoreAlert'] ?? 0 == 0) {
+        if (e.request.headers['ignoreAlert'] ?? true) {
           MessageBLoC.instance.errorMessageController.add('网络异常');
         }
         if (GlobalConfigs.DEBUG) {

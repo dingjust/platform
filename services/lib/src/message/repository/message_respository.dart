@@ -8,7 +8,8 @@ class MessageRepository {
   Future<CountUnreadResponse> countUnread(String uid) async {
     Response<Map<String, dynamic>> response;
     try {
-//      response = await http$.post(Apis.countUnreadMsg(uid));
+      response = await http$.post(Apis.countUnreadMsg(uid),
+          options: Options(headers: {'ignoreAlert': 1}));
     } on DioError catch (e) {
       print(e);
     }
@@ -24,7 +25,8 @@ class MessageRepository {
     var response;
     // String response;
     try {
-      response = await http$.post(Apis.readMsg(uid, code));
+      response = await http$.post(Apis.readMsg(uid, code),
+          options: Options(headers: {'ignoreAlert': 1}));
     } on DioError catch (e) {
       print(e);
     }
@@ -34,11 +36,12 @@ class MessageRepository {
       return false;
   }
 
-  ///消息标记未读
+  ///全部消息标记未读
   Future<bool> readAllMessage(String uid) async {
     var response;
     try {
-      response = await http$.post(Apis.readAllMsg(uid));
+      response = await http$.post(Apis.readAllMsg(uid),
+          options: Options(headers: {'ignoreAlert': 1}));
     } on DioError catch (e) {
       print(e);
     }

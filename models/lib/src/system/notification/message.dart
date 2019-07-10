@@ -138,4 +138,12 @@ PAY_THE_REST,
 
 ///生产订单流程更新
 @JsonValue('progressUpdated')
-PROGRESS_UPDATED}
+PROGRESS_UPDATED,
+
+///生产订单工厂延期提醒
+@JsonValue('purchaseFactoryDelay')
+PURCHASE_FACTORY_DELAY,
+
+///生产订单品牌延期提醒
+@JsonValue('purchaseBrandDelay')
+PURCHASE_BRAND_DELAY}

@@ -204,5 +204,7 @@ const PAGE_ROUTE_MAP = <MsgModule, int>{
   MsgModule.PROGRESS_UPDATED: 3,
   MsgModule.PAY_DEPOSIT: 3,
   MsgModule.PAY_THE_REST: 3,
+  MsgModule.PURCHASE_FACTORY_DELAY: 3,
+  MsgModule.PURCHASE_BRAND_DELAY: 3,
   MsgModule.RECOMMEND_REQUIRE_ORDER: 4,
 };
