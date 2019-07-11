@@ -64,11 +64,10 @@ class AmountFlowBLoC extends BLoCBase {
 
   loadingMore({DateTime date}) async {
     //模拟数据到底
-    if (amountFlowResponse.totalPages > amountFlowResponse.number +1) {
+    if (amountFlowResponse.totalPages > amountFlowResponse.number + 1) {
       // TODO: 分页拿数据，response.data;
-      amountFlowResponse = await AmountFlowRepository().list(params: {
-        'page':amountFlowResponse.number+1
-      });
+      amountFlowResponse = await AmountFlowRepository()
+          .list(params: {'page': amountFlowResponse.number + 1});
       amountFlows.addAll(amountFlowResponse.content);
     } else {
       //通知显示已经到底部
@@ -89,9 +88,9 @@ class AmountFlowBLoC extends BLoCBase {
     amountFlows.clear();
     //若没有数据则查询
 //    if (amountFlowResponse.content.isEmpty) {
-      // TODO: 分页拿数据，response.data;
-      amountFlowResponse = await AmountFlowRepository().list();
-      amountFlows.addAll(amountFlowResponse.content);
+    // TODO: 分页拿数据，response.data;
+    amountFlowResponse = await AmountFlowRepository().list();
+    amountFlows.addAll(amountFlowResponse.content);
 //    }
     _controller.sink.add(amountFlows);
   }
@@ -102,5 +101,4 @@ class AmountFlowBLoC extends BLoCBase {
 
     super.dispose();
   }
-
 }

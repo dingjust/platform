@@ -85,7 +85,7 @@ class _AmountFlowDetailPageState extends State<AmountFlowDetailPage> {
                   _buildDetailRow('时间',
                       '${DateFormatUtil.formatYMDHMS(snapshot.data.creationtime)}'),
 //                  _buildDetailRow('剩余总额', '￥12222222'),
-                  _buildDetailRow('交易单号', '${snapshot.data.order?.code}'),
+                  _buildDetailRow('交易单号', '${snapshot.data.code}'),
                   _buildDetailRow('备注', '${snapshot.data.remark}'),
                 ],
               ),

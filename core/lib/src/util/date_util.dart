@@ -16,6 +16,15 @@ class DateFormatUtil {
       return text;
     }
   }
+
+  static DateTime nextMonth(DateTime date) {
+    //12月的情况
+    if (date.month == 12) {
+      return DateTime(date.year + 1, 1, 1);
+    } else {
+      return DateTime(date.year, date.month + 1, 1);
+    }
+  }
 }
 
 ///时间转述工具类

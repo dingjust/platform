@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/my/response/bills_response.dart';
 
 class MyBillBLoC extends BLoCBase {
   // 工厂模式
@@ -21,11 +24,19 @@ class MyBillBLoC extends BLoCBase {
     return _instance;
   }
 
-  List<AmountFlowModel> _bills = [];
+  List<BillModel> _bills = [];
 
-  List<AmountFlowModel> get factories => _bills;
+  List<BillModel> get factories => _bills;
 
-  var _controller = StreamController < List < AmountFlowModel
+  int pageSize = 10;
+  int currentPage = 0;
+  int totalPages = 0;
+  int totalElements = 0;
+
+  //锁
+  bool lock = false;
+
+  var _controller = StreamController < List < BillModel
 
   >
 
@@ -35,41 +46,55 @@ class MyBillBLoC extends BLoCBase {
 
   broadcast();
 
-  Stream<List<AmountFlowModel>> get stream => _controller.stream;
+  Stream<List<BillModel>> get stream => _controller.stream;
 
   var conditionController = StreamController<DateTime>.broadcast();
 
   Stream<DateTime> get conditionStream => conditionController.stream;
 
   filterByDate({DateTime date}) async {
-    _bills.clear();
-    //若没有数据则查询
-    if (_bills.isEmpty) {
-      // TODO: 分页拿数据，response.data;
-      _bills = (await Future.delayed(const Duration(seconds: 1), () {
-        List<AmountFlowModel> list = [];
-        for (int i = 10; i >= 0; i--) {
-          AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
-          model.amountFlowType = AmountFlowType.INFLOW;
-          model.creationtime = date;
-          model.amountStatus = AmountStatus.AUDITING;
-          list.add(model);
-        }
-        return list;
-      }));
+    if (!lock) {
+      lock = true;
+      //重置参数
+      reset();
+      _bills.clear();
+      Map data = {
+        'createdDateFrom':
+        DateTime(date.year, date.month).millisecondsSinceEpoch,
+        'createdDateTo': DateFormatUtil
+            .nextMonth(date)
+            .millisecondsSinceEpoch
+      };
+      Response<Map<String, dynamic>> response;
+      try {
+        response =
+        await http$.post(UserApis.bills, data: data, queryParameters: {
+          'page': currentPage,
+          'size': pageSize,
+        });
+      } on DioError catch (e) {
+        print(e);
+      }
+      if (response != null && response.statusCode == 200) {
+        BillsResponse billsResponse = BillsResponse.fromJson(response.data);
+        totalPages = billsResponse.totalPages;
+        totalElements = billsResponse.totalElements;
+        _bills.addAll(billsResponse.content);
+      }
+      _controller.sink.add(_bills);
+      lock = false;
     }
-    _controller.sink.add(_bills);
   }
 
   loadingMoreByDate({DateTime date}) async {
     //模拟数据到底
     if (_bills.length < 15) {
-      _bills.add(await Future.delayed(const Duration(seconds: 1), () {
-        AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
-        model.amountFlowType = AmountFlowType.OUTFLOW;
-        model.creationtime = date;
-        return model;
-      }));
+      // _bills.add(await Future.delayed(const Duration(seconds: 1), () {
+      //   BillModel model = BillModel.fromJson(mockBill);
+      //   model.amountFlowType = AmountFlowType.OUTFLOW;
+      //   model.creationtime = date;
+      //   return model;
+      // }));
     } else {
       //通知显示已经到底部
       bottomController.sink.add(true);
@@ -84,19 +109,26 @@ class MyBillBLoC extends BLoCBase {
     _controller.sink.add(null);
   }
 
+  void reset() {
+    _bills = [];
+    currentPage = 0;
+    totalPages = 0;
+    totalElements = 0;
+  }
+
   //下拉刷新
   Future refreshData({DateTime date}) async {
     _bills.clear();
-    _bills = (await Future.delayed(const Duration(seconds: 1), () {
-      List<AmountFlowModel> list = [];
-      for (int i = 10; i >= 0; i--) {
-        AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
-        model.amountFlowType = AmountFlowType.OUTFLOW;
-        model.creationtime = date;
-        list.add(model);
-      }
-      return list;
-    }));
+    // _bills = (await Future.delayed(const Duration(seconds: 1), () {
+    //   List<BillModel> list = [];
+    //   for (int i = 10; i >= 0; i--) {
+    //     BillModel model = BillModel.fromJson(mockBill);
+    //     model.amountFlowType = AmountFlowType.OUTFLOW;
+    //     model.creationtime = date;
+    //     list.add(model);
+    //   }
+    //   return list;
+    // }));
 
     _controller.sink.add(_bills);
   }
@@ -107,12 +139,4 @@ class MyBillBLoC extends BLoCBase {
 
     super.dispose();
   }
-
-  ///TODO：mock数据待删除
-  Map<String, dynamic> mockBill = {
-    'amount': 12392.00,
-    'account': '89080***********28',
-    'amountStatus': 'AUDITING',
-    'flowSource': 'CASH_OUT'
-  };
 }

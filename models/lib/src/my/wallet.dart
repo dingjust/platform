@@ -61,6 +61,7 @@ class AmountFlowModel extends ItemModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
   static int _dateTimetoMilliseconds(DateTime date) =>
       date.millisecondsSinceEpoch;
 }
@@ -170,6 +171,7 @@ class BankCardModel extends ItemModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
   static int _dateTimetoMilliseconds(DateTime date) =>
       date.millisecondsSinceEpoch;
 }
@@ -240,6 +242,7 @@ class BillModel extends ItemModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
+
   static int _dateTimetoMilliseconds(DateTime date) =>
       date.millisecondsSinceEpoch;
 }

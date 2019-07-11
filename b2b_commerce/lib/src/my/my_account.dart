@@ -381,11 +381,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
   void onAddCard() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
-//    Navigator.of(context)
-//        .push(MaterialPageRoute(builder: (context) => WebSocketRoute()));
   }
 
   Future<CompanyWalletModel> _getData() async {
+    print('===================>获取钱包');
     Response response = await http$.get(UserApis.getCompanyWallet);
     return CompanyWalletModel.fromJson(response.data);
   }
