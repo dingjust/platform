@@ -3,10 +3,10 @@ import 'package:models/models.dart';
 
 import 'bank_card.dart';
 
-part 'amount_flow.g.dart';
+part 'bill.g.dart';
 
 @JsonSerializable()
-class AmountFlowModel extends ItemModel {
+class BillModel extends ItemModel {
   ///交易单号
   String code;
 
@@ -25,6 +25,9 @@ class AmountFlowModel extends ItemModel {
   ///资金流水类型
   AmountFlowType amountFlowType;
 
+  ///资金状态
+  AmountStatus amountStatus;
+
   ///描述
   String description;
 
@@ -34,8 +37,8 @@ class AmountFlowModel extends ItemModel {
   ///平台备注
   String platformRemark;
 
-  ///剩余总额
-  double totalResidualAmount;
+  ///订单编号
+  String orderCode;
 
   ///日期
   ///  //注册时间
@@ -44,23 +47,24 @@ class AmountFlowModel extends ItemModel {
         toJson: _dateTimetoMilliseconds)
   DateTime creationtime;
 
-  AmountFlowModel({this.code,
+  BillModel({this.code,
     this.company,
     this.account,
     this.amount,
     this.flowSource,
     this.amountFlowType,
+    this.amountStatus,
     this.description,
     this.remark,
     this.platformRemark,
     this.creationtime,
-    this.totalResidualAmount});
+    this.orderCode});
 
-  factory AmountFlowModel.fromJson(Map<String, dynamic> json) =>
-      _$AmountFlowModelFromJson(json);
+  factory BillModel.fromJson(Map<String, dynamic> json) =>
+      _$BillModelFromJson(json);
 
-  static Map<String, dynamic> toJson(AmountFlowModel model) =>
-      _$AmountFlowModelToJson(model);
+  static Map<String, dynamic> toJson(BillModel model) =>
+      _$BillModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
