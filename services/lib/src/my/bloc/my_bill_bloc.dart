@@ -87,20 +87,41 @@ class MyBillBLoC extends BLoCBase {
   }
 
   loadingMoreByDate({DateTime date}) async {
-    //模拟数据到底
-    if (_bills.length < 15) {
-      // _bills.add(await Future.delayed(const Duration(seconds: 1), () {
-      //   BillModel model = BillModel.fromJson(mockBill);
-      //   model.amountFlowType = AmountFlowType.OUTFLOW;
-      //   model.creationtime = date;
-      //   return model;
-      // }));
-    } else {
-      //通知显示已经到底部
-      bottomController.sink.add(true);
+    if (!lock) {
+      lock = true;
+      //数据到底
+      if (currentPage + 1 == totalPages) {
+        //通知显示已经到底部
+        bottomController.sink.add(true);
+      } else {
+        Map data = {
+          'createdDateFrom':
+          DateTime(date.year, date.month).millisecondsSinceEpoch,
+          'createdDateTo': DateFormatUtil
+              .nextMonth(date)
+              .millisecondsSinceEpoch
+        };
+        Response<Map<String, dynamic>> response;
+        try {
+          response = await http$.post(UserApis.bills,
+              data: data,
+              queryParameters: {'page': currentPage + 1, 'size': pageSize});
+        } on DioError catch (e) {
+          print(e);
+        }
+
+        if (response != null && response.statusCode == 200) {
+          BillsResponse billsResponse = BillsResponse.fromJson(response.data);
+          totalPages = billsResponse.totalPages;
+          totalElements = billsResponse.totalElements;
+          currentPage = billsResponse.number;
+          _bills.addAll(billsResponse.content);
+        }
+      }
+      loadingController.sink.add(false);
+      _controller.sink.add(_bills);
+      lock = false;
     }
-    loadingController.sink.add(false);
-    _controller.sink.add(_bills);
   }
 
   clear() async {
