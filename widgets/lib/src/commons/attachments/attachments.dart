@@ -356,7 +356,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
     );
 
     imagePicker = new ImagePickerHandler(this, _controller);
-    imagePicker.build(0xFFFFFFFF,0xFF000000,widget.isCut,widget.ratioX,widget.ratioY);
+    imagePicker.build(0xFFFFFFFF,0xFF6495ED,widget.isCut,widget.ratioX,widget.ratioY);
   }
 
   @override
