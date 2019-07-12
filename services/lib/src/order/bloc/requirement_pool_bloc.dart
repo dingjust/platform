@@ -170,6 +170,10 @@ class RequirementPoolBLoC extends BLoCBase {
 
   dispose() {
     _controller.close();
+    _loadingController.close();
+    _bottomController.close();
+    _toTopBtnController.close();
+    _returnToTopController.close();
   }
 
   /// 生成查询条件信息

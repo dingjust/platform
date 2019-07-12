@@ -87,11 +87,11 @@ class BillListView extends StatelessWidget {
               expenditure: 20134.00,
               lineHeight: 8,
             ),
-            StreamBuilder<List<AmountFlowModel>>(
+            StreamBuilder<List<BillModel>>(
               stream: bloc.stream,
               initialData: null,
               builder: (BuildContext context,
-                  AsyncSnapshot<List<AmountFlowModel>> snapshot) {
+                  AsyncSnapshot<List<BillModel>> snapshot) {
                 if (snapshot.data == null) {
                   //默认条件查询
                   bloc.filterByDate(date: selectedDate);
@@ -144,4 +144,3 @@ class BillListView extends StatelessWidget {
     );
   }
 }
-

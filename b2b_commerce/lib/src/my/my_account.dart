@@ -19,75 +19,80 @@ class _MyAccountPageState extends State<MyAccountPage> {
   ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<CompanyWalletModel>(
-        builder:
-            (BuildContext context, AsyncSnapshot<CompanyWalletModel> snapshot) {
-          if (snapshot.data != null) {
-            return Container(
-              color: Color.fromRGBO(245, 245, 245, 1),
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: <Widget>[
-                  SliverAppBar(
-                    expandedHeight: 200,
-                    pinned: true,
-                    elevation: 0.5,
-                    backgroundColor: const Color.fromRGBO(255, 219, 0, 1),
-                    centerTitle: true,
-                    title: Text(
-                      '我的账户',
-                      style: TextStyle(
-                        color: Color.fromRGBO(36, 38, 41, 1),
-                        fontSize: 22,
+    return FutureBuilder<CompanyWalletModel>(
+      builder:
+          (BuildContext context, AsyncSnapshot<CompanyWalletModel> snapshot) {
+        return Scaffold(
+          body: Builder(
+            builder: (BuildContext context) {
+              if (snapshot.data != null) {
+                return Container(
+                  color: Color.fromRGBO(245, 245, 245, 1),
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    slivers: <Widget>[
+                      SliverAppBar(
+                        expandedHeight: 200,
+                        pinned: true,
+                        elevation: 0.5,
+                        backgroundColor: const Color.fromRGBO(255, 219, 0, 1),
+                        centerTitle: true,
+                        title: Text(
+                          '我的账户',
+                          style: TextStyle(
+                            color: Color.fromRGBO(36, 38, 41, 1),
+                            fontSize: 22,
+                          ),
+                        ),
+                        actions: <Widget>[_buildAction(context)],
+                        brightness: Brightness.dark,
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: Stack(
+                            fit: StackFit.expand,
+                            children: <Widget>[
+                              _buildHeader(context, snapshot.data)
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    actions: <Widget>[_buildAction(context)],
-                    brightness: Brightness.dark,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Stack(
-                        fit: StackFit.expand,
-                        children: <Widget>[
-                          _buildHeader(context, snapshot.data)
-                        ],
-                      ),
-                    ),
-                  ),
-                  SliverList(
-                      delegate: SliverChildListDelegate([
+                      SliverList(
+                          delegate: SliverChildListDelegate([
                         _buildBill(context),
                         _buildBlankCard(context),
                         Container(
                           height: 100,
                         )
                       ])),
-                ],
-              ),
-            );
-          } else {
-            return _buildLoadingPage();
-          }
-        },
-        initialData: null,
-        future: _getData(),
-      ),
-      bottomSheet: Container(
-        height: 50,
-        width: double.infinity,
-        child: FlatButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => WithdrawCash()),
-            );
-          },
-          color: const Color.fromRGBO(255, 219, 0, 1),
-          child: Text(
-            '提现',
-            style: TextStyle(fontSize: 20),
+                    ],
+                  ),
+                );
+              } else {
+                return _buildLoadingPage();
+              }
+            },
           ),
-        ),
-      ),
+          bottomSheet: Container(
+            height: 50,
+            width: double.infinity,
+            child: FlatButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WithdrawCash(snapshot.data)),
+                );
+              },
+              color: const Color.fromRGBO(255, 219, 0, 1),
+              child: Text(
+                '提现',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+        );
+      },
+      initialData: null,
+      future: _getData(),
     );
   }
 
@@ -376,14 +381,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
   void onAddCard() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
-//    Navigator.of(context)
-//        .push(MaterialPageRoute(builder: (context) => WebSocketRoute()));
   }
 
   Future<CompanyWalletModel> _getData() async {
-//    return Future.delayed(const Duration(seconds: 1), () {
-//      return '1';
-//    });
+    print('===================>获取钱包');
     Response response = await http$.get(UserApis.getCompanyWallet);
     return CompanyWalletModel.fromJson(response.data);
   }

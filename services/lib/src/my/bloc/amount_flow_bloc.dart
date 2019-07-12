@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:services/src/user/response/amount_flow_response.dart';
 
 class AmountFlowBLoC extends BLoCBase {
   // 工厂模式
@@ -10,8 +11,11 @@ class AmountFlowBLoC extends BLoCBase {
   static AmountFlowBLoC get instance => _getInstance();
   static AmountFlowBLoC _instance;
 
+  AmountFlowResponse amountFlowResponse;
+
   AmountFlowBLoC._internal() {
     // 初始化
+    amountFlowResponse = AmountFlowResponse(0, 10, 0, 0, []);
   }
 
   static AmountFlowBLoC _getInstance() {
@@ -48,37 +52,23 @@ class AmountFlowBLoC extends BLoCBase {
   Stream<DateTime> get conditionStream => conditionController.stream;
 
   getData({DateTime date}) async {
-    amountFlows.clear();
+//    amountFlows.clear();
     //若没有数据则查询
-    if (amountFlows.isEmpty) {
+    if (amountFlowResponse.content.isEmpty) {
       // TODO: 分页拿数据，response.data;
-      amountFlows = (await Future.delayed(const Duration(seconds: 1), () {
-        List<AmountFlowModel> list = [];
-        for (int i = 10; i >= 0; i--) {
-          AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
-          model.amountFlowType = AmountFlowType.INFLOW;
-          model.creationtime = date;
-          model.amountStatus = AmountStatus.AUDITING;
-          model.creationtime = DateTime.now();
-          list.add(model);
-        }
-        return list;
-      }));
+      amountFlowResponse = await AmountFlowRepository().list();
+      amountFlows.addAll(amountFlowResponse.content);
     }
     _controller.sink.add(amountFlows);
   }
 
   loadingMore({DateTime date}) async {
     //模拟数据到底
-    if (amountFlows.length < 15) {
-      amountFlows.add(await Future.delayed(const Duration(seconds: 1), () {
-        AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
-        model.amountFlowType = AmountFlowType.INFLOW;
-        model.creationtime = date;
-        model.amountStatus = AmountStatus.AUDITING;
-        model.creationtime = DateTime.now();
-        return model;
-      }));
+    if (amountFlowResponse.totalPages > amountFlowResponse.number + 1) {
+      // TODO: 分页拿数据，response.data;
+      amountFlowResponse = await AmountFlowRepository()
+          .list(params: {'page': amountFlowResponse.number + 1});
+      amountFlows.addAll(amountFlowResponse.content);
     } else {
       //通知显示已经到底部
       bottomController.sink.add(true);
@@ -96,19 +86,12 @@ class AmountFlowBLoC extends BLoCBase {
   //下拉刷新
   Future refreshData({DateTime date}) async {
     amountFlows.clear();
-    amountFlows = (await Future.delayed(const Duration(seconds: 1), () {
-      List<AmountFlowModel> list = [];
-      for (int i = 10; i >= 0; i--) {
-        AmountFlowModel model = AmountFlowModel.fromJson(mockBill);
-        model.amountFlowType = AmountFlowType.INFLOW;
-        model.creationtime = date;
-        model.amountStatus = AmountStatus.AUDITING;
-        model.creationtime = DateTime.now();
-        list.add(model);
-      }
-      return list;
-    }));
-
+    //若没有数据则查询
+//    if (amountFlowResponse.content.isEmpty) {
+    // TODO: 分页拿数据，response.data;
+    amountFlowResponse = await AmountFlowRepository().list();
+    amountFlows.addAll(amountFlowResponse.content);
+//    }
     _controller.sink.add(amountFlows);
   }
 
@@ -118,12 +101,4 @@ class AmountFlowBLoC extends BLoCBase {
 
     super.dispose();
   }
-
-  ///TODO：mock数据待删除
-  Map<String, dynamic> mockBill = {
-    'amount': 12392.00,
-    'account': '89080***********28',
-    'amountStatus': 'AUDITING',
-    'flowSource': 'CASH_OUT'
-  };
 }

@@ -3,8 +3,8 @@ library models;
 import 'package:json_annotation/json_annotation.dart';
 
 export 'src/media/media.dart';
-export 'src/my/amount_flow.dart';
 export 'src/my/guideline.dart';
+export 'src/my/wallet.dart';
 export 'src/order/invoice.dart';
 export 'src/order/order.dart';
 export 'src/product/product.dart';
@@ -40,26 +40,31 @@ class EnumModel {
 }
 
 ///根据code获取name
-String enumMap(dynamic enumModels,String code){
+String enumMap(dynamic enumModels, String code) {
   String text = '';
-  EnumModel model = enumModels.firstWhere((enumModel) => enumModel.code == code,orElse: () => null);
-  if(model != null){
+  EnumModel model = enumModels.firstWhere((enumModel) => enumModel.code == code,
+      orElse: () => null);
+  if (model != null) {
     text = model.name;
   }
   return text;
 }
 
-List<EnumModel> enumCodesToModels(List<String> codes,dynamic enumModels){
-  return codes.map((code){
-    return enumModels.firstWhere((enumModel) => enumModel.code == code,orElse: () => null);;
+List<EnumModel> enumCodesToModels(List<String> codes, dynamic enumModels) {
+  return codes.map((code) {
+    return enumModels.firstWhere((enumModel) => enumModel.code == code,
+        orElse: () => null);
+    ;
   }).toList();
 }
-List<String> enumCodesToNames(List<String> codes,dynamic enumModels){
-  List<String> names = codes.map((code){
-    EnumModel model = enumModels.firstWhere((enumModel) => enumModel.code == code,orElse: () => null);
-    if(model != null){
+
+List<String> enumCodesToNames(List<String> codes, dynamic enumModels) {
+  List<String> names = codes.map((code) {
+    EnumModel model = enumModels
+        .firstWhere((enumModel) => enumModel.code == code, orElse: () => null);
+    if (model != null) {
       return model.name;
-    }else{
+    } else {
       return null;
     }
   }).toList();
@@ -72,13 +77,14 @@ List<String> enumCodesToNames(List<String> codes,dynamic enumModels){
 }
 
 //格式选中的枚举（多选）
-String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,int count) {
+String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,
+    int count) {
   String text = '';
 
   if (codes != null) {
     text = '';
     for (int i = 0; i < codes.length; i++) {
-      if (i > count-1) {
+      if (i > count - 1) {
         text += '...';
         break;
       }
@@ -95,11 +101,9 @@ String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,int 
 }
 
 //格式选中的枚举（单选）
-String formatEnumSelectText(
-    List<EnumModel> enumModels, List<String> enumCode) {
+String formatEnumSelectText(List<EnumModel> enumModels, List<String> enumCode) {
   String text = '';
-  if (enumCode.isNotEmpty)
-    text = enumMap(enumModels, enumCode[0]);
+  if (enumCode.isNotEmpty) text = enumMap(enumModels, enumCode[0]);
   return text;
 }
 
@@ -238,96 +242,96 @@ const FillerEnum = <EnumModel>[
 
 /// 厚薄
 const ThicknessEnum = <EnumModel>[
-  EnumModel('K001','薄款'),
-  EnumModel('K002','适中'),
-  EnumModel('K003','加厚'),
-  EnumModel('K004','加绒'),
-  EnumModel('K005','抓绒'),
-  EnumModel('K006','毛内胆'),
-  EnumModel('K007','棉棉内胆'),
+  EnumModel('K001', '薄款'),
+  EnumModel('K002', '适中'),
+  EnumModel('K003', '加厚'),
+  EnumModel('K004', '加绒'),
+  EnumModel('K005', '抓绒'),
+  EnumModel('K006', '毛内胆'),
+  EnumModel('K007', '棉棉内胆'),
 ];
 
 /// 季节
 const SeasonEnum = <EnumModel>[
-  EnumModel('L001','春季'),
-  EnumModel('L002','夏季'),
-  EnumModel('L003','秋季'),
-  EnumModel('L004','冬季'),
-  EnumModel('L005','春夏'),
-  EnumModel('L006','秋冬'),
-  EnumModel('L007','四季'),
+  EnumModel('L001', '春季'),
+  EnumModel('L002', '夏季'),
+  EnumModel('L003', '秋季'),
+  EnumModel('L004', '冬季'),
+  EnumModel('L005', '春夏'),
+  EnumModel('L006', '秋冬'),
+  EnumModel('L007', '四季'),
 ];
 
 //吊牌
 const TaggableEnum = <EnumModel>[
-  EnumModel('true','有'),
-  EnumModel('false','沒有'),
+  EnumModel('true', '有'),
+  EnumModel('false', '沒有'),
 ];
 
 /// 门襟
 const PlacketEnum = <EnumModel>[
-  EnumModel('M001','拉链'),
-  EnumModel('M002','单排扣'),
-  EnumModel('M003','双排扣'),
-  EnumModel('M004','暗扣'),
-  EnumModel('M005','牛角扣'),
+  EnumModel('M001', '拉链'),
+  EnumModel('M002', '单排扣'),
+  EnumModel('M003', '双排扣'),
+  EnumModel('M004', '暗扣'),
+  EnumModel('M005', '牛角扣'),
 ];
 
 ///省份
 const ProvinceEnum = <EnumModel>[
-  EnumModel('P01','北京市'),
-  EnumModel('P02','天津市'),
-  EnumModel('P03','上海市'),
-  EnumModel('P04','重庆市'),
-  EnumModel('P05','河北省'),
-  EnumModel('P06','河南省'),
-  EnumModel('P07','云南省'),
-  EnumModel('P08','辽宁省'),
-  EnumModel('P09','黑龙江省'),
-  EnumModel('P10','湖南省'),
-  EnumModel('P11','安徽省'),
-  EnumModel('P12','山东省'),
-  EnumModel('P13','新疆维吾尔...'),
-  EnumModel('P14','江苏省'),
-  EnumModel('P15','浙江省'),
-  EnumModel('P16','江西省'),
-  EnumModel('P17','广西壮族...'),
-  EnumModel('P18','甘肃省'),
-  EnumModel('P19','山西省'),
-  EnumModel('P20','内蒙古'),
-  EnumModel('P21','陕西省'),
-  EnumModel('P22','吉林省'),
-  EnumModel('P23','福建省'),
-  EnumModel('P24','贵州省'),
-  EnumModel('P25','广东省'),
-  EnumModel('P26','青海省'),
-  EnumModel('P27','西藏'),
-  EnumModel('P28','四川省'),
-  EnumModel('P29','宁夏回族...'),
-  EnumModel('P30','海南省'),
-  EnumModel('P31','台湾省'),
-  EnumModel('P32','香港'),
-  EnumModel('P33','澳门'),
+  EnumModel('P01', '北京市'),
+  EnumModel('P02', '天津市'),
+  EnumModel('P03', '上海市'),
+  EnumModel('P04', '重庆市'),
+  EnumModel('P05', '河北省'),
+  EnumModel('P06', '河南省'),
+  EnumModel('P07', '云南省'),
+  EnumModel('P08', '辽宁省'),
+  EnumModel('P09', '黑龙江省'),
+  EnumModel('P10', '湖南省'),
+  EnumModel('P11', '安徽省'),
+  EnumModel('P12', '山东省'),
+  EnumModel('P13', '新疆维吾尔...'),
+  EnumModel('P14', '江苏省'),
+  EnumModel('P15', '浙江省'),
+  EnumModel('P16', '江西省'),
+  EnumModel('P17', '广西壮族...'),
+  EnumModel('P18', '甘肃省'),
+  EnumModel('P19', '山西省'),
+  EnumModel('P20', '内蒙古'),
+  EnumModel('P21', '陕西省'),
+  EnumModel('P22', '吉林省'),
+  EnumModel('P23', '福建省'),
+  EnumModel('P24', '贵州省'),
+  EnumModel('P25', '广东省'),
+  EnumModel('P26', '青海省'),
+  EnumModel('P27', '西藏'),
+  EnumModel('P28', '四川省'),
+  EnumModel('P29', '宁夏回族...'),
+  EnumModel('P30', '海南省'),
+  EnumModel('P31', '台湾省'),
+  EnumModel('P32', '香港'),
+  EnumModel('P33', '澳门'),
 ];
 
 //产值规模
 const ScaleRangesEnum = <EnumModel>[
-  EnumModel('SR001','0-100万'),
-  EnumModel('SR002','100万-500万'),
-  EnumModel('SR003','500万-1000万'),
-  EnumModel('SR004','1000万-5000万'),
-  EnumModel('SR005','5000万以上'),
+  EnumModel('SR001', '0-100万'),
+  EnumModel('SR002', '100万-500万'),
+  EnumModel('SR003', '500万-1000万'),
+  EnumModel('SR004', '1000万-5000万'),
+  EnumModel('SR005', '5000万以上'),
 ];
 
 //年龄段
 const AgeRangesEnum = <EnumModel>[
-  EnumModel('AR001','0-6'),
-  EnumModel('AR002','7-12'),
-  EnumModel('AR003','13-17'),
-  EnumModel('AR004','18-23'),
-  EnumModel('AR005','24-30'),
-  EnumModel('AR006','31-40'),
-  EnumModel('AR007','41以上'),
+  EnumModel('AR001', '0-6'),
+  EnumModel('AR002', '7-12'),
+  EnumModel('AR003', '13-17'),
+  EnumModel('AR004', '18-23'),
+  EnumModel('AR005', '24-30'),
+  EnumModel('AR006', '31-40'),
+  EnumModel('AR007', '41以上'),
 ];
 
 //价格段
@@ -355,11 +359,10 @@ const PopulationScaleEnum = <EnumModel>[
 ];
 
 //合作方式枚举
-const CooperationModesEnum  = <EnumModel>[
+const CooperationModesEnum = <EnumModel>[
   EnumModel('LIGHT_PROCESSING', '清加工'),
   EnumModel('LABOR_AND_MATERIAL', '包工包料'),
 ];
-
 
 /// 分页数据
 @JsonSerializable()
@@ -399,18 +402,21 @@ class PurchaseOrderOptions {
   static const FULL = "FULL";
   static const BASIC_LESS = "BASIC_LESS";
 }
+
 class RequirementOrderOptions {
   static const BASIC = "BASIC";
   static const DEFAULT = "DEFAULT";
   static const FULL = "FULL";
   static const BASIC_LESS = "BASIC_LESS";
 }
+
 class ProofingOrderOptions {
   static const BASIC = "BASIC";
   static const DEFAULT = "DEFAULT";
   static const FULL = "FULL";
   static const BASIC_LESS = "BASIC_LESS";
 }
+
 class ApparelProductOptions {
   static const BASIC = "BASIC";
   static const DEFAULT = "DEFAULT";
@@ -420,6 +426,7 @@ class ApparelProductOptions {
   static const DETAIL_FACTORIES = "DETAIL_FACTORIES";
   static const DETAIL = "DETAIL";
 }
+
 class FactoryOptions {
   static const BASIC = "BASIC";
   static const DEFAULT = "DEFAULT";
@@ -429,6 +436,7 @@ class FactoryOptions {
   static const CONTACT = "CONTACT";
   static const CERTIFICATE = "CERTIFICATE";
 }
+
 class BrandOptions {
   static const BASIC = "BASIC";
   static const DEFAULT = "DEFAULT";

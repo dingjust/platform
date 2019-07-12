@@ -20,6 +20,7 @@ export 'src/my/bloc/amount_flow_bloc.dart';
 export 'src/my/bloc/my_bill_bloc.dart';
 export 'src/my/bloc/my_help_bloc.dart';
 export 'src/my/repository/user_guideline_repository.dart';
+export 'src/my/repository/bill_repository.dart';
 export 'src/net/http_manager.dart';
 export 'src/order/bloc/proofing_orders_bloc.dart';
 export 'src/order/bloc/purchase_order_bloc.dart';
@@ -79,6 +80,8 @@ export 'src/websocket/websocket_service.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/message/notify_bloc.dart';
 export 'src/message/jpush_service.dart';
+export 'src/user/amount_flow_repository.dart';
+export 'src/my/bloc/my_contract_bloc.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

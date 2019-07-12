@@ -5,11 +5,24 @@ class DateFormatUtil {
     return DateFormat('yyyy-MM-dd HH:mm').format(date);
   }
 
+  static String formatYMDHMS(DateTime date) {
+    return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+  }
+
   static String formatYMD(DateTime date) {
     String text;
     if (date != null) {
       text = DateFormat('yyyy-MM-dd').format(date);
       return text;
+    }
+  }
+
+  static DateTime nextMonth(DateTime date) {
+    //12月的情况
+    if (date.month == 12) {
+      return DateTime(date.year + 1, 1, 1);
+    } else {
+      return DateTime(date.year, date.month + 1, 1);
     }
   }
 }

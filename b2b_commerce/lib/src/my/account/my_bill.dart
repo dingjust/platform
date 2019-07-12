@@ -65,8 +65,7 @@ class BillListView extends StatelessWidget {
     // 监听筛选条件更改
     bloc.conditionStream.listen((date) {
       selectedDate = date;
-      //清空数据
-      bloc.clear();
+      bloc.filterByDate(date: selectedDate);
     });
 
     _scrollController.addListener(() {
@@ -94,11 +93,11 @@ class BillListView extends StatelessWidget {
             //   expenditure: 20134.00,
             //   lineHeight: 8,
             // ),
-            StreamBuilder<List<AmountFlowModel>>(
+            StreamBuilder<List<BillModel>>(
               stream: bloc.stream,
               initialData: null,
               builder: (BuildContext context,
-                  AsyncSnapshot<List<AmountFlowModel>> snapshot) {
+                  AsyncSnapshot<List<BillModel>> snapshot) {
                 if (snapshot.data == null) {
                   //默认条件查询
                   bloc.filterByDate(date: selectedDate);
@@ -153,10 +152,10 @@ class BillListView extends StatelessWidget {
 }
 
 class BillCard extends StatelessWidget {
-  BillCard({Key key, this.height = 150, this.model}) : super(key: key);
+  BillCard({Key key, this.height = 120, this.model}) : super(key: key);
 
   final double height;
-  final AmountFlowModel model;
+  final BillModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -189,13 +188,13 @@ class BillCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        '${AmountFlowTypeLocalizedMap[model.amountFlowType]}',
+                        '${FlowSourceLocalizedMap[model.flowSource]}',
                         style: const TextStyle(
                             fontSize: 18,
                             color: const Color.fromRGBO(100, 100, 100, 1)),
                       ),
                       Text(
-                        '成功',
+                        '${AmountStatusLocalizedMap[model.amountStatus]}',
                         style: const TextStyle(
                             fontSize: 18,
                             color: const Color.fromRGBO(100, 100, 100, 1)),
@@ -205,33 +204,34 @@ class BillCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        '- ￥ ${model.amount}',
-                        style: const TextStyle(
+                          '${getSymbol(model.amountFlowType)} ￥ ${model
+                              .amount}',
+                          style: TextStyle(
                             fontSize: 20,
-                            color: const Color.fromRGBO(255, 68, 68, 1)),
-                      )
+                            color: getSymbolColor(model.amountFlowType),
+                          ))
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text(
-                        model.order != null
-                            ? '生产订单${model.order.code}'
-                            : '提现到银行卡${model.account}',
+                        model.orderCode != null
+                            ? '生产订单${model.orderCode}'
+                            : '提现到银行卡${model.account.cardNumber}',
                         style:
                             const TextStyle(fontSize: 18, color: Colors.black),
                       )
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        '余额￥222222.333',
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
-                      )
-                    ],
-                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Text(
+                  //       'wan',
+                  //       style:
+                  //           const TextStyle(fontSize: 18, color: Colors.black),
+                  //     )
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -245,7 +245,17 @@ class BillCard extends StatelessWidget {
   void _onTap(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => BillDetailPage(
-              code: model.code,
+          id: model.id,
             )));
+  }
+
+  String getSymbol(AmountFlowType type) {
+    return type == AmountFlowType.INFLOW ? '+' : '-';
+  }
+
+  Color getSymbolColor(AmountFlowType type) {
+    return type == AmountFlowType.INFLOW
+        ? Color.fromRGBO(255, 68, 68, 1)
+        : Colors.black45;
   }
 }

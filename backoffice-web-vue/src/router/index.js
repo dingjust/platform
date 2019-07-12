@@ -211,6 +211,16 @@ const router = new Router({
               name: '使用教程',
               component: () => import(/* webpackChunkName: 'operationCourse' */ '@/views/miscs/operation-course/OperationCoursePage')
             }
+            ,{
+              path: '/miscs/wallet',
+              name: '钱包',
+              component: () => import(/* webpackChunkName: 'wallet' */ '@/views/miscs/wallet/walletPage')
+            }
+            ,{
+              path: '/miscs/cashOutManager',
+              name: '提现管理',
+              component: () => import(/* webpackChunkName: 'cashOutManager' */ '@/views/miscs/cashOutManager/cashOutManagerPage')
+            }
           ]
         }
       ]

@@ -8,7 +8,8 @@ abstract class UserApis {
   //发送短信验证码
   static get sendCaptcha => (phone) => '/{baseSiteId}/sms/captcha/$phone';
   //发送登录用的验证码
-  static get sendCaptchaForLogin => (phone) => '/{baseSiteId}/sms/captcha/asm/B2B/$phone';
+  static get sendCaptchaForLogin =>
+          (phone) => '/{baseSiteId}/sms/captcha/asm/B2B/$phone';
 
   //验证验证码是否正确
   static get validateCaptcha => '/{baseSiteId}/sms/validate';
@@ -42,7 +43,8 @@ abstract class UserApis {
   static get requirementReports => '/{baseSiteId}/company/reports/requirement';
 
   ///未登录时全部需求报表
-  static get offlineRequirementReports => '/{baseSiteId}/orders/requirement/countByStatuses';
+  static get offlineRequirementReports =>
+      '/{baseSiteId}/orders/requirement/countByStatuses';
 
   ///手机号是否注册
   static get phoneExists => (code) {
@@ -54,7 +56,8 @@ abstract class UserApis {
   //创建发票抬头
   static get invoiceTitleCreate => '/{baseSiteId}/company/invoice/title';
   //更新/删除发票抬头(详情)
-  static get invoiceTitleFromId => (id) => '/{baseSiteId}/company/invoice/title/$id';
+  static get invoiceTitleFromId =>
+          (id) => '/{baseSiteId}/company/invoice/title/$id';
 
   //获取所有角色
   static get roles => '/{baseSiteId}/roles';
@@ -76,4 +79,22 @@ abstract class UserApis {
   ///获取钱包
   static get getCompanyWallet => '/{baseSiteId}/companyWallet';
 
+  ///获取流水列表
+  static get getAmountFlows => '/{baseSiteId}/amountFlow';
+
+  ///获取流水明细
+  static get getAmountFlow => (id) => '/{baseSiteId}/amountFlow/$id';
+
+  ///申请提现
+  static get cashOut => (amount) => '/{baseSiteId}/amountFlow/cashOut/$amount';
+
+  ///提现取消
+  static get cashOutCanceled =>
+          (id) => '/{baseSiteId}/amountFlow/cashOutCanceled/$id';
+
+  ///获取账单列表
+  static get bills => '/{baseSiteId}/bill';
+
+  ///获取账单详情
+  static get billDetail => (code) => '/{baseSiteId}/bill/$code';
 }

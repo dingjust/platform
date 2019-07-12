@@ -27,7 +27,8 @@ class ProductionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async{
-
+        //修改消息阅读进度
+        order.updated = false;
         showDialog(
             context: context,
             barrierDismissible: false,

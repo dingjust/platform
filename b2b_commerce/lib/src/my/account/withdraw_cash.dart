@@ -1,11 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 /// 提现页面
-class WithdrawCash extends StatelessWidget {
+// class WithdrawCash extends StatelessWidget {
+//   CompanyWalletModel wallet;
+//   ScrollController _scrollController = ScrollController();
+//   TextEditingController _numController = TextEditingController();
+
+//   WithdrawCash(
+//     this.wallet, {
+//     Key key,
+//   }) : super(key: key);
+
+// }
+
+class WithdrawCash extends StatefulWidget {
+  CompanyWalletModel wallet;
+
+  WithdrawCash(this.wallet, {Key key}) : super(key: key);
+
+  @override
+  _WithdrawCashState createState() => _WithdrawCashState();
+}
+
+class _WithdrawCashState extends State<WithdrawCash> {
   ScrollController _scrollController = ScrollController();
   TextEditingController _numController = TextEditingController();
+  TextField _numField;
+
+  @override
+  void initState() {
+    _numField = TextField(
+      autofocus: false,
+      keyboardType: TextInputType.number,
+      controller: _numController,
+      onChanged: (value) {},
+      decoration: InputDecoration(
+        hintText: '输入金额',
+        border: InputBorder.none,
+      ),
+      textAlign: TextAlign.right,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +104,7 @@ class WithdrawCash extends StatelessWidget {
         height: 50,
         width: double.infinity,
         child: FlatButton(
-          onPressed: () {
-            //TODO
-          },
+          onPressed: onSubmit,
           color: const Color.fromRGBO(255, 219, 0, 1),
           child: Text(
             '确认提交',
@@ -118,7 +155,7 @@ class WithdrawCash extends StatelessWidget {
                       )),
                   Container(
                       child: Text(
-                        "987652.00",
+                        "${widget.wallet.canCashOut.roundToDouble()}",
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
@@ -135,18 +172,6 @@ class WithdrawCash extends StatelessWidget {
   }
 
   Widget _buildRow1() {
-    TextField _numField = TextField(
-      autofocus: false,
-      keyboardType: TextInputType.number,
-      controller: _numController,
-      onChanged: (value) {},
-      decoration: InputDecoration(
-        hintText: '输入金额',
-        border: InputBorder.none,
-      ),
-      textAlign: TextAlign.right,
-    );
-
     return Container(
       color: Colors.white,
       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -187,6 +212,13 @@ class WithdrawCash extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void onSubmit() {
+    //校验
+    if (double.parse(_numController.text) > widget.wallet.canCashOut) {
+      print('提现金额不得大于可提现金额');
+    }
   }
 }
 

@@ -25,8 +25,8 @@ class MessageItemPage extends StatelessWidget {
           );
         } else {
           jpush$.onOpenMessage(model);
-          NotifyBloC.instance.getData(
-              NotifyBloC.instance.refreshData(model.groupCode.toString()));
+          // NotifyBloC.instance.getData();
+          NotifyBloC.instance.refreshData(model.groupCode.toString());
         }
       },
       child: Container(
