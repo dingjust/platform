@@ -337,3 +337,49 @@ class CompanyWalletModel extends ItemModel {
   static Map<String, dynamic> toJson(CompanyWalletModel model) =>
       _$CompanyWalletModelToJson(model);
 }
+
+
+//合同
+@JsonSerializable()
+class ContractModel extends ItemModel {
+  String title;
+  int contractNumber;
+  String belongTo;
+  DateTime createTime;
+  ContractStatus struts;
+
+  ContractModel({
+    this.title,
+    this.contractNumber,
+    this.belongTo,
+    this.createTime,
+    this.struts,
+  });
+
+
+  factory ContractModel.fromJson(Map<String, dynamic> json) =>
+      _$ContractModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractModel model) =>
+      _$ContractModelToJson(model);
+
+}
+
+enum ContractStatus {
+  /// 待签署
+  WAIT_FOR_SIGN,
+
+  /// 已签署
+  SIGNED,
+
+  // 已失效
+  FAILED,
+
+}
+
+// TODO: i18n处理
+const ContractStatusLocalizedMap = {
+  ContractStatus.WAIT_FOR_SIGN: "待签署",
+  ContractStatus.SIGNED: "已签署",
+  ContractStatus.FAILED: '已失效',
+};
