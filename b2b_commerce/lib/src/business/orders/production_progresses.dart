@@ -343,7 +343,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 Container(
                   padding: EdgeInsets.only(right: 10),
                   child: Text(
-                    '${progress.delayedDays != null && progress.delayedDays > 0
+                    '${progress.delayedDays != null && progress.delayedDays > 0 && sequence <= _index
                         ? '已延期${progress.delayedDays}天'
                         : ''}',
                     style: TextStyle(color: Colors.red, fontSize: 18),
@@ -749,7 +749,9 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   Future<void> _neverSatisfied(BuildContext context,
       ProductionProgressModel model, String type) async {
     TextEditingController inputController = TextEditingController();
-    inputController.text = model.quantity.toString();
+    inputController.text = model.quantity != null && model.quantity > 0
+        ? model.quantity.toString()
+        : '';
     return showDialog(
         context: context,
         barrierDismissible: false,

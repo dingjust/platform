@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
+import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_ADDRESSES = '/my/my_addresses';
   static const ROUTE_MY_CART = '/my/my_cart';
   static const ROUTE_MY_INVOICES = '/my/my_invoices';
+  static const ROUTE_MY_CONTRACT = '/my/my_contract';
   static const ROUTE_MY_COLLECTIONS = '/my/my_collections';
   static const ROUTE_MY_CLIENT_SERVICES = '/my/my_client_services';
   static const ROUTE_MY_SETTINGS = '/my/my_settings';
@@ -81,6 +83,7 @@ class AppRoutes with GlobalRoutes {
 //    ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
+    ROUTE_MY_CONTRACT: (context) => MyContractPage(),
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
     ROUTE_MY_SETTINGS: (context) => MySettingsPage(),
     ROUTE_MY_REGISTER: (context) => RegisterPage(),

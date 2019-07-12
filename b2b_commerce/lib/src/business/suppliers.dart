@@ -444,27 +444,29 @@ class _SuppliersItemState extends State<SuppliersItem> {
                   child: invited ? Text('已邀请报价') : Text('邀请报价'),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  onPressed: invited
-                      ? null
-                      : () {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (_) {
-                                return RequestDataLoading(
-                                  requestCallBack: RequirementOrderRepository()
-                                      .doRecommendation(widget.requirementCode,
-                                          widget.supplierModel.uid),
-                                  outsideDismiss: false,
-                                  loadingText: '邀请中。。。',
-                                  entrance: '0',
-                                );
-                              });
-                          setState(() {
-                            invited = true;
-                          });
-                        },
-                )
+            onPressed: invited
+                ? null
+                : () {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) {
+                    return RequestDataLoading(
+                      requestCallBack: RequirementOrderRepository()
+                          .doRecommendation(widget.requirementCode,
+                          widget.supplierModel.uid),
+                      outsideDismiss: false,
+                      loadingText: '邀请中。。。',
+                      entrance: '0',
+                    );
+                  }).then((_) {
+                    Navigator.pop(context);
+                setState(() {
+                  invited = true;
+                });
+              });
+            },
+          )
               : Icon(
                   Icons.chevron_right,
                   color: Colors.black26,
