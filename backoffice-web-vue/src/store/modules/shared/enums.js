@@ -1,5 +1,24 @@
 const state = {
 
+  //流水来源
+  flowSources: [
+    {code: 'CASH_OUT', name: '提现'},
+    {code: 'PROOFING', name: '生产中'},
+    {code: 'PURCHASE_DEPOSIT', name: '待出库'},
+    {code: 'PURCHASE_BALANCE', name: '已出库'},
+  ],
+  //资金流水类型
+  amountFlowTypes: [
+    {code: 'INFLOW', name: '流入'},
+    {code: 'OUTFLOW', name: '流出'},
+  ],
+  //资金状态
+  amountStatuses: [
+    {code: 'AUDITING', name: '未结算'},
+    {code: 'COMPLETED', name: '已完成'},
+    {code: 'CANCELED', name: '已取消'},
+    {code: 'REJECTED', name: '已拒绝'},
+  ],
   //工厂星级
   starLevels: [
     {code: 1, name: '一星'},

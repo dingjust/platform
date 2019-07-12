@@ -1026,38 +1026,36 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   }
 
   void onApprove() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text('是否确认?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('否', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('是', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                int statusCode =
-                    await QuoteOrderRepository().quoteApprove(pageItem.code);
-                Navigator.of(context).pop();
-                if (statusCode == 200) {
-                  //触发刷新
-                  refreshData();
-                } else {
-                  alertMessage('确认失败');
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '是否确认该工厂报价?',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            dialogHeight: 180,
+            confirmAction: () {
+              Navigator.of(context).pop();
+            },
+          );
+        });
   }
+  confirmFactory(QuoteModel model) async {
+    int statusCode =
+    await QuoteOrderRepository().quoteApprove(pageItem.code);
+    Navigator.of(context).pop();
+    if (statusCode == 200) {
+      //触发刷新
+      refreshData();
+    } else {
+      alertMessage('确认失败');
+    }
+  }
+
 
   void onQuoteAgain() {
     Navigator.of(context).push(MaterialPageRoute(

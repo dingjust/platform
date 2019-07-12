@@ -32,7 +32,7 @@ dependencies:
   path_provider: ^0.5.0+1
   open_file: ^2.0.3
   month_picker_dialog: ^0.0.8
-  cached_network_image: ^1.0.0
+  cached_network_image: ^0.7.0
   flutter_spinkit: ^3.1.0
   cool_ui: "^0.1.14"
   crypto: ^2.0.6

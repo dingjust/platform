@@ -30,6 +30,8 @@ import IndustrialClustersModule from './miscs/industrial-clusters';
 import LabelsModule from './miscs/labels';
 import CarouselsModule from './miscs/carousels';
 import OperationCoursesModule from './miscs/operationCourses';
+import WalletModule from './miscs/wallet';
+import CashOutManagerModule from './miscs/cashOutManager';
 
 export {
   // shared
@@ -62,4 +64,6 @@ export {
   SampleCheckoutHistModule,
   SuppliersModule,
   OperationCoursesModule,
+  WalletModule,
+  CashOutManagerModule
 }

@@ -204,7 +204,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 onPublish(widget.factoryUid);
               },
             ),
-          )),
+          )
+      ),
     );
   }
 
