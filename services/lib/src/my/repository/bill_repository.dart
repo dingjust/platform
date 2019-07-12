@@ -4,10 +4,10 @@ import 'package:services/services.dart';
 
 class BillRepository {
   /// 查询帮助信息详情
-  Future<BillModel> getDetail(String code) async {
+  Future<BillModel> getDetail(int id) async {
     Response response;
     try {
-      response = await http$.get(UserApis.billDetail(code));
+      response = await http$.get(UserApis.billDetail(id));
     } on DioError catch (e) {
       print(e);
     }

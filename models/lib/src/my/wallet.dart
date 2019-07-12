@@ -178,6 +178,8 @@ class BankCardModel extends ItemModel {
 
 @JsonSerializable()
 class BillModel extends ItemModel {
+  int id;
+
   ///交易单号
   String code;
 
@@ -219,20 +221,20 @@ class BillModel extends ItemModel {
   @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
   DateTime cashCompletionTime;
 
-  BillModel(
-      {this.code,
-      this.company,
-      this.account,
-      this.amount,
-      this.flowSource,
-      this.amountFlowType,
-      this.amountStatus,
-      this.description,
-      this.remark,
-      this.platformRemark,
-      this.creationtime,
-      this.cashCompletionTime,
-      this.orderCode});
+  BillModel({this.id,
+    this.code,
+    this.company,
+    this.account,
+    this.amount,
+    this.flowSource,
+    this.amountFlowType,
+    this.amountStatus,
+    this.description,
+    this.remark,
+    this.platformRemark,
+    this.creationtime,
+    this.cashCompletionTime,
+    this.orderCode});
 
   factory BillModel.fromJson(Map<String, dynamic> json) =>
       _$BillModelFromJson(json);

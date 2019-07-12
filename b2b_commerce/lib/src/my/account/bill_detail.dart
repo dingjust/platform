@@ -1,11 +1,12 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class BillDetailPage extends StatefulWidget {
-  final String code;
+  final int id;
 
-  const BillDetailPage({Key key, this.code}) : super(key: key);
+  const BillDetailPage({Key key, this.id}) : super(key: key);
 
   @override
   _BillDetailPageState createState() => _BillDetailPageState();
@@ -21,8 +22,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
         elevation: 0.5,
       ),
       body: FutureBuilder<BillModel>(
-        builder:
-            (BuildContext context, AsyncSnapshot<BillModel> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<BillModel> snapshot) {
           if (snapshot.data != null) {
             return Container(
               child: Column(
@@ -35,7 +35,8 @@ class _BillDetailPageState extends State<BillDetailPage> {
                       children: <Widget>[
                         Container(
                           child: Text(
-                            '提现',
+                            '${FlowSourceLocalizedMap[snapshot.data
+                                .flowSource]}',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,
@@ -83,7 +84,7 @@ class _BillDetailPageState extends State<BillDetailPage> {
                     padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
                     child: DetailRow(
                       label: '银行卡',
-                      value: '${snapshot.data.account}',
+                      value: '${snapshot.data.account?.cardNumber}',
                     ),
                   ),
                   Container(
@@ -130,8 +131,13 @@ class _BillDetailPageState extends State<BillDetailPage> {
     );
   }
 
-  Future<BillModel> _getData() {
-    
+  Future<BillModel> _getData() async {
+    BillModel result = await BillRepository().getDetail(widget.id);
+    if (result != null) {
+      return result;
+    } else {
+      return null;
+    }
   }
 }
 

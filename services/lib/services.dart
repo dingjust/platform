@@ -20,6 +20,7 @@ export 'src/my/bloc/amount_flow_bloc.dart';
 export 'src/my/bloc/my_bill_bloc.dart';
 export 'src/my/bloc/my_help_bloc.dart';
 export 'src/my/repository/user_guideline_repository.dart';
+export 'src/my/repository/bill_repository.dart';
 export 'src/net/http_manager.dart';
 export 'src/order/bloc/proofing_orders_bloc.dart';
 export 'src/order/bloc/purchase_order_bloc.dart';
