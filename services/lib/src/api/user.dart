@@ -97,4 +97,7 @@ abstract class UserApis {
 
   ///获取账单详情
   static get billDetail => (code) => '/{baseSiteId}/bill/$code';
+
+  ///查询/绑定银行卡
+  static get bankCard => '/{baseSiteId}/bankCard';
 }
