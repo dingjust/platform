@@ -2,24 +2,24 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
   //测试
-  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+//  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
+//  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
 
   // static const CONTEXT_PATH = 'https://192.168.1.128:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH =
   //     'https://192.168.1.128:9002/djwebservices/v2';
 
   // 生产
-  // static const CONTEXT_PATH = 'http://ht.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+   static const CONTEXT_PATH = 'http://ht.nbyjy.net';
+   static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   ///websocket 连接
-  static get WEBSOCKET_URL =>
-          (String token, String uid) {
-        return 'ws://47.106.112.137:8088/message?token=$token&userId=$uid';
-        //  return 'ws://192.168.1.128:8088/message?token=$token&userId=$uid';
-        // return 'ws://echo.websocket.org';
-      };
+//  static get WEBSOCKET_URL =>
+//          (String token, String uid) {
+//        return 'ws://47.106.112.137:8088/message?token=$token&userId=$uid';
+//        //  return 'ws://192.168.1.128:8088/message?token=$token&userId=$uid';
+//        // return 'ws://echo.websocket.org';
+//      };
 
   static const BASE_URL = '$CONTEXT_PATH';
   static const ACCESS_TOKEN_KEY = 'access_token';
