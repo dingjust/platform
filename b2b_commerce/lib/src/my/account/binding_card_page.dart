@@ -230,7 +230,8 @@ class _BindingCardPageState extends State<BindingCardPage> {
       BankCardModel form = BankCardModel();
       form
         ..accountName = _nameController.text
-        ..cardNumber = _cardController.text;
+        ..cardNumber = _cardController.text
+        ..bankOutlet = _bankBranchController.text;
 
       if (bank != null) {
         form

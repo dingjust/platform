@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -82,7 +81,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => WithdrawCash(snapshot.data)),
+                      builder: (context) =>
+                          WithdrawCash(snapshot.data, bankCardModel)),
                 );
               },
               color: const Color.fromRGBO(255, 219, 0, 1),
@@ -165,7 +165,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   Container(
                       child: Text(
                         '${(model.canCashOut + model.auditing +
-                            model.cashOuting).roundToDouble()}',
+                            model.cashOuting)}',
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
@@ -458,7 +459,7 @@ class AmountBlock extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            '￥${amount.roundToDouble()}',
+            '￥${amount}',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
