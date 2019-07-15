@@ -100,4 +100,7 @@ abstract class UserApis {
 
   ///查询/绑定银行卡
   static get bankCard => '/{baseSiteId}/bankCard';
+
+  ///解绑银行卡
+  static get unbindBankCard => (id) => '/{baseSiteId}/bankCard/$id';
 }

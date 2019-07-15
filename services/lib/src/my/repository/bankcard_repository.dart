@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/src/api/user.dart';
@@ -30,10 +32,29 @@ class BankCardRepository {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      BankCardModel model = BankCardModel.fromJson(response.data);
-      return model;
+      if (response.data.length > 0) {
+        BankCardModel model = BankCardModel.fromJson(response.data[0]);
+        return model;
+      } else {
+        return null;
+      }
     } else {
       return null;
+    }
+  }
+
+  /// 解绑银行卡
+  Future<bool> unbindBankCards(int id) async {
+    Response response;
+    try {
+      response = await http$.delete(UserApis.unbindBankCard(id));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
