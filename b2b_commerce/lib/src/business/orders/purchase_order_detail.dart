@@ -68,12 +68,14 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   bool isHide = true;
   int totalQuantity = 0;
   SalesApplication salesApplication;
+  var _futureBuilderFuture;
 
   PurchaseOrderModel order;
   _PurchaseDetailPageState({this.order});
 
   @override
   void initState() {
+    _futureBuilderFuture = _getData();
     super.initState();
   }
 
@@ -85,72 +87,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     PurchaseOrderStatus.COMPLETED: Colors.green,
     PurchaseOrderStatus.CANCELLED: Colors.grey,
   };
-
-//  Widget build(BuildContext context) {
-//    final bloc = BLoCProvider.of<UserBLoC>(context);
-//    return Scaffold(
-//        appBar: AppBar(
-//          brightness: Brightness.light,
-//          centerTitle: true,
-//          elevation: 0.5,
-//          title: Text('生产订单明细'),
-//          actions: <Widget>[
-//            order.salesApplication == null
-//                ? Container()
-//                : Container(
-//                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-//                    child: Center(
-//                      child: Text(
-//                          '${SalesApplicationLocalizedMap[order.salesApplication]}'),
-//                    ),
-//                  ),
-//          ],
-//        ),
-//        body: Container(
-//            child: ListView(
-//          children: <Widget>[
-////            Container(
-////              color: Colors.white,
-////              padding: EdgeInsets.only(left: 10),
-////              child: StatusStep(
-////                list: _statusList,
-////                currentStatus: PurchaseOrderStatusLocalizedMap[order.status],
-////                isScroll: false,
-////              ),
-////            ),
-//            Container(
-//              color: Colors.white,
-//              padding: EdgeInsets.fromLTRB(0, 5, 10, 0),
-//              child: Align(
-//                alignment: Alignment.centerRight,
-//                child: Text(
-//                  '${PurchaseOrderStatusLocalizedMap[order.status]}',
-//                  style: TextStyle(
-//                      color: _statusColors[order.status],
-//                      fontSize: 18,
-//                      fontWeight: FontWeight.w500),
-//                ),
-//              ),
-//            ),
-//            _buildEntries(context),
-//            _buildProductHide(context),
-//            _buildProductInfo(context),
-//            (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
-//                        order.depositPaid == false) ||
-//                    order.status == PurchaseOrderStatus.CANCELLED
-//                ? _buildTipsPayment(context)
-//                : _buildPurchaseProductionProgresse(context),
-//            _buildDeliveryAddress(context),
-//            bloc.isBrandUser
-//                ? _buildFactoryInfo(context)
-//                : _buildBrandInfo(context),
-//            _buildDocutment(context),
-//            _buildRemarks(context),
-//            _buildBottom(context),
-//            _buildCommitButton(context),
-//          ],
-//        )));
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,7 +155,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             );
           }
         }, initialData: null,
-        future: _getData(),
+        future: _futureBuilderFuture,
       ),
     );
   }
@@ -234,44 +170,44 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     return detailModel;
   }
 
-  initData(PurchaseOrderModel order){
+  initData(PurchaseOrderModel order) {
     setState(() {
-    mockData.clear();
-    //把颜色尺码封装成ApparelSizeVariantProductEntry
-    if (order.entries.isNotEmpty) {
-    for (int i = 0; i < order.entries.length; i++) {
-    if (order.entries[i].product.color != null &&
-    order.entries[i].product.size != null) {
-    ApparelSizeVariantProductEntry entry =
-    new ApparelSizeVariantProductEntry();
-    entry.quantity = order.entries[i].quantity;
-    totalQuantity += order.entries[i].quantity;
-    entry.model = order.entries[i].product;
-    mockData.add(entry);
-    }
-    }
-    }
-    //控制是否显示按钮
-    if (order.status == PurchaseOrderStatus.PENDING_PAYMENT ||
-    (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE &&
-    order.balancePaid == false)) {
-    isShowButton = true;
-    }
+      print(order.code);
+      mockData.clear();
+      //把颜色尺码封装成ApparelSizeVariantProductEntry
+      if (order.entries.isNotEmpty) {
+        for (int i = 0; i < order.entries.length; i++) {
+          if (order.entries[i].product.color != null &&
+              order.entries[i].product.size != null) {
+            ApparelSizeVariantProductEntry entry =
+            new ApparelSizeVariantProductEntry();
+            entry.quantity = order.entries[i].quantity;
+            totalQuantity += order.entries[i].quantity;
+            entry.model = order.entries[i].product;
+            mockData.add(entry);
+          }
+        }
+      }
+      //控制是否显示按钮
+      if (order.status == PurchaseOrderStatus.PENDING_PAYMENT ||
+          (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE &&
+              order.balancePaid == false)) {
+        isShowButton = true;
+      }
 
-    if (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
-    order.salesApplication == SalesApplication.ONLINE) {
-    isHide = false;
-    }
+      if (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
+          order.salesApplication == SalesApplication.ONLINE) {
+        isHide = false;
+      }
 
-    final bloc = BLoCProvider.of<UserBLoC>(context);
-    if (bloc.isBrandUser) {
-    userType = 'brand';
-    } else {
-    userType = 'factory';
-    }
+      final bloc = BLoCProvider.of<UserBLoC>(context);
+      if (bloc.isBrandUser) {
+        userType = 'brand';
+      } else {
+        userType = 'factory';
+      }
       salesApplication = order.salesApplication;
     });
-
   }
 
   //产品详情
