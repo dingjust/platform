@@ -57,36 +57,38 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
         ),
       ),
       body: FutureBuilder<QuoteModel>(
-          builder: (BuildContext context, AsyncSnapshot<QuoteModel> snapshot) {
-        if (snapshot.data != null) {
-          return ListView(
-            children: <Widget>[
-              _buildRefuseMessage(),
-              _buildCompanyInfo(),
-              _buildFactory(),
-              Card(
-                elevation: 0,
-                margin: EdgeInsets.only(top: 15),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: _buildProduct(),
+        builder: (BuildContext context, AsyncSnapshot<QuoteModel> snapshot) {
+          if (snapshot.data != null) {
+            return ListView(
+              children: <Widget>[
+                _buildRefuseMessage(),
+                _buildCompanyInfo(),
+                _buildFactory(),
+                Card(
+                  elevation: 0,
+                  margin: EdgeInsets.only(top: 15),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    child: _buildProduct(),
+                  ),
                 ),
-              ),
-              _buildQuoteCost(),
-              _buildDeliveryDate(),
-              _buildAttachment(),
-              _buildRemark(),
-              _buildOrderState(),
-              _buildSummary()
-            ],
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },        initialData: null,
-        future: _getData(),),
+                _buildQuoteCost(),
+                _buildDeliveryDate(),
+                _buildAttachment(),
+                _buildRemark(),
+                _buildOrderState(),
+                _buildSummary()
+              ],
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+        initialData: null,
+        future: _getData(),
+      ),
     );
   }
 
@@ -740,14 +742,18 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
   }
 
   void refreshData() async {
-    //查询明细
-    QuoteModel detailModel =
-        await QuoteOrderRepository().getQuoteDetails(pageItem.code);
-    if (detailModel != null) {
-      setState(() {
-        pageItem = detailModel;
-      });
-    }
+    // //查询明细
+    // QuoteModel detailModel =
+    //     await QuoteOrderRepository().getQuoteDetails(pageItem.code);
+    // if (detailModel != null) {
+    //   setState(() {
+    //     pageItem = detailModel;
+    //   });
+    // }
+    QuoteOrdersBLoC().refreshData('ALL');
+    setState(() {
+      _getData();
+    });
   }
 
   Widget _buildSummary() {
@@ -905,9 +911,10 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                       QuoteModel quote = await QuoteOrderRepository()
                           .getQuoteDetails(pageItem.code);
                       if (quote.activePurchaseOrder?.code != null) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  PurchaseOrderDetailPage(code: quote.activePurchaseOrder.code)));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                PurchaseOrderDetailPage(
+                                    code: quote.activePurchaseOrder.code)));
                       } else {
                         showDialog<void>(
                           context: context,
@@ -1009,6 +1016,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
       if (value != null && value != '') {
         rejectQuote(pageItem, value);
       }
+      setState(() {});
     });
   }
 
@@ -1038,15 +1046,17 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
             confirmButtonText: '是',
             cancelButtonText: '否',
             dialogHeight: 180,
-            confirmAction: () {
+            confirmAction: () async {
+              confirmFactory();
+              setState(() {});
               Navigator.of(context).pop();
             },
           );
         });
   }
-  confirmFactory(QuoteModel model) async {
-    int statusCode =
-    await QuoteOrderRepository().quoteApprove(pageItem.code);
+
+  confirmFactory() async {
+    int statusCode = await QuoteOrderRepository().quoteApprove(pageItem.code);
     Navigator.of(context).pop();
     if (statusCode == 200) {
       //触发刷新
@@ -1055,7 +1065,6 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
       alertMessage('确认失败');
     }
   }
-
 
   void onQuoteAgain() {
     Navigator.of(context).push(MaterialPageRoute(
