@@ -33,25 +33,25 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword',
+        keyword: 'keyword'
       })
     },
     methods: {
       ...mapActions({
-        search: 'search',
+        search: 'search'
       }),
-      onSearch(page, size) {
+      onSearch (page, size) {
         const keyword = this.keyword;
-        const url = this.apis().findAmountFlows();
+        const url = this.apis().findBills();
         this.search({url, keyword, page, size});
       },
-      onAdvancedSearch(page, size) {
+      onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
-        const url = this.apis().findAmountFlowsAll();
+        const url = this.apis().findBills();
         this.searchAdvanced({url, query, page, size});
       },
-      async onDetails(item) {
+      async onDetails (item) {
         const url = this.apis().getAmountFlowDetail(item.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -59,44 +59,44 @@
           return;
         }
 
-        // this.fn.openSlider('明细：' + item.name, WalletDetailsPage, result);
+      // this.fn.openSlider('明细：' + item.name, WalletDetailsPage, result);
       },
-      async onCanceled(item) {
+      async onCanceled (item) {
         const url = this.apis().cashOutCanceled(item.id);
         const result = await this.$http.delete(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('删除问题'+item.name+"成功");
+        this.$message.success('删除问题' + item.name + '成功');
         this.onSearch();
       },
 
-      onNew() {
+      onNew () {
         this.cashOutView = true;
       },
-      handleClose(done) {
+      handleClose (done) {
         this.cashOutView = false;
       },
-      async cashOutApply(){
+      async cashOutApply () {
         const url = this.apis().cashOutApply(this.amount);
         const result = await this.$http.put(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('申请提现'+this.amount+"成功");
+        this.$message.success('申请提现' + this.amount + '成功');
         console.log(this.amount);
         this.cashOutView = false;
       }
     },
-    data() {
+    data () {
       return {
-        amount:0,
-        cashOutView:false
+        amount: 0,
+        cashOutView: false
       };
     },
-    created() {
+    created () {
       this.onSearch();
     }
   };

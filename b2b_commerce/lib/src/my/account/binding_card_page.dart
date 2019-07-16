@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/my/my_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -118,14 +120,12 @@ class _BindingCardPageState extends State<BindingCardPage> {
                   color: Color.fromRGBO(255, 214, 12, 1),
                   onPressed: (_seconds == 0)
                       ? () async {
-                          // if (legal) {
-                          // UserRepositoryImpl()
-                          //     .sendCaptcha(
-                          //         UserBLoC.instance.currentUser.contactPhone)
-                          //     .then((a) {
-                          _startTimer();
-                          // });
-                          // }
+                    UserRepositoryImpl()
+                        .sendCaptcha(
+                        UserBLoC.instance.currentUser.mobileNumber)
+                        .then((a) {
+                      _startTimer();
+                    });
                         }
                       : null,
                   child: Text(
@@ -168,7 +168,9 @@ class _BindingCardPageState extends State<BindingCardPage> {
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5))),
-          onPressed: () {},
+          onPressed: () {
+            onSubmit();
+          },
         ),
       ),
     );
@@ -184,6 +186,55 @@ class _BindingCardPageState extends State<BindingCardPage> {
           bank = null;
         }
       });
+    }
+  }
+
+  void onSubmit() async {
+    bool result = await UserRepositoryImpl().validateCaptcha(
+        UserBLoC.instance.currentUser.mobileNumber, _captchaController.text);
+    if (result) {
+      BankCardModel form = BankCardModel();
+      form
+        ..accountName = _nameController.text
+        ..iconUrl = Apis.cnBankLOGO(bank.bank)
+        ..bankCode = bank.bank
+        ..bankName = bank.bankName
+        ..cardNumber = _cardController.text;
+
+      BankCardRepository().bindingBankCard(form).then((result) {
+        if (result) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.RESULT_DIALOG,
+                  failTips: result ? '绑定成功' : '绑定失败',
+                  callbackResult: false,
+                  confirmAction: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => MyAccountPage()),
+                        ModalRoute.withName('/'));
+                  },
+                );
+              });
+        }
+      });
+    } else {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '验证不正确',
+              callbackResult: false,
+              confirmAction: () {
+                Navigator.of(context).pop();
+              },
+            );
+          });
     }
   }
 

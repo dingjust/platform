@@ -59,6 +59,23 @@ const actions = {
       commit('page', response);
     }
   },
+  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
+    console.log(query);
+    commit('url', url);
+    commit('queryFormData', query);
+    commit('currentPageNumber', page);
+    if (size) {
+      commit('currentPageSize', size);
+    }
+
+    const response = await http.post(url, query, {
+      page: state.currentPageNumber,
+      size: state.currentPageSize
+    });
+    if (!response['errors']) {
+      commit('page', response);
+    }
+  },
   refresh({dispatch, commit, state},{url}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;

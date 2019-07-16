@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <cash-out-manager-toolbar @onNew="onNew" @onSearch="onSearch"/>
-      <cash-out-manager-list :page="page" @onDetails="onDetails" @onRejected="onRejected" @onCompleted="onCompleted" @onSearch="onSearch"/>
+      <cash-out-manager-toolbar @onNew="onNew" @onSearch="onAdvancedSearch"/>
+      <cash-out-manager-list :page="page" @onDetails="onDetails" @onRejected="onRejected" @onCompleted="onCompleted" @onSearch="onAdvancedSearch"/>
     </el-card>
   </div>
 </template>
@@ -25,65 +25,74 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword',
+        keyword: 'keyword'
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
+        searchAdvanced:'searchAdvanced',
       }),
-      onSearch(page, size) {
+      onSearch (page, size) {
+        // const keyword = this.keyword;
         const keyword = this.keyword;
-        const url = this.apis().findAmountFlowsAll();
+        const url = this.apis().findBills();
         this.search({url, keyword, page, size});
+        // this.$http.post(url, {}, {
+        //   'page': 0,
+        //   'size': 10
+        // });
       },
-      onAdvancedSearch(page, size) {
-        this.setIsAdvancedSearch(true);
-        const query = this.queryFormData;
-        const url = this.apis().findAmountFlowsAll();
+      onAdvancedSearch (page, size) {
+        this.isAdvancedSearch = true;
+        var query = {
+          flowSource: ['CASH_OUT'],
+          amountFlowType:['OUTFLOW'],
+          amountStatus: ['IN_REVIEW','REVIEWED','REJECTED']
+        };
+        const url = this.apis().findBills();
         this.searchAdvanced({url, query, page, size});
       },
-      async onDetails(item) {
-        const url = this.apis().rejectedCashOut(item.id);
+      async onDetails (item) {
+        const url = this.apis().getBill(item.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
-          return;
         }
 
-        // this.fn.openSlider('明细：' + item.name, cashOutManagerDetailsPage, result);
+        this.fn.openSlider('明细：' + item.name, cashOutManagerDetailsPage, result);
       },
-      async onRejected(item) {
+      async onRejected (item) {
         const url = this.apis().rejectedCashOut(item.id);
         const result = await this.$http.delete(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('拒绝提现'+item.amount+"成功");
-        this.onSearch();
+        this.$message.success('拒绝提现' + item.amount + '成功');
+        this.onAdvancedSearch();
       },
 
-      async onCompleted(item) {
+      async onCompleted (item) {
         const url = this.apis().completedCashOut(item.id);
         const result = await this.$http.put(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('确认提现'+item.amount+"成功");
-        this.onSearch();
+        this.$message.success('确认提现' + item.amount + '成功');
+        this.onAdvancedSearch();
       },
 
-      onNew(formData) {
+      onNew (formData) {
         // this.fn.openSlider('新建', cashOutManagerDetailsPage, formData);
-      },
+      }
     },
-    data() {
+    data () {
       return {};
     },
-    created() {
-      this.onSearch();
+    created () {
+      this.onAdvancedSearch();
     }
   };
 </script>

@@ -360,14 +360,17 @@ let TENANT_APIS = {
   synchronizeProgress(code,targetCode){
     return '/b2b/orders/purchase/' + code + '/synchronizeProgress/'+targetCode;
   },
+  getBill(id) {
+    return '/b2b/bill/'+id;
+  },
   rejectedCashOut(id) {
-    return '/b2b/amountFlow/cashOutRejected/'+id;
+    return '/b2b/companyWallet/cashOutRejected/'+id;
   },
   completedCashOut(id){
-    return '/b2b/amountFlow/cashOutCompleted/'+id;
+    return '/b2b/companyWallet/cashOutCompleted/'+id;
   },
-  findAmountFlowsAll() {
-    return '/b2b/amountFlow/all'
+  findBills() {
+    return '/b2b/bill/all'
   },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
