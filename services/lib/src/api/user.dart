@@ -86,15 +86,21 @@ abstract class UserApis {
   static get getAmountFlow => (id) => '/{baseSiteId}/amountFlow/$id';
 
   ///申请提现
-  static get cashOut => (amount) => '/{baseSiteId}/amountFlow/cashOut/$amount';
+  static get cashOut => '/{baseSiteId}/companyWallet/cashOut';
 
   ///提现取消
   static get cashOutCanceled =>
-          (id) => '/{baseSiteId}/amountFlow/cashOutCanceled/$id';
+          (id) => '/{baseSiteId}/companyWallet/cashOutCanceled/$id';
 
   ///获取账单列表
   static get bills => '/{baseSiteId}/bill';
 
   ///获取账单详情
   static get billDetail => (code) => '/{baseSiteId}/bill/$code';
+
+  ///查询/绑定银行卡
+  static get bankCard => '/{baseSiteId}/bankCard';
+
+  ///解绑银行卡
+  static get unbindBankCard => (id) => '/{baseSiteId}/bankCard/$id';
 }

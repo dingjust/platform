@@ -1,25 +1,16 @@
+import 'package:b2b_commerce/src/my/my_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-
-/// 提现页面
-// class WithdrawCash extends StatelessWidget {
-//   CompanyWalletModel wallet;
-//   ScrollController _scrollController = ScrollController();
-//   TextEditingController _numController = TextEditingController();
-
-//   WithdrawCash(
-//     this.wallet, {
-//     Key key,
-//   }) : super(key: key);
-
-// }
 
 class WithdrawCash extends StatefulWidget {
   CompanyWalletModel wallet;
 
-  WithdrawCash(this.wallet, {Key key}) : super(key: key);
+  BankCardModel bankCardModel;
+
+  WithdrawCash(this.wallet, this.bankCardModel, {Key key}) : super(key: key);
 
   @override
   _WithdrawCashState createState() => _WithdrawCashState();
@@ -30,13 +21,17 @@ class _WithdrawCashState extends State<WithdrawCash> {
   TextEditingController _numController = TextEditingController();
   TextField _numField;
 
+  bool validate = false;
+
   @override
   void initState() {
     _numField = TextField(
       autofocus: false,
       keyboardType: TextInputType.number,
       controller: _numController,
-      onChanged: (value) {},
+      onChanged: (value) {
+        formValidate();
+      },
       decoration: InputDecoration(
         hintText: '输入金额',
         border: InputBorder.none,
@@ -104,7 +99,7 @@ class _WithdrawCashState extends State<WithdrawCash> {
         height: 50,
         width: double.infinity,
         child: FlatButton(
-          onPressed: onSubmit,
+          onPressed: validate ? onSubmit : null,
           color: const Color.fromRGBO(255, 219, 0, 1),
           child: Text(
             '确认提交',
@@ -155,7 +150,8 @@ class _WithdrawCashState extends State<WithdrawCash> {
                       )),
                   Container(
                       child: Text(
-                        "${widget.wallet.canCashOut.roundToDouble()}",
+                        "${widget.wallet.canCashOut}",
+                        overflow: TextOverflow.visible,
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
@@ -199,26 +195,62 @@ class _WithdrawCashState extends State<WithdrawCash> {
         children: <Widget>[
           InfoRow(
             label: '户名',
-            value: '刘少立',
+            value: '${widget.bankCardModel.accountName}',
           ),
           InfoRow(
             label: '银行卡号',
-            value: '6229293939309309',
+            value: '${widget.bankCardModel.cardNumber}',
           ),
           InfoRow(
             label: '银行',
-            value: '工商银行',
+            value: '${widget.bankCardModel.bankName}',
+          ),
+          InfoRow(
+            label: '开户网点',
+            value: '${widget.bankCardModel.bankOutlet}',
           )
         ],
       ),
     );
   }
 
+  void formValidate() {
+    double cashNum = double.parse(_numController.text);
+    setState(() {
+      validate = _numController.text != '' &&
+          cashNum <= widget.wallet.canCashOut &&
+          cashNum > 0;
+    });
+  }
+
   void onSubmit() {
-    //校验
-    if (double.parse(_numController.text) > widget.wallet.canCashOut) {
-      print('提现金额不得大于可提现金额');
-    }
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '确定提现？',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            dialogHeight: 180,
+            confirmAction: () async {
+              AmountFlowRepository()
+                  .cashOut(double.parse(_numController.text))
+                  .then((result) {
+                if (result) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => MyAccountPage()),
+                      ModalRoute.withName('/'));
+                } else {
+                  Navigator.of(context).pop();
+                }
+              });
+            },
+          );
+        });
   }
 }
 

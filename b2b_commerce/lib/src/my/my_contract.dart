@@ -138,7 +138,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
   openSelectButton(BuildContext context) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (_) {
           return FloatSelectPage(
             buttonText1: '关联订单合同',

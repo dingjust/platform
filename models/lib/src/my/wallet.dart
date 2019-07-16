@@ -148,20 +148,26 @@ class BankCardModel extends ItemModel {
 
   ArticleApprovalStatus approvalStatus;
 
+  ///银行卡Icon
+  String iconUrl;
+
+  ///开户网点
+  String bankOutlet;
+
   ///日期
   ///  //注册时间
   @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
   DateTime creationtime;
 
-  BankCardModel({
-    this.company,
+  BankCardModel({this.company,
     this.bankCode,
     this.bankName,
     this.accountName,
     this.cardNumber,
     this.approvalStatus,
     this.creationtime,
-  });
+    this.bankOutlet,
+    this.iconUrl});
 
   factory BankCardModel.fromJson(Map<String, dynamic> json) =>
       _$BankCardModelFromJson(json);

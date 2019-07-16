@@ -185,5 +185,5 @@ const MediaFormatMap = {
   MediaFormat.DEFAULT_PRODUCT_DETAIL: "DefaultProductDetail",
   MediaFormat.DEFAULT_PRODUCT_THUMBNAIL: "DefaultProductThumbnail",
   MediaFormat.DEFAULT_PRODUCT_PREVIEW: "DefaultProductPreview",
-  MediaFormat.NORMAL: 'Normal'
+  MediaFormat.NORMAL: 'DefaultProductNormal'
 };
