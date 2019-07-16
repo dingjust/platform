@@ -2,16 +2,16 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
   //测试
-//  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-//  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
 
   // static const CONTEXT_PATH = 'https://192.168.1.128:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH =
   //     'https://192.168.1.128:9002/djwebservices/v2';
 
   // 生产
-   static const CONTEXT_PATH = 'http://ht.nbyjy.net';
-   static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+//   static const CONTEXT_PATH = 'http://ht.nbyjy.net';
+//   static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   ///websocket 连接
 //  static get WEBSOCKET_URL =>
@@ -49,7 +49,8 @@ class GlobalConfigs {
   static const Requirement_HISTORY_KEYWORD_KEY =
       'requirement_history_keyword_key';
 
-  /// grant types
+  /// grant type
+  ///
   static const GRANT_TYPE_PASSWORD = 'password';
   static const GRANT_TYPE_CLIENT_CREDENTIALS = 'client_credentials';
   static const GRANT_TYPE_AUTHORIZATION_CODE = 'authorization_code';

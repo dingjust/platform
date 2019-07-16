@@ -151,6 +151,9 @@ class BankCardModel extends ItemModel {
   ///银行卡Icon
   String iconUrl;
 
+  ///开户网点
+  String bankOutlet;
+
   ///日期
   ///  //注册时间
   @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
@@ -163,6 +166,7 @@ class BankCardModel extends ItemModel {
     this.cardNumber,
     this.approvalStatus,
     this.creationtime,
+    this.bankOutlet,
     this.iconUrl});
 
   factory BankCardModel.fromJson(Map<String, dynamic> json) =>

@@ -15,10 +15,13 @@ class BindingCardPage extends StatefulWidget {
 class _BindingCardPageState extends State<BindingCardPage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _captchaController = TextEditingController();
+  TextEditingController _bankNameController = TextEditingController();
+  TextEditingController _bankBranchController = TextEditingController();
   TextEditingController _cardController = TextEditingController();
 
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _cardFocusNode = FocusNode();
+  FocusNode _bankBranchFocusNode = FocusNode();
 
   BankResponse bank;
 
@@ -61,6 +64,7 @@ class _BindingCardPageState extends State<BindingCardPage> {
               child: TextFieldComponent(
                 focusNode: _cardFocusNode,
                 controller: _cardController,
+                inputType: TextInputType.number,
                 leadingText: Text('银行卡号',
                     style: TextStyle(
                       fontSize: 16,
@@ -75,7 +79,8 @@ class _BindingCardPageState extends State<BindingCardPage> {
                 },
               ),
             ),
-            Container(
+            bank != null
+                ? Container(
               color: Colors.white,
               height: 100,
               padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
@@ -85,7 +90,8 @@ class _BindingCardPageState extends State<BindingCardPage> {
                   RichText(
                     text: TextSpan(
                         text: '银行：',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        style:
+                        TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(text: bank?.bankName ?? '')
                         ]),
@@ -94,6 +100,34 @@ class _BindingCardPageState extends State<BindingCardPage> {
                       ? Image.network(Apis.cnBankLOGO(bank.bank))
                       : Container(),
                 ],
+              ),
+            )
+                : Container(
+              color: Colors.white,
+              height: 100,
+              child: InputRow(
+                field: TextField(
+                  autofocus: false,
+                  controller: _bankNameController,
+                  decoration: InputDecoration(
+                      hintText: '请输入银行名称', border: InputBorder.none),
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.white,
+              child: TextFieldComponent(
+                focusNode: _bankBranchFocusNode,
+                controller: _bankBranchController,
+                leadingText: Text('开户网点',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                hintText: '输入',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
               ),
             ),
             Container(
@@ -196,10 +230,17 @@ class _BindingCardPageState extends State<BindingCardPage> {
       BankCardModel form = BankCardModel();
       form
         ..accountName = _nameController.text
-        ..iconUrl = Apis.cnBankLOGO(bank.bank)
-        ..bankCode = bank.bank
-        ..bankName = bank.bankName
-        ..cardNumber = _cardController.text;
+        ..cardNumber = _cardController.text
+        ..bankOutlet = _bankBranchController.text;
+
+      if (bank != null) {
+        form
+          ..iconUrl = Apis.cnBankLOGO(bank.bank)
+          ..bankCode = bank.bank
+          ..bankName = bank.bankName;
+      } else {
+        form..bankName = _bankNameController.text;
+      }
 
       BankCardRepository().bindingBankCard(form).then((result) {
         if (result) {

@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -17,6 +16,9 @@ class MyAccountPage extends StatefulWidget {
 
 class _MyAccountPageState extends State<MyAccountPage> {
   ScrollController _scrollController = ScrollController();
+
+  BankCardModel bankCardModel;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<CompanyWalletModel>(
@@ -75,13 +77,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
             height: 50,
             width: double.infinity,
             child: FlatButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WithdrawCash(snapshot.data)),
-                );
-              },
+              onPressed: bankCardModel != null
+                  ? () {
+                onWithdraw(snapshot.data);
+              }
+                  : null,
               color: const Color.fromRGBO(255, 219, 0, 1),
               child: Text(
                 '提现',
@@ -162,7 +162,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   Container(
                       child: Text(
                         '${(model.canCashOut + model.auditing +
-                            model.cashOuting).roundToDouble()}',
+                            model.cashOuting)}',
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w500,
@@ -265,48 +266,59 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
   Widget _buildBlankCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
       margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
+          bankCardModel != null
+              ? Container(
             margin: const EdgeInsets.only(bottom: 15),
             child: Row(
               children: <Widget>[
-                Container(
-                  child: Image.network(
-                    'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1551089271298&di=e86274438d3c8ad92d09a82c412f7eb4&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01f2b45541ad67000001a64b30c1bf.jpg',
-                    width: 80,
-                    height: 80,
-                  ),
-                ),
                 Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            width: 150,
-                            child: Text(
-                              '工商银行',
+                  flex: 1,
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              // width: 150,
+                              child: Text('${bankCardModel.bankName}',
+                                  style: TextStyle(fontSize: 18)),
                             ),
+                            bankCardModel.iconUrl != null
+                                ? Container(
+                              child: Image.network(
+                                '${bankCardModel.iconUrl}',
+                              ),
+                            )
+                                : Container(),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 20),
+                          child: Text(
+                            '${bankCardModel.cardNumber}',
+                            style: TextStyle(fontSize: 18),
                           ),
-                          Container(
-                            child: Text('6212***************4243'),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-                Icon(B2BIcons.del_blank_card)
+                IconButton(
+                  icon: Icon(B2BIcons.del_blank_card),
+                  onPressed: onUnbindBankCard,
+                )
               ],
             ),
-          ),
-          FlatButton(
+          )
+              : FlatButton(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5),
                 side: BorderSide(color: Colors.black26, width: 0.5)),
@@ -383,10 +395,46 @@ class _MyAccountPageState extends State<MyAccountPage> {
         .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
   }
 
+  void onWithdraw(CompanyWalletModel model) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WithdrawCash(model, bankCardModel)),
+    );
+  }
+
   Future<CompanyWalletModel> _getData() async {
-    print('===================>获取钱包');
-    Response response = await http$.get(UserApis.getCompanyWallet);
-    return CompanyWalletModel.fromJson(response.data);
+    BankCardRepository().getBankCards().then((value) {
+      bankCardModel = value;
+    });
+
+    CompanyWalletModel wallet = await WalletRepository().getWallet();
+    return wallet;
+  }
+
+  void onUnbindBankCard() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            contentText2: '确定删除银行卡？',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            dialogHeight: 180,
+            confirmAction: () async {
+              BankCardRepository()
+                  .unbindBankCards(bankCardModel.id)
+                  .then((result) {
+                setState(() {});
+                Navigator.of(context).pop();
+              });
+            },
+          );
+        });
   }
 
   @override
@@ -416,7 +464,7 @@ class AmountBlock extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            '￥${amount.roundToDouble()}',
+            '￥${amount}',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(

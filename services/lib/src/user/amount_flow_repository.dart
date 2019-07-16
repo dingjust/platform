@@ -6,21 +6,23 @@ import 'package:services/services.dart';
 import 'package:services/src/user/response/amount_flow_response.dart';
 
 //流水服务接口
-class AmountFlowRepository{
+class AmountFlowRepository {
   const AmountFlowRepository();
 
   @override
-  Future<AmountFlowResponse> list({dynamic data,Map<String,dynamic> params}) async {
-    if(data == null){
+  Future<AmountFlowResponse> list(
+      {dynamic data, Map<String, dynamic> params}) async {
+    if (data == null) {
       data = {};
     }
-    if(params == null){
+    if (params == null) {
       params = {};
     }
     Response response;
     AmountFlowResponse result;
     try {
-      response = await http$.post(UserApis.getAmountFlows,data: data,queryParameters: params);
+      response = await http$.post(UserApis.getAmountFlows,
+          data: data, queryParameters: params);
     } catch (e) {
       print(e);
     }
@@ -44,7 +46,8 @@ class AmountFlowRepository{
     Response response;
     bool result = false;
     try {
-      response = await http$.put(UserApis.cashOut(amount));
+      response = await http$
+          .put(UserApis.cashOut, queryParameters: {'amount': amount});
     } catch (e) {
       print(e);
     }
@@ -69,5 +72,4 @@ class AmountFlowRepository{
     }
     return result;
   }
-
 }
