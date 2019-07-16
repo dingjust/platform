@@ -3,7 +3,7 @@ import http from '@/common/js/http';
 const state = {
   keyword: '',
   isAdvancedSearch: false,
-  groups:['B2B'],
+  groups: ['B2B'],
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -15,11 +15,11 @@ const state = {
   },
   formData: {
     id: null,
-    index:'',
+    index: '',
     name: '',
     description: '',
-    group:"B2B",
-    infos:[]
+    group: 'B2B',
+    infos: []
   },
   queryFormData: {
     company: '',
@@ -27,8 +27,8 @@ const state = {
     amountFlowTypes: [],
     amountStatus: [],
     createdDateFrom: null,
-    createdDateTo: null,
-  },
+    createdDateTo: null
+  }
 };
 
 const mutations = {
@@ -37,10 +37,11 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
+  queryFormData: (state,query) => state.queryFormData = query
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url,keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
@@ -49,7 +50,7 @@ const actions = {
 
     const response = await http.post(url, {
       keyword: state.keyword,
-      groups:['B2B']},{
+      groups: ['B2B']}, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -59,9 +60,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
-    console.log(query);
-    commit('url', url);
+  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
@@ -76,12 +75,12 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state},{url}) {
+  refresh ({dispatch, commit, state}, {url}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {url,keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url, keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 
@@ -90,7 +89,7 @@ const getters = {
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  isAdvancedSearch: state => state.isAdvancedSearch,
+  isAdvancedSearch: state => state.isAdvancedSearch
 };
 
 export default {

@@ -13,7 +13,7 @@
   const {mapGetters, mapActions} = createNamespacedHelpers('CashOutManagerModule');
 
   import cashOutManagerToolbar from './toolbar/cashOutManagerToolbar';
-  import cashOutManagerList from './list/cashOutManagerList';
+  import cashOutManagerList from '../cashOutManager/list/cashOutManagerList';
   import cashOutManagerDetailsPage from './details/cashOutManagerDetailsPage';
 
   export default {
@@ -31,24 +31,15 @@
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced:'searchAdvanced',
+        searchAdvanced: 'searchAdvanced'
       }),
-      onSearch (page, size) {
-        // const keyword = this.keyword;
-        const keyword = this.keyword;
-        const url = this.apis().findBills();
-        this.search({url, keyword, page, size});
-        // this.$http.post(url, {}, {
-        //   'page': 0,
-        //   'size': 10
-        // });
-      },
       onAdvancedSearch (page, size) {
         this.isAdvancedSearch = true;
         var query = {
+          keyword: this.keyword,
           flowSource: ['CASH_OUT'],
-          amountFlowType:['OUTFLOW'],
-          amountStatus: ['IN_REVIEW','REVIEWED','REJECTED']
+          amountFlowType: ['OUTFLOW'],
+          amountStatus: ['IN_REVIEW', 'REVIEWED', 'REJECTED']
         };
         const url = this.apis().findBills();
         this.searchAdvanced({url, query, page, size});
@@ -59,8 +50,7 @@
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
         }
-
-        this.fn.openSlider('明细：' + item.name, cashOutManagerDetailsPage, result);
+        this.fn.openSlider('明细：' + item.code, cashOutManagerDetailsPage, result);
       },
       async onRejected (item) {
         const url = this.apis().rejectedCashOut(item.id);
