@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/my/my_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -13,10 +15,13 @@ class BindingCardPage extends StatefulWidget {
 class _BindingCardPageState extends State<BindingCardPage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _captchaController = TextEditingController();
+  TextEditingController _bankNameController = TextEditingController();
+  TextEditingController _bankBranchController = TextEditingController();
   TextEditingController _cardController = TextEditingController();
 
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _cardFocusNode = FocusNode();
+  FocusNode _bankBranchFocusNode = FocusNode();
 
   BankResponse bank;
 
@@ -59,6 +64,7 @@ class _BindingCardPageState extends State<BindingCardPage> {
               child: TextFieldComponent(
                 focusNode: _cardFocusNode,
                 controller: _cardController,
+                inputType: TextInputType.number,
                 leadingText: Text('银行卡号',
                     style: TextStyle(
                       fontSize: 16,
@@ -73,7 +79,8 @@ class _BindingCardPageState extends State<BindingCardPage> {
                 },
               ),
             ),
-            Container(
+            bank != null
+                ? Container(
               color: Colors.white,
               height: 100,
               padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
@@ -83,7 +90,8 @@ class _BindingCardPageState extends State<BindingCardPage> {
                   RichText(
                     text: TextSpan(
                         text: '银行：',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        style:
+                        TextStyle(fontSize: 16, color: Colors.black),
                         children: <TextSpan>[
                           TextSpan(text: bank?.bankName ?? '')
                         ]),
@@ -92,6 +100,34 @@ class _BindingCardPageState extends State<BindingCardPage> {
                       ? Image.network(Apis.cnBankLOGO(bank.bank))
                       : Container(),
                 ],
+              ),
+            )
+                : Container(
+              color: Colors.white,
+              height: 100,
+              child: InputRow(
+                field: TextField(
+                  autofocus: false,
+                  controller: _bankNameController,
+                  decoration: InputDecoration(
+                      hintText: '请输入银行名称', border: InputBorder.none),
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.white,
+              child: TextFieldComponent(
+                focusNode: _bankBranchFocusNode,
+                controller: _bankBranchController,
+                leadingText: Text('开户网点',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                hintText: '输入',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
               ),
             ),
             Container(
@@ -118,14 +154,12 @@ class _BindingCardPageState extends State<BindingCardPage> {
                   color: Color.fromRGBO(255, 214, 12, 1),
                   onPressed: (_seconds == 0)
                       ? () async {
-                          // if (legal) {
-                          // UserRepositoryImpl()
-                          //     .sendCaptcha(
-                          //         UserBLoC.instance.currentUser.contactPhone)
-                          //     .then((a) {
-                          _startTimer();
-                          // });
-                          // }
+                    UserRepositoryImpl()
+                        .sendCaptcha(
+                        UserBLoC.instance.currentUser.mobileNumber)
+                        .then((a) {
+                      _startTimer();
+                    });
                         }
                       : null,
                   child: Text(
@@ -168,7 +202,9 @@ class _BindingCardPageState extends State<BindingCardPage> {
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5))),
-          onPressed: () {},
+          onPressed: () {
+            onSubmit();
+          },
         ),
       ),
     );
@@ -184,6 +220,62 @@ class _BindingCardPageState extends State<BindingCardPage> {
           bank = null;
         }
       });
+    }
+  }
+
+  void onSubmit() async {
+    bool result = await UserRepositoryImpl().validateCaptcha(
+        UserBLoC.instance.currentUser.mobileNumber, _captchaController.text);
+    if (result) {
+      BankCardModel form = BankCardModel();
+      form
+        ..accountName = _nameController.text
+        ..cardNumber = _cardController.text
+        ..bankOutlet = _bankBranchController.text;
+
+      if (bank != null) {
+        form
+          ..iconUrl = Apis.cnBankLOGO(bank.bank)
+          ..bankCode = bank.bank
+          ..bankName = bank.bankName;
+      } else {
+        form..bankName = _bankNameController.text;
+      }
+
+      BankCardRepository().bindingBankCard(form).then((result) {
+        if (result) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.RESULT_DIALOG,
+                  failTips: result ? '绑定成功' : '绑定失败',
+                  callbackResult: false,
+                  confirmAction: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => MyAccountPage()),
+                        ModalRoute.withName('/'));
+                  },
+                );
+              });
+        }
+      });
+    } else {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '验证不正确',
+              callbackResult: false,
+              confirmAction: () {
+                Navigator.of(context).pop();
+              },
+            );
+          });
     }
   }
 

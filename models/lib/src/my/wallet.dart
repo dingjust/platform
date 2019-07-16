@@ -148,20 +148,26 @@ class BankCardModel extends ItemModel {
 
   ArticleApprovalStatus approvalStatus;
 
+  ///银行卡Icon
+  String iconUrl;
+
+  ///开户网点
+  String bankOutlet;
+
   ///日期
   ///  //注册时间
   @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
   DateTime creationtime;
 
-  BankCardModel({
-    this.company,
+  BankCardModel({this.company,
     this.bankCode,
     this.bankName,
     this.accountName,
     this.cardNumber,
     this.approvalStatus,
     this.creationtime,
-  });
+    this.bankOutlet,
+    this.iconUrl});
 
   factory BankCardModel.fromJson(Map<String, dynamic> json) =>
       _$BankCardModelFromJson(json);
@@ -178,6 +184,8 @@ class BankCardModel extends ItemModel {
 
 @JsonSerializable()
 class BillModel extends ItemModel {
+  int id;
+
   ///交易单号
   String code;
 
@@ -219,20 +227,20 @@ class BillModel extends ItemModel {
   @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
   DateTime cashCompletionTime;
 
-  BillModel(
-      {this.code,
-      this.company,
-      this.account,
-      this.amount,
-      this.flowSource,
-      this.amountFlowType,
-      this.amountStatus,
-      this.description,
-      this.remark,
-      this.platformRemark,
-      this.creationtime,
-      this.cashCompletionTime,
-      this.orderCode});
+  BillModel({this.id,
+    this.code,
+    this.company,
+    this.account,
+    this.amount,
+    this.flowSource,
+    this.amountFlowType,
+    this.amountStatus,
+    this.description,
+    this.remark,
+    this.platformRemark,
+    this.creationtime,
+    this.cashCompletionTime,
+    this.orderCode});
 
   factory BillModel.fromJson(Map<String, dynamic> json) =>
       _$BillModelFromJson(json);

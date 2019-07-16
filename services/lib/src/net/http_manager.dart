@@ -160,17 +160,17 @@ class HttpManager {
     String path, {
     BuildContext context,
     data,
+        Map<String, dynamic> queryParameters,
     Options options,
     CancelToken cancelToken,
   }) {
     _setContext(context);
     path = path.replaceAll('{baseSiteId}', baseSiteId);
-    return instance.put(
-      path,
-      data: data,
-      options: options,
-      cancelToken: cancelToken,
-    );
+    return instance.put(path,
+        data: data,
+        options: options,
+        cancelToken: cancelToken,
+        queryParameters: queryParameters);
   }
 
   Future<Response<T>> delete<T>(

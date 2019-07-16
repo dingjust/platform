@@ -204,11 +204,12 @@ class BillCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        '- ￥ ${model.amount}',
-                        style: const TextStyle(
+                          '${getSymbol(model.amountFlowType)} ￥ ${model
+                              .amount}',
+                          style: TextStyle(
                             fontSize: 20,
-                            color: const Color.fromRGBO(255, 68, 68, 1)),
-                      )
+                            color: getSymbolColor(model.amountFlowType),
+                          ))
                     ],
                   ),
                   Row(
@@ -244,7 +245,17 @@ class BillCard extends StatelessWidget {
   void _onTap(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => BillDetailPage(
-              code: model.code,
+          id: model.id,
             )));
+  }
+
+  String getSymbol(AmountFlowType type) {
+    return type == AmountFlowType.INFLOW ? '+' : '-';
+  }
+
+  Color getSymbolColor(AmountFlowType type) {
+    return type == AmountFlowType.INFLOW
+        ? Color.fromRGBO(255, 68, 68, 1)
+        : Colors.black45;
   }
 }

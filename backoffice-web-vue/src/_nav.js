@@ -143,6 +143,11 @@ export default {
           url: '/miscs/operationCourse',
           icon: 'iconNone'
         },
+        {
+          name: '提现管理',
+          url: '/miscs/cashOutManager',
+          icon: 'iconNone',
+        }
       ]
     }
   ]

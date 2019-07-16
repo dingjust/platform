@@ -48,9 +48,9 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: (){
-              Navigator.push(
-                context,MaterialPageRoute(builder: (context) => WebViewPage()),
-              );
+              // Navigator.push(
+              //   context,MaterialPageRoute(builder: (context) => WebViewPage()),
+              // );
             },
           ),
         )

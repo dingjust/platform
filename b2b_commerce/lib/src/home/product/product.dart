@@ -18,6 +18,7 @@ class RecommendProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('=====${model.thumbnails[0].normalUrl()}');
     return GestureDetector(
       onTap: () async {
         //TODO: 跳转到产品详情页

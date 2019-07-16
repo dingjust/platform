@@ -314,7 +314,13 @@ const COMMON_APIS = {
   },
   removeMedia(mediaID) {
     return '/b2b/media/' + mediaID
-  }
+  },
+  getAmountFlowDetail(id) {
+    return '/b2b/amountFlow/' + id
+  },
+  findAmountFlows() {
+    return '/b2b/amountFlow'
+  },
 };
 
 let TENANT_APIS = {
@@ -353,7 +359,19 @@ let TENANT_APIS = {
   },
   synchronizeProgress(code,targetCode){
     return '/b2b/orders/purchase/' + code + '/synchronizeProgress/'+targetCode;
-  }
+  },
+  getBill(id) {
+    return '/b2b/bill/'+id;
+  },
+  rejectedCashOut(id) {
+    return '/b2b/companyWallet/cashOutRejected/'+id;
+  },
+  completedCashOut(id){
+    return '/b2b/companyWallet/cashOutCompleted/'+id;
+  },
+  findBills() {
+    return '/b2b/bill/all'
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
@@ -399,6 +417,12 @@ let NONE_TENANT_APIS = {
   },
   payProofingsImage(code) {
     return '/b2b/checkout/multi/wechat/pay/'+code;
+  },
+  cashOutCanceled(code) {
+    return '/b2b/checkout/multi/wechat/pay/'+code;
+  },
+  cashOutApply(amount) {
+    return '/b2b/amountFlow/cashOut/'+amount;
   },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
