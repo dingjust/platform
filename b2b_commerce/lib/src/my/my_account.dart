@@ -77,14 +77,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
             height: 50,
             width: double.infinity,
             child: FlatButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          WithdrawCash(snapshot.data, bankCardModel)),
-                );
-              },
+              onPressed: bankCardModel != null
+                  ? () {
+                onWithdraw(snapshot.data);
+              }
+                  : null,
               color: const Color.fromRGBO(255, 219, 0, 1),
               child: Text(
                 '提现',
@@ -396,6 +393,14 @@ class _MyAccountPageState extends State<MyAccountPage> {
   void onAddCard() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => BindingCardPage()));
+  }
+
+  void onWithdraw(CompanyWalletModel model) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WithdrawCash(model, bankCardModel)),
+    );
   }
 
   Future<CompanyWalletModel> _getData() async {
