@@ -35,7 +35,7 @@
     methods: {
       ...mapActions({
         refresh: 'refresh',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvancedBills'
       }),
       onAdvancedSearch (page, size) {
         this.isAdvancedSearch = true;
@@ -85,7 +85,7 @@
     },
     computed: {
       ...mapGetters({
-        page: 'page',
+        page: 'billsPage',
         keyword: 'keyword'
       }),
       isNewlyCreated: function () {
