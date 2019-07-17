@@ -290,10 +290,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       result = '';
     } else {
       if (RegexUtil.isMobile(_phoneController.text)) {
-        bool exist =
+        UserType type =
             await UserRepositoryImpl().phoneExist(_phoneController.text);
 
-        if (exist != null && exist) {
+        if (type != null && type != UserType.DEFAULT) {
           result = "";
           isExist = true;
         } else {
@@ -353,8 +353,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 failTips: '重置密码失败',
                 callbackResult: false,
               );
-            }
-        );
+            });
       }
     });
   }

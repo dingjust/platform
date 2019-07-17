@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -19,7 +20,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<String> sendCaptchaForLogin(String phone) async{
+  Future<String> sendCaptchaForLogin(String phone) async {
     Response response = await http$.get(UserApis.sendCaptchaForLogin(phone));
     return response.data;
   }
@@ -85,7 +86,6 @@ class UserRepositoryImpl implements UserRepository {
     }
   }
 
-
   @override
   Future<String> factoryUpdate(FactoryModel factory) async {
     Response response = await http$.put(Apis.factoryUpdate(factory.uid),
@@ -134,7 +134,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<bool> phoneExist(String phone) async {
+  Future<UserType> phoneExist(String phone) async {
     // TODO: implement phoneExist
     /// 公司订单报表
     Response response;
@@ -144,9 +144,9 @@ class UserRepositoryImpl implements UserRepository {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      return response.data;
+      return UserTypeValueMap[response.data];
     } else {
-      return null;
+      return UserType.DEFAULT;
     }
   }
 
@@ -200,7 +200,9 @@ class UserRepositoryImpl implements UserRepository {
     String result;
     try {
       response = await http$.post(
-        UserApis.employeeCreate, data: B2BCustomerModel.toJson(model),);
+        UserApis.employeeCreate,
+        data: B2BCustomerModel.toJson(model),
+      );
     } catch (e) {
       print(e);
     }
@@ -217,7 +219,9 @@ class UserRepositoryImpl implements UserRepository {
     String result;
     try {
       response = await http$.put(
-        UserApis.employeeFromId(uid), data: B2BCustomerModel.toJson(model),);
+        UserApis.employeeFromId(uid),
+        data: B2BCustomerModel.toJson(model),
+      );
     } catch (e) {
       print(e);
     }
@@ -250,8 +254,8 @@ class UserRepositoryImpl implements UserRepository {
     Response response;
     B2BCustomerResponse result;
     try {
-      response =
-      await http$.post(UserApis.employees, queryParameters: params, data: data);
+      response = await http$.post(UserApis.employees,
+          queryParameters: params, data: data);
     } catch (e) {
       print(e);
     }
@@ -277,6 +281,4 @@ class UserRepositoryImpl implements UserRepository {
 
     return result;
   }
-
-
 }

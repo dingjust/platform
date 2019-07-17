@@ -91,6 +91,8 @@ class UserModel extends PrincipalModel {
 
   static List<Map<String, dynamic>> _rolesToJson(List<RoleModel> models) =>
       models.map((model) => RoleModel.toJson(model)).toList();
+
+
 }
 
 /// 客户

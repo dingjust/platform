@@ -4,14 +4,12 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-
 //确认按钮点击动作
 typedef void ConfirmAction();
 //取消按钮点击动作
 typedef void CancelAction();
 //跳过的动作
 typedef void JumpAction();
-
 
 class CustomizeDialog extends StatefulWidget {
   //是否允许点击空白处关闭dialog
@@ -95,12 +93,11 @@ class CustomizeDialog extends StatefulWidget {
 
   DateTime expectedDeliveryDate;
 
-
   CustomizeDialog({
     Key key,
     this.outsideDismiss = true,
     this.confirmAction,
-    this.callbackResult=false,
+    this.callbackResult = false,
     this.contentWidgetList,
     this.title,
     this.contentStyle,
@@ -112,8 +109,8 @@ class CustomizeDialog extends StatefulWidget {
     this.cancelAction,
     this.cancelButtonText,
     this.confirmButtonText,
-    this.isNeedCancelButton=false,
-    this.isNeedConfirmButton=false,
+    this.isNeedCancelButton = false,
+    this.isNeedConfirmButton = false,
     @required this.dialogType,
     this.contentText1,
     this.contentTextStyle2,
@@ -138,8 +135,7 @@ class CustomizeDialog extends StatefulWidget {
     this.orderModel,
     this.currentNode,
     this.expectedDeliveryDate,
-    })
-      : super(key: key);
+  }) : super(key: key);
 
   @override
   _CustomizeDialogPageState createState() => _CustomizeDialogPageState();
@@ -162,12 +158,13 @@ enum DialogType {
   BALANCE_INPUT_DIALOG,
 
   //弹框输入预计完成时间
-  ESTIMATED_DATE
+  ESTIMATED_DATE,
 
+  ///登录消息弹窗
+  LOGIN_MESSAGE_DIALOG,
 }
 
 class _CustomizeDialogPageState extends State<CustomizeDialog> {
-
   _dismissDialog() {
     Navigator.of(context).pop();
   }
@@ -179,23 +176,27 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.dialogType == DialogType.CONFIRM_DIALOG) {
+    if (widget.dialogType == DialogType.CONFIRM_DIALOG) {
       return buildConfirmDialog(context);
-    }else if(widget.dialogType == DialogType.RESULT_DIALOG) {
+    } else if (widget.dialogType == DialogType.RESULT_DIALOG) {
       return buildResultDialog(context);
-    }else if(widget.dialogType == DialogType.INPUTS_DIALOG){
+    } else if (widget.dialogType == DialogType.LOGIN_MESSAGE_DIALOG) {
+      return buildLoginMessageDialog(context);
+    } else if (widget.dialogType == DialogType.INPUTS_DIALOG) {
       return buildInputsDialog(context);
-    }else if(widget.dialogType == DialogType.PRICE_INPUT_DIALOG){
+    } else if (widget.dialogType == DialogType.PRICE_INPUT_DIALOG) {
       return buildManyInputsDialog(context);
-    }else if(widget.dialogType == DialogType.BALANCE_INPUT_DIALOG){
+    } else if (widget.dialogType == DialogType.BALANCE_INPUT_DIALOG) {
       return buildManyInputsBalanceDialog(context);
-    }else if(widget.dialogType == DialogType.ESTIMATED_DATE){
+    } else if (widget.dialogType == DialogType.ESTIMATED_DATE) {
       return WillPopScope(
         child: buildEstimatedDateDialog(context),
-        onWillPop: (){
-          if(widget.estimatedDate1 != null && widget.estimatedDate2 != null
-              && widget.estimatedDate3 != null && widget.estimatedDate4 != null
-              && widget.estimatedDate5 != null){
+        onWillPop: () {
+          if (widget.estimatedDate1 != null &&
+              widget.estimatedDate2 != null &&
+              widget.estimatedDate3 != null &&
+              widget.estimatedDate4 != null &&
+              widget.estimatedDate5 != null) {
             Navigator.of(context).popUntil(ModalRoute.withName('/'));
           }
         },
@@ -203,16 +204,19 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     }
   }
 
-
-  Widget buildConfirmDialog(BuildContext context){
+  Widget buildConfirmDialog(BuildContext context) {
     return GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(
         type: MaterialType.transparency,
         child: Center(
           child: SizedBox(
-            width: widget.dialogWidth == null || widget.dialogWidth <300?300.0:widget.dialogWidth,
-            height: widget.dialogHeight == null || widget.dialogHeight <150?150.0:widget.dialogHeight,
+            width: widget.dialogWidth == null || widget.dialogWidth < 300
+                ? 300.0
+                : widget.dialogWidth,
+            height: widget.dialogHeight == null || widget.dialogHeight < 150
+                ? 150.0
+                : widget.dialogHeight,
             child: Container(
               decoration: ShapeDecoration(
                 color: Color(0xffffffff),
@@ -227,13 +231,13 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       height: 40,
                       child: Row(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: Icon(
                               Icons.error,
                               size: 40,
@@ -247,9 +251,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 '${widget.title == null || widget.title == ''
                                     ? ''
                                     : widget.title}',
-                                style: TextStyle(
-
-                                ),
+                                style: TextStyle(),
                               ),
                             ),
                           ),
@@ -258,93 +260,117 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                         alignment: Alignment.topLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
                               child: Text(
-                                '${widget.contentText1 == null || widget.contentText1 == ''? '':widget.contentText1}',
-                                style: widget.contentTextStyle1 != null ?
-                                widget.contentTextStyle1:null,
+                                '${widget.contentText1 == null ||
+                                    widget.contentText1 == '' ? '' : widget
+                                    .contentText1}',
+                                style: widget.contentTextStyle1 != null
+                                    ? widget.contentTextStyle1
+                                    : null,
                               ),
                             ),
-                            widget.contentText2 != null && widget.contentText2 != ''?
-                            Container(
+                            widget.contentText2 != null &&
+                                widget.contentText2 != ''
+                                ? Container(
                               margin: EdgeInsets.only(top: 10),
                               child: Text(
                                 '${widget.contentText2}',
-                                style: widget.contentTextStyle2 != null  ?
-                                widget.contentTextStyle2:null,
+                                style: widget.contentTextStyle2 != null
+                                    ? widget.contentTextStyle2
+                                    : null,
                               ),
-                            ):
-                                Container()
+                            )
+                                : Container()
                           ],
                         ),
                       ),
                     ),
                     Container(
                       child: Row(
-                        mainAxisAlignment: widget.isNeedCancelButton?MainAxisAlignment.center:MainAxisAlignment.start,
+                        mainAxisAlignment: widget.isNeedCancelButton
+                            ? MainAxisAlignment.center
+                            : MainAxisAlignment.start,
                         children: <Widget>[
-                          widget.isNeedCancelButton?Center(
+                          widget.isNeedCancelButton
+                              ? Center(
                             child: Container(
                                 child: FlatButton(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 55),
                                     child: Text(
-                                      '${widget.cancelButtonText==null||widget.cancelButtonText==''?'取消':widget.cancelButtonText}',
+                                      '${widget.cancelButtonText == null ||
+                                          widget.cancelButtonText == ''
+                                          ? '取消'
+                                          : widget.cancelButtonText}',
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
                                     ),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                                    onPressed: widget.cancelAction
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    onPressed: widget.cancelAction)),
                                 )
-                            ),
-                          ):Container(),
-                          widget.isNeedConfirmButton?
-                          Center(
+                              : Container(),
+                          widget.isNeedConfirmButton
+                              ? Center(
                             child: Container(
-                              child: widget.isNeedCancelButton? FlatButton(
+                              child: widget.isNeedCancelButton
+                                  ? FlatButton(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 55),
                                   child: Text(
-                                    '${widget.confirmButtonText==null||widget.confirmButtonText==''?'确定':widget.confirmButtonText}',
+                                    '${widget.confirmButtonText == null ||
+                                        widget.confirmButtonText == ''
+                                        ? '确定'
+                                        : widget.confirmButtonText}',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
                                   ),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                                  onPressed: widget.confirmAction
-                              ):FlatButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 133),
-                                  child: Text(
-                                    '${widget.confirmButtonText==null||widget.confirmButtonText==''?'确定':widget.confirmButtonText}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                  onPressed: widget.confirmAction)
+                                  : FlatButton(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 133),
+                                child: Text(
+                                  '${widget.confirmButtonText == null ||
+                                      widget.confirmButtonText == ''
+                                      ? '确定'
+                                      : widget.confirmButtonText}',
+                                  style: TextStyle(
+                                    color: Colors.black,
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                                  onPressed:  widget.confirmAction,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(15))),
+                                onPressed: widget.confirmAction,
                               ),
                               decoration: BoxDecoration(
-                                  border: Border(left: BorderSide(color: Colors.grey,width: 0.5))
-                              ),
+                                  border: Border(
+                                      left: BorderSide(
+                                          color: Colors.grey,
+                                          width: 0.5))),
                             ),
-                          ):Container(),
+                          )
+                              : Container(),
                         ],
                       ),
                       decoration: BoxDecoration(
-                          border: Border(top: BorderSide(color: Colors.grey,width: 0.5))
-                      ),
+                          border: Border(
+                              top: BorderSide(color: Colors.grey, width: 0.5))),
                     )
                   ],
                 ),
@@ -356,7 +382,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     );
   }
 
-  Widget buildResultDialog(BuildContext context){
+  Widget buildResultDialog(BuildContext context) {
     return GestureDetector(
       onTap: null,
       child: Material(
@@ -379,19 +405,20 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       height: 10,
                       child: Row(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: widget.callbackResult
                                 ? Icon(
                               Icons.check_circle,
                               color: Colors.green,
                               size: 30,
-                            ) : Icon(
+                            )
+                                : Icon(
                               Icons.cancel,
                               color: Colors.red,
                               size: 30,
@@ -404,8 +431,9 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 '${widget.title == null || widget.title == ''
                                     ? ''
                                     : widget.title}',
-                                style: widget.titleStyle == null ?
-                                null : widget.titleStyle,
+                                style: widget.titleStyle == null
+                                    ? null
+                                    : widget.titleStyle,
                               ),
                             ),
                           ),
@@ -416,9 +444,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 5),
+                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                       height: 80,
                       child: Center(
                         child: Text(
@@ -428,8 +455,9 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                               .successTips}'
                               : '${widget.failTips == null ||
                               widget.failTips == '' ? '失败' : widget.failTips}',
-                          style: widget.contentStyle == null ?
-                          null : widget.contentStyle,
+                          style: widget.contentStyle == null
+                              ? null
+                              : widget.contentStyle,
                         ),
                       ),
                     ),
@@ -440,21 +468,27 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 100),
                               child: Text(
-                                '${widget.confirmButtonText==null||widget.confirmButtonText==''?'确定':widget.confirmButtonText}',
+                                '${widget.confirmButtonText == null ||
+                                    widget.confirmButtonText == ''
+                                    ? '确定'
+                                    : widget.confirmButtonText}',
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
                               ),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(15))),
-                              onPressed: widget.confirmAction == null ? () {
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                              onPressed: widget.confirmAction == null
+                                  ? () {
                                 Navigator.of(context).pop();
-                              } : widget.confirmAction),
+                              }
+                                  : widget.confirmAction),
                         ),
                       ),
                       decoration: BoxDecoration(
-                          border: Border(top: BorderSide(color: Colors.grey,width: 0.5))
-                      ),
+                          border: Border(
+                              top: BorderSide(color: Colors.grey, width: 0.5))),
                     )
                   ],
                 ),
@@ -466,7 +500,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     );
   }
 
-  Widget buildInputsDialog(BuildContext context){
+  Widget buildInputsDialog(BuildContext context) {
     return GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(
@@ -490,8 +524,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                   children: <Widget>[
                     Container(
                       height: 30,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       child: Row(
                         children: <Widget>[
                           Container(
@@ -504,13 +537,14 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                           ),
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10,vertical: 13),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 13),
                               child: Text(
                                 '${widget.title == null || widget.title == ''
                                     ? ''
                                     : widget.title}',
                                 style: TextStyle(
-                                      fontSize: 18,
+                                  fontSize: 18,
                                 ),
                               ),
                             ),
@@ -520,10 +554,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 0),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 5),
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 5),
                         alignment: Alignment.topLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -553,7 +587,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 55),
                                     child: Text(
-                                      '${widget.cancelButtonText==null||widget.cancelButtonText==''?'取消':widget.cancelButtonText}',
+                                      '${widget.cancelButtonText == null ||
+                                          widget.cancelButtonText == ''
+                                          ? '取消'
+                                          : widget.cancelButtonText}',
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
@@ -561,9 +598,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15))),
-                                    onPressed: widget.cancelAction
-                                )
-                            ),
+                                    onPressed: widget.cancelAction)),
                           ),
                           Center(
                             child: Container(
@@ -571,7 +606,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 55),
                                   child: Text(
-                                    '${widget.confirmButtonText==null||widget.confirmButtonText==''?'确定':widget.confirmButtonText}',
+                                    '${widget.confirmButtonText == null ||
+                                        widget.confirmButtonText == ''
+                                        ? '确定'
+                                        : widget.confirmButtonText}',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -579,22 +617,21 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
-                                  onPressed: (){
-                                    Navigator.of(context).pop(widget.inputController1.text);
-                                  }
-                              ),
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .pop(widget.inputController1.text);
+                                  }),
                               decoration: BoxDecoration(
-                                  border: Border(left: BorderSide(
-                                      color: Colors.grey, width: 0.5))
-                              ),
+                                  border: Border(
+                                      left: BorderSide(
+                                          color: Colors.grey, width: 0.5))),
                             ),
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border(
-                              top: BorderSide(color: Colors.grey, width: 0.5))
-                      ),
+                              top: BorderSide(color: Colors.grey, width: 0.5))),
                     ),
                   ],
                 ),
@@ -606,7 +643,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     );
   }
 
-  Widget buildManyInputsDialog(BuildContext context){
+  Widget buildManyInputsDialog(BuildContext context) {
     return GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(
@@ -630,8 +667,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                   children: <Widget>[
                     Container(
                       height: 30,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       child: Row(
                         children: <Widget>[
                           Container(
@@ -649,9 +685,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 '${widget.title == null || widget.title == ''
                                     ? ''
                                     : widget.title}',
-                                style: TextStyle(
-
-                                ),
+                                style: TextStyle(),
                               ),
                             ),
                           ),
@@ -660,10 +694,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 0),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 5),
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 5),
 //                        alignment: Alignment.topLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -680,7 +714,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 hideDivider: true,
                                 enabled: false,
                                 prefix: '￥',
-                                leadingText: Text('订单总额：',style: TextStyle(fontSize: 16),),
+                                leadingText: Text(
+                                  '订单总额：',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                             Container(
@@ -694,7 +731,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 hideDivider: true,
                                 isInputBorder: true,
                                 prefix: '￥',
-                                leadingText: Text('        定金：',style: TextStyle(fontSize: 16),),
+                                leadingText: Text(
+                                  '        定金：',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                             Container(
@@ -708,7 +748,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 hideDivider: true,
                                 isInputBorder: true,
                                 prefix: '￥',
-                                leadingText: Text('        单价：',style: TextStyle(fontSize: 16),),
+                                leadingText: Text(
+                                  '        单价：',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                           ],
@@ -725,7 +768,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 55),
                                     child: Text(
-                                      '${widget.cancelButtonText==null||widget.cancelButtonText==''?'取消':widget.cancelButtonText}',
+                                      '${widget.cancelButtonText == null ||
+                                          widget.cancelButtonText == ''
+                                          ? '取消'
+                                          : widget.cancelButtonText}',
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
@@ -733,11 +779,9 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15))),
-                                    onPressed: (){
+                                    onPressed: () {
                                       Navigator.of(context).pop();
-                                    }
-                                )
-                            ),
+                                    })),
                           ),
                           Center(
                             child: Container(
@@ -745,7 +789,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 55),
                                   child: Text(
-                                    '${widget.confirmButtonText==null||widget.confirmButtonText==''?'确定':widget.confirmButtonText}',
+                                    '${widget.confirmButtonText == null ||
+                                        widget.confirmButtonText == ''
+                                        ? '确定'
+                                        : widget.confirmButtonText}',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -753,28 +800,29 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
-                                  onPressed: (){
-                                    if(widget.inputController1.text == ''){
+                                  onPressed: () {
+                                    if (widget.inputController1.text == '') {
                                       widget.inputController1.text = '￥0';
                                     }
-                                    if(widget.inputController2.text == ''){
+                                    if (widget.inputController2.text == '') {
                                       widget.inputController2.text = '￥0';
                                     }
-                                    Navigator.of(context).pop(widget.inputController1.text+','+widget.inputController2.text);
-                                  }
-                              ),
+                                    Navigator.of(context).pop(
+                                        widget.inputController1.text +
+                                            ',' +
+                                            widget.inputController2.text);
+                                  }),
                               decoration: BoxDecoration(
-                                  border: Border(left: BorderSide(
-                                      color: Colors.grey, width: 0.5))
-                              ),
+                                  border: Border(
+                                      left: BorderSide(
+                                          color: Colors.grey, width: 0.5))),
                             ),
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border(
-                              top: BorderSide(color: Colors.grey, width: 0.5))
-                      ),
+                              top: BorderSide(color: Colors.grey, width: 0.5))),
                     ),
                   ],
                 ),
@@ -787,7 +835,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
   }
 
   //尾款
-  Widget buildManyInputsBalanceDialog(BuildContext context){
+  Widget buildManyInputsBalanceDialog(BuildContext context) {
     return GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(
@@ -811,8 +859,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                   children: <Widget>[
                     Container(
                       height: 30,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
@@ -831,13 +878,13 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                           ),
                           GestureDetector(
                             child: Container(
-                                margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                                child: Text(
-                                  '无需付款直接跳过 >>',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                  ),
+                              margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                              child: Text(
+                                '无需付款直接跳过 >>',
+                                style: TextStyle(
+                                  color: Colors.grey,
                                 ),
+                              ),
                             ),
                             onTap: widget.jumpAction,
                           ),
@@ -846,10 +893,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 0),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 5),
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 5),
 //                        alignment: Alignment.topLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -866,7 +913,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 hideDivider: true,
                                 enabled: false,
                                 prefix: '￥',
-                                leadingText: Text('订单总额：',style: TextStyle(fontSize: 16),),
+                                leadingText: Text(
+                                  '订单总额：',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                             Container(
@@ -880,7 +930,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 hideDivider: true,
                                 enabled: false,
                                 prefix: '￥',
-                                leadingText: Text('已付定金：',style: TextStyle(fontSize: 16),),
+                                leadingText: Text(
+                                  '已付定金：',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                             Container(
@@ -894,7 +947,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 hideDivider: true,
                                 enabled: false,
                                 prefix: '￥',
-                                leadingText: Text('应付尾款：',style: TextStyle(fontSize: 16),),
+                                leadingText: Text(
+                                  '应付尾款：',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                             Container(
@@ -925,7 +981,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 55),
                                     child: Text(
-                                      '${widget.cancelButtonText==null||widget.cancelButtonText==''?'取消':widget.cancelButtonText}',
+                                      '${widget.cancelButtonText == null ||
+                                          widget.cancelButtonText == ''
+                                          ? '取消'
+                                          : widget.cancelButtonText}',
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
@@ -933,11 +992,9 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15))),
-                                    onPressed: (){
+                                    onPressed: () {
                                       Navigator.of(context).pop();
-                                    }
-                                )
-                            ),
+                                    })),
                           ),
                           Center(
                             child: Container(
@@ -945,7 +1002,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 55),
                                   child: Text(
-                                    '${widget.confirmButtonText==null||widget.confirmButtonText==''?'确定':widget.confirmButtonText}',
+                                    '${widget.confirmButtonText == null ||
+                                        widget.confirmButtonText == ''
+                                        ? '确定'
+                                        : widget.confirmButtonText}',
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
@@ -953,25 +1013,24 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
-                                  onPressed: (){
-                                    if(widget.inputController3.text == ''){
+                                  onPressed: () {
+                                    if (widget.inputController3.text == '') {
                                       widget.inputController1.text = '￥0';
                                     }
-                                    Navigator.of(context).pop(widget.inputController3.text);
-                                  }
-                              ),
+                                    Navigator.of(context)
+                                        .pop(widget.inputController3.text);
+                                  }),
                               decoration: BoxDecoration(
-                                  border: Border(left: BorderSide(
-                                      color: Colors.grey, width: 0.5))
-                              ),
+                                  border: Border(
+                                      left: BorderSide(
+                                          color: Colors.grey, width: 0.5))),
                             ),
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border(
-                              top: BorderSide(color: Colors.grey, width: 0.5))
-                      ),
+                              top: BorderSide(color: Colors.grey, width: 0.5))),
                     ),
                   ],
                 ),
@@ -983,7 +1042,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     );
   }
 
-  Widget buildEstimatedDateDialog(BuildContext context){
+  Widget buildEstimatedDateDialog(BuildContext context) {
     return GestureDetector(
       onTap: null,
       child: Material(
@@ -1007,31 +1066,28 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                   children: <Widget>[
                     Container(
                       height: 30,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Align(
-                              alignment: Alignment.topLeft,
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(10, 10, 0, 5),
-                                child: Icon(
-                                  Icons.edit,
-                                  size: 30,
-                                  color: Colors.grey,
-                                ),
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(10, 10, 0, 5),
+                              child: Icon(
+                                Icons.edit,
+                                size: 30,
+                                color: Colors.grey,
                               ),
                             ),
+                          ),
                           Expanded(
                             child: Container(
                               margin: EdgeInsets.only(top: 5),
                               child: Center(
                                 child: Text(
                                   '预计排产日期',
-                                  style: TextStyle(
-                                    fontSize: 18
-                                  ),
+                                  style: TextStyle(fontSize: 18),
                                 ),
                               ),
                             ),
@@ -1041,18 +1097,18 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                     ),
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 0),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 5),
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 5),
 //                        alignment: Alignment.topLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             GestureDetector(
-                              onTap: (){
-                                if(widget.currentNode <= 0) {
+                              onTap: () {
+                                if (widget.currentNode <= 0) {
                                   _showDatePicker(widget.estimatedDate1, 0);
                                 }
                               },
@@ -1062,38 +1118,42 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     text: TextSpan(
                                         text: '',
                                         style: TextStyle(
-                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                            color:
+                                            Color.fromRGBO(255, 45, 45, 1),
+                                            fontSize: 16),
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: '备料',
-                                            style: TextStyle(
-                                                color: Colors.black
-                                            ),
+                                            style:
+                                            TextStyle(color: Colors.black),
                                           ),
                                           TextSpan(
                                               text: '*',
                                               style: TextStyle(
                                                 color: Colors.red,
-                                              )
-                                          ),
-                                        ]
-                                    ),
+                                              )),
+                                        ]),
                                   ),
                                   Expanded(
                                     child: Container(
                                       height: 35,
                                       margin: const EdgeInsets.all(10),
-                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      padding:
+                                      EdgeInsets.fromLTRB(10, 5, 10, 5),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                        border: Border.all(
+                                            color: Colors.grey[300],
+                                            width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate1 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate1)}',
-                                          style: TextStyle(
-                                          ),
+                                          '${widget.estimatedDate1 == null
+                                              ? '点击选取时间'
+                                              : DateFormatUtil.formatYMD(
+                                              widget.estimatedDate1)}',
+                                          style: TextStyle(),
                                         ),
                                       ),
                                     ),
@@ -1102,7 +1162,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 if (widget.currentNode <= 1) {
                                   _showDatePicker(widget.estimatedDate2, 1);
                                 }
@@ -1113,38 +1173,42 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     text: TextSpan(
                                         text: '',
                                         style: TextStyle(
-                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                            color:
+                                            Color.fromRGBO(255, 45, 45, 1),
+                                            fontSize: 16),
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: '裁剪',
-                                            style: TextStyle(
-                                                color: Colors.black
-                                            ),
+                                            style:
+                                            TextStyle(color: Colors.black),
                                           ),
                                           TextSpan(
                                               text: '*',
                                               style: TextStyle(
                                                 color: Colors.red,
-                                              )
-                                          ),
-                                        ]
-                                    ),
+                                              )),
+                                        ]),
                                   ),
                                   Expanded(
                                     child: Container(
                                       height: 35,
                                       margin: const EdgeInsets.all(10),
-                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      padding:
+                                      EdgeInsets.fromLTRB(10, 5, 10, 5),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                        border: Border.all(
+                                            color: Colors.grey[300],
+                                            width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate2 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate2)}',
-                                          style: TextStyle(
-                                          ),
+                                          '${widget.estimatedDate2 == null
+                                              ? '点击选取时间'
+                                              : DateFormatUtil.formatYMD(
+                                              widget.estimatedDate2)}',
+                                          style: TextStyle(),
                                         ),
                                       ),
                                     ),
@@ -1153,7 +1217,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 if (widget.currentNode <= 2) {
                                   _showDatePicker(widget.estimatedDate3, 2);
                                 }
@@ -1164,38 +1228,42 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     text: TextSpan(
                                         text: '',
                                         style: TextStyle(
-                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                            color:
+                                            Color.fromRGBO(255, 45, 45, 1),
+                                            fontSize: 16),
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: '车缝',
-                                            style: TextStyle(
-                                                color: Colors.black
-                                            ),
+                                            style:
+                                            TextStyle(color: Colors.black),
                                           ),
                                           TextSpan(
                                               text: '*',
                                               style: TextStyle(
                                                 color: Colors.red,
-                                              )
-                                          ),
-                                        ]
-                                    ),
+                                              )),
+                                        ]),
                                   ),
                                   Expanded(
                                     child: Container(
                                       height: 35,
                                       margin: const EdgeInsets.all(10),
-                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      padding:
+                                      EdgeInsets.fromLTRB(10, 5, 10, 5),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                        border: Border.all(
+                                            color: Colors.grey[300],
+                                            width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate3 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate3)}',
-                                          style: TextStyle(
-                                          ),
+                                          '${widget.estimatedDate3 == null
+                                              ? '点击选取时间'
+                                              : DateFormatUtil.formatYMD(
+                                              widget.estimatedDate3)}',
+                                          style: TextStyle(),
                                         ),
                                       ),
                                     ),
@@ -1204,7 +1272,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 if (widget.currentNode <= 3) {
                                   _showDatePicker(widget.estimatedDate4, 3);
                                 }
@@ -1215,38 +1283,42 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     text: TextSpan(
                                         text: '',
                                         style: TextStyle(
-                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                            color:
+                                            Color.fromRGBO(255, 45, 45, 1),
+                                            fontSize: 16),
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: '后整',
-                                            style: TextStyle(
-                                                color: Colors.black
-                                            ),
+                                            style:
+                                            TextStyle(color: Colors.black),
                                           ),
                                           TextSpan(
                                               text: '*',
                                               style: TextStyle(
                                                 color: Colors.red,
-                                              )
-                                          ),
-                                        ]
-                                    ),
+                                              )),
+                                        ]),
                                   ),
                                   Expanded(
                                     child: Container(
                                       height: 35,
                                       margin: const EdgeInsets.all(10),
-                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      padding:
+                                      EdgeInsets.fromLTRB(10, 5, 10, 5),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                        border: Border.all(
+                                            color: Colors.grey[300],
+                                            width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate4 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate4)}',
-                                          style: TextStyle(
-                                          ),
+                                          '${widget.estimatedDate4 == null
+                                              ? '点击选取时间'
+                                              : DateFormatUtil.formatYMD(
+                                              widget.estimatedDate4)}',
+                                          style: TextStyle(),
                                         ),
                                       ),
                                     ),
@@ -1255,7 +1327,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 if (widget.currentNode <= 4) {
                                   _showDatePicker(widget.estimatedDate5, 4);
                                 }
@@ -1266,38 +1338,42 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     text: TextSpan(
                                         text: '',
                                         style: TextStyle(
-                                            color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
+                                            color:
+                                            Color.fromRGBO(255, 45, 45, 1),
+                                            fontSize: 16),
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: '验货',
-                                            style: TextStyle(
-                                                color: Colors.black
-                                            ),
+                                            style:
+                                            TextStyle(color: Colors.black),
                                           ),
                                           TextSpan(
                                               text: '*',
                                               style: TextStyle(
                                                 color: Colors.red,
-                                              )
-                                          ),
-                                        ]
-                                    ),
+                                              )),
+                                        ]),
                                   ),
                                   Expanded(
                                     child: Container(
                                       height: 35,
                                       margin: const EdgeInsets.all(10),
-                                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                      padding:
+                                      EdgeInsets.fromLTRB(10, 5, 10, 5),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(color: Colors.grey[300], width: 0.5),
+                                        border: Border.all(
+                                            color: Colors.grey[300],
+                                            width: 0.5),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${widget.estimatedDate5 == null ? '点击选取时间':DateFormatUtil.formatYMD(widget.estimatedDate5)}',
-                                          style: TextStyle(
-                                          ),
+                                          '${widget.estimatedDate5 == null
+                                              ? '点击选取时间'
+                                              : DateFormatUtil.formatYMD(
+                                              widget.estimatedDate5)}',
+                                          style: TextStyle(),
                                         ),
                                       ),
                                     ),
@@ -1348,13 +1424,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15))),
-                                    onPressed: (){
-
+                                    onPressed: () {
 //                                        Navigator.of(context).popUntil(ModalRoute.withName('/'));
                                       Navigator.of(context).pop();
-                                    }
-                                )
-                            ),
+                                    })),
                           ),
                           Center(
                             child: Container(
@@ -1370,22 +1443,20 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
-                                  onPressed: (){
+                                  onPressed: () {
                                     onSubmitDate();
-                                  }
-                              ),
+                                  }),
                               decoration: BoxDecoration(
-                                  border: Border(left: BorderSide(
-                                      color: Colors.grey, width: 0.5))
-                              ),
+                                  border: Border(
+                                      left: BorderSide(
+                                          color: Colors.grey, width: 0.5))),
                             ),
                           ),
                         ],
                       ),
                       decoration: BoxDecoration(
                           border: Border(
-                              top: BorderSide(color: Colors.grey, width: 0.5))
-                      ),
+                              top: BorderSide(color: Colors.grey, width: 0.5))),
                     ),
                   ],
                 ),
@@ -1397,7 +1468,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     );
   }
 
-  doSomething(){
+  doSomething() {
     print('按按钮了！');
     if (widget.confirmAction != null) {
       widget.confirmAction;
@@ -1405,24 +1476,25 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
 //          .then((value) {
 //        Navigator.of(context).pop(value);
 //      });
-    }else{
+    } else {
       Navigator.of(context).pop();
     }
   }
 
   //打开日期选择器
-  void _showDatePicker(DateTime date,int index) {
-    _selectDate(context,date,index);
+  void _showDatePicker(DateTime date, int index) {
+    _selectDate(context, date, index);
   }
+
   //生成日期选择器
-  Future<Null> _selectDate(BuildContext context,DateTime date,int index) async {
+  Future<Null> _selectDate(BuildContext context, DateTime date,
+      int index) async {
     DateTime nowTime = DateTime.now();
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: nowTime,
         firstDate: nowTime,
-        lastDate: DateTime(2999)
-    );
+        lastDate: DateTime(2999));
 
     setState(() {
       if (index == 0) {
@@ -1436,16 +1508,16 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
       } else if (index == 4) {
         widget.estimatedDate5 = _picked;
       }
-
     });
   }
 
   onSubmitDate() {
-    if (widget.estimatedDate1 != null && widget.estimatedDate2 != null
-        && widget.estimatedDate3 != null && widget.estimatedDate4 != null
-        && widget.estimatedDate5 != null) {
-
-      if(widget.orderModel != null){
+    if (widget.estimatedDate1 != null &&
+        widget.estimatedDate2 != null &&
+        widget.estimatedDate3 != null &&
+        widget.estimatedDate4 != null &&
+        widget.estimatedDate5 != null) {
+      if (widget.orderModel != null) {
         ProductionProgressModel model1 = widget.orderModel.progresses[0];
         model1.estimatedDate = widget.estimatedDate1;
         model1.updateOnly = true;
@@ -1466,17 +1538,27 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         model5.estimatedDate = widget.estimatedDate5;
         model5.updateOnly = true;
 
-        for(int i=0;i<widget.orderModel.progresses.length;i++){
-          if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.MATERIAL_PREPARATION){
-            model1.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
-          }else if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.CUTTING){
-            model2.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
-          }else if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.STITCHING){
-            model3.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
-          }else if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.AFTER_FINISHING){
-            model4.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
-          }else if(widget.orderModel.progresses[i].phase == ProductionProgressPhase.INSPECTION){
-            model5.estimatedDate = widget.orderModel.progresses[i].estimatedDate;
+        for (int i = 0; i < widget.orderModel.progresses.length; i++) {
+          if (widget.orderModel.progresses[i].phase ==
+              ProductionProgressPhase.MATERIAL_PREPARATION) {
+            model1.estimatedDate =
+                widget.orderModel.progresses[i].estimatedDate;
+          } else if (widget.orderModel.progresses[i].phase ==
+              ProductionProgressPhase.CUTTING) {
+            model2.estimatedDate =
+                widget.orderModel.progresses[i].estimatedDate;
+          } else if (widget.orderModel.progresses[i].phase ==
+              ProductionProgressPhase.STITCHING) {
+            model3.estimatedDate =
+                widget.orderModel.progresses[i].estimatedDate;
+          } else if (widget.orderModel.progresses[i].phase ==
+              ProductionProgressPhase.AFTER_FINISHING) {
+            model4.estimatedDate =
+                widget.orderModel.progresses[i].estimatedDate;
+          } else if (widget.orderModel.progresses[i].phase ==
+              ProductionProgressPhase.INSPECTION) {
+            model5.estimatedDate =
+                widget.orderModel.progresses[i].estimatedDate;
           }
         }
 
@@ -1487,7 +1569,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         modelList.add(model4);
         modelList.add(model5);
 
-        PurchaseOrderRepository().progressEstimatedDateUploads(widget.orderModel.code,model5.id.toString(),modelList);
+        PurchaseOrderRepository().progressEstimatedDateUploads(
+            widget.orderModel.code, model5.id.toString(), modelList);
 //        try{
 //          showDialog(
 //              context: context,
@@ -1509,7 +1592,158 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     }
   }
 
-
+  Widget buildLoginMessageDialog(BuildContext context) {
+    return GestureDetector(
+      onTap: null,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: SizedBox(
+            width: 300.0,
+            height: 150.0,
+            child: Container(
+              decoration: ShapeDecoration(
+                color: Color(0xffffffff),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      height: 10,
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: widget.callbackResult
+                                ? Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 30,
+                            )
+                                : Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                '${widget.title == null || widget.title == ''
+                                    ? ''
+                                    : widget.title}',
+                                style: widget.titleStyle == null
+                                    ? null
+                                    : widget.titleStyle,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            color: Colors.grey,
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                      height: 80,
+                      child: Center(
+                        child: Text(
+                          widget.callbackResult
+                              ? '${widget.successTips == null ||
+                              widget.successTips == '' ? '成功' : widget
+                              .successTips}'
+                              : '${widget.failTips == null ||
+                              widget.failTips == '' ? '失败' : widget.failTips}',
+                          style: widget.contentStyle == null
+                              ? null
+                              : widget.contentStyle,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: FlatButton(
+                                  padding:
+                                  const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    '${widget.cancelButtonText == null ||
+                                        widget.cancelButtonText == ''
+                                        ? '取消'
+                                        : widget.cancelButtonText}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                  onPressed: widget.confirmAction == null
+                                      ? () {
+                                    Navigator.of(context).pop();
+                                  }
+                                      : widget.cancelAction),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      right: BorderSide(
+                                          color: Colors.grey, width: 0.5))),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: FlatButton(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                  ),
+                                  child: Text(
+                                    '${widget.confirmButtonText == null ||
+                                        widget.confirmButtonText == ''
+                                        ? '确定'
+                                        : widget.confirmButtonText}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                  onPressed: widget.confirmAction == null
+                                      ? () {
+                                    Navigator.of(context).pop();
+                                  }
+                                      : widget.confirmAction),
+                            ),
+                          )
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              top: BorderSide(color: Colors.grey, width: 0.5))),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class DialogAttribute {
@@ -1552,7 +1786,7 @@ class DialogAttribute {
     Key key,
     this.outsideDismiss = true,
     this.confirmAction,
-    this.callbackResult=false,
+    this.callbackResult = false,
     this.contentWidgetList,
     this.title,
     this.contentStyle,
@@ -1564,15 +1798,15 @@ class DialogAttribute {
     this.cancelAction,
     this.cancelButtonText,
     this.confirmButtonText,
-    this.isNeedCancelButton=false,
-    this.isNeedConfirmButton=false,
+    this.isNeedCancelButton = false,
+    this.isNeedConfirmButton = false,
     @required this.dialogType,
   });
 }
 
-
 class DialogUtil {
-  static Future dialog(BuildContext context,DialogAttribute attribute,) {
+  static Future dialog(BuildContext context,
+      DialogAttribute attribute,) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -1580,7 +1814,6 @@ class DialogUtil {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
           );
-        }
-    );
+        });
   }
 }

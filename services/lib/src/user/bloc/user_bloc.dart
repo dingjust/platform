@@ -55,6 +55,8 @@ class UserBLoC extends BLoCBase {
   StreamController _loginResultController =
       StreamController<String>.broadcast();
 
+  StreamController get loginStreamController => _loginResultController;
+
   Stream<String> get loginStream => _loginResultController.stream;
 
   ///跳转登录
@@ -66,21 +68,14 @@ class UserBLoC extends BLoCBase {
       {String username, String password, bool remember}) async {
     Response loginResponse;
     try {
-      //校验账号存在
-      bool exist = await UserRepositoryImpl().phoneExist(username);
-      if (exist != null && exist) {
-        loginResponse = await http$.post(
-            HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
-          'username': username,
-          'password': password,
-          'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
-          'client_id': GlobalConfigs.B2B_CLIENT_ID,
-          'client_secret': GlobalConfigs.B2B_CLIENT_SECRET
-        }));
-      } else {
-        _loginResultController.sink.add('账号不存在请注册后登录');
-        return LoginResult.FAIL;
-      }
+      loginResponse = await http$
+          .post(HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
+        'username': username,
+        'password': password,
+        'grant_type': GlobalConfigs.GRANT_TYPE_PASSWORD,
+        'client_id': GlobalConfigs.B2B_CLIENT_ID,
+        'client_secret': GlobalConfigs.B2B_CLIENT_SECRET
+      }));
     } catch (e) {
       print(e);
       //登录错误回调
@@ -103,20 +98,10 @@ class UserBLoC extends BLoCBase {
 
       if (infoResponse != null && infoResponse.statusCode == 200) {
         print(infoResponse.data);
-        UserModel user = UserModel.fromJson(infoResponse.data);
-
-        //用户类型是否于选择一致
-        if (_user.type != user.type) {
-          //清除token
-          http$.removeAuthorization();
-          _loginResultController.sink.add('账户类型不一致，请重新选择');
-          return LoginResult.FAIL;
-        } else {
-          _user = user;
-          _user
-            ..name = infoResponse.data['username']
-            ..status = UserStatus.ONLINE;
-        }
+        _user = UserModel.fromJson(infoResponse.data);
+        _user
+          ..name = infoResponse.data['username']
+          ..status = UserStatus.ONLINE;
       }
 
       // 获取公司信息
@@ -154,8 +139,8 @@ class UserBLoC extends BLoCBase {
     Response loginResponse;
     try {
       //校验账号存在
-      bool exist = await UserRepositoryImpl().phoneExist(username);
-      if (exist != null && exist) {
+      UserType type = await UserRepositoryImpl().phoneExist(username);
+      if (type != null && type != UserType.DEFAULT) {
         loginResponse = await http$.post(
             HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
           'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
@@ -309,6 +294,18 @@ class UserBLoC extends BLoCBase {
         LocalStorage.save(
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
       }
+    }
+  }
+
+  ///检测用户存在性
+  Future<UserType> checkUserExist(String username) async {
+    try {
+      //校验账号存在
+      UserType type = await UserRepositoryImpl().phoneExist(username);
+      return type;
+    } catch (e) {
+      print(e);
+      return UserType.DEFAULT;
     }
   }
 

@@ -414,10 +414,10 @@ class _LoginPageState extends State<LoginPage> {
       result = '';
     } else {
       if (RegexUtil.isMobile(_phoneController.text)) {
-        bool exist =
+        UserType type =
             await UserRepositoryImpl().phoneExist(_phoneController.text);
 
-        if (exist != null && exist) {
+        if (type != null && type != UserType.DEFAULT) {
           result = "";
           isExist = true;
         } else {
@@ -435,44 +435,8 @@ class _LoginPageState extends State<LoginPage> {
     return isExist;
   }
 
-  doLogin(UserBLoC bloc) {}
-
-  void onLogin(UserBLoC bloc) {
-    //加载条
-    showDialog(
-      context: context,
-      builder: (context) =>
-          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
-    );
+  void doLogin(UserBLoC bloc) {
     if (_isPasswordLogin) {
-//      showDialog(
-//          context: context,
-//          barrierDismissible: false,
-//          builder: (_) {
-//            return RequestDataLoading(
-//              requestCallBack: null,
-//              loginCallBack: bloc.login(
-//                  username: _phoneController.text,
-//                  password: _passwordController.text,
-//                  remember: _isRemember),
-//              loadingText: '登录中。。。',
-//              entrance: '',
-//            );
-//          }).then((result) {
-//        print(result);
-//        if (result == LoginResult.SUCCESS) {
-////          Navigator.of(context).pushAndRemoveUntil(
-////              MaterialPageRoute(
-////                  builder: (context) =>
-////                      MyAppHomeDelegate(
-////                          userType: UserBLoC.instance.currentUser.type)),
-////              ModalRoute.withName('/'));
-////          Navigator.pop(context);
-//          Navigator.of(context).popUntil(ModalRoute.withName('/'));
-//        } else if (result == LoginResult.DIO_ERROR) {
-//          Navigator.of(context).pop();
-//        }
-//      });
       bloc
           .login(
               username: _phoneController.text,
@@ -486,29 +450,6 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
     } else {
-//      showDialog(
-//          context: context,
-//          barrierDismissible: false,
-//          builder: (_) {
-//            return RequestDataLoading(
-//              requestCallBack: bloc.loginByCaptcha(
-//                  username: _phoneController.text,
-//                  captcha: _smsCaptchaController.text,
-//                  remember: _isRemember),
-//              outsideDismiss: false,
-//              loadingText: '登录中。。。',
-//              entrance: '',
-//            );
-//          }).then((result) {
-//        if (result == LoginResult.SUCCESS) {
-//          Navigator.of(context).pushAndRemoveUntil(
-//              MaterialPageRoute(builder: (context) => HomePage()),
-//              ModalRoute.withName('/'));
-////          Navigator.of(context).popUntil(ModalRoute.withName('/'));
-//        } else if (result == LoginResult.DIO_ERROR) {
-//          Navigator.of(context).pop();
-//        }
-//      });
       bloc
           .loginByCaptcha(
               username: _phoneController.text,
@@ -522,6 +463,54 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
     }
+  }
+
+  void onLogin(UserBLoC bloc) {
+    //加载条
+    showDialog(
+      context: context,
+      builder: (context) =>
+          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    );
+    bloc.checkUserExist(_phoneController.text).then((value) {
+      if (value == UserType.DEFAULT) {
+        bloc.loginStreamController.sink.add('账号不存在请注册后登陆');
+      } else {
+        if (bloc.currentUser.type != value) {
+          Navigator.of(context).pop();
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.LOGIN_MESSAGE_DIALOG,
+                  failTips:
+                  '您当前登录账户为${UserTypeLocalizedMap[bloc.currentUser
+                      .type]}账户,与您选择的身份不匹配。',
+                  callbackResult: false,
+                  cancelButtonText: '换个账户',
+                  confirmButtonText: '继续登录',
+                  confirmAction: () {
+                    Navigator.of(context).pop();
+                    //加载条
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          ProgressIndicatorFactory
+                              .buildDefaultProgressIndicator(),
+                    );
+                    doLogin(bloc);
+                  },
+                  cancelAction: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+              });
+        } else {
+          doLogin(bloc);
+        }
+      }
+    });
   }
 
   void showSnackBar(BuildContext context) {
