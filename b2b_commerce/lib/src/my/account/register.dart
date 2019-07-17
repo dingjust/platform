@@ -89,6 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Text(
                           '当前选择:${UserTypeLocalizedMap[UserBLoC.instance.currentUser.type]}',
                           style: TextStyle(fontSize: 16),
+
                         ),
                       )
                     ],

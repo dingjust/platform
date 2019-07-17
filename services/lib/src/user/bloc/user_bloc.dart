@@ -103,9 +103,20 @@ class UserBLoC extends BLoCBase {
 
       if (infoResponse != null && infoResponse.statusCode == 200) {
         print(infoResponse.data);
-        _user = UserModel.fromJson(infoResponse.data);
-        _user.name = infoResponse.data['username'];
-        _user.status = UserStatus.ONLINE;
+        UserModel user = UserModel.fromJson(infoResponse.data);
+
+        //用户类型是否于选择一致
+        if (_user.type != user.type) {
+          //清除token
+          http$.removeAuthorization();
+          _loginResultController.sink.add('账户类型不一致，请重新选择');
+          return LoginResult.FAIL;
+        } else {
+          _user = user;
+          _user
+            ..name = infoResponse.data['username']
+            ..status = UserStatus.ONLINE;
+        }
       }
 
       // 获取公司信息
