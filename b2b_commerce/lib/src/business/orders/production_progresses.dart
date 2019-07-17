@@ -343,7 +343,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 Container(
                   padding: EdgeInsets.only(right: 10),
                   child: Text(
-                    '${progress.delayedDays != null && progress.delayedDays > 0 && sequence <= _index
+                    '${progress.delayedDays != null &&
+                        progress.delayedDays > 0 && sequence <= _index
                         ? '已延期${progress.delayedDays}天'
                         : ''}',
                     style: TextStyle(color: Colors.red, fontSize: 18),
@@ -411,6 +412,18 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     child: CachedNetworkImage(
                         imageUrl: '${progress.medias[0].previewUrl()}',
                         fit: BoxFit.cover,
+                        imageBuilder: (context, imageProvider) =>
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                         placeholder: (context, url) =>
                             SpinKitRing(
                               color: Colors.black12,

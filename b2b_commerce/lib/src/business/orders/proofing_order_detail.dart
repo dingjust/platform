@@ -117,11 +117,25 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                       imageUrl:
                       '${model.product.thumbnail.previewUrl()}',
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => SpinKitRing(
-                        color: Colors.black12,
-                        lineWidth: 2,
-                        size: 30,
-                      ),
+                      imageBuilder: (context, imageProvider) =>
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius:
+                              BorderRadius.circular(10),
+                            ),
+                          ),
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          ),
                       errorWidget: (context, url, error) =>
                           SpinKitRing(
                             color: Colors.black12,
@@ -158,10 +172,11 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             ),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => PicturePickPreviewWidget(
-                    medias: model.product.thumbnails,
-                    isUpload: false,
-                  )));
+                  builder: (context) =>
+                      PicturePickPreviewWidget(
+                        medias: model.product.thumbnails,
+                        isUpload: false,
+                      )));
             },
           )
               : Container(
@@ -485,16 +500,30 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         imageUrl:
                         '${model.supplier.profilePicture.previewUrl()}',
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        ),
-                        errorWidget: (context, url, error) => SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        )),
+                        imageBuilder: (context, imageProvider) =>
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                        placeholder: (context, url) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            )),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),

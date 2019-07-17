@@ -193,6 +193,18 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                             imageUrl:
                                 '${pageItem.supplier.profilePicture.previewUrl()}',
                             fit: BoxFit.cover,
+                            imageBuilder: (context, imageProvider) =>
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
                             placeholder: (context, url) => SpinKitRing(
                                   color: Colors.black12,
                                   lineWidth: 2,
@@ -434,6 +446,18 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                     imageUrl:
                         '${pageItem.requirementOrder.details.pictures[0].previewUrl()}',
                     fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                     placeholder: (context, url) => SpinKitRing(
                           color: Colors.black12,
                           lineWidth: 2,

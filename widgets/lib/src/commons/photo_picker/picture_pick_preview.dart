@@ -54,17 +54,24 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
   Color iconColorRight = Colors.black;
   String userType;
 
-  final StreamController _streamController = StreamController<double>.broadcast();
+  final StreamController _streamController =
+      StreamController < double
+
+  >
+
+      .
+
+  broadcast();
 
   List<MediaModel> mediaList;
   @override
   void initState() {
     final bloc = BLoCProvider.of<UserBLoC>(context);
-    if(bloc.isBrandUser){
+    if (bloc.isBrandUser) {
       userType = 'brand';
-    }else{
+    } else {
       userType = 'factory';
-      if(widget.isUpload) {
+      if (widget.isUpload) {
         MediaModel model = new MediaModel();
         widget.medias.insert(0, model);
       }
@@ -83,39 +90,34 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
               onPressed: () {
                 if (userType == 'factory') {
                   //带参数返回
-                  if(widget.isUpload) {
+                  if (widget.isUpload) {
                     setState(() {
                       widget.medias.removeAt(0);
                       Navigator.of(context).pop(widget.medias);
                     });
-                  }else{
+                  } else {
                     Navigator.of(context).pop();
                   }
                 } else {
                   Navigator.of(context).pop();
                 }
-              }
-          ),
+              }),
           title: Text('图片详情'),
           elevation: 0.5,
           brightness: Brightness.light,
           centerTitle: true,
-
         ),
-        body: Container(
-            child:
-            _buildGrid(context)
-        ),
+        body: Container(child: _buildGrid(context)),
       ),
       onWillPop: () {
         if (userType == 'factory') {
           //带参数返回
-          if(widget.isUpload) {
+          if (widget.isUpload) {
             setState(() {
               widget.medias.removeAt(0);
               Navigator.of(context).pop(widget.medias);
             });
-          }else{
+          } else {
             Navigator.of(context).pop();
           }
         } else {
@@ -127,12 +129,10 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
 
   Widget _buildGrid(BuildContext context) {
     return GridView(
-      physics:
-      widget.primary == false ? NeverScrollableScrollPhysics() : null,
+      physics: widget.primary == false ? NeverScrollableScrollPhysics() : null,
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: widget.itemWidth,
-          crossAxisSpacing: 10),
+          maxCrossAxisExtent: widget.itemWidth, crossAxisSpacing: 10),
       children: List.generate(widget.medias.length, (index) {
         if (index == 0 && userType == 'factory' && widget.isUpload == true) {
           return GestureDetector(
@@ -166,62 +166,70 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
         }
         return GestureDetector(
           child: Container(
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey[200],
-                    blurRadius: 5.0,
-                    spreadRadius: 2.0,
-                    offset: Offset(0, 3.0),
-                  ),
-                ],
-              ),
-              child: Container(
-                  padding: EdgeInsets.all(5),
-                  width: 80,
-                  height: 80,
-                  child: CachedNetworkImage(
-                      imageUrl: '${widget.medias[index].actualUrl}',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30.0,
-                          ),
-                      errorWidget: (context, url, error) =>
-                          Container(
-                            padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                            child: Center(
-                              child: Icon(
-                                B2BIcons.noPicture,
-                                color: Color.fromRGBO(200, 200, 200, 1),
-                                size: 60,
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[200],
+                  blurRadius: 5.0,
+                  spreadRadius: 2.0,
+                  offset: Offset(0, 3.0),
+                ),
+              ],
+            ),
+            child: Container(
+                padding: EdgeInsets.all(5),
+                width: 80,
+                height: 80,
+                child: CachedNetworkImage(
+                    imageUrl: '${widget.medias[index].actualUrl}',
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
                               ),
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color.fromRGBO(243, 243, 243, 1)),
+                        ),
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30.0,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Center(
+                            child: Icon(
+                              B2BIcons.noPicture,
+                              color: Color.fromRGBO(200, 200, 200, 1),
+                              size: 60,
                             ),
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Color.fromRGBO(243, 243, 243, 1)),
-                          )
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  )
-              ),
+                          ),
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color.fromRGBO(243, 243, 243, 1)),
+                        )),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                )),
           ),
           onTap: () {
             print('${widget.medias[index].actualUrl}');
-            onPreview(
-                context,'${widget.medias[index].actualUrl}');
+            onPreview(context, '${widget.medias[index].actualUrl}');
           },
-
           onLongPress: () {
-            userType == 'factory' ? _deleteFile(widget.medias[index]):null;
+            userType == 'factory' ? _deleteFile(widget.medias[index]) : null;
           },
         );
       }),
@@ -238,15 +246,15 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
           child: Container(
               child: PhotoView(
                 imageProvider: NetworkImage(url),
-              )
-          ),
-          onTap: (){
+              )),
+          onTap: () {
             Navigator.of(context).pop();
           },
         );
       },
     );
   }
+
 //文件下载打开
   Future<String> _previewFile(String url, String name, String mediaType) async {
     String downloadUrl = '${GlobalConfigs.CONTEXT_PATH}${url}';
@@ -484,5 +492,4 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
       },
     );
   }
-
 }

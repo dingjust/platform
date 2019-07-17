@@ -34,26 +34,35 @@ class RecommendProductItem extends StatelessWidget {
             color: Colors.white, borderRadius: BorderRadius.circular(5)),
         child: Column(
           children: <Widget>[
-            model.thumbnails != null && model.thumbnails.isNotEmpty
-                ? Container(
+            model.thumbnails != null && model.thumbnails.isNotEmpty&&model.thumbnails[0].url!=null
+                ? CachedNetworkImage(
+                    imageUrl: '${model.thumbnails[0].normalUrl()}',
                     width: 200,
                     height: 200,
-                    child: CachedNetworkImage(
-                        imageUrl: '${model.thumbnails[0].normalUrl()}',
-                        width: 200,
-                        height: 200,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) => Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
                             ),
-                        errorWidget: (context, url, error) => SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            )),
-                  )
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5),
+                                topRight: Radius.circular(5)),
+                          ),
+                        ),
+                    placeholder: (context, url) => SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) => SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ))
                 : Container(
                     // width: imageSize,
                     height: imageSize,

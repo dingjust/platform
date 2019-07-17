@@ -159,6 +159,19 @@ class _AttachmentsState extends State<Attachments> {
                         height: 100,
                         imageUrl: '${model.previewUrl()}',
                         fit: BoxFit.cover,
+                        imageBuilder: (context, imageProvider) =>
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey,
+                              ),
+                            ),
                         placeholder: (context, url) => SpinKitRing(
                               color: Colors.black12,
                               lineWidth: 2,
@@ -332,7 +345,8 @@ class EditableAttachments extends StatefulWidget {
   _EditableAttachmentsState createState() => _EditableAttachmentsState();
 }
 
-class _EditableAttachmentsState extends State<EditableAttachments> with TickerProviderStateMixin, ImagePickerListener{
+class _EditableAttachmentsState extends State<EditableAttachments>
+    with TickerProviderStateMixin, ImagePickerListener {
   ScrollController _scrollController = new ScrollController();
   Color iconColorLeft = Colors.grey[200];
   Color iconColorRight = Colors.black;
@@ -343,7 +357,13 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
   final StreamController _compressStreamController =
       StreamController<double>.broadcast();
 
-  File _image;
+  //stream列
+  // List<StreamController> _streamControllerList = [];
+  // Map<String, StreamController> _streamControllerMap = {};
+  // Map<String, File> _fileMap = {};
+  List<File> _uploadFileList = [];
+  List<StreamController> _streamControllerList = [];
+
   AnimationController _controller;
   ImagePickerHandler imagePicker;
 
@@ -356,7 +376,8 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
     );
 
     imagePicker = new ImagePickerHandler(this, _controller);
-    imagePicker.build(0xFFFFFFFF,0xFF6495ED,widget.isCut,widget.ratioX,widget.ratioY);
+    imagePicker.build(
+        0xFFFFFFFF, 0xFF6495ED, widget.isCut, widget.ratioX, widget.ratioY);
   }
 
   @override
@@ -368,7 +389,7 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
   }
 
   @override
-  userImage(File _image)async {
+  userImage(File _image) async {
     if (_image != null) {
       await _uploadFile(_image);
     }
@@ -455,6 +476,46 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
       ));
     }
 
+    //上传中的图片
+    for (int i = 0; i < _uploadFileList.length; i++) {
+      widgetList.add(GestureDetector(
+        child: Container(
+          width: widget.imageWidth,
+          height: widget.imageHeight,
+          margin: EdgeInsets.symmetric(horizontal: 5),
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Image.file(
+                _uploadFileList[i],
+              ),
+              Container(
+                width: widget.imageWidth,
+                height: widget.imageHeight,
+                color: Colors.black26,
+              ),
+              StreamBuilder<double>(
+                  stream: _streamControllerList[i].stream,
+                  initialData: 0.0,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<double> snapshot) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: snapshot.data,
+                      ),
+                    );
+                  })
+            ],
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onTap: () {},
+        onLongPress: () {},
+      ));
+    }
+
     widgetList.addAll(widget.list.reversed.map(
       (model) {
         // 附件类型
@@ -501,6 +562,17 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
                 child: CachedNetworkImage(
                   imageUrl: '${model.previewUrl()}',
                   fit: BoxFit.cover,
+                  imageBuilder: (context, imageProvider) =>
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey,
+                        ),
+                      ),
                   placeholder: (context, url) => SpinKitRing(
                         color: Colors.black12,
                         lineWidth: 2,
@@ -712,51 +784,53 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
 
   Future _uploadFile(File file) async {
     // TODO： 引入StreamBuilder实时更新进度条
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            StreamBuilder<double>(
-                stream: _streamController.stream,
-                initialData: 0.0,
-                builder:
-                    (BuildContext context, AsyncSnapshot<double> snapshot) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                          child: Text(
-                            '上传中',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                        Center(
-                          child: LinearProgressIndicator(
-                            value: snapshot.data,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('进度:', style: TextStyle(fontSize: 12)),
-                            Text('${((snapshot.data / 1) * 100).round()}%',
-                                style: TextStyle(fontSize: 12))
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                })
-          ],
-        );
-      },
-    );
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return SimpleDialog(
+    //       children: <Widget>[
+    //         StreamBuilder<double>(
+    //             stream: _streamController.stream,
+    //             initialData: 0.0,
+    //             builder:
+    //                 (BuildContext context, AsyncSnapshot<double> snapshot) {
+    //               return Container(
+    //                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+    //                 child: Column(
+    //                   children: <Widget>[
+    //                     Container(
+    //                       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+    //                       child: Text(
+    //                         '上传中',
+    //                         style: TextStyle(fontSize: 12),
+    //                       ),
+    //                     ),
+    //                     Center(
+    //                       child: LinearProgressIndicator(
+    //                         value: snapshot.data,
+    //                       ),
+    //                     ),
+    //                     Row(
+    //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                       children: <Widget>[
+    //                         Text('进度:', style: TextStyle(fontSize: 12)),
+    //                         Text('${((snapshot.data / 1) * 100).round()}%',
+    //                             style: TextStyle(fontSize: 12))
+    //                       ],
+    //                     )
+    //                   ],
+    //                 ),
+    //               );
+    //             })
+    //       ],
+    //     );
+    //   },
+    // );
 
-    // /// TODO: 调用上传接口,更新上传进度条
+    //上传文件置入列表
+    int index = _addFile(file);
+    //调用上传接口,更新上传进度条
     try {
       FormData formData = FormData.from({
         "file": UploadFileInfo(file, "file",
@@ -773,12 +847,13 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
           headers: {'Content-Type': 'application/json;charset=UTF-8'},
         ),
         onSendProgress: (int sent, int total) {
-          _streamController.sink.add(sent / total);
+          _streamControllerList[index].sink.add(sent / total);
         },
       );
+      _removeFile(file);
 
-      Navigator.of(context).pop();
-//      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
+      //Navigator.of(context).pop();
       setState(() {
         ///  TODO:用上传图片回调的URL更新图片列表
         widget.list.add(MediaModel.fromJson(response.data));
@@ -788,84 +863,83 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
     }
   }
 
-  Future _uploadFileByBytes(List<int> bytes) async {
-    // TODO： 引入StreamBuilder实时更新进度条
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            StreamBuilder<double>(
-                stream: _streamController.stream,
-                initialData: 0.0,
-                builder:
-                    (BuildContext context, AsyncSnapshot<double> snapshot) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                          child: Text(
-                            '上传中',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                        Center(
-                          child: LinearProgressIndicator(
-                            value: snapshot.data,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('进度:', style: TextStyle(fontSize: 12)),
-                            Text('${((snapshot.data / 1) * 100).round()}%',
-                                style: TextStyle(fontSize: 12))
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                })
-          ],
-        );
-      },
-    );
+  // Future _uploadFileByBytes(List<int> bytes) async {
+  //   // TODO： 引入StreamBuilder实时更新进度条
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return SimpleDialog(
+  //         children: <Widget>[
+  //           StreamBuilder<double>(
+  //               stream: _streamController.stream,
+  //               initialData: 0.0,
+  //               builder:
+  //                   (BuildContext context, AsyncSnapshot<double> snapshot) {
+  //                 return Container(
+  //                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+  //                   child: Column(
+  //                     children: <Widget>[
+  //                       Container(
+  //                         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+  //                         child: Text(
+  //                           '上传中',
+  //                           style: TextStyle(fontSize: 12),
+  //                         ),
+  //                       ),
+  //                       Center(
+  //                         child: LinearProgressIndicator(
+  //                           value: snapshot.data,
+  //                         ),
+  //                       ),
+  //                       Row(
+  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                         children: <Widget>[
+  //                           Text('进度:', style: TextStyle(fontSize: 12)),
+  //                           Text('${((snapshot.data / 1) * 100).round()}%',
+  //                               style: TextStyle(fontSize: 12))
+  //                         ],
+  //                       )
+  //                     ],
+  //                   ),
+  //                 );
+  //               })
+  //         ],
+  //       );
+  //     },
+  //   );
+  //   // /// TODO: 调用上传接口,更新上传进度条
+  //   try {
+  //     FormData formData = FormData.from({
+  //       "file": UploadFileInfo.fromBytes(bytes, "file",
+  //           contentType: ContentType.parse('image/jpeg')),
+  //       "conversionGroup": "DefaultProductConversionGroup",
+  //       "imageFormat": "DefaultImageFormat"
+  //     });
+  //     Response<Map<String, dynamic>> response = await http$.post(
+  //       Apis.upload(),
+  //       data: formData,
+  //       // queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
+  //       // queryParameters: {'imageFormat': 'DefaultImageFormat'},
+  //       options: Options(
+  //         headers: {'Content-Type': 'application/json;charset=UTF-8'},
+  //       ),
+  //       onSendProgress: (int sent, int total) {
+  //         _streamController.sink.add(sent / total);
+  //       },
+  //     );
 
-    // /// TODO: 调用上传接口,更新上传进度条
-    try {
-      FormData formData = FormData.from({
-        "file": UploadFileInfo.fromBytes(bytes, "file",
-            contentType: ContentType.parse('image/jpeg')),
-        "conversionGroup": "DefaultProductConversionGroup",
-        "imageFormat": "DefaultImageFormat"
-      });
-      Response<Map<String, dynamic>> response = await http$.post(
-        Apis.upload(),
-        data: formData,
-        // queryParameters: {'conversionGroup': 'DefaultProductConversionGroup'},
-        // queryParameters: {'imageFormat': 'DefaultImageFormat'},
-        options: Options(
-          headers: {'Content-Type': 'application/json;charset=UTF-8'},
-        ),
-        onSendProgress: (int sent, int total) {
-          _streamController.sink.add(sent / total);
-        },
-      );
-
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
-      setState(() {
-        ///  TODO:用上传图片回调的URL更新图片列表
-        widget.list.add(MediaModel.fromJson(response.data));
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+  //     Navigator.of(context).pop();
+  //     Navigator.of(context).pop();
+  //     Navigator.of(context).pop();
+  //     setState(() {
+  //       ///  TODO:用上传图片回调的URL更新图片列表
+  //       widget.list.add(MediaModel.fromJson(response.data));
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   //TODO :传入Media参数
   Future _deleteFile(MediaModel mediaModel, {String code}) async {
@@ -919,5 +993,23 @@ class _EditableAttachmentsState extends State<EditableAttachments> with TickerPr
         );
       },
     );
+  }
+
+  int _addFile(File file) {
+    setState(() {
+      _uploadFileList.add(file);
+      _streamControllerList.add(StreamController < double>.broadcast());
+    });
+    return _uploadFileList.indexOf(file);
+  }
+
+  void _removeFile(File file) {
+    StreamController streamController =
+    _streamControllerList[_uploadFileList.indexOf(file)];
+    _streamControllerList.remove(streamController);
+    streamController.close();
+    setState(() {
+      _uploadFileList.remove(file);
+    });
   }
 }

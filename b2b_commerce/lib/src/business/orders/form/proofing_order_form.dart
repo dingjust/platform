@@ -169,6 +169,18 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                                 imageUrl:
                                     '${widget.quoteModel.requirementOrder.belongTo.profilePicture.previewUrl()}',
                                 fit: BoxFit.cover,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                      width: 100,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
                                 placeholder: (context, url) => SpinKitRing(
                                       color: Colors.black12,
                                       lineWidth: 2,
