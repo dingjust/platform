@@ -1,11 +1,9 @@
 import 'package:b2b_commerce/src/business/search/purchase_order_search_result.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
-import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'contract_select_widget.dart';
-import 'contract_webview_page.dart';
 
 class JoinOrderContractPage extends StatefulWidget{
   _JoinOrderContractPageState createState() => _JoinOrderContractPageState();
@@ -59,7 +57,7 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
 
   Widget _buildSelectOrderItem(){
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         SearchModel searchModel = SearchModel(keyword: '');
         Navigator.push(
             context,
@@ -70,8 +68,8 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
                       isContractSelect: true,
                     )
             )
-        ).then((value){
-           print(value.code);
+        ).then((value) {
+          print(value.code);
         });
       },
       child: Container(
@@ -79,7 +77,7 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
         child: Row(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               width: 80,
               height: 80,
               child: Image.asset(
@@ -88,7 +86,7 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: RichText(
                 text: TextSpan(
                     text: '选择关联订单',
@@ -109,8 +107,8 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
           ],
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(width: 3,color: Colors.black38)
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(width: 3, color: Colors.black38)
         ),
       ),
     );

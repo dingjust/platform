@@ -589,17 +589,17 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             children: <Widget>[
               Text('数量：', style: TextStyle()),
               Container(
-                    margin: EdgeInsets.only(left: 15),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: progress.quantity == 0 || progress.quantity == null
-                          ? Text('${userType == 'brand' ? '' : '填写'}',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ))
-                          : Text('${progress.quantity}', style: TextStyle()),
-                    ),
-                  ),
+                margin: EdgeInsets.only(left: 15),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: progress.quantity == 0 || progress.quantity == null
+                      ? Text('${userType == 'brand' ? '' : '填写'}',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ))
+                      : Text('${progress.quantity}', style: TextStyle()),
+                ),
+              ),
               progress.quantity == null
                   ? Align(
                 alignment: Alignment.centerRight,
