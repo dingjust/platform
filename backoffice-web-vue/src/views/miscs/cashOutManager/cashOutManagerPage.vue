@@ -10,11 +10,12 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('CashOutManagerModule');
+  const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('CashOutManagerModule');
 
   import cashOutManagerToolbar from './toolbar/cashOutManagerToolbar';
   import cashOutManagerList from '../cashOutManager/list/cashOutManagerList';
   import cashOutManagerDetailsPage from './details/cashOutManagerDetailsPage';
+  import store from '../../../components/webchat/store';
 
   export default {
     name: 'cashOutManagerPage',
@@ -25,13 +26,17 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword'
+        keyword: 'keyword',
+        cashOutDetailData: 'cashOutDetailData'
       })
     },
     methods: {
+      ...mapMutations({
+        setCashOutDetailData: 'cashOutDetailData',
+      }),
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
       }),
       onAdvancedSearch (page, size) {
         this.isAdvancedSearch = true;
@@ -50,7 +55,8 @@
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
         }
-        this.fn.openSlider('明细：' + item.code, cashOutManagerDetailsPage, result);
+        this.setCashOutDetailData(result);
+        this.fn.openSlider('明细：' + item.code, cashOutManagerDetailsPage);
       },
       async onRejected (item) {
         const url = this.apis().rejectedCashOut(item.id);

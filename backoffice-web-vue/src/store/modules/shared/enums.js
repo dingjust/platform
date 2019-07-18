@@ -18,6 +18,8 @@ const state = {
     {code: 'COMPLETED', name: '已完成'},
     {code: 'CANCELED', name: '已取消'},
     {code: 'REJECTED', name: '已拒绝'},
+    {code: 'IN_REVIEW', name: '审核中'},
+    {code: 'REVIEWED', name: '已审核'},
   ],
   //工厂星级
   starLevels: [

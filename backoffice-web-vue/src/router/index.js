@@ -214,7 +214,7 @@ const router = new Router({
             ,{
               path: '/miscs/wallet',
               name: '钱包',
-              component: () => import(/* webpackChunkName: 'wallet' */ '@/views/miscs/wallet/walletPage')
+              component: () => import(/* webpackChunkName: 'wallet' */ '@/views/miscs/wallet/WalletPage')
             }
             ,{
               path: '/miscs/cashOutManager',

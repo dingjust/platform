@@ -20,9 +20,9 @@
           {{scope.row.amountStatus|enumTranslate('AmountStatus')}}
         </template>
       </el-table-column>
-      <el-table-column label="提现发起时间" prop="creationtime" width="120" >
+      <el-table-column label="提现发起时间" prop="creationtime" width="150" >
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
+          <span>{{scope.row.creationtime | formatDateWithSecond}}</span>
         </template>
       </el-table-column>
       <!--<el-table-column label="提现完成时间" prop="cashCompletionTime" width="120">-->
@@ -34,8 +34,8 @@
       <el-table-column label="操作"  fixed="right" width="180">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="onCompleted(scope.row)" v-show="!(scope.row.amountStatus == 'IN_REVIEW' || scope.row.amountStatus == 'REVIEWED')">确认</el-button>
-          <el-button type="text" icon="el-icon-delete" @click="onRejected(scope.row)" v-show="!(scope.row.amountStatus == 'IN_REVIEW' || scope.row.amountStatus == 'REVIEWED')">拒绝</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onCompleted(scope.row)" v-show="!(scope.row.amountStatus == 'REJECTED' || scope.row.amountStatus == 'REVIEWED')">确认</el-button>
+          <el-button type="text" icon="el-icon-delete" @click="onRejected(scope.row)" v-show="!(scope.row.amountStatus == 'REJECTED' || scope.row.amountStatus == 'REVIEWED')">拒绝</el-button>
         </template>
       </el-table-column>
     </el-table>
