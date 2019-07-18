@@ -29,11 +29,13 @@ class ApparelProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onLongPress: isSelectOption ? null : onPrdouctDeleting,
-      onTap: isSelectOption ? (){
-        if(isSelectOption){
-          Navigator.pop(context,item);
+      onTap: isSelectOption
+          ? () {
+        if (isSelectOption) {
+          Navigator.pop(context, item);
         }
-      } : onPrdouctUpdating,
+      }
+          : onPrdouctUpdating,
       child: Card(
         margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
         elevation: 0,
@@ -51,8 +53,8 @@ class ApparelProductItem extends StatelessWidget {
       padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
       child: Row(
         children: <Widget>[
-          item.thumbnail != null?
-          Container(
+          item.thumbnail != null
+              ? Container(
             width: 80,
             height: 80,
             child: CachedNetworkImage(
@@ -60,6 +62,18 @@ class ApparelProductItem extends StatelessWidget {
                 height: 100,
                 imageUrl: '${item.thumbnail.previewUrl()}',
                 fit: BoxFit.cover,
+                imageBuilder: (context, imageProvider) =>
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                 placeholder: (context, url) =>
                     SpinKitRing(
                       color: Colors.black12,
@@ -71,13 +85,12 @@ class ApparelProductItem extends StatelessWidget {
                       color: Colors.black12,
                       lineWidth: 2,
                       size: 30,
-                    )
-            ),
+                    )),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
             ),
-          ) :
-          Container(
+          )
+              : Container(
             width: 80,
             height: 80,
             decoration: BoxDecoration(
@@ -99,7 +112,7 @@ class ApparelProductItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '${item.name==null?'':item.name}',
+                    '${item.name == null ? '' : item.name}',
                     style: TextStyle(
                       fontSize: 15,
                     ),
@@ -111,7 +124,7 @@ class ApparelProductItem extends StatelessWidget {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      '货号：${item.skuID==null?'':item.skuID}',
+                      '货号：${item.skuID == null ? '' : item.skuID}',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
@@ -162,11 +175,10 @@ class ApparelProductItem extends StatelessWidget {
                     child: Container(
                       width: 60,
                       height: 25,
-                      margin: EdgeInsets.only(right: 10,left: 10),
+                      margin: EdgeInsets.only(right: 10, left: 10),
                       decoration: BoxDecoration(
                           color: Color.fromRGBO(255, 214, 12, 1),
-                          borderRadius: BorderRadius.circular(5)
-                      ),
+                          borderRadius: BorderRadius.circular(5)),
                       child: Center(child: Text('发需求')),
                     ),
                     onTap: onPrdouctProduction,
@@ -175,11 +187,10 @@ class ApparelProductItem extends StatelessWidget {
                     child: Container(
                       width: 60,
                       height: 25,
-                      margin: EdgeInsets.only(right: 10,left: 10),
+                      margin: EdgeInsets.only(right: 10, left: 10),
                       decoration: BoxDecoration(
                           color: Color.fromRGBO(255, 214, 12, 1),
-                          borderRadius: BorderRadius.circular(5)
-                      ),
+                          borderRadius: BorderRadius.circular(5)),
                       child: Center(child: Text(_approvalStatusText)),
                     ),
                     onTap: onProductShlefing,

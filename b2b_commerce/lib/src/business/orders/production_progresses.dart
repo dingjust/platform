@@ -343,7 +343,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 Container(
                   padding: EdgeInsets.only(right: 10),
                   child: Text(
-                    '${progress.delayedDays != null && progress.delayedDays > 0 && sequence <= _index
+                    '${progress.delayedDays != null &&
+                        progress.delayedDays > 0 && sequence <= _index
                         ? '已延期${progress.delayedDays}天'
                         : ''}',
                     style: TextStyle(color: Colors.red, fontSize: 18),
@@ -411,6 +412,18 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     child: CachedNetworkImage(
                         imageUrl: '${progress.medias[0].previewUrl()}',
                         fit: BoxFit.cover,
+                        imageBuilder: (context, imageProvider) =>
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                         placeholder: (context, url) =>
                             SpinKitRing(
                               color: Colors.black12,
@@ -576,17 +589,17 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
             children: <Widget>[
               Text('数量：', style: TextStyle()),
               Container(
-                    margin: EdgeInsets.only(left: 15),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: progress.quantity == 0 || progress.quantity == null
-                          ? Text('${userType == 'brand' ? '' : '填写'}',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ))
-                          : Text('${progress.quantity}', style: TextStyle()),
-                    ),
-                  ),
+                margin: EdgeInsets.only(left: 15),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: progress.quantity == 0 || progress.quantity == null
+                      ? Text('${userType == 'brand' ? '' : '填写'}',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ))
+                      : Text('${progress.quantity}', style: TextStyle()),
+                ),
+              ),
               progress.quantity == null
                   ? Align(
                 alignment: Alignment.centerRight,

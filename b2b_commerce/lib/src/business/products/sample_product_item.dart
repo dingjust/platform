@@ -10,19 +10,27 @@ class SampleProductItem extends StatelessWidget {
   bool isDetail;
   bool isHistoryCreate;
 
-  SampleProductItem({this.item,this.isDetail = false,this.isHistoryCreate = false});
+  SampleProductItem(
+      {this.item, this.isDetail = false, this.isHistoryCreate = false});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         if (isHistoryCreate) {
           Navigator.pop(context, item);
           return;
         }
-        if(isDetail) ProductRepositoryImpl().getSample(item.code).then((sample){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SampleProductDetailPage(item: item,)));
-        });
+        if (isDetail)
+          ProductRepositoryImpl().getSample(item.code).then((sample) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SampleProductDetailPage(
+                          item: item,
+                        )));
+          });
       },
       child: Card(
         elevation: 0,
@@ -31,13 +39,25 @@ class SampleProductItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: <Widget>[
-              item.pictures.length > 0?
-              Container(
+              item.pictures.length > 0
+                  ? Container(
                 width: 80,
                 height: 80,
                 child: CachedNetworkImage(
                     imageUrl: '${item.pictures[0].previewUrl()}',
                     fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
                     placeholder: (context, url) =>
                         SpinKitRing(
                           color: Colors.black12,
@@ -49,13 +69,12 @@ class SampleProductItem extends StatelessWidget {
                           color: Colors.black12,
                           lineWidth: 2,
                           size: 30,
-                        )
-                ),
+                        )),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-              ):
-              Container(
+              )
+                  : Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
@@ -76,10 +95,12 @@ class SampleProductItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(item?.name,style: TextStyle(fontSize: 15),),
+                    Text(
+                      item?.name,
+                      style: TextStyle(fontSize: 15),
+                    ),
                     Container(
-                      padding:
-                      EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                      padding: EdgeInsets.symmetric(vertical: 1, horizontal: 5),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(5),

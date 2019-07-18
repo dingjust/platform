@@ -339,10 +339,10 @@ class _RegisterPageState extends State<RegisterPage> {
       result = '输入正确手机号';
     } else {
       if (RegexUtil.isMobile(_phoneController.text)) {
-        bool exist =
+        UserType type =
             await UserRepositoryImpl().phoneExist(_phoneController.text);
 
-        if (exist != null && exist) {
+        if (type != null && type != UserType.DEFAULT) {
           result = "账号已存在";
         } else {
           result = "";

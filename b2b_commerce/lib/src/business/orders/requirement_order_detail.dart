@@ -159,6 +159,18 @@ class _RequirementOrderDetailPageState
                       imageUrl:
                       '${orderModel.belongTo.profilePicture.previewUrl()}',
                       fit: BoxFit.cover,
+                      imageBuilder: (context, imageProvider) =>
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                       placeholder: (context, url) =>
                           SpinKitRing(
                             color: Colors.black12,
@@ -513,6 +525,18 @@ class _RequirementOrderDetailPageState
                     height: 100,
                     imageUrl: '${orderModel.details.pictures[0].previewUrl()}',
                     fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                     placeholder: (context, url) =>
                         SpinKitRing(
                           color: Colors.black12,

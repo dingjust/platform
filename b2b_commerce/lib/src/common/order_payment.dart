@@ -222,6 +222,18 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                       height: 100,
                       imageUrl: '${model.product.thumbnail.previewUrl()}',
                       fit: BoxFit.cover,
+                      imageBuilder: (context, imageProvider) =>
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
                       placeholder: (context, url) => SpinKitRing(
                             color: Colors.black12,
                             lineWidth: 2,

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:models/models.dart';
 import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:services/src/supplier/brands_response.dart';
@@ -38,7 +39,7 @@ abstract class UserRepository {
   Future<List<LabelModel>> labels();
 
   /// 手机号是否注册
-  Future<bool> phoneExist(String phone);
+  Future<UserType> phoneExist(String phone);
 
   //品牌获取工厂供应商列表（品牌端）
   Future<FactoriesResponse> factorySuppliers(Map<String, Object> params);

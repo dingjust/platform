@@ -67,6 +67,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
   void initState() {
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -323,7 +324,8 @@ class _MyBrandPageState extends State<MyBrandPage> {
       child: Column(
         children: <Widget>[
           Offstage(
-            offstage: UserBLoC.instance.currentUser.b2bUnit.uid != widget.brand.uid,
+            offstage:
+            UserBLoC.instance.currentUser.b2bUnit.uid != widget.brand.uid,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Row(
@@ -338,7 +340,8 @@ class _MyBrandPageState extends State<MyBrandPage> {
                                   MyBrandBaseFormPage(widget.brand)));
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(255, 214, 12, 1),
                         borderRadius: BorderRadius.circular(5),
@@ -364,6 +367,18 @@ class _MyBrandPageState extends State<MyBrandPage> {
                             imageUrl:
                                 '${widget.brand.profilePicture.previewUrl()}',
                             fit: BoxFit.cover,
+                            imageBuilder: (context, imageProvider) =>
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
                             placeholder: (context, url) => SpinKitRing(
                                   color: Colors.black12,
                                   lineWidth: 2,
