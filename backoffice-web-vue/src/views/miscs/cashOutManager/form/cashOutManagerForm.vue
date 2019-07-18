@@ -20,7 +20,7 @@
     </el-card>
 
     <div class="pt-2"></div>
-    <el-card class="box-card" v-show="slotData.account != null">
+    <el-card class="box-card" v-if="slotData.account != null">
     <div slot="header" class="clearfix">
       <span>提现账户信息</span>
     </div>
