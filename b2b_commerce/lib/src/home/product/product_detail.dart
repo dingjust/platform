@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart' as dj;
 import 'package:b2b_commerce/src/home/product/buy_proofing_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,7 +9,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
-import 'package:b2b_commerce/src/home/product/dj_bottom_sheet.dart' as dj;
 
 class ProductDetailPage extends StatefulWidget {
   ProductDetailPage({Key key, @required this.product}) : super(key: key);
@@ -512,12 +512,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 }
 
 class BasicInfoRow extends StatelessWidget {
-  const BasicInfoRow(
-      {Key key,
-      @required this.label,
-      @required this.value,
-      this.action,
-      this.onTap})
+  const BasicInfoRow({Key key,
+    @required this.label,
+    @required this.value,
+    this.action,
+    this.onTap})
       : super(key: key);
 
   final String label;
