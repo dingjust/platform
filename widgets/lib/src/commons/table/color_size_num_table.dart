@@ -31,7 +31,8 @@ class ColorSizeNumTable extends StatelessWidget {
         ),
         TableCell(
           child: Table(
-            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
+            border: TableBorder.all(
+                color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: [
               TableRow(children: [
@@ -116,8 +117,11 @@ class ColorSizeNumTable extends StatelessWidget {
                 Container(
                   width: 20,
                   decoration: BoxDecoration(
-                    color: Color(
-                        int.parse('0xff' + '${entries[0].model.color.colorCode==null || entries[0].model.color.colorCode =='' ? 'fffff':entries[0].model.color.colorCode.substring(1)}')),
+                    color: Color(int.parse('0xff' +
+                        '${entries[0].model.color.colorCode == null ||
+                            entries[0].model.color.colorCode == ''
+                            ? 'fffff'
+                            : entries[0].model.color.colorCode.substring(1)}')),
                     shape: BoxShape.circle,
                   ),
                   child: Text(''),
@@ -129,7 +133,8 @@ class ColorSizeNumTable extends StatelessWidget {
         ),
         TableCell(
           child: Table(
-            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
+            border: TableBorder.all(
+                color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: _sizeRowList,
           ),
@@ -150,7 +155,8 @@ class ColorSizeNumTable extends StatelessWidget {
             //   1: FixedColumnWidth(255),
             // },
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
+            border: TableBorder.all(
+                color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             children: tableRowList,
           ),
         ],
@@ -206,7 +212,8 @@ class EditColorSizeNumTable extends StatelessWidget {
         ),
         TableCell(
           child: Table(
-            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
+            border: TableBorder.all(
+                color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: [
               TableRow(children: [
@@ -240,7 +247,7 @@ class EditColorSizeNumTable extends StatelessWidget {
         ),
       ])
     ];
-    if(data != null) {
+    if (data != null) {
       data.forEach((entry) {
         if (colorRowList[entry.model.color.code] == null) {
           colorRowList[entry.model.color.code] = [];
@@ -272,7 +279,8 @@ class EditColorSizeNumTable extends StatelessWidget {
                     alignment: Alignment.center,
                     child: TextField(
                       controller: entry.controller,
-                      decoration: InputDecoration(border: InputBorder.none,hintText: '填写'),
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: '填写'),
                       keyboardType: TextInputType.number,
                       //只能输入数字
                       inputFormatters: <TextInputFormatter>[
@@ -282,9 +290,7 @@ class EditColorSizeNumTable extends StatelessWidget {
                     height: 40.0,
                   )),
                 ],
-              )
-              
-              )
+      ))
           .toList();
 
       String colorCode =
@@ -312,7 +318,8 @@ class EditColorSizeNumTable extends StatelessWidget {
         ),
         TableCell(
           child: Table(
-            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
+            border: TableBorder.all(
+                color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: _sizeRowList,
           ),
@@ -333,7 +340,8 @@ class EditColorSizeNumTable extends StatelessWidget {
             //   1: FixedColumnWidth(255),
             // },
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: TableBorder.all(color: Colors.grey, width: 0.5, style: BorderStyle.solid),
+            border: TableBorder.all(
+                color: Colors.grey, width: 0.5, style: BorderStyle.solid),
             children: tableRowList,
           ),
         ],
