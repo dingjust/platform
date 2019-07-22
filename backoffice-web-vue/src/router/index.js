@@ -179,6 +179,21 @@ const router = new Router({
           },
           children: [
             {
+              path: '/miscs/contract/manage/contract',
+              name: '合同管理',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/contract/manage/ContractPage')
+            },
+            {
+              path: '/miscs/contract/template/template',
+              name: '合同模板',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/contract/template/TemplatePage')
+            },
+            {
+              path: '/miscs/contract/seal/seal',
+              name: '印章管理',
+              component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/contract/seal/SealPage')
+            },
+            {
               path: 'carousel',
               name: '轮播图配置',
               component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/carousel/CarouselPage')

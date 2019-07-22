@@ -312,7 +312,19 @@ const state = {
     {code: 'N02', name: '51到100人'},
     {code: 'N03', name: '101到200人'},
     {code: 'N04', name: '200人以上'}
-  ]
+  ],
+  //合同状态
+  contractStates: [
+    {code: 'WITH', name: '待签署'},
+    {code: 'SIGN', name: '已签署'},
+    {code: 'COMPLETE', name: '已完成'}
+  ],
+  //印章状态
+  sealStates: [
+    {code: 'NORMAL', name: '正常'},
+    {code: 'DISABLING', name: '禁用'},
+  ],
+
 };
 
 const mutations = {};

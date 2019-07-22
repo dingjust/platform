@@ -124,6 +124,27 @@ export default {
       icon: 'icon-puzzle',
       children: [
         {
+          name: '合同',
+          icon: 'iconNone',
+          children: [
+            {
+              name: '合同管理',
+              url: '/miscs/contract/manage/contract',
+              icon: 'iconNone',
+            },
+            {
+              name: '合同模板',
+              url: '/miscs/contract/template/template',
+              icon: 'iconNone',
+            },
+            {
+              name: '印章管理',
+              url: '/miscs/contract/seal/seal',
+              icon: 'iconNone',
+            },
+          ]
+        },
+        {
           name: '轮播图配置',
           url: '/miscs/carousel',
           icon: 'iconNone'
