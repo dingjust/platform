@@ -28,6 +28,7 @@ class TextFieldComponent extends StatefulWidget {
   final int maxLines;
   final int maxLength;
   bool isInputBorder;
+  bool isSteppedPrice;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -56,6 +57,7 @@ class TextFieldComponent extends StatefulWidget {
     this.maxLength,
     this.maxLines,
     this.isInputBorder = false,
+    this.isSteppedPrice = false,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
@@ -84,6 +86,8 @@ class TextFieldComponentState extends State<TextFieldComponent> {
           if(widget.prefix != null && widget.controller.text != ''){
             widget.controller.text = widget.prefix + widget.controller.text;
           }
+          widget.controller.clearComposing();
+          widget.focusNode.unfocus();
         });
       }
     });
@@ -106,7 +110,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.textAlign == TextAlign.right){
+//    if(widget.textAlign == TextAlign.right){
       widget.controller.value = TextEditingValue(
         // 设置内容
         text: widget.controller.text,
@@ -118,7 +122,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
           ),
         ),
       );
-    }
+//    }
 
     return Column(
       children: <Widget>[

@@ -67,6 +67,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ..thumbnails = widget.item.thumbnails
       ..images = widget.item.images
       ..brand = widget.item.brand
+      ..proofingFee = widget.item.proofingFee
+      ..steppedPrices = widget.item.steppedPrices
+      ..basicProduction = widget.item.basicProduction
+      ..productionDays = widget.item.productionDays
+      ..productionIncrement = widget.item.productionIncrement
       ..salesVolume = widget.item.salesVolume;
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
@@ -97,10 +102,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   dialogHeight: 180,
                   confirmAction: () {
                     Navigator.of(context).pop();
+                    Navigator.of(context).pop();
                   },
                 );
               }).then((_) {
-            Navigator.of(context).pop();
+//            Navigator.of(context).pop();
           });
         } else {
           Navigator.pop(context);
@@ -364,13 +370,12 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         _product.price == null) {
       _showValidateMsg(context, '请填写产品价格');
       return;
-    } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY &&
-        (_product.minPrice == null || _product.maxPrice == null)) {
-      _showValidateMsg(context, '请填写产品价格');
-      return;
     }
     if (_product.attributes == null) {
       _product.attributes = ApparelProductAttributesModel();
+    }
+    if (_product.steppedPrices == null) {
+      _product.steppedPrices = [];
     }
     Navigator.pop(context);
     if (widget.isCreate) {
