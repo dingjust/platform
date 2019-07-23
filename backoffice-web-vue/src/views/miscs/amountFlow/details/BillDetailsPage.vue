@@ -1,20 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-row type="flex" justify="end" v-show="!(cashOutDetailData.amountStatus == 'REJECTED' || cashOutDetailData.amountStatus == 'REVIEWED')">
-      <el-button type="primary" icon="el-icon-edit" @click="onCompleted(cashOutDetailData)">确认</el-button>
-      <el-button type="danger" icon="el-icon-delete" @click="onRejected(cashOutDetailData)">拒绝</el-button>
-    </el-row>
-    <div class="pt-2"></div>
-    <cash-out-manager-form ref="form" :slot-data="cashOutDetailData" :read-only="isNewlyCreated"/>
-    <div class="pt-2"></div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>账户账单</span>
-      </div>
-      <bill-manager-list :page="page" @onDetails="onDetails" @onSearch="onAdvancedSearch"/>
-    </el-card>
-    <div class="pt-2"></div>
-    <!--<operation-course-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" @onUpdate="onUpdate"/>-->
+    <cash-out-manager-form ref="form" :slot-data="slotData" :read-only="isNewlyCreated"/>
   </div>
 
 
@@ -25,13 +11,12 @@
 
   const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('CashOutManagerModule');
 
-  import CashOutManagerForm from '../form/cashOutManagerForm';
-  import BillManagerList from '../../bill/list/BillManagerList';
+  import CashOutManagerForm from '../../cashOutManager/form/cashOutManagerForm';
 
   export default {
-    name: 'CashOutManagerDetailsPage',
+    name: 'BillDetailsPage',
     props: ['slotData'],
-    components: {CashOutManagerForm, BillManagerList},
+    components: {CashOutManagerForm},
     methods: {
       ...mapActions({
         searchAdvanced: 'searchAdvancedBills'
@@ -46,7 +31,7 @@
           // flowSource: ['CASH_OUT'],
           // amountFlowType: ['OUTFLOW'],
           // amountStatus: ['IN_REVIEW', 'REVIEWED', 'REJECTED']
-          company: this.cashOutDetailData.company.uid
+          company: this.slotData.company.uid
         };
         const url = this.apis().findBills();
         this.searchAdvanced({url, query, page, size});
@@ -94,7 +79,7 @@
         cashOutDetailData: 'cashOutDetailData'
       }),
       isNewlyCreated: function () {
-        return this.cashOutDetailData.id == null;
+        return this.slotData.id == null;
       }
     },
     data () {

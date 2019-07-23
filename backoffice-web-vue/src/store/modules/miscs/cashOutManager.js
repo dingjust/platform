@@ -20,6 +20,7 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
+  cashOutDetailData: null,
   formData: {
     id: null,
     index: '',
@@ -45,7 +46,8 @@ const mutations = {
   page: (state, page) => state.page = page,
   billsPage: (state, page) => state.billsPage = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
-  queryFormData: (state,query) => state.queryFormData = query
+  queryFormData: (state, query) => state.queryFormData = query,
+  cashOutDetailData: (state, data) => state.cashOutDetailData = data
 };
 
 const actions = {
@@ -104,7 +106,7 @@ const actions = {
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url, keyword, page: currentPageNumber, size: currentPageSize});
-  }
+  },
 };
 
 const getters = {
@@ -113,7 +115,8 @@ const getters = {
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
   billsPage: state => state.billsPage,
-  isAdvancedSearch: state => state.isAdvancedSearch
+  isAdvancedSearch: state => state.isAdvancedSearch,
+  cashOutDetailData: state => state.cashOutDetailData
 };
 
 export default {

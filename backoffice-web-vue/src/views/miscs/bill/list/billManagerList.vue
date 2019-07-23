@@ -22,12 +22,12 @@
       </el-table-column>
       <el-table-column label="账单创建时间" prop="creationtime">
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
+          <span>{{scope.row.creationtime | formatDateWithSecond}}</span>
         </template>
       </el-table-column>
       <el-table-column label="账单完成时间" prop="cashCompletionTime">
         <template slot-scope="scope">
-          <span>{{scope.row.cashCompletionTime | formatDate}}</span>
+          <span>{{scope.row.cashCompletionTime | formatDateWithSecond}}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" prop="remark" ></el-table-column>
