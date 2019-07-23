@@ -34,7 +34,10 @@ import {
   SuppliersModule,
   OperationCoursesModule,
   WalletModule,
-  CashOutManagerModule
+  CashOutManagerModule,
+  ContractModule,
+  ContractTemplateModule,
+  ContractSealModule,
 } from './modules';
 
 // 状态管理
@@ -93,6 +96,9 @@ export default new Vuex.Store({
     OperationCoursesModule,
     WalletModule,
     CashOutManagerModule,
+    ContractModule,
+    ContractTemplateModule,
+    ContractSealModule,
   },
   state,
   getters,

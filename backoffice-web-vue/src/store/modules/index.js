@@ -32,6 +32,9 @@ import CarouselsModule from './miscs/carousels';
 import OperationCoursesModule from './miscs/operationCourses';
 import WalletModule from './miscs/wallet';
 import CashOutManagerModule from './miscs/cashOutManager';
+import ContractModule from './miscs/contract';
+import ContractTemplateModule from './miscs/contractTemplate'
+import ContractSealModule from './miscs/contractSeal'
 
 export {
   // shared
@@ -65,5 +68,8 @@ export {
   SuppliersModule,
   OperationCoursesModule,
   WalletModule,
-  CashOutManagerModule
+  CashOutManagerModule,
+  ContractModule,
+  ContractTemplateModule,
+  ContractSealModule,
 }
