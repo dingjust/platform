@@ -1,5 +1,7 @@
-import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart' as dj;
+import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
+as dj;
 import 'package:b2b_commerce/src/home/product/buy_proofing_form.dart';
+import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -427,17 +429,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 Expanded(
                   flex: 1,
                   child: Container(
-                    height: double.infinity,
-                    child: FlatButton(
-                      color: Color.fromRGBO(255, 214, 12, 1),
-                      onPressed: () {},
-                      disabledColor: Colors.grey[300],
-                      child: Text(
-                        '买大货',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
-                  ),
+                      height: double.infinity,
+                      child: Builder(
+                        builder: (BuildContext buttonContext) =>
+                            FlatButton(
+                              color: Color.fromRGBO(255, 214, 12, 1),
+                              onPressed: () {
+                                onBuyPurchase(buttonContext);
+                              },
+                              disabledColor: Colors.grey[300],
+                              child: Text(
+                                '买大货',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                      )),
                 )
               ],
             ),
@@ -462,6 +468,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         context: buildContext,
         builder: (BuildContext context) {
           return BuyProofingForm(widget.product);
+        });
+  }
+
+  void onBuyPurchase(BuildContext buildContext) {
+    dj.showModalBottomSheet<void>(
+        context: buildContext,
+        builder: (BuildContext context) {
+          return BuyPurchaseForm(widget.product);
         });
   }
 

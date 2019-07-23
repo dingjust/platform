@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -8,21 +7,21 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class BuyProofingForm extends StatefulWidget {
+class BuyPurchaseForm extends StatefulWidget {
   final ApparelProductModel product;
 
-  const BuyProofingForm(this.product, {Key key}) : super(key: key);
+  const BuyPurchaseForm(this.product, {Key key}) : super(key: key);
 
   @override
-  _BuyProofingFormState createState() => _BuyProofingFormState();
+  _BuyPurchaseFormState createState() => _BuyPurchaseFormState();
 }
 
-class _BuyProofingFormState extends State<BuyProofingForm> {
+class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   List<EditApparelSizeVariantProductEntry> productEntries;
 
   ///按颜色分组
   Map<String, List<EditApparelSizeVariantProductEntry>> colorRowList =
-  Map<String, List<EditApparelSizeVariantProductEntry>>();
+      Map<String, List<EditApparelSizeVariantProductEntry>>();
   TextEditingController totalEditingController;
   TextEditingController remarksEditingController;
   List<Widget> tabs = [];
@@ -31,8 +30,14 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   double imageOverTop = 40;
   double imageToLeft = 20;
 
-  ///样衣费用
+  ///单价
   double price = 20.00;
+
+  ///订金
+  double deposit = 800.00;
+
+  ///预计交货时间
+  DateTime expectedDeliveryDate = DateTime.now();
 
   @override
   void initState() {
@@ -41,7 +46,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
 
     productEntries = widget.product.variants
         .map((variant) => EditApparelSizeVariantProductEntry(
-        controller: TextEditingController(text: '0'), model: variant))
+            controller: TextEditingController(text: '0'), model: variant))
         .toList();
     if (productEntries != null) {
       productEntries.forEach((entry) {
@@ -77,7 +82,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                       flex: 1,
                       child: Container(
                         padding:
-                        EdgeInsets.fromLTRB(imageToLeft, 5, imageToLeft, 5),
+                            EdgeInsets.fromLTRB(imageToLeft, 5, imageToLeft, 5),
                         child: Column(
                           children: <Widget>[
                             _buildHeadRow(),
@@ -110,26 +115,26 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
             imageUrl: '${widget.product.thumbnail.previewUrl()}',
             fit: BoxFit.cover,
             imageBuilder: (context, imageProvider) => Container(
-              width: imageSize,
-              height: imageSize,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
+                  width: imageSize,
+                  height: imageSize,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
             placeholder: (context, url) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: imageSize,
-            ),
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: imageSize,
+                ),
             errorWidget: (context, url, error) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: imageSize,
-            )),
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: imageSize,
+                )),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5), color: Colors.white),
       ),
@@ -215,61 +220,61 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries) {
     List<Widget> widgets = entries
         .map((entry) => Container(
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text('${entry.model.size.name}'),
-          Row(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  B2BIcons.remove_rect,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  if (int.parse(entry.controller.text) > 0) {
-                    setState(() {
-                      int i = int.parse(entry.controller.text);
-                      i--;
-                      entry.controller.text = '$i';
-                    });
-                  }
-                },
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('${entry.model.size.name}'),
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          B2BIcons.remove_rect,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          if (int.parse(entry.controller.text) > 0) {
+                            setState(() {
+                              int i = int.parse(entry.controller.text);
+                              i--;
+                              entry.controller.text = '$i';
+                            });
+                          }
+                        },
+                      ),
+                      Container(
+                        width: 40,
+                        child: TextField(
+                          controller: entry.controller,
+                          decoration: InputDecoration(border: InputBorder.none),
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          //只能输入数字
+                          inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly,
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          B2BIcons.add_rect,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            int i = int.parse(entry.controller.text);
+                            i++;
+                            entry.controller.text = '$i';
+                          });
+                        },
+                      )
+                    ],
+                  )
+                ],
               ),
-              Container(
-                width: 40,
-                child: TextField(
-                  controller: entry.controller,
-                  decoration: InputDecoration(border: InputBorder.none),
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  //只能输入数字
-                  inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly,
-                  ],
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  B2BIcons.add_rect,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  setState(() {
-                    int i = int.parse(entry.controller.text);
-                    i++;
-                    entry.controller.text = '$i';
-                  });
-                },
-              )
-            ],
-          )
-        ],
-      ),
-    ))
+            ))
         .toList();
 
     widgets.add(_buildTotal());
@@ -412,7 +417,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
             children: <Widget>[
               RichText(
                 text: TextSpan(
-                    text: '总额: ',
+                    text: '订金(总额x30%): ',
                     style: TextStyle(color: Colors.grey, fontSize: 16),
                     children: <TextSpan>[
                       TextSpan(
@@ -437,9 +442,10 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
     return result;
   }
 
-  Widget _buildTab(String color, List<EditApparelSizeVariantProductEntry> entries) {
+  Widget _buildTab(
+      String color, List<EditApparelSizeVariantProductEntry> entries) {
     String colorCode =
-    entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
+        entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
     return Tab(
       // text: '${entries[0].model.color.name}',
       child: Container(
@@ -450,18 +456,18 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
           children: <Widget>[
             entries[0].model.color.colorCode != null
                 ? Positioned(
-              left: 0,
-              top: 12,
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                    color: Color(int.parse('0xFF${colorCode}')),
-                    border:
-                    Border.all(width: 0.5, color: Colors.grey[300])),
-                child: Text(''),
-              ),
-            )
+                    left: 0,
+                    top: 12,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: Color(int.parse('0xFF${colorCode}')),
+                          border:
+                              Border.all(width: 0.5, color: Colors.grey[300])),
+                      child: Text(''),
+                    ),
+                  )
                 : Container(),
             Container(
               margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
@@ -471,19 +477,19 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
             ),
             colorTotalNum(entries) > 0
                 ? Positioned(
-                right: 0,
-                top: 0,
-                child: Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.orangeAccent),
-                    child: Center(
-                      child: Text(
-                        '${colorTotalNum(entries)}',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    )))
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                        width: 15,
+                        height: 15,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.orangeAccent),
+                        child: Center(
+                          child: Text(
+                            '${colorTotalNum(entries)}',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        )))
                 : Container()
           ],
         ),
@@ -544,7 +550,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
 
   void onSubmit() async {
     //拼装数据
-    ProofingModel model = ProofingModel();
+    PurchaseOrderModel model = new PurchaseOrderModel();
     model.entries = productEntries.where((entry) {
       return entry.controller.text != '';
     }).map((entry) {
@@ -553,7 +559,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
         ..thumbnail = widget.product.thumbnail
         ..thumbnails = widget.product.thumbnails
         ..images = widget.product.images;
-      return ProofingEntryModel(
+      return PurchaseOrderEntryModel(
         quantity: int.parse(entry.controller.text),
         product: variantProduct,
       );
@@ -562,14 +568,19 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
       ..unitPrice = price
       ..totalPrice = totalNum() * price
       ..totalQuantity = totalNum()
+      ..deposit = deposit
+      ..salesApplication = SalesApplication.ONLINE
+      ..machiningType = MachiningType.LABOR_AND_MATERIAL
+      ..invoiceNeeded = false
+      ..expectedDeliveryDate = expectedDeliveryDate
       ..remarks = remarksEditingController.text;
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: ProofingOrderRepository()
-                .proofingCreateByProduct(model, widget.product.belongTo.uid),
+            requestCallBack: PurchaseOrderRepository()
+                .purchaseByProduct(model, widget.product.belongTo.uid),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: '',
@@ -589,7 +600,6 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
               successTips: '下单成功',
               callbackResult: result,
               confirmAction: () {
-                // Navigator.of(context).pop();
                 getOrderDetail(value);
               },
             );
@@ -599,13 +609,13 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
 
   void getOrderDetail(String code) async {
     if (code != null && code != '') {
-      ProofingModel detailModel =
-      await ProofingOrderRepository().proofingDetail(code);
+      PurchaseOrderModel detailModel =
+          await PurchaseOrderRepository().getPurchaseOrderDetail(code);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (context) =>
-                  OrderPaymentPage(
+              builder: (context) => OrderPaymentPage(
                     order: detailModel,
+                    paymentFor: PaymentFor.DEPOSIT,
                   )),
           ModalRoute.withName('/'));
     }

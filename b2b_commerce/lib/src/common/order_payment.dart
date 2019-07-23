@@ -237,12 +237,12 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                       placeholder: (context, url) => SpinKitRing(
                             color: Colors.black12,
                             lineWidth: 2,
-                            size: 30,
+                        size: 100,
                           ),
                       errorWidget: (context, url, error) => SpinKitRing(
                             color: Colors.black12,
                             lineWidth: 2,
-                            size: 30,
+                        size: 100,
                           )),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),

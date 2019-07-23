@@ -714,10 +714,12 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               '发布时间：${DateFormatUtil.format(model.creationTime)}',
               style: TextStyle(color: Colors.black),
             ),
-            Text(
+            model.requirementOrderRef != null
+                ? Text(
               '需求订单号：${model.requirementOrderRef}',
               style: TextStyle(color: Colors.black),
             )
+                : Container()
           ],
         ),
       ),

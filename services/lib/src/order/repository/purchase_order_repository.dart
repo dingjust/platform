@@ -58,6 +58,25 @@ class PurchaseOrderRepository {
     }
   }
 
+  //看款下单创建生产订单
+  Future<String> purchaseByProduct(PurchaseOrderModel form,
+      String productBelongTo) async {
+    Response response;
+    try {
+      response = await http$.post(
+          OrderApis.purchaseCreateByProduct(productBelongTo),
+          data: PurchaseOrderModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
+
   /// 获取订单明细
   Future<PurchaseOrderModel> getPurchaseOrderDetail(String code) async {
     Response<Map<String, dynamic>> response;
@@ -112,16 +131,19 @@ class PurchaseOrderRepository {
   }
 
   //批量修改生产进度预计完成时间
-  Future<bool> progressEstimatedDateUploads(String code, String id, List<ProductionProgressModel> forms) async {
+  Future<bool> progressEstimatedDateUploads(String code, String id,
+      List<ProductionProgressModel> forms) async {
 //    List<Map<String, dynamic>> entriesToJson(List<PurchaseOrderEntryModel> entries) =>
 //    entries.map((entry) => PurchaseOrderEntryModel.toJson(entry)).toList();
-    List<Map<String,dynamic>> data = forms.map((progress) => ProductionProgressModel.toJson(progress)).toList();
+    List<Map<String, dynamic>> data = forms
+        .map((progress) => ProductionProgressModel.toJson(progress))
+        .toList();
     Response response;
     try {
-      response = await http$.put(OrderApis.progressEstimatedDateUploads(code, id),
+      response = await http$.put(
+          OrderApis.progressEstimatedDateUploads(code, id),
           data: data,
           options: Options(responseType: ResponseType.plain));
-
     } on DioError catch (e) {
       print(e);
     }

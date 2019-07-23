@@ -20,6 +20,24 @@ class ProofingOrderRepository {
     }
   }
 
+  ///看款创建打样单
+  Future<String> proofingCreateByProduct(ProofingModel model,
+      String productBelongTo) async {
+    Response response;
+    try {
+      response = await http$.post(
+          OrderApis.proofingCreateByProduct(productBelongTo),
+          data: ProofingModel.toJson(model));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
+
   ///获取打样单明细
   Future<ProofingModel> proofingDetail(String code) async {
     Response<Map<String, dynamic>> response;
@@ -72,14 +90,14 @@ class ProofingOrderRepository {
   }
 
   //确认发货
-  Future<bool> proofingDelivering(String code , ProofingModel form) async {
+  Future<bool> proofingDelivering(String code, ProofingModel form) async {
     Response response;
-    try{
-      response =  await http$.put(
+    try {
+      response = await http$.put(
         OrderApis.proofingDelivering(code),
         data: ProofingModel.toJson(form),
       );
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -90,14 +108,13 @@ class ProofingOrderRepository {
     }
   }
 
-  Future<bool> updateAddress(String code , ProofingModel form) async {
+  Future<bool> updateAddress(String code, ProofingModel form) async {
     Response<String> response;
-    try{
-      response =  await http$.put(
-          OrderApis.updateProofAddress(code),
+    try {
+      response = await http$.put(OrderApis.updateProofAddress(code),
           data: ProofingModel.toJson(form),
           options: Options(responseType: ResponseType.plain));
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -126,14 +143,14 @@ class ProofingOrderRepository {
   }
 
   //确认打样订单
-  Future<bool> proofingConfirm(String code , ProofingModel form) async {
+  Future<bool> proofingConfirm(String code, ProofingModel form) async {
     Response response;
-    try{
-      response =  await http$.put(
+    try {
+      response = await http$.put(
         OrderApis.proofingConfirm(code),
         data: ProofingModel.toJson(form),
       );
-    }on DioError catch(e){
+    } on DioError catch (e) {
       print(e);
     }
 
@@ -143,6 +160,4 @@ class ProofingOrderRepository {
       return false;
     }
   }
-
-
 }

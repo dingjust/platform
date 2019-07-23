@@ -139,50 +139,48 @@ class ProofingOrderItem extends StatelessWidget {
     );
   }
 
+  Widget _buildProductName(String name) {
+    return Text('$name',
+        style: const TextStyle(fontSize: 15), overflow: TextOverflow.ellipsis);
+  }
+
+  Widget _buildProductSkuID(String skuID) {
+    if (skuID == null) {
+      return Container();
+    }
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text('货号：$skuID',
+          style: const TextStyle(fontSize: 12, color: Colors.grey)),
+    );
+  }
+
+  Widget _buildCategoryAndCount(String category, int sum) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(255, 243, 243, 1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        "$category   $sum 件",
+        style: const TextStyle(
+            fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
+      ),
+    );
+  }
+
   Widget _buildEntries() {
     // 计算总数
     int sum = 0;
     model.entries.forEach((entry) {
       sum = sum + entry.quantity;
     });
-
-    Widget _buildProductName(String name) {
-      return Text(name,
-          style: const TextStyle(fontSize: 15),
-          overflow: TextOverflow.ellipsis);
-    }
-
-    Widget _buildProductSkuID(String skuID) {
-      if (skuID == null) {
-        return Container();
-      }
-
-      return Container(
-        padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text('货号：$skuID',
-            style: const TextStyle(fontSize: 12, color: Colors.grey)),
-      );
-    }
-
-    Widget _buildCategoryAndCount(String category, int sum) {
-      return Container(
-        padding: const EdgeInsets.fromLTRB(3, 1, 3, 1),
-        decoration: BoxDecoration(
-          color: const Color.fromRGBO(255, 243, 243, 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          "$category   $sum 件",
-          style: const TextStyle(
-              fontSize: 15, color: const Color.fromRGBO(255, 133, 148, 1)),
-        ),
-      );
-    }
-
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Row(
@@ -197,9 +195,9 @@ class ProofingOrderItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _buildProductName(model.product.name),
-                  _buildProductSkuID(model.product.skuID),
-                  _buildCategoryAndCount(model.product.category?.name, sum)
+                  _buildProductName(model.product?.name),
+                  _buildProductSkuID(model.product?.skuID),
+                  _buildCategoryAndCount(model.product?.category?.name, sum)
                 ],
               ),
             ),

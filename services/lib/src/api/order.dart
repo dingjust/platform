@@ -59,6 +59,11 @@ class OrderApis {
   //创建线下采购订单 POST
   static get purchaseOfflineOrders => '/{baseSiteId}/orders/purchase/create';
 
+  //看款下单创建采购订单 POST
+  static get purchaseCreateByProduct =>
+          (productBelongTo) =>
+      '/{baseSiteId}/orders/purchase/createByProduct/$productBelongTo';
+
   //创建线上生产订单
   static get purchaseOnlineOrders => (quote) {
         return '/{baseSiteId}/orders/purchase/create/$quote';
@@ -153,6 +158,12 @@ class OrderApis {
   ///创建打样单
   static get proofingCreate => (code) {
         return '/{baseSiteId}/orders/proofing/create/$code';
+      };
+
+  ///看款创建打样单
+  static get proofingCreateByProduct =>
+          (productBelongTo) {
+        return '/{baseSiteId}/orders/proofing/createByProduct/$productBelongTo';
       };
 
   /// 根据条件获取打样单列表 POST
