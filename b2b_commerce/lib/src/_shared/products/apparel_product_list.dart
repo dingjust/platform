@@ -282,11 +282,22 @@ class _ApparelProductListState extends State<ApparelProductList> {
           product.price == null) {
         _showValidateMsg(context, '产品价格为空不可上架');
         return;
-      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY &&
-          (product.proofingFee == null)) {
-        _showValidateMsg(context, '订货设置资料未完善，不可上架');
-        return;
+      } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY ){
+          if(product.proofingFee == null || product.basicProduction == null || product.productionIncrement == null || product.productionDays == null) {
+            _showValidateMsg(context, '订货设置资料未完善，不可上架');
+            return;
+          }else{
+            for (var stepped in product.steppedPrices) {
+              if(stepped.minimumQuantity == null || stepped.price == null){
+                _showValidateMsg(context, '订货设置资料未完善，不可上架');
+                return;
+              }
+            }
+          }
+
       }
+
+
 
       showDialog(
           context: context,

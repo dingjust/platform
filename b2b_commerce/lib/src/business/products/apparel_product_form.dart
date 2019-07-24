@@ -121,7 +121,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
           title: Text(widget.isCreate ? '新建产品' : _enabled ? '编辑产品' : '产品明细'),
           actions: <Widget>[
             Offstage(
-              offstage: _enabled,
+              offstage: _enabled || widget.item.approvalStatus == ArticleApprovalStatus.approved,
               child: IconButton(
                 icon: Text('编辑'),
                 onPressed: () {
@@ -349,6 +349,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   }
 
   onPublish() {
+    print(_product.approvalStatus);
     if (_product.images == null || _product.images.isEmpty) {
       _showValidateMsg(context, '请上传主图');
       return;
@@ -401,6 +402,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         }
       });
     } else {
+      print('${_product.approvalStatus}************************');
       showDialog(
           context: context,
           barrierDismissible: false,

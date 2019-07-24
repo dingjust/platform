@@ -32,11 +32,11 @@ class _ApparelProductPricesInputPageState
   Map<String, Object> map;
 
   List<SteppedPriceModel> models = [];
-  List<SteppedPriceItem> items = [];
   List<FocusNode> quantityFocusNodes = [];
   List<FocusNode> priceFocusNodes = [];
   List<TextEditingController> quantityControllers = [];
   List<TextEditingController> priceControllers = [];
+  Map<SteppedPriceModel,TextEditingController> priceMap = Map();
 
 //  boll showSteppedPrices = false;
 
@@ -44,7 +44,6 @@ class _ApparelProductPricesInputPageState
   bool isShowProductionDays = true;
 
   void initState() {
-    print(widget.item.proofingFee);
     _proofingFeeController.text = '${widget.item.proofingFee ?? ''}';
     _productionDaysController.text = '${widget.item.productionDays ?? ''}';
     _productionIncrementController.text =
@@ -57,10 +56,6 @@ class _ApparelProductPricesInputPageState
     if (models.length <= 0) {
       models.add(SteppedPriceModel());
     }
-//    int length = models.length;
-//    for(int i =0;i<3-length;i++){
-//      models.add(SteppedPriceModel());
-//    }
 
     super.initState();
   }
@@ -68,18 +63,22 @@ class _ApparelProductPricesInputPageState
   @override
   Widget build(BuildContext context) {
     quantityControllers.clear();
-    priceControllers.clear();
-    models.forEach((model) {
+//    priceControllers.clear();
+    for(var model in models){
       quantityFocusNodes.add(FocusNode());
       priceFocusNodes.add(FocusNode());
       quantityControllers.add(TextEditingController(text: model.minimumQuantity == null ? '' : model.minimumQuantity.toString()));
-      priceControllers.add(TextEditingController(text: model.price == null ? '' : model.price.toString()));
-    });
+      if(!priceMap.containsKey(model)){
+        TextEditingController controller = TextEditingController(text: model.price == null ? '' : model.price.toString());
+        priceMap.putIfAbsent(model, ()=>controller);
+      }
+    }
+    priceControllers = priceMap.values.toList();
 
     List<Widget> widgets = [];
     widgets.add(_buildFactoryInfo(context));
     for (int i = 0; i < models.length; i++) {
-      widgets.add(_buildItem(models[i], i + 1, quantityFocusNodes[i],
+      widgets.add(_buildItem(context,models[i], i + 1, quantityFocusNodes[i],
           priceFocusNodes[i], quantityControllers[i], priceControllers[i]));
     }
     widgets.add(createItemBtn());
@@ -105,22 +104,48 @@ class _ApparelProductPricesInputPageState
                       ),
                     ),
                     onTap: () async {
-                      if(_proofingFeeController.text == '' || _basicProductionController.text == '' || _productionDaysController.text == '' || _productionIncrementController.text == ''){
-                        ShowDialogUtil.showValidateMsg(context, '订货设置资料未完善');
-                        return;
-                      }else{
-                        widget.item.proofingFee = ClassHandleUtil.removeSymbolRMBToDouble(_proofingFeeController.text);
-                        widget.item.basicProduction = int.parse(_basicProductionController.text);
-                        widget.item.productionDays = int.parse(_productionDaysController.text);
-                        widget.item.productionIncrement = int.parse(_productionIncrementController.text);
-                      }
+//                      if(_proofingFeeController.text == '' || _basicProductionController.text == '' || _productionDaysController.text == '' || _productionIncrementController.text == ''){
+//                        ShowDialogUtil.showValidateMsg(context, '订货设置资料未完善');
+//                        return;
+//                      }
+//
+//                      for (var model in models) {
+//                        if(model.minimumQuantity == null || model.price == null){
+//                          ShowDialogUtil.showValidateMsg(context, '订货设置资料未完善');
+//                          return;
+//                        }
+//                      }
+                      widget.item.proofingFee = ClassHandleUtil.removeSymbolRMBToDouble(_proofingFeeController.text);
+                      widget.item.basicProduction = ClassHandleUtil.transInt(_basicProductionController.text);
+                      widget.item.productionDays = ClassHandleUtil.transInt(_productionDaysController.text);
+                      widget.item.productionIncrement = ClassHandleUtil.transInt(_productionIncrementController.text);
 
-                      models.forEach((model) {
-                        if(model.minimumQuantity == null || model.price == null){
-                          ShowDialogUtil.showValidateMsg(context, '订货设置资料未完善');
+                      for(int i=0;i<models.length;i++){
+                        if(models[i].minimumQuantity == null && models[i].price != null){
+                          ShowDialogUtil.showValidateMsg(context, '请完善阶梯起订量');
                           return;
                         }
-                      });
+                        if(models[i].price == null && models[i].minimumQuantity == null){
+                          models.remove(models[i]);
+                        }
+                      }
+
+                      if(models.length >1){
+                        for(int i=0;i<models.length;i++){
+                          if(i == models.length - 1){
+                            break;
+                          }
+
+                          if(models[i + 1].minimumQuantity != null && models[i].minimumQuantity != null){
+                            if(models[i + 1].minimumQuantity <= models[i].minimumQuantity){
+                              ShowDialogUtil.showValidateMsg(context, '第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
+                              return;
+                            }
+                          }
+
+                        }
+                      }
+
                       widget.item.steppedPrices = models;
 
                       Navigator.pop(context);
@@ -147,7 +172,7 @@ class _ApparelProductPricesInputPageState
                   style: TextStyle(
                     fontSize: 16,
                   )),
-              hintText: '请输入单件打样价格',
+              hintText: widget.enabled ? '请输入单件打样价格' : '',
               prefix: '￥',
               inputFormatters: [
                 DecimalInputFormat(),
@@ -280,7 +305,7 @@ class _ApparelProductPricesInputPageState
                         style: TextStyle(
                           fontSize: 16,
                         )),
-                    hintText: '输入数量',
+                    hintText: widget.enabled ? '输入数量' : '',
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
@@ -297,7 +322,7 @@ class _ApparelProductPricesInputPageState
                         style: TextStyle(
                           fontSize: 16,
                         )),
-                    hintText: '输入天数',
+                    hintText: widget.enabled ? '输入天数' : '',
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
@@ -314,7 +339,7 @@ class _ApparelProductPricesInputPageState
                         style: TextStyle(
                           fontSize: 16,
                         )),
-                    hintText: '输入数量',
+                    hintText: widget.enabled ? '输入数量' : '',
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
@@ -337,17 +362,26 @@ class _ApparelProductPricesInputPageState
   }
 
   Widget _buildItem(
+      BuildContext context,
       SteppedPriceModel model,
       int seq,
       FocusNode quantityFocusNode,
       FocusNode priceFocusNode,
       TextEditingController quantityController,
       TextEditingController priceController) {
-    String text = '第一阶梯';
-    if (seq == 2) {
-      text = '第二阶梯';
-    } else if (seq == 3) {
-      text = '第三阶梯';
+    if(seq > 1){
+      quantityFocusNode.addListener((){
+
+        if(!quantityFocusNode.hasFocus && models[seq-1].minimumQuantity != null && models[seq-2].minimumQuantity != null){
+          if(models[seq-1].minimumQuantity <= models[seq-2].minimumQuantity){
+            quantityController.clear();
+            models[seq-1].minimumQuantity = null;
+//            ShowDialogUtil.showSnakeBarByKey(_scaffoldKey,context, '第'+ enumMap(DightEnum, seq) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, seq - 1)+'阶梯的起订量');
+            ShowDialogUtil.showValidateMsg(context, '第'+ enumMap(DightEnum, seq) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, seq - 1)+'阶梯的起订量');
+//              return;
+          }
+        }
+      });
     }
 
     return Offstage(
@@ -360,7 +394,7 @@ class _ApparelProductPricesInputPageState
               children: <Widget>[
                 Container(
                   width: (MediaQueryData.fromWindow(window).size.width - 50) / 3,
-                  child: Center(child: Text(text)),
+                  child: Center(child: Text('第'+ enumMap(DightEnum, seq) +'阶梯')),
                 ),
                 Container(
                   width: (MediaQueryData.fromWindow(window).size.width - 50) / 3,
@@ -369,14 +403,13 @@ class _ApparelProductPricesInputPageState
                       textAlign: TextAlign.left,
                       focusNode: quantityFocusNode,
                       controller: quantityController,
-                      hintText: '输入数量',
+                      hintText: widget.enabled ? '输入数量' : '',
                       hideDivider: true,
                       inputFormatters: [
                         WhitelistingTextInputFormatter.digitsOnly
                       ],
                       onChanged: (v) {
-                        model.minimumQuantity =
-                            int.parse(quantityController.text);
+                        model.minimumQuantity = ClassHandleUtil.transInt(quantityController.text);
                       },
                       enabled: widget.enabled,
                     ),
@@ -388,7 +421,7 @@ class _ApparelProductPricesInputPageState
                     textAlign: TextAlign.left,
                     focusNode: priceFocusNode,
                     controller: priceController,
-                    hintText: '输入价格',
+                    hintText: widget.enabled ? '输入价格' : '',
                     prefix: '￥',
                     inputFormatters: [DecimalInputFormat()],
                     hideDivider: true,
@@ -417,8 +450,8 @@ class _ApparelProductPricesInputPageState
                     onPressed: () {
                       setState(() {
                         models.remove(model);
-//                        quantityControllers.remove(quantityController);
-//                        priceControllers.remove(priceController);
+                        quantityControllers.remove(quantityController);
+                        priceMap.remove(model);
                       });
                     },
                   ),
@@ -433,91 +466,11 @@ class _ApparelProductPricesInputPageState
         ),
       ),
     );
-
-//    return Offstage(
-//      offstage: !isShowSteppedPrices,
-//      child: Column(
-//        children: <Widget>[
-//          Container(
-//            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-//            child: Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//              children: <Widget>[
-//                Container(
-//                  child: Text(text),
-//                  padding: EdgeInsets.only(left: MediaQueryData.fromWindow(window).size.width/2 - 50),
-//                ),
-//                Offstage(
-//                  offstage: seq == 1,
-//                  child: GestureDetector(
-//                    onTap: () {
-//                      setState(() {
-//                        models.remove(item);
-//                      });
-//                    },
-//                    child: Text(
-//                      '删除',
-//                      style: TextStyle(
-//                        color: Colors.red,
-//                      ),
-//                    ),
-//                  ),
-//                ),
-//              ],
-//            ),
-//          ),
-////        SteppedPriceItem(
-////          model:item,
-////        ),
-//          Container(
-//            margin: EdgeInsets.symmetric(horizontal: 15),
-//            decoration: BoxDecoration(
-//              borderRadius: BorderRadius.circular(8),
-//              color: Colors.white,
-//            ),
-//            child: Column(
-//              children: <Widget>[
-//                TextFieldComponent(
-//                  focusNode: quantityFocusNode,
-//                  controller: item.quantityController,
-//                  leadingText: Text('起订量',
-//                      style: TextStyle(
-//                        fontSize: 16,
-//                      )),
-//                  hintText: '输入数量',
-//                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-//                  onChanged: (v){
-//                    item.model.minimumQuantity = int.parse(item.quantityController.text);
-//                  },
-//                ),
-//                TextFieldComponent(
-//                  focusNode: priceFocusNode,
-//                  controller: item.priceController,
-//                  leadingText: Text('阶梯价格',
-//                      style: TextStyle(
-//                        fontSize: 16,
-//                      )),
-//                  hintText: '输入价格',
-//                  prefix: '￥',
-//                  inputFormatters: [
-//                    DecimalInputFormat()
-//                  ],
-//                  onChanged: (v){
-//                    item.model.price = double.parse(item.priceController.text);
-////                  widget.model.price = double.parse(widget.priceController.text);
-//                  },
-//                ),
-//              ],
-//            ),
-//          )
-//        ],
-//      ),
-//    );
   }
 
   Widget createItemBtn() {
     return Offstage(
-      offstage: models.length >= 3 || !isShowSteppedPrices,
+      offstage: models.length >= 3 || !isShowSteppedPrices || !widget.enabled,
       child: GestureDetector(
         onTap: () {
           if (models.length >= 0 && models.length < 3) {
@@ -544,95 +497,4 @@ class _ApparelProductPricesInputPageState
     );
   }
 
-  //非空提示
-  bool _showValidateMsg(BuildContext context, String message) {
-    _validateMessage(context, '${message}');
-    return false;
-  }
-
-  Future<void> _validateMessage(BuildContext context, String message) async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.RESULT_DIALOG,
-            failTips: '${message}',
-            callbackResult: false,
-            outsideDismiss: true,
-          );
-        });
-  }
 }
-
-class SteppedPriceItem {
-  SteppedPriceModel model;
-  FocusNode quantityFocusNode;
-  FocusNode priceFocusNode;
-  TextEditingController quantityController;
-  TextEditingController priceController;
-
-  SteppedPriceItem({this.model}) {
-    this.quantityFocusNode = FocusNode();
-    this.priceFocusNode = FocusNode();
-    this.quantityController = TextEditingController();
-    this.priceController = TextEditingController();
-  }
-
-//  SteppedPriceItemState createState() => SteppedPriceItemState();
-}
-
-//class SteppedPriceItemState extends State<SteppedPriceItem>{
-//
-//  @override
-//  void initState() {
-//    super.initState();
-//    widget.quantityController.text = widget.model.minimumQuantity == null ? '' : widget.model.minimumQuantity.toString();
-//    widget.priceController.text = widget.model.price == null ? '' : widget.model.price.toString();
-//  }
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container(
-//      margin: EdgeInsets.symmetric(horizontal: 15),
-//      decoration: BoxDecoration(
-//        borderRadius: BorderRadius.circular(8),
-//        color: Colors.white,
-//      ),
-//      child: Column(
-//        children: <Widget>[
-//          TextFieldComponent(
-//            focusNode: widget.quantityFocusNode,
-//            controller: widget.quantityController,
-//            leadingText: Text('起订量',
-//                style: TextStyle(
-//                  fontSize: 16,
-//                )),
-//            hintText: '输入数量',
-//            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-//            onChanged: (v){
-//              widget.model.minimumQuantity = int.parse(widget.quantityController.text);
-//            },
-//          ),
-//          TextFieldComponent(
-//            focusNode: widget.priceFocusNode,
-//            controller: widget.priceController,
-//            leadingText: Text('阶梯价格',
-//                style: TextStyle(
-//                  fontSize: 16,
-//                )),
-//            hintText: '输入价格',
-//            prefix: '￥',
-//            inputFormatters: [
-//              DecimalInputFormat()
-//            ],
-//            onChanged: (v){
-//              widget.model.price = double.parse(widget.priceController.text);
-//            },
-//          ),
-//        ],
-//      ),
-//    );
-//  }
-//
-//}
