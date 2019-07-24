@@ -68,7 +68,6 @@ class ApparelProductBLoC extends BLoCBase {
         }
 
         productsResponse = await ProductRepositoryImpl().list(data, {'fields':ApparelProductOptions.DEFAULT});
-        print(productsResponse.content[0].proofingFee);
         if (productsResponse != null) {
           _productsMap[status].currentPage = productsResponse.number;
           _productsMap[status].totalPages = productsResponse.totalPages;
