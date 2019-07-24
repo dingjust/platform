@@ -95,9 +95,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             child: Text(
               '${widget.product.name}',
               style: TextStyle(
-                color: Color.fromRGBO(50, 50, 50, 1),
-                fontSize: 16,
-              ),
+                  color: Color.fromRGBO(50, 50, 50, 1),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
               overflow: TextOverflow.clip,
             ),
           ),
@@ -137,14 +137,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   style: TextStyle(fontSize: 16, color: Colors.black87),
                   children: <TextSpan>[
                     TextSpan(
-                        text: '￥60.00', style: TextStyle(color: Colors.red))
+                        text: '￥${widget.product.proofingFee}',
+                        style: TextStyle(color: Colors.red))
                   ]),
             ),
           ),
           Container(
               margin: EdgeInsets.only(top: 10),
               child: Text(
-                '生产天数：1000件内5天，每加500件多1天',
+                '生产天数：${widget.product.basicProduction}件内${widget.product
+                    .productionDays}天，每加${widget.product
+                    .productionIncrement}件多1天',
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               )),
           Container(
@@ -219,16 +222,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   // }
 
   Widget _buildMoneyRow() {
+    ///阶梯价空处理
+    if (widget.product.steppedPrices == null) {
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text('请补全商品阶梯价')]),
+      );
+    }
+
+
+    List<Widget> _moneyRows = [];
+    for (int i = 0; i < widget.product.steppedPrices.length; i++) {
+      //最后一个阶梯价
+      if (i == widget.product.steppedPrices.length - 1) {
+        _moneyRows.add(_buildMoneyRowBlock(
+            '￥${widget.product.steppedPrices[i].price}',
+            '≥${widget.product.steppedPrices[i].minimumQuantity}件'));
+      } else {
+        _moneyRows.add(_buildMoneyRowBlock(
+            '￥${widget.product.steppedPrices[i].price}',
+            '${widget.product.steppedPrices[i].minimumQuantity}~${widget.product
+                .steppedPrices[i + 1].minimumQuantity}件'));
+      }
+    }
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          _buildMoneyRowBlock('￥50.00', '50~1000件'),
-          _buildMoneyRowBlock('￥45.00', '1001~5000件'),
-          _buildMoneyRowBlock('￥40.00', '≥5001'),
-        ],
-      ),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: _moneyRows),
     );
   }
 

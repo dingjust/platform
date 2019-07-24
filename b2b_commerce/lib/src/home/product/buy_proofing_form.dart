@@ -1,4 +1,5 @@
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'dart:async';
+
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +26,25 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   Map<String, List<EditApparelSizeVariantProductEntry>>();
   TextEditingController totalEditingController;
   TextEditingController remarksEditingController;
+
+  //总数流
+  var _streamController = StreamController < int
+
+  >
+
+      .
+
+  broadcast();
+
+  Stream<int> get totalNumStream => _streamController.stream;
   List<Widget> tabs = [];
   List<Widget> views = [];
   double imageSize = 100;
   double imageOverTop = 40;
   double imageToLeft = 20;
 
-  ///样衣费用
-  double price = 20.00;
+  //总数
+  int totalNum = 0;
 
   @override
   void initState() {
@@ -60,6 +72,9 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
 
   @override
   Widget build(BuildContext context) {
+    //计算总数
+    countTotalNum();
+
     return GestureDetector(
       onTap: () {
         //空处理，防止关闭bottomSheet
@@ -157,7 +172,10 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                         flex: 1,
                         child: Text(
                           '${widget.product.name}',
-                          style: TextStyle(color: Colors.black87, fontSize: 14),
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                       )
@@ -168,7 +186,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          '￥60.0',
+                          '￥${widget.product.proofingFee}',
                           style: TextStyle(color: Colors.red, fontSize: 14),
                           textAlign: TextAlign.left,
                         ),
@@ -366,31 +384,26 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              RichText(
-                text: TextSpan(
-                    text: '预计生产天数：',
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: '3天', style: TextStyle(color: Colors.black87)),
-                    ]),
-              ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                        text: '共',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '${totalNum()}',
-                              style: TextStyle(color: Colors.orange)),
-                          TextSpan(text: '件')
-                        ]),
-                  ),
-                  Text(
-                    '￥${totalNum() * 20.00}',
-                    style: TextStyle(color: Colors.orange, fontSize: 16),
+                  StreamBuilder<int>(
+                    initialData: 0,
+                    stream: totalNumStream,
+                    builder:
+                        (BuildContext context, AsyncSnapshot<int> snapshot) {
+                      return RichText(
+                        text: TextSpan(
+                            text: '共',
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: '${snapshot.data}',
+                                  style: TextStyle(color: Colors.orange)),
+                              TextSpan(text: '件')
+                            ]),
+                      );
+                    },
                   ),
                 ],
               )
@@ -416,7 +429,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                     style: TextStyle(color: Colors.grey, fontSize: 16),
                     children: <TextSpan>[
                       TextSpan(
-                          text: '￥800.00',
+                          text: '￥${totalNum * widget.product.proofingFee}',
                           style: TextStyle(color: Colors.orange)),
                     ]),
               ),
@@ -437,7 +450,8 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
     return result;
   }
 
-  Widget _buildTab(String color, List<EditApparelSizeVariantProductEntry> entries) {
+  Widget _buildTab(String color,
+      List<EditApparelSizeVariantProductEntry> entries) {
     String colorCode =
     entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
     return Tab(
@@ -507,12 +521,14 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
     );
   }
 
-  int totalNum() {
+  int countTotalNum() {
     int i = 0;
     productEntries.forEach((entry) {
       i = i + int.parse(entry.controller.text);
     });
-    return i;
+    totalNum = i;
+    _streamController.sink.add(totalNum);
+    return totalNum;
   }
 
   int colorTotalNum(List<EditApparelSizeVariantProductEntry> entries) {
@@ -559,9 +575,9 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
       );
     }).toList();
     model
-      ..unitPrice = price
-      ..totalPrice = totalNum() * price
-      ..totalQuantity = totalNum()
+      ..unitPrice = widget.product.proofingFee
+      ..totalPrice = totalNum * widget.product.proofingFee
+      ..totalQuantity = totalNum
       ..remarks = remarksEditingController.text;
     showDialog(
         context: context,
@@ -589,7 +605,6 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
               successTips: '下单成功',
               callbackResult: result,
               confirmAction: () {
-                // Navigator.of(context).pop();
                 getOrderDetail(value);
               },
             );
@@ -609,5 +624,12 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                   )),
           ModalRoute.withName('/'));
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _streamController.close();
+    super.dispose();
   }
 }

@@ -10,7 +10,7 @@ class ApparelProductPricesInputPage extends StatefulWidget {
   ApparelProductModel item;
   bool enabled;
 
-  ApparelProductPricesInputPage(this.item,{this.enabled = false});
+  ApparelProductPricesInputPage(this.item, {this.enabled = false});
 
   _ApparelProductPricesInputPageState createState() =>
       _ApparelProductPricesInputPageState();
@@ -22,13 +22,13 @@ class _ApparelProductPricesInputPageState
   final TextEditingController _proofingFeeController = TextEditingController();
   FocusNode _basicProductionFocusNode = FocusNode();
   final TextEditingController _basicProductionController =
-      TextEditingController();
+  TextEditingController();
   FocusNode _productionDaysFocusNode = FocusNode();
   final TextEditingController _productionDaysController =
-      TextEditingController();
+  TextEditingController();
   FocusNode _productionIncrementFocusNode = FocusNode();
   final TextEditingController _productionIncrementController =
-      TextEditingController();
+  TextEditingController();
   Map<String, Object> map;
 
   List<SteppedPriceModel> models = [];
@@ -48,7 +48,7 @@ class _ApparelProductPricesInputPageState
     _proofingFeeController.text = '${widget.item.proofingFee ?? ''}';
     _productionDaysController.text = '${widget.item.productionDays ?? ''}';
     _productionIncrementController.text =
-        '${widget.item.productionIncrement ?? ''}';
+    '${widget.item.productionIncrement ?? ''}';
     _basicProductionController.text = '${widget.item.basicProduction ?? ''}';
     if (widget.item.steppedPrices != null &&
         widget.item.steppedPrices.isNotEmpty) {
@@ -72,8 +72,11 @@ class _ApparelProductPricesInputPageState
     models.forEach((model) {
       quantityFocusNodes.add(FocusNode());
       priceFocusNodes.add(FocusNode());
-      quantityControllers.add(TextEditingController(text: model.minimumQuantity == null ? '' : model.minimumQuantity.toString()));
-      priceControllers.add(TextEditingController(text: model.price == null ? '' : model.price.toString()));
+      quantityControllers.add(TextEditingController(
+          text: model.minimumQuantity == null ? '' : model.minimumQuantity
+              .toString()));
+      priceControllers.add(TextEditingController(
+          text: model.price == null ? '' : model.price.toString()));
     });
 
     List<Widget> widgets = [];
@@ -105,18 +108,27 @@ class _ApparelProductPricesInputPageState
                       ),
                     ),
                     onTap: () async {
-                      if(_proofingFeeController.text == '' || _basicProductionController.text == '' || _productionDaysController.text == '' || _productionIncrementController.text == ''){
+                      if (_proofingFeeController.text == '' ||
+                          _basicProductionController.text == '' ||
+                          _productionDaysController.text == '' ||
+                          _productionIncrementController.text == '') {
                         ShowDialogUtil.showValidateMsg(context, '订货设置资料未完善');
                         return;
-                      }else{
-                        widget.item.proofingFee = ClassHandleUtil.removeSymbolRMBToDouble(_proofingFeeController.text);
-                        widget.item.basicProduction = int.parse(_basicProductionController.text);
-                        widget.item.productionDays = int.parse(_productionDaysController.text);
-                        widget.item.productionIncrement = int.parse(_productionIncrementController.text);
+                      } else {
+                        widget.item.proofingFee =
+                            ClassHandleUtil.removeSymbolRMBToDouble(
+                                _proofingFeeController.text);
+                        widget.item.basicProduction =
+                            int.parse(_basicProductionController.text);
+                        widget.item.productionDays =
+                            int.parse(_productionDaysController.text);
+                        widget.item.productionIncrement =
+                            int.parse(_productionIncrementController.text);
                       }
 
                       models.forEach((model) {
-                        if(model.minimumQuantity == null || model.price == null){
+                        if (model.minimumQuantity == null ||
+                            model.price == null) {
                           ShowDialogUtil.showValidateMsg(context, '订货设置资料未完善');
                           return;
                         }
@@ -193,22 +205,32 @@ class _ApparelProductPricesInputPageState
                 ),
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15, horizontal: 15),
                   child: Row(
                     children: <Widget>[
                       Container(
                         width:
-                            (MediaQueryData.fromWindow(window).size.width - 50) / 3,
+                        (MediaQueryData
+                            .fromWindow(window)
+                            .size
+                            .width - 50) / 3,
                         child: Container(),
                       ),
                       Container(
                         width:
-                            (MediaQueryData.fromWindow(window).size.width - 50) / 3,
+                        (MediaQueryData
+                            .fromWindow(window)
+                            .size
+                            .width - 50) / 3,
                         child: Text('起订量'),
                       ),
                       Container(
                         width:
-                            (MediaQueryData.fromWindow(window).size.width - 50) / 3,
+                        (MediaQueryData
+                            .fromWindow(window)
+                            .size
+                            .width - 50) / 3,
                         child: Text('阶梯价格'),
                       ),
                     ],
@@ -284,8 +306,9 @@ class _ApparelProductPricesInputPageState
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
-                    onEditingComplete: (){
-                      FocusScope.of(context).requestFocus(_productionDaysFocusNode);
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(
+                          _productionDaysFocusNode);
                     },
                     enabled: widget.enabled,
                   ),
@@ -301,8 +324,9 @@ class _ApparelProductPricesInputPageState
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
-                    onEditingComplete: (){
-                      FocusScope.of(context).requestFocus(_productionIncrementFocusNode);
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(
+                          _productionIncrementFocusNode);
                     },
                     enabled: widget.enabled,
                   ),
@@ -328,7 +352,8 @@ class _ApparelProductPricesInputPageState
             offstage: !isShowProductionDays,
             child: Padding(
               padding: const EdgeInsets.only(left: 15),
-              child: Text('生产增量即下单多N件则生产周期延长1天。',style: TextStyle(color: Colors.grey),),
+              child: Text(
+                '生产增量即下单多N件则生产周期延长1天。', style: TextStyle(color: Colors.grey),),
             ),
           ),
         ],
@@ -336,8 +361,7 @@ class _ApparelProductPricesInputPageState
     );
   }
 
-  Widget _buildItem(
-      SteppedPriceModel model,
+  Widget _buildItem(SteppedPriceModel model,
       int seq,
       FocusNode quantityFocusNode,
       FocusNode priceFocusNode,
@@ -359,11 +383,17 @@ class _ApparelProductPricesInputPageState
             Row(
               children: <Widget>[
                 Container(
-                  width: (MediaQueryData.fromWindow(window).size.width - 50) / 3,
+                  width: (MediaQueryData
+                      .fromWindow(window)
+                      .size
+                      .width - 50) / 3,
                   child: Center(child: Text(text)),
                 ),
                 Container(
-                  width: (MediaQueryData.fromWindow(window).size.width - 50) / 3,
+                  width: (MediaQueryData
+                      .fromWindow(window)
+                      .size
+                      .width - 50) / 3,
                   child: Center(
                     child: TextFieldComponent(
                       textAlign: TextAlign.left,
@@ -383,7 +413,10 @@ class _ApparelProductPricesInputPageState
                   ),
                 ),
                 Container(
-                  width: (MediaQueryData.fromWindow(window).size.width - 50) / 3,
+                  width: (MediaQueryData
+                      .fromWindow(window)
+                      .size
+                      .width - 50) / 3,
                   child: TextFieldComponent(
                     textAlign: TextAlign.left,
                     focusNode: priceFocusNode,
@@ -393,7 +426,8 @@ class _ApparelProductPricesInputPageState
                     inputFormatters: [DecimalInputFormat()],
                     hideDivider: true,
                     onChanged: (v) {
-                      model.price = ClassHandleUtil.removeSymbolRMBToDouble(priceController.text);
+                      model.price = ClassHandleUtil.removeSymbolRMBToDouble(
+                          priceController.text);
                     },
                     enabled: widget.enabled,
                   ),
@@ -407,7 +441,7 @@ class _ApparelProductPricesInputPageState
                         height: 30.0,
                       ),
                       decoration:
-                          BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                      BoxDecoration(borderRadius: BorderRadius.circular(15)),
                       child: Icon(
                         B2BIcons.close,
                         color: Colors.red,

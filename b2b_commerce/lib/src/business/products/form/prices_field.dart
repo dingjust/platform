@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import '../apparel_product_prices_input.dart';
 import 'package:widgets/widgets.dart';
+
+import '../apparel_product_prices_input.dart';
 
 class PricesField extends StatefulWidget {
   PricesField(this.item,{this.enabled = false});
@@ -26,8 +27,10 @@ class _PricesFieldState extends State<PricesField> {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>ApparelProductPricesInputPage(widget.item,enabled: widget.enabled,)));
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                ApparelProductPricesInputPage(
+                  widget.item, enabled: widget.enabled,)));
           },
           child: ShowSelectTile(
 //            isRequired: true,

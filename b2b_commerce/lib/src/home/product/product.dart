@@ -64,7 +64,7 @@ class RecommendProductItem extends StatelessWidget {
                     SpinKitRing(
                       color: Colors.black12,
                       lineWidth: 2,
-                      size: 30,
+                      size: 200,
                     ))
                 : Container(
                     // width: imageSize,
