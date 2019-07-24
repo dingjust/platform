@@ -93,6 +93,8 @@ class B2BIcons {
   const IconData(0xe71e, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData remove_rect =
   const IconData(0xe723, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData close =
+  const IconData(0xe641, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }
 
 class CommonImage {

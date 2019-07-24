@@ -26,14 +26,14 @@ class _PricesFieldState extends State<PricesField> {
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: !widget.enabled ? null : (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>ApparelProductPricesInputPage(widget.item)));
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>ApparelProductPricesInputPage(widget.item,enabled: widget.enabled,)));
           },
           child: ShowSelectTile(
-            isRequired: true,
-            isShowIcon: widget.enabled,
-            leadingText: '价格',
-            tralingText: widget.item.minPrice == null && widget.item.maxPrice == null ? '' : '￥${widget.item.minPrice ?? ''} ~ ￥${widget.item.maxPrice ?? ''}',
+//            isRequired: true,
+//            isShowIcon: widget.enabled,
+            leadingText: '订货设置',
+//            tralingText: widget.item.minPrice == null && widget.item.maxPrice == null ? '' : '￥${widget.item.minPrice ?? ''} ~ ￥${widget.item.maxPrice ?? ''}',
           ),
         ),
       ],
