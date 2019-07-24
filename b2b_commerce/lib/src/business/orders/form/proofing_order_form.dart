@@ -136,74 +136,78 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
           margin: EdgeInsets.only(bottom: 15),
           color: Colors.white,
-          child: Column(
+          child: Row(
             children: <Widget>[
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    widget.quoteModel.requirementOrder.belongTo == null ||
-                            widget.quoteModel.requirementOrder.belongTo
-                                    .profilePicture ==
-                                null
-                        ? Container(
-                            margin: EdgeInsets.all(10),
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'temp/picture.png',
-                                    package: "assets",
-                                  ),
-                                  fit: BoxFit.cover,
-                                )),
-                          )
-                        : Container(
-                            margin: EdgeInsets.all(10),
-                            width: 80,
-                            height: 80,
-                            child: CachedNetworkImage(
-                                width: 100,
-                                height: 100,
-                                imageUrl:
-                                    '${widget.quoteModel.requirementOrder.belongTo.profilePicture.previewUrl()}',
-                                fit: BoxFit.cover,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                placeholder: (context, url) => SpinKitRing(
-                                      color: Colors.black12,
-                                      lineWidth: 2,
-                                      size: 30,
-                                    ),
-                                errorWidget: (context, url, error) =>
-                                    SpinKitRing(
-                                      color: Colors.black12,
-                                      lineWidth: 2,
-                                      size: 30,
-                                    )),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
+              widget.quoteModel.requirementOrder.belongTo == null ||
+                  widget.quoteModel.requirementOrder.belongTo
+                      .profilePicture ==
+                      null
+                  ? Container(
+                margin: EdgeInsets.all(10),
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'temp/picture.png',
+                        package: "assets",
+                      ),
+                      fit: BoxFit.cover,
+                    )),
+              )
+                  : Container(
+                margin: EdgeInsets.all(10),
+                width: 80,
+                height: 80,
+                child: CachedNetworkImage(
+                    width: 100,
+                    height: 100,
+                    imageUrl:
+                    '${widget.quoteModel.requirementOrder.belongTo
+                        .profilePicture.previewUrl()}',
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
                             ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                    Container(
-                        child: Column(
+                        ),
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.only(bottom: 5),
                           child: Text(
-                            '${widget.quoteModel.requirementOrder == null || widget.quoteModel.requirementOrder.belongTo.name == null ? '' : widget.quoteModel.requirementOrder.belongTo.name}',
+                            '${widget.quoteModel.requirementOrder == null ||
+                                widget.quoteModel.requirementOrder.belongTo
+                                    .name == null ? '' : widget.quoteModel
+                                .requirementOrder.belongTo.name}',
                             textScaleFactor: 1.3,
                           ),
                         ),
@@ -211,30 +215,27 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                             margin: EdgeInsets.only(top: 5),
                             color: Color.fromRGBO(254, 252, 235, 1),
                             child: widget.quoteModel.requirementOrder != null &&
-                                    widget.quoteModel.requirementOrder
-                                            .belongTo !=
-                                        null &&
-                                    widget.quoteModel.requirementOrder.belongTo
-                                            .approvalStatus !=
-                                        null &&
-                                    widget.quoteModel.requirementOrder.belongTo
-                                            .approvalStatus !=
-                                        ArticleApprovalStatus.approved
+                                widget.quoteModel.requirementOrder.belongTo !=
+                                    null &&
+                                widget.quoteModel.requirementOrder.belongTo
+                                    .approvalStatus !=
+                                    null &&
+                                widget.quoteModel.requirementOrder.belongTo
+                                    .approvalStatus !=
+                                    ArticleApprovalStatus.approved
                                 ? Text('  已认证  ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 133, 148, 1),
-                                    ))
+                                style: TextStyle(
+                                  color: Color.fromRGBO(255, 133, 148, 1),
+                                ))
                                 : Text(
-                                    '  未认证  ',
-                                    style: TextStyle(
-                                      color: Color.fromRGBO(255, 133, 148, 1),
-                                    ),
-                                  ))
+                              '  未认证  ',
+                              style: TextStyle(
+                                color: Color.fromRGBO(255, 133, 148, 1),
+                              ),
+                            ))
                       ],
-                    ))
-                  ],
-                ),
-              ),
+                    )),
+              )
             ],
           ),
         ),

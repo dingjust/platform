@@ -237,12 +237,12 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                       placeholder: (context, url) => SpinKitRing(
                             color: Colors.black12,
                             lineWidth: 2,
-                            size: 30,
+                        size: 100,
                           ),
                       errorWidget: (context, url, error) => SpinKitRing(
                             color: Colors.black12,
                             lineWidth: 2,
-                            size: 30,
+                        size: 100,
                           )),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -405,7 +405,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
-            '￥${widget.order.totalPrice}',
+            '￥${getPayAmount()}',
             style: TextStyle(fontSize: 18, color: Colors.red),
           ),
           Container(
@@ -660,6 +660,26 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         }
       });
     }
+  }
+
+  double getPayAmount() {
+    double result = 0;
+    switch (widget.paymentFor) {
+      case PaymentFor.DEFAULT:
+        result = widget.order.totalPrice;
+        break;
+      case PaymentFor.DEPOSIT:
+        PurchaseOrderModel model = widget.order as PurchaseOrderModel;
+        result = model.deposit;
+        break;
+      case PaymentFor.BALANCE:
+        PurchaseOrderModel model = widget.order as PurchaseOrderModel;
+        result = model.balance;
+        break;
+      default:
+        break;
+    }
+    return result;
   }
 
   //支付后确认订单操作，延时1秒

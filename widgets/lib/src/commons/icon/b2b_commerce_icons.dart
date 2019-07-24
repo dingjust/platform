@@ -85,6 +85,14 @@ class B2BIcons {
       const IconData(0xe639, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData aim =
   const IconData(0xe68d, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData home_2 =
+  const IconData(0xe60c, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData phone_2 =
+  const IconData(0xe655, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData add_rect =
+  const IconData(0xe71e, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData remove_rect =
+  const IconData(0xe723, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData close =
   const IconData(0xe641, fontFamily: 'b2bIcons2', matchTextDirection: true);
 }

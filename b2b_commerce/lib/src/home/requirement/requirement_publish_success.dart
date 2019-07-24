@@ -141,12 +141,12 @@ class _PublishRequirementSuccessDialogState
                   SpinKitRing(
                     color: Colors.black12,
                     lineWidth: 2,
-                    size: 30,
+                    size: 80,
                   ),
               errorWidget: (context, url, error) => SpinKitRing(
                 color: Colors.black12,
                 lineWidth: 2,
-                size: 30,
+                size: 80,
               )),
         );
       }
