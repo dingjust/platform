@@ -8,12 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
 class BuyPurchaseForm extends StatefulWidget {
   final ApparelProductModel product;
 
-  const BuyPurchaseForm(this.product, {Key key}) : super(key: key);
+  final double heightScale;
+
+  const BuyPurchaseForm(this.product, {Key key, this.heightScale = 0.75})
+      : super(key: key);
 
   @override
   _BuyPurchaseFormState createState() => _BuyPurchaseFormState();
@@ -73,7 +77,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     }
     productEntries = widget.product.variants
         .map((variant) => EditApparelSizeVariantProductEntry(
-        controller: TextEditingController(text: '0'), model: variant))
+        controller: TextEditingController(), model: variant))
         .toList();
     if (productEntries != null) {
       productEntries.forEach((entry) {
@@ -96,41 +100,51 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     countTotalNum();
 
     return GestureDetector(
-      onTap: () {
-        //空处理，防止关闭bottomSheet
-      },
-      child: Container(
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Container(
-                margin: EdgeInsets.only(top: imageOverTop),
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        padding:
-                        EdgeInsets.fromLTRB(imageToLeft, 5, imageToLeft, 5),
-                        child: Column(
-                          children: <Widget>[
-                            _buildHeadRow(),
-                            _buildBody(),
-                            // _buildTotal()
-                            _buildEnd(),
-                          ],
+        onTap: () {
+          //空处理，防止关闭bottomSheet
+        },
+        child: Padding(
+          padding:
+          EdgeInsets.only(bottom: MediaQuery
+              .of(context)
+              .viewInsets
+              .bottom),
+          child: Container(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * widget.heightScale,
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                Container(
+                    margin: EdgeInsets.only(top: imageOverTop),
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(
+                                imageToLeft, 5, imageToLeft, 5),
+                            child: Column(
+                              children: <Widget>[
+                                _buildHeadRow(),
+                                _buildBody(),
+                                // _buildTotal()
+                                _buildEnd(),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    _buildSubmit()
-                  ],
-                )),
-            _buildImageBlock()
-          ],
-        ),
-      ),
-    );
+                        _buildSubmit()
+                      ],
+                    )),
+                _buildImageBlock()
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _buildImageBlock() {
@@ -231,6 +245,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
       child: DefaultTabController(
         length: colorRowList.length,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: TabBar(
             unselectedLabelColor: Colors.black26,
             labelColor: Colors.orange,
@@ -267,9 +282,13 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                 onPressed: () {
                   if (int.parse(entry.controller.text) > 0) {
                     setState(() {
-                      int i = int.parse(entry.controller.text);
-                      i--;
-                      entry.controller.text = '$i';
+                      if (entry.controller.text == '1') {
+                        entry.controller.text = '';
+                      } else {
+                        int i = int.parse(entry.controller.text);
+                        i--;
+                        entry.controller.text = '$i';
+                      }
                     });
                   }
                 },
@@ -278,13 +297,21 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                 width: 40,
                 child: TextField(
                   controller: entry.controller,
-                  decoration: InputDecoration(border: InputBorder.none),
+                  decoration: InputDecoration(
+                      border: InputBorder.none, hintText: '0'),
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
                   //只能输入数字
                   inputFormatters: <TextInputFormatter>[
                     WhitelistingTextInputFormatter.digitsOnly,
                   ],
+                  onChanged: (val) {
+                    if (val == '0') {
+                      setState(() {
+                        entry.controller.text = '';
+                      });
+                    }
+                  },
                 ),
               ),
               IconButton(
@@ -294,9 +321,13 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                 ),
                 onPressed: () {
                   setState(() {
-                    int i = int.parse(entry.controller.text);
-                    i++;
-                    entry.controller.text = '$i';
+                    if (entry.controller.text == '') {
+                      entry.controller.text = '1';
+                    } else {
+                      int i = int.parse(entry.controller.text);
+                      i++;
+                      entry.controller.text = '$i';
+                    }
                   });
                 },
               )
@@ -346,23 +377,31 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                       color: Colors.orange,
                     ),
                     onPressed: () {
-                      if (int.parse(totalEditingController.text) > 0) {
-                        setState(() {
-                          int i = int.parse(totalEditingController.text);
-                          i--;
-                          totalEditingController.text = '$i';
-                          productEntries.forEach((entry) {
-                            entry.controller.text = '$i';
-                          });
-                        });
-                      }
+                      setState(() {
+                        if (int.parse(totalEditingController.text) > 0) {
+                          if (totalEditingController.text == '1') {
+                            totalEditingController.text = '';
+                            productEntries.forEach((entry) {
+                              entry.controller.text = '';
+                            });
+                          } else {
+                            int i = int.parse(totalEditingController.text);
+                            i--;
+                            totalEditingController.text = '$i';
+                            productEntries.forEach((entry) {
+                              entry.controller.text = '$i';
+                            });
+                          }
+                        }
+                      });
                     },
                   ),
                   Container(
                     width: 40,
                     child: TextField(
                       controller: totalEditingController,
-                      decoration: InputDecoration(border: InputBorder.none),
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: '0'),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       //只能输入数字
@@ -370,6 +409,9 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
                       onChanged: (val) {
+                        if (val == '') {
+                          val = '0';
+                        }
                         setState(() {
                           productEntries.forEach((entry) {
                             entry.controller.text = val;
@@ -385,12 +427,19 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                     ),
                     onPressed: () {
                       setState(() {
-                        int i = int.parse(totalEditingController.text);
-                        i++;
-                        totalEditingController.text = '$i';
-                        productEntries.forEach((entry) {
-                          entry.controller.text = '$i';
-                        });
+                        if (totalEditingController.text == '') {
+                          totalEditingController.text = '1';
+                          productEntries.forEach((entry) {
+                            entry.controller.text = '1';
+                          });
+                        } else {
+                          int i = int.parse(totalEditingController.text);
+                          i++;
+                          totalEditingController.text = '$i';
+                          productEntries.forEach((entry) {
+                            entry.controller.text = '$i';
+                          });
+                        }
                       });
                     },
                   )
@@ -523,7 +572,9 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                         shape: BoxShape.circle, color: Colors.orangeAccent),
                     child: Center(
                       child: Text(
-                        '${colorTotalNum(entries)}',
+                        colorTotalNum(entries) > 99
+                            ? '···'
+                            : '${colorTotalNum(entries)}',
                         style: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     )))
@@ -537,7 +588,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   Widget _buildSubmit() {
     return Container(
       width: double.infinity,
-      height: 40,
+      height: 50,
       margin: EdgeInsets.only(top: 5),
       child: FlatButton(
         color: Colors.orange,
@@ -553,7 +604,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   int countTotalNum() {
     int i = 0;
     productEntries.forEach((entry) {
-      i = i + int.parse(entry.controller.text);
+      if (entry.controller.text == '') {
+        i = i + 0;
+      } else {
+        i = i + int.parse(entry.controller.text);
+      }
     });
     totalNum = i;
     //计算生产天数
@@ -598,28 +653,42 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   int colorTotalNum(List<EditApparelSizeVariantProductEntry> entries) {
     int result = 0;
     entries.forEach((entry) {
-      result = result + int.parse(entry.controller.text);
+      if (entry.controller.text == '') {
+        result = result + 0;
+      } else {
+        result = result + int.parse(entry.controller.text);
+      }
     });
     return result;
   }
 
+  ///校验表单
+  bool validateForm() {
+    return totalNum >= widget.product.steppedPrices[0].minimumQuantity;
+  }
+
   void onSure() {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.CONFIRM_DIALOG,
-            contentText2: '是否提交订单？',
-            isNeedConfirmButton: true,
-            isNeedCancelButton: true,
-            dialogHeight: 200,
-            confirmAction: () {
-              Navigator.of(context).pop();
-              onSubmit();
-            },
-          );
-        });
+    if (validateForm()) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '是否提交订单？',
+              isNeedConfirmButton: true,
+              isNeedCancelButton: true,
+              dialogHeight: 200,
+              confirmAction: () {
+                Navigator.of(context).pop();
+                onSubmit();
+              },
+            );
+          });
+    } else {
+      Toast.show("未达最低采购量", context,
+          duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+    }
   }
 
   void onSubmit() async {
