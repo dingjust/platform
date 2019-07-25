@@ -23,19 +23,29 @@ enum UserType {
   BRAND,
 
   /// 工厂用户
-  FACTORY
+  FACTORY,
+  DEFAULT,
 }
 
 const UserTypeMap = {
   UserType.ANONYMOUS: "ANONYMOUS",
   UserType.BRAND: "BRAND",
   UserType.FACTORY: "FACTORY",
+  UserType.DEFAULT: "DEFAULT"
+};
+
+const UserTypeValueMap = {
+  "ANONYMOUS": UserType.ANONYMOUS,
+  "BRAND": UserType.BRAND,
+  "FACTORY": UserType.FACTORY,
+  "DEFAULT": UserType.DEFAULT
 };
 
 const UserTypeLocalizedMap = {
   UserType.ANONYMOUS: "游客",
   UserType.BRAND: "品牌端",
   UserType.FACTORY: "工厂端",
+  UserType.DEFAULT: "系统默认"
 };
 
 enum UserStatus {

@@ -301,7 +301,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                   color: Colors.transparent,
                   child:  Container(
                     width: double.infinity,
-                    height: 200.0,
+                    height: 400.0,
                     child: _bottomView(),
                   ),
                 ),
@@ -338,7 +338,7 @@ class _MyAddressPickerState extends State<_MyAddressPicker> {
       child:  Container(
         padding: const EdgeInsets.all(6.0),
         alignment: Alignment.center,
-        height: 150.0,
+        height: 250.0,
         child: CupertinoPicker(
           backgroundColor: Colors.white,
           scrollController: widget.controller,

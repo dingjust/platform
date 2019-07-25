@@ -134,6 +134,18 @@ class _RequirementOrderDetailForFactoryState
                 child: CachedNetworkImage(
                     imageUrl: '${widget.model.belongTo.profilePicture}',
                     fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
                     placeholder: (context, url) =>
                         SpinKitRing(
                           color: Colors.black12,
@@ -145,11 +157,10 @@ class _RequirementOrderDetailForFactoryState
                           color: Colors.black12,
                           lineWidth: 2,
                           size: 30,
-                        )
-                ),
+                        )),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    ),
+                  borderRadius: BorderRadius.circular(5),
+                ),
               ),
               Expanded(
                 flex: 1,
@@ -286,8 +297,21 @@ class _RequirementOrderDetailForFactoryState
                   width: 80,
                   height: 80,
                   child: CachedNetworkImage(
-                      imageUrl: 'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg',
+                      imageUrl:
+                      'https://gd3.alicdn.com/imgextra/i2/0/TB194socYrpK1RjSZTEXXcWAVXa_!!0-item_pic.jpg',
                       fit: BoxFit.cover,
+                      imageBuilder: (context, imageProvider) =>
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
                       placeholder: (context, url) =>
                           SpinKitRing(
                             color: Colors.black12,
@@ -299,11 +323,10 @@ class _RequirementOrderDetailForFactoryState
                             color: Colors.black12,
                             lineWidth: 2,
                             size: 30,
-                          )
-                  ),
+                          )),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
                 ),
                 Container(
                   height: 80,

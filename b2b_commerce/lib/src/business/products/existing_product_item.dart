@@ -5,26 +5,39 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-class ExistingProductItem extends StatelessWidget{
+class ExistingProductItem extends StatelessWidget {
   ApparelProductModel product;
   bool isFactoryDetail;
-  ExistingProductItem(this.product,{this.isFactoryDetail = false});
+
+  ExistingProductItem(this.product, {this.isFactoryDetail = false});
 
   @override
   Widget build(BuildContext context) {
-    if(isFactoryDetail){
+    if (isFactoryDetail) {
       return GestureDetector(
         child: Container(
             child: Center(
               child: Column(
                 children: <Widget>[
                   Container(
-                    child: product.thumbnail != null ?
-                    CachedNetworkImage(
+                    child: product.thumbnail != null
+                        ? CachedNetworkImage(
                         width: 100,
                         height: 100,
                         imageUrl: '${product.thumbnail.previewUrl()}',
                         fit: BoxFit.cover,
+                        imageBuilder: (context, imageProvider) =>
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
                         placeholder: (context, url) =>
                             SpinKitRing(
                               color: Colors.black12,
@@ -36,26 +49,19 @@ class ExistingProductItem extends StatelessWidget{
                               color: Colors.black12,
                               lineWidth: 2,
                               size: 30,
-                            )
-                    )
+                            ))
                         : Container(
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.circular(5),
-                          color: Color.fromRGBO(
-                              243, 243, 243, 1)),
-                      child: Icon(
-                        B2BIcons.noPicture,
-                        color:
-                        Color.fromRGBO(200, 200, 200, 1),
-                        size: 60
-                      ),
+                          borderRadius: BorderRadius.circular(5),
+                          color: Color.fromRGBO(243, 243, 243, 1)),
+                      child: Icon(B2BIcons.noPicture,
+                          color: Color.fromRGBO(200, 200, 200, 1), size: 60),
                     ),
                   ),
                   Container(
-                    padding:EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 10),
                     child: Text(
                       product.name ?? '',
                       overflow: TextOverflow.ellipsis,
@@ -66,7 +72,8 @@ class ExistingProductItem extends StatelessWidget{
                   ),
                   Container(
                     child: Text(
-                      '￥${product.minPrice ?? ''}'' ～ ￥${product.maxPrice ?? ''}',
+                      '￥${product.minPrice ?? ''}' ' ～ ￥${product.maxPrice ??
+                          ''}',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.red,
@@ -87,7 +94,7 @@ class ExistingProductItem extends StatelessWidget{
           );
         },
       );
-    }else{
+    } else {
       return GestureDetector(
         child: Container(
             color: Colors.white,
@@ -98,40 +105,36 @@ class ExistingProductItem extends StatelessWidget{
                     width: 180,
                     height: 200,
                     padding: EdgeInsets.all(20),
-                    child: product.thumbnail != null ?
-                    CachedNetworkImage(
+                    child: product.thumbnail != null
+                        ? CachedNetworkImage(
                         imageUrl: '${product.thumbnail.previewUrl()}',
                         fit: BoxFit.cover,
-                        placeholder: (context, url) =>  SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        ),
-                        errorWidget: (context, url, error) => SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        )
-                    )
+                        placeholder: (context, url) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            ),
+                        errorWidget: (context, url, error) =>
+                            SpinKitRing(
+                              color: Colors.black12,
+                              lineWidth: 2,
+                              size: 30,
+                            ))
                         : Container(
                       width: 180,
                       height: 200,
                       decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.circular(5),
-                          color: Color.fromRGBO(
-                              243, 243, 243, 1)),
-                      child: Icon(
-                        B2BIcons.noPicture,
-                        color:
-                        Color.fromRGBO(200, 200, 200, 1),
-                        size: 60
-                      ),
+                          borderRadius: BorderRadius.circular(5),
+                          color: Color.fromRGBO(243, 243, 243, 1)),
+                      child: Icon(B2BIcons.noPicture,
+                          color: Color.fromRGBO(200, 200, 200, 1),
+                          size: 60),
                     ),
                   ),
                   Container(
                     height: 20,
-                    padding:EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 10),
                     child: Text(
                       product.name ?? '',
                       style: TextStyle(
@@ -141,9 +144,10 @@ class ExistingProductItem extends StatelessWidget{
                   ),
                   Container(
                     height: 20,
-                    padding:EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 10),
                     child: Text(
-                      '￥${product.minPrice ?? ''}'' ～ ￥${product.maxPrice ?? ''}',
+                      '￥${product.minPrice ?? ''}'
+                          ' ～ ￥${product.maxPrice ?? ''}',
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.red,

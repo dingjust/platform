@@ -343,7 +343,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                 Container(
                   padding: EdgeInsets.only(right: 10),
                   child: Text(
-                    '${progress.delayedDays != null && progress.delayedDays > 0 && sequence <= _index
+                    '${progress.delayedDays != null &&
+                        progress.delayedDays > 0 && sequence <= _index
                         ? '已延期${progress.delayedDays}天'
                         : ''}',
                     style: TextStyle(color: Colors.red, fontSize: 18),
@@ -411,6 +412,18 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                     child: CachedNetworkImage(
                         imageUrl: '${progress.medias[0].previewUrl()}',
                         fit: BoxFit.cover,
+                        imageBuilder: (context, imageProvider) =>
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                         placeholder: (context, url) =>
                             SpinKitRing(
                               color: Colors.black12,
@@ -559,61 +572,54 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
 
   Widget _buildQuantity(BuildContext context, ProductionProgressModel progress,
       String currentPhase, int sequence, int _index) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        userType != null &&
+            userType == 'factory' &&
+            (sequence >= _index) &&
+            order.status == PurchaseOrderStatus.IN_PRODUCTION
+            ? _showDialog(progress, '数量')
+            : null;
+      },
       child: Container(
-        padding: EdgeInsets.all(8),
-        child: Row(
-          children: <Widget>[
-            GestureDetector(
-                child: Text('数量：', style: TextStyle()),
-                onTap: () {
-                  userType != null &&
-                      userType == 'factory' &&
-                      (sequence >= _index) &&
-                      order.status == PurchaseOrderStatus.IN_PRODUCTION
-                      ? _showDialog(progress, '数量')
-                      : null;
-                }),
-            GestureDetector(
-                child: Container(
-                  margin: EdgeInsets.only(left: 15),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: progress.quantity == 0 || progress.quantity == null
-                        ? Text('${userType == 'brand' ? '' : '填写'}',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ))
-                        : Text('${progress.quantity}', style: TextStyle()),
-                  ),
+        child: Container(
+          padding: EdgeInsets.all(8),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Text('数量：', style: TextStyle()),
+              Container(
+                margin: EdgeInsets.only(left: 15),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: progress.quantity == 0 || progress.quantity == null
+                      ? Text('${userType == 'brand' ? '' : '填写'}',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ))
+                      : Text('${progress.quantity}', style: TextStyle()),
                 ),
-                onTap: () {
-                  userType != null &&
-                      userType == 'factory' &&
-                      (sequence >= _index) &&
-                      order.status == PurchaseOrderStatus.IN_PRODUCTION
-                      ? _showDialog(progress, '数量')
-                      : null;
-                }),
-            progress.quantity == null
-                ? Align(
-              alignment: Alignment.centerRight,
-              child: userType == 'brand'
-                  ? Container()
-                  : IconButton(
-                  icon: Icon(Icons.keyboard_arrow_right),
-                  onPressed: () {
-                    userType != null &&
-                        userType == 'factory' &&
-                        (sequence >= _index) &&
-                        order.status ==
-                            PurchaseOrderStatus.IN_PRODUCTION
-                        ? _showDialog(progress, '数量')
-                        : null;
-                  }),
-            )
-                : Container()
-          ],
+              ),
+              progress.quantity == null
+                  ? Align(
+                alignment: Alignment.centerRight,
+                child: userType == 'brand'
+                    ? Container()
+                    : IconButton(
+                    icon: Icon(Icons.keyboard_arrow_right),
+                    onPressed: () {
+                      userType != null &&
+                          userType == 'factory' &&
+                          (sequence >= _index) &&
+                          order.status ==
+                              PurchaseOrderStatus.IN_PRODUCTION
+                          ? _showDialog(progress, '数量')
+                          : null;
+                    }),
+              )
+                  : Container()
+            ],
+          ),
         ),
       ),
     );

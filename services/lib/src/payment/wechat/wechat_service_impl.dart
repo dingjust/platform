@@ -21,7 +21,7 @@ class WechatServiceImpl implements WechatService {
 
     //全局监听微信回调
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) {
-      print('>>>>> ${data.errStr}');
+      print('>>>>>微信回调 ${data.errStr}');
     });
   }
 

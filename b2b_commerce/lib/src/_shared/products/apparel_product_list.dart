@@ -7,8 +7,8 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/src/order/PageEntry.dart';
+import 'package:widgets/widgets.dart';
 
 class ApparelProductList extends StatefulWidget {
   ApparelProductList({
@@ -283,8 +283,8 @@ class _ApparelProductListState extends State<ApparelProductList> {
         _showValidateMsg(context, '产品价格为空不可上架');
         return;
       } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY &&
-          (product.minPrice == null || product.maxPrice == null)) {
-        _showValidateMsg(context, '产品价格为空不可上架');
+          (product.proofingFee == null)) {
+        _showValidateMsg(context, '订货设置资料未完善，不可上架');
         return;
       }
 

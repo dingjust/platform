@@ -26,7 +26,7 @@ class ImageFactory {
 
   static Widget buildThumbnailImage(
     MediaModel media, {
-    double size = 60,
+        double size = 80,
     BoxFit fit = BoxFit.cover,
   }) {
     if (media == null) {
@@ -35,36 +35,47 @@ class ImageFactory {
 
     // TODO：拿media format为Thumbnail的converted图片
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-      width: 80,
-      height: 80,
-      child:
+        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+        width: 90,
+        height: 80,
+        child:
 //      Image.network(
 //        '${media.previewUrl()}',
 //        fit: BoxFit.cover,
 //      )
 //        ,
 //    );
-    Container(
-      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-      width: 80,
-      height: 80,
-      child: CachedNetworkImage(
-          imageUrl: '${media.previewUrl()}',
-          fit: BoxFit.cover,
-          placeholder: (context, url) =>  SpinKitRing(
-            color: Colors.black12,
-            lineWidth:2,
-            size: 30.0,
-          ),
-          errorWidget: (context, url, error) => SpinKitRing(
-            color: Colors.black12,
-            lineWidth:2,
-            size: 30,
-          )
-      ),
-    )
-    );
+        Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          width: 100,
+          height: 100,
+          child: CachedNetworkImage(
+              imageUrl: '${media.previewUrl()}',
+              // fit: BoxFit.cover,
+              imageBuilder: (context, imageProvider) =>
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+              placeholder: (context, url) =>
+                  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30.0,
+                  ),
+              errorWidget: (context, url, error) =>
+                  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  )),
+        ));
   }
 
   static Widget buildThumbnailImageForList(
@@ -98,8 +109,7 @@ class ImageFactory {
     }
 
     return CircleAvatar(
-      backgroundImage:
-      NetworkImage('${profilePicture.previewUrl()}'),
+      backgroundImage: NetworkImage('${profilePicture.previewUrl()}'),
       radius: radius,
     );
   }

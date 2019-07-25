@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
-import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
@@ -138,7 +137,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
   openSelectButton(BuildContext context) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (_) {
           return FloatSelectPage(
             buttonText1: '关联订单合同',

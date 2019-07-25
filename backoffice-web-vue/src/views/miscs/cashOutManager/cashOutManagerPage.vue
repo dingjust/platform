@@ -10,11 +10,12 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('CashOutManagerModule');
+  const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('CashOutManagerModule');
 
   import cashOutManagerToolbar from './toolbar/cashOutManagerToolbar';
-  import cashOutManagerList from './list/cashOutManagerList';
+  import cashOutManagerList from '../cashOutManager/list/cashOutManagerList';
   import cashOutManagerDetailsPage from './details/cashOutManagerDetailsPage';
+  import store from '../../../components/webchat/store';
 
   export default {
     name: 'cashOutManagerPage',
@@ -25,30 +26,25 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword'
+        keyword: 'keyword',
+        cashOutDetailData: 'cashOutDetailData'
       })
     },
     methods: {
+      ...mapMutations({
+        setCashOutDetailData: 'cashOutDetailData',
+      }),
       ...mapActions({
         search: 'search',
-        searchAdvanced:'searchAdvanced',
+        searchAdvanced: 'searchAdvanced',
       }),
-      onSearch (page, size) {
-        // const keyword = this.keyword;
-        const keyword = this.keyword;
-        const url = this.apis().findBills();
-        this.search({url, keyword, page, size});
-        // this.$http.post(url, {}, {
-        //   'page': 0,
-        //   'size': 10
-        // });
-      },
       onAdvancedSearch (page, size) {
         this.isAdvancedSearch = true;
         var query = {
+          keyword: this.keyword,
           flowSource: ['CASH_OUT'],
-          amountFlowType:['OUTFLOW'],
-          amountStatus: ['IN_REVIEW','REVIEWED','REJECTED']
+          amountFlowType: ['OUTFLOW'],
+          amountStatus: ['IN_REVIEW', 'REVIEWED', 'REJECTED']
         };
         const url = this.apis().findBills();
         this.searchAdvanced({url, query, page, size});
@@ -59,8 +55,8 @@
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
         }
-
-        this.fn.openSlider('明细：' + item.name, cashOutManagerDetailsPage, result);
+        this.setCashOutDetailData(result);
+        this.fn.openSlider('明细：' + item.code, cashOutManagerDetailsPage);
       },
       async onRejected (item) {
         const url = this.apis().rejectedCashOut(item.id);

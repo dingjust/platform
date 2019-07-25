@@ -12,9 +12,11 @@ import '../../../common/logistics_input_page.dart';
 import '../../../common/order_payment.dart';
 
 class PurchaseOrderItem extends StatefulWidget {
-  PurchaseOrderItem({Key key, this.order}) : super(key: key);
+  PurchaseOrderItem({Key key, this.order, this.isContractSelect: false})
+      : super(key: key);
 
   final PurchaseOrderModel order;
+  bool isContractSelect;
 
   _PurchaseOrderItemState createState() => _PurchaseOrderItemState();
 }
@@ -59,10 +61,15 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
         ),
       ),
       onTap: () async {
+        if (widget.isContractSelect) {
+          Navigator.of(context).pop(widget.order);
+        } else {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => PurchaseOrderDetailPage(code: widget.order.code)),
+                builder: (context) =>
+                    PurchaseOrderDetailPage(code: widget.order.code)),
           );
+        }
       },
     );
   }

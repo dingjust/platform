@@ -91,7 +91,6 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                 '提交订单',
                 style: TextStyle(
                   color: Colors.black,
-
                   fontSize: 18,
                 ),
               ),
@@ -120,8 +119,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                   Navigator.of(context).pop();
                 },
               );
-            }
-        );
+            });
       },
     );
   }
@@ -136,28 +134,44 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             child: Row(
               children: <Widget>[
                 widget.quoteModel.requirementOrder.belongTo == null ||
-                    widget.quoteModel.requirementOrder.belongTo.profilePicture == null?
-                Container(
+                    widget.quoteModel.requirementOrder.belongTo
+                        .profilePicture ==
+                        null
+                    ? Container(
                   margin: EdgeInsets.all(10),
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image:AssetImage(
+                        image: AssetImage(
                           'temp/picture.png',
                           package: "assets",
                         ),
                         fit: BoxFit.cover,
                       )),
-                ):
-                Container(
+                )
+                    : Container(
                   margin: EdgeInsets.all(10),
                   width: 80,
                   height: 80,
                   child: CachedNetworkImage(
-                      imageUrl: '${widget.quoteModel.requirementOrder.belongTo.profilePicture.previewUrl()}',
+                      imageUrl:
+                      '${widget.quoteModel.requirementOrder.belongTo
+                          .profilePicture.previewUrl()}',
                       fit: BoxFit.cover,
+                      imageBuilder: (context, imageProvider) =>
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                       placeholder: (context, url) =>
                           SpinKitRing(
                             color: Colors.black12,
@@ -169,11 +183,10 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                             color: Colors.black12,
                             lineWidth: 2,
                             size: 30,
-                          )
-                  ),
+                          )),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 Container(
                     child: Column(
@@ -182,17 +195,25 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                         Container(
                           margin: EdgeInsets.only(bottom: 5),
                           child: Text(
-                            '${widget.quoteModel.requirementOrder == null || widget.quoteModel.requirementOrder.belongTo.name == null ?
-                            '' : widget.quoteModel.requirementOrder.belongTo.name}',
+                            '${widget.quoteModel.requirementOrder == null ||
+                                widget.quoteModel.requirementOrder.belongTo
+                                    .name == null ? '' : widget.quoteModel
+                                .requirementOrder.belongTo.name}',
                             textScaleFactor: 1.3,
                           ),
                         ),
                         Container(
                             margin: EdgeInsets.only(top: 5),
                             color: Color.fromRGBO(254, 252, 235, 1),
-                            child: widget.quoteModel.requirementOrder != null && widget.quoteModel.requirementOrder.belongTo != null &&
-                                widget.quoteModel.requirementOrder.belongTo.approvalStatus != null
-                                && widget.quoteModel.requirementOrder.belongTo.approvalStatus != ArticleApprovalStatus.approved
+                            child: widget.quoteModel.requirementOrder != null &&
+                                widget.quoteModel.requirementOrder.belongTo !=
+                                    null &&
+                                widget.quoteModel.requirementOrder.belongTo
+                                    .approvalStatus !=
+                                    null &&
+                                widget.quoteModel.requirementOrder.belongTo
+                                    .approvalStatus !=
+                                    ArticleApprovalStatus.approved
                                 ? Text('  已认证  ',
                                 style: TextStyle(
                                   color: Color.fromRGBO(255, 133, 148, 1),
@@ -223,24 +244,19 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             child: Card(
                 elevation: 0,
                 color: Colors.white10,
-                child: Center(child: RichText(
-                  text: TextSpan(
-                      text: '产品选择/创建',
-                      style: TextStyle(
-                          fontSize: 16,
-                          
-                          color: Colors.black
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                                fontSize: 16,
-                                
-                                color: Colors.red)
-                        ),
-                      ]),
-                ),)),
+                child: Center(
+                  child: RichText(
+                    text: TextSpan(
+                        text: '产品选择/创建',
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: ' *',
+                              style:
+                              TextStyle(fontSize: 16, color: Colors.red)),
+                        ]),
+                  ),
+                )),
           ),
           onTap: () async {
             dynamic result = await Navigator.push(
@@ -324,8 +340,8 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
           child: Row(
             children: <Widget>[
-              productModel.thumbnail != null?
-              Container(
+              productModel.thumbnail != null
+                  ? Container(
                 width: 80,
                 height: 80,
                 child: CachedNetworkImage(
@@ -342,13 +358,12 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                           color: Colors.black12,
                           lineWidth: 2,
                           size: 30,
-                        )
-                ),
+                        )),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    ),
-              ):
-              Container(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              )
+                  : Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
@@ -490,18 +505,22 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           child: ListTile(
             leading: Wrap(
               children: <Widget>[
-                Text('生产数量',style: TextStyle(fontSize: 16,)),
-                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+                Text('生产数量',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                Text(' *',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.red,
+                    )),
               ],
             ),
             trailing: _totalQuantity == null || _totalQuantity <= 0
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
                     _totalQuantity.toString(),
-                    style: TextStyle(
-                        fontSize: 16,
-                        
-                        color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
           ),
         ),
@@ -524,15 +543,15 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                       : item.quantityController.text);
                 });
               });
-              if(price != null && price != ''){
+              if (price != null && price != '') {
                 totalPrice = double.parse(price) * _totalQuantity;
-              }else if(price == null && widget.quoteModel != null && widget.quoteModel.unitPrice != null){
+              } else if (price == null &&
+                  widget.quoteModel != null &&
+                  widget.quoteModel.unitPrice != null) {
                 totalPrice = widget.quoteModel.unitPrice * _totalQuantity;
               }
-
             });
           });
-
         });
   }
 
@@ -547,14 +566,19 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           TextFieldComponent(
             focusNode: _priceFocusNode,
             controller: _priceController,
-            leadingText: Text('订单报价',style: TextStyle(fontSize: 16,),),
+            leadingText: Text(
+              '订单报价',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
             hideDivider: true,
             prefix: '￥',
             inputFormatters: [
               DecimalInputFormat(),
             ],
             isRequired: true,
-            onChanged: (value){
+            onChanged: (value) {
               setState(() {
                 price = value;
                 totalPrice = double.parse(price) * _totalQuantity;
@@ -562,24 +586,19 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             },
           ),
           Container(
-            padding: EdgeInsets.only(right: 20,top: 15,bottom: 15),
+            padding: EdgeInsets.only(right: 20, top: 15, bottom: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Container(
                   child: Text('合计：',
-                      style: TextStyle(
-                          fontSize: 16,
-                          
-                          color: Colors.grey)),
+                      style: TextStyle(fontSize: 16, color: Colors.grey)),
                 ),
                 Container(
-                  child: Text(totalPrice == null ? '${0.00}' : '￥ ${totalPrice}',
-                      style: TextStyle(
-                          fontSize: 20,
-                          
-                          color: Colors.red)),
+                  child: Text(
+                      totalPrice == null ? '${0.00}' : '￥ ${totalPrice}',
+                      style: TextStyle(fontSize: 20, color: Colors.red)),
                 ),
               ],
             ),
@@ -597,7 +616,12 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
       child: TextFieldComponent(
         focusNode: _earnestMoneyFocusNode,
         controller: _earnestMoneyController,
-        leadingText: Text('定金',style: TextStyle(fontSize: 16,),),
+        leadingText: Text(
+          '定金',
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
         hintText: '请输入定金（数字）',
         hideDivider: true,
         prefix: '￥',
@@ -605,7 +629,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           DecimalInputFormat(),
         ],
         isRequired: true,
-        onChanged: (value){
+        onChanged: (value) {
           setState(() {
             earnestMoney = value;
           });
@@ -617,29 +641,27 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
   //预计交货时间
   Widget _buildDeliveryDate(BuildContext context) {
     return GestureDetector(
-        child: Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 3),
-          child: ListTile(
-            leading: Text(
-              '预计交货时间',
-              style: TextStyle(
-                fontSize: 16,
-                
-              ),
-            ),
-            trailing: widget.quoteModel == null || widget.quoteModel.expectedDeliveryDate == null
-                ? Icon(Icons.keyboard_arrow_right)
-                : Text(
-              '${DateFormatUtil.formatYMD(widget.quoteModel.expectedDeliveryDate)}',
-              style: TextStyle(
-                  fontSize: 16,
-                  
-                  color: Colors.grey),
+      child: Container(
+        color: Colors.white,
+        margin: EdgeInsets.only(top: 3),
+        child: ListTile(
+          leading: Text(
+            '预计交货时间',
+            style: TextStyle(
+              fontSize: 16,
             ),
           ),
+          trailing: widget.quoteModel == null ||
+              widget.quoteModel.expectedDeliveryDate == null
+              ? Icon(Icons.keyboard_arrow_right)
+              : Text(
+            '${DateFormatUtil.formatYMD(
+                widget.quoteModel.expectedDeliveryDate)}',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
         ),
-        );
+      ),
+    );
   }
 
   //合作方式
@@ -651,18 +673,22 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           child: ListTile(
             leading: Wrap(
               children: <Widget>[
-                Text('合作方式',style: TextStyle(fontSize: 16,)),
-                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+                Text('合作方式',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                Text(' *',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.red,
+                    )),
               ],
             ),
             trailing: machiningType == null
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
                     MachiningTypeLocalizedMap[machiningType],
-                    style: TextStyle(
-                        fontSize: 16,
-                        
-                        color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
           ),
         ),
@@ -680,18 +706,22 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           child: ListTile(
             leading: Wrap(
               children: <Widget>[
-                Text('是否开具发票',style: TextStyle(fontSize: 16,)),
-                Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)),
+                Text('是否开具发票',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                Text(' *',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.red,
+                    )),
               ],
             ),
             trailing: isInvoice == null
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
                     isInvoice == true ? '开发票' : '不开发票',
-                    style: TextStyle(
-                        fontSize: 16,
-                        
-                        color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
           ),
         ),
@@ -752,7 +782,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             maxLines: null,
             maxLength: 120,
             controller: _remarksController,
-            onChanged: (val){
+            onChanged: (val) {
               remarks = _remarksController.text;
             },
           ),
@@ -765,22 +795,21 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     return Container(
       padding: EdgeInsets.only(bottom: 20),
       child: Container(
-              width: double.infinity,
-              height: 50,
-              margin: EdgeInsets.fromLTRB(20, 15, 20, 0),
-              child: RaisedButton(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  child: Text(
-                    '提交订单',
-                    style: TextStyle(
-                      color: Colors.black,
-                      
-                      fontSize: 18,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  onPressed: onSure)),
+          width: double.infinity,
+          height: 50,
+          margin: EdgeInsets.fromLTRB(20, 15, 20, 0),
+          child: RaisedButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '提交订单',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: onSure)),
       decoration: BoxDecoration(
         color: Color.fromRGBO(242, 242, 242, 1),
       ),
@@ -855,7 +884,6 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     );
   }
 
-
   void onSure() async {
     bool isSubmit = false;
     List<PurchaseOrderEntryModel> entries = new List();
@@ -899,7 +927,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
     //单价
     if (price != null) {
       purchaseOrder.unitPrice = double.parse(price);
-    }else{
+    } else {
       purchaseOrder.unitPrice = widget.quoteModel.unitPrice;
     }
     purchaseOrder.entries = entries;
@@ -912,28 +940,25 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
 
     try {
       //非空验证
-      if(purchaseOrder.entries == null || purchaseOrder.entries.length <= 0){
+      if (purchaseOrder.entries == null || purchaseOrder.entries.length <= 0) {
         isSubmit = _showValidateMsg(context, '请选择产品');
-      }
-      else if(purchaseOrder.totalQuantity == null || purchaseOrder.totalQuantity <= 0){
+      } else if (purchaseOrder.totalQuantity == null ||
+          purchaseOrder.totalQuantity <= 0) {
         isSubmit = _showValidateMsg(context, '请输入生产数量');
-      }
-      else if(purchaseOrder.unitPrice == null || purchaseOrder.unitPrice < 0){
+      } else if (purchaseOrder.unitPrice == null ||
+          purchaseOrder.unitPrice < 0) {
         isSubmit = _showValidateMsg(context, '请输入订单报价');
-      }
-      else if(purchaseOrder.deposit == null || purchaseOrder.deposit < 0){
+      } else if (purchaseOrder.deposit == null || purchaseOrder.deposit < 0) {
         isSubmit = _showValidateMsg(context, '请输入定金');
-      }
-      else if(purchaseOrder.machiningType == null){
+      } else if (purchaseOrder.machiningType == null) {
         isSubmit = _showValidateMsg(context, '请选择合作方式');
-      }
-      else if(purchaseOrder.invoiceNeeded == null){
+      } else if (purchaseOrder.invoiceNeeded == null) {
         isSubmit = _showValidateMsg(context, '请选择是否开具发票');
-      }else{
+      } else {
         isSubmit = true;
       }
 
-      if(isSubmit){
+      if (isSubmit) {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -949,8 +974,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                   onSubmit(purchaseOrder);
                 },
               );
-            }
-        );
+            });
       }
     } catch (e) {
       print(e);
@@ -969,8 +993,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             loadingText: '保存中。。。',
             entrance: 'createPurchaseOrder',
           );
-        }
-    ).then((value) {
+        }).then((value) {
       bool result = false;
       if (value != null) {
         result = true;
@@ -989,27 +1012,26 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                 getPurchaseOrderDetail(value);
               },
             );
-          }
-      );
+          });
     });
   }
 
-  void getPurchaseOrderDetail(String code) async{
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>
-              PurchaseOrderDetailPage(code: code)
-          ), ModalRoute.withName('/'));
+  void getPurchaseOrderDetail(String code) async {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) => PurchaseOrderDetailPage(code: code)),
+        ModalRoute.withName('/'));
     ProductionBLoC.instance.refreshData('');
     PurchaseOrderBLoC.instance.refreshData('ALL');
   }
 
   //非空提示
-  bool _showValidateMsg(BuildContext context,String message){
+  bool _showValidateMsg(BuildContext context, String message) {
     _validateMessage(context, '${message}');
     return false;
   }
 
-  Future<void> _validateMessage(BuildContext context,String message) async {
+  Future<void> _validateMessage(BuildContext context, String message) async {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -1020,7 +1042,6 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             callbackResult: false,
             outsideDismiss: true,
           );
-        }
-    );
+        });
   }
 }

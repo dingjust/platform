@@ -1,20 +1,20 @@
 <template>
   <div class="animated fadeIn">
-    <operation-course-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" @onUpdate="onUpdate"/>
+    <el-row type="flex" justify="end" v-show="!(cashOutDetailData.amountStatus == 'REJECTED' || cashOutDetailData.amountStatus == 'REVIEWED')">
+      <el-button type="primary" icon="el-icon-edit" @click="onCompleted(cashOutDetailData)">确认</el-button>
+      <el-button type="danger" icon="el-icon-delete" @click="onRejected(cashOutDetailData)">拒绝</el-button>
+    </el-row>
     <div class="pt-2"></div>
-    <operation-course-form ref="form" :slot-data="slotData" :read-only="isNewlyCreated"/>
+    <cash-out-manager-form ref="form" :slot-data="cashOutDetailData" :read-only="isNewlyCreated"/>
     <div class="pt-2"></div>
-    <operation-course-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" @onUpdate="onUpdate"/>
-    <el-dialog v-if="isTenant()" title="修改" :modal="false"
-               :visible.sync="updateDialogVisible"
-               :show-close="false" append-to-body width="50%">
-      <operation-course-form ref="form2" :slot-data="slotData" :read-only="true"/>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="updateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateSubmit">确 定</el-button>
-      </span>
-
-    </el-dialog>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>账户账单</span>
+      </div>
+      <bill-manager-list :page="page" @onDetails="onDetails" @onSearch="onAdvancedSearch"/>
+    </el-card>
+    <div class="pt-2"></div>
+    <!--<operation-course-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" @onUpdate="onUpdate"/>-->
   </div>
 
 
@@ -23,67 +23,85 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapActions} = createNamespacedHelpers('CashOutManagersModule');
+  const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('CashOutManagerModule');
 
   import CashOutManagerForm from '../form/cashOutManagerForm';
+  import BillManagerList from '../../bill/list/BillManagerList';
 
   export default {
     name: 'CashOutManagerDetailsPage',
     props: ['slotData'],
-    components: {CashOutManagerForm},
+    components: {CashOutManagerForm, BillManagerList},
     methods: {
       ...mapActions({
-        refresh: 'refresh'
+        searchAdvanced: 'searchAdvancedBills'
       }),
-      onUpdate(){
-        this.updateDialogVisible = true;
+      ...mapMutations({
+        setCashOutDetailData: 'cashOutDetailData'
+      }),
+      onAdvancedSearch (page, size) {
+        this.isAdvancedSearch = true;
+        var query = {
+          keyword: this.keyword,
+          // flowSource: ['CASH_OUT'],
+          // amountFlowType: ['OUTFLOW'],
+          // amountStatus: ['IN_REVIEW', 'REVIEWED', 'REJECTED']
+          company: this.cashOutDetailData.company.uid
+        };
+        const url = this.apis().findBills();
+        this.searchAdvanced({url, query, page, size});
       },
-      async updateSubmit(){
-          const url = this.apis().updateOperationCourse();
-          const result = await this.$http.put(url, this.slotData);
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
-            return;
-          }
-          this.$message.success('修改成功');
-          this.updateDialogVisible = false;
+      async onDetails (item) {
+        const url = this.apis().getBill(item.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+        }
+        this.setCashOutDetailData(result);
+        // this.fn.openSlider('明细：' + item.code, cashOutManagerDetailsPage, result);
       },
-      onSubmit() {
-        console.log(this.slotData);
-        this.$refs['form'].validate((valid)=> {
-          if(valid){
-            this._onSubmit();
-          }
-
-        })
-      },
-      onCancel() {
-        this.fn.closeSlider();
-      },
-      async _onSubmit() {
-        let formData = this.slotData;
-
-        const url = this.apis().createOperationCourse();
-        const result = await this.$http.post(url, formData);
+      async onRejected (item) {
+        const url = this.apis().rejectedCashOut(item.id);
+        const result = await this.$http.delete(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
+        this.$message.success('拒绝提现' + item.amount + '成功');
+        this.onDetails(item);
+        this.onAdvancedSearch();
+      },
 
-        this.$message.success('保存成功');
-        this.$set(this.slotData, 'name', result);
-        const searchUrl = this.apis().getOperationCourses();
-        this.refresh(searchUrl);
-        this.fn.closeSlider(true);
+      async onCompleted (item) {
+        const url = this.apis().completedCashOut(item.id);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('确认提现' + item.amount + '成功');
+        this.onDetails(item);
+        this.onAdvancedSearch();
+      },
+      onCancel () {
+        this.fn.closeSlider();
       }
     },
     computed: {
+      ...mapGetters({
+        page: 'billsPage',
+        keyword: 'keyword',
+        cashOutDetailData: 'cashOutDetailData'
+      }),
       isNewlyCreated: function () {
-        return this.slotData.id == null;
+        return this.cashOutDetailData.id == null;
       }
     },
-    data() {
-      return {updateDialogVisible:false,}
-    }
+    data () {
+      return {updateDialogVisible: false}
+    },
+    created () {
+      this.onAdvancedSearch();
+    },
   }
 </script>

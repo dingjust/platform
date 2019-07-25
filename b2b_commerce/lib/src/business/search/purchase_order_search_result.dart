@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
-import 'package:b2b_commerce/src/_shared/widgets/scroll_to_top_button.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
@@ -12,10 +11,11 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../purchase_orders.dart';
-
 class PurchaseOrderSearchResultPage extends StatelessWidget {
-  PurchaseOrderSearchResultPage({Key key, this.searchModel}) : super(key: key);
+  PurchaseOrderSearchResultPage(
+      {Key key, this.searchModel, this.isContractSelect: false})
+      : super(key: key);
+  bool isContractSelect;
   SearchModel searchModel;
   GlobalKey _productionOrderBlocProviderKey = GlobalKey();
   List<String> historyKeywords;
@@ -62,6 +62,7 @@ class PurchaseOrderSearchResultPage extends StatelessWidget {
           ),
           body: ProductionListView(
             keyword: searchModel.keyword,
+            isContractSelect: isContractSelect,
           ),
         ),
         onWillPop: () {
@@ -111,10 +112,12 @@ class PurchaseOrderSearchResultPage extends StatelessWidget {
 
 class ProductionListView extends StatelessWidget {
   String keyword;
+  bool isContractSelect;
 
   ScrollController _scrollController = new ScrollController();
 
-  ProductionListView({Key key, @required this.keyword}) : super(key: key);
+  ProductionListView({Key key, @required this.keyword, this.isContractSelect})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +199,7 @@ class ProductionListView extends StatelessWidget {
                       children: snapshot.data.map((order) {
                         return PurchaseOrderItem(
                           order: order,
+                          isContractSelect: isContractSelect,
                         );
                       }).toList(),
                     );

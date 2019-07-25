@@ -21,6 +21,13 @@ Vue.filter('formatDate', time => {
   let date = new Date(time);
   return formatDate(date, 'yyyy-MM-dd hh:mm');
 });
+Vue.filter('formatDateWithSecond', time => {
+  if (time === null) {
+    return '';
+  }
+  let date = new Date(time);
+  return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
+});
 Vue.filter('enumTranslate', (enumVal, enumType) => {
   return enumTranslate(enumVal, enumType);
 });

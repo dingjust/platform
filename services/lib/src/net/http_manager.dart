@@ -37,7 +37,7 @@ class HttpManager {
     BaseOptions options = BaseOptions(
         baseUrl: GlobalConfigs.BASE_URL,
         connectTimeout: 5000,
-        receiveTimeout: 10000,
+        receiveTimeout: 30000,
         headers: authorization != null ? {'Authorization': authorization} : {});
 
     _instance = Dio(options);
