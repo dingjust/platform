@@ -1,25 +1,30 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
+/// 主图
 class DetailPictureField extends StatefulWidget {
-  DetailPictureField(this.item);
+  DetailPictureField(this.item,{this.enabled = false});
 
   final ApparelProductModel item;
+  final bool enabled;
 
   @override
   State<StatefulWidget> createState() => _DetailPictureFieldState();
 }
 
 class _DetailPictureFieldState extends State<DetailPictureField> {
-  List<File> _detailImages = [];
+  @override
+  void initState() {
+    if(widget.item.details == null) widget.item.details = [];
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Column(
       children: <Widget>[
         Container(
@@ -31,26 +36,19 @@ class _DetailPictureFieldState extends State<DetailPictureField> {
                 style: TextStyle(fontSize: 16),
               ),
               Text(
-                '（最多8张）',
+                '（最多5张）',
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
+              Text(
+                '*',
+                style: TextStyle(color: Colors.red, fontSize: 16),
+              )
             ],
           ),
         ),
-        AlbumsAndCameras(
-//          pictureUrls: widget.item?.detail.,
-          images: _detailImages,
-          height: 100,
-          width: 100,
-          iconSize: 100,
-          count: 8,
-        ),
+        EditableAttachments(list: widget.item.details,editable: widget.enabled,)
       ],
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 }

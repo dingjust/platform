@@ -186,6 +186,8 @@ class ProductModel extends ItemModel {
   List<MediaModel> thumbnails;
   @JsonKey(fromJson: _mediasFromJson, toJson: _mediasToJson)
   List<MediaModel> images;
+  @JsonKey(fromJson: _mediasFromJson, toJson: _mediasToJson)
+  List<MediaModel> details;
   int salesVolume;
   ArticleApprovalStatus approvalStatus;
   bool privacy;
@@ -242,6 +244,7 @@ class ProductModel extends ItemModel {
       this.salesVolume,
       this.approvalStatus,
       this.images,
+      this.details,
       this.belongTo,
       this.thumbnails,
         this.skuID,
@@ -312,6 +315,7 @@ class VariantProductModel extends ProductModel {
     CompanyModel belongTo,
     List<MediaModel> thumbnails,
     List<MediaModel> images,
+    List<MediaModel> details,
     double proofingFee,
     int basicProduction,
     int productionDays,
@@ -331,12 +335,13 @@ class VariantProductModel extends ProductModel {
             belongTo: belongTo,
             thumbnails: thumbnails,
             images: images,
-    category: category,
-    proofingFee: proofingFee,
-    basicProduction: basicProduction,
-    productionDays: productionDays,
-    productionIncrement: productionIncrement,
-    steppedPrices: steppedPrices,
+            details:details,
+            category: category,
+            proofingFee: proofingFee,
+            basicProduction: basicProduction,
+            productionDays: productionDays,
+            productionIncrement: productionIncrement,
+            steppedPrices: steppedPrices,
   );
 
   factory VariantProductModel.fromJson(Map<String, dynamic> json) =>
@@ -389,6 +394,7 @@ class ApparelProductModel extends ProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<MediaModel> details,
     this.variants,
     this.attributes,
     this.skuID,
@@ -420,6 +426,7 @@ class ApparelProductModel extends ProductModel {
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
+    details:details,
   );
 
   ApparelProductModel.empty() {
@@ -475,6 +482,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<MediaModel> details,
   }) : super(
             code: code,
             name: name,
@@ -497,6 +505,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
+    details:details,
   );
 
   factory ApparelStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
@@ -537,6 +546,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<MediaModel> details,
   }) : super(
             code: code,
             name: name,
@@ -560,6 +570,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
+    details:details,
   );
 
   factory ApparelSizeVariantProductModel.fromJson(Map<String, dynamic> json) =>
@@ -592,6 +603,7 @@ class FabricProductModel extends ProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<MediaModel> details,
     this.variants,
   }) : super(
           code: code,
@@ -609,6 +621,7 @@ class FabricProductModel extends ProductModel {
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
+    details:details,
         );
 
   factory FabricProductModel.fromJson(Map<String, dynamic> json) =>
@@ -638,6 +651,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<MediaModel> details,
     this.color,
   }) : super(
           code: code,
@@ -655,6 +669,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
+    details:details,
         );
 
   factory FabricStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>

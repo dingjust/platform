@@ -8,6 +8,7 @@ import 'package:widgets/widgets.dart';
 
 import 'form/attributes_field.dart';
 import 'form/color_size_stock_field.dart';
+import 'form/detail_picture_field.dart';
 import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';
 
@@ -66,6 +67,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ..skuID = widget.item.skuID
       ..thumbnails = widget.item.thumbnails
       ..images = widget.item.images
+      ..details = widget.item.details
       ..brand = widget.item.brand
       ..proofingFee = widget.item.proofingFee
       ..steppedPrices = widget.item.steppedPrices
@@ -121,7 +123,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
           title: Text(widget.isCreate ? '新建产品' : _enabled ? '编辑产品' : '产品明细'),
           actions: <Widget>[
             Offstage(
-              offstage: _enabled,
+              offstage: _enabled || widget.item.approvalStatus == ArticleApprovalStatus.approved,
               child: IconButton(
                 icon: Text('编辑'),
                 onPressed: () {
@@ -159,7 +161,10 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               _product,
               enabled: _enabled,
             ),
-//            DetailPictureField(widget.item),
+            DetailPictureField(
+              _product,
+              enabled: _enabled,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Divider(
@@ -349,6 +354,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   }
 
   onPublish() {
+    print(_product.details);
     if (_product.images == null || _product.images.isEmpty) {
       _showValidateMsg(context, '请上传主图');
       return;

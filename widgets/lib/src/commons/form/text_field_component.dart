@@ -68,8 +68,11 @@ class TextFieldComponentState extends State<TextFieldComponent> {
 
   @override
   void initState() {
+
     if(widget.prefix != null && widget.controller.text != ''){
-      widget.controller.text = widget.prefix + widget.controller.text;
+      if(!widget.controller.text.startsWith(widget.prefix)){
+        widget.controller.text = widget.prefix + widget.controller.text;
+      }
     }
 
     widget.focusNode.addListener(() {
@@ -86,8 +89,6 @@ class TextFieldComponentState extends State<TextFieldComponent> {
           if(widget.prefix != null && widget.controller.text != ''){
             widget.controller.text = widget.prefix + widget.controller.text;
           }
-          widget.controller.clearComposing();
-          widget.focusNode.unfocus();
         });
       }
     });
