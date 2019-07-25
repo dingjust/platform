@@ -46,6 +46,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Theme(
       data: ThemeData(canvasColor: Colors.transparent),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           elevation: 0.5,
           centerTitle: true,
@@ -231,7 +232,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             children: [Text('请补全商品阶梯价')]),
       );
     }
-
 
     List<Widget> _moneyRows = [];
     for (int i = 0; i < widget.product.steppedPrices.length; i++) {

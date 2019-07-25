@@ -40,7 +40,7 @@ class EnumModel {
 }
 
 ///根据code获取name
-String enumMap(dynamic enumModels, String code) {
+String enumMap(dynamic enumModels, dynamic code) {
   String text = '';
   EnumModel model = enumModels.firstWhere((enumModel) => enumModel.code == code,
       orElse: () => null);
@@ -362,6 +362,13 @@ const PopulationScaleEnum = <EnumModel>[
 const CooperationModesEnum = <EnumModel>[
   EnumModel('LIGHT_PROCESSING', '清加工'),
   EnumModel('LABOR_AND_MATERIAL', '包工包料'),
+];
+
+///数字枚举
+const DightEnum = <EnumModel>[
+  EnumModel(1,'一'),
+  EnumModel(2,'二'),
+  EnumModel(3,'三'),
 ];
 
 /// 分页数据

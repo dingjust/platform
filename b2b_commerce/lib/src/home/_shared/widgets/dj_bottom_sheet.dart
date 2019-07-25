@@ -172,7 +172,7 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
       minWidth: constraints.maxWidth,
       maxWidth: constraints.maxWidth,
       minHeight: 0.0,
-      maxHeight: constraints.maxHeight * 3 / 4,
+      maxHeight: constraints.maxHeight,
     );
   }
 
