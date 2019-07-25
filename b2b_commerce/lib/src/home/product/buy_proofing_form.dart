@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 import 'package:toast/toast.dart';
+import 'package:widgets/widgets.dart';
 
 class BuyProofingForm extends StatefulWidget {
   final ApparelProductModel product;
@@ -436,7 +436,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   StreamBuilder<int>(
-                    initialData: 0,
+                    initialData: totalNum,
                     stream: totalNumStream,
                     builder:
                         (BuildContext context, AsyncSnapshot<int> snapshot) {
@@ -446,7 +446,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                             style: TextStyle(color: Colors.grey, fontSize: 16),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: '${snapshot.data}',
+                                  text: '${totalNum}',
                                   style: TextStyle(color: Colors.orange)),
                               TextSpan(text: '件')
                             ]),

@@ -448,7 +448,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
             ],
           ),
           StreamBuilder<int>(
-            initialData: 0,
+            initialData: totalNum,
             stream: totalNumStream,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
               return Row(
@@ -472,7 +472,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                             style: TextStyle(color: Colors.grey, fontSize: 16),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: '${snapshot.data}',
+                                  text: '${totalNum}',
                                   style: TextStyle(color: Colors.orange)),
                               TextSpan(text: '件')
                             ]),
