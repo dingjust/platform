@@ -34,40 +34,43 @@ class RecommendProductItem extends StatelessWidget {
             color: Colors.white, borderRadius: BorderRadius.circular(5)),
         child: Column(
           children: <Widget>[
-            model.thumbnails != null && model.thumbnails.isNotEmpty&&model.thumbnails[0].url!=null
-                ? CachedNetworkImage(
-                imageUrl: '${model.thumbnails[0].normalUrl()}',
-                    width: 200,
-                    height: 200,
-                fit: BoxFit.cover,
-                imageBuilder: (context, imageProvider) =>
-                    Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
+            model.thumbnails != null &&
+                model.thumbnails.isNotEmpty &&
+                model.thumbnails[0].url != null
+                ? Container(
+              width: 200,
+              height: 200,
+              child: CachedNetworkImage(
+                  imageUrl: '${model.thumbnails[0].normalUrl()}',
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                  imageBuilder: (context, imageProvider) =>
+                      Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5),
+                              topRight: Radius.circular(5)),
                         ),
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(5)),
                       ),
-                    ),
-                placeholder: (context, url) =>
-                    SpinKitRing(
-                      color: Colors.black12,
-                      lineWidth: 2,
-                      size: 200,
-                    ),
-                errorWidget: (context, url, error) =>
-                    SpinKitRing(
-                      color: Colors.black12,
-                      lineWidth: 2,
-                      size: 200,
-                    ))
+                  placeholder: (context, url) =>
+                      SpinKitCircle(
+                        color: Colors.black12,
+                        size: 60,
+                      ),
+                  errorWidget: (context, url, error) =>
+                      SpinKitCircle(
+                        color: Colors.black12,
+                        size: 60,
+                      )),
+            )
                 : Container(
-                    // width: imageSize,
                     height: imageSize,
                     padding: EdgeInsets.all(20),
                     child: Container(
@@ -113,7 +116,8 @@ class RecommendProductItem extends StatelessWidget {
                             children: <TextSpan>[
                               TextSpan(
                                   text:
-                                      '${model.minPrice ?? 0}—${model.maxPrice ?? 0}',
+                                  '${model?.minSteppedPrice ?? 0}—${model
+                                      ?.maxSteppedPrice ?? 0}',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold)),

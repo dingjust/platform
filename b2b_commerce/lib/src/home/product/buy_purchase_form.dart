@@ -73,7 +73,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     produceDay = widget.product.productionDays;
     if (widget.product.steppedPrices != null &&
         widget.product.steppedPrices.isNotEmpty) {
-      price = widget.product.steppedPrices.first.price;
+      price = widget.product.minSteppedPrice;
     }
     productEntries = widget.product.variants
         .map((variant) => EditApparelSizeVariantProductEntry(
@@ -217,7 +217,10 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          '￥$price',
+                          totalNum == 0
+                              ? '￥${widget.product.minSteppedPrice}-${widget
+                              .product.maxSteppedPrice}'
+                              : '￥$price',
                           style: TextStyle(color: Colors.red, fontSize: 14),
                           textAlign: TextAlign.left,
                         ),

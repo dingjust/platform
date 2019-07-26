@@ -228,32 +228,32 @@ class ProductModel extends ItemModel {
   @JsonKey(toJson: companyToJson)
   CompanyModel belongTo;
 
-  ProductModel(
-      {this.code,
-      this.name,
-      this.price,
-      this.minPrice,
-      this.maxPrice,
-      this.thumbnail,
-      this.staircasePrices,
-      this.privacy,
-      this.superCategories,
-      this.category,
-      this.ratingIfPrivacy,
-      this.stockLevel,
-      this.salesVolume,
-      this.approvalStatus,
-      this.images,
-      this.details,
-      this.belongTo,
-      this.thumbnails,
-        this.skuID,
-        this.proofingFee,
-        this.basicProduction,
-        this.productionDays,
-        this.productionIncrement,
-        this.steppedPrices,
-      });
+  ProductModel({
+    this.code,
+    this.name,
+    this.price,
+    this.minPrice,
+    this.maxPrice,
+    this.thumbnail,
+    this.staircasePrices,
+    this.privacy,
+    this.superCategories,
+    this.category,
+    this.ratingIfPrivacy,
+    this.stockLevel,
+    this.salesVolume,
+    this.approvalStatus,
+    this.images,
+    this.details,
+    this.belongTo,
+    this.thumbnails,
+    this.skuID,
+    this.proofingFee,
+    this.basicProduction,
+    this.productionDays,
+    this.productionIncrement,
+    this.steppedPrices,
+  });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);
@@ -289,6 +289,28 @@ class ProductModel extends ItemModel {
   static List<Map<String, dynamic>> _steppedPriceToJson(
       List<SteppedPriceModel> models) =>
       models.map((model) => SteppedPriceModel.toJson(model)).toList();
+
+  ///最低价
+  double get minSteppedPrice {
+    double result = 0;
+    steppedPrices.forEach((entry) {
+      if (entry.price < result) {
+        result = entry.price;
+      }
+    });
+    return result;
+  }
+
+  ///最高价
+  double get maxSteppedPrice {
+    double result = 0;
+    steppedPrices.forEach((entry) {
+      if (entry.price > result) {
+        result = entry.price;
+      }
+    });
+    return result;
+  }
 }
 
 /// 变式产品
@@ -322,26 +344,26 @@ class VariantProductModel extends ProductModel {
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
   }) : super(
-            code: code,
-            name: name,
-            price: price,
-            thumbnail: thumbnail,
-            staircasePrices: staircasePrices,
-            privacy: privacy,
-            ratingIfPrivacy: ratingIfPrivacy,
-            superCategories: superCategories,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            belongTo: belongTo,
-            thumbnails: thumbnails,
-            images: images,
-            details:details,
-            category: category,
-            proofingFee: proofingFee,
-            basicProduction: basicProduction,
-            productionDays: productionDays,
-            productionIncrement: productionIncrement,
-            steppedPrices: steppedPrices,
+    code: code,
+    name: name,
+    price: price,
+    thumbnail: thumbnail,
+    staircasePrices: staircasePrices,
+    privacy: privacy,
+    ratingIfPrivacy: ratingIfPrivacy,
+    superCategories: superCategories,
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+    belongTo: belongTo,
+    thumbnails: thumbnails,
+    images: images,
+    details: details,
+    category: category,
+    proofingFee: proofingFee,
+    basicProduction: basicProduction,
+    productionDays: productionDays,
+    productionIncrement: productionIncrement,
+    steppedPrices: steppedPrices,
   );
 
   factory VariantProductModel.fromJson(Map<String, dynamic> json) =>
@@ -406,27 +428,27 @@ class ApparelProductModel extends ProductModel {
     this.suggestedPrice,
     this.isRecommend,
   }) : super(
-            code: code,
-            name: name,
-            price: price,
-            thumbnail: thumbnail,
-            staircasePrices: staircasePrices,
-            privacy: privacy,
-            salesVolume: salesVolume,
-            ratingIfPrivacy: ratingIfPrivacy,
-            superCategories: superCategories,
-            stockLevel: stockLevel,
-            thumbnails: thumbnails,
-            images: images,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
+    code: code,
+    name: name,
+    price: price,
+    thumbnail: thumbnail,
+    staircasePrices: staircasePrices,
+    privacy: privacy,
+    salesVolume: salesVolume,
+    ratingIfPrivacy: ratingIfPrivacy,
+    superCategories: superCategories,
+    stockLevel: stockLevel,
+    thumbnails: thumbnails,
+    images: images,
+    minPrice: minPrice,
+    maxPrice: maxPrice,
     belongTo: belongTo,
     proofingFee: proofingFee,
     basicProduction: basicProduction,
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
-    details:details,
+    details: details,
   );
 
   ApparelProductModel.empty() {
@@ -451,7 +473,6 @@ class ApparelProductModel extends ProductModel {
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
       CategoryModel.toJson(model);
-
 }
 
 @JsonSerializable()
@@ -484,28 +505,28 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
   }) : super(
-            code: code,
-            name: name,
-            price: price,
-            thumbnail: thumbnail,
-            variants: variants,
-            staircasePrices: staircasePrices,
-            privacy: privacy,
-            ratingIfPrivacy: ratingIfPrivacy,
-            baseProduct: baseProduct,
-            superCategories: superCategories,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            belongTo: belongTo,
-            thumbnails: thumbnails,
-            images: images,
+    code: code,
+    name: name,
+    price: price,
+    thumbnail: thumbnail,
+    variants: variants,
+    staircasePrices: staircasePrices,
+    privacy: privacy,
+    ratingIfPrivacy: ratingIfPrivacy,
+    baseProduct: baseProduct,
+    superCategories: superCategories,
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+    belongTo: belongTo,
+    thumbnails: thumbnails,
+    images: images,
     category: category,
     proofingFee: proofingFee,
     basicProduction: basicProduction,
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
-    details:details,
+    details: details,
   );
 
   factory ApparelStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
@@ -548,29 +569,29 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
   }) : super(
-            code: code,
-            name: name,
-            price: price,
-            thumbnail: thumbnail,
-            variants: variants,
-            staircasePrices: staircasePrices,
-            privacy: privacy,
-            ratingIfPrivacy: ratingIfPrivacy,
-            baseProduct: baseProduct,
-            color: color,
-            superCategories: superCategories,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            belongTo: belongTo,
-            thumbnails: thumbnails,
-            images: images,
+    code: code,
+    name: name,
+    price: price,
+    thumbnail: thumbnail,
+    variants: variants,
+    staircasePrices: staircasePrices,
+    privacy: privacy,
+    ratingIfPrivacy: ratingIfPrivacy,
+    baseProduct: baseProduct,
+    color: color,
+    superCategories: superCategories,
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+    belongTo: belongTo,
+    thumbnails: thumbnails,
+    images: images,
     category: category,
     proofingFee: proofingFee,
     basicProduction: basicProduction,
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
-    details:details,
+    details: details,
   );
 
   factory ApparelSizeVariantProductModel.fromJson(Map<String, dynamic> json) =>
@@ -621,7 +642,7 @@ class FabricProductModel extends ProductModel {
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
-    details:details,
+    details: details,
         );
 
   factory FabricProductModel.fromJson(Map<String, dynamic> json) =>
@@ -669,7 +690,7 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     productionDays: productionDays,
     productionIncrement: productionIncrement,
     steppedPrices: steppedPrices,
-    details:details,
+    details: details,
         );
 
   factory FabricStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
@@ -916,4 +937,3 @@ class SteppedPriceModel extends ItemModel {
   static Map<String, dynamic> toJson(SteppedPriceModel model) =>
       _$SteppedPriceModelToJson(model);
 }
-
