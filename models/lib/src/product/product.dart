@@ -292,13 +292,17 @@ class ProductModel extends ItemModel {
 
   ///最低价
   double get minSteppedPrice {
-    double result = 0;
-    steppedPrices.forEach((entry) {
-      if (entry.price < result) {
-        result = entry.price;
-      }
-    });
-    return result;
+    if (steppedPrices == null || steppedPrices.isEmpty) {
+      return 0;
+    } else {
+      double result = steppedPrices.first.price;
+      steppedPrices.forEach((entry) {
+        if (entry.price < result) {
+          result = entry.price;
+        }
+      });
+      return result;
+    }
   }
 
   ///最高价
