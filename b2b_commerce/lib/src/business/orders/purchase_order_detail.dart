@@ -1819,10 +1819,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     TextEditingController con2 = new TextEditingController();
                     FocusNode node = new FocusNode();
                     FocusNode node1 = new FocusNode();
-                    FocusNode node2 = new FocusNode();
                     con.text = order.totalPrice.toString();
                     con1.text = order.deposit.toString();
-                    con2.text = order.unitPrice.toString();
                     showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -1832,10 +1830,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             outsideDismiss: false,
                             inputController: con,
                             inputController1: con1,
-                            inputController2: con2,
+//                            inputController2: con2,
                             focusNode: node,
                             focusNode1: node1,
-                            focusNode2: node2,
+                            expectedDeliveryDate: order.expectedDeliveryDate,
+//                            focusNode2: node2,
                           );
                         }
                     ).then((value) {
@@ -1844,11 +1843,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         str = str.replaceAll('￥', '');
                         print(str);
                         String deposit = str.substring(0, str.indexOf(','));
-                        print(deposit);
-                        String unitPrice = str.substring(
+                        String date = str.substring(
                             str.indexOf(',') + 1, str.length);
-                        print(unitPrice);
-                        _showDepositDialog(context, order, deposit, unitPrice);
+                        _showDepositDialog(
+                            context, order, deposit,date == 'null' ? null : DateTime.parse(date));
                       }
                     });
                   }),
@@ -2546,22 +2544,16 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //打开修改定金金额弹框
   void _showDepositDialog(BuildContext context, PurchaseOrderModel model,
-      String depositText, String unitPriceText) {
+      String depositText, DateTime date) {
     double deposit = model.deposit;
-    double unit = model.unitPrice;
     if (depositText != null && depositText != '') {
       if (depositText.indexOf('￥') != 0) {
         deposit = double.parse(depositText.replaceAll('￥', ''));
       }
     }
-    if (unitPriceText != null && unitPriceText != '') {
-      if (unitPriceText.indexOf('￥') != 0) {
-        unit = double.parse(unitPriceText.replaceAll('￥', ''));
-      }
-    }
     setState(() {
       model.deposit = deposit;
-      model.unitPrice = unit;
+      model.expectedDeliveryDate = date;
     });
     model.skipPayBalance = false;
     try {
@@ -2577,12 +2569,13 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               entrance: '0',
             );
           }
-      ).then((_) {
+      ).then((_){
         PurchaseOrderBLoC.instance.refreshData('ALL');
       });
     } catch (e) {
       print(e);
     }
+
   }
 
   Future<void> _showTips(BuildContext context, PurchaseOrderModel model) {

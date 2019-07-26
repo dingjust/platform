@@ -90,6 +90,8 @@ class CustomizeDialog extends StatefulWidget {
   PurchaseOrderModel orderModel;
   //当前节点序号
   int currentNode;
+  //交货日期
+  DateTime deliveryDate;
 
   DateTime expectedDeliveryDate;
 
@@ -135,6 +137,7 @@ class CustomizeDialog extends StatefulWidget {
     this.orderModel,
     this.currentNode,
     this.expectedDeliveryDate,
+     this.deliveryDate,
   }) : super(key: key);
 
   @override
@@ -726,10 +729,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 textAlign: TextAlign.left,
                                 focusNode: widget.focusNode1,
                                 controller: widget.inputController1,
-                                autofocus: true,
-                                inputType: TextInputType.number,
+//                                inputType: TextInputType.number,
+                                inputFormatters: [
+                                  DecimalInputFormat(),
+                                ],
                                 hideDivider: true,
-                                isInputBorder: true,
+//                                isInputBorder: true,
                                 prefix: '￥',
                                 leadingText: Text(
                                   '        定金：',
@@ -737,23 +742,39 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 ),
                               ),
                             ),
-                            Container(
-                              alignment: Alignment.centerRight,
-                              child: TextFieldComponent(
-                                textAlign: TextAlign.left,
-                                focusNode: widget.focusNode2,
-                                controller: widget.inputController2,
-                                autofocus: false,
-                                inputType: TextInputType.number,
-                                hideDivider: true,
-                                isInputBorder: true,
-                                prefix: '￥',
-                                leadingText: Text(
-                                  '        单价：',
-                                  style: TextStyle(fontSize: 16),
+                            GestureDetector(
+                              onTap: (){
+                                _showDatePicker(widget.expectedDeliveryDate, 5);
+                              },
+                              child: Container(
+                                padding:  EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                                child: Row(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(child: Text('交货日期：',style: TextStyle(fontSize: 16),),width: 85,),
+                                    Expanded(child: widget.expectedDeliveryDate == null ? Text('请选择日期',style: TextStyle(color: Colors.grey,),) :
+                                    Text(DateFormatUtil.formatYMD(widget.expectedDeliveryDate),style: TextStyle(color: Colors.grey,)),),
+                                  ],
                                 ),
                               ),
                             ),
+//                            Container(
+//                              alignment: Alignment.centerRight,
+//                              child: TextFieldComponent(
+//                                textAlign: TextAlign.left,
+//                                focusNode: widget.focusNode2,
+//                                controller: widget.inputController2,
+//                                autofocus: false,
+//                                inputType: TextInputType.number,
+//                                hideDivider: true,
+//                                isInputBorder: true,
+//                                prefix: '￥',
+//                                leadingText: Text(
+//                                  '        单价：',
+//                                  style: TextStyle(fontSize: 16),
+//                                ),
+//                              ),
+//                            ),
                           ],
                         ),
                       ),
@@ -804,13 +825,11 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     if (widget.inputController1.text == '') {
                                       widget.inputController1.text = '￥0';
                                     }
-                                    if (widget.inputController2.text == '') {
-                                      widget.inputController2.text = '￥0';
-                                    }
+//                                    if (widget.inputController2.text == '') {
+//                                      widget.inputController2.text = '￥0';
+//                                    }
                                     Navigator.of(context).pop(
-                                        widget.inputController1.text +
-                                            ',' +
-                                            widget.inputController2.text);
+                                        widget.inputController1.text+','+widget.expectedDeliveryDate.toString());
                                   }),
                               decoration: BoxDecoration(
                                   border: Border(
@@ -1492,8 +1511,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     DateTime nowTime = DateTime.now();
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: nowTime,
-        firstDate: nowTime,
+        initialDate: date ?? nowTime,
+        firstDate: DateTime.fromMillisecondsSinceEpoch(nowTime.millisecondsSinceEpoch - 24*60*60*1000),
         lastDate: DateTime(2999));
 
     setState(() {
@@ -1507,6 +1526,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         widget.estimatedDate4 = _picked;
       } else if (index == 4) {
         widget.estimatedDate5 = _picked;
+      } else if(index == 5){
+        widget.expectedDeliveryDate = _picked ?? date;
       }
     });
   }
