@@ -1174,6 +1174,8 @@ class ProofingModel extends OrderModel {
   @JsonKey(toJson: _factoryToJson)
   FactoryModel belongTo;
 
+  BrandModel brandReference;
+
   ///合作商信息
 //  @JsonKey(toJson: _companyToJson)
 //  CompanyModel supplier;
@@ -1209,6 +1211,7 @@ class ProofingModel extends OrderModel {
         this.entries,
       double unitPrice,
       this.requirementOrderRef,
+        this.brandReference,
       this.quoteRef})
       : super(
             code: code,

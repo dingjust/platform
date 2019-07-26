@@ -143,8 +143,10 @@ class _ProofingListState extends State<ProofingList>
     ProofingModel detailModel =
     await ProofingOrderRepository().proofingDetail(model.code);
 
-    QuoteModel quoteModel =
-    await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
+    QuoteModel quoteModel;
+    if (detailModel.quoteRef != null) {
+      await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
+    }
 
     Navigator.of(context).push(
       MaterialPageRoute(

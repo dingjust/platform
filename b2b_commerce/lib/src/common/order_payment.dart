@@ -9,6 +9,7 @@ import 'package:fluwx/fluwx.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
 class OrderPaymentPage extends StatefulWidget {
@@ -413,7 +414,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             width: 120,
             child: FlatButton(
               color: Color.fromRGBO(255, 214, 12, 1),
-              onPressed: widget.order.deliveryAddress == null ? null : onPay,
+              onPressed: validate,
               disabledColor: Colors.grey[300],
               child: Text(
                 '支付',
@@ -424,6 +425,15 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         ],
       ),
     );
+  }
+
+  void validate() {
+    if (widget.order.deliveryAddress == null) {
+      Toast.show("请选择收货地址", context,
+          duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+    } else {
+      onPay();
+    }
   }
 
   void onPay() async {

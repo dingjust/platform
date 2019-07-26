@@ -128,6 +128,14 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   Widget _buildCompanyInfo() {
     /// 工厂端显示
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      //判断是否看款单
+      BrandModel brandModel;
+      if (widget.quoteModel?.requirementOrder?.belongTo != null) {
+        brandModel = widget.quoteModel.requirementOrder.belongTo;
+      } else if (widget.model.brandReference != null) {
+        brandModel = widget.model.brandReference;
+      }
+
       return GestureDetector(
         onTap: () {
           //TODO跳转详细页
@@ -138,10 +146,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           color: Colors.white,
           child: Row(
             children: <Widget>[
-              widget.quoteModel.requirementOrder.belongTo == null ||
-                  widget.quoteModel.requirementOrder.belongTo
-                      .profilePicture ==
-                      null
+              brandModel == null || brandModel.profilePicture == null
                   ? Container(
                 margin: EdgeInsets.all(10),
                 width: 80,
@@ -163,9 +168,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                 child: CachedNetworkImage(
                     width: 100,
                     height: 100,
-                    imageUrl:
-                    '${widget.quoteModel.requirementOrder.belongTo
-                        .profilePicture.previewUrl()}',
+                    imageUrl: '${brandModel.profilePicture.previewUrl()}',
                     fit: BoxFit.cover,
                     imageBuilder: (context, imageProvider) =>
                         Container(
@@ -204,24 +207,20 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
                         Container(
                           margin: EdgeInsets.only(bottom: 5),
                           child: Text(
-                            '${widget.quoteModel.requirementOrder == null ||
-                                widget.quoteModel.requirementOrder.belongTo
-                                    .name == null ? '' : widget.quoteModel
-                                .requirementOrder.belongTo.name}',
+                            '${widget?.quoteModel?.requirementOrder == null ||
+                                brandModel.name == null ? '' : brandModel
+                                .name}',
                             textScaleFactor: 1.3,
                           ),
                         ),
                         Container(
                             margin: EdgeInsets.only(top: 5),
                             color: Color.fromRGBO(254, 252, 235, 1),
-                            child: widget.quoteModel.requirementOrder != null &&
-                                widget.quoteModel.requirementOrder.belongTo !=
-                                    null &&
-                                widget.quoteModel.requirementOrder.belongTo
-                                    .approvalStatus !=
-                                    null &&
-                                widget.quoteModel.requirementOrder.belongTo
-                                    .approvalStatus !=
+                            child: widget?.quoteModel?.requirementOrder !=
+                                null &&
+                                brandModel != null &&
+                                brandModel.approvalStatus != null &&
+                                brandModel.approvalStatus !=
                                     ArticleApprovalStatus.approved
                                 ? Text('  已认证  ',
                                 style: TextStyle(
