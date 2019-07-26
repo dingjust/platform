@@ -28,7 +28,8 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   ///按颜色分组
   Map<String, List<EditApparelSizeVariantProductEntry>> colorRowList =
   Map<String, List<EditApparelSizeVariantProductEntry>>();
-  TextEditingController totalEditingController;
+  Map<String, TextEditingController> totalEditingControllerMap =
+  Map<String, TextEditingController>();
   TextEditingController remarksEditingController;
 
   //总数流
@@ -52,7 +53,6 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
 
   @override
   void initState() {
-    totalEditingController = TextEditingController(text: '0');
     remarksEditingController = TextEditingController();
 
     productEntries = widget.product.variants
@@ -68,8 +68,9 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
       });
     }
     colorRowList.forEach((color, entries) {
+      totalEditingControllerMap[color] = TextEditingController();
       tabs.add(_buildTab(color, entries));
-      views.add(_buildViewBody(entries));
+      views.add(_buildViewBody(entries, color));
     });
     super.initState();
   }
@@ -111,7 +112,6 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                               children: <Widget>[
                                 _buildHeadRow(),
                                 _buildBody(),
-                                // _buildTotal()
                                 _buildEnd(),
                               ],
                             ),
@@ -245,7 +245,8 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
     );
   }
 
-  Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries) {
+  Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries,
+      String color) {
     List<Widget> widgets = entries
         .map((entry) => Container(
       decoration: BoxDecoration(
@@ -321,14 +322,15 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
     ))
         .toList();
 
-    widgets.add(_buildTotal());
+    widgets.add(_buildTotal(entries, color));
 
     return ListView(
       children: widgets,
     );
   }
 
-  Widget _buildTotal() {
+  Widget _buildTotal(List<EditApparelSizeVariantProductEntry> entries,
+      String color) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -361,16 +363,18 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                     ),
                     onPressed: () {
                       setState(() {
-                        if (int.parse(totalEditingController.text) > 0) {
-                          if (totalEditingController.text == '1') {
-                            totalEditingController.text = '';
+                        if (int.parse(totalEditingControllerMap[color].text) >
+                            0) {
+                          if (totalEditingControllerMap[color].text == '1') {
+                            totalEditingControllerMap[color].text = '';
                             productEntries.forEach((entry) {
                               entry.controller.text = '';
                             });
                           } else {
-                            int i = int.parse(totalEditingController.text);
+                            int i = int.parse(
+                                totalEditingControllerMap[color].text);
                             i--;
-                            totalEditingController.text = '$i';
+                            totalEditingControllerMap[color].text = '$i';
                             productEntries.forEach((entry) {
                               entry.controller.text = '$i';
                             });
@@ -382,8 +386,9 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                   Container(
                     width: 40,
                     child: TextField(
-                      controller: totalEditingController,
-                      decoration: InputDecoration(border: InputBorder.none),
+                      controller: totalEditingControllerMap[color],
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: '0'),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       //只能输入数字
@@ -409,15 +414,16 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                     ),
                     onPressed: () {
                       setState(() {
-                        if (totalEditingController.text == '') {
-                          totalEditingController.text = '1';
+                        if (totalEditingControllerMap[color].text == '') {
+                          totalEditingControllerMap[color].text = '1';
                           productEntries.forEach((entry) {
                             entry.controller.text = '1';
                           });
                         } else {
-                          int i = int.parse(totalEditingController.text);
+                          int i =
+                          int.parse(totalEditingControllerMap[color].text);
                           i++;
-                          totalEditingController.text = '$i';
+                          totalEditingControllerMap[color].text = '$i';
                           productEntries.forEach((entry) {
                             entry.controller.text = '$i';
                           });

@@ -29,7 +29,8 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   ///按颜色分组
   Map<String, List<EditApparelSizeVariantProductEntry>> colorRowList =
   Map<String, List<EditApparelSizeVariantProductEntry>>();
-  TextEditingController totalEditingController;
+  Map<String, TextEditingController> totalEditingControllerMap =
+  Map<String, TextEditingController>();
   TextEditingController remarksEditingController;
 
   //总数流
@@ -68,7 +69,6 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
 
   @override
   void initState() {
-    totalEditingController = TextEditingController(text: '0');
     remarksEditingController = TextEditingController();
     produceDay = widget.product.productionDays;
     if (widget.product.steppedPrices != null &&
@@ -88,8 +88,9 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
       });
     }
     colorRowList.forEach((color, entries) {
+      totalEditingControllerMap[color] = TextEditingController();
       tabs.add(_buildTab(color, entries));
-      views.add(_buildViewBody(entries));
+      views.add(_buildViewBody(entries, color));
     });
     super.initState();
   }
@@ -131,7 +132,6 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                               children: <Widget>[
                                 _buildHeadRow(),
                                 _buildBody(),
-                                // _buildTotal()
                                 _buildEnd(),
                               ],
                             ),
@@ -265,7 +265,8 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     );
   }
 
-  Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries) {
+  Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries,
+      String color) {
     List<Widget> widgets = entries
         .map((entry) => Container(
       decoration: BoxDecoration(
@@ -341,14 +342,15 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     ))
         .toList();
 
-    widgets.add(_buildTotal());
+    widgets.add(_buildTotal(entries, color));
 
     return ListView(
       children: widgets,
     );
   }
 
-  Widget _buildTotal() {
+  Widget _buildTotal(List<EditApparelSizeVariantProductEntry> entries,
+      String color) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -381,17 +383,19 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                     ),
                     onPressed: () {
                       setState(() {
-                        if (int.parse(totalEditingController.text) > 0) {
-                          if (totalEditingController.text == '1') {
-                            totalEditingController.text = '';
-                            productEntries.forEach((entry) {
+                        if (int.parse(totalEditingControllerMap[color].text) >
+                            0) {
+                          if (totalEditingControllerMap[color].text == '1') {
+                            totalEditingControllerMap[color].text = '';
+                            entries.forEach((entry) {
                               entry.controller.text = '';
                             });
                           } else {
-                            int i = int.parse(totalEditingController.text);
+                            int i = int.parse(
+                                totalEditingControllerMap[color].text);
                             i--;
-                            totalEditingController.text = '$i';
-                            productEntries.forEach((entry) {
+                            totalEditingControllerMap[color].text = '$i';
+                            entries.forEach((entry) {
                               entry.controller.text = '$i';
                             });
                           }
@@ -402,7 +406,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                   Container(
                     width: 40,
                     child: TextField(
-                      controller: totalEditingController,
+                      controller: totalEditingControllerMap[color],
                       decoration: InputDecoration(
                           border: InputBorder.none, hintText: '0'),
                       keyboardType: TextInputType.number,
@@ -416,7 +420,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                           val = '0';
                         }
                         setState(() {
-                          productEntries.forEach((entry) {
+                          entries.forEach((entry) {
                             entry.controller.text = val;
                           });
                         });
@@ -430,16 +434,21 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                     ),
                     onPressed: () {
                       setState(() {
-                        if (totalEditingController.text == '') {
-                          totalEditingController.text = '1';
-                          productEntries.forEach((entry) {
+                        if (totalEditingControllerMap[color].text == '') {
+                          setState(() {
+                            totalEditingControllerMap[color].text = '1';
+                          });
+                          entries.forEach((entry) {
                             entry.controller.text = '1';
                           });
                         } else {
-                          int i = int.parse(totalEditingController.text);
+                          int i =
+                          int.parse(totalEditingControllerMap[color].text);
                           i++;
-                          totalEditingController.text = '$i';
-                          productEntries.forEach((entry) {
+                          setState(() {
+                            totalEditingControllerMap[color].text = '$i';
+                          });
+                          entries.forEach((entry) {
                             entry.controller.text = '$i';
                           });
                         }
@@ -602,6 +611,10 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
         onPressed: onSure,
       ),
     );
+  }
+
+  TextEditingController getController(String color) {
+    return totalEditingControllerMap[color];
   }
 
   int countTotalNum() {
