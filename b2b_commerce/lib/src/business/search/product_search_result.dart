@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
+import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
+import 'package:b2b_commerce/src/_shared/products/apparel_product_search_list.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
@@ -68,7 +70,7 @@ class _ProductSearchResultPageState extends State<ProductSearchResultPage> {
               ],
             ),
           ),
-          body: ProductListView(
+          body: ApparelProductSearchList(
             keyword: widget.searchModel.keyword,
           ),
         ),
@@ -136,7 +138,7 @@ class ProductListView extends StatelessWidget {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore(keyword);
+        bloc.getDatasLoadingMore(keyword: keyword);
       }
     });
 
@@ -169,7 +171,7 @@ class ProductListView extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<PageEntry> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.getData(keyword);
+                    bloc.getDatas(keyword: keyword);
                     return ProgressIndicatorFactory
                         .buildPaddedProgressIndicator();
                   }

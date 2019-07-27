@@ -28,6 +28,11 @@ class ApparelProductBLoC extends BLoCBase {
     PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>(),status: 'unapproved'),
   };
 
+  static final Map<String, PageEntry> _searchProductsMap = {
+    'ALL':
+    PageEntry(currentPage: 0, size: 10, data: List<ApparelProductModel>(),status: 'ALL'),
+  };
+
   ApparelProductBLoC._internal() {
     // 初始化
     products = List<ApparelProductModel>();
@@ -48,22 +53,121 @@ class ApparelProductBLoC extends BLoCBase {
   void clearNewProduct() {}
 
   var _controller = StreamController<PageEntry>.broadcast();
+  var _searchController = StreamController<PageEntry>.broadcast();
 
   var _detailController = StreamController<ApparelProductModel>();
 
   Stream<PageEntry> get stream => _controller.stream;
+  Stream<PageEntry> get searchStream => _searchController.stream;
 
   Stream<ApparelProductModel> get detailStream => _detailController.stream;
+//
+//  filterByStatuses(String status) async {
+//    if (!lock) {
+//      lock = true;
+//      if (_productsMap[status].data.isEmpty) {
+//        if (status == null) status = 'ALL';
+//        Map<String, dynamic> data = {};
+//        if (status != 'ALL') {
+//          data = {
+//            'approvalStatuses': [status]
+//          };
+//        }
+//
+//        productsResponse = await ProductRepositoryImpl().list(data, {'fields':ApparelProductOptions.DEFAULT});
+//        if (productsResponse != null) {
+//          _productsMap[status].currentPage = productsResponse.number;
+//          _productsMap[status].totalPages = productsResponse.totalPages;
+//          _productsMap[status].totalElements = productsResponse.totalElements;
+//          _productsMap[status].data.clear();
+//          _productsMap[status].data.addAll(productsResponse.content);
+//        }
+//      }
+//      _controller.sink.add(_productsMap[status]);
+//      lock = false;
+//    }
+//  }
+//
+//  loadingMoreByStatuses(String status) async {
+//    if (!lock) {
+//      lock = true;
+//      if (status == null) status = 'ALL';
+//      Map<String, dynamic> data = {};
+//      if (status != 'ALL') {
+//        data = {
+//          'approvalStatuses': [status],
+//        };
+//      }
+//      if (_productsMap[status].currentPage <
+//          _productsMap[status].totalPages - 1) {
+//        productsResponse = await ProductRepositoryImpl().list(data, {
+//          'page': _productsMap[status].currentPage + 1,
+//          'fields':ApparelProductOptions.DEFAULT,
+//        });
+//        _productsMap[status].currentPage = productsResponse.number;
+//        _productsMap[status].totalPages = productsResponse.totalPages;
+//        _productsMap[status].totalElements = productsResponse.totalElements;
+//        _productsMap[status].data.addAll(productsResponse.content);
+//      } else {
+//        bottomController.sink.add(true);
+//      }
+//      loadingController.sink.add(false);
+//      _controller.sink.add(_productsMap[status]);
+//      lock = false;
+//    }
+//  }
+//
+  getData(String keyword,{String status}) async {
+    if (!lock) {
+      print(keyword);
+      lock = true;
+      products.clear();
+      productsResponse = await ProductRepositoryImpl().list({'keyword': keyword,'approvalStatuses': status,}, {});
+      products.addAll(productsResponse.content);
+      _controller.sink.add(PageEntry(data: products));
+      lock = false;
+    }
+  }
 
-  filterByStatuses(String status) async {
+  loadingMore(String keyword,{String status}) async {
+    if (productsResponse.number < productsResponse.totalPages - 1) {
+      productsResponse = await ProductRepositoryImpl().list({
+        'keyword': keyword,
+        'approvalStatuses': status,
+      }, {
+        'page': productsResponse.number + 1,
+      });
+      products.addAll(productsResponse.content);
+    } else {
+      bottomController.sink.add(true);
+    }
+    loadingController.sink.add(false);
+    _controller.sink.add(PageEntry(data: products));
+  }
+
+  //下拉刷新
+//  Future refreshData() async {
+//    productsResponse = await ProductRepositoryImpl().list({},{});
+//    _controller.sink.add(productsResponse.content);
+//  }
+
+  dispose() {
+    _controller.close();
+    _detailController.close();
+
+    super.dispose();
+  }
+
+  getDatas({String status,String keyword}) async {
     if (!lock) {
       lock = true;
+      if (status == null) status = 'ALL';
       if (_productsMap[status].data.isEmpty) {
-        if (status == null) status = 'ALL';
         Map<String, dynamic> data = {};
         if (status != 'ALL') {
           data = {
-            'approvalStatuses': [status]
+            'approvalStatuses': [status],
+            'keyword':keyword ?? '',
           };
         }
 
@@ -76,12 +180,14 @@ class ApparelProductBLoC extends BLoCBase {
           _productsMap[status].data.addAll(productsResponse.content);
         }
       }
+
       _controller.sink.add(_productsMap[status]);
+
       lock = false;
     }
   }
 
-  loadingMoreByStatuses(String status) async {
+  getDatasLoadingMore({String status,String keyword}) async {
     if (!lock) {
       lock = true;
       if (status == null) status = 'ALL';
@@ -89,6 +195,7 @@ class ApparelProductBLoC extends BLoCBase {
       if (status != 'ALL') {
         data = {
           'approvalStatuses': [status],
+          'keyword':keyword ?? '',
         };
       }
       if (_productsMap[status].currentPage <
@@ -105,38 +212,11 @@ class ApparelProductBLoC extends BLoCBase {
         bottomController.sink.add(true);
       }
       loadingController.sink.add(false);
+
       _controller.sink.add(_productsMap[status]);
+
       lock = false;
     }
-  }
-
-  getData(String keyword) async {
-    if (!lock) {
-      print(keyword);
-      lock = true;
-      products.clear();
-      productsResponse =
-      await ProductRepositoryImpl().list({'keyword': keyword}, {});
-      print(productsResponse.content);
-      products.addAll(productsResponse.content);
-      _controller.sink.add(PageEntry(data: products));
-      lock = false;
-    }
-  }
-
-  loadingMore(String keyword) async {
-    if (productsResponse.number < productsResponse.totalPages - 1) {
-      productsResponse = await ProductRepositoryImpl().list({
-        'keyword': keyword
-      }, {
-        'page': productsResponse.number + 1,
-      });
-      products.addAll(productsResponse.content);
-    } else {
-      bottomController.sink.add(true);
-    }
-    loadingController.sink.add(false);
-    _controller.sink.add(PageEntry(data: products));
   }
 
   clear() {
@@ -156,16 +236,16 @@ class ApparelProductBLoC extends BLoCBase {
     _productsMap[status].currentPage = 0;
   }
 
-  //下拉刷新
-//  Future refreshData() async {
-//    productsResponse = await ProductRepositoryImpl().list({},{});
-//    _controller.sink.add(productsResponse.content);
-//  }
+  ///重置数据
+  clearSearchProductsMap() {
+    _searchProductsMap.forEach((key, value) {
+      value.data.clear();
+      value.currentPage = 0;
+    });
+  }
 
-  dispose() {
-    _controller.close();
-    _detailController.close();
-
-    super.dispose();
+  clearSearchProductsMapByStatus(String status) {
+    _searchProductsMap[status].data.clear();
+    _searchProductsMap[status].currentPage = 0;
   }
 }
