@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -444,17 +445,17 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   void _onProductSelect() async {
     ApparelProductModel selectProduct =
         await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ApparelProductsPage(
-                  isSelectOption: true,
-                )));
+            builder: (context) => ProductSelectPage()));
 
-    setState(() {
-      product = selectProduct;
-      productEntries = product.variants
-          .map((variant) => EditApparelSizeVariantProductEntry(
-              controller: TextEditingController(), model: variant))
-          .toList();
-    });
+    if(selectProduct != null){
+      setState(() {
+        product = selectProduct;
+        productEntries = product.variants
+            .map((variant) => EditApparelSizeVariantProductEntry(
+            controller: TextEditingController(), model: variant))
+            .toList();
+      });
+    }
   }
 
   Widget _buildSampleNum() {

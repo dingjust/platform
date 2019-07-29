@@ -27,6 +27,8 @@ class SearchModel {
 
   String keyword;
 
+  bool isSelection;
+
   SearchModel({
     Key key,
     this.keyword,
@@ -36,7 +38,8 @@ class SearchModel {
     this.productCondition,
     this.requirementCondition,
     this.route,
-  });
+    this.isSelection = false,
+});
 }
 
 class SearchModelPage extends StatefulWidget {
@@ -48,6 +51,8 @@ class SearchModelPage extends StatefulWidget {
   }) : super(key: key);
 
   _SearchModelPageState createState() => _SearchModelPageState();
+
+
 }
 
 enum SearchModelType {
@@ -77,28 +82,35 @@ enum SearchModelType {
 
   //需求报价
   REQUIREMENT_QUOTE,
+
+  //产品选择
+  PRODUCT_SELECT,
+
 }
 
 class _SearchModelPageState extends State<SearchModelPage> {
+
   TextEditingController controller = TextEditingController();
   FocusNode focusNode = FocusNode();
 
   String searchText = '';
 
+  List<String> _historyKeywords = [];
+
   @override
   void initState() {
-    if (widget.searchModel.keyword != null &&
-        widget.searchModel.keyword != '') {
+    _historyKeywords = widget.searchModel.historyKeywords;
+    if(widget.searchModel.keyword != null && widget.searchModel.keyword != ''){
       controller.text = widget.searchModel.keyword;
     }
     super.initState();
 
-    if (SearchModelType.EXIST_PRODUCT == widget.searchModel.searchModelType ||
-        SearchModelType.PRODUCT == widget.searchModel.searchModelType) {
+    if(SearchModelType.EXIST_PRODUCT == widget.searchModel.searchModelType
+        || SearchModelType.PRODUCT == widget.searchModel.searchModelType){
       searchText = '请输入编码，名称，货号搜索';
-    } else if (SearchModelType.FACTORY == widget.searchModel.searchModelType) {
+    }else if(SearchModelType.FACTORY == widget.searchModel.searchModelType){
       searchText = '请输入编码，名称搜索';
-    } else {
+    }else{
       searchText = '请输入订单号，名称，货号搜索';
     }
 
@@ -112,9 +124,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
     await LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
-      widget.searchModel.historyKeywords =
-          list.map((item) => item as String).toList();
-      print(widget.searchModel.historyKeywords);
+      widget.searchModel.historyKeywords = list.map((item) => item as String).toList();
     } else {
       widget.searchModel.historyKeywords = [];
     }
@@ -123,94 +133,98 @@ class _SearchModelPageState extends State<SearchModelPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          title: Row(
-            children: <Widget>[
-              Expanded(
+      appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: true,
+        title: Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                height: 35,
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.grey[300], width: 0.5),
+                ),
                 child: Container(
-                  height: 35,
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.grey[300], width: 0.5),
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 5),
-                    padding: EdgeInsets.only(left: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: controller,
-                            focusNode: focusNode,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                              hintText: '${searchText}',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              contentPadding: EdgeInsets.all(0),
-                              disabledBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              border: InputBorder.none,
+                  margin: EdgeInsets.only(bottom: 5),
+                  padding: EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          autofocus: true,
+                          decoration: InputDecoration(
+                            hintText: '${searchText}',
+                            hintStyle: TextStyle(
+                              color: Colors.grey
                             ),
-                            onChanged: (value) {
-                              widget.searchModel.keyword = value;
-                            },
+                            contentPadding: EdgeInsets.all(0),
+                            disabledBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value){
+                            widget.searchModel.keyword = value;
+                          },
+                        ),
+                      ),
+                      Container(
+                        child: GestureDetector(
+                          onTap: (){
+                            setState(() {
+                              controller.text = '';
+                            });
+                          },
+                          child: Icon(
+                            Icons.clear,
+                            color: Colors.grey,
                           ),
                         ),
-                        Container(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                controller.text = '';
-                              });
-                            },
-                            child: Icon(
-                              Icons.clear,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                width: 70,
-                height: 32,
-                child: FlatButton(
-                    child: Text(
-                      '搜索',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+              width: 70,
+              height: 32,
+              child: RaisedButton(
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  child: Text(
+                    '搜  索',
+                    style: TextStyle(
+                      color: Colors.black,
                     ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    onPressed: () async {
-                      onSubmit();
-                      setState(() {
-                        widget.searchModel.keyword = controller.text;
-                      });
-                    }),
-              ),
-            ],
-          ),
-        ),
-        body: ListView(
-          children: <Widget>[
-            _buildHistoryListView(context),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  onPressed: () async {
+                    onSubmit();
+                    setState(() {
+                      widget.searchModel.keyword = controller.text;
+                    });
+                  }),
+            ),
           ],
-        ));
+        ),
+      ),
+      body: ListView(
+        children: <Widget>[
+          _buildHistoryListView(context),
+        ],
+      )
+    );
   }
 
   onSubmit() {
-    if (widget.searchModel.searchModelType == SearchModelType.PURCHASE_ORDER) {
+    if(widget.searchModel.searchModelType == SearchModelType.PURCHASE_ORDER) {
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -218,10 +232,12 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   PurchaseOrderSearchResultPage(
                     searchModel: widget.searchModel,
                   )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
+      if(controller.text != ''){
+        if(widget.searchModel.historyKeywords.contains(controller.text)){
+          widget.searchModel.historyKeywords.remove(controller.text);
+        }
         widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
+        LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY, json.encode(widget.searchModel.historyKeywords));
       }
     }
     if (widget.searchModel.searchModelType == SearchModelType.QUOTE_ORDER) {
@@ -232,14 +248,13 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   QuoteSearchResultPage(
                     searchModel: widget.searchModel,
                   )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
+        if (controller.text != '' && controller.text.isNotEmpty) {
+          widget.searchModel.historyKeywords.add(controller.text);
+          LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+              json.encode(widget.searchModel.historyKeywords));
+        }
     }
-    if (widget.searchModel.searchModelType ==
-        SearchModelType.REQUIREMENT_ORDER) {
+    if (widget.searchModel.searchModelType == SearchModelType.REQUIREMENT_ORDER) {
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -247,11 +262,11 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   RequirementSearchResultPage(
                     searchModel: widget.searchModel,
                   )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
+        if (controller.text != '' && controller.text.isNotEmpty) {
+          widget.searchModel.historyKeywords.add(controller.text);
+          LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+              json.encode(widget.searchModel.historyKeywords));
+        }
     }
     if (widget.searchModel.searchModelType == SearchModelType.PROOFING_ORDER) {
       Navigator.push(
@@ -261,13 +276,13 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   ProofingSearchResultPage(
                     searchModel: widget.searchModel,
                   )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
+        if (controller.text != '' && controller.text.isNotEmpty) {
+          widget.searchModel.historyKeywords.add(controller.text);
+          LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+              json.encode(widget.searchModel.historyKeywords));
+        }
     }
-    if (widget.searchModel.searchModelType == SearchModelType.PRODUCT) {
+    if(widget.searchModel.searchModelType == SearchModelType.PRODUCT){
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -275,13 +290,27 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   ProductSearchResultPage(
                     searchModel: widget.searchModel,
                   )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
+        if (controller.text != '' && controller.text.isNotEmpty) {
+          _historyKeywords.add(controller.text);
+          LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
+              json.encode(widget.searchModel.historyKeywords));
+        }
     }
-    if (widget.searchModel.searchModelType == SearchModelType.FACTORY) {
+    if(widget.searchModel.searchModelType == SearchModelType.PRODUCT_SELECT){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ProductSearchResultPage(
+                    searchModel: widget.searchModel,
+                  )));
+        if (controller.text != '' && controller.text.isNotEmpty) {
+          _historyKeywords.add(controller.text);
+          LocalStorage.save(GlobalConfigs.PRODUCT_SELECT_HISTORY_KEYWORD_KEY,
+              json.encode(widget.searchModel.historyKeywords));
+        }
+    }
+    if(widget.searchModel.searchModelType == SearchModelType.FACTORY){
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -292,21 +321,21 @@ class _SearchModelPageState extends State<SearchModelPage> {
               loadingText: '加载中。。。',
               entrance: '',
             );
-          }).then((value) {
+          }
+      ).then((value){
         Navigator.of(context).pop();
         FactoryCondition condition = widget.searchModel.factoryCondition;
         condition.keyword = controller.text;
         FactoryBLoC.instance.clear();
       });
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
+        if (controller.text != '' && controller.text.isNotEmpty) {
+          widget.searchModel.historyKeywords.add(controller.text);
+          LocalStorage.save(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
+              json.encode(widget.searchModel.historyKeywords));
+        }
       Navigator.of(context).pop();
     }
-    if (widget.searchModel.searchModelType ==
-        SearchModelType.PRODUCTION_ORDER) {
+    if(widget.searchModel.searchModelType == SearchModelType.PRODUCTION_ORDER){
       ProductionBLoC.instance.clear();
       Navigator.of(context).pop(controller.text);
       if (controller.text != '' && controller.text.isNotEmpty) {
@@ -315,7 +344,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
             json.encode(widget.searchModel.historyKeywords));
       }
     }
-    if (widget.searchModel.searchModelType == SearchModelType.EXIST_PRODUCT) {
+    if(widget.searchModel.searchModelType == SearchModelType.EXIST_PRODUCT){
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -326,7 +355,8 @@ class _SearchModelPageState extends State<SearchModelPage> {
               loadingText: '加载中。。。',
               entrance: '',
             );
-          }).then((value) {
+          }
+      ).then((value){
         ProductCondition condition = widget.searchModel.productCondition;
         condition.keyword = controller.text;
         OrderByProductBLoc.instance.clear();
@@ -340,8 +370,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
       });
       Navigator.of(context).pop();
     }
-    if (widget.searchModel.searchModelType ==
-        SearchModelType.REQUIREMENT_QUOTE) {
+    if(widget.searchModel.searchModelType == SearchModelType.REQUIREMENT_QUOTE){
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -352,9 +381,9 @@ class _SearchModelPageState extends State<SearchModelPage> {
               loadingText: '加载中。。。',
               entrance: '',
             );
-          }).then((value) {
-        RequirementFilterCondition condition =
-            widget.searchModel.requirementCondition;
+          }
+      ).then((value){
+        RequirementFilterCondition condition = widget.searchModel.requirementCondition;
         condition.keyword = controller.text;
         RequirementPoolBLoC.instance.clear();
         Navigator.of(context).pop();
@@ -371,9 +400,9 @@ class _SearchModelPageState extends State<SearchModelPage> {
 //    }
   }
 
-  delayedLoading() {
+  delayedLoading(){
     //注意！！别删！！
-    int a = 1 + 1;
+    int a = 1+1;
   }
 
   //历史搜索部分
@@ -395,22 +424,24 @@ class _SearchModelPageState extends State<SearchModelPage> {
               ),
               Container(
                 child: FlatButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      List<String> historyKeywords = List();
-                      widget.searchModel.historyKeywords = historyKeywords;
-                      LocalStorage.save(widget.searchModel.route,
-                          json.encode(historyKeywords));
-                    });
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: Colors.grey,
-                  ),
-                  label: Text(
-                    '清除历史',
-                    style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)),
-                  ),
+                    onPressed: (){
+                      setState(() {
+                        List<String> historyKeywords = List();
+                        _historyKeywords = historyKeywords;
+                        LocalStorage.save(widget.searchModel.route,
+                            json.encode(_historyKeywords));
+                      });
+                    },
+                    icon: Icon(
+                      Icons.clear,
+                      color: Colors.grey,
+                    ),
+                    label: Text(
+                        '清除历史',
+                      style: TextStyle(
+                          color: Color.fromRGBO(100, 100, 100, 1)
+                      ),
+                    ),
                 ),
               )
             ],
@@ -422,139 +453,130 @@ class _SearchModelPageState extends State<SearchModelPage> {
               spacing: 8.0, // 主轴(水平)方向间距
               runSpacing: 4.0, // 纵轴（垂直）方向间距
               alignment: WrapAlignment.start, //沿主轴方向居中
-              children: widget.searchModel.historyKeywords
-                  .map((keyword) =>
-                  HistoryTag(
-                    value: keyword,
-                    onTap: () {
-                      setState(() {
-                        widget.searchModel.keyword = keyword;
-                      });
+              children: _historyKeywords.map((keyword) => HistoryTag(
+                value: keyword,
+                onTap: () {
+                  setState(() {
+                    widget.searchModel.keyword = keyword;
+                  });
 //                  Navigator.pop(context);
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.PURCHASE_ORDER) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    PurchaseOrderSearchResultPage(
-                                      searchModel: widget.searchModel,
-                                    )));
-                      }
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.QUOTE_ORDER) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    QuoteSearchResultPage(
-                                      searchModel: widget.searchModel,
-                                    )));
-                      }
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.REQUIREMENT_ORDER) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    RequirementSearchResultPage(
-                                      searchModel: widget.searchModel,
-                                    )));
-                      }
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.PROOFING_ORDER) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ProofingSearchResultPage(
-                                      searchModel: widget.searchModel,
-                                    )));
-                      }
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.PRODUCT) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ProductSearchResultPage(
-                                      searchModel: widget.searchModel,
-                                    )));
-                      }
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.FACTORY) {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) {
-                              return RequestDataLoading(
-                                requestCallBack: delayedLoading(),
-                                outsideDismiss: false,
-                                loadingText: '加载中。。。',
-                                entrance: '',
-                              );
-                            }).then((value) {
-                          FactoryCondition condition =
-                              widget.searchModel.factoryCondition;
-                          condition.keyword = keyword;
-                          FactoryBLoC.instance.clear();
-                          Navigator.of(context).pop();
-                        });
-                        Navigator.of(context).pop();
-                      }
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.PRODUCTION_ORDER) {
-                        ProductionBLoC.instance.clear();
-                        Navigator.of(context).pop(keyword);
-                      }
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.EXIST_PRODUCT) {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) {
-                              return RequestDataLoading(
-                                requestCallBack: delayedLoading(),
-                                outsideDismiss: false,
-                                loadingText: '加载中。。。',
-                                entrance: '',
-                              );
-                            }).then((value) {
-                          ProductCondition condition =
-                              widget.searchModel.productCondition;
-                          condition.keyword = keyword;
-                          OrderByProductBLoc.instance.clear();
-                          OrderByProductBLoc.instance.getData(condition);
-                          Navigator.of(context).pop();
-                        });
-                        Navigator.of(context).pop();
-                      }
-                      if (widget.searchModel.searchModelType ==
-                          SearchModelType.REQUIREMENT_QUOTE) {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) {
-                              return RequestDataLoading(
-                                requestCallBack: delayedLoading(),
-                                outsideDismiss: false,
-                                loadingText: '加载中。。。',
-                                entrance: '',
-                              );
-                            }).then((value) {
-                          RequirementFilterCondition condition =
-                              widget.searchModel.requirementCondition;
-                          condition.keyword = keyword;
-                          RequirementPoolBLoC.instance.clear();
-                          Navigator.of(context).pop();
-                        });
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  ))
+                  if(widget.searchModel.searchModelType == SearchModelType.PURCHASE_ORDER) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PurchaseOrderSearchResultPage(
+                                  searchModel: widget.searchModel,
+                                )));
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.QUOTE_ORDER) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                QuoteSearchResultPage(
+                                  searchModel: widget.searchModel,
+                                )));
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.REQUIREMENT_ORDER) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                RequirementSearchResultPage(
+                                  searchModel: widget.searchModel,
+                                )));
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.PROOFING_ORDER) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProofingSearchResultPage(
+                                  searchModel: widget.searchModel,
+                                )));
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.PRODUCT){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ProductSearchResultPage(
+                                  searchModel: widget.searchModel,
+                                )));
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.FACTORY){
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoading(
+                            requestCallBack: delayedLoading(),
+                            outsideDismiss: false,
+                            loadingText: '加载中。。。',
+                            entrance: '',
+                          );
+                        }
+                    ).then((value){
+                      FactoryCondition condition = widget.searchModel.factoryCondition;
+                      condition.keyword = keyword;
+                      FactoryBLoC.instance.clear();
+                      Navigator.of(context).pop();
+                    });
+                    Navigator.of(context).pop();
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.PRODUCTION_ORDER){
+                    ProductionBLoC.instance.clear();
+                    Navigator.of(context).pop(keyword);
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.EXIST_PRODUCT){
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoading(
+                            requestCallBack: delayedLoading(),
+                            outsideDismiss: false,
+                            loadingText: '加载中。。。',
+                            entrance: '',
+                          );
+                        }
+                    ).then((value){
+                      ProductCondition condition = widget.searchModel.productCondition;
+                      condition.keyword = keyword;
+                      OrderByProductBLoc.instance.clear();
+                      OrderByProductBLoc.instance.getData(condition);
+                      Navigator.of(context).pop();
+                    });
+                    Navigator.of(context).pop();
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.REQUIREMENT_QUOTE){
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoading(
+                            requestCallBack: delayedLoading(),
+                            outsideDismiss: false,
+                            loadingText: '加载中。。。',
+                            entrance: '',
+                          );
+                        }
+                    ).then((value){
+                      RequirementFilterCondition condition = widget.searchModel.requirementCondition;
+                      condition.keyword = keyword;
+                      RequirementPoolBLoC.instance.clear();
+                      Navigator.of(context).pop();
+                    });
+                    Navigator.of(context).pop();
+                  }
+                },
+              ))
                   .toList()),
         )
       ],
     );
   }
+
 }
+

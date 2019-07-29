@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/business/products/product_select.dart';
+import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
@@ -304,9 +308,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ApparelProductsPage(
-                isSelectOption: true,
-                item: _product,
+              builder: (context) => ProductSelectPage(
               ),
             ),
           );
@@ -404,12 +406,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 )),
           ),
           onTap: () async {
+
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ApparelProductsPage(
-                  isSelectOption: true,
-                  item: _product,
+                builder: (context) => ProductSelectPage(
+
                 ),
               ),
             );
