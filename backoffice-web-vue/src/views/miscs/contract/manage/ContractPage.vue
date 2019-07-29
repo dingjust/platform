@@ -29,11 +29,11 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getAllSizes()
+        const url = this.apis().getContracts()
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {
-        const url = this.apis().getLabel(item.id);
+        const url = this.apis().getContractDetail(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

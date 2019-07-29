@@ -372,6 +372,18 @@ let TENANT_APIS = {
   findBills () {
     return '/b2b/bill/all'
   },
+  getContracts () {
+    return '/b2b/user/agreement/list';
+  },
+  getContractDetail (code) {
+    return '/b2b/user/agreement/get/' + code;
+  },
+  getSeals () {
+    return '/b2b/user/seal/list';
+  },
+  getTemplates () {
+    return '/b2b/user/agreement/list';
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

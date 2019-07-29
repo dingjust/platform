@@ -354,4 +354,34 @@ class PurchaseOrderRepository {
         PurchaseOrdersResponse.fromJson(response.data);
     return purchaseResponse;
   }
+
+  //个人认证
+  Future<Certification> personalCertification() async {
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(UserApis.personalCertification);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      Certification certification = Certification.fromJson(response.data);
+      return certification;
+    } else
+      return null;
+  }
+
+  //企业认证
+  Future<Certification> enterpriseCertification() async {
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(UserApis.enterpriseCertification);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      Certification certification = Certification.fromJson(response.data);
+      return certification;
+    } else
+      return null;
+  }
 }

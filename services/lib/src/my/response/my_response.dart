@@ -40,3 +40,21 @@ class NotifyResponse {
   static Map<String, dynamic> toJson(NotifyResponse model) =>
       _$NotifyResponseToJson(model);
 }
+
+@JsonSerializable()
+class ContractResponse {
+  final int number;
+  final int size;
+  final int totalPages;
+  final int totalElements;
+  final List<ContractModel> content;
+
+  ContractResponse(this.number, this.size, this.totalPages, this.totalElements,
+      this.content);
+
+  factory ContractResponse.fromJson(Map<String, dynamic> json) =>
+      _$ContractResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractResponse model) =>
+      _$ContractResponseToJson(model);
+}

@@ -345,17 +345,20 @@ class CompanyWalletModel extends ItemModel {
 @JsonSerializable()
 class ContractModel extends ItemModel {
   String title;
-  int contractNumber;
+  String contractNumber;
   String belongTo;
-  DateTime createTime;
-  ContractStatus struts;
+  DateTime createtime;
+  ContractStatus state;
+  bool available;
+  String code;
 
   ContractModel({
     this.title,
     this.contractNumber,
     this.belongTo,
-    this.createTime,
-    this.struts,
+    this.createtime,
+    this.state,
+    this.available,
   });
 
 
@@ -368,20 +371,49 @@ class ContractModel extends ItemModel {
 }
 
 enum ContractStatus {
-  /// 待签署
-  WAIT_FOR_SIGN,
+  /// 初始状态
+  INITIATE,
 
-  /// 已签署
-  SIGNED,
+  /// 签署中
+  SIGN,
 
-  // 已失效
-  FAILED,
+  // 甲方签署
+  PARTY_A_SIGN,
+
+  //乙方签署
+  PARTY_B_SIGN,
+
+  //完成
+  COMPLETE,
+
+  //作废
+  INVALID,
 
 }
 
 // TODO: i18n处理
 const ContractStatusLocalizedMap = {
-  ContractStatus.WAIT_FOR_SIGN: "待签署",
-  ContractStatus.SIGNED: "已签署",
-  ContractStatus.FAILED: '已失效',
+  ContractStatus.INITIATE: "待签署",
+  ContractStatus.SIGN: "签署中",
+  ContractStatus.PARTY_A_SIGN: '甲方签署',
+  ContractStatus.PARTY_B_SIGN: "乙方签署",
+  ContractStatus.COMPLETE: "已签署",
+  ContractStatus.INVALID: '已作废',
 };
+
+@JsonSerializable()
+class Certification {
+  final int code;
+  final String msg;
+  final int resultCode;
+  final String data;
+
+  Certification(this.code, this.msg, this.resultCode, this.data);
+
+  factory Certification.fromJson(Map<String, dynamic> json) =>
+      _$CertificationFromJson(json);
+
+  static Map<String, dynamic> toJson(Certification model) =>
+      _$CertificationToJson(model);
+
+}

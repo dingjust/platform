@@ -16,9 +16,9 @@ import 'my_help.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
-  EnumModel('1', '待签署'),
-  EnumModel('2', '已签署'),
-  EnumModel('3', '已失效'),
+  EnumModel('INITIATE', '待签署'),
+  EnumModel('COMPLETE', '已签署'),
+  EnumModel('INVALID', '已作废'),
 ];
 
 class MyContractPage extends StatefulWidget {

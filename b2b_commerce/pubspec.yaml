@@ -65,9 +65,11 @@ dependencies:
   image_cropper: ^1.0.2
   jpush_flutter: ^0.0.11
   permission_handler: ^3.1.0
-  # flutter_widget_from_html: 0.2.0
-  # flutter_inappbrowser: 1.2.1
+  flutter_widget_from_html: 0.2.0
+  flutter_inappbrowser: 1.2.1
   toast: ^0.1.5
+  flutter_webview_plugin: 0.3.5
+  flutter_native_web: ^1.0.3
 
 dev_dependencies:
   flutter_test:

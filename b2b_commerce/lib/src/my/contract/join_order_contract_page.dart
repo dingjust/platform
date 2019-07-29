@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/business/search/purchase_order_search_result.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
+import 'package:b2b_commerce/src/my/contract/contract_webview_page.dart';
 import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
+import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/material.dart';
 
 import 'contract_select_widget.dart';
@@ -13,22 +15,22 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text('关联订单合同'),
-        centerTitle: true,
-        elevation: 0.5,
-      ),
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: <Widget>[
-            _buildSelectOrderItem(),
-            _buildSelectContractItem(),
-            _buildSelectSealItem(),
-          ],
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text('关联订单合同'),
+          centerTitle: true,
+          elevation: 0.5,
         ),
-      ),
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: <Widget>[
+              _buildSelectOrderItem(),
+              _buildSelectContractItem(),
+              _buildSelectSealItem(),
+            ],
+          ),
+        ),
         bottomNavigationBar: Container(
           color: Colors.white10,
           margin: EdgeInsets.all(10),
@@ -46,9 +48,9 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: (){
-//               Navigator.push(
-//                 context,MaterialPageRoute(builder: (context) => WebViewPage()),
-//               );
+              Navigator.push(
+                context,MaterialPageRoute(builder: (context) => WebViewPage()),
+              );
             },
           ),
         )

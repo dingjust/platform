@@ -13,9 +13,10 @@ class ContractItemPage extends StatefulWidget {
 class _ContractItemPageState extends State<ContractItemPage>{
 
   static Map<ContractStatus, Color> _statusColors = {
-    ContractStatus.WAIT_FOR_SIGN: Colors.red,
-    ContractStatus.SIGNED: Colors.green,
-    ContractStatus.FAILED: Colors.grey,
+    ContractStatus.INITIATE: Colors.red,
+    ContractStatus.SIGN: Colors.yellow,
+    ContractStatus.COMPLETE: Colors.green,
+    ContractStatus.INVALID: Colors.grey,
   };
 
   @override
@@ -54,10 +55,10 @@ class _ContractItemPageState extends State<ContractItemPage>{
           ),
           Container(
             child: Text(
-              '${ContractStatusLocalizedMap[widget.model.struts]}',
+              '${ContractStatusLocalizedMap[widget.model.state]}',
               textAlign: TextAlign.end,
               style: TextStyle(
-                color: _statusColors[widget.model.struts],
+                color: _statusColors[widget.model.state],
               ),
             ),
           ),
@@ -73,7 +74,7 @@ class _ContractItemPageState extends State<ContractItemPage>{
           Expanded(
             child: Container(
               child: Text(
-                '合同编号：${widget.model.contractNumber}',
+                '合同编号：${widget.model.code}',
                 style: TextStyle(
                   color: Colors.black26,
                 ),
@@ -82,7 +83,7 @@ class _ContractItemPageState extends State<ContractItemPage>{
           ),
           Container(
             child:  Text(
-              '${DateFormatUtil.formatYMD(DateTime.now())}',
+              '${DateFormatUtil.formatYMD(widget.model.createtime)}',
               style: TextStyle(
                 color: Colors.black26,
               ),
