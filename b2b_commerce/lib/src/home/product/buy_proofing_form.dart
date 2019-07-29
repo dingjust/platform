@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/common/order_payment.dart';
+import 'package:b2b_commerce/src/home/product/order_confirm_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -231,13 +232,13 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
           resizeToAvoidBottomInset: false,
           appBar: TabBar(
             unselectedLabelColor: Colors.black26,
-            labelColor: Colors.orange,
+            labelColor: Colors.black,
             indicatorSize: TabBarIndicatorSize.label,
             tabs: _buildTabs(),
             labelStyle: TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
             isScrollable: true,
-            indicatorColor: Colors.orange,
+            indicatorColor: Color.fromRGBO(255, 214, 12, 1),
           ),
           body: TabBarView(children: views),
         ),
@@ -335,22 +336,6 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
       child: Column(
         children: <Widget>[
           Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                child: Text('备注'),
-              ),
-              Expanded(
-                flex: 1,
-                child: TextField(
-                  controller: remarksEditingController,
-                  decoration: InputDecoration(
-                      border: InputBorder.none, hintText: '填写备注'),
-                ),
-              )
-            ],
-          ),
-          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text('批量修改数量'),
@@ -359,7 +344,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                   IconButton(
                     icon: Icon(
                       B2BIcons.remove_rect,
-                      color: Colors.orange,
+                      color: Color.fromRGBO(255, 214, 12, 1),
                     ),
                     onPressed: () {
                       setState(() {
@@ -367,7 +352,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                             0) {
                           if (totalEditingControllerMap[color].text == '1') {
                             totalEditingControllerMap[color].text = '';
-                            productEntries.forEach((entry) {
+                            entries.forEach((entry) {
                               entry.controller.text = '';
                             });
                           } else {
@@ -375,7 +360,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                                 totalEditingControllerMap[color].text);
                             i--;
                             totalEditingControllerMap[color].text = '$i';
-                            productEntries.forEach((entry) {
+                            entries.forEach((entry) {
                               entry.controller.text = '$i';
                             });
                           }
@@ -400,7 +385,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                           val = '0';
                         }
                         setState(() {
-                          productEntries.forEach((entry) {
+                          entries.forEach((entry) {
                             entry.controller.text = val;
                           });
                         });
@@ -410,13 +395,13 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                   IconButton(
                     icon: Icon(
                       B2BIcons.add_rect,
-                      color: Colors.orange,
+                      color: Color.fromRGBO(255, 214, 12, 1),
                     ),
                     onPressed: () {
                       setState(() {
                         if (totalEditingControllerMap[color].text == '') {
                           totalEditingControllerMap[color].text = '1';
-                          productEntries.forEach((entry) {
+                          entries.forEach((entry) {
                             entry.controller.text = '1';
                           });
                         } else {
@@ -424,7 +409,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                           int.parse(totalEditingControllerMap[color].text);
                           i++;
                           totalEditingControllerMap[color].text = '$i';
-                          productEntries.forEach((entry) {
+                          entries.forEach((entry) {
                             entry.controller.text = '$i';
                           });
                         }
@@ -435,34 +420,6 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
               )
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  StreamBuilder<int>(
-                    initialData: totalNum,
-                    stream: totalNumStream,
-                    builder:
-                        (BuildContext context, AsyncSnapshot<int> snapshot) {
-                      return RichText(
-                        text: TextSpan(
-                            text: '共',
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '${totalNum}',
-                                  style: TextStyle(color: Colors.orange)),
-                              TextSpan(text: '件')
-                            ]),
-                      );
-                    },
-                  ),
-                ],
-              )
-            ],
-          )
         ],
       ),
       decoration: BoxDecoration(
@@ -475,8 +432,25 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
       child: Column(
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              StreamBuilder<int>(
+                initialData: totalNum,
+                stream: totalNumStream,
+                builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                  return RichText(
+                    text: TextSpan(
+                        text: '共',
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: '${totalNum}',
+                              style: TextStyle(color: Colors.red)),
+                          TextSpan(text: '件')
+                        ]),
+                  );
+                },
+              ),
               RichText(
                 text: TextSpan(
                     text: '总额: ',
@@ -484,7 +458,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                     children: <TextSpan>[
                       TextSpan(
                           text: '￥${totalNum * widget.product.proofingFee}',
-                          style: TextStyle(color: Colors.orange)),
+                          style: TextStyle(color: Colors.red)),
                     ]),
               ),
             ],
@@ -545,7 +519,9 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                     width: 15,
                     height: 15,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.orangeAccent),
+                      shape: BoxShape.circle,
+                      color: Colors.red,
+                    ),
                     child: Center(
                       child: Text(
                         colorTotalNum(entries) > 99
@@ -567,12 +543,24 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
       height: 50,
       margin: EdgeInsets.only(top: 5),
       child: FlatButton(
-        color: Colors.orange,
+        color: Color.fromRGBO(255, 214, 12, 1),
         child: Text(
           '确定',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
-        onPressed: onSure,
+        // onPressed: onSure,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  OrderConfirmForm(
+                    product: widget.product,
+                    colorRowList: colorRowList,
+                    productEntries: productEntries,
+                    remarksEditingController: remarksEditingController,
+                    totalEditingControllerMap: totalEditingControllerMap,
+                    orderType: OrderType.PROOFING,
+                  )));
+        },
       ),
     );
   }

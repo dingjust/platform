@@ -267,7 +267,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       ),
       routes: AppRoutes.allRoutes,
       localizationsDelegates: [
-        //此处
+        //此处5
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         ChineseCupertinoLocalizations.delegate
