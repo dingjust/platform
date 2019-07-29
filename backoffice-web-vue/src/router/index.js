@@ -8,7 +8,7 @@ Vue.use(Router);
 const router = new Router({
   mode: 'hash',
   linkActiveClass: 'open active',
-  scrollBehavior: () => ({y: 0}),
+  scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
       path: '/',
@@ -217,24 +217,45 @@ const router = new Router({
               path: '/miscs/sample/sampleCheckoutHist',
               name: '样衣借还记录',
               component: () => import(/* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
-            },{
+            }, {
               path: '/miscs/supplier',
               name: '供应商',
               component: () => import(/* webpackChunkName: 'supplier' */ '@/views/miscs/supplier/SupplierPage')
-            },{
+            }, {
               path: '/miscs/operationCourse',
               name: '使用教程',
               component: () => import(/* webpackChunkName: 'operationCourse' */ '@/views/miscs/operation-course/OperationCoursePage')
             }
-            ,{
+            , {
               path: '/miscs/wallet',
               name: '钱包',
               component: () => import(/* webpackChunkName: 'wallet' */ '@/views/miscs/wallet/WalletPage')
             }
-            ,{
+            , {
               path: '/miscs/cashOutManager',
               name: '提现管理',
               component: () => import(/* webpackChunkName: 'cashOutManager' */ '@/views/miscs/cashOutManager/cashOutManagerPage')
+            }
+            , {
+              path: '/unclassified/orderPurchase',
+              name: '下单',
+              component: () => import(/* webpackChunkName: 'orderPurchase' */ '@/views/unclassified/orderPurchase')
+            }, {
+              path: '/unclassified/sealManagement',
+              name: '印章管理',
+              component: () => import(/* webpackChunkName: 'sealManagement' */ '@/views/unclassified/sealManagement')
+            }, {
+              path: '/unclassified/createContract',
+              name: '创建合同',
+              component: () => import(/* webpackChunkName: 'sealManagement' */ '@/views/unclassified/createContract')
+            }, {
+              path: '/unclassified/markDown',
+              name: 'markdown',
+              component: () => import(/* webpackChunkName: 'sealManagement' */ '@/views/unclassified/markDown')
+            }, {
+              path: '/unclassified/contractTemplate',
+              name: '合同模板',
+              component: () => import(/* webpackChunkName: 'sealManagement' */ '@/views/unclassified/contractTemplate')
             }
           ]
         }
@@ -263,7 +284,7 @@ router.beforeEach((to, from, next) => {
     return next();
   }
 
-  next({path: LOGIN_URL, query: {backUrl: to.fullPath}});
+  next({ path: LOGIN_URL, query: { backUrl: to.fullPath } });
 });
 
 export default router;
