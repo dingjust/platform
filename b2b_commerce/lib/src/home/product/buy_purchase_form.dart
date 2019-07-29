@@ -29,19 +29,13 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
 
   ///按颜色分组
   Map<String, List<EditApparelSizeVariantProductEntry>> colorRowList =
-  Map<String, List<EditApparelSizeVariantProductEntry>>();
+      Map<String, List<EditApparelSizeVariantProductEntry>>();
   Map<String, TextEditingController> totalEditingControllerMap =
-  Map<String, TextEditingController>();
+      Map<String, TextEditingController>();
   TextEditingController remarksEditingController;
 
   //总数流
-  var _streamController = StreamController < int
-
-  >
-
-      .
-
-  broadcast();
+  var _streamController = StreamController<int>.broadcast();
 
   Stream<int> get totalNumStream => _streamController.stream;
   List<Widget> tabs = [];
@@ -78,7 +72,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     }
     productEntries = widget.product.variants
         .map((variant) => EditApparelSizeVariantProductEntry(
-        controller: TextEditingController(), model: variant))
+            controller: TextEditingController(), model: variant))
         .toList();
     if (productEntries != null) {
       productEntries.forEach((entry) {
@@ -107,15 +101,9 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
         },
         child: Padding(
           padding:
-          EdgeInsets.only(bottom: MediaQuery
-              .of(context)
-              .viewInsets
-              .bottom),
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height * widget.heightScale,
+            height: MediaQuery.of(context).size.height * widget.heightScale,
             child: Stack(
               fit: StackFit.expand,
               children: <Widget>[
@@ -160,26 +148,26 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
             imageUrl: '${widget.product.thumbnail.previewUrl()}',
             fit: BoxFit.cover,
             imageBuilder: (context, imageProvider) => Container(
-              width: imageSize,
-              height: imageSize,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
+                  width: imageSize,
+                  height: imageSize,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
             placeholder: (context, url) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: imageSize,
-            ),
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: imageSize,
+                ),
             errorWidget: (context, url, error) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: imageSize,
-            )),
+                  color: Colors.black12,
+                  lineWidth: 2,
+                  size: imageSize,
+                )),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5), color: Colors.white),
       ),
@@ -207,7 +195,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                         flex: 1,
                         child: Text(
                           '${widget.product.name}',
-                          style: TextStyle(color: Colors.black87, fontSize: 14),
+                          style: TextStyle(color: Colors.black87, fontSize: 16),
                           textAlign: TextAlign.left,
                         ),
                       )
@@ -219,10 +207,9 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                         flex: 1,
                         child: Text(
                           totalNum == 0
-                              ? '￥${widget.product.minSteppedPrice} ~ ￥${widget
-                              .product.maxSteppedPrice}'
+                              ? '￥${widget.product.minSteppedPrice} ~ ￥${widget.product.maxSteppedPrice}'
                               : '￥$price',
-                          style: TextStyle(color: Colors.red, fontSize: 14),
+                          style: TextStyle(color: Colors.red, fontSize: 16),
                           textAlign: TextAlign.left,
                         ),
                       )
@@ -266,81 +253,86 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     );
   }
 
-  Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries,
-      String color) {
+  Widget _buildViewBody(
+      List<EditApparelSizeVariantProductEntry> entries, String color) {
     List<Widget> widgets = entries
         .map((entry) => Container(
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text('${entry.model.size.name}'),
-          Row(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  B2BIcons.remove_rect,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  if (int.parse(entry.controller.text) > 0) {
-                    setState(() {
-                      if (entry.controller.text == '1') {
-                        entry.controller.text = '';
-                      } else {
-                        int i = int.parse(entry.controller.text);
-                        i--;
-                        entry.controller.text = '$i';
-                      }
-                    });
-                  }
-                },
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('${entry.model.size.name}',
+                      style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          B2BIcons.remove_rect,
+                          color: Colors.grey[300],
+                        ),
+                        onPressed: () {
+                          if (int.parse(entry.controller.text) > 0) {
+                            setState(() {
+                              if (entry.controller.text == '1') {
+                                entry.controller.text = '';
+                              } else {
+                                int i = int.parse(entry.controller.text);
+                                i--;
+                                entry.controller.text = '$i';
+                              }
+                            });
+                          }
+                        },
+                      ),
+                      Container(
+                        width: 40,
+                        child: TextField(
+                          controller: entry.controller,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '0',
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 14),
+                          //只能输入数字
+                          inputFormatters: <TextInputFormatter>[
+                            WhitelistingTextInputFormatter.digitsOnly,
+                          ],
+                          onChanged: (val) {
+                            if (val == '0') {
+                              setState(() {
+                                entry.controller.text = '';
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          B2BIcons.add_rect,
+                          color: Colors.grey[300],
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (entry.controller.text == '') {
+                              entry.controller.text = '1';
+                            } else {
+                              int i = int.parse(entry.controller.text);
+                              i++;
+                              entry.controller.text = '$i';
+                            }
+                          });
+                        },
+                      )
+                    ],
+                  )
+                ],
               ),
-              Container(
-                width: 40,
-                child: TextField(
-                  controller: entry.controller,
-                  decoration: InputDecoration(
-                      border: InputBorder.none, hintText: '0'),
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  //只能输入数字
-                  inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly,
-                  ],
-                  onChanged: (val) {
-                    if (val == '0') {
-                      setState(() {
-                        entry.controller.text = '';
-                      });
-                    }
-                  },
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  B2BIcons.add_rect,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (entry.controller.text == '') {
-                      entry.controller.text = '1';
-                    } else {
-                      int i = int.parse(entry.controller.text);
-                      i++;
-                      entry.controller.text = '$i';
-                    }
-                  });
-                },
-              )
-            ],
-          )
-        ],
-      ),
-    ))
+            ))
         .toList();
 
     widgets.add(_buildTotal(entries, color));
@@ -350,15 +342,18 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     );
   }
 
-  Widget _buildTotal(List<EditApparelSizeVariantProductEntry> entries,
-      String color) {
+  Widget _buildTotal(
+      List<EditApparelSizeVariantProductEntry> entries, String color) {
     return Container(
       child: Column(
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('批量修改数量'),
+              Text(
+                '批量修改数量',
+                style: TextStyle(fontSize: 14),
+              ),
               Row(
                 children: <Widget>[
                   IconButton(
@@ -393,9 +388,12 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                     child: TextField(
                       controller: totalEditingControllerMap[color],
                       decoration: InputDecoration(
-                          border: InputBorder.none, hintText: '0'),
+                          border: InputBorder.none,
+                          hintText: '0',
+                          hintStyle: TextStyle(fontSize: 14)),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14),
                       //只能输入数字
                       inputFormatters: <TextInputFormatter>[
                         WhitelistingTextInputFormatter.digitsOnly,
@@ -428,7 +426,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                           });
                         } else {
                           int i =
-                          int.parse(totalEditingControllerMap[color].text);
+                              int.parse(totalEditingControllerMap[color].text);
                           i++;
                           setState(() {
                             totalEditingControllerMap[color].text = '$i';
@@ -467,7 +465,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                       RichText(
                         text: TextSpan(
                             text: '共',
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                            style: TextStyle(color: Colors.grey, fontSize: 14),
                             children: <TextSpan>[
                               TextSpan(
                                   text: '${totalNum}',
@@ -477,7 +475,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                       ),
                       Text(
                         '￥${snapshot.data * price}',
-                        style: TextStyle(color: Colors.red, fontSize: 16),
+                        style: TextStyle(color: Colors.red, fontSize: 14),
                       ),
                     ],
                   )
@@ -489,7 +487,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                   RichText(
                     text: TextSpan(
                         text: '预计生产天数：',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
                         children: <TextSpan>[
                           TextSpan(
                               text: '${countProduceDays(snapshot.data)}',
@@ -499,7 +497,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                   RichText(
                     text: TextSpan(
                         text: '订金(总额x30%): ',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
                         children: <TextSpan>[
                           TextSpan(
                               text: '￥$deposit',
@@ -512,7 +510,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
           ),
           decoration: BoxDecoration(
               border:
-              Border(top: BorderSide(width: 0.5, color: Colors.grey[300]))),
+                  Border(top: BorderSide(width: 0.5, color: Colors.grey[300]))),
         );
       },
     );
@@ -526,10 +524,10 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     return result;
   }
 
-  Widget _buildTab(String color,
-      List<EditApparelSizeVariantProductEntry> entries) {
+  Widget _buildTab(
+      String color, List<EditApparelSizeVariantProductEntry> entries) {
     String colorCode =
-    entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
+        entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
     return Tab(
       // text: '${entries[0].model.color.name}',
       child: Container(
@@ -540,44 +538,45 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
           children: <Widget>[
             entries[0].model.color.colorCode != null
                 ? Positioned(
-              left: 0,
-              top: 12,
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                    color: Color(int.parse('0xFF${colorCode}')),
-                    border:
-                    Border.all(width: 0.5, color: Colors.grey[300])),
-                child: Text(''),
-              ),
-            )
+                    left: 0,
+                    top: 12,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: Color(int.parse('0xFF${colorCode}')),
+                          border:
+                              Border.all(width: 0.5, color: Colors.grey[300])),
+                      child: Text(''),
+                    ),
+                  )
                 : Container(),
             Container(
               margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
               child: Text(
                 '${entries[0].model.color.name}',
+                style: TextStyle(fontSize: 14),
               ),
             ),
             colorTotalNum(entries) > 0
                 ? Positioned(
-                right: 0,
-                top: 0,
-                child: Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red,
-                    ),
-                    child: Center(
-                      child: Text(
-                        colorTotalNum(entries) > 99
-                            ? '···'
-                            : '${colorTotalNum(entries)}',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    )))
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                        width: 15,
+                        height: 15,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                        child: Center(
+                          child: Text(
+                            colorTotalNum(entries) > 99
+                                ? '···'
+                                : '${colorTotalNum(entries)}',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        )))
                 : Container()
           ],
         ),
@@ -596,19 +595,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
           '确定',
           style: TextStyle(color: Colors.black),
         ),
-        // onPressed: onSure,
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  OrderConfirmForm(
-                    product: widget.product,
-                    colorRowList: colorRowList,
-                    productEntries: productEntries,
-                    remarksEditingController: remarksEditingController,
-                    totalEditingControllerMap: totalEditingControllerMap,
-                    orderType: OrderType.PURCHASE,
-                  )));
-        },
+        onPressed: onSure,
       ),
     );
   }
@@ -638,7 +625,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     int addOnDay = 0;
     if (totalNum > widget.product.basicProduction) {
       addOnDay = ((totalNum - widget.product.basicProduction) /
-          widget.product.productionIncrement)
+              widget.product.productionIncrement)
           .ceil();
     }
     produceDay = basic + addOnDay;
@@ -660,6 +647,8 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
         }
       }
     }
+    price = widget.product.steppedPrices.first.price;
+    return price;
   }
 
   int colorTotalNum(List<EditApparelSizeVariantProductEntry> entries) {
@@ -681,22 +670,15 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
 
   void onSure() {
     if (validateForm()) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText2: '是否提交订单？',
-              isNeedConfirmButton: true,
-              isNeedCancelButton: true,
-              dialogHeight: 200,
-              confirmAction: () {
-                Navigator.of(context).pop();
-                onSubmit();
-              },
-            );
-          });
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => OrderConfirmForm(
+                product: widget.product,
+                colorRowList: colorRowList,
+                productEntries: productEntries,
+                remarksEditingController: remarksEditingController,
+                totalEditingControllerMap: totalEditingControllerMap,
+                orderType: OrderType.PURCHASE,
+              )));
     } else {
       Toast.show("未达最低采购量", context,
           duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
@@ -765,13 +747,13 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   void getOrderDetail(String code) async {
     if (code != null && code != '') {
       PurchaseOrderModel detailModel =
-      await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+          await PurchaseOrderRepository().getPurchaseOrderDetail(code);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (context) => OrderPaymentPage(
-                order: detailModel,
-                paymentFor: PaymentFor.DEPOSIT,
-              )),
+                    order: detailModel,
+                    paymentFor: PaymentFor.DEPOSIT,
+                  )),
           ModalRoute.withName('/'));
     }
   }
