@@ -1,15 +1,18 @@
 import 'dart:convert';
 
+import 'package:b2b_commerce/src/business/products/product_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class HistorySearch extends StatefulWidget {
   String hintText;
   String historyKey;
+  String keyword;
 
   HistorySearch({
     this.historyKey = '',
     this.hintText = '',
+    this.keyword = '',
   });
 
   @override
@@ -23,6 +26,8 @@ class _HistorySearchState extends State<HistorySearch> {
 
   @override
   void initState(){
+    controller.text = widget.keyword;
+
     // TODO: implement initState
     super.initState();
   }
@@ -113,18 +118,8 @@ class _HistorySearchState extends State<HistorySearch> {
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20))),
-                    onPressed: () async {
-                      setState(() {
-                        if(controller.text != ''){
-                          if(_historywords.contains(controller.text)){
-                           _historywords.remove(controller.text);
-                          }
-                          _historywords.add(controller.text);
-                          LocalStorage.save(widget.historyKey, json.encode(_historywords));
-                        }
-                      });
-                      Navigator.pop(context,controller.text);
-                    }),
+                    onPressed: () => onSearch(context),
+                ),
               ),
             ],
           ),
@@ -135,6 +130,37 @@ class _HistorySearchState extends State<HistorySearch> {
           ],
         )
     );
+  }
+
+  void onSearch(BuildContext context) {
+    setState(() {
+      if(controller.text != ''){
+        if(_historywords.contains(controller.text)){
+         _historywords.remove(controller.text);
+        }
+        _historywords.add(controller.text);
+        LocalStorage.save(widget.historyKey, json.encode(_historywords));
+      }
+    });
+      switch(widget.historyKey){
+        case GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY:
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductSearchPage(
+            keyword: controller.text,
+          )));
+          break;
+        case GlobalConfigs.PRODUCT_SELECT_HISTORY_KEYWORD_KEY:
+          Navigator.pop(context,controller.text);
+          break;
+//        case GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY:
+//          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductSearchPage(
+//            keyword: controller.text,
+//          )));
+//          break;
+        default :
+          Navigator.pop(context,controller.text);
+          break;
+      }
+
   }
 
   //历史搜索部分
@@ -184,7 +210,19 @@ class _HistorySearchState extends State<HistorySearch> {
               runSpacing: 4.0, // 纵轴（垂直）方向间距
               alignment: WrapAlignment.start, //沿主轴方向居中
               children:_historywords.map((word){
-                return Text(word);
+                return GestureDetector(
+                  onTap: (){
+                    controller.text = word;
+                    this.onSearch(context);
+                  },
+                  child: Chip(
+                    backgroundColor: Color.fromRGBO(245, 245, 245, 1),
+                    label: Text(
+                      word,
+                      style: TextStyle(),
+                    ),
+                  ),
+                );;
               }).toList()
           )
         )

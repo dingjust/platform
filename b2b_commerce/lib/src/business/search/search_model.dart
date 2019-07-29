@@ -125,7 +125,6 @@ class _SearchModelPageState extends State<SearchModelPage> {
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
       widget.searchModel.historyKeywords = list.map((item) => item as String).toList();
-      print('${widget.searchModel.historyKeywords}------------======================');
     } else {
       widget.searchModel.historyKeywords = [];
     }
@@ -233,11 +232,13 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   PurchaseOrderSearchResultPage(
                     searchModel: widget.searchModel,
                   )));
-        if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.searchModel.historyKeywords.add(controller.text);
-          LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-              json.encode(widget.searchModel.historyKeywords));
+      if(controller.text != ''){
+        if(widget.searchModel.historyKeywords.contains(controller.text)){
+          widget.searchModel.historyKeywords.remove(controller.text);
         }
+        widget.searchModel.historyKeywords.add(controller.text);
+        LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY, json.encode(widget.searchModel.historyKeywords));
+      }
     }
     if (widget.searchModel.searchModelType == SearchModelType.QUOTE_ORDER) {
       Navigator.push(

@@ -10,14 +10,12 @@ import 'package:services/services.dart';
 import 'package:services/src/order/PageEntry.dart';
 import 'package:widgets/widgets.dart';
 
-import 'apparel_product_search_item.dart';
-
 class ApparelProductSearchList extends StatefulWidget {
   ApparelProductSearchList({
     Key key,
     this.status,
     this.keyword,
-    this.isSelection,
+    this.isSelection = false,
   }) : super(key: key);
   final String status;
 
@@ -40,7 +38,12 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMore(widget.keyword,status: widget.status);
+        if(widget.isSelection){
+          bloc.loadingMoreSelectData(widget.keyword,status: widget.status);
+        }else{
+          bloc.loadingMoreSearchData(widget.keyword,status: widget.status);
+        }
+
       }
     });
 
@@ -67,18 +70,26 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            return await bloc.getData(widget.keyword,status: widget.status);
+            if(widget.isSelection){
+              return await bloc.getSelectData(widget.keyword,status: widget.status);
+            }else{
+              return await bloc.getSearchData(widget.keyword,status: widget.status);
+            }
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             controller: widget.scrollController,
             children: <Widget>[
               StreamBuilder<PageEntry>(
-                stream: bloc.stream,
+                stream: widget.isSelection ? bloc.selectSearchStream : bloc.searchStream,
                 builder: (BuildContext context,
                     AsyncSnapshot<PageEntry> snapshot) {
                   if (snapshot.data == null) {
-                    bloc.getData(widget.keyword,status: widget.status);
+                    if(widget.isSelection){
+                      bloc.getSelectData(widget.keyword,status: widget.status);
+                    }else{
+                      bloc.getSearchData(widget.keyword,status: widget.status);
+                    }
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 200),
                       child: Center(child: CircularProgressIndicator()),
@@ -181,7 +192,11 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
           seconds: 2,
         ),
       ));
-      ApparelProductBLoC.instance.getData(widget.keyword);
+      if(widget.isSelection){
+        ApparelProductBLoC.instance.getSelectData(widget.keyword,status: widget.status);
+      }else{
+        ApparelProductBLoC.instance.getSearchData(widget.keyword,status: widget.status);
+      }
     });
   }
 
@@ -248,7 +263,11 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
                 },
               );
             });
-        ApparelProductBLoC.instance.getData(widget.keyword);
+        if(widget.isSelection){
+          ApparelProductBLoC.instance.getSelectData(widget.keyword,status: widget.status);
+        }else{
+          ApparelProductBLoC.instance.getSearchData(widget.keyword,status: widget.status);
+        }
       });
     } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
       if (product.variants == null || product.variants.isEmpty) {
@@ -307,7 +326,11 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
                 },
               );
             });
-            ApparelProductBLoC.instance.getData(widget.keyword);
+            if(widget.isSelection){
+              ApparelProductBLoC.instance.getSelectData(widget.keyword,status: widget.status);
+            }else{
+              ApparelProductBLoC.instance.getSearchData(widget.keyword,status: widget.status);
+            }
       });
     }
   }

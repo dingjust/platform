@@ -50,4 +50,3 @@ export 'src/commons/dialog/customize_dialog.dart';
 export 'src/commons/dialog/request_data_loading.dart';
 export 'src/commons/list_tile/list_title.dart';
 export 'src/commons/table/report_table.dart';
-export 'src/commons/search/history_search.dart';
