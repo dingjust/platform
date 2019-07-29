@@ -168,7 +168,38 @@ export default {
           name: '提现管理',
           url: '/miscs/cashOutManager',
           icon: 'iconNone',
-        }
+        },
+        {
+          name: '未分类',
+          icon: 'iconNone',
+          children: [
+            {
+              name: '下单',
+              url: '/unclassified/orderPurchase',
+              icon: 'iconNone',
+            },
+            {
+              name: '印章管理',
+              url: '/unclassified/sealManagement',
+              icon: 'iconNone',
+            },
+            {
+              name: '创建合同',
+              url: '/unclassified/createContract',
+              icon: 'iconNone',
+            },
+            {
+              name: 'markdown',
+              url: '/unclassified/markDown',
+              icon: 'iconNone',
+            },
+            {
+              name: '合同模板',
+              url: '/unclassified/contractTemplate',
+              icon: 'iconNone',
+            }
+          ]
+        },
       ]
     }
   ]
