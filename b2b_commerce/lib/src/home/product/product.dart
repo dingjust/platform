@@ -34,14 +34,14 @@ class RecommendProductItem extends StatelessWidget {
             color: Colors.white, borderRadius: BorderRadius.circular(5)),
         child: Column(
           children: <Widget>[
-            model.thumbnails != null &&
-                model.thumbnails.isNotEmpty &&
-                model.thumbnails[0].url != null
+            model?.thumbnails != null &&
+                model?.thumbnails.isNotEmpty &&
+                model?.thumbnails[0].url != null
                 ? Container(
               width: 200,
               height: 200,
               child: CachedNetworkImage(
-                  imageUrl: '${model.thumbnails[0].normalUrl()}',
+                  imageUrl: '${model?.thumbnails[0].normalUrl()}',
                   width: 200,
                   height: 200,
                   fit: BoxFit.cover,
