@@ -475,7 +475,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   Widget _buildTab(
       String color, List<EditApparelSizeVariantProductEntry> entries) {
     String colorCode =
-        entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
+    entries[0].model.color.colorCode?.replaceAll(RegExp('#'), '');
     return Tab(
       // text: '${entries[0].model.color.name}',
       child: Container(
