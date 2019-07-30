@@ -86,7 +86,7 @@ class _ApparelProductPricesInputPageState
 
     return Scaffold(
         appBar: AppBar(
-            title: Text('订货设置'),
+            title: Text('价格设置'),
             elevation: 0.5,
             brightness: Brightness.light,
             centerTitle: true,
@@ -105,13 +105,13 @@ class _ApparelProductPricesInputPageState
                     ),
                     onTap: () async {
 //                      if(_proofingFeeController.text == '' || _basicProductionController.text == '' || _productionDaysController.text == '' || _productionIncrementController.text == ''){
-//                        ShowDialogUtil.showValidateMsg(context, '订货设置资料未完善');
+//                        ShowDialogUtil.showValidateMsg(context, '价格设置资料未完善');
 //                        return;
 //                      }
 //
 //                      for (var model in models) {
 //                        if(model.minimumQuantity == null || model.price == null){
-//                          ShowDialogUtil.showValidateMsg(context, '订货设置资料未完善');
+//                          ShowDialogUtil.showValidateMsg(context, '价格设置资料未完善');
 //                          return;
 //                        }
 //                      }

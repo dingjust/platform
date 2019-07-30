@@ -95,7 +95,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+        // backgroundColor: Color.fromRGBO(255, 214, 12, 1),
         leading: IconButton(
           icon: Icon(Icons.chevron_left),
           onPressed: () {
@@ -107,7 +107,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           style: TextStyle(color: Colors.black87),
         ),
         centerTitle: true,
-        elevation: 0,
+        elevation: 1,
       ),
       body: _buildMainListView(),
       bottomSheet: _buildBottomSheet(),
@@ -116,62 +116,31 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
   Widget _buildMainListView() {
     return Container(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom / 3),
       child: ListView(
         children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Container(
-                height: 50,
-                width: double.infinity,
-                color: Color.fromRGBO(255, 214, 12, 1),
-              ),
-              Container(
-                padding: widgetPadding,
-                child: AddressSection(
-                  height: 120,
-                  context: context,
-                  deliveryAddress: addressModel,
-                  onAddressChanged: _handleAddressChange,
-                ),
-              ),
-            ],
+          Container(
+            padding: widgetPadding,
+            child: AddressSection(
+              height: 120,
+              context: context,
+              deliveryAddress: addressModel,
+              onAddressChanged: _handleAddressChange,
+            ),
+            decoration: BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(width: 0.5, color: Colors.grey))),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
             padding: widgetPadding,
             child: _buildHeadRow(),
           ),
-          // Expanded(
-          //   flex: 1,
-          //   child: Padding(
-          //     padding: widgetPadding,
-          //     child: _buildBody(),
-          //   ),
-          // ),
           Padding(
             padding: widgetPadding,
             child: _buildBody(),
           ),
-          // Container(
-          //   // height: 100,
-          //   padding: widgetPadding,
-          //   child: Row(
-          //     children: <Widget>[
-          //       Container(
-          //         margin: EdgeInsets.only(right: 10),
-          //         child: Text('备注'),
-          //       ),
-          //       Expanded(
-          //         flex: 1,
-          //         child: TextField(
-          //           controller: widget.remarksEditingController,
-          //           decoration: InputDecoration(
-          //               border: InputBorder.none, hintText: '填写备注'),
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
           _buildEnd()
         ],
       ),
@@ -179,76 +148,75 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   Widget _buildHeadRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Container(
-          height: imageSize,
-          margin: EdgeInsets.only(right: 20),
-          child: CachedNetworkImage(
-              width: imageSize,
-              height: imageSize,
-              imageUrl: '${widget.product.thumbnail.previewUrl()}',
-              fit: BoxFit.cover,
-              imageBuilder: (context, imageProvider) => Container(
-                    width: imageSize,
-                    height: imageSize,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            height: imageSize,
+            margin: EdgeInsets.only(right: 20),
+            child: CachedNetworkImage(
+                width: imageSize,
+                height: imageSize,
+                imageUrl: '${widget.product.thumbnail.previewUrl()}',
+                fit: BoxFit.cover,
+                imageBuilder: (context, imageProvider) => Container(
+                      width: imageSize,
+                      height: imageSize,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      borderRadius: BorderRadius.circular(5),
                     ),
-                  ),
-              placeholder: (context, url) => SpinKitCircle(
-                    color: Colors.black12,
-                    size: imageSize,
-                  ),
-              errorWidget: (context, url, error) => SpinKitCircle(
-                    color: Colors.black12,
-                    size: imageSize,
-                  )),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Colors.white),
-        ),
-        Expanded(
-            flex: 1,
-            child: Container(
-              height: imageSize,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '${widget.product.name}',
-                          style: TextStyle(color: Colors.black87, fontSize: 14),
-                          textAlign: TextAlign.left,
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          totalNum == 0
-                              ? '￥${widget.product.minSteppedPrice} ~ ￥${widget.product.maxSteppedPrice}'
-                              : '￥$price',
-                          style: TextStyle(color: Colors.red, fontSize: 14),
-                          textAlign: TextAlign.left,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            )),
-      ],
+                placeholder: (context, url) => SpinKitCircle(
+                      color: Colors.black12,
+                      size: imageSize,
+                    ),
+                errorWidget: (context, url, error) => SpinKitCircle(
+                      color: Colors.black12,
+                      size: imageSize,
+                    )),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+            ),
+          ),
+          Expanded(
+              flex: 1,
+              child: Container(
+                height: imageSize,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            '${widget.product.name}',
+                            style:
+                                TextStyle(color: Colors.black87, fontSize: 16),
+                            textAlign: TextAlign.left,
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: _buildPriceText(),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )),
+        ],
+      ),
     );
   }
 
@@ -271,9 +239,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
 
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      // margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey[300]))),
+          border: Border(top: BorderSide(color: Colors.grey[200]))),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -288,6 +256,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   children: <Widget>[
                     Text(
                       '${entries[0].model.color.name}',
+                      style: TextStyle(fontSize: 14),
                     ),
                   ],
                 )),
@@ -322,6 +291,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         return Container(
           // height: 50,
           padding: widgetPadding,
+          decoration: BoxDecoration(
+              border:
+                  Border(top: BorderSide(color: Colors.grey[300], width: 0.5))),
           margin: EdgeInsets.only(bottom: bottomSheetHeight + 10),
           child: Column(
             children: <Widget>[
@@ -330,53 +302,25 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(right: 10),
-                      child: Text('备注'),
+                      child: Text(
+                        '备注',
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ),
                     Expanded(
                       flex: 1,
                       child: TextField(
                         controller: widget.remarksEditingController,
                         decoration: InputDecoration(
-                            border: InputBorder.none, hintText: '填写备注'),
+                            border: InputBorder.none,
+                            hintText: '填写备注',
+                            hintStyle: TextStyle(fontSize: 14)),
                       ),
                     )
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                            text: '共',
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '${totalNum}',
-                                  style: TextStyle(color: Colors.red)),
-                              TextSpan(text: '件')
-                            ]),
-                      ),
-                      Text(
-                        '￥${snapshot.data * price}',
-                        style: TextStyle(color: Colors.red, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        text: '预计生产天数：',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '${countProduceDays(snapshot.data)}',
-                              style: TextStyle(color: Colors.black87)),
-                        ]),
-                  ),
-                ],
-              ),
+              _buildProduceDayRow(snapshot)
             ],
           ),
         );
@@ -388,19 +332,19 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       List<EditApparelSizeVariantProductEntry> entries, String color) {
     List<Widget> widgets = entries
         .map((entry) => Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(width: 0.5, color: Colors.grey[300]))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('${entry.model.size.name}'),
+                  Text(
+                    '${entry.model.size.name}',
+                    style: TextStyle(fontSize: 14),
+                  ),
                   Row(
                     children: <Widget>[
                       IconButton(
                         icon: Icon(
                           B2BIcons.remove_rect,
-                          color: Colors.grey,
+                          color: Colors.grey[300],
                         ),
                         onPressed: () {
                           if (int.parse(entry.controller.text) > 1) {
@@ -417,9 +361,12 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                         child: TextField(
                           controller: entry.controller,
                           decoration: InputDecoration(
-                              border: InputBorder.none, hintText: '0'),
+                              border: InputBorder.none,
+                              hintText: '0',
+                              hintStyle: TextStyle(fontSize: 14)),
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 14),
                           //只能输入数字
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly,
@@ -436,7 +383,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                       IconButton(
                         icon: Icon(
                           B2BIcons.add_rect,
-                          color: Colors.grey,
+                          color: Colors.grey[300],
                         ),
                         onPressed: () {
                           setState(() {
@@ -483,21 +430,12 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                            text: '订金(总额x30%): ',
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '￥$deposit',
-                                  style: TextStyle(color: Colors.red)),
-                            ]),
-                      ),
+                      RichText(text: _buildAmountTextSpan()),
                     ],
                   ),
                 ),
@@ -531,6 +469,88 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     );
   }
 
+  TextSpan _buildAmountTextSpan() {
+    if (widget.orderType == OrderType.PURCHASE) {
+      return TextSpan(
+          text: '订金(总额x30%): ',
+          style: TextStyle(color: Colors.grey, fontSize: 14),
+          children: <TextSpan>[
+            TextSpan(text: '￥$deposit', style: TextStyle(color: Colors.red)),
+          ]);
+    } else if (widget.orderType == OrderType.PROOFING) {
+      return TextSpan(
+          text: '总额: ',
+          style: TextStyle(color: Colors.grey, fontSize: 14),
+          children: <TextSpan>[
+            TextSpan(
+                text: '￥${totalNum * widget.product.proofingFee}',
+                style: TextStyle(color: Colors.red)),
+          ]);
+    } else {
+      return null;
+    }
+  }
+
+  Text _buildPriceText() {
+    if (widget.orderType == OrderType.PURCHASE) {
+      return Text(
+        totalNum == 0
+            ? '￥${widget.product.minSteppedPrice} ~ ￥${widget.product.maxSteppedPrice}'
+            : '￥$price',
+        style: TextStyle(color: Colors.red, fontSize: 18),
+        textAlign: TextAlign.left,
+      );
+    } else if (widget.orderType == OrderType.PROOFING) {
+      return Text(
+        '￥${widget.product.proofingFee}',
+        style: TextStyle(color: Colors.red, fontSize: 18),
+        textAlign: TextAlign.left,
+      );
+    }
+    return Text('');
+  }
+
+  Widget _buildProduceDayRow(AsyncSnapshot<int> snapshot) {
+    if (widget.orderType == OrderType.PURCHASE) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+                text: '预计生产天数：',
+                style: TextStyle(color: Colors.grey, fontSize: 14),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: '${countProduceDays(snapshot.data)}',
+                      style: TextStyle(color: Colors.black87, fontSize: 14)),
+                ]),
+          ),
+          Row(
+            children: <Widget>[
+              RichText(
+                text: TextSpan(
+                    text: '共',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: '${totalNum}',
+                          style: TextStyle(color: Colors.red)),
+                      TextSpan(text: '件')
+                    ]),
+              ),
+              Text(
+                '￥${snapshot.data * price}',
+                style: TextStyle(color: Colors.red, fontSize: 14),
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
+  }
+
   void _handleAddressChange(AddressModel address) {
     setState(() {
       addressModel = address;
@@ -548,9 +568,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     });
     totalNum = i;
     //计算生产天数
-    countProduceDays(totalNum);
+    produceDay = countProduceDays(totalNum);
     //计算单价
-    countUnitPrice(totalNum);
+    price = countUnitPrice(totalNum);
     deposit = DoubleUtil.getDecimalsValue(totalNum * price * depositPercent, 2);
     _streamController.sink.add(totalNum);
     return totalNum;
@@ -584,6 +604,8 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         }
       }
     }
+    price = widget.product.steppedPrices.first.price;
+    return price;
   }
 
   int colorTotalNum(List<EditApparelSizeVariantProductEntry> entries) {
@@ -690,7 +712,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       }
       showDialog(
           context: context,
-          barrierDismissible: false,
+          barrierDismissible: true,
           builder: (_) {
             return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
@@ -834,16 +856,16 @@ class AddressSection extends StatelessWidget {
       onTap: selectDeliveryAddress,
       child: Container(
         height: height,
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.white,
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Colors.grey, //阴影颜色
-                blurRadius: 5.0, //阴影大小
-              ),
-            ]),
+        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        // decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(5),
+        //     color: Colors.white,
+        //     boxShadow: <BoxShadow>[
+        //       BoxShadow(
+        //         color: Colors.grey, //阴影颜色
+        //         blurRadius: 5.0, //阴影大小
+        //       ),
+        //     ]),
         child: Column(
           children: <Widget>[
             Row(

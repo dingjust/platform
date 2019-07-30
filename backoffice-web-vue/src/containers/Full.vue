@@ -17,7 +17,7 @@
       </main>
       <!--<AppAside/>-->
     </div>
-    <AppFooter/>
+    <!-- <AppFooter/> -->
   </div>
 </template>
 
@@ -25,7 +25,7 @@
   // import nav from '../_nav';
   import {
     AppHeader,
-    AppFooter,
+    // AppFooter,
     Sidebar,
     // Aside as AppAside,
     Breadcrumb,
@@ -38,7 +38,7 @@
       AppHeader,
       Sidebar,
       // AppAside,
-      AppFooter,
+      // AppFooter,
       Breadcrumb,
       SideSlider
     },
