@@ -73,6 +73,10 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
         ).then((value) {
           print(value.code);
         });
+
+//        Navigator.push(
+//          context,MaterialPageRoute(builder: (context) => WebView111Page(urlString:'http://baidu.com')),
+//        );
       },
       child: Container(
         margin: EdgeInsets.only(top: 20),

@@ -31,6 +31,11 @@ class _WebView111PageState extends State<WebView111Page> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WebviewScaffold(
       appBar: AppBar(
@@ -54,7 +59,6 @@ class _WebView111PageState extends State<WebView111Page> {
         ],
       ),
       url: widget.urlString,
-      withZoom: false,
     );
   }
 }

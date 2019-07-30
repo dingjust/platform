@@ -93,7 +93,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   Widget _buildEnterpriseItem(){
     return GestureDetector(
       onTap: () async {
-        enterpris();
+        enterprise();
       },
       child: Container(
         color: Colors.white,
@@ -231,7 +231,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
     );
   }
 
-  enterpris(){
+  enterprise(){
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -247,10 +247,10 @@ class _MyAuthenticationState extends State<MyAuthentication> {
       Certification certification = value;
       if (certification != null) {
         if(certification.data !=  null){
-          _launchURL(certification.data);
-//          Navigator.push(
-//                 context,MaterialPageRoute(builder: (context) => WebViewPage(urlString:certification.data)),
-//               );
+//          _launchURL(certification.data);
+          Navigator.push(
+            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString :certification.data)),
+          );
         }else{
           showDialog(
               context: context,
