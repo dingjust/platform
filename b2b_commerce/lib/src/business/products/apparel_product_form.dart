@@ -398,13 +398,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
             );
           }).then((value){
             print(value);
-        if (widget.keyword == null) {
-          ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-          ApparelProductBLoC.instance.filterByStatuses(widget.status);
-        } else {
-          ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-          ApparelProductBLoC.instance.getData(widget.keyword);
-        }
+            ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+            ApparelProductBLoC.instance.getDatas(status: widget.status);
       });
     } else {
       showDialog(
@@ -420,13 +415,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
             );
           }).then((value){
             print(value);
-        if (widget.keyword == null) {
-          ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-          ApparelProductBLoC.instance.filterByStatuses(widget.status);
-        } else {
-          ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-          ApparelProductBLoC.instance.getData(widget.keyword);
-        }
+            ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+            ApparelProductBLoC.instance.getDatas(status: widget.status);
       });
     }
   }

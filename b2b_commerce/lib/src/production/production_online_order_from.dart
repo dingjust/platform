@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -262,10 +263,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ApparelProductsPage(
-                      isSelectOption: true,
-                      item: _product,
-                    ),
+                builder: (context) => ProductSelectPage(),
               ),
             );
             if (result != null) {
@@ -427,10 +425,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
           dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ApparelProductsPage(
-                    isSelectOption: true,
-                    item: _product,
-                  ),
+              builder: (context) => ProductSelectPage(),
             ),
           );
           if (result != null) {

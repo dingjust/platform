@@ -27,6 +27,8 @@ class SearchModel {
 
   String keyword;
 
+  bool isSelection;
+
   SearchModel({
     Key key,
     this.keyword,
@@ -36,6 +38,7 @@ class SearchModel {
     this.productCondition,
     this.requirementCondition,
     this.route,
+    this.isSelection = false,
 });
 }
 
@@ -80,6 +83,9 @@ enum SearchModelType {
   //需求报价
   REQUIREMENT_QUOTE,
 
+  //产品选择
+  PRODUCT_SELECT,
+
 }
 
 class _SearchModelPageState extends State<SearchModelPage> {
@@ -89,8 +95,11 @@ class _SearchModelPageState extends State<SearchModelPage> {
 
   String searchText = '';
 
+  List<String> _historyKeywords = [];
+
   @override
   void initState() {
+    _historyKeywords = widget.searchModel.historyKeywords;
     if(widget.searchModel.keyword != null && widget.searchModel.keyword != ''){
       controller.text = widget.searchModel.keyword;
     }
@@ -116,7 +125,6 @@ class _SearchModelPageState extends State<SearchModelPage> {
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
       widget.searchModel.historyKeywords = list.map((item) => item as String).toList();
-      print(widget.searchModel.historyKeywords);
     } else {
       widget.searchModel.historyKeywords = [];
     }
@@ -223,11 +231,13 @@ class _SearchModelPageState extends State<SearchModelPage> {
                   PurchaseOrderSearchResultPage(
                     searchModel: widget.searchModel,
                   )));
-        if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.searchModel.historyKeywords.add(controller.text);
-          LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-              json.encode(widget.searchModel.historyKeywords));
+      if(controller.text != ''){
+        if(widget.searchModel.historyKeywords.contains(controller.text)){
+          widget.searchModel.historyKeywords.remove(controller.text);
         }
+        widget.searchModel.historyKeywords.add(controller.text);
+        LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY, json.encode(widget.searchModel.historyKeywords));
+      }
     }
     if (widget.searchModel.searchModelType == SearchModelType.QUOTE_ORDER) {
       Navigator.push(
@@ -280,8 +290,22 @@ class _SearchModelPageState extends State<SearchModelPage> {
                     searchModel: widget.searchModel,
                   )));
         if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.searchModel.historyKeywords.add(controller.text);
+          _historyKeywords.add(controller.text);
           LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
+              json.encode(widget.searchModel.historyKeywords));
+        }
+    }
+    if(widget.searchModel.searchModelType == SearchModelType.PRODUCT_SELECT){
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ProductSearchResultPage(
+                    searchModel: widget.searchModel,
+                  )));
+        if (controller.text != '' && controller.text.isNotEmpty) {
+          _historyKeywords.add(controller.text);
+          LocalStorage.save(GlobalConfigs.PRODUCT_SELECT_HISTORY_KEYWORD_KEY,
               json.encode(widget.searchModel.historyKeywords));
         }
     }
@@ -402,9 +426,9 @@ class _SearchModelPageState extends State<SearchModelPage> {
                     onPressed: (){
                       setState(() {
                         List<String> historyKeywords = List();
-                        widget.searchModel.historyKeywords = historyKeywords;
+                        _historyKeywords = historyKeywords;
                         LocalStorage.save(widget.searchModel.route,
-                            json.encode(historyKeywords));
+                            json.encode(_historyKeywords));
                       });
                     },
                     icon: Icon(
@@ -428,7 +452,7 @@ class _SearchModelPageState extends State<SearchModelPage> {
               spacing: 8.0, // 主轴(水平)方向间距
               runSpacing: 4.0, // 纵轴（垂直）方向间距
               alignment: WrapAlignment.start, //沿主轴方向居中
-              children: widget.searchModel.historyKeywords.map((keyword) => HistoryTag(
+              children: _historyKeywords.map((keyword) => HistoryTag(
                 value: keyword,
                 onTap: () {
                   setState(() {

@@ -16,10 +16,14 @@ class MyContractBLoC extends BLoCBase {
   bool lock = false;
 
   static final Map<String, PageEntry> _dataMap = {
-    'ALL': PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    '1': PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    '2': PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    '3': PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
+    'ALL':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
+    'INITIATE':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
+    'SIGN':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
+    'COMPLETE':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
   };
 
   var _controller = StreamController <ContractData>.broadcast();
@@ -41,28 +45,33 @@ class MyContractBLoC extends BLoCBase {
 
   getData(String status) async {
 
-    _dataMap[status].data.addAll(await Future.delayed(const Duration(seconds: 1), () {
-      return <ContractModel>[
-        ContractModel.fromJson({
-          'title':'衣加衣采购合同',
-          'contractNumber':1245323523,
-          'belongTo':'宁波衣加衣供应链管理有限公司',
-          'struts':'WAIT_FOR_SIGN',
-        }),
-        ContractModel.fromJson({
-          'title':'衣加衣采购合同',
-          'contractNumber':5532535232,
-          'belongTo':'宁波衣加衣供应链管理有限公司',
-          'struts':'SIGNED',
-        }),
-        ContractModel.fromJson({
-          'title':'衣加衣采购合同',
-          'contractNumber':2145112322,
-          'belongTo':'宁波衣加衣供应链管理有限公司',
-          'struts':'FAILED',
-        }),
-      ];
-    }));
+    //若没有数据则查询
+      //  分页拿数据，response.data;
+      //请求参数
+      Map data = {
+          'state': status
+      };
+
+      Response<Map<String, dynamic>> response;
+
+      try {
+        response = await http$
+            .post(UserApis.contractList, data: data, queryParameters: {
+          'page': _dataMap[status].currentPage,
+          'size': _dataMap[status].size,
+        });
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (response != null && response.statusCode == 200) {
+        ContractResponse contractResponse =
+        ContractResponse.fromJson(response.data);
+        _dataMap[status].totalPages = contractResponse.totalPages;
+        _dataMap[status].totalElements = contractResponse.totalElements;
+        _dataMap[status].data.clear();
+        _dataMap[status].data.addAll(contractResponse.content);
+      }
 
     _controller.sink.add(ContractData(status: status, data: _dataMap[status].data));
 

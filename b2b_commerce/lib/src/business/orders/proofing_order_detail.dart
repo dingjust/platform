@@ -106,45 +106,45 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 model.product != null &&
                     model.product.thumbnail != null &&
                     model.product.thumbnail.url != null
-                      ? Container(
-                    margin: EdgeInsets.only(right: 15),
-                    padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-                    width: 80,
-                    height: 80,
-                    child: CachedNetworkImage(
-                        width: 100,
-                        height: 100,
-                        imageUrl:
-                        '${model.product.thumbnail.previewUrl()}',
-                        fit: BoxFit.cover,
-                        imageBuilder: (context, imageProvider) =>
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius:
-                                BorderRadius.circular(10),
+                    ? Container(
+                  margin: EdgeInsets.only(right: 15),
+                  padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                  width: 80,
+                  height: 80,
+                  child: CachedNetworkImage(
+                      width: 100,
+                      height: 100,
+                      imageUrl:
+                      '${model.product.thumbnail.previewUrl()}',
+                      fit: BoxFit.cover,
+                      imageBuilder: (context, imageProvider) =>
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
                               ),
+                              borderRadius:
+                              BorderRadius.circular(10),
                             ),
-                        placeholder: (context, url) =>
-                            SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            ),
-                        errorWidget: (context, url, error) =>
-                            SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            )),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                          ),
+                      placeholder: (context, url) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          SpinKitRing(
+                            color: Colors.black12,
+                            lineWidth: 2,
+                            size: 30,
+                          )),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 )
                     : Container(
                   margin: EdgeInsets.only(right: 15),

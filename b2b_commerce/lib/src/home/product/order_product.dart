@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -81,27 +82,21 @@ class _ProductsPageState extends State<ProductsPage> {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    String jsonStr = await LocalStorage.get(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY);
-                    if (jsonStr != null && jsonStr != '') {
-                      List<dynamic> list = json.decode(jsonStr);
-                      historyKeywords = list.map((item) => item as String).toList();
-                    } else {
-                      historyKeywords = [];
-                    }
-                    Navigator.push(
+                    dynamic result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            SearchModelPage(
-                              searchModel: SearchModel(
-                                  historyKeywords: historyKeywords,
-                                  searchModelType: SearchModelType.EXIST_PRODUCT,
-                                  productCondition: productCondition,
-                                  route: GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY
-                              ),
-                            ),
+                        builder: (context) => HistorySearch(
+                          historyKey: GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
+                          hintText: '请输入编码，名称，货号搜索',
+                          keyword: productCondition.keyword,
+                        )
                       ),
                     );
+
+                    if(result != null){
+                      productCondition.keyword = result;
+                      OrderByProductBLoc.instance.clearProducts();
+                    }
                   },
                   child: Container(
                     height: 28,
@@ -355,7 +350,7 @@ class ProductsView extends StatelessWidget {
                   initialData: bloc.products,
                   builder: (BuildContext context,
                       AsyncSnapshot<List<ApparelProductModel>> snapshot) {
-                    if (snapshot.data.isNotEmpty) {
+                  if (snapshot.data != null && snapshot.data.isNotEmpty) {
                       List<RecommendProductItem> recommendProductItems =
                           snapshot.data
                               .map((product) => RecommendProductItem(

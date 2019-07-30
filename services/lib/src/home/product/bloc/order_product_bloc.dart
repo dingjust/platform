@@ -188,6 +188,10 @@ class OrderByProductBLoc extends BLoCBase {
     _controller.sink.add(_products);
   }
 
+  clearProducts(){
+    _controller.sink.add(null);
+  }
+
   void reset() {
     _products = [];
     currentPage = 0;

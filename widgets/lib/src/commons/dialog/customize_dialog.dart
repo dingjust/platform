@@ -90,6 +90,8 @@ class CustomizeDialog extends StatefulWidget {
   PurchaseOrderModel orderModel;
   //当前节点序号
   int currentNode;
+  //交货日期
+  DateTime deliveryDate;
 
   DateTime expectedDeliveryDate;
 
@@ -135,6 +137,7 @@ class CustomizeDialog extends StatefulWidget {
     this.orderModel,
     this.currentNode,
     this.expectedDeliveryDate,
+    this.deliveryDate,
   }) : super(key: key);
 
   @override
@@ -647,190 +650,239 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
     return GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(
-        type: MaterialType.transparency,
-        child: Center(
-          child: SizedBox(
-            width: 300.0,
-            height: 280.0,
-            child: Container(
-              decoration: ShapeDecoration(
-                color: Color(0xffffffff),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+          type: MaterialType.transparency,
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery
+                    .of(context)
+                    .viewInsets
+                    .bottom),
+            child: Center(
+              child: SizedBox(
+                width: 300.0,
+                height: 280.0,
+                child: Container(
+                  decoration: ShapeDecoration(
+                    color: Color(0xffffffff),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: 30,
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.fromLTRB(10, 10, 0, 5),
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 30,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Text(
+                                    '${widget.title == null ||
+                                        widget.title == '' ? '' : widget
+                                        .title}',
+                                    style: TextStyle(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 0),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 5),
+//                        alignment: Alignment.topLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: TextFieldComponent(
+                                    textAlign: TextAlign.left,
+                                    focusNode: widget.focusNode,
+                                    controller: widget.inputController,
+                                    autofocus: false,
+                                    inputType: widget.inputType1,
+                                    hideDivider: true,
+                                    enabled: false,
+                                    prefix: '￥',
+                                    leadingText: Text(
+                                      '订单总额：',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: TextFieldComponent(
+                                    textAlign: TextAlign.left,
+                                    focusNode: widget.focusNode1,
+                                    controller: widget.inputController1,
+//                                inputType: TextInputType.number,
+                                    inputFormatters: [
+                                      DecimalInputFormat(),
+                                    ],
+                                    hideDivider: true,
+//                                isInputBorder: true,
+                                    prefix: '￥',
+                                    leadingText: Text(
+                                      '        定金：',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _showDatePicker(
+                                        widget.expectedDeliveryDate, 5);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 15),
+                                    child: Row(
+//                                mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Text(
+                                            '交货日期：',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          width: 85,
+                                        ),
+                                        Expanded(
+                                          child: widget.expectedDeliveryDate ==
+                                              null
+                                              ? Text(
+                                            '请选择日期',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          )
+                                              : Text(
+                                              DateFormatUtil.formatYMD(widget
+                                                  .expectedDeliveryDate),
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                              )),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+//                            Container(
+//                              alignment: Alignment.centerRight,
+//                              child: TextFieldComponent(
+//                                textAlign: TextAlign.left,
+//                                focusNode: widget.focusNode2,
+//                                controller: widget.inputController2,
+//                                autofocus: false,
+//                                inputType: TextInputType.number,
+//                                hideDivider: true,
+//                                isInputBorder: true,
+//                                prefix: '￥',
+//                                leadingText: Text(
+//                                  '        单价：',
+//                                  style: TextStyle(fontSize: 16),
+//                                ),
+//                              ),
+//                            ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Center(
+                                child: Container(
+                                    child: FlatButton(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 55),
+                                        child: Text(
+                                          '${widget.cancelButtonText == null ||
+                                              widget.cancelButtonText == ''
+                                              ? '取消'
+                                              : widget.cancelButtonText}',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15))),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        })),
+                              ),
+                              Center(
+                                child: Container(
+                                  child: FlatButton(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 55),
+                                      child: Text(
+                                        '${widget.confirmButtonText == null ||
+                                            widget.confirmButtonText == ''
+                                            ? '确定'
+                                            : widget.confirmButtonText}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15))),
+                                      onPressed: () {
+                                        if (widget.inputController1.text ==
+                                            '') {
+                                          widget.inputController1.text = '￥0';
+                                        }
+//                                    if (widget.inputController2.text == '') {
+//                                      widget.inputController2.text = '￥0';
+//                                    }
+                                        Navigator.of(context).pop(
+                                            widget.inputController1.text +
+                                                ',' +
+                                                widget.expectedDeliveryDate
+                                                    .toString());
+                                      }),
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          left: BorderSide(
+                                              color: Colors.grey, width: 0.5))),
+                                ),
+                              ),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  top: BorderSide(
+                                      color: Colors.grey, width: 0.5))),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      height: 30,
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 10, 0, 5),
-                            child: Icon(
-                              Icons.edit,
-                              size: 30,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(
-                                '${widget.title == null || widget.title == ''
-                                    ? ''
-                                    : widget.title}',
-                                style: TextStyle(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin:
-                        EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                        padding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-//                        alignment: Alignment.topLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              alignment: Alignment.centerRight,
-                              child: TextFieldComponent(
-                                textAlign: TextAlign.left,
-                                focusNode: widget.focusNode,
-                                controller: widget.inputController,
-                                autofocus: false,
-                                inputType: widget.inputType1,
-                                hideDivider: true,
-                                enabled: false,
-                                prefix: '￥',
-                                leadingText: Text(
-                                  '订单总额：',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerRight,
-                              child: TextFieldComponent(
-                                textAlign: TextAlign.left,
-                                focusNode: widget.focusNode1,
-                                controller: widget.inputController1,
-                                autofocus: true,
-                                inputType: TextInputType.number,
-                                hideDivider: true,
-                                isInputBorder: true,
-                                prefix: '￥',
-                                leadingText: Text(
-                                  '        定金：',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerRight,
-                              child: TextFieldComponent(
-                                textAlign: TextAlign.left,
-                                focusNode: widget.focusNode2,
-                                controller: widget.inputController2,
-                                autofocus: false,
-                                inputType: TextInputType.number,
-                                hideDivider: true,
-                                isInputBorder: true,
-                                prefix: '￥',
-                                leadingText: Text(
-                                  '        单价：',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Center(
-                            child: Container(
-                                child: FlatButton(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 55),
-                                    child: Text(
-                                      '${widget.cancelButtonText == null ||
-                                          widget.cancelButtonText == ''
-                                          ? '取消'
-                                          : widget.cancelButtonText}',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(15))),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    })),
-                          ),
-                          Center(
-                            child: Container(
-                              child: FlatButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 55),
-                                  child: Text(
-                                    '${widget.confirmButtonText == null ||
-                                        widget.confirmButtonText == ''
-                                        ? '确定'
-                                        : widget.confirmButtonText}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(15))),
-                                  onPressed: () {
-                                    if (widget.inputController1.text == '') {
-                                      widget.inputController1.text = '￥0';
-                                    }
-                                    if (widget.inputController2.text == '') {
-                                      widget.inputController2.text = '￥0';
-                                    }
-                                    Navigator.of(context).pop(
-                                        widget.inputController1.text +
-                                            ',' +
-                                            widget.inputController2.text);
-                                  }),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      left: BorderSide(
-                                          color: Colors.grey, width: 0.5))),
-                            ),
-                          ),
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              top: BorderSide(color: Colors.grey, width: 0.5))),
-                    ),
-                  ],
-                ),
-              ),
             ),
-          ),
-        ),
-      ),
+          )),
     );
   }
 
@@ -1492,10 +1544,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
   Future<Null> _selectDate(BuildContext context, DateTime date,
       int index) async {
     DateTime nowTime = DateTime.now();
+    DateTime dateTime =
+    date == null ? nowTime : date.compareTo(nowTime) < 0 ? nowTime : date;
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: nowTime,
-        firstDate: nowTime,
+        initialDate: dateTime,
+        firstDate: dateTime,
         lastDate: DateTime(2999));
 
     setState(() {
@@ -1509,6 +1563,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
         widget.estimatedDate4 = _picked;
       } else if (index == 4) {
         widget.estimatedDate5 = _picked;
+      } else if (index == 5) {
+        widget.expectedDeliveryDate = _picked ?? date;
       }
     });
   }

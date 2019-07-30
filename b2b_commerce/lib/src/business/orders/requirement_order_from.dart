@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/orders/form/is_proofing_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/is_provide_sample_product_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/machining_type_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -55,8 +56,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
   FocusNode _remarksFocusNode = FocusNode();
   TextEditingController _remarksController = TextEditingController();
 
+  ApparelProductModel _product;
+
   @override
   void initState() {
+    _product = widget.product;
     if (!widget.isCreate || widget.isReview) {
 //      model.details = widget.order.details;
       _nameController.text = widget.order.details.productName;
@@ -82,9 +86,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
           UserBLoC.instance.currentUser.mobileNumber;
     }
 
-    if (widget.product != null) {
-      widget.order.details.category = widget.product.category;
-      widget.order.details.pictures = widget.product.images;
+    if (_product != null) {
+      widget.order.details.category = _product.category;
+      widget.order.details.pictures = _product.images;
     }
 
     // TODO: implement initState
@@ -155,23 +159,21 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                     dynamic result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ApparelProductsPage(
-                              isSelectOption: true,
-                              item: widget.product,
-                            ),
+                        builder: (context) => ProductSelectPage(),
                       ),
                     );
+                    print('${result}-=-=-==-=');
                     //TODO：导入产品后的一系列操作
-                    widget.product = result;
                     if (result != null) {
+                      _product = result;
                       setState(() {
-                        widget.order.details.pictures = widget.product.images;
-                        widget.order.details.productName = widget.product.name;
+                        widget.order.details.pictures = _product.images;
+                        widget.order.details.productName = _product.name;
                         widget.order.details.productSkuID =
-                            widget.product.skuID;
-                        if (widget.product.category != null) {
+                            _product.skuID;
+                        if (_product.category != null) {
                           widget.order.details.category =
-                              widget.product.category;
+                              _product.category;
                         }
                       });
                     }
@@ -237,7 +239,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
               // 触摸收起键盘
               _nameFocusNode.unfocus();
             },
-            child: widget.product == null
+            child: _product == null
                 ? TextFieldComponent(
                     focusNode: _nameFocusNode,
                     controller: _nameController,
@@ -254,11 +256,11 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                       widget.order.details.productName = _nameController.text;
                     },
                   )
-                : ProductField(widget.product),
+                : ProductField(_product),
           ),
           CategoryField(
             widget.order,
-            product: widget.product,
+            product: _product,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),

@@ -29,7 +29,7 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getAllSizes()
+        const url = this.apis().getSeals();
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {
