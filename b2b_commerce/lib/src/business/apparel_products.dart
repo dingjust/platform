@@ -63,7 +63,6 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
                 size: 20,
               ),
               onPressed: ()async{
-                //解析
                 Navigator.push(context, MaterialPageRoute(builder: (context) => HistorySearch(
                   hintText: '请输入编码，名称，货号搜索',
                   historyKey: GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
