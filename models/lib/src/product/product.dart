@@ -308,6 +308,9 @@ class ProductModel extends ItemModel {
   ///最高价
   double get maxSteppedPrice {
     double result = 0;
+    if (steppedPrices == null) {
+      return result;
+    }
     steppedPrices.forEach((entry) {
       if (entry.price > result) {
         result = entry.price;

@@ -236,7 +236,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       List<EditApparelSizeVariantProductEntry> entries, String color) {
     //色值
     String colorCode =
-        entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
+    entries[0].model.color.colorCode?.replaceAll(RegExp('#'), '');
 
     return Container(
       // margin: EdgeInsets.only(bottom: 20),
