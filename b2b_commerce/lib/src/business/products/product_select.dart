@@ -31,9 +31,9 @@ class _ProductSelectPageState extends State<ProductSelectPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
-      _status = ArticleApprovalStatusMap[ArticleApprovalStatus.approved];
-    }
+//    if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+//      _status = ArticleApprovalStatusMap[ArticleApprovalStatus.approved];
+//    }
     return BLoCProvider<ApparelProductBLoC>(
       key: _globalKey,
       bloc: ApparelProductBLoC.instance,
@@ -75,7 +75,7 @@ class _ProductSelectPageState extends State<ProductSelectPage> {
           padding: const EdgeInsets.only(top: 10),
           child: ApparelProductSearchList(
             isSelection:true,
-            status: _status,
+//            status: _status,
             keyword: _keyword,
           ),
         ),
@@ -90,6 +90,7 @@ class _ProductSelectPageState extends State<ProductSelectPage> {
         builder: (context) => HistorySearch(
           historyKey: GlobalConfigs.PRODUCT_SELECT_HISTORY_KEYWORD_KEY,
           hintText: '请输入编码，名称，货号搜索',
+          keyword: _keyword,
         ),
       ),
     );
