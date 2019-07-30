@@ -103,4 +103,19 @@ abstract class UserApis {
 
   ///解绑银行卡
   static get unbindBankCard => (id) => '/{baseSiteId}/bankCard/$id';
+
+  //合同管理列表
+  static get contractList => '/{baseSiteId}/user/agreement/list';
+
+  //获取某个合同
+  static get getContract => (code) {
+    return '/{baseSiteId}/orders/proofing/$code';
+  };
+
+  //用户个人认证
+  static get personalCertification => '/{baseSiteId}/fdd/api/get/personal/verify/url';
+
+  //企业认证
+  static get enterpriseCertification => '/{baseSiteId}/fdd/api/get/enterprise/verify/url';
+
 }
