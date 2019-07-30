@@ -7,6 +7,8 @@ import 'package:services/src/order/PageEntry.dart';
 
 class ApparelProductBLoC extends BLoCBase {
   ProductsResponse productsResponse;
+  ProductsResponse searchProductsResponse;
+  ProductsResponse selectProductsResponse;
   List<ApparelProductModel> products;
   List<ApparelProductModel> selectProducts;
   ApparelProductModel currentProduct;
@@ -41,6 +43,8 @@ class ApparelProductBLoC extends BLoCBase {
     selectProducts = List<ApparelProductModel>();
     currentProduct = ApparelProductModel.empty();
     productsResponse = ProductsResponse(0, 10, 0, 0, []);
+    searchProductsResponse = ProductsResponse(0, 10, 0, 0, []);
+    selectProductsResponse = ProductsResponse(0, 10, 0, 0, []);
 
     newProduct = ApparelProductModel();
   }
@@ -76,8 +80,11 @@ class ApparelProductBLoC extends BLoCBase {
       print(keyword);
       lock = true;
       products.clear();
-      productsResponse = await ProductRepositoryImpl().list({'keyword': keyword,'approvalStatuses': status,}, {});
-      products.addAll(productsResponse.content);
+      searchProductsResponse = await ProductRepositoryImpl().list({'keyword': keyword,'approvalStatuses': status,}, {});
+      if(searchProductsResponse != null){
+        products.addAll(searchProductsResponse.content);
+      }
+
       _searchController.sink.add(PageEntry(data: products));
       lock = false;
     }
@@ -85,14 +92,14 @@ class ApparelProductBLoC extends BLoCBase {
 
   //加载更多
   loadingMoreSearchData(String keyword,{String status}) async {
-    if (productsResponse.number < productsResponse.totalPages - 1) {
-      productsResponse = await ProductRepositoryImpl().list({
+    if (searchProductsResponse.number < searchProductsResponse.totalPages - 1) {
+      searchProductsResponse = await ProductRepositoryImpl().list({
         'keyword': keyword,
         'approvalStatuses': status,
       }, {
-        'page': productsResponse.number + 1,
+        'page': searchProductsResponse.number + 1,
       });
-      products.addAll(productsResponse.content);
+      products.addAll(searchProductsResponse.content);
     } else {
       bottomController.sink.add(true);
     }
@@ -106,8 +113,11 @@ class ApparelProductBLoC extends BLoCBase {
       print(keyword);
       lock = true;
       selectProducts.clear();
-      productsResponse = await ProductRepositoryImpl().list({'keyword': keyword,'approvalStatuses': status,}, {});
-      selectProducts.addAll(productsResponse.content);
+      selectProductsResponse = await ProductRepositoryImpl().list({'keyword': keyword,'approvalStatuses': status,}, {});
+      if(selectProductsResponse != null){
+        selectProducts.addAll(selectProductsResponse.content);
+      }
+
       _selectSearchController.sink.add(PageEntry(data: selectProducts));
       lock = false;
     }
@@ -115,14 +125,14 @@ class ApparelProductBLoC extends BLoCBase {
 
   //加载更多
   loadingMoreSelectData(String keyword,{String status}) async {
-    if (productsResponse.number < productsResponse.totalPages - 1) {
-      productsResponse = await ProductRepositoryImpl().list({
+    if (selectProductsResponse.number < selectProductsResponse.totalPages - 1) {
+      selectProductsResponse = await ProductRepositoryImpl().list({
         'keyword': keyword,
         'approvalStatuses': status,
       }, {
-        'page': productsResponse.number + 1,
+        'page': selectProductsResponse.number + 1,
       });
-      selectProducts.addAll(productsResponse.content);
+      selectProducts.addAll(selectProductsResponse.content);
     } else {
       bottomController.sink.add(true);
     }
@@ -195,6 +205,8 @@ class ApparelProductBLoC extends BLoCBase {
 
   dispose() {
     _controller.close();
+    _searchController.close();
+    _selectSearchController.close();
     _detailController.close();
 
     super.dispose();
