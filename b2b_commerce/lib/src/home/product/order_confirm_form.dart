@@ -539,7 +539,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                     ]),
               ),
               Text(
-                '￥${snapshot.data * price}',
+                '￥${DoubleUtil.getDecimalsValue(snapshot.data * price, 2)}',
                 style: TextStyle(color: Colors.red, fontSize: 14),
               ),
             ],

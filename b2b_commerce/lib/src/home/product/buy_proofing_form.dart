@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/home/product/order_confirm_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -451,7 +452,9 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                     children: <TextSpan>[
                       TextSpan(
-                          text: '￥${totalNum * widget.product.proofingFee}',
+                          text:
+                          '￥${DoubleUtil.getDecimalsValue(
+                              totalNum * widget.product.proofingFee, 2)}',
                           style: TextStyle(color: Colors.red)),
                     ]),
               ),
