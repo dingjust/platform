@@ -203,6 +203,7 @@ class ProductionItem extends StatelessWidget {
                                 '货号：${order.product == null || order.product.skuID == null ? '' : order.product.skuID}',
                                 style:
                                     TextStyle(fontSize: 12, color: Colors.grey),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             )),
                         order.product == null || order.product.category == null

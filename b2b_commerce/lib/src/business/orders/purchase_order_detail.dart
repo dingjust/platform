@@ -671,40 +671,79 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Column(
           children: <Widget>[
-            ListTile(
-              leading: Icon(
-                B2BIcons.location,
-                color: Colors.black,
-              ),
-              title: Row(
-                children: <Widget>[
-                  order.deliveryAddress == null ||
-                          order.deliveryAddress.fullname == null
+            GestureDetector(
+              onTap: (){
+                userType == 'brand' && order.status != PurchaseOrderStatus.COMPLETED &&
+                    order.status != PurchaseOrderStatus.CANCELLED &&
+                    order.status != PurchaseOrderStatus.OUT_OF_STORE
+                    ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyAddressesPage(isJumpSource: true)),
+                  //接收返回数据并处理
+                ).then((value) async {
+                  print(value);
+                  if (value != null) {
+                    setState(() {
+                      order.deliveryAddress = value;
+                    });
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return RequestDataLoading(
+                            requestCallBack: PurchaseOrderRepository()
+                                .updateAddress(order.code, order),
+                            outsideDismiss: false,
+                            loadingText: '保存中。。。',
+                            entrance: '0',
+                          );
+                        }
+                    ).then((value){
+                      _getData();
+                    });
+                  }
+                })
+                    : null;
+                PurchaseOrderBLoC.instance.refreshData('ALL');
+              },
+              child: Container(
+                child: ListTile(
+                  leading: Icon(
+                    B2BIcons.location,
+                    color: Colors.black,
+                  ),
+                  title: Row(
+                    children: <Widget>[
+                      order.deliveryAddress == null ||
+                              order.deliveryAddress.fullname == null
+                          ? Container()
+                          : Text(order.deliveryAddress.fullname),
+                      order.deliveryAddress == null ||
+                              order.deliveryAddress.cellphone == null
+                          ? Container()
+                          : Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: Text(order.deliveryAddress.cellphone),
+                            )
+                    ],
+                  ),
+                  subtitle: order.deliveryAddress == null ||
+                          order.deliveryAddress.region == null ||
+                          order.deliveryAddress.city == null ||
+                          order.deliveryAddress.cityDistrict == null ||
+                          order.deliveryAddress.line1 == null
                       ? Container()
-                      : Text(order.deliveryAddress.fullname),
-                  order.deliveryAddress == null ||
-                          order.deliveryAddress.cellphone == null
-                      ? Container()
-                      : Container(
-                          margin: EdgeInsets.only(left: 10),
-                          child: Text(order.deliveryAddress.cellphone),
-                        )
-                ],
+                      : Text(
+                          order.deliveryAddress.region.name +
+                              order.deliveryAddress.city.name +
+                              order.deliveryAddress.cityDistrict.name +
+                              order.deliveryAddress.line1,
+                          style: TextStyle(
+                            color: Colors.black,
+                          )),
+                ),
               ),
-              subtitle: order.deliveryAddress == null ||
-                      order.deliveryAddress.region == null ||
-                      order.deliveryAddress.city == null ||
-                      order.deliveryAddress.cityDistrict == null ||
-                      order.deliveryAddress.line1 == null
-                  ? Container()
-                  : Text(
-                      order.deliveryAddress.region.name +
-                          order.deliveryAddress.city.name +
-                          order.deliveryAddress.cityDistrict.name +
-                          order.deliveryAddress.line1,
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
             ),
             SizedBox(
               child: Image.asset(
@@ -714,33 +753,36 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               ),
             ),
             GestureDetector(
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(20),
-                    child: Text(
-                      '物流信息',
-                      style: TextStyle(fontSize: 16),
+              child: Container(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        '物流信息',
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.carrierDetails.name : ''}',
-                          style: TextStyle(fontSize: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                            '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.carrierDetails.name : ''}',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                      ),
-                      Container(
-                        child: Text(
-                          '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.trackingID : ''}',
-                          style: TextStyle(fontSize: 16),
+                        Container(
+                          child: Text(
+                            '${order.consignment != null && order.consignment.carrierDetails != null ? order.consignment.trackingID : ''}',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               ),
               onTap: () {
                 if (order.consignment != null &&
@@ -761,35 +803,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         ),
       ),
       onTap: () async {
-        userType == 'brand'
-            ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyAddressesPage(isJumpSource: true)),
-                //接收返回数据并处理
-              ).then((value) async {
-                print(value);
-                if (value != null) {
-                  setState(() {
-                    order.deliveryAddress = value;
-                  });
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return RequestDataLoading(
-                          requestCallBack: PurchaseOrderRepository()
-                              .updateAddress(order.code, order),
-                          outsideDismiss: false,
-                          loadingText: '保存中。。。',
-                          entrance: '0',
-                        );
-                      }
-                  );
-                }
-              })
-            : null;
-        PurchaseOrderBLoC.instance.refreshData('ALL');
+
       },
     );
   }
