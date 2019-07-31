@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
@@ -67,11 +68,16 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
   @override
   Widget build(BuildContext context) {
     if (widget.requestCallBack != null) {
-      widget.requestCallBack.then((value)async{
-        Navigator.of(context).pop(value);
+      widget.requestCallBack.then((value) async {
+          Navigator.of(context).pop(value);
+      }).timeout(Duration(seconds: 5)).then((v){
+        Navigator.of(context).pop();
+      }).catchError((e){
+        Navigator.of(context).pop();
       });
+
     }
-    return  GestureDetector(
+    return GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(
         type: MaterialType.transparency,

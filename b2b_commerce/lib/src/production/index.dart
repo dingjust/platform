@@ -144,7 +144,7 @@ class _ProductionPageState extends State<ProductionPage> {
                   bloc: ProductionBLoC.instance,
                 ),
             ),
-            body: ProductionListView(keyword),
+            body: Container(child: ProductionListView(keyword)),
           ),
           floatingActionButton: SpeedDial(
             // animatedIcon: AnimatedIcons.menu_close,
@@ -217,15 +217,32 @@ class _ProductionPageState extends State<ProductionPage> {
   }
 }
 
-class ProductionListView extends StatelessWidget {
-  ScrollController _scrollController = new ScrollController();
+class ProductionListView extends StatefulWidget {
+  ScrollController scrollController = new ScrollController();
   String keyword;
-
   ProductionListView(this.keyword);
 
+  _ProductionListViewState createState() => _ProductionListViewState();
+}
+
+class _ProductionListViewState extends State<ProductionListView>{
   ///当前选中条件
   FilterConditionEntry currentCondition = FilterConditionEntry(
       label: '当前生产', value: 'comprehensive', checked: true);
+
+  @override
+  void initState() {
+    super.initState();
+
+    var bloc = BLoCProvider.of<ProductionBLoC>(context);
+    widget.scrollController.addListener(() {
+      if (widget.scrollController.position.pixels == widget.scrollController.position.maxScrollExtent) {
+        bloc.loadingStart();
+        bloc.getDataMore(widget.keyword);
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,77 +255,161 @@ class ProductionListView extends StatelessWidget {
       bloc.clear();
     });
 
+//    return Container(
+//        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+//        color: Color.fromRGBO(242, 242, 242, 1),
+//        child: RefreshIndicator(
+//          onRefresh: () async {
+//            return await bloc.refreshData(widget.keyword);
+//          },
+//          child: ListView(
+//            controller: scrollController,
+//            children: <Widget>[
+//              StreamBuilder<List<PurchaseOrderModel>>(
+//                  stream: bloc.stream,
+//                  builder: (BuildContext context,
+//                      AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+//                    if (snapshot.data == null) {
+//                      if (UserBLoC.instance.currentUser.status ==
+//                          UserStatus.ONLINE) {
+//                        bloc.getData(widget.keyword);
+//                        return ProgressIndicatorFactory
+//                            .buildPaddedProgressIndicator();
+//                      } else {
+//                        return LoginRemind();
+//                      }
+//                    }
+//                    if (snapshot.data.length <= 0) {
+//                      return Column(
+//                        mainAxisSize: MainAxisSize.max,
+//                        mainAxisAlignment: MainAxisAlignment.center,
+//                        crossAxisAlignment: CrossAxisAlignment.center,
+//                        children: <Widget>[
+//                          Container(
+//                            margin: EdgeInsets.only(top: 200),
+//                            child: Image.asset(
+//                              'temp/logo2.png',
+//                              package: 'assets',
+//                              width: 80,
+//                              height: 80,
+//                            ),
+//                          ),
+//                          Container(child: Text('您尚无在生产中的订单')),
+//                          Container(child: Text('点击右下角添加订单')),
+//                          Container(
+//                            child: FlatButton(
+//                              color: Color.fromRGBO(255, 214, 12, 1),
+//                              shape: RoundedRectangleBorder(
+//                                  borderRadius: BorderRadius.circular(10)),
+//                              onPressed: () {
+//                                Navigator.of(context).push(MaterialPageRoute(
+//                                    builder: (context) => MyHelpPage()));
+//                              },
+//                              child: Text('如何创建订单？'),
+//                            ),
+//                          )
+//                        ],
+//                      );
+//                    }
+//                    if (snapshot.hasData) {
+//                      return Column(
+//                        children: snapshot.data.map((order) {
+//                          return ProductionItem(
+//                            order: order,
+//                          );
+//                        }).toList(),
+//                      );
+//                    } else if (snapshot.hasError) {
+//                      return Text('${snapshot.error}');
+//                    }
+//                  }),
+//              // _buildRecommend(bloc)
+//            ],
+//          ),
+//        ));
+
     return Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        color: Color.fromRGBO(242, 242, 242, 1),
-        child: RefreshIndicator(
-          onRefresh: () async {
-            return await bloc.refreshData(keyword);
-          },
-          child: ListView(
-            children: <Widget>[
-              StreamBuilder<List<PurchaseOrderModel>>(
-                  stream: bloc.stream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
-                    if (snapshot.data == null) {
-                      if (UserBLoC.instance.currentUser.status ==
-                          UserStatus.ONLINE) {
-                        bloc.getData(keyword);
-                        return ProgressIndicatorFactory
-                            .buildPaddedProgressIndicator();
-                      } else {
-                        return LoginRemind();
-                      }
+      decoration: BoxDecoration(color: Colors.grey[100]),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          return await bloc.refreshData(widget.keyword);
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: widget.scrollController,
+          children: <Widget>[
+            StreamBuilder<List<PurchaseOrderModel>>(
+                stream: bloc.stream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+                  if (snapshot.data == null) {
+                    if (UserBLoC.instance.currentUser.status ==
+                        UserStatus.ONLINE) {
+                      bloc.getData(widget.keyword);
+                      return ProgressIndicatorFactory
+                          .buildPaddedProgressIndicator();
+                    } else {
+                      return LoginRemind();
                     }
-                    if (snapshot.data.length <= 0) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 200),
-                            child: Image.asset(
-                              'temp/logo2.png',
-                              package: 'assets',
-                              width: 80,
-                              height: 80,
-                            ),
+                  }
+                  if (snapshot.data.length <= 0) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top: 200),
+                          child: Image.asset(
+                            'temp/logo2.png',
+                            package: 'assets',
+                            width: 80,
+                            height: 80,
                           ),
-                          Container(child: Text('您尚无在生产中的订单')),
-                          Container(child: Text('点击右下角添加订单')),
-                          Container(
-                            child: FlatButton(
-                              color: Color.fromRGBO(255, 214, 12, 1),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => MyHelpPage()));
-                              },
-                              child: Text('如何创建订单？'),
-                            ),
-                          )
-                        ],
-                      );
-                    }
-                    if (snapshot.hasData) {
-                      return Column(
-                        children: snapshot.data.map((order) {
-                          return ProductionItem(
-                            order: order,
-                          );
-                        }).toList(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text('${snapshot.error}');
-                    }
-                  }),
-              // _buildRecommend(bloc)
-            ],
-          ),
-        ));
+                        ),
+                        Container(child: Text('您尚无在生产中的订单')),
+                        Container(child: Text('点击右下角添加订单')),
+                        Container(
+                          child: FlatButton(
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => MyHelpPage()));
+                            },
+                            child: Text('如何创建订单？'),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: snapshot.data.map((order) {
+                        return ProductionItem(
+                          order: order,
+                        );
+                      }).toList(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                }),
+            StreamBuilder<bool>(
+              stream: bloc.loadingStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return ProgressIndicatorFactory
+                    .buildPaddedOpacityProgressIndicator(
+                  opacity: snapshot.data ? 1.0 : 0,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
 //  Widget _buildRecommend(ProductionBLoC bloc) {
