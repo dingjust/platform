@@ -1,13 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/business/proofing_orders.dart';
-import 'package:b2b_commerce/src/business/purchase_orders.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:models/models.dart';
 import 'package:services/services.dart';
 
 class RequestDataLoading extends StatefulWidget {
@@ -57,7 +48,7 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
     super.dispose();
   }
 
-  doRequestData(){
+  doRequestData() {
     if (widget.requestCallBack != null) {
       widget.requestCallBack.then((value) {
         Navigator.of(context).pop(value);
@@ -67,25 +58,34 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
 
   @override
   Widget build(BuildContext context) {
+    MessageBLoC.instance.errorMessageStream.listen((value) {
+      Navigator.of(context).pop();
+    });
+
+
     if (widget.requestCallBack != null) {
       widget.requestCallBack.then((value) async {
-          Navigator.of(context).pop(value);
-      }).timeout(Duration(seconds: 5)).then((v){
-        Navigator.of(context).pop();
-      }).catchError((e){
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(value);
       });
-
+      // .timeout(Duration(seconds: 5))
+      // .then((v) {
+      //   print('1======================!!!!');
+      //   Navigator.of(context).pop();
+      // })
+      // .catchError((e) {
+      //   print('2======================!!!!');
+      //   Navigator.of(context).pop();
+      // });
     }
     return GestureDetector(
       onTap: widget.outsideDismiss ? _dismissDialog : null,
       child: Material(
         type: MaterialType.transparency,
-        child:  Center(
-          child:  SizedBox(
+        child: Center(
+          child: SizedBox(
             width: 120.0,
             height: 120.0,
-            child:  Container(
+            child: Container(
               decoration: ShapeDecoration(
                 color: Color(0xffffffff),
                 shape: RoundedRectangleBorder(
@@ -94,18 +94,18 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
                   ),
                 ),
               ),
-              child:  Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                   CircularProgressIndicator(),
-                   Padding(
+                  CircularProgressIndicator(),
+                  Padding(
                     padding: const EdgeInsets.only(
                       top: 20.0,
                     ),
-                    child:  Text(
+                    child: Text(
                       widget.loadingText,
-                      style:  TextStyle(fontSize: 12.0),
+                      style: TextStyle(fontSize: 12.0),
                     ),
                   ),
                 ],
