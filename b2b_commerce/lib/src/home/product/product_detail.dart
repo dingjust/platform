@@ -32,16 +32,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     final bloc = BLoCProvider.of<UserBLoC>(context);
 
-    List<MediaModel> thumbnails = widget.product.thumbnails
-        .map((thumbnail) => MediaModel(
-        convertedMedias: thumbnail.convertedMedias,
-        mediaFormat: thumbnail.mediaFormat,
-        mediaType: thumbnail.mediaType,
-        mime: thumbnail.mime,
-        name: thumbnail.name,
-        url: '${thumbnail.detailUrl()}',
-        id: thumbnail.id))
-        .toList();
+    List<MediaModel> thumbnails = [];
+    if (widget.product.thumbnails != null) {
+      thumbnails = widget.product.thumbnails
+          .map((thumbnail) =>
+          MediaModel(
+              convertedMedias: thumbnail.convertedMedias,
+              mediaFormat: thumbnail.mediaFormat,
+              mediaType: thumbnail.mediaType,
+              mime: thumbnail.mime,
+              name: thumbnail.name,
+              url: '${thumbnail.detailUrl()}',
+              id: thumbnail.id))
+          .toList();
+    }
 
     return Theme(
       data: ThemeData(canvasColor: Colors.transparent),
@@ -75,14 +79,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildHeaderSection() {
-    //因字符样式不同，将价格按小数点分割
-    List<String> _minPrice = widget.product.minPrice != null
-        ? widget.product.minPrice.toString().split(".")
-        : ['0', '0'];
-    List<String> _maxPrice = widget.product.maxPrice != null
-        ? widget.product.maxPrice.toString().split(".")
-        : ['0', '0'];
-
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -244,7 +240,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         _moneyRows.add(_buildMoneyRowBlock(
             '￥${widget.product.steppedPrices[i].price}',
             '${widget.product.steppedPrices[i].minimumQuantity}~${widget.product
-                .steppedPrices[i + 1].minimumQuantity}件'));
+                .steppedPrices[i + 1].minimumQuantity - 1}件'));
       }
     }
     return Container(
