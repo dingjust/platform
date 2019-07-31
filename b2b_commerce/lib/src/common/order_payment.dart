@@ -483,7 +483,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     if (result) {
       showDialog(
           context: context,
-          barrierDismissible: false,
+          barrierDismissible: true,
           child: Center(
             child: CircularProgressIndicator(),
           ));
