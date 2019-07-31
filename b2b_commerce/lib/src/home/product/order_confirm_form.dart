@@ -706,6 +706,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
             entrance: '',
           );
         }).then((value) {
+      print('==================$value');
       bool result = false;
       if (value != null) {
         result = true;
@@ -771,6 +772,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       if (value != null) {
         result = true;
       }
+      print('=================');
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -792,12 +794,15 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     if (code != null && code != '') {
       switch (widget.orderType) {
         case OrderType.PROOFING:
+          print('$code');
           onProofingPaying(code);
           break;
         case OrderType.PURCHASE:
+          print('$code');
           onPurchasePaying(code);
           break;
         default:
+          print('!!!!!!!!!!!!!!!');
       }
     }
   }

@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -161,8 +162,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       )),
                   Container(
                       child: Text(
-                        '${(model.canCashOut + model.auditing +
-                            model.cashOuting)}',
+                        '${DoubleUtil.getDecimalsValue(
+                            (model.canCashOut + model.auditing +
+                                model.cashOuting), 2)}',
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 32,
@@ -184,15 +186,15 @@ class _MyAccountPageState extends State<MyAccountPage> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         AmountBlock(
-          amount: model.canCashOut,
+          amount: DoubleUtil.getDecimalsValue(model.canCashOut, 2),
           text: '可取金额',
         ),
         AmountBlock(
-          amount: model.cashOuting,
+          amount: DoubleUtil.getDecimalsValue(model.cashOuting, 2),
           text: '提现中金额',
         ),
         AmountBlock(
-          amount: model.auditing,
+          amount: DoubleUtil.getDecimalsValue(model.auditing, 2),
           text: '未结算金额',
         )
       ],

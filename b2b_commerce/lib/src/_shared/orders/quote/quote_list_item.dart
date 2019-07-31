@@ -68,7 +68,10 @@ class QuoteListItem extends StatelessWidget {
 //          await QuoteOrderRepository().getQuoteDetails(model.code);
       Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (context) => QuoteOrderDetailPage(model.code,)),
+            builder: (context) =>
+                QuoteOrderDetailPage(
+                  model.code,
+                )),
       );
     }
 
@@ -107,7 +110,7 @@ class QuoteListItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               RichText(
-                  text: TextSpan(
+                text: TextSpan(
                   text: '报价：',
                   style: TextStyle(fontSize: 18, color: Colors.black),
                   children: <TextSpan>[
@@ -136,9 +139,13 @@ class QuoteListItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  '${model.supplier?.name}',
-                  style: const TextStyle(fontSize: 15),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '${model.supplier?.name}',
+                    style: const TextStyle(fontSize: 15),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 Text(
                   '${DateFormatUtil.format(model.creationTime)}',
@@ -236,7 +243,7 @@ class QuoteListItem extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
-                                  factoryUid:model.belongTo.uid,
+                              factoryUid: model.belongTo.uid,
                                   isFactoryDetail: true,
                                 )));
                   },
@@ -247,7 +254,7 @@ class QuoteListItem extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
-                                  factoryUid:model.belongTo.uid,
+                              factoryUid: model.belongTo.uid,
                                   isFactoryDetail: true,
                                 )));
                   },
@@ -294,7 +301,7 @@ class QuoteListItem extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
-                              factoryUid:model.belongTo.uid,
+                              factoryUid: model.belongTo.uid,
                                   isFactoryDetail: true,
                                 )));
                   },
@@ -305,7 +312,7 @@ class QuoteListItem extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MyFactoryPage(
-                              factoryUid:model.belongTo.uid,
+                              factoryUid: model.belongTo.uid,
                                   isFactoryDetail: true,
                                 )));
                   },
@@ -423,9 +430,10 @@ class QuoteListItem extends StatelessWidget {
                       QuoteModel quote = await QuoteOrderRepository()
                           .getQuoteDetails(model.code);
                       if (quote.activePurchaseOrder?.code != null) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  PurchaseOrderDetailPage(code: quote.activePurchaseOrder.code)));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                PurchaseOrderDetailPage(
+                                    code: quote.activePurchaseOrder.code)));
                       } else {
                         showDialog(
                             context: context,

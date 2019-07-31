@@ -121,12 +121,15 @@ class ProofingOrderItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 // TODO 公司信息字段后续待修改
-                Container(
-                  width: 200,
-                  child: Text(
-                    '${model.supplier.name}',
-                    style: const TextStyle(fontSize: 15),
-                    overflow: TextOverflow.ellipsis,
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: 200,
+                    child: Text(
+                      '${model.supplier.name}',
+                      style: const TextStyle(fontSize: 15),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
                 Text('${DateFormatUtil.format(model.creationTime)}',

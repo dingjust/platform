@@ -102,6 +102,11 @@ class UserBLoC extends BLoCBase {
         _user
           ..name = infoResponse.data['username']
           ..status = UserStatus.ONLINE;
+      } else {
+        _user = UserModel.empty();
+        // 清除授权
+        http$.removeAuthorization();
+        _controller.sink.add(_user);
       }
 
       // 获取公司信息
