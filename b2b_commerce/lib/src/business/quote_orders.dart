@@ -65,12 +65,11 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
             MaterialPageRoute(
               builder: (context) =>
                   SearchModelPage(
-                      searchModel:SearchModel(
+                      searchModel: SearchModel(
                         historyKeywords: historyKeywords,
                         searchModelType: SearchModelType.QUOTE_ORDER,
                         route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-                      )
-                  ),
+                      )),
             ),
           );
         });
@@ -80,7 +79,7 @@ class _QuoteOrdersPageState extends State<QuoteOrdersPage> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     QuoteOrdersBLoC.instance.reset();
   }

@@ -7,7 +7,6 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import './my_brand.dart';
-import './my_company_certificate_select.dart';
 import './my_factory.dart';
 import '../_shared/widgets/image_factory.dart';
 import '../common/app_image.dart';
@@ -52,8 +51,8 @@ class MyHomePage extends StatelessWidget {
         MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理',
             AppRoutes.ROUTE_MY_INVOICES),
         menuSeparator,
-         MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '合同管理',
-             AppRoutes.ROUTE_MY_CONTRACT),
+        //  MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '合同管理',
+        //      AppRoutes.ROUTE_MY_CONTRACT),
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服',
