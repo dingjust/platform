@@ -59,7 +59,7 @@ export default {
           icon: 'iconNone',
         },
         {
-          name: '印章管理',
+          name: '印章创建',
           url: '/seal/create',
           icon: 'iconNone',
         },
