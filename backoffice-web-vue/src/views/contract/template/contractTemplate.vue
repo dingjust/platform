@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import ContractDetails from "./components/contractDetails.vue";
+import ContractDetails from "../manage/components/contractDetails.vue";
 export default {
   name: "ContractTemplate",
   data() {

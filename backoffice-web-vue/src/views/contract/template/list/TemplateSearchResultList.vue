@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <el-row>
-      <el-col :span="4" v-for="(o, index) in 10" :key="o" :offset="0">
+      <el-col :span="4" v-for="(o, index) in 10" :key="o" :offset="0" >
         <div style="margin: 10px">
           <el-card :body-style="{ padding: '5px'}">
             <img width="150px" height="150px" src="http://attach.bbs.wps.cn/attachments/forum/201307/04/2227437j184dwnaabrwl71.jpg">
