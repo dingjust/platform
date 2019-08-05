@@ -4,12 +4,13 @@ $border-color:                        $gray-200;
 
 // Navbar
 
-$navbar-height:                       50px;
+$navbar-height:                       45px;
 $navbar-bg:                           theme-color("primary");
 $navbar-border:                       0;
-$navbar-brand-width:                  220px;
-$navbar-brand-bg:                     darken(theme-color("primary"),10%);
-$navbar-brand-logo-size:              90px auto;
+$navbar-brand-width:                  80px;
+// $navbar-brand-bg:                     darken(theme-color("primary"),10%);
+$navbar-brand-bg:                     theme-color("primary");
+$navbar-brand-logo-size:              30px auto;
 $navbar-brand-border:                 0;
 
 $navbar-color:                        #fff;
@@ -18,8 +19,8 @@ $navbar-active-color:                 darken($navbar-color, 20%);
 $navbar-disabled-color:               lighter($navbar-color, 20%);
 
 // Sidebar
-$sidebar-bg:                          $gray-800;
-$sidebar-width:                       220px;
+$sidebar-bg:                          $white;
+$sidebar-width:                       120px;
 $mobile-sidebar-width:                220px;
 
 // Sidebar Navigation
@@ -27,9 +28,9 @@ $mobile-sidebar-width:                220px;
 $sidebar-nav-title-padding-y:         .95rem;
 $sidebar-nav-title-color:             $text-muted;
 
-$sidebar-nav-link-hover-bg:           darken($sidebar-bg, 10%);
+$sidebar-nav-link-hover-bg:           #FAF0DD;
 
-$sidebar-nav-link-active-bg:          darken($sidebar-bg, 10%);
+$sidebar-nav-link-active-bg:          #FAF0DD;
 $sidebar-nav-link-active-icon-color:  theme-color("primary");
 
 $sidebar-nav-dropdown-bg:             darken($sidebar-bg, 5%);

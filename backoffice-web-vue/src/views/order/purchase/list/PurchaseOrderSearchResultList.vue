@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange"
               v-if="isHeightComputed" :height="autoHeight">
       <el-table-column label="生产订单号" prop="code"></el-table-column>
@@ -37,8 +37,8 @@
       </el-table-column>
     </el-table>
     <div class="pt-2"></div>
-    <div class="float-right">
-      <el-pagination layout="total, sizes, prev, pager, next, jumper"
+    <!-- <div class="float-right"> -->
+      <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
                      @size-change="onPageSizeChanged"
                      @current-change="onCurrentPageChanged"
                      :current-page="page.number + 1"
@@ -46,7 +46,7 @@
                      :page-count="page.totalPages"
                      :total="page.totalElements">
       </el-pagination>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 

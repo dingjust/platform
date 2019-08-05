@@ -1,6 +1,7 @@
 .app-header.navbar {
   position: relative;
   flex-direction: row;
+  justify-content: space-between;
   height: $navbar-height;
   padding: 0;
   margin: 0;
@@ -8,11 +9,11 @@
   @include borders($navbar-border);
 
   .navbar-brand {
-    display: inline-block;
+    // display: inline-block;
     width: $navbar-brand-width;
     height: $navbar-height;
-    padding: $navbar-padding-y $navbar-padding-x;
-    margin-right: 0;
+    // padding: $navbar-padding-y $navbar-padding-x;
+    // margin-right: 0;
     background-color: $navbar-brand-bg;
     background-image: $navbar-brand-logo;
     background-repeat: no-repeat;
@@ -21,13 +22,18 @@
     @include borders($navbar-brand-border);
   }
 
+  .input{
+    border-radius: 20px;
+    color: #fff;
+  }
+
   .navbar-toggler {
     min-width: 50px;
     padding: $navbar-toggler-padding-y 0;
 
-    &:hover .navbar-toggler-icon {
-      background-image: $navbar-toggler-icon-hover;
-    }
+    // &:hover .navbar-toggler-icon {
+    //   background-image: $navbar-toggler-icon-hover;
+    // }
   }
 
   .navbar-toggler-icon {
@@ -64,9 +70,15 @@
         margin-left: 0;
       }
 
-      > .img-avatar {
+       .img-avatar {
         height: $navbar-height - 20px;
-        margin: 0 10px;
+        margin: 0 20px;
+      }
+
+      .name{
+        color: #000;
+        margin-right: 20px;
+        font-weight: 600;
       }
     }
   }
