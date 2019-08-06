@@ -35,6 +35,7 @@ import {
   OperationCoursesModule,
   WalletModule,
   CashOutManagerModule,
+  // contract
   ContractModule,
   ContractTemplateModule,
   ContractSealModule,
@@ -96,6 +97,7 @@ export default new Vuex.Store({
     OperationCoursesModule,
     WalletModule,
     CashOutManagerModule,
+    // contract
     ContractModule,
     ContractTemplateModule,
     ContractSealModule,

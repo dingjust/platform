@@ -1,53 +1,94 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="tableData" v-if="isHeightComputed" :height="autoHeight">
-      <el-table-column width="60" fixed>
-        <template slot-scope="props">
-          <img width="50px" height="50px" src="http://attach.bbs.wps.cn/attachments/forum/201307/04/2227437j184dwnaabrwl71.jpg">
-        </template>
-      </el-table-column>
-      <el-table-column label="合同名称" prop="title" width="220" fixed></el-table-column>
-      <el-table-column label="合同编号" prop="code" fixed></el-table-column>
-      <el-table-column label="签署对象" prop="option"  fixed></el-table-column>
-      <el-table-column label="创建时间" prop="createdTs">
+    <el-dialog :visible.sync="dialogTableVisible" width="80%">
+      <contract-details />
+    </el-dialog>
+    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
+      :height="autoHeight">
+      <el-table-column label="合同名称" fixed>
         <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
+          <span>
+            <el-link @click="dialogTableVisible = true">{{scope.row.code}}</el-link>
+          </span>
         </template>
       </el-table-column>
-      <el-table-column label="当前状态" prop="state" fixed>
+      <el-table-column label="合同编号" prop="code"></el-table-column>
+      <el-table-column label="签署对象" v-if="!isBrand()" prop="belongTo.name">
         <template slot-scope="scope">
-          <span>{{getEnum('contractStates', scope.row.state)}}</span>
+          <span v-if="scope.row.purchaser">{{scope.row.purchaser.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="props">
-          <el-button type="text" @click="on1">盖章</el-button>
-          <el-button type="text" @click="on2">下载</el-button>
-          <el-button type="text" @click="on2">删除</el-button>
+      <el-table-column label="签署对象" v-if="!isFactory()" prop="belongTo.name">
+        <template slot-scope="scope">
+          <span v-if="scope.row.belongTo">{{scope.row.belongTo.name}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间">
+        <template slot-scope="scope">
+          <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="当前状态" prop="status" :column-key="'status'" :filters="statuses">
+        <template slot-scope="scope">
+          <!-- <el-tag disable-transitions></el-tag> -->
+          {{getEnum('purchaseOrderStatuses', scope.row.status)}}
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="创建时间" prop="expectedDeliveryDate">
+        <template slot-scope="scope">
+          <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
+        </template>
+      </el-table-column> -->
+      <el-table-column label="操作" width="250">
+        <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">下载</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">拒签</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">签署</el-button>
+          <!-- <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">撤回</el-button> -->
         </template>
       </el-table-column>
     </el-table>
+    <div class="pt-2"></div>
+    <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="onPageSizeChanged"
-                   @current-change="onCurrentPageChanged"
-                   :current-page="page.number + 1"
-                   :page-size="page.size"
-                   :page-count="page.totalPages"
-                   :total="page.totalElements">
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
+    <!-- </div> -->
   </div>
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapActions
+  } = createNamespacedHelpers('PurchaseOrdersModule');
+
+  import ContractDetails from "../components/ContractDetails";
 
   export default {
     name: 'ContractSearchResultList',
     props: ["page"],
+    components: {
+      ContractDetails
+    },
+    computed: {},
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
+      handleFilterChange(val) {
+        this.statuses = val.status;
+
+        this.$emit('onSearch', 0);
+      },
       onPageSizeChanged(val) {
         this._reset();
 
-        if (this.isAdvancedSearch) {
+        if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val);
           return;
         }
@@ -55,7 +96,7 @@
         this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
-        if (this.isAdvancedSearch) {
+        if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
         }
@@ -67,29 +108,32 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      on1(){
-
+      onDetails(row) {
+        this.$emit('onDetails', row);
       },
-      on2(){
-
-      }
     },
     data() {
       return {
-        tableData: [{
-          title: 'XX1-订单合同',
-          code: '3565512232',
-          option: '上海市普陀山公司',
-          creationtime:new Date(),
-          state:'COMPLETE',
-        }, {
-          title: 'XX2-付费合同',
-          code: '25571223553',
-          option: '广州市抖抖手公司',
-          creationtime:new Date(),
-          state:'COMPLETE',
-        },]
+        statuses: this.$store.state.PurchaseOrdersModule.statuses,
+        dialogTableVisible: false
       }
     }
   }
+
 </script>
+<style>
+  .el-table th {
+    background-color: #FAFBFC;
+  }
+
+  .el-dialog__body {
+    padding-left: 20px;
+    padding-right: 0px;
+    padding-bottom: 30px;
+    padding-top: 0px;
+    color: #606266;
+    font-size: 14px;
+    word-break: break-all;
+  }
+
+</style>

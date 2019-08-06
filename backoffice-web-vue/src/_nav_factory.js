@@ -31,6 +31,11 @@ export default {
           name: '打样单',
           url: '/order/proofing',
           icon: 'iconNone'
+        },
+        {
+          name: '生产进度',
+          url: '/order/production',
+          icon: 'iconNone'
         }
       ]
     },

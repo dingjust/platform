@@ -101,6 +101,11 @@ const router = new Router({
               name: '生产订单',
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/purchase/PurchaseOrderPage')
             },
+            {
+              path: 'production',
+              name: '生产进度',
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/production/ProductionPage')
+            },
           ]
         },
         {
@@ -243,7 +248,7 @@ const router = new Router({
             }, {
               path: '/seal/create',
               name: '印章创建',
-              component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/seal/sealManagement')
+              component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/seal/sealForm')
             }, {
               path: '/manage/createContract',
               name: '创建合同',

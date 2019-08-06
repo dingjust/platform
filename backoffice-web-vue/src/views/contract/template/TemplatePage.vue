@@ -1,56 +1,83 @@
 <template>
   <div class="animated fadeIn content">
+    <div class="report">
+      <template-report />
+    </div>
     <el-card>
-      <template-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
+      <template-toolbar
+        @onNew="onNew"
+        @onSearch="onSearch"
+      />
+      <template-list
+        :page="page"
+        @onDetails="onDetails"
+        @onSearch="onSearch"
+      />
     </el-card>
   </div>
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters, mapActions} = createNamespacedHelpers('ContractTemplateModule');
+import { createNamespacedHelpers } from "vuex";
+const { mapGetters, mapActions } = createNamespacedHelpers(
+  "ContractTemplateModule"
+);
 
-  import TemplateList from './list/TemplateSearchResultList';
+import TemplateList from "./list/TemplateSearchResultList";
+import TemplateReport from "./components/TemplateReport";
+import TemplateToolbar from "./toolbar/TemplateToolbar";
 
-  export default {
-    name: 'TemplatePage',
-    components: {
-      TemplateList,
+export default {
+  name: "TemplatePage",
+  components: {
+    TemplateList,
+    TemplateReport,
+    TemplateToolbar
+  },
+  computed: {
+    ...mapGetters({
+      page: "page",
+      keyword: "keyword"
+    })
+  },
+  methods: {
+    ...mapActions({
+      search: "search"
+    }),
+    onSearch(page, size) {
+      const keyword = this.keyword;
+      const url = this.apis().getTemplates();
+      this.search({
+        url,
+        keyword,
+        page,
+        size
+      });
     },
-    computed: {
-      ...mapGetters({
-        page: 'page',
-        keyword: 'keyword',
-      })
-    },
-    methods: {
-      ...mapActions({
-        search: 'search',
-      }),
-      onSearch(page, size) {
-        const keyword = this.keyword;
-        const url = this.apis().getTemplates()
-        this.search({url, keyword, page, size});
-      },
-      async onDetails(item) {
-        const url = this.apis().getLabel(item.id);
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
+    async onDetails(item) {
+      const url = this.apis().getLabel(item.id);
+      const result = await this.$http.get(url);
+      if (result["errors"]) {
+        this.$message.error(result["errors"][0].message);
+        return;
+      }
 
-        this.fn.openSlider('明细：' + item.name, LabelDetailsPage, result);
-      },
-      onNew(formData) {
-        this.fn.openSlider('创建', LabelDetailsPage, formData);
-      },
+      this.fn.openSlider("明细：" + item.name, LabelDetailsPage, result);
     },
-    data() {
-      return {};
-    },
-    created() {
-      this.onSearch();
+    onNew(formData) {
+      this.fn.openSlider("创建", LabelDetailsPage, formData);
     }
-  };
+  },
+  data() {
+    return {};
+  },
+  created() {
+    this.onSearch();
+  }
+};
 </script>
+<style>
+.report {
+  margin-bottom: 10px;
+}
+</style>
