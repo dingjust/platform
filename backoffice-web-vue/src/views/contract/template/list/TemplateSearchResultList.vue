@@ -11,7 +11,7 @@
           </el-row>
           <el-row type="flex" justify="center">
             <el-col :span="16">
-              <h6 class="template-name">XXXXXXXXX采购合同模板</h6>
+              <h6 class="template-name">{{item.name}}</h6>
             </el-col>
           </el-row>
         </div>
@@ -31,7 +31,7 @@
     border-radius: 10px;
     flex-direction: column;
     display: flex;
-    border: 1px solid #ffffff;
+    /* border: 1px solid #ffffff; */
   }
 
   .template-file_selected {
@@ -41,7 +41,7 @@
     flex-direction: column;
     display: flex;
     background-color: #ededed;
-    border: 1px solid #ffd60c;
+    /* border: 1px solid #ffd60c; */
   }
 
   .template-file:hover {

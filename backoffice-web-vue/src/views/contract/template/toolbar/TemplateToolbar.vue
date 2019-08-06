@@ -1,15 +1,18 @@
 <template>
   <el-form :inline="true">
+    <el-dialog :visible.sync="dialogTableVisible" width="80%">
+      <template-form />
+    </el-dialog>
     <el-row type="flex" justify="space-between">
       <el-col :span="8">
         <el-row type="flex" justify="space-around">
           <el-button-group>
-          <el-button>删除</el-button>
-          <el-button>下载</el-button>
-          <el-button>启用</el-button>
-          <el-button>禁用</el-button>
+            <el-button>删除</el-button>
+            <el-button>下载</el-button>
+            <el-button>启用</el-button>
+            <el-button>禁用</el-button>
           </el-button-group>
-          <el-button type="text">新建模板</el-button>
+          <el-button type="text"  @click="dialogTableVisible = true">新建模板</el-button>
         </el-row>
       </el-col>
       <el-col :span="6">
@@ -31,9 +34,13 @@
     mapMutations
   } = createNamespacedHelpers("ContractTemplateModule");
 
+  import TemplateForm from "../components/TemplateForm";
+
   export default {
     name: "TemplateToolbar",
-    components: {},
+    components: {
+      TemplateForm
+    },
     computed: {},
     methods: {
       ...mapMutations({
@@ -47,6 +54,7 @@
     },
     data() {
       return {
+        dialogTableVisible: false,
         keyword: this.$store.state.ContractTemplateModule.keyword,
         formData: this.$store.state.ContractTemplateModule.formData,
         queryFormData: this.$store.state.ContractTemplateModule.queryFormData
