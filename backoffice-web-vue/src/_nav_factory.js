@@ -64,11 +64,6 @@ export default {
           icon: 'iconNone',
         },
         {
-          name: '印章创建',
-          url: '/seal/create',
-          icon: 'iconNone',
-        },
-        {
           name: '创建合同',
           url: '/manage/createContract',
           icon: 'iconNone',

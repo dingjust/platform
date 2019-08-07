@@ -2,15 +2,10 @@
   <el-form :inline="true">
     <el-row type="flex" justify="space-between">
       <el-col :span="8">
-        <el-row type="flex" justify="space-around">
-          <el-button-group>
-            <el-button>删除</el-button>
-            <el-button>下载</el-button>
-            <el-button>启用</el-button>
-            <el-button>禁用</el-button>
-          </el-button-group>
-          <el-button type="text" @click="onCreate">新建模板</el-button>
-        </el-row>
+        <el-button-group>
+          <el-button @click="onCreate">新建印章</el-button>
+          <el-button>管理设置</el-button>
+        </el-button-group>
       </el-col>
       <el-col :span="6">
         <el-row type="flex" justify="space-between">
@@ -25,38 +20,35 @@
 <script>
   import {
     createNamespacedHelpers
-  } from "vuex";
+  } from 'vuex';
 
   const {
     mapMutations
-  } = createNamespacedHelpers("ContractTemplateModule");
+  } = createNamespacedHelpers('ContractSealModule');
 
   export default {
-    name: "TemplateToolbar",
+    name: 'SealToolbar',
     components: {},
     computed: {},
     methods: {
       ...mapMutations({
-        setKeyword: "keyword",
-        setQueryFormData: "queryFormData"
+        setKeyword: 'keyword',
       }),
       onSearch() {
         this.setKeyword(this.keyword);
-        this.$emit("onSearch", 0);
+        this.$emit('onSearch', 0);
       },
       onCreate() {
-        this.$router.push("templateForm");
+        this.$router.push("sealForm");
       }
     },
     data() {
       return {
-        keyword: this.$store.state.ContractTemplateModule.keyword,
-        formData: this.$store.state.ContractTemplateModule.formData,
-        queryFormData: this.$store.state.ContractTemplateModule.queryFormData
-      };
+        keyword: this.$store.state.ContractSealModule.keyword,
+      }
     },
     created() {}
-  };
+  }
 
 </script>
 <style>
@@ -69,7 +61,6 @@
     background-color: #ffd60c;
     border-color: #ffd60c;
     margin-left: 20px;
-    color: #000;
   }
 
 </style>

@@ -125,9 +125,7 @@
       async onUpload(file) {
         var fd=new FormData();
         fd.append('file',file);
-        const result = await this.$http.post(this.mediaUploadUrl, fd,{},{
-          'Content-Type':'multipart/form-data'
-        });
+        const result = await this.$http.formdataPost(this.mediaUploadUrl,fd);
         console.log(result);
       }
     }

@@ -33,7 +33,7 @@
               <el-col :span="4">
                 <el-button-group>
                   <el-button type="warning" class="template-form-button">保存</el-button>
-                  <el-button >返回</el-button>
+                  <el-button @click="onBack">返回</el-button>
                 </el-button-group>
               </el-col>
             </el-row>
@@ -83,6 +83,9 @@
       onSelect(code) {
         this.selectedCode = code;
       },
+      onBack(){
+         this.$router.go(-1);
+      }
     },
     data() {
       return {

@@ -1,6 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
+      <seal-toolbar class="seal-toolbar"/>
       <seal-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
     </el-card>
   </div>
@@ -8,14 +9,17 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters, mapActions} = createNamespacedHelpers('ContractModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('ContractSealModule');
 
   import SealList from './list/SealSearchResultList';
+  import SealToolbar from './toolbar/SealToolbar';
+
 
   export default {
     name: 'SealPage',
     components: {
-      SealList
+      SealList,
+      SealToolbar
     },
     computed: {
       ...mapGetters({
@@ -54,3 +58,8 @@
     }
   };
 </script>
+<style>
+.seal-toolbar{
+  margin-bottom: 10px;
+}
+</style>

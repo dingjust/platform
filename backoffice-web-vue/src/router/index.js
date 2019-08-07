@@ -221,6 +221,7 @@ const router = new Router({
         },
         {
           path: '/contract',
+          redirect: '/manage',
           name: '合同',
           component: {
             render(c) {
@@ -251,7 +252,7 @@ const router = new Router({
               name: '下单',
               component: () => import( /* webpackChunkName: 'orderPurchase' */ '@/views/unclassified/orderPurchase')
             }, {
-              path: '/seal/create',
+              path: '/sealForm',
               name: '印章创建',
               component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/seal/sealForm')
             }, {

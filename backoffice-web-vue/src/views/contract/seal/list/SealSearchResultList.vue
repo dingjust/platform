@@ -1,9 +1,9 @@
 <template>
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="tableData" v-if="isHeightComputed" :height="autoHeight">
-      <el-table-column width="100" label="印章" fixed>
-        <template slot-scope="props">
-          <img width="50px" height="50px" src="tableData.media.url">
+      <el-table-column  label="印章" fixed>
+        <template slot-scope="scope">
+          <img width="100px" height="100px" :src="scope.row.media.url">
         </template>
       </el-table-column>
       <el-table-column label="印章名称" prop="title" width="220" fixed></el-table-column>
@@ -82,7 +82,7 @@
           creationtime:new Date(),
           state:'NORMAL',
           media:{
-            url:'http://attach.bbs.wps.cn/attachments/forum/201307/04/2227437j184dwnaabrwl71.jpg'
+            url:'https://47.106.112.137/resource/h30/h99/8805604130846.png'
           }
         }, {
           title: 'XX2-印章',
@@ -91,7 +91,7 @@
           creationtime:new Date(),
           state:'NORMAL',
           media:{
-            url:'http://attach.bbs.wps.cn/attachments/forum/201307/04/2227437j184dwnaabrwl71.jpg'
+            url:'https://47.106.112.137/resource/h30/h99/8805604130846.png'
           }
         },]
       }

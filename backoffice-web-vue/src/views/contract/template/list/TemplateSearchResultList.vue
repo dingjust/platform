@@ -53,8 +53,9 @@
   }
 
   .img-word {
-    width: 59px;
-    height: 65px;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
   }
 
   .template-name {
