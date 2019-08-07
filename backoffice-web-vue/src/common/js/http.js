@@ -62,14 +62,16 @@ let http = {
   /** post 请求
    * @param  {接口地址} url
    * @param  {请求参数} data
-   * @param  {headers参数} params
+   * @param  {路由参数} params
+   * @param  {headers参数} headers
    */
-  post: function (url, data, params) {
+  post: function (url, data, params,headers) {
     let loading = Loading.service(this.options);
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.post(url, data, {
-        params: params
+        params: params,
+        headers:headers
       }).then((response) => {
         loading.close();
         return resolve(response.data);
