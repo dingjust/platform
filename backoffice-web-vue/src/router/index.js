@@ -238,6 +238,11 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/template/TemplatePage')
             },
             {
+              path: '/templateForm',
+              name: '新建合同模板',
+              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/template/components/TemplateForm')
+            },
+            {
               path: '/seal',
               name: '印章管理',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/seal/SealPage')

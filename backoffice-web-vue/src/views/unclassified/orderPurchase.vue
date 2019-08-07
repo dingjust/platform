@@ -233,66 +233,18 @@
                 </el-row>
               </el-row>
               <el-row class="custom-el-row" type="flex" justify="space-between" align="middle">
-                <span>定金</span>
                 <el-row class="custom-el-row-width">
-                  <span class="custom-style-span">事件</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                  <span class="custom-style-span">后，</span>
-                  <span class="custom-style-span">时长</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                  <span class="custom-style-span">天</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                  <span class="custom-style-span">，付款金额比例</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-row>
-              </el-row>
-              <el-row class="custom-el-row" type="flex" justify="space-between" align="middle">
-                <span>第一期尾款</span>
-                <el-row class="custom-el-row-width">
-                  <span class="custom-style-span">事件</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                  <span class="custom-style-span">后，</span>
-                  <span class="custom-style-span">时长</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                  <span class="custom-style-span">天</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                  <span class="custom-style-span">，付款金额比例</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-row>
-              </el-row>
-              <el-row class="custom-el-row" type="flex" justify="space-between" align="middle">
-                <span>第二期尾款</span>
-                <el-row class="custom-el-row-width">
-                  <span class="custom-style-span">事件</span>
-                  <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                  <span class="custom-style-span">后，</span>
+                  <el-col :span="12">
+                    <el-row>
+                      <span>定金</span>
+                      <span class="custom-style-span">事件</span>
+                      <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                      <span class="custom-style-span">后，</span>
+                    </el-row>
+                  </el-col>
                   <span class="custom-style-span">时长</span>
                   <el-select class="custom-select" size="small" v-model="value" placeholder="请选择">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -343,24 +295,6 @@
               <div class="custom-collapse-item_title">备注及附件</div>
             </template>
             <div class="custom-collapse-item_content">
-              <el-row :gutter="20">
-                <el-col :span="4">
-                  <el-row type="flex" justify="space-between" align="middle">
-                    <el-col :span="10">
-                      <div class="grid-content bg-purple"></div>
-                    </el-col>
-                    <el-col :span="12">
-                      <div class="grid-content bg-purple"></div>
-                    </el-col>
-                  </el-row>
-                </el-col>
-                <el-col :span="16">
-                  <div class="grid-content bg-purple"></div>
-                </el-col>
-                <el-col :span="4">
-                  <div class="grid-content bg-purple"></div>
-                </el-col>
-              </el-row>
               <el-row class="custom-el-row">
                 <el-input type="textarea" :autosize="{ minRows: 4}" placeholder="备注" v-model="textarea2"></el-input>
               </el-row>
@@ -413,7 +347,7 @@
   .general-title {
     margin-bottom: 20px;
     text-align: center;
-    font-weight: 600
+    font-weight: 600;
   }
 
   .custom-collapse-item {

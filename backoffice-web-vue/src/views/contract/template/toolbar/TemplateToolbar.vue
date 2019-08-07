@@ -12,7 +12,8 @@
             <el-button>启用</el-button>
             <el-button>禁用</el-button>
           </el-button-group>
-          <el-button type="text"  @click="dialogTableVisible = true">新建模板</el-button>
+          <el-button type="text"  @click="onCreate">新建模板</el-button>
+          <!-- <router-link to="/contract/template/form">新建模板</router-link> -->
         </el-row>
       </el-col>
       <el-col :span="6">
@@ -50,6 +51,9 @@
       onSearch() {
         this.setKeyword(this.keyword);
         this.$emit("onSearch", 0);
+      },
+      onCreate(){
+                  this.$router.push("templateForm");
       }
     },
     data() {
