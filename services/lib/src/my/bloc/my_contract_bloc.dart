@@ -20,7 +20,7 @@ class MyContractBLoC extends BLoCBase {
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'INITIATE':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'SIGN':
+    'INVALID':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'COMPLETE':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
@@ -46,10 +46,11 @@ class MyContractBLoC extends BLoCBase {
   getData(String status) async {
 
     //若没有数据则查询
+    if(_dataMap != null && _dataMap.length > 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-          'state': status
+        'state': status
       };
 
       Response<Map<String, dynamic>> response;
@@ -72,7 +73,7 @@ class MyContractBLoC extends BLoCBase {
         _dataMap[status].data.clear();
         _dataMap[status].data.addAll(contractResponse.content);
       }
-
+    }
     _controller.sink.add(ContractData(status: status, data: _dataMap[status].data));
 
   }

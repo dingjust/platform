@@ -347,7 +347,8 @@ class ContractModel extends ItemModel {
   String title;
   String contractNumber;
   String belongTo;
-  DateTime createtime;
+  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
+  DateTime createTime;
   ContractStatus state;
   bool available;
   String code;
@@ -356,7 +357,7 @@ class ContractModel extends ItemModel {
     this.title,
     this.contractNumber,
     this.belongTo,
-    this.createtime,
+    this.createTime,
     this.state,
     this.available,
   });
@@ -367,6 +368,9 @@ class ContractModel extends ItemModel {
 
   static Map<String, dynamic> toJson(ContractModel model) =>
       _$ContractModelToJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 
 }
 
@@ -415,5 +419,102 @@ class Certification {
 
   static Map<String, dynamic> toJson(Certification model) =>
       _$CertificationToJson(model);
+
+}
+
+enum AgreementTemplateType{
+  ///框架协议
+  KJXY,
+
+  ///采购订单
+  CGDD,
+
+  ///委托生产合同
+  WTSCHT,
+
+  ///补充协议
+  BCXY,
+
+}
+
+const AgreementTemplateTypeLocalizedMap = {
+  AgreementTemplateType.KJXY: "框架协议",
+  AgreementTemplateType.CGDD: "采购订单",
+  AgreementTemplateType.WTSCHT: '委托生产合同',
+  AgreementTemplateType.BCXY: "补充协议",
+};
+
+const AgreementTemplateTypeMap = {
+  AgreementTemplateType.KJXY: "KJXY",
+  AgreementTemplateType.CGDD: "CGDD",
+  AgreementTemplateType.WTSCHT: 'WTSCHT',
+  AgreementTemplateType.BCXY: "BCXY",
+};
+
+@JsonSerializable()
+class ContractTemplateModel {
+  final String code;
+  final String title;
+  final AgreementTemplateType type;
+  final bool available;
+  final String remark;
+
+  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
+  final DateTime createTime;
+
+  ContractTemplateModel({this.code, this.title, this.type, this.available,this.remark,this.createTime});
+
+  factory ContractTemplateModel.fromJson(Map<String, dynamic> json) =>
+      _$ContractTemplateModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractTemplateModel model) =>
+      _$ContractTemplateModelToJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
+
+}
+
+@JsonSerializable()
+class SealModel {
+  final String code;
+  final String name;
+  final bool enabled;
+
+  @JsonKey(toJson: _mediaToJson)
+  final MediaModel media;
+
+  @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
+  final DateTime createTime;
+
+  SealModel({this.code, this.name, this.enabled, this.media,this.createTime});
+
+  factory SealModel.fromJson(Map<String, dynamic> json) =>
+      _$SealModelFromJson(json);
+
+  static Map<String, dynamic> toJson(SealModel model) =>
+      _$SealModelToJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
+
+  static Map<String, dynamic> _mediaToJson(MediaModel model) =>
+      MediaModel.toJson(model);
+}
+
+@JsonSerializable()
+class ContractSaveModel {
+  final String userTempCode;
+  final String userSignCode;
+  final String role;
+  final String orderCode;
+
+  ContractSaveModel({this.userTempCode, this.userSignCode, this.role, this.orderCode});
+
+  factory ContractSaveModel.fromJson(Map<String, dynamic> json) =>
+      _$ContractSaveModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractSaveModel model) =>
+      _$ContractSaveModelToJson(model);
 
 }

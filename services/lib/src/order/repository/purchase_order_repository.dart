@@ -384,4 +384,19 @@ class PurchaseOrderRepository {
     } else
       return null;
   }
+
+  //个体工商户
+  Future<Certification> individualBusiness(String verifyType,String companyType) async {
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(UserApis.individualBusiness(verifyType,companyType));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      Certification certification = Certification.fromJson(response.data);
+      return certification;
+    } else
+      return null;
+  }
 }

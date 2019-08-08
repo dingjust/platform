@@ -1,11 +1,12 @@
+import 'package:b2b_commerce/src/my/contract/float_select_page.dart';
 import 'package:b2b_commerce/src/my/contract/webview_page.dart';
-import 'package:dio/dio.dart';
+import 'package:b2b_commerce/src/my/my_authentication_enterprise_result.dart';
+import 'package:b2b_commerce/src/my/my_authentication_result.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
-import 'package:b2b_commerce/src/my/contract/contract_webview_page.dart';
 
 class MyAuthentication extends StatefulWidget {
   CompanyModel company;
@@ -93,7 +94,15 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   Widget _buildEnterpriseItem(){
     return GestureDetector(
       onTap: () async {
-        enterprise();
+        if (widget.company.approvalStatus == null) {
+          enterprise();
+        }
+        if (widget.company.approvalStatus == ArticleApprovalStatus.approved) {
+          Navigator.push(
+            context, MaterialPageRoute(
+              builder: (context) => MyAuthenticationEnterpriseResult()),
+          );
+        }
       },
       child: Container(
         color: Colors.white,
@@ -107,6 +116,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                   '企业认证',
                   style: TextStyle(
                     fontSize: 20,
+                    color:widget.company.approvalStatus == null?Colors.black:Colors.grey
                   ),
                 ),
               ),
@@ -140,6 +150,17 @@ class _MyAuthenticationState extends State<MyAuthentication> {
 
   Widget _buildIndividualBusinessItem(){
     return GestureDetector(
+      onTap: (){
+        if (widget.company.approvalStatus == null) {
+          individualBusiness();
+        }
+        if (widget.company.approvalStatus == ArticleApprovalStatus.approved) {
+          Navigator.push(
+            context, MaterialPageRoute(
+              builder: (context) => MyAuthenticationEnterpriseResult()),
+          );
+        }
+      },
       child: Container(
         color: Colors.white,
         margin: EdgeInsets.only(top: 5),
@@ -152,6 +173,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                 '个体户认证',
                 style: TextStyle(
                   fontSize: 20,
+                  color:widget.company.approvalStatus == null?Colors.black:Colors.grey
                 ),
               ),
             ),
@@ -186,7 +208,14 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   Widget _buildPersonalItem(){
     return GestureDetector(
       onTap: () async {
-        personal();
+        if (widget.company.approvalStatus == null) {
+          personal();
+        }
+        if (widget.company.approvalStatus == ArticleApprovalStatus.approved){
+          Navigator.push(
+            context,MaterialPageRoute(builder: (context) => MyAuthenticationResult()),
+          );
+        }
       },
       child: Container(
         color: Colors.white,
@@ -200,6 +229,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                 '个人认证',
                 style: TextStyle(
                   fontSize: 20,
+                  color:widget.company.approvalStatus == null?Colors.black:Colors.grey
                 ),
               ),
             ),
@@ -223,6 +253,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
               child: Icon(
                 Icons.keyboard_arrow_right,
                 size: 28,
+                color:widget.company.approvalStatus == null?Colors.black:Colors.grey
               ),
             ),
           ],
@@ -248,6 +279,61 @@ class _MyAuthenticationState extends State<MyAuthentication> {
       if (certification != null) {
         if(certification.data !=  null){
 //          _launchURL(certification.data);
+          Navigator.push(
+            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString :certification.data)),
+          );
+        }else{
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.RESULT_DIALOG,
+                  failTips: certification.msg,
+                  callbackResult: false,
+                  confirmAction: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+              });
+        }
+      }else{
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '认证失败',
+                callbackResult: false,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            });
+      }
+    });
+  }
+
+
+  individualBusiness(){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack:
+            PurchaseOrderRepository().individualBusiness('1', '2'),
+            outsideDismiss: false,
+            loadingText: '请稍候。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      Certification certification = value;
+      if (certification != null) {
+        if(certification.data !=  null){
+//          _launchURL(certification.data);
+        print(certification.data);
           Navigator.push(
             context,MaterialPageRoute(builder: (context) => WebView111Page(urlString :certification.data)),
           );
