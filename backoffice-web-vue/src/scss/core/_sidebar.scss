@@ -90,7 +90,8 @@
     text-transform: uppercase;
   }
 
-  .nav-divider, .divider {
+  .nav-divider,
+  .divider {
     height: 10px;
   }
 
@@ -120,6 +121,7 @@
     text-decoration: none;
     background: $sidebar-nav-link-bg;
     @include borders($sidebar-nav-link-borders);
+
     @if $enable-sidebar-nav-rounded {
       border-radius: $border-radius;
     }
@@ -141,6 +143,9 @@
     &.active {
       color: $sidebar-nav-link-active-color;
       background: $sidebar-nav-link-active-bg;
+      border-left-width: 3px;
+      border-left-style: solid;
+      border-left-color: $sidebar-nav-link-active-color;
       @include borders($sidebar-nav-link-active-borders);
 
       i {
@@ -162,14 +167,18 @@
       }
     }
 
-    @each $color, $value in $theme-colors {
+    @each $color,
+    $value in $theme-colors {
       &.nav-link-#{$color} {
         background: $value;
+
         i {
-          color: rgba(255,255,255,.7);
+          color: rgba(255, 255, 255, .7);
         }
+
         &:hover {
-          background: darken($value,5%) !important;
+          background: darken($value, 5%) !important;
+
           i {
             color: #fff;
           }
@@ -196,26 +205,29 @@
       background-repeat: no-repeat;
       background-position: center;
       transition: transform .3s;
+      transform: rotate(180deg);
     }
   }
 
   // ex.  <li class="nav-item nav-dropdown">
   .nav-dropdown.open {
-    background: $sidebar-nav-dropdown-bg;
+    // background: $sidebar-nav-dropdown-bg;
     @include borders($sidebar-nav-dropdown-borders);
+
     @if $enable-sidebar-nav-rounded {
       border-radius: $border-radius;
     }
-    > .nav-dropdown-items {
+
+    >.nav-dropdown-items {
       max-height: 1000px;
     }
 
     .nav-link {
-      color: $sidebar-nav-dropdown-color;
+      // color: $sidebar-nav-dropdown-color;
       border-left: 0 !important;
     }
 
-    > .nav-link.nav-dropdown-toggle::before {
+    >.nav-link.nav-dropdown-toggle::before {
       transform: rotate(-90deg);
     }
 
@@ -244,7 +256,7 @@
     }
   }
 
-  @if (lightness( $sidebar-bg ) < 40) {
+  @if (lightness($sidebar-bg) < 40) {
     .progress {
       background-color: lighten($sidebar-bg, 15%) !important;
     }
@@ -285,6 +297,7 @@
 
     &:hover {
       background-color: $sidebar-minimizer-hover-bg;
+
       &::before {
         background-image: $sidebar-minimizer-hover-indicator;
       }
@@ -343,6 +356,7 @@
     .hidden-cn {
       display: none;
     }
+
     .sidebar {
       z-index: $zindex-sticky - 1;
 
@@ -355,7 +369,8 @@
         @include sidebar-width($sidebar-borders, $sidebar-minimized-width);
       }
 
-      .nav-divider, .divider,
+      .nav-divider,
+      .divider,
       .nav-title,
       .sidebar-footer,
       .sidebar-form,
@@ -377,7 +392,7 @@
           width: $sidebar-width + $sidebar-minimized-width;
           overflow: visible;
 
-          > .nav-link {
+          >.nav-link {
             background: $sidebar-nav-link-hover-bg;
 
             i {
@@ -433,8 +448,8 @@
         }
       }
 
-      .nav > .nav-dropdown {
-        > .nav-dropdown-items {
+      .nav>.nav-dropdown {
+        >.nav-dropdown-items {
           display: none;
           max-height: 1000px;
           background: $sidebar-bg;
@@ -442,7 +457,8 @@
 
         &:hover {
           background: $sidebar-nav-link-hover-bg;
-          > .nav-dropdown-items {
+
+          >.nav-dropdown-items {
             position: absolute;
             left: $sidebar-minimized-width;
             display: inline;

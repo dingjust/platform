@@ -51,7 +51,7 @@
       <slot></slot>
     </nav>
     <SidebarFooter/>
-    <SidebarMinimizer/>
+    <!-- <SidebarMinimizer/> -->
   </div>
 </template>
 <script>

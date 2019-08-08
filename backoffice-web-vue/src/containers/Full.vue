@@ -1,6 +1,7 @@
 <style lang="scss">
   .app {
     overflow: hidden;
+    line-height: 0;
   }
 </style>
 <template>

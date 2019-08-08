@@ -84,6 +84,18 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
     super.initState();
   }
 
+  //判断产品是否可编辑
+  bool isEnable(){
+    bool result = false;
+    if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+      result =  _enabled || widget.item.approvalStatus == ArticleApprovalStatus.approved;
+    }else{
+      result =  _enabled;
+    }
+
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -123,7 +135,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
           title: Text(widget.isCreate ? '新建产品' : _enabled ? '编辑产品' : '产品明细'),
           actions: <Widget>[
             Offstage(
-              offstage: _enabled || widget.item.approvalStatus == ArticleApprovalStatus.approved,
+              offstage: isEnable(),
               child: IconButton(
                 icon: Text('编辑'),
                 onPressed: () {

@@ -108,10 +108,9 @@ class _HistorySearchState extends State<HistorySearch> {
                 margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
                 width: 70,
                 height: 32,
-                child: RaisedButton(
-                    color: Color.fromRGBO(255, 214, 12, 1),
+                child: FlatButton(
                     child: Text(
-                      '搜  索',
+                      '搜索',
                       style: TextStyle(
                         color: Colors.black,
                       ),

@@ -11,7 +11,7 @@
       </el-input>
     </el-row>
     <el-row class="contract_custom-row">
-      <span>{{contractName}}</span>
+      <span></span>
     </el-row>
     <el-row class="contract_custom-row text-align-left">
       <span>固定条款</span>

@@ -1,21 +1,25 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <contract-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
+      <seal-toolbar class="seal-toolbar"/>
+      <seal-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
     </el-card>
   </div>
 </template>
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters, mapActions} = createNamespacedHelpers('ContractModule');
+  const {mapGetters, mapActions} = createNamespacedHelpers('ContractSealModule');
 
-  import ContractList from './list/ContractSearchResultList';
+  import SealList from './list/SealSearchResultList';
+  import SealToolbar from './toolbar/SealToolbar';
+
 
   export default {
-    name: 'ContractPage',
+    name: 'SealPage',
     components: {
-      ContractList
+      SealList,
+      SealToolbar
     },
     computed: {
       ...mapGetters({
@@ -29,11 +33,11 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getContracts()
+        const url = this.apis().getSeals();
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {
-        const url = this.apis().getContractDetail(item.code);
+        const url = this.apis().getLabel(item.id);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -54,3 +58,8 @@
     }
   };
 </script>
+<style>
+.seal-toolbar{
+  margin-bottom: 10px;
+}
+</style>

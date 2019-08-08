@@ -63,7 +63,6 @@
 <template>
   <div>
     <div class="loading" v-show="open" @click="open = false"></div>
-
     <transition name="slide-fade">
       <div v-if="open" class="side-slider">
         <el-card class="header pd10">
@@ -75,9 +74,6 @@
             </el-col>
             <el-col :span="16">
               <div class="title" v-text="title"></div>
-            </el-col>
-            <el-col :span="4">
-              <div class="grid-content bg-purple"></div>
             </el-col>
           </el-row>
           <div class="side-slider-center">
