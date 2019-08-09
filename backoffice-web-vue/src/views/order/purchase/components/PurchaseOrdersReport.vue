@@ -1,34 +1,36 @@
 <template>
   <el-card>
-    <el-row type="flex" justify="space-between" align="top">
-      <el-col :span="3">
+    <el-row type="flex" justify="space-between" align="middle">
+      <el-col :span="4">
         <div class="grid-head">
-          <h6>合同模板</h6>
+          <h6>合同文件</h6>
         </div>
       </el-col>
       <el-col :span="4">
-        <div class="template-grid-content">
-          <h5>模板总数量 6</h5>
+        <div class="purchase-grid-content">
+          <h5>待签署 6</h5>
         </div>
       </el-col>
       <el-col :span="4">
-        <div class="template-grid-content">
-          <h5>采购合同模板 6</h5>
+        <div class="purchase-grid-content">
+          <h5>已完成 6</h5>
         </div>
       </el-col>
       <el-col :span="4">
-        <div class="template-grid-content">
-          <h5>框架协议模板 6</h5>
+        <div class="purchase-grid-content">
+          <h5>已作废 6</h5>
         </div>
       </el-col>
       <el-col :span="4">
-        <div class="template-grid-content">
-          <h5>附件合同模板 51</h5>
+        <div class="purchase-grid-content">
+          <h5>合同总数 51</h5>
         </div>
       </el-col>
       <el-col :span="4">
-        <div class="template-grid-content">
-          <h5>附件合同模板 51</h5>
+        <div class="grid-tail">
+          <el-link type="warning">
+            <h6>了解电子合同</h6>
+          </el-link>
         </div>
       </el-col>
     </el-row>
@@ -37,7 +39,7 @@
 
 <script>
   export default {
-    name: "TemplateReport",
+    name: "PurchaseOrdersReport",
     components: {},
     computed: {},
     methods: {},
@@ -49,7 +51,7 @@
 
 </script>
 <style>
-  .template-grid-content {
+  .purchase-grid-content {
     text-align: center;
     border-left: 2px solid rgba(0, 0, 0, 0.09);
   }

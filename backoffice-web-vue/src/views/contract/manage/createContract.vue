@@ -57,14 +57,26 @@
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
-        <el-col :span="20" offset="2">
+        <el-col :span="8" offset="2">
           <!-- <el-input size="small" placeholder="选择纸质合同" v-model="input1" :disabled="true">
             <el-button slot="prepend">上传纸质合同</el-button>
           </el-input> -->
           <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1"
-            :on-exceed="handleExceed" :file-list="fileList">
-            <el-button size="small">上传纸质合同</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
+            list-type="picture-card" :on-exceed="handleExceed" :file-list="fileList">
+            <!-- <el-button size="small">上传纸质合同</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div> -->
+            <i slot="default" class="el-icon-plus"></i>
+            <div slot="file" slot-scope="{file}">
+              <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
+              <span class="el-upload-list__item-actions">
+                <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
+                  <i class="el-icon-delete"></i>
+                </span>
+                <span v-if="!disabled" class="el-upload-list__item-file-name">
+                  {{file.name}}
+                </span>
+              </span>
+            </div>
           </el-upload>
         </el-col>
       </el-row>
@@ -106,9 +118,12 @@
         this.selectFile = this.cacheSelectFile;
       },
       handleExceed(files, fileList) {
-        this.$message.warning(`${files}`);
+        this.$message.warning(`已达最大文件数`);
         console.log(files);
       },
+      handleRemove(file) {
+        this.fileList.pop(file);
+      }
     },
     data() {
       return {
@@ -178,6 +193,51 @@
 
   .el-upload__tip {
     margin-top: 10px;
+  }
+
+  /* .upload_img {
+    vertical-align: middle;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    float: left;
+    position: relative;
+    z-index: 1;
+    margin-left: -80px;
+    background-color: #FFF
+  } */
+
+  .el-upload-list--picture-card .el-upload-list__item {
+    overflow: hidden;
+    background-color: #fff;
+    border: 0px solid #c0ccda !important;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    margin: 0 8px 8px 0;
+    display: inline-block;
+  }
+
+  .el-upload--picture-card {
+    background-color: #fbfdff;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    vertical-align: top;
+  }
+
+  .el-upload-list__item-file-name {
+    position: absolute;
+    right: 25px;
+    top: 50;
+    font-size: 12px;
+    color: #ffffff;
+    display: none
   }
 
 </style>

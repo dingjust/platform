@@ -32,6 +32,7 @@
           prefix-icon="el-icon-search"
           v-model="input2"
           size="small"
+          id="header-input__inner"
         >
         </el-input>
       </div>
@@ -98,8 +99,8 @@ export default {
   font-size: 20px;
 }
 
-.el-input__inner {
-  border-radius: 50px;
+#header-input__inner {
+  border-radius: 50px !important;
   line-height: 30px;
 }
 

@@ -16,7 +16,7 @@ export default {
   methods: {},
   data() {
     return {
-      viewerText: "# 固定条款 \n xxxxxx"
+      viewerText: "### 1. 制作一份待办事宜 [Todo 列表](https://www.zybuluo.com/mdeditor?url=https://www.zybuluo.com/static/editor/md-help.markdown#13-待办事宜-todo-列表)"
     };
   }
 };

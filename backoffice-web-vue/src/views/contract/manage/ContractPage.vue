@@ -6,7 +6,9 @@
     <el-card>
       <el-row>
         <el-col :span="2">
-          <h6>订单列表</h6>
+          <div class="orders-list-title">
+            <h6>合同列表</h6>
+          </div>
         </el-col>
       </el-row>
       <contract-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
@@ -14,7 +16,7 @@
         <template v-for="(item, index) in contractStatues">
           <el-tab-pane :name="item">
             <span slot="label">
-              <tab-label-bubble :label="item" :num="index"/>
+              <tab-label-bubble :label="item" :num="index" />
             </span>
             <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
               @onAdvancedSearch="onAdvancedSearch" />
@@ -41,7 +43,7 @@
   import ContractToolbar from "./toolbar/ContractToolbar";
   import ContractSearchResultList from "./list/ContractSearchResultList";
   import ContractReport from "./components/ContractReport";
-    import TabLabelBubble from "./components/TabLabelBubble";
+  import TabLabelBubble from "@/components/custom/TabLabelBubble";
   // import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
   export default {
@@ -138,4 +140,10 @@
   .el-tabs__item:hover {
     color: #ffd60c;
   }
+
+  .orders-list-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
+
 </style>

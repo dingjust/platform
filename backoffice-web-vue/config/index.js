@@ -79,6 +79,10 @@ module.exports = {
     //   },
     // },
     proxyTable: {
+      '/resource': {
+        target: 'http://sc.nbyjy.net',
+        "secure": false,
+      },
       '/medias': {
         target: 'https://47.106.112.137:9002',
         "secure": false,
