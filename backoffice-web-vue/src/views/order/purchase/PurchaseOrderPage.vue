@@ -12,11 +12,11 @@
         </el-col>
       </el-row>
       <purchase-order-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item">
             <span slot="label">
-              <tab-label-bubble :label="item" :num="index" />
+              <tab-label-bubble :label="item.name" :num="index" />
             </span>
             <purchase-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
               @onAdvancedSearch="onAdvancedSearch" />
@@ -91,6 +91,12 @@
           size
         });
       },
+      onNew(formData) {
+        // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
+      },
+      handleClick(tab, event) {
+        console.log(tab, event);
+      },
       async onDetails(row) {
         const url = this.apis().getPurchaseOrder(row.code);
         const result = await this.$http.get(url);
@@ -108,11 +114,16 @@
     data() {
       return {
         formData: this.$store.state.PurchaseOrdersModule.formData,
-        activeName: "全部",
-        statues: ["全部", "待接单", "待付款", "生产中","待出库","已出库","已完成", "已取消"]
+        activeStatus: {},
+        statues: [{code:'ALL',name:'全部'}]
       }
     },
     created() {
+      // this.statues.
+      this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
+        this.statues.push(element);
+      });
+      this.activeStatus=this.statues[0];
       this.onSearch('');
     }
   }

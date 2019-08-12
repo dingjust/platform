@@ -6,15 +6,15 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
-            <el-tag>线上订单</el-tag>
+            <el-tag>{{getEnum('salesApplication', scope.row.salesApplication)}}</el-tag>
           </el-row>
         </template>
       </el-table-column>
       <el-table-column label="产品" min-width="150">
         <template slot-scope="scope">
-          <el-row type="flex" justify="space-between" align="middle" gutter="50">
+          <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
-              <img width="64px" height="64px" :src="scope.row.product.thumbnail.url">
+              <img width="54px" height="54px" :src="scope.row.product.thumbnail.url">
             </el-col>
             <el-col :span="16">
               <el-row>
