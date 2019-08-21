@@ -1,10 +1,13 @@
 <template>
   <div class="info-finance-body">
+    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body>
+      <purchase-order-info-reconciliation :slotData="slotData" />
+    </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-finance-body-title-row">
       <div class="info-title">
         <h6 class="info-title_text">财务（当前选用“森马”财务方案）</h6>
       </div>
-      <el-button type="text" class="info-detail-logistics_info-btn2">查看对账单</el-button>
+      <el-button type="text" class="info-detail-logistics_info-btn1" @click="reconciliatioFormVisible=!reconciliatioFormVisible">查看对账单</el-button>
     </el-row>
     <el-row>
       <el-table :data="mockData" style="width: 100%">
@@ -30,7 +33,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <div class="info-finance-btn">确认已付</div>
+            <el-button size="mini" class="info-detail-logistics_info-btn1">确认已付</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -39,17 +42,24 @@
 </template>
 
 <script>
+  import PurchaseOrderInfoReconciliation from './PurchaseOrderInfoReconciliation';
+
   export default {
     name: 'PurchaseOrderInfoFinance',
     props: ['slotData'],
-    components: {},
+    components: {
+      PurchaseOrderInfoReconciliation
+    },
     mixins: [],
     computed: {
 
     },
-    methods: {},
+    methods: {
+
+    },
     data() {
       return {
+        reconciliatioFormVisible: false,
         mockData: [{
           'term': '一',
           'detail': '签署后5天以内完成付款30%作为定金',
@@ -62,15 +72,7 @@
           'term': '三',
           'detail': '签署后5天以内完成付款30%作为定金',
           'amount': 5000
-        }, {
-          'term': '一',
-          'detail': '签署后5天以内完成付款30%作为定金',
-          'amount': 5000
-        }, {
-          'term': '一',
-          'detail': '签署后5天以内完成付款30%作为定金',
-          'amount': 5000
-        }]
+        }, ]
       }
     },
     created() {}
@@ -83,7 +85,7 @@
     margin-top: 20px;
   }
 
-  .info-finance-btn{
+  .info-finance-btn {
     width: 50px;
     height: 25px;
     text-align: center;
@@ -101,13 +103,24 @@
     font-weight: 500;
     border-radius: 4px;
     font-size: 10px;
-}
+  }
 
-.info-finance-btn:focus, .info-finance-btn:hover {
+  .info-finance-btn:focus,
+  .info-finance-btn:hover {
     color: #409EFF;
     border-color: #c6e2ff;
     background-color: #ecf5ff;
-}
-  
+  }
+
+    .info-detail-logistics_info-btn1 {
+    width: 70px;
+    height: 25px;
+    background: #FFD60C;
+    font-weight: 400;
+    color: rgba(0,0,0,0.85);
+    font-size: 10px;
+    border-radius: 0px;
+    border: 0px solid #FFD60C;
+  }
 
 </style>

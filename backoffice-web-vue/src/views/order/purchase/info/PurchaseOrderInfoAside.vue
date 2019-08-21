@@ -40,6 +40,7 @@
     width: 100%;
     /* background-color: yellow; */
     padding-left: 10px;
+    padding-right: 10px;
     /* border-left: 1px solid rgba(0, 0, 0, 0.09); */
   }
 

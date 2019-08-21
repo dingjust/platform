@@ -17,7 +17,7 @@
       <purchase-order-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
-          <el-tab-pane :name="item">
+          <el-tab-pane :name="item.code">
             <span slot="label">
               <tab-label-bubble :label="item.name" :num="index" />
             </span>
@@ -124,7 +124,7 @@
         dialogDetailVisible: false,
         contentData: {},
         formData: this.$store.state.PurchaseOrdersModule.formData,
-        activeStatus: {},
+        activeStatus: 'ALL',
         statues: [{
           code: "ALL",
           name: "全部"
@@ -136,7 +136,7 @@
       this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
         this.statues.push(element);
       });
-      this.activeStatus = this.statues[0];
+      // this.activeStatus = this.statues[0];
       this.onSearch("");
     }
   };

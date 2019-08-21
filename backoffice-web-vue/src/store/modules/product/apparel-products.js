@@ -73,7 +73,13 @@ const actions = {
   async search({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('url', url);
     commit('keyword', keyword);
-    commit('currentPageNumber', page);
+    // commit('currentPageNumber', page);
+
+    if (page||page===0) {
+      console.log(page);
+      commit('currentPageNumber', page);
+    }
+
     if (size) {
       commit('currentPageSize', size);
     }
