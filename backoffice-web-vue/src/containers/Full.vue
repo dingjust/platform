@@ -11,7 +11,7 @@
       <Sidebar :navItems="nav"/>
       <SideSlider/>
       <main class="main">
-        <breadcrumb :list="list"/>
+        <breadcrumb :list="list" v-if="name!='仪表盘'"/>
         <div class="container-fluid">
           <router-view></router-view>
         </div>
