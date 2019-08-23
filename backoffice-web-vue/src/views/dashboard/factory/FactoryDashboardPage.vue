@@ -21,7 +21,12 @@
         </el-row>
       </el-col>
       <el-col :span="10">
+        <el-row>
         <account-entry-card />
+        </el-row>
+        <el-row>
+        <img class="dashboard-img" src="/resource/hb7/haa/8807140098078.png"/>
+        </el-row>
       </el-col>
     </el-row>
   </div>
@@ -81,6 +86,11 @@
     padding-right: 20px;
     padding-bottom: 10px;
     margin-bottom: 10px;
+  }
+
+  .dashboard-img{
+    width: 100%;
+    border-radius: 5px;
   }
 
 </style>

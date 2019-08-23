@@ -60,7 +60,7 @@ export default {
         },
         {
           name: '下单',
-          url: '/unclassified/orderPurchase',
+          url: '/orderPurchase',
           icon: 'iconNone',
         },
         {

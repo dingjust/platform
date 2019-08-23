@@ -1,61 +1,72 @@
 <template>
-  <el-row type="flex" justify="space-between">
-    <template v-for="(item,index) in mockData">
-      <el-col :span="5">
-        <el-row type="flex" justify="center" align="middle">
-          <h6 class="progress-status">{{item.status}}</h6>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle">
-          <div :class="getLeftLine(index,mockData)" />
-          <el-col :span="6">
-            <div
-              :class="item.finsh?'progress-icon-container':isDoing(index,mockData)?'progress-icon-container_doing':'progress-icon-container_none'">
-              <i class="iconfont2 progress-icon" v-html="item.icon" v-if="!isDoing(index,mockData)"></i>
-              <h6 v-if="isDoing(index,mockData)" class="progress-icon-container_text">进行中</h6>
+  <div>
+    <el-dialog :visible.sync="updateFormVisible" width="50%" class="purchase-dialog" append-to-body>
+      <order-progress-update-form :slotData="slotData" />
+    </el-dialog>
+    <el-row type="flex" justify="space-between">
+      <template v-for="(item,index) in mockData">
+        <el-col :span="5">
+          <el-row type="flex" justify="center" align="middle">
+            <h6 class="progress-status">{{item.status}}</h6>
+          </el-row>
+          <el-row type="flex" justify="center" align="middle">
+            <div :class="getLeftLine(index,mockData)" />
+            <el-col :span="6">
+              <div
+                :class="item.finsh?'progress-icon-container':isDoing(index,mockData)?'progress-icon-container_doing':'progress-icon-container_none'">
+                <i class="iconfont2 progress-icon" v-html="item.icon" v-if="!isDoing(index,mockData)"></i>
+                <h6 v-if="isDoing(index,mockData)" class="progress-icon-container_text">进行中</h6>
+              </div>
+            </el-col>
+            <div :class="getRightLine(index,mockData)" />
+          </el-row>
+          <el-row type="flex" justify="center" align="middle">
+            <div class="progress-line-horizon_none" />
+            <div :class="item.finsh?'progress-line-vertical':'progress-line-vertical_none'">
             </div>
-          </el-col>
-          <div :class="getRightLine(index,mockData)" />
-        </el-row>
-        <el-row type="flex" justify="center" align="middle">
-          <div class="progress-line-horizon_none" />
-          <div :class="item.finsh?'progress-line-vertical':'progress-line-vertical_none'">
-          </div>
-          <div class="progress-line-horizon_none" />
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" v-if="item.img!=null">
-          <img class="progress-img" :src="item.img">
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" class="progress-row" v-if="item.finshDate!=null">
-          <el-col :span="19" :offset="4">
-            <h6 class="progress-info">完成日期: {{item.finshDate}}</h6>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" v-if="item.num!=null">
-          <el-col :span="19" :offset="4">
-            <h6 class="progress-info">完成数量: {{item.num}}</h6>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" v-if="item.remarks!=null">
-          <el-col :span="19" :offset="4">
-            <h6 class="progress-info">备注: {{item.remarks}}</h6>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" v-if="!item.finsh">
-          <el-button size="mini" class="info-detail-logistics_info-btn1">编辑</el-button>
-        </el-row>
-        <el-row type="flex" style="margin-top:5px;" justify="center" align="middle" v-if="!item.finsh&&isDoing(index,mockData)">
-          <el-button size="mini" class="info-detail-logistics_info-btn1">{{item.status}}完成</el-button>
-        </el-row>
-      </el-col>
-    </template>
-  </el-row>
+            <div class="progress-line-horizon_none" />
+          </el-row>
+          <el-row type="flex" justify="center" align="middle" v-if="item.img!=null">
+            <img class="progress-img" :src="item.img">
+          </el-row>
+          <el-row type="flex" justify="center" align="middle" class="progress-row" v-if="item.finshDate!=null">
+            <el-col :span="19" :offset="4">
+              <h6 class="progress-info">完成日期: {{item.finshDate}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="center" align="middle" v-if="item.num!=null">
+            <el-col :span="19" :offset="4">
+              <h6 class="progress-info">完成数量: {{item.num}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="center" align="middle" v-if="item.remarks!=null">
+            <el-col :span="19" :offset="4">
+              <h6 class="progress-info">备注: {{item.remarks}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="center" align="middle" v-if="!item.finsh">
+            <el-button size="mini" class="info-detail-logistics_info-btn1"
+              @click="updateFormVisible=!updateFormVisible">编辑</el-button>
+          </el-row>
+          <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
+            v-if="!item.finsh&&isDoing(index,mockData)">
+            <el-button size="mini" class="info-detail-logistics_info-btn1">{{item.status}}完成</el-button>
+          </el-row>
+        </el-col>
+      </template>
+    </el-row>
+  </div>
 </template>
 
 <script>
+  import OrderProgressUpdateForm from './OrderProgressUpdateForm';
+
   export default {
     name: "PurchaseOrderProgress",
     props: ['slotData'],
-    components: {},
+    components: {
+      OrderProgressUpdateForm
+    },
     computed: {},
     methods: {
       ///判断左边线样式
@@ -105,6 +116,7 @@
     },
     data() {
       return {
+        updateFormVisible: false,
         mockData: [{
             status: '备料',
             finshDate: '2019-3-1',
