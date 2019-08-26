@@ -7,7 +7,7 @@
       <el-button size="mini" class="info-detail-logistics_info-btn1">部分发货</el-button>
     </el-row>
     <el-row>
-      <purchase-order-progress />
+      <purchase-order-progress :slotData="slotData"/>
     </el-row>
   </div>
 </template>

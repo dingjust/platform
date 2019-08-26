@@ -11,8 +11,8 @@
       </el-col>
       <el-col :span="6" :offset="1">
         <div style="width:100%;">
-          <el-date-picker style="width:100%;" class="progress-update-form-datepicker" v-model="form.date" type="date"
-            placeholder="选择日期">
+          <el-date-picker style="width:100%;" class="progress-update-form-datepicker" v-model="slotData.estimatedDate"
+            type="date" placeholder="选择日期">
           </el-date-picker>
         </div>
       </el-col>
@@ -20,7 +20,7 @@
         <h6 class="progress-update-form-text1">完成数量:</h6>
       </el-col>
       <el-col :span="6">
-        <el-input v-model="form.num" type="number" placeholder="填写数量"></el-input>
+        <el-input v-model="slotData.quantity" type="number" placeholder="填写数量"></el-input>
       </el-col>
     </el-row>
     <el-row type="flex" align="top" class="progress-update-form-row">
@@ -28,7 +28,7 @@
         <h6 class="progress-update-form-text1">备注信息:</h6>
       </el-col>
       <el-col :span="16" :offset="1">
-        <el-input type="textarea" :rows="7" placeholder="填写备注" v-model="form.remarks">
+        <el-input type="textarea" :rows="7" placeholder="填写备注" v-model="slotData.remarks">
         </el-input>
       </el-col>
     </el-row>
@@ -37,8 +37,11 @@
         <h6 class="progress-update-form-text1">上传图片:</h6>
       </el-col>
       <el-col :span="16" :offset="1">
-        <images-upload class="order-purchase-upload" :slot-data="form.attachments" />
+        <images-upload class="order-purchase-upload" :slot-data="slotData.medias" />
       </el-col>
+    </el-row>
+    <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
+      <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
     </el-row>
   </div>
 </template>
@@ -48,6 +51,7 @@
 
   export default {
     name: 'OrderProgressUpdateForm',
+    props: ['slotData', 'orderCode'],
     components: {
       ImagesUpload
     },
@@ -56,7 +60,20 @@
 
     },
     methods: {
-
+      async onSubmit() {
+        // if (this.compareDate(new Date(), new Date(this.slotData.estimatedDate))) {
+        //   this.$message.error('预计完成时间不能小于当前时间');
+        //   return false;
+        // }
+        // const url = this.apis().updateProgressOfPurchaseOrder(this.orderCode, this.slotData.id);
+        // const result = await this.$http.put(url, this.slotData);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
+        // this.$message.success('更新成功');
+        this.$emit('editSubmit');
+      }
     },
     data() {
       return {
@@ -92,9 +109,7 @@
     margin-bottom: 10px;
   }
 
-  .order-purchase-upload {
-
-  }
+  .order-purchase-upload {}
 
   .order-purchase-upload .el-upload--picture-card {
     width: 100px;
@@ -105,6 +120,14 @@
   .order-purchase-upload .el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
+  }
+
+  .update-form-submit {
+    background-color: #FFD60C;
+    border-color: #FFD60C;
+    color: #000;
+    width: 150px;
+    margin-top: 50px;
   }
 
 </style>

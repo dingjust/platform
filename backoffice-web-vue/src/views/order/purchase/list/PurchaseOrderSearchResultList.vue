@@ -6,7 +6,8 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
-            <el-tag>{{getEnum('salesApplication', scope.row.salesApplication)}}</el-tag>
+            <img width="50px" height="15px" :src="scope.row.salesApplication=='ONLINE'?'static/img/online.png':'static/img/offline.png'"/>
+            <!-- <el-tag>{{getEnum('salesApplication', scope.row.salesApplication)}}</el-tag> -->
           </el-row>
         </template>
       </el-table-column>
@@ -145,8 +146,8 @@
 
 </script>
 <style>
-.purchase-list-button{
-  color: #FFA403;
-}
-</style>
+  .purchase-list-button {
+    color: #FFA403;
+  }
 
+</style>

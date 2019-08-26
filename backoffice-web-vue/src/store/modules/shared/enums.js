@@ -328,7 +328,8 @@ const state = {
   salesApplication:[
     {code: 'BELOW_THE_LINE', name: '线下订单'},
     {code: 'ONLINE', name: '线上订单'},
-  ]
+  ],
+  
 
 };
 

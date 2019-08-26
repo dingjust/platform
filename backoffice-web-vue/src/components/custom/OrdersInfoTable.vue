@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" >
         <el-table-column label="颜色" >
           <template slot-scope="scope">
             <span>{{scope.row.name}}</span>
