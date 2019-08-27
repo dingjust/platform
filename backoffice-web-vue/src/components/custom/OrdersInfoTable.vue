@@ -1,16 +1,16 @@
 <template>
   <div>
     <el-row>
-      <el-table :data="tableData" border style="width: 100%" >
-        <el-table-column label="颜色" >
+      <el-table :data="showTable?colors:colors.slice(0,1)" border style="width: 100%">
+        <el-table-column label="颜色">
           <template slot-scope="scope">
-            <span>{{scope.row.name}}</span>
+            <span>{{scope.row}}</span>
           </template>
         </el-table-column>
-        <template v-for="(item,index) in tableHead">
+        <template v-for="(item,index) in sizes">
           <el-table-column :label="item">
             <template slot-scope="scope">
-              <span>{{sizeFilter(item,scope.row.size)}}</span>
+              <span>{{colorSizeFilter(scope.row,item).quantity}}</span>
             </template>
           </el-table-column>
         </template>
@@ -28,33 +28,42 @@
     name: "OrdersInfoTable",
     props: ['slotData'],
     components: {},
-    computed: {},
+    computed: {
+      sizes: function () {
+        var sizes = new Set([]);
+        this.slotData.forEach(element => {
+          sizes.add(element.product.size.name);
+        });
+        return  Array.from(sizes);
+      },
+      colors: function () {
+        var colors = new Set([]);
+        this.slotData.forEach(element => {
+          colors.add(element.product.color.name);
+        });
+        return Array.from(colors);
+      },
+    },
     methods: {
       onClickShowTable() {
         this.showTable = !this.showTable;
-        if(this.tableData.length==1){
-          this.tableData=this.mockData;
-        }else{
-          this.tableData=[this.mockData[0]];
+        if (this.tableData.length == 1) {
+          this.tableData = this.mockData;
+        } else {
+          this.tableData = [this.mockData[0]];
         }
       },
-      //尺码筛选
-      sizeFilter(name, sizes) {
+      //颜色尺码筛选
+      colorSizeFilter(color, size) {
         var result = '';
-        sizes.forEach(element => {
-          if (element.name == name) {
-            result = element.num;
-            return element.num;
-          }
-        });
-        return result;
+        return this.slotData.find(element => element.product.color.name == color && element.product.size.name == size);
       }
     },
     data() {
       return {
         showTable: false,
-        tableData:[],
-        previewTableData:[],
+        tableData: [],
+        previewTableData: [],
         mockData: [{
             'name': '白色',
             size: [{
@@ -180,13 +189,9 @@
       };
     },
     created() {
-      //生成表格信息
-      this.mockData[0].size.forEach(element => {
-        this.tableHead.push(element.name);
-      });
       //表格预览数据（取一行数据）
-      this.previewTableData.push(this.mockData[0]);
-      this.tableData=this.previewTableData;
+      // this.previewTableData.push(this.mockData[0]);
+      // this.tableData = this.previewTableData;
     }
   };
 
@@ -203,7 +208,8 @@
     -moz-osx-font-smoothing: grayscale;
     cursor: pointer;
   }
-  .orders-info-table-btn{
+
+  .orders-info-table-btn {
     margin-top: 20px;
   }
 

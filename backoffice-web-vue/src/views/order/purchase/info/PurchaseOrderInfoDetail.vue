@@ -69,7 +69,7 @@
               @click="receiveFormVisible=!receiveFormVisible">查看收货单</el-button>
           </el-row>
           <el-row class="info-detail-item_row2">
-            <orders-info-table :slotData="slotData" class="info-detail-table" />
+            <orders-info-table :slotData="slotData.entries" class="info-detail-table" />
           </el-row>
         </div>
       </el-col>
