@@ -250,7 +250,7 @@ const router = new Router({
             }, {
               path: '/orderPurchase',
               name: '下单',
-              component: () => import( /* webpackChunkName: 'orderPurchase' */ '@/views/unclassified/orderPurchase')
+              component: () => import( /* webpackChunkName: 'orderPurchase' */ '@/views/order/purchase/OrderPurchase')
             }, {
               path: '/sealForm',
               name: '印章创建',

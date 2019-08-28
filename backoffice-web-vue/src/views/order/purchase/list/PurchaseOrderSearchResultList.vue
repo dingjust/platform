@@ -6,7 +6,8 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
-            <img width="50px" height="15px" :src="scope.row.salesApplication=='ONLINE'?'static/img/online.png':'static/img/offline.png'"/>
+            <img width="50px" height="15px"
+              :src="scope.row.salesApplication=='ONLINE'?'static/img/online.png':'static/img/offline.png'" />
             <!-- <el-tag>{{getEnum('salesApplication', scope.row.salesApplication)}}</el-tag> -->
           </el-row>
         </template>
@@ -58,7 +59,10 @@
         </template>
       </el-table-column>
       <el-table-column label="订单标签">
-        <el-tag type="danger">欠款</el-tag>
+        <template slot-scope="scope">
+          <img width="40px" height="15px"
+            :src="getPaymentStatusTag(scope.row)" />
+        </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
@@ -135,6 +139,9 @@
           amount += element.quantity;
         });
         return amount;
+      },
+      getPaymentStatusTag(row){
+        return row.balancePaid?'static/img/paid.png':'static/img/arrears.png';
       }
     },
     data() {

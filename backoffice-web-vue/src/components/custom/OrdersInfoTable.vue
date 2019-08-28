@@ -10,7 +10,7 @@
         <template v-for="(item,index) in sizes">
           <el-table-column :label="item">
             <template slot-scope="scope">
-              <span>{{colorSizeFilter(scope.row,item).quantity}}</span>
+              <span>{{colorSizeFilter(scope.row,item)}}</span>
             </template>
           </el-table-column>
         </template>
@@ -55,8 +55,12 @@
       },
       //颜色尺码筛选
       colorSizeFilter(color, size) {
-        var result = '';
-        return this.slotData.find(element => element.product.color.name == color && element.product.size.name == size);
+        var result=this.slotData.find(element => element.product.color.name == color && element.product.size.name == size);
+        if(result!=null){
+        return result.quantity;
+        }else{
+          return '';
+        }
       }
     },
     data() {

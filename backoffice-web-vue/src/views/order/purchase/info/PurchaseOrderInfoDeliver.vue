@@ -11,7 +11,7 @@
           <el-row class="info-receive-row">
             <form-label label="合作对象" />
           </el-row>
-          <el-form :disabled="item.code!=null">
+          <!-- <el-form :disabled="item.code!=null"> -->
             <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
               <el-col :span="6">
                 <el-row type="flex" align="middle">
@@ -37,7 +37,7 @@
               <el-col :span="6">
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">发货方式</h6>
-                  <el-input placeholder="输入方式" v-model="form.receiveName" size="mini" :disabled="form.offlinereceive">
+                  <el-input placeholder="输入方式" v-model="form.deliverWay" size="mini" :disabled="form.offlinereceive">
                   </el-input>
                 </el-row>
               </el-col>
@@ -147,9 +147,9 @@
               <h6 class="order-table-info">发货日期： 2019-7-19</h6>
             </el-row>
             <el-row type="flex" justify="center" class="info-receive-row">
-              <el-button class="info-receive-submit" @click="onSubmit()">确认创建</el-button>
+              <el-button class="info-receive-submit" @click="onSubmit">确认创建</el-button>
             </el-row>
-          </el-form>
+          <!-- </el-form> -->
         </el-tab-pane>
       </template>
     </el-tabs>
@@ -219,7 +219,7 @@
         return this.colors.size + 2;
       },
       onSubmit() {
-
+        console.log(this.form);
       }
     },
     data() {
@@ -289,6 +289,7 @@
           remarks: "",
           imperfectionsNum: '',
           returnNum: '',
+          deliverWay:'',
           entries: []
         },
       }

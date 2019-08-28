@@ -129,6 +129,57 @@ module.exports = {
           '^/amap': ''
         }
       },
+    // proxyTable: {
+    //   '/resource': {
+    //     target: 'http://192.168.1.146',
+    //     "secure": false,
+    //   },
+    //   '/medias': {
+    //     target: 'https://192.168.1.146:9002',
+    //     "secure": false,
+    //     pathRewrite: {
+    //       '^/medias': 'djwebservices/medias'
+    //     }
+    //   },
+    //   '/logout': {
+    //     target: 'https://192.168.1.146:9002',
+    //     "secure": false,
+    //     pathRewrite: {
+    //       '^/logout': 'djwebservices/logout'
+    //     }
+    //   },
+    //   '/authorizationserver': {
+    //     target: 'https://192.168.1.146:9002',
+    //     changeOrigin: true,
+    //     "secure": false,
+    //     pathRewrite: {
+    //       '^/authorizationserver': 'authorizationserver'
+    //     }
+    //   },
+    //   '/b2b': {
+    //     target: 'https://192.168.1.146:9002',
+    //     changeOrigin: true,
+    //     "secure": false,
+    //     pathRewrite: {
+    //       '^/b2b': 'djwebservices/v2/b2b-apparel-zh'
+    //     }
+    //   },
+    //   '/c2b': {
+    //     target: 'https://192.168.1.146:9002',
+    //     changeOrigin: true,
+    //     "secure": false,
+    //     pathRewrite: {
+    //       '^/c2b': 'djwebservices/v2/c2b-apparel-zh'
+    //     }
+    //   },
+    //   '/amap': {
+    //     target: 'https://restapi.amap.com',
+    //     changeOrigin: true,
+    //     "secure": false,
+    //     pathRewrite: {
+    //       '^/amap': ''
+    //     }
+    //   },
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
