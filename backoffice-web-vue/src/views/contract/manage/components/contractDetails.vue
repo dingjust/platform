@@ -1,41 +1,40 @@
 <template>
-  <div>
-    <el-row class="contract_custom-row">
-      <el-input placeholder="请输入内容" size="mini" v-model="input1">
-        <template slot="prepend">合同模板名称</template>
-      </el-input>
-    </el-row>
-    <el-row class="contract_custom-row">
-      <el-input placeholder="请输入内容" size="mini" v-model="input2">
-        <template slot="prepend">备注</template>
-      </el-input>
-    </el-row>
-    <el-row class="contract_custom-row">
-      <span>{{contractName}}</span>
-    </el-row>
-    <el-row class="contract_custom-row text-align-left">
-      <span>固定条款</span>
-    </el-row>
-    <el-row>
-      <div class="contract_custom-fixed_terms">
-        <Viewer :value="viewerText" class="contract_custom-viewer" />
+  <el-container>
+    <el-main>
+      <el-row
+        class="contract_custom-row"
+        type="flex"
+        justify="start"
+      >
+        <el-col :span="4">
+          <span>合同状态:待签署</span>
+        </el-col>
+        <el-col :span="6">
+          <span>合同编号:HT0000000001</span>
+        </el-col>
+      </el-row>
+      <el-row class="contract_custom-row contract_title text-align-center">
+        <span>委托生产合同</span>
+      </el-row>
+      <el-row>
+        <div class="contract_custom-fixed_terms">
+          <Viewer
+            :value="viewerText"
+            class="contract_custom-viewer"
+          />
+        </div>
+      </el-row>
+    </el-main>
+    <el-aside width="73px">
+      <div class="dialog-aside_buttons">
+        <el-button-group>
+          <el-button icon="el-icon-edit">签署</el-button>
+          <el-button icon="el-icon-share">下载</el-button>
+          <el-button icon="el-icon-delete">作废</el-button>
+        </el-button-group>
       </div>
-    </el-row>
-    <el-row class="contract_custom-row text-align-left">
-      <span>自定义条款</span>
-    </el-row>
-    <el-row>
-      <div class="contract_custom-custom_terms">
-        <Editor
-          v-model="editorText"
-          :html="editorHtml"
-          :options="editorOptions"
-          :visible="editorVisible"
-          previewStyle="vertical"
-        />
-      </div>
-    </el-row>
-  </div>
+    </el-aside>
+  </el-container>
 </template>
 
 <script>
@@ -51,18 +50,8 @@ export default {
     return {
       input1: "",
       input2: "",
-      viewerText: "# 固定条款 \n xxxxxx",
-      editorText: "**This is test** \n* vue \n* element \n* webpack",
-      editorHtml: "",
-      editorOptions: {
-        minHeight: "400px",
-        language: "zh_CN",
-        useCommandShortcut: true,
-        useDefaultHTMLSanitizer: true,
-        usageStatistics: true,
-        hideModeSwitch: false
-      },
-      editorVisible: true
+      viewerText:
+        "### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容"
     };
   },
   components: {
@@ -84,21 +73,31 @@ export default {
 
 <style lang="scss" scoped>
 .contract_custom-row {
-  margin: 20px 0;
+  // margin: 20px 0;
 }
-.text-align-left {
-  text-align: left;
+
+.contract_title {
+  margin-top: 20px;
 }
+
+.text-align-center {
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .contract_custom-fixed_terms {
-  padding: 5px;
-  text-align: left;
-  border: 1px solid #969696;
+  padding: 20px;
+  text-align: center;
+  // border: 1px solid #969696;
   //   border-radius: 10px;
 }
-.contract_custom-custom_terms {
-  text-align: left;
-}
+
 .contract_custom-viewer {
-  min-height: 200px;
+  min-height: 300px;
+}
+.dialog-aside_buttons {
+  margin-top: 200px;
 }
 </style>

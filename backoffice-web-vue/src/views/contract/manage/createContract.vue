@@ -1,152 +1,243 @@
 <template>
   <div class="animated fadeIn content">
-    <el-card class="box-card">
-      <div class="custom-create-contract-page">
-        <el-row class="custom-item_row" type="flex" justify="center" align="middle">
-          <span>创建合同（关联订单合同）</span>
-        </el-row>
-        <div class="custom-create-contract-page_content">
-          <div class="custom-content_item">
-            <el-row class="custom-content_title">合同类型</el-row>
-            <el-row class="custom-item_row" type="flex" justify="space-between" align="middle">
-              <el-row class="custom-radio-item custom-item_check" type="flex" align="middle">
-                <el-col :span="2">
-                  <i class="el-icon-check"></i>
-                </el-col>
-                <el-col :span="20" class="custom-radio-item_col">
-                  <span class="custom-radio-item_title">新签合同（电子签章）——电子合同</span>
-                  <span class="custom-radio-item_span">新创建电子合同或者上传未签署的纸质合同文件，使用在线电子签章签署合同</span>
-                </el-col>
-                <el-col :span="2">
-                  <i class="el-icon-arrow-down"></i>
-                </el-col>
-              </el-row>
-              <el-row class="custom-radio-item" type="flex" align="middle">
-                <el-col :span="2">
-                  <i class="el-icon-check"></i>
-                </el-col>
-                <el-col :span="21" class="custom-radio-item_col">
-                  <span class="custom-radio-item_title">已签纸质合同</span>
-                  <span class="custom-radio-item_span">把已签署的合同文件扫描件上传到订单附件中作为备份</span>
-                </el-col>
-              </el-row>
-            </el-row>
+    <el-dialog :visible.sync="dialogTemplateVisible" :show-close="false">
+      <el-row slot="title" type="flex" justify="space-between" align="middle">
+        <el-col :span="4">
+          <div class="template-form-header">
+            <h6>文件选择</h6>
           </div>
-          <div class="custom-content_item">
-            <el-row class="custom-content_title">合同内容</el-row>
-            <el-row class="custom-item_row" type="flex" justify="space-between" align="middle">
-              <el-col :span="10">
-                <el-row class="custom-item_row-select">
-                  <span>关联订单</span>
-                  <el-select size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in cities" :key="item.value" :label="item.label" :value="item.value">
-                      <span style="float: left">{{ item.label }}</span>
-                      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-                    </el-option>
-                  </el-select>
-                </el-row>
-                <el-row class="custom-item_row-select">
-                  <span>合同模板</span>
-                  <el-select size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in cities" :key="item.value" :label="item.label" :value="item.value">
-                      <span style="float: left">{{ item.label }}</span>
-                      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-                    </el-option>
-                  </el-select>
-                </el-row>
-                <el-row class="custom-item_row-select">
-                  <span>合同印章</span>
-                  <el-select size="small" v-model="value" placeholder="请选择">
-                    <el-option v-for="item in cities" :key="item.value" :label="item.label" :value="item.value">
-                      <span style="float: left">{{ item.label }}</span>
-                      <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-                    </el-option>
-                  </el-select>
-                </el-row>
-                <el-row class="custom-item_row-select">
-                  <el-radio size="small" v-model="radio1" label="1" border>我是甲方</el-radio>
-                  <el-radio size="small" v-model="radio1" label="2" border>我是乙方</el-radio>
-                </el-row>
-              </el-col>
-              <el-col class="custom-item_row-select_right" :span="14"></el-col>
-            </el-row>
-          </div>
-        </div>
-      </div>
+        </el-col>
+        <el-col :span="6">
+          <el-button-group>
+            <el-button class="template-form-button" @click="onFileSelectSure">确定</el-button>
+            <el-button @click="dialogTemplateVisible=false">关闭</el-button>
+          </el-button-group>
+        </el-col>
+      </el-row>
+      <contract-template-select @fileSelectChange="onFileSelectChange" />
+    </el-dialog>
+    <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
+      <el-row slot="title">
+        <el-button>生成合同</el-button>
+      </el-row>
+      <contract-preview />
+    </el-dialog>
+    <el-card class="box-card card-body">
+      <el-row type="flex" justify="center" align="middle">
+        <span class="create-contract-title">创建合同</span>
+      </el-row>
+      <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
+      <el-row type="flex" justify="space-around">
+        <el-col :span="6">
+          <el-row type="flex" justify="space-between">
+            <el-radio v-model="hasFrameworkContract" :label="false">无框架合同</el-radio>
+            <el-radio v-model="hasFrameworkContract" :label="true">有框架合同</el-radio>
+          </el-row>
+        </el-col>
+        <el-divider direction="vertical"></el-divider>
+        <el-col :span="6">
+          <el-row type="flex" justify="space-between">
+            <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
+            <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row">
+        <el-col :span="20" offset="2">
+          <el-input size="small" placeholder="选择订单" v-model="input1" :disabled="true">
+            <el-button slot="prepend">关联订单</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType=='1'">
+        <el-col :span="20" offset="2">
+          <el-input size="small" placeholder="选择合同模板" v-model="selectFile.name" :disabled="true">
+            <el-button slot="prepend" @click="dialogTemplateVisible=true">合同模板</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType!='1'">
+        <el-col :span="8" offset="2">
+          <!-- <el-input size="small" placeholder="选择纸质合同" v-model="input1" :disabled="true">
+            <el-button slot="prepend">上传纸质合同</el-button>
+          </el-input> -->
+          <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1"
+            list-type="picture-card" :on-exceed="handleExceed" :file-list="fileList">
+            <!-- <el-button size="small">上传纸质合同</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div> -->
+            <i slot="default" class="el-icon-plus"></i>
+            <div slot="file" slot-scope="{file}">
+              <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
+              <span class="el-upload-list__item-actions">
+                <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
+                  <i class="el-icon-delete"></i>
+                </span>
+                <span v-if="!disabled" class="el-upload-list__item-file-name">
+                  {{file.name}}
+                </span>
+              </span>
+            </div>
+          </el-upload>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" type="flex" justify="center">
+        <el-col :span="4" :offset="-2">
+          <el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>
+        </el-col>
+        <el-col :span="4" :offset="2">
+          <el-button class="create-contract-button_2">生成合同</el-button>
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
 
 <script>
+  import ContractTypeSelect from "./components/ContractTypeSelect";
+  import ContractTemplateSelect from "./components/ContractTemplateSelect";
+  import ContractPreview from "./components/ContractPreview";
+
   export default {
     name: "CreateContract",
+    components: {
+      ContractTypeSelect,
+      ContractTemplateSelect,
+      ContractPreview
+    },
     methods: {
-      handleClick() {
-        alert("button click");
+      onContractTypeChange(val) {
+        this.contractType = val;
+      },
+      //文件选择（缓存，并未确定）
+      onFileSelectChange(data) {
+        this.cacheSelectFile = data;
+      },
+      //文件选择确定
+      onFileSelectSure() {
+        this.dialogTemplateVisible = false;
+        this.selectFile = this.cacheSelectFile;
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`已达最大文件数`);
+        console.log(files);
+      },
+      handleRemove(file) {
+        this.fileList.pop(file);
       }
+    },
+    data() {
+      return {
+        contractType: '1',
+        hasFrameworkContract: false,
+        partyA: true,
+        dialogTemplateVisible: false,
+        cacheSelectFile: {},
+        selectFile: {},
+        fileList: [],
+        dialogPreviewVisible: false,
+      };
     }
   };
 
 </script>
-
-<style lang="scss">
-  .custom-create-contract-page_content {
-    border: 1px solid #a4a4a4;
+<style>
+  .create-contract-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 50px;
+    margin-top: 20px;
   }
 
-  .custom-content_title {
-    height: 45px;
-    line-height: 45px;
-    color: #101010;
-    font-size: 20px;
-    background-color: rgba(239, 239, 239, 1);
-    text-align: left;
-    padding-left: 10px;
+  .create-contract-type_select {
+    width: 280px;
+    height: 100px;
+    background: rgba(255, 164, 3, 1);
+    opacity: 0.85;
+    border-radius: 9px;
   }
 
-  .custom-item_row {
-    padding: 60px;
+  .dropdown-menu {
+    width: 280px;
+    height: 100px;
   }
 
-  .custom-item_row-select {
-    margin: 30px 0;
+  .card-body {
+    background-color: #FAFBFC;
   }
 
-  .custom-radio-item {
-    width: 690px;
-    height: 106px;
-    border-radius: 10px;
-    border: 1px solid #a2a2a2;
+  .contractTypeSelect {
+    margin-bottom: 50px;
   }
 
-  .custom-radio-item_title {
-    font-size: 24px;
-    color: #101010;
-    display: block;
-    text-align: left;
+  .create-contract-row {
+    margin-top: 20px;
   }
 
-  .custom-radio-item_span {
-    font-size: 20px;
-    color: #a4a4a4;
-    display: block;
-    text-align: left;
-  }
-
-  .custom-radio-item_col {
-    height: 100%;
-    padding: 5px 0;
-    background-color: #fff;
-  }
-
-  .custom-item_check {
-    border: 1px solid #ffd60c;
+  .create-contract-row_button {
     background-color: #ffd60c;
+    border-color: #ffd60c;
   }
 
-  .custom-item_row-select_right {
-    height: 400px;
-    border: 1px solid #a4a4a4;
+  .create-contract-button {
+    background-color: #ffd60c;
+    border-color: #ffd60c;
+    color: #000;
+    width: 100%;
+    height: 40px;
+  }
+
+  .create-contract-button_2 {
+    width: 100%;
+    height: 40px;
+  }
+
+  .el-upload__tip {
+    margin-top: 10px;
+  }
+
+  /* .upload_img {
+    vertical-align: middle;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    float: left;
+    position: relative;
+    z-index: 1;
+    margin-left: -80px;
+    background-color: #FFF
+  } */
+
+  .el-upload-list--picture-card .el-upload-list__item {
+    overflow: hidden;
+    background-color: #fff;
+    border: 0px solid #c0ccda !important;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    margin: 0 8px 8px 0;
+    display: inline-block;
+  }
+
+  .el-upload--picture-card {
+    background-color: #fbfdff;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    box-sizing: border-box;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    vertical-align: top;
+  }
+
+  .el-upload-list__item-file-name {
+    position: absolute;
+    right: 25px;
+    top: 50;
+    font-size: 12px;
+    color: #ffffff;
+    display: none
   }
 
 </style>

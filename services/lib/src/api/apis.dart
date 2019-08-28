@@ -96,22 +96,21 @@ class Apis {
   ///分享-需求订单
   static get shareRequirement =>
           (String code) {
-        return 'http://${GlobalConfigs
+        return '${GlobalConfigs
             .CONTEXT_PATH}:9091/RequirementSharePage.html?code=$code';
       };
 
   ///分享-生产进度
   static get shareProductionProgress =>
           (String code) {
-        return 'http://${GlobalConfigs
+        return '${GlobalConfigs
             .CONTEXT_PATH}:9091/productionProgressShare.html?code=$code';
       };
 
   ///分享-工厂
   static get shareFactory =>
           (String code) {
-        return 'http://${GlobalConfigs
-            .CONTEXT_PATH}:9091/factoryInfo.html?code=$code';
+        return '${GlobalConfigs.CONTEXT_PATH}:9091/factoryInfo.html?code=$code';
       };
 
   ///银行卡号查询

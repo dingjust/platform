@@ -26,10 +26,11 @@ class MyContractPage extends StatefulWidget {
 }
 
 class _MyContractPageState extends State<MyContractPage> with SingleTickerProviderStateMixin ,AutomaticKeepAliveClientMixin{
-
   final GlobalKey _globalKey = GlobalKey<_MyContractPageState>();
   List<String> historyKeywords;
   var controller;
+
+
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
       length: statuses.length,
       vsync: this, //动画效果的异步处理，默认格式
     );
+
     super.initState();
   }
 
@@ -185,7 +187,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<MyContractBLoC>(context);
-
+    print(widget.status.code);
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
@@ -199,8 +201,8 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
             StreamBuilder<ContractData>(
               stream: widget.status == null
                   ? bloc.stream
-                  : bloc.stream.where((purchaseData) =>
-              purchaseData.status == widget.status.code),
+                  : bloc.stream.where((data) =>
+              data.status == widget.status.code),
               // initialData: null,
               builder:
                   (BuildContext context, AsyncSnapshot<ContractData> snapshot) {

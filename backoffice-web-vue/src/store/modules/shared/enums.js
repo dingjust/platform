@@ -324,6 +324,11 @@ const state = {
     {code: 'NORMAL', name: '正常'},
     {code: 'DISABLING', name: '禁用'},
   ],
+  //订单类型
+  salesApplication:[
+    {code: 'BELOW_THE_LINE', name: '线下订单'},
+    {code: 'ONLINE', name: '线上订单'},
+  ]
 
 };
 

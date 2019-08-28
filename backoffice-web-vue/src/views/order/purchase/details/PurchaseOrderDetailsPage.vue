@@ -1,14 +1,15 @@
 <template>
   <div class="animated fadeIn">
-    <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
+    <!-- <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
                                  @onSubmit="onSubmit"
-                                 @onCancel="onCancel"/>
+                                 @onCancel="onCancel"/> -->
     <div class="pt-2"></div>
-    <purchase-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/>
+    <!-- <purchase-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/> -->
+    <purchase-order-info :slot-data="slotData"/>
     <div class="pt-2"></div>
-    <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
+    <!-- <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
                                  @onSubmit="onSubmit"
-                                 @onCancel="onCancel"/>
+                                 @onCancel="onCancel"/> -->
   </div>
 </template>
 
@@ -19,11 +20,13 @@
 
   import PurchaseOrderFormToolbar from "../toolbar/PurchaseOrderFormToolbar";
   import PurchaseOrderForm from '../form/PurchaseOrderForm';
+  import PurchaseOrderInfo from '../info/PurchaseOrderInfo';
+
 
   export default {
     name: 'PurchaseOrderDetailsPage',
     props: ['slotData'],
-    components: {PurchaseOrderFormToolbar, PurchaseOrderForm},
+    components: {PurchaseOrderFormToolbar, PurchaseOrderForm,PurchaseOrderInfo},
     methods: {
       ...mapActions({
         refresh: 'refresh'

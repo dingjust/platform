@@ -3,7 +3,9 @@
     <el-card class="box-card">
       <el-row :gutter="20">
         <el-col :span="8">
-          <img :src="sealUrl" />
+          <div class="seal-form_img">
+            <img :src="sealUrl" />
+          </div>
         </el-col>
         <el-col :span="8">
           <el-row class="seal_custom-row">
@@ -114,9 +116,35 @@
             border = this.sealBorder == "sealBorder0" ? 0 : 1;
           this.sealUrl = CDS.personal(this.sealName, 0, 0, shape, border);
         }
+        // console.log(this.sealUrl);
+        var imgFile = dataURLtoFile(this.sealUrl);
+        console.log(imgFile);
+        this.onUpload(imgFile);
+      },
+      //上传
+      async onUpload(file) {
+        var fd=new FormData();
+        fd.append('file',file);
+        const result = await this.$http.formdataPost(this.mediaUploadUrl,fd);
+        console.log(result);
       }
     }
   };
+
+  function dataURLtoFile(dataurl, filename = 'file') {
+    let arr = dataurl.split(',')
+    let mime = arr[0].match(/:(.*?);/)[1]
+    let suffix = mime.split('/')[1]
+    let bstr = atob(arr[1])
+    let n = bstr.length
+    let u8arr = new Uint8Array(n)
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new File([u8arr], `${filename}.${suffix}`, {
+      type: mime
+    })
+  }
 
 </script>
 
@@ -124,6 +152,10 @@
   .seal_custom-row {
     text-align: left;
     margin: 10px 0;
+  }
+
+  .seal-form_img {
+    border-right: 1px solid #E6E6E6;
   }
 
 </style>

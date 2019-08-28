@@ -101,6 +101,11 @@ const router = new Router({
               name: '生产订单',
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/purchase/PurchaseOrderPage')
             },
+            {
+              path: 'production',
+              name: '生产进度',
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/production/ProductionPage')
+            },
           ]
         },
         {
@@ -216,6 +221,7 @@ const router = new Router({
         },
         {
           path: '/contract',
+          redirect: '/manage',
           name: '合同',
           component: {
             render(c) {
@@ -233,6 +239,11 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/template/TemplatePage')
             },
             {
+              path: '/templateForm',
+              name: '新建合同模板',
+              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/template/components/TemplateForm')
+            },
+            {
               path: '/seal',
               name: '印章管理',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/seal/SealPage')
@@ -241,9 +252,9 @@ const router = new Router({
               name: '下单',
               component: () => import( /* webpackChunkName: 'orderPurchase' */ '@/views/unclassified/orderPurchase')
             }, {
-              path: '/seal/create',
+              path: '/sealForm',
               name: '印章创建',
-              component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/seal/sealManagement')
+              component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/seal/sealForm')
             }, {
               path: '/manage/createContract',
               name: '创建合同',

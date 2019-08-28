@@ -58,3 +58,40 @@ class ContractResponse {
   static Map<String, dynamic> toJson(ContractResponse model) =>
       _$ContractResponseToJson(model);
 }
+
+
+@JsonSerializable()
+class ContractTempResponse {
+  final int number;
+  final int size;
+  final int totalPages;
+  final int totalElements;
+  final List<ContractTemplateModel> content;
+
+  ContractTempResponse(this.number, this.size, this.totalPages, this.totalElements,
+      this.content);
+
+  factory ContractTempResponse.fromJson(Map<String, dynamic> json) =>
+      _$ContractTempResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractTempResponse model) =>
+      _$ContractTempResponseToJson(model);
+}
+
+@JsonSerializable()
+class SealResponse {
+  final int number;
+  final int size;
+  final int totalPages;
+  final int totalElements;
+  final List<SealModel> content;
+
+  SealResponse(this.number, this.size, this.totalPages, this.totalElements,
+      this.content);
+
+  factory SealResponse.fromJson(Map<String, dynamic> json) =>
+      _$SealResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(SealResponse model) =>
+      _$SealResponseToJson(model);
+}

@@ -1,40 +1,41 @@
 <template>
   <div class="animated fadeIn">
-    <el-table v-if="isHeightComputed" ref="resultTable" stripe
-              :data="page.content"
-              :height="autoHeight"
-              @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="32" fixed></el-table-column>
-      <el-table-column label="产品编码" prop="code" width="120" fixed></el-table-column>
-      <el-table-column label="产品货号" prop="skuID" width="120" fixed></el-table-column>
-      <el-table-column label="产品名称" prop="name" width="480"></el-table-column>
-      <el-table-column label="供货价" prop="price" :formatter="numberFormatter"></el-table-column>
-      <el-table-column label="上/下架状态" prop="approvalStatus">
+    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
+      @selection-change="handleSelectionChange">
+      <!-- <el-table-column type="selection" width="32"></el-table-column> -->
+      <el-table-column label="产品图片" width="120">
+        <template slot-scope="scope">
+          <img width="54px" height="54px" :src="scope.row.thumbnail.url">
+        </template>
+      </el-table-column>
+      <el-table-column label="产品名" prop="name" min-width="200"></el-table-column>
+      <el-table-column label="产品货号" prop="skuID" min-width="120"></el-table-column>
+      <el-table-column label="品类" min-width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.category.name}}</span> </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="approvalStatus">
         <template slot-scope="scope">
           <span>{{getEnum('approvalStatuses', scope.row.approvalStatus)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="240">
+      <el-table-column label="操作" min-width="240">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
           <el-button v-if="isFactory() && scope.row.approvalStatus==='unapproved'" type="text" icon="el-icon-edit"
-                     @click="onShelf(scope.row)">
+            @click="onShelf(scope.row)">
             上架
           </el-button>
           <el-button v-if="isFactory() && scope.row.approvalStatus==='approved'" type="text" icon="el-icon-edit"
-                     @click="onOffShelf(scope.row)">
+            @click="onOffShelf(scope.row)">
             下架
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="onPageSizeChanged"
-                   @current-change="onCurrentPageChanged"
-                   :current-page="page.number + 1"
-                   :page-size="page.size"
-                   :page-count="page.totalPages"
-                   :total="page.totalElements">
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
   </div>
 </template>
@@ -92,4 +93,5 @@
       }
     }
   }
+
 </script>

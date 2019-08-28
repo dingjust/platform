@@ -1,96 +1,86 @@
 <template>
-  <div class="animated fadeIn content">
-    <el-card>
-      <requirement-order-toolbar @onSearch="onSearch"
-                                 @onAdvancedSearch="onAdvancedSearch"/>
-      <requirement-order-search-result-list :page="page"
-                                            @onSearch="onSearch"
-                                            @onAdvancedSearch="onAdvancedSearch">
-        <template slot="operations" slot-scope="props">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
-          <el-button type="text" icon="el-icon-edit" :disabled="!isPendingQuote(props.item)"
-                     @click="onQuoting(props.item)">
-            报价
-          </el-button>
-        </template>
-      </requirement-order-search-result-list>
-    </el-card>
+  <div class="animated fadeIn">
+    <el-row :gutter="20">
+      <el-col :span="14">
+        <el-row>
+          <business-card />
+        </el-row>
+        <el-row>
+          <toolbar-card />
+        </el-row>
+        <el-row>
+          <chart-card />
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="12">
+            <month-income-card :slot-data="lastMonthIncome"/>
+          </el-col>
+          <el-col :span="12">
+            <month-income-card :slot-data="thisMonthIncome"/>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="10">
+        <account-entry-card />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
-
-  const {mapGetters, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
-
-  import RequirementOrderToolbar from "@/views/order/requirement/toolbar/RequirementOrderToolbar";
-  import RequirementOrderSearchResultList from '@/views/order/requirement/list/RequirementOrderSearchResultList';
-  import RequirementOrderDetailsPage from '@/views/order/requirement/details/RequirementOrderDetailsPage';
-
-  import QuoteDetailsPage from '@/views/order/quote/details/QuoteDetailsPage';
+  import BusinessCard from '../shared/BusinessCard';
+  import ToolbarCard from '../shared/ToolbarCard';
+  import ChartCard from '../shared/ChartCard';
+  import MonthIncomeCard from '../shared/MonthIncomeCard';
+  import AccountEntryCard from '../shared/AccountEntryCard';
 
   export default {
     name: 'FactoryDashboardPage',
     components: {
-      RequirementOrderToolbar,
-      RequirementOrderSearchResultList
+      BusinessCard,
+      ToolbarCard,
+      ChartCard,
+      MonthIncomeCard,
+      AccountEntryCard
     },
     computed: {
-      ...mapGetters({
-        page: 'page'
-      }),
+
     },
-    methods: {
-      ...mapActions({
-        search: 'search',
-        searchAdvanced: 'searchAdvanced'
-      }),
-      onSearch(page, size) {
-        const keyword = this.keyword;
-        const statuses = this.statuses;
-        const url = this.apis().getAllRequirementOrders();
-        this.search({url, keyword, statuses, page, size});
-      },
-      onAdvancedSearch(page, size) {
-        this.isAdvancedSearch = true;
-
-        const query = this.queryFormData;
-        const url = this.apis().getAllRequirementOrders();
-        this.searchAdvanced({url, query, page, size});
-      },
-      async onDetails(item) {
-        const url = this.apis().getRequirementOrder(item.code);
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
-      },
-      onQuoting(item) {
-        console.log('报价: ' + JSON.stringify(item));
-        let quoteFormData = {};
-        Object.assign(quoteFormData, this.quoteFormData);
-        quoteFormData.requirementOrder = item;
-
-        // 填写报价单
-        this.fn.openSlider('填写报价单，需求编号：' + item.code, QuoteDetailsPage, quoteFormData);
-      },
-      isPendingQuote: function (row) {
-        return row.status === 'PENDING_QUOTE';
-      },
-    },
+    methods: {},
     data() {
       return {
-        keyword: this.$store.state.RequirementOrdersModule.keyword,
-        queryFormData: this.$store.state.RequirementOrdersModule.queryFormData,
-        quoteFormData: this.$store.state.RequirementOrdersModule.quoteFormData,
-        isAdvancedSearch: this.$store.state.RequirementOrdersModule.isAdvancedSearch,
+        thisMonthIncome:{
+          title:'本月营收',
+          income:1231.12,
+          proofingOrders:8,
+          purchaseOrders:10,
+          incomed:123,
+          comparison:0.264
+        },
+        lastMonthIncome:{
+          title:'上月营收',
+          income:3134.12,
+          proofingOrders:23,
+          purchaseOrders:13,
+          incomed:1232,
+          comparison:0.3114
+        }
       };
     },
-    created() {
-      this.onSearch();
-    }
+    created() {}
   };
+
 </script>
+<style>
+  .dashboard-card {
+    background-color: #ffffff;
+    border-radius: 5px;
+    width: 100%;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+</style>
