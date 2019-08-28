@@ -6,7 +6,7 @@
       </div>
     </el-row>
     <el-row type="flex" justify="center">
-      <h6>sss</h6>
+      <h6>{{slotData.uniqueCode}}</h6>
     </el-row>
     <el-row type="flex" justify="center">
       <el-button class="purchase-order-btn" @click="onGenerate">生成唯一码</el-button>
@@ -17,7 +17,7 @@
 <script>
   export default {
     name: 'UniquecodeGenerateForm',
-        props: ['slotData'],
+    props: ['slotData'],
 
     components: {
 
@@ -35,13 +35,11 @@
           return;
         }
         this.$message.success('生成唯一码成功');
-        this.uniqueCode=result;
+        this.$set(this.slotData, 'uniqueCode', result);
       },
     },
     data() {
-      return {
-        uniqueCode:''
-      }
+      return {}
     },
     created() {
 

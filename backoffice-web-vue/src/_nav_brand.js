@@ -1,18 +1,17 @@
 export default {
   items: [
-    {
-      title: true,
-      name: '品牌',
-      class: '',
-      wrapper: {
-        element: 'span',
-        attributes: {}
-      }
-    },
+    // {
+    //   title: true,
+    //   name: '品牌',
+    //   class: '',
+    //   wrapper: {
+    //     element: 'span',
+    //     attributes: {}
+    //   }
+    // },
     {
       name: '仪表盘',
       url: '/dashboard',
-      icon: 'icon-speedometer'
     },
     {
       name: '产品管理',

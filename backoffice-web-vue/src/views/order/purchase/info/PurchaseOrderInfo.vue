@@ -20,7 +20,7 @@
 <script>
   import PurchaseOrderInfoMain from './PurchaseOrderInfoMain';
   import PurchaseOrderInfoAside from './PurchaseOrderInfoAside';
-  import UniquecodeGenerateForm from './UniquecodeGenerateForm';
+  import UniquecodeGenerateForm from '@/components/custom/UniquecodeGenerateForm';
 
   export default {
     name: 'PurchaseOrderInfo',
