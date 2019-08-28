@@ -248,9 +248,9 @@ const router = new Router({
               name: '印章管理',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/seal/SealPage')
             }, {
-              path: '/unclassified/orderPurchase',
+              path: '/orderPurchase',
               name: '下单',
-              component: () => import( /* webpackChunkName: 'orderPurchase' */ '@/views/unclassified/orderPurchase')
+              component: () => import( /* webpackChunkName: 'orderPurchase' */ '@/views/order/purchase/OrderPurchase')
             }, {
               path: '/sealForm',
               name: '印章创建',

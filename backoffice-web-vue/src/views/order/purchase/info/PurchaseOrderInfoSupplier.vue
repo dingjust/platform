@@ -6,11 +6,11 @@
       </div>
     </el-row>
     <el-row type="flex" justify="space-between" align="center" class="info-row">
-      <orders-info-item :slotData="'合作商'">{{slotData.name}}</orders-info-item>
+      <orders-info-item :slotData="'合作商'">{{name}}</orders-info-item>
     </el-row>
     <el-row type="flex" justify="space-between" align="center" class="info-row">
-      <orders-info-item :slotData="'联系人'">{{slotData.contactPerson}}</orders-info-item>
-      <orders-info-item :slotData="'联系方式'">{{slotData.contactPhone}}</orders-info-item>
+      <orders-info-item :slotData="'联系人'">{{contactPerson}}</orders-info-item>
+      <orders-info-item :slotData="'联系方式'">{{contactPhone}}</orders-info-item>
     </el-row>
   </div>
 </template>
@@ -26,7 +26,27 @@
     },
     mixins: [],
     computed: {
-
+      name: function () {
+        if (this.slotData.purchaser != null) {
+          return this.slotData.purchaser.name;
+        } else {
+          return this.slotData.companyOfSeller;
+        }
+      },
+      contactPerson: function () {
+        if (this.slotData.purchaser != null) {
+          return this.slotData.purchaser.contactPerson;
+        } else {
+          return this.slotData.contactPersonOfSeller;
+        }
+      },
+      contactPhone: function () {
+        if (this.slotData.purchaser != null) {
+          return this.slotData.purchaser.contactPhone;
+        } else {
+          return this.slotData.contactOfSeller;
+        }
+      }
     },
     methods: {},
     data() {
@@ -55,7 +75,8 @@
     opacity: 0.85;
   }
 
-  .info-row{
+  .info-row {
     margin-top: 5px;
   }
+
 </style>

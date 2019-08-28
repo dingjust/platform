@@ -1,69 +1,92 @@
 <template>
-  <el-row type="flex" justify="space-between">
-    <template v-for="(item,index) in mockData">
-      <el-col :span="5">
-        <el-row type="flex" justify="center" align="middle">
-          <h6 class="progress-status">{{item.status}}</h6>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle">
-          <div :class="getLeftLine(index,mockData)" />
-          <el-col :span="6">
-            <div
-              :class="item.finsh?'progress-icon-container':isDoing(index,mockData)?'progress-icon-container_doing':'progress-icon-container_none'">
-              <i class="iconfont2 progress-icon" v-html="item.icon" v-if="!isDoing(index,mockData)"></i>
-              <h6 v-if="isDoing(index,mockData)" class="progress-icon-container_text">进行中</h6>
+  <div>
+    <el-dialog :visible.sync="updateFormVisible" width="50%" class="purchase-dialog" append-to-body>
+      <order-progress-update-form :slotData="selectProgressModel" :orderCode="slotData.code"
+        @editSubmit="onEditSubmit" />
+    </el-dialog>
+    <el-row type="flex" justify="space-between">
+      <template v-for="(item,index) in slotData.progresses">
+        <el-col :span="5">
+          <el-row type="flex" justify="center" align="middle">
+            <h6 class="progress-status">{{getEnum('productionProgressPhaseTypes', item.phase)}}</h6>
+          </el-row>
+          <el-row type="flex" justify="center" align="middle">
+            <div :class="getLeftLine(index,slotData.progresses)" />
+            <el-col :span="6">
+              <div
+                :class="item.sequence<=currentSequence?'progress-icon-container':isDoing(index,slotData.progresses)?'progress-icon-container_doing':'progress-icon-container_none'">
+                <i class="iconfont2 progress-icon" v-html="phaseIcon[item.phase]"
+                  v-if="!isDoing(index,slotData.progresses)"></i>
+                <h6 v-if="isDoing(index,slotData.progresses)" class="progress-icon-container_text">进行中</h6>
+              </div>
+            </el-col>
+            <div :class="getRightLine(index,slotData.progresses)" />
+          </el-row>
+          <el-row type="flex" justify="center" align="middle">
+            <div class="progress-line-horizon_none" />
+            <div :class="item.sequence==currentSequence?'progress-line-vertical':'progress-line-vertical_none'">
             </div>
-          </el-col>
-          <div :class="getRightLine(index,mockData)" />
-        </el-row>
-        <el-row type="flex" justify="center" align="middle">
-          <div class="progress-line-horizon_none" />
-          <div :class="item.finsh?'progress-line-vertical':'progress-line-vertical_none'">
-          </div>
-          <div class="progress-line-horizon_none" />
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" v-if="item.img!=null">
-          <img class="progress-img" :src="item.img">
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" class="progress-row" v-if="item.finshDate!=null">
-          <el-col :span="19" :offset="4">
-            <h6 class="progress-info">完成日期: {{item.finshDate}}</h6>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" v-if="item.num!=null">
-          <el-col :span="19" :offset="4">
-            <h6 class="progress-info">完成数量: {{item.num}}</h6>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" v-if="item.remarks!=null">
-          <el-col :span="19" :offset="4">
-            <h6 class="progress-info">备注: {{item.remarks}}</h6>
-          </el-col>
-        </el-row>
-        <el-row type="flex" justify="center" align="middle" v-if="!item.finsh">
-          <el-button size="mini" class="info-detail-logistics_info-btn1">编辑</el-button>
-        </el-row>
-        <el-row type="flex" style="margin-top:5px;" justify="center" align="middle" v-if="!item.finsh&&isDoing(index,mockData)">
-          <el-button size="mini" class="info-detail-logistics_info-btn1">{{item.status}}完成</el-button>
-        </el-row>
-      </el-col>
-    </template>
-  </el-row>
+            <div class="progress-line-horizon_none" />
+          </el-row>
+          <el-row type="flex" justify="center" align="middle" v-if="item.medias!=null&&item.medias.length!=0">
+            <img class="progress-img" :src="item.medias[0].url">
+          </el-row>
+          <el-row type="flex" justify="center" align="middle" class="progress-info-row" v-if="item.estimatedDate!=null">
+            <el-col :span="19">
+              <h6 class="progress-info">完成日期: {{item.estimatedDate | timestampToTime}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="center" class="progress-info-row" align="middle" v-if="item.quantity!=null">
+            <el-col :span="19">
+              <h6 class="progress-info">完成数量: {{item.quantity}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="center" class="progress-info-row" align="middle" v-if="item.remarks!=null">
+            <el-col :span="19">
+              <h6 class="progress-info">备注: {{item.remarks}}</h6>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="center" align="middle" v-if="item.sequence>=currentSequence&&slotData.status=='IN_PRODUCTION'">
+            <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onEdit(item)">编辑</el-button>
+          </el-row>
+          <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
+            v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'">
+            <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
+              {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
+          </el-row>
+        </el-col>
+      </template>
+    </el-row>
+  </div>
 </template>
 
 <script>
+  import OrderProgressUpdateForm from './OrderProgressUpdateForm';
+
   export default {
     name: "PurchaseOrderProgress",
     props: ['slotData'],
-    components: {},
-    computed: {},
+    components: {
+      OrderProgressUpdateForm
+    },
+    computed: {
+      currentSequence: function () {
+        var result = 0;
+        this.slotData.progresses.forEach(element => {
+          if (element.phase == this.slotData.currentPhase) {
+            result = element.sequence;
+          }
+        });
+        return result;
+      },
+    },
     methods: {
       ///判断左边线样式
       getLeftLine(index, data) {
         if (index == 0) {
           return 'progress-line-horizon_none'
         } else {
-          if (data[index].finsh) {
+          if (data[index].sequence <= this.currentSequence) {
             return 'progress-line-horizon';
           } else {
             return 'progress-line-horizon_grey';
@@ -75,11 +98,11 @@
         if (index == data.length - 1) {
           return 'progress-line-horizon_none'
         } else {
-          if (data[index].finsh) {
-            if (data[index + 1].finsh) {
-              return 'progress-line-horizon'
-            } else {
+          if (data[index].sequence <= this.currentSequence) {
+            if (data[index].phase == this.slotData.currentPhase) {
               return 'progress-line-horizon_grey';
+            } else {
+              return 'progress-line-horizon';
             }
           } else {
             return 'progress-line-horizon_grey';
@@ -88,66 +111,55 @@
       },
       ///判断是否正在进行中
       isDoing(index, data) {
-        if (data[index].finsh) {
+        return data[index].phase == this.slotData.currentPhase;
+      },
+      onEdit(item) {
+        this.selectProgressModel = item;
+        this.selectProgressModel.updateOnly = true;
+        this.updateFormVisible = !this.updateFormVisible;
+      },
+      async onEditSubmit() {
+        if (this.compareDate(new Date(), new Date(this.selectProgressModel.estimatedDate))) {
+          this.$message.error('预计完成时间不能小于当前时间');
           return false;
-        } else {
-          if (index == 0) {
-            return true;
-          } else {
-            if (data[index - 1].finsh) {
-              return true;
-            } else {
-              return false;
-            }
-          }
         }
-      }
+        const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, this.selectProgressModel.id);
+        const result = await this.$http.put(url, this.selectProgressModel);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('更新成功');
+        this.updateFormVisible = false;
+      },
+      async onProgressFinish(item,index) {
+        item.updateOnly = false;
+        const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, item.id);
+        const result = await this.$http.put(url, item);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('更新成功');
+        this.updateFormVisible = false;
+        if(index!=this.slotData.progresses.length-1){
+        this.slotData.currentPhase=this.slotData.progresses[index+1].phase;
+        }else{
+          this.slotData.status='IN_PRODUCTION';
+        }
+      },
     },
     data() {
       return {
-        mockData: [{
-            status: '备料',
-            finshDate: '2019-3-1',
-            num: 2000,
-            remarks: '延期两天，后面 时间赶回来',
-            img: '/resource/h0f/h26/8804513611806.jpg',
-            finsh: true,
-            icon: '&#xe675;'
-          },
-          {
-            status: '裁剪',
-            finshDate: '2019-3-1',
-            num: 2000,
-            remarks: '延期两天，后面 时间赶回来',
-            img: '/resource/h0f/h26/8804513611806.jpg',
-            finsh: true,
-            icon: '&#xe677;'
-          },
-          {
-            status: '车缝',
-            finshDate: '2019-3-1',
-            num: 2000,
-            remarks: '延期两天，后面 时间赶回来',
-            finsh: false,
-            icon: '&#xe67a;'
-          },
-          {
-            status: '后整',
-            finshDate: '2019-3-1',
-            num: 2000,
-            remarks: '延期两天，后面 时间赶回来',
-            finsh: false,
-            icon: '&#xe679;'
-          },
-          {
-            status: '验货',
-            finshDate: '2019-3-1',
-            num: 2000,
-            remarks: '延期两天，后面 时间赶回来',
-            finsh: false,
-            icon: '&#xe689;'
-          }
-        ]
+        updateFormVisible: false,
+        phaseIcon: {
+          MATERIAL_PREPARATION: '&#xe675;',
+          CUTTING: '&#xe677;',
+          STITCHING: '&#xe67a;',
+          AFTER_FINISHING: '&#xe67a;',
+          INSPECTION: '&#xe689;',
+        },
+        selectProgressModel: '',
       };
     },
     created() {
@@ -257,6 +269,10 @@
 
   .progress-row {
     margin-top: 2px;
+  }
+
+  .progress-info-row {
+    text-align: center;
   }
 
 </style>

@@ -1,21 +1,29 @@
 <template>
   <el-form :inline="true">
     <el-form-item label="品牌名">
-      <el-input placeholder="输入品牌名" v-model="keyword" class="purchase-toolbar-input"></el-input>
+      <el-input placeholder="输入品牌名" v-model="queryFormData.purchasers[0]"  class="purchase-toolbar-input"></el-input>
     </el-form-item>
     <el-form-item label="日期">
-        <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
-          start-placeholder="开始日期" end-placeholder="截止日期" :picker-options="pickerOptions">
-        </el-date-picker>
+      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
+        value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
+        :picker-options="pickerOptions">
+      </el-date-picker>
     </el-form-item>
     <el-form-item label="跟单员">
       <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
     </el-form-item>
     <el-form-item label="分类">
-      <el-input placeholder="" class="purchase-toolbar-input"></el-input>
+      <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
+      <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable reserve-keyword
+        clearable>
+        <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
+          <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name" :value="level2.name">
+          </el-option>
+        </el-option-group>
+      </el-select>
     </el-form-item>
     <el-button-group>
-      <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
+      <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
       <el-button native-type="reset" @click="">重置</el-button>
     </el-button-group>
   </el-form>
@@ -40,8 +48,13 @@
         setQueryFormData: 'queryFormData',
       }),
       onSearch() {
+        this.$store.state.PurchaseOrdersModule.keyword=this.keyword;
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
+      },
+      onAdvancedSearch() {
+        this.setQueryFormData(this.queryFormData);
+        this.$emit('onAdvancedSearch', 0);
       },
       async getFactories(query) {
         const url = this.apis().getFactories();
@@ -70,6 +83,19 @@
           return;
         }
         this.brands = result.content;
+      },
+      onDateChange(values) {
+        console.log(values[0]);
+        this.queryFormData.createdDateFrom = values[0];
+        this.queryFormData.createdDateTo = values[1];
+        this.onAdvancedSearch();
+      },
+      async getCategories() {
+        const url = this.apis().getMinorCategories();
+        const results = await this.$http.get(url);
+        if (!results['errors']) {
+          this.categories = results;
+        }
       },
     },
     data() {
@@ -104,12 +130,14 @@
         dateTime: '',
         factories: [],
         brands: [],
-        keyword: this.$store.state.ContractModule.keyword,
-        formData: this.$store.state.ContractModule.formData,
-        queryFormData: this.$store.state.ContractModule.queryFormData,
+        keyword: this.$store.state.PurchaseOrdersModule.keyword,
+        formData: this.$store.state.PurchaseOrdersModule.formData,
+        queryFormData: this.$store.state.PurchaseOrdersModule.queryFormData,
+        categories: [],
       }
     },
     created() {
+      this.getCategories();
       if (this.isTenant()) {
         this.getFactories();
         this.getBrands();
@@ -137,7 +165,7 @@
     width: 120px;
   }
 
-  .el-form-item__label{
+  .el-form-item__label {
     font-size: 13px;
   }
 

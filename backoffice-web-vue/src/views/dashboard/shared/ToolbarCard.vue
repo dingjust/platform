@@ -2,14 +2,14 @@
   <div class="animated fadeIn dashboard-card">
     <el-row type="flex" align="middle" justify="start">
       <el-col :span="4">
-      <div class="dashboard-title">
-        <h6 class="dashboard-title_text">工具直通车：</h6>
-      </div>
+        <div class="dashboard-title">
+          <h6 class="dashboard-title_text">工具直通车：</h6>
+        </div>
       </el-col>
-      <el-button class="dashboard-toolbar-btn" size="mini">创建线下订单</el-button>
+      <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToOrderPurchase">创建线下订单</el-button>
       <el-button class="dashboard-toolbar-btn" size="mini">唯一码导入</el-button>
       <el-button class="dashboard-toolbar-btn" size="mini">公司认证</el-button>
-      <el-button class="dashboard-toolbar-btn" size="mini">电子合同模板</el-button>
+      <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToTemplate">电子合同模板</el-button>
     </el-row>
   </div>
 </template>
@@ -26,6 +26,12 @@
     methods: {
       onSetting() {
 
+      },
+      jumpToTemplate() {
+        this.$router.push("template");
+      },
+      jumpToOrderPurchase() {
+        this.$router.push("orderPurchase");
       }
     },
     data() {

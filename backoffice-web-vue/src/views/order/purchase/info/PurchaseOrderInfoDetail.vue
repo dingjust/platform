@@ -1,7 +1,7 @@
 <template>
   <div class="info-detail-body">
     <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-info-deliver :slotData="slotData" />
+      <purchase-order-info-deliver :slotData="slotData" :read-only="true" />
     </el-dialog>
     <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
       <purchase-order-info-receive :slotData="slotData" />
@@ -19,34 +19,36 @@
         <div>
           <el-row type="flex" align="center" class="info-detail-item_row">
             <el-col :span="7">
-              <orders-info-item :slotData="'生产单号'">TOP23958589232</orders-info-item>
+              <orders-info-item :slotData="'生产单号'">{{slotData.code}}</orders-info-item>
             </el-col>
             <el-col :span="6" :offset="1">
-              <orders-info-item :slotData="'生产产品'">麻辣小龙虾</orders-info-item>
+              <orders-info-item :slotData="'生产产品'">{{slotData.product.name}}</orders-info-item>
             </el-col>
             <el-col :span="5">
-              <orders-info-item :slotData="'合作方式'">清加工</orders-info-item>
+              <orders-info-item :slotData="'合作方式'">{{getEnum('machiningTypes', slotData.machiningType)}}
+              </orders-info-item>
             </el-col>
             <el-col :span="6">
-              <orders-info-item :slotData="'是否开发票'">开发票</orders-info-item>
+              <orders-info-item :slotData="'是否开发票'">{{slotData.invoiceNeeded?'开发票':'不开发票'}}</orders-info-item>
             </el-col>
           </el-row>
           <el-row type="flex" align="center" class="info-detail-item_row">
             <el-col :span="7">
-              <orders-info-item :slotData="'交货日期'">2019-01-01</orders-info-item>
+              <orders-info-item :slotData="'交货日期'">{{slotData.expectedDeliveryDate | timestampToTime}}
+              </orders-info-item>
             </el-col>
             <el-col :span="6" :offset="1">
-              <orders-info-item :slotData="'生产数量'">200(件)</orders-info-item>
+              <orders-info-item :slotData="'生产数量'">{{totalQuantity}}(件)</orders-info-item>
             </el-col>
             <el-col :span="5">
-              <orders-info-item :slotData="'生产总额'">￥100W</orders-info-item>
+              <orders-info-item :slotData="'生产总额'">￥{{this.slotData.totalPrice}}</orders-info-item>
             </el-col>
             <el-col :span="6">
-              <orders-info-item :slotData="'订单报价'">￥50.0</orders-info-item>
+              <orders-info-item :slotData="'订单报价'">￥{{this.slotData.unitPrice}}</orders-info-item>
             </el-col>
           </el-row>
-          <el-row class="info-detail-item_row">
-            <orders-info-item :slotData="'送货地址'">广东省广州市珠江新城xxxx大夏900号 刘少立 1039847837</orders-info-item>
+          <el-row class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">
+            <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}} {{this.slotData.contactPersonOfSeller}} {{this.slotData.contactOfSeller}}</orders-info-item>
           </el-row>
           <el-row type="flex" justify="space-between" align="middle">
             <el-row type="flex" justify="start" align="middle">
@@ -67,7 +69,7 @@
               @click="receiveFormVisible=!receiveFormVisible">查看收货单</el-button>
           </el-row>
           <el-row class="info-detail-item_row2">
-            <orders-info-table :slotData="slotData" class="info-detail-table" />
+            <orders-info-table :slotData="slotData.entries" class="info-detail-table" />
           </el-row>
         </div>
       </el-col>
@@ -95,7 +97,13 @@
     },
     mixins: [],
     computed: {
-
+      totalQuantity: function () {
+        var result = 0;
+        this.slotData.entries.forEach(element => {
+          result+=element.quantity;
+        });
+        return result;
+      },
     },
     methods: {},
     data() {
@@ -148,7 +156,7 @@
     height: 25px;
     background: #FFD60C;
     font-weight: 400;
-    color: rgba(0,0,0,0.85);
+    color: rgba(0, 0, 0, 0.85);
     font-size: 10px;
     border-radius: 0px;
     border: 0px solid #FFD60C;

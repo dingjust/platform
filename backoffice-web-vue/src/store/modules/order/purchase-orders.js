@@ -79,6 +79,7 @@ const state = {
     createdDateTo: null,
     belongTos: [],
     purchasers:[],
+    keyword:''
   },
   addressFormData: {
     id: null,

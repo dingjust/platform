@@ -101,7 +101,13 @@
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       },
       handleClick(tab, event) {
-        console.log(tab, event);
+        // console.log(tab.name);
+        this.queryFormData.statuses=[tab.name];
+        if(tab.name=='ALL'){
+          this.onSearch("");
+        }else{
+        this.onAdvancedSearch();
+        }
       },
       async onDetails(row) {
         const url = this.apis().getPurchaseOrder(row.code);
@@ -132,11 +138,9 @@
       };
     },
     created() {
-      // this.statues.
       this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
         this.statues.push(element);
       });
-      // this.activeStatus = this.statues[0];
       this.onSearch("");
     }
   };
