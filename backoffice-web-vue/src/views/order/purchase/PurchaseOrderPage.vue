@@ -19,7 +19,7 @@
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code">
             <span slot="label">
-              <tab-label-bubble :label="item.name" :num="index" />
+              <tab-label-bubble :label="item.name" :num="0" />
             </span>
             <purchase-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
               @onAdvancedSearch="onAdvancedSearch" />

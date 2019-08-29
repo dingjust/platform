@@ -53,7 +53,7 @@
           <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="订单生成时间">
+      <el-table-column label="订单生成时间" min-width="100">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>

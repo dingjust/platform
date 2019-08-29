@@ -6,7 +6,7 @@
       </div>
     </el-row>
     <el-row type="flex" align="middle" class="progress-update-form-row">
-      <el-col :span="3">
+      <el-col :span="4">
         <h6 class="progress-update-form-text1">预计完成日期:</h6>
       </el-col>
       <el-col :span="6" :offset="1">
@@ -24,7 +24,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" align="top" class="progress-update-form-row">
-      <el-col :span="3">
+      <el-col :span="4">
         <h6 class="progress-update-form-text1">备注信息:</h6>
       </el-col>
       <el-col :span="16" :offset="1">
@@ -33,7 +33,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" align="top" class="progress-update-form-row">
-      <el-col :span="3">
+      <el-col :span="4">
         <h6 class="progress-update-form-text1">上传图片:</h6>
       </el-col>
       <el-col :span="16" :offset="1">

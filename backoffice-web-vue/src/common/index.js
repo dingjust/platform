@@ -315,6 +315,14 @@ const COMMON_APIS = {
   createPurchaseOrderOfQuote(quote) {
     return '/b2b/orders/purchase/create/' + quote;
   },
+  //创建发货单
+  createShippingOrder(code) {
+    return '/b2b/orders/purchase/'+code+'/createShippingOrder';
+  },
+  //确认线下生产订单
+  confirmProductionByOffline(code) {
+    return '/b2b/orders/purchase/'+code+'/confirmProductionByOffline';
+  },
   getProductionProgressReports() {
     return '/b2b/reports/productionProgresses';
   },
