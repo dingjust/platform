@@ -2,25 +2,26 @@
   <div class="info-receive-body">
     <el-row class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">创建收货单</h6>
+        <h6 class="info-title_text">收货单</h6>
       </div>
     </el-row>
     <el-row class="info-receive-row">
       <form-label label="合作对象" />
     </el-row>
+    <!-- <el-form :disabled="item.code!=null"> -->
     <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">发货人</h6>
-          <el-input placeholder="输入品牌名" v-model="form.brandName" size="mini">
+          <el-input placeholder="输入品牌名" v-model="form.consignorName" size="mini">
           </el-input>
         </el-row>
       </el-col>
       <el-col :span="8">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">联系方式</h6>
-          <el-input placeholder="输入手机号" v-model="form.phone" size="mini">
-            <el-select v-model="form.phone" slot="append" placeholder="请选择">
+          <el-input placeholder="输入手机号" v-model="form.consignorPhone" size="mini">
+            <el-select v-model="form.consignorPhone" slot="append" placeholder="请选择">
               <el-option label="123" value="123"></el-option>
               <el-option label="1234" value="1234"></el-option>
               <el-option label="1324" value="1324"></el-option>
@@ -33,19 +34,20 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">发货方式</h6>
-          <el-input placeholder="输入方式" v-model="form.receiveName" size="mini" :disabled="form.offlinereceive">
+          <el-input placeholder="输入方式" v-model="form.deliverWay" size="mini" :disabled="form.isOfflineConsignment">
           </el-input>
         </el-row>
       </el-col>
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">发货单号</h6>
-          <el-input placeholder="货运单号" v-model="form.receiveCode" size="mini" :disabled="form.offlinereceive">
+          <el-input placeholder="货运单号" v-model="form.receiveCode" size="mini" :disabled="form.isOfflineConsignment">
           </el-input>
         </el-row>
       </el-col>
       <el-col :span="8">
-        <el-checkbox v-model="form.offlinereceive" size='mini' class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）</el-checkbox>
+        <el-checkbox v-model="form.isOfflineConsignment" size='mini' class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）
+        </el-checkbox>
       </el-col>
     </el-row>
     <el-row class="info-receive-row">
@@ -55,21 +57,21 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">收货人</h6>
-          <el-input placeholder="输入名称" v-model="form.receiveName" size="mini">
+          <el-input placeholder="输入名称" v-model="form.consigneeName" size="mini">
           </el-input>
         </el-row>
       </el-col>
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">联系方式</h6>
-          <el-input placeholder="输入方式" v-model="form.receivePhone" size="mini">
+          <el-input placeholder="输入方式" v-model="form.consigneePhone" size="mini">
           </el-input>
         </el-row>
       </el-col>
       <el-col :span="12">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">详细地址</h6>
-          <el-input placeholder="输入收货地址" v-model="form.receiveAddress" size="mini">
+          <el-input placeholder="输入收货地址" v-model="form.consigneeAddress" size="mini">
           </el-input>
         </el-row>
       </el-col>
@@ -88,7 +90,7 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">产品款号</h6>
-          <el-input placeholder="输入款号" v-model="form.productSKU" size="mini">
+          <el-input placeholder="输入款号" v-model="form.skuID" size="mini">
           </el-input>
         </el-row>
       </el-col>
@@ -106,7 +108,7 @@
           <td>{{sizeArray[0].color}}</td>
           <template v-for="(size,index) in sizeArray">
             <td style="width:80px">
-              <el-input class="order-table-input" type="number" v-model="size.num" placeholder="输入">
+              <el-input class="order-table-input" type="number" v-model="size.quantity" placeholder="输入">
               </el-input>
             </td>
           </template>
@@ -126,24 +128,47 @@
       <tr>
         <td>退料</td>
         <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.returnNum" placeholder="输入"></el-input>
+          <el-input v-model="form.withdrawalQuality" placeholder="输入"></el-input>
         </td>
       </tr>
       <tr>
         <td>残次品数</td>
         <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.imperfectionsNum" placeholder="输入"></el-input>
+          <el-input v-model="form.defectiveQuality" placeholder="输入"></el-input>
         </td>
       </tr>
     </table>
-    <el-row type="flex" justify="end" class="info-receive-row">
-      <h6 class="order-table-info">品牌跟单员： 杨建</h6>
-      <h6 class="order-table-info">工厂跟单员： 刘少立</h6>
-      <h6 class="order-table-info">发货日期： 2019-7-19</h6>
-    </el-row>
     <el-row type="flex" justify="center" class="info-receive-row">
-      <el-button class="info-receive-submit" @click="onSubmit()">确认创建</el-button>
+      <template v-if="isBrand()">
+        <el-button class="info-receive-submit" v-if="slotData.deliveryOrders==null||slotData.deliveryOrders.length==0"
+          @click="onSubmit">确认创建</el-button>
+        <el-button class="info-receive-submit"
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='UNCOMMITTED'">
+          保存并退出</el-button>
+        <el-button class="info-receive-submit"
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='UNCOMMITTED'"
+          @click="onCommit">
+          确认完成收货</el-button>
+        <el-button class="info-receive-submit"
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'">
+          撤回</el-button>
+      </template>
+      <template v-if="isFactory()">
+        <el-button class="info-receive-refuse"
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'">
+          拒绝</el-button>
+        <el-button class="info-receive-submit"
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'">
+          确认</el-button>
+      </template>
     </el-row>
+    <el-row type="flex" justify="end" class="info-receive-row">
+      <h6 class="order-table-info">品牌跟单员： xxx</h6>
+      <h6 class="order-table-info">工厂跟单员： {{slotData.user.name}}</h6>
+      <h6 class="order-table-info">发货日期： {{slotData
+        .creationtime | timestampToTime}}</h6>
+    </el-row>
+    <!-- </el-form> -->
   </div>
 </template>
 
@@ -152,7 +177,7 @@
   import FormLabel from '@/components/custom/FormLabel';
 
   export default {
-    name: 'PurchaseOrderInforeceive',
+    name: 'PurchaseOrderInfoReceive',
     props: ['slotData'],
     components: {
       OrdersInfoItem,
@@ -174,21 +199,12 @@
         });
         return colors;
       },
-      // SizesNum: {
-      //   get() {
-      //     return this.sizesForm;
-      //   },
-      //   set(val) {
-      //     console.log(val);
-      //     this.sizesForm = val;
-      //   }
-      // }
       totalAmout: function () {
         var totalAmount = 0;
         this.form.entries.forEach(sizeArray => {
           sizeArray.forEach(item => {
-            if (item.num != '') {
-              totalAmount += parseInt(item.num);
+            if (item.quantity != '') {
+              totalAmount += parseInt(item.quantity);
             }
           })
         });
@@ -199,9 +215,9 @@
       countRowAmount(rowIndex) {
         var amount = 0;
         this.form.entries[rowIndex].forEach(element => {
-          if (element.num != '') {
-            let num = parseInt(element.num);
-            amount = amount + num;
+          if (element.quantity != '') {
+            let quantity = parseInt(element.quantity);
+            amount = amount + quantity;
           }
         });
         return amount;
@@ -209,27 +225,126 @@
       getColspanLength() {
         return this.colors.size + 2;
       },
-      onSubmit() {
+      async onSubmit() {
+        //组合订单行参数
+        var entries = [];
+        this.form.entries.forEach(variants => {
+          variants.forEach(variant => {
+            if (variant.quantity != '' && variant.quantity > 0) {
+              let item = {
+                quantity: variant.quantity,
+                color: variant.color,
+                size: variant.size
+              }
+              entries.push(item);
+            }
+          })
+        });
+        //表单参数
+        var form = {
+          withdrawalQuality: this.form.withdrawalQuality,
+          defectiveQuality: this.form.defectiveQuality,
+          consignorName: this.form.consignorName,
+          consignorPhone: this.form.consignorPhone,
+          consigneeName: this.form.consigneeName,
+          consigneePhone: this.form.consigneePhone,
+          consigneeAddress: this.form.consigneeAddress,
+          isOfflineConsignment: this.form.isOfflineConsignment,
+          entries: entries,
+          remarks: this.form.remarks,
+          skuID: this.form.skuID,
+          brand: this.form.productBrandName
+        };
 
-      }
+        const url = this.apis().createDeliveryOrder(this.slotData.code);
+        const result = await this.$http.post(url, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('创建成功');
+        //刷新数据
+        this.refreshData();
+      },
+      async refreshData() {
+        const url = this.apis().getPurchaseOrder(this.slotData.code);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        //跟新slotData
+        this.$set(this.slotData, 'deliveryOrders', result.deliveryOrders);
+        this.$emit('afterCreate');
+      },
+      getVariant(color, size, entries) {
+        var result = entries.filter(item => item.color == color && item.size == size);
+        if (result.length != 0) {
+          return result[0];
+        } else {
+          return null;
+        }
+      },
+      async onCommit() {
+        //组合订单行参数
+        var entries = [];
+        this.form.entries.forEach(variants => {
+          variants.forEach(variant => {
+            if (variant.quantity != '' && variant.quantity > 0) {
+              entries.push(variant);
+            }
+          })
+        });
+        //表单参数
+        var form = {
+          id: this.form.id,
+          code: this.form.code,
+          withdrawalQuality: this.form.withdrawalQuality,
+          defectiveQuality: this.form.defectiveQuality,
+          consignorName: this.form.consignorName,
+          consignorPhone: this.form.consignorPhone,
+          consigneeName: this.form.consigneeName,
+          consigneePhone: this.form.consigneePhone,
+          consigneeAddress: this.form.consigneeAddress,
+          isOfflineConsignment: this.form.isOfflineConsignment,
+          entries: entries,
+          remarks: this.form.remarks,
+          skuID: this.form.skuID,
+          brand: this.form.productBrandName
+        };
+
+        const url = this.apis().commitDeliveryOrder();
+        const result = await this.$http.put(url, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('保存成功');
+        //刷新数据
+        this.refreshData();
+      },
     },
     data() {
       return {
         receiveFormVisible: false,
+        activeForm: '1',
+        mockData: [],
         form: {
-          brandName: "",
-          phone: "",
-          receiveName: "",
+          code: '',
+          id: '',
+          consignorName: "",
+          consignorPhone: "",
           receiveCode: "",
-          offlinereceive: false,
-          receiveName: "",
-          receivePhone: "",
-          receiveAddress: "",
+          isOfflineConsignment: false,
+          consigneeName: "",
+          consigneePhone: "",
+          consigneeAddress: "",
           productBrandName: "",
-          productSKU: "",
+          skuID: "",
           remarks: "",
-          imperfectionsNum: '',
-          returnNum: '',
+          defectiveQuality: '',
+          withdrawalQuality: '',
+          deliverWay: '',
           entries: []
         },
       }
@@ -240,11 +355,24 @@
       this.colors.forEach(color => {
         var sizeArray = [];
         this.sizes.forEach(size => {
-          sizeArray.push({
-            'size': size,
-            'color': color,
-            'num': '',
-          })
+          if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+            sizeArray.push({
+              'size': size,
+              'color': color,
+              'quantity': '',
+            });
+          } else {
+            let variant = this.getVariant(color, size, this.slotData.deliveryOrders[0].entries);
+            if (variant != null) {
+              sizeArray.push(variant);
+            } else {
+              sizeArray.push({
+                'size': size,
+                'color': color,
+                'quantity': '',
+              });
+            }
+          }
         });
         this.form.entries.push(sizeArray);
       });
@@ -256,11 +384,24 @@
           this.colors.forEach(color => {
             var sizeArray = [];
             this.sizes.forEach(size => {
-              sizeArray.push({
-                'size': size,
-                'color': color,
-                'num': '',
-              })
+              if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+                sizeArray.push({
+                  'size': size,
+                  'color': color,
+                  'quantity': '',
+                });
+              } else {
+                let variant = this.getVariant(color, size, this.slotData.deliveryOrders[0].entries);
+                if (variant != null) {
+                  sizeArray.push(variant);
+                } else {
+                  sizeArray.push({
+                    'size': size,
+                    'color': color,
+                    'quantity': '',
+                  });
+                }
+              }
             });
             this.form.entries.push(sizeArray);
           });
@@ -273,19 +414,68 @@
           this.colors.forEach(color => {
             var sizeArray = [];
             this.sizes.forEach(size => {
-              sizeArray.push({
-                'size': size,
-                'color': color,
-                'num': '',
-              })
+              if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+                sizeArray.push({
+                  'size': size,
+                  'color': color,
+                  'quantity': '',
+                });
+              } else {
+                let variant = this.getVariant(color, size, this.slotData.deliveryOrders[0].entries);
+                if (variant != null) {
+                  sizeArray.push(variant);
+                } else {
+                  sizeArray.push({
+                    'size': size,
+                    'color': color,
+                    'quantity': '',
+                  });
+                }
+              }
             });
             this.form.entries.push(sizeArray);
           });
         },
         deep: true
+      },
+      slotData: {
+        handler(val, oldVal) {
+          if (this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0) {
+            this.form.id = this.slotData.deliveryOrders[0].id;
+            this.form.code = this.slotData.deliveryOrders[0].code;
+            this.form.consignorName = this.slotData.deliveryOrders[0].consignorName;
+            this.form.consignorPhone = this.slotData.deliveryOrders[0].consignorPhone;
+            this.form.isOfflineConsignment = this.slotData.deliveryOrders[0].isOfflineConsignment;
+            this.form.consigneeName = this.slotData.deliveryOrders[0].consigneeName;
+            this.form.consigneePhone = this.slotData.deliveryOrders[0].consigneePhone;
+            this.form.consigneeAddress = this.slotData.deliveryOrders[0].consigneeAddress;
+            this.form.productBrandName = this.slotData.deliveryOrders[0].productBrandName;
+            this.form.skuID = this.slotData.deliveryOrders[0].skuID;
+            this.form.remarks = this.slotData.deliveryOrders[0].remarks;
+            this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
+            this.form.withdrawalQuality = this.slotData.deliveryOrders[0].withdrawalQuality
+          }
+        },
+        deep: true,
       }
     },
-    mounted() {}
+    mounted() {
+      if (this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0) {
+        this.form.id = this.slotData.deliveryOrders[0].id;
+        this.form.code = this.slotData.deliveryOrders[0].code;
+        this.form.consignorName = this.slotData.deliveryOrders[0].consignorName;
+        this.form.consignorPhone = this.slotData.deliveryOrders[0].consignorPhone;
+        this.form.isOfflineConsignment = this.slotData.deliveryOrders[0].isOfflineConsignment;
+        this.form.consigneeName = this.slotData.deliveryOrders[0].consigneeName;
+        this.form.consigneePhone = this.slotData.deliveryOrders[0].consigneePhone;
+        this.form.consigneeAddress = this.slotData.deliveryOrders[0].consigneeAddress;
+        this.form.productBrandName = this.slotData.deliveryOrders[0].productBrandName;
+        this.form.skuID = this.slotData.deliveryOrders[0].skuID;
+        this.form.remarks = this.slotData.deliveryOrders[0].remarks;
+        this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
+        this.form.withdrawalQuality = this.slotData.deliveryOrders[0].withdrawalQuality
+      }
+    }
   }
 
 </script>
@@ -362,6 +552,13 @@
     background-color: #FFD60C;
     border-color: #FFD60C;
     color: #000;
+    width: 150px;
+  }
+
+  .info-receive-refuse {
+    background-color: red;
+    border-color: red;
+    color: #fff;
     width: 150px;
   }
 

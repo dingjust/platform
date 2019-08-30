@@ -192,7 +192,7 @@
     },
     data() {
       return {
-
+        
       }
     },
     created() {

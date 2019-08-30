@@ -317,11 +317,20 @@ const COMMON_APIS = {
   },
   //创建发货单
   createShippingOrder(code) {
-    return '/b2b/orders/purchase/'+code+'/createShippingOrder';
+    return '/b2b/orders/purchase/' + code + '/createShippingOrder';
+  },
+  //创建收货单
+  createDeliveryOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/createDeliveryOrder';
+  },
+  //提交收货单
+  commitDeliveryOrder() {
+    return '/b2b/orders/purchase/commitDeliveryOrder';
+    ;
   },
   //确认线下生产订单
   confirmProductionByOffline(code) {
-    return '/b2b/orders/purchase/'+code+'/confirmProductionByOffline';
+    return '/b2b/orders/purchase/' + code + '/confirmProductionByOffline';
   },
   getProductionProgressReports() {
     return '/b2b/reports/productionProgresses';

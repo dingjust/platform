@@ -4,7 +4,7 @@
       <purchase-order-deliver-views :slotData="slotData" />
     </el-dialog>
     <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-info-receive :slotData="slotData" />
+      <purchase-order-info-receive :slotData="slotData" @afterCreate="onAfterCreate" />
     </el-dialog>
     <el-row class="info-title-row">
       <div class="info-title">
@@ -48,7 +48,8 @@
             </el-col>
           </el-row>
           <el-row class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">
-            <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}} {{this.slotData.contactPersonOfSeller}} {{this.slotData.contactOfSeller}}</orders-info-item>
+            <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}}
+              {{this.slotData.contactPersonOfSeller}} {{this.slotData.contactOfSeller}}</orders-info-item>
           </el-row>
           <el-row type="flex" justify="space-between" align="middle">
             <el-row type="flex" justify="start" align="middle">
@@ -65,7 +66,7 @@
             </el-row>
             <el-button type="text" class="info-detail-logistics_info-btn1"
               @click="deliverFormVisible=!deliverFormVisible">查看发货单</el-button>
-            <el-button type="text" class="info-detail-logistics_info-btn1"
+            <el-button type="text" class="info-detail-logistics_info-btn1" :disabled="slotData.deliveryOrders==null||slotData.deliveryOrders.length==0"
               @click="receiveFormVisible=!receiveFormVisible">查看收货单</el-button>
           </el-row>
           <el-row class="info-detail-item_row2">
@@ -100,12 +101,16 @@
       totalQuantity: function () {
         var result = 0;
         this.slotData.entries.forEach(element => {
-          result+=element.quantity;
+          result += element.quantity;
         });
         return result;
       },
     },
-    methods: {},
+    methods: {
+      onAfterCreate() {
+        this.receiveFormVisible = false;
+      }
+    },
     data() {
       return {
         deliverFormVisible: false,

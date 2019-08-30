@@ -2,12 +2,14 @@
   <el-row class="purchase-order-row" type="flex" justify="center" align="middle" :gutter="50">
     <el-button class="purchase-order-btn" v-if="isMyself&&isPending" @click="onUniqueCode">唯一码
     </el-button>
-    <el-button class="purchase-order-btn" v-if="isBrand" @click="onUniqueCode">收货单</el-button>
-    <el-button class="purchase-order-btn" v-if="isBrand" @click="onUniqueCode">创建对账单</el-button>
-    <el-button class="purchase-order-btn" @click="onCreateAgain">{{isBrand?'再下一单':'重新创建'}}</el-button>
+    <el-button class="purchase-order-btn" v-if="isBrand&&!isPending" @click="onCreateReceive">收货单</el-button>
+    <!-- <el-button class="purchase-order-btn" v-if="isBrand" @click="onUniqueCode">创建对账单</el-button> -->
+    <el-button class="purchase-order-btn" v-if="slotData.status=='COMPLETED'" @click="onCreateAgain">
+      {{isBrand?'再下一单':'重新创建'}}</el-button>
     <el-button class="purchase-order-btn" v-if="!isMyself&&isPending" @click="onConfirm">接单</el-button>
-    <el-button class="purchase-order-btn" v-if="isFactory" @click="onUniqueCode">发货单</el-button>
-    <el-button class="purchase-order-btn" v-if="isFactory" @click="onUniqueCode">查看收货单</el-button>
+    <el-button class="purchase-order-btn" :disabled="slotData.shippingOrders==null||slotData.shippingOrders.length==0"
+      v-if="isFactory&&!isPending" @click="onDeliverViewsOpen">发货单</el-button>
+    <el-button class="purchase-order-btn" v-if="isFactory&&!isPending" @click="onCreateReceive">查看收货单</el-button>
     <el-button class="purchase-order-btn2" @click="
     onCancel" v-if="isPending">{{isMyself?'取消订单':'拒单'}}
     </el-button>
@@ -45,6 +47,12 @@
       },
       onCreateAgain() {
         this.$emit('onCreateAgain');
+      },
+      onCreateReceive() {
+        this.$emit('onCreateReceive');
+      },
+      onDeliverViewsOpen() {
+        this.$emit('onDeliverViewsOpen');
       }
     },
     data() {
