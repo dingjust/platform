@@ -10,25 +10,25 @@ export default {
     //   }
     // },
     {
-      name: '仪表盘',
+      name: '首页',
       url: '/dashboard',
     },
     {
       name: '产品管理',
       url: '/product',
-      icon: 'icon-puzzle',
+      // icon: 'icon-puzzle',
       children: [
         {
           name: '服装产品',
           url: '/product/apparel',
-          icon: 'iconNone',
+          // icon: 'iconNone',
         }
       ]
     },
     {
       name: '订单管理',
       url: '/order',
-      icon: 'icon-puzzle',
+      // icon: 'icon-puzzle',
       children: [
         {
           name: '需求订单',
@@ -53,9 +53,50 @@ export default {
       ]
     },
     {
+      name: '合同',
+      url: '/contract',
+      children: [
+        {
+          name: '合同管理',
+          url: '/manage',
+          icon: 'iconNone',
+        },
+        {
+          name: '合同模板',
+          url: '/template',
+          icon: 'iconNone',
+        },
+        {
+          name: '印章管理',
+          url: '/seal',
+          icon: 'iconNone',
+        },
+        {
+          name: '下单',
+          url: '/orderPurchase',
+          icon: 'iconNone',
+        },
+        {
+          name: '创建合同',
+          url: '/manage/createContract',
+          icon: 'iconNone',
+        },
+        {
+          name: 'markdown',
+          url: '/unclassified/markDown',
+          icon: 'iconNone',
+        },
+        {
+          name: '合同模板',
+          url: '/template/create',
+          icon: 'iconNone',
+        }
+      ]
+    },
+    {
       name: '账户管理',
       url: '/account',
-      icon: 'icon-puzzle',
+      // icon: 'icon-puzzle',
       children: [
         {
           name: '认证信息',
@@ -87,7 +128,7 @@ export default {
     {
       name: '其他',
       url: '/miscs',
-      icon: 'icon-puzzle',
+      // icon: 'icon-puzzle',
       children: [
         {
           name: '合同',

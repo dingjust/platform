@@ -19,7 +19,7 @@
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code">
             <span slot="label">
-              <tab-label-bubble :label="item.name" :num="index" />
+              <tab-label-bubble :label="item.name" :num="0" />
             </span>
             <purchase-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
               @onAdvancedSearch="onAdvancedSearch" />
@@ -42,7 +42,7 @@
   } = createNamespacedHelpers(
     "PurchaseOrdersModule"
   );
-
+  
   import PurchaseOrderToolbar from "./toolbar/PurchaseOrderToolbar";
   import PurchaseOrderSearchResultList from "./list/PurchaseOrderSearchResultList";
   import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
@@ -102,11 +102,11 @@
       },
       handleClick(tab, event) {
         // console.log(tab.name);
-        this.queryFormData.statuses=[tab.name];
-        if(tab.name=='ALL'){
+        this.queryFormData.statuses = [tab.name];
+        if (tab.name == 'ALL') {
           this.onSearch("");
-        }else{
-        this.onAdvancedSearch();
+        } else {
+          this.onAdvancedSearch();
         }
       },
       async onDetails(row) {
@@ -142,6 +142,9 @@
         this.statues.push(element);
       });
       this.onSearch("");
+    },
+    mounted() {
+
     }
   };
 
@@ -156,7 +159,7 @@
     padding-left: 10px;
   }
 
-  .purchase-dialog .el-dialog{
+  .purchase-dialog .el-dialog {
     border-radius: 10px !important;
   }
 

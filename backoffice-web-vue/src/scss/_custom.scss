@@ -57,6 +57,18 @@
   padding-top: 10px;
 }
 
+.purchase-dialog .el-dialog {
+  border-radius: 10px !important;
+}
+
+.purchase-dialog-header {
+  padding: 0px !important;
+}
+
+.purchase-dialog .el-dialog__header {
+  padding: 0px !important;
+}
+
 @font-face {
   font-family: 'iconfont';  /* project id 1329132 */
   src: url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.eot');
