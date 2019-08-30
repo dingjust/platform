@@ -2,26 +2,6 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-container>
-        <el-aside width="150px" class="template-aside">
-          <el-row justify="center" type="flex">
-            <h6 class="template-aside_text">订单基础合同范本</h6>
-          </el-row>
-          <el-row :span="3" v-for="(item, index) in mockData" :key="index" :offset="0">
-            <div :class="item.code==selectedCode?'template-file_selected':'template-file'" @click="onSelect(item)">
-              <div class="template-ban" v-show="item.baned">
-                <i class="el-icon-remove template-ban_icon"></i>
-              </div>
-              <el-row type="flex" justify="center">
-                <img src="static/img/word.png" class="img-word" alt="" />
-              </el-row>
-              <el-row type="flex" justify="center">
-                <el-col :span="16" style="text-align: center">
-                  <h6 class="template-name">{{item.title}}</h6>
-                </el-col>
-              </el-row>
-            </div>
-          </el-row>
-        </el-aside>
         <el-main>
           <div>
             <el-row type="flex" justify="space-between" align="middle">
@@ -32,31 +12,30 @@
               </el-col>
               <el-col :span="4">
                 <el-button-group>
-                  <el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>
+                  <!--<el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>-->
                   <el-button @click="onBack">返回</el-button>
                 </el-button-group>
               </el-col>
             </el-row>
             <el-row class="contract_custom-row">
-              <el-input placeholder="请输入内容" size="mini" v-model="tempName"><template slot="prepend">合同模板名称</template>
+              <el-input placeholder="请输入名称" size="mini" v-model="slotData.title"><template slot="prepend">合同模板名称</template>
               </el-input>
             </el-row>
             <el-row class="contract_custom-row">
-              <el-input placeholder="请输入内容" size="mini" v-model="remarks"><template slot="prepend">备注</template>
+              <el-input placeholder="请输入备注" size="mini" v-model="slotData.remarks"><template slot="prepend">备注</template>
               </el-input>
             </el-row>
             <el-row class="contract_custom-row"><span></span></el-row>
             <el-row class="contract_custom-row text-align-left"><span>固定条款</span></el-row>
             <el-row>
               <div class="contract_custom-fixed_terms">
-                <Viewer :value="viewerText" class="contract_custom-viewer" />
+                <Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />
               </div>
             </el-row>
             <el-row class="contract_custom-row text-align-left"><span>自定义条款</span></el-row>
             <el-row>
-              <div class="contract_custom-custom_terms">
-                <Editor v-model="editorText" :html="editorHtml" :options="editorOptions" :visible="editorVisible"
-                  previewStyle="vertical" />
+              <div class="contract_custom-fixed_terms">
+                <Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />
               </div>
             </el-row>
           </div>
@@ -82,18 +61,18 @@
   const {mapActions} = createNamespacedHelpers('ContractTemplateModule');
 
   export default {
-    name: "TemplateForm",
-    props: ["propdata"],
+    name: "TemplateDetail",
+    props: ["slotData"],
     methods: {
       ...mapActions({
         refresh: 'refresh',
         search: "search"
       }),
       onSelect(item) {
-        this.viewerText = item.header;
-        this.editorText = item.content;
-        this.tempCode = item.code;
-        this.tempType = item.type;
+        this.slotData.content = item.header;
+        this.slotData.customizeContent = item.content;
+        this.slotData.code = item.code;
+        this.slotData.type = item.type;
       },
       async getTemplate(code) {
         const url = this.apis().getTemplates(code);
@@ -106,8 +85,8 @@
         const url = this.apis().saveTemplate();
         const tempData = {
           title: this.tempName,
-          content: this.viewerText,
-          customizeContent: this.editorText,
+          content: this.editorText,
+          customizeContent: this.viewerText,
           type: this.tempType,
           available: true,
           originalTmplCode: this.tempCode,
@@ -121,6 +100,7 @@
         }
         this.$message.success('保存成功');
 
+        this.$emit("onSearch",0);
         this.fn.closeSlider(true);
       },
       async getTemplateListPt(){
@@ -137,11 +117,6 @@
     },
     data() {
       return {
-        input1: "",
-        input2: "",
-        keyword:'',
-        viewerText: "",
-        editorText: "",
         editorHtml: "",
         editorOptions: {
           minHeight: "400px",
@@ -152,22 +127,9 @@
           hideModeSwitch: false
         },
         tempContent:'',
-        selectedCode: '1',
+        selectedCode: '3',
         editorVisible: true,
         mockData: [],
-        tempName: '',
-        remarks: '',
-        tempType: '',
-        tempCode:'',
-        slotData: {
-          title: '',
-          content: '',
-          customizeContent: '',
-          type:'',
-          available:'',
-          originalTmplCode: '',
-          remark: ''
-        },
       };
     },
 

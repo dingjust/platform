@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <seal-toolbar class="seal-toolbar"/>
+      <seal-toolbar  @onSearch="onSearch" class="seal-toolbar"/>
       <seal-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
     </el-card>
   </div>
@@ -33,7 +33,7 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getSeals();
+        const url = this.apis().getSealsList();
         this.search({url, keyword, page, size});
       },
       async onDetails(item) {

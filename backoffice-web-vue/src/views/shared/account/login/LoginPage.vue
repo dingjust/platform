@@ -18,11 +18,11 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="icon-lock"></i></span>
                   </div>
-                  <input v-model="password" type="password" class="form-control" placeholder="请输入密码">
+                  <input v-model="password" type="password"  class="form-control" placeholder="请输入密码">
                 </b-input-group>
                 <b-row>
                   <b-col cols="6">
-                    <b-button variant="primary" class="px-4" @click="login">登录</b-button>
+                    <b-button variant="primary" class="px-4" @click="login" @keyup.enter="login">登录</b-button>
                   </b-col>
                 </b-row>
               </b-card-body>
@@ -38,8 +38,17 @@
     name: 'LoginPage',
     data() {
       return {
-        username: '',
-        password: ''
+        username: '13631450151',
+        password: '123456'
+      }
+    },
+    created(){
+      var vm = this;
+      document.onkeydown = function(e) {
+        var key = window.event.keyCode;
+        if (key == 13) {
+          vm.login();
+        }
       }
     },
     methods: {
@@ -48,7 +57,7 @@
         const password = this.password;
 
         this.$store.dispatch('login', {username, password});
-      }
+      },
     }
   }
 </script>

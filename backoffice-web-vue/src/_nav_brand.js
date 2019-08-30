@@ -91,23 +91,43 @@ export default {
       children: [
         {
           name: '合同',
-          icon: 'iconNone',
+          url: '/contract',
           children: [
             {
               name: '合同管理',
-              url: '/miscs/contract/manage/contract',
+              url: '/manage',
               icon: 'iconNone',
             },
             {
               name: '合同模板',
-              url: '/miscs/contract/template/template',
+              url: '/template',
               icon: 'iconNone',
             },
             {
               name: '印章管理',
-              url: '/miscs/contract/seal/seal',
+              url: '/seal',
               icon: 'iconNone',
             },
+            {
+              name: '下单',
+              url: '/unclassified/orderPurchase',
+              icon: 'iconNone',
+            },
+            // {
+            //   name: '创建合同',
+            //   url: '/manage/createContract',
+            //   icon: 'iconNone',
+            // },
+            {
+              name: 'markdown',
+              url: '/unclassified/markDown',
+              icon: 'iconNone',
+            },
+            {
+              name: '合同模板',
+              url: '/template/create',
+              icon: 'iconNone',
+            }
           ]
         },
         {

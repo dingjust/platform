@@ -63,11 +63,11 @@ export default {
           url: '/orderPurchase',
           icon: 'iconNone',
         },
-        {
-          name: '创建合同',
-          url: '/manage/createContract',
-          icon: 'iconNone',
-        },
+        // {
+        //   name: '创建合同',
+        //   url: '/manage/createContract',
+        //   icon: 'iconNone',
+        // },
         {
           name: 'markdown',
           url: '/unclassified/markDown',

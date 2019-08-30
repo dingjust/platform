@@ -318,9 +318,11 @@ const state = {
   ],
   //合同状态
   contractStates: [
-    {code: 'WITH', name: '待签署'},
-    {code: 'SIGN', name: '已签署'},
-    {code: 'COMPLETE', name: '已完成'}
+    {code: 'INITIATE', name: '待签署'},
+    {code: 'COMPLETE', name: '已签署'},
+    {code: 'INVALID', name: '已作废'},
+    {code: 'PARTY_A_SIGN', name: '待甲方签署'},
+    {code: 'PARTY_B_SIGN', name: '待乙方签署'}
   ],
   //印章状态
   sealStates: [
@@ -332,7 +334,13 @@ const state = {
     {code: 'BELOW_THE_LINE', name: '线下订单'},
     {code: 'ONLINE', name: '线上订单'},
   ],
-  
+  //模板类型
+  TemplateType: [
+    {code: 'BCXY', name: '补充协议'},
+    {code: 'WTSCHT', name: '委托生产合同'},
+    {code: 'CGDD', name: '采购订单'},
+    {code: 'KJXY', name: '框架协议'},
+  ],
 
 };
 

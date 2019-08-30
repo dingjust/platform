@@ -4,7 +4,7 @@
       <el-col :span="8">
         <el-button-group>
           <el-button @click="onCreate">新建印章</el-button>
-          <el-button>管理设置</el-button>
+          <!--<el-button>管理设置</el-button>-->
         </el-button-group>
       </el-col>
       <el-col :span="6">
@@ -21,6 +21,8 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
+  import SealForm from '../sealForm'
+
 
   const {
     mapMutations
@@ -39,7 +41,8 @@
         this.$emit('onSearch', 0);
       },
       onCreate() {
-        this.$router.push("sealForm");
+        // this.$router.push("sealForm");
+        this.fn.openSlider('创建', SealForm, '');
       }
     },
     data() {
@@ -61,6 +64,7 @@
     background-color: #ffd60c;
     border-color: #ffd60c;
     margin-left: 20px;
+    color:#000000;
   }
 
 </style>
