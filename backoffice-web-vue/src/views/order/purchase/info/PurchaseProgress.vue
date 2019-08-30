@@ -1,7 +1,7 @@
 <template>
   <div class="info-remarks-body">
     <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-info-deliver :slotData="slotData" :read-only="false" />
+      <purchase-order-info-deliver :slotData="slotData" @afterCreate="onAfterCreate" :read-only="false" />
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
       <div class="info-title">
@@ -32,7 +32,9 @@
 
     },
     methods: {
-
+      onAfterCreate(){
+        this.deliverFormVisible=false;
+      }
     },
     data() {
       return {

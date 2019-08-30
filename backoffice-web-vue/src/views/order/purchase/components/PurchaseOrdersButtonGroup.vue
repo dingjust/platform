@@ -23,17 +23,17 @@
       isMyself: function () {
         return this.currentUser.companyCode == this.slotData.belongTo.uid;
       },
-      isFactory: function () {
-        return this.currentUser.type == 'FACTORY';
-      },
-      isBrand: function () {
-        return this.currentUser.type == 'BRAND';
-      },
       isPending: function () {
         return this.slotData.status == 'PENDING_CONFIRM';
       },
     },
     methods: {
+      isBrand() {
+        return this.currentUser.type == 'BRAND';
+      },
+      isFactory() {
+        return this.currentUser.type == 'FACTORY';
+      },
       onUniqueCode() {
         this.$emit('onUniqueCode');
       },
