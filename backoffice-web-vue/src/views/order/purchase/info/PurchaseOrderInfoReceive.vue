@@ -8,7 +8,7 @@
     <el-row class="info-receive-row">
       <form-label label="合作对象" />
     </el-row>
-    <!-- <el-form :disabled="item.code!=null"> -->
+    <el-form :disabled="!isBrand()">
     <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
       <el-col :span="6">
         <el-row type="flex" align="middle">
@@ -168,7 +168,7 @@
       <h6 class="order-table-info">发货日期： {{slotData
         .creationtime | timestampToTime}}</h6>
     </el-row>
-    <!-- </el-form> -->
+    </el-form>
   </div>
 </template>
 

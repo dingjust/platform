@@ -1,5 +1,5 @@
 const COMMON_APIS = {
-  getAmapTips(key, keyWord, city) {
+  getAmapTips (key, keyWord, city) {
     return '/amap/v3/assistant/inputtips?key=' + key + '&keywords=' + keyWord + '&city=' + city;
   },
   changePassword(username) {
@@ -404,7 +404,7 @@ let TENANT_APIS = {
   findBills() {
     return '/b2b/bill/all'
   },
-  getContracts() {
+  getContractsList () {
     return '/b2b/user/agreement/list';
   },
   getContractDetail(code) {
@@ -413,9 +413,49 @@ let TENANT_APIS = {
   getSeals() {
     return '/b2b/user/seal/list';
   },
-  getTemplates() {
-    return '/b2b/user/agreement/list';
+  getTemplatesListPt () {
+    return '/b2b/agreement/temp/list';
   },
+  getTemplates (code) {
+    return '/b2b/user/agreement/temp/get/'+code;
+  },
+  getTemplatesList () {
+    return '/b2b/user/agreement/temp/list';
+  },
+  saveTemplate () {
+    return '/b2b/user/agreement/temp/save';
+  },
+  deleteTemplate (code) {
+    return '/b2b/user/agreement/temp/delete/'+code;
+  },
+  saveSeal () {
+    return '/b2b/user/seal/save';
+  },
+  delSeal (code) {
+    return '/b2b/user/seal/delete/'+code;
+  },
+  saveContract () {
+    return '/b2b/user/agreement/save';
+  },
+  saveContract () {
+    return '/b2b/user/agreement/save';
+  },
+  personalAuthentication(){
+    return '/b2b/fdd/api/save/personal/verify/data';
+  },
+  enterpriseAuthentication(){
+    return  '/b2b/fdd/api/save/enterprise/verify/data';
+  },
+  getAuthenticationState(){
+    return  '/b2b/cert/state';
+  },
+  getAuthenticationInfo(){
+    return  '/b2b/cert/personal/cert/info';
+  },
+  getAuthenticationEnterprise(){
+    return  '/b2b/cert/enterprise/cert/info';
+  },
+
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
@@ -473,6 +513,57 @@ let NONE_TENANT_APIS = {
   },
   getWallet() {
     return '/b2b/companyWallet';
+  },
+  getContractsList () {
+    return '/b2b/user/agreement/list';
+  },
+  getSealsList () {
+    return '/b2b/user/seal/list';
+  },
+  getTemplatesListPt () {
+    return '/b2b/agreement/temp/list';
+  },
+  getTemplates (code) {
+    return '/b2b/user/agreement/temp/get/'+code;
+  },
+  getTemplatesList () {
+    return '/b2b/user/agreement/temp/list';
+  },
+  saveTemplate () {
+    return '/b2b/user/agreement/temp/save';
+  },
+  deleteTemplate (code) {
+    return '/b2b/user/agreement/temp/delete/'+code;
+  },
+  saveSeal () {
+    return '/b2b/user/seal/save';
+  },
+  delSeal (code) {
+    return '/b2b/user/seal/delete/'+code;
+  },
+  saveContract () {
+    return '/b2b/user/agreement/save';
+  },
+  downContract(code){
+    return '/b2b/user/agreement/get/download/token/'+code;
+  },
+  flowContract(code, sealCode) {
+    return '/b2b/user/agreement/start/flow/' + code + '?sealCode=' + sealCode;
+  },
+  personalAuthentication(){
+    return '/b2b/fdd/api/save/personal/verify/data';
+  },
+  enterpriseAuthentication(){
+    return  '/b2b/fdd/api/save/enterprise/verify/data';
+  },
+  getAuthenticationState(){
+    return  '/b2b/cert/state';
+  },
+  getAuthenticationInfo(){
+    return  '/b2b/cert/personal/cert/info';
+  },
+  getAuthenticationEnterprise(){
+    return  '/b2b/cert/enterprise/cert/info';
   },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

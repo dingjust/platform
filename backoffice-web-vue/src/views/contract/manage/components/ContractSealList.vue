@@ -22,7 +22,7 @@
       <el-table-column label="操作">
         <template  slot-scope="props">
           <!--<el-button type="text" icon="el-icon-edit" @click="on1">编辑</el-button>-->
-          <el-button type="text" icon="el-icon-delete" @click="onDelete(props.row.code)">删除</el-button>
+          <el-button type="text" icon="el-icon-add" @click="onSelected(props.row)">使用</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,71 +40,69 @@
 <script>
 
   export default {
-    name: 'SealSearchResultList',
+    name: 'ContractSealList',
     props: ["page"],
     methods: {
-      onPageSizeChanged(val) {
+      async onPageSizeChanged(val) {
         this._reset();
 
-        if (this.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
+        if(keyword == null){
+          keyword = '';
+        }
+        const url = this.apis().getSealsList();
+        console.log(url)
+        const result = await this.$http.post(url,{
+          keyword: keyword
+        }, {
+          page: val,
+          size: 10
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
+        this.sealPage = result;
 
-        this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
-        if (this.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
+      async onCurrentPageChanged(val) {
+        if(keyword == null){
+          keyword = '';
+        }
+        const url = this.apis().getSealsList();
+        console.log(url)
+        const result = await this.$http.post(url,{
+          keyword: keyword
+        }, {
+          page: val -1,
+          size: 10
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
+        this.sealPage = result;
 
-        this.$emit('onSearch', val - 1);
       },
       _reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      on1(){
-
+      onSelected(item) {
+        if (item.code == this.selectedItem.code) {
+          //空选择
+          this.selectedItem = {};
+        } else {
+          this.selectedItem = item;
+        }
+        console.log(this.selectedItem);
+        this.dialogSealVisible=true
+        this.$emit('onSealSelectChange',this.selectedItem );
       },
-      async onDelete(code){
-        const url = this.apis().delSeal(code);
-        const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        if(result){
-          this.$message.success('删除成功');
-        }else{
-          this.$message.error('删除失败');
-        }
-        this.$emit("onSearch",0);
-      }
     },
     data() {
       return {
-        // tableData: [{
-        //   title: 'XX1-印章',
-        //   code: '3565512232',
-        //   role: '管理员',
-        //   creationtime:new Date(),
-        //   state:'NORMAL',
-        //   media:{
-        //     url:'https://47.106.112.137/resource/h30/h99/8805604130846.png'
-        //   }
-        // }, {
-        //   title: 'XX2-印章',
-        //   code: '25571223553',
-        //   role: '管理员',
-        //   creationtime:new Date(),
-        //   state:'NORMAL',
-        //   media:{
-        //     url:'https://47.106.112.137/resource/h30/h99/8805604130846.png'
-        //   }
-        // },]
+        selectedItem:{},
       }
     }
   }

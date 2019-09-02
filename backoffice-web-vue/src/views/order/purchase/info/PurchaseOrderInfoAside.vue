@@ -1,9 +1,9 @@
 <template>
   <div class="info-aside-body">
     <purchase-order-info-supplier :slotData="slotData" />
-    <purchase-order-info-staff :slotData="{}" class="" />
-    <purchase-order-info-contract :slotData="{}" />
-    <purchase-order-info-log :slotData="{}" />
+    <purchase-order-info-staff :slotData="slotData" class="" />
+    <purchase-order-info-contract :slotData="slotData" />
+    <purchase-order-info-log :slotData="slotData" />
   </div>
 </template>
 

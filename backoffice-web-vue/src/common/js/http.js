@@ -72,6 +72,7 @@ let http = {
         params: params,
       }).then((response) => {
         loading.close();
+        console.log(response);
         return resolve(response.data);
       })
         .catch((error) => {
@@ -134,7 +135,7 @@ let http = {
         });
     });
   },
-    /** upload 
+    /** upload
    * @param  {接口地址} url
    * @param  {请求参数} data
    */
