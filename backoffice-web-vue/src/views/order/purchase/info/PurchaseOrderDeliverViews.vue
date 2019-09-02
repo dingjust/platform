@@ -61,6 +61,9 @@
           })
         });
         return totalAmount;
+      },
+      activeOrder: function () {
+        return this.slotData.shippingOrders[0].code;
       }
     },
     methods: {
@@ -149,7 +152,6 @@
           deliverWay: '',
           entries: []
         },
-        activeOrder:this.slotData.shippingOrders[0].code
       }
     },
     created() {
