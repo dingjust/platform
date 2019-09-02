@@ -6,9 +6,7 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
-            <img width="50px" height="15px"
-              :src="scope.row.salesApplication=='ONLINE'?'static/img/online.png':'static/img/offline.png'" />
-            <!-- <el-tag>{{getEnum('salesApplication', scope.row.salesApplication)}}</el-tag> -->
+            <el-tag>{{getEnum('salesApplication', scope.row.salesApplication)}}</el-tag>
           </el-row>
         </template>
       </el-table-column>
@@ -53,23 +51,18 @@
           <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="订单生成时间" min-width="100">
+      <el-table-column label="订单生成时间">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单标签">
-        <template slot-scope="scope">
-          <img width="40px" height="15px"
-            :src="getPaymentStatusTag(scope.row)" />
-        </template>
+        <el-tag type="danger">欠款</el-tag>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
           <el-row>
-            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>
-            <el-divider direction="vertical"></el-divider>
-            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">账务</el-button>
+            <el-button type="text" @click="onSelected(scope.row)" class="purchase-list-button">选择</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -94,7 +87,7 @@
   } = createNamespacedHelpers('PurchaseOrdersModule');
 
   export default {
-    name: 'PurchaseOrderSearchResultList',
+    name: 'ContractOrderSelect',
     props: ["page"],
     components: {},
     computed: {},
@@ -102,28 +95,55 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      handleFilterChange(val) {
+      async handleFilterChange(val) {
         this.statuses = val.status;
 
-        this.$emit('onSearch', 0);
+        // this.$emit('onSearchOrder','', 0,10);
+        const url = this.apis().getPurchaseOrders();
+        const result = await this.$http.post(url,{
+          keyword: ''
+        }, {
+          page: 0,
+          size: 10
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.page = result;
+        console.log(result);
       },
-      onPageSizeChanged(val) {
+      async onPageSizeChanged(val) {
         this._reset();
-
-        if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
+        console.log(val);
+        const url = this.apis().getPurchaseOrders();
+        const result = await this.$http.post(url,{
+          keyword: ''
+        }, {
+          page: val,
+          size: 10
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-
-        this.$emit('onSearch', 0, val);
+        this.page = result;
+        console.log(result);
       },
-      onCurrentPageChanged(val) {
-        if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
+      async onCurrentPageChanged(val) {
+        const url = this.apis().getPurchaseOrders();
+        const result = await this.$http.post(url,{
+          keyword: ''
+        }, {
+          page: val - 1,
+          size: 10
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-
-        this.$emit('onSearch', val - 1);
+        this.page = result;
+        console.log(result);
       },
       _reset() {
         this.$refs.resultTable.clearSort();
@@ -140,21 +160,29 @@
         });
         return amount;
       },
-      getPaymentStatusTag(row){
-        return row.balancePaid?'static/img/paid.png':'static/img/arrears.png';
-      }
+      onSelected(item) {
+        if (item.code == this.selectedItem.code) {
+          //空选择
+          this.selectedItem = {};
+        } else {
+          this.selectedItem = item;
+        }
+        console.log(this.selectedItem);
+        this.$emit('onOrderSelectChange',this.selectedItem );
+      },
     },
     data() {
       return {
         statuses: this.$store.state.PurchaseOrdersModule.statuses,
+        selectedItem:{},
       }
     }
   }
 
 </script>
 <style>
-  .purchase-list-button {
-    color: #FFA403;
-  }
-
+.purchase-list-button{
+  color: #FFA403;
+}
 </style>
+

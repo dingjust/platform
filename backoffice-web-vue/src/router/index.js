@@ -255,11 +255,13 @@ const router = new Router({
               path: '/sealForm',
               name: '印章创建',
               component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/seal/sealForm')
-            }, {
-              path: '/manage/createContract',
-              name: '创建合同',
-              component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/manage/createContract')
-            }, {
+            },
+            // {
+            //   path: '/manage/createContract',
+            //   name: '创建合同',
+            //   component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/manage/createContract')
+            // },
+            {
               path: '/unclassified/markDown',
               name: 'markdown',
               component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/unclassified/markDown')

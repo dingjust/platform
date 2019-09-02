@@ -1,5 +1,6 @@
 <template>
   <div class="animated fadeIn content">
+
     <div class="report">
       <contract-report />
     </div>
@@ -11,15 +12,14 @@
           </div>
         </el-col>
       </el-row>
-      <contract-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+      <contract-toolbar @onNew="onNew" @onSearch="onSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="(item, index) in contractStatues">
           <el-tab-pane :name="item">
             <span slot="label">
               <tab-label-bubble :label="item" :num="index" />
             </span>
-            <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-              @onAdvancedSearch="onAdvancedSearch" />
+            <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" />
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -37,22 +37,26 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    "PurchaseOrdersModule"
+    "ContractModule"
   );
 
   import ContractToolbar from "./toolbar/ContractToolbar";
   import ContractSearchResultList from "./list/ContractSearchResultList";
   import ContractReport from "./components/ContractReport";
-  import TabLabelBubble from "@/components/custom/TabLabelBubble";
+  import TabLabelBubble from "./components/TabLabelBubble";
+
   // import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
   export default {
-    name: "PurchaseOrderPage",
+    name: "ContractPage",
     components: {
       ContractToolbar,
       ContractSearchResultList,
       ContractReport,
       TabLabelBubble
+    },
+    provide:{
+        onSearch: this.onSearch
     },
     computed: {
       ...mapGetters({
@@ -64,37 +68,34 @@
     methods: {
       ...mapActions({
         search: "search",
-        searchAdvanced: "searchAdvanced"
       }),
       ...mapMutations({
-        setIsAdvancedSearch: "isAdvancedSearch"
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const statuses = this.statuses;
-        const url = this.apis().getPurchaseOrders();
-        this.setIsAdvancedSearch(false);
+        // const statuses = this.statuses;
+        const url = this.apis().getContractsList();
         this.search({
           url,
-          keyword,
-          statuses,
+          // keyword,
+          // statuses,
           page,
           size
         });
       },
-      onAdvancedSearch(page, size) {
-        this.setIsAdvancedSearch(true);
-        const query = this.queryFormData;
-        const url = this.apis().getPurchaseOrders();
-        this.searchAdvanced({
-          url,
-          query,
-          page,
-          size
-        });
-      },
+      // onAdvancedSearch(page, size) {
+      //   this.setIsAdvancedSearch(true);
+      //   const query = this.queryFormData;
+      //   const url = this.apis().getContracts();
+      //   this.searchAdvanced({
+      //     url,
+      //     query,
+      //     page,
+      //     size
+      //   });
+      // },
       async onDetails(row) {
-        const url = this.apis().getPurchaseOrder(row.code);
+        const url = this.apis().getContractDetail(row.code);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
@@ -106,15 +107,32 @@
       onNew(formData) {
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       },
-      handleClick(tab, event) {
-        console.log(tab, event);
-      }
+      async handleClick(tab, event) {
+        console.log(tab);
+        console.log(tab.name);
+
+        const state = 'SIGN';
+
+        const url = this.apis().getContractsList();
+        console.log(url)
+        const result = await this.$http.post(url,{
+            'state':state
+        }, {
+          page: 0,
+          size: 10
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+      },
     },
     data() {
       return {
         formData: this.$store.state.PurchaseOrdersModule.formData,
         activeName: "全部",
-        contractStatues: ["全部", "待签署", "待回签", "已完成", "已作废"]
+        contractStatues: ["全部", "待签署", "待回签", "已完成", "已作废"],
+
       };
     },
     created() {

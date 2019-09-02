@@ -10,7 +10,7 @@
         <el-col :span="8">
           <el-row class="seal_custom-row">
             <span>角色：</span>
-            <el-radio-group v-model="sealRole" size="mini">
+            <el-radio-group @change="selectedRole" v-model="sealRole" size="mini">
               <el-radio-button label="sealRole0">公司</el-radio-button>
               <el-radio-button label="sealRole1">个人</el-radio-button>
             </el-radio-group>
@@ -59,6 +59,7 @@
           </el-row>
           <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
             <el-button size="mini" type="success" @click="createSeal">生成印章</el-button>
+            <el-button size="mini" type="primary" @click="doSomething">保存印章</el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -67,7 +68,11 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
   import CDS from "./utils/canvasdrawseal.js";
+  import http from '@/common/js/http';
+  const {mapActions} = createNamespacedHelpers('ContractSealModule');
+
   export default {
     name: "SealManagement",
     data() {
@@ -76,15 +81,16 @@
         sealRole: "",
         sealShape: "",
         sealBorder: "",
-        sealName: "宁波衣加衣供应链有限公司",
+        sealName: '',
         sealType: "",
-        sealRemarks: ""
+        sealRemarks: "",
+        currentUser: this.$store.getters.currentUser,
+        imgFile:'',
       };
     },
     mounted() {
-      console.log(CDS.colors[1]);
       this.sealUrl = CDS.companySeal(
-        "宁波衣加衣供应链有限公司",
+        "XXXXXX有限公司",
         0,
         0,
         "横向文",
@@ -92,6 +98,9 @@
       );
     },
     methods: {
+      ...mapActions({
+        refresh: 'refresh'
+      }),
       createSeal() {
         if (this.sealRole == "sealRole0") {
           if (this.sealShape == "sealShape0") {
@@ -117,16 +126,50 @@
           this.sealUrl = CDS.personal(this.sealName, 0, 0, shape, border);
         }
         // console.log(this.sealUrl);
-        var imgFile = dataURLtoFile(this.sealUrl);
-        console.log(imgFile);
-        this.onUpload(imgFile);
+        this.imgFile = dataURLtoFile(this.sealUrl);
+        // console.log(imgFile);
+        // this.onUpload(imgFile);
+      },
+      doSomething(){
+        this.onUpload(this.imgFile);
       },
       //上传
       async onUpload(file) {
-        var fd=new FormData();
-        fd.append('file',file);
-        const result = await this.$http.formdataPost(this.mediaUploadUrl,fd);
-        console.log(result);
+        if(file != null){
+          var fd=new FormData();
+          fd.append('file',file);
+          const result = await this.$http.formdataPost(this.mediaUploadUrl,fd);
+
+          if(result != null){
+            this.saveSeal(result);
+          }
+        }
+      },
+      selectedRole(){
+        if(this.sealRole == 'sealRole0'){
+          this.sealName = this.currentUser.companyName;
+        }
+        if(this.sealRole == 'sealRole1'){
+          this.sealName = this.currentUser.username;
+        }
+
+        console.log(this.currentUser);
+      },
+      async saveSeal(item){
+        const url = this.apis().saveSeal();
+        const tempData = {
+          name: this.sealName,
+          media: item,
+        };
+        let formData = Object.assign({}, tempData);
+        const result = await http.post(url, formData);
+        if (result['errors']) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success(result.msg);
+        this.refresh();
+        this.fn.closeSlider(true);
       }
     }
   };

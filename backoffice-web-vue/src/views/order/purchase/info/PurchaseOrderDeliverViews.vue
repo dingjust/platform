@@ -2,159 +2,38 @@
   <div class="info-receive-body">
     <el-row class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">创建发货单</h6>
+        <h6 class="info-title_text">查看发货单</h6>
       </div>
     </el-row>
-    <el-row class="info-receive-row">
-      <form-label label="合作对象" />
-    </el-row>
-    <!-- <el-form :disabled="item.code!=null"> -->
-    <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">发货人</h6>
-          <el-input placeholder="输入品牌名" v-model="form.consignorName" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="8">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">联系方式</h6>
-          <el-input placeholder="输入手机号" v-model="form.consignorPhone" size="mini">
-            <el-select v-model="form.consignorPhone" slot="append" placeholder="请选择">
-              <el-option label="123" value="123"></el-option>
-              <el-option label="1234" value="1234"></el-option>
-              <el-option label="1324" value="1324"></el-option>
-            </el-select>
-          </el-input>
-        </el-row>
-      </el-col>
-    </el-row>
-    <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">发货方式</h6>
-          <el-input placeholder="输入方式" v-model="form.deliverWay" size="mini" :disabled="form.isOfflineConsignment">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">发货单号</h6>
-          <el-input placeholder="货运单号" v-model="form.receiveCode" size="mini" :disabled="form.isOfflineConsignment">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="8">
-        <el-checkbox v-model="form.isOfflineConsignment" size='mini' class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）
-        </el-checkbox>
-      </el-col>
-    </el-row>
-    <el-row class="info-receive-row">
-      <form-label label="收货信息" />
-    </el-row>
-    <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">收货人</h6>
-          <el-input placeholder="输入名称" v-model="form.consigneeName" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">联系方式</h6>
-          <el-input placeholder="输入方式" v-model="form.consigneePhone" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="12">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">详细地址</h6>
-          <el-input placeholder="输入收货地址" v-model="form.consigneeAddress" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-    </el-row>
-    <el-row class="info-receive-row">
-      <form-label label="产品信息" />
-    </el-row>
-    <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">品牌</h6>
-          <el-input placeholder="输入品牌名称" v-model="form.productBrandName" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">产品款号</h6>
-          <el-input placeholder="输入款号" v-model="form.skuID" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-    </el-row>
-    <table cellspacing="2" width="100%" :height="(form.entries.length+1)*50" class="order-table">
-      <tr class="order-table-th_row">
-        <td style="width:40px">颜色</td>
-        <template v-for="item in sizes">
-          <th>{{item}}</th>
-        </template>
-        <th>数量小计</th>
-      </tr>
-      <template v-for="(sizeArray,rowIndex) in form.entries">
-        <tr>
-          <td>{{sizeArray[0].color}}</td>
-          <template v-for="(size,index) in sizeArray">
-            <td style="width:80px">
-              <el-input class="order-table-input" type="number" v-model="size.num" placeholder="输入">
-              </el-input>
-            </td>
-          </template>
-          <td style="width:100px">{{countRowAmount(rowIndex)}}</td>
-        </tr>
+    <el-tabs v-model="activeOrder" type="card">
+      <template v-for="(order,index) in slotData.shippingOrders">
+        <el-tab-pane :label="''+(index+1)" :name="order.code">
+          <deliver-view :slotData="order" />
+        </el-tab-pane>
       </template>
-      <tr>
-        <td>合计</td>
-        <td :colspan="getColspanLength()+1">{{totalAmout}}</td>
-      </tr>
-      <tr>
-        <td>备注</td>
-        <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.remarks" placeholder="输入"></el-input>
-        </td>
-      </tr>
-      <tr>
-        <td>退料</td>
-        <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.returnNum" placeholder="输入"></el-input>
-        </td>
-      </tr>
-      <tr>
-        <td>残次品数</td>
-        <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.imperfectionsNum" placeholder="输入"></el-input>
-        </td>
-      </tr>
-    </table>
-    <el-row type="flex" justify="center" class="info-receive-row">
-      <el-button class="info-receive-submit" @click="onSubmit">确认创建</el-button>
+    </el-tabs>
+    <el-row type="flex" justify="end" class="info-receive-row">
+      <h6 class="order-table-info">品牌跟单员： xxx</h6>
+      <h6 class="order-table-info">工厂跟单员： {{slotData.user.name}}</h6>
+      <h6 class="order-table-info">发货日期： {{slotData
+        .creationtime | timestampToTime}}</h6>
     </el-row>
-    <!-- </el-form> -->
   </div>
 </template>
 
 <script>
   import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
   import FormLabel from '@/components/custom/FormLabel';
+  import DeliverView from '../components/DeliverView';
+  import Bus from '@/common/js/bus.js';
 
   export default {
     name: 'PurchaseOrderInfoDeliver',
     props: ['slotData'],
     components: {
       OrdersInfoItem,
-      FormLabel
+      FormLabel,
+      DeliverView
     },
     mixins: [],
     computed: {
@@ -224,9 +103,7 @@
           consigneeAddress: this.form.consigneeAddress,
           isOfflineConsignment: this.form.isOfflineConsignment,
           entries: entries,
-          remarks:this.form.remarks,
-          skuID:this.form.skuID,
-          brand:this.form.productBrandName
+          remarks: this.form.remarks
         };
 
         const url = this.apis().createShippingOrder(this.slotData.code);
@@ -239,16 +116,16 @@
         //刷新数据
         this.refreshData();
       },
-      async refreshData(){
-                const url = this.apis().getPurchaseOrder(this.slotData.code);
+      async refreshData() {
+        const url = this.apis().getPurchaseOrder(this.slotData.code);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         }
-        //跟新slotData
-        this.$set(this.slotData,'shippingOrders',result.shippingOrders);
-        this.$emit('afterCreate');
+        this.$set(this, 'slotData', result);
+        Bus.$emit('msg', '我要传给兄弟组件们，你收到没有')
+        // this.slotData=result;
       }
     },
     data() {
@@ -265,13 +142,14 @@
           consigneePhone: "",
           consigneeAddress: "",
           productBrandName: "",
-          skuID: "",
+          productSKU: "",
           remarks: "",
           imperfectionsNum: '',
           returnNum: '',
           deliverWay: '',
           entries: []
         },
+        activeOrder:this.slotData.shippingOrders[0].code
       }
     },
     created() {

@@ -18,11 +18,11 @@
             <el-row type="flex" align="middle">
               <h6 class="info-input-prepend">合作商</h6>
               <el-input placeholder="名称" v-model="form.companyOfSeller" size="mini">
-                <el-select v-model="form.companyOfSeller" slot="append" placeholder="请选择">
+                <!-- <el-select v-model="form.companyOfSeller" slot="append" placeholder="请选择">
                   <el-option label="123" value="123"></el-option>
                   <el-option label="1234" value="1234"></el-option>
                   <el-option label="1324" value="1324"></el-option>
-                </el-select>
+                </el-select> -->
               </el-input>
             </el-row>
           </el-col>
@@ -435,7 +435,7 @@
           <el-col :span="24">
             <el-row type="flex" align="middle">
               <h6 class="info-input-prepend" style="width:45px">跟单员</h6>
-              <el-select v-model="form.QC" placeholder="请选择">
+              <el-select v-model="form.QC" placeholder="请选择" :disabled="true">
                 <el-option label="采购部-刘少立" value="确认订单"></el-option>
                 <el-option label="采购部-刘少立" value="签署合同"></el-option>
                 <el-option label="采购部-刘少立" value="确认收货"></el-option>
@@ -796,7 +796,7 @@
             },
             attachments: this.form.attachments,
             remarks: this.form.remarks,
-            salesApplication:'BELOW_THE_LINE'
+            salesApplication: 'BELOW_THE_LINE'
           };
           //提交数据
           const url = this.apis().createOfflinePurchaseOrder();
@@ -807,6 +807,15 @@
           }
           this.$message.success('创建成功');
         }
+      },
+      async getProductAgain() {
+        const url = this.apis().getApparelProduct(this.againData.entries[0].product.baseProduct);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.onProductSelect(result);
       }
     },
     data() {
@@ -859,15 +868,10 @@
         ],
         form: {
           companyOfSeller: "",
-          phone: "",
-          receiveCode: "",
           offlinereceive: false,
-          receiveAddress: "",
           productBrandName: "",
           productSKU: "",
           remarks: "",
-          imperfectionsNum: '',
-          returnNum: '',
           entries: [''],
           contactPersonOfSeller: '',
           contactOfSeller: '',
@@ -895,17 +899,58 @@
           monthBalance: {
             event: 'ORDER_CONFIRMED',
           },
-          QC: {},
-          remarks: '',
+          QC: this.$store.getters.currentUser.username,
           attachments: []
         },
+        isAgain: this.$route.params.isAgain,
+        againData: this.$route.params.data
       }
     },
     created() {
       this.onSearch();
       this.getRegions();
     },
-    mounted() {}
+    mounted() {
+      if (this.isAgain) {
+        this.form = {
+          companyOfSeller: this.againData.companyOfSeller,
+          offlinereceive: false,
+          productBrandName: "",
+          productSKU: "",
+          remarks: this.againData.remarks,
+          entries: [''],
+          contactPersonOfSeller: this.againData.contactPersonOfSeller,
+          contactOfSeller: this.againData.contactOfSeller,
+          isHaveDeposit: false,
+          payPlanType: this.againData.payPlan.payPlanType,
+          plan: '1',
+          deposit: {
+            event: 'ORDER_CONFIRMED',
+            time: 5,
+            range: 'INSIDE',
+            percent: 0.3
+          },
+          balance1: {
+            event: 'ORDER_CONFIRMED',
+            time: 5,
+            range: 'INSIDE',
+            percent: 0.3
+          },
+          balance2: {
+            event: 'ORDER_CONFIRMED',
+            time: 5,
+            range: 'INSIDE',
+            percent: 0.3
+          },
+          monthBalance: {
+            event: 'ORDER_CONFIRMED',
+          },
+          QC: {},
+          attachments: []
+        };
+        this.getProductAgain();
+      }
+    }
   }
 
 </script>

@@ -14,7 +14,23 @@
           </el-button-group>
         </el-col>
       </el-row>
-      <contract-template-select @fileSelectChange="onFileSelectChange" />
+      <contract-template-select :mock-data="mockData" @fileSelectChange="onFileSelectChange" />
+    </el-dialog>
+    <el-dialog :visible.sync="dialogOrderVisible" :show-close="false">
+      <el-row slot="title" type="flex" justify="space-between" align="middle">
+        <el-col :span="4">
+          <div class="template-form-header">
+            <h6>订单选择</h6>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <el-button-group>
+            <!--<el-button class="template-form-button" @click="onFileSelectSure">确定</el-button>-->
+            <el-button @click="dialogOrderVisible=false">关闭</el-button>
+          </el-button-group>
+        </el-col>
+      </el-row>
+      <contract-order-select :page="orderPage" :onSearchOrder="onSearchOrder" @onOrderSelectChange="onOrderSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
       <el-row slot="title">
@@ -43,21 +59,21 @@
         </el-col>
       </el-row>
       <el-row class="create-contract-row">
-        <el-col :span="20" offset="2">
-          <el-input size="small" placeholder="选择订单" v-model="input1" :disabled="true">
-            <el-button slot="prepend">关联订单</el-button>
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="选择订单" v-model="orderSelectFile.code" :disabled="true">
+            <el-button slot="prepend"  @click="dialogOrderVisible=true">关联订单</el-button>
           </el-input>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType=='1'">
-        <el-col :span="20" offset="2">
-          <el-input size="small" placeholder="选择合同模板" v-model="selectFile.name" :disabled="true">
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="选择合同模板" v-model="selectFile.title" :disabled="true">
             <el-button slot="prepend" @click="dialogTemplateVisible=true">合同模板</el-button>
           </el-input>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
-        <el-col :span="8" offset="2">
+        <el-col :span="8" :offset="2">
           <!-- <el-input size="small" placeholder="选择纸质合同" v-model="input1" :disabled="true">
             <el-button slot="prepend">上传纸质合同</el-button>
           </el-input> -->
@@ -85,7 +101,7 @@
           <el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>
         </el-col>
         <el-col :span="4" :offset="2">
-          <el-button class="create-contract-button_2">生成合同</el-button>
+          <el-button class="create-contract-button_2" @click="onSave">生成合同</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -93,18 +109,78 @@
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from "vuex";
   import ContractTypeSelect from "./components/ContractTypeSelect";
   import ContractTemplateSelect from "./components/ContractTemplateSelect";
   import ContractPreview from "./components/ContractPreview";
+  import ContractOrderSelect from "./components/ContractOrderSelect";
+  import http from '@/common/js/http';
+
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers(
+    "ContractModule"
+  );
+
 
   export default {
     name: "CreateContract",
     components: {
       ContractTypeSelect,
       ContractTemplateSelect,
-      ContractPreview
+      ContractPreview,
+      ContractOrderSelect,
+    },
+    computed: {
+      ...mapGetters({
+        page: "page",
+        keyword: "keyword"
+      })
     },
     methods: {
+      ...mapActions({
+        search: "search",
+        refresh: 'refresh'
+      }),
+      async onSearchTemp(keyword,page, size) {
+        if(keyword == null){
+          keyword = '';
+        }
+        const url = this.apis().getTemplatesList();
+        const result = await this.$http.post(url,{
+          keyword: keyword
+        }, {
+          page: 0,
+          size: 100
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.mockData = result.content;
+      },
+      async onSearchOrder(keyword,page, size) {
+        if(keyword == null){
+          keyword = '';
+        }
+        console.log(2)
+        const url = this.apis().getPurchaseOrders();
+        const result = await this.$http.post(url,{
+          keyword: keyword
+        }, {
+          page: page,
+          size: 10
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.orderPage = result;
+        console.log(result);
+      },
       onContractTypeChange(val) {
         this.contractType = val;
       },
@@ -112,10 +188,17 @@
       onFileSelectChange(data) {
         this.cacheSelectFile = data;
       },
+      //订单选择
+      onOrderSelectChange(data) {
+        console.log(data);
+        this.orderSelectFile = data;
+        this.dialogOrderVisible = false;
+      },
       //文件选择确定
       onFileSelectSure() {
         this.dialogTemplateVisible = false;
         this.selectFile = this.cacheSelectFile;
+        console.log(this.selectFile);
       },
       handleExceed(files, fileList) {
         this.$message.warning(`已达最大文件数`);
@@ -123,6 +206,50 @@
       },
       handleRemove(file) {
         this.fileList.pop(file);
+      },
+      async onSave(){
+        if(this.orderSelectFile == null){
+          return;
+        }
+        if(this.selectFile == null){
+          return;
+        }
+        let role = '';
+        if(this.partyA){
+          role = 'PARTYA';
+        }else{
+          role = 'PARTYB';
+        }
+
+        let data = {
+          'userTempCode' : this.selectFile.code,
+          'role':role,
+          'title':'',
+          'orderCode':this.orderSelectFile.code,
+        }
+
+        const url = this.apis().saveContract();
+        let formData = Object.assign({}, data);
+        const result = await http.post(url, formData);
+
+        this.$message.success(result.msg);
+
+        const searchUrl = this.apis().getContractsList();
+        // const result = await this.$http.post(url,{
+        //   keyword: ''
+        // }, {
+        //   page: 0,
+        //   size: 10
+        // });
+        // if (result["errors"]) {
+        //   this.$message.error(result["errors"][0].message);
+        //   return;
+        // }
+
+        this.refresh({searchUrl});
+
+        this.fn.closeSlider(true);
+
       }
     },
     data() {
@@ -131,11 +258,20 @@
         hasFrameworkContract: false,
         partyA: true,
         dialogTemplateVisible: false,
+        dialogOrderVisible : false,
         cacheSelectFile: {},
+        orderSelectFile:{},
         selectFile: {},
         fileList: [],
         dialogPreviewVisible: false,
+        input1:'',
+        mockData:[],
+        orderPage:[],
       };
+    },
+    created(){
+      this.onSearchTemp();
+      this.onSearchOrder('',0,10);
     }
   };
 
@@ -234,7 +370,7 @@
   .el-upload-list__item-file-name {
     position: absolute;
     right: 25px;
-    top: 50;
+    top: 50px;
     font-size: 12px;
     color: #ffffff;
     display: none

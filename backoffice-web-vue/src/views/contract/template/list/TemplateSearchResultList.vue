@@ -1,86 +1,51 @@
 <template>
-  <div class="animated fadeIn template-body">
-    <el-row>
-      <el-col :span="3" v-for="(item, index) in mockData" :key="index" :offset="0">
-        <div :class="item.code==selectedCode?'template-file_selected':'template-file'" @click="onSelect(item.code)">
-          <div class="template-ban" v-show="item.baned">
-            <i class="el-icon-remove template-ban_icon"></i>
-          </div>
-          <el-row type="flex" justify="center">
-            <img src="static/img/word.png" class="img-word" alt="" />
-          </el-row>
-          <el-row type="flex" justify="center">
-            <el-col :span="16">
-              <h6 class="template-name">{{item.name}}</h6>
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
-    </el-row>
+  <div class="animated fadeIn">
+    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
+      <!--<el-table-column label="模板编号" width="300" prop="code" fixed></el-table-column>-->
+      <el-table-column label="模板名称"  prop="title" ></el-table-column>
+      <el-table-column label="模板类型" prop="state" :column-key="'type'">
+        <template slot-scope="scope">
+          <!-- <el-tag disable-transitions></el-tag> -->
+          {{getEnum('TemplateType', scope.row.type)}}
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="available" >
+        <template slot-scope="scope">
+          <span>{{ scope.row.available?'可用':'不可用'}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" prop="createdTs" >
+        <template slot-scope="scope">
+          <span>{{scope.row.creationtime | formatDate}}</span>
+        </template>
+      </el-table-column>
+      <!--<el-table-column label="用印章审批角色" prop="role"  fixed></el-table-column>-->
+      <el-table-column label="操作" >
+        <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row.code)">查看</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row.code)">删除</el-button>
+          <!--<el-divider direction="vertical"></el-divider>-->
+          <!--<el-button type="text" icon="el-icon-edit" @click="">启用</el-button>-->
+          <!--<el-divider direction="vertical"></el-divider>-->
+          <!--<el-button type="text" icon="el-icon-delete" @click="">禁用</el-button>-->
+        </template>
+      </el-table-column>
+    </el-table>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+                   @size-change="onPageSizeChanged"
+                   @current-change="onCurrentPageChanged"
+                   :current-page="page.number + 1"
+                   :page-size="page.size"
+                   :page-count="page.totalPages"
+                   :total="page.totalElements">
     </el-pagination>
   </div>
 </template>
 
-<style>
-  .template-file {
-    padding-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    flex-direction: column;
-    display: flex;
-    /* border: 1px solid #ffffff; */
-  }
-
-  .template-file_selected {
-    padding-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    flex-direction: column;
-    display: flex;
-    background-color: #ededed;
-    /* border: 1px solid #ffd60c; */
-  }
-
-  .template-file:hover {
-    background-color: #ededed;
-  }
-
-  .template-file:active {
-    background-color: #ededed;
-  }
-
-  .img-word {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 5px;
-  }
-
-  .template-name {
-    text-align: center;
-    font-size: 12px;
-  }
-
-  .template-body {
-    padding-top: 20px;
-  }
-
-  .template-ban {
-    z-index: 1;
-    position: absolute;
-    right: 30px;
-  }
-
-  .template-ban_icon {
-    color: red;
-    font-size: 30px;
-  }
-
-</style>
-
 <script>
+  import TemplateForm from "../components/TemplateForm";
+
   export default {
     name: "TemplateSearchResultList",
     props: ["page"],
@@ -115,51 +80,30 @@
           this.selectedCode = code;
         }
       },
-
+      onDetails(code) {
+        // console.log(row);
+        this.$emit('onDetails', code);
+      },
+      async onDelete(code){
+        const url = this.apis().deleteTemplate(code);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        if(result){
+          this.$message.success('删除成功');
+        }else{
+          this.$message.error('删除失败');
+        }
+        this.$emit("onSearch",0);
+      }
     },
     data() {
       return {
         selectedCode: "0",
-        mockData: [{
-            code: "1",
-            name: "XXXXXXXXX采购合同模板"
-          },
-          {
-            code: "2",
-            name: "XXXXXXXXX采购合同模板"
-          },
-          {
-            code: "3",
-            name: "XXXXXXXXX采购合同模板"
-          },
-          {
-            code: "5",
-            name: "XXXXXXXXX采购合同模板"
-          },
-          {
-            code: "6",
-            name: "XXXXXXXXX采购合同模板"
-          },
-          {
-            code: "7",
-            name: "XXXXXXXXX采购合同模板",
-            baned:true
-          },
-          {
-            code: "8",
-            name: "XXXXXXXXX采购合同模板"
-          },
-          {
-            code: "9",
-            name: "XXXXXXXXX采购合同模板"
-          },
-          {
-            code: "10",
-            name: "XXXXXXXXX采购合同模板"
-          },
-        ]
+        mockData: []
       };
     }
   };
-
 </script>

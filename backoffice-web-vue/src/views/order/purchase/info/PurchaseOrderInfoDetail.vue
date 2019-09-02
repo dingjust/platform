@@ -1,7 +1,7 @@
 <template>
   <div class="info-detail-body">
     <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-info-deliver :slotData="slotData" :read-only="true" />
+      <purchase-order-deliver-views :slotData="slotData" />
     </el-dialog>
     <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
       <purchase-order-info-receive :slotData="slotData" />
@@ -83,8 +83,8 @@
 <script>
   import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
   import OrdersInfoTable from '@/components/custom/OrdersInfoTable';
-  import PurchaseOrderInfoDeliver from './PurchaseOrderInfoDeliver';
   import PurchaseOrderInfoReceive from './PurchaseOrderInfoReceive';
+  import PurchaseOrderDeliverViews from './PurchaseOrderDeliverViews';
 
   export default {
     name: 'PurchaseOrderInfoDetail',
@@ -92,7 +92,7 @@
     components: {
       OrdersInfoItem,
       OrdersInfoTable,
-      PurchaseOrderInfoDeliver,
+      PurchaseOrderDeliverViews,
       PurchaseOrderInfoReceive,
     },
     mixins: [],

@@ -14,6 +14,7 @@
     <el-button-group>
       <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
       <el-button  native-type="reset" @click="">重置</el-button>
+      <el-button type="primary" class="toolbar-search_input" @click="onCreateContract">创建合同</el-button>
     </el-button-group>
   </el-form>
 </template>
@@ -22,6 +23,7 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
+  import ContractForm from '../ContractForm'
 
   const {
     mapMutations
@@ -40,33 +42,8 @@
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
-      async getFactories(query) {
-        const url = this.apis().getFactories();
-        const result = await this.$http.post(url, {
-          keyword: query
-        }, {
-          page: 0,
-          size: 10
-        });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        this.factories = result.content;
-      },
-      async getBrands(query) {
-        const url = this.apis().getBrands();
-        const result = await this.$http.post(url, {
-          keyword: query
-        }, {
-          page: 0,
-          size: 10
-        });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        this.brands = result.content;
+      onCreateContract(){
+        this.fn.openSlider('创建', ContractForm, '');
       },
     },
     data() {
@@ -107,10 +84,6 @@
       }
     },
     created() {
-      if (this.isTenant()) {
-        this.getFactories();
-        this.getBrands();
-      }
     }
   }
 
