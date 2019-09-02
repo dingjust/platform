@@ -75,7 +75,7 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">品牌</h6>
-            <el-input placeholder="输入品牌名称" v-model="slotData.productBrandName" size="mini">
+            <el-input placeholder="输入品牌名称" v-model="slotData.brand" size="mini">
             </el-input>
           </el-row>
         </el-col>

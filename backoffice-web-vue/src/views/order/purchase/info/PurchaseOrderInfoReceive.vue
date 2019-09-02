@@ -9,166 +9,173 @@
       <form-label label="合作对象" />
     </el-row>
     <el-form :disabled="!isBrand()">
-    <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">发货人</h6>
-          <el-input placeholder="输入品牌名" v-model="form.consignorName" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="8">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">联系方式</h6>
-          <el-input placeholder="输入手机号" v-model="form.consignorPhone" size="mini">
-            <el-select v-model="form.consignorPhone" slot="append" placeholder="请选择">
-              <el-option label="123" value="123"></el-option>
-              <el-option label="1234" value="1234"></el-option>
-              <el-option label="1324" value="1324"></el-option>
+      <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
+        <el-col :span="6">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">发货人</h6>
+            <el-input placeholder="输入品牌名" v-model="form.consignorName" size="mini">
+            </el-input>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">联系方式</h6>
+            <el-input placeholder="输入手机号" v-model="form.consignorPhone" size="mini">
+              <el-select v-model="form.consignorPhone" slot="append" placeholder="请选择">
+                <el-option label="123" value="123"></el-option>
+                <el-option label="1234" value="1234"></el-option>
+                <el-option label="1324" value="1324"></el-option>
+              </el-select>
+            </el-input>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
+        <el-col :span="6">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">发货方式</h6>
+            <el-select v-model="form.consignment.carrierDetails.code" placeholder="请选择"
+              :disabled="form.isOfflineConsignment">
+              <el-option v-for="item in carriers" :key="item.code" :label="item.name" :value="item.code">
+              </el-option>
             </el-select>
-          </el-input>
-        </el-row>
-      </el-col>
-    </el-row>
-    <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">发货方式</h6>
-          <el-input placeholder="输入方式" v-model="form.deliverWay" size="mini" :disabled="form.isOfflineConsignment">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">发货单号</h6>
-          <el-input placeholder="货运单号" v-model="form.receiveCode" size="mini" :disabled="form.isOfflineConsignment">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="8">
-        <el-checkbox v-model="form.isOfflineConsignment" size='mini' class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）
-        </el-checkbox>
-      </el-col>
-    </el-row>
-    <el-row class="info-receive-row">
-      <form-label label="收货信息" />
-    </el-row>
-    <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">收货人</h6>
-          <el-input placeholder="输入名称" v-model="form.consigneeName" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">联系方式</h6>
-          <el-input placeholder="输入方式" v-model="form.consigneePhone" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="12">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">详细地址</h6>
-          <el-input placeholder="输入收货地址" v-model="form.consigneeAddress" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-    </el-row>
-    <el-row class="info-receive-row">
-      <form-label label="产品信息" />
-    </el-row>
-    <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">品牌</h6>
-          <el-input placeholder="输入品牌名称" v-model="form.productBrandName" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-      <el-col :span="6">
-        <el-row type="flex" align="middle">
-          <h6 class="info-input-prepend">产品款号</h6>
-          <el-input placeholder="输入款号" v-model="form.skuID" size="mini">
-          </el-input>
-        </el-row>
-      </el-col>
-    </el-row>
-    <table cellspacing="2" width="100%" :height="(form.entries.length+1)*50" class="order-table">
-      <tr class="order-table-th_row">
-        <td style="width:40px">颜色</td>
-        <template v-for="item in sizes">
-          <th>{{item}}</th>
-        </template>
-        <th>数量小计</th>
-      </tr>
-      <template v-for="(sizeArray,rowIndex) in form.entries">
-        <tr>
-          <td>{{sizeArray[0].color}}</td>
-          <template v-for="(size,index) in sizeArray">
-            <td style="width:80px">
-              <el-input class="order-table-input" type="number" v-model="size.quantity" placeholder="输入">
-              </el-input>
-            </td>
+          </el-row>
+        </el-col>
+        <el-col :span="6">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">发货单号</h6>
+            <el-input placeholder="货运单号" v-model="form.consignment.trackingID" size="mini"
+              :disabled="form.isOfflineConsignment">
+            </el-input>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-checkbox v-model="form.isOfflineConsignment" size='mini' class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）
+          </el-checkbox>
+        </el-col>
+      </el-row>
+      <el-row class="info-receive-row">
+        <form-label label="收货信息" />
+      </el-row>
+      <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
+        <el-col :span="6">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">收货人</h6>
+            <el-input placeholder="输入名称" v-model="form.consigneeName" size="mini">
+            </el-input>
+          </el-row>
+        </el-col>
+        <el-col :span="6">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">联系方式</h6>
+            <el-input placeholder="输入方式" v-model="form.consigneePhone" size="mini">
+            </el-input>
+          </el-row>
+        </el-col>
+        <el-col :span="12">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">详细地址</h6>
+            <el-input placeholder="输入收货地址" v-model="form.consigneeAddress" size="mini">
+            </el-input>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row class="info-receive-row">
+        <form-label label="产品信息" />
+      </el-row>
+      <el-row class="info-receive-row" type="flex" justify="start" align="middle" :gutter="20">
+        <el-col :span="6">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">品牌</h6>
+            <el-input placeholder="输入品牌名称" v-model="form.brand" size="mini">
+            </el-input>
+          </el-row>
+        </el-col>
+        <el-col :span="6">
+          <el-row type="flex" align="middle">
+            <h6 class="info-input-prepend">产品款号</h6>
+            <el-input placeholder="输入款号" v-model="form.skuID" size="mini">
+            </el-input>
+          </el-row>
+        </el-col>
+      </el-row>
+      <table cellspacing="2" width="100%" :height="(form.entries.length+1)*50" class="order-table">
+        <tr class="order-table-th_row">
+          <td style="width:40px">颜色</td>
+          <template v-for="item in sizes">
+            <th>{{item}}</th>
           </template>
-          <td style="width:100px">{{countRowAmount(rowIndex)}}</td>
+          <th>数量小计</th>
         </tr>
-      </template>
-      <tr>
-        <td>合计</td>
-        <td :colspan="getColspanLength()+1">{{totalAmout}}</td>
-      </tr>
-      <tr>
-        <td>备注</td>
-        <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.remarks" placeholder="输入"></el-input>
-        </td>
-      </tr>
-      <tr>
-        <td>退料</td>
-        <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.withdrawalQuality" placeholder="输入"></el-input>
-        </td>
-      </tr>
-      <tr>
-        <td>残次品数</td>
-        <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.defectiveQuality" placeholder="输入"></el-input>
-        </td>
-      </tr>
-    </table>
+        <template v-for="(sizeArray,rowIndex) in form.entries">
+          <tr>
+            <td>{{sizeArray[0].color}}</td>
+            <template v-for="(size,index) in sizeArray">
+              <td style="width:80px">
+                <el-input class="order-table-input" type="number" v-model="size.quantity" placeholder="输入">
+                </el-input>
+              </td>
+            </template>
+            <td style="width:100px">{{countRowAmount(rowIndex)}}</td>
+          </tr>
+        </template>
+        <tr>
+          <td>合计</td>
+          <td :colspan="getColspanLength()+1">{{totalAmout}}</td>
+        </tr>
+        <tr>
+          <td>备注</td>
+          <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
+            <el-input v-model="form.remarks" placeholder="输入"></el-input>
+          </td>
+        </tr>
+        <tr>
+          <td>退料</td>
+          <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
+            <el-input v-model="form.withdrawalQuality" placeholder="输入"></el-input>
+          </td>
+        </tr>
+        <tr>
+          <td>残次品数</td>
+          <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
+            <el-input v-model="form.defectiveQuality" placeholder="输入"></el-input>
+          </td>
+        </tr>
+      </table>
+    </el-form>
     <el-row type="flex" justify="center" class="info-receive-row">
       <template v-if="isBrand()">
         <el-button class="info-receive-submit" v-if="slotData.deliveryOrders==null||slotData.deliveryOrders.length==0"
           @click="onSubmit">确认创建</el-button>
         <el-button class="info-receive-submit"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='UNCOMMITTED'">
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='UNCOMMITTED'"
+          @click="onSave">
           保存并退出</el-button>
         <el-button class="info-receive-submit"
           v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='UNCOMMITTED'"
           @click="onCommit">
           确认完成收货</el-button>
         <el-button class="info-receive-submit"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'">
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'"
+          @click="onWithdraw">
           撤回</el-button>
       </template>
       <template v-if="isFactory()">
         <el-button class="info-receive-refuse"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'">
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onReject">
           拒绝</el-button>
         <el-button class="info-receive-submit"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'">
+          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'"
+          @click="onAccept">
           确认</el-button>
       </template>
     </el-row>
     <el-row type="flex" justify="end" class="info-receive-row">
-      <h6 class="order-table-info">品牌跟单员： xxx</h6>
-      <h6 class="order-table-info">工厂跟单员： {{slotData.user.name}}</h6>
+      <h6 class="order-table-info">品牌跟单员： {{slotData.brandOperator!=null?slotData.brandOperator.name:'未指定'}}</h6>
+      <h6 class="order-table-info">工厂跟单员： {{slotData.factoryOperator!=null?slotData.factoryOperator.name:'未指定'}}</h6>
       <h6 class="order-table-info">发货日期： {{slotData
         .creationtime | timestampToTime}}</h6>
     </el-row>
-    </el-form>
   </div>
 </template>
 
@@ -253,7 +260,8 @@
           entries: entries,
           remarks: this.form.remarks,
           skuID: this.form.skuID,
-          brand: this.form.productBrandName
+          brand: this.form.brand,
+          consignment: this.form.consignment
         };
 
         const url = this.apis().createDeliveryOrder(this.slotData.code);
@@ -310,7 +318,8 @@
           entries: entries,
           remarks: this.form.remarks,
           skuID: this.form.skuID,
-          brand: this.form.productBrandName
+          brand: this.form.brand,
+          consignment: this.form.consignment
         };
 
         const url = this.apis().commitDeliveryOrder();
@@ -323,33 +332,121 @@
         //刷新数据
         this.refreshData();
       },
+      async getCarriers() {
+        const url = this.apis().getCarriers();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.carriers = result;
+      },
+      async onSave() {
+        //组合订单行参数
+        var entries = [];
+        this.form.entries.forEach(variants => {
+          variants.forEach(variant => {
+            if (variant.quantity != '' && variant.quantity > 0) {
+              entries.push(variant);
+            }
+          })
+        });
+        //表单参数
+        var form = {
+          id: this.form.id,
+          code: this.form.code,
+          withdrawalQuality: this.form.withdrawalQuality,
+          defectiveQuality: this.form.defectiveQuality,
+          consignorName: this.form.consignorName,
+          consignorPhone: this.form.consignorPhone,
+          consigneeName: this.form.consigneeName,
+          consigneePhone: this.form.consigneePhone,
+          consigneeAddress: this.form.consigneeAddress,
+          isOfflineConsignment: this.form.isOfflineConsignment,
+          entries: entries,
+          remarks: this.form.remarks,
+          skuID: this.form.skuID,
+          brand: this.form.brand,
+          consignment: this.form.consignment
+        };
+
+        const url = this.apis().updateDeliveryOrder();
+        const result = await this.$http.put(url, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('保存成功');
+        //刷新数据
+        this.refreshData();
+      },
+      async onWithdraw() {
+        const url = this.apis().withdrawDeliveryOrder(this.form.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('撤回成功');
+        //刷新数据
+        this.refreshData();
+      },
+      async onAccept() {
+        const url = this.apis().confirmDeliveryOrder(this.form.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('确认成功');
+        //刷新数据
+        this.refreshData();
+      },
+      async onReject() {
+        const url = this.apis().rejectDeliveryOrder(this.form.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('拒绝成功');
+        //刷新数据
+        this.refreshData();
+      }
     },
     data() {
       return {
         receiveFormVisible: false,
         activeForm: '1',
         mockData: [],
+        carriers: [],
         form: {
           code: '',
           id: '',
           consignorName: "",
           consignorPhone: "",
-          receiveCode: "",
           isOfflineConsignment: false,
           consigneeName: "",
           consigneePhone: "",
           consigneeAddress: "",
-          productBrandName: "",
+          brand: "",
           skuID: "",
           remarks: "",
           defectiveQuality: '',
           withdrawalQuality: '',
-          deliverWay: '',
+          consignment: {
+            trackingID: '',
+            carrierDetails: {
+              name: '',
+              code: ''
+            },
+          },
           entries: []
         },
       }
     },
     created() {
+      this.getCarriers();
       //初始化表格
       this.form.entries = [];
       this.colors.forEach(color => {
@@ -449,7 +546,7 @@
             this.form.consigneeName = this.slotData.deliveryOrders[0].consigneeName;
             this.form.consigneePhone = this.slotData.deliveryOrders[0].consigneePhone;
             this.form.consigneeAddress = this.slotData.deliveryOrders[0].consigneeAddress;
-            this.form.productBrandName = this.slotData.deliveryOrders[0].productBrandName;
+            this.form.brand = this.slotData.deliveryOrders[0].brand;
             this.form.skuID = this.slotData.deliveryOrders[0].skuID;
             this.form.remarks = this.slotData.deliveryOrders[0].remarks;
             this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
@@ -469,7 +566,7 @@
         this.form.consigneeName = this.slotData.deliveryOrders[0].consigneeName;
         this.form.consigneePhone = this.slotData.deliveryOrders[0].consigneePhone;
         this.form.consigneeAddress = this.slotData.deliveryOrders[0].consigneeAddress;
-        this.form.productBrandName = this.slotData.deliveryOrders[0].productBrandName;
+        this.form.brand = this.slotData.deliveryOrders[0].brand;
         this.form.skuID = this.slotData.deliveryOrders[0].skuID;
         this.form.remarks = this.slotData.deliveryOrders[0].remarks;
         this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
