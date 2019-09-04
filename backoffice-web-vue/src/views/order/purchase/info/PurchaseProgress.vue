@@ -7,7 +7,7 @@
       <div class="info-title">
         <h6 class="info-title_text">生产进度</h6>
       </div>
-      <el-button size="mini" class="info-detail-logistics_info-btn1" @click="deliverFormVisible=!deliverFormVisible">
+      <el-button size="mini" class="info-detail-logistics_info-btn1" @click="deliverFormVisible=!deliverFormVisible" v-if="isFactory()">
         部分发货</el-button>
     </el-row>
     <el-row>

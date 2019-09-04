@@ -9,14 +9,14 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">甲方</h6>
-          <el-input placeholder="输入名称" v-model="form.partyAName" size="mini">
+          <el-input placeholder="输入名称" v-model="form.partA" size="mini">
           </el-input>
         </el-row>
       </el-col>
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">乙方</h6>
-          <el-input placeholder="输入名称" v-model="form.partyBName" size="mini">
+          <el-input placeholder="输入名称" v-model="form.partB" size="mini">
           </el-input>
         </el-row>
       </el-col>
@@ -25,39 +25,42 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">品牌</h6>
-          <el-input placeholder="输入品牌名" v-model="form.brandName" size="mini">
+          <el-input placeholder="输入品牌名" v-model="form.brand" size="mini">
           </el-input>
         </el-row>
       </el-col>
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">款号</h6>
-          <el-input placeholder="输入款号" v-model="form.partyBName" size="mini">
+          <el-input placeholder="输入款号" v-model="form.skuID" size="mini">
           </el-input>
         </el-row>
       </el-col>
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">加工方式</h6>
-          <el-input placeholder="输入方式" v-model="form.machiningType" size="mini">
-          </el-input>
+          <el-select v-model="form.cooperationMethod" placeholder="请选择">
+            <el-option v-for="item in machiningTypes" :key="item.value" :label="item.name" :value="item.code">
+            </el-option>
+          </el-select>
         </el-row>
       </el-col>
     </el-row>
-    <table cellspacing="2" width="100%" :height="sizesForm.length*50" class="order-table">
+    <table cellspacing="2" width="100%" :height="form.entries.length*50" class="order-table">
       <tr class="order-table-th_row">
         <th>颜色</th>
         <template v-for="item in sizes">
-          <th>{{item}}</th>
+          <th :colspan="getColspanLength3()">{{item}}</th>
         </template>
         <th>数量小计</th>
       </tr>
-      <template v-for="(row,rowIndex) in mockData">
+      <template v-for="(sizeArray,rowIndex) in form.entries">
         <tr>
-          <td style="width:80px">{{row.color.name}}</td>
-          <template v-for="(item,index) in sizes">
-            <td style="width:80px">
-              {{getSizeNum(row.size,item)}}
+          <td style="width:80px">{{sizeArray[0].color}}</td>
+          <template v-for="(item,index) in sizeArray">
+            <td style="width:80px" :colspan="getColspanLength3()">
+              <el-input class="order-table-input" v-model="item.quantity" type="number" placeholder="输入">
+              </el-input>
             </td>
           </template>
           <td style="width:100px">{{countRowAmount(rowIndex)}}</td>
@@ -65,84 +68,108 @@
       </template>
       <tr>
         <td>数量合计</td>
-        <td :colspan="getColspanLength()-1">{{totalAmout}}</td>
+        <td :colspan="getColspanLength2()+1">{{totalAmout}}</td>
       </tr>
       <tr>
         <td>金额合计</td>
-        <td :colspan="getColspanLength()-1">￥1200000</td>
+        <td :colspan="getColspanLength2()+1">￥{{slotData.unitPrice}} X {{totalAmout}} =
+          ￥{{totalAmout*slotData.unitPrice}}</td>
       </tr>
       <tr>
         <td>已付金额</td>
-        <td :colspan="getColspanLength()-1">￥1200000</td>
+        <td :colspan="getColspanLength2()+1">￥{{form.paid}}</td>
       </tr>
       <tr>
         <td>剩余合计</td>
-        <td :colspan="getColspanLength()-1">￥1200000</td>
+        <td :colspan="getColspanLength2()+1">￥{{totalAmout*slotData.unitPrice-form.paid}}</td>
       </tr>
       <tr>
         <td>延期扣款</td>
         <td class="order-table-input">
-          <el-input v-model="form.delayDeduction" placeholder="输入"></el-input>
+          <el-input v-model="form.delayDeduction" placeholder="输入" type="number"></el-input>
         </td>
         <td>扣款备注</td>
-        <td :colspan="getColspanLength()-2" class="order-table-input">
-          <el-input v-model="form.delayRemarks" placeholder="输入"></el-input>
+        <td :colspan="getColspanLength()" class="order-table-input">
+          <el-input v-model="form.delayDeductionRemarks" placeholder="输入"></el-input>
         </td>
       </tr>
       <tr>
       <tr>
         <td>质量扣款</td>
         <td class="order-table-input">
-          <el-input v-model="form.qualityDeduction" placeholder="输入"></el-input>
+          <el-input v-model="form.qualityDeduction" placeholder="输入" type="number"></el-input>
         </td>
         <td>扣款备注</td>
-        <td :colspan="getColspanLength()-2" class="order-table-input">
-          <el-input v-model="form.qualityRemarks" placeholder="输入"></el-input>
+        <td :colspan="getColspanLength()" class="order-table-input">
+          <el-input v-model="form.qualityDeductionRemarks" placeholder="输入"></el-input>
         </td>
       </tr>
       <tr>
       <tr>
         <td>其他扣款</td>
         <td class="order-table-input">
-          <el-input v-model="form.otherDeduction" placeholder="输入"></el-input>
+          <el-input v-model="form.otherDeduction" placeholder="输入" type="number"></el-input>
         </td>
         <td>扣款备注</td>
-        <td :colspan="getColspanLength()-2" class="order-table-input">
-          <el-input v-model="form.otherRemarks" placeholder="输入"></el-input>
+        <td :colspan="getColspanLength()" class="order-table-input">
+          <el-input v-model="form.otherDeductionRemarks" placeholder="输入"></el-input>
         </td>
       </tr>
       <tr>
       <tr>
         <td>其他款项</td>
         <td class="order-table-input">
-          <el-input v-model="form.otherPrice" placeholder="输入"></el-input>
+          <el-input v-model="form.otherFunds" placeholder="输入" type="number"></el-input>
         </td>
         <td>扣款备注</td>
-        <td :colspan="getColspanLength()-2" class="order-table-input">
-          <el-input v-model="form.otherPriceRemarks" placeholder="输入"></el-input>
+        <td :colspan="getColspanLength()" class="order-table-input">
+          <el-input v-model="form.otherFundsRemarks" placeholder="输入"></el-input>
         </td>
       </tr>
       <tr>
       <tr>
         <td>备注</td>
-        <td :colspan="getColspanLength()-1" class="order-table-input" style="width:120px">
+        <td :colspan="getColspanLength2()+1" class="order-table-input" style="width:120px">
           <el-input v-model="form.remarks" placeholder="输入"></el-input>
         </td>
       </tr>
       <tr>
         <td>应付金额</td>
-        <td :colspan="getColspanLength()-1" class="order-table-input" style="width:120px">
-          <el-input v-model="form.realPay" placeholder="输入"></el-input>
+        <td :colspan="getColspanLength2()+1" class="order-table-input" style="width:120px">
+          {{shouldPay}}
         </td>
       </tr>
     </table>
     <el-row type="flex" justify="end" class="info-receive-row">
-      <h6 class="order-table-info">品牌跟单员： 杨建</h6>
-      <h6 class="order-table-info">工厂跟单员： 刘少立</h6>
-      <h6 class="order-table-info">发货日期： 2019-7-19</h6>
+      <h6 class="order-table-info">品牌跟单员： {{slotData.brandOperator!=null?slotData.brandOperator.name:'未指定'}}</h6>
+      <h6 class="order-table-info">工厂跟单员： {{slotData.factoryOperator!=null?slotData.factoryOperator.name:'未指定'}}</h6>
+      <h6 class="order-table-info">发货日期： {{slotData
+        .creationtime | timestampToTime}}</h6>
     </el-row>
     <el-row type="flex" justify="center" class="info-receive-row">
-      <el-button class="info-receive-submit" @click="onSubmit()">确认创建</el-button>
+      <template v-if="isBrand()">
+        <el-button class="info-receive-submit"
+          v-if="slotData.reconciliationOrders==null||slotData.reconciliationOrders.length==0&&slotData.status=='COMPLETED'"
+          @click="onSubmit">确认创建</el-button>
+        <el-button class="info-receive-submit"
+          v-if="slotData.reconciliationOrders!=null&&slotData.reconciliationOrders.length!=0&&slotData.reconciliationOrders[0].status=='UNCOMMITTED'"
+          @click="onCommit">
+          确认提交</el-button>
+        <el-button class="info-receive-submit"
+          v-if="slotData.reconciliationOrders!=null&&slotData.reconciliationOrders.length!=0&&slotData.reconciliationOrders[0].status=='PENDING_CONFIRM'"
+          @click="onWithdraw">
+          撤回</el-button>
+      </template>
+      <template v-if="isFactory()">
+        <el-button class="info-receive-refuse"
+          v-if="slotData.reconciliationOrders!=null&&slotData.reconciliationOrders.length!=0&&slotData.reconciliationOrders[0].status=='PENDING_CONFIRM'"
+          @click="onReject">
+          拒绝</el-button>
+        <el-button class="info-receive-submit"
+          v-if="slotData.reconciliationOrders!=null&&slotData.reconciliationOrders.length!=0&&slotData.reconciliationOrders[0].status=='PENDING_CONFIRM'"
+          @click="onAccept">
+          确认</el-button>
+      </template>
     </el-row>
   </div>
 </template>
@@ -150,6 +177,9 @@
 <script>
   import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
   import FormLabel from '@/components/custom/FormLabel';
+
+  import Bus from '@/common/js/bus';
+
 
   export default {
     name: 'PurchaseOrderInfoReconciliation',
@@ -162,149 +192,315 @@
     computed: {
       sizes: function () {
         var sizes = new Set([]);
-        this.mockData.forEach(color => {
-          color.size.forEach(size => {
-            sizes.add(size.name);
-          });
+        this.slotData.entries.forEach(element => {
+          sizes.add(element.product.size.name);
         });
         return sizes;
       },
+      colors: function () {
+        var colors = new Set([]);
+        this.slotData.entries.forEach(element => {
+          colors.add(element.product.color.name);
+        });
+        return colors;
+      },
       totalAmout: function () {
         var totalAmount = 0;
-        this.mockData.forEach(item => {
-          item.size.forEach(size => {
-            if (size.num != null && size.num != '') {
-              totalAmount += parseInt(size.num);
+        this.form.entries.forEach(sizeArray => {
+          sizeArray.forEach(item => {
+            if (item.quantity != '') {
+              totalAmount += parseInt(item.quantity);
             }
-          });
-        })
+          })
+        });
         return totalAmount;
+      },
+      shouldPay: function () {
+        return this.totalAmout * this.slotData.unitPrice - this.form.paid - this.form.delayDeduction - this.form
+          .qualityDeduction - this.form.otherDeduction - this.form.otherFunds;
       }
     },
     methods: {
       countRowAmount(rowIndex) {
         var amount = 0;
-        this.mockData[rowIndex].size.forEach(element => {
-          if (element != null) {
-            let num = parseInt(element.num);
-            amount = amount + num;
+        this.form.entries[rowIndex].forEach(element => {
+          if (element.quantity != '') {
+            let quantity = parseInt(element.quantity);
+            amount = amount + quantity;
           }
         });
         return amount;
       },
       getColspanLength() {
-        return this.sizes.size + 2;
+        return this.sizes.size;
       },
-      onSubmit() {
-
+      getColspanLength2() {
+        return this.sizes.size > 1 ? this.sizes.size : 2;
       },
-      getSizeNum(sizes, sizeName) {
-        var result = '';
-        sizes.forEach(size => {
-          if (size.name == sizeName) {
-            result = size.num;
-          }
+      getColspanLength3() {
+        return this.sizes.size > 1 ? 1 : 2;
+      },
+      async onSubmit() {
+        //组合订单行参数
+        var entries = [];
+        this.form.entries.forEach(variants => {
+          variants.forEach(variant => {
+            if (variant.quantity != '' && variant.quantity > 0) {
+              let item = {
+                quantity: variant.quantity,
+                color: variant.color,
+                size: variant.size
+              }
+              entries.push(item);
+            }
+          })
         });
-        return result;
+        //表单参数
+        var form = {
+          partA: this.form.partA,
+          partB: this.form.partB,
+          brand: this.form.brand,
+          skuID: this.form.skuID,
+          cooperationMethod: this.form.cooperationMethod,
+          remarks: this.form.remarks,
+          delayDeduction: this.form.delayDeduction,
+          delayDeductionRemarks: this.form.delayDeductionRemarks,
+          qualityDeduction: this.form.qualityDeduction,
+          qualityDeductionRemarks: this.form.qualityDeductionRemarks,
+          otherDeduction: this.form.otherDeduction,
+          otherDeductionRemarks: this.form.otherDeductionRemarks,
+          otherFunds: this.form.otherFunds,
+          otherFundsRemarks: this.form.otherDeductionRemarks,
+          entries: entries,
+        };
+
+        const url = this.apis().createReconciliationOrder(this.slotData.code);
+        const result = await this.$http.post(url, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('创建成功');
+        //刷新数据
+        this.refreshData();
+      },
+      async refreshData() {
+        const url = this.apis().getPurchaseOrder(this.slotData.code);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        //跟新slotData
+        this.$set(this.slotData, 'reconciliationOrders', result.reconciliationOrders);
+        this.$emit('afterCreate');
+      },
+      getVariant(color, size, entries) {
+        var result = entries.filter(item => item.color == color && item.size == size);
+        if (result.length != 0) {
+          return result[0];
+        } else {
+          return null;
+        }
+      },
+      async onCommit() {
+        //组合订单行参数
+        var entries = [];
+        this.form.entries.forEach(variants => {
+          variants.forEach(variant => {
+            if (variant.quantity != '' && variant.quantity > 0) {
+              let item = {
+                quantity: variant.quantity,
+                color: variant.color,
+                size: variant.size
+              }
+              entries.push(item);
+            }
+          })
+        });
+        //表单参数
+        var form = {
+          id: this.form.id,
+          code: this.form.code,
+          partA: this.form.partA,
+          partB: this.form.partB,
+          brand: this.form.brand,
+          skuID: this.form.skuID,
+          cooperationMethod: this.form.cooperationMethod,
+          remarks: this.form.remarks,
+          delayDeduction: this.form.delayDeduction,
+          delayDeductionRemarks: this.form.delayDeductionRemarks,
+          qualityDeduction: this.form.qualityDeduction,
+          qualityDeductionRemarks: this.form.qualityDeductionRemarks,
+          otherDeduction: this.form.otherDeduction,
+          otherDeductionRemarks: this.form.otherDeductionRemarks,
+          otherFunds: this.form.otherFunds,
+          otherFundsRemarks: this.form.otherDeductionRemarks,
+          entries: entries,
+        };
+
+        const url = this.apis().commitReconciliationOrder();
+        const result = await this.$http.put(url, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('提交成功');
+        //刷新数据
+        this.refreshData();
+      },
+      async onWithdraw() {
+        const url = this.apis().withdrawReconciliationOrder();
+        const result = await this.$http.put(url, {
+          id: this.form.id
+        });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('撤回成功');
+        //刷新数据
+        this.refreshData();
+      },
+      async onReject() {
+        const url = this.apis().rejectReconciliation(this.form.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('拒绝成功');
+        //刷新数据
+        this.refreshData();
+      },
+      async onAccept() {
+        const url = this.apis().confirmReconciliation(this.form.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('确认成功');
+        //刷新数据
+        this.refreshData();
+      },
+      initTable() {
+        //初始化表格
+        this.form.entries = [];
+        this.colors.forEach(color => {
+          var sizeArray = [];
+          this.sizes.forEach(size => {
+            if (this.slotData.reconciliationOrders == null || this.slotData.reconciliationOrders.length == 0) {
+              sizeArray.push({
+                size: size,
+                color: color,
+                quantity: '',
+              });
+            } else {
+              let variant = this.getVariant(color, size, this.slotData.reconciliationOrders[0].entries);
+              if (variant != null) {
+                sizeArray.push(variant);
+              } else {
+                sizeArray.push({
+                  size: size,
+                  color: color,
+                  quantity: '',
+                });
+              }
+            }
+          });
+          this.form.entries.push(sizeArray);
+        });
+      },
+      initUpdateForm() {
+        if (this.slotData.reconciliationOrders != null && this.slotData.reconciliationOrders.length != 0) {
+          this.form.id = this.slotData.reconciliationOrders[0].id;
+          this.form.code = this.slotData.reconciliationOrders[0].code;
+          this.form.partA = this.slotData.reconciliationOrders[0].partA;
+          this.form.partB = this.slotData.reconciliationOrders[0].partB;
+          this.form.brand = this.slotData.reconciliationOrders[0].brand;
+          this.form.skuID = this.slotData.reconciliationOrders[0].skuID;
+          this.form.cooperationMethod = this.slotData.reconciliationOrders[0].cooperationMethod;
+          this.form.remarks = this.slotData.reconciliationOrders[0].remarks;
+          this.form.delayDeduction = this.slotData.reconciliationOrders[0].delayDeduction;
+          this.form.delayDeductionRemarks = this.slotData.reconciliationOrders[0].delayDeductionRemarks;
+          this.form.qualityDeduction = this.slotData.reconciliationOrders[0].qualityDeduction;
+          this.form.qualityDeductionRemarks = this.slotData.reconciliationOrders[0].qualityDeductionRemarks;
+          this.form.otherDeduction = this.slotData.reconciliationOrders[0].otherDeduction;
+          this.form.otherDeductionRemarks = this.slotData.reconciliationOrders[0].otherDeductionRemarks;
+          this.form.otherFunds = this.slotData.reconciliationOrders[0].otherFunds;
+          this.form.otherFundsRemarks = this.slotData.reconciliationOrders[0].otherFundsRemarks;
+        } else {
+          this.form.id = '';
+          this.form.code = '';
+          this.form.partA = '';
+          this.form.partB = '';
+          this.form.brand = '';
+          this.form.skuID = '';
+          this.form.cooperationMethod = '';
+          this.form.remarks = '';
+          this.form.delayDeduction = '';
+          this.form.delayDeductionRemarks = '';
+          this.form.qualityDeduction = '';
+          this.form.qualityDeductionRemarks = '';
+          this.form.otherDeduction = '';
+          this.form.otherDeductionRemarks = '';
+          this.form.otherFunds = '';
+          this.form.otherFundsRemarks = '';
+        }
       }
     },
     data() {
       return {
+        machiningTypes: this.$store.state.EnumsModule.machiningTypes,
         form: {
-          partyAName: "",
-          partyBName: "",
-          brandName: "",
-          machiningType: "",
+          id: '',
+          code: '',
+          partA: "",
+          partB: "",
+          brand: "",
+          skuID: "",
+          cooperationMethod: "",
           remarks: "",
-          imperfectionsNum: '',
-          realPay: '',
-          delayDeduction:'',
-          delayRemarks:'',
-          qualityDeduction:'',
-          qualityRemarks:'',
-          otherDeduction:'',
-          otherRemarks:'',
-          otherPrice:'',
-          otherPriceRemarks:''
-
+          paid: 0,
+          delayDeduction: 0,
+          delayDeductionRemarks: '',
+          qualityDeduction: 0,
+          qualityDeductionRemarks: '',
+          otherDeduction: 0,
+          otherDeductionRemarks: '',
+          otherFunds: 0,
+          otherFundsRemarks: '',
+          entries: [],
         },
-        sizesForm: [
-          []
-        ],
-        mockData: [{
-          'color': {
-            'name': '蓝色',
-            'code': 'C1'
-          },
-          'size': [{
-            'name': 'X',
-            'code': 'S1',
-            'num': 1
-          }, {
-            'name': 'S',
-            'code': 'S2',
-            'num': 2
-          }, {
-            'name': 'XL',
-            'code': 'S3',
-            'num': 3
-          }]
-        }, {
-          'color': {
-            'name': '绿色',
-            'code': 'C1'
-          },
-          'size': [{
-            'name': 'X',
-            'code': 'S1',
-            'num': 1
-          }, {
-            'name': 'S',
-            'code': 'S2',
-            'num': 2
-          }, {
-            'name': 'XL',
-            'code': 'S3',
-            'num': 3
-          }]
-        }, {
-          'color': {
-            'name': '红色',
-            'code': 'C1'
-          },
-          'size': [{
-            'name': 'X',
-            'code': 'S1',
-            'num': 1
-          }, {
-            'name': 'S',
-            'code': 'S2',
-            'num': 2
-          }, {
-            'name': 'XL',
-            'code': 'S3',
-            'num': 3
-          }]
-        }],
       }
     },
     created() {
-
+      this.initTable();
     },
     watch: {
-      sizes: {
+      colors: {
         handler(val, oldVal) {
-          this.sizesForm = [];
-          var sizesNum = [];
-          this.sizes.forEach(element => {
-            sizesNum.push('');
-          });
-          this.sizesForm.push(sizesNum);
+          this.initTable();
         },
         deep: true
+      },
+      sizes: {
+        handler(val, oldVal) {
+          this.initTable();
+        },
+        deep: true
+      },
+      slotData: {
+        handler(val, oldVal) {
+          this.initUpdateForm();
+        },
+        deep: true,
       }
     },
-    mounted() {}
+    mounted() {
+      this.initUpdateForm();
+    }
   }
 
 </script>
@@ -357,6 +553,7 @@
   .order-table-input .el-input__inner {
     /* width: 60px; */
     border: 0px solid #fff;
+    text-align: center;
   }
 
   .order-table-btn {
@@ -381,6 +578,14 @@
     background-color: #FFD60C;
     border-color: #FFD60C;
     color: #000;
+    width: 150px;
+  }
+
+
+  .info-receive-refuse {
+    background-color: red;
+    border-color: red;
+    color: #fff;
     width: 150px;
   }
 

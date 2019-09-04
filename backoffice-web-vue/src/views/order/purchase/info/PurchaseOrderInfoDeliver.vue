@@ -140,7 +140,7 @@
         </td>
       </tr>
     </table>
-    <el-row type="flex" justify="center" class="info-receive-row">
+    <el-row type="flex" justify="center" class="info-receive-row" v-if="isFactory()">
       <el-button class="info-receive-submit" @click="onSubmit(false)">部分发货</el-button>
       <el-button class="info-receive-submit" @click="onSubmit(true)"
         :disabled="slotData.status!='WAIT_FOR_OUT_OF_STORE'">全部发货</el-button>

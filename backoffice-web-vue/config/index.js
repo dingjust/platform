@@ -77,6 +77,7 @@ module.exports = {
     //       '^/amap': ''
     //     }
     //   },
+    // },
     proxyTable: {
       '/resource': {
         target: 'http://sc.nbyjy.net',

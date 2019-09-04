@@ -22,7 +22,7 @@
       <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToOrderPurchase">创建线下订单</el-button>
       <el-button class="dashboard-toolbar-btn" size="mini" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入
       </el-button>
-      <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToTemplate">电子合同模板</el-button>
+      <!-- <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToTemplate">电子合同模板</el-button> -->
       <el-button class="dashboard-toolbar-btn" size="mini" @click="enterpriseFormVisible = true">企业认证</el-button>
       <el-button class="dashboard-toolbar-btn" size="mini" @click="businessFormVisible = true">个体户认证</el-button>
       <el-button class="dashboard-toolbar-btn" size="mini" @click="personalFormVisible = true">个人认证</el-button>
