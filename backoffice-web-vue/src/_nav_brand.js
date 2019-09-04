@@ -71,21 +71,21 @@ export default {
           url: '/seal',
           icon: 'iconNone',
         },
-        {
-          name: '下单',
-          url: '/orderPurchase',
-          icon: 'iconNone',
-        },
-        {
-          name: '创建合同',
-          url: '/manage/createContract',
-          icon: 'iconNone',
-        },
-        {
-          name: 'markdown',
-          url: '/unclassified/markDown',
-          icon: 'iconNone',
-        },
+        // {
+        //   name: '下单',
+        //   url: '/orderPurchase',
+        //   icon: 'iconNone',
+        // },
+        // {
+        //   name: '创建合同',
+        //   url: '/manage/createContract',
+        //   icon: 'iconNone',
+        // },
+        // {
+        //   name: 'markdown',
+        //   url: '/unclassified/markDown',
+        //   icon: 'iconNone',
+        // },
         {
           name: '合同模板',
           url: '/template/create',

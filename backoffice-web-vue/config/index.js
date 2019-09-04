@@ -77,28 +77,27 @@ module.exports = {
     //       '^/amap': ''
     //     }
     //   },
-    // },
     proxyTable: {
       '/resource': {
         target: 'http://sc.nbyjy.net',
         "secure": false,
       },
       '/medias': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         pathRewrite: {
           '^/medias': 'djwebservices/medias'
         }
       },
       '/logout': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         pathRewrite: {
           '^/logout': 'djwebservices/logout'
         }
       },
       '/authorizationserver': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
@@ -106,7 +105,7 @@ module.exports = {
         }
       },
       '/b2b': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
@@ -114,7 +113,7 @@ module.exports = {
         }
       },
       '/c2b': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
@@ -129,27 +128,28 @@ module.exports = {
           '^/amap': ''
         }
       },
+    },
     // proxyTable: {
     //   '/resource': {
-    //     target: 'http://localhost',
+    //     target: 'http://192.168.1.146',
     //     "secure": false,
     //   },
     //   '/medias': {
-    //     target: 'https://localhost:9002',
+    //     target: 'https://192.168.1.146:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/medias': 'djwebservices/medias'
     //     }
     //   },
     //   '/logout': {
-    //     target: 'https://localhost:9002',
+    //     target: 'https://192.168.1.146:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/logout': 'djwebservices/logout'
     //     }
     //   },
     //   '/authorizationserver': {
-    //     target: 'https://localhost:9002',
+    //     target: 'https://192.168.1.146:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -157,7 +157,7 @@ module.exports = {
     //     }
     //   },
     //   '/b2b': {
-    //     target: 'https://localhost:9002',
+    //     target: 'https://192.168.1.146:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -165,7 +165,7 @@ module.exports = {
     //     }
     //   },
     //   '/c2b': {
-    //     target: 'https://localhost:9002',
+    //     target: 'https://192.168.1.146:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -180,7 +180,7 @@ module.exports = {
     //       '^/amap': ''
     //     }
     //   },
-    },
+    // },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

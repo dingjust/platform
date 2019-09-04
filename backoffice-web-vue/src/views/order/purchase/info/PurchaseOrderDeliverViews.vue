@@ -5,16 +5,16 @@
         <h6 class="info-title_text">查看发货单</h6>
       </div>
     </el-row>
-    <el-tabs v-model="activeOrder" type="card">
+    <el-tabs v-model="activeOrder" type="card" editable @edit="handleTabsEdit">
       <template v-for="(order,index) in slotData.shippingOrders">
-        <el-tab-pane :label="''+(index+1)" :name="order.code">
+        <el-tab-pane :label="''+(index+1)" :name="''+index">
           <deliver-view :slotData="order" />
         </el-tab-pane>
       </template>
     </el-tabs>
     <el-row type="flex" justify="end" class="info-receive-row">
-      <h6 class="order-table-info">品牌跟单员： xxx</h6>
-      <h6 class="order-table-info">工厂跟单员： {{slotData.user.name}}</h6>
+      <h6 class="order-table-info">品牌跟单员： {{slotData.brandOperator!=null?slotData.brandOperator.name:'未指定'}}</h6>
+      <h6 class="order-table-info">工厂跟单员： {{slotData.factoryOperator!=null?slotData.factoryOperator.name:'未指定'}}</h6>
       <h6 class="order-table-info">发货日期： {{slotData
         .creationtime | timestampToTime}}</h6>
     </el-row>
@@ -25,7 +25,6 @@
   import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
   import FormLabel from '@/components/custom/FormLabel';
   import DeliverView from '../components/DeliverView';
-  import Bus from '@/common/js/bus.js';
 
   export default {
     name: 'PurchaseOrderInfoDeliver',
@@ -33,89 +32,15 @@
     components: {
       OrdersInfoItem,
       FormLabel,
-      DeliverView
+      DeliverView,
     },
     mixins: [],
     computed: {
-      sizes: function () {
-        var sizes = new Set([]);
-        this.slotData.entries.forEach(element => {
-          sizes.add(element.product.size.name);
-        });
-        return sizes;
-      },
-      colors: function () {
-        var colors = new Set([]);
-        this.slotData.entries.forEach(element => {
-          colors.add(element.product.color.name);
-        });
-        return colors;
-      },
-      totalAmout: function () {
-        var totalAmount = 0;
-        this.form.entries.forEach(sizeArray => {
-          sizeArray.forEach(item => {
-            if (item.num != '') {
-              totalAmount += parseInt(item.num);
-            }
-          })
-        });
-        return totalAmount;
-      }
+      // activeOrder: function () {
+      //   return this.slotData.shippingOrders[0].code;
+      // }
     },
     methods: {
-      countRowAmount(rowIndex) {
-        var amount = 0;
-        this.form.entries[rowIndex].forEach(element => {
-          if (element.num != '') {
-            let num = parseInt(element.num);
-            amount = amount + num;
-          }
-        });
-        return amount;
-      },
-      getColspanLength() {
-        return this.colors.size + 2;
-      },
-      async onSubmit() {
-        //组合订单行参数
-        var entries = [];
-        this.form.entries.forEach(variants => {
-          variants.forEach(variant => {
-            if (variant.num != '' && variant.num > 0) {
-              let item = {
-                quantity: variant.num,
-                color: variant.color,
-                size: variant.size
-              }
-              entries.push(item);
-            }
-          })
-        });
-        //表单参数
-        var form = {
-          withdrawalQuality: this.form.returnNum,
-          defectiveQuality: this.form.imperfectionsNum,
-          consignorName: this.form.consignorName,
-          consignorPhone: this.form.consignorPhone,
-          consigneeName: this.form.consigneeName,
-          consigneePhone: this.form.consigneePhone,
-          consigneeAddress: this.form.consigneeAddress,
-          isOfflineConsignment: this.form.isOfflineConsignment,
-          entries: entries,
-          remarks: this.form.remarks
-        };
-
-        const url = this.apis().createShippingOrder(this.slotData.code);
-        const result = await this.$http.post(url, form);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('创建成功');
-        //刷新数据
-        this.refreshData();
-      },
       async refreshData() {
         const url = this.apis().getPurchaseOrder(this.slotData.code);
         const result = await this.$http.get(url);
@@ -124,84 +49,49 @@
           return;
         }
         this.$set(this, 'slotData', result);
-        Bus.$emit('msg', '我要传给兄弟组件们，你收到没有')
         // this.slotData=result;
+      },
+      handleTabsEdit(targetName, action) {
+        if (action === 'add') {
+          this.$emit('createNewDeliver')
+        }
+        if (action === 'remove') {
+          this.$confirm('是否确认删除发货单?', '删除', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.deleteDeliverOrder();
+          });
+
+        }
+      },
+      async deleteDeliverOrder() {
+        const url = this.apis().deleteShippingOrder(this.slotData.shippingOrders[this.activeOrder].id);
+        const result = await this.$http.put(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$message.success('删除成功');
+        this.refreshData();
       }
     },
     data() {
       return {
-        receiveFormVisible: false,
-        activeForm: '1',
-        mockData: [],
-        form: {
-          consignorName: "",
-          consignorPhone: "",
-          receiveCode: "",
-          isOfflineConsignment: false,
-          consigneeName: "",
-          consigneePhone: "",
-          consigneeAddress: "",
-          productBrandName: "",
-          productSKU: "",
-          remarks: "",
-          imperfectionsNum: '',
-          returnNum: '',
-          deliverWay: '',
-          entries: []
-        },
-        activeOrder:this.slotData.shippingOrders[0].code
+        activeOrder: '0'
       }
     },
     created() {
-      //初始化表格
-      this.form.entries = [];
-      this.colors.forEach(color => {
-        var sizeArray = [];
-        this.sizes.forEach(size => {
-          sizeArray.push({
-            'size': size,
-            'color': color,
-            'num': '',
-          })
-        });
-        this.form.entries.push(sizeArray);
-      });
+
     },
     watch: {
-      colors: {
+      slotData: {
         handler(val, oldVal) {
-          this.form.entries = [];
-          this.colors.forEach(color => {
-            var sizeArray = [];
-            this.sizes.forEach(size => {
-              sizeArray.push({
-                'size': size,
-                'color': color,
-                'num': '',
-              })
-            });
-            this.form.entries.push(sizeArray);
-          });
+          this.activeOrder = '0';
         },
         deep: true
       },
-      sizes: {
-        handler(val, oldVal) {
-          this.form.entries = [];
-          this.colors.forEach(color => {
-            var sizeArray = [];
-            this.sizes.forEach(size => {
-              sizeArray.push({
-                'size': size,
-                'color': color,
-                'num': '',
-              })
-            });
-            this.form.entries.push(sizeArray);
-          });
-        },
-        deep: true
-      }
     },
     mounted() {}
   }

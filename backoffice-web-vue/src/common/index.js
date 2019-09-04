@@ -315,13 +315,45 @@ const COMMON_APIS = {
   createPurchaseOrderOfQuote(quote) {
     return '/b2b/orders/purchase/create/' + quote;
   },
-  //创建发货单
+  //创建部分发货单
   createShippingOrder(code) {
-    return '/b2b/orders/purchase/'+code+'/createShippingOrder';
+    return '/b2b/orders/purchase/' + code + '/createShippingOrder';
+  },
+  //创建全部发货单
+  confirmShipping(code) {
+    return '/b2b/orders/purchase/' + code + '/confirmShipping';
+  },
+  //删除发货单
+  deleteShippingOrder(id) {
+    return '/b2b/orders/purchase/deleteShippingOrder/' + id;
+  },
+  //创建收货单
+  createDeliveryOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/createDeliveryOrder';
+  },
+  //提交收货单
+  commitDeliveryOrder() {
+    return '/b2b/orders/purchase/commitDeliveryOrder';
+  },
+  //保存收货单
+  updateDeliveryOrder() {
+    return '/b2b/orders/purchase/updateDeliveryOrder';
+  },
+  //撤回收货单
+  withdrawDeliveryOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/recallDelivery';
+  },
+  //确认收货单
+  confirmDeliveryOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/confirmDelivery';
+  },
+  //拒绝收货单
+  rejectDeliveryOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/rejectDelivery';
   },
   //确认线下生产订单
   confirmProductionByOffline(code) {
-    return '/b2b/orders/purchase/'+code+'/confirmProductionByOffline';
+    return '/b2b/orders/purchase/' + code + '/confirmProductionByOffline';
   },
   getProductionProgressReports() {
     return '/b2b/reports/productionProgresses';
@@ -395,7 +427,7 @@ let TENANT_APIS = {
   findBills() {
     return '/b2b/bill/all'
   },
-  getContractsList () {
+  getContractsList() {
     return '/b2b/user/agreement/list';
   },
   getContractDetail(code) {
@@ -404,44 +436,47 @@ let TENANT_APIS = {
   getSeals() {
     return '/b2b/user/seal/list';
   },
-  getTemplatesListPt () {
+  getTemplatesListPt() {
     return '/b2b/agreement/temp/list';
   },
-  getTemplates (code) {
-    return '/b2b/user/agreement/temp/get/'+code;
+  getTemplates(code) {
+    return '/b2b/user/agreement/temp/get/' + code;
   },
-  getTemplatesList () {
+  getTemplatesList() {
     return '/b2b/user/agreement/temp/list';
   },
-  saveTemplate () {
+  saveTemplate() {
     return '/b2b/user/agreement/temp/save';
   },
-  deleteTemplate (code) {
-    return '/b2b/user/agreement/temp/delete/'+code;
+  deleteTemplate(code) {
+    return '/b2b/user/agreement/temp/delete/' + code;
   },
-  saveSeal () {
+  saveSeal() {
     return '/b2b/user/seal/save';
   },
-  delSeal (code) {
-    return '/b2b/user/seal/delete/'+code;
+  delSeal(code) {
+    return '/b2b/user/seal/delete/' + code;
   },
-  saveContract () {
+  saveContract() {
     return '/b2b/user/agreement/save';
   },
-  personalAuthentication(){
+  saveContract() {
+    return '/b2b/user/agreement/save';
+  },
+  personalAuthentication() {
     return '/b2b/fdd/api/save/personal/verify/data';
   },
-  enterpriseAuthentication(){
-    return  '/b2b/fdd/api/save/enterprise/verify/data';
+  enterpriseAuthentication() {
+    return '/b2b/fdd/api/save/enterprise/verify/data';
   },
-  getAuthenticationState(){
-    return  '/b2b/cert/state';
+  getAuthenticationState() {
+    return '/b2b/cert/state';
   },
-  getAuthenticationInfo(){
-    return  '/b2b/cert/personal/cert/info';
+  getAuthenticationInfo() {
+    return '/b2b/cert/personal/cert/info';
   },
-  getAuthenticationEnterprise(){
-    return  '/b2b/cert/enterprise/cert/info';
+  getAuthenticationEnterprise() {
+    return '/b2b/cert/enterprise/cert/info';
   },
 
 };
@@ -502,56 +537,56 @@ let NONE_TENANT_APIS = {
   getWallet() {
     return '/b2b/companyWallet';
   },
-  getContractsList () {
+  getContractsList() {
     return '/b2b/user/agreement/list';
   },
-  getSealsList () {
+  getSealsList() {
     return '/b2b/user/seal/list';
   },
-  getTemplatesListPt () {
+  getTemplatesListPt() {
     return '/b2b/agreement/temp/list';
   },
-  getTemplates (code) {
-    return '/b2b/user/agreement/temp/get/'+code;
+  getTemplates(code) {
+    return '/b2b/user/agreement/temp/get/' + code;
   },
-  getTemplatesList () {
+  getTemplatesList() {
     return '/b2b/user/agreement/temp/list';
   },
-  saveTemplate () {
+  saveTemplate() {
     return '/b2b/user/agreement/temp/save';
   },
-  deleteTemplate (code) {
-    return '/b2b/user/agreement/temp/delete/'+code;
+  deleteTemplate(code) {
+    return '/b2b/user/agreement/temp/delete/' + code;
   },
-  saveSeal () {
+  saveSeal() {
     return '/b2b/user/seal/save';
   },
-  delSeal (code) {
-    return '/b2b/user/seal/delete/'+code;
+  delSeal(code) {
+    return '/b2b/user/seal/delete/' + code;
   },
-  saveContract () {
+  saveContract() {
     return '/b2b/user/agreement/save';
   },
-  downContract(code){
-    return '/b2b/user/agreement/get/download/token/'+code;
+  downContract(code) {
+    return '/b2b/user/agreement/get/download/token/' + code;
   },
   flowContract(code, sealCode) {
     return '/b2b/user/agreement/start/flow/' + code + '?sealCode=' + sealCode;
   },
-  personalAuthentication(){
+  personalAuthentication() {
     return '/b2b/fdd/api/save/personal/verify/data';
   },
-  enterpriseAuthentication(){
-    return  '/b2b/fdd/api/save/enterprise/verify/data';
+  enterpriseAuthentication() {
+    return '/b2b/fdd/api/save/enterprise/verify/data';
   },
-  getAuthenticationState(){
-    return  '/b2b/cert/state';
+  getAuthenticationState() {
+    return '/b2b/cert/state';
   },
-  getAuthenticationInfo(){
-    return  '/b2b/cert/personal/cert/info';
+  getAuthenticationInfo() {
+    return '/b2b/cert/personal/cert/info';
   },
-  getAuthenticationEnterprise(){
-    return  '/b2b/cert/enterprise/cert/info';
+  getAuthenticationEnterprise() {
+    return '/b2b/cert/enterprise/cert/info';
   },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

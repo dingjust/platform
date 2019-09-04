@@ -34,14 +34,16 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">发货方式</h6>
-          <el-input placeholder="输入方式" v-model="form.deliverWay" size="mini" :disabled="form.isOfflineConsignment">
-          </el-input>
+          <el-select v-model="form.consignment.carrierDetails.code" placeholder="请选择" :disabled="form.isOfflineConsignment">
+            <el-option v-for="item in carriers" :key="item.code" :label="item.name" :value="item.code">
+            </el-option>
+          </el-select>
         </el-row>
       </el-col>
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">发货单号</h6>
-          <el-input placeholder="货运单号" v-model="form.receiveCode" size="mini" :disabled="form.isOfflineConsignment">
+          <el-input placeholder="货运单号" v-model="form.consignment.trackingID" size="mini" :disabled="form.isOfflineConsignment">
           </el-input>
         </el-row>
       </el-col>
@@ -83,7 +85,7 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">品牌</h6>
-          <el-input placeholder="输入品牌名称" v-model="form.productBrandName" size="mini">
+          <el-input placeholder="输入品牌名称" v-model="form.brand" size="mini">
           </el-input>
         </el-row>
       </el-col>
@@ -139,7 +141,9 @@
       </tr>
     </table>
     <el-row type="flex" justify="center" class="info-receive-row">
-      <el-button class="info-receive-submit" @click="onSubmit">确认创建</el-button>
+      <el-button class="info-receive-submit" @click="onSubmit(false)">部分发货</el-button>
+      <el-button class="info-receive-submit" @click="onSubmit(true)"
+        :disabled="slotData.status!='WAIT_FOR_OUT_OF_STORE'">全部发货</el-button>
     </el-row>
     <!-- </el-form> -->
   </div>
@@ -198,7 +202,7 @@
       getColspanLength() {
         return this.colors.size + 2;
       },
-      async onSubmit() {
+      async onSubmit(isAll) {
         //组合订单行参数
         var entries = [];
         this.form.entries.forEach(variants => {
@@ -224,13 +228,19 @@
           consigneeAddress: this.form.consigneeAddress,
           isOfflineConsignment: this.form.isOfflineConsignment,
           entries: entries,
-          remarks:this.form.remarks,
-          skuID:this.form.skuID,
-          brand:this.form.productBrandName
+          remarks: this.form.remarks,
+          skuID: this.form.skuID,
+          brand: this.form.brand,
+          consignment:this.form.consignment
         };
-
-        const url = this.apis().createShippingOrder(this.slotData.code);
-        const result = await this.$http.post(url, form);
+        var result;
+        if (isAll) {
+          const url = this.apis().confirmShipping(this.slotData.code);
+          result = await this.$http.put(url, form);
+        } else {
+          const url = this.apis().createShippingOrder(this.slotData.code);
+          result = await this.$http.post(url, form);
+        }
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -239,16 +249,25 @@
         //刷新数据
         this.refreshData();
       },
-      async refreshData(){
-                const url = this.apis().getPurchaseOrder(this.slotData.code);
+      async refreshData() {
+        const url = this.apis().getPurchaseOrder(this.slotData.code);
         const result = await this.$http.get(url);
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         }
         //跟新slotData
-        this.$set(this.slotData,'shippingOrders',result.shippingOrders);
+        this.$set(this.slotData, 'shippingOrders', result.shippingOrders);
         this.$emit('afterCreate');
+      },
+      async getCarriers() {
+        const url = this.apis().getCarriers();
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.carriers = result;
       }
     },
     data() {
@@ -256,25 +275,32 @@
         receiveFormVisible: false,
         activeForm: '1',
         mockData: [],
+        carriers:[],
         form: {
           consignorName: "",
           consignorPhone: "",
-          receiveCode: "",
           isOfflineConsignment: false,
           consigneeName: "",
           consigneePhone: "",
           consigneeAddress: "",
-          productBrandName: "",
+          brand: "",
           skuID: "",
           remarks: "",
           imperfectionsNum: '',
           returnNum: '',
-          deliverWay: '',
+          consignment:{
+            trackingID:'',
+            carrierDetails:{
+              name:'',
+              code:''
+            },
+          },
           entries: []
         },
       }
     },
     created() {
+      this.getCarriers();
       //初始化表格
       this.form.entries = [];
       this.colors.forEach(color => {
@@ -288,6 +314,7 @@
         });
         this.form.entries.push(sizeArray);
       });
+
     },
     watch: {
       colors: {

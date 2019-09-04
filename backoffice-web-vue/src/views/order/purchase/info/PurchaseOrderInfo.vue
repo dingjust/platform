@@ -3,6 +3,12 @@
     <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="purchase-dialog" append-to-body>
       <uniquecode-generate-form :slotData="slotData" />
     </el-dialog>
+    <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
+      <purchase-order-info-receive :slotData="slotData" @afterCreate="onAfterCreate" />
+    </el-dialog>
+    <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
+      <purchase-order-deliver-views :slotData="slotData" />
+    </el-dialog>
     <el-row>
       <el-col :span="16">
         <purchase-order-info-main :slotData="slotData" />
@@ -11,7 +17,8 @@
         <purchase-order-info-aside :slotData="slotData" />
       </el-col>
     </el-row>
-    <purchase-orders-button-group :slotData="slotData" @onUniqueCode="onUniqueCode" @onConfirm="onConfirm" @onCreateAgain="onCreateAgain"
+    <purchase-orders-button-group :slotData="slotData" @onUniqueCode="onUniqueCode" @onConfirm="onConfirm"
+      @onDeliverViewsOpen="onDeliverViewsOpen" @onCreateAgain="onCreateAgain" @onCreateReceive="onCreateReceive"
       @onCancel="onCancel" />
   </div>
 </template>
@@ -21,6 +28,8 @@
   import PurchaseOrderInfoAside from './PurchaseOrderInfoAside';
   import UniquecodeGenerateForm from '@/components/custom/UniquecodeGenerateForm';
   import PurchaseOrdersButtonGroup from '../components/PurchaseOrdersButtonGroup';
+  import PurchaseOrderInfoReceive from './PurchaseOrderInfoReceive';
+  import PurchaseOrderDeliverViews from './PurchaseOrderDeliverViews';
 
   export default {
     name: 'PurchaseOrderInfo',
@@ -29,7 +38,9 @@
       PurchaseOrderInfoMain,
       PurchaseOrderInfoAside,
       UniquecodeGenerateForm,
-      PurchaseOrdersButtonGroup
+      PurchaseOrdersButtonGroup,
+      PurchaseOrderInfoReceive,
+      PurchaseOrderDeliverViews
     },
     mixins: [],
     computed: {
@@ -77,16 +88,30 @@
         this.$message.success('取消成功');
         this.$router.push("order/purchase");
       },
-      onCreateAgain(){
-        this.$router.push({name:"下单",params:{
-          isAgain:true,
-          data:this.slotData
-        }});
+      onCreateAgain() {
+        this.$router.push({
+          name: "下单",
+          params: {
+            isAgain: true,
+            data: this.slotData
+          }
+        });
+      },
+      onCreateReceive() {
+        this.receiveFormVisible = true;
+      },
+      onAfterCreate() {
+        this.receiveFormVisible = false;
+      },
+      onDeliverViewsOpen() {
+        this.deliverFormVisible = true;
       }
     },
     data() {
       return {
         uniquecodeFormVisible: false,
+        receiveFormVisible: false,
+        deliverFormVisible: false,
       }
     },
     created() {}
