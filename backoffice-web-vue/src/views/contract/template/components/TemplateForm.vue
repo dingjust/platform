@@ -166,7 +166,8 @@
           type:'',
           available:'',
           originalTmplCode: '',
-          remark: ''
+          remark: '',
+          header:'',
         },
       };
     },

@@ -428,9 +428,6 @@ let TENANT_APIS = {
   saveContract () {
     return '/b2b/user/agreement/save';
   },
-  saveContract () {
-    return '/b2b/user/agreement/save';
-  },
   personalAuthentication(){
     return '/b2b/fdd/api/save/personal/verify/data';
   },

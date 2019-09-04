@@ -1,6 +1,5 @@
 <template>
   <div class="animated fadeIn template-body">
-    <div class="main-content">
       <el-row :gutter="10">
         <el-col :span="4" v-for="(item, index) in mockData" :key="index" :offset="0">
           <div :class="item.code==selectedItem.code?'template-file_selected':'template-file'" @click="onSelect(item)">
@@ -15,7 +14,6 @@
           </div>
         </el-col>
       </el-row>
-    </div>
   </div>
 </template>
 
@@ -45,10 +43,10 @@
 
 </script>
 <style>
-  .main-content {
-    border: 0.5px solid #CCCCCC;
-    padding: 10px;
-  }
+  /*.main-content {*/
+    /*border: 0.5px solid #CCCCCC;*/
+    /*padding: 10px;*/
+  /*}*/
 
   .template-file {
     padding-top: 10px;
@@ -91,6 +89,8 @@
 
   .template-body {
     /* padding-top: 20px; */
+    height: 500px;
+    overflow-y:auto;
   }
 
   .template-form-header {
