@@ -90,13 +90,14 @@
             this.enterpriseReadOnly = true
           }else {
             this.businessReadOnly = true
+            this.getData();
           }
         }
         if(result.data.personalState == 'UNCERTIFIED'){
           this.personalReadOnly = false
         }else{
           this.personalReadOnly = true;
-          // this.getPersonalData();
+          this.getPersonalData();
         }
         // if(result.data.companyType == null){
         //   this.isCompany = null;

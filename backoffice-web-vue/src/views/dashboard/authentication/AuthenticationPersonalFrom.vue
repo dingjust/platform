@@ -44,8 +44,8 @@
       async onSave(){
           const url = this.apis().personalAuthentication();
           const tempData = {
-            username: personalSlotData.username,
-            idCardNum: personalSlotData.idCardNum,
+            username: this.personalSlotData.username,
+            idCardNum: this.personalSlotData.idCardNum,
           };
           let formData = Object.assign({}, tempData);
           const result = await http.post(url, formData);
