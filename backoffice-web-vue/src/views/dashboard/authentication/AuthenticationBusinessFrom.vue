@@ -64,12 +64,12 @@
       async onSave(){
           const url = this.apis().enterpriseAuthentication();
           const tempData = {
-            companyName: businessSlotData.companyName,
+            companyName: this.businessSlotData.companyName,
             organization: '',
             role: 'LEGAL',
-            username: businessSlotData.username,
-            idCardNum: businessSlotData.idCardNum,
-            verifyWay: businessSlotData.type,
+            username: this.businessSlotData.username,
+            idCardNum: this.businessSlotData.idCardNum,
+            verifyWay: this.businessSlotData.type,
             companyType: 'TYPE2'
           };
           let formData = Object.assign({}, tempData);

@@ -79,11 +79,11 @@
       async onSave(){
           const url = this.apis().enterpriseAuthentication();
           const tempData = {
-            companyName: enterpriseSlotData.companyName,
-            organization: enterpriseSlotData.organization,
-            role: enterpriseSlotData.role,
-            username: enterpriseSlotData.username,
-            idCardNum: enterpriseSlotData.idCardNum,
+            companyName: this.enterpriseSlotData.companyName,
+            organization: this.enterpriseSlotData.organization,
+            role: this.enterpriseSlotData.role,
+            username: this.enterpriseSlotData.username,
+            idCardNum: this.enterpriseSlotData.idCardNum,
             verifyWay: 'WAY1',
             companyType: 'TYPE1'
           };
