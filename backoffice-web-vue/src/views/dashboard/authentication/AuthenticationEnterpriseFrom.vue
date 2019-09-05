@@ -19,14 +19,6 @@
     </el-row>
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >
       <el-col :span="3" >
-        <el-button type="info" style="width: 120px" disabled >法定代表人</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-input size="small" v-model="enterpriseSlotData.username" placeholder="法定代表人" />
-      </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
-      <el-col :span="3" >
         <el-button type="info" style="width: 120px" disabled >选择办理人身份</el-button>
       </el-col>
       <el-col :span="12">
@@ -38,7 +30,8 @@
     </el-row>
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >
       <el-col :span="3" >
-        <el-button type="info" style="width: 120px" disabled >操作人姓名</el-button>
+        <el-button type="info" v-if="enterpriseSlotData.role=='AGENT'" style="width: 120px" disabled >代理人姓名</el-button>
+        <el-button type="info" v-if="enterpriseSlotData.role=='LEGAL'" style="width: 120px" disabled >法定代表人</el-button>
       </el-col>
       <el-col :span="12">
         <el-input size="small" v-model="enterpriseSlotData.username" placeholder="操作人姓名" />
