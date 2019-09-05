@@ -128,49 +128,7 @@ export default {
     {
       name: '其他',
       url: '/miscs',
-      // icon: 'icon-puzzle',
       children: [
-        {
-          name: '合同',
-          url: '/contract',
-          children: [
-            {
-              name: '合同管理',
-              url: '/manage',
-              icon: 'iconNone',
-            },
-            {
-              name: '合同模板',
-              url: '/template',
-              icon: 'iconNone',
-            },
-            {
-              name: '印章管理',
-              url: '/seal',
-              icon: 'iconNone',
-            },
-            {
-              name: '下单',
-              url: '/unclassified/orderPurchase',
-              icon: 'iconNone',
-            },
-            // {
-            //   name: '创建合同',
-            //   url: '/manage/createContract',
-            //   icon: 'iconNone',
-            // },
-            {
-              name: 'markdown',
-              url: '/unclassified/markDown',
-              icon: 'iconNone',
-            },
-            {
-              name: '合同模板',
-              url: '/template/create',
-              icon: 'iconNone',
-            }
-          ]
-        },
         {
           name: '认证中心',
           url: '/Authentication',
@@ -178,7 +136,6 @@ export default {
         },
         {
           name: '样衣管理',
-          icon: 'fa fa-check',
           children: [
             {
               name: '样衣',
