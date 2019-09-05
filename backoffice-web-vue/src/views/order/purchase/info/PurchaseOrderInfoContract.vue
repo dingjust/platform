@@ -39,13 +39,14 @@
       async onCreate(){
         const url = this.apis().getAuthenticationState();
         const result = await http.get(url);
+        console.log(result);
         Bus.$emit('my-event');
         if(result.data.personalState == 'SUCCESS' || result.data.companyState == 'SUCCESS'){
           this.fn.openSlider("创建", contractForm,this.slotData);
           // this.dialogContractVisible = true;
 
         }else{
-
+          this.$message.error('当前账号未通过认证');
         }
 
       }

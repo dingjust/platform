@@ -172,6 +172,11 @@ export default {
           ]
         },
         {
+          name: '认证中心',
+          url: '/Authentication',
+          icon: 'iconNone',
+        },
+        {
           name: '样衣管理',
           icon: 'fa fa-check',
           children: [
