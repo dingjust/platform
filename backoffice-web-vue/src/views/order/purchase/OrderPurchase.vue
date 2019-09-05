@@ -4,7 +4,7 @@
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
-      <suppliers-select @onSearch="onSearch" @onSelect="onSuppliersSelect" />
+      <supplier-select @onSearch="onSearch" @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-card class="box-card">
       <div class="info-order-body">
@@ -44,7 +44,7 @@
             </el-row>
           </el-col>
           <el-col :span="4">
-            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible">选择供应商</el-button>
+            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商</el-button>
           </el-col>
         </el-row>
         <el-row class="info-order-row">
@@ -826,6 +826,12 @@
         }
         this.onProductSelect(result);
       },
+      onSuppliersSelect(val){
+        this.suppliersSelectVisible=false;
+        this.form.companyOfSeller=val.name;
+        this.form.contactPersonOfSeller=val.contactPerson;
+        this.form.contactOfSeller=val.contactPhone;
+      }
     },
     data() {
       return {
