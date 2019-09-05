@@ -1,13 +1,13 @@
 <template>
   <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick" :stretch="false"  style="width: 100%" >
     <el-tab-pane label="企业认证" :disabled="isCompany" name="first">
-      <authentication-enterprise-from />
+      <authentication-enterprise-from  :companyState="companyState" :enterpriseSlotData="enterpriseSlotData" :enterpriseReadOnly="enterpriseReadOnly"/>
     </el-tab-pane>
     <el-tab-pane label="个体户认证" :disabled="isBusiness" name="second">
-      <authentication-business-from />
+      <authentication-business-from  :companyState="companyState" :businessSlotData="businessSlotData" :businessReadOnly="businessReadOnly"/>
     </el-tab-pane>
     <el-tab-pane label="个人认证" :disabled="isPersonal" name="third">
-      <authentication-personal-from  :personalSlotData="personalSlotData"/>
+      <authentication-personal-from :personalState="personalState" :personalSlotData="personalSlotData" :personalReadOnly="personalReadOnly"/>
       <!--<authentication-personal-result :disabled="openPersonalDialog" />-->
     </el-tab-pane>
   </el-tabs>
@@ -42,6 +42,30 @@
 
         console.log(this.personalSlotData);
       },
+      async getData(){
+        const url = this.apis().enterpriseAuthentication();
+        const result = await http.get(url);
+        console.log(result);
+        if(this.companyType == 'ENTERPRISE'){
+          this.enterpriseSlotData.companyName = result.data.name;
+          this.enterpriseSlotData.organization = result.data.organization;
+          if(result.data.agent != null ){
+            this.enterpriseSlotData.role = 'AGENT';
+            this.enterpriseSlotData.username = result.data.agent.name;
+            this.enterpriseSlotData.idCardNum = result.data.agent.idCardNum;
+          }else{
+            this.enterpriseSlotData.role = 'LEGAL';
+            this.enterpriseSlotData.username = result.data.legal.name;
+            this.enterpriseSlotData.idCardNum = result.data.legal.idCardNum;
+          }
+        }
+        if(this.companyType == 'INDIVIDUAL'){
+          this.businessSlotData.companyName = result.data.name;
+          this.businessSlotData.username = result.data.legal.name;
+          this.businessSlotData.idCardNum = result.data.legal.idCardNum;
+
+        }
+      },
       handleClick(tab, event) {
         console.log(tab, event);
       },
@@ -49,14 +73,30 @@
         const url = this.apis().getAuthenticationState();
         const result = await http.get(url);
         console.log(result);
+        this.personalState = result.data.personalState;
         if(result.data.companyState == 'UNCERTIFIED'){
-          this.openEnterpriseDialog = true
+          if(result.data.companyType == 'ENTERPRISE'){
+            this.companyType = 'ENTERPRISE';
+            this.enterpriseReadOnly = false
+          }else if(result.data.companyType == 'INDIVIDUAL'){
+            this.businessReadOnly = false
+            this.companyType = 'INDIVIDUAL';
+          }else{
+            this.enterpriseReadOnly = false
+            this.businessReadOnly = false
+          }
+        }else{
+          if(result.data.companyType == 'ENTERPRISE'){
+            this.enterpriseReadOnly = true
+          }else {
+            this.businessReadOnly = true
+          }
         }
         if(result.data.personalState == 'UNCERTIFIED'){
           this.personalReadOnly = false
         }else{
           this.personalReadOnly = true;
-          this.getPersonalData();
+          // this.getPersonalData();
         }
         // if(result.data.companyType == null){
         //   this.isCompany = null;
@@ -69,14 +109,6 @@
       },
       personal(){
         if(this.currentUser.type == 'BRAND'){
-          if(this.openPersonalDialog){
-            this.personalFormVisible = true;
-            this.openPersonalDialog = false
-          }else{
-            this.personalFormVisible = false
-            this.openPersonalDialog = true
-
-          }
 
         }else{
           this.isPersonal = true;
@@ -86,20 +118,31 @@
     data() {
       return {
         activeName: 'first',
-        uniquecodeFormVisible: false,
-        enterpriseFormVisible: false,
-        personalFormVisible: false,
-        businessFormVisible: false,
         currentUser: this.$store.getters.currentUser,
         isCompany: false,
         isBusiness: false,
         isPersonal: false,
+        companyType:'',
         companyState: '',
         personalState: '',
-        openPersonalDialog: false,
-        openEnterpriseDialog: false,
-        personalResultFormVisible: false,
+        enterpriseReadOnly: false,
+        businessReadOnly: false,
         personalReadOnly: false,
+        enterpriseSlotData:{
+          companyName:'',
+          organization:'',
+          username:'',
+          role:'LEGAL',
+          name:'',
+          idCardNum:''
+        },
+        businessSlotData:{
+          role: "LEGAL",
+          idCardNum:'',
+          companyName:'',
+          username:'',
+          type:'WAY1',
+        },
         personalSlotData:{
           username:'',
           idCardNum:'',
