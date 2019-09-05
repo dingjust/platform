@@ -15,7 +15,7 @@
 
   export default {
     name: 'PurchaseOrderInfoAside',
-    props: ['slotData'],
+    props: ['slotData','dialogDetailVisible'],
     components: {
       PurchaseOrderInfoSupplier,
       PurchaseOrderInfoStaff,

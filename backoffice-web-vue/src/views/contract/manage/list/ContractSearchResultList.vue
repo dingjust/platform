@@ -24,7 +24,8 @@
       <el-table-column label="合同名称" fixed>
         <template slot-scope="scope">
           <span>
-            <el-link @click="dialogTableVisible = true">{{scope.row.title}}</el-link>
+            {{scope.row.title}}
+            <!--<el-link @click="dialogTableVisible = true">{{scope.row.title}}</el-link>-->
           </span>
         </template>
       </el-table-column>

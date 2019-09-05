@@ -10,7 +10,7 @@
         <el-button type="info" disabled >个人姓名</el-button>
       </el-col>
       <el-col :span="15">
-        <el-input size="small" v-model="username" placeholder="个人姓名" />
+        <el-input size="small" :aria-readonly="true" v-model="username" placeholder="个人姓名" />
       </el-col>
     </el-row>
     <el-row class="form-row" type="flex" >
@@ -18,19 +18,19 @@
         <el-button type="info" disabled >个人身份证号</el-button>
       </el-col>
       <el-col :span="15">
-        <el-input size="small" v-model="idCardNum" placeholder="个人身份证号" />
+        <el-input size="small" :aria-readonly="true" v-model="idCardNum" placeholder="个人身份证号" />
       </el-col>
     </el-row>
-    <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button style="margin-top: 10px;width: 200px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
-    </el-row>
+    <!--<el-row class="seal_custom-row" type="flex" justify="center" align="middle">-->
+      <!--<el-button style="margin-top: 10px;width: 200px" size="mini" type="warning" @click="onSave" >提交认证</el-button>-->
+    <!--</el-row>-->
   </div>
 </template>
 
 <script>
   import http from '@/common/js/http';
   export default {
-    name: 'AuthenticationPersonalFrom',
+    name: 'AuthenticationPersonalResult',
     components: {
 
     },
@@ -39,30 +39,12 @@
 
     },
     methods: {
-      async onSave(){
-        if(this.idCardNum == null || this.idCardNum == ''){
-          this.$message.error('身份证号不能为空');
-          return;
-        }else if(this.username == null || this.username == ''){
-          this.$message.error('名字不能为空');
-          return;
-        }else{
-          const url = this.apis().personalAuthentication();
-          const tempData = {
-            username: this.username,
-            idCardNum: this.idCardNum,
-          };
-          let formData = Object.assign({}, tempData);
-          const result = await http.post(url, formData);
-          console.log(result);
-          // this.$message.success(result.msg);
-          if(result.data !=  null){
-            window.open(result.data, '_blank');
-          }else{
-            this.$message.success(result.msg);
-          }
-        }
-
+      async getData(){
+        const url = this.apis().personalAuthentication();
+        const result = await http.get(url);
+        console.log(result);
+        this.username = result.data.name;
+        this.idCardNum = result.data.idCard;
       }
     },
     data() {
@@ -72,7 +54,7 @@
       }
     },
     created() {
-
+      this.getData();
     },
     mounted() {}
 

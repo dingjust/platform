@@ -4,19 +4,19 @@
       <el-container>
         <el-main>
           <div>
-            <el-row type="flex" justify="space-between" align="middle">
-              <el-col :span="4">
-                <div class="template-form-header">
-                  <h6>新建合同模板</h6>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <el-button-group>
-                  <!--<el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>-->
-                  <el-button @click="onBack">返回</el-button>
-                </el-button-group>
-              </el-col>
-            </el-row>
+            <!--<el-row type="flex" justify="space-between" align="middle">-->
+              <!--<el-col :span="4">-->
+                <!--<div class="template-form-header">-->
+                  <!--<h6>新建合同模板</h6>-->
+                <!--</div>-->
+              <!--</el-col>-->
+              <!--<el-col :span="4">-->
+                <!--<el-button-group>-->
+                  <!--&lt;!&ndash;<el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>&ndash;&gt;-->
+                  <!--<el-button @click="onBack">返回</el-button>-->
+                <!--</el-button-group>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
             <el-row class="contract_custom-row">
               <el-input placeholder="请输入名称" size="mini" v-model="slotData.title"><template slot="prepend">合同模板名称</template>
               </el-input>
@@ -35,7 +35,7 @@
             <el-row class="contract_custom-row text-align-left"><span>自定义条款</span></el-row>
             <el-row>
               <div class="contract_custom-fixed_terms">
-                <Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />
+                <Viewer :value="slotData.content" class="contract_custom-viewer" />
               </div>
             </el-row>
           </div>
@@ -150,7 +150,7 @@
       }
     },
     created(){
-      this.getTemplateListPt();
+      // this.getTemplateListPt();
     }
   };
 

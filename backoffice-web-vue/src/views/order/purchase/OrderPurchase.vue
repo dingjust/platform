@@ -510,7 +510,7 @@
           result = '定金+2期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后，甲方应向乙方支付生效订单总金额的' +
             this.form.deposit
             .percent * 100 +
-            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.form.deposit.event[this.form.balance1.event] +
+            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form.balance1
             .time +
             '日' + this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +

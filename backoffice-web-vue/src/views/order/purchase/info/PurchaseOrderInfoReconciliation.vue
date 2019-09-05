@@ -217,7 +217,7 @@
       },
       shouldPay: function () {
         return this.totalAmout * this.slotData.unitPrice - this.form.paid - this.form.delayDeduction - this.form
-          .qualityDeduction - this.form.otherDeduction - this.form.otherFunds;
+          .qualityDeduction - this.form.otherDeduction + this.form.otherFunds;
       }
     },
     methods: {
