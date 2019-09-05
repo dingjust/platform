@@ -9,8 +9,8 @@
       <!-- </el-button-group> -->
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-form>
-    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
-      highlight-current-row @current-change="handleCurrentChange" @selection-change="handleSelectionChange">
+    <el-table ref="resultTable" stripe :data="page.content" :height="suppliers" highlight-current-row
+      @current-change="handleCurrentChange" @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="32"></el-table-column> -->
       <el-table-column>
         <template slot-scope="scope">
@@ -31,78 +31,31 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
-    </el-pagination>
   </div>
 </template>
 
 <script>
-  import {
-    createNamespacedHelpers
-  } from 'vuex';
-  const {
-    mapGetters,
-    mapActions
-  } = createNamespacedHelpers('SuppliersModule');
-
   export default {
-    name: 'ProductSelect',
-    props: ["page"],
+    name: 'SuppliersSelect',
     computed: {
-      ...mapGetters({
-        page: 'page',
-      }),
+
     },
     methods: {
-      ...mapActions({
-        search: 'search',
-      }),
-      onSearch(page, size) {
+     async onSearch() {
+        var url;
         if (this.isBrand()) {
-          const keyword = this.$store.state.BrandsModule.keyword;
-          const url = this.apis().getBrandSuppliers();
-          this.search({
-            url,
-            keyword,
-            page,
-            size
-          });
+          url = this.apis().getBrandSuppliers();
         } else if (this.isFactory()) {
-          const keyword = this.$store.state.FactoriesModule.keyword;
-          const url = this.apis().getFactoriesSuppliers();
-          this.search({
-            url,
-            keyword,
-            page,
-            size
-          });
+          url = this.apis().getFactoriesSuppliers();
         }
-      },
-      ...mapMutations({
-        setKeyword: 'keyword',
-        setQueryFormData: 'queryFormData'
-      }),
-      onPageSizeChanged(val) {
-        this._reset();
-        if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
+        const result = await this.$http.get(url, {}, {
+          size: 99
+        });
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$emit('onSearch', 0, val);
-      },
-      onCurrentPageChanged(val) {
-        this.$emit('onSearch', val - 1);
-      },
-      _reset() {
-        this.$refs.resultTable.clearSort();
-        this.$refs.resultTable.clearFilter();
-        this.$refs.resultTable.clearSelection();
-      },
-      onSearch() {
-        this.setKeyword(this.keyword);
-        this.$emit('onSearch', 0);
+        this.suppliers = result;
       },
       numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
@@ -120,10 +73,12 @@
         this.$emit('onSelect', this.selectProduct);
       }
     },
+    created() {
+      this.onSearch();
+    },
     data() {
       return {
-        keywordFromFactory: this.$store.state.FactoriesModule.keyword,
-        keywordFromBrand: this.$store.state.BrandsModule.keyword
+        suppliers: []
       }
     }
   }

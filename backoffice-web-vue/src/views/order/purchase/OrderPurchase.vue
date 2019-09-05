@@ -3,6 +3,9 @@
     <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body>
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
+    <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
+      <suppliers-select @onSearch="onSearch" @onSelect="onSuppliersSelect" />
+    </el-dialog>
     <el-card class="box-card">
       <div class="info-order-body">
         <el-row class="info-title-row">
@@ -39,6 +42,9 @@
               <el-input placeholder="电话号码" v-model="form.contactOfSeller" size="mini">
               </el-input>
             </el-row>
+          </el-col>
+          <el-col :span="4">
+            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible">选择供应商</el-button>
           </el-col>
         </el-row>
         <el-row class="info-order-row">
@@ -487,6 +493,7 @@
   import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
   import FormLabel from '@/components/custom/FormLabel';
   import ProductSelect from '@/components/custom/ProductSelect';
+  import SupplierSelect from '@/components/custom/SupplierSelect';
   import ImagesUpload from '@/components/custom/ImagesUpload';
 
   export default {
@@ -495,7 +502,8 @@
       OrdersInfoItem,
       FormLabel,
       ProductSelect,
-      ImagesUpload
+      ImagesUpload,
+      SupplierSelect
     },
     mixins: [],
     computed: {
@@ -822,6 +830,7 @@
     data() {
       return {
         productSelectVisible: false,
+        suppliersSelectVisible: false,
         currentProductIndex: 0,
         regions: [],
         freightPayer: {

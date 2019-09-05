@@ -166,7 +166,6 @@ export default {
         },
         {
           name: '样衣管理',
-          icon: 'fa fa-check',
           children: [
             {
               name: '样衣',
