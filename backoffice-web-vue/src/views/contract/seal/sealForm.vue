@@ -139,7 +139,7 @@
           var fd=new FormData();
           fd.append('file',file);
           const result = await this.$http.formdataPost(this.mediaUploadUrl,fd);
-
+          console.log(result);
           if(result != null){
             this.saveSeal(result);
           }
@@ -162,6 +162,7 @@
           media: item,
         };
         let formData = Object.assign({}, tempData);
+        console.log(formData);
         const result = await http.post(url, formData);
         if (result['errors']) {
           this.$message.error(result.msg);

@@ -128,28 +128,27 @@ module.exports = {
           '^/amap': ''
         }
       },
-    },
     // proxyTable: {
     //   '/resource': {
-    //     target: 'http://192.168.1.146',
+    //     target: 'http://localhost',
     //     "secure": false,
     //   },
     //   '/medias': {
-    //     target: 'https://192.168.1.146:9002',
+    //     target: 'https://localhost:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/medias': 'djwebservices/medias'
     //     }
     //   },
     //   '/logout': {
-    //     target: 'https://192.168.1.146:9002',
+    //     target: 'https://localhost:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/logout': 'djwebservices/logout'
     //     }
     //   },
     //   '/authorizationserver': {
-    //     target: 'https://192.168.1.146:9002',
+    //     target: 'https://localhost:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -157,7 +156,7 @@ module.exports = {
     //     }
     //   },
     //   '/b2b': {
-    //     target: 'https://192.168.1.146:9002',
+    //     target: 'https://localhost:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -165,7 +164,7 @@ module.exports = {
     //     }
     //   },
     //   '/c2b': {
-    //     target: 'https://192.168.1.146:9002',
+    //     target: 'https://localhost:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -180,7 +179,7 @@ module.exports = {
     //       '^/amap': ''
     //     }
     //   },
-    // },
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
