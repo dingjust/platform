@@ -29,13 +29,13 @@
             <el-row class="contract_custom-row text-align-left"><span>固定条款</span></el-row>
             <el-row>
               <div class="contract_custom-fixed_terms">
-                <Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />
+                <Viewer :value="slotData.content" class="contract_custom-viewer" />
               </div>
             </el-row>
             <el-row class="contract_custom-row text-align-left"><span>自定义条款</span></el-row>
             <el-row>
               <div class="contract_custom-fixed_terms">
-                <Viewer :value="slotData.content" class="contract_custom-viewer" />
+                <Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />
               </div>
             </el-row>
           </div>

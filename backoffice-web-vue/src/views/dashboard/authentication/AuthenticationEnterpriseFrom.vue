@@ -1,63 +1,58 @@
 <template>
   <div class="uniquecode-form-body">
-    <el-row class="uniquecode-form-title-row">
-      <el-col :span="22" >
-        <h6 >企业认证</h6>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >企业名称</el-button>
       </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" justify="start" :gutter=3 >
-      <el-col :span="7" :push="2">
-        <el-button type="info" disabled >企业名称</el-button>
-      </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-input size="small" v-model="companyName" placeholder="企业名称" />
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="3">
-        <el-button type="info" disabled >税号</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button style="width: 120px" type="info" disabled >税号</el-button>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-input size="small" v-model="organization" placeholder="税号" />
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="1">
-        <el-button type="info" disabled >法定代表人</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >法定代表人</el-button>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-input size="small" v-model="username" placeholder="法定代表人" />
       </el-col>
     </el-row>
-    <el-row class="form-row">
-      <el-col :span="7" >
-        <el-button type="info" disabled >选择办理人身份</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >选择办理人身份</el-button>
       </el-col>
-      <el-col :span="13">
+      <el-col :span="12">
       <el-radio-group v-model="role"  size="mini">
         <el-radio-button style="margin-left: 5px"  label="LEGAL">我是法人</el-radio-button>
         <el-radio-button style="margin-right: 15px " label="AGENT">我是代理人</el-radio-button>
       </el-radio-group>
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="1">
-        <el-button type="info" disabled >操作人姓名</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >操作人姓名</el-button>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-input size="small" v-model="name" placeholder="操作人姓名" />
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7">
-        <el-button type="info" disabled >操作人身份证号</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >操作人身份证号</el-button>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-input size="small" v-model="idCardNum" placeholder="操作人身份证号" />
       </el-col>
     </el-row>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button style="margin-top: 10px;width: 200px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+      <el-button style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
     </el-row>
   </div>
 </template>

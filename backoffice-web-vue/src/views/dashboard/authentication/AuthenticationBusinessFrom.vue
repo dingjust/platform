@@ -1,47 +1,42 @@
 <template>
   <div class="uniquecode-form-body">
-    <el-row class="uniquecode-form-title-row">
-      <el-col :span="22" >
-        <h6 >个体户认证</h6>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button style="width: 120px" type="info" disabled >企业名称</el-button>
       </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="1">
-        <el-button type="info" disabled >企业名称</el-button>
-      </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-input size="small" v-model="companyName" placeholder="企业名称" />
       </el-col>
     </el-row>
-    <el-row class="form-row">
-      <el-col :span="7" :push="1">
-        <el-button type="info" disabled >认证方式</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button style="width: 120px" type="info" disabled >认证方式</el-button>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-radio-group v-model="type"  size="mini">
           <el-radio-button label="WAY1">对公账号认证</el-radio-button>
           <el-radio-button label="WAY2">无对公账号认证</el-radio-button>
         </el-radio-group>
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="1">
-        <el-button type="info" disabled >法人名称</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button  style="width: 120px" type="info" disabled >法人名称</el-button>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-input size="small" v-model="username" placeholder="法人名称" />
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7">
-        <el-button type="info" disabled >法人身份证号</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button style="width: 120px" type="info" disabled >法人身份证号</el-button>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-input size="small" v-model="idCardNum" placeholder="法人身份证号" />
       </el-col>
     </el-row>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button style="margin-top: 10px;width: 200px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+      <el-button style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
     </el-row>
   </div>
 </template>
