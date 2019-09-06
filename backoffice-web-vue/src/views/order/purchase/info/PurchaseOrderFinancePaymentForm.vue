@@ -101,7 +101,9 @@
           }
         }
 
-        result[result.length - 1].deletable = true;
+        if (result.length > 0) {
+          result[result.length - 1].deletable = true;
+        }
 
         return result;
       }

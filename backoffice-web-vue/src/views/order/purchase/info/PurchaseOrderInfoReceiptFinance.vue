@@ -46,6 +46,10 @@
       <purchase-order-finance-receipt-form :payPlanItem="itemData" :slotData="slotData" :form="formData"
                                            @close="onClose" @refreshItem="refreshItem"/>
     </el-dialog>
+
+    <!--<el-dialog :visible.sync="financeReceiptVisible" width="60%" class="purchase-dialog" append-to-body>-->
+      <!--<purchase-order-info-receipt :receiptOrders="receiptOrders" @refreshData="refreshItem"/>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 
@@ -60,7 +64,20 @@
     },
     mixins: [],
     computed: {
+      receiptOrders: function () {
+        let result = [];
+        for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
+          for (var receipt of payPlanItem.receiptOrders) {
+            result.push(receipt);
+          }
+        }
 
+        if (result.length > 0) {
+          result[result.length - 1].deletable = true;
+        }
+
+        return result;
+      }
     },
     methods: {
       async refreshData () {
@@ -79,12 +96,11 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
+        this.$set(this.slotData, 'payPlan', result.payPlan);
         for (var payPlanItem of result.payPlan.payPlanItems) {
           if (payPlanItem.id === this.itemData.id) {
-            this.$set(this.itemData,'receiptOrders',payPlanItem.receiptOrders);
-            this.$set(this.itemData,'remainingUnReceiptAmount',payPlanItem.remainingUnReceiptAmount);
-            this.$set(this.itemData,'receiptStatus',payPlanItem.receiptStatus);
+            this.$set(this.itemData, 'remainingUnReceiptAmount', payPlanItem.remainingUnReceiptAmount);
+            this.$set(this.itemData, 'receiptStatus', payPlanItem.receiptStatus);
           }
         }
       },

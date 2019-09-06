@@ -78,9 +78,10 @@
           return;
         }
 
+        this.$set(this.slotData,'payPlan',result.payPlan);
+
         for (var payPlanItem of result.payPlan.payPlanItems) {
           if (payPlanItem.id === this.itemData.id) {
-            this.$set(this.itemData,'paymentOrders',payPlanItem.paymentOrders);
             this.$set(this.itemData,'remainingUnpaidAmount',payPlanItem.remainingUnpaidAmount);
             this.$set(this.itemData,'payStatus',payPlanItem.payStatus);
           }
