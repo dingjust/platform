@@ -90,6 +90,7 @@
         search: "search"
       }),
       onSelect(item) {
+        this.selectedCode = item.code;
         this.viewerText = item.header;
         this.editorText = item.content;
         this.tempCode = item.code;
