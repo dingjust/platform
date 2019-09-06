@@ -1,24 +1,9 @@
 <template>
   <div class="animated fadeIn">
     <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
-      <el-row slot="title" type="flex" justify="space-between" align="middle">
-        <el-col :span="4">
-          <div class="template-form-header">
-            <h6>印章选择</h6>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <el-button-group>
-            <!--<el-button class="template-form-button" @click="onFileSelectSure">确定</el-button>-->
-            <el-button @click="dialogSealVisible=false">关闭</el-button>
-          </el-button-group>
-        </el-col>
-      </el-row>
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
-    <el-dialog :visible.sync="dialogTableVisible" width="80%">
-      <contract-details />
-    </el-dialog>
+
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :height="autoHeight">
       <el-table-column label="合同名称" fixed>
@@ -53,12 +38,11 @@
       </el-table-column> -->
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">查看</el-button>
           <el-button type="text"  icon="el-icon-edit" @click="onDownload(scope.row.code)">下载</el-button>
           <!--<a javascript="this.apis().downContract(code)">111</a>-->
-          <el-divider direction="vertical"></el-divider>
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">拒签</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-button type="text" icon="el-icon-edit" @click="onSearchSeal(scope.row)">签署</el-button>
+          <el-button v-if="scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text" icon="el-icon-edit" @click="onRefuse(scope.row.code)">拒签</el-button>
+          <el-button v-if="scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text" icon="el-icon-edit" @click="onSearchSeal(scope.row)">签署</el-button>
           <!-- <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">撤回</el-button> -->
         </template>
       </el-table-column>
@@ -135,18 +119,14 @@
         const result = await http.get(url);
         console.log(result);
 
-        // var str = 'http://localhost:8081/b2b/user/agreement/download/'+result;
-
         window.location.href = 'http://localhost:8081/b2b/user/agreement/download/' + result.data;
 
-        // var downloadElement = document.createElement('a');
-        // var href = window.URL.createObjectURL(str); // 创建下载的链接
-        // downloadElement.href = href;
-        // downloadElement.download = '表格'+'.xlsx'; // 下载后文件名
-        // document.body.appendChild(downloadElement);
-        // downloadElement.click(); // 点击下载
-        // document.body.removeChild(downloadElement); // 下载完成移除元素
-        // window.URL.revokeObjectURL(href); // 释放掉blob对象
+      },
+      async onRefuse(code){
+        const url = this.apis().refuseContract(code);
+        const result = await this.$http.get(url);
+
+        this.$message.error(result.msg);
       },
       async onSearchSeal(vel,keyword,page, size) {
         this.contractCode = vel.code;
@@ -169,6 +149,7 @@
         this.dialogSealVisible=true
       },
       async onSealSelectChange(data) {
+        this.dialogSealVisible = false;
         const sealCode = data.code;
 
         const url = this.apis().flowContract(this.contractCode,sealCode);

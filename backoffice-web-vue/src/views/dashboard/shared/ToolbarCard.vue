@@ -38,7 +38,6 @@
   import AuthenticationEnterpriseFrom from '../authentication/AuthenticationEnterpriseFrom';
   import AuthenticationPersonalFrom from '../authentication/AuthenticationPersonalFrom';
   import AuthenticationBusinessFrom from '../authentication/AuthenticationBusinessFrom';
-  import AuthenticationPersonalResult from '../authentication/AuthenticationPersonalResult';
   import http from '@/common/js/http';
 
   export default {
@@ -49,7 +48,6 @@
       AuthenticationEnterpriseFrom,
       AuthenticationPersonalFrom,
       AuthenticationBusinessFrom,
-      AuthenticationPersonalResult,
     },
     computed: {
 

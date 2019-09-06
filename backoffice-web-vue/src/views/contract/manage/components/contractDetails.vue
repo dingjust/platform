@@ -7,19 +7,19 @@
         justify="start"
       >
         <el-col :span="4">
-          <span>合同状态:待签署</span>
+          <span>合同状态:{{getEnum('contractStates', slotData.state)}}</span>
         </el-col>
         <el-col :span="6">
-          <span>合同编号:HT0000000001</span>
+          <span>合同编号:{{slotData.code}}</span>
         </el-col>
       </el-row>
       <el-row class="contract_custom-row contract_title text-align-center">
-        <span>委托生产合同</span>
+        <span>{{slotData.title}}</span>
       </el-row>
       <el-row>
         <div class="contract_custom-fixed_terms">
           <Viewer
-            :value="viewerText"
+            :value="slotData.content"
             class="contract_custom-viewer"
           />
         </div>
@@ -28,9 +28,9 @@
     <el-aside width="73px">
       <div class="dialog-aside_buttons">
         <el-button-group>
-          <el-button icon="el-icon-edit">签署</el-button>
-          <el-button icon="el-icon-share">下载</el-button>
-          <el-button icon="el-icon-delete">作废</el-button>
+          <el-button v-if="slotData.state == 'SIGN' || slotData.state == 'PARTY_A_SIGN' || slotData.state == 'PARTY_B_SIGN'" icon="el-icon-edit" @click="onSearchSeal" >签署</el-button>
+          <el-button icon="el-icon-share"  @click="onDownload(slotData.code)">下载</el-button>
+          <el-button v-if="slotData.state == 'SIGN' || slotData.state == 'PARTY_A_SIGN' || slotData.state == 'PARTY_B_SIGN'" icon="el-icon-delete"  @click="onRefuse()">拒签</el-button>
         </el-button-group>
       </div>
     </el-aside>
@@ -43,16 +43,54 @@ import "tui-editor/dist/tui-editor-contents.css";
 import "highlight.js/styles/github.css";
 import "codemirror/lib/codemirror.css";
 import { Viewer, Editor } from "@toast-ui/vue-editor";
+import http from '@/common/js/http';
 export default {
   name: "ContractDetails",
-  props: ["propdata"],
+  props: ["slotData"],
   data() {
     return {
       input1: "",
       input2: "",
       viewerText:
-        "### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容### 合作模板### 自定义内容 #### 我是自定义内容"
+        "",
+      dialogSealVisible:false,
     };
+  },
+  methods:{
+    async onRefuse(){
+      const url = this.apis().refuseContract(slotData.code);
+      const result = await this.$http.get(url);
+
+      this.$message.error(result.msg);
+    },
+    async onDownload(code){
+      const url = this.apis().downContract(code);
+      const result = await http.get(url);
+      console.log(result);
+
+      window.location.href = 'http://localhost:8081/b2b/user/agreement/download/' + result.data;
+
+    },
+    async onSearchSeal(vel,keyword,page, size) {
+      this.contractCode = vel.code;
+      if(keyword == null){
+        keyword = '';
+      }
+      const url = this.apis().getSealsList();
+      console.log(url)
+      const result = await this.$http.post(url,{
+        keyword: keyword
+      }, {
+        page: page,
+        size: 10
+      });
+      if (result["errors"]) {
+        this.$message.error(result["errors"][0].message);
+        return;
+      }
+      this.sealPage = result;
+      this.dialogSealVisible=true
+    },
   },
   components: {
     Viewer,

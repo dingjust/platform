@@ -5,7 +5,7 @@
             <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
             <!--<el-button @click="dialogTemplateVisible=false">关闭</el-button>-->
           </el-button-group>
-      <contract-template-select :mock-data="mockData" @fileSelectChange="onFileSelectChange" />
+      <contract-template-select  @fileSelectChange="onFileSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
       <!--<el-row slot="title" type="flex" justify="space-between" align="middle">-->
@@ -52,7 +52,7 @@
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择订单" v-model="orderSelectFile.code" :disabled="true">
-            <el-button slot="prepend"  @click="dialogOrderVisible=true">关联订单</el-button>
+            <el-button slot="prepend" :disabled="orderReadOnly" @click="dialogOrderVisible=true">关联订单</el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -137,23 +137,6 @@
         search: "search",
         refresh: 'refresh'
       }),
-      async onSearchTemp(keyword,page, size) {
-        if(keyword == null){
-          keyword = '';
-        }
-        const url = this.apis().getTemplatesList();
-        const result = await this.$http.post(url,{
-          keyword: keyword
-        }, {
-          page: 0,
-          size: 100
-        });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        this.mockData = result.content;
-      },
       async onSearchOrder(keyword,page, size) {
         if(keyword == null){
           keyword = '';
@@ -244,13 +227,21 @@
 
       },
       onSetOrderCode(){
-        if(this.slotData != null){
+        if(this.slotData != null && this.slotData != ''){
+          console.log(111)
           this.orderSelectFile = this.slotData;
+          this.orderReadOnly = true;
+          if(this.currentUser.type == 'BRAND'){
+            this.partyA = true;
+          }else{
+            this.partyA = false;
+          }
         }
       }
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         contractType: '1',
         hasFrameworkContract: false,
         partyA: true,
@@ -261,13 +252,13 @@
         selectFile: {},
         fileList: [],
         dialogPreviewVisible: false,
+        orderReadOnly : false,
         input1:'',
         mockData:[],
         orderPage:[],
       };
     },
     created(){
-      this.onSearchTemp();
       this.onSearchOrder('',0,10);
       console.log('sss'+this.slotData);
       this.onSetOrderCode();

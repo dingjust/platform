@@ -6,14 +6,14 @@ import ElementUI from 'element-ui';
 import {TENANT_APIS, NONE_TENANT_APIS} from '@/common';
 import router from '@/router';
 import store from '@/store';
-import {formatDate, enumTranslate, timestampToTime, postponedDays} from '@/common/js/filters';
+import {formatDate, enumTranslate, timestampToTime, postponedDays, floatFormat} from '@/common/js/filters';
 import HttpServletPlugin from '@/plugins/HttpServletPlugin.js';
 import http from '@/common/js/http';
 import autoHeight from '@/mixins/autoHeight';
 
 import App from './App';
 
-//时间过滤器
+// 时间过滤器
 Vue.filter('formatDate', time => {
   if (time === null) {
     return '';
@@ -31,7 +31,7 @@ Vue.filter('formatDateWithSecond', time => {
 Vue.filter('enumTranslate', (enumVal, enumType) => {
   return enumTranslate(enumVal, enumType);
 });
-//时间戳转成日期字符串格式
+// 时间戳转成日期字符串格式
 Vue.filter('timestampToTime', function (timestamp) {
   if (timestamp == null) {
     return '';
@@ -42,53 +42,57 @@ Vue.filter('timestampToTime', function (timestamp) {
 Vue.filter('postponedDays', function (timestamp) {
   return postponedDays(timestamp);
 });
+// 两个数相乘
+Vue.filter('floatFormat', function (num1, num2) {
+  return floatFormat(num1, num2);
+});
 Vue.use(BootstrapVue);
 Vue.use(HttpServletPlugin);
 Vue.use(ElementUI, {size: 'small'});
 Vue.prototype.fn = {};
 Vue.prototype.$http = http;
-//根据命令设置导航数据
+// 根据命令设置导航数据
 import _nav from '@/_nav.js';
 import _nav_brand from '@/_nav_brand.js';
 import _nav_factory from '@/_nav_factory.js';
 
 Vue.prototype.CONFIG = {
-  nav(type = process.env.NAV) {
+  nav (type = process.env.NAV) {
     return type === 'FACTORY' ? _nav_factory : (type === 'BRAND' ? _nav_brand : _nav);
-  },
+  }
 };
 
 Vue.mixin({
   props: ['viewMode'],
   mixins: [autoHeight],
-  data() {
+  data () {
     return {
       defaultDateValueFormat: 'yyyy-MM-dd"T"HH:mm:ssZ',
       mediaUploadUrl: '/b2b/media/file/upload',
       VIEW_MODE_LIST: 'LIST',
-      VIEW_MODE_TABS: 'TABS',
+      VIEW_MODE_TABS: 'TABS'
     }
   },
   computed: {
   },
   methods: {
-    apis() {
+    apis () {
       if (this.$store.getters.currentUser.type === 'TENANT') {
         return TENANT_APIS;
       }
 
       return NONE_TENANT_APIS;
     },
-    isBrand() {
+    isBrand () {
       return this.$store.getters.currentUser.type === 'BRAND';
     },
-    isFactory() {
+    isFactory () {
       return this.$store.getters.currentUser.type === 'FACTORY';
     },
-    isTenant() {
+    isTenant () {
       return this.$store.getters.currentUser.type === 'TENANT';
     },
-    compareDate(date1, date2) {
+    compareDate (date1, date2) {
       let result = false;
       if (date1.getFullYear() > date2.getFullYear()) {
         result = true;
@@ -105,10 +109,10 @@ Vue.mixin({
       return result;
     },
     // 枚举类型
-    getEnum(enumsName, code) {
+    getEnum (enumsName, code) {
       const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);
       return result ? result['name'] : 'UNKNOWN';
-    },
+    }
   }
 });
 /* eslint-disable no-new */

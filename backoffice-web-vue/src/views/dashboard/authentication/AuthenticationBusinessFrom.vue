@@ -37,7 +37,7 @@
       </el-col>
     </el-row>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+      <el-button v-if="companyState == 'UNCERTIFIED'"  style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
     </el-row>
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
