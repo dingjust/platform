@@ -5,7 +5,7 @@
         <h6 class="info-title_text">查看发货单</h6>
       </div>
     </el-row>
-    <el-tabs v-model="activeOrder" type="card" editable @edit="handleTabsEdit">
+    <el-tabs v-model="activeOrder" type="card" :editable="isFactory()" @edit="handleTabsEdit">
       <template v-for="(order,index) in slotData.shippingOrders">
         <el-tab-pane :label="''+(index+1)" :name="''+index">
           <deliver-view :slotData="order" />
@@ -25,6 +25,7 @@
   import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
   import FormLabel from '@/components/custom/FormLabel';
   import DeliverView from '../components/DeliverView';
+  import PurchaseOrderInfoDeliver from './PurchaseOrderInfoDeliver';
 
   export default {
     name: 'PurchaseOrderInfoDeliver',
@@ -33,6 +34,7 @@
       OrdersInfoItem,
       FormLabel,
       DeliverView,
+      PurchaseOrderInfoDeliver
     },
     mixins: [],
     computed: {
@@ -53,7 +55,7 @@
       },
       handleTabsEdit(targetName, action) {
         if (action === 'add') {
-          this.$emit('createNewDeliver')
+          this.$emit('createNewDeliver');
         }
         if (action === 'remove') {
           this.$confirm('是否确认删除发货单?', '删除', {

@@ -3,6 +3,9 @@
     <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body>
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
+    <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
+      <supplier-select @onSearch="onSearch" @onSelect="onSuppliersSelect" />
+    </el-dialog>
     <el-card class="box-card">
       <div class="info-order-body">
         <el-row class="info-title-row">
@@ -40,6 +43,9 @@
               </el-input>
             </el-row>
           </el-col>
+          <el-col :span="4">
+            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商</el-button>
+          </el-col>
         </el-row>
         <el-row class="info-order-row">
           <form-label label="生产详情" />
@@ -49,7 +55,7 @@
             <el-col :span="8">
               <el-row type="flex" align="middle">
                 <h6 class="info-input-prepend">产品名</h6>
-                <el-input placeholder="名称" v-model="product.name" size="mini" :disabled="true">
+                <el-input placeholder="名称" v-model="product.name" size="mini" :disabled="false">
                   <el-button slot="append" @click="onpenSelect(productIndex)">点击选择</el-button>
                 </el-input>
               </el-row>
@@ -231,7 +237,7 @@
             <el-row type="flex" align="middle">
               <h6 class="info-input-prepend">定金</h6>
               <el-input placeholder="选择事件" class="purchase-order-input_select"
-                v-model="triggerEvent[form.deposit.event]" :disabled="true" size="mini">
+                v-model="triggerEvent[form.deposit.event]" :disabled="false" @focus="" size="mini">
                 <template slot="prepend">事件</template>
                 <el-select slot="append" v-model="form.deposit.event" placeholder="请选择">
                   <template v-for="(value,key) in triggerEvent">
@@ -245,7 +251,7 @@
             <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2">后</h6>
               <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.deposit.time"
-                :disabled="true" size="mini">
+                :disabled="false" size="mini">
                 <template slot="prepend">时长</template>
                 <el-select slot="append" v-model="form.deposit.time" placeholder="请选择">
                   <el-option label="5" :value="5"></el-option>
@@ -258,7 +264,7 @@
           <el-col :span="4">
             <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2">天</h6>
-              <el-input class="purchase-order-input_select" v-model="triggerType[form.deposit.range]" :disabled="true"
+              <el-input class="purchase-order-input_select" v-model="triggerType[form.deposit.range]" :disabled="false"
                 size="mini">
                 <el-select slot="append" v-model="form.deposit.range">
                   <template v-for="(value,key) in triggerType">
@@ -271,7 +277,7 @@
           <el-col :span="7">
             <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
-              <el-input class="purchase-order-input_select" v-model="form.deposit.percent*100+'%'" :disabled="true"
+              <el-input class="purchase-order-input_select" v-model="form.deposit.percent*100+'%'" :disabled="false"
                 size="mini">
                 <template slot="prepend">金额比例</template>
                 <el-select slot="append" v-model="form.deposit.percent">
@@ -297,7 +303,7 @@
             <el-row type="flex" align="middle">
               <h6 class="info-input-prepend">第1期尾款</h6>
               <el-input placeholder="选择事件" class="purchase-order-input_select"
-                v-model="triggerEvent[form.balance1.event]" :disabled="true" size="mini">
+                v-model="triggerEvent[form.balance1.event]" :disabled="false" size="mini">
                 <template slot="prepend">事件</template>
                 <el-select slot="append" v-model="form.balance1.event" placeholder="请选择">
                   <template v-for="(value,key) in triggerEvent">
@@ -311,7 +317,7 @@
             <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2">后</h6>
               <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.balance1.time"
-                :disabled="true" size="mini">
+                :disabled="false" size="mini">
                 <template slot="prepend">时长</template>
                 <el-select slot="append" v-model="form.balance1.time" placeholder="请选择">
                   <el-option label="5" :value="5"></el-option>
@@ -324,7 +330,7 @@
           <el-col :span="4">
             <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2">天</h6>
-              <el-input class="purchase-order-input_select" v-model="triggerType[form.balance1.range]" :disabled="true"
+              <el-input class="purchase-order-input_select" v-model="triggerType[form.balance1.range]" :disabled="false"
                 size="mini">
                 <el-select slot="append" v-model="form.balance1.range">
                   <template v-for="(value,key) in triggerType">
@@ -337,7 +343,7 @@
           <el-col :span="7">
             <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
-              <el-input class="purchase-order-input_select" v-model="form.balance1.percent*100+'%'" :disabled="true"
+              <el-input class="purchase-order-input_select" v-model="form.balance1.percent*100+'%'" :disabled="false"
                 size="mini">
                 <template slot="prepend">金额比例</template>
                 <el-select slot="append" v-model="form.balance1.percent">
@@ -363,7 +369,7 @@
             <el-row type="flex" align="middle">
               <h6 class="info-input-prepend">第2期尾款</h6>
               <el-input placeholder="选择事件" class="purchase-order-input_select"
-                v-model="triggerEvent[form.balance2.event]" :disabled="true" size="mini">
+                v-model="triggerEvent[form.balance2.event]" :disabled="false" size="mini">
                 <template slot="prepend">事件</template>
                 <el-select slot="append" v-model="form.balance2.event" placeholder="请选择">
                   <template v-for="(value,key) in triggerEvent">
@@ -377,7 +383,7 @@
             <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2">后</h6>
               <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.balance2.time"
-                :disabled="true" size="mini">
+                :disabled="false" size="mini">
                 <template slot="prepend">时长</template>
                 <el-select slot="append" v-model="form.balance2.time" placeholder="请选择">
                   <el-option label="5" :value="5"></el-option>
@@ -390,7 +396,7 @@
           <el-col :span="4">
             <el-row type="flex" align="middle" justify="start">
               <h6 class="info-input-prepend2">天</h6>
-              <el-input class="purchase-order-input_select" v-model="triggerType[form.balance2.range]" :disabled="true"
+              <el-input class="purchase-order-input_select" v-model="triggerType[form.balance2.range]" :disabled="false"
                 size="mini">
                 <el-select slot="append" v-model="form.balance2.range">
                   <template v-for="(value,key) in triggerType">
@@ -412,7 +418,7 @@
             <el-row type="flex" align="middle">
               <h6 class="info-input-prepend">月结</h6>
               <el-input placeholder="选择事件" class="purchase-order-input_select"
-                v-model="triggerEvent[form.monthBalance.event]" :disabled="true" size="mini">
+                v-model="triggerEvent[form.monthBalance.event]" :disabled="false" size="mini">
                 <template slot="prepend">事件</template>
                 <el-select slot="append" v-model="form.monthBalance.event" placeholder="请选择">
                   <template v-for="(value,key) in triggerEvent">
@@ -435,7 +441,7 @@
           <el-col :span="24">
             <el-row type="flex" align="middle">
               <h6 class="info-input-prepend" style="width:45px">跟单员</h6>
-              <el-select v-model="form.QC" placeholder="请选择" :disabled="true">
+              <el-select v-model="form.QC" placeholder="请选择" :disabled="false">
                 <el-option label="采购部-刘少立" value="确认订单"></el-option>
                 <el-option label="采购部-刘少立" value="签署合同"></el-option>
                 <el-option label="采购部-刘少立" value="确认收货"></el-option>
@@ -487,6 +493,7 @@
   import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
   import FormLabel from '@/components/custom/FormLabel';
   import ProductSelect from '@/components/custom/ProductSelect';
+  import SupplierSelect from '@/components/custom/SupplierSelect';
   import ImagesUpload from '@/components/custom/ImagesUpload';
 
   export default {
@@ -495,7 +502,8 @@
       OrdersInfoItem,
       FormLabel,
       ProductSelect,
-      ImagesUpload
+      ImagesUpload,
+      SupplierSelect
     },
     mixins: [],
     computed: {
@@ -510,7 +518,7 @@
           result = '定金+2期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后，甲方应向乙方支付生效订单总金额的' +
             this.form.deposit
             .percent * 100 +
-            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.form.deposit.event[this.form.balance1.event] +
+            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form.balance1
             .time +
             '日' + this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +
@@ -807,6 +815,7 @@
           }
           this.$message.success('创建成功');
         }
+        this.$router.push("order/purchase");
       },
       async getProductAgain() {
         const url = this.apis().getApparelProduct(this.againData.entries[0].product.baseProduct);
@@ -816,11 +825,18 @@
           return;
         }
         this.onProductSelect(result);
+      },
+      onSuppliersSelect(val){
+        this.suppliersSelectVisible=false;
+        this.form.companyOfSeller=val.name;
+        this.form.contactPersonOfSeller=val.contactPerson;
+        this.form.contactOfSeller=val.contactPhone;
       }
     },
     data() {
       return {
         productSelectVisible: false,
+        suppliersSelectVisible: false,
         currentProductIndex: 0,
         regions: [],
         freightPayer: {

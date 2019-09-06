@@ -6,8 +6,14 @@
     <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
       <purchase-order-info-receive :slotData="slotData" @afterCreate="onAfterCreate" />
     </el-dialog>
+    <el-dialog :visible.sync="deliverViewsVisible" width="80%" class="purchase-dialog" append-to-body>
+      <purchase-order-deliver-views :slotData="slotData" @createNewDeliver="onCreateNewDeliver" />
+    </el-dialog>
     <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-deliver-views :slotData="slotData" />
+      <purchase-order-info-deliver :slotData="slotData" @afterCreate="onAfterCreate" />
+    </el-dialog>
+    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body>
+      <purchase-order-info-reconciliation :slotData="slotData" />
     </el-dialog>
     <el-row>
       <el-col :span="16">
@@ -19,7 +25,7 @@
     </el-row>
     <purchase-orders-button-group :slotData="slotData" @onUniqueCode="onUniqueCode" @onConfirm="onConfirm"
       @onDeliverViewsOpen="onDeliverViewsOpen" @onCreateAgain="onCreateAgain" @onCreateReceive="onCreateReceive"
-      @onCancel="onCancel" />
+      @onReconciliation="onReconciliation" @onCancel="onCancel" />
   </div>
 </template>
 
@@ -30,6 +36,8 @@
   import PurchaseOrdersButtonGroup from '../components/PurchaseOrdersButtonGroup';
   import PurchaseOrderInfoReceive from './PurchaseOrderInfoReceive';
   import PurchaseOrderDeliverViews from './PurchaseOrderDeliverViews';
+  import PurchaseOrderInfoReconciliation from './PurchaseOrderInfoReconciliation';
+  import PurchaseOrderInfoDeliver from './PurchaseOrderInfoDeliver';
 
   export default {
     name: 'PurchaseOrderInfo',
@@ -40,7 +48,9 @@
       UniquecodeGenerateForm,
       PurchaseOrdersButtonGroup,
       PurchaseOrderInfoReceive,
-      PurchaseOrderDeliverViews
+      PurchaseOrderDeliverViews,
+      PurchaseOrderInfoReconciliation,
+      PurchaseOrderInfoDeliver
     },
     mixins: [],
     computed: {
@@ -67,7 +77,7 @@
           return;
         }
         this.$message.success('接单成功');
-        this.$set(this.slotData, 'status', 'PENDING_CONFIRM');
+        this.$set(this.slotData, 'status', 'IN_PRODUCTION');
       },
       onCancel() {
         this.$confirm('是否确认取消订单?', '取消订单', {
@@ -102,8 +112,20 @@
       },
       onAfterCreate() {
         this.receiveFormVisible = false;
+        this.deliverFormVisible = false;
       },
       onDeliverViewsOpen() {
+        if (this.slotData.shippingOrders == null || this.slotData.shippingOrders.length == 0) {
+          this.deliverFormVisible = true;
+        } else {
+          this.deliverViewsVisible = true;
+        }
+      },
+      onReconciliation() {
+        this.reconciliatioFormVisible = true;
+      },
+      onCreateNewDeliver() {
+        this.deliverViewsVisible = false;
         this.deliverFormVisible = true;
       }
     },
@@ -111,10 +133,14 @@
       return {
         uniquecodeFormVisible: false,
         receiveFormVisible: false,
+        deliverViewsVisible: false,
+        reconciliatioFormVisible: false,
         deliverFormVisible: false,
       }
     },
-    created() {}
+    created() {
+
+    }
   }
 
 </script>

@@ -351,6 +351,26 @@ const COMMON_APIS = {
   rejectDeliveryOrder(code) {
     return '/b2b/orders/purchase/' + code + '/rejectDelivery';
   },
+  //创建对账单
+  createReconciliationOrder(code) {
+    return '/b2b/orders/purchase/' + code + '/createReconciliationOrder';
+  },
+  //提交对账单
+  commitReconciliationOrder() {
+    return '/b2b/orders/purchase/commitReconciliationOrder';
+  },
+  //撤回对账单
+  withdrawReconciliationOrder() {
+    return '/b2b/orders/purchase/recallReconciliationOrder';
+  },
+  //确认对账单
+  confirmReconciliation(code) {
+    return '/b2b/orders/purchase/'+code+'/confirmReconciliation';
+  },
+  //拒绝对账单
+  rejectReconciliation(code) {
+    return '/b2b/orders/purchase/'+code+'/rejectReconciliation';
+  },
   //确认线下生产订单
   confirmProductionByOffline(code) {
     return '/b2b/orders/purchase/' + code + '/confirmProductionByOffline';

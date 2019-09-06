@@ -1,7 +1,7 @@
 <template>
   <div class="info-detail-body">
     <el-dialog :visible.sync="deliverViewsVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-deliver-views :slotData="slotData" @createNewDeliver="onCreateNewDeliver"/>
+      <purchase-order-deliver-views :slotData="slotData" @createNewDeliver="onCreateNewDeliver" />
     </el-dialog>
     <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
       <purchase-order-info-receive :slotData="slotData" @afterCreate="onAfterCreate" />
@@ -67,7 +67,8 @@
               <!-- </el-col> -->
               <el-button class="info-detail-logistics_info-btn1">查看物流</el-button>
             </el-row>
-            <el-button type="text" class="info-detail-logistics_info-btn1" :disabled="slotData.shippingOrders==null||slotData.shippingOrders.length==0"
+            <el-button type="text" class="info-detail-logistics_info-btn1"
+              :disabled="slotData.shippingOrders==null||slotData.shippingOrders.length==0"
               @click="deliverViewsVisible=!deliverViewsVisible">查看发货单</el-button>
             <el-button type="text" class="info-detail-logistics_info-btn1"
               :disabled="slotData.deliveryOrders==null||slotData.deliveryOrders.length==0"
@@ -117,9 +118,9 @@
         this.receiveFormVisible = false;
         this.deliverFormVisible = false;
       },
-      onCreateNewDeliver(){
-        this.deliverViewsVisible=false;
-        this.deliverFormVisible=true;
+      onCreateNewDeliver() {
+        this.deliverViewsVisible = false;
+        this.deliverFormVisible = true;
       }
     },
     data() {

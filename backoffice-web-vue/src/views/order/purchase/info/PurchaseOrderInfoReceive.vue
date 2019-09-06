@@ -143,38 +143,33 @@
         </tr>
       </table>
     </el-form>
-    <el-row type="flex" justify="center" class="info-receive-row">
-      <template v-if="isBrand()">
-        <el-button class="info-receive-submit" v-if="slotData.deliveryOrders==null||slotData.deliveryOrders.length==0"
-          @click="onSubmit">确认创建</el-button>
-        <el-button class="info-receive-submit"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='UNCOMMITTED'"
-          @click="onSave">
-          保存并退出</el-button>
-        <el-button class="info-receive-submit"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='UNCOMMITTED'"
-          @click="onCommit">
-          确认完成收货</el-button>
-        <el-button class="info-receive-submit"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'"
-          @click="onWithdraw">
-          撤回</el-button>
-      </template>
-      <template v-if="isFactory()">
-        <el-button class="info-receive-refuse"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onReject">
-          拒绝</el-button>
-        <el-button class="info-receive-submit"
-          v-if="slotData.deliveryOrders!=null&&slotData.deliveryOrders.length!=0&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'"
-          @click="onAccept">
-          确认</el-button>
-      </template>
-    </el-row>
     <el-row type="flex" justify="end" class="info-receive-row">
       <h6 class="order-table-info">品牌跟单员： {{slotData.brandOperator!=null?slotData.brandOperator.name:'未指定'}}</h6>
       <h6 class="order-table-info">工厂跟单员： {{slotData.factoryOperator!=null?slotData.factoryOperator.name:'未指定'}}</h6>
       <h6 class="order-table-info">发货日期： {{slotData
         .creationtime | timestampToTime}}</h6>
+    </el-row>
+    <el-row type="flex" justify="center" class="info-receive-row">
+      <template v-if="isBrand()">
+        <!-- <el-button class="info-receive-submit" v-if="slotData.deliveryOrders==null||slotData.deliveryOrders.length==0"
+          @click="onSubmit">确认创建</el-button> -->
+        <el-button class="info-receive-submit" v-if="showSaveBtn" @click="onSave">
+          保存并退出</el-button>
+        <el-button class="info-receive-submit"
+          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='UNCOMMITTED'" @click="onCommit">
+          确认完成收货</el-button>
+        <el-button class="info-receive-submit"
+          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onWithdraw">
+          撤回</el-button>
+      </template>
+      <template v-if="isFactory()">
+        <el-button class="info-receive-refuse"
+          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onReject">
+          拒绝</el-button>
+        <el-button class="info-receive-submit"
+          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onAccept">
+          确认</el-button>
+      </template>
     </el-row>
   </div>
 </template>
@@ -216,6 +211,16 @@
           })
         });
         return totalAmount;
+      },
+      hasDeliveryOrders: function () {
+        return this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0
+      },
+      showSaveBtn: function () {
+        if (this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0) {
+          return this.slotData.deliveryOrders[0].status != 'PENDING_CONFIRM';
+        } else {
+          return true;
+        }
       }
     },
     methods: {
@@ -283,6 +288,7 @@
         }
         //跟新slotData
         this.$set(this.slotData, 'deliveryOrders', result.deliveryOrders);
+        this.$set(this.slotData, 'status', result.status);
         this.$emit('afterCreate');
       },
       getVariant(color, size, entries) {
@@ -341,7 +347,14 @@
         }
         this.carriers = result;
       },
-      async onSave() {
+      onSave() {
+        if (this.hasDeliveryOrders) {
+          this.onUpdate();
+        } else {
+          this.onSubmit();
+        }
+      },
+      async onUpdate() {
         //组合订单行参数
         var entries = [];
         this.form.entries.forEach(variants => {
@@ -418,7 +431,6 @@
       return {
         receiveFormVisible: false,
         activeForm: '1',
-        mockData: [],
         carriers: [],
         form: {
           code: '',
