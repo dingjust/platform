@@ -52,29 +52,28 @@
 
     },
     methods: {},
-    data() {
+    data () {
       return {
-        thisMonthIncome:{
-          title:'本月营收',
-          income:1231.12,
-          proofingOrders:8,
-          purchaseOrders:10,
-          incomed:123,
-          comparison:0.264
+        thisMonthIncome: {
+          title: '本月营收',
+          income: 1231.12,
+          proofingOrders: 8,
+          purchaseOrders: 10,
+          incomed: 123,
+          comparison: 0.264
         },
-        lastMonthIncome:{
-          title:'上月营收',
-          income:3134.12,
-          proofingOrders:23,
-          purchaseOrders:13,
-          incomed:1232,
-          comparison:0.3114
+        lastMonthIncome: {
+          title: '上月营收',
+          income: 3134.12,
+          proofingOrders: 23,
+          purchaseOrders: 13,
+          incomed: 1232,
+          comparison: 0.3114
         }
       };
     },
-    created() {}
+    created () {}
   };
-
 </script>
 <style>
   .dashboard-card {

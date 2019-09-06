@@ -76,7 +76,7 @@
         </el-row>
         <el-row class="dashboard-row">
           <div class="dashboard-title2">
-            <h6 class="dashboard-title_text">财务</h6>
+            <h6 class="dashboard-title_text">账务</h6>
           </div>
         </el-row>
         <el-row  type="flex" justify="space-between" align="middle">

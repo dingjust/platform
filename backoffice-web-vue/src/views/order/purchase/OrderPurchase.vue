@@ -742,7 +742,7 @@
               entries.push(item);
             }
           });
-          //组合财务参数
+          //组合账务参数
           var payPlanItems = [];
           if (this.form.isHaveDeposit) {
             payPlanItems.push({
