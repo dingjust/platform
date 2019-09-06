@@ -7,474 +7,477 @@
       <supplier-select @onSearch="onSearch" @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-card class="box-card">
-      <div class="info-order-body">
-        <el-row class="info-title-row">
-          <div class="info-title">
-            <h6 class="info-title_text">创建线下订单</h6>
-          </div>
-        </el-row>
-        <el-row class="info-order-row">
-          <form-label label="合作对象" />
-        </el-row>
-        <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
-          <el-col :span="8">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">合作商</h6>
-              <el-input placeholder="名称" v-model="form.companyOfSeller" size="mini">
-                <!-- <el-select v-model="form.companyOfSeller" slot="append" placeholder="请选择">
-                  <el-option label="123" value="123"></el-option>
-                  <el-option label="1234" value="1234"></el-option>
-                  <el-option label="1324" value="1324"></el-option>
-                </el-select> -->
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="6">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">联系人</h6>
-              <el-input placeholder="姓名" v-model="form.contactPersonOfSeller" size="mini">
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="6">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">联系方式</h6>
-              <el-input placeholder="电话号码" v-model="form.contactOfSeller" size="mini">
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="4">
-            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商</el-button>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row">
-          <form-label label="生产详情" />
-        </el-row>
-        <template v-for="(product,productIndex) in form.entries">
+      <el-form :model="form" :rules="rules" ref="form">
+        <div class="info-order-body">
+          <el-row class="info-title-row">
+            <div class="info-title">
+              <h6 class="info-title_text">创建线下订单</h6>
+            </div>
+          </el-row>
+          <el-row class="info-order-row">
+            <form-label label="合作对象" />
+          </el-row>
           <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
             <el-col :span="8">
+              <el-form-item prop="companyOfSeller" class="purchase-form-item">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">合作商</h6>
+                  <el-input placeholder="名称" v-model="form.companyOfSeller" size="mini" >
+                  </el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item prop="contactPersonOfSeller" class="purchase-form-item">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">联系人</h6>
+                  <el-input placeholder="姓名" v-model="form.contactPersonOfSeller" size="mini" >
+                  </el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item prop="contactOfSeller" class="purchase-form-item">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">联系方式</h6>
+                  <el-input placeholder="电话号码" v-model="form.contactOfSeller" size="mini" >
+                  </el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col :span="4">
+              <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商</el-button>
+            </el-col> -->
+          </el-row>
+          <el-row class="info-order-row">
+            <form-label label="生产详情" />
+          </el-row>
+          <template v-for="(product,productIndex) in form.entries">
+            <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
+              <el-col :span="8">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">产品名</h6>
+                  <el-input placeholder="名称" v-model="product.name" size="mini" :disabled="false">
+                    <el-button slot="append" @click="onpenSelect(productIndex)">点击选择</el-button>
+                  </el-input>
+                </el-row>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请输入报价', trigger: 'blur' ,type: 'number'}]" :key="product.key"
+                  :prop="'entries.' + productIndex+'.unitPrice'">
+                  <el-row type="flex" align="middle">
+                    <h6 class="info-input-prepend">订单报价</h6>
+                    <el-input placeholder="输入报价" v-model.number="product.unitPrice" size="mini">
+                    </el-input>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">交货日期</h6>
+                  <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期">
+                  </el-date-picker>
+                </el-row>
+              </el-col>
+              <el-col :span="2">
+                <el-button type="text" v-if="productIndex!=0" @click="removeRow(productIndex)">删除</el-button>
+              </el-col>
+            </el-row>
+            <el-row type="flex" v-if="product.code!=null">
+              <img class="purchase-product-img"
+                :src="product.thumbnail!=null&&product.thumbnail.length!=0?product.thumbnail.url:'static/img/nopicture.png'">
+              <table cellspacing="2" width="100%" :height="(form.entries.length+1)*50" class="order-table">
+                <tr class="order-table-th_row">
+                  <td style="width:40px">颜色</td>
+                  <template v-for="item in product.sizes">
+                    <th>{{item}}</th>
+                  </template>
+                  <th>小计</th>
+                </tr>
+                <template v-for="(color,rowIndex) in product.colors">
+                  <tr>
+                    <td>{{color}}</td>
+                    <template v-for="(size,index) in product.sizes">
+                      <td style="width:80px">
+                        <el-input class="order-table-input" type="number"
+                          v-model="getVariant(color,size,product.variants).num">
+                        </el-input>
+                      </td>
+                    </template>
+                    <td style="width:100px">{{countColorsAmount(color,product.variants)}}</td>
+                  </tr>
+                </template>
+                <tr>
+                  <td>合计</td>
+                  <td :colspan="getColspanLength(product.sizes.size)+1">{{countTotalAmount(product.variants)}}</td>
+                </tr>
+              </table>
+            </el-row>
+            <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
+              <el-col :span="7">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">合作方式</h6>
+                  <template v-for="(value,key) in machiningTypes">
+                    <el-radio class="info-radio" v-model="product.machiningTypes" :label="key">{{value}}
+                    </el-radio>
+                  </template>
+                </el-row>
+              </el-col>
+              <el-col :span="7">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">承担运费</h6>
+                  <template v-for="(value,key) in freightPayer">
+                    <el-radio class="info-radio" v-model="product.freightPayer" :label="key">{{value}}</el-radio>
+                  </template>
+                </el-row>
+              </el-col>
+              <el-col :span="6">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">是否开发票</h6>
+                  <el-radio class="info-radio" v-model="product.invoice" :label="false">不开发票</el-radio>
+                  <el-radio class="info-radio" v-model="product.invoice" :label="true">开发票</el-radio>
+                </el-row>
+              </el-col>
+              <el-col :span="4">
+                <el-select v-model="product.invoicePercent" placeholder="税点">
+                  <el-option v-for="item in invoicePercent" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" class="info-order-row" type="flex" align="middle">
+              <el-col :span="6">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">送货地址</h6>
+                  <el-select class="w-100" v-model="product.address.region" value-key="isocode"
+                    @change="(val)=>onRegionChanged(val,productIndex)">
+                    <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
+                    </el-option>
+                  </el-select>
+                </el-row>
+              </el-col>
+              <el-col :span="4">
+                <el-select class="w-100" v-model="product.address.city" @change="(val)=>onCityChanged(val,productIndex)"
+                  value-key="code">
+                  <el-option v-for="item in product.cities" :key="item.code" :label="item.name" :value="item">
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="4">
+                <el-select class="w-100" v-model="product.address.cityDistrict" value-key="code">
+                  <el-option v-for="item in product.cityDistricts" :key="item.code" :label="item.name" :value="item">
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="6">
+                <el-row type="flex" align="middle">
+                  <el-input placeholder="详细地址" v-model="product.address.line1" size="mini">
+                  </el-input>
+                </el-row>
+              </el-col>
+              <el-col :span="4">
+                <el-button size="mini">选择</el-button>
+              </el-col>
+            </el-row>
+            <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
+              <el-col :span="6">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">收货人</h6>
+                  <el-input placeholder="名称" v-model="product.address.fullname" size="mini">
+                  </el-input>
+                </el-row>
+              </el-col>
+              <el-col :span="6">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">联系方式</h6>
+                  <el-input placeholder="电话" v-model="product.address.cellphone" size="mini">
+                  </el-input>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-divider></el-divider>
+              </el-col>
+            </el-row>
+          </template>
+          <el-row type="flex" justify="center" class="info-order-row" align="middle">
+            <el-col :span="24">
+              <div class="order-purchase-table-btn_add" @click="addRow">
+                +添加另一款产品
+              </div>
+            </el-col>
+          </el-row>
+          <el-row class="info-order-row">
+            <form-label label="账务设置" />
+          </el-row>
+          <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
+            <el-col :span="6">
               <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">产品名</h6>
-                <el-input placeholder="名称" v-model="product.name" size="mini" :disabled="false">
-                  <el-button slot="append" @click="onpenSelect(productIndex)">点击选择</el-button>
-                </el-input>
+                <h6 class="info-input-prepend">有无定金</h6>
+                <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="true">有定金</el-radio>
+                <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="false">无定金</el-radio>
               </el-row>
             </el-col>
             <el-col :span="8">
               <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">订单报价</h6>
-                <el-input placeholder="输入报价" v-model="product.unitPrice" size="mini">
+                <h6 class="info-input-prepend">尾款期数</h6>
+                <template v-for="(value,key) in payPlanType">
+                  <el-radio class="info-radio" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
+                </template>
+              </el-row>
+            </el-col>
+            <el-col :span="10">
+              <el-row type="flex" align="middle">
+                <h6 class="info-input-prepend" style="margin-right:20px;width:80px">选用我的账务方案</h6>
+                <el-radio class="info-radio" v-model="form.plan" label="1">方案1</el-radio>
+                <el-radio class="info-radio" v-model="form.plan" label="2">方案2</el-radio>
+                <el-radio class="info-radio" v-model="form.plan" label="3">方案3</el-radio>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="info-order-row" v-if="form.isHaveDeposit" type="flex" justify="start" align="middle"
+            :gutter="10">
+            <el-col :span="7">
+              <el-row type="flex" align="middle">
+                <h6 class="info-input-prepend">定金</h6>
+                <el-input placeholder="选择事件" class="purchase-order-input_select"
+                  v-model="triggerEvent[form.deposit.event]" :disabled="false" @focus="" size="mini">
+                  <template slot="prepend">事件</template>
+                  <el-select slot="append" v-model="form.deposit.event" placeholder="请选择">
+                    <template v-for="(value,key) in triggerEvent">
+                      <el-option :label="value" :value="key"></el-option>
+                    </template>
+                  </el-select>
                 </el-input>
               </el-row>
             </el-col>
             <el-col :span="6">
-              <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">交货日期</h6>
-                <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期">
-                </el-date-picker>
-              </el-row>
-            </el-col>
-            <el-col :span="2">
-              <el-button type="text" v-if="productIndex!=0" @click="removeRow(productIndex)">删除</el-button>
-            </el-col>
-          </el-row>
-          <el-row type="flex" v-if="product!=''">
-            <img class="purchase-product-img"
-              :src="product.thumbnail!=null&&product.thumbnail.length!=0?product.thumbnail.url:'static/img/nopicture.png'">
-            <table cellspacing="2" width="100%" :height="(form.entries.length+1)*50" class="order-table">
-              <tr class="order-table-th_row">
-                <td style="width:40px">颜色</td>
-                <template v-for="item in product.sizes">
-                  <th>{{item}}</th>
-                </template>
-                <th>小计</th>
-              </tr>
-              <template v-for="(color,rowIndex) in product.colors">
-                <tr>
-                  <td>{{color}}</td>
-                  <template v-for="(size,index) in product.sizes">
-                    <td style="width:80px">
-                      <el-input class="order-table-input" type="number"
-                        v-model="getVariant(color,size,product.variants).num">
-                      </el-input>
-                    </td>
-                  </template>
-                  <td style="width:100px">{{countColorsAmount(color,product.variants)}}</td>
-                </tr>
-              </template>
-              <tr>
-                <td>合计</td>
-                <td :colspan="getColspanLength(product.sizes.size)+1">{{countTotalAmount(product.variants)}}</td>
-              </tr>
-            </table>
-          </el-row>
-          <el-row class="info-order-row" v-if="product!=''" type="flex" justify="start" align="middle" :gutter="20">
-            <el-col :span="7">
-              <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">合作方式</h6>
-                <template v-for="(value,key) in machiningTypes">
-                  <el-radio class="info-radio" v-model="product.cooperationMode" :label="key">{{value}}
-                  </el-radio>
-                </template>
-              </el-row>
-            </el-col>
-            <el-col :span="7">
-              <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">承担运费</h6>
-                <template v-for="(value,key) in freightPayer">
-                  <el-radio class="info-radio" v-model="product.fare" :label="key">{{value}}</el-radio>
-                </template>
-              </el-row>
-            </el-col>
-            <el-col :span="6">
-              <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">是否开发票</h6>
-                <el-radio class="info-radio" v-model="product.invoice" :label="false">不开发票</el-radio>
-                <el-radio class="info-radio" v-model="product.invoice" :label="true">开发票</el-radio>
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2">后</h6>
+                <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.deposit.time"
+                  :disabled="false" size="mini">
+                  <template slot="prepend">时长</template>
+                  <el-select slot="append" v-model="form.deposit.time" placeholder="请选择">
+                    <el-option label="5" :value="5"></el-option>
+                    <el-option label="7" :value="7"></el-option>
+                    <el-option label="15" :value="15"></el-option>
+                  </el-select>
+                </el-input>
               </el-row>
             </el-col>
             <el-col :span="4">
-              <el-select v-model="product.invoicePercent" placeholder="税点">
-                <el-option v-for="item in invoicePercent" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2">天</h6>
+                <el-input class="purchase-order-input_select" v-model="triggerType[form.deposit.range]"
+                  :disabled="false" size="mini">
+                  <el-select slot="append" v-model="form.deposit.range">
+                    <template v-for="(value,key) in triggerType">
+                      <el-option :label="value" :value="key"></el-option>
+                    </template>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+            <el-col :span="7">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
+                <el-input class="purchase-order-input_select" v-model="form.deposit.percent*100+'%'" :disabled="false"
+                  size="mini">
+                  <template slot="prepend">金额比例</template>
+                  <el-select slot="append" v-model="form.deposit.percent">
+                    <el-option label="0%" :value="0"></el-option>
+                    <el-option label="10%" :value="0.1"></el-option>
+                    <el-option label="20%" :value="0.2"></el-option>
+                    <el-option label="30%" :value="0.3"></el-option>
+                    <el-option label="40%" :value="0.4"></el-option>
+                    <el-option label="50%" :value="0.5"></el-option>
+                    <el-option label="60%" :value="0.6"></el-option>
+                    <el-option label="70%" :value="0.7"></el-option>
+                    <el-option label="80%" :value="0.8"></el-option>
+                    <el-option label="90%" :value="0.9"></el-option>
+                    <el-option label="100%" :value="1"></el-option>
+                  </el-select>
+                </el-input>
+              </el-row>
             </el-col>
           </el-row>
-          <el-row :gutter="10" class="info-order-row" v-if="product!=''" type="flex" align="middle">
-            <el-col :span="6">
+          <el-row class="info-order-row" v-if="form.payPlanType!='MONTHLY_SETTLEMENT'" type="flex" justify="start"
+            align="middle" :gutter="10">
+            <el-col :span="7">
               <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">送货地址</h6>
-                <el-select class="w-100" v-model="product.address.region" value-key="isocode"
-                  @change="(val)=>onRegionChanged(val,productIndex)">
-                  <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
-                  </el-option>
+                <h6 class="info-input-prepend">第1期尾款</h6>
+                <el-input placeholder="选择事件" class="purchase-order-input_select"
+                  v-model="triggerEvent[form.balance1.event]" :disabled="false" size="mini">
+                  <template slot="prepend">事件</template>
+                  <el-select slot="append" v-model="form.balance1.event" placeholder="请选择">
+                    <template v-for="(value,key) in triggerEvent">
+                      <el-option :label="value" :value="key"></el-option>
+                    </template>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+            <el-col :span="6">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2">后</h6>
+                <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.balance1.time"
+                  :disabled="false" size="mini">
+                  <template slot="prepend">时长</template>
+                  <el-select slot="append" v-model="form.balance1.time" placeholder="请选择">
+                    <el-option label="5" :value="5"></el-option>
+                    <el-option label="7" :value="7"></el-option>
+                    <el-option label="15" :value="15"></el-option>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+            <el-col :span="4">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2">天</h6>
+                <el-input class="purchase-order-input_select" v-model="triggerType[form.balance1.range]"
+                  :disabled="false" size="mini">
+                  <el-select slot="append" v-model="form.balance1.range">
+                    <template v-for="(value,key) in triggerType">
+                      <el-option :label="value" :value="key"></el-option>
+                    </template>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+            <el-col :span="7">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
+                <el-input class="purchase-order-input_select" v-model="form.balance1.percent*100+'%'" :disabled="false"
+                  size="mini">
+                  <template slot="prepend">金额比例</template>
+                  <el-select slot="append" v-model="form.balance1.percent">
+                    <el-option label="0%" :value="0"></el-option>
+                    <el-option label="10%" :value="0.1"></el-option>
+                    <el-option label="20%" :value="0.2"></el-option>
+                    <el-option label="30%" :value="0.3"></el-option>
+                    <el-option label="40%" :value="0.4"></el-option>
+                    <el-option label="50%" :value="0.5"></el-option>
+                    <el-option label="60%" :value="0.6"></el-option>
+                    <el-option label="70%" :value="0.7"></el-option>
+                    <el-option label="80%" :value="0.8"></el-option>
+                    <el-option label="90%" :value="0.9"></el-option>
+                    <el-option label="100%" :value="1"></el-option>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="info-order-row" v-if="form.payPlanType=='PHASETWO'" type="flex" justify="start" align="middle"
+            :gutter="10">
+            <el-col :span="7">
+              <el-row type="flex" align="middle">
+                <h6 class="info-input-prepend">第2期尾款</h6>
+                <el-input placeholder="选择事件" class="purchase-order-input_select"
+                  v-model="triggerEvent[form.balance2.event]" :disabled="false" size="mini">
+                  <template slot="prepend">事件</template>
+                  <el-select slot="append" v-model="form.balance2.event" placeholder="请选择">
+                    <template v-for="(value,key) in triggerEvent">
+                      <el-option :label="value" :value="key"></el-option>
+                    </template>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+            <el-col :span="6">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2">后</h6>
+                <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.balance2.time"
+                  :disabled="false" size="mini">
+                  <template slot="prepend">时长</template>
+                  <el-select slot="append" v-model="form.balance2.time" placeholder="请选择">
+                    <el-option label="5" :value="5"></el-option>
+                    <el-option label="7" :value="7"></el-option>
+                    <el-option label="15" :value="15"></el-option>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+            <el-col :span="4">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2">天</h6>
+                <el-input class="purchase-order-input_select" v-model="triggerType[form.balance2.range]"
+                  :disabled="false" size="mini">
+                  <el-select slot="append" v-model="form.balance2.range">
+                    <template v-for="(value,key) in triggerType">
+                      <el-option :label="value" :value="key"></el-option>
+                    </template>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+            <el-col :span="7">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="info-order-row" v-if="form.payPlanType=='MONTHLY_SETTLEMENT'" type="flex" justify="start"
+            align="middle" :gutter="10">
+            <el-col :span="7">
+              <el-row type="flex" align="middle">
+                <h6 class="info-input-prepend">月结</h6>
+                <el-input placeholder="选择事件" class="purchase-order-input_select"
+                  v-model="triggerEvent[form.monthBalance.event]" :disabled="false" size="mini">
+                  <template slot="prepend">事件</template>
+                  <el-select slot="append" v-model="form.monthBalance.event" placeholder="请选择">
+                    <template v-for="(value,key) in triggerEvent">
+                      <el-option :label="value" :value="key"></el-option>
+                    </template>
+                  </el-select>
+                </el-input>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2" style="width: 200px">后, 次月月底支付剩余全部款项</h6>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="info-order-row">
+            <form-label label="人员设置" />
+          </el-row>
+          <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
+            <el-col :span="24">
+              <el-row type="flex" align="middle">
+                <h6 class="info-input-prepend" style="width:45px">跟单员</h6>
+                <el-select v-model="form.QC" placeholder="请选择" :disabled="true">
+                  <el-option label="采购部-刘少立" value="确认订单"></el-option>
                 </el-select>
               </el-row>
             </el-col>
-            <el-col :span="4">
-              <el-select class="w-100" v-model="product.address.city" @change="(val)=>onCityChanged(val,productIndex)"
-                value-key="code">
-                <el-option v-for="item in product.cities" :key="item.code" :label="item.name" :value="item">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="4">
-              <el-select class="w-100" v-model="product.address.cityDistrict" value-key="code">
-                <el-option v-for="item in product.cityDistricts" :key="item.code" :label="item.name" :value="item">
-                </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="6">
+          </el-row>
+          <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
+            <el-col :span="24">
               <el-row type="flex" align="middle">
-                <el-input placeholder="详细地址" v-model="product.address.line1" size="mini">
+                <h6 class="info-input-prepend" style="width:45px">结果预览</h6>
+                <el-input type="textarea" autosize v-model="resultPreview" />
                 </el-input>
               </el-row>
-            </el-col>
-            <el-col :span="4">
-              <el-button size="mini">选择</el-button>
             </el-col>
           </el-row>
-          <el-row class="info-order-row" v-if="product!=''" type="flex" justify="start" align="middle" :gutter="20">
-            <el-col :span="6">
-              <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">收货人</h6>
-                <el-input placeholder="名称" v-model="product.address.fullname" size="mini">
-                </el-input>
-              </el-row>
-            </el-col>
-            <el-col :span="6">
-              <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">联系方式</h6>
-                <el-input placeholder="电话" v-model="product.address.cellphone" size="mini">
-                </el-input>
-              </el-row>
-            </el-col>
+          <el-row class="info-order-row">
+            <form-label label="备注及附件" />
+          </el-row>
+          <el-row class="info-order-row" type="flex" justify="start" align="top">
+            <h6 class="info-input-prepend" style="width:45px">备注</h6>
+            <el-input type="textarea" :rows="3" placeholder="请输入备注留言..." v-model="form.remarks">
+            </el-input>
           </el-row>
           <el-row>
-            <el-col :span="24">
-              <el-divider></el-divider>
-            </el-col>
+            <images-upload class="order-purchase-upload" :slot-data="form.attachments" />
           </el-row>
-        </template>
-        <el-row type="flex" justify="center" class="info-order-row" align="middle">
-          <el-col :span="24">
-            <div class="order-purchase-table-btn_add" @click="addRow">
-              +添加另一款产品
-            </div>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row">
-          <form-label label="账务设置" />
-        </el-row>
-        <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
-          <el-col :span="6">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">有无定金</h6>
-              <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="true">有定金</el-radio>
-              <el-radio class="info-radio" v-model="form.isHaveDeposit" :label="false">无定金</el-radio>
-            </el-row>
-          </el-col>
-          <el-col :span="8">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">尾款期数</h6>
-              <template v-for="(value,key) in payPlanType">
-                <el-radio class="info-radio" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
-              </template>
-            </el-row>
-          </el-col>
-          <el-col :span="10">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend" style="margin-right:20px;width:80px">选用我的账务方案</h6>
-              <el-radio class="info-radio" v-model="form.plan" label="1">方案1</el-radio>
-              <el-radio class="info-radio" v-model="form.plan" label="2">方案2</el-radio>
-              <el-radio class="info-radio" v-model="form.plan" label="3">方案3</el-radio>
-            </el-row>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row" v-if="form.isHaveDeposit" type="flex" justify="start" align="middle"
-          :gutter="10">
-          <el-col :span="7">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">定金</h6>
-              <el-input placeholder="选择事件" class="purchase-order-input_select"
-                v-model="triggerEvent[form.deposit.event]" :disabled="false" @focus="" size="mini">
-                <template slot="prepend">事件</template>
-                <el-select slot="append" v-model="form.deposit.event" placeholder="请选择">
-                  <template v-for="(value,key) in triggerEvent">
-                    <el-option :label="value" :value="key"></el-option>
-                  </template>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="6">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2">后</h6>
-              <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.deposit.time"
-                :disabled="false" size="mini">
-                <template slot="prepend">时长</template>
-                <el-select slot="append" v-model="form.deposit.time" placeholder="请选择">
-                  <el-option label="5" :value="5"></el-option>
-                  <el-option label="7" :value="7"></el-option>
-                  <el-option label="15" :value="15"></el-option>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="4">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2">天</h6>
-              <el-input class="purchase-order-input_select" v-model="triggerType[form.deposit.range]" :disabled="false"
-                size="mini">
-                <el-select slot="append" v-model="form.deposit.range">
-                  <template v-for="(value,key) in triggerType">
-                    <el-option :label="value" :value="key"></el-option>
-                  </template>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="7">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
-              <el-input class="purchase-order-input_select" v-model="form.deposit.percent*100+'%'" :disabled="false"
-                size="mini">
-                <template slot="prepend">金额比例</template>
-                <el-select slot="append" v-model="form.deposit.percent">
-                  <el-option label="0%" :value="0"></el-option>
-                  <el-option label="10%" :value="0.1"></el-option>
-                  <el-option label="20%" :value="0.2"></el-option>
-                  <el-option label="30%" :value="0.3"></el-option>
-                  <el-option label="40%" :value="0.4"></el-option>
-                  <el-option label="50%" :value="0.5"></el-option>
-                  <el-option label="60%" :value="0.6"></el-option>
-                  <el-option label="70%" :value="0.7"></el-option>
-                  <el-option label="80%" :value="0.8"></el-option>
-                  <el-option label="90%" :value="0.9"></el-option>
-                  <el-option label="100%" :value="1"></el-option>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row" v-if="form.payPlanType!='MONTHLY_SETTLEMENT'" type="flex" justify="start"
-          align="middle" :gutter="10">
-          <el-col :span="7">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">第1期尾款</h6>
-              <el-input placeholder="选择事件" class="purchase-order-input_select"
-                v-model="triggerEvent[form.balance1.event]" :disabled="false" size="mini">
-                <template slot="prepend">事件</template>
-                <el-select slot="append" v-model="form.balance1.event" placeholder="请选择">
-                  <template v-for="(value,key) in triggerEvent">
-                    <el-option :label="value" :value="key"></el-option>
-                  </template>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="6">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2">后</h6>
-              <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.balance1.time"
-                :disabled="false" size="mini">
-                <template slot="prepend">时长</template>
-                <el-select slot="append" v-model="form.balance1.time" placeholder="请选择">
-                  <el-option label="5" :value="5"></el-option>
-                  <el-option label="7" :value="7"></el-option>
-                  <el-option label="15" :value="15"></el-option>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="4">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2">天</h6>
-              <el-input class="purchase-order-input_select" v-model="triggerType[form.balance1.range]" :disabled="false"
-                size="mini">
-                <el-select slot="append" v-model="form.balance1.range">
-                  <template v-for="(value,key) in triggerType">
-                    <el-option :label="value" :value="key"></el-option>
-                  </template>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="7">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
-              <el-input class="purchase-order-input_select" v-model="form.balance1.percent*100+'%'" :disabled="false"
-                size="mini">
-                <template slot="prepend">金额比例</template>
-                <el-select slot="append" v-model="form.balance1.percent">
-                  <el-option label="0%" :value="0"></el-option>
-                  <el-option label="10%" :value="0.1"></el-option>
-                  <el-option label="20%" :value="0.2"></el-option>
-                  <el-option label="30%" :value="0.3"></el-option>
-                  <el-option label="40%" :value="0.4"></el-option>
-                  <el-option label="50%" :value="0.5"></el-option>
-                  <el-option label="60%" :value="0.6"></el-option>
-                  <el-option label="70%" :value="0.7"></el-option>
-                  <el-option label="80%" :value="0.8"></el-option>
-                  <el-option label="90%" :value="0.9"></el-option>
-                  <el-option label="100%" :value="1"></el-option>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row" v-if="form.payPlanType=='PHASETWO'" type="flex" justify="start" align="middle"
-          :gutter="10">
-          <el-col :span="7">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">第2期尾款</h6>
-              <el-input placeholder="选择事件" class="purchase-order-input_select"
-                v-model="triggerEvent[form.balance2.event]" :disabled="false" size="mini">
-                <template slot="prepend">事件</template>
-                <el-select slot="append" v-model="form.balance2.event" placeholder="请选择">
-                  <template v-for="(value,key) in triggerEvent">
-                    <el-option :label="value" :value="key"></el-option>
-                  </template>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="6">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2">后</h6>
-              <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="form.balance2.time"
-                :disabled="false" size="mini">
-                <template slot="prepend">时长</template>
-                <el-select slot="append" v-model="form.balance2.time" placeholder="请选择">
-                  <el-option label="5" :value="5"></el-option>
-                  <el-option label="7" :value="7"></el-option>
-                  <el-option label="15" :value="15"></el-option>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="4">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2">天</h6>
-              <el-input class="purchase-order-input_select" v-model="triggerType[form.balance2.range]" :disabled="false"
-                size="mini">
-                <el-select slot="append" v-model="form.balance2.range">
-                  <template v-for="(value,key) in triggerType">
-                    <el-option :label="value" :value="key"></el-option>
-                  </template>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="7">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
-            </el-row>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row" v-if="form.payPlanType=='MONTHLY_SETTLEMENT'" type="flex" justify="start"
-          align="middle" :gutter="10">
-          <el-col :span="7">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">月结</h6>
-              <el-input placeholder="选择事件" class="purchase-order-input_select"
-                v-model="triggerEvent[form.monthBalance.event]" :disabled="false" size="mini">
-                <template slot="prepend">事件</template>
-                <el-select slot="append" v-model="form.monthBalance.event" placeholder="请选择">
-                  <template v-for="(value,key) in triggerEvent">
-                    <el-option :label="value" :value="key"></el-option>
-                  </template>
-                </el-select>
-              </el-input>
-            </el-row>
-          </el-col>
-          <el-col :span="12">
-            <el-row type="flex" align="middle" justify="start">
-              <h6 class="info-input-prepend2" style="width: 200px">后, 次月月底支付剩余全部款项</h6>
-            </el-row>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row">
-          <form-label label="人员设置" />
-        </el-row>
-        <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
-          <el-col :span="24">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend" style="width:45px">跟单员</h6>
-              <el-select v-model="form.QC" placeholder="请选择" :disabled="false">
-                <el-option label="采购部-刘少立" value="确认订单"></el-option>
-                <el-option label="采购部-刘少立" value="签署合同"></el-option>
-                <el-option label="采购部-刘少立" value="确认收货"></el-option>
-                <el-option label="采购部-刘少立" value="确认对账"></el-option>
-                <el-option label="采购部-刘少立 " value="收到发票 "></el-option>
-              </el-select>
-            </el-row>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
-          <el-col :span="24">
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend" style="width:45px">结果预览</h6>
-              <el-input type="textarea" autosize v-model="resultPreview" />
-              </el-input>
-            </el-row>
-          </el-col>
-        </el-row>
-        <el-row class="info-order-row">
-          <form-label label="备注及附件" />
-        </el-row>
-        <el-row class="info-order-row" type="flex" justify="start" align="top">
-          <h6 class="info-input-prepend" style="width:45px">备注</h6>
-          <el-input type="textarea" :rows="3" placeholder="请输入备注留言..." v-model="form.remarks">
-          </el-input>
-        </el-row>
-        <el-row>
-          <images-upload class="order-purchase-upload" :slot-data="form.attachments" />
-        </el-row>
-        <el-row type="flex" justify="center" class="info-order-row">
-          <el-button class="info-order-submit" @click="onSubmit()">确认创建</el-button>
-        </el-row>
-      </div>
+          <el-row type="flex" justify="center" class="info-order-row">
+            <el-button class="info-order-submit" @click="onSubmit()">确认创建</el-button>
+          </el-row>
+        </div>
+      </el-form>
     </el-card>
   </div>
 </template>
@@ -624,32 +627,37 @@
           colorsSet.add(varaint.color.name);
           variants.push(item);
         });
-        var entry = {
-          thumbnail: product.thumbnail,
-          name: product.name,
-          code: product.code,
-          variants: variants,
-          sizes: sizesSet,
-          colors: colorsSet,
-          unitPrice: '',
-          expectedDeliveryDate: '',
-          cooperationMode: '',
-          fare: '',
-          invoice: true,
-          invoicePercent: '',
-          address: {
-            city: '',
-            cityDistrict: '',
-            region: '',
-            line1: '',
-            fullname: '',
-            cellphone: ''
-          },
-          cities: [],
-          cityDistricts: [],
-        };
-        this.form.entries.pop();
-        this.form.entries.push(entry);
+        // var entry = {
+        //   thumbnail: product.thumbnail,
+        //   name: product.name,
+        //   code: product.code,
+        //   variants: variants,
+        //   sizes: sizesSet,
+        //   colors: colorsSet,
+        //   unitPrice: '',
+        //   expectedDeliveryDate: '',
+        //   machiningTypes: '',
+        //   freightPayer: '',
+        //   invoice: true,
+        //   invoicePercent: '',
+        //   address: {
+        //     city: '',
+        //     cityDistrict: '',
+        //     region: '',
+        //     line1: '',
+        //     fullname: '',
+        //     cellphone: ''
+        //   },
+        //   cities: [],
+        //   cityDistricts: [],
+        // };
+        this.$set(this.form.entries[this.currentProductIndex], 'thumbnail', product.thumbnail);
+        this.$set(this.form.entries[this.currentProductIndex], 'name', product.name);
+        this.$set(this.form.entries[this.currentProductIndex], 'code', product.code);
+        this.$set(this.form.entries[this.currentProductIndex], 'variants', variants);
+        this.$set(this.form.entries[this.currentProductIndex], 'sizes', sizesSet);
+        this.$set(this.form.entries[this.currentProductIndex], 'colors', colorsSet);
+        // this.form.entries.splice(this.currentProductIndex, 1, entry);
         this.productSelectVisible = false;
       },
       getVariant(color, size, variants) {
@@ -665,7 +673,24 @@
         this.productSelectVisible = !this.productSelectVisible;
       },
       addRow() {
-        this.form.entries.push('');
+        this.form.entries.push({
+          unitPrice: '',
+          expectedDeliveryDate: '',
+          machiningTypes: '',
+          freightPayer: '',
+          invoice: true,
+          invoicePercent: 0.03,
+          address: {
+            city: '',
+            cityDistrict: '',
+            region: '',
+            line1: '',
+            fullname: '',
+            cellphone: ''
+          },
+          cities: [],
+          cityDistricts: [],
+        });
       },
       removeRow(index) {
         this.form.entries.splice(index, 1);
@@ -790,21 +815,25 @@
             contactOfSeller: this.form.contactOfSeller,
             contactPersonOfSeller: this.form.contactPersonOfSeller,
             deliveryAddress: element.address,
-            freightPayer: 'PARTYA',
-            machiningType: 'LABOR_AND_MATERIAL',
-            invoiceTaxPoint: 0.3,
+            freightPayer: element.freightPayer,
+            machiningType: element.machiningTypes,
+            invoiceTaxPoint: element.invoicePercent,
             invoiceNeeded: true,
             unitPrice: element.unitPrice,
             entries: entries,
+            expectedDeliveryDate: element.expectedDeliveryDate,
             payPlan: {
-              name: '1',
+              name: Date.now.toString,
               payPlanType: this.form.payPlanType,
               isHaveDeposit: this.form.isHaveDeposit,
               payPlanItems: payPlanItems
             },
             attachments: this.form.attachments,
             remarks: this.form.remarks,
-            salesApplication: 'BELOW_THE_LINE'
+            salesApplication: 'BELOW_THE_LINE',
+            // supplier: {
+            //   uid: ''
+            // }
           };
           //提交数据
           const url = this.apis().createOfflinePurchaseOrder();
@@ -826,11 +855,11 @@
         }
         this.onProductSelect(result);
       },
-      onSuppliersSelect(val){
-        this.suppliersSelectVisible=false;
-        this.form.companyOfSeller=val.name;
-        this.form.contactPersonOfSeller=val.contactPerson;
-        this.form.contactOfSeller=val.contactPhone;
+      onSuppliersSelect(val) {
+        this.suppliersSelectVisible = false;
+        this.form.companyOfSeller = val.name;
+        this.form.contactPersonOfSeller = val.contactPerson;
+        this.form.contactOfSeller = val.contactPhone;
       }
     },
     data() {
@@ -870,16 +899,16 @@
           'OUTSIDE': '以外'
         },
         invoicePercent: [{
+            label: '3%税点',
+            value: 0.03
+          },
+          {
             label: '6%税点',
-            value: '1'
+            value: 0.06
           },
           {
-            label: '8%税点',
-            value: '2'
-          },
-          {
-            label: '11%税点',
-            value: '3'
+            label: '13%税点',
+            value: 0.13
           }
         ],
         form: {
@@ -888,7 +917,24 @@
           productBrandName: "",
           productSKU: "",
           remarks: "",
-          entries: [''],
+          entries: [{
+            unitPrice: '',
+            expectedDeliveryDate: '',
+            machiningTypes: '',
+            freightPayer: '',
+            invoice: true,
+            invoicePercent: 0.03,
+            address: {
+              city: '',
+              cityDistrict: '',
+              region: '',
+              line1: '',
+              fullname: '',
+              cellphone: ''
+            },
+            cities: [],
+            cityDistricts: [],
+          }],
           contactPersonOfSeller: '',
           contactOfSeller: '',
           isHaveDeposit: false,
@@ -916,10 +962,30 @@
             event: 'ORDER_CONFIRMED',
           },
           QC: this.$store.getters.currentUser.username,
-          attachments: []
+          attachments: [],
+          // supplier: {
+          //   uid: ''
+          // }
         },
         isAgain: this.$route.params.isAgain,
-        againData: this.$route.params.data
+        againData: this.$route.params.data,
+        rules: {
+          companyOfSeller: [{
+            required: true,
+            message: '请填写合作商名称',
+            trigger: 'blur'
+          }, ],
+          contactPersonOfSeller: [{
+            required: true,
+            message: '请填写联系人名称',
+            trigger: 'blur'
+          }, ],
+          contactOfSeller: [{
+            required: true,
+            message: '请填写联系方式',
+            trigger: 'blur'
+          }, ],
+        }
       }
     },
     created() {
@@ -934,7 +1000,24 @@
           productBrandName: "",
           productSKU: "",
           remarks: this.againData.remarks,
-          entries: [''],
+          entries: [{
+            unitPrice: '',
+            expectedDeliveryDate: '',
+            machiningTypes: '',
+            freightPayer: '',
+            invoice: true,
+            invoicePercent: 0.03,
+            address: {
+              city: '',
+              cityDistrict: '',
+              region: '',
+              line1: '',
+              fullname: '',
+              cellphone: ''
+            },
+            cities: [],
+            cityDistricts: [],
+          }],
           contactPersonOfSeller: this.againData.contactPersonOfSeller,
           contactOfSeller: this.againData.contactOfSeller,
           isHaveDeposit: false,
@@ -1142,6 +1225,19 @@
   .order-purchase-upload .el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
+  }
+
+  .purchase-form-item small.el-form-item {
+    margin-bottom: 0px !important;
+  }
+
+  .purchase-form-item .el-form-item--mini.el-form-item,
+  .el-form-item--small.el-form-item {
+    margin-bottom: 0px !important;
+  }
+
+  .purchase-form-item .el-form-item__error {
+    padding-left: 70px !important;
   }
 
 </style>

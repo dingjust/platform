@@ -21,11 +21,6 @@
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">联系方式</h6>
           <el-input placeholder="输入手机号" v-model="form.consignorPhone" size="mini">
-            <el-select v-model="form.consignorPhone" slot="append" placeholder="请选择">
-              <el-option label="123" value="123"></el-option>
-              <el-option label="1234" value="1234"></el-option>
-              <el-option label="1324" value="1324"></el-option>
-            </el-select>
           </el-input>
         </el-row>
       </el-col>
@@ -277,14 +272,14 @@
         mockData: [],
         carriers:[],
         form: {
-          consignorName: "",
-          consignorPhone: "",
+          consignorName:  this.$store.getters.currentUser.username,
+          consignorPhone: this.$store.getters.currentUser.mobileNumber,
           isOfflineConsignment: false,
-          consigneeName: "",
-          consigneePhone: "",
-          consigneeAddress: "",
-          brand: "",
-          skuID: "",
+          consigneeName: this.slotData.deliveryAddress.fullname,
+          consigneePhone: this.slotData.deliveryAddress.cellphone,
+          consigneeAddress: this.slotData.deliveryAddress.details,
+          brand:  this.slotData.product.brand,
+          skuID: this.slotData.product.skuID,
           remarks: "",
           imperfectionsNum: '',
           returnNum: '',
