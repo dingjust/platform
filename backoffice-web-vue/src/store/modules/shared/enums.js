@@ -1,66 +1,66 @@
 const state = {
 
-  //流水来源
+  // 流水来源
   flowSources: [
     {code: 'CASH_OUT', name: '提现'},
     {code: 'PROOFING', name: '生产中'},
     {code: 'PURCHASE_DEPOSIT', name: '待出库'},
-    {code: 'PURCHASE_BALANCE', name: '已出库'},
+    {code: 'PURCHASE_BALANCE', name: '已出库'}
   ],
-  //资金流水类型
+  // 资金流水类型
   amountFlowTypes: [
     {code: 'INFLOW', name: '流入'},
-    {code: 'OUTFLOW', name: '流出'},
+    {code: 'OUTFLOW', name: '流出'}
   ],
-  //资金状态
+  // 资金状态
   amountStatuses: [
     {code: 'AUDITING', name: '未结算'},
     {code: 'COMPLETED', name: '已完成'},
     {code: 'CANCELED', name: '已取消'},
     {code: 'REJECTED', name: '已拒绝'},
     {code: 'IN_REVIEW', name: '审核中'},
-    {code: 'REVIEWED', name: '已审核'},
+    {code: 'REVIEWED', name: '已审核'}
   ],
-  //工厂星级
+  // 工厂星级
   starLevels: [
     {code: 1, name: '一星'},
     {code: 2, name: '两星'},
     {code: 3, name: '三星'},
     {code: 4, name: '四星'},
-    {code: 5, name: '五星'},
+    {code: 5, name: '五星'}
   ],
-  //轮播图类型
+  // 轮播图类型
   carouselGroups: [
     {code: 'B2B', name: 'B2B'},
-    {code: 'C2B', name: 'C2B'},
+    {code: 'C2B', name: 'C2B'}
   ],
 
-  //轮播图类型
+  // 轮播图类型
   carouselTypes: [
     {code: 'CT001', name: '首页'},
     {code: 'CT002', name: '工厂首页'},
-    {code: 'CT003', name: '品牌首页'},
+    {code: 'CT003', name: '品牌首页'}
   ],
 
-  //生产进度类型
+  // 生产进度类型
   productionProgressPhaseTypes: [
     {code: 'MATERIAL_PREPARATION', name: '备料'},
     {code: 'CUTTING', name: '裁剪'},
     {code: 'STITCHING', name: '车缝'},
     {code: 'AFTER_FINISHING', name: '后整'},
-    {code: 'INSPECTION', name: '验货'},
+    {code: 'INSPECTION', name: '验货'}
   ],
-  //样衣借还类型
+  // 样衣借还类型
   sampleCheckoutTypes: [
     {code: 'BORROW', name: '借入'},
-    {code: 'LEND', name: '借出'},
+    {code: 'LEND', name: '借出'}
   ],
-  //样衣借还状态
+  // 样衣借还状态
   returnStates: [
     {code: 'NOT_RETURNED', name: '未还'},
-    {code: 'RETURNED', name: '已还'},
+    {code: 'RETURNED', name: '已还'}
   ],
-  //需求订单状态
+  // 需求订单状态
   requirementOrderStatuses: [
     {code: 'PENDING_QUOTE', name: '报价中'},
     {code: 'COMPLETED', name: '已完成'},
@@ -71,7 +71,7 @@ const state = {
     COMPLETED: 1,
     CANCELLED: 1
   },
-  //生产订单状态
+  // 生产订单状态
   purchaseOrderStatuses: [
     {code: 'PENDING_CONFIRM', name: '待确认'},
     {code: 'PENDING_PAYMENT', name: '待付款'},
@@ -81,15 +81,15 @@ const state = {
     {code: 'COMPLETED', name: '已完成'},
     {code: 'CANCELLED', name: '已取消'},
     {code: 'UNCOMMITTED', name: '未提交'},
-    {code: 'APPROVED', name: '未提交'},
+    {code: 'APPROVED', name: '未提交'}
   ],
-  //打样订单状态
+  // 打样订单状态
   proofingOrderStatuses: [
     {code: 'PENDING_PAYMENT', name: '待付款'},
     {code: 'PENDING_DELIVERY', name: '待发货'},
     {code: 'SHIPPED', name: '已发货'},
     {code: 'COMPLETED', name: '已完成'},
-    {code: 'CANCELLED', name: '已取消'},
+    {code: 'CANCELLED', name: '已取消'}
   ],
   salesOrderStatuses: [
     {code: 'PENDING_PAYMENT', name: '待付款'},
@@ -103,7 +103,7 @@ const state = {
     'SHIPPED': 2,
     'COMPLETED': 3
   },
-  //报价单状态
+  // 报价单状态
   quoteStates: [
     {code: 'SELLER_SUBMITTED', name: '待处理'},
     {code: 'BUYER_APPROVED', name: '通过'},
@@ -148,7 +148,7 @@ const state = {
     {code: 'FG0020', name: '街头'},
     {code: 'FG0021', name: '户外'},
     {code: 'FG0022', name: '波西米亚'},
-    {code: 'FG0023', name: '工装'},
+    {code: 'FG0023', name: '工装'}
   ],
   // 面料成分
   fabricCompositions: [
@@ -316,7 +316,7 @@ const state = {
     {code: 'N03', name: '101到200人'},
     {code: 'N04', name: '200人以上'}
   ],
-  //合同状态
+  // 合同状态
   contractStates: [
     {code: 'INITIATE', name: '待签署'},
     {code: 'COMPLETE', name: '已签署'},
@@ -324,24 +324,66 @@ const state = {
     {code: 'PARTY_A_SIGN', name: '待甲方签署'},
     {code: 'PARTY_B_SIGN', name: '待乙方签署'}
   ],
-  //印章状态
+  // 印章状态
   sealStates: [
     {code: 'NORMAL', name: '正常'},
-    {code: 'DISABLING', name: '禁用'},
+    {code: 'DISABLING', name: '禁用'}
   ],
-  //订单类型
-  salesApplication:[
+  // 订单类型
+  salesApplication: [
     {code: 'BELOW_THE_LINE', name: '线下订单'},
-    {code: 'ONLINE', name: '线上订单'},
+    {code: 'ONLINE', name: '线上订单'}
   ],
-  //模板类型
+  // 模板类型
   TemplateType: [
     {code: 'BCXY', name: '补充协议'},
     {code: 'WTSCHT', name: '委托生产合同'},
     {code: 'CGDD', name: '采购订单'},
-    {code: 'KJXY', name: '框架协议'},
+    {code: 'KJXY', name: '框架协议'}
   ],
-
+  // 支付类型
+  PaymentType: [
+    {code: 'PARTPAID', name: '部分付款'},
+    {code: 'ALLPAID', name: '全部付款'}
+  ],
+  ReceiptType: [
+    {code: 'PARTPAID', name: '部分收款'},
+    {code: 'ALLPAID', name: '全部收款'}
+  ],
+  // 账期支付方式
+  PayPlanType: [
+    {
+      code: 'PHASEONE',
+      name: '一期款'
+    },
+    {
+      code: 'PHASETWO',
+      name: '二期款'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT',
+      name: '月结'
+    }
+  ],
+  // 账期支付类型
+  PayMoneyType: [
+    {
+      code: 'DEPOSIT',
+      name: '定金'
+    },
+    {
+      code: 'PHASEONE',
+      name: '一期款'
+    },
+    {
+      code: 'PHASETWO',
+      name: '二期款'
+    },
+    {
+      code: 'MONTHLY_SETTLEMENT',
+      name: '月结'
+    }
+  ]
 };
 
 const mutations = {};

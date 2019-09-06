@@ -315,9 +315,9 @@ const COMMON_APIS = {
   createPurchaseOrderOfQuote(quote) {
     return '/b2b/orders/purchase/create/' + quote;
   },
-  //创建部分发货单
+  //创建发货单
   createShippingOrder(code) {
-    return '/b2b/orders/purchase/' + code + '/createShippingOrder';
+    return '/b2b/orders/purchase/'+code+'/createShippingOrder';
   },
   //创建全部发货单
   confirmShipping(code) {
@@ -399,6 +399,24 @@ const COMMON_APIS = {
   getBill(id) {
     return '/b2b/bill/' + id;
   },
+  createPaymentOrder (id) {
+    return 'b2b/orders/purchase/confirmPayment/' + id;
+  },
+  updatePaymentOrder () {
+    return 'b2b/orders/purchase/updatePaymentOrder';
+  },
+  deletePaymentOrder (id) {
+    return 'b2b/orders/purchase/deletePaymentOrder/' + id;
+  },
+  createReceiptOrder (id) {
+    return 'b2b/orders/purchase/confirmReceipt/' + id;
+  },
+  updateReceiptOrder () {
+    return 'b2b/orders/purchase/updateReceiptOrder';
+  },
+  deleteReceiptOrder (id) {
+    return 'b2b/orders/purchase/deleteReceiptOrder/' + id;
+  },
 };
 
 let TENANT_APIS = {
@@ -447,7 +465,7 @@ let TENANT_APIS = {
   findBills() {
     return '/b2b/bill/all'
   },
-  getContractsList() {
+  getContractsList () {
     return '/b2b/user/agreement/list';
   },
   getContractDetail(code) {
@@ -456,44 +474,44 @@ let TENANT_APIS = {
   getSeals() {
     return '/b2b/user/seal/list';
   },
-  getTemplatesListPt() {
+  getTemplatesListPt () {
     return '/b2b/agreement/temp/list';
   },
-  getTemplates(code) {
+  getTemplates (code) {
     return '/b2b/user/agreement/temp/get/' + code;
   },
-  getTemplatesList() {
+  getTemplatesList () {
     return '/b2b/user/agreement/temp/list';
   },
-  saveTemplate() {
+  saveTemplate () {
     return '/b2b/user/agreement/temp/save';
   },
-  deleteTemplate(code) {
-    return '/b2b/user/agreement/temp/delete/' + code;
+  deleteTemplate (code) {
+    return '/b2b/user/agreement/temp/delete/'+code;
   },
-  saveSeal() {
+  saveSeal () {
     return '/b2b/user/seal/save';
   },
-  delSeal(code) {
-    return '/b2b/user/seal/delete/' + code;
+  delSeal (code) {
+    return '/b2b/user/seal/delete/'+code;
   },
-  saveContract() {
+  saveContract () {
     return '/b2b/user/agreement/save';
   },
-  saveContract() {
+  saveContract () {
     return '/b2b/user/agreement/save';
   },
-  personalAuthentication() {
+  personalAuthentication(){
     return '/b2b/fdd/api/save/personal/verify/data';
   },
-  enterpriseAuthentication() {
-    return '/b2b/fdd/api/save/enterprise/verify/data';
+  enterpriseAuthentication(){
+    return  '/b2b/fdd/api/save/enterprise/verify/data';
   },
-  getAuthenticationState() {
-    return '/b2b/cert/state';
+  getAuthenticationState(){
+    return  '/b2b/cert/state';
   },
-  getAuthenticationInfo() {
-    return '/b2b/cert/personal/cert/info';
+  getAuthenticationInfo(){
+    return  '/b2b/cert/personal/cert/info';
   },
   getAuthenticationEnterprise() {
     return '/b2b/cert/enterprise/cert/info';
@@ -560,53 +578,53 @@ let NONE_TENANT_APIS = {
   getWallet() {
     return '/b2b/companyWallet';
   },
-  getContractsList() {
+  getContractsList () {
     return '/b2b/user/agreement/list';
   },
-  getSealsList() {
+  getSealsList () {
     return '/b2b/user/seal/list';
   },
-  getTemplatesListPt() {
+  getTemplatesListPt () {
     return '/b2b/agreement/temp/list';
   },
-  getTemplates(code) {
-    return '/b2b/user/agreement/temp/get/' + code;
+  getTemplates (code) {
+    return '/b2b/user/agreement/temp/get/'+code;
   },
-  getTemplatesList() {
+  getTemplatesList () {
     return '/b2b/user/agreement/temp/list';
   },
-  saveTemplate() {
+  saveTemplate () {
     return '/b2b/user/agreement/temp/save';
   },
-  deleteTemplate(code) {
-    return '/b2b/user/agreement/temp/delete/' + code;
+  deleteTemplate (code) {
+    return '/b2b/user/agreement/temp/delete/'+code;
   },
-  saveSeal() {
+  saveSeal () {
     return '/b2b/user/seal/save';
   },
-  delSeal(code) {
-    return '/b2b/user/seal/delete/' + code;
+  delSeal (code) {
+    return '/b2b/user/seal/delete/'+code;
   },
-  saveContract() {
+  saveContract () {
     return '/b2b/user/agreement/save';
   },
-  downContract(code) {
-    return '/b2b/user/agreement/get/download/token/' + code;
+  downContract(code){
+    return '/b2b/user/agreement/get/download/token/'+code;
   },
   flowContract(code, sealCode) {
     return '/b2b/user/agreement/start/flow/' + code + '?sealCode=' + sealCode;
   },
-  personalAuthentication() {
+  personalAuthentication(){
     return '/b2b/fdd/api/save/personal/verify/data';
   },
-  enterpriseAuthentication() {
-    return '/b2b/fdd/api/save/enterprise/verify/data';
+  enterpriseAuthentication(){
+    return  '/b2b/fdd/api/save/enterprise/verify/data';
   },
-  getAuthenticationState() {
-    return '/b2b/cert/state';
+  getAuthenticationState(){
+    return  '/b2b/cert/state';
   },
-  getAuthenticationInfo() {
-    return '/b2b/cert/personal/cert/info';
+  getAuthenticationInfo(){
+    return  '/b2b/cert/personal/cert/info';
   },
   getAuthenticationEnterprise() {
     return '/b2b/cert/enterprise/cert/info';

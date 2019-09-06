@@ -18,20 +18,19 @@
 
   const {mapActions} = createNamespacedHelpers('PurchaseOrdersModule');
 
-  import PurchaseOrderFormToolbar from "../toolbar/PurchaseOrderFormToolbar";
+  import PurchaseOrderFormToolbar from '../toolbar/PurchaseOrderFormToolbar';
   import PurchaseOrderForm from '../form/PurchaseOrderForm';
   import PurchaseOrderInfo from '../info/PurchaseOrderInfo';
-
 
   export default {
     name: 'PurchaseOrderDetailsPage',
     props: ['slotData'],
-    components: {PurchaseOrderFormToolbar, PurchaseOrderForm,PurchaseOrderInfo},
+    components: {PurchaseOrderFormToolbar, PurchaseOrderForm, PurchaseOrderInfo},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
-      async onSubmit() {
+      async onSubmit () {
         // console.log("submitted data: " + JSON.stringify(this.slotData));
 
         const expectedDeliveryDate = this.slotData.expectedDeliveryDate;
@@ -57,10 +56,10 @@
 
         this.fn.closeSlider();
       },
-      onCancel() {
+      onCancel () {
         this.fn.closeSlider();
       },
-      confirmDelivering() {
+      confirmDelivering () {
 
       }
     },
@@ -69,7 +68,7 @@
         return this.slotData.id === null;
       }
     },
-    data() {
+    data () {
       return {}
     }
   }

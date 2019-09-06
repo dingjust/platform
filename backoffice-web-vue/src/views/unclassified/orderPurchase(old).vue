@@ -225,7 +225,7 @@
                   </el-radio-group>
                 </div>
                 <el-row>
-                  <span>选用我的财务方案：</span>
+                  <span>选用我的账务方案：</span>
                   <el-button type="warning" size="small" plain>方案一</el-button>
                   <el-button type="warning" size="small" plain>方案二</el-button>
                   <el-button type="warning" size="small" plain>方案三</el-button>

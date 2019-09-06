@@ -2,14 +2,16 @@
   <div class="info-main-body">
     <purchase-order-info-detail :slotData="slotData" />
     <purchase-progress :slotData="slotData" />
-    <purchase-order-info-finance :slotData="slotData" />
+    <purchase-order-info-payment-finance :slotData="slotData" v-if="isBrand()"/>
+    <purchase-order-info-receipt-finance :slotData="slotData" v-if="isFactory()"/>
     <purchase-order-info-remarks :slotData="slotData" />
   </div>
 </template>
 
 <script>
   import PurchaseOrderInfoDetail from './PurchaseOrderInfoDetail';
-  import PurchaseOrderInfoFinance from './PurchaseOrderInfoFinance';
+  import PurchaseOrderInfoPaymentFinance from './PurchaseOrderInfoPaymentFinance';
+  import PurchaseOrderInfoReceiptFinance from './PurchaseOrderInfoReceiptFinance';
   import PurchaseOrderInfoRemarks from './PurchaseOrderInfoRemarks';
   import PurchaseProgress from './PurchaseProgress';
 
@@ -18,7 +20,8 @@
     props: ['slotData'],
     components: {
       PurchaseOrderInfoDetail,
-      PurchaseOrderInfoFinance,
+      PurchaseOrderInfoPaymentFinance,
+      PurchaseOrderInfoReceiptFinance,
       PurchaseOrderInfoRemarks,
       PurchaseProgress
     },
