@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn content">
-    <div class="report">
-      <template-report />
-    </div>
+    <!--<div class="report">-->
+      <!--<template-report />-->
+    <!--</div>-->
     <el-card>
       <template-toolbar ref="tempTool" @onNew="onNew" @onSearch="onSearch" class="template-toolbar" />
       <template-list ref="tempList" :page="page" @onDetails="onDetails" @onSearch="onSearch" />

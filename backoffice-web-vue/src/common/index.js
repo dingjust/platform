@@ -478,6 +478,9 @@ let TENANT_APIS = {
   getAuthenticationEnterprise() {
     return '/b2b/cert/enterprise/cert/info';
   },
+  refuseContract(code){
+    return '/b2b/user/agreement/reject/sign/'+code;
+  }
 
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
@@ -588,6 +591,12 @@ let NONE_TENANT_APIS = {
   getAuthenticationEnterprise() {
     return '/b2b/cert/enterprise/cert/info';
   },
+  getContractDetail(code) {
+    return '/b2b/user/agreement/get/' + code;
+  },
+  refuseContract(code){
+    return '/b2b/user/agreement/reject/sign/'+code;
+  }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

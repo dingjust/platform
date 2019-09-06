@@ -1,30 +1,16 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
+    <el-form :inline="true">
+      <el-button class="product-select-btn" @click="onSelected">确定</el-button>
+    </el-form>
+    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight"
+              highlight-current-row @current-change="handleCurrentChange" @selection-change="handleSelectionChange">
       <el-table-column  label="印章" fixed>
         <template slot-scope="scope">
           <img width="100px" height="100px" :src="scope.row.media.url">
         </template>
       </el-table-column>
       <el-table-column label="印章名称" prop="name" width="220" fixed></el-table-column>
-      <el-table-column label="印章编号" prop="code" fixed></el-table-column>
-      <el-table-column label="状态" prop="state" fixed>
-        <template slot-scope="scope">
-          <span>{{ scope.row.enabled?'可用':'不可用'}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" prop="createdTs">
-        <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
-        </template>
-      </el-table-column>
-      <!--<el-table-column label="用印章审批角色" prop="role"  fixed></el-table-column>-->
-      <el-table-column label="操作">
-        <template  slot-scope="props">
-          <!--<el-button type="text" icon="el-icon-edit" @click="on1">编辑</el-button>-->
-          <el-button type="text" icon="el-icon-add" @click="onSelected(props.row)">使用</el-button>
-        </template>
-      </el-table-column>
     </el-table>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
                    @size-change="onPageSizeChanged"
@@ -89,15 +75,19 @@
         this.$refs.resultTable.clearSelection();
       },
       onSelected(item) {
-        if (item.code == this.selectedItem.code) {
-          //空选择
-          this.selectedItem = {};
-        } else {
-          this.selectedItem = item;
+        if(this.selectedItem == '' || this.selectedItem == null){
+          return;
+        }else{
+          this.$emit('onSealSelectChange',this.selectedItem );
         }
-        console.log(this.selectedItem);
-        this.dialogSealVisible=true
-        this.$emit('onSealSelectChange',this.selectedItem );
+
+      },
+      handleSelectionChange(val) {
+        this.selectedItem = val;
+      },
+      //选中行
+      handleCurrentChange(val) {
+        this.selectedItem = val;
       },
     },
     data() {
@@ -107,3 +97,33 @@
     }
   }
 </script>
+<style>
+  .purchase-list-button{
+    color: #FFA403;
+  }
+  .product-info {
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 12px;
+  }
+
+  .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+    background-color: #ffc107;
+  }
+
+  .product-select-btn {
+    width: 70px;
+    height: 30px;
+    background: #FFD60C;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 10px;
+    border-radius: 0px;
+    border: 0px solid #FFD60C;
+    margin-top: 10px;
+  }
+
+  .el-table__body tr.current-row>td {
+    background-color: #ffc107;
+  }
+</style>

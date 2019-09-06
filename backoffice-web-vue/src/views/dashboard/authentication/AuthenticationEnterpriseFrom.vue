@@ -34,19 +34,19 @@
         <el-button type="info" v-if="enterpriseSlotData.role=='LEGAL'" style="width: 120px" disabled >法定代表人</el-button>
       </el-col>
       <el-col :span="12">
-        <el-input size="small" v-model="enterpriseSlotData.username" placeholder="操作人姓名" />
+        <el-input size="small" v-model="enterpriseSlotData.username" placeholder="姓名" />
       </el-col>
     </el-row>
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >
       <el-col :span="3" >
-        <el-button type="info" style="width: 120px" disabled >操作人身份证号</el-button>
+        <el-button type="info" style="width: 120px" disabled >身份证号</el-button>
       </el-col>
       <el-col :span="12">
-        <el-input size="small" v-model="enterpriseSlotData.idCardNum" placeholder="操作人身份证号" />
+        <el-input size="small" v-model="enterpriseSlotData.idCardNum" placeholder="身份证号" />
       </el-col>
     </el-row>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+      <el-button v-if="companyState == 'UNCERTIFIED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
     </el-row>
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">

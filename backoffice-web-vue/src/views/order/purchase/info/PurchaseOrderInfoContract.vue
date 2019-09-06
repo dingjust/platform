@@ -5,7 +5,7 @@
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">合同（待签署）</h6>
+        <h6 class="info-title_text">合同</h6>
       </div>
       <el-button type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同</el-button>
     </el-row>
