@@ -149,6 +149,7 @@
         this.dialogSealVisible=true
       },
       async onSealSelectChange(data) {
+        this.dialogSealVisible = false;
         const sealCode = data.code;
 
         const url = this.apis().flowContract(this.contractCode,sealCode);
