@@ -1,63 +1,57 @@
 <template>
   <div class="uniquecode-form-body">
-    <el-row class="uniquecode-form-title-row">
-      <el-col :span="22" >
-        <h6 >企业认证</h6>
+    <el-form ref="form" label-position="top" :model="enterpriseSlotData" :rules="rules" :disabled="enterpriseReadOnly">
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >企业名称</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-input size="small" v-model="enterpriseSlotData.companyName" placeholder="企业名称" />
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" justify="start" :gutter=3 >
-      <el-col :span="7" :push="2">
-        <el-button type="info" disabled >企业名称</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button style="width: 120px" type="info" disabled >税号</el-button>
       </el-col>
-      <el-col :span="15">
-        <el-input size="small" v-model="companyName" placeholder="企业名称" />
-      </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="3">
-        <el-button type="info" disabled >税号</el-button>
-      </el-col>
-      <el-col :span="15">
-        <el-input size="small" v-model="organization" placeholder="税号" />
+      <el-col :span="12">
+        <el-input size="small" v-model="enterpriseSlotData.organization" placeholder="税号" />
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="1">
-        <el-button type="info" disabled >法定代表人</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >选择办理人身份</el-button>
       </el-col>
-      <el-col :span="15">
-        <el-input size="small" v-model="username" placeholder="法定代表人" />
-      </el-col>
-    </el-row>
-    <el-row class="form-row">
-      <el-col :span="7" >
-        <el-button type="info" disabled >选择办理人身份</el-button>
-      </el-col>
-      <el-col :span="13">
-      <el-radio-group v-model="role"  size="mini">
+      <el-col :span="12">
+      <el-radio-group v-model="enterpriseSlotData.role"  size="mini">
         <el-radio-button style="margin-left: 5px"  label="LEGAL">我是法人</el-radio-button>
         <el-radio-button style="margin-right: 15px " label="AGENT">我是代理人</el-radio-button>
       </el-radio-group>
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="1">
-        <el-button type="info" disabled >操作人姓名</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" v-if="enterpriseSlotData.role=='AGENT'" style="width: 120px" disabled >代理人姓名</el-button>
+        <el-button type="info" v-if="enterpriseSlotData.role=='LEGAL'" style="width: 120px" disabled >法定代表人</el-button>
       </el-col>
-      <el-col :span="15">
-        <el-input size="small" v-model="name" placeholder="操作人姓名" />
+      <el-col :span="12">
+        <el-input size="small" v-model="enterpriseSlotData.username" placeholder="姓名" />
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7">
-        <el-button type="info" disabled >操作人身份证号</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >身份证号</el-button>
       </el-col>
-      <el-col :span="15">
-        <el-input size="small" v-model="idCardNum" placeholder="操作人身份证号" />
+      <el-col :span="12">
+        <el-input size="small" v-model="enterpriseSlotData.idCardNum" placeholder="身份证号" />
       </el-col>
     </el-row>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button style="margin-top: 10px;width: 200px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+      <el-button v-if="companyState == 'UNCERTIFIED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+    </el-row>
+    </el-form>
+    <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
+      <el-button v-if="companyState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
+      <el-button v-if="companyState == 'SUCCESS'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >重新认证</el-button>
     </el-row>
   </div>
 </template>
@@ -66,6 +60,7 @@
   import http from '@/common/js/http';
   export default {
     name: 'AuthenticationEnterpriseFrom',
+    props: ['enterpriseSlotData', 'enterpriseReadOnly','companyState'],
     components: {
 
     },
@@ -75,29 +70,13 @@
     },
     methods: {
       async onSave(){
-        if(this.companyName == null || this.companyName == ''){
-          this.$message.error('企业名称不能为空');
-          return;
-        }else if(this.username == null || this.username == ''){
-          this.$message.error('法人名字不能为空');
-          return;
-        }else if(this.idCardNum == null || this.idCardNum == ''){
-          this.$message.error('法人身份证号不能为空');
-          return;
-        }else if(this.organization == null || this.organization == ''){
-          this.$message.error('税号不能为空');
-          return;
-        }else if(this.name == null || this.name == ''){
-          this.$message.error('操作人姓名不能为空');
-          return;
-        }else{
           const url = this.apis().enterpriseAuthentication();
           const tempData = {
-            companyName: this.companyName,
-            organization: this.organization,
-            role: this.role,
-            username: this.username,
-            idCardNum: this.idCardNum,
+            companyName: this.enterpriseSlotData.companyName,
+            organization: this.enterpriseSlotData.organization,
+            role: this.enterpriseSlotData.role,
+            username: this.enterpriseSlotData.username,
+            idCardNum: this.enterpriseSlotData.idCardNum,
             verifyWay: 'WAY1',
             companyType: 'TYPE1'
           };
@@ -108,18 +87,18 @@
           }else{
             this.$message.success(result.msg);
           }
-        }
 
       }
     },
     data() {
       return {
-        role: "LEGAL",
-        companyName:'',
-        username:'',
-        idCardNum:'',
-        organization:'',
-        name:'',
+        rules: {
+          companyName: [{required: true, message: '必填', trigger: 'blur'}],
+          username: [{required: true, message: '必填', trigger: 'blur'}],
+          idCardNum: [{required: true, message: '必填', trigger: 'blur'}],
+          role: [{required: true, message: '必填', trigger: 'blur'}],
+          organization: [{required: true, message: '必填', trigger: 'blur'}],
+        },
       }
     },
     created() {

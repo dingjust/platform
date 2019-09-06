@@ -4,10 +4,10 @@
       <el-container>
         <el-aside width="150px" class="template-aside">
           <el-row justify="center" type="flex">
-            <h6 class="template-aside_text">订单基础合同范本</h6>
+            <h6 class="template-aside_text">基础合同范本</h6>
           </el-row>
           <el-row :span="3" v-for="(item, index) in mockData" :key="index" :offset="0">
-            <div :class="item.code==selectedCode?'template-file_selected':'template-file'" @click="onSelect(item)">
+            <div class="template-file" @click="onSelect(item)">
               <div class="template-ban" v-show="item.baned">
                 <i class="el-icon-remove template-ban_icon"></i>
               </div>
@@ -166,7 +166,8 @@
           type:'',
           available:'',
           originalTmplCode: '',
-          remark: ''
+          remark: '',
+          header:'',
         },
       };
     },

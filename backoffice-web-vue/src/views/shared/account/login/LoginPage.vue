@@ -38,8 +38,8 @@
     name: 'LoginPage',
     data() {
       return {
-        username: '13631450151',
-        password: '123456'
+        username: '',
+        password: ''
       }
     },
     created(){

@@ -3,34 +3,32 @@
     <el-row type="flex" justify="space-between" align="middle">
       <el-col :span="4">
         <div class="grid-head">
-          <h6>合同文件</h6>
+          <h6>生产订单</h6>
         </div>
       </el-col>
       <el-col :span="4">
         <div class="purchase-grid-content">
-          <h5>待签署 6</h5>
+          <h5>历史订单 6</h5>
         </div>
       </el-col>
       <el-col :span="4">
         <div class="purchase-grid-content">
-          <h5>已完成 6</h5>
+          <h5>生产总款数 6</h5>
         </div>
       </el-col>
       <el-col :span="4">
         <div class="purchase-grid-content">
-          <h5>已作废 6</h5>
+          <h5>生产总收入 6</h5>
         </div>
       </el-col>
       <el-col :span="4">
         <div class="purchase-grid-content">
-          <h5>合同总数 51</h5>
+          <h5>准交率 51</h5>
         </div>
       </el-col>
-      <el-col :span="4">
-        <div class="grid-tail">
-          <el-link type="warning">
-            <h6>了解电子合同</h6>
-          </el-link>
+         <el-col :span="4">
+        <div class="purchase-grid-content">
+          <h5>平均生产时间内 51h</h5>
         </div>
       </el-col>
     </el-row>

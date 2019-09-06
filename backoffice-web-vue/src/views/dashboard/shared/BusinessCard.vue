@@ -26,7 +26,7 @@
           </div>
         </el-row>
         <el-row class="dashboard-row">
-          <div class="dashboard-title2">
+          <div class="dashboard-title">
             <h6 class="dashboard-title_text">合同</h6>
           </div>
         </el-row>
@@ -75,8 +75,8 @@
           </div>
         </el-row>
         <el-row class="dashboard-row">
-          <div class="dashboard-title2">
-            <h6 class="dashboard-title_text">账务</h6>
+          <div class="dashboard-title">
+            <h6 class="dashboard-title_text">财务</h6>
           </div>
         </el-row>
         <el-row  type="flex" justify="space-between" align="middle">
@@ -151,7 +151,7 @@
 
   .dashboard-content {
     width: 100%;
-    border-left: 2px solid #FFE373;
+    /* border-left: 2px solid #FFE373; */
     padding-left: 10px;
     /* height: 14px; */
   }
@@ -159,7 +159,7 @@
   .dashboard-content_text {
     font-size: 26px;
     font-weight: bold;
-    color: rgba(0, 0, 0, 0.65);
+    color: rgba(255,164,3,0.85);
     margin-bottom: 5px !important;
   }
 

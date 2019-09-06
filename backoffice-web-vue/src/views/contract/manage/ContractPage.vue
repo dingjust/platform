@@ -1,9 +1,11 @@
 <template>
   <div class="animated fadeIn content">
-
-    <div class="report">
-      <contract-report />
-    </div>
+    <el-dialog :visible.sync="dialogTableVisible" width="80%">
+      <contract-details  :slotData="contractData" />
+    </el-dialog>
+    <!--<div class="report">-->
+      <!--<contract-report />-->
+    <!--</div>-->
     <el-card>
       <el-row>
         <el-col :span="2">
@@ -31,6 +33,7 @@
   import {
     createNamespacedHelpers
   } from "vuex";
+  import ContractDetails from "./components/ContractDetails";
 
   const {
     mapGetters,
@@ -53,7 +56,8 @@
       ContractToolbar,
       ContractSearchResultList,
       ContractReport,
-      TabLabelBubble
+      TabLabelBubble,
+      ContractDetails,
     },
     provide:{
         onSearch: this.onSearch
@@ -101,8 +105,10 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-
+        console.log(result);
         // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
+        this.contractData = result.data;
+        this.dialogTableVisible = true;
       },
       onNew(formData) {
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
@@ -132,7 +138,8 @@
         formData: this.$store.state.PurchaseOrdersModule.formData,
         activeName: "全部",
         contractStatues: ["全部", "待签署", "待回签", "已完成", "已作废"],
-
+        dialogTableVisible:false,
+        contractData:'',
       };
     },
     created() {

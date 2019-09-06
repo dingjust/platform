@@ -6,12 +6,16 @@
       </div>
     </el-row>
     <el-row type="flex" justify="space-between" align="center" class="info-row">
-      <orders-info-item :slotData="'品牌跟单员'">刘少力（采购）</orders-info-item>
-            <orders-info-item :slotData="'联系电话'">15521163784</orders-info-item>
+      <orders-info-item :slotData="'品牌跟单员'">{{slotData.brandOperator!=null?slotData.brandOperator.name:'未指定'}}
+      </orders-info-item>
+      <orders-info-item :slotData="'联系电话'">{{slotData.brandOperator!=null?slotData.brandOperator.mobileNumber:'未指定'}}
+      </orders-info-item>
     </el-row>
     <el-row type="flex" justify="space-between" align="center" class="info-row">
-      <orders-info-item :slotData="'工厂跟单员'">未指定</orders-info-item>
-      <orders-info-item :slotData="'联系电话'">未指定</orders-info-item>
+      <orders-info-item :slotData="'工厂跟单员'">{{slotData.factoryOperator!=null?slotData.factoryOperator.name:'未指定'}}
+      </orders-info-item>
+      <orders-info-item :slotData="'联系电话'">
+        {{slotData.factoryOperator!=null?slotData.factoryOperator.mobileNumber:'未指定'}}</orders-info-item>
     </el-row>
   </div>
 </template>
@@ -56,7 +60,8 @@
     opacity: 0.85;
   }
 
-  .info-row{
+  .info-row {
     margin-top: 5px;
   }
+
 </style>

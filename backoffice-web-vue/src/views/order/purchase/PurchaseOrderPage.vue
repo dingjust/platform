@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="dialogDetailVisible" width="85%" class="purchase-dialog">
-      <purchase-order-details-page :slotData="contentData" />
+      <purchase-order-details-page :slotData="contentData" :dialogDetailVisible="dialogDetailVisible" />
     </el-dialog>
     <div class="report">
       <purchase-orders-report />
@@ -21,7 +21,7 @@
             <span slot="label">
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
-            <purchase-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
+            <purchase-order-search-result-list :page="page" @onDetails="onDetails"  @onSearch="onSearch"
               @onAdvancedSearch="onAdvancedSearch" />
           </el-tab-pane>
         </template>
@@ -34,6 +34,7 @@
   import {
     createNamespacedHelpers
   } from "vuex";
+  import Bus from '@/common/js/bus.js';
 
   const {
     mapGetters,
@@ -42,7 +43,7 @@
   } = createNamespacedHelpers(
     "PurchaseOrdersModule"
   );
-  
+
   import PurchaseOrderToolbar from "./toolbar/PurchaseOrderToolbar";
   import PurchaseOrderSearchResultList from "./list/PurchaseOrderSearchResultList";
   import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
@@ -97,7 +98,7 @@
           size
         });
       },
-      onNew(formData) {
+    onNew(formData) {
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       },
       handleClick(tab, event) {
@@ -141,6 +142,9 @@
       this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
         this.statues.push(element);
       });
+      Bus.$on('my-event', args => {
+        this.dialogDetailVisible = false;
+      }),
       this.onSearch("");
     },
     mounted() {

@@ -17,7 +17,7 @@
           </el-row>
           <el-row class="seal_custom-row">
             <span>形状：</span>
-            <el-radio-group v-model="sealShape" size="mini">
+            <el-radio-group @change="createSeal" v-model="sealShape" size="mini">
               <el-radio-button :disabled="sealRole == 'sealRole1'" label="sealShape0">圆形</el-radio-button>
               <el-radio-button :disabled="sealRole == 'sealRole1'" label="sealShape1">椭圆</el-radio-button>
               <el-radio-button :disabled="sealRole == 'sealRole0'" label="sealShape2">长方形</el-radio-button>
@@ -26,7 +26,7 @@
           </el-row>
           <el-row class="seal_custom-row">
             <span>边框：</span>
-            <el-radio-group :disabled="sealRole == 'sealRole0'" v-model="sealBorder" size="mini">
+            <el-radio-group @change="createSeal" :disabled="sealRole == 'sealRole0'" v-model="sealBorder" size="mini">
               <el-radio-button label="sealBorder0">有</el-radio-button>
               <el-radio-button label="sealBorder1">无</el-radio-button>
             </el-radio-group>
@@ -139,7 +139,7 @@
           var fd=new FormData();
           fd.append('file',file);
           const result = await this.$http.formdataPost(this.mediaUploadUrl,fd);
-
+          console.log(result);
           if(result != null){
             this.saveSeal(result);
           }
@@ -152,7 +152,7 @@
         if(this.sealRole == 'sealRole1'){
           this.sealName = this.currentUser.username;
         }
-
+        this.createSeal();
         console.log(this.currentUser);
       },
       async saveSeal(item){
@@ -162,6 +162,7 @@
           media: item,
         };
         let formData = Object.assign({}, tempData);
+        console.log(formData);
         const result = await http.post(url, formData);
         if (result['errors']) {
           this.$message.error(result.msg);

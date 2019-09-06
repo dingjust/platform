@@ -25,14 +25,16 @@
 
   .side-slider {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
+    top: 10%;
+    bottom: 10px;
+    right: 5%;
     /*left: 220px;*/
-    left: 0;
+    left: 10%;
     background-color: #f5f5f5;
     z-index: 1121;
     overflow: hidden;
+    border-radius: 6px;
+    box-sizing: border-box;
 
     .side-slider-center {
       position: absolute;
@@ -52,6 +54,7 @@
         width: 30px;
         height: 100%;
         cursor: pointer;
+        /*float: right;*/
       }
 
       .title {
@@ -65,17 +68,19 @@
     <div class="loading" v-show="open" @click="open = false"></div>
     <transition name="slide-fade">
       <div v-if="open" class="side-slider">
-        <el-card class="header pd10">
-          <el-row :gutter="20">
-            <el-col :span="4">
-              <div class="clear">
-                <i class="el-icon-close" @click="closeSlider()"></i>
+        <el-card class="">
+          <div style="width:100%;height: 20px;">
+          <!--<el-row :gutter="20">-->
+            <!--<el-col :span="16">-->
+              <!--<div class="title" v-text="title"></div>-->
+            <!--</el-col>-->
+            <!--<el-col :span="20">-->
+              <div class="" style="float:right;cursor: pointer;margin-right: 10px;height: 100%; width: 30px;">
+                <i class="el-icon-close" style="width: 10px;height: 10px;" @click="closeSlider()"></i>
               </div>
-            </el-col>
-            <el-col :span="16">
-              <div class="title" v-text="title"></div>
-            </el-col>
-          </el-row>
+            <!--</el-col>-->
+          <!--</el-row>-->
+          </div>
           <div class="side-slider-center">
             <component class="side-slider-item"
                        :is="contentSlot"

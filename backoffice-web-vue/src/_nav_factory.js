@@ -58,21 +58,21 @@ export default {
           url: '/seal',
           icon: 'iconNone',
         },
-        {
-          name: '下单',
-          url: '/orderPurchase',
-          icon: 'iconNone',
-        },
+        // {
+        //   name: '下单',
+        //   url: '/orderPurchase',
+        //   icon: 'iconNone',
+        // },
         // {
         //   name: '创建合同',
         //   url: '/manage/createContract',
         //   icon: 'iconNone',
         // },
-        {
-          name: 'markdown',
-          url: '/unclassified/markDown',
-          icon: 'iconNone',
-        },
+        // {
+        //   name: 'markdown',
+        //   url: '/unclassified/markDown',
+        //   icon: 'iconNone',
+        // },
         {
           name: '合同模板',
           url: '/template/create',
@@ -154,5 +154,42 @@ export default {
         }
       ]
     },
+    {
+      name: '其他',
+      url: '/miscs',
+      // icon: 'icon-puzzle',
+      children: [
+        {
+          name: '认证中心',
+          url: '/Authentication',
+          icon: 'iconNone',
+        },
+        {
+          name: '样衣管理',
+          children: [
+            {
+              name: '样衣',
+              url: '/miscs/sample/sampleProduct',
+              icon: 'iconNone',
+            },
+            {
+              name: '样衣借还记录',
+              url: '/miscs/sample/sampleCheckoutHist',
+              icon: 'iconNone',
+            }
+          ]
+        },
+        {
+          name: '供应商',
+          url: '/miscs/supplier',
+          icon: 'iconNone',
+        },
+        {
+          name: '钱包',
+          url: '/miscs/wallet',
+          icon: 'iconNone',
+        }
+      ]
+    }
   ]
 }

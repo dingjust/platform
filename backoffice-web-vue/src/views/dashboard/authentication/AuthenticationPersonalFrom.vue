@@ -1,28 +1,29 @@
 <template>
   <div class="uniquecode-form-body">
-    <el-row class="uniquecode-form-title-row">
-      <el-col :span="22" >
-        <h6 >个人认证</h6>
+    <el-form ref="form" label-position="top" :model="personalSlotData" :rules="rules" :disabled="personalReadOnly">
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button type="info" style="width: 120px" disabled >个人姓名</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-input size="small" v-model="personalSlotData.username" placeholder="个人姓名" />
       </el-col>
     </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7" :push="1">
-        <el-button type="info" disabled >个人姓名</el-button>
+    <el-row class="form-row" type="flex" justify="center" :gutter=15 >
+      <el-col :span="3" >
+        <el-button style="width: 120px" type="info" disabled >操作人身份证号</el-button>
       </el-col>
-      <el-col :span="15">
-        <el-input size="small" v-model="username" placeholder="个人姓名" />
-      </el-col>
-    </el-row>
-    <el-row class="form-row" type="flex" >
-      <el-col :span="7">
-        <el-button type="info" disabled >个人身份证号</el-button>
-      </el-col>
-      <el-col :span="15">
-        <el-input size="small" v-model="idCardNum" placeholder="个人身份证号" />
+      <el-col :span="12">
+        <el-input size="small" v-model="personalSlotData.idCardNum" placeholder="操作人身份证号" />
       </el-col>
     </el-row>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
-      <el-button style="margin-top: 10px;width: 200px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+      <el-button v-if="personalState == 'UNCERTIFIED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>
+    </el-row>
+    </el-form>
+    <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
+      <el-button v-if="personalState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
+      <el-button v-if="personalState == 'SUCCESS'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >重新认证</el-button>
     </el-row>
   </div>
 </template>
@@ -31,6 +32,7 @@
   import http from '@/common/js/http';
   export default {
     name: 'AuthenticationPersonalFrom',
+    props: ['personalSlotData', 'personalReadOnly','personalState'],
     components: {
 
     },
@@ -40,34 +42,29 @@
     },
     methods: {
       async onSave(){
-        if(this.idCardNum == null || this.idCardNum == ''){
-          this.$message.error('身份证号不能为空');
-          return;
-        }else if(this.username == null || this.username == ''){
-          this.$message.error('名字不能为空');
-          return;
-        }else{
           const url = this.apis().personalAuthentication();
           const tempData = {
-            username: this.username,
-            idCardNum: this.idCardNum,
+            username: this.personalSlotData.username,
+            idCardNum: this.personalSlotData.idCardNum,
           };
           let formData = Object.assign({}, tempData);
           const result = await http.post(url, formData);
+          console.log(result);
           // this.$message.success(result.msg);
           if(result.data !=  null){
             window.open(result.data, '_blank');
           }else{
             this.$message.success(result.msg);
           }
-        }
 
       }
     },
     data() {
       return {
-        username: '',
-        idCardNum: '',
+        rules: {
+          username: [{required: true, message: '必填', trigger: 'blur'}],
+          idCardNum: [{required: true, message: '必填', trigger: 'blur'}],
+        },
       }
     },
     created() {

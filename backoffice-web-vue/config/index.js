@@ -84,21 +84,21 @@ module.exports = {
         "secure": false,
       },
       '/medias': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         pathRewrite: {
           '^/medias': 'djwebservices/medias'
         }
       },
       '/logout': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         "secure": false,
         pathRewrite: {
           '^/logout': 'djwebservices/logout'
         }
       },
       '/authorizationserver': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
@@ -106,7 +106,7 @@ module.exports = {
         }
       },
       '/b2b': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
@@ -114,7 +114,7 @@ module.exports = {
         }
       },
       '/c2b': {
-        target: 'https://localhost:9002',
+        target: 'https://47.106.112.137:9002',
         changeOrigin: true,
         "secure": false,
         pathRewrite: {
@@ -129,6 +129,7 @@ module.exports = {
           '^/amap': ''
         }
       },
+    },
     // proxyTable: {
     //   '/resource': {
     //     target: 'http://localhost',
@@ -180,7 +181,7 @@ module.exports = {
     //       '^/amap': ''
     //     }
     //   },
-    },
+    // },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

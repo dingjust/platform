@@ -216,7 +216,12 @@ const router = new Router({
               path: '/miscs/cashOutManager',
               name: '提现管理',
               component: () => import( /* webpackChunkName: 'cashOutManager' */ '@/views/miscs/cashOutManager/cashOutManagerPage')
-            }
+            },
+            {
+              path: '/Authentication',
+              name: '认证中心',
+              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/dashboard/authentication/AuthenticationPage')
+            },
           ]
         },
         {

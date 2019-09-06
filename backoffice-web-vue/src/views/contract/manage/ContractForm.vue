@@ -1,35 +1,26 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="dialogTemplateVisible" :show-close="false">
-      <el-row slot="title" type="flex" justify="space-between" align="middle">
-        <el-col :span="4">
-          <div class="template-form-header">
-            <h6>文件选择</h6>
-          </div>
-        </el-col>
-        <el-col :span="6">
+    <el-dialog :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body>
           <el-button-group>
-            <el-button class="template-form-button" @click="onFileSelectSure">确定</el-button>
-            <el-button @click="dialogTemplateVisible=false">关闭</el-button>
+            <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
+            <!--<el-button @click="dialogTemplateVisible=false">关闭</el-button>-->
           </el-button-group>
-        </el-col>
-      </el-row>
-      <contract-template-select :mock-data="mockData" @fileSelectChange="onFileSelectChange" />
+      <contract-template-select  @fileSelectChange="onFileSelectChange" />
     </el-dialog>
-    <el-dialog :visible.sync="dialogOrderVisible" :show-close="false">
-      <el-row slot="title" type="flex" justify="space-between" align="middle">
-        <el-col :span="4">
-          <div class="template-form-header">
-            <h6>订单选择</h6>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <el-button-group>
-            <!--<el-button class="template-form-button" @click="onFileSelectSure">确定</el-button>-->
-            <el-button @click="dialogOrderVisible=false">关闭</el-button>
-          </el-button-group>
-        </el-col>
-      </el-row>
+    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
+      <!--<el-row slot="title" type="flex" justify="space-between" align="middle">-->
+        <!--<el-col :span="4">-->
+          <!--<div class="template-form-header">-->
+            <!--<h6>订单选择</h6>-->
+          <!--</div>-->
+        <!--</el-col>-->
+        <!--<el-col :span="6">-->
+          <!--<el-button-group>-->
+            <!--&lt;!&ndash;<el-button class="template-form-button" @click="onFileSelectSure">确定</el-button>&ndash;&gt;-->
+            <!--<el-button @click="dialogOrderVisible=false">关闭</el-button>-->
+          <!--</el-button-group>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
       <contract-order-select :page="orderPage" :onSearchOrder="onSearchOrder" @onOrderSelectChange="onOrderSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
@@ -61,7 +52,7 @@
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择订单" v-model="orderSelectFile.code" :disabled="true">
-            <el-button slot="prepend"  @click="dialogOrderVisible=true">关联订单</el-button>
+            <el-button slot="prepend" :disabled="orderReadOnly" @click="dialogOrderVisible=true">关联订单</el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -98,7 +89,7 @@
       </el-row>
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
-          <el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>
+          <!--<el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
         </el-col>
         <el-col :span="4" :offset="2">
           <el-button class="create-contract-button_2" @click="onSave">生成合同</el-button>
@@ -127,7 +118,8 @@
 
 
   export default {
-    name: "CreateContract",
+    name: "ContractForm",
+    props: ['slotData'],
     components: {
       ContractTypeSelect,
       ContractTemplateSelect,
@@ -145,23 +137,6 @@
         search: "search",
         refresh: 'refresh'
       }),
-      async onSearchTemp(keyword,page, size) {
-        if(keyword == null){
-          keyword = '';
-        }
-        const url = this.apis().getTemplatesList();
-        const result = await this.$http.post(url,{
-          keyword: keyword
-        }, {
-          page: 0,
-          size: 100
-        });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        this.mockData = result.content;
-      },
       async onSearchOrder(keyword,page, size) {
         if(keyword == null){
           keyword = '';
@@ -250,10 +225,23 @@
 
         this.fn.closeSlider(true);
 
+      },
+      onSetOrderCode(){
+        if(this.slotData != null && this.slotData != ''){
+          console.log(111)
+          this.orderSelectFile = this.slotData;
+          this.orderReadOnly = true;
+          if(this.currentUser.type == 'BRAND'){
+            this.partyA = true;
+          }else{
+            this.partyA = false;
+          }
+        }
       }
     },
     data() {
       return {
+        currentUser: this.$store.getters.currentUser,
         contractType: '1',
         hasFrameworkContract: false,
         partyA: true,
@@ -264,14 +252,16 @@
         selectFile: {},
         fileList: [],
         dialogPreviewVisible: false,
+        orderReadOnly : false,
         input1:'',
         mockData:[],
         orderPage:[],
       };
     },
     created(){
-      this.onSearchTemp();
       this.onSearchOrder('',0,10);
+      console.log('sss'+this.slotData);
+      this.onSetOrderCode();
     }
   };
 
@@ -375,5 +365,15 @@
     color: #ffffff;
     display: none
   }
-
+  .product-select-btn {
+    width: 70px;
+    height: 30px;
+    background: #FFD60C;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 10px;
+    border-radius: 0px;
+    border: 0px solid #FFD60C;
+    margin-top: 10px;
+  }
 </style>
