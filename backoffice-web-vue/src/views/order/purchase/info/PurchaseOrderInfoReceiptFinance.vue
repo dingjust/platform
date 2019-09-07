@@ -7,8 +7,8 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-finance-body-title-row2">
       <h6 class="info-title_text2">进度</h6>
-      <el-button class="info-finance-logistics_info-btn1" @click="reconciliatioFormVisible=!reconciliatioFormVisible">
-        查看对账单</el-button>
+      <el-button class="info-finance-logistics_info-btn1" @click="financeReceiptVisible=!financeReceiptVisible">
+        查看收款单</el-button>
     </el-row>
     <el-row style="margin-top:10px;">
       <el-timeline>
@@ -44,25 +44,60 @@
 
     <el-dialog :visible.sync="financeReceiptFormVisible" width="60%" class="purchase-dialog" append-to-body>
       <purchase-order-finance-receipt-form :payPlanItem="itemData" :slotData="slotData" :form="formData"
-                                           @close="onClose" @refreshItem="refreshItem"/>
+                                           @close="onClose" @refreshItem="refreshItem" :receiptOrders="receiptOrders()"
+                                            @refreshData="refreshData"/>
+    </el-dialog>
+
+    <el-dialog :visible.sync="financeReceiptVisible" width="60%" class="purchase-dialog" append-to-body>
+      <purchase-order-info-receipt :receiptOrders="receiptOrders()" @refreshItem="refreshItem"
+                                   @refreshData="refreshData"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
   import PurchaseOrderFinanceReceiptForm from './PurchaseOrderFinanceReceiptForm';
+  import PurchaseOrderInfoReceipt from './PurchaseOrderInfoReceipt';
 
   export default {
     name: 'PurchaseOrderInfoReceiptFinance',
     props: ['slotData'],
     components: {
+      PurchaseOrderInfoReceipt,
       PurchaseOrderFinanceReceiptForm
     },
     mixins: [],
     computed: {
-
+      // receiptOrders: function () {
+      //   let result = [];
+      //   for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
+      //     for (var receipt of payPlanItem.receiptOrders) {
+      //       result.push(receipt);
+      //     }
+      //   }
+      //
+      //   if (result.length > 0) {
+      //     result[result.length - 1].deletable = true;
+      //   }
+      //
+      //   return result;
+      // }
     },
     methods: {
+      receiptOrders () {
+        let result = [];
+        for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
+          for (var receipt of payPlanItem.receiptOrders) {
+            result.push(receipt);
+          }
+        }
+
+        if (result.length > 0) {
+          result[result.length - 1].deletable = true;
+        }
+
+        return result;
+      },
       async refreshData () {
         const url = this.apis().getPurchaseOrder(this.slotData.code);
         const result = await this.$http.get(url);
@@ -79,12 +114,12 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
+        this.$set(this.slotData, 'payPlan', result.payPlan);
+        this.receiptOrders();
         for (var payPlanItem of result.payPlan.payPlanItems) {
           if (payPlanItem.id === this.itemData.id) {
-            this.$set(this.itemData,'receiptOrders',payPlanItem.receiptOrders);
-            this.$set(this.itemData,'remainingUnReceiptAmount',payPlanItem.remainingUnReceiptAmount);
-            this.$set(this.itemData,'receiptStatus',payPlanItem.receiptStatus);
+            this.$set(this.itemData, 'remainingUnReceiptAmount', payPlanItem.remainingUnReceiptAmount);
+            this.$set(this.itemData, 'receiptStatus', payPlanItem.receiptStatus);
           }
         }
       },
@@ -100,6 +135,7 @@
     data () {
       return {
         financeReceiptFormVisible: false,
+        financeReceiptVisible: false,
         itemData: {},
         formData: {
           paymentType: '',
