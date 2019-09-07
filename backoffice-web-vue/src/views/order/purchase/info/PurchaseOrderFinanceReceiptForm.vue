@@ -72,7 +72,8 @@
       </el-col>
     </el-row>
     <el-row>
-      <purchase-order-info-receipt :slot-data="slotData" :receiptOrders="receiptOrders" @refreshData="refreshData"/>
+      <purchase-order-info-receipt :slot-data="slotData" :receiptOrders="receiptOrders" @refreshItem="refreshItem"
+                                   @refreshData="refreshData()"/>
     </el-row>
   </div>
 </template>
@@ -85,7 +86,7 @@
     components: {
       PurchaseOrderInfoReceipt
     },
-    props: ['slotData', 'payPlanItem', 'form'],
+    props: ['slotData', 'payPlanItem', 'form','receiptOrders'],
     mixins: [],
     computed: {
       headers: function () {
@@ -93,20 +94,20 @@
           Authorization: this.$store.getters.token
         }
       },
-      receiptOrders: function () {
-        let result = [];
-        for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
-          for (var receipt of payPlanItem.receiptOrders) {
-            result.push(receipt);
-          }
-        }
-
-        if (result.length > 0) {
-          result[result.length - 1].deletable = true;
-        }
-
-        return result;
-      }
+      // receiptOrders: function () {
+      //   let result = [];
+      //   for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
+      //     for (var receipt of payPlanItem.receiptOrders) {
+      //       result.push(receipt);
+      //     }
+      //   }
+      //
+      //   if (result.length > 0) {
+      //     result[result.length - 1].deletable = true;
+      //   }
+      //
+      //   return result;
+      // }
     },
     methods: {
       onBeforeUpload (file) {
@@ -139,16 +140,26 @@
         }
         this.$emit('close');
       },
-      async refreshData () {
-        const url = this.apis().getPurchaseOrder(this.slotData.code);
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
+      async refreshItem () {
+        // const url = this.apis().getPurchaseOrder(this.slotData.code);
+        // const result = await this.$http.get(url);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
 
         this.$emit('refreshItem');
-      }
+      },
+      async refreshData () {
+        // const url = this.apis().getPurchaseOrder(this.slotData.code);
+        // const result = await this.$http.get(url);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
+
+        this.$emit('refreshData');
+      },
     },
     data () {
       return {

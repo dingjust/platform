@@ -400,22 +400,22 @@ const COMMON_APIS = {
     return '/b2b/bill/' + id;
   },
   createPaymentOrder (id) {
-    return 'b2b/orders/purchase/confirmPayment/' + id;
+    return '/b2b/orders/purchase/confirmPayment/' + id;
   },
   updatePaymentOrder () {
-    return 'b2b/orders/purchase/updatePaymentOrder';
+    return '/b2b/orders/purchase/updatePaymentOrder';
   },
   deletePaymentOrder (id) {
-    return 'b2b/orders/purchase/deletePaymentOrder/' + id;
+    return '/b2b/orders/purchase/deletePaymentOrder/' + id;
   },
   createReceiptOrder (id) {
-    return 'b2b/orders/purchase/confirmReceipt/' + id;
+    return '/b2b/orders/purchase/confirmReceipt/' + id;
   },
   updateReceiptOrder () {
-    return 'b2b/orders/purchase/updateReceiptOrder';
+    return '/b2b/orders/purchase/updateReceiptOrder';
   },
   deleteReceiptOrder (id) {
-    return 'b2b/orders/purchase/deleteReceiptOrder/' + id;
+    return '/b2b/orders/purchase/deleteReceiptOrder/' + id;
   },
 };
 

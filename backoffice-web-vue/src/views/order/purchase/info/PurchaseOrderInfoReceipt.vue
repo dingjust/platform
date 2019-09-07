@@ -90,7 +90,7 @@
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
         } else {
-          this.$emit('refreshData');
+          this.$emit('refreshItem');
         }
       }
     },
