@@ -11,11 +11,13 @@
       </el-col>
       <el-col :span="22">
         <el-row>
-          <template v-for="item in mockAttachments">
-            <a :href="item" target="_blank">
-            <img :src="item" class="info-remarks-img"/>
+          <template v-for="item in slotData.attachments"
+            v-if="slotData.attachments!=null&&slotData.attachments.length!=0">
+            <a :href="item.url" target="_blank">
+              <img :src="item.url" class="info-remarks-img" />
             </a>
           </template>
+          <h6 v-if="slotData.attachments==null||slotData.attachments.length==0">暂无附件</h6>
         </el-row>
       </el-col>
     </el-row>
@@ -76,27 +78,28 @@
     width: 100%;
     margin-top: 20px;
   }
-  .info-remarks-img{
+
+  .info-remarks-img {
     width: 50px;
     height: 50px;
     border-radius: 10px;
     margin-right: 10px;
   }
 
-  .info-remarks-row{
+  .info-remarks-row {
     margin-top: 20px;
   }
 
-  .info-remarks-textarea{
+  .info-remarks-textarea {
     width: 100%;
-    border:0.5px solid rgba(0,0,0,0.15);
+    border: 0.5px solid rgba(0, 0, 0, 0.15);
     padding: 5px 10px;
-    border-radius:3px;
+    border-radius: 3px;
   }
 
-  .info-remarks-textarea_text{
+  .info-remarks-textarea_text {
     font-size: 10px;
-    color:rgba(0,0,0,0.45);
+    color: rgba(0, 0, 0, 0.45);
   }
 
 </style>

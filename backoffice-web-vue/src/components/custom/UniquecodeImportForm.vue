@@ -22,7 +22,7 @@
         <el-col :span="14">
           <h6 class="uniquecode-form-text">产品名:{{order.product.name}}</h6>
           <h6 class="uniquecode-form-text">货号:{{order.product.skuID}}</h6>
-          <h6 class="uniquecode-form-text">{{order.belongTo.name}}</h6>
+          <h6 class="uniquecode-form-text">{{name}}</h6>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center">
@@ -40,7 +40,13 @@
     },
     mixins: [],
     computed: {
-
+      name: function () {
+        if (this.order.belongTo != null) {
+          return this.order.belongTo.name;
+        } else {
+          return this.order.purchaser.name;
+        }
+      }
     },
     methods: {
       async onSearch() {

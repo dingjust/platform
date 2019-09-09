@@ -115,11 +115,7 @@
         this.deliverFormVisible = false;
       },
       onDeliverViewsOpen() {
-        if (this.slotData.shippingOrders == null || this.slotData.shippingOrders.length == 0) {
-          this.deliverFormVisible = true;
-        } else {
-          this.deliverViewsVisible = true;
-        }
+        this.deliverFormVisible = true;
       },
       onReconciliation() {
         this.reconciliatioFormVisible = true;

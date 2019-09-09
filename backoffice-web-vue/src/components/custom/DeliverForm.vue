@@ -387,7 +387,7 @@
   .order-table tr th {
     border: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
-    height: 50px;
+    height: 30px;
     font-size: 10px;
   }
 

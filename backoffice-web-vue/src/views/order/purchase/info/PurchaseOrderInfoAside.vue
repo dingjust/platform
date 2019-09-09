@@ -12,6 +12,7 @@
   import PurchaseOrderInfoStaff from './PurchaseOrderInfoStaff';
   import PurchaseOrderInfoContract from './PurchaseOrderInfoContract';
   import PurchaseOrderInfoLog from './PurchaseOrderInfoLog';
+  import PurchaseOrderButtonGroup from './PurchaseOrderButtonGroup';
 
   export default {
     name: 'PurchaseOrderInfoAside',
@@ -20,7 +21,8 @@
       PurchaseOrderInfoSupplier,
       PurchaseOrderInfoStaff,
       PurchaseOrderInfoContract,
-      PurchaseOrderInfoLog
+      PurchaseOrderInfoLog,
+      PurchaseOrderButtonGroup
     },
     mixins: [],
     computed: {

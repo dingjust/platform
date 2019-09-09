@@ -1,14 +1,9 @@
 <template>
   <div class="info-remarks-body">
-    <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-info-deliver :slotData="slotData" @afterCreate="onAfterCreate" :read-only="false" />
-    </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
       <div class="info-title">
         <h6 class="info-title_text">生产进度</h6>
       </div>
-      <el-button size="mini" class="info-detail-logistics_info-btn1" @click="deliverFormVisible=!deliverFormVisible" v-if="isFactory()">
-        部分发货</el-button>
     </el-row>
     <el-row>
       <purchase-order-progress :slotData="slotData" />
@@ -18,14 +13,12 @@
 
 <script>
   import PurchaseOrderProgress from '@/components/custom/PurchaseOrderProgress';
-  import PurchaseOrderInfoDeliver from './PurchaseOrderInfoDeliver';
 
   export default {
     name: 'PurchaseOrderInfoProgress',
     props: ['slotData'],
     components: {
       PurchaseOrderProgress,
-      PurchaseOrderInfoDeliver
     },
     mixins: [],
     computed: {

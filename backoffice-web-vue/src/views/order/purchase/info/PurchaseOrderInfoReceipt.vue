@@ -39,14 +39,13 @@
       </el-table-column>
     <el-table-column label="操作">
     <template slot-scope="scope">
-    <el-button size="mini" type="text" @click="onDelete(scope.row.id)" v-if="scope.row.deletable">删除</el-button>
+    <el-button size="mini" type="text" @click="onDelete(scope.row.id)" v-if="scope.row.deletable === true">删除</el-button>
     </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script>
-
   export default {
     name: 'PurchaseOrderInfoReceipt',
     props: ['slotData', 'receiptOrders'],
@@ -90,26 +89,9 @@
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
         } else {
-          this.$emit('refreshData');
+          this.$emit('refreshItem');
         }
       }
-      // async refreshData () {
-      //   const url = this.apis().getPurchaseOrder(this.slotData.code);
-      //   const result = await this.$http.get(url);
-      //   if (result['errors']) {
-      //     this.$message.error(result['errors'][0].message);
-      //     return;
-      //   }
-      //   for (let item of result.payPlan.payPlanItems) {
-      //     if (item.id === this.payPlanItem.id) {
-      //       this.payPlanItem = item;
-      //       // this.$set(this.payPlanItem, 'receiptOrders', item.receiptOrders);
-      //     }
-      //     console.log(item);
-      //   }
-      //   // 跟新slotData
-      //   console.log(this.payPlanItem);
-      // }
     },
     data () {
       return {
