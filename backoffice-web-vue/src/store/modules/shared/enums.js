@@ -79,9 +79,7 @@ const state = {
     {code: 'WAIT_FOR_OUT_OF_STORE', name: '待出库'},
     {code: 'OUT_OF_STORE', name: '已出库'},
     {code: 'COMPLETED', name: '已完成'},
-    {code: 'CANCELLED', name: '已取消'},
-    {code: 'UNCOMMITTED', name: '未提交'},
-    {code: 'APPROVED', name: '未提交'}
+    {code: 'CANCELLED', name: '已取消'}
   ],
   // 打样订单状态
   proofingOrderStatuses: [

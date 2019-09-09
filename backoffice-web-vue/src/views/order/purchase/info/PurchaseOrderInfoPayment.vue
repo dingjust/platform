@@ -92,26 +92,9 @@
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
         } else {
-          this.$emit('refreshData');
+          this.$emit('refreshItem');
         }
       }
-      // async refreshData () {
-      //   const url = this.apis().getPurchaseOrder(this.slotData.code);
-      //   const result = await this.$http.get(url);
-      //   if (result['errors']) {
-      //     this.$message.error(result['errors'][0].message);
-      //     return;
-      //   }
-      //   for (let item of result.payPlan.payPlanItems) {
-      //     if (item.id === this.payPlanItem.id) {
-      //       this.payPlanItem = item;
-      //       // this.$set(this.payPlanItem, 'receiptOrders', item.receiptOrders);
-      //     }
-      //     console.log(item);
-      //   }
-      //   // 跟新slotData
-      //   console.log(this.payPlanItem);
-      // }
     },
     data () {
       return {

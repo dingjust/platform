@@ -7,8 +7,8 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-finance-body-title-row2">
       <h6 class="info-title_text2">进度</h6>
-      <!--<el-button class="info-finance-logistics_info-btn1" @click="reconciliatioFormVisible=!reconciliatioFormVisible">-->
-        <!--查看对账单</el-button>-->
+      <el-button class="info-finance-logistics_info-btn1" @click="financePaymentVisible=!financePaymentVisible">
+        查看付款单</el-button>
     </el-row>
     <el-row style="margin-top:10px;">
       <el-timeline>
@@ -19,7 +19,7 @@
               <h6 class="info-log-content">{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
             </el-col>
             <el-col :span="10">
-              <h6 class="finance-log-content">签署后{{payPlanItem.triggerDays}}天
+              <h6 class="finance-log-content">{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
                 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}完成付款
                 {{payPlanItem.payPercent * 100}}%作为{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
             </el-col>
@@ -31,34 +31,57 @@
               <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnpaidAmount != 0">剩余未付￥{{payPlanItem.remainingUnpaidAmount,2 | floatFormat}}</h6>
             </el-col>
             <el-col :span="8">
-              <el-row type="flex" justify="end" align="middle">
+              <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true">
                 <el-button class="info-finance-logistics_info-btn3" @click="onPayment(payPlanItem)">付款
                 </el-button>
               </el-row>
             </el-col>
           </el-row>
-          <el-dialog :visible.sync="financePaymentFormVisible" width="60%" class="purchase-dialog" append-to-body>
-            <purchase-order-finance-payment-form :payPlanItem="itemData" :slotData="slotData" :form="formData"
-                                                 @close="onClose" @refreshItem="refreshItem"/>
-          </el-dialog>
+
         </el-timeline-item>
       </el-timeline>
     </el-row>
+
+    <el-dialog :visible.sync="financePaymentFormVisible" width="60%" class="purchase-dialog" append-to-body>
+      <purchase-order-finance-payment-form :payPlanItem="itemData" :slotData="slotData" :form="formData"
+                                           @close="onClose" @refreshItem="refreshItem" :paymentOrders="paymentOrders"
+                                           @refreshData="refreshData" @clearFormData="clearFormData"/>
+    </el-dialog>
+
+    <el-dialog :visible.sync="financePaymentVisible" width="60%" class="purchase-dialog" append-to-body>
+      <purchase-order-info-payment :paymentOrders="paymentOrders" @refreshItem="refreshItem"
+                                   @refreshData="refreshData" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import PurchaseOrderFinancePaymentForm from './PurchaseOrderFinancePaymentForm';
+  import PurchaseOrderInfoPayment from './PurchaseOrderInfoPayment';
 
   export default {
     name: 'PurchaseOrderInfoPaymentFinance',
     props: ['slotData'],
     components: {
+      PurchaseOrderInfoPayment,
       PurchaseOrderFinancePaymentForm
     },
     mixins: [],
     computed: {
+      paymentOrders: function () {
+        let result = [];
+        for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
+          for (var receipt of payPlanItem.paymentOrders) {
+            result.push(receipt);
+          }
+        }
 
+        if (result.length > 0) {
+          result[result.length - 1].deletable = true;
+        }
+
+        return result;
+      }
     },
     methods: {
       async refreshData () {
@@ -78,18 +101,27 @@
           return;
         }
 
-        this.$set(this.slotData,'payPlan',result.payPlan);
+        this.$set(this.slotData, 'payPlan', result.payPlan);
 
         for (var payPlanItem of result.payPlan.payPlanItems) {
-          if (payPlanItem.id === this.itemData.id) {
-            this.$set(this.itemData,'remainingUnpaidAmount',payPlanItem.remainingUnpaidAmount);
-            this.$set(this.itemData,'payStatus',payPlanItem.payStatus);
+          if (payPlanItem.isCurrentItem === true) {
+            this.$set(this.itemData, 'remainingUnpaidAmount', payPlanItem.remainingUnpaidAmount);
+            this.$set(this.itemData, 'payStatus', payPlanItem.payStatus);
+            this.$set(this.itemData, 'moneyType', payPlanItem.moneyType);
+            this.$set(this.itemData, 'payPercent', payPlanItem.payPercent);
+            this.$set(this.itemData, 'id', payPlanItem.id);
           }
         }
       },
       onClose () {
         this.financePaymentFormVisible = false;
         this.refreshData();
+      },
+      clearFormData () {
+        this.formData.paymentType = '';
+        this.formData.amount = '';
+        this.formData.payCertificate = '';
+        this.formData.remarks = '';
       },
       onPayment (payPlanItem) {
         this.financePaymentFormVisible = !this.financePaymentFormVisible;
@@ -99,6 +131,7 @@
     data () {
       return {
         financePaymentFormVisible: false,
+        financePaymentVisible: false,
         itemData: {},
         formData: {
           paymentType: '',
