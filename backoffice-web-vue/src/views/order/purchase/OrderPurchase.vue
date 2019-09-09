@@ -4,7 +4,10 @@
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
-      <supplier-select @onSearch="onSearch" @onSelect="onSuppliersSelect" />
+      <supplier-select @onSelect="onSuppliersSelect" />
+    </el-dialog>
+    <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
+      <address-select @onSelect="onAddressSelect" />
     </el-dialog>
     <el-card class="box-card">
       <el-form :model="form" :rules="rules" ref="form">
@@ -22,7 +25,7 @@
               <el-form-item prop="companyOfSeller" class="purchase-form-item">
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">合作商</h6>
-                  <el-input placeholder="名称" v-model="form.companyOfSeller" size="mini" >
+                  <el-input placeholder="名称" v-model="form.companyOfSeller" size="mini">
                   </el-input>
                 </el-row>
               </el-form-item>
@@ -31,7 +34,7 @@
               <el-form-item prop="contactPersonOfSeller" class="purchase-form-item">
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">联系人</h6>
-                  <el-input placeholder="姓名" v-model="form.contactPersonOfSeller" size="mini" >
+                  <el-input placeholder="姓名" v-model="form.contactPersonOfSeller" size="mini">
                   </el-input>
                 </el-row>
               </el-form-item>
@@ -40,7 +43,7 @@
               <el-form-item prop="contactOfSeller" class="purchase-form-item">
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">联系方式</h6>
-                  <el-input placeholder="电话号码" v-model="form.contactOfSeller" size="mini" >
+                  <el-input placeholder="电话号码" v-model="form.contactOfSeller" size="mini">
                   </el-input>
                 </el-row>
               </el-form-item>
@@ -177,7 +180,7 @@
                 </el-row>
               </el-col>
               <el-col :span="4">
-                <el-button size="mini">选择</el-button>
+                <el-button size="mini" @click="addressSelect(productIndex)">选择</el-button>
               </el-col>
             </el-row>
             <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
@@ -497,6 +500,7 @@
   import FormLabel from '@/components/custom/FormLabel';
   import ProductSelect from '@/components/custom/ProductSelect';
   import SupplierSelect from '@/components/custom/SupplierSelect';
+  import AddressSelect from '@/components/custom/AddressSelect';
   import ImagesUpload from '@/components/custom/ImagesUpload';
 
   export default {
@@ -506,7 +510,8 @@
       FormLabel,
       ProductSelect,
       ImagesUpload,
-      SupplierSelect
+      SupplierSelect,
+      AddressSelect
     },
     mixins: [],
     computed: {
@@ -860,12 +865,31 @@
         this.form.companyOfSeller = val.name;
         this.form.contactPersonOfSeller = val.contactPerson;
         this.form.contactOfSeller = val.contactPhone;
+      },
+      addressSelect(index) {
+        this.currentProductIndex = index;
+        this.addressSelectVisible = !this.addressSelectVisible;
+      },
+     async onAddressSelect(val) {
+        this.addressSelectVisible = false;
+        this.form.entries[this.currentProductIndex].address = val;
+        this.getCities(val.region, this.currentProductIndex);
+        const url = this.apis().getDistricts(val.city.code);
+        const result = await this.$http.get(url);
+
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+
+        this.form.entries[this.currentProductIndex].cityDistricts = result;
       }
     },
     data() {
       return {
         productSelectVisible: false,
         suppliersSelectVisible: false,
+        addressSelectVisible: false,
         currentProductIndex: 0,
         regions: [],
         freightPayer: {
