@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="dialogDetailVisible" width="85%" class="purchase-dialog">
-      <purchase-order-details-page :slotData="contentData" :dialogDetailVisible="dialogDetailVisible" />
+    <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%" class="purchase-dialog">
+      <purchase-order-details-page :contract="contract" :slotData="contentData" :dialogDetailVisible="dialogDetailVisible" />
     </el-dialog>
     <div class="report">
       <purchase-orders-report />
@@ -49,6 +49,7 @@
   import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
   import PurchaseOrdersReport from "./components/PurchaseOrdersReport";
   import TabLabelBubble from "@/components/custom/TabLabelBubble";
+  import http from '@/common/js/http';
 
   export default {
     name: "PurchaseOrderPage",
@@ -124,7 +125,19 @@
       },
       onNew(formData) {
         this.fn.openSlider("创建手工单", PurchaseOrderDetailsPage, formData);
-      }
+      },
+      async getContract(){
+        console.log(this.contentData.code);
+        const url = this.apis().getContractsList();
+        const result = await http.post(url,{orderCode:this.contentData.code},{page:0,
+          size:100});
+        this.contract = result.content[0];
+
+        console.log(this.contract)
+      },
+      initContract(){
+        this.contract = '';
+      },
     },
     data() {
       return {
@@ -135,7 +148,8 @@
         statues: [{
           code: "ALL",
           name: "全部"
-        }]
+        }],
+        contract:'',
       };
     },
     created() {
@@ -143,7 +157,7 @@
         this.statues.push(element);
       });
       Bus.$on('my-event', args => {
-        this.dialogDetailVisible = false;
+        this.dialogDetailVisible = !this.dialogDetailVisible;
       }),
       this.onSearch("");
     },

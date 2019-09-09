@@ -1,7 +1,8 @@
 <template>
   <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick" :stretch="false"  style="width: 100%" >
-    <el-tab-pane label="企业认证" :disabled="isCompany" name="first">
-      <authentication-enterprise-from  :companyState="companyState" :enterpriseSlotData="enterpriseSlotData" :enterpriseReadOnly="enterpriseReadOnly"/>
+    <el-tab-pane v-if="this.companyState == 'UNCERTIFIED'|| (this.companyType == 'INDIVIDUAL'
+          && this.companyState != 'UNCERTIFIED' && this.companyState != 'FAILED')" label="企业认证" :disabled="isCompany" name="first">
+      <authentication-enterprise-from :companyState="companyState" :enterpriseSlotData="enterpriseSlotData" :enterpriseReadOnly="enterpriseReadOnly"/>
     </el-tab-pane>
     <el-tab-pane v-if="companyState == 'CHECK' && companyType == 'ENTERPRISE'" label="企业认证（认证中）" :disabled="isCompany" name="first">
       <authentication-enterprise-from  :companyState="companyState" :enterpriseSlotData="enterpriseSlotData" :enterpriseReadOnly="enterpriseReadOnly"/>
@@ -9,16 +10,23 @@
     <el-tab-pane v-if="companyState == 'SUCCESS' && companyType == 'ENTERPRISE'" label="企业认证（已认证）" :disabled="isCompany" name="first">
       <authentication-enterprise-from  :companyState="companyState" :enterpriseSlotData="enterpriseSlotData" :enterpriseReadOnly="enterpriseReadOnly"/>
     </el-tab-pane>
-    <el-tab-pane  label="个体户认证" :disabled="isBusiness" name="second">
+    <el-tab-pane v-if="companyState == 'FAILED' && companyType == 'ENTERPRISE'" label="企业认证" :disabled="isCompany" name="first">
+      <authentication-enterprise-from :companyState="companyState" :enterpriseSlotData="enterpriseSlotData" :enterpriseReadOnly="enterpriseReadOnly"/>
+    </el-tab-pane>
+    <el-tab-pane v-if="companyState == 'UNCERTIFIED'|| (companyType == 'ENTERPRISE'
+          && companyState != 'UNCERTIFIED' && companyState != 'FAILED')" label="个体户认证" :disabled="isBusiness" name="second">
       <authentication-business-from  :companyState="companyState" :businessSlotData="businessSlotData" :businessReadOnly="businessReadOnly"/>
     </el-tab-pane>
-    <el-tab-pane v-if="companyState == 'CHECK' && companyType == 'INDIVIDUAL'" label="个体户认证" :disabled="isBusiness" name="second">
+    <el-tab-pane v-if="companyState == 'CHECK' && companyType == 'INDIVIDUAL'" label="个体户认证（认证中）" :disabled="isBusiness" name="second">
       <authentication-business-from  :companyState="companyState" :businessSlotData="businessSlotData" :businessReadOnly="businessReadOnly"/>
     </el-tab-pane>
-    <el-tab-pane  v-if="companyState == 'SUCCESS' && companyType == 'INDIVIDUAL'"  label="个体户认证" :disabled="isBusiness" name="second">
+    <el-tab-pane  v-if="companyState == 'SUCCESS' && companyType == 'INDIVIDUAL'"  label="个体户认证（已认证）" :disabled="isBusiness" name="second">
       <authentication-business-from  :companyState="companyState" :businessSlotData="businessSlotData" :businessReadOnly="businessReadOnly"/>
     </el-tab-pane>
-    <el-tab-pane v-if="personalState == 'UNCERTIFIED'" label="个人认证" :disabled="isPersonal" name="third">
+    <el-tab-pane v-if="companyState == 'FAILED' && companyType == 'INDIVIDUAL'" label="个体户认证" :disabled="isBusiness" name="second">
+      <authentication-business-from  :companyState="companyState" :businessSlotData="businessSlotData" :businessReadOnly="businessReadOnly"/>
+    </el-tab-pane>
+    <el-tab-pane v-if="personalState == 'UNCERTIFIED' || personalState == 'FAILED'" label="个人认证" :disabled="isPersonal" name="third">
       <authentication-personal-from :personalState="personalState" :personalSlotData="personalSlotData" :personalReadOnly="personalReadOnly"/>
     </el-tab-pane>
     <el-tab-pane  v-if="personalState == 'CHECK'" label="个人认证（认证中）" :disabled="isPersonal" name="third">
@@ -119,14 +127,6 @@
           this.personalReadOnly = true;
           this.getPersonalData();
         }
-        // if(result.data.companyType == null){
-        //   this.isCompany = null;
-        // }else if(result.data.companyType == 'INDIVIDUAL'){
-        //   this.isCompany = false;
-        // }else{
-        //   this.isCompany = true;
-        // }
-
       },
       personal(){
         if(this.currentUser.type == 'BRAND'){
@@ -134,6 +134,22 @@
         }else{
           this.isPersonal = true;
         }
+      },
+      checkState(){
+        //控制tab不可点逻辑
+        if(this.companyState != 'UNCERTIFIED' && this.companyState != 'FAILED'){
+            if(this.companyType == 'ENTERPRISE'){
+              this.isBusiness = false;
+              this.isCompany = true;
+            }else{
+              this.isBusiness = true;
+              this.isCompany = false;
+            }
+        }
+        if(this.companyState == 'SUCCESS'){
+          this.isPersonal = true;
+        }
+
       },
     },
     data() {
@@ -143,9 +159,18 @@
         isCompany: false,
         isBusiness: false,
         isPersonal: false,
-        companyType:'',
+        companyType: '',
         companyState: '',
         personalState: '',
+        enterpriseShow: '',
+        enterpriseShowCheck: '',
+        enterpriseShowSuccess: '',
+        businessShow: false,
+        businessShowCheck: false,
+        businessShowSuccess: false,
+        personalShow: false,
+        personalShowCheck: false,
+        personalShowSuccess: false,
         enterpriseReadOnly: false,
         businessReadOnly: false,
         personalReadOnly: false,
@@ -172,6 +197,7 @@
     },
     created() {
       this.getAuthenticationState();
+      this.checkState();
     },
     mounted() {}
 

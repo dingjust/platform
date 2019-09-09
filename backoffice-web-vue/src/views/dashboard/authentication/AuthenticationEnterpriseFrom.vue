@@ -1,6 +1,6 @@
 <template>
   <div class="uniquecode-form-body">
-    <el-form ref="form" label-position="top" :model="enterpriseSlotData" :rules="rules" :disabled="enterpriseReadOnly">
+    <el-form ref="form" label-position="top" :model="enterpriseSlotData" :rules="rules" :disabled="readOnly">
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >
       <el-col :span="3" >
         <el-button type="info" style="width: 120px" disabled >企业名称</el-button>
@@ -51,7 +51,7 @@
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
       <el-button v-if="companyState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
-      <el-button v-if="companyState == 'SUCCESS'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >重新认证</el-button>
+      <el-button v-if="companyState == 'SUCCESS' || companyState == 'FAILED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="reAuthentication" >重新认证</el-button>
     </el-row>
   </div>
 </template>
@@ -88,6 +88,9 @@
             this.$message.success(result.msg);
           }
 
+      },
+      reAuthentication(){
+        this.readOnly = false;
       }
     },
     data() {
@@ -99,10 +102,11 @@
           role: [{required: true, message: '必填', trigger: 'blur'}],
           organization: [{required: true, message: '必填', trigger: 'blur'}],
         },
+        readOnly:false,
       }
     },
     created() {
-
+      this.readOnly = this.enterpriseReadOnly;
     },
     mounted() {}
 
