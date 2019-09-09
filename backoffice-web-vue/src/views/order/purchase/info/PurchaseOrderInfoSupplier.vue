@@ -6,11 +6,11 @@
       </div>
     </el-row>
     <el-row type="flex" justify="space-between" align="center" class="info-row">
-      <orders-info-item :slotData="'合作商'">{{name}}</orders-info-item>
+      <orders-info-item :slotData="'合作商'">{{cooperator.name}}</orders-info-item>
     </el-row>
     <el-row type="flex" justify="space-between" align="center" class="info-row">
-      <orders-info-item :slotData="'联系人'">{{contactPerson}}</orders-info-item>
-      <orders-info-item :slotData="'联系方式'">{{contactPhone}}</orders-info-item>
+      <orders-info-item :slotData="'联系人'">{{cooperator.contactPerson}}</orders-info-item>
+      <orders-info-item :slotData="'联系方式'">{{cooperator.contactPhone}}</orders-info-item>
     </el-row>
   </div>
 </template>
@@ -26,25 +26,35 @@
     },
     mixins: [],
     computed: {
-      name: function () {
-        if (this.slotData.purchaser != null) {
-          return this.slotData.purchaser.name;
+      cooperator: function () {
+        if (this.isBrand()) {
+          if (this.slotData.belongTo != null) {
+            return {
+              name: this.slotData.belongTo.name,
+              contactPerson: this.slotData.belongTo.contactPerson,
+              contactPhone: this.slotData.belongTo.contactPhone
+            };
+          } else {
+            return {
+              name: this.slotData.companyOfSeller,
+              contactPerson: this.slotData.contactPersonOfSeller,
+              contactPhone: this.slotData.contactOfSeller
+            };
+          }
         } else {
-          return this.slotData.companyOfSeller;
-        }
-      },
-      contactPerson: function () {
-        if (this.slotData.purchaser != null) {
-          return this.slotData.purchaser.contactPerson;
-        } else {
-          return this.slotData.contactPersonOfSeller;
-        }
-      },
-      contactPhone: function () {
-        if (this.slotData.purchaser != null) {
-          return this.slotData.purchaser.contactPhone;
-        } else {
-          return this.slotData.contactOfSeller;
+          if (this.slotData.purchaser != null) {
+            return {
+              name: this.slotData.purchaser.name,
+              contactPerson: this.slotData.purchaser.contactPerson,
+              contactPhone: this.slotData.purchaser.contactPhone
+            };
+          } else {
+            return {
+              name: this.slotData.companyOfSeller,
+              contactPerson: this.slotData.contactPersonOfSeller,
+              contactPhone: this.slotData.contactOfSeller
+            };
+          }
         }
       }
     },

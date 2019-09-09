@@ -2,7 +2,8 @@
   <el-row class="purchase-order-row" type="flex" justify="center" align="middle" :gutter="50">
     <el-button class="purchase-order-btn" v-if="isMyself&&isPending" @click="onUniqueCode">唯一码
     </el-button>
-    <el-button class="purchase-order-btn" v-if="isBrand()&&!isPending&&!isCompleted" @click="onCreateReceive">收货</el-button>
+    <el-button class="purchase-order-btn" v-if="isBrand()&&!isPending&&!isCompleted" @click="onCreateReceive">收货
+    </el-button>
     <el-button class="purchase-order-btn" v-if="isBrand()&&isCompleted" @click="onCreateReconciliation">对账单</el-button>
     <!-- <el-button class="purchase-order-btn" v-if="slotData.status=='COMPLETED'" @click="onCreateAgain">
       {{isBrand()?'再下一单':'重新创建'}}</el-button> -->
@@ -19,7 +20,7 @@
     onCancel" v-if="isPending">{{isMyself?'取消订单':'拒单'}}
     </el-button>
   </el-row>
-</template>
+</template> 
 
 <script>
   export default {
@@ -28,11 +29,13 @@
     components: {},
     computed: {
       isMyself: function () {
-        // if (this.isBrand()) {
-        //   return this.$store.getters.currentUser.companyCode == this.slotData.purchaser.uid;
-        // } else {
-        return this.$store.getters.currentUser.companyCode == this.slotData.belongTo.uid;
-        // }
+        if (this.isBrand()) {
+          return this.$store.getters.currentUser.companyCode == this.slotData.purchaser.uid && this.slotData
+            .belongTo == null;
+        } else {
+          return this.$store.getters.currentUser.companyCode == this.slotData.belongTo.uid && this.slotData
+            .purchaser == null;
+        }
       },
       isProduction: function () {
         return this.slotData.status == 'IN_PRODUCTION';
