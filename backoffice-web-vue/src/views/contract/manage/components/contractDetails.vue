@@ -2,7 +2,6 @@
   <el-container>
     <el-main>
       <el-row
-        class="contract_custom-row"
         type="flex"
         justify="start"
       >
@@ -71,8 +70,8 @@ export default {
       window.location.href = 'http://localhost:8081/b2b/user/agreement/download/' + result.data;
 
     },
-    async onSearchSeal(vel,keyword,page, size) {
-      this.contractCode = vel.code;
+    async onSearchSeal(keyword,page, size) {
+      this.contractCode = slotData.code;
       if(keyword == null){
         keyword = '';
       }
@@ -127,7 +126,6 @@ export default {
 
 .contract_custom-fixed_terms {
   padding: 20px;
-  text-align: center;
   // border: 1px solid #969696;
   //   border-radius: 10px;
 }

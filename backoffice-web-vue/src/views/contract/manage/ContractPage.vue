@@ -33,7 +33,6 @@
   import {
     createNamespacedHelpers
   } from "vuex";
-  import ContractDetails from "./components/ContractDetails";
 
   const {
     mapGetters,
@@ -46,6 +45,7 @@
   import ContractToolbar from "./toolbar/ContractToolbar";
   import ContractSearchResultList from "./list/ContractSearchResultList";
   import ContractReport from "./components/ContractReport";
+  import ContractDetails from "./components/ContractDetails";
   import TabLabelBubble from "./components/TabLabelBubble";
 
   // import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";

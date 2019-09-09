@@ -13,7 +13,7 @@
     <el-row style="margin-top:10px;">
       <el-timeline>
         <el-timeline-item placement="bottom" v-for="(payPlanItem, index) in slotData.payPlan.payPlanItems" :key="index"
-                          :color="index==0?'#FFD60C':'#E4E7ED'"  hide-timestamp="true">
+                          :color="index==0?'#FFD60C':'#E4E7ED'"  :hide-timestamp="true">
           <el-row type="flex" justify="space-between" align="middle">
             <el-col :span="2">
               <h6 class="info-log-content">{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
