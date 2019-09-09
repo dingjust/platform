@@ -46,7 +46,6 @@
 </template>
 
 <script>
-
   export default {
     name: 'PurchaseOrderInfoReceipt',
     props: ['slotData', 'receiptOrders'],

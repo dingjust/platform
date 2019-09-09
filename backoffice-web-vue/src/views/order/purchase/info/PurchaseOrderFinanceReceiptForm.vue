@@ -22,7 +22,7 @@
     <el-row type="flex" align="middle">
       <el-col :span="8">
         <el-row type="flex" align="middle">
-          <h6 class="finance-form-text1">类型</h6>
+          <h6 class="finance-form-text1">收款类型</h6>
           <div style="margin-left: 20px">
             <el-radio-group v-model="form.paymentType" size="mini" fill="#FFD60C">
               <el-radio-button v-for="item in receiptTypes"
@@ -86,28 +86,14 @@
     components: {
       PurchaseOrderInfoReceipt
     },
-    props: ['slotData', 'payPlanItem', 'form','receiptOrders'],
+    props: ['slotData', 'payPlanItem', 'form', 'receiptOrders'],
     mixins: [],
     computed: {
       headers: function () {
         return {
           Authorization: this.$store.getters.token
         }
-      },
-      // receiptOrders: function () {
-      //   let result = [];
-      //   for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
-      //     for (var receipt of payPlanItem.receiptOrders) {
-      //       result.push(receipt);
-      //     }
-      //   }
-      //
-      //   if (result.length > 0) {
-      //     result[result.length - 1].deletable = true;
-      //   }
-      //
-      //   return result;
-      // }
+      }
     },
     methods: {
       onBeforeUpload (file) {
@@ -127,10 +113,28 @@
       },
       async createReceiptOrder () {
         if (this.form.paymentType === '') {
-          this.$message.error('类型必填');
+          this.$message.error('请选择收款类型');
           return;
         }
 
+        if (this.form.amount === '') {
+          this.$message.error('金额必填');
+          return;
+        }
+
+        if (this.payPlanItem.remainingUnReceiptAmount < parseFloat(this.form.amount)) {
+          this.$confirm('收款金额将超出剩余未收金额', '是否确认创建收款单', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.commit();
+          });
+        } else {
+          this.commit();
+        }
+      },
+      async commit () {
         if (this.form.payCertificate === '') {
           this.form.payCertificate = null;
         }
@@ -138,28 +142,15 @@
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
         }
-        this.$emit('close');
+        this.$emit('clearFormData');
+        this.$emit('refreshItem');
       },
       async refreshItem () {
-        // const url = this.apis().getPurchaseOrder(this.slotData.code);
-        // const result = await this.$http.get(url);
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        //   return;
-        // }
-
         this.$emit('refreshItem');
       },
       async refreshData () {
-        // const url = this.apis().getPurchaseOrder(this.slotData.code);
-        // const result = await this.$http.get(url);
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        //   return;
-        // }
-
         this.$emit('refreshData');
-      },
+      }
     },
     data () {
       return {
