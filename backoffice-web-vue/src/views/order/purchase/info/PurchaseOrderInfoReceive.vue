@@ -107,7 +107,7 @@
             <td>{{sizeArray[0].color}}</td>
             <template v-for="(size,index) in sizeArray">
               <td style="width:80px">
-                <el-input class="order-table-input" type="number" v-model="size.quantity" placeholder="输入">
+                <el-input class="order-table-input" type="number" v-model="size.quantity">
                 </el-input>
               </td>
             </template>
@@ -629,7 +629,7 @@
   .order-table tr th {
     border: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
-    height: 50px;
+    height: 30px;
     font-size: 10px;
   }
 
@@ -640,6 +640,7 @@
   .order-table-input .el-input__inner {
     /* width: 60px; */
     border: 0px solid #fff;
+    text-align: center;
   }
 
   .order-table-btn {

@@ -60,13 +60,15 @@
             <td style="width:80px">{{sizeArray[0].color}}</td>
             <template v-for="(item,index) in sizeArray">
               <td style="width:80px" :colspan="getColspanLength3()">
-                <el-input class="order-table-input" v-model="item.quantity" type="number" placeholder="输入">
+                <el-input class="order-table-input" v-model="item.quantity" type="number">
                 </el-input>
               </td>
             </template>
             <td style="width:100px">{{countRowAmount(rowIndex)}}</td>
           </tr>
         </template>
+      </table>
+      <table cellspacing="2" width="100%" :height="form.entries.length*50" class="order-table" style="margin-bottom:20px;">
         <tr>
           <td>数量合计</td>
           <td :colspan="getColspanLength2()+1">{{totalAmout}}</td>
@@ -77,68 +79,68 @@
             ￥{{totalAmout*slotData.unitPrice}}</td>
         </tr>
         <tr>
-          <td>已付金额</td>
-          <td :colspan="getColspanLength2()+1">￥{{form.paid}}</td>
-        </tr>
-        <tr>
-          <td>剩余合计</td>
-          <td :colspan="getColspanLength2()+1">￥{{totalAmout*slotData.unitPrice-form.paid}}</td>
-        </tr>
-        <tr>
           <td>延期扣款</td>
           <td class="order-table-input">
-            <el-input v-model.number="form.delayDeduction" placeholder="输入" type="number"></el-input>
+            <el-input v-model.number="form.delayDeduction" prefix-icon="el-icon-minus" type="number"></el-input>
           </td>
           <td>扣款备注</td>
           <td :colspan="getColspanLength()" class="order-table-input">
-            <el-input v-model="form.delayDeductionRemarks" placeholder="输入"></el-input>
+            <el-input v-model="form.delayDeductionRemarks"></el-input>
           </td>
         </tr>
         <tr>
         <tr>
           <td>质量扣款</td>
           <td class="order-table-input">
-            <el-input v-model.number="form.qualityDeduction" placeholder="输入" type="number"></el-input>
+            <el-input v-model.number="form.qualityDeduction" type="number" prefix-icon="el-icon-minus"></el-input>
           </td>
           <td>扣款备注</td>
           <td :colspan="getColspanLength()" class="order-table-input">
-            <el-input v-model="form.qualityDeductionRemarks" placeholder="输入"></el-input>
+            <el-input v-model="form.qualityDeductionRemarks"></el-input>
           </td>
         </tr>
         <tr>
         <tr>
           <td>其他扣款</td>
           <td class="order-table-input">
-            <el-input v-model.number="form.otherDeduction" placeholder="输入" type="number"></el-input>
+            <el-input v-model.number="form.otherDeduction" type="number" prefix-icon="el-icon-minus"></el-input>
           </td>
           <td>扣款备注</td>
           <td :colspan="getColspanLength()" class="order-table-input">
-            <el-input v-model="form.otherDeductionRemarks" placeholder="输入"></el-input>
+            <el-input v-model="form.otherDeductionRemarks"></el-input>
           </td>
         </tr>
         <tr>
         <tr>
-          <td>其他款项</td>
+          <td>其他增款</td>
           <td class="order-table-input">
-            <el-input v-model.number="form.otherFunds" placeholder="输入" type="number"></el-input>
+            <el-input v-model.number="form.otherFunds" type="number" prefix-icon="el-icon-plus"></el-input>
           </td>
           <td>扣款备注</td>
           <td :colspan="getColspanLength()" class="order-table-input">
-            <el-input v-model="form.otherFundsRemarks" placeholder="输入"></el-input>
+            <el-input v-model="form.otherFundsRemarks"></el-input>
           </td>
         </tr>
         <tr>
         <tr>
           <td>备注</td>
           <td :colspan="getColspanLength2()+1" class="order-table-input" style="width:120px">
-            <el-input v-model="form.remarks" placeholder="输入"></el-input>
+            <el-input v-model="form.remarks"></el-input>
           </td>
         </tr>
         <tr>
-          <td>应付金额</td>
+          <td>实际应付总额</td>
           <td :colspan="getColspanLength2()+1" class="order-table-input" style="width:120px">
             {{shouldPay}}
           </td>
+        </tr>
+        <tr>
+          <td>已付金额</td>
+          <td :colspan="getColspanLength2()+1">￥{{form.paid}}</td>
+        </tr>
+        <tr>
+          <td>剩余应付金额</td>
+          <td :colspan="getColspanLength2()+1">￥{{shouldPay-form.paid}}</td>
         </tr>
       </table>
     </el-form>
@@ -214,7 +216,7 @@
         return totalAmount;
       },
       shouldPay: function () {
-        var result = this.totalAmout * this.converNum(this.slotData.unitPrice) - this.converNum(this.form.paid) - this
+        var result = this.totalAmout * this.converNum(this.slotData.unitPrice)  - this
           .converNum(this.form.delayDeduction) - this.converNum(this.form.qualityDeduction) - this.converNum(this.form
             .otherDeduction) + this.converNum(this.form.otherFunds);
         return result;
@@ -562,14 +564,14 @@
     /* width: 600px;
     height: 600px; */
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
   }
 
   .order-table tr td,
   .order-table tr th {
     border: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
-    height: 50px;
+    height: 30px;
     font-size: 10px;
   }
 
