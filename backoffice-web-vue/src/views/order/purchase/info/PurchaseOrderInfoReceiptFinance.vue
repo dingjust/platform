@@ -12,14 +12,16 @@
     </el-row>
     <el-row style="margin-top:10px;">
       <el-timeline>
-        <el-timeline-item placement="bottom" v-for="(payPlanItem, index) in slotData.payPlan.payPlanItems" :key="index"
+        <el-timeline-item placement="bottom" v-for="(payPlanItem, index) in payPlanItems" :key="index"
                           :color="index==0?'#FFD60C':'#E4E7ED'"  :hide-timestamp="true">
           <el-row type="flex" justify="space-between" align="middle">
             <el-col :span="2">
               <h6 class="info-log-content">{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
             </el-col>
             <el-col :span="10">
-              <h6 class="finance-log-content">{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
+              <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
+                {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余款项</h6>
+              <h6 class="finance-log-content" v-else>{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
                 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}完成付款
                 {{payPlanItem.payPercent * 100}}%作为{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
             </el-col>
@@ -68,6 +70,13 @@
     },
     mixins: [],
     computed: {
+      payPlanItems: function () {
+        let result = this.slotData.payPlan.payPlanItems;
+        if (result != null && result.length > 0) {
+          result[result.length - 1].isLastItem = true;
+        }
+        return result;
+      },
       receiptOrders: function () {
         let result = [];
         for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
@@ -104,6 +113,7 @@
 
         if (result.payPlan.isCompleted === true) {
           this.financeReceiptFormVisible = false;
+          return;
         }
 
         for (var payPlanItem of result.payPlan.payPlanItems) {
