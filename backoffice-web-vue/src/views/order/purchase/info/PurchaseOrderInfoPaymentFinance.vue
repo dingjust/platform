@@ -103,9 +103,14 @@
 
         this.$set(this.slotData, 'payPlan', result.payPlan);
 
+        if (result.payPlan.isCompleted === true) {
+          this.financePaymentFormVisible = false;
+        }
+
         for (var payPlanItem of result.payPlan.payPlanItems) {
           if (payPlanItem.isCurrentItem === true) {
             this.$set(this.itemData, 'remainingUnpaidAmount', payPlanItem.remainingUnpaidAmount);
+            this.$set(this.itemData, 'lastItemAmount', payPlanItem.lastItemAmount);
             this.$set(this.itemData, 'payStatus', payPlanItem.payStatus);
             this.$set(this.itemData, 'moneyType', payPlanItem.moneyType);
             this.$set(this.itemData, 'payPercent', payPlanItem.payPercent);

@@ -102,9 +102,14 @@
         }
         this.$set(this.slotData, 'payPlan', result.payPlan);
 
+        if (result.payPlan.isCompleted === true) {
+          this.financeReceiptFormVisible = false;
+        }
+
         for (var payPlanItem of result.payPlan.payPlanItems) {
           if (payPlanItem.isCurrentItem === true) {
             this.$set(this.itemData, 'remainingUnReceiptAmount', payPlanItem.remainingUnReceiptAmount);
+            this.$set(this.itemData, 'lastItemAmount', payPlanItem.lastItemAmount);
             this.$set(this.itemData, 'receiptStatus', payPlanItem.receiptStatus);
             this.$set(this.itemData, 'moneyType', payPlanItem.moneyType);
             this.$set(this.itemData, 'payPercent', payPlanItem.payPercent);
@@ -112,27 +117,6 @@
             return;
           }
         }
-
-        // var items = result.payPlan.payPlanItems;
-        // if (items.length > 0) {
-        //   var receipts = items[items.length - 1].receiptOrders;
-        //   if (receipts.length > 0) {
-        //     if (receipts[receipts.length - 1].receiptStatus === 'PAID') {
-        //       this.financeReceiptFormVisible = false;
-        //     }else{
-        //       for (var payPlanItem of result.payPlan.payPlanItems) {
-        //         if (payPlanItem.isCurrentItem === true) {
-        //           this.$set(this.itemData, 'remainingUnReceiptAmount', payPlanItem.remainingUnReceiptAmount);
-        //           this.$set(this.itemData, 'receiptStatus', payPlanItem.receiptStatus);
-        //           this.$set(this.itemData, 'moneyType', payPlanItem.moneyType);
-        //           this.$set(this.itemData, 'payPercent', payPlanItem.payPercent);
-        //           this.$set(this.itemData, 'id', payPlanItem.id);
-        //           return;
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
       },
       onClose () {
         this.financeReceiptFormVisible = false;
