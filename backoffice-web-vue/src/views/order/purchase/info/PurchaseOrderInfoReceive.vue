@@ -21,11 +21,6 @@
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">联系方式</h6>
             <el-input placeholder="输入手机号" v-model="form.consignorPhone" size="mini">
-              <el-select v-model="form.consignorPhone" slot="append" placeholder="请选择">
-                <el-option label="123" value="123"></el-option>
-                <el-option label="1234" value="1234"></el-option>
-                <el-option label="1324" value="1324"></el-option>
-              </el-select>
             </el-input>
           </el-row>
         </el-col>
@@ -112,7 +107,7 @@
             <td>{{sizeArray[0].color}}</td>
             <template v-for="(size,index) in sizeArray">
               <td style="width:80px">
-                <el-input class="order-table-input" type="number" v-model="size.quantity" placeholder="输入">
+                <el-input class="order-table-input" type="number" v-model="size.quantity">
                 </el-input>
               </td>
             </template>
@@ -151,12 +146,9 @@
     </el-row>
     <el-row type="flex" justify="center" class="info-receive-row">
       <template v-if="isBrand()">
-        <!-- <el-button class="info-receive-submit" v-if="slotData.deliveryOrders==null||slotData.deliveryOrders.length==0"
-          @click="onSubmit">确认创建</el-button> -->
         <el-button class="info-receive-submit" v-if="showSaveBtn" @click="onSave">
           保存并退出</el-button>
-        <el-button class="info-receive-submit"
-          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='UNCOMMITTED'" @click="onCommit">
+        <el-button class="info-receive-submit" v-if="showCommitBtn" @click="onCommit">
           确认完成收货</el-button>
         <el-button class="info-receive-submit"
           v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onWithdraw">
@@ -220,6 +212,14 @@
           return this.slotData.deliveryOrders[0].status != 'PENDING_CONFIRM';
         } else {
           return true;
+        }
+      },
+      showCommitBtn: function () {
+        if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+          return this.slotData.status == 'OUT_OF_STORE';
+        } else {
+          return this.slotData.deliveryOrders[0].status == 'UNCOMMITTED' || this.slotData.deliveryOrders[0].status ==
+            'REJECTED';
         }
       }
     },
@@ -425,6 +425,37 @@
         this.$message.success('拒绝成功');
         //刷新数据
         this.refreshData();
+      },
+      initForm() {
+        if (this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0) {
+          this.form.id = this.slotData.deliveryOrders[0].id;
+          this.form.code = this.slotData.deliveryOrders[0].code;
+          this.form.consignorName = this.slotData.deliveryOrders[0].consignorName;
+          this.form.consignorPhone = this.slotData.deliveryOrders[0].consignorPhone;
+          this.form.isOfflineConsignment = this.slotData.deliveryOrders[0].isOfflineConsignment;
+          this.form.consigneeName = this.slotData.deliveryOrders[0].consigneeName;
+          this.form.consigneePhone = this.slotData.deliveryOrders[0].consigneePhone;
+          this.form.consigneeAddress = this.slotData.deliveryOrders[0].consigneeAddress;
+          this.form.brand = this.slotData.deliveryOrders[0].brand;
+          this.form.skuID = this.slotData.deliveryOrders[0].skuID;
+          this.form.remarks = this.slotData.deliveryOrders[0].remarks;
+          this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
+          this.form.withdrawalQuality = this.slotData.deliveryOrders[0].withdrawalQuality
+        } else {
+          var lastShippingOrders = this.slotData.shippingOrders[this.slotData.shippingOrders.length - 1];
+
+          this.form.consignorName = lastShippingOrders.consignorName;
+          this.form.consignorPhone = lastShippingOrders.consignorPhone;
+          this.form.isOfflineConsignment = lastShippingOrders.isOfflineConsignment;
+          this.form.consigneeName = lastShippingOrders.consigneeName;
+          this.form.consigneePhone = lastShippingOrders.consigneePhone;
+          this.form.consigneeAddress = lastShippingOrders.consigneeAddress;
+          this.form.brand = lastShippingOrders.brand;
+          this.form.skuID = lastShippingOrders.skuID;
+          this.form.remarks = lastShippingOrders.remarks;
+          this.form.defectiveQuality = lastShippingOrders.defectiveQuality;
+          this.form.withdrawalQuality = lastShippingOrders.withdrawalQuality;
+        }
       }
     },
     data() {
@@ -549,41 +580,13 @@
       },
       slotData: {
         handler(val, oldVal) {
-          if (this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0) {
-            this.form.id = this.slotData.deliveryOrders[0].id;
-            this.form.code = this.slotData.deliveryOrders[0].code;
-            this.form.consignorName = this.slotData.deliveryOrders[0].consignorName;
-            this.form.consignorPhone = this.slotData.deliveryOrders[0].consignorPhone;
-            this.form.isOfflineConsignment = this.slotData.deliveryOrders[0].isOfflineConsignment;
-            this.form.consigneeName = this.slotData.deliveryOrders[0].consigneeName;
-            this.form.consigneePhone = this.slotData.deliveryOrders[0].consigneePhone;
-            this.form.consigneeAddress = this.slotData.deliveryOrders[0].consigneeAddress;
-            this.form.brand = this.slotData.deliveryOrders[0].brand;
-            this.form.skuID = this.slotData.deliveryOrders[0].skuID;
-            this.form.remarks = this.slotData.deliveryOrders[0].remarks;
-            this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
-            this.form.withdrawalQuality = this.slotData.deliveryOrders[0].withdrawalQuality
-          }
+          this.initForm();
         },
         deep: true,
       }
     },
     mounted() {
-      if (this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0) {
-        this.form.id = this.slotData.deliveryOrders[0].id;
-        this.form.code = this.slotData.deliveryOrders[0].code;
-        this.form.consignorName = this.slotData.deliveryOrders[0].consignorName;
-        this.form.consignorPhone = this.slotData.deliveryOrders[0].consignorPhone;
-        this.form.isOfflineConsignment = this.slotData.deliveryOrders[0].isOfflineConsignment;
-        this.form.consigneeName = this.slotData.deliveryOrders[0].consigneeName;
-        this.form.consigneePhone = this.slotData.deliveryOrders[0].consigneePhone;
-        this.form.consigneeAddress = this.slotData.deliveryOrders[0].consigneeAddress;
-        this.form.brand = this.slotData.deliveryOrders[0].brand;
-        this.form.skuID = this.slotData.deliveryOrders[0].skuID;
-        this.form.remarks = this.slotData.deliveryOrders[0].remarks;
-        this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
-        this.form.withdrawalQuality = this.slotData.deliveryOrders[0].withdrawalQuality
-      }
+      this.initForm();
     }
   }
 
@@ -626,7 +629,7 @@
   .order-table tr th {
     border: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
-    height: 50px;
+    height: 30px;
     font-size: 10px;
   }
 
@@ -637,6 +640,7 @@
   .order-table-input .el-input__inner {
     /* width: 60px; */
     border: 0px solid #fff;
+    text-align: center;
   }
 
   .order-table-btn {

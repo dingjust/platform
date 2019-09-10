@@ -20,7 +20,7 @@
         <purchase-order-info-main :slotData="slotData" />
       </el-col>
       <el-col :span="8">
-        <purchase-order-info-aside :slotData="slotData" />
+        <purchase-order-info-aside :slotData="slotData"  :contract="contract" />
       </el-col>
     </el-row>
     <purchase-orders-button-group :slotData="slotData" @onUniqueCode="onUniqueCode" @onConfirm="onConfirm"
@@ -41,7 +41,7 @@
 
   export default {
     name: 'PurchaseOrderInfo',
-    props: ['slotData'],
+    props: ['slotData','contract'],
     components: {
       PurchaseOrderInfoMain,
       PurchaseOrderInfoAside,
@@ -115,11 +115,7 @@
         this.deliverFormVisible = false;
       },
       onDeliverViewsOpen() {
-        if (this.slotData.shippingOrders == null || this.slotData.shippingOrders.length == 0) {
-          this.deliverFormVisible = true;
-        } else {
-          this.deliverViewsVisible = true;
-        }
+        this.deliverFormVisible = true;
       },
       onReconciliation() {
         this.reconciliatioFormVisible = true;

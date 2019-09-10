@@ -2,7 +2,7 @@
   <div class="info-aside-body">
     <purchase-order-info-supplier :slotData="slotData" />
     <purchase-order-info-staff :slotData="slotData" class="" />
-    <purchase-order-info-contract :slotData="slotData" />
+    <purchase-order-info-contract :slotData="slotData" :contract="contract"/>
     <purchase-order-info-log :slotData="slotData" />
   </div>
 </template>
@@ -12,15 +12,17 @@
   import PurchaseOrderInfoStaff from './PurchaseOrderInfoStaff';
   import PurchaseOrderInfoContract from './PurchaseOrderInfoContract';
   import PurchaseOrderInfoLog from './PurchaseOrderInfoLog';
+  import PurchaseOrderButtonGroup from './PurchaseOrderButtonGroup';
 
   export default {
     name: 'PurchaseOrderInfoAside',
-    props: ['slotData','dialogDetailVisible'],
+    props: ['slotData','dialogDetailVisible','contract'],
     components: {
       PurchaseOrderInfoSupplier,
       PurchaseOrderInfoStaff,
       PurchaseOrderInfoContract,
-      PurchaseOrderInfoLog
+      PurchaseOrderInfoLog,
+      PurchaseOrderButtonGroup
     },
     mixins: [],
     computed: {

@@ -1,6 +1,6 @@
 <template>
   <div class="uniquecode-form-body">
-    <el-form ref="form" label-position="top" :model="personalSlotData" :rules="rules" :disabled="personalReadOnly">
+    <el-form ref="form" label-position="top" :model="personalSlotData" :rules="rules" :disabled="readOnly">
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >
       <el-col :span="3" >
         <el-button type="info" style="width: 120px" disabled >个人姓名</el-button>
@@ -23,7 +23,8 @@
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
       <el-button v-if="personalState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
-      <el-button v-if="personalState == 'SUCCESS'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >重新认证</el-button>
+      <!--<el-button v-if="(personalState == 'SUCCESS' || personalState == 'FAILED') && !isReAuthentication" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="reAuthentication" >重新认证</el-button>-->
+      <!--<el-button v-if="isReAuthentication" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>-->
     </el-row>
   </div>
 </template>
@@ -57,6 +58,10 @@
             this.$message.success(result.msg);
           }
 
+      },
+      reAuthentication(){
+        this.readOnly = false;
+        this.isReAuthentication = true;
       }
     },
     data() {
@@ -65,10 +70,12 @@
           username: [{required: true, message: '必填', trigger: 'blur'}],
           idCardNum: [{required: true, message: '必填', trigger: 'blur'}],
         },
+        readOnly : false,
+        isReAuthentication: false,
       }
     },
     created() {
-
+      this.readOnly = this.personalReadOnly
     },
     mounted() {}
 

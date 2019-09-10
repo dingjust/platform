@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column label="创建时间">
         <template slot-scope="scope">
-          <span>{{scope.row.expectedDeliveryDate | formatDate}}</span>
+          <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
       <el-table-column label="当前状态" prop="state" :column-key="'state'" :filters="statuses">
