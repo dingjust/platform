@@ -26,9 +26,6 @@
       <el-button class="dashboard-toolbar-btn" size="mini" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入
       </el-button>
       <!-- <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToTemplate">电子合同模板</el-button> -->
-      <el-button class="dashboard-toolbar-btn" size="mini" @click="enterprise">企业认证</el-button>
-      <el-button class="dashboard-toolbar-btn" size="mini" @click="individualBusiness">个体户认证</el-button>
-      <el-button class="dashboard-toolbar-btn" size="mini" @click="personal">个人认证</el-button>
     </el-row>
   </div>
 </template>
