@@ -19,8 +19,15 @@
               <h6 class="info-log-content">{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
             </el-col>
             <el-col :span="10">
-              <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
-                {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余款项</h6>
+              <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">
+                  {{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后
+                  <span v-if="payPlanItem.moneyType === 'MONTHLY_SETTLEMENT'">
+                    次月月底支付剩余全部款项
+                  </span>
+                  <span v-else>
+                    {{payPlanItem.triggerDays}}天 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余全部款项
+                  </span>
+                </h6>
               <h6 class="finance-log-content" v-else>{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
                 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}完成付款
                 {{payPlanItem.payPercent * 100}}%作为{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>

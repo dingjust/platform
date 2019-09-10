@@ -20,7 +20,7 @@
             </el-col>
             <el-col :span="10">
               <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
-                {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余款项</h6>
+                {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余全部款项</h6>
               <h6 class="finance-log-content" v-else>{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
                 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}完成付款
                 {{payPlanItem.payPercent * 100}}%作为{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
