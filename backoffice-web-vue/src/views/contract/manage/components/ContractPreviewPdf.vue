@@ -12,7 +12,7 @@
              slotData.state != 'COMPLETE'"  type="warning" class="toolbar-search_input"
                  @click="onRevoke(slotData.code)">撤回</el-button>
     </div>
-    <iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl" height="560"
+    <iframe id='previewPdf' :src="'http://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl" height="560"
             width="100%">
     </iframe>
   </div>

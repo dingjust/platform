@@ -322,6 +322,12 @@ const state = {
     {code: 'PARTY_A_SIGN', name: '待甲方签署'},
     {code: 'PARTY_B_SIGN', name: '待乙方签署'}
   ],
+  contractStatesQuery: [
+    {code: 'WAIT_SIGN', name: '待签署'},
+    {code: 'COMPLETE', name: '已签署'},
+    {code: 'INVALID', name: '已作废'},
+
+  ],
   // 印章状态
   sealStates: [
     {code: 'NORMAL', name: '正常'},

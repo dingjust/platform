@@ -21,21 +21,7 @@
         <span class="create-contract-title">创建合同</span>
       </el-row>
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
-      <el-row type="flex" justify="space-around">
-        <el-col :span="6">
-          <el-row type="flex" justify="space-between">
-            <el-radio v-model="hasFrameworkContract" :label="false">无框架合同</el-radio>
-            <el-radio v-model="hasFrameworkContract" :label="true">有框架合同</el-radio>
-          </el-row>
-        </el-col>
-        <el-divider direction="vertical"></el-divider>
-        <el-col :span="6">
-          <el-row type="flex" justify="space-between">
-            <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
-            <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
-          </el-row>
-        </el-col>
-      </el-row>
+
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择订单" v-model="orderSelectFile.code" :disabled="true">
@@ -51,35 +37,71 @@
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
-        <el-col :span="8" :offset="2">
-           <el-input size="small" placeholder="选择纸质合同" v-model="input1" :disabled="true">
-            <el-button slot="prepend">上传纸质合同</el-button>
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="请输入合同编号" v-model="selectFile.title" >
+            <el-button slot="prepend" :disabled="true" >合同编号</el-button>
           </el-input>
-          <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1"
-            list-type="picture-card" :on-exceed="handleExceed" :file-list="fileList">
-             <el-button size="small">上传纸质合同</el-button>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType!='1'">
+        <el-col :span="8" :offset="2">
+          <el-upload
+            name="file"
+            :action="mediaUploadUrl"
+            list-type="picture-card"
+            :data="uploadFormData"
+            :before-upload="onBeforeUpload"
+            :on-success="onSuccess"
+            :headers="headers"
+            :on-exceed="handleExceed"
+            :file-list="fileList"
+            :on-preview="handlePreview"
+            multiple :limit="1"
+            :on-remove="handleRemove">
             <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
-            <i slot="default" class="el-icon-plus"></i>
+            <i class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
               <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
               <span class="el-upload-list__item-actions">
-                <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-                  <i class="el-icon-delete"></i>
-                </span>
-                <span v-if="!disabled" class="el-upload-list__item-file-name">
-                  {{file.name}}
-                </span>
-              </span>
+            <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
+            <i class="el-icon-delete"></i>
+            </span>
+            <span v-if="!disabled" class="el-upload-list__item-file-name">
+            {{file.name}}
+            </span>
+            </span>
             </div>
           </el-upload>
         </el-col>
       </el-row>
+      <el-row  class="create-contract-row" type="flex" justify="start">
+        <el-col :push="2" :span="8">
+          <span class="tips">合同类型</span>
+          <el-radio v-model="hasFrameworkContract" :label="false">无框架合同</el-radio>
+          <el-radio v-model="hasFrameworkContract" :label="true">有框架合同</el-radio>
+        </el-col>
+        <el-col v-if="hasFrameworkContract" :span="5" :offset="2">
+          <el-input size="small" placeholder="选择框架协议" v-model="selectFile.title" :disabled="true">
+            <el-button slot="prepend" @click="dialogTemplateVisible=true">选择已签协议</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row  class="create-contract-row" type="flex" justify="start">
+        <el-col :push="2" :span="8">
+          <span class="tips">我的身份</span>
+          <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
+          <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
+        </el-col>
+      </el-row>
+
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
           <!--<el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
         </el-col>
         <el-col :span="4" :offset="2">
-          <el-button class="create-contract-button_2" @click="onSave">生成合同</el-button>
+          <el-button v-if="pdfFile == ''" class="create-contract-button" @click="onSave">生成合同</el-button>
+
+          <el-button v-else  class="create-contract-button" @click="onSavePdf" >生成合同</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -96,6 +118,7 @@
   import ContractOrderSelect from "./components/ContractOrderSelect";
   import http from '@/common/js/http';
   import TemplateForm from "../../contract/template/components/TemplateForm";
+  import Bus from '@/common/js/bus.js';
 
   const {
     mapGetters,
@@ -119,7 +142,18 @@
       ...mapGetters({
         page: "page",
         keyword: "keyword"
-      })
+      }),
+      uploadFormData: function () {
+        return {
+          fileFormat: 'DefaultFileFormat',
+          conversionGroup: 'DefaultProductConversionGroup',
+        };
+      },
+      headers: function () {
+        return {
+          Authorization: this.$store.getters.token
+        }
+      }
     },
     methods: {
       ...mapActions({
@@ -165,11 +199,50 @@
         console.log(this.selectFile);
       },
       handleExceed(files, fileList) {
-        this.$message.warning(`已达最大文件数`);
+        if(fileList > 1){
+          this.$message.warning(`已达最大文件数`);
+          return false;
+        }
+
         console.log(files);
       },
       handleRemove(file) {
-        this.fileList.pop(file);
+        console.log(file);
+        this.fileList = [];
+        this.pdfFile = '';
+      },
+      async onSavePdf(){
+        if(this.orderSelectFile == null){
+          return;
+        }
+        if(this.selectFile == null){
+          return;
+        }
+        let role = '';
+        if(this.partyA){
+          role = 'PARTYA';
+        }else{
+          role = 'PARTYB';
+        }
+
+        let data = {
+          'pdf':this.pdfFile,
+          'role':role,
+          'title':'',
+          'orderCode':this.orderSelectFile.code,
+        }
+
+        const url = this.apis().saveContract();
+        let formData = Object.assign({}, data);
+        const result = await http.post(url, formData);
+
+        this.$message.success(result.msg);
+
+        const searchUrl = this.apis().getContractsList();
+
+        this.refresh({searchUrl});
+
+        this.fn.closeSlider(true);
       },
       async onSave(){
         if(this.orderSelectFile == null){
@@ -198,17 +271,11 @@
 
         this.$message.success(result.msg);
 
+        if(result.data != null && result.data != ''){
+          Bus.$emit('openContract',result.data);
+        }
+
         const searchUrl = this.apis().getContractsList();
-        // const result = await this.$http.post(url,{
-        //   keyword: ''
-        // }, {
-        //   page: 0,
-        //   size: 10
-        // });
-        // if (result["errors"]) {
-        //   this.$message.error(result["errors"][0].message);
-        //   return;
-        // }
 
         this.refresh({searchUrl});
 
@@ -231,6 +298,21 @@
         // this.$router.push("templateForm");
         this.fn.openSlider("创建", TemplateForm);
       },
+      handlePreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      onBeforeUpload(file) {
+        if (file.type !== 'application/pdf') {
+          this.$message.error('选择的文件不是PDF文件');
+          return false;
+        }
+        return true;
+      },
+      onSuccess(response) {
+        console.log(response)
+        this.pdfFile = response;
+      },
     },
     data() {
       return {
@@ -249,6 +331,8 @@
         input1:'',
         mockData:[],
         orderPage:[],
+        disabled:false,
+        pdfFile:'',
       };
     },
     created(){
@@ -369,5 +453,9 @@
     border: 0px solid #FFD60C;
     margin-top: 10px;
     margin-left:10px;
+  }
+  .tips{
+    margin-right: 15px;
+    margin-left: 5px;
   }
 </style>

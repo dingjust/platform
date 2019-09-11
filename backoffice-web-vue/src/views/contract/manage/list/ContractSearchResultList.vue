@@ -41,7 +41,7 @@
       </el-table-column> -->
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="text" @click="previewPdf(scope.row)">查看</el-button>
+          <el-button type="text" @click="previewPdf(scope.row,'')">查看</el-button>
           <el-button type="text"  @click="onDownload(scope.row.code)">下载</el-button>
           <el-button v-if="currentUser.companyName == scope.row.partner &&
           scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
@@ -177,10 +177,16 @@
           this.$message.success(result.msg);
         }
       },
-      async previewPdf(val) {
+      async previewPdf(val,code) {
         this.thisContract = val;
+        let queryCode = '';
+        if(code != null || code !=''){
+          queryCode = code;
+        }else{
+          val.code;
+        }
 
-        const url = this.apis().downContract(val.code);
+        const url = this.apis().downContract(queryCode);
         const result = await http.get(url);
         console.log(result);
 
@@ -206,6 +212,7 @@
       }
     },
     created(){
+      console.log(this.page);
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
         this.pdfVisible = !this.pdfVisible;
@@ -213,6 +220,10 @@
       });
       Bus.$on('openList', args => {
         this.dialogSealVisible = !this.dialogSealVisible;
+      });
+      Bus.$on('openContract', args => {
+        this.pdfVisible = !this.pdfVisible;
+        this.previewPdf('',args);
       });
     }
   }

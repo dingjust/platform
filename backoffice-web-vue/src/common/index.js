@@ -506,9 +506,6 @@ let TENANT_APIS = {
   saveContract() {
     return '/b2b/user/agreement/save';
   },
-  saveContract() {
-    return '/b2b/user/agreement/save';
-  },
   personalAuthentication() {
     return '/b2b/fdd/api/save/personal/verify/data';
   },
@@ -532,7 +529,7 @@ let TENANT_APIS = {
   },
   previewPdf(code){
     return '/b2b/user/agreement/preview/pdf/'+code;
-  }
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 

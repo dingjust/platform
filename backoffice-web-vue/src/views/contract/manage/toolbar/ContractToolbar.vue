@@ -1,4 +1,8 @@
 <template>
+  <div>
+  <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" >
+    <contract-type />
+  </el-dialog>
   <el-form :inline="true">
     <el-form-item label="品牌名">
       <el-input placeholder="输入品牌名" v-model="keyword"></el-input>
@@ -14,9 +18,10 @@
     <el-button-group>
       <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
       <el-button  native-type="reset" @click="">重置</el-button>
-      <el-button type="primary" class="toolbar-search_input" @click="onCreateContract">创建合同</el-button>
+      <el-button type="primary" class="toolbar-search_input" @click="dialogVisible = !dialogVisible">创建合同</el-button>
     </el-button-group>
   </el-form>
+  </div>
 </template>
 
 <script>
@@ -24,6 +29,8 @@
     createNamespacedHelpers
   } from 'vuex';
   import ContractForm from '../ContractForm'
+  import ContractType from '../components/ContractType'
+  import Bus from '@/common/js/bus.js';
 
   const {
     mapMutations
@@ -31,7 +38,7 @@
 
   export default {
     name: 'ContractToolbar',
-    components: {},
+    components: {ContractType},
     computed: {},
     methods: {
       ...mapMutations({
@@ -81,9 +88,13 @@
         keyword: this.$store.state.ContractModule.keyword,
         formData: this.$store.state.ContractModule.formData,
         queryFormData: this.$store.state.ContractModule.queryFormData,
+        dialogVisible:false,
       }
     },
     created() {
+      Bus.$on('openContractType', args => {
+        this.dialogVisible = !this.dialogVisible;
+      })
     }
   }
 

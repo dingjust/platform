@@ -76,13 +76,15 @@
       ...mapMutations({
       }),
       onSearch(page, size) {
+        console.log(1111)
         const keyword = this.keyword;
-        // const statuses = this.statuses;
+        const statuses = this.state;
+        console.log(statuses);
         const url = this.apis().getContractsList();
         this.search({
           url,
-          // keyword,
-          // statuses,
+          keyword,
+          statuses,
           page,
           size
         });
@@ -113,31 +115,32 @@
       onNew(formData) {
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       },
-      async handleClick(tab, event) {
-        console.log(tab);
-        console.log(tab.name);
-
-        const state = 'SIGN';
-
-        const url = this.apis().getContractsList();
-        console.log(url)
-        const result = await this.$http.post(url,{
-            'state':state
-        }, {
-          page: 0,
-          size: 10
-        });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
+      handleClick(tab, event) {
+        this.state = this.getEnumCode(tab.name);
+        if (tab.name == 'ALL') {
+          this.state = '';
+          this.onSearch("");
+        } else {
+          this.onSearch('');
         }
       },
+      getEnumCode (name) {
+        if(name == '待签署'){
+          return 'WAIT_SIGN'
+        }
+        if(name == '已完成'){
+          return 'COMPLETE'
+        }
+        if(name == '已作废'){
+          return 'INVALID'
+        }
+      }
     },
     data() {
       return {
         formData: this.$store.state.PurchaseOrdersModule.formData,
         activeName: "全部",
-        contractStatues: ["全部", "待签署", "待回签", "已完成", "已作废"],
+        contractStatues: ["全部", "待签署", "已完成", "已作废"],
         dialogTableVisible:false,
         contractData:'',
       };
