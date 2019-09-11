@@ -46,6 +46,7 @@
         this.$set(this.slotData, 'code', result);
         this.refresh();
         this.fn.closeSlider(true);
+        this.$emit('afterCreate');
       }
     },
     computed: {

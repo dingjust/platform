@@ -15,7 +15,8 @@
       <el-col :span="16">
         <el-row type="flex">
           <h6 class="finance-form-text1" v-if="isBrand()">剩余未付/本期总额</h6>
-          <h6 class="finance-form-text3">￥{{payPlanItem.remainingUnpaidAmount,2 | floatFormat}}/￥{{slotData.totalPrice * payPlanItem.payPercent,2 | floatFormat}}</h6>
+          <h6 class="finance-form-text3">￥{{payPlanItem.remainingUnpaidAmount,2 | floatFormat}}/￥{{payPlanItem.lastItemAmount != null
+            ? payPlanItem.lastItemAmount : slotData.totalPrice * payPlanItem.payPercent,2 | floatFormat}}</h6>
         </el-row>
       </el-col>
     </el-row>
@@ -121,6 +122,19 @@
           return;
         }
 
+        if (this.payPlanItem.remainingUnpaidAmount < parseFloat(this.form.amount)) {
+          this.$confirm('付款金额将超出剩余未付金额', '是否确认创建付款单', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.commit();
+          });
+        } else {
+          this.commit();
+        }
+      },
+      async commit () {
         if (this.form.payCertificate === '') {
           this.form.payCertificate = null;
         }

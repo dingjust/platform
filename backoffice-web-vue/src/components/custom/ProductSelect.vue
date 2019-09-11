@@ -1,11 +1,16 @@
 <template>
   <div class="animated fadeIn">
+    <el-dialog :visible.sync="productDetailsVisible" width="80%" class="purchase-dialog" append-to-body>
+      <apparel-product-details-page :slotData="formData" @afterCreate="onAfterCreate"/>
+    </el-dialog>
     <el-form :inline="true">
       <el-form-item label="">
         <el-input placeholder="请输入产品货号/名称查询" v-model="keyword"></el-input>
       </el-form-item>
       <!-- <el-button-group> -->
       <el-button type="text" @click="onSearch">查找</el-button>
+
+      <el-button type="text" @click="onNew">创建产品</el-button>
       <!-- </el-button-group> -->
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-form>
@@ -54,6 +59,8 @@
     createNamespacedHelpers
   } from 'vuex';
 
+  import ApparelProductDetailsPage from '@/views/product/apparel/details/ApparelProductDetailsPage';
+
   const {
     mapMutations
   } = createNamespacedHelpers('ApparelProductsModule');
@@ -62,6 +69,9 @@
     name: 'ProductSelect',
     props: ["page"],
     computed: {},
+    components: {
+      ApparelProductDetailsPage
+    },
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
@@ -101,10 +111,19 @@
       },
       onSure() {
         this.$emit('onSelect', this.selectProduct);
+      },
+      onNew() {
+        this.productDetailsVisible = true;
+      },
+      onAfterCreate(){
+        console.log('sdssssss');
+        this.productDetailsVisible = false;
       }
     },
     data() {
       return {
+        productDetailsVisible: false,
+        formData: this.$store.state.ApparelProductsModule.formData,
         multipleSelection: [],
         keyword: '',
         selectProduct: ''

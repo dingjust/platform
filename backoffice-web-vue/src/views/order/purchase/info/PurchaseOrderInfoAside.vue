@@ -2,6 +2,7 @@
   <div class="info-aside-body">
     <purchase-order-info-supplier :slotData="slotData" />
     <purchase-order-info-staff :slotData="slotData" class="" />
+    <purchase-order-button-group :slotData="slotData"/> 
     <purchase-order-info-contract :slotData="slotData" :contract="contract"/>
     <purchase-order-info-log :slotData="slotData" />
   </div>
