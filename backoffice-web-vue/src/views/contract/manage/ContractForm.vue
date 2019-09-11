@@ -3,24 +3,11 @@
     <el-dialog :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body>
           <el-button-group>
             <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
-            <!--<el-button @click="dialogTemplateVisible=false">关闭</el-button>-->
+            <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
           </el-button-group>
       <contract-template-select  @fileSelectChange="onFileSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <!--<el-row slot="title" type="flex" justify="space-between" align="middle">-->
-        <!--<el-col :span="4">-->
-          <!--<div class="template-form-header">-->
-            <!--<h6>订单选择</h6>-->
-          <!--</div>-->
-        <!--</el-col>-->
-        <!--<el-col :span="6">-->
-          <!--<el-button-group>-->
-            <!--&lt;!&ndash;<el-button class="template-form-button" @click="onFileSelectSure">确定</el-button>&ndash;&gt;-->
-            <!--<el-button @click="dialogOrderVisible=false">关闭</el-button>-->
-          <!--</el-button-group>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
       <contract-order-select :page="orderPage" :onSearchOrder="onSearchOrder" @onOrderSelectChange="onOrderSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
@@ -65,13 +52,13 @@
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
         <el-col :span="8" :offset="2">
-          <!-- <el-input size="small" placeholder="选择纸质合同" v-model="input1" :disabled="true">
+           <el-input size="small" placeholder="选择纸质合同" v-model="input1" :disabled="true">
             <el-button slot="prepend">上传纸质合同</el-button>
-          </el-input> -->
+          </el-input>
           <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1"
             list-type="picture-card" :on-exceed="handleExceed" :file-list="fileList">
-            <!-- <el-button size="small">上传纸质合同</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div> -->
+             <el-button size="small">上传纸质合同</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
             <i slot="default" class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
               <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
@@ -108,6 +95,7 @@
   import ContractPreview from "./components/ContractPreview";
   import ContractOrderSelect from "./components/ContractOrderSelect";
   import http from '@/common/js/http';
+  import TemplateForm from "../../contract/template/components/TemplateForm";
 
   const {
     mapGetters,
@@ -125,6 +113,7 @@
       ContractTemplateSelect,
       ContractPreview,
       ContractOrderSelect,
+      TemplateForm,
     },
     computed: {
       ...mapGetters({
@@ -237,7 +226,11 @@
             this.partyA = false;
           }
         }
-      }
+      },
+      onCreateTemp() {
+        // this.$router.push("templateForm");
+        this.fn.openSlider("创建", TemplateForm);
+      },
     },
     data() {
       return {
@@ -375,5 +368,6 @@
     border-radius: 0px;
     border: 0px solid #FFD60C;
     margin-top: 10px;
+    margin-left:10px;
   }
 </style>

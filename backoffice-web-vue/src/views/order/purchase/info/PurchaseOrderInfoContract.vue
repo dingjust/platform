@@ -3,6 +3,12 @@
     <el-dialog :visible.sync="dialogContractVisible" width="85%" class="purchase-dialog">
       <contract-form :slotData="slotData" ></contract-form>
     </el-dialog>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
+    </el-dialog>
+    <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
+      <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
+    </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
       <div class="info-title">
         <h6 class="info-title_text">合同（{{contract==''?'未签署':getEnum('contractStates', contract.state)}}）</h6>
@@ -27,13 +33,15 @@
   import Bus from '@/common/js/bus.js';
   import http from '@/common/js/http';
   import ContractDetails from "../../../contract/manage/components/ContractDetails";
+  import ContractPreviewPdf from '../../../contract/manage/components/ContractPreviewPdf'
 
   export default {
     name: 'PurchaseOrderInfoContract',
     props: ['slotData','contract'],
     components: {
       contractForm,
-      ContractDetails
+      ContractDetails,
+      ContractPreviewPdf,
     },
     mixins: [],
     computed: {
@@ -54,20 +62,69 @@
         }
 
       },
-      async openContract(){
-        const url = this.apis().getContractDetail(this.contract.code);
-        const result = await this.$http.get(url);
+      // async openContract(){
+      //   const url = this.apis().getContractDetail(this.contract.code);
+      //   const result = await this.$http.get(url);
+      //   if (result["errors"]) {
+      //     this.$message.error(result["errors"][0].message);
+      //     return;
+      //   }
+      //   console.log(result);
+      //
+      //   if(result.data != null || result.data != ''){
+      //     Bus.$emit('my-event');
+      //     this.fn.openSlider("创建", ContractDetails,result.data);
+      //   }
+      //
+      // },
+      async openContract() {
+        this.thisContract = this.contract;
+
+        const url = this.apis().downContract(this.contract.code);
+        const result = await http.get(url);
+        console.log(result);
+
+        const aa = 'http://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        //
+        // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
+        this.pdfVisible = true;
+        this.fileUrl = encodeURIComponent(aa)
+      },
+      async onSearchSeal(vel,keyword,page, size) {
+        if(vel != null){
+          this.contractCode = vel.code;
+        }
+
+        if(keyword == null){
+          keyword = '';
+        }
+        const url = this.apis().getSealsList();
+        console.log(url)
+        const result = await this.$http.post(url,{
+          keyword: keyword
+        }, {
+          page: page,
+          size: 10
+        });
         if (result["errors"]) {
           this.$message.error(result["errors"][0].message);
           return;
         }
-        console.log(result);
+        this.sealPage = result;
+        this.dialogSealVisible=true
+      },
+      async onSealSelectChange(data) {
+        this.dialogSealVisible = false;
+        const sealCode = data.code;
 
-        if(result.data != null || result.data != ''){
-          Bus.$emit('my-event');
-          this.fn.openSlider("创建", ContractDetails,result.data);
+        const url = this.apis().flowContract(this.contractCode,sealCode);
+        const result = await http.get(url);
+
+        if(result.data !=  null){
+          window.open(result.data, '_blank');
+        }else{
+          this.$message.success(result.msg);
         }
-
       },
     },
     data() {
@@ -75,9 +132,22 @@
         dialogContractVisible:false,
         dialogTableVisible:false,
         contractData:'',
+        pdfVisible:false,
+        fileUrl:'',
+        thisContract:'',
+        dialogSealVisible:false,
+        sealPage:false,
       }
     },
     created() {
+      Bus.$on('openSeal', args => {
+        this.onSearchSeal();
+        this.pdfVisible = !this.pdfVisible;
+        this.dialogSealVisible = !this.dialogSealVisible;
+      });
+      Bus.$on('openList', args => {
+        this.dialogSealVisible = !this.dialogSealVisible;
+      });
       // this.getContract();
     }
   }
@@ -115,5 +185,8 @@
     padding: 0px !important;
   }
 
+  .el-dialog{
+    width: 80%;
+  }
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn" >
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
       <el-table-column  label="印章" fixed>
         <template slot-scope="scope">
@@ -35,6 +35,7 @@
                    :total="page.totalElements">
     </el-pagination>
   </div>
+
 </template>
 
 <script>
@@ -109,3 +110,10 @@
     }
   }
 </script>
+
+<style>
+  .toolbar-search_input{
+    background-color: #ffd60c;
+    border-color: #ffd60c;
+  }
+</style>

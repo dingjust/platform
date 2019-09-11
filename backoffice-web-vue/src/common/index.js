@@ -518,8 +518,13 @@ let TENANT_APIS = {
   },
   refuseContract(code){
     return '/b2b/user/agreement/reject/sign/'+code;
+  },
+  revokeContract(code){
+    return '/b2b/user/agreement/revoke/'+code;
+  },
+  previewPdf(code){
+    return '/b2b/user/agreement/preview/pdf/'+code;
   }
-
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
@@ -634,6 +639,12 @@ let NONE_TENANT_APIS = {
   },
   refuseContract(code){
     return '/b2b/user/agreement/reject/sign/'+code;
+  },
+  revokeContract(code){
+    return '/b2b/user/agreement/revoke/'+code;
+  },
+  previewPdf(code){
+    return '/b2b/user/agreement/preview/pdf/'+code;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

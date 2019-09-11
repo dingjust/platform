@@ -1,7 +1,8 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn" >
     <el-form :inline="true">
       <el-button class="product-select-btn" @click="onSelected">确定</el-button>
+      <el-button class="product-select-btn" @click="onCreate">新建印章</el-button>
     </el-form>
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight"
               highlight-current-row @current-change="handleCurrentChange" @selection-change="handleSelectionChange">
@@ -24,11 +25,18 @@
 </template>
 
 <script>
+  import SealForm from '../../seal/sealForm'
+  import Bus from '@/common/js/bus.js';
 
   export default {
     name: 'ContractSealList',
     props: ["page"],
     methods: {
+      onCreate() {
+        Bus.$emit('openList');
+        // this.$router.push("sealForm");
+        this.fn.openSlider('创建', SealForm, '');
+      },
       async onPageSizeChanged(val) {
         this._reset();
 
@@ -125,5 +133,8 @@
 
   .el-table__body tr.current-row>td {
     background-color: #ffc107;
+  }
+  .v-modal{
+    display: none;
   }
 </style>

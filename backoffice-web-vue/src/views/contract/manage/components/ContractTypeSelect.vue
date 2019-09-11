@@ -40,22 +40,22 @@
       </el-popover>
     </el-col>
     <el-col :span="8">
-      <!--<div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"-->
-        <!--@click="contractType='3'">-->
-        <!--<el-row>-->
-          <!--<el-col :span="24">-->
-            <!--<h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">-->
-              <!--上传已签纸质合同</h5>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-        <!--<el-row>-->
-          <!--<el-col :span="20">-->
-            <!--<h6-->
-              <!--:class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">-->
-              <!--把已签署的合同文件扫描件上传到订单附件中作为备份</h6>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-      <!--</div>-->
+      <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
+        @click="contractType='3'">
+        <el-row>
+          <el-col :span="24">
+            <h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+              上传已签纸质合同</h5>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="20">
+            <h6
+              :class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              把已签署的合同文件扫描件上传到订单附件中作为备份</h6>
+          </el-col>
+        </el-row>
+      </div>
     </el-col>
   </el-row>
 </template>

@@ -3,6 +3,9 @@
     <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
+    </el-dialog>
 
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :height="autoHeight">
@@ -25,7 +28,7 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="当前状态" prop="state" :column-key="'state'" :filters="statuses">
+      <el-table-column label="当前状态" prop="state" :column-key="'state'" >
         <template slot-scope="scope">
           <!-- <el-tag disable-transitions></el-tag> -->
           {{getEnum('contractStates', scope.row.state)}}
@@ -38,12 +41,12 @@
       </el-table-column> -->
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">查看</el-button>
-          <el-button type="text"  icon="el-icon-edit" @click="onDownload(scope.row.code)">下载</el-button>
-          <!--<a javascript="this.apis().downContract(code)">111</a>-->
-          <el-button v-if="scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text" icon="el-icon-edit" @click="onRefuse(scope.row.code)">拒签</el-button>
-          <el-button v-if="scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text" icon="el-icon-edit" @click="onSearchSeal(scope.row)">签署</el-button>
-          <!-- <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">撤回</el-button> -->
+          <el-button type="text" @click="previewPdf(scope.row)">查看</el-button>
+          <el-button type="text"  @click="onDownload(scope.row.code)">下载</el-button>
+          <el-button v-if="currentUser.companyName == scope.row.partner &&
+          scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
+          <el-button v-if="scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>
+          <el-button v-if="currentUser.companyName != scope.row.partner && scope.row.state != 'COMPLETE'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,6 +66,8 @@
     createNamespacedHelpers
   } from 'vuex';
   import ContractSealList from "../components/ContractSealList";
+  import ContractPreviewPdf from '../components/ContractPreviewPdf'
+  import Bus from '@/common/js/bus.js';
 
   const {
     mapActions
@@ -75,6 +80,7 @@
     name: 'ContractSearchResultList',
     props: ["page"],
     components: {
+      ContractPreviewPdf,
       ContractDetails,
       ContractSealList
     },
@@ -119,17 +125,27 @@
         const result = await http.get(url);
         console.log(result);
 
-        window.location.href = 'http://localhost:8081/b2b/user/agreement/download/' + result.data;
+        window.location.href = 'http://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
       },
       async onRefuse(code){
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
-
+        console.log(result);
+        this.$message.error(result.msg);
+      },
+      async onRevoke(code){
+        console.log(code);
+        const url = this.apis().revokeContract(code);
+        const result = await this.$http.get(url);
+        console.log(result);
         this.$message.error(result.msg);
       },
       async onSearchSeal(vel,keyword,page, size) {
-        this.contractCode = vel.code;
+        if(vel != null){
+          this.contractCode = vel.code;
+        }
+
         if(keyword == null){
           keyword = '';
         }
@@ -161,6 +177,19 @@
           this.$message.success(result.msg);
         }
       },
+      async previewPdf(val) {
+        this.thisContract = val;
+
+        const url = this.apis().downContract(val.code);
+        const result = await http.get(url);
+        console.log(result);
+
+        const aa = 'http://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        //
+        // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
+        this.pdfVisible = true;
+        this.fileUrl = encodeURIComponent(aa)
+      },
 
     },
     data() {
@@ -170,9 +199,21 @@
         sealPage:[],
         dialogSealVisible:false,
         contractCode:'',
+        pdfVisible: false,
+        currentUser: this.$store.getters.currentUser,
+        fileUrl : '',
+        thisContract:'',
       }
     },
     created(){
+      Bus.$on('openSeal', args => {
+        this.onSearchSeal();
+        this.pdfVisible = !this.pdfVisible;
+        this.dialogSealVisible = !this.dialogSealVisible;
+      });
+      Bus.$on('openList', args => {
+        this.dialogSealVisible = !this.dialogSealVisible;
+      });
     }
   }
 
@@ -181,15 +222,18 @@
   .el-table th {
     background-color: #FAFBFC;
   }
-
-  .el-dialog__body {
-    padding-left: 20px;
-    padding-right: 0px;
-    padding-bottom: 30px;
-    padding-top: 0px;
-    color: #606266;
-    font-size: 14px;
-    word-break: break-all;
+  .el-dialog{
+    width: 80%;
   }
+
+  /*.el-dialog__body {*/
+    /*padding-left: 20px;*/
+    /*padding-right: 0px;*/
+    /*padding-bottom: 30px;*/
+    /*padding-top: 0px;*/
+    /*color: #606266;*/
+    /*font-size: 14px;*/
+    /*word-break: break-all;*/
+  /*}*/
 
 </style>
