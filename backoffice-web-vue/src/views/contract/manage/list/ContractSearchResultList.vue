@@ -180,10 +180,10 @@
       async previewPdf(val,code) {
         this.thisContract = val;
         let queryCode = '';
-        if(code != null || code !=''){
+        if(code != null && code !=''){
           queryCode = code;
         }else{
-          val.code;
+          queryCode = val.code;
         }
 
         const url = this.apis().downContract(queryCode);
