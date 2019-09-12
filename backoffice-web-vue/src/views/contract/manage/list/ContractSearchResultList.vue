@@ -125,7 +125,7 @@
         const result = await http.get(url);
         console.log(result);
 
-        window.location.href = 'http://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
       },
       async onRefuse(code){
