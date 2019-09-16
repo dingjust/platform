@@ -2,7 +2,7 @@
   <div class="info-receive-body">
     <el-row class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">收货单</h6>
+        <h6 class="info-title_text">收货单({{receiveOrderStatus}})</h6>
       </div>
     </el-row>
     <el-row class="info-receive-row">
@@ -220,6 +220,13 @@
         } else {
           return this.slotData.deliveryOrders[0].status == 'UNCOMMITTED' || this.slotData.deliveryOrders[0].status ==
             'REJECTED';
+        }
+      },
+      receiveOrderStatus:function(){
+        if(this.slotData.deliveryOrders==null||this.slotData.deliveryOrders.length==0){
+          return '';
+        }else{
+          return this.getEnum('RemarksOrderStatus', this.slotData.deliveryOrders[0].status);
         }
       }
     },

@@ -2,7 +2,7 @@
   <div class="info-detail-body">
     <el-row class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">生产订单详情</h6>
+        <h6 class="info-title_text">生产订单详情({{getEnum('purchaseOrderStatuses', slotData.status)}})</h6>
       </div>
     </el-row>
     <el-row type="flex" justify="space-between" align="center">

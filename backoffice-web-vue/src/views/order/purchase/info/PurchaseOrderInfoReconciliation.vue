@@ -2,7 +2,7 @@
   <div class="info-receive-body">
     <el-row class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">创建对账单</h6>
+        <h6 class="info-title_text">创建对账单({{reconciliationOrderStatus}})</h6>
       </div>
     </el-row>
     <el-form :disabled="isFactory()">
@@ -68,7 +68,8 @@
           </tr>
         </template>
       </table>
-      <table cellspacing="2" width="100%" :height="form.entries.length*50" class="order-table" style="margin-bottom:20px;">
+      <table cellspacing="2" width="100%" :height="form.entries.length*50" class="order-table"
+        style="margin-bottom:20px;">
         <tr>
           <td>数量合计</td>
           <td :colspan="getColspanLength2()+1">{{totalAmout}}</td>
@@ -216,7 +217,7 @@
         return totalAmount;
       },
       shouldPay: function () {
-        var result = this.totalAmout * this.converNum(this.slotData.unitPrice)  - this
+        var result = this.totalAmout * this.converNum(this.slotData.unitPrice) - this
           .converNum(this.form.delayDeduction) - this.converNum(this.form.qualityDeduction) - this.converNum(this.form
             .otherDeduction) + this.converNum(this.form.otherFunds);
         return result;
@@ -239,6 +240,13 @@
           return this.slotData.reconciliationOrders[0].status == 'UNCOMMITTED' || this.slotData.reconciliationOrders[
               0].status ==
             'REJECTED';
+        }
+      },
+      reconciliationOrderStatus: function () {
+        if (this.slotData.reconciliationOrders == null || this.slotData.reconciliationOrders.length == 0) {
+          return '';
+        } else {
+          return this.getEnum('RemarksOrderStatus', this.slotData.reconciliationOrders[0].status);
         }
       }
     },
