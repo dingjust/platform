@@ -46,11 +46,12 @@
               <h6 class="progress-info">备注: {{item.remarks}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="center" align="middle" v-if="item.sequence>=currentSequence&&slotData.status=='IN_PRODUCTION'">
+          <el-row type="flex" justify="center" align="middle"
+            v-if="item.sequence>=currentSequence&&slotData.status=='IN_PRODUCTION'&&isFactory()">
             <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onEdit(item)">编辑</el-button>
           </el-row>
           <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
-            v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'">
+            v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
             <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
               {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
           </el-row>
@@ -132,7 +133,7 @@
         this.$message.success('更新成功');
         this.updateFormVisible = false;
       },
-      async onProgressFinish(item,index) {
+      async onProgressFinish(item, index) {
         item.updateOnly = false;
         const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, item.id);
         const result = await this.$http.put(url, item);
@@ -142,10 +143,10 @@
         }
         this.$message.success('更新成功');
         this.updateFormVisible = false;
-        if(index!=this.slotData.progresses.length-1){
-        this.slotData.currentPhase=this.slotData.progresses[index+1].phase;
-        }else{
-          this.slotData.status='IN_PRODUCTION';
+        if (index != this.slotData.progresses.length - 1) {
+          this.slotData.currentPhase = this.slotData.progresses[index + 1].phase;
+        } else {
+          this.slotData.status = 'IN_PRODUCTION';
         }
       },
     },
