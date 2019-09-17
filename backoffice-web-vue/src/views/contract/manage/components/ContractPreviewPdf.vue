@@ -1,17 +1,17 @@
 <template>
-  <div :data="slotData" style="width: 100%">
+  <div>
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;">
-      <el-button type="warning"  @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
-      <el-button  v-if="slotData.state == 'SIGN' || slotData.state == 'PARTY_A_SIGN' || slotData.state == 'PARTY_B_SIGN'"
-                  type="warning" class="toolbar-search_input" @click="onRefuse(slotData.code)" >拒签</el-button>
+      <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
+      <el-button v-if="slotData.state == 'SIGN' || slotData.state == 'PARTY_A_SIGN' || slotData.state == 'PARTY_B_SIGN'"
+        type="warning" class="toolbar-search_input" @click="onRefuse(slotData.code)">拒签</el-button>
       <el-button v-if="slotData.state == 'SIGN' || slotData.state == 'PARTY_A_SIGN' ||
-             slotData.state == 'PARTY_B_SIGN'"  type="warning" class="toolbar-search_input"
-                 @click="onSearchSeal">签署</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE'"  type="warning" class="toolbar-search_input"
-                 @click="onRevoke(slotData.code)">撤回</el-button>
+             slotData.state == 'PARTY_B_SIGN'" type="warning" class="toolbar-search_input" @click="onSearchSeal">签署
+      </el-button>
+      <el-button v-if="slotData.state != 'COMPLETE'" type="warning" class="toolbar-search_input"
+        @click="onRevoke(slotData.code)">撤回</el-button>
     </div>
-    <iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl" height="560"
-            width="100%">
+    <iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
+      height="560" width="100%">
     </iframe>
   </div>
 </template>
@@ -23,31 +23,32 @@
 
   export default {
     name: 'ContractPreviewPdf',
-    props: ['slotData','fileUrl'],
+    props: ['slotData', 'fileUrl'],
     components: {
       ContractSealList
     },
-    data () {
+    data() {
       return {
         currentUser: this.$store.getters.currentUser,
-        sealPage:'',
+        sealPage: '',
+        reFresh:true
       }
     },
     methods: {
-      async onRefuse(code){
+      async onRefuse(code) {
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
         console.log(result);
         this.$message.error(result.msg);
       },
-      async onRevoke(code){
+      async onRevoke(code) {
         console.log(code);
         const url = this.apis().revokeContract(code);
         const result = await this.$http.get(url);
         console.log(result);
         this.$message.error(result.msg);
       },
-      async onDownload(code){
+      async onDownload(code) {
         const url = this.apis().downContract(code);
         const result = await http.get(url);
         console.log(result);
@@ -58,20 +59,22 @@
         Bus.$emit('openSeal');
       },
     },
-    created () {
-    }
+    created() {},
   }
+
 </script>
 
 <style>
-  .toolbar-search_input{
+  .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
   }
-  .v-modal{
+
+  /* .v-modal{
+    display: none;
+  } */
+  .toolbar .toolbarViewer {
     display: none;
   }
-  .toolbar .toolbarViewer{
-    display: none;
-  }
+
 </style>

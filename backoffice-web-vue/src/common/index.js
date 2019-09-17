@@ -621,6 +621,9 @@ let NONE_TENANT_APIS = {
   saveContract() {
     return '/b2b/user/agreement/save';
   },
+  getContractDetail(code) {
+    return '/b2b/user/agreement/get/' + code;
+  },
   downContract(code) {
     return '/b2b/user/agreement/get/download/token/' + code;
   },
@@ -642,9 +645,6 @@ let NONE_TENANT_APIS = {
   getAuthenticationEnterprise() {
     return '/b2b/cert/enterprise/cert/info';
   },
-  getContractDetail(code) {
-    return '/b2b/user/agreement/get/' + code;
-  },
   refuseContract(code){
     return '/b2b/user/agreement/reject/sign/'+code;
   },
@@ -653,7 +653,7 @@ let NONE_TENANT_APIS = {
   },
   previewPdf(code){
     return '/b2b/user/agreement/preview/pdf/'+code;
-  }
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

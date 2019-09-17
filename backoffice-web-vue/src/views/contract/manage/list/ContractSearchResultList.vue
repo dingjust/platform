@@ -221,10 +221,10 @@
       Bus.$on('openList', args => {
         this.dialogSealVisible = !this.dialogSealVisible;
       });
-      Bus.$on('openContract', args => {
-        this.pdfVisible = !this.pdfVisible;
-        this.previewPdf('',args);
-      });
+      // Bus.$on('openContract', args => {
+      //   this.pdfVisible = !this.pdfVisible;
+      //   this.previewPdf('',args);
+      // });
     }
   }
 
