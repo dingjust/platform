@@ -381,7 +381,27 @@ const state = {
       code: 'MONTHLY_SETTLEMENT',
       name: '月结'
     }
-  ]
+  ],
+  CooperatorType: [
+    {
+      code: 'ONLINE',
+      name: '线上合作商'
+    },
+    {
+      code: 'OFFLINE',
+      name: '自定义合作商'
+    }
+  ],
+  CooperatorCategory: [
+    {
+      code: 'SUPPLIER',
+      name: '供应商'
+    },
+    {
+      code: 'CUSTOMER',
+      name: '客户'
+    }
+  ],
 };
 
 const mutations = {};
