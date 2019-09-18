@@ -102,7 +102,7 @@ export default {
     //     },
     //     {
     //       name: '供应商',
-    //       url: '/miscs/supplier',
+    //       url: '/miscs/cooperator',
     //       icon: 'iconNone',
     //     },
     //     {
@@ -180,8 +180,8 @@ export default {
           ]
         },
         {
-          name: '供应商',
-          url: '/miscs/supplier',
+          name: '合作商',
+          url: '/miscs/cooperator',
           icon: 'iconNone',
         },
         {
