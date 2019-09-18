@@ -23,8 +23,6 @@
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
       <el-button v-if="personalState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
-      <!--<el-button v-if="(personalState == 'SUCCESS' || personalState == 'FAILED') && !isReAuthentication" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="reAuthentication" >重新认证</el-button>-->
-      <!--<el-button v-if="isReAuthentication" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >提交认证</el-button>-->
     </el-row>
   </div>
 </template>
@@ -43,6 +41,13 @@
     },
     methods: {
       async onSave(){
+        if(this.personalSlotData.username == null || this.personalSlotData.username == ''){
+          this.$message.error('请填写个人姓名');
+          return;
+        }else if(this.personalSlotData.idCardNum == null || this.personalSlotData.idCardNum == ''){
+          this.$message.error('请填写身份证号码');
+          return;
+        }else{
           const url = this.apis().personalAuthentication();
           const tempData = {
             username: this.personalSlotData.username,
@@ -57,6 +62,7 @@
           }else{
             this.$message.success(result.msg);
           }
+        }
 
       },
       reAuthentication(){

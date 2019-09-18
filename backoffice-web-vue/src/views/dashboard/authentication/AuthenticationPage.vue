@@ -106,6 +106,9 @@
           }else if(result.data.companyType == 'INDIVIDUAL'){
             this.businessReadOnly = false
             this.companyType = 'INDIVIDUAL';
+          }else if(result.data.companyType == null){
+            this.enterpriseReadOnly = false
+            this.businessReadOnly = false
           }else{
             this.enterpriseReadOnly = false
             this.businessReadOnly = false
@@ -141,8 +144,11 @@
             if(this.companyType == 'ENTERPRISE'){
               this.isBusiness = false;
               this.isCompany = true;
-            }else{
+            }else if(this.companyType == 'INDIVIDUAL'){
               this.isBusiness = true;
+              this.isCompany = false;
+            }else{
+              this.isBusiness = false;
               this.isCompany = false;
             }
         }
