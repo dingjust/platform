@@ -151,7 +151,7 @@ export default {
         },
         {
           name: '合作商',
-          url: '/miscs/supplier',
+          url: '/miscs/cooperator',
           icon: 'iconNone',
         },
         // {

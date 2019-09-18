@@ -26,6 +26,7 @@ import ProofingsModule from './order/proofings';
 import SampleProductModule from './miscs/sampleProduct';
 import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
 import SuppliersModule from './miscs/suppliers';
+import CooperatorModule from './miscs/cooperator';
 import IndustrialClustersModule from './miscs/industrial-clusters';
 import LabelsModule from './miscs/labels';
 import CarouselsModule from './miscs/carousels';
@@ -68,6 +69,7 @@ export {
   SampleProductModule,
   SampleCheckoutHistModule,
   SuppliersModule,
+  CooperatorModule,
   OperationCoursesModule,
   WalletModule,
   CashOutManagerModule,

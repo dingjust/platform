@@ -120,7 +120,7 @@ export default {
         },
         {
           name: '供应商',
-          url: '/miscs/supplier',
+          url: '/miscs/cooperator',
           icon: 'iconNone',
         },
         // {

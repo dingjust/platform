@@ -201,9 +201,25 @@ const router = new Router({
               name: '样衣借还记录',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
             }, {
-              path: '/miscs/supplier',
-              name: '供应商',
-              component: () => import( /* webpackChunkName: 'supplier' */ '@/views/miscs/supplier/SupplierPage')
+              path: '/miscs/cooperator',
+              name: '合作商',
+              component: {
+                render(c) {
+                  return c('router-view');
+                }
+              },
+              children:[
+                {
+                  path: 'cooperatorCreate',
+                  name: '添加合作商',
+                  component: () => import( /* webpackChunkName: 'operationCourse' */ '@/views/miscs/cooperator/form/CooperatorFormPage')
+                },
+                {
+                  path: '',
+                  name: '合作商列表',
+                  component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/CooperatorPage'),
+                }
+              ]
             }, {
               path: '/miscs/operationCourse',
               name: '使用教程',
