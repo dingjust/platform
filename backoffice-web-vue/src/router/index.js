@@ -192,7 +192,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/label/LabelPage')
             },
             {
-              path: '/miscs/sample/sampleProduct',
+              path: '/product/sample/sampleProduct',
               name: '样衣管理',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleProduct/SampleProductPage'),
             },
