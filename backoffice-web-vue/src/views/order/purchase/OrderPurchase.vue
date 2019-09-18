@@ -113,37 +113,53 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-row type="flex" align="middle">
-                    <h6 class="info-input-prepend">交货日期</h6>
-                    <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期">
-                    </el-date-picker>
-                  </el-row>
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择日期', trigger: 'change' ,type: 'date'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.expectedDeliveryDate'">
+                    <el-row type="flex" align="middle">
+                      <h6 class="info-input-prepend">交货日期</h6>
+                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期">
+                      </el-date-picker>
+                    </el-row>
+                  </el-form-item>
                 </el-col>
               </el-row>
               <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
                 <el-col :span="7">
-                  <el-row type="flex" align="middle">
-                    <h6 class="info-input-prepend">合作方式</h6>
-                    <template v-for="(value,key) in machiningTypes">
-                      <el-radio class="info-radio" v-model="product.machiningTypes" :label="key">{{value}}
-                      </el-radio>
-                    </template>
-                  </el-row>
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择合作方式', trigger: 'change'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.machiningTypes'">
+                    <el-row type="flex" align="middle">
+                      <h6 class="info-input-prepend">合作方式</h6>
+                      <template v-for="(value,key) in machiningTypes">
+                        <el-radio class="info-radio" v-model="product.machiningTypes" :label="key">{{value}}
+                        </el-radio>
+                      </template>
+                    </el-row>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="7">
-                  <el-row type="flex" align="middle">
-                    <h6 class="info-input-prepend">承担运费</h6>
-                    <template v-for="(value,key) in freightPayer">
-                      <el-radio class="info-radio" v-model="product.freightPayer" :label="key">{{value}}</el-radio>
-                    </template>
-                  </el-row>
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择承担运费方', trigger: 'change'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.freightPayer'">
+                    <el-row type="flex" align="middle">
+                      <h6 class="info-input-prepend">承担运费</h6>
+                      <template v-for="(value,key) in freightPayer">
+                        <el-radio class="info-radio" v-model="product.freightPayer" :label="key">{{value}}</el-radio>
+                      </template>
+                    </el-row>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-row type="flex" align="middle">
-                    <h6 class="info-input-prepend">是否开发票</h6>
-                    <el-radio class="info-radio" v-model="product.invoice" :label="false">不开发票</el-radio>
-                    <el-radio class="info-radio" v-model="product.invoice" :label="true">开发票</el-radio>
-                  </el-row>
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择是否开发票', trigger: 'change'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.invoice'">
+                    <el-row type="flex" align="middle">
+                      <h6 class="info-input-prepend">是否开发票</h6>
+                      <el-radio class="info-radio" v-model="product.invoice" :label="false">不开发票</el-radio>
+                      <el-radio class="info-radio" v-model="product.invoice" :label="true">开发票</el-radio>
+                    </el-row>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="4">
                   <el-select v-model="product.invoicePercent" :disabled="!product.invoice" placeholder="税点">
@@ -154,33 +170,50 @@
               </el-row>
               <el-row :gutter="10" class="info-order-row" type="flex" align="middle">
                 <el-col :span="6">
-                  <el-row type="flex" align="middle">
-                    <h6 class="info-input-prepend">送货地址</h6>
-                    <el-select class="w-100" v-model="product.address.region" value-key="isocode"
-                      @change="(val)=>onRegionChanged(val,productIndex)">
-                      <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择省', trigger: 'change'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.address.region'">
+                    <el-row type="flex" align="middle">
+                      <h6 class="info-input-prepend">送货地址</h6>
+                      <el-select class="w-100" v-model="product.address.region" value-key="isocode"
+                        @change="(val)=>onRegionChanged(val,productIndex)">
+                        <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
+                        </el-option>
+                      </el-select>
+                    </el-row>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择市', trigger: 'change'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.address.city'">
+                    <el-select class="w-100" v-model="product.address.city"
+                      @change="(val)=>onCityChanged(val,productIndex)" value-key="code">
+                      <el-option v-for="item in product.cities" :key="item.code" :label="item.name" :value="item">
                       </el-option>
                     </el-select>
-                  </el-row>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="4">
-                  <el-select class="w-100" v-model="product.address.city"
-                    @change="(val)=>onCityChanged(val,productIndex)" value-key="code">
-                    <el-option v-for="item in product.cities" :key="item.code" :label="item.name" :value="item">
-                    </el-option>
-                  </el-select>
-                </el-col>
-                <el-col :span="4">
-                  <el-select class="w-100" v-model="product.address.cityDistrict" value-key="code">
-                    <el-option v-for="item in product.cityDistricts" :key="item.code" :label="item.name" :value="item">
-                    </el-option>
-                  </el-select>
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择区', trigger: 'change'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.address.cityDistrict'">
+                    <el-select class="w-100" v-model="product.address.cityDistrict" value-key="code">
+                      <el-option v-for="item in product.cityDistricts" :key="item.code" :label="item.name"
+                        :value="item">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-row type="flex" align="middle">
-                    <el-input placeholder="详细地址" v-model="product.address.line1" size="mini">
-                    </el-input>
-                  </el-row>
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请详细地址', trigger: 'change'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.address.line1'">
+                    <el-row type="flex" align="middle">
+                      <el-input placeholder="详细地址" v-model="product.address.line1" size="mini">
+                      </el-input>
+                    </el-row>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="4">
                   <el-button size="mini" @click="addressSelect(productIndex)">选择</el-button>
@@ -188,18 +221,26 @@
               </el-row>
               <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
                 <el-col :span="6">
-                  <el-row type="flex" align="middle">
-                    <h6 class="info-input-prepend">收货人</h6>
-                    <el-input placeholder="名称" v-model="product.address.fullname" size="mini">
-                    </el-input>
-                  </el-row>
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请填写收货人', trigger: 'blur'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.address.fullname'">
+                    <el-row type="flex" align="middle">
+                      <h6 class="info-input-prepend">收货人</h6>
+                      <el-input placeholder="名称" v-model="product.address.fullname" size="mini">
+                      </el-input>
+                    </el-row>
+                  </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-row type="flex" align="middle">
-                    <h6 class="info-input-prepend">联系方式</h6>
-                    <el-input placeholder="电话" v-model="product.address.cellphone" size="mini">
-                    </el-input>
-                  </el-row>
+                  <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请填写联系方式', trigger: 'blur'}]" :key="product.key"
+                    :prop="'entries.' + productIndex+'.address.cellphone'">
+                    <el-row type="flex" align="middle">
+                      <h6 class="info-input-prepend">联系方式</h6>
+                      <el-input placeholder="电话" v-model="product.address.cellphone" size="mini">
+                      </el-input>
+                    </el-row>
+                  </el-form-item>
                 </el-col>
               </el-row>
             </template>
@@ -766,6 +807,14 @@
         this.form.entries[index].cityDistricts = result;
       },
       async onSubmit() {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+
+          } else {
+            this.$message('请完善表单信息');
+            return false;
+          }
+        });
         //分单
         for (var element of this.form.entries) {
           //组合订单行参数
