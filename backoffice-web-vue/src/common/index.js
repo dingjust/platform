@@ -294,6 +294,9 @@ const COMMON_APIS = {
   updateProgressOfPurchaseOrder(code, id) {
     return '/b2b/orders/purchase/' + code + '/progress/' + id;
   },
+  updateProgressForBatch(code){
+    return '/b2b/orders/purchase/' + code + '/progresses';
+  },
   //生成唯一码
   generateUniqueCode(code) {
     return '/b2b/orders/purchase/' + code + '/unique';
