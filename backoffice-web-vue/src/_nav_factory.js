@@ -18,8 +18,13 @@ export default {
       url: '/order',
       children: [
         {
-          name: '报价单',
+          name: '报价订单',
           url: '/order/quote',
+          icon: 'iconNone'
+        },
+        {
+          name: '打样订单',
+          url: '/order/proofing',
           icon: 'iconNone'
         },
         {
@@ -27,16 +32,11 @@ export default {
           url: '/order/purchase',
           icon: 'iconNone'
         },
-        {
-          name: '打样单',
-          url: '/order/proofing',
-          icon: 'iconNone'
-        },
-        {
-          name: '生产进度',
-          url: '/order/production',
-          icon: 'iconNone'
-        }
+        // {
+        //   name: '生产进度',
+        //   url: '/order/production',
+        //   icon: 'iconNone'
+        // }
       ]
     },
     {
@@ -54,7 +54,7 @@ export default {
           icon: 'iconNone',
         },
         {
-          name: '印章管理',
+          name: '签章管理',
           url: '/seal',
           icon: 'iconNone',
         },
@@ -113,18 +113,18 @@ export default {
     //   ]
     // },
     {
-      name: '产品管理',
+      name: '产品',
       url: '/product',
       children: [
         {
-          name: '服装产品',
+          name: '产品管理',
           url: '/product/apparel',
           icon: 'iconNone',
         }
       ]
     },
     {
-      name: '账户管理',
+      name: '公司',
       url: '/account',
       children: [
         {

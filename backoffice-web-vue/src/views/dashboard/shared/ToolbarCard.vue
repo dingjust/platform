@@ -4,7 +4,7 @@
       <uniquecode-import-form />
     </el-dialog>
     <el-dialog :visible.sync="enterpriseFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
-      <authentication-enterprise-from/>
+      <authentication-enterprise-from />
     </el-dialog>
     <el-dialog :visible.sync="personalFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
       <authentication-personal-from />
@@ -25,6 +25,8 @@
       <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToOrderPurchase">创建线下订单</el-button>
       <el-button class="dashboard-toolbar-btn" size="mini" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入
       </el-button>
+      <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToAuthentication">认证中心
+      </el-button>
       <!-- <el-button class="dashboard-toolbar-btn" size="mini" @click="jumpToTemplate">电子合同模板</el-button> -->
     </el-row>
   </div>
@@ -39,7 +41,7 @@
 
   export default {
     name: 'ToolbarCard',
-    props:['dialogVisible'],
+    props: ['dialogVisible'],
     components: {
       UniquecodeImportForm,
       AuthenticationEnterpriseFrom,
@@ -50,57 +52,56 @@
 
     },
     methods: {
-      enterprise(){
-        if(this.isCompany == null){
+      enterprise() {
+        if (this.isCompany == null) {
           this.enterpriseFormVisible = true
-        }else if(this.isCompany == true){
+        } else if (this.isCompany == true) {
           this.enterpriseFormVisible = true
-        }else{
+        } else {
           this.$message.error('该账号已在进行企业认证，不能再进行个体户认证');
         }
       },
-      individualBusiness(){
-        if(this.isCompany == null){
+      individualBusiness() {
+        if (this.isCompany == null) {
           this.businessFormVisible = true
-        }else if(this.isCompany == false){
+        } else if (this.isCompany == false) {
           this.businessFormVisible = true
-        }else{
+        } else {
           this.$message.error('该账号已在进行个体户认证，不能再进行企业认证');
         }
       },
-      personal(){
-        if(this.currentUser.type == 'BRAND'){
-          if(!this.openPersonalDialog){
+      personal() {
+        if (this.currentUser.type == 'BRAND') {
+          if (!this.openPersonalDialog) {
             this.personalFormVisible = true
-          }else{
+          } else {
             this.personalResultFormVisible = true
           }
 
-        }else{
+        } else {
           this.$message.error('工厂用户不能做个人认证');
         }
       },
-      async getAuthenticationState(){
+      async getAuthenticationState() {
         const url = this.apis().getAuthenticationState();
         const result = await http.get(url);
         console.log(result);
-        if(result.data.companyState == 'SUCCESS'){
+        if (result.data.companyState == 'SUCCESS') {
           this.openEnterpriseDialog = true
         }
-        if(result.data.personalState == 'SUCCESS'){
+        if (result.data.personalState == 'SUCCESS') {
           this.openPersonalDialog = true
         }
-        if(result.data.companyType == null){
+        if (result.data.companyType == null) {
           this.isCompany = null;
-        }else if(result.data.companyType == 'INDIVIDUAL'){
+        } else if (result.data.companyType == 'INDIVIDUAL') {
           this.isCompany = false;
-        }else{
+        } else {
           this.isCompany = true;
         }
 
       },
-      showEnterpriseDialog(){
-      },
+      showEnterpriseDialog() {},
       onSetting() {
 
       },
@@ -109,21 +110,24 @@
       },
       jumpToOrderPurchase() {
         this.$router.push("orderPurchase");
+      },
+      jumpToAuthentication() {
+        this.$router.push("/Authentication");
       }
     },
     data() {
       return {
         uniquecodeFormVisible: false,
         enterpriseFormVisible: false,
-        personalFormVisible:false,
-        businessFormVisible:false,
+        personalFormVisible: false,
+        businessFormVisible: false,
         currentUser: this.$store.getters.currentUser,
-        isCompany:null,
-        companyState:'',
-        personalState:'',
-        openPersonalDialog:false,
-        openEnterpriseDialog:false,
-        personalResultFormVisible:false,
+        isCompany: null,
+        companyState: '',
+        personalState: '',
+        openPersonalDialog: false,
+        openEnterpriseDialog: false,
+        personalResultFormVisible: false,
       };
     },
     created() {
@@ -170,4 +174,5 @@
   .uniquecode-dialog .el-dialog__header {
     padding: 0px !important;
   }
+
 </style>

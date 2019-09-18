@@ -16,7 +16,9 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
-              <img width="54px" v-if="scope.row.product!=null" height="54px" :src="scope.row.product.thumbnail.url">
+              <img width="54px" v-if="scope.row.product!=null" height="54px"
+                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'">
+              </img>
             </el-col>
             <el-col :span="16">
               <el-row>
@@ -60,8 +62,7 @@
       </el-table-column>
       <el-table-column label="订单标签">
         <template slot-scope="scope">
-          <img width="40px" height="15px"
-            :src="getPaymentStatusTag(scope.row)" />
+          <img width="40px" height="15px" :src="getPaymentStatusTag(scope.row)" />
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
@@ -140,8 +141,8 @@
         });
         return amount;
       },
-      getPaymentStatusTag(row){
-        return row.balancePaid?'static/img/paid.png':'static/img/arrears.png';
+      getPaymentStatusTag(row) {
+        return row.balancePaid ? 'static/img/paid.png' : 'static/img/arrears.png';
       }
     },
     data() {

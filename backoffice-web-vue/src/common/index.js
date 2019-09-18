@@ -1,428 +1,428 @@
 const COMMON_APIS = {
-  getAmapTips (key, keyWord, city) {
+  getAmapTips(key, keyWord, city) {
     return '/amap/v3/assistant/inputtips?key=' + key + '&keywords=' + keyWord + '&city=' + city;
   },
-  changePassword (username) {
+  changePassword(username) {
     return '/b2b/users/' + username + '/password';
   },
-  getRegions () {
+  getRegions() {
     return '/b2b/addresses/CN/regions';
   },
-  getCities (parentCode) {
+  getCities(parentCode) {
     return '/b2b/addresses/' + parentCode + '/cities'
   },
-  getDistricts (parentCode) {
+  getDistricts(parentCode) {
     return '/b2b/addresses/' + parentCode + '/districts'
   },
-  getCarriers () {
+  getCarriers() {
     return '/b2b/carriers';
   },
-  createColor () {
+  createColor() {
     return '/b2b/colors/create';
   },
-  getColors () {
+  getColors() {
     return '/b2b/colors';
   },
-  getColor (code) {
+  getColor(code) {
     return '/b2b/colors/' + code;
   },
-  getAllColors () {
+  getAllColors() {
     return '/b2b/colors/all';
   },
-  createSize () {
+  createSize() {
     return '/b2b/sizes/create';
   },
-  getSizes () {
+  getSizes() {
     return '/b2b/sizes';
   },
-  getSize (code) {
+  getSize(code) {
     return '/b2b/sizes/' + code;
   },
-  getAllSizes () {
+  getAllSizes() {
     return '/b2b/sizes/all';
   },
-  createSampleProduct () {
+  createSampleProduct() {
     return '/b2b/products/sample/create';
   },
-  updateSampleProduct (code) {
+  updateSampleProduct(code) {
     return '/b2b/products/sample/update/' + code;
   },
-  getSampleProducts () {
+  getSampleProducts() {
     return '/b2b/products/sample';
   },
-  getSampleProduct (id) {
+  getSampleProduct(id) {
     return '/b2b/products/sample/' + id;
   },
-  createSampleCheckoutHist () {
+  createSampleCheckoutHist() {
     return '/b2b/products/sampleCheckoutHist/create';
   },
-  updateSampleCheckoutHist (id) {
+  updateSampleCheckoutHist(id) {
     return '/b2b/products/sampleCheckoutHist/update/' + id;
   },
-  getSampleCheckoutHists () {
+  getSampleCheckoutHists() {
     return '/b2b/products/sampleCheckoutHist';
   },
-  getAdvanceSampleCheckoutHists () {
+  getAdvanceSampleCheckoutHists() {
     return '/b2b/products/sampleCheckoutHist/search';
   },
-  getSampleCheckoutHist (id) {
+  getSampleCheckoutHist(id) {
     return '/b2b/products/sampleCheckoutHist/' + id;
   },
-  createCarousel () {
+  createCarousel() {
     return '/b2b/carousels/create';
   },
-  updateCarousel (id) {
+  updateCarousel(id) {
     return '/b2b/carousels/update/' + id;
   },
-  getCarousels () {
+  getCarousels() {
     return '/b2b/carousels';
   },
-  getCarousel (id) {
+  getCarousel(id) {
     return '/b2b/carousels/' + id;
   },
-  createIndustrialCluster () {
+  createIndustrialCluster() {
     return '/b2b/industrialClusters/create';
   },
-  getIndustrialClusters () {
+  getIndustrialClusters() {
     return '/b2b/industrialClusters';
   },
-  getIndustrialClustersAll () {
+  getIndustrialClustersAll() {
     return '/b2b/industrialClusters/all';
   },
-  getIndustrialCluster (code) {
+  getIndustrialCluster(code) {
     return '/b2b/industrialClusters/' + code;
   },
-  createLabel () {
+  createLabel() {
     return '/b2b/labels/create';
   },
-  updateLabel () {
+  updateLabel() {
     return '/b2b/labels/update';
   },
-  getAllLabels () {
+  getAllLabels() {
     return '/b2b/labels/all';
   },
-  getGroupLabels (group) {
+  getGroupLabels(group) {
     return '/b2b/labels/' + group + '/all';
   },
-  getIndustrialClusterLabels () {
+  getIndustrialClusterLabels() {
     return '/b2b/industrialClusters/labels';
   },
-  getLabels () {
+  getLabels() {
     return '/b2b/labels';
   },
-  getLabel (id) {
+  getLabel(id) {
     return '/b2b/labels/' + id;
   },
-  getBrandSuppliers () {
+  getBrandSuppliers() {
     return '/b2b/factories/getSuppliers';
   },
-  getFactoriesSuppliers () {
+  getFactoriesSuppliers() {
     return '/b2b/brands/getSuppliers';
   },
-  createEmployee () {
+  createEmployee() {
     return '/b2b/employees/create';
   },
-  updateEmployee (uid) {
+  updateEmployee(uid) {
     return '/b2b/employees/update/' + uid;
   },
-  getEmployees () {
+  getEmployees() {
     return '/b2b/employees';
   },
-  getEmployee (uid) {
+  getEmployee(uid) {
     return '/b2b/employees/' + uid;
   },
-  createBrand () {
+  createBrand() {
     return '/b2b/brands/new';
   },
-  updateBrand (uid) {
+  updateBrand(uid) {
     return '/b2b/brands/' + uid;
   },
-  getBrands () {
+  getBrands() {
     return '/b2b/brands';
   },
-  getBrand (uid) {
+  getBrand(uid) {
     return '/b2b/brands/' + uid;
   },
-  removeCertificateForCompany (uid, mediaID) {
+  removeCertificateForCompany(uid, mediaID) {
     return '/b2b/brands/' + uid + '/certificate/' + mediaID;
   },
-  createFactory () {
+  createFactory() {
     return '/b2b/factories/new';
   },
-  updateFactory (uid) {
+  updateFactory(uid) {
     return '/b2b/factories/' + uid;
   },
-  getFactories () {
+  getFactories() {
     return '/b2b/factories';
   },
-  getFactory (uid) {
+  getFactory(uid) {
     return '/b2b/factories/' + uid;
   },
-  createB2BCustomer () {
+  createB2BCustomer() {
     return '/b2b/b2bCustomers/create';
   },
-  updateB2BCustomer (uid) {
+  updateB2BCustomer(uid) {
     return '/b2b/b2bCustomers/update/' + uid;
   },
-  getB2BCustomers () {
+  getB2BCustomers() {
     return '/b2b/b2bCustomers';
   },
-  getB2BCustomer (uid) {
+  getB2BCustomer(uid) {
     return '/b2b/b2bCustomers/' + uid;
   },
-  createRole () {
+  createRole() {
     return '/b2b/roles/create';
   },
-  getRoles () {
+  getRoles() {
     return '/b2b/roles';
   },
-  getAllRoles () {
+  getAllRoles() {
     return '/b2b/roles';
   },
-  getRole (uid) {
+  getRole(uid) {
     return '/b2b/roles/' + uid;
   },
-  createUserGroup () {
+  createUserGroup() {
     return '/b2b/userGroups/create';
   },
-  updateUserGroup () {
+  updateUserGroup() {
     return '/b2b/userGroups/update';
   },
-  getUserGroups () {
+  getUserGroups() {
     return '/b2b/userGroups';
   },
-  getUserGroup (uid) {
+  getUserGroup(uid) {
     return '/b2b/userGroups/' + uid;
   },
-  createB2BUnit () {
+  createB2BUnit() {
     return '/b2b/b2bUnits';
   },
-  getB2BUnits () {
+  getB2BUnits() {
     return '/b2b/b2bUnits';
   },
-  getB2BUnit (uid) {
+  getB2BUnit(uid) {
     return '/b2b/b2bUnits/' + uid;
   },
-  createAddress () {
+  createAddress() {
     return '/b2b/company/addresses';
   },
-  updateAddress (id) {
+  updateAddress(id) {
     return '/b2b/company/addresses/' + id;
   },
-  removeAddress (id) {
+  removeAddress(id) {
     return '/b2b/company/addresses/' + id;
   },
-  getAddresses () {
+  getAddresses() {
     return '/b2b/company/addresses';
   },
-  getAddress (id) {
+  getAddress(id) {
     return '/b2b/company/addresses/' + id;
   },
-  getCategories () {
+  getCategories() {
     return '/b2b/categories/categories';
   },
-  createCategories () {
+  createCategories() {
     return '/b2b/categories';
   },
   // 小类，级联（二级）
-  getMinorCategories () {
+  getMinorCategories() {
     return '/b2b/categories/cascaded';
   },
-  getMajorCategories () {
+  getMajorCategories() {
     return '/b2b/categories/majors';
   },
-  getApparelProduct (code) {
+  getApparelProduct(code) {
     return '/b2b/products/apparel/' + code;
   },
-  onShelfProduct (code) {
+  onShelfProduct(code) {
     return '/b2b/products/apparel/' + code + '/on';
   },
-  offShelfProduct (code) {
+  offShelfProduct(code) {
     return '/b2b/products/apparel/' + code + '/off';
   },
-  createApparelProduct () {
+  createApparelProduct() {
     return '/b2b/products/apparel/create';
   },
-  updateBasicOfApparelProduct (code) {
+  updateBasicOfApparelProduct(code) {
     return '/b2b/products/apparel/' + code + '/basic';
   },
-  updateVariantsOfApparelProduct (code) {
+  updateVariantsOfApparelProduct(code) {
     return '/b2b/products/apparel/' + code + '/variants';
   },
-  updateAttributesOfApparelProduct (code) {
+  updateAttributesOfApparelProduct(code) {
     return '/b2b/products/apparel/' + code + '/attributes';
   },
-  updateImagesOfApparelProduct (code) {
+  updateImagesOfApparelProduct(code) {
     return '/b2b/products/apparel/' + code + '/images';
   },
-  getRequirementOrder (code) {
+  getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },
-  cancelledRequirementOrder (code) {
+  cancelledRequirementOrder(code) {
     return '/b2b/orders/requirement/cancelled/' + code;
   },
-  recommendRequirementOrderToFactory (code, uid) {
+  recommendRequirementOrderToFactory(code, uid) {
     return '/b2b/orders/requirement/' + code + '/factory/' + uid + '/recommend';
   },
-  createRequirementOrder () {
+  createRequirementOrder() {
     return '/b2b/orders/requirement/new';
   },
-  updateRequirementOrder (code) {
+  updateRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code + '/request';
   },
-  getQuote (code) {
+  getQuote(code) {
     return '/b2b/orders/quote/' + code;
   },
-  createQuote () {
+  createQuote() {
     return '/b2b/orders/quote/create';
   },
-  updateQuote (code) {
+  updateQuote(code) {
     return '/b2b/orders/quote/' + code;
   },
-  updateApprove (code) {
+  updateApprove(code) {
     return '/b2b/orders/quote/' + code + '/approve';
   },
-  updateReject (code) {
+  updateReject(code) {
     return '/b2b/orders/quote/' + code + 'reject';
   },
-  getPurchaseOrder (code) {
+  getPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code;
   },
-  updateDeliveryAddressOfPurchaseOrder (code) {
+  updateDeliveryAddressOfPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code + '/deliveryAddress';
   },
-  updateProgressOfPurchaseOrder (code, id) {
+  updateProgressOfPurchaseOrder(code, id) {
     return '/b2b/orders/purchase/' + code + '/progress/' + id;
   },
-  // 生成唯一码
-  generateUniqueCode (code) {
+  //生成唯一码
+  generateUniqueCode(code) {
     return '/b2b/orders/purchase/' + code + '/unique';
   },
-  // 根据唯一码获取订单明细
-  getDetailsForUniqueCode (code) {
+  //根据唯一码获取订单明细
+  getDetailsForUniqueCode(code) {
     return '/b2b/orders/purchase/unique/' + code;
   },
-  // 关联唯一码
-  linkUniqueCode (code) {
+  //关联唯一码
+  linkUniqueCode(code) {
     return '/b2b/orders/purchase/link/' + code;
   },
-  createPurchaseOrder () {
+  createPurchaseOrder() {
     return '/b2b/orders/purchase/create';
   },
-  createOfflinePurchaseOrder () {
+  createOfflinePurchaseOrder() {
     return '/b2b/orders/purchase/createByOffline';
   },
-  createPurchaseOrderOfQuote (quote) {
+  createPurchaseOrderOfQuote(quote) {
     return '/b2b/orders/purchase/create/' + quote;
   },
-  // 创建发货单
-  createShippingOrder (code) {
+  //创建发货单
+  createShippingOrder(code) {
     return '/b2b/orders/purchase/' + code + '/createShippingOrder';
   },
-  // 创建全部发货单
-  confirmShipping (code) {
+  //创建全部发货单
+  confirmShipping(code) {
     return '/b2b/orders/purchase/' + code + '/confirmShipping';
   },
-  // 删除发货单
-  deleteShippingOrder (id) {
+  //删除发货单
+  deleteShippingOrder(id) {
     return '/b2b/orders/purchase/deleteShippingOrder/' + id;
   },
-  // 创建收货单
-  createDeliveryOrder (code) {
+  //创建收货单
+  createDeliveryOrder(code) {
     return '/b2b/orders/purchase/' + code + '/createDeliveryOrder';
   },
-  // 创建并提交收货单
-  createAndCommitDeliveryOrder (code) {
+  //创建并提交收货单
+  createAndCommitDeliveryOrder(code) {
     return '/b2b/orders/purchase/' + code + '/createAndCommitDeliveryOrder';
   },
-  // 提交收货单
-  commitDeliveryOrder () {
+  //提交收货单
+  commitDeliveryOrder() {
     return '/b2b/orders/purchase/commitDeliveryOrder';
   },
-  // 保存收货单
-  updateDeliveryOrder () {
+  //保存收货单
+  updateDeliveryOrder() {
     return '/b2b/orders/purchase/updateDeliveryOrder';
   },
-  // 撤回收货单
-  withdrawDeliveryOrder (code) {
+  //撤回收货单
+  withdrawDeliveryOrder(code) {
     return '/b2b/orders/purchase/' + code + '/recallDelivery';
   },
-  // 确认收货单
-  confirmDeliveryOrder (code) {
+  //确认收货单
+  confirmDeliveryOrder(code) {
     return '/b2b/orders/purchase/' + code + '/confirmDelivery';
   },
-  // 拒绝收货单
-  rejectDeliveryOrder (code) {
+  //拒绝收货单
+  rejectDeliveryOrder(code) {
     return '/b2b/orders/purchase/' + code + '/rejectDelivery';
   },
-  // 创建对账单
-  createReconciliationOrder (code) {
+  //创建对账单
+  createReconciliationOrder(code) {
     return '/b2b/orders/purchase/' + code + '/createReconciliationOrder';
   },
-  // 创建对账单
-  createAndCommitReconciliationOrder (code) {
+  //创建对账单
+  createAndCommitReconciliationOrder(code) {
     return '/b2b/orders/purchase/' + code + '/createAndCommitReconciliationOrder';
   },
-  // 提交对账单
-  commitReconciliationOrder () {
+  //提交对账单
+  commitReconciliationOrder() {
     return '/b2b/orders/purchase/commitReconciliationOrder';
   },
-  // 撤回对账单
-  withdrawReconciliationOrder () {
+  //撤回对账单
+  withdrawReconciliationOrder() {
     return '/b2b/orders/purchase/recallReconciliationOrder';
   },
-  // 确认对账单
-  confirmReconciliation (code) {
+  //确认对账单
+  confirmReconciliation(code) {
     return '/b2b/orders/purchase/' + code + '/confirmReconciliation';
   },
-  // 拒绝对账单
-  rejectReconciliation (code) {
+  //拒绝对账单
+  rejectReconciliation(code) {
     return '/b2b/orders/purchase/' + code + '/rejectReconciliation';
   },
-  // 确认线下生产订单
-  confirmProductionByOffline (code) {
+  //确认线下生产订单
+  confirmProductionByOffline(code) {
     return '/b2b/orders/purchase/' + code + '/confirmProductionByOffline';
   },
-  getProductionProgressReports () {
+  getProductionProgressReports() {
     return '/b2b/reports/productionProgresses';
   },
-  getProofing (code) {
+  getProofing(code) {
     return '/b2b/orders/proofing/' + code;
   },
-  updateDeliveryAddressOfProofing (code) {
+  updateDeliveryAddressOfProofing(code) {
     return '/b2b/orders/proofing/' + code + '/deliveryAddress';
   },
-  createProofing (quote) {
+  createProofing(quote) {
     return '/b2b/orders/proofing/create/' + quote;
   },
-  removeMedia (mediaID) {
+  removeMedia(mediaID) {
     return '/b2b/media/' + mediaID
   },
-  getAmountFlowDetail (id) {
+  getAmountFlowDetail(id) {
     return '/b2b/amountFlow/' + id
   },
-  findAmountFlows () {
+  findAmountFlows() {
     return '/b2b/amountFlow'
   },
-  getBill (id) {
+  getBill(id) {
     return '/b2b/bill/' + id;
   },
-  createPaymentOrder (id) {
+  createPaymentOrder(id) {
     return '/b2b/orders/purchase/confirmPayment/' + id;
   },
-  updatePaymentOrder () {
+  updatePaymentOrder() {
     return '/b2b/orders/purchase/updatePaymentOrder';
   },
-  deletePaymentOrder (id) {
+  deletePaymentOrder(id) {
     return '/b2b/orders/purchase/deletePaymentOrder/' + id;
   },
-  createReceiptOrder (id) {
+  createReceiptOrder(id) {
     return '/b2b/orders/purchase/confirmReceipt/' + id;
   },
-  updateReceiptOrder () {
+  updateReceiptOrder() {
     return '/b2b/orders/purchase/updateReceiptOrder';
   },
-  deleteReceiptOrder (id) {
+  deleteReceiptOrder(id) {
     return '/b2b/orders/purchase/deleteReceiptOrder/' + id;
   },
   getCooperators () {
@@ -443,231 +443,231 @@ const COMMON_APIS = {
 };
 
 let TENANT_APIS = {
-  getApparelProducts () {
+  getApparelProducts() {
     return '/b2b/products/apparel/all';
   },
-  getRequirementOrders () {
+  getRequirementOrders() {
     return '/b2b/orders/requirement/all';
   },
-  getAllRequirementOrders () {
+  getAllRequirementOrders() {
     return this.getRequirementOrders();
   },
-  getQuotes () {
+  getQuotes() {
     return '/b2b/orders/quote/all';
   },
-  getPurchaseOrders () {
+  getPurchaseOrders() {
     return '/b2b/orders/purchase/all';
   },
-  getProofings () {
+  getProofings() {
     return '/b2b/orders/proofing/all';
   },
-  createOperationCourse () {
+  createOperationCourse() {
     return '/b2b/guideline/create';
   },
-  updateOperationCourse () {
+  updateOperationCourse() {
     return '/b2b/guideline/update';
   },
-  deleteOperationCourse (id) {
+  deleteOperationCourse(id) {
     return '/b2b/guideline/delete/' + id;
   },
-  getOperationCourses () {
+  getOperationCourses() {
     return '/b2b/guideline';
   },
-  getOperationCourse (id) {
+  getOperationCourse(id) {
     return '/b2b/guideline/' + id;
   },
-  synchronizeProgress (code, targetCode) {
+  synchronizeProgress(code, targetCode) {
     return '/b2b/orders/purchase/' + code + '/synchronizeProgress/' + targetCode;
   },
-  rejectedCashOut (id) {
+  rejectedCashOut(id) {
     return '/b2b/companyWallet/cashOutRejected/' + id;
   },
-  completedCashOut (id) {
+  completedCashOut(id) {
     return '/b2b/companyWallet/cashOutCompleted/' + id;
   },
-  findBills () {
+  findBills() {
     return '/b2b/bill/all'
   },
-  getContractsList () {
+  getContractsList() {
     return '/b2b/user/agreement/list';
   },
-  getContractDetail (code) {
+  getContractDetail(code) {
     return '/b2b/user/agreement/get/' + code;
   },
-  getSeals () {
+  getSeals() {
     return '/b2b/user/seal/list';
   },
-  getTemplatesListPt () {
+  getTemplatesListPt() {
     return '/b2b/agreement/temp/list';
   },
-  getTemplates (code) {
+  getTemplates(code) {
     return '/b2b/user/agreement/temp/get/' + code;
   },
-  getTemplatesList () {
+  getTemplatesList() {
     return '/b2b/user/agreement/temp/list';
   },
-  saveTemplate () {
+  saveTemplate() {
     return '/b2b/user/agreement/temp/save';
   },
-  deleteTemplate (code) {
+  deleteTemplate(code) {
     return '/b2b/user/agreement/temp/delete/' + code;
   },
-  saveSeal () {
+  saveSeal() {
     return '/b2b/user/seal/save';
   },
-  delSeal (code) {
+  delSeal(code) {
     return '/b2b/user/seal/delete/' + code;
   },
-  saveContract () {
+  saveContract() {
     return '/b2b/user/agreement/save';
   },
-  saveContract () {
+  saveContract() {
     return '/b2b/user/agreement/save';
   },
-  personalAuthentication () {
+  personalAuthentication() {
     return '/b2b/fdd/api/save/personal/verify/data';
   },
-  enterpriseAuthentication () {
+  enterpriseAuthentication() {
     return '/b2b/fdd/api/save/enterprise/verify/data';
   },
-  getAuthenticationState () {
+  getAuthenticationState() {
     return '/b2b/cert/state';
   },
-  getAuthenticationInfo () {
+  getAuthenticationInfo() {
     return '/b2b/cert/personal/cert/info';
   },
-  getAuthenticationEnterprise () {
+  getAuthenticationEnterprise() {
     return '/b2b/cert/enterprise/cert/info';
   },
-  refuseContract (code) {
-    return '/b2b/user/agreement/reject/sign/' + code;
+  refuseContract(code){
+    return '/b2b/user/agreement/reject/sign/'+code;
   },
-  revokeContract (code) {
-    return '/b2b/user/agreement/revoke/' + code;
+  revokeContract(code){
+    return '/b2b/user/agreement/revoke/'+code;
   },
-  previewPdf (code) {
-    return '/b2b/user/agreement/preview/pdf/' + code;
+  previewPdf(code){
+    return '/b2b/user/agreement/preview/pdf/'+code;
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
 let NONE_TENANT_APIS = {
-  getApparelProducts () {
+  getApparelProducts() {
     return '/b2b/products/apparel';
   },
-  getRequirementOrders () {
+  getRequirementOrders() {
     return '/b2b/orders/requirement';
   },
-  getAllRequirementOrders () {
+  getAllRequirementOrders() {
     return '/b2b/orders/requirement/all';
   },
-  getQuotes () {
+  getQuotes() {
     return '/b2b/orders/quote';
   },
-  getPurchaseOrders () {
+  getPurchaseOrders() {
     return '/b2b/orders/purchase';
   },
-  confirmDeliveringOfProductionOrder (code) {
+  confirmDeliveringOfProductionOrder(code) {
     return '/b2b/orders/purchase/' + code + '/delivering';
   },
-  getProofings () {
+  getProofings() {
     return '/b2b/orders/proofing';
   },
-  confirmDeliveringOfProofing (code) {
+  confirmDeliveringOfProofing(code) {
     return '/b2b/orders/proofing/' + code + '/delivering';
   },
-  cancellingOfProofing (code) {
+  cancellingOfProofing(code) {
     return '/b2b/orders/proofing/' + code + '/cancelling';
   },
-  cancellingOfPurchaseOrder (code) {
+  cancellingOfPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code + '/cancelling';
   },
-  completedOfPurchaseOrder (code) {
+  completedOfPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code + '/shipped';
   },
-  completedOfProofing (code) {
+  completedOfProofing(code) {
     return '/b2b/orders/proofing/' + code + '/shipped';
   },
-  payProofings (code) {
+  payProofings(code) {
     return '/b2b/orders/proofing/' + code + '/paid';
   },
-  payProofingsImage (code) {
+  payProofingsImage(code) {
     return '/b2b/checkout/multi/wechat/pay/' + code;
   },
-  cashOutCanceled (code) {
+  cashOutCanceled(code) {
     return '/b2b/checkout/multi/wechat/pay/' + code;
   },
-  cashOutApply (amount) {
+  cashOutApply(amount) {
     return '/b2b/amountFlow/cashOut/' + amount;
   },
-  getBills () {
+  getBills() {
     return '/b2b/bill';
   },
-  getWallet () {
+  getWallet() {
     return '/b2b/companyWallet';
   },
-  getContractsList () {
+  getContractsList() {
     return '/b2b/user/agreement/list';
   },
-  getSealsList () {
+  getSealsList() {
     return '/b2b/user/seal/list';
   },
-  getTemplatesListPt () {
+  getTemplatesListPt() {
     return '/b2b/agreement/temp/list';
   },
-  getTemplates (code) {
+  getTemplates(code) {
     return '/b2b/user/agreement/temp/get/' + code;
   },
-  getTemplatesList () {
+  getTemplatesList() {
     return '/b2b/user/agreement/temp/list';
   },
-  saveTemplate () {
+  saveTemplate() {
     return '/b2b/user/agreement/temp/save';
   },
-  deleteTemplate (code) {
+  deleteTemplate(code) {
     return '/b2b/user/agreement/temp/delete/' + code;
   },
-  saveSeal () {
+  saveSeal() {
     return '/b2b/user/seal/save';
   },
-  delSeal (code) {
+  delSeal(code) {
     return '/b2b/user/seal/delete/' + code;
   },
-  saveContract () {
+  saveContract() {
     return '/b2b/user/agreement/save';
   },
-  downContract (code) {
+  downContract(code) {
     return '/b2b/user/agreement/get/download/token/' + code;
   },
-  flowContract (code, sealCode) {
+  flowContract(code, sealCode) {
     return '/b2b/user/agreement/start/flow/' + code + '?sealCode=' + sealCode;
   },
-  personalAuthentication () {
+  personalAuthentication() {
     return '/b2b/fdd/api/save/personal/verify/data';
   },
-  enterpriseAuthentication () {
+  enterpriseAuthentication() {
     return '/b2b/fdd/api/save/enterprise/verify/data';
   },
-  getAuthenticationState () {
+  getAuthenticationState() {
     return '/b2b/cert/state';
   },
-  getAuthenticationInfo () {
+  getAuthenticationInfo() {
     return '/b2b/cert/personal/cert/info';
   },
-  getAuthenticationEnterprise () {
+  getAuthenticationEnterprise() {
     return '/b2b/cert/enterprise/cert/info';
   },
-  getContractDetail (code) {
+  getContractDetail(code) {
     return '/b2b/user/agreement/get/' + code;
   },
-  refuseContract (code) {
-    return '/b2b/user/agreement/reject/sign/' + code;
+  refuseContract(code){
+    return '/b2b/user/agreement/reject/sign/'+code;
   },
-  revokeContract (code) {
-    return '/b2b/user/agreement/revoke/' + code;
+  revokeContract(code){
+    return '/b2b/user/agreement/revoke/'+code;
   },
-  previewPdf (code) {
-    return '/b2b/user/agreement/preview/pdf/' + code;
+  previewPdf(code){
+    return '/b2b/user/agreement/preview/pdf/'+code;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

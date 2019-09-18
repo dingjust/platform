@@ -7,7 +7,7 @@
     </el-row>
     <el-tabs v-model="activeOrder" type="card" :editable="isFactory()" @edit="handleTabsEdit">
       <template v-for="(order,index) in slotData.shippingOrders">
-        <el-tab-pane :label="''+(index+1)" :name="''+index">
+        <el-tab-pane :label="''+(index+1)+'('+getDeliverOrderType(order)+')'" :name="''+index">
           <deliver-view :slotData="order" />
         </el-tab-pane>
       </template>
@@ -77,6 +77,13 @@
         }
         this.$message.success('删除成功');
         this.refreshData();
+      },
+      getDeliverOrderType(order){
+        if(order.isFullShipment==null||order.isFullShipment==''){
+          return '部分发货'
+        }else{
+          return '全部发货'
+        }
       }
     },
     data() {

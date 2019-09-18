@@ -14,18 +14,6 @@ export default {
       url: '/dashboard',
     },
     {
-      name: '产品管理',
-      url: '/product',
-      // icon: 'icon-puzzle',
-      children: [
-        {
-          name: '服装产品',
-          url: '/product/apparel',
-          // icon: 'iconNone',
-        }
-      ]
-    },
-    {
       name: '订单管理',
       url: '/order',
       // icon: 'icon-puzzle',
@@ -41,7 +29,7 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '打样单',
+          name: '打样订单',
           url: '/order/proofing',
           icon: 'iconNone'
         },
@@ -67,7 +55,7 @@ export default {
           icon: 'iconNone',
         },
         {
-          name: '印章管理',
+          name: '签章管理',
           url: '/seal',
           icon: 'iconNone',
         },
@@ -94,7 +82,19 @@ export default {
       ]
     },
     {
-      name: '账户管理',
+      name: '产品管理',
+      url: '/product',
+      // icon: 'icon-puzzle',
+      children: [
+        {
+          name: '服装产品',
+          url: '/product/apparel',
+          // icon: 'iconNone',
+        }
+      ]
+    },
+    {
+      name: '公司',
       url: '/account',
       // icon: 'icon-puzzle',
       children: [

@@ -157,7 +157,7 @@
         this.statues.push(element);
       });
       Bus.$on('my-event', args => {
-        this.dialogDetailVisible = !this.dialogDetailVisible;
+        // this.dialogDetailVisible = !this.dialogDetailVisible;
       }),
       this.onSearch("");
     },

@@ -1,14 +1,15 @@
 <template>
-  <div class="animated fadeIn content">
+  <div>
     <el-dialog :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body>
-          <el-button-group>
-            <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
-            <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-          </el-button-group>
-      <contract-template-select  @fileSelectChange="onFileSelectChange" />
+      <el-button-group>
+        <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
+        <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
+      </el-button-group>
+      <contract-template-select @fileSelectChange="onFileSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <contract-order-select :page="orderPage" :onSearchOrder="onSearchOrder" @onOrderSelectChange="onOrderSelectChange" />
+      <contract-order-select :page="orderPage" :onSearchOrder="onSearchOrder"
+        @onOrderSelectChange="onOrderSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
       <el-row slot="title">
@@ -16,26 +17,14 @@
       </el-row>
       <contract-preview />
     </el-dialog>
-    <el-card class="box-card card-body">
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
+    </el-dialog>
+    <div>
       <el-row type="flex" justify="center" align="middle">
         <span class="create-contract-title">创建合同</span>
       </el-row>
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
-      <el-row type="flex" justify="space-around">
-        <el-col :span="6">
-          <el-row type="flex" justify="space-between">
-            <el-radio v-model="hasFrameworkContract" :label="false">无框架合同</el-radio>
-            <el-radio v-model="hasFrameworkContract" :label="true">有框架合同</el-radio>
-          </el-row>
-        </el-col>
-        <el-divider direction="vertical"></el-divider>
-        <el-col :span="6">
-          <el-row type="flex" justify="space-between">
-            <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
-            <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
-          </el-row>
-        </el-col>
-      </el-row>
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择订单" v-model="orderSelectFile.code" :disabled="true">
@@ -51,15 +40,19 @@
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
-        <el-col :span="8" :offset="2">
-           <el-input size="small" placeholder="选择纸质合同" v-model="input1" :disabled="true">
-            <el-button slot="prepend">上传纸质合同</el-button>
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="请输入合同编号" v-model="selectFile.title">
+            <el-button slot="prepend" :disabled="true">合同编号</el-button>
           </el-input>
-          <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1"
-            list-type="picture-card" :on-exceed="handleExceed" :file-list="fileList">
-             <el-button size="small">上传纸质合同</el-button>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType!='1'">
+        <el-col :span="8" :offset="2">
+          <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+            :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
+            :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
             <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
-            <i slot="default" class="el-icon-plus"></i>
+            <i class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
               <img class="el-upload-list__item-thumbnail" src="static/img/pdf.png" alt="">
               <span class="el-upload-list__item-actions">
@@ -74,15 +67,37 @@
           </el-upload>
         </el-col>
       </el-row>
+      <el-row class="create-contract-row" type="flex" justify="start">
+        <el-col :push="2" :span="8">
+          <span class="tips">合同类型</span>
+          <el-radio v-model="hasFrameworkContract" :label="false">无框架合同</el-radio>
+          <el-radio v-model="hasFrameworkContract" :label="true">有框架合同</el-radio>
+        </el-col>
+        <el-col v-if="hasFrameworkContract" :span="5" :offset="2">
+          <el-input size="small" placeholder="选择框架协议" v-model="selectFile.title" :disabled="true">
+            <el-button slot="prepend" @click="dialogTemplateVisible=true">选择已签协议</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" type="flex" justify="start">
+        <el-col :push="2" :span="8">
+          <span class="tips">我的身份</span>
+          <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
+          <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
+        </el-col>
+      </el-row>
+
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
           <!--<el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
         </el-col>
         <el-col :span="4" :offset="2">
-          <el-button class="create-contract-button_2" @click="onSave">生成合同</el-button>
+          <el-button v-if="pdfFile == ''" class="create-contract-button" @click="onSave">生成合同</el-button>
+
+          <el-button v-else class="create-contract-button" @click="onSavePdf">生成合同</el-button>
         </el-col>
       </el-row>
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -96,6 +111,9 @@
   import ContractOrderSelect from "./components/ContractOrderSelect";
   import http from '@/common/js/http';
   import TemplateForm from "../../contract/template/components/TemplateForm";
+  import Bus from '@/common/js/bus.js';
+  import ContractPreviewPdf from './components/ContractPreviewPdf'
+
 
   const {
     mapGetters,
@@ -114,25 +132,37 @@
       ContractPreview,
       ContractOrderSelect,
       TemplateForm,
+      ContractPreviewPdf
     },
     computed: {
       ...mapGetters({
         page: "page",
         keyword: "keyword"
-      })
+      }),
+      uploadFormData: function () {
+        return {
+          fileFormat: 'DefaultFileFormat',
+          conversionGroup: 'DefaultProductConversionGroup',
+        };
+      },
+      headers: function () {
+        return {
+          Authorization: this.$store.getters.token
+        }
+      }
     },
     methods: {
       ...mapActions({
         search: "search",
         refresh: 'refresh'
       }),
-      async onSearchOrder(keyword,page, size) {
-        if(keyword == null){
+      async onSearchOrder(keyword, page, size) {
+        if (keyword == null) {
           keyword = '';
         }
         console.log(2)
         const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url,{
+        const result = await this.$http.post(url, {
           keyword: keyword
         }, {
           page: page,
@@ -165,31 +195,37 @@
         console.log(this.selectFile);
       },
       handleExceed(files, fileList) {
-        this.$message.warning(`已达最大文件数`);
+        if (fileList > 1) {
+          this.$message.warning(`已达最大文件数`);
+          return false;
+        }
+
         console.log(files);
       },
       handleRemove(file) {
-        this.fileList.pop(file);
+        console.log(file);
+        this.fileList = [];
+        this.pdfFile = '';
       },
-      async onSave(){
-        if(this.orderSelectFile == null){
+      async onSavePdf() {
+        if (this.orderSelectFile == null) {
           return;
         }
-        if(this.selectFile == null){
+        if (this.selectFile == null) {
           return;
         }
         let role = '';
-        if(this.partyA){
+        if (this.partyA) {
           role = 'PARTYA';
-        }else{
+        } else {
           role = 'PARTYB';
         }
 
         let data = {
-          'userTempCode' : this.selectFile.code,
-          'role':role,
-          'title':'',
-          'orderCode':this.orderSelectFile.code,
+          'pdf': this.pdfFile,
+          'role': role,
+          'title': '',
+          'orderCode': this.orderSelectFile.code,
         }
 
         const url = this.apis().saveContract();
@@ -199,30 +235,59 @@
         this.$message.success(result.msg);
 
         const searchUrl = this.apis().getContractsList();
-        // const result = await this.$http.post(url,{
-        //   keyword: ''
-        // }, {
-        //   page: 0,
-        //   size: 10
-        // });
-        // if (result["errors"]) {
-        //   this.$message.error(result["errors"][0].message);
-        //   return;
-        // }
 
-        this.refresh({searchUrl});
+        this.refresh({
+          searchUrl
+        });
 
         this.fn.closeSlider(true);
-
       },
-      onSetOrderCode(){
-        if(this.slotData != null && this.slotData != ''){
+      async onSave() {
+        if (this.orderSelectFile == null) {
+          return;
+        }
+        if (this.selectFile == null) {
+          return;
+        }
+        let role = '';
+        if (this.partyA) {
+          role = 'PARTYA';
+        } else {
+          role = 'PARTYB';
+        }
+
+        let data = {
+          'userTempCode': this.selectFile.code,
+          'role': role,
+          'title': '',
+          'orderCode': this.orderSelectFile.code,
+        }
+
+        const url = this.apis().saveContract();
+        let formData = Object.assign({}, data);
+        const result = await http.post(url, formData);
+
+        this.$message.success(result.msg);
+
+        if (result.data != null && result.data != '') {
+          Bus.$emit('openContract', result.data);
+        }
+
+        const searchUrl = this.apis().getContractsList();
+
+        this.refresh({
+          searchUrl
+        });
+        this.fn.closeSlider(true);
+      },
+      onSetOrderCode() {
+        if (this.slotData != null && this.slotData != '') {
           console.log(111)
           this.orderSelectFile = this.slotData;
           this.orderReadOnly = true;
-          if(this.currentUser.type == 'BRAND'){
+          if (this.currentUser.type == 'BRAND') {
             this.partyA = true;
-          }else{
+          } else {
             this.partyA = false;
           }
         }
@@ -230,6 +295,21 @@
       onCreateTemp() {
         // this.$router.push("templateForm");
         this.fn.openSlider("创建", TemplateForm);
+      },
+      handlePreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      onBeforeUpload(file) {
+        if (file.type !== 'application/pdf') {
+          this.$message.error('选择的文件不是PDF文件');
+          return false;
+        }
+        return true;
+      },
+      onSuccess(response) {
+        console.log(response)
+        this.pdfFile = response;
       },
     },
     data() {
@@ -239,21 +319,26 @@
         hasFrameworkContract: false,
         partyA: true,
         dialogTemplateVisible: false,
-        dialogOrderVisible : false,
+        dialogOrderVisible: false,
         cacheSelectFile: {},
-        orderSelectFile:{},
+        orderSelectFile: {},
         selectFile: {},
         fileList: [],
         dialogPreviewVisible: false,
-        orderReadOnly : false,
-        input1:'',
-        mockData:[],
-        orderPage:[],
+        orderReadOnly: false,
+        input1: '',
+        mockData: [],
+        orderPage: [],
+        disabled: false,
+        pdfFile: '',
+        pdfVisible: false,
+        fileUrl: '',
+        thisContract: '',
       };
     },
-    created(){
-      this.onSearchOrder('',0,10);
-      console.log('sss'+this.slotData);
+    created() {
+      this.onSearchOrder('', 0, 10);
+      console.log('sss' + this.slotData);
       this.onSetOrderCode();
     }
   };
@@ -358,6 +443,7 @@
     color: #ffffff;
     display: none
   }
+
   .product-select-btn {
     width: 70px;
     height: 30px;
@@ -368,6 +454,12 @@
     border-radius: 0px;
     border: 0px solid #FFD60C;
     margin-top: 10px;
-    margin-left:10px;
+    margin-left: 10px;
   }
+
+  .tips {
+    margin-right: 15px;
+    margin-left: 5px;
+  }
+
 </style>

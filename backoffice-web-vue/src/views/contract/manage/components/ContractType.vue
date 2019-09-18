@@ -1,58 +1,55 @@
 <template>
   <el-row type="flex" justify="space-around">
     <el-col :span="8">
-      <el-popover placement="bottom" width="320" trigger="hover" v-model="visible">
-        <template v-for="item in data">
-          <el-row justify="space-between" type="flex">
-            <el-col :span="24">
-              <div class="create-contract-type_option" @click="onSelectOption(item.value)">
-                <el-row justify="space-between" type="flex" align="middle">
-                  <el-col :span="2">
-                  </el-col>
-                  <el-col :span="22">
-                    <el-radio v-model="contractType" :label="item.value">{{item.label}}</el-radio>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-col>
-          </el-row>
-        </template>
-        <div slot="reference"
-          :class="contractType!='3'?'create-contract-type_select':'create-contract-type_not_select'">
-          <el-row>
-            <el-col :span="24">
-              <h5
-                :class="contractType!='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-                新签合同（电子签章）———{{contractType!='2'?'使用平台电子模板':'上传纸质合同文件'}}</h5>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="20">
-              <h6
-                :class="contractType!='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
-                平台电子模板或者上传自定义合同,使用在线电子签章合同</h6>
-            </el-col>
-          </el-row>
-          <el-row type="flex" justify="center" align="center">
-            <div class="create-contract-type_icon" :class="visible?'el-icon-arrow-down':'el-icon-arrow-up'"></div>
-          </el-row>
-        </div>
-      </el-popover>
+      <div :class="contractType=='1'?'create-contract-type_select':'create-contract-type_not_select'"
+           @click="onCreateContract">
+        <el-row>
+          <el-col :span="24">
+            <h5 :class="contractType=='1'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+              订单关联合同</h5>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="20">
+            <h6
+              :class="contractType=='1'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              以某一份生产订单内容为合同标的的合同</h6>
+          </el-col>
+        </el-row>
+      </div>
+    </el-col>
+    <el-col :span="8">
+      <div :class="contractType=='2'?'create-contract-type_select':'create-contract-type_not_select'"
+        @click="contractType='2'">
+        <el-row>
+          <el-col :span="24">
+            <h5 :class="contractType=='2'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+              非订单关联合同</h5>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="20">
+            <h6
+              :class="contractType=='2'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              与合作商签订长期合作合同，即框架协议</h6>
+          </el-col>
+        </el-row>
+      </div>
     </el-col>
     <el-col :span="8">
       <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
-        @click="contractType='3'">
+           @click="contractType='3'">
         <el-row>
           <el-col :span="24">
             <h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-              上传已签纸质合同</h5>
+              补充协议</h5>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="20">
             <h6
               :class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
-              把已签署的合同文件扫描件上传到订单附件中作为备份</h6>
+              对已签署的合同签署补充协议</h6>
           </el-col>
         </el-row>
       </div>
@@ -61,12 +58,20 @@
 </template>
 
 <script>
+  import Bus from '@/common/js/bus.js';
+  import ContractForm from '../ContractForm'
+
   export default {
-    name: "ContractTypeSelect",
+    name: "ContractType",
     methods: {
       onSelectOption(val) {
         this.contractType = val;
-      }
+      },
+      onCreateContract(){
+        this.contractType='1';
+        Bus.$emit('openContractType');
+        this.fn.openSlider('创建', ContractForm, '');
+      },
     },
     data() {
       return {
@@ -76,10 +81,10 @@
             label: "使用平台电子模板",
             value: "1"
           },
-          {
-            label: "上传纸质合同文件",
-            value: "2"
-          }
+          // {
+          //   label: "上传纸质合同文件",
+          //   value: "2"
+          // }
         ]
       };
     },
@@ -127,6 +132,7 @@
     padding-right: 15px;
     padding-top: 20px;
     cursor: pointer;
+    border:1px gray solid;
   }
 
   .create-contract-type_option {
