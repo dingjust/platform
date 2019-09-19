@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%;height:720px;" append-to-body>
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
     </el-dialog>
 
@@ -44,8 +44,8 @@
           <el-button type="text" @click="previewPdf(scope.row,'')">查看</el-button>
           <el-button type="text"  @click="onDownload(scope.row.code)">下载</el-button>
           <el-button v-if="currentUser.companyName == scope.row.partner &&
-          scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
-          <el-button v-if="scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>
+          scope.row.state == 'INITIATE' || scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
+          <el-button v-if="scope.row.state == 'INITIATE' || scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>
           <el-button v-if="currentUser.companyName != scope.row.partner && scope.row.state != 'COMPLETE'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>
         </template>
       </el-table-column>
@@ -185,7 +185,6 @@
         }else{
           queryCode = val.code;
         }
-
         const url = this.apis().downContract(queryCode);
         const result = await http.get(url);
         console.log(result);
@@ -220,6 +219,9 @@
       });
       Bus.$on('openList', args => {
         this.dialogSealVisible = !this.dialogSealVisible;
+      });
+      Bus.$on('closePdfView', args => {
+        this.pdfVisible = !this.pdfVisible;
       });
       // Bus.$on('openContract', args => {
       //   this.pdfVisible = !this.pdfVisible;

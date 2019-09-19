@@ -126,7 +126,7 @@
       },
       getEnumCode (name) {
         if(name == '待签署'){
-          return 'WAIT_SIGN'
+          return 'SIGN'
         }
         if(name == '已完成'){
           return 'COMPLETE'
