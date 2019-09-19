@@ -1,23 +1,23 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <apparel-product-toolbar @onNew="onNew"
-                               @onSearch="onSearch"
-                               @onAdvancedSearch="onAdvancedSearch"/>
-      <apparel-product-list :page="page"
-                             @onDetails="onDetails"
-                             @onSearch="onSearch"
-                             @onAdvancedSearch="onAdvancedSearch"
-                             @onShelf="onShelf"
-                             @onOffShelf="onOffShelf"/>
+      <apparel-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+      <apparel-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
+        @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf" @onOffShelf="onOffShelf" />
     </el-card>
   </div>
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
-  const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('ApparelProductsModule');
+  const {
+    mapGetters,
+    mapMutations,
+    mapActions
+  } = createNamespacedHelpers('ApparelProductsModule');
 
   import ApparelProductToolbar from "./toolbar/ApparelProductToolbar";
   import ApparelProductList from './list/ApparelProductList';
@@ -49,14 +49,24 @@
         this.setAdvancedSearch(false);
         const keyword = this.keyword;
         const url = this.apis().getApparelProducts();
-        this.search({url, keyword, page, size});
+        this.search({
+          url,
+          keyword,
+          page,
+          size
+        });
       },
       onAdvancedSearch(page, size) {
         this.setAdvancedSearch(true);
 
         const query = this.queryFormData;
         const url = this.apis().getApparelProducts();
-        this.searchAdvanced({url, query, page, size});
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size
+        });
       },
       async onDetails(item) {
         const url = this.apis().getApparelProduct(item.code);
@@ -65,8 +75,13 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
-        this.fn.openSlider('产品：' + item.code, ApparelProductDetailsPage, result);
+        this.$router.push({
+          name: '产品详情',
+          params: {
+            slotData: result
+          }
+        });
+        // this.fn.openSlider('产品：' + item.code, ApparelProductDetailsPage, result);
       },
       async onShelf(item) {
         const url = this.apis().onShelfProduct(item.code);
@@ -89,7 +104,13 @@
         this.refresh();
       },
       onNew(formData) {
-        this.fn.openSlider('创建产品', ApparelProductDetailsPage, formData);
+        this.$router.push({
+          name: '产品详情',
+          params: {
+            slotData: formData
+          }
+        });
+        // this.fn.openSlider('创建产品', ApparelProductDetailsPage, formData);
       },
     },
     data() {
@@ -99,4 +120,5 @@
       this.onSearch();
     }
   };
+
 </script>
