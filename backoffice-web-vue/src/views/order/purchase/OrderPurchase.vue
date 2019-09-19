@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body>
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
-    <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body>
       <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
