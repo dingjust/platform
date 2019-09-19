@@ -33,13 +33,14 @@ import {
   SampleCheckoutHistModule,
   SuppliersModule,
   CooperatorModule,
+  PayPlanModule,
   OperationCoursesModule,
   WalletModule,
   CashOutManagerModule,
   // contract
   ContractModule,
   ContractTemplateModule,
-  ContractSealModule,
+  ContractSealModule
 } from './modules';
 
 // 状态管理
@@ -52,15 +53,15 @@ const getters = {};
 
 // mutations
 const mutations = {
-  sideSliderState_get(state, payload) {
+  sideSliderState_get (state, payload) {
     // 类别
     state.sideSliderState = payload;
-  },
+  }
 };
 
 // actions
 const actions = {
-  sideSliderState_set({dispatch, commit, state}, payload) {
+  sideSliderState_set ({dispatch, commit, state}, payload) {
     commit('sideSliderState_get', payload);
   }
 };
@@ -96,13 +97,14 @@ export default new Vuex.Store({
     SampleProductModule,
     SuppliersModule,
     CooperatorModule,
+    PayPlanModule,
     OperationCoursesModule,
     WalletModule,
     CashOutManagerModule,
     // contract
     ContractModule,
     ContractTemplateModule,
-    ContractSealModule,
+    ContractSealModule
   },
   state,
   getters,

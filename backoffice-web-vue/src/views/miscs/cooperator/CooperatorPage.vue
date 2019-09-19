@@ -1,7 +1,12 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="cooperatorDetailsDialogVisible" width="80%" class="purchase-dialog" append-to-body>
-      <cooperator-details-page :itemData="itemData" @onSearch="onSearch" @onDetails="onDetails" @onDelete="onDelete" />
+    <el-dialog :visible.sync="cooperatorDetailsDialogVisible" @close="onDialogClose" width="80%" height="100%" class="purchase-dialog" append-to-body>
+      <cooperator-details-page :itemData="itemData"
+                               @onSearch="onSearch"
+                               @onDetails="onDetails"
+                               @onDelete="onDelete"
+                               @onSearchOrders="onSearchOrders"
+      />
     </el-dialog>
     <el-card>
       <el-row type="flex" justify="space-between">
@@ -29,7 +34,7 @@
             <span slot="label">
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
-              <cooperator-search-result-list :page="page" @onDetails="onDetails" @onDelete="onDelete" @onSearch="onSearch"/>
+              <cooperator-search-result-list :page="page" @onDetails="onDetails" @onDelete="onDelete" @onEdit="onEdit"/>
             </el-tab-pane>
           </template>
         </el-tabs>
@@ -42,7 +47,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters, mapActions} = createNamespacedHelpers('CooperatorModule');
+  const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('CooperatorModule');
   import CooperatorToolbar from '@/views/miscs/cooperator/toolbar/CooperatorToolbar';
   import CooperatorSearchResultList from '@/views/miscs/cooperator/list/CooperatorSearchResultList';
   import TabLabelBubble from '@/components/custom/TabLabelBubble';
@@ -55,12 +60,20 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        queryFormData: 'queryFormData'
+        queryFormData: 'queryFormData',
+        ordersQueryFormData: 'ordersQueryFormData'
       })
     },
     methods: {
+      ...mapMutations({
+        setOrdersPageNumber: 'setOrdersPageNumber',
+        setOrdersPageSize: 'setOrdersPageSize',
+        setEditFormData: 'setEditFormData'
+      }),
       ...mapActions({
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        searchOrdersAdvanced: 'searchOrdersAdvanced',
+        clearOrderPageData: 'clearOrderPageData'
       }),
       onSearch (page, size) {
         const queryFormData = this.queryFormData;
@@ -71,14 +84,36 @@
       async onDetails (item) {
         const url = this.apis().getCooperator(item.id);
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
         this.itemData = result;
 
         this.cooperatorDetailsDialogVisible = true;
+        //查询合作过的订单
+        this.onSearchOrders(0, 8);
+      },
+      async onSearchOrders (page, size) {
+        if (page != null) {
+          this.setOrdersPageNumber(page);
+        }
+        if (size != null) {
+          this.setOrdersPageSize(size);
+        }
+
+        const url = this.apis().getPurchaseOrders();
+        if (this.isFactory()) {
+          this.ordersQueryFormData.purchasers = [this.itemData.partner.uid];
+        } else if (this.isBrand()) {
+          this.ordersQueryFormData.belongTos = [this.itemData.partner.uid];
+        }
+
+        this.searchOrdersAdvanced({url});
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        // }
       },
       async onDelete (item) {
         const url = this.apis().deleteCooperator(item.id);
@@ -101,11 +136,26 @@
       },
       onJumpTo () {
         this.$router.push('/miscs/cooperator/cooperatorCreate');
+      },
+      onDialogClose(){
+        this.clearOrderPageData();
+      },
+      async onEdit(item){
+        const url = this.apis().getCooperator(item.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.setEditFormData(result);
+
+        this.$router.push('/miscs/cooperator/cooperatorUpdate');
       }
     },
     data () {
       return {
-        itemData:{},
+        itemData: {},
         cooperatorDetailsDialogVisible: false,
         activeStatus: 'ALL',
         statues: [{

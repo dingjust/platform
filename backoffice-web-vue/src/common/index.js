@@ -439,6 +439,9 @@ const COMMON_APIS = {
   },
   deleteCooperator (id) {
     return '/b2b/cooperator/delete/' + id;
+  },
+  getPayPlans(){
+    return '/b2b/payPlan';
   }
 };
 

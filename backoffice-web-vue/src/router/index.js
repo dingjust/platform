@@ -215,6 +215,11 @@ const router = new Router({
                   component: () => import( /* webpackChunkName: 'operationCourse' */ '@/views/miscs/cooperator/form/CooperatorFormPage')
                 },
                 {
+                  path: 'cooperatorUpdate',
+                  name: '编辑合作商',
+                  component: () => import( /* webpackChunkName: 'operationCourse' */ '@/views/miscs/cooperator/form/CooperatorEditFormPage')
+                },
+                {
                   path: '',
                   name: '合作商列表',
                   component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/CooperatorPage'),

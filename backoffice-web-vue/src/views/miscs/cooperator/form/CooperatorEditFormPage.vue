@@ -6,7 +6,7 @@
           <div class="cooperator-info-order-body">
             <el-row class="cooperator-info-title-row">
               <div class="cooperator-info-title">
-                <h6 class="cooperator-info-title_text">添加合作商</h6>
+                <h6 class="cooperator-info-title_text">编辑合作商</h6>
               </div>
             </el-row>
             <el-row type="flex">
@@ -33,7 +33,6 @@
                                      @clear="handleClear"
                                      @focus="handleFocus"
                                      value-key = "name"
-                                     :clearable = "true"
                                      :trigger-on-focus="false">
                     </el-autocomplete>
                     <el-autocomplete v-else style="width: 100%"
@@ -169,7 +168,7 @@
               </el-col>
             </el-row>
             <el-row type="flex" justify="center" class="cooperator-info-order-row">
-              <el-button class="cooperator-info-order-submit" @click="onSubmit()">确认创建</el-button>
+              <el-button class="cooperator-info-order-submit" @click="onSubmit()">确认保存</el-button>
             </el-row>
           </div>
         </el-form>
@@ -191,12 +190,12 @@
   import PayPlanSelect from '@/components/custom/PayPlanSelect';
 
   export default {
-    name: 'CooperatorFormPage',
+    name: 'CooperatorEditFormPage',
     props: [],
     components: {FormLabel, PayPlanSelect},
     computed: {
       ...mapGetters({
-        formData: 'formData'
+        formData: 'editFormData'
       }),
       ...createNamespacedHelpers('PayPlanModule').mapGetters({
         payPlanPage: 'page'
@@ -204,6 +203,7 @@
     },
     methods: {
       ...mapMutations({
+        setFormData: 'setFormData',
         currentPageNumber: 'currentPageNumber',
         currentPageSize: 'currentPageSize'
       }),
@@ -271,8 +271,8 @@
       },
       async onSubmit () {
         // 提交数据
-        const url = this.apis().createCooperator();
-        const result = await this.$http.post(url, this.formData);
+        const url = this.apis().updateCooperator();
+        const result = await this.$http.put(url, this.formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -284,7 +284,7 @@
         const url = this.apis().getPayPlans();
         this.searchPayPlan({url, keyword, page, size});
       },
-      onSelect(item){
+      onSelect (item) {
         this.formData.payPlan = item;
         this.payPlanSelectDialogVisible = false;
       }
