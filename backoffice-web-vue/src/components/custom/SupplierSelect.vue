@@ -9,8 +9,7 @@
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-form>
     <el-table ref="resultTable" stripe :data="page.content" highlight-current-row @current-change="handleCurrentChange"
-      @selection-change="handleSelectionChange" @filter-change="handleFilterChange" v-if="isHeightComputed"
-      :height="autoHeight">
+      @selection-change="handleSelectionChange" :height="autoHeight">
       <el-table-column label="合作商名称" prop="name">
         <template slot-scope="scope">
           <span v-if="scope.row.partner != null"> {{scope.row.partner.name}}</span>
@@ -50,7 +49,7 @@
 
   const {
     mapActions,
-    mapGetters
+    mapGetters,
   } = createNamespacedHelpers('CooperatorModule');
 
   export default {
@@ -63,7 +62,6 @@
     },
     methods: {
       ...mapActions({
-        refresh: 'refresh',
         searchAdvanced: 'searchAdvanced'
       }),
       onPageSizeChanged(val) {
