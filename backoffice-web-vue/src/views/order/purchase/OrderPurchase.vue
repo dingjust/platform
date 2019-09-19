@@ -25,7 +25,7 @@
               <el-form-item prop="companyOfSeller" class="purchase-form-item">
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">合作商</h6>
-                  <el-input placeholder="名称" v-model="form.companyOfSeller" size="mini">
+                  <el-input placeholder="名称" v-model="form.companyOfSeller" :disabled="true" size="mini">
                   </el-input>
                 </el-row>
               </el-form-item>
@@ -34,7 +34,7 @@
               <el-form-item prop="contactPersonOfSeller" class="purchase-form-item">
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">联系人</h6>
-                  <el-input placeholder="姓名" v-model="form.contactPersonOfSeller" size="mini">
+                  <el-input placeholder="姓名" v-model="form.contactPersonOfSeller" :disabled="true" size="mini">
                   </el-input>
                 </el-row>
               </el-form-item>
@@ -43,14 +43,14 @@
               <el-form-item prop="contactOfSeller" class="purchase-form-item">
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">联系方式</h6>
-                  <el-input placeholder="电话号码" v-model="form.contactOfSeller" size="mini">
+                  <el-input placeholder="电话号码" :disabled="true" v-model="form.contactOfSeller" size="mini">
                   </el-input>
                 </el-row>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="4">
+            <el-col :span="4">
               <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商</el-button>
-            </el-col> -->
+            </el-col>
           </el-row>
           <el-row class="info-order-row">
             <form-label label="生产详情" />
@@ -889,9 +889,9 @@
             attachments: this.form.attachments,
             remarks: this.form.remarks,
             salesApplication: 'BELOW_THE_LINE',
-            // supplier: {
-            //   uid: ''
-            // }
+            cooperator: {
+              id: this.form.cooperator.id
+            }
           };
           //提交数据
           const url = this.apis().createOfflinePurchaseOrder();
@@ -916,8 +916,9 @@
       onSuppliersSelect(val) {
         this.suppliersSelectVisible = false;
         this.form.companyOfSeller = val.name;
-        this.form.contactPersonOfSeller = val.contactPerson;
-        this.form.contactOfSeller = val.contactPhone;
+        this.form.contactPersonOfSeller = val.person;
+        this.form.contactOfSeller = val.phone;
+        this.form.cooperator.id = val.id;
       },
       addressSelect(index) {
         this.currentProductIndex = index;
@@ -1047,9 +1048,9 @@
           },
           QC: this.$store.getters.currentUser.username,
           attachments: [],
-          // supplier: {
-          //   uid: ''
-          // }
+          cooperator: {
+            id: ''
+          }
         },
         isAgain: this.$route.params.isAgain,
         againData: this.$route.params.data,
