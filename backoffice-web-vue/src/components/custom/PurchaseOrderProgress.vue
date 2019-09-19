@@ -112,7 +112,11 @@
       },
       ///判断是否正在进行中
       isDoing(index, data) {
-        return data[index].phase == this.slotData.currentPhase;
+        if (this.slotData.status == 'IN_PRODUCTION') {
+          return data[index].phase == this.slotData.currentPhase;
+        } else {
+          return false;
+        }
       },
       onEdit(item) {
         this.selectProgressModel = item;
@@ -146,7 +150,7 @@
         if (index != this.slotData.progresses.length - 1) {
           this.slotData.currentPhase = this.slotData.progresses[index + 1].phase;
         } else {
-          this.slotData.status = 'IN_PRODUCTION';
+          this.slotData.status = 'WAIT_FOR_OUT_OF_STORE';
         }
       },
     },

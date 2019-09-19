@@ -17,9 +17,9 @@
       </el-row>
       <el-row type="flex" justify="space-between">
         <el-col :span="10">
-          <el-image width="60px" height="60px"
+          <img width="60px" height="60px"
             :src="order.product.thumbnail!=null&&order.product.thumbnail.length!=0?order.product.thumbnail.url:'static/img/nopicture.png'">
-          </el-image>
+          </img>
         </el-col>
         <el-col :span="14">
           <h6 class="uniquecode-form-text">产品名:{{order.product.name}}</h6>

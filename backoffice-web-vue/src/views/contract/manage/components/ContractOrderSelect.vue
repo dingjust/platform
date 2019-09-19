@@ -27,7 +27,7 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
-              <img width="54px" v-if="scope.row.product!=null" height="54px" :src="scope.row.product.thumbnail.url">
+              <img width="54px" v-if="scope.row.product!=null" height="54px" :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'">
             </el-col>
             <el-col :span="16">
               <el-row>

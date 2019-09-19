@@ -1,10 +1,5 @@
 <template>
     <div class="cooperator-info-order-body">
-      <el-row class="cooperator-info-title-row">
-        <div class="cooperator-info-title">
-          <h6 class="cooperator-info-title_text">查看合作商</h6>
-        </div>
-      </el-row>
       <el-row type="flex">
         <el-col :span="11">
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
@@ -25,7 +20,10 @@
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
             <el-col :span="8">身份类型</el-col>
-            <el-col :span="16">{{getEnum('CooperatorCategory',itemData.category)}}</el-col>
+            <el-col :span="16">
+              {{getEnum('CooperatorCategory',itemData.category)}}
+              <span v-if="itemData.detailedIdentity != null">{{'('}}{{itemData.detailedIdentity}}{{')'}}</span>
+            </el-col>
           </el-row>
         </el-col>
         <el-col :span="2">
@@ -62,28 +60,19 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('CooperatorModule');
-  import FormLabel from '@/components/custom/FormLabel';
+  const {mapGetters, mapActions} = createNamespacedHelpers('CooperatorModule');
 
   export default {
-    name: 'CooperatorFormPage',
+    name: 'CooperatorInfoPage',
     props: ['itemData'],
-    components: {FormLabel},
+    components: {},
     computed: {
       ...mapGetters({
-        formData: 'formData'
       })
     },
     methods: {
       ...mapActions({
-        searchAdvanced: 'searchAdvanced'
       }),
-      onSearch(page, size) {
-        const queryFormData = this.queryFormData;
-
-        const url = this.apis().getCooperators();
-        this.searchAdvanced({url, queryFormData, page, size});
-      },
     },
     data() {
       return {
