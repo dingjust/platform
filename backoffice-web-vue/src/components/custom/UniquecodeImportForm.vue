@@ -17,7 +17,9 @@
       </el-row>
       <el-row type="flex" justify="space-between">
         <el-col :span="10">
-          <img width="60px" height="60px" :src="order.product.thumbnail.url">
+          <img width="60px" height="60px"
+            :src="order.product.thumbnail!=null&&order.product.thumbnail.length!=0?order.product.thumbnail.url:'static/img/nopicture.png'">
+          </img>
         </el-col>
         <el-col :span="14">
           <h6 class="uniquecode-form-text">产品名:{{order.product.name}}</h6>
@@ -34,10 +36,8 @@
 
 <script>
   export default {
-    name: 'UniquecodeImportForm',
-    components: {
-
-    },
+    name: "UniquecodeImportForm",
+    components: {},
     mixins: [],
     computed: {
       name: function () {
@@ -52,8 +52,8 @@
       async onSearch() {
         const url = this.apis().getDetailsForUniqueCode(this.uniqueCode);
         const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
         this.order = result;
@@ -61,26 +61,23 @@
       async onImport() {
         const url = this.apis().linkUniqueCode(this.uniqueCode);
         const result = await this.$http.put(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
         this.$message.success("导入成功");
         this.$router.push("order/purchase");
-      },
+      }
     },
     data() {
       return {
-        uniqueCode: '',
-        order: ''
-      }
+        uniqueCode: "",
+        order: ""
+      };
     },
-    created() {
-
-    },
+    created() {},
     mounted() {}
-
-  }
+  };
 
 </script>
 <style>
@@ -90,7 +87,7 @@
 
   .uniquecode-form-title {
     width: 100%;
-    border-left: 2px solid #FFD60C;
+    border-left: 2px solid #ffd60c;
     padding-left: 10px;
     height: 14px;
   }
@@ -121,7 +118,7 @@
   }
 
   .uniquecode-form-btn {
-    background: #FFD60C;
+    background: #ffd60c;
     color: rgba(0, 0, 0, 0.85);
     width: 200px;
     margin-top: 20px;

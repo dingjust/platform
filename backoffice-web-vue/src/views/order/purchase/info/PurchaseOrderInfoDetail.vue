@@ -7,7 +7,7 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="center">
       <el-col :span="3">
-        <img :src="slotData.product.thumbnail.url" class="info-detail-thumnail" />
+        <img :src="slotData.product.thumbnail!=null&&slotData.product.thumbnail.length!=0?slotData.product.thumbnail.url:'static/img/nopicture.png'" class="info-detail-thumnail" />
       </el-col>
       <el-col :span="21">
         <div>

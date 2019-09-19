@@ -70,6 +70,22 @@
     },
     methods: {
       async onSave(){
+        if(this.enterpriseSlotData.companyName == null || this.enterpriseSlotData.companyName == ''){
+          this.$message.error('请填写企业名称');
+          return;
+        }else if(this.enterpriseSlotData.organization == null || this.enterpriseSlotData.organization == ''){
+          this.$message.error('请填写税号');
+          return;
+        }else if(this.enterpriseSlotData.role == null || this.enterpriseSlotData.role == ''){
+          this.$message.error('请选择办理人身份');
+          return;
+        }else if(this.enterpriseSlotData.username == null || this.enterpriseSlotData.username == ''){
+          this.$message.error('请填写办理人姓名');
+          return;
+        }else if(this.enterpriseSlotData.idCardNum == null || this.enterpriseSlotData.idCardNum == ''){
+          this.$message.error('请填写办理人身份证');
+          return;
+        }else{
           const url = this.apis().enterpriseAuthentication();
           const tempData = {
             companyName: this.enterpriseSlotData.companyName,
@@ -87,7 +103,7 @@
           }else{
             this.$message.success(result.msg);
           }
-
+        }
       },
       reAuthentication(){
         this.readOnly = false;

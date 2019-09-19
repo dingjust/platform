@@ -5,7 +5,8 @@
       <!-- <el-table-column type="selection" width="32"></el-table-column> -->
       <el-table-column label="产品图片" width="120">
         <template slot-scope="scope">
-          <img width="54px" height="54px" :src="scope.row.thumbnail.url">
+          <img width="54px" height="54px"
+            :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'">
         </template>
       </el-table-column>
       <el-table-column label="产品名" prop="name" min-width="200"></el-table-column>
@@ -42,7 +43,7 @@
 
 <script>
   export default {
-    name: 'ApparelProductList',
+    name: "ApparelProductList",
     props: ["page"],
     computed: {},
     methods: {
@@ -50,19 +51,19 @@
         this._reset();
 
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
+          this.$emit("onAdvancedSearch", val);
           return;
         }
 
-        this.$emit('onSearch', 0, val);
+        this.$emit("onSearch", 0, val);
       },
       onCurrentPageChanged(val) {
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val - 1);
+          this.$emit("onAdvancedSearch", val - 1);
           return;
         }
 
-        this.$emit('onSearch', val - 1);
+        this.$emit("onSearch", val - 1);
       },
       _reset() {
         this.$refs.resultTable.clearSort();
@@ -70,16 +71,16 @@
         this.$refs.resultTable.clearSelection();
       },
       onDetails(row) {
-        this.$emit('onDetails', row);
+        this.$emit("onDetails", row);
       },
       onShelf(row) {
-        this.$emit('onShelf', row);
+        this.$emit("onShelf", row);
       },
       onOffShelf(row) {
-        this.$emit('onOffShelf', row);
+        this.$emit("onOffShelf", row);
       },
       numberFormatter(val) {
-        if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
+        if (val.price !== null && val.price !== "" && val.price !== "undefined") {
           return parseFloat(val.price).toFixed(2);
         }
       },
@@ -89,9 +90,9 @@
     },
     data() {
       return {
-        multipleSelection: [],
-      }
+        multipleSelection: []
+      };
     }
-  }
+  };
 
 </script>

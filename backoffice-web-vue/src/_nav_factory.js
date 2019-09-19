@@ -16,8 +16,7 @@ export default {
     {
       name: '订单',
       url: '/order',
-      children: [
-        {
+      children: [{
           name: '报价订单',
           url: '/order/quote',
           icon: 'iconNone'
@@ -42,8 +41,7 @@ export default {
     {
       name: '合同',
       url: '/contract',
-      children: [
-        {
+      children: [{
           name: '合同管理',
           url: '/manage',
           icon: 'iconNone',
@@ -102,7 +100,7 @@ export default {
     //     },
     //     {
     //       name: '供应商',
-    //       url: '/miscs/cooperator',
+    //       url: '/miscs/supplier',
     //       icon: 'iconNone',
     //     },
     //     {
@@ -115,22 +113,36 @@ export default {
     {
       name: '产品',
       url: '/product',
-      children: [
-        {
-          name: '产品管理',
-          url: '/product/apparel',
-          icon: 'iconNone',
-        }
-      ]
+      children: [{
+        name: '产品管理',
+        url: '/product/apparel',
+        icon: 'iconNone',
+      },
+      {
+        name: '样衣管理',
+        url: '/product/sample/sampleProduct',
+        icon: 'iconNone',
+      },
+      // {
+      //   name: '样衣借还记录',
+      //   url: '/miscs/sample/sampleCheckoutHist',
+      //   icon: 'iconNone',
+      // }
+    ]
     },
     {
       name: '公司',
       url: '/account',
       children: [
+        // {
+        //   name: '认证信息',
+        //   url: '/account/my',
+        //   icon: 'iconNone'
+        // },
         {
-          name: '认证信息',
-          url: '/account/my',
-          icon: 'iconNone'
+          name: '认证中心',
+          url: '/Authentication',
+          icon: 'iconNone',
         },
         {
           name: '员工',
@@ -138,10 +150,15 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '组织架构',
-          url: '/account/b2b-unit',
-          icon: 'iconNone'
+          name: '合作商',
+          url: '/miscs/cooperator',
+          icon: 'iconNone',
         },
+        // {
+        //   name: '组织架构',
+        //   url: '/account/b2b-unit',
+        //   icon: 'iconNone'
+        // },
         {
           name: '角色',
           url: '/account/role',
@@ -159,31 +176,6 @@ export default {
       url: '/miscs',
       // icon: 'icon-puzzle',
       children: [
-        {
-          name: '认证中心',
-          url: '/Authentication',
-          icon: 'iconNone',
-        },
-        {
-          name: '样衣管理',
-          children: [
-            {
-              name: '样衣',
-              url: '/miscs/sample/sampleProduct',
-              icon: 'iconNone',
-            },
-            {
-              name: '样衣借还记录',
-              url: '/miscs/sample/sampleCheckoutHist',
-              icon: 'iconNone',
-            }
-          ]
-        },
-        {
-          name: '合作商',
-          url: '/miscs/cooperator',
-          icon: 'iconNone',
-        },
         {
           name: '钱包',
           url: '/miscs/wallet',

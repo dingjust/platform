@@ -14,7 +14,7 @@ export default {
       url: '/dashboard',
     },
     {
-      name: '订单管理',
+      name: '订单',
       url: '/order',
       // icon: 'icon-puzzle',
       children: [
@@ -82,7 +82,7 @@ export default {
       ]
     },
     {
-      name: '产品管理',
+      name: '产品',
       url: '/product',
       // icon: 'icon-puzzle',
       children: [
@@ -90,7 +90,17 @@ export default {
           name: '服装产品',
           url: '/product/apparel',
           // icon: 'iconNone',
-        }
+        },
+        {
+          name: '样衣管理',
+          url: '/product/sample/sampleProduct',
+          icon: 'iconNone',
+        },
+        // {
+        //   name: '样衣借还记录',
+        //   url: '/miscs/sample/sampleCheckoutHist',
+        //   icon: 'iconNone',
+        // }
       ]
     },
     {
@@ -109,10 +119,15 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '组织架构',
-          url: '/account/b2b-unit',
-          icon: 'iconNone'
+          name: '供应商',
+          url: '/miscs/cooperator',
+          icon: 'iconNone',
         },
+        // {
+        //   name: '组织架构',
+        //   url: '/account/b2b-unit',
+        //   icon: 'iconNone'
+        // },
         {
           name: '角色',
           url: '/account/role',
@@ -132,26 +147,6 @@ export default {
         {
           name: '认证中心',
           url: '/Authentication',
-          icon: 'iconNone',
-        },
-        {
-          name: '样衣管理',
-          children: [
-            {
-              name: '样衣',
-              url: '/miscs/sample/sampleProduct',
-              icon: 'iconNone',
-            },
-            {
-              name: '样衣借还记录',
-              url: '/miscs/sample/sampleCheckoutHist',
-              icon: 'iconNone',
-            }
-          ]
-        },
-        {
-          name: '合作商',
-          url: '/miscs/cooperator',
           icon: 'iconNone',
         },
         {
