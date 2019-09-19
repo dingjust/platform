@@ -3,19 +3,10 @@ import http from '@/common/js/http';
 const state = {
   keyword: '',
   currentPageNumber: 0,
-  currentPageSize: 10,
-  ordersPageNumber: 0,
-  ordersPageSize: 10,
+  currentPageSize: 8,
   page: {
     number: 0, // 当前页，从0开始
     size: 10, // 每页显示条数
-    totalPages: 1, // 总页数
-    totalElements: 0, // 总数目数
-    content: [] // 当前页数据
-  },
-  orderPage: {
-    number: 0, // 当前页，从0开始
-    size: 8, // 每页显示条数
     totalPages: 1, // 总页数
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
@@ -24,54 +15,22 @@ const state = {
     type: '',
     keyword: ''
   },
-  ordersQueryFormData: {
-    belongTos: null,
-    purchasers: null
-  },
   formData: {
     id: null,
     name: '',
-    contactPhone: '',
-    contactPerson: '',
-    taxNumber: '',
-    bankOfDeposit: '',
-    bankAccount: '',
-    partner: null,
-    type: null,
-    category: null,
-    detailedIdentity: '',
-    payPlan: null,
+    payPlanType: '',
+    isHaveDeposit: null,
     remarks: ''
-  },
-  editFormData: {
-    id: null,
-    name: '',
-    contactPhone: '',
-    contactPerson: '',
-    taxNumber: '',
-    bankOfDeposit: '',
-    bankAccount: '',
-    partner: null,
-    type: null,
-    category: null,
-    detailedIdentity: '',
-    payPlan: null,
-    remarks: ''
-  },
+  }
 };
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
-  setOrdersPageNumber: (state, ordersPageNumber) => state.ordersPageNumber = ordersPageNumber,
-  setOrdersPageSize: (state, ordersPageSize) => state.ordersPageSize = ordersPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   page: (state, page) => state.page = page,
-  orderPage: (state, page) => state.orderPage = page,
   setQueryFormData: (state, query) => state.queryFormData = query,
-  setOrdersQueryFormData: (state, query) => state.ordersQueryFormData = query,
-  setFormData: (state, data) => state.formData = data,
-  setEditFormData: (state, data) => state.editFormData = data
+  setFormData: (state, data) => state.setFormData = data
 };
 
 const actions = {
@@ -82,7 +41,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.get(url, {
+    const response = await http.post(url, {
       keyword: state.keyword
     }, {
       page: state.currentPageNumber,
@@ -144,14 +103,10 @@ const getters = {
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  ordersPageNumber: state => state.ordersPageNumber,
-  ordersPageSize: state => state.ordersPageSize,
   page: state => state.page,
   orderPage: state => state.orderPage,
   queryFormData: state => state.queryFormData,
-  ordersQueryFormData: state => state.ordersQueryFormData,
-  formData: state => state.formData,
-  editFormData: state => state.editFormData,
+  formData: state => state.formData
 };
 
 export default {

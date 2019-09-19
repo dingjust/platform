@@ -30,6 +30,7 @@ import CooperatorModule from './miscs/cooperator';
 import IndustrialClustersModule from './miscs/industrial-clusters';
 import LabelsModule from './miscs/labels';
 import CarouselsModule from './miscs/carousels';
+import PayPlanModule from './miscs/payPlan';
 import OperationCoursesModule from './miscs/operationCourses';
 import WalletModule from './miscs/wallet';
 import CashOutManagerModule from './miscs/cashOutManager';
@@ -70,6 +71,7 @@ export {
   SampleCheckoutHistModule,
   SuppliersModule,
   CooperatorModule,
+  PayPlanModule,
   OperationCoursesModule,
   WalletModule,
   CashOutManagerModule,

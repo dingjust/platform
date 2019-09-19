@@ -900,7 +900,7 @@ const state = {
   // 合同状态
   contractStates: [{
       code: 'INITIATE',
-      name: '待签署'
+      name: '未签署'
     },
     {
       code: 'COMPLETE',

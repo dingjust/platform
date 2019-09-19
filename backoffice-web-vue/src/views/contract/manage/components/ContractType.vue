@@ -2,7 +2,7 @@
   <el-row type="flex" justify="space-around">
     <el-col :span="8">
       <div :class="contractType=='1'?'create-contract-type_select':'create-contract-type_not_select'"
-           @click="onCreateContract">
+           @click="onCreateOrderContract">
         <el-row>
           <el-col :span="24">
             <h5 :class="contractType=='1'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
@@ -20,7 +20,7 @@
     </el-col>
     <el-col :span="8">
       <div :class="contractType=='2'?'create-contract-type_select':'create-contract-type_not_select'"
-        @click="contractType='2'">
+        @click="onCreateFrameContract">
         <el-row>
           <el-col :span="24">
             <h5 :class="contractType=='2'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
@@ -36,30 +36,32 @@
         </el-row>
       </div>
     </el-col>
-    <el-col :span="8">
-      <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
-           @click="contractType='3'">
-        <el-row>
-          <el-col :span="24">
-            <h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-              补充协议</h5>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="20">
-            <h6
-              :class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
-              对已签署的合同签署补充协议</h6>
-          </el-col>
-        </el-row>
-      </div>
-    </el-col>
+    <!--<el-col :span="8">-->
+      <!--<div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"-->
+           <!--@click="onCreateSupplementContract">-->
+        <!--<el-row>-->
+          <!--<el-col :span="24">-->
+            <!--<h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">-->
+              <!--补充协议</h5>-->
+          <!--</el-col>-->
+        <!--</el-row>-->
+        <!--<el-row>-->
+          <!--<el-col :span="20">-->
+            <!--<h6-->
+              <!--:class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">-->
+              <!--对已签署的合同签署补充协议</h6>-->
+          <!--</el-col>-->
+        <!--</el-row>-->
+      <!--</div>-->
+    <!--</el-col>-->
   </el-row>
 </template>
 
 <script>
   import Bus from '@/common/js/bus.js';
   import ContractForm from '../ContractForm'
+  import ContractFrameForm from '../ContractFrameForm'
+  import ContractSupplementForm from '../ContractSupplementForm'
 
   export default {
     name: "ContractType",
@@ -67,10 +69,20 @@
       onSelectOption(val) {
         this.contractType = val;
       },
-      onCreateContract(){
+      onCreateOrderContract(){
         this.contractType='1';
         Bus.$emit('openContractType');
         this.fn.openSlider('创建', ContractForm, '');
+      },
+      onCreateFrameContract(){
+        this.contractType='2';
+        Bus.$emit('openContractType');
+        this.fn.openSlider('创建', ContractFrameForm, '');
+      },
+      onCreateSupplementContract(){
+        this.contractType='3';
+        Bus.$emit('openContractType');
+        this.fn.openSlider('创建', ContractSupplementForm, '');
       },
     },
     data() {

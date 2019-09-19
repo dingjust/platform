@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn">
-    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
+    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange"
       :height="autoHeight">
       <el-table-column label="合作商名称" prop="name">
         <template slot-scope="scope">
@@ -34,6 +34,8 @@
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetails(scope.row)" class="cooperator-list-button">明细</el-button>
+            <el-divider direction="vertical"></el-divider>
+            <el-button type="text" @click="onEdit(scope.row)" class="cooperator-list-button">编辑</el-button>
             <el-divider direction="vertical"></el-divider>
             <el-button type="text" @click="onDelete(scope.row)" class="cooperator-list-button">删除</el-button>
           </el-row>
@@ -99,19 +101,18 @@
       onDetails(row) {
         this.$emit('onDetails', row);
       },
+      onEdit(row) {
+        this.$emit('onEdit', row);
+      },
       onDelete(row) {
-        this.$emit('onDelete', row);
+        this.$confirm('此操作将永久删除该合作商, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$emit('onDelete', row);
+        })
       },
-      countTotalQuantity(entries) {
-        let amount = 0;
-        entries.forEach(element => {
-          amount += element.quantity;
-        });
-        return amount;
-      },
-      getPaymentStatusTag(row){
-        return row.balancePaid?'static/img/paid.png':'static/img/arrears.png';
-      }
     },
     data() {
       return {

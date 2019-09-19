@@ -14,27 +14,21 @@
       <!-- </el-button-group> -->
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-form>
-    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
+    <!--v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"-->
+    <el-table :data="page.content"
       highlight-current-row @current-change="handleCurrentChange" @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="32"></el-table-column> -->
-      <el-table-column>
+      <el-table-column label="方案名称" prop="name">
+      </el-table-column>
+      <el-table-column label="账务类型" prop="payPlanType">
         <template slot-scope="scope">
-          <el-row>
-            <el-col :span="20">
-              <el-row>
-                <h6 class="product-info">{{scope.row.name}}</h6>
-              </el-row>
-              <el-row>
-                <h6 class="product-info">{{scope.row.skuID}}</h6>
-              </el-row>
-            </el-col>
-          </el-row>
+          <span>{{getEnum('PayPlanType',scope.row.payPlanType)}}</span>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements" :page-sizes="[8,10,20]">
     </el-pagination>
   </div>
 </template>
@@ -46,10 +40,10 @@
 
   const {
     mapMutations
-  } = createNamespacedHelpers('ApparelProductsModule');
+  } = createNamespacedHelpers('PayPlanModule');
 
   export default {
-    name: 'ProductSelect',
+    name: 'PayPlanSelect',
     props: ['page'],
     computed: {},
     components: {
@@ -57,14 +51,9 @@
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
-        setQueryFormData: 'queryFormData'
       }),
       onPageSizeChanged (val) {
         this._reset();
-        if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
-          this.$emit('onAdvancedSearch', val);
-          return;
-        }
         this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged (val) {
@@ -89,10 +78,10 @@
       },
       // 选中行
       handleCurrentChange (val) {
-        this.selectProduct = val;
+        this.selectPayPlan = val;
       },
       onSure () {
-        this.$emit('onSelect', this.selectProduct);
+        this.$emit('onSelect', this.selectPayPlan);
       },
       onNew () {
         this.productDetailsVisible = true;
@@ -104,12 +93,13 @@
     },
     data () {
       return {
-        productDetailsVisible: false,
-        formData: this.$store.state.ApparelProductsModule.formData,
         multipleSelection: [],
         keyword: '',
-        selectProduct: ''
+        selectPayPlan: ''
       }
+    },
+    created () {
+      this.$emit('onSearch', 0);
     }
   }
 </script>
