@@ -196,7 +196,6 @@
 
         let data = {
           'pdf': this.pdfFile,
-          'role': 'PARTYA',
           'title': '',
           'isFrame' : false,
           'mainAgreementNum':this.slotData.code,
@@ -223,7 +222,6 @@
           return;
         }
         let data = {
-          'role': 'PARTYA',
           'title': '',
           'mainAgreementNum':this.slotData.code,
           'isSupplementary':true,
