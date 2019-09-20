@@ -70,7 +70,6 @@
           page: 0,
           size: 10
         });
-        console.log(result);
         this.tempData = result.content;
       },
       selectType(item){
@@ -90,12 +89,10 @@
           }
           this.mockData.push(temp);
 
-          console.log(this.mockData);
         }
 
       },
       async onSearchTemp(keyword,page, size) {
-        console.log(321)
         if(keyword == null){
           keyword = '';
         }
@@ -126,7 +123,6 @@
             }
             this.mockData.push(temp);
 
-            console.log(this.mockData);
           }
         }
       },
@@ -144,7 +140,6 @@
       this.getTemplateListPt();
       // this.onSearchTemp();
       this.mockData = [];
-      console.log(this.tempType)
     }
   };
 

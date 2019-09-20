@@ -5,7 +5,7 @@
       <contract-supplement-form  :slotData="slotData" />
     </el-dialog>
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
-      <el-button type="warning" @click="dialogOrderVisible=true" class="toolbar-search_input">增加补充协议</el-button>
+      <el-button type="warning" @click="onBCXY" class="toolbar-search_input">增加补充协议</el-button>
       <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
       <el-button v-if="slotData.state == 'SIGN' || slotData.state == 'PARTY_A_SIGN' || slotData.state == 'PARTY_B_SIGN'"
         type="warning" class="toolbar-search_input" @click="onRefuse(slotData.code)">拒签</el-button>
@@ -43,25 +43,25 @@
       }
     },
     methods: {
+      onBCXY(){
+        this.dialogOrderVisible = true;
+        Bus.$emit('closePdfView');
+      },
       async onRefuse(code) {
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
-        console.log(result);
         this.$message.success(result.msg);
         Bus.$emit('closePdfView');
       },
       async onRevoke(code) {
-        console.log(code);
         const url = this.apis().revokeContract(code);
         const result = await this.$http.get(url);
-        console.log(result);
         this.$message.success(result.msg);
         Bus.$emit('closePdfView');
       },
       async onDownload(code) {
         const url = this.apis().downContract(code);
         const result = await http.get(url);
-        console.log(result);
 
         window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },

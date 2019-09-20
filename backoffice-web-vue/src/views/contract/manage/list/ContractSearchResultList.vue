@@ -123,7 +123,6 @@
       async onDownload(code){
         const url = this.apis().downContract(code);
         const result = await http.get(url);
-        console.log(result);
 
         window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
@@ -131,14 +130,11 @@
       async onRefuse(code){
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
-        console.log(result);
         this.$message.error(result.msg);
       },
       async onRevoke(code){
-        console.log(code);
         const url = this.apis().revokeContract(code);
         const result = await this.$http.get(url);
-        console.log(result);
         this.$message.error(result.msg);
       },
       async onSearchSeal(vel,keyword,page, size) {
@@ -150,7 +146,6 @@
           keyword = '';
         }
         const url = this.apis().getSealsList();
-        console.log(url)
         const result = await this.$http.post(url,{
           keyword: keyword
         }, {
@@ -187,7 +182,6 @@
         }
         const url = this.apis().downContract(queryCode);
         const result = await http.get(url);
-        console.log(result);
 
         const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
         //
@@ -211,7 +205,6 @@
       }
     },
     created(){
-      console.log(this.page);
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
         this.pdfVisible = !this.pdfVisible;

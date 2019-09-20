@@ -123,11 +123,9 @@
           return;
         }
         this.page = result;
-        console.log(result);
       },
       async onPageSizeChanged(val) {
         this._reset();
-        console.log(val);
         const url = this.apis().getPurchaseOrders();
         const result = await this.$http.post(url,{
           keyword: ''
@@ -140,7 +138,6 @@
           return;
         }
         this.page = result;
-        console.log(result);
       },
       async onCurrentPageChanged(val) {
         const url = this.apis().getPurchaseOrders();
@@ -155,7 +152,6 @@
           return;
         }
         this.page = result;
-        console.log(result);
       },
       _reset() {
         this.$refs.resultTable.clearSort();
@@ -179,7 +175,6 @@
         // } else {
         //   this.selectedItem = item;
         // }
-        // console.log(this.selectedItem);
         this.$emit('onOrderSelectChange',this.selectedItem );
       },
       handleSelectionChange(val) {

@@ -65,7 +65,6 @@ export default {
     async onDownload(code){
       const url = this.apis().downContract(code);
       const result = await http.get(url);
-      console.log(result);
 
       window.location.href = 'http://localhost:8081/b2b/user/agreement/download/' + result.data;
 
@@ -76,7 +75,6 @@ export default {
         keyword = '';
       }
       const url = this.apis().getSealsList();
-      console.log(url)
       const result = await this.$http.post(url,{
         keyword: keyword
       }, {
@@ -102,7 +100,6 @@ export default {
   },
   watch: {
     propdata(newValue, oldValue) {
-      console.log(newValue);
     }
   }
 };

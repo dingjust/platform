@@ -157,7 +157,6 @@
         if (keyword == null) {
           keyword = '';
         }
-        console.log(2)
         const url = this.apis().getPurchaseOrders();
         const result = await this.$http.post(url, {
           keyword: keyword
@@ -170,7 +169,6 @@
           return;
         }
         this.orderPage = result;
-        console.log(result);
       },
       onContractTypeChange(val) {
         this.contractType = val;
@@ -181,7 +179,6 @@
       },
       //订单选择
       onOrderSelectChange(data) {
-        console.log(data);
         this.orderSelectFile = data;
         this.dialogOrderVisible = false;
       },
@@ -189,7 +186,6 @@
       onFileSelectSure() {
         this.dialogTemplateVisible = false;
         this.selectFile = this.cacheSelectFile;
-        console.log(this.selectFile);
       },
       handleExceed(files, fileList) {
         if (fileList > 1) {
@@ -197,24 +193,22 @@
           return false;
         }
 
-        console.log(files);
       },
       handleRemove(file) {
-        console.log(file);
         this.fileList = [];
         this.pdfFile = '';
       },
       async onSavePdf() {
-        if (this.selectFile == null) {
+        if (this.pdfFile.id == null || this.pdfFile.id == '') {
+          this.$message.error('请上传PDF');
           return;
         }
-        if (this.pdfFile == null) {
-          return;
-        }
-        if (this.suppliers == null) {
+        if (this.suppliers.uid == null || this.suppliers.uid == '') {
+          this.$message.error('请选择合作商');
           return;
         }
         if(this.dateTime == '' || this.dateTime == null){
+          this.$message.error('请选择合同有效期');
           return;
         }
         let role = '';
@@ -249,13 +243,16 @@
         this.fn.closeSlider(true);
       },
       async onSave() {
-        if (this.suppliers == null) {
+        if (this.suppliers.uid == null || this.suppliers.uid == '') {
+          this.$message.error('请选择合作商');
           return;
         }
-        if (this.selectFile == null) {
+        if (this.selectFile.id == null || this.selectFile.id == '') {
+          this.$message.error('请选择合同模板');
           return;
         }
         if(this.dateTime == '' || this.dateTime == null){
+          this.$message.error('请选择合同有效期');
           return;
         }
         let role = '';
@@ -273,8 +270,6 @@
           'isFrame' : true,
           'partnerCompanyCode':this.suppliers.uid,
         }
-
-        console.log(data);
 
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
@@ -295,7 +290,6 @@
       },
       onSetOrderCode() {
         if (this.slotData != null && this.slotData != '') {
-          console.log(111)
           this.orderSelectFile = this.slotData;
           this.orderReadOnly = true;
           if (this.currentUser.type == 'BRAND') {
@@ -321,7 +315,6 @@
         return true;
       },
       onSuccess(response) {
-        console.log(response)
         this.pdfFile = response;
       },
       onSuppliersSelect(val) {
@@ -392,7 +385,6 @@
     },
     created() {
       this.onSearchOrder('', 0, 10);
-      console.log('sss' + this.slotData);
       this.onSetOrderCode();
     }
   };
