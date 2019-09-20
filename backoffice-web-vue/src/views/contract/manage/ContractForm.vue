@@ -176,7 +176,6 @@
         if (keyword == null) {
           keyword = '';
         }
-        console.log(2)
         const url = this.apis().getPurchaseOrders();
         const result = await this.$http.post(url, {
           keyword: keyword
@@ -189,7 +188,6 @@
           return;
         }
         this.orderPage = result;
-        console.log(result);
       },
       onContractTypeChange(val) {
         this.contractType = val;
@@ -203,7 +201,6 @@
       },
       //订单选择
       onOrderSelectChange(data) {
-        console.log(data);
         this.orderSelectFile = data;
         this.dialogOrderVisible = false;
       },
@@ -211,12 +208,10 @@
       onFileSelectSure() {
         this.dialogTemplateVisible = false;
         this.selectFile = this.cacheSelectFile;
-        console.log(this.selectFile);
       },
       onContractSelectSure() {
         this.dialogContractVisible = false;
         this.selectContract = this.cacheSelectContract;
-        console.log(this.selectContract);
       },
       handleExceed(files, fileList) {
         if (fileList > 1) {
@@ -224,10 +219,8 @@
           return false;
         }
 
-        console.log(files);
       },
       handleRemove(file) {
-        console.log(file);
         this.fileList = [];
         this.pdfFile = '';
       },
@@ -236,13 +229,12 @@
         if(this.contractType == '3'){
           agreementType = 'CUSTOMIZE_COMPLETED';
         }
-        if (this.orderSelectFile == null) {
+        if (this.orderSelectFile.code == null || this.orderSelectFile.code == '') {
+          this.$message.error('请选择订单');
           return;
         }
-        if (this.selectFile == null) {
-          return;
-        }
-        if(this.pdfFile== null){
+        if(this.pdfFile.id == null || this.pdfFile.id == ''){
+          this.$message.error('请先上传PDF文件');
           return;
         }
         let role = '';
@@ -251,7 +243,6 @@
         } else {
           role = 'PARTYB';
         }
-
         let data = {
           'pdf': this.pdfFile,
           'role': role,
@@ -275,10 +266,13 @@
         this.fn.closeSlider(true);
       },
       async onSave() {
-        if (this.orderSelectFile == null) {
+
+        if (this.orderSelectFile.code == null || this.orderSelectFile.code == '') {
+          this.$message.error('请选择订单');
           return;
         }
-        if (this.selectFile == null) {
+        if (this.selectFile.id == null || this.selectFile.id == '') {
+          this.$message.error('请选择合同模板');
           return;
         }
         let role = '';
@@ -287,13 +281,18 @@
         } else {
           role = 'PARTYB';
         }
+        var frameAgreementCode = '';
         if(this.hasFrameworkContract){
           this.agreementType = '';
+          if(this.selectContract.code == null || this.selectContract.code == ''){
+            return;
+          }
+
+          if(this.selectContract.code != null &&this.selectContract.code != ''){
+            frameAgreementCode = this.selectContract.code;
+          }
         }
-        var frameAgreementCode = '';
-        if(this.selectContract != null &&this.selectContract != ''){
-          frameAgreementCode = this.selectContract.code;
-        }
+
 
         let data = {
           'userTempCode': this.selectFile.code,
@@ -302,7 +301,6 @@
           'frameAgreementCode' : frameAgreementCode,
           'orderCode': this.orderSelectFile.code,
         }
-
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
@@ -322,7 +320,6 @@
       },
       onSetOrderCode() {
         if (this.slotData != null && this.slotData != '') {
-          console.log(111)
           this.orderSelectFile = this.slotData;
           this.orderReadOnly = true;
           if (this.currentUser.type == 'BRAND') {
@@ -348,7 +345,6 @@
         return true;
       },
       onSuccess(response) {
-        console.log(response)
         this.pdfFile = response;
       },
       async getContractList(uid){
@@ -361,7 +357,6 @@
           page: 0,
           size: 100
         });
-        console.log(result);
         this.mockData = result.content;
       },
       openKJHTSelect(){
@@ -416,7 +411,6 @@
     },
     created() {
       this.onSearchOrder('', 0, 10);
-      console.log('sss' + this.slotData);
       this.onSetOrderCode();
     }
   };

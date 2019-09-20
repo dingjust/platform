@@ -26,7 +26,7 @@
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
-          <el-input size="small" placeholder="选择已签合同" v-model="slotData.title" :disabled="true">
+          <el-input size="small" placeholder="选择已签合同" v-model="slotData.code" :disabled="true">
             <el-button slot="prepend" :disabled="true" @click="suppliersSelectVisible=true">已签合同</el-button>
           </el-input>
         </el-col>
@@ -142,7 +142,6 @@
         if (keyword == null) {
           keyword = '';
         }
-        console.log(2)
         const url = this.apis().getPurchaseOrders();
         const result = await this.$http.post(url, {
           keyword: keyword
@@ -155,7 +154,6 @@
           return;
         }
         this.orderPage = result;
-        console.log(result);
       },
       onContractTypeChange(val) {
         this.contractType = val;
@@ -166,7 +164,6 @@
       },
       //订单选择
       onOrderSelectChange(data) {
-        console.log(data);
         this.orderSelectFile = data;
         this.dialogOrderVisible = false;
       },
@@ -174,7 +171,6 @@
       onFileSelectSure() {
         this.dialogTemplateVisible = false;
         this.selectFile = this.cacheSelectFile;
-        console.log(this.selectFile);
       },
       handleExceed(files, fileList) {
         if (fileList > 1) {
@@ -182,31 +178,27 @@
           return false;
         }
 
-        console.log(files);
       },
       handleRemove(file) {
-        console.log(file);
         this.fileList = [];
         this.pdfFile = '';
       },
       async onSavePdf() {
-        if (this.selectFile == null) {
+
+        if (this.pdfFile.id == null || this.pdfFile.id == '') {
+          this.$message.error('请上传PDF文件');
           return;
         }
-        if (this.pdfFile == null) {
-          return;
-        }
-        if (this.suppliers == null) {
-          return;
-        }
-        if(this.dateTime == '' || this.dateTime == null){
+        if (this.suppliers.uid == null || this.suppliers.uid) {
+          this.$message.error('请选择合作商');
           return;
         }
 
         let data = {
           'pdf': this.pdfFile,
-          'role': this.slotData.role,
+          'role': 'PARTYA',
           'title': '',
+          'isFrame' : false,
           'mainAgreementNum':this.slotData.code,
           'isSupplementary':true,
         }
@@ -226,18 +218,19 @@
         this.fn.closeSlider(true);
       },
       async onSave() {
-        if (this.selectFile == null) {
+        if (this.selectFile.id == null || this.selectFile.id == '') {
+          this.$message.error('请选择合同模板');
           return;
         }
         let data = {
-          'role': this.slotData.role,
+          'role': 'PARTYA',
           'title': '',
-          'mainAgreementNum':slotData.code,
+          'mainAgreementNum':this.slotData.code,
           'isSupplementary':true,
+          'isFrame' : false,
           'userTempCode': this.selectFile.code,
         }
 
-        console.log(data);
 
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
@@ -258,7 +251,6 @@
       },
       onSetOrderCode() {
         if (this.slotData != null && this.slotData != '') {
-          console.log(111)
           this.orderSelectFile = this.slotData;
           this.orderReadOnly = true;
           if (this.currentUser.type == 'BRAND') {
@@ -284,7 +276,6 @@
         return true;
       },
       onSuccess(response) {
-        console.log(response)
         this.pdfFile = response;
       },
       onSuppliersSelect(val) {
@@ -355,7 +346,6 @@
     },
     created() {
       this.onSearchOrder('', 0, 10);
-      console.log('sss' + this.slotData);
       this.onSetOrderCode();
     }
   };

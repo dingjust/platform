@@ -38,6 +38,7 @@
   import http from '@/common/js/http';
   import ContractDetails from "../../../contract/manage/components/ContractDetails";
   import ContractPreviewPdf from '../../../contract/manage/components/ContractPreviewPdf'
+  import contractSealView from '../../../contract/manage/components/ContractSealList'
 
   export default {
     name: 'PurchaseOrderInfoContract',
