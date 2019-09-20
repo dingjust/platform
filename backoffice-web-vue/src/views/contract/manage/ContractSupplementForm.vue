@@ -198,7 +198,7 @@
           'pdf': this.pdfFile,
           'title': '',
           'isFrame' : false,
-          'mainAgreementNum':this.slotData.code,
+          'mainAgreementCode':this.slotData.code,
           'isSupplementary':true,
         }
 
@@ -223,7 +223,7 @@
         }
         let data = {
           'title': '',
-          'mainAgreementNum':this.slotData.code,
+          'mainAgreementCode':this.slotData.code,
           'isSupplementary':true,
           'isFrame' : false,
           'userTempCode': this.selectFile.code,
