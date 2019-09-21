@@ -203,7 +203,7 @@
           this.$message.error('请上传PDF');
           return;
         }
-        if (this.suppliers.uid == null || this.suppliers.uid == '') {
+        if (this.suppliers.id == null || this.suppliers.id == '') {
           this.$message.error('请选择合作商');
           return;
         }
@@ -225,7 +225,7 @@
           'validityEnd': this.dateTime[1],
           'validityStart': this.dateTime[0],
           'isFrame' : true,
-          'partnerCompanyCode':this.suppliers.uid,
+          'partnerCompanyCode':this.suppliers.id,
         }
 
         const url = this.apis().saveContract();
@@ -243,7 +243,8 @@
         this.fn.closeSlider(true);
       },
       async onSave() {
-        if (this.suppliers.uid == null || this.suppliers.uid == '') {
+        console.log(this.suppliers);
+        if (this.suppliers.id == null || this.suppliers.id == '') {
           this.$message.error('请选择合作商');
           return;
         }
@@ -268,7 +269,7 @@
           'role': role,
           'title': '',
           'isFrame' : true,
-          'partnerCompanyCode':this.suppliers.uid,
+          'partnerCompanyCode':this.suppliers.id,
         }
 
         const url = this.apis().saveContract();
