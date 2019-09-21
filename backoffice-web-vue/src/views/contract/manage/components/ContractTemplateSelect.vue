@@ -1,20 +1,20 @@
 <template>
-  <div class="animated fadeIn template-body" style="height: 500px;">
+  <div class="animated fadeIn template-body" style="height: auto">
     <el-card>
-      <el-container  style="height: 500px;">
-        <el-aside width="150px"  style="height: 500px;" class="template-aside">
+      <el-container  style="">
+        <el-aside width="150px"  style="" class="template-aside">
           <el-row justify="center" type="flex">
             <h6 class="template-aside_text">订单基础合同范本</h6>
           </el-row>
           <el-row :span="3" v-for="(item, index) in tempData" :key="index" :offset="0">
-            <div  :class="item.code==selectedItemTemp.code?'template-file_selected':'template-file'" @click="selectType(item)">
+            <div v-if="item.title!=null && item.title!=''&& item.type ==tempType && (tempType != null && tempType != 'undefined' && tempType != '')" :class="item.code==selectedItemTemp.code?'template-file_selected':'template-file'" @click="selectType(item)">
               <!--<div class="template-ban" v-show="item.baned">-->
                 <!--<i class="el-icon-remove template-ban_icon"></i>-->
               <!--</div>-->
-              <el-row v-if="item.title!=null && item.title!=''" type="flex" justify="center">
+              <el-row type="flex" justify="center">
                 <img src="static/img/word.png" class="img-word" alt="" />
               </el-row>
-              <el-row v-if="item.title!=null && item.title!=''"  type="flex" justify="center">
+              <el-row type="flex" justify="center">
                 <el-col :span="16" style="text-align: center">
                   <h6 class="template-name">{{item.title}}</h6>
                 </el-col>
@@ -23,7 +23,7 @@
           </el-row>
         </el-aside>
         <el-main>
-    <div class="main-content" style="height: 500px;">
+    <div class="main-content" style="">
       <el-row >
         <el-col v-if="mockData!=null && mockData!= []" :span="4" v-for="(item, index) in mockData" :key="index" :offset="0">
           <div v-if="item.title!=null && item.title!=''" :class="item.code==selectedItem.code?'template-file_selected':'template-file'" @click="onSelect(item)">
@@ -51,6 +51,7 @@
 
   export default {
     name: "ContractTemplateSelect",
+    props:['tempType'],
     methods: {
       onSelect(item) {
         if (item.code == this.selectedItem.code) {
@@ -69,10 +70,10 @@
           page: 0,
           size: 10
         });
-        console.log(result);
         this.tempData = result.content;
       },
       selectType(item){
+        this.onSearchTemp();
         this.selectedItemTemp = item;
         var temp =[];
         if(this.allData != null && this.allData != []){
@@ -88,7 +89,6 @@
           }
           this.mockData.push(temp);
 
-          console.log(this.mockData);
         }
 
       },
@@ -109,6 +109,22 @@
         }
         this.allData = result.content;
         this.mockData = result.content;
+        if(this.tempType != null){
+          var temp =[];
+          if(this.allData != null && this.allData != []){
+            for(var i=0; i<this.allData.length;i++){
+              if(this.tempType == this.allData[i].type){
+                temp.push(this.allData[i]);
+              }
+            }
+            this.mockData = [];
+            for(var i=0; i<temp.length;i++){
+              this.mockData.push(temp[i]);
+            }
+            this.mockData.push(temp);
+
+          }
+        }
       },
     },
     data() {
@@ -116,19 +132,21 @@
         selectedItem: {},
         selectedItemTemp: {},
         tempData:[],
-        mockData:[],
         allData:[],
+        mockData:[],
       };
     },
     created(){
       this.getTemplateListPt();
-      this.onSearchTemp();
+      // this.onSearchTemp();
+      this.mockData = [];
     }
   };
 
 </script>
 <style>
   .main-content {
+    min-height: 100px;
     border: 0.5px solid #CCCCCC;
     padding: 10px;
   }

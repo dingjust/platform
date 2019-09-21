@@ -4,17 +4,17 @@
     <contract-type />
   </el-dialog>
   <el-form :inline="true">
-    <el-form-item label="品牌名">
-      <el-input placeholder="输入品牌名" v-model="keyword"></el-input>
+    <el-form-item label="合同名称">
+      <el-input placeholder="合同名称" v-model="keyword"></el-input>
     </el-form-item>
-    <el-form-item label="日期">
-      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="至"
-        start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
-      </el-date-picker>
-    </el-form-item>
-    <el-form-item label="合同编号">
-      <el-input placeholder="输入编号" v-model="queryFormData.code"></el-input>
-    </el-form-item>
+    <!--<el-form-item label="日期">-->
+      <!--<el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="至"-->
+        <!--start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions">-->
+      <!--</el-date-picker>-->
+    <!--</el-form-item>-->
+    <!--<el-form-item label="合同编号">-->
+      <!--<el-input placeholder="输入编号" v-model="queryFormData.code"></el-input>-->
+    <!--</el-form-item>-->
     <el-button-group>
       <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
       <el-button  native-type="reset" @click="">重置</el-button>

@@ -28,7 +28,6 @@ const mutations = {
 
 const actions = {
   async search({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
-    console.log('2222222222'+statuses)
     commit('url', url);
     commit('keyword', keyword);
     commit('state', statuses);
@@ -40,7 +39,7 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword,
+      title: state.keyword,
       state: statuses
     }, {
       page: state.currentPageNumber,

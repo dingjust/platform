@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%;height:720px;" append-to-body>
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
     </el-dialog>
 
@@ -44,8 +44,8 @@
           <el-button type="text" @click="previewPdf(scope.row,'')">查看</el-button>
           <el-button type="text"  @click="onDownload(scope.row.code)">下载</el-button>
           <el-button v-if="currentUser.companyName == scope.row.partner &&
-          scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
-          <el-button v-if="scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>
+          scope.row.state == 'INITIATE' || scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
+          <el-button v-if="scope.row.state == 'INITIATE' || scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>
           <el-button v-if="currentUser.companyName != scope.row.partner && scope.row.state != 'COMPLETE'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>
         </template>
       </el-table-column>
@@ -123,7 +123,6 @@
       async onDownload(code){
         const url = this.apis().downContract(code);
         const result = await http.get(url);
-        console.log(result);
 
         window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
@@ -131,14 +130,11 @@
       async onRefuse(code){
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
-        console.log(result);
         this.$message.error(result.msg);
       },
       async onRevoke(code){
-        console.log(code);
         const url = this.apis().revokeContract(code);
         const result = await this.$http.get(url);
-        console.log(result);
         this.$message.error(result.msg);
       },
       async onSearchSeal(vel,keyword,page, size) {
@@ -150,7 +146,6 @@
           keyword = '';
         }
         const url = this.apis().getSealsList();
-        console.log(url)
         const result = await this.$http.post(url,{
           keyword: keyword
         }, {
@@ -185,10 +180,8 @@
         }else{
           queryCode = val.code;
         }
-
         const url = this.apis().downContract(queryCode);
         const result = await http.get(url);
-        console.log(result);
 
         const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
         //
@@ -212,7 +205,6 @@
       }
     },
     created(){
-      console.log(this.page);
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
         this.pdfVisible = !this.pdfVisible;
@@ -220,6 +212,9 @@
       });
       Bus.$on('openList', args => {
         this.dialogSealVisible = !this.dialogSealVisible;
+      });
+      Bus.$on('closePdfView', args => {
+        this.pdfVisible = !this.pdfVisible;
       });
       // Bus.$on('openContract', args => {
       //   this.pdfVisible = !this.pdfVisible;

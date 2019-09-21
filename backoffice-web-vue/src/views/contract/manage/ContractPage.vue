@@ -76,10 +76,8 @@
       ...mapMutations({
       }),
       onSearch(page, size) {
-        console.log(1111)
         const keyword = this.keyword;
         const statuses = this.state;
-        console.log(statuses);
         const url = this.apis().getContractsList();
         this.search({
           url,
@@ -107,7 +105,6 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-        console.log(result);
         // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
         this.contractData = result.data;
         this.dialogTableVisible = true;
@@ -126,7 +123,7 @@
       },
       getEnumCode (name) {
         if(name == '待签署'){
-          return 'WAIT_SIGN'
+          return 'SIGN'
         }
         if(name == '已完成'){
           return 'COMPLETE'

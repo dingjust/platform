@@ -44,7 +44,6 @@
           keyword = '';
         }
         const url = this.apis().getSealsList();
-        console.log(url)
         const result = await this.$http.post(url,{
           keyword: keyword
         }, {
@@ -63,7 +62,6 @@
           keyword = '';
         }
         const url = this.apis().getSealsList();
-        console.log(url)
         const result = await this.$http.post(url,{
           keyword: keyword
         }, {

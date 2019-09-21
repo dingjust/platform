@@ -15,15 +15,15 @@
       <div class="info-title">
         <h6 class="info-title_text">合同（{{contract==null?'未签署':getEnum('contractStates', contract.state)}}）</h6>
       </div>
-      <el-button v-if="contract ==null" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
+      <el-button v-if="contract ==null || contract.state == 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
       </el-button>
-      <el-button v-if="contract !=null" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同
+      <el-button v-if="contract !=null && contract.state != 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同
       </el-button>
     </el-row>
-    <el-row v-if="contract !=null" type="flex" justify="center">
+    <el-row v-if="contract !=null && contract.state != 'INVALID'" type="flex" justify="center">
       <img @click="openContract" src="static/img/word.png" class="info-img-word" alt="" />
     </el-row>
-    <el-row v-if="contract !=null" type="flex" justify="center">
+    <el-row v-if="contract !=null && contract.state != 'INVALID'" type="flex" justify="center">
       <el-col :span="16">
         <h6 @click="openContract" class="info-template-name">{{contract.title}}</h6>
       </el-col>
@@ -38,6 +38,7 @@
   import http from '@/common/js/http';
   import ContractDetails from "../../../contract/manage/components/ContractDetails";
   import ContractPreviewPdf from '../../../contract/manage/components/ContractPreviewPdf'
+  import contractSealView from '../../../contract/manage/components/ContractSealList'
 
   export default {
     name: 'PurchaseOrderInfoContract',
