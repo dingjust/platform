@@ -125,7 +125,7 @@ const router = new Router({
         },
         {
           path: 'account',
-          name: '账户管理',
+          name: '公司',
           component: {
             render(c) {
               return c('router-view');
@@ -165,6 +165,44 @@ const router = new Router({
               path: 'address',
               name: '地址管理',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/address/AddressPage'),
+            },
+            {
+              path: 'setting',
+              name: '配置',
+              component: {
+                render(c) {
+                  return c('router-view');
+                }
+              },
+              children: [
+                {
+                  path: 'payPlan',
+                  name: '账务配置',
+                  component: {
+                    render(c) {
+                      return c('router-view');
+                    }
+                  },
+                  children:[
+                    {
+                      path: '',
+                      name: '账务方案列表',
+                      component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/PayPlanPage'),
+                    },
+                    {
+                      path: 'create',
+                      name: '添加新方案',
+                      component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/form/PayPlanFormPage'),
+                    },
+                    {
+                      path: 'update',
+                      name: '编辑新方案',
+                      component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/form/PayPlanEditFormPage'),
+                    },
+                  ]
+
+                }
+              ]
             }
           ]
         },

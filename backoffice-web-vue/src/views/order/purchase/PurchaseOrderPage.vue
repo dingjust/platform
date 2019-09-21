@@ -132,8 +132,6 @@
         const result = await http.post(url,{orderCode:this.contentData.code},{page:0,
           size:100});
         this.contract = result.content[0];
-
-        console.log(this.contract)
       },
       initContract(){
         this.contract = '';

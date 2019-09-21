@@ -18,10 +18,19 @@ const state = {
   formData: {
     id: null,
     name: '',
+    payPlanType: 'PHASEONE',
+    isHaveDeposit: false,
+    remarks: '',
+    payPlanItems:[]
+  },
+  editFormData: {
+    id: null,
+    name: '',
     payPlanType: '',
-    isHaveDeposit: null,
-    remarks: ''
-  }
+    isHaveDeposit: false,
+    remarks: '',
+    payPlanItems:[]
+  },
 };
 
 const mutations = {
@@ -30,7 +39,8 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   page: (state, page) => state.page = page,
   setQueryFormData: (state, query) => state.queryFormData = query,
-  setFormData: (state, data) => state.setFormData = data
+  setFormData: (state, data) => state.formData = data,
+  setEditFormData: (state, data) => state.editFormData = data,
 };
 
 const actions = {
@@ -41,7 +51,7 @@ const actions = {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post(url, {
+    const response = await http.get(url, {
       keyword: state.keyword
     }, {
       page: state.currentPageNumber,
@@ -52,8 +62,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
-    commit('queryFormData', query);
+  async searchAdvanced ({dispatch, commit, state}, {url, page, size}) {
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
@@ -67,17 +76,6 @@ const actions = {
     // console.log(JSON.stringify(response));
     if (!response['errors']) {
       commit('page', response);
-    }
-  },
-  async searchOrdersAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
-    const response = await http.post(url, state.ordersQueryFormData, {
-      page: state.ordersPageNumber,
-      size: state.ordersPageSize
-    });
-
-    // console.log(JSON.stringify(response));
-    if (!response['errors']) {
-      commit('orderPage', response);
     }
   },
   refresh ({dispatch, commit, state}) {
@@ -106,7 +104,8 @@ const getters = {
   page: state => state.page,
   orderPage: state => state.orderPage,
   queryFormData: state => state.queryFormData,
-  formData: state => state.formData
+  formData: state => state.formData,
+  editFormData: state => state.editFormData,
 };
 
 export default {
