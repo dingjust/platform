@@ -275,7 +275,8 @@
         this.fn.closeSlider(true);
       },
       async onSave() {
-
+        console.log(this.orderSelectFile.code);
+        // return;
         if (this.orderSelectFile.code == null || this.orderSelectFile.code == '') {
           this.$message.error('请选择订单');
           return;

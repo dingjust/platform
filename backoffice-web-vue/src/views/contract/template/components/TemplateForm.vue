@@ -8,7 +8,7 @@
           </el-row>
           <el-row :span="3" v-for="(item, index) in mockData" :key="index" :offset="0">
             <div :class="item.code==selectedCode?'template-file_selected':'template-file'" @click="onSelect(item)">
-              <div class="template-ban" v-show="item.baned">
+              <a href="#here"><div class="template-ban" v-show="item.baned">
                 <i class="el-icon-remove template-ban_icon"></i>
               </div>
               <el-row type="flex" justify="center">
@@ -19,11 +19,12 @@
                   <h6 class="template-name">{{item.title}}</h6>
                 </el-col>
               </el-row>
+              </a>
             </div>
           </el-row>
         </el-aside>
-        <el-main>
-          <div>
+        <el-main style="margin-left: 150px">
+          <div  id="here">
             <el-row type="flex" justify="space-between" align="middle">
               <el-col :span="4">
                 <div class="template-form-header">
@@ -33,7 +34,7 @@
               <el-col :span="4">
                 <el-button-group>
                   <el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>
-                  <el-button @click="onBack">返回</el-button>
+                  <!--<el-button @click="onBack">返回</el-button>-->
                 </el-button-group>
               </el-col>
             </el-row>
@@ -104,6 +105,10 @@
         this.fn.closeSlider(true);
       },
       async onSave(){
+        if(this.tempName == null || this.tempName == ''){
+          this.$message.error('请输入模板名字');
+          return;
+        }
         const url = this.apis().saveTemplate();
         const tempData = {
           title: this.tempName,
@@ -116,11 +121,11 @@
         };
         let formData = Object.assign({}, tempData);
         const result = await http.post(url, formData);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('保存成功');
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
+        this.$message.success(result.msg);
 
         this.fn.closeSlider(true);
       },
@@ -150,7 +155,7 @@
           useCommandShortcut: true,
           useDefaultHTMLSanitizer: true,
           usageStatistics: true,
-          hideModeSwitch: false
+          hideModeSwitch: true
         },
         tempContent:'',
         selectedCode: '1',
@@ -227,6 +232,7 @@
     border-right: 5px solid #E6E6E6;
     // border-radius: 20px;
     padding-right: 10px;
+    position: fixed;
   }
 
   .template-aside_text {

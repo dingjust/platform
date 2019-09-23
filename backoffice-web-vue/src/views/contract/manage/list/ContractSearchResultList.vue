@@ -6,7 +6,9 @@
     <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%;height:720px;" append-to-body>
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
     </el-dialog>
-
+    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
+      <contract-supplement-form  :slotData="thisContract" />
+    </el-dialog>
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
       :height="autoHeight">
       <el-table-column label="合同名称" fixed>
@@ -17,7 +19,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="合同编号" prop="code"></el-table-column>
+      <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
       <el-table-column label="签署对象" prop="belongTo.name">
         <template slot-scope="scope">
           <span>{{scope.row.partner}}</span>
@@ -43,9 +45,10 @@
         <template slot-scope="scope">
           <el-button type="text" @click="previewPdf(scope.row,'')">查看</el-button>
           <el-button type="text"  @click="onDownload(scope.row.code)">下载</el-button>
-          <el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
-          <el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>
-          <el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>
+          <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>-->
+          <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>-->
+          <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>-->
+          <el-button type="text" v-if="scope.row.state != 'INVALID'" @click="onBCXY(scope.row)">增加补充协议</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -67,6 +70,7 @@
   import ContractSealList from "../components/ContractSealList";
   import ContractPreviewPdf from '../components/ContractPreviewPdf'
   import Bus from '@/common/js/bus.js';
+  import ContractSupplementForm from '../ContractSupplementForm'
 
   const {
     mapActions
@@ -81,7 +85,8 @@
     components: {
       ContractPreviewPdf,
       ContractDetails,
-      ContractSealList
+      ContractSealList,
+      ContractSupplementForm
     },
     computed: {},
     methods: {
@@ -125,6 +130,15 @@
 
         window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
+      },
+      onConfirm() {
+        this.$confirm('是否确认接单?', '接单', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          console.log('ffff');
+        });
       },
       async onRefuse(code){
         const url = this.apis().refuseContract(code);
@@ -188,7 +202,10 @@
         this.pdfVisible = true;
         this.fileUrl = encodeURIComponent(aa)
       },
-
+      onBCXY(val){
+        this.thisContract = val;
+        this.dialogOrderVisible = true;
+      },
     },
     data() {
       return {
@@ -201,19 +218,20 @@
         currentUser: this.$store.getters.currentUser,
         fileUrl : '',
         thisContract:'',
+        dialogOrderVisible:false
       }
     },
     created(){
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
-        this.pdfVisible = !this.pdfVisible;
-        this.dialogSealVisible = !this.dialogSealVisible;
+        this.pdfVisible = false;
+        this.dialogSealVisible = true;
       });
       Bus.$on('openList', args => {
-        this.dialogSealVisible = !this.dialogSealVisible;
+        this.dialogSealVisible = true;
       });
       Bus.$on('closePdfView', args => {
-        this.pdfVisible = !this.pdfVisible;
+        this.pdfVisible = false;
       });
       // Bus.$on('openContract', args => {
       //   this.pdfVisible = !this.pdfVisible;
