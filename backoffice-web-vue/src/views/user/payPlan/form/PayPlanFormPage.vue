@@ -37,7 +37,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters} = createNamespacedHelpers('PayPlanModule');
+  const {mapGetters,mapMutations} = createNamespacedHelpers('PayPlanModule');
   import PayPlanForm from '../../../../components/custom/PayPlanForm';
 
   export default {
@@ -48,9 +48,11 @@
       ...mapGetters({
         formData: 'formData'
       }),
-
     },
     methods: {
+      ...mapMutations({
+        setFormData: 'setFormData'
+      }),
       async onSubmit () {
         // 提交数据
         const url = this.apis().createPayPlan();
@@ -62,11 +64,6 @@
         this.$router.push('/account/setting/payPlan');
         this.$message.success('创建账务方案成功');
       },
-      async onSearchPayPlan (page, size) {
-        const keyword = this.$store.state.PayPlanModule.keyword;
-        const url = this.apis().getPayPlans();
-        this.searchPayPlan({url, keyword, page, size});
-      }
     },
     data () {
       return {
@@ -74,6 +71,16 @@
     },
     created () {
 
+    },
+    destroyed(){
+      this.setFormData ({
+        id: null,
+          name: '',
+          payPlanType: 'PHASEONE',
+          isHaveDeposit: false,
+          remarks: '',
+          payPlanItems:[]
+      });
     }
   };
 </script>
