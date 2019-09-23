@@ -78,14 +78,17 @@
     mixins: [],
     computed: {
       payPlanItems: function () {
-        let result = this.slotData.payPlan.payPlanItems;
+        var result = [];
+        if(this.slotData.payPlan.payPlanItems != null){
+          result = this.slotData.payPlan.payPlanItems;
+        }
         if (result != null && result.length > 0) {
           result[result.length - 1].isLastItem = true;
         }
         return result;
       },
       paymentOrders: function () {
-        let result = [];
+        var result = [];
         for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
           for (var receipt of payPlanItem.paymentOrders) {
             result.push(receipt);

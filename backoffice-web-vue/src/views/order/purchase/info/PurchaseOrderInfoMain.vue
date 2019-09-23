@@ -2,8 +2,8 @@
   <div class="info-main-body">
     <purchase-order-info-detail :slotData="slotData" />
     <purchase-progress :slotData="slotData" />
-    <purchase-order-info-payment-finance :slotData="slotData" v-if="isBrand()"/>
-    <purchase-order-info-receipt-finance :slotData="slotData" v-if="isFactory()"/>
+    <purchase-order-info-payment-finance :slotData="slotData" v-if="isBrand() && slotData.payPlan!= null"/>
+    <purchase-order-info-receipt-finance :slotData="slotData" v-if="isFactory() && slotData.payPlan!= null"/>
     <purchase-order-info-remarks :slotData="slotData" />
   </div>
 </template>

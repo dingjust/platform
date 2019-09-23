@@ -1012,15 +1012,47 @@ const state = {
     },
     {
       code: 'PHASEONE',
-      name: '一期款'
+      name: '1期尾款'
     },
     {
       code: 'PHASETWO',
-      name: '二期款'
+      name: '2期尾款'
     },
     {
       code: 'MONTHLY_SETTLEMENT',
       name: '月结'
+    }
+  ],
+  TriggerEvent: [
+    {
+      code: 'ORDER_CONFIRMED',
+      name: '确认订单'
+    },
+    {
+      code: 'CONTRACT_SIGNED',
+      name: '签署合同'
+    },
+    {
+      code: 'DELIVERY_CONFIRMED',
+      name: '确认收货'
+    },
+    {
+      code: 'RECONCILIATION_CONFIRMED',
+      name: '确认对账'
+    },
+    {
+      code: 'INVOICE_RECEIVED',
+      name: '收到发票'
+    }
+  ],
+  TriggerType: [
+    {
+      code: 'INSIDE',
+      name: '以内'
+    },
+    {
+      code: 'OUTSIDE',
+      name: '以外'
     }
   ],
   CooperatorType: [
