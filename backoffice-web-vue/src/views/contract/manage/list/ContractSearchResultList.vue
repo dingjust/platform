@@ -43,10 +43,9 @@
         <template slot-scope="scope">
           <el-button type="text" @click="previewPdf(scope.row,'')">查看</el-button>
           <el-button type="text"  @click="onDownload(scope.row.code)">下载</el-button>
-          <el-button v-if="currentUser.companyName == scope.row.partner &&
-          scope.row.state == 'INITIATE' || scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
-          <el-button v-if="scope.row.state == 'INITIATE' || scope.row.state == 'SIGN' || scope.row.state == 'PARTY_A_SIGN' || scope.row.state == 'PARTY_B_SIGN'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>
-          <el-button v-if="currentUser.companyName != scope.row.partner && scope.row.state != 'COMPLETE'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>
+          <el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onRefuse(scope.row.code)">拒签</el-button>
+          <el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>
+          <el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>
         </template>
       </el-table-column>
     </el-table>

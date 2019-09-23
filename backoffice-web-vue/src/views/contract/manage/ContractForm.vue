@@ -47,7 +47,7 @@
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
         <el-col :span="20" :offset="2">
-          <el-input size="small" placeholder="请输入合同编号" v-model="selectFile.title">
+          <el-input size="small" placeholder="请输入合同编号" v-model="contractCode">
             <el-button slot="prepend" :disabled="true">合同编号</el-button>
           </el-input>
         </el-col>
@@ -225,9 +225,12 @@
         this.pdfFile = '';
       },
       async onSavePdf() {
-        var agreementType = '';
+        var agreementType = null;
         if(this.contractType == '3'){
           agreementType = 'CUSTOMIZE_COMPLETED';
+        }
+        if(this.contractType == '2'){
+          agreementType = 'CUSTOMIZE';
         }
         if (this.orderSelectFile.code == null || this.orderSelectFile.code == '') {
           this.$message.error('请选择订单');
@@ -237,16 +240,22 @@
           this.$message.error('请先上传PDF文件');
           return;
         }
+        if(this.contractCode == null || this.contractCode == ''){
+          this.$message.error('请输入自定义合同编号');
+          return;
+        }
         let role = '';
         if (this.partyA) {
           role = 'PARTYA';
         } else {
           role = 'PARTYB';
         }
+
         let data = {
           'pdf': this.pdfFile,
           'role': role,
           'title': '',
+          'customizeCode':this.contractCode,
           'agreementType':agreementType,
           'orderCode': this.orderSelectFile.code,
         }
@@ -407,6 +416,7 @@
         companyUid:'',
         dialogContractVisible:false,
         cacheSelectContract:'',
+        contractCode:'',
       };
     },
     created() {
