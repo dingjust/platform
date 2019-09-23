@@ -172,18 +172,18 @@
     created() {
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
-        this.pdfVisible = !this.pdfVisible;
-        this.dialogSealVisible = !this.dialogSealVisible;
+        this.pdfVisible = false;
+        this.dialogSealVisible = true;
       });
       Bus.$on('openList', args => {
-        this.dialogSealVisible = !this.dialogSealVisible;
+        this.dialogSealVisible = true;
       });
       Bus.$on('openContract', args => {
         this.dialogContractVisible = false;
         this.previewPdf(args);
       });
       Bus.$on('closePdfView', args => {
-        this.pdfVisible = !this.pdfVisible;
+        this.pdfVisible = false;
       });
       // this.getContract();
     }

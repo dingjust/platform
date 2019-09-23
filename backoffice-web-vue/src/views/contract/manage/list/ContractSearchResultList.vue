@@ -10,7 +10,7 @@
       <contract-supplement-form  :slotData="thisContract" />
     </el-dialog>
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
-      :height="autoHeight">
+              :height="autoHeight">
       <el-table-column label="合同名称" fixed>
         <template slot-scope="scope">
           <span>
@@ -55,8 +55,8 @@
     <div class="pt-2"></div>
     <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+                   @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+                   :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
     <!-- </div> -->
   </div>
@@ -173,10 +173,11 @@
         this.dialogSealVisible=true
       },
       async onSealSelectChange(data) {
+        console.log(data);
         this.dialogSealVisible = false;
         const sealCode = data.code;
 
-        const url = this.apis().flowContract(this.contractCode,sealCode);
+        const url = this.apis().flowContract(this.thisContract.code,sealCode);
         const result = await http.get(url);
 
         if(result.data !=  null){
@@ -250,13 +251,13 @@
   }
 
   /*.el-dialog__body {*/
-    /*padding-left: 20px;*/
-    /*padding-right: 0px;*/
-    /*padding-bottom: 30px;*/
-    /*padding-top: 0px;*/
-    /*color: #606266;*/
-    /*font-size: 14px;*/
-    /*word-break: break-all;*/
+  /*padding-left: 20px;*/
+  /*padding-right: 0px;*/
+  /*padding-bottom: 30px;*/
+  /*padding-top: 0px;*/
+  /*color: #606266;*/
+  /*font-size: 14px;*/
+  /*word-break: break-all;*/
   /*}*/
 
 </style>
