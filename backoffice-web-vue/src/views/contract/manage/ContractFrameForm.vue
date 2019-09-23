@@ -39,6 +39,13 @@
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="请输入合同编号" v-model="contractCode">
+            <el-button slot="prepend" :disabled="true">合同编号</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType!='1'">
         <el-col :span="8" :offset="2">
           <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
                      :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
@@ -211,6 +218,10 @@
           this.$message.error('请选择合同有效期');
           return;
         }
+        if(this.contractCode == null || this.contractCode == ''){
+          this.$message.error('请输入自定义合同编号');
+          return;
+        }
         let role = '';
         if (this.partyA) {
           role = 'PARTYA';
@@ -225,6 +236,7 @@
           'validityEnd': this.dateTime[1],
           'validityStart': this.dateTime[0],
           'isFrame' : true,
+          'customizeCode':this.contractCode,
           'partnerCompanyCode':this.suppliers.id,
         }
 
@@ -243,7 +255,6 @@
         this.fn.closeSlider(true);
       },
       async onSave() {
-        console.log(this.suppliers);
         if (this.suppliers.id == null || this.suppliers.id == '') {
           this.$message.error('请选择合作商');
           return;
@@ -353,6 +364,7 @@
         tempData:[],
         allData:[],
         dateTime:'',
+        contractCode:'',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',

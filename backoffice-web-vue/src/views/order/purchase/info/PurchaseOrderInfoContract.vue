@@ -13,21 +13,30 @@
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">合同（{{contract==null?'未签署':getEnum('contractStates', contract.state)}}）</h6>
+        <h6 class="info-title_text">合同（{{contracts==null || contracts == ''?'未签署':'已有合同'}}）</h6>
       </div>
-      <el-button v-if="contract ==null || contract.state == 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
+      <el-button v-if="contracts ==null || contracts == ''" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
       </el-button>
-      <el-button v-if="contract !=null && contract.state != 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同
-      </el-button>
+      <!--<el-button v-if="contract !=null && contract.state != 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同-->
+      <!--</el-button>-->
     </el-row>
-    <el-row v-if="contract !=null && contract.state != 'INVALID'" type="flex" justify="center">
-      <img @click="openContract" src="static/img/word.png" class="info-img-word" alt="" />
-    </el-row>
-    <el-row v-if="contract !=null && contract.state != 'INVALID'" type="flex" justify="center">
-      <el-col :span="16">
-        <h6 @click="openContract" class="info-template-name">{{contract.title}}</h6>
-      </el-col>
-    </el-row>
+    <div>
+      <el-row >
+        <el-col v-if="contracts!=null && contracts!= []" :span="4" v-for="(item, index) in contracts" :key="index" :offset="0">
+              <div class="template-file" v-if="item.title!=null && item.title!=''" @click="openContract(item)">
+                <el-row type="flex" justify="center">
+                  <img src="static/img/word.png" class="info-img-word" alt="" />
+                </el-row>
+                <el-row type="flex" justify="center">
+              <el-col :span="16">
+                <h6 class="info-template-name">{{item.title}}</h6>
+              </el-col>
+            </el-row>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+
   </div>
 </template>
 
@@ -38,12 +47,13 @@
   import http from '@/common/js/http';
   import ContractDetails from "../../../contract/manage/components/ContractDetails";
   import ContractPreviewPdf from '../../../contract/manage/components/ContractPreviewPdf'
-  import contractSealView from '../../../contract/manage/components/ContractSealList'
+  import ContractSealList from '../../../contract/manage/components/ContractSealList'
 
   export default {
     name: 'PurchaseOrderInfoContract',
-    props: ['slotData', 'contract'],
+    props: ['slotData', 'contracts'],
     components: {
+      ContractSealList,
       contractForm,
       ContractDetails,
       ContractPreviewPdf,
@@ -82,10 +92,10 @@
       //   }
       //
       // },
-      async openContract() {
-        this.thisContract = this.contract;
+      async openContract(item) {
+        this.thisContract = item;
 
-        const url = this.apis().downContract(this.contract.code);
+        const url = this.apis().downContract(item.code);
         const result = await http.get(url);
         console.log(result);
 
@@ -172,6 +182,9 @@
         this.dialogContractVisible = false;
         this.previewPdf(args);
       });
+      Bus.$on('closePdfView', args => {
+        this.pdfVisible = !this.pdfVisible;
+      });
       // this.getContract();
     }
   }
@@ -212,6 +225,23 @@
 
   .el-dialog {
     width: 80%;
+  }
+
+  .template-file {
+    padding-top: 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+    flex-direction: column;
+    display: flex;
+    /* border: 1px solid #ffd60c; */
+  }
+
+  .template-file:hover {
+    background-color: #ffd60c;
+  }
+
+  .template-file:active {
+    background-color: #ffd60c;
   }
 
 </style>

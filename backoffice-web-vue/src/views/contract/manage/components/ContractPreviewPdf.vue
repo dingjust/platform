@@ -5,15 +5,14 @@
       <contract-supplement-form  :slotData="slotData" />
     </el-dialog>
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
-      <el-button type="warning" @click="onBCXY" class="toolbar-search_input">增加补充协议</el-button>
+      <el-button type="warning" v-if="slotData.state != 'INVALID'" @click="onBCXY" class="toolbar-search_input">增加补充协议</el-button>
       <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
-      <el-button v-if="slotData.state == 'SIGN' || slotData.state == 'PARTY_A_SIGN' || slotData.state == 'PARTY_B_SIGN'"
-        type="warning" class="toolbar-search_input" @click="onRefuse(slotData.code)">拒签</el-button>
-      <el-button v-if="slotData.state == 'SIGN' || slotData.state == 'PARTY_A_SIGN' ||
-             slotData.state == 'PARTY_B_SIGN'" type="warning" class="toolbar-search_input" @click="onSearchSeal">签署
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'"
+        type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning" class="toolbar-search_input" @click="onSearchSeal">签署
       </el-button>
-      <el-button v-if="slotData.state != 'COMPLETE'" type="warning" class="toolbar-search_input"
-        @click="onRevoke(slotData.code)">撤回</el-button>
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning" class="toolbar-search_input"
+        @click="onRevokeConfirm(slotData.code)">撤回</el-button>
     </div>
     <iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
       height="480" width="100%">
@@ -47,11 +46,29 @@
         this.dialogOrderVisible = true;
         Bus.$emit('closePdfView');
       },
-      async onRefuse(code) {
+      async onRefuseConfirm(code) {
+        this.$confirm('是否拒绝签署合同?', '拒签', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.onRefuse(code);
+        });
+      },
+      async onRefuse(code){
+        Bus.$emit('closePdfView');
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
         this.$message.success(result.msg);
-        Bus.$emit('closePdfView');
+      },
+      async onRevokeConfirm(code) {
+        this.$confirm('是否撤回合同?', '撤回', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.onRefuse(code);
+        });
       },
       async onRevoke(code) {
         const url = this.apis().revokeContract(code);
@@ -66,10 +83,13 @@
         window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
       async onSearchSeal() {
+        Bus.$emit('closePdfView');
         Bus.$emit('openSeal');
       },
     },
-    created() {},
+    created() {
+      console.log(this.slotData);
+    },
   }
 
 </script>

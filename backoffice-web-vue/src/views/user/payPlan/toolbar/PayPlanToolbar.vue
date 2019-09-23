@@ -1,7 +1,7 @@
 <template>
   <el-form :inline="true">
     <el-form-item label="">
-      <el-input placeholder="输入合作商名称/联系人/联系方式" v-model="queryFormData.keyword"  class="cooperator-toolbar-input"></el-input>
+      <el-input placeholder="输入账务方案名称查询" v-model="queryFormData.keyword"  class="cooperator-toolbar-input"></el-input>
     </el-form-item>
     <el-button-group>
       <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
@@ -12,30 +12,27 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters} = createNamespacedHelpers('CooperatorModule');
+
+  const {mapGetters} = createNamespacedHelpers('PayPlanModule');
 
   export default {
-    name: 'CooperatorToolBar',
-    props: [],
+    name: 'PayPlanToolbar',
+    components: {},
     computed: {
       ...mapGetters({
         queryFormData: 'queryFormData'
       })
+
     },
     methods: {
-      onSearch (page, size) {
-        this.$emit('onSearch', 0);
+      onSearch () {
+        this.$emit('onSearch');
       }
     },
     data () {
       return {
-      };
+        formData: this.$store.state.AddressesModule.formData
+      }
     }
   }
 </script>
-
-<style scoped>
-  .cooperator-toolbar-input{
-    width: 240px;
-  }
-</style>

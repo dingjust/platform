@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%" class="purchase-dialog">
-      <purchase-order-details-page :contract="contract" :slotData="contentData" :dialogDetailVisible="dialogDetailVisible" />
+      <purchase-order-details-page :contracts="contracts" :slotData="contentData" :dialogDetailVisible="dialogDetailVisible" />
     </el-dialog>
     <div class="report">
       <purchase-orders-report />
@@ -131,12 +131,14 @@
         const url = this.apis().getContractsList();
         const result = await http.post(url,{orderCode:this.contentData.code},{page:0,
           size:100});
-        this.contract = result.content[0];
-
-        console.log(this.contract)
+        for(var i=0;i<result.content.length;i++){
+          if(result.content[i].state != 'INVALID'){
+            this.contracts.push(result.content[i]);
+          }
+        }
       },
       initContract(){
-        this.contract = '';
+        this.contracts = [];
       },
     },
     data() {
@@ -149,7 +151,7 @@
           code: "ALL",
           name: "全部"
         }],
-        contract:'',
+        contracts:[],
       };
     },
     created() {

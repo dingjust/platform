@@ -5,7 +5,7 @@
                                  @onCancel="onCancel"/> -->
     <div class="pt-2"></div>
     <!-- <purchase-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/> -->
-    <purchase-order-info :slot-data="slotData" :contract="contract"/>
+    <purchase-order-info :slot-data="slotData" :contracts="contracts"/>
     <div class="pt-2"></div>
     <!-- <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
                                  @onSubmit="onSubmit"
@@ -24,7 +24,7 @@
 
   export default {
     name: 'PurchaseOrderDetailsPage',
-    props: ['slotData','contract'],
+    props: ['slotData','contracts'],
     components: {PurchaseOrderFormToolbar, PurchaseOrderForm, PurchaseOrderInfo},
     methods: {
       ...mapActions({

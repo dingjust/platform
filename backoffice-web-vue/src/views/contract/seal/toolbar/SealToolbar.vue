@@ -22,7 +22,7 @@
     createNamespacedHelpers
   } from 'vuex';
   import SealForm from '../sealForm'
-
+  import http from '@/common/js/http';
 
   const {
     mapMutations

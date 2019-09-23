@@ -2,8 +2,8 @@
   <div class="info-aside-body">
     <purchase-order-info-supplier :slotData="slotData" />
     <purchase-order-info-staff :slotData="slotData" class="" />
-    <purchase-order-button-group :slotData="slotData"/> 
-    <purchase-order-info-contract :slotData="slotData" :contract="contract"/>
+    <purchase-order-button-group :slotData="slotData"/>
+    <purchase-order-info-contract :slotData="slotData" :contracts="contracts"/>
     <purchase-order-info-log :slotData="slotData" />
   </div>
 </template>
@@ -17,7 +17,7 @@
 
   export default {
     name: 'PurchaseOrderInfoAside',
-    props: ['slotData','dialogDetailVisible','contract'],
+    props: ['slotData','dialogDetailVisible','contracts'],
     components: {
       PurchaseOrderInfoSupplier,
       PurchaseOrderInfoStaff,
