@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body>
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
-    <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body>
       <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
@@ -394,7 +394,12 @@
                 </el-input>
               </el-row>
             </el-col>
-            <el-col :span="7">
+            <el-col :span="7" v-if="form.payPlanType=='PHASEONE'">
+              <el-row type="flex" align="middle" justify="start">
+                <h6 class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
+              </el-row>
+            </el-col>
+            <el-col :span="7" v-if="form.payPlanType!='PHASEONE'">
               <el-row type="flex" align="middle" justify="start">
                 <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
                 <el-input class="purchase-order-input_select" v-model="form.balance1.percent*100+'%'" :disabled="false"
@@ -807,102 +812,101 @@
         this.form.entries[index].cityDistricts = result;
       },
       async onSubmit() {
-        this.$refs['form'].validate((valid) => {
+        this.$refs['form'].validate(async (valid) => {
           if (valid) {
-
+            //分单
+            for (var element of this.form.entries) {
+              //组合订单行参数
+              var entries = [];
+              element.variants.forEach(variant => {
+                if (variant.num != '' && variant.num > 0) {
+                  let item = {
+                    quantity: variant.num,
+                    product: {
+                      color: variant.color,
+                      size: variant.size,
+                      baseProduct: variant.baseProduct,
+                      code: variant.code
+                    }
+                  }
+                  entries.push(item);
+                }
+              });
+              //组合账务参数
+              var payPlanItems = [];
+              if (this.form.isHaveDeposit) {
+                payPlanItems.push({
+                  payPercent: this.form.deposit.percent,
+                  triggerEvent: this.form.deposit.event,
+                  triggerDays: this.form.deposit.time,
+                  moneyType: 'DEPOSIT',
+                  triggerType: this.form.deposit.range,
+                });
+              }
+              if (this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
+                payPlanItems.push({
+                  triggerEvent: this.form.monthBalance.event,
+                  moneyType: 'MONTHLY_SETTLEMENT',
+                });
+              } else {
+                payPlanItems.push({
+                  payPercent: this.form.balance1.percent,
+                  triggerEvent: this.form.balance1.event,
+                  triggerDays: this.form.balance1.time,
+                  moneyType: 'PHASEONE',
+                  triggerType: this.form.balance1.range,
+                });
+                if (this.form.payPlanType == 'PHASETWO') {
+                  payPlanItems.push({
+                    payPercent: this.form.balance2.percent,
+                    triggerEvent: this.form.balance2.event,
+                    triggerDays: this.form.balance2.time,
+                    moneyType: 'PHASETWO',
+                    triggerType: this.form.balance2.range,
+                  });
+                }
+              }
+              //组合表单参数
+              let form = {
+                companyOfSeller: this.form.companyOfSeller,
+                contactOfSeller: this.form.contactOfSeller,
+                contactPersonOfSeller: this.form.contactPersonOfSeller,
+                deliveryAddress: element.address,
+                freightPayer: element.freightPayer,
+                machiningType: element.machiningTypes,
+                invoiceTaxPoint: element.invoicePercent,
+                invoiceNeeded: true,
+                unitPrice: element.unitPrice,
+                entries: entries,
+                expectedDeliveryDate: element.expectedDeliveryDate,
+                payPlan: {
+                  name: Date.now.toString,
+                  payPlanType: this.form.payPlanType,
+                  isHaveDeposit: this.form.isHaveDeposit,
+                  payPlanItems: payPlanItems
+                },
+                attachments: this.form.attachments,
+                remarks: this.form.remarks,
+                salesApplication: 'BELOW_THE_LINE',
+                cooperator: {
+                  id: this.form.cooperator.id
+                }
+              };
+              //提交数据
+              const url = this.apis().createOfflinePurchaseOrder();
+              const result = await this.$http.post(url, form);
+              if (result['errors']) {
+                this.$message.error(result['errors'][0].message);
+                return;
+              }
+              this.$message.success('创建成功');
+            }
+            this.$router.push("order/purchase");
           } else {
             this.$message('请完善表单信息');
             return false;
           }
         });
-        //分单
-        for (var element of this.form.entries) {
-          //组合订单行参数
-          var entries = [];
-          element.variants.forEach(variant => {
-            if (variant.num != '' && variant.num > 0) {
-              let item = {
-                quantity: variant.num,
-                product: {
-                  color: variant.color,
-                  size: variant.size,
-                  baseProduct: variant.baseProduct,
-                  code: variant.code
-                }
-              }
-              entries.push(item);
-            }
-          });
-          //组合账务参数
-          var payPlanItems = [];
-          if (this.form.isHaveDeposit) {
-            payPlanItems.push({
-              payPercent: this.form.deposit.percent,
-              triggerEvent: this.form.deposit.event,
-              triggerDays: this.form.deposit.time,
-              moneyType: 'DEPOSIT',
-              triggerType: this.form.deposit.range,
-            });
-          }
-          if (this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
-            payPlanItems.push({
-              triggerEvent: this.form.monthBalance.event,
-              moneyType: 'MONTHLY_SETTLEMENT',
-            });
-          } else {
-            payPlanItems.push({
-              payPercent: this.form.balance1.percent,
-              triggerEvent: this.form.balance1.event,
-              triggerDays: this.form.balance1.time,
-              moneyType: 'PHASEONE',
-              triggerType: this.form.balance1.range,
-            });
-            if (this.form.payPlanType == 'PHASETWO') {
-              payPlanItems.push({
-                payPercent: this.form.balance2.percent,
-                triggerEvent: this.form.balance2.event,
-                triggerDays: this.form.balance2.time,
-                moneyType: 'PHASETWO',
-                triggerType: this.form.balance2.range,
-              });
-            }
-          }
-          //组合表单参数
-          let form = {
-            companyOfSeller: this.form.companyOfSeller,
-            contactOfSeller: this.form.contactOfSeller,
-            contactPersonOfSeller: this.form.contactPersonOfSeller,
-            deliveryAddress: element.address,
-            freightPayer: element.freightPayer,
-            machiningType: element.machiningTypes,
-            invoiceTaxPoint: element.invoicePercent,
-            invoiceNeeded: true,
-            unitPrice: element.unitPrice,
-            entries: entries,
-            expectedDeliveryDate: element.expectedDeliveryDate,
-            payPlan: {
-              name: Date.now.toString,
-              payPlanType: this.form.payPlanType,
-              isHaveDeposit: this.form.isHaveDeposit,
-              payPlanItems: payPlanItems
-            },
-            attachments: this.form.attachments,
-            remarks: this.form.remarks,
-            salesApplication: 'BELOW_THE_LINE',
-            cooperator: {
-              id: this.form.cooperator.id
-            }
-          };
-          //提交数据
-          const url = this.apis().createOfflinePurchaseOrder();
-          const result = await this.$http.post(url, form);
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
-            return;
-          }
-          this.$message.success('创建成功');
-        }
-        this.$router.push("order/purchase");
       },
       async getProductAgain() {
         const url = this.apis().getApparelProduct(this.againData.entries[0].product.baseProduct);
