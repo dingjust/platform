@@ -83,6 +83,7 @@
         window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
       async onSearchSeal() {
+        Bus.$emit('closePdfView');
         Bus.$emit('openSeal');
       },
     },
