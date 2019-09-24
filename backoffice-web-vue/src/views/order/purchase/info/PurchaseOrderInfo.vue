@@ -20,7 +20,7 @@
         <purchase-order-info-main :slotData="slotData" />
       </el-col>
       <el-col :span="8">
-        <purchase-order-info-aside :slotData="slotData"  :contract="contract" />
+        <purchase-order-info-aside :slotData="slotData"  :contracts="contracts" />
       </el-col>
     </el-row>
     <purchase-orders-button-group :slotData="slotData" @onUniqueCode="onUniqueCode" @onConfirm="onConfirm"
@@ -41,7 +41,7 @@
 
   export default {
     name: 'PurchaseOrderInfo',
-    props: ['slotData','contract'],
+    props: ['slotData','contracts'],
     components: {
       PurchaseOrderInfoMain,
       PurchaseOrderInfoAside,
