@@ -133,7 +133,7 @@
         this.dialogSealVisible = false;
         const sealCode = data.code;
 
-        const url = this.apis().flowContract(this.contractCode, sealCode);
+        const url = this.apis().flowContract(this.thisContract.code, sealCode);
         const result = await http.get(url);
 
         if (result.data != null) {
