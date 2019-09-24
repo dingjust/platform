@@ -131,6 +131,14 @@
           }).then(() => {
             this.commit();
           });
+        }else if (this.form.paymentType === 'ALLPAID' && this.payPlanItem.remainingUnReceiptAmount > parseFloat(this.form.amount)) {
+          this.$confirm('全部收款金额低于剩余收付金额', '是否确认创建收款单', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.commit();
+          });
         } else {
           this.commit();
         }

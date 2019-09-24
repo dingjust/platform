@@ -29,13 +29,27 @@
                                      v-model="formData.partner.name"
                                      :fetch-suggestions="querySearchAsync"
                                      placeholder="请输入合作商名称"
-                                     @select="handleSelect"
                                      @clear="handleClear"
                                      @focus="handleFocus"
                                      value-key = "name"
                                      :clearable = "true"
+                                     :highlight-first-item="true"
                                      v-selectLoadMore="selectLoadMore"
                                      :trigger-on-focus="false">
+                      <template slot-scope="{ item }">
+                        <el-row type="flex">
+                          <el-col :span="16">
+                            <span >{{ item.name }}</span>
+                            <img :src="getPaymentStatusTag" />
+                          </el-col>
+                          <el-col :span="4">
+                            <span >{{ item.contactPerson }}</span>
+                          </el-col>
+                          <el-col :span="4">
+                            <span>{{ item.contactPhone }}</span>
+                          </el-col>
+                        </el-row>
+                      </template>
                     </el-autocomplete>
                     <el-autocomplete v-else style="width: 100%"
                                      id="partnerInput"
@@ -50,6 +64,7 @@
                         <el-row type="flex">
                           <el-col :span="16">
                             <span >{{ item.name }}</span>
+                            <img :src="getPaymentStatusTag" />
                           </el-col>
                           <el-col :span="4">
                             <span >{{ item.contactPerson }}</span>
@@ -58,7 +73,6 @@
                             <span>{{ item.contactPhone }}</span>
                           </el-col>
                         </el-row>
-
                       </template>
                     </el-autocomplete>
                   </el-row>
@@ -225,7 +239,8 @@
         formData: 'formData'
       }),
       ...createNamespacedHelpers('PayPlanModule').mapGetters({
-        payPlanPage: 'page'
+        payPlanPage: 'page',
+        queryFormData: 'queryFormData'
       })
     },
     methods: {
@@ -239,7 +254,7 @@
         clearFormData: 'clearFormData'
       }),
       ...createNamespacedHelpers('PayPlanModule').mapActions({
-        searchPayPlan: 'search'
+        searchPayPlan: 'searchAdvanced'
       }),
       onSearch (page, size) {
         const queryFormData = this.queryFormData;
@@ -257,7 +272,6 @@
         }
       },
       async querySearchAsync (queryString, cb) {
-        console.log(this.isScrollEnd);
         this.isScrollEnd = false;
         this.keyword = queryString;
         this.pageNumber = 0;
@@ -278,7 +292,6 @@
         }
 
         var results = this.companies;
-        console.log(results);
         cb(results);
       },
       handleSelect (item) {
@@ -312,9 +325,8 @@
         this.$router.push('/miscs/cooperator');
       },
       async onSearchPayPlan (page, size) {
-        const keyword = this.$store.state.PayPlanModule.keyword;
         const url = this.apis().getPayPlans();
-        this.searchPayPlan({url, keyword, page, size});
+        this.searchPayPlan({url,page, size});
       },
       async selectLoadMore () {
         if (this.isScrollEnd) {
@@ -340,7 +352,6 @@
           });
 
           this.pageNumber += 1;
-          console.log(this.companies);
         } else if (this.isFactory()) {
           const result = await this.$http.post(this.apis().getBrandsByName(), null, {
             'keyword': this.keyword,
@@ -360,12 +371,17 @@
           });
 
           this.pageNumber += 1;
-          console.log(this.companies);
         }
       },
       onSelect (item) {
-        this.formData.payPlan = item;
+        console.log(item);
+        if(item != null && item != ''){
+          this.formData.payPlan = item;
+        }
         this.payPlanSelectDialogVisible = false;
+      },
+      getPaymentStatusTag() {
+        return '/dist/static/img/arrears.png';
       }
     },
     data () {
@@ -385,6 +401,19 @@
     destroyed () {
       this.clearFormData();
       console.log(this.formData);
+    },
+    watch: {
+      // 关闭弹窗时清空表单数据
+      payPlanSelectDialogVisible: {
+        handler (val, oldVal) {
+          if (val === false) {
+            this.queryFormData.keyword = '';
+          }else{
+            this.onSearchPayPlan();
+          }
+        },
+        deep: true
+      }
     }
   };
 </script>
