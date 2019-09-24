@@ -89,7 +89,14 @@
       },
     },
     created() {
-      console.log(this.slotData);
+      Bus.$on('closeDialogOrderVisible', args => {
+        this.dialogOrderVisible = false;
+      });
+      Bus.$on('openContract1', args => {
+        Bus.$emit('openContract');
+        // this.dialogContractVisible = false;
+        // this.previewPdf(args);
+      });
     },
   }
 
