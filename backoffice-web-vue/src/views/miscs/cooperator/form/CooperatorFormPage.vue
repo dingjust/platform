@@ -231,10 +231,12 @@
     methods: {
       ...mapMutations({
         currentPageNumber: 'currentPageNumber',
-        currentPageSize: 'currentPageSize'
+        currentPageSize: 'currentPageSize',
+        setFormData: 'setFormData'
       }),
       ...mapActions({
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearFormData: 'clearFormData'
       }),
       ...createNamespacedHelpers('PayPlanModule').mapActions({
         searchPayPlan: 'search'
@@ -379,6 +381,10 @@
     },
     created () {
 
+    },
+    destroyed () {
+      this.clearFormData();
+      console.log(this.formData);
     }
   };
 </script>
