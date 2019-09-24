@@ -15,7 +15,7 @@
       <div class="info-title">
         <h6 class="info-title_text">合同（{{contracts==null || contracts == ''?'未签署':'已有合同'}}）</h6>
       </div>
-      <el-button v-if="contracts ==null || contracts == ''" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
+      <el-button v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED'" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
       </el-button>
       <!--<el-button v-if="contract !=null && contract.state != 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同-->
       <!--</el-button>-->
@@ -23,7 +23,7 @@
     <div>
       <el-row >
         <el-col v-if="contracts!=null && contracts!= []" :span="4" v-for="(item, index) in contracts" :key="index" :offset="0">
-              <div class="template-file" v-if="item.title!=null && item.title!=''" @click="openContract(item)">
+              <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)">
                 <el-row type="flex" justify="center">
                   <img src="static/img/word.png" class="info-img-word" alt="" />
                 </el-row>
@@ -92,7 +92,7 @@
       //   }
       //
       // },
-      async openContract(item) {
+      async showContract(item) {
         this.thisContract = item;
 
         const url = this.apis().downContract(item.code);
@@ -185,7 +185,10 @@
       Bus.$on('closePdfView', args => {
         this.pdfVisible = false;
       });
-      // this.getContract();
+      Bus.$on('closeContractFrom', args => {
+        console.log(2323)
+        this.dialogContractVisible = false;
+      });
     }
   }
 

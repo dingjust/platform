@@ -127,7 +127,7 @@
         this.fn.openSlider("创建手工单", PurchaseOrderDetailsPage, formData);
       },
       async getContract(){
-        console.log(this.contentData.code);
+        console.log(this.contentData);
         const url = this.apis().getContractsList();
         const result = await http.post(url,{orderCode:this.contentData.code},{page:0,
           size:100});
