@@ -33,6 +33,7 @@
                                      @clear="handleClear"
                                      @focus="handleFocus"
                                      value-key = "name"
+                                     :disabled = "isOnline"
                                      :trigger-on-focus="false">
                     </el-autocomplete>
                     <el-autocomplete v-else style="width: 100%"
@@ -294,11 +295,14 @@
         payPlanSelectDialogVisible: false,
         cooperatorCategorys: this.$store.state.EnumsModule.CooperatorCategory,
         companies: [],
-        payPlans: []
+        payPlans: [],
+        isOnline: false,
       };
     },
     created () {
-
+      if (this.formData.partner != null){
+        this.isOnline = true;
+      }
     }
   };
 </script>

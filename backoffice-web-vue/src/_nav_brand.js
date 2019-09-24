@@ -119,7 +119,7 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '供应商',
+          name: '合作商',
           url: '/miscs/cooperator',
           icon: 'iconNone',
         },
