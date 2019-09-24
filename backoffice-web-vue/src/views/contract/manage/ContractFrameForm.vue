@@ -1,10 +1,9 @@
 <template>
   <div>
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body>
-      <el-button-group>
         <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
+        <el-divider direction="vertical"></el-divider>
         <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-      </el-button-group>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
