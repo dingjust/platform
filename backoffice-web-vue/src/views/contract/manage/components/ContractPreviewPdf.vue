@@ -67,7 +67,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.onRefuse(code);
+          this.onRevoke(code);
         });
       },
       async onRevoke(code) {
