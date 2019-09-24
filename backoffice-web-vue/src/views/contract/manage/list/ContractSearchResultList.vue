@@ -20,6 +20,7 @@
         </template>
       </el-table-column>
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
+      <el-table-column label="生产单号" prop="orderCode"></el-table-column>
       <el-table-column label="签署对象" prop="belongTo.name">
         <template slot-scope="scope">
           <span>{{scope.row.partner}}</span>

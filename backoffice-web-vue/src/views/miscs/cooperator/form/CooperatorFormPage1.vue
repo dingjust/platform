@@ -24,43 +24,56 @@
                 <el-form-item prop="name" class="cooperator-form-item">
                   <el-row type="flex" align="middle">
                     <h6 class="cooperator-info-input-prepend">合作商名称</h6>
-                    <el-autocomplete v-if="formData.partner != null" style="width: 100%"
-                                     id="partnerInput"
-                                     v-model="formData.partner.name"
-                                     :fetch-suggestions="querySearchAsync"
-                                     placeholder="请输入合作商名称"
-                                     @select="handleSelect"
-                                     @clear="handleClear"
-                                     @focus="handleFocus"
-                                     value-key = "name"
-                                     :clearable = "true"
-                                     v-selectLoadMore="selectLoadMore"
-                                     :trigger-on-focus="false">
-                    </el-autocomplete>
-                    <el-autocomplete v-else style="width: 100%"
-                                     id="partnerInput"
-                                     v-model="formData.name"
-                                     :fetch-suggestions="querySearchAsync"
-                                     placeholder="请输入合作商名称"
-                                     @select="handleSelect"
-                                     :highlight-first-item="true"
-                                     v-selectLoadMore="selectLoadMore"
-                                     :trigger-on-focus="false">
-                      <template slot-scope="{ item }">
-                        <el-row type="flex">
-                          <el-col :span="16">
-                            <span >{{ item.name }}</span>
-                          </el-col>
-                          <el-col :span="4">
-                            <span >{{ item.contactPerson }}</span>
-                          </el-col>
-                          <el-col :span="4">
-                            <span>{{ item.contactPhone }}</span>
-                          </el-col>
-                        </el-row>
-
-                      </template>
-                    </el-autocomplete>
+                    <el-select style="width: 100%"
+                       v-model="formData.name"
+                               multiple
+                               :multiple-limit=1
+                              filterable
+                              remote
+                              reserve-keyword
+                              placeholder="请输入关键词"
+                               @change="handleSelect"
+                              :remote-method="querySearchAsync"
+                               v-selectLoadMore="selectLoadMore">
+                      <el-option
+                        v-for="item in companies"
+                        :key="item.uid"
+                        :label="item.name"
+                        :value="item.name">
+                          <el-row type="flex">
+                            <el-col :span="16">
+                              <span >{{ item.name }}</span>
+                            </el-col>
+                            <el-col :span="4">
+                              <span >{{ item.contactPerson }}</span>
+                            </el-col>
+                            <el-col :span="4">
+                              <span>{{ item.contactPhone }}</span>
+                            </el-col>
+                          </el-row>
+                      </el-option>
+                    </el-select>
+                    <!--<el-autocomplete v-if="formData.partner != null" style="width: 100%"-->
+                                     <!--id="partnerInput"-->
+                                     <!--v-model="formData.partner.name"-->
+                                     <!--:fetch-suggestions="querySearchAsync"-->
+                                     <!--placeholder="请输入合作商名称"-->
+                                     <!--@select="handleSelect"-->
+                                     <!--@clear="handleClear"-->
+                                     <!--@focus="handleFocus"-->
+                                     <!--value-key = "name"-->
+                                     <!--:clearable = "true"-->
+                                     <!--:trigger-on-focus="false">-->
+                    <!--</el-autocomplete>-->
+                    <!--<el-autocomplete v-else style="width: 100%"-->
+                                     <!--id="partnerInput"-->
+                                     <!--v-model="formData.name"-->
+                                     <!--:fetch-suggestions="querySearchAsync"-->
+                                     <!--placeholder="请输入合作商名称"-->
+                                     <!--@select="handleSelect"-->
+                                     <!--:inputLoadMore="inputLoadMore"-->
+                                     <!--:highlight-first-item="true"-->
+                                     <!--:trigger-on-focus="false">-->
                   </el-row>
                 </el-form-item>
               </el-col>
@@ -187,8 +200,8 @@
 </template>
 
 <script>
-  import Vue from 'vue';
   import {createNamespacedHelpers} from 'vuex';
+  import Vue from 'vue';
   const {mapGetters, mapActions, mapMutations} = createNamespacedHelpers('CooperatorModule');
   import FormLabel from '@/components/custom/FormLabel';
   import PayPlanSelect from '@/components/custom/PayPlanSelect';
@@ -196,8 +209,7 @@
   Vue.directive('selectLoadMore', {
     bind (el, binding) {
       // 获取element-ui定义好的scroll盒子
-      const SELECTWRAP_DOM = el.querySelector('.el-autocomplete-suggestion__wrap');
-      console.log(SELECTWRAP_DOM);
+      const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap');
 
       SELECTWRAP_DOM.addEventListener('scroll', function () {
         /*
@@ -231,12 +243,10 @@
     methods: {
       ...mapMutations({
         currentPageNumber: 'currentPageNumber',
-        currentPageSize: 'currentPageSize',
-        setFormData: 'setFormData'
+        currentPageSize: 'currentPageSize'
       }),
       ...mapActions({
-        searchAdvanced: 'searchAdvanced',
-        clearFormData: 'clearFormData'
+        searchAdvanced: 'searchAdvanced'
       }),
       ...createNamespacedHelpers('PayPlanModule').mapActions({
         searchPayPlan: 'search'
@@ -256,9 +266,7 @@
           this.onAdvancedSearch();
         }
       },
-      async querySearchAsync (queryString, cb) {
-        console.log(this.isScrollEnd);
-        this.isScrollEnd = false;
+      async querySearchAsync (queryString) {
         this.keyword = queryString;
         this.pageNumber = 0;
         if (this.isBrand()) {
@@ -276,12 +284,9 @@
           }
           this.companies = result.content;
         }
-
-        var results = this.companies;
-        console.log(results);
-        cb(results);
       },
       handleSelect (item) {
+        console.log(item);
         this.formData.partner = {
           uid: item.uid,
           name: item.name,
@@ -301,25 +306,7 @@
       handleFocus () {
         document.getElementById('partnerInput').blur();
       },
-      async onSubmit () {
-        // 提交数据
-        const url = this.apis().createCooperator();
-        const result = await this.$http.post(url, this.formData);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$router.push('/miscs/cooperator');
-      },
-      async onSearchPayPlan (page, size) {
-        const keyword = this.$store.state.PayPlanModule.keyword;
-        const url = this.apis().getPayPlans();
-        this.searchPayPlan({url, keyword, page, size});
-      },
       async selectLoadMore () {
-        if (this.isScrollEnd) {
-          return;
-        }
         // 下拉滚动到底后执行
         if (this.isBrand()) {
           const result = await this.$http.post(this.apis().getFactoriesByName(), null, {
@@ -329,10 +316,6 @@
           if (result['errors']) {
             this.$message.error(result['errors'][0].message);
             return;
-          }
-
-          if (result.content.length === 0) {
-            this.isScrollEnd = true;
           }
 
           result.content.forEach(data => {
@@ -351,10 +334,6 @@
             return;
           }
 
-          if (result.content.length === 0) {
-            this.isScrollEnd = true;
-          }
-
           result.content.forEach(data => {
             this.companies.push(data);
           });
@@ -362,6 +341,21 @@
           this.pageNumber += 1;
           console.log(this.companies);
         }
+      },
+      async onSubmit () {
+        // 提交数据
+        const url = this.apis().createCooperator();
+        const result = await this.$http.post(url, this.formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$router.push('/miscs/cooperator');
+      },
+      async onSearchPayPlan (page, size) {
+        const keyword = this.$store.state.PayPlanModule.keyword;
+        const url = this.apis().getPayPlans();
+        this.searchPayPlan({url, keyword, page, size});
       },
       onSelect (item) {
         this.formData.payPlan = item;
@@ -375,16 +369,11 @@
         companies: [],
         payPlans: [],
         keyword: '',
-        pageNumber: 0,
-        isScrollEnd: false
+        pageNumber: 0
       };
     },
     created () {
 
-    },
-    destroyed () {
-      this.clearFormData();
-      console.log(this.formData);
     }
   };
 </script>

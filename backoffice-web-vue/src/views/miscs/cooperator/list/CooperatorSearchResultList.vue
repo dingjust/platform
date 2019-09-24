@@ -20,6 +20,11 @@
           <span v-else> {{scope.row.contactPhone}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="类别"prop="category">
+        <template slot-scope="scope">
+          <span> {{getEnum('CooperatorCategory',scope.row.category)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="类型"prop="type">
         <template slot-scope="scope">
           <span> {{getEnum('CooperatorType',scope.row.type)}}</span>

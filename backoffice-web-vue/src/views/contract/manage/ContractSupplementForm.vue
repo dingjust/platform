@@ -207,7 +207,8 @@
         const result = await http.post(url, formData);
 
         this.$message.success(result.msg);
-
+        Bus.$emit('closeContractFrom');
+        Bus.$emit('closeDialogOrderVisible');
         const searchUrl = this.apis().getContractsList();
 
         this.refresh({
@@ -237,9 +238,10 @@
         this.$message.success(result.msg);
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+          Bus.$emit('openContract1', result.data);
         }
-
+        Bus.$emit('closeContractFrom');
+        Bus.$emit('closeDialogOrderVisible');
         const searchUrl = this.apis().getContractsList();
 
         this.refresh({

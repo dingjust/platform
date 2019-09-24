@@ -1,10 +1,9 @@
 <template>
   <div>
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body>
-      <el-button-group>
         <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
+        <el-divider direction="vertical"></el-divider>
         <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-      </el-button-group>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
@@ -271,14 +270,20 @@
         this.refresh({
           searchUrl
         });
-
+        Bus.$emit('closeContractFrom');
         this.fn.closeSlider(true);
+
+
       },
       async onSave() {
         console.log(this.orderSelectFile.code);
         // return;
         if (this.orderSelectFile.code == null || this.orderSelectFile.code == '') {
           this.$message.error('请选择订单');
+          return;
+        }
+        if(this.orderSelectFile.status == 'PENDING_CONFIRM' || this.orderSelectFile.status == 'CANCELLED'){
+          this.$message.error('当前选择的订单不能是待确认状态和已取消状态');
           return;
         }
         if (this.selectFile.id == null || this.selectFile.id == '') {
@@ -320,7 +325,7 @@
         if (result.data != null && result.data != '') {
           Bus.$emit('openContract', result.data);
         }
-
+        Bus.$emit('closeContractFrom');
         const searchUrl = this.apis().getContractsList();
 
         this.refresh({
@@ -538,6 +543,7 @@
     border: 0px solid #FFD60C;
     margin-top: 10px;
     margin-left: 10px;
+    margin-bottom: 10px;
   }
 
   .tips {

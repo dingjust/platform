@@ -137,6 +137,24 @@ const actions = {
       totalElements: 0, // 总数目数
       content: [] // 当前页数据
     });
+  },
+  clearFormData({dispatch, commit, state}){
+    commit('setFormData', {
+      id: null,
+      name: '',
+      contactPhone: '',
+      contactPerson: '',
+      taxNumber: '',
+      bankOfDeposit: '',
+      bankAccount: '',
+      partner: null,
+      type: null,
+      category: null,
+      detailedIdentity: '',
+      payPlan: null,
+      remarks: ''
+    });
+    console.log(state.formData);
   }
 };
 

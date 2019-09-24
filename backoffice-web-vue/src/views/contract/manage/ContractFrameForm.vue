@@ -108,7 +108,7 @@
   import TemplateForm from "../../contract/template/components/TemplateForm";
   import Bus from '@/common/js/bus.js';
   import ContractPreviewPdf from './components/ContractPreviewPdf'
-  import SupplierSelect from '@/components/custom/SupplierSelect';
+  import SupplierSelect from './components/SupplierSelect';
 
 
   const {
