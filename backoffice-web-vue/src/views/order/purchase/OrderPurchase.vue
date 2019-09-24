@@ -118,7 +118,7 @@
                     :prop="'entries.' + productIndex+'.expectedDeliveryDate'">
                     <el-row type="flex" align="middle">
                       <h6 class="info-input-prepend">交货日期</h6>
-                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期">
+                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期" :picker-options="pickerOptions">
                       </el-date-picker>
                     </el-row>
                   </el-form-item>
@@ -903,7 +903,7 @@
             }
             this.$router.push("order/purchase");
           } else {
-            this.$message('请完善表单信息');
+            this.$message.error('请完善表单信息');
             return false;
           }
         });
@@ -948,7 +948,7 @@
         } else {
           return product.code != null && product.code != '';
         }
-      }
+      },
     },
     data() {
       return {
@@ -1074,6 +1074,13 @@
             message: '请填写联系方式',
             trigger: 'blur'
           }, ],
+        },
+        pickerOptions: {
+          disabledDate(time) {
+            let date=new Date();
+            date.setDate(date.getDate()-1);
+            return time.getTime() < date;
+          },
         }
       }
     },
