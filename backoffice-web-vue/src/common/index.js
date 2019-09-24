@@ -140,6 +140,9 @@ const COMMON_APIS = {
   getBrands() {
     return '/b2b/brands';
   },
+  getBrandsByName() {
+    return '/b2b/brands/searchByName';
+  },
   getBrand(uid) {
     return '/b2b/brands/' + uid;
   },
@@ -154,6 +157,9 @@ const COMMON_APIS = {
   },
   getFactories() {
     return '/b2b/factories';
+  },
+  getFactoriesByName() {
+    return '/b2b/factories/searchByName';
   },
   getFactory(uid) {
     return '/b2b/factories/' + uid;

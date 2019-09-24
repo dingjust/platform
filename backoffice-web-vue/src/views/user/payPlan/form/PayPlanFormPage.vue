@@ -37,7 +37,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters,mapMutations} = createNamespacedHelpers('PayPlanModule');
+  const {mapGetters, mapMutations} = createNamespacedHelpers('PayPlanModule');
   import PayPlanForm from '../../../../components/custom/PayPlanForm';
 
   export default {
@@ -47,7 +47,7 @@
     computed: {
       ...mapGetters({
         formData: 'formData'
-      }),
+      })
     },
     methods: {
       ...mapMutations({
@@ -63,7 +63,7 @@
         }
         this.$router.push('/account/setting/payPlan');
         this.$message.success('创建账务方案成功');
-      },
+      }
     },
     data () {
       return {
@@ -72,14 +72,14 @@
     created () {
 
     },
-    destroyed(){
-      this.setFormData ({
+    destroyed () {
+      this.setFormData({
         id: null,
-          name: '',
-          payPlanType: 'PHASEONE',
-          isHaveDeposit: false,
-          remarks: '',
-          payPlanItems:[]
+        name: '',
+        payPlanType: 'PHASEONE',
+        isHaveDeposit: false,
+        remarks: '',
+        payPlanItems: []
       });
     }
   };

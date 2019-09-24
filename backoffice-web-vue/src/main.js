@@ -10,6 +10,7 @@ import {formatDate, enumTranslate, timestampToTime, postponedDays, floatFormat} 
 import HttpServletPlugin from '@/plugins/HttpServletPlugin.js';
 import http from '@/common/js/http';
 import autoHeight from '@/mixins/autoHeight';
+import directives from './directives';
 
 import App from './App';
 
@@ -46,9 +47,11 @@ Vue.filter('postponedDays', function (timestamp) {
 Vue.filter('floatFormat', function (num1, num2) {
   return floatFormat(num1, num2);
 });
+
 Vue.use(BootstrapVue);
 Vue.use(HttpServletPlugin);
 Vue.use(ElementUI, {size: 'small'});
+// Vue.use(directives);
 Vue.prototype.fn = {};
 Vue.prototype.$http = http;
 // 根据命令设置导航数据
