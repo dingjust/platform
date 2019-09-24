@@ -87,7 +87,7 @@
     components: {
       PurchaseOrderInfoPayment
     },
-    props: ['slotData', 'payPlanItem', 'form','paymentOrders'],
+    props: ['slotData', 'payPlanItem', 'form', 'paymentOrders'],
     mixins: [],
     computed: {
       headers: function () {
@@ -130,6 +130,14 @@
           }).then(() => {
             this.commit();
           });
+        } else if (this.form.paymentType === 'ALLPAID' && this.payPlanItem.remainingUnpaidAmount > parseFloat(this.form.amount)) {
+          this.$confirm('全部付款金额低于剩余未付金额', '是否确认创建付款单', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.commit();
+          });
         } else {
           this.commit();
         }
@@ -150,7 +158,7 @@
       },
       async refreshData () {
         this.$emit('refreshData');
-      },
+      }
     },
     data () {
       return {

@@ -18,6 +18,9 @@
                 <span v-if="itemData.isHaveDeposit">
                   定金+
                 </span>
+                <span v-else>
+                  无定金+
+                </span>
                 {{getEnum('PayPlanType',itemData.payPlanType)}}
               </el-col>
             </el-row>

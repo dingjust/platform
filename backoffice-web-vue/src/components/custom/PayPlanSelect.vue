@@ -1,17 +1,12 @@
 <template>
   <div class="animated fadeIn">
-    <!--<el-dialog :visible.sync="productDetailsVisible" width="80%" class="purchase-dialog" append-to-body>-->
-    <!--<apparel-product-details-page :slotData="formData" @afterCreate="onAfterCreate"/>-->
-    <!--</el-dialog>-->
     <el-form :inline="true">
       <el-form-item label="">
-        <el-input placeholder="请输入账务方案名称查询" v-model="keyword"></el-input>
+        <el-input placeholder="请输入账务方案名称查询" v-model="queryFormData.keyword"></el-input>
       </el-form-item>
-      <!-- <el-button-group> -->
-      <el-button type="text" @click="onSearch">查找</el-button>
+          <el-button type="text" @click="onSearch">搜索</el-button>
 
-      <!--<el-button type="text" @click="onNew">创建产品</el-button>-->
-      <!-- </el-button-group> -->
+          <el-button type="text" @click="onNew">创建账务方案</el-button>
       <el-button class="product-select-btn" @click="onSure">确定</el-button>
     </el-form>
     <!--v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"-->
@@ -39,39 +34,30 @@
   } from 'vuex';
 
   const {
-    mapMutations
+    mapGetters,mapMutations
   } = createNamespacedHelpers('PayPlanModule');
 
   export default {
     name: 'PayPlanSelect',
     props: ['page'],
-    computed: {},
-    components: {
+    computed: {
+      ...mapGetters({
+        queryFormData: 'queryFormData'
+      })
     },
+    components: {},
     methods: {
       ...mapMutations({
-        setKeyword: 'keyword',
+        setQueryFormData: 'setQueryFormData',
       }),
       onPageSizeChanged (val) {
-        this._reset();
         this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged (val) {
         this.$emit('onSearch', val - 1);
       },
-      _reset () {
-        this.$refs.resultTable.clearSort();
-        this.$refs.resultTable.clearFilter();
-        this.$refs.resultTable.clearSelection();
-      },
       onSearch () {
-        this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
-      },
-      numberFormatter (val) {
-        if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
-          return parseFloat(val.price).toFixed(2);
-        }
       },
       handleSelectionChange (val) {
         this.multipleSelection = val;
@@ -84,23 +70,18 @@
         this.$emit('onSelect', this.selectPayPlan);
       },
       onNew () {
-        this.productDetailsVisible = true;
+        this.$router.push('/account/setting/payPlan/create');
       },
-      onAfterCreate () {
-        console.log('sdssssss');
-        this.productDetailsVisible = false;
-      }
     },
     data () {
       return {
         multipleSelection: [],
-        keyword: '',
-        selectPayPlan: ''
+        selectPayPlan: '',
+        keyword:''
       }
     },
     created () {
-      this.$emit('onSearch', 0);
-    }
+    },
   }
 </script>
 <style>
