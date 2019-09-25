@@ -33,9 +33,9 @@ const actions = {
     if (size) {
       commit('currentPageSize', size);
     }
-
+    console.log(state);
     const response = await http.post(url, {
-      keyword: state.keyword
+      title: state.keyword
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize

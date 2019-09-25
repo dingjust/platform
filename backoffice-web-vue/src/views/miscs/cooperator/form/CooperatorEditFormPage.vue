@@ -199,7 +199,8 @@
         formData: 'editFormData'
       }),
       ...createNamespacedHelpers('PayPlanModule').mapGetters({
-        payPlanPage: 'page'
+        payPlanPage: 'page',
+        queryFormData: 'queryFormData'
       })
     },
     methods: {
@@ -212,7 +213,7 @@
         searchAdvanced: 'searchAdvanced'
       }),
       ...createNamespacedHelpers('PayPlanModule').mapActions({
-        searchPayPlan: 'search'
+        searchPayPlan: 'searchAdvanced'
       }),
       onSearch (page, size) {
         const queryFormData = this.queryFormData;
@@ -281,9 +282,8 @@
         this.$router.push('/miscs/cooperator');
       },
       async onSearchPayPlan (page, size) {
-        const keyword = this.$store.state.PayPlanModule.keyword;
         const url = this.apis().getPayPlans();
-        this.searchPayPlan({url, keyword, page, size});
+        this.searchPayPlan({url, page, size});
       },
       onSelect (item) {
         this.formData.payPlan = item;
@@ -302,6 +302,19 @@
     created () {
       if (this.formData.partner != null){
         this.isOnline = true;
+      }
+    },
+    watch: {
+      // 关闭弹窗时清空表单数据
+      payPlanSelectDialogVisible: {
+        handler (val, oldVal) {
+          if (val === false) {
+            this.queryFormData.keyword = '';
+          }else{
+            this.onSearchPayPlan();
+          }
+        },
+        deep: true
       }
     }
   };
