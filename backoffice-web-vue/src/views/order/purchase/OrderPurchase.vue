@@ -866,6 +866,14 @@
                   });
                 }
               }
+
+              var totalPercent=0;
+              for(var i=0;i++;i<payPlanItems.length-1){
+                totalPercent+=payPlanItems[i].payPercent;
+              }
+
+              payPlanItems[payPlanItems.lastIndexOf]=totalPercent;
+
               //组合表单参数
               let form = {
                 companyOfSeller: this.form.companyOfSeller,

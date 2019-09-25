@@ -148,7 +148,7 @@
       <template v-if="isBrand()">
         <el-button class="info-receive-submit" v-if="showSaveBtn" @click="onSave">
           保存并退出</el-button>
-        <el-button class="info-receive-submit" v-if="showCommitBtn" @click="onCommit">
+        <el-button class="info-receive-submit" :disabled="!showCommitBtn" @click="onCommit">
           确认完成收货</el-button>
         <el-button class="info-receive-submit"
           v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onWithdraw">
@@ -216,16 +216,17 @@
       },
       showCommitBtn: function () {
         if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
-          return this.slotData.status == 'OUT_OF_STORE';
+          // return this.slotData.status == 'OUT_OF_STORE';
+          return false;
         } else {
           return this.slotData.deliveryOrders[0].status == 'UNCOMMITTED' || this.slotData.deliveryOrders[0].status ==
             'REJECTED';
         }
       },
-      receiveOrderStatus:function(){
-        if(this.slotData.deliveryOrders==null||this.slotData.deliveryOrders.length==0){
+      receiveOrderStatus: function () {
+        if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
           return '';
-        }else{
+        } else {
           return this.getEnum('RemarksOrderStatus', this.slotData.deliveryOrders[0].status);
         }
       }
@@ -334,9 +335,16 @@
           brand: this.form.brand,
           consignment: this.form.consignment
         };
+        var url = '';
+        var result = '';
+        if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+          url = this.apis().createAndCommitDeliveryOrder();
+          result = await this.$http.post(url, form);
+        } else {
+          url = this.apis().commitDeliveryOrder();
+          result = await this.$http.put(url, form);
+        }
 
-        const url = this.apis().commitDeliveryOrder();
-        const result = await this.$http.put(url, form);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -447,7 +455,8 @@
           this.form.skuID = this.slotData.deliveryOrders[0].skuID;
           this.form.remarks = this.slotData.deliveryOrders[0].remarks;
           this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
-          this.form.withdrawalQuality = this.slotData.deliveryOrders[0].withdrawalQuality
+          this.form.withdrawalQuality = this.slotData.deliveryOrders[0].withdrawalQuality;
+          this.form.consignment=this.slotData.deliveryOrders[0].consignment;
         } else {
           var lastShippingOrders = this.slotData.shippingOrders[this.slotData.shippingOrders.length - 1];
 
@@ -462,6 +471,7 @@
           this.form.remarks = lastShippingOrders.remarks;
           this.form.defectiveQuality = lastShippingOrders.defectiveQuality;
           this.form.withdrawalQuality = lastShippingOrders.withdrawalQuality;
+          this.form.consignment=lastShippingOrders.consignment;
         }
       }
     },
