@@ -49,6 +49,11 @@ const router = new Router({
               path: 'apparel',
               name: '服装产品',
               component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/ApparelProductPage')
+            },
+            {
+              path: 'apparelDetail',
+              name: '产品详情',
+              component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/details/ApparelProductDetailsPage')
             }
           ]
         },
