@@ -4,6 +4,8 @@ const state = {
   url: '',
   keyword: '',
   statuses: '',
+  dateTime:'',
+  orderCode:'',
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -15,6 +17,8 @@ const state = {
   },
   queryFormData: {},
 };
+var creationtimeStart='';
+var creationtimeEnd = '';
 
 const mutations = {
   url: (state, url) => state.url = url,
@@ -22,14 +26,24 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   state:(state) => state,
   keyword: (state, keyword) => state.keyword = keyword,
+  orderCode:(state, orderCode) => state.orderCode = orderCode,
+  dateTime:(state, dateTime) => state.dateTime = dateTime,
   page: (state, page) => state.page = page,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
+  async search({dispatch, commit, state}, {url, keyword,orderCode,dateTime, statuses, page, size}) {
     commit('url', url);
     commit('keyword', keyword);
+    commit('orderCode', orderCode);
+    console.log(dateTime)
+    if(dateTime != null && dateTime != ''){
+      commit('dateTime', dateTime);
+      creationtimeStart = state.dateTime[0];
+      creationtimeEnd = state.dateTime[1];
+    }
+
     commit('state', statuses);
     if (page||page===0) {
       commit('currentPageNumber', page);
@@ -37,9 +51,11 @@ const actions = {
     if (size) {
       commit('currentPageSize', size);
     }
-
     const response = await http.post(url, {
       title: state.keyword,
+      orderCode:state.orderCode,
+      creationtimeStart:creationtimeStart,
+      creationtimeEnd:creationtimeEnd,
       state: statuses
     }, {
       page: state.currentPageNumber,
@@ -64,7 +80,9 @@ const actions = {
 const getters = {
   url: state => state.url,
   keyword: state => state.keyword,
+  orderCode:state => state.orderCode,
   statuses: state => state.statuses,
+  dateTime:state => state.dateTime,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   isAdvancedSearch: state => state.isAdvancedSearch,

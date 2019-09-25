@@ -66,6 +66,8 @@
       ...mapGetters({
         page: "page",
         keyword: "keyword",
+        orderCode:'orderCode',
+        dateTime:'dateTime',
         queryFormData: "queryFormData"
       })
     },
@@ -77,11 +79,15 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
+        const orderCode = this.orderCode;
         const statuses = this.state;
+        const dateTime = this.dateTime;
         const url = this.apis().getContractsList();
         this.search({
           url,
           keyword,
+          orderCode,
+          dateTime,
           statuses,
           page,
           size

@@ -7,19 +7,17 @@
     <el-form-item label="合同名称">
       <el-input placeholder="合同名称" v-model="keyword"></el-input>
     </el-form-item>
-    <!--<el-form-item label="日期">-->
-      <!--<el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="至"-->
-        <!--start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions">-->
-      <!--</el-date-picker>-->
-    <!--</el-form-item>-->
-    <!--<el-form-item label="合同编号">-->
-      <!--<el-input placeholder="输入编号" v-model="queryFormData.code"></el-input>-->
-    <!--</el-form-item>-->
-    <el-button-group>
+    <el-form-item label="日期">
+      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="至"
+        start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item label="合同编号">
+      <el-input placeholder="输入编号" v-model="orderCode"></el-input>
+    </el-form-item>
       <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
       <el-button  native-type="reset" @click="">重置</el-button>
       <el-button type="primary" class="toolbar-search_input" @click="dialogVisible = !dialogVisible">创建合同</el-button>
-    </el-button-group>
   </el-form>
   </div>
 </template>
@@ -43,10 +41,14 @@
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
+        setOrderCode: 'orderCode',
+        setDateTime:'dateTime',
         setQueryFormData: 'queryFormData',
       }),
       onSearch() {
         this.setKeyword(this.keyword);
+        this.setOrderCode(this.orderCode);
+        this.setDateTime(this.dateTime);
         this.$emit('onSearch', 0);
       },
       onCreateContract(){
@@ -82,10 +84,11 @@
             }
           }]
         },
-        dateTime: '',
         factories: [],
         brands: [],
         keyword: this.$store.state.ContractModule.keyword,
+        orderCode: this.$store.state.ContractModule.orderCode,
+        dateTime:this.$store.state.ContractModule.dateTime,
         formData: this.$store.state.ContractModule.formData,
         queryFormData: this.$store.state.ContractModule.queryFormData,
         dialogVisible:false,
