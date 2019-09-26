@@ -8,14 +8,24 @@
       </el-row>
       <apparel-product-basic-form ref="basicForm" :slot-data="slotData" :read-only="false">
       </apparel-product-basic-form>
-    </el-card>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>图片</span>
-        <span v-if="!isTenant()">
-          <el-button class="float-right" type="text" @click="onUpdateImages">编辑</el-button>
-        </span>
-      </div>
+      <el-divider></el-divider>
+      <el-row class="info-title-row">
+        <h6 class="info-title_text">选择品类：</h6>
+      </el-row>
+      <apparel-product-categories-form :slot-data="slotData"></apparel-product-categories-form>
+      <el-divider></el-divider>
+      <apparel-product-colors-form :slot-data="slotData">
+      </apparel-product-colors-form>
+      <el-divider></el-divider>
+      <apparel-product-sizes-form :slot-data="slotData">
+      </apparel-product-sizes-form>
+      <el-divider></el-divider>
+      <el-row class="info-title-row">
+        <!-- <div class="info-title"> -->
+        <h6 class="info-title_text">上传图片</h6>
+        <!-- </div> -->
+      </el-row>
+      <el-divider></el-divider>
       <apparel-product-images-form ref="imagesForm" :slot-data="slotData" :read-only="readOnly">
       </apparel-product-images-form>
     </el-card>
@@ -77,7 +87,6 @@
         <el-button @click="imagesDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="updateImagesSubmit">确 定</el-button>
       </span>
-
     </el-dialog>
   </div>
 </template>
@@ -87,6 +96,9 @@
   import ApparelProductBasicForm from './ApparelProductBasicForm';
   import ApparelProductVariantsForm from './ApparelProductVariantsForm';
   import ApparelProductAttributesForm from './ApparelProductAttributesForm';
+  import ApparelProductCategoriesForm from './ApparelProductCategoriesForm';
+  import ApparelProductColorsForm from './ApparelProductColorsForm';
+  import ApparelProductSizesForm from './ApparelProductSizesForm';
 
   export default {
     name: 'ApparelProductFrom',
@@ -95,6 +107,9 @@
       ApparelProductBasicForm,
       ApparelProductVariantsForm,
       ApparelProductAttributesForm,
+      ApparelProductCategoriesForm,
+      ApparelProductColorsForm,
+      ApparelProductSizesForm
     },
     props: ['slotData', 'readOnly'],
     methods: {
@@ -223,8 +238,10 @@
   .info-input-prepend {
     display: inline-block;
     margin: 0 5px;
+    /* margin-top: 5px; */
     width: 60px;
     font-size: 12px;
+    font-weight: 500;
   }
 
   .info-input-prepend2 {
