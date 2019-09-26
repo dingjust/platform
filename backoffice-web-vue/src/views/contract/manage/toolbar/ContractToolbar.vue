@@ -8,7 +8,7 @@
       <el-input placeholder="合同名称" v-model="keyword"></el-input>
     </el-form-item>
     <el-form-item label="日期">
-      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="至"
+      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator=" 至 "
         start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions">
       </el-date-picker>
     </el-form-item>
@@ -16,8 +16,8 @@
       <el-input placeholder="输入编号" v-model="orderCode"></el-input>
     </el-form-item>
       <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
-      <el-button  native-type="reset" @click="">重置</el-button>
-      <el-button type="primary" class="toolbar-search_input" @click="dialogVisible = !dialogVisible">创建合同</el-button>
+      <el-button  native-type="reset" @click="onReset">重置</el-button>
+      <el-button type="primary" class="toolbar-search_input" @click="dialogVisible = true">创建合同</el-button>
   </el-form>
   </div>
 </template>
@@ -53,6 +53,11 @@
       },
       onCreateContract(){
         this.fn.openSlider('创建', ContractForm, '');
+      },
+      onReset(){
+        this.keyword = '';
+        this.dateTime = '';
+        this.ordercode = '';
       },
     },
     data() {

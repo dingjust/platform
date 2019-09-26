@@ -42,6 +42,9 @@ const actions = {
       commit('dateTime', dateTime);
       creationtimeStart = state.dateTime[0];
       creationtimeEnd = state.dateTime[1];
+    }else{
+      creationtimeStart = '';
+      creationtimeEnd = '';
     }
 
     commit('state', statuses);

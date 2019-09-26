@@ -311,6 +311,8 @@
         }
       },
       onCreateTemp() {
+        this.dialogTemplateVisible = false;
+        this.fn.closeSlider(false);
         // this.$router.push("templateForm");
         this.fn.openSlider("创建", TemplateForm);
       },

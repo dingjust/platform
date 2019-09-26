@@ -260,6 +260,8 @@
         }
       },
       onCreateTemp() {
+        this.dialogTemplateVisible = false;
+        Bus.$emit('closeBCXYFrom');
         // this.$router.push("templateForm");
         this.fn.openSlider("创建", TemplateForm);
       },
