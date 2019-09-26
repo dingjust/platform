@@ -112,7 +112,7 @@ class ContractRepository {
   }
 
   ///创建合同
-  Future<bool> SignaContract(Map data) async {
+  Future<Certification> SignaContract(Map data) async {
     Response response;
     try {
       response = await http$.post(UserApis.saveContract,
@@ -121,24 +121,114 @@ class ContractRepository {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      return true;
+      return Certification.fromJson(response.data);
     } else {
-      return false;
+      return null;
     }
   }
 
   ///开启合同
-  Future<bool> flowContract(String code) async {
+  Future<Certification> flowContract(String code,String sealCode) async {
     Response response;
     try {
-      response = await http$.post(UserApis.flowContract(code));
+      response = await http$.get(UserApis.flowContract(code,sealCode));
     } on DioError catch (e) {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
-      return true;
+      return Certification.fromJson(response.data);
     } else {
-      return false;
+      return null;
+    }
+  }
+
+  //查看合同
+  Future<ContractCallbackModel> getContract(String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.getContract(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return ContractCallbackModel.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  //个人认证
+  Future<Certification> personalAuthentication(Map data) async {
+    Response response;
+    try {
+      response = await http$.post(UserApis.personalAuthentication,data: data);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return Certification.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  //企业认证
+  Future<Certification> enterpriseAuthentication(Map data) async {
+    Response response;
+    try {
+      response = await http$.post(UserApis.enterpriseAuthentication,data: data);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return Certification.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  //认证状态
+  Future<CertificationState> getAuthenticationState() async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.getAuthenticationState);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return CertificationState.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  //个人认证信息
+  Future<CertificationInfo> getAuthenticationInfo() async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.getAuthenticationInfo);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return CertificationInfo.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  //企业认证信息
+  Future<CertificationInfo> getAuthenticationInfoEnterprise() async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.getAuthenticationEnterprise);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return CertificationInfo.fromJson(response.data);
+    } else {
+      return null;
     }
   }
 

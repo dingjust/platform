@@ -1,7 +1,10 @@
 
+import 'package:b2b_commerce/src/my/contract/contract_mark_down_widget.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 class ContractItemPage extends StatefulWidget {
   ContractModel model;
@@ -21,19 +24,45 @@ class _ContractItemPageState extends State<ContractItemPage>{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(5,5,5,0),
-      padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
-      child: Column(
-        children: <Widget>[
-          _buildHead(),
-          _buildCenter(),
-          _buildBottom(),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8)
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoading(
+                requestCallBack:
+                ContractRepository().getContract(widget.model.code),
+                outsideDismiss: false,
+                loadingText: '请稍候。。。',
+                entrance: '',
+              );
+            }).then((value) {
+          if (value != null && value.data != null) {
+            ContractModel model = value.data;
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) =>
+                      ContractMarkDownWidgetPage(model : model)),
+            );
+          }
+        });
+      },
+      child: Container(
+        margin: EdgeInsets.fromLTRB(5,5,5,0),
+        padding: EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+        child: Column(
+          children: <Widget>[
+            _buildHead(),
+            _buildCenter(),
+            _buildBottom(),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8)
+        ),
       ),
     );
   }
@@ -83,7 +112,7 @@ class _ContractItemPageState extends State<ContractItemPage>{
           ),
           Container(
             child:  Text(
-              '${DateFormatUtil.formatYMD(widget.model.createtime)}',
+              '${DateFormatUtil.formatYMD(widget.model.createTime)}',
               style: TextStyle(
                 color: Colors.black26,
               ),
