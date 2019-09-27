@@ -119,7 +119,7 @@
 
 
   export default {
-    name: "ContractForm",
+    name: "ContractFrameForm",
     props: ['slotData'],
     components: {
       ContractTypeSelect,
@@ -244,6 +244,10 @@
         const result = await http.post(url, formData);
 
         this.$message.success(result.msg);
+
+        if (result.data != null && result.data != '') {
+          Bus.$emit('openContract', result.data);
+        }
 
         const searchUrl = this.apis().getContractsList();
 

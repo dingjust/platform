@@ -265,6 +265,10 @@
 
         this.$message.success(result.msg);
 
+        if (result.data != null && result.data != '') {
+          Bus.$emit('openContract', result.data);
+        }
+
         const searchUrl = this.apis().getContractsList();
 
         this.refresh({

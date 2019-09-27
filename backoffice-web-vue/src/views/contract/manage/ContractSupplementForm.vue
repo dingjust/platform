@@ -97,7 +97,7 @@
 
 
   export default {
-    name: "ContractForm",
+    name: "ContractSupplementForm",
     props: ['slotData'],
     components: {
       ContractTypeSelect,
@@ -208,6 +208,11 @@
         this.$message.success(result.msg);
         Bus.$emit('closeContractFrom');
         Bus.$emit('closeDialogOrderVisible');
+
+        if (result.data != null && result.data != '') {
+          Bus.$emit('openContract1', result.data);
+        }
+
         const searchUrl = this.apis().getContractsList();
 
         this.refresh({

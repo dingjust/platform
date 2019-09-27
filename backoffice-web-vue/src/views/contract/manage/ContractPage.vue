@@ -14,7 +14,7 @@
           </div>
         </el-col>
       </el-row>
-      <contract-toolbar @onNew="onNew" @onSearch="onSearch"/>
+      <contract-toolbar style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="(item, index) in contractStatues">
           <el-tab-pane :name="item">
@@ -68,7 +68,8 @@
         keyword: "keyword",
         orderCode:'orderCode',
         dateTime:'dateTime',
-        queryFormData: "queryFormData"
+        queryFormData: "queryFormData",
+        type:'type'
       })
     },
     methods: {
@@ -82,12 +83,14 @@
         const orderCode = this.orderCode;
         const statuses = this.state;
         const dateTime = this.dateTime;
+        const type = this.type;
         const url = this.apis().getContractsList();
         this.search({
           url,
           keyword,
           orderCode,
           dateTime,
+          type,
           statuses,
           page,
           size
