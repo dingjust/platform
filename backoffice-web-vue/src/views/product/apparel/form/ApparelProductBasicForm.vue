@@ -34,8 +34,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item class="product-form-item" :rules="[
-                { required: true, message: '请输入品牌', trigger: 'blur'}]" prop="brand">
+          <el-form-item class="product-form-item" prop="brand">
             <el-row type="flex" align="middle">
               <div style="width:50px">
                 <h6 class="info-input-prepend">品牌：</h6>
