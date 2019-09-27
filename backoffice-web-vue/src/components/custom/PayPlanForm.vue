@@ -436,10 +436,6 @@
     font-size: 10px;
   }
 
-  label {
-    margin-bottom: 0px !important;
-  }
-
   .el-input--small .el-input__inner {
     height: 28px;
     line-height: 32px;

@@ -14,8 +14,8 @@
         </dj-checkbox>
       </template>
     </el-checkbox-group>
-    <el-row type="flex" justify="center" align="center" class="orders-info-table-btn">
-      <i class="iconfont icon_arrow" v-if="!showAllColor" @click="onClickshowAllColor">&#xe714;&nbsp;展开</i>
+    <el-row type="flex" justify="start" align="center" class="orders-info-table-btn">
+      <i class="iconfont icon_arrow" v-if="!showAllColor" @click="onClickshowAllColor">&#xe714;&nbsp;展开全部颜色</i>
       <i class="iconfont icon_arrow" v-if="showAllColor" @click="onClickshowAllColor">&#xe713;&nbsp;收回</i>
     </el-row>
   </div>
@@ -119,8 +119,8 @@
   .icon_arrow {
     font-family: "iconfont" !important;
     font-size: 12px;
-    font-weight: 400;
-    color: rgba(0, 0, 0, 0.65);
+    /* font-weight: 400; */
+    color: #FF7A7A;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -webkit-text-stroke-width: 0.2px;

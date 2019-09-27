@@ -126,12 +126,6 @@
     line-height: normal;
   }
 
-
-
-  label {
-    margin-bottom: 0px !important;
-  }
-
   .el-input.is-disabled .el-input__inner {
     cursor: pointer;
     background-color: #fff;

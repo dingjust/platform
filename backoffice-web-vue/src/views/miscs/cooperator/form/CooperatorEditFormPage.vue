@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn content ttt1">
     <el-card class="box-card">
       <div class="animated fadeIn">
         <el-form :model="formData">
@@ -358,9 +358,6 @@
     /*padding: 10px 60px;*/
   }
 
-  label {
-    margin-bottom: 0px !important;
-  }
 
   .el-input.is-disabled .el-input__inner {
     cursor: pointer;

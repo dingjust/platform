@@ -61,12 +61,14 @@
     },
     data() {
       return {
-        slotData: ''
+        slotData: {}
       }
     },
     created() {
       if (this.$route.params.slotData != null) {
         this.slotData = this.$route.params.slotData;
+      }else{
+        this.slotData=this.$store.state.ApparelProductsModule.formData;
       }
     }
   }

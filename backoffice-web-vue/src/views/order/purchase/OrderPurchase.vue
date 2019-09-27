@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn content order-purchase-form">
     <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body>
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
@@ -1302,7 +1302,7 @@
     font-size: 10px;
   }
 
-  label {
+  .order-purchase-form label {
     margin-bottom: 0px !important;
   }
 
