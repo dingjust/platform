@@ -107,11 +107,6 @@ abstract class UserApis {
   ///合同管理列表
   static get contractList => '/{baseSiteId}/user/agreement/list';
 
-  ///获取某个合同
-  static get getContract => (code) {
-    return '/{baseSiteId}/orders/proofing/$code';
-  };
-
   ///用户个人认证
   static get personalCertification => '/{baseSiteId}/fdd/api/get/personal/verify/url';
 
@@ -133,8 +128,28 @@ abstract class UserApis {
   static get saveContract => '/{baseSiteId}/user/agreement/save';
 
   ///开启合同
-  static get flowContract => (code){
-    return '/{baseSiteId}/user/agreement/start/flow/$code';
+  static get flowContract => (code,sealCode){
+    return '/{baseSiteId}/user/agreement/start/flow/$code?sealCode=$sealCode';
   };
+
+  ///查看合同
+  static get getContract => (code){
+    return '/{baseSiteId}/user/agreement/get/$code';
+  };
+
+  //个人认证
+  static get personalAuthentication =>  '/{baseSiteId}/fdd/api/save/personal/verify/data';
+
+  //企业认证
+  static get enterpriseAuthentication =>  '/{baseSiteId}/fdd/api/save/enterprise/verify/data';
+
+  //获取认证状态
+  static get getAuthenticationState =>  '/{baseSiteId}/cert/state';
+
+  //获取个人认证信息
+  static get getAuthenticationInfo =>  '/{baseSiteId}/cert/personal/cert/info';
+
+  //获取企业认证信息
+  static get getAuthenticationEnterprise =>  '/{baseSiteId}/cert/enterprise/cert/info';
 
 }

@@ -51,7 +51,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
             barrierDismissible: false,
             builder: (_) {
               return RequestDataLoading(
-                requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+                requestCallBack: LocalStorage.get(GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY),
                 outsideDismiss: false,
                 loadingText: '加载中。。。',
                 entrance: '',
@@ -73,7 +73,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
                     searchModel:SearchModel(
                       historyKeywords: historyKeywords,
                       searchModelType: SearchModelType.PURCHASE_ORDER,
-                      route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+                      route: GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
                     ),
                   ),
             ),
@@ -119,7 +119,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
             child: RaisedButton(
               color: Color.fromRGBO(255, 214, 12, 1),
               child: Text(
-                '签署新合同',
+                '创建新合同',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
@@ -232,26 +232,11 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
                             AppBLoC.instance.getConnectivityResult ==
                                 ConnectivityResult.none
                                 ? '网络链接不可用请重试'
-                                : '没有相关订单数据',
+                                : '没有相关数据',
                             style: TextStyle(
                               color: Colors.grey,
                             ),
                           )),
-                      AppBLoC.instance.getConnectivityResult !=
-                          ConnectivityResult.none
-                          ? Container(
-                        child: FlatButton(
-                          color: Color.fromRGBO(255, 214, 12, 1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => MyHelpPage()));
-                          },
-                          child: Text('如何创建订单？'),
-                        ),
-                      )
-                          : Container()
                     ],
                   );
                 }

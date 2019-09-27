@@ -13,7 +13,7 @@
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">合同（{{contracts==null || contracts == ''?'未签署':'已有合同'}}）</h6>
+        <h6 class="info-title_text">合同（{{contracts==null || contracts == '' || contracts.length <= 0?'未签署':'已有合同'}}）</h6>
       </div>
       <el-button v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED'" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
       </el-button>

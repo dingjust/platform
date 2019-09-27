@@ -176,26 +176,30 @@ class PurchaseOrderBLoC extends BLoCBase {
       }
     }
 
-    loadingController.sink.add(false);
+    bottomController.sink.add(false);
     _controller.sink
         .add(PurchaseData(status: status, data: _ordersMap[status].data));
   }
 
   loadingMoreByKeyword(String keyword) async {
-    if (!lock) {
-      lock = true;
+    //若没有数据则查询
+    if (_ordersMap['SEARCH'].currentPage + 1 == _ordersMap['SEARCH'].totalPages) {
+      //通知显示已经到底部
+      loadingController.sink.add(true);
+    } else {
       //数据到底
       Map data = {
         'keyword': keyword,
       };
       Response<Map<String, dynamic>> response;
       try {
-        response = await http$
-            .post(OrderApis.purchaseOrders, data: data, queryParameters: {
-          'page': ++_ordersMap['ALL'].currentPage,
-          'size': _ordersMap['ALL'].size,
-          'fields': PurchaseOrderOptions.DEFAULT,
-        });
+        response = await http$.post(OrderApis.purchaseOrders, data: data,
+            queryParameters: {
+              'page': ++_ordersMap['SEARCH'].currentPage,
+              'size': _ordersMap['SEARCH'].size,
+              'fields': PurchaseOrderOptions.BASIC,
+            }
+        );
       } on DioError catch (e) {
         print(e);
       }
@@ -203,14 +207,12 @@ class PurchaseOrderBLoC extends BLoCBase {
       if (response != null && response.statusCode == 200) {
         PurchaseOrdersResponse ordersResponse =
             PurchaseOrdersResponse.fromJson(response.data);
-        _ordersMap['ALL'].totalPages = ordersResponse.totalPages;
-        _ordersMap['ALL'].totalElements = ordersResponse.totalElements;
-        _ordersMap['ALL'].data.addAll(ordersResponse.content);
+        _ordersMap['SEARCH'].totalPages = ordersResponse.totalPages;
+        _ordersMap['SEARCH'].totalElements = ordersResponse.totalElements;
+        _ordersMap['SEARCH'].data.addAll(ordersResponse.content);
       }
       loadingController.sink.add(false);
-      _controller.sink
-          .add(PurchaseData(status: 'ALL', data: _ordersMap['ALL'].data));
-      lock = false;
+      _purchaseController.sink.add(_ordersMap['SEARCH'].data);
     }
   }
 
