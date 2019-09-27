@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <el-form ref="form" label-position="top" :model="slotData" :disabled="readOnly" :rules="rules">
+    <!-- <el-form ref="form" label-position="top" :model="slotData" :disabled="readOnly" :rules="rules"> -->
       <el-row :gutter="10">
-        <!-- <el-col :span="8">
+        <!-- <el-col :span="8"> 
           <el-form-item label="标题" prop="name">
             <el-input v-model="slotData.name" placeholder="输入产品标题"></el-input>
           </el-form-item>
@@ -112,7 +112,7 @@
           </el-form-item>
         </el-col>
       </el-row> -->
-    </el-form>
+    <!-- </el-form> -->
   </div>
 </template>
 

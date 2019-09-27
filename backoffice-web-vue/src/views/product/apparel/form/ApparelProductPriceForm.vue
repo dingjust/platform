@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-form ref="form" :model="slotData">
       <el-row class="info-title-row">
         <div class="info-title">
           <h6 class="info-title_text">价格设置<span class="info-title_text-sub">(上架必备)</span></h6>
@@ -112,7 +111,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-    </el-form>
   </div>
 </template>
 

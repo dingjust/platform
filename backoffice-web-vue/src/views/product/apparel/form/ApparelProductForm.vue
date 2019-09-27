@@ -1,45 +1,47 @@
 <template>
   <div>
-    <el-card class="box-card">
-      <el-row class="info-title-row">
-        <div class="info-title">
-          <h6 class="info-title_text">基本信息</h6>
-        </div>
+    <el-form ref="form" :model="slotData">
+      <el-card class="box-card">
+        <el-row class="info-title-row">
+          <div class="info-title">
+            <h6 class="info-title_text">基本信息</h6>
+          </div>
+        </el-row>
+        <apparel-product-basic-form :slot-data="slotData" :read-only="false">
+        </apparel-product-basic-form>
+        <el-divider></el-divider>
+        <el-row class="info-title-row">
+          <h6 class="info-title_text">选择品类：</h6>
+        </el-row>
+        <apparel-product-categories-form :slot-data="slotData"></apparel-product-categories-form>
+        <el-divider></el-divider>
+        <apparel-product-colors-form :slot-data="slotData">
+        </apparel-product-colors-form>
+        <el-divider></el-divider>
+        <apparel-product-sizes-form :slot-data="slotData">
+        </apparel-product-sizes-form>
+        <el-divider></el-divider>
+        <apparel-product-images-form :slot-data="slotData" :read-only="readOnly">
+        </apparel-product-images-form>
+      </el-card>
+      <div class="pt-2"></div>
+      <div class="pt-2"></div>
+      <el-card class="box-card">
+        <apparel-product-price-form :slot-data="slotData">
+        </apparel-product-price-form>
+      </el-card>
+      <div class="pt-2"></div>
+      <el-card class="box-card">
+        <apparel-product-attributes-form :slot-data="slotData" :read-only="readOnly">
+        </apparel-product-attributes-form>
+      </el-card>
+      <el-row type="flex" justify="center" class="product-form-row">
+        <el-button class="product-form-btn" @click="onUpdate()" v-if="this.slotData.code!=null&&this.slotData.code!=''">
+          更新产品信息</el-button>
+        <el-button class="product-form-btn" @click="onCreate()" v-if="this.slotData.code==null||this.slotData.code==''">
+          确认创建产品</el-button>
       </el-row>
-      <apparel-product-basic-form ref="basicForm" :slot-data="slotData" :read-only="false">
-      </apparel-product-basic-form>
-      <el-divider></el-divider>
-      <el-row class="info-title-row">
-        <h6 class="info-title_text">选择品类：</h6>
-      </el-row>
-      <apparel-product-categories-form :slot-data="slotData"></apparel-product-categories-form>
-      <el-divider></el-divider>
-      <apparel-product-colors-form :slot-data="slotData">
-      </apparel-product-colors-form>
-      <el-divider></el-divider>
-      <apparel-product-sizes-form :slot-data="slotData">
-      </apparel-product-sizes-form>
-      <el-divider></el-divider>
-      <apparel-product-images-form ref="imagesForm" :slot-data="slotData" :read-only="readOnly">
-      </apparel-product-images-form>
-    </el-card>
-    <div class="pt-2"></div>
-    <div class="pt-2"></div>
-    <el-card class="box-card">
-      <apparel-product-price-form :slot-data="slotData">
-      </apparel-product-price-form>
-    </el-card>
-    <div class="pt-2"></div>
-    <el-card class="box-card">
-      <apparel-product-attributes-form ref="attributesForm" :slot-data="slotData" :read-only="readOnly">
-      </apparel-product-attributes-form>
-    </el-card>
-    <el-row type="flex" justify="center" class="product-form-row">
-      <el-button class="product-form-btn" @click="onUpdate()" v-if="this.slotData.code!=null&&this.slotData.code!=''">
-        更新产品信息</el-button>
-      <el-button class="product-form-btn" @click="onSubmit()" v-if="this.slotData.code==null||this.slotData.code==''">
-        确认创建产品</el-button>
-    </el-row>
+    </el-form>
   </div>
 </template>
 
@@ -67,7 +69,18 @@
     },
     props: ['slotData', 'readOnly'],
     methods: {
-      async onUpdate() {
+      onUpdate() {
+        this.$refs['form'].validate(valid => {
+          if (valid) {
+            this._Update();
+            return true;
+          } else {
+            this.$message.error('请完善表单信息');
+            return false;
+          }
+        });
+      },
+      async _Update() {
         this.formData = Object.assign({}, this.slotData);
         this.slotData.variants = [];
         const url = this.apis().updateOfApparelProduct(this.slotData.code);
@@ -78,7 +91,18 @@
         }
         this.$message.success('更新基本信息成功');
       },
-      async onSubmit() {
+      onCreate() {
+        this.$refs['form'].validate(valid => {
+          if (valid) {
+            this._Create();
+            return true;
+          } else {
+            this.$message.error('请完善表单信息');
+            return false;
+          }
+        });
+      },
+      async _Create() {
         this.formData = Object.assign({}, this.slotData);
         const url = this.apis().createApparelProduct();
         const result = await this.$http.post(url, this.formData);
