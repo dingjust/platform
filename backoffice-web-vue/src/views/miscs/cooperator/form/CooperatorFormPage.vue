@@ -40,7 +40,7 @@
                         <el-row type="flex">
                           <el-col :span="16">
                             <span >{{ item.name }}</span>
-                            <img :src="getPaymentStatusTag" />
+                            <img :src="getPaymentStatusTag(item)" />
                           </el-col>
                           <el-col :span="4">
                             <span >{{ item.contactPerson }}</span>
@@ -64,7 +64,13 @@
                         <el-row type="flex">
                           <el-col :span="16">
                             <span >{{ item.name }}</span>
-                            <img :src="getPaymentStatusTag" />
+                            <!--<span v-if="item.approvalStatus == 'approval'" style="color: #ffa403;margin-left: 10px;font-size: 8px">-->
+                              <!--认证-->
+                            <!--</span>-->
+                            <!--<span v-else style="color: #ffa403;margin-left: 10px;font-size: 8px">-->
+                              <!--未认证-->
+                            <!--</span>-->
+                            <img width="50px" height="40px" :src="getPaymentStatusTag(item)" />
                           </el-col>
                           <el-col :span="4">
                             <span >{{ item.contactPerson }}</span>
@@ -380,8 +386,13 @@
         }
         this.payPlanSelectDialogVisible = false;
       },
-      getPaymentStatusTag() {
-        return '/dist/static/img/arrears.png';
+      getPaymentStatusTag(item) {
+        if(item.approvalStatus == 'approval'){
+          return 'static/img/certified.png';
+        }else{
+          return 'static/img/uncertified.png';
+        }
+
       }
     },
     data () {

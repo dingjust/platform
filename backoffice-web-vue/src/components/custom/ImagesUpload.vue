@@ -12,6 +12,7 @@
           :headers="headers"
           :file-list="fileList"
           :on-preview="handlePreview"
+          :limit="limit"
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -26,7 +27,7 @@
 <script>
   export default {
     name: 'ImagesUpload',
-    props: ['slotData'],
+    props: ['slotData' ,'limit'],
     methods: {
       onBeforeUpload(file) {
         if (file.size > 1024 * 1024 * 10) {

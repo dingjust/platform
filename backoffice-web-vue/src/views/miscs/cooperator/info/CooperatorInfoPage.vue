@@ -126,8 +126,6 @@
     line-height: normal;
   }
 
-
-
   label {
     margin-bottom: 0px !important;
   }
@@ -155,6 +153,6 @@
   }
 
   .el-divider--vertical{
-    height: 13em;
+    height: auto;
   }
 </style>

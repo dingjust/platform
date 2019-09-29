@@ -1,48 +1,123 @@
 <template>
-  <div class="animated fadeIn">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>基本信息</span>
+  <div class="animated fadeIn factory-edit">
+    <el-row class="factory-info-title-row">
+      <div class="factory-info-title">
+        <h6 class="factory-info-title_text">编辑资料</h6>
       </div>
-      <factory-basic-form ref="basicForm"
-                          :slot-data="slotData"
-                          :read-only="readOnly">
-      </factory-basic-form>
-    </el-card>
-    <div class="pt-2"></div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>认证信息</span>
-      </div>
-      <factory-certificate-form ref="certificateForm"
-                                :slot-data="slotData"
-                                :read-only="readOnly">
-      </factory-certificate-form>
-    </el-card>
+    </el-row>
+    <div class="titleCardClass">
+      <el-form :model="formData">
+        <el-row>
+          <factory-basic-form :form-data="formData"></factory-basic-form>
+        </el-row>
+        <el-row>
+          <factory-contact-form :form-data="formData" :cities="cities" :cityDistricts="cityDistricts"></factory-contact-form>
+        </el-row>
+        <el-row>
+          <factory-scale-form :form-data="formData"></factory-scale-form>
+        </el-row>
+        <el-row>
+          <factory-capacity-form :form-data="formData"></factory-capacity-form>
+        </el-row>
+        <el-row>
+          <factory-service-form :form-data="formData"></factory-service-form>
+        </el-row>
+      </el-form>
+    </div>
+
+    <el-row type="flex" justify="center">
+      <el-button class="buttonClass" @click="onSave">
+        <h6>保存</h6>
+      </el-button>
+    </el-row>
   </div>
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters} = createNamespacedHelpers('FactoriesModule');
   import FactoryBasicForm from './FactoryBasicForm';
   import FactoryCertificateForm from './FactoryCertificateForm';
+  import FactoryContactForm from './FactoryContactForm';
+  import FactoryScaleForm from './FactoryScaleForm';
+  import FactoryCapacityForm from './FactoryCapacityForm';
+  import FactoryServiceForm from './FactoryServiceForm';
 
   export default {
     name: 'FactoryFrom',
     components: {
+      FactoryServiceForm,
+      FactoryCapacityForm,
+      FactoryScaleForm,
+      FactoryContactForm,
       FactoryBasicForm,
-      FactoryCertificateForm,
+      FactoryCertificateForm
     },
-    props: ['slotData', 'readOnly'],
+    computed: {
+      ...mapGetters({
+        formData: 'formData'
+      })
+    },
+    props: ['cities', 'cityDistricts'],
     methods: {
-      validate(callback) {
-        // TODO: validation
-        return true;
-        // return this.$refs['basicForm'].validate(callback);
+      onSave () {
+        this.$emit('onSave');
       }
     },
-    computed: {},
-    data() {
-      return {}
+    data () {
+      return {
+      }
+    },
+    created () {
     }
   }
 </script>
+
+<style>
+  .factory-edit .factory-info-title {
+    width: 100%;
+    border-left: 2px solid #FFD60C;
+    padding-left: 10px;
+    height: 14px;
+  }
+
+  .factory-edit .factory-info-title_text {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.65;
+  }
+
+  .factory-edit .factory-info-title-row {
+    margin-bottom: 20px;
+  }
+
+  .factory-edit .buttonClass{
+    padding: 10px 120px 0px 120px;
+    margin-top: 40px;
+    background-color: #ffd60c;
+    color: #0b0e0f;
+    border-radius: 8px;
+  }
+
+  .factory-edit .titleCardClass{
+    border-style: solid;
+    border-width: 1px;
+    border-top: white;
+    border-color: #DCDCDC;
+  }
+
+  /*.factory-edit .purchase-form-item small.el-form-item {*/
+    /*margin-bottom: 0px !important;*/
+  /*}*/
+
+  /*.factory-edit .purchase-form-item .el-form-item--mini.el-form-item,*/
+  /*.el-form-item--small.el-form-item {*/
+    /*margin-bottom: 0px !important;*/
+  /*}*/
+
+  /*.factory-edit .purchase-form-item .el-form-item__error {*/
+    /*padding-left: 70px !important;*/
+  /*}*/
+</style>
