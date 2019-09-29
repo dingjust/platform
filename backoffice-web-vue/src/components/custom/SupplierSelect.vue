@@ -53,7 +53,7 @@
     mapMutations
   } = createNamespacedHelpers('CooperatorModule');
 
-export default {
+  export default {
     name: 'SuppliersSelect',
     computed: {
       ...mapGetters({
@@ -65,11 +65,9 @@ export default {
       ...mapActions({
         searchAdvanced: 'searchAdvanced'
       }),
-      ...mapMutations(
-        {
-          setKeyword:'setQueryFormDataKeyword'
-        }
-      ),
+      ...mapMutations({
+        setKeyword: 'setQueryFormDataKeyword'
+      }),
       onPageSizeChanged(val) {
         this._reset();
 
@@ -122,14 +120,16 @@ export default {
             id: this.selectSupplier.id,
             name: this.selectSupplier.partner.name,
             person: this.selectSupplier.partner.contactPerson,
-            phone: this.selectSupplier.partner.contactPhone
+            phone: this.selectSupplier.partner.contactPhone,
+            payPlan: this.selectSupplier.payPlan
           };
         } else {
           result = {
             id: this.selectSupplier.id,
             name: this.selectSupplier.name,
             person: this.selectSupplier.contactPerson,
-            phone: this.selectSupplier.contactPhone
+            phone: this.selectSupplier.contactPhone,
+            payPlan: this.selectSupplier.payPlan
           };
         }
         this.$emit('onSelect', result);

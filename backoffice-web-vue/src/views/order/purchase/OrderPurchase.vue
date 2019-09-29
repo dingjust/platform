@@ -118,7 +118,8 @@
                     :prop="'entries.' + productIndex+'.expectedDeliveryDate'">
                     <el-row type="flex" align="middle">
                       <h6 class="info-input-prepend">交货日期</h6>
-                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期" :picker-options="pickerOptions">
+                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期"
+                        :picker-options="pickerOptions">
                       </el-date-picker>
                     </el-row>
                   </el-form-item>
@@ -867,12 +868,12 @@
                 }
               }
 
-              var totalPercent=0;
-              for(var i=0;i++;i<payPlanItems.length-1){
-                totalPercent+=payPlanItems[i].payPercent;
+              var totalPercent = 0;
+              for (var i = 0; i++; i < payPlanItems.length - 1) {
+                totalPercent += payPlanItems[i].payPercent;
               }
 
-              payPlanItems[payPlanItems.lastIndexOf]=totalPercent;
+              payPlanItems[payPlanItems.lastIndexOf] = totalPercent;
 
               //组合表单参数
               let form = {
@@ -931,6 +932,9 @@
         this.form.contactPersonOfSeller = val.person;
         this.form.contactOfSeller = val.phone;
         this.form.cooperator.id = val.id;
+        if(val.payPlan!=null){
+        this.setPayPlan(val.payPlan);
+        }
       },
       addressSelect(index) {
         this.currentProductIndex = index;
@@ -957,6 +961,35 @@
           return product.code != null && product.code != '';
         }
       },
+      setPayPlan(payPlan) {
+        this.form.isHaveDeposit = payPlan.isHaveDeposit;
+        this.form.payPlanType = payPlan.payPlanType;
+        payPlan.payPlanItems.forEach((item) => {
+          switch (item.moneyType) {
+            case 'PHASEONE':
+              this.form.balance1.percent = item.payPercent;
+              this.form.balance1.event = item.triggerEvent;
+              this.form.balance1.time = item.triggerDays;
+              this.form.balance1.range = item.triggerType;
+              break;
+            case 'PHASETWO':
+              this.form.balance2.percent = item.payPercent;
+              this.form.balance2.event = item.triggerEvent;
+              this.form.balance2.time = item.triggerDays;
+              this.form.balance2.range = item.triggerType;
+              break;
+            case 'DEPOSIT':
+              this.form.deposit.percent = item.payPercent;
+              this.form.deposit.event = item.triggerEvent;
+              this.form.deposit.time = item.triggerDays;
+              this.form.deposit.range = item.triggerType;
+              break;
+            case 'MONTHLY_SETTLEMENT':
+              this.form.monthBalance.event = item.triggerEvent;
+              break;
+          }
+        });
+      }
     },
     data() {
       return {
@@ -1085,8 +1118,8 @@
         },
         pickerOptions: {
           disabledDate(time) {
-            let date=new Date();
-            date.setDate(date.getDate()-1);
+            let date = new Date();
+            date.setDate(date.getDate() - 1);
             return time.getTime() < date;
           },
         }
