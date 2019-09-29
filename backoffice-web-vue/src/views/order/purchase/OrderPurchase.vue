@@ -9,6 +9,9 @@
     <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
       <address-select @onSelect="onAddressSelect" />
     </el-dialog>
+    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body>
+      <pay-plan-select @onSelect="onPayPlanSelect" />
+    </el-dialog>
     <el-card class="box-card">
       <el-form :model="form" :rules="rules" ref="form">
         <div class="info-order-body">
@@ -277,14 +280,12 @@
                 </template>
               </el-row>
             </el-col>
-            <!-- <el-col :span="10">
+            <el-col :span="10">
               <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend" style="margin-right:20px;width:80px">选用我的账务方案</h6>
-                <el-radio class="info-radio" v-model="form.plan" label="1">方案1</el-radio>
-                <el-radio class="info-radio" v-model="form.plan" label="2">方案2</el-radio>
-                <el-radio class="info-radio" v-model="form.plan" label="3">方案3</el-radio>
+                <!-- <h6 class="info-input-prepend" style="margin-right:20px;width:80px">选用我的账务方案</h6> -->
+                <el-button style="margin-right:20px;width:150px" @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用我的账务方案</el-button>
               </el-row>
-            </el-col> -->
+            </el-col>
           </el-row>
           <el-row class="info-order-row" v-if="form.isHaveDeposit" type="flex" justify="start" align="middle"
             :gutter="10">
@@ -553,6 +554,7 @@
   import SupplierSelect from '@/components/custom/SupplierSelect';
   import AddressSelect from '@/components/custom/AddressSelect';
   import ImagesUpload from '@/components/custom/ImagesUpload';
+  import PayPlanSelect from '@/components/custom/PayPlanSelect';
 
   export default {
     name: 'orderPurchase',
@@ -562,7 +564,8 @@
       ProductSelect,
       ImagesUpload,
       SupplierSelect,
-      AddressSelect
+      AddressSelect,
+      PayPlanSelect
     },
     mixins: [],
     computed: {
@@ -932,8 +935,9 @@
         this.form.contactPersonOfSeller = val.person;
         this.form.contactOfSeller = val.phone;
         this.form.cooperator.id = val.id;
-        if(val.payPlan!=null){
-        this.setPayPlan(val.payPlan);
+        if (val.payPlan != null) {
+          this.setPayPlan(val.payPlan);
+          this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
       addressSelect(index) {
@@ -989,6 +993,10 @@
               break;
           }
         });
+      },
+      onPayPlanSelect(item) {
+        this.setPayPlan(item);
+        this.payPlanSelectDialogVisible = false;
       }
     },
     data() {
@@ -996,6 +1004,7 @@
         productSelectVisible: false,
         suppliersSelectVisible: false,
         addressSelectVisible: false,
+        payPlanSelectDialogVisible: false,
         currentProductIndex: 0,
         regions: [],
         freightPayer: {

@@ -201,7 +201,7 @@
       ...createNamespacedHelpers('PayPlanModule').mapGetters({
         payPlanPage: 'page',
         queryFormData: 'queryFormData'
-      })
+      }),
     },
     methods: {
       ...mapMutations({
