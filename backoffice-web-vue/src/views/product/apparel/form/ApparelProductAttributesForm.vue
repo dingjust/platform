@@ -1,167 +1,165 @@
 <template>
-  <div class="animated fadeIn">
-    <el-form ref="form" label-position="top" :model="slotData" :disabled="readOnly">
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="风格" prop="styles">
-            <el-select v-model="slotData.attributes.styles" class="w-100" multiple placeholder="请选择">
-              <el-option
-                v-for="item in productStyles"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="面料" prop="fabricComposition">
-            <el-select v-model="slotData.attributes.fabricCompositions" class="w-100" multiple placeholder="请选择">
-              <el-option
-                v-for="item in fabricCompositions"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="版型" prop="editionType">
-            <el-select v-model="slotData.attributes.editionType" class="w-100" placeholder="请选择">
-              <el-option
-                v-for="item in editionTypes"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="款式" prop="pattern">
-            <el-select v-model="slotData.attributes.pattern" class="w-100" placeholder="请选择">
-              <el-option
-                v-for="item in productPatterns"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="袖型" prop="sleeveType">
-            <el-select v-model="slotData.attributes.sleeveType" class="w-100" placeholder="请选择">
-              <el-option
-                v-for="item in sleeveTypes"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="袖型" prop="sleeveType">
-            <el-select v-model="slotData.attributes.sleeveLength" class="w-100" placeholder="请选择">
-              <el-option
-                v-for="item in sleeveLengths"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="图案" prop="decorativePatterns">
-            <el-select v-model="slotData.attributes.decorativePatterns" class="w-100" multiple placeholder="请选择">
-              <el-option
-                v-for="item in decorativePatterns"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="流行元素" prop="popularElements">
-            <el-select v-model="slotData.attributes.popularElements" class="w-100" multiple placeholder="请选择">
-              <el-option
-                v-for="item in popularElements"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="填充物" prop="filler">
-            <el-select v-model="slotData.attributes.filler" class="w-100" placeholder="请选择">
-              <el-option
-                v-for="item in productFillers"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="厚薄" prop="thickness">
-            <el-select v-model="slotData.attributes.thickness" class="w-100" placeholder="请选择">
-              <el-option
-                v-for="item in productThicknesses"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="季节" prop="season">
-            <el-select v-model="slotData.attributes.season" class="w-100" placeholder="请选择">
-              <el-option
-                v-for="item in productSeasons"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="门襟" prop="placket">
-            <el-select v-model="slotData.attributes.placket" class="w-100" placeholder="请选择">
-              <el-option
-                v-for="item in plackets"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="吊牌" prop="taggable">
-            <el-radio-group v-model="slotData.attributes.taggable">
-              <el-radio :label="true" :key="1">有</el-radio>
-              <el-radio :label="false" :key="0">没有</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+  <div class="animated fadeIn product-attributes">
+    <el-row class="info-title-row">
+      <div class="info-title">
+        <h6 class="info-title_text">产品属性</h6>
+      </div>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">风格<span class="info-title_text-sub">(可多选)</span>：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-checkbox-group v-model="slotData.attributes.styles" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in productStyles">
+            <el-checkbox-button :label="item.code">{{item.name}}</el-checkbox-button>
+          </template>
+        </el-checkbox-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">面料成分<span class="info-title_text-sub">(可多选)</span>：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-checkbox-group v-model="slotData.attributes.fabricCompositions" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in fabricCompositions">
+            <el-checkbox-button :label="item.code">{{item.name}}</el-checkbox-button>
+          </template>
+        </el-checkbox-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">版型：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group v-model="slotData.attributes.editionType" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in editionTypes">
+            <el-radio-button :label="item.code">{{item.name}}</el-radio-button>
+          </template>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">款式：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group v-model="slotData.attributes.pattern" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in productPatterns">
+            <el-radio-button :label="item.code">{{item.name}}</el-radio-button>
+          </template>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">袖型：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group v-model="slotData.attributes.sleeveType" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in sleeveTypes">
+            <el-radio-button :label="item.code">{{item.name}}</el-radio-button>
+          </template>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">袖长：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group v-model="slotData.attributes.sleeveLength" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in sleeveLengths">
+            <el-radio-button :label="item.code">{{item.name}}</el-radio-button>
+          </template>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">图案：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-checkbox-group v-model="slotData.attributes.decorativePatterns" :max="1" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in decorativePatterns">
+            <el-checkbox-button :label="item.code">{{item.name}}</el-checkbox-button>
+          </template>
+        </el-checkbox-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">流行元素：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-checkbox-group v-model="slotData.attributes.popularElements" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in popularElements">
+            <el-checkbox-button :max="1" :label="item.code">{{item.name}}</el-checkbox-button>
+          </template>
+        </el-checkbox-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">填充物：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group v-model="slotData.attributes.filler" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in productFillers">
+            <el-radio-button :label="item.code">{{item.name}}</el-radio-button>
+          </template>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">厚薄：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group v-model="slotData.attributes.thickness" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in productThicknesses">
+            <el-radio-button :label="item.code">{{item.name}}</el-radio-button>
+          </template>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">季节：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group v-model="slotData.attributes.season" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in productSeasons">
+            <el-radio-button :label="item.code">{{item.name}}</el-radio-button>
+          </template>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">门襟：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group v-model="slotData.attributes.placket" text-color="#000000" fill="#ffd60c">
+          <template v-for="item in plackets">
+            <el-radio-button :label="item.code">{{item.name}}</el-radio-button>
+          </template>
+        </el-radio-group>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="3">
+        <h6 class="info-title_text product-attributes-title">吊牌：</h6>
+      </el-col>
+      <el-col :span="20">
+        <el-radio-group class="product-attributes-radio-group" v-model="slotData.attributes.taggable" text-color="#000000" fill="#ffd60c">
+          <el-radio :label="true" :key="1" class="product-attributes-radio">有</el-radio>
+          <el-radio :label="false" :key="0" class="product-attributes-radio">没有</el-radio>
+        </el-radio-group>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -191,7 +189,37 @@
         plackets: this.$store.state.EnumsModule.plackets
       };
     },
-    created() {
-    }
+    created() {}
   };
+
 </script>
+<style>
+  .product-attributes .el-checkbox-button--small .el-checkbox-button__inner {
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 0px;
+    color: rgb(0, 0, 1, 0.45);
+  }
+
+  .product-attributes .el-radio-button--small .el-radio-button__inner {
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 0px;
+    color: rgb(0, 0, 1, 0.45);
+  }
+
+  .product-attributes-title {
+    padding-top: 9px;
+    font-weight: 500;
+  }
+
+  .product-attributes-radio {
+    color: rgb(0, 0, 1, 0.45);
+
+  }
+
+  .product-attributes-radio-group{
+    margin-left: 25px;
+  }
+
+</style>

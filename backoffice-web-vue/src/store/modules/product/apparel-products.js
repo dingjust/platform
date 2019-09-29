@@ -16,6 +16,7 @@ const state = {
   formData: {
     id: null,
     images: [],
+    details:[],
     code: '',
     skuID: '',
     name: '',
@@ -50,6 +51,8 @@ const state = {
       uid: '',
       name: ''
     },
+    steppedPrices:[]
+
   },
   queryFormData: {
     skuID: '',

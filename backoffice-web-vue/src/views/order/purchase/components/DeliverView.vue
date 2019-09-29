@@ -24,7 +24,7 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">发货方式</h6>
-            <el-input placeholder="输入方式" v-model="slotData.deliverWay" size="mini"
+            <el-input placeholder="输入方式" v-model="slotData.consignment.carrierDetails.name" size="mini"
               :disabled="slotData.isOfflineConsignment">
             </el-input>
           </el-row>
@@ -32,7 +32,7 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">发货单号</h6>
-            <el-input placeholder="货运单号" v-model="slotData.receiveCode" size="mini"
+            <el-input placeholder="货运单号" v-model="slotData.consignment.trackingID" size="mini"
               :disabled="slotData.isOfflineConsignment">
             </el-input>
           </el-row>

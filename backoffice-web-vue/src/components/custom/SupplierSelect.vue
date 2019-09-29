@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-form :inline="true">
       <el-form-item label="">
-        <el-input placeholder="请输入名称查询" v-model="queryFormData.keyword"></el-input>
+        <el-input placeholder="请输入名称查询" :value="queryFormData.keyword" @input="setKeyword"></el-input>
       </el-form-item>
       <el-button type="text" @click="onSearch">查找</el-button>
       <el-button type="text" @click="jumpToCreate">添加合作商</el-button>
@@ -50,6 +50,7 @@
   const {
     mapActions,
     mapGetters,
+    mapMutations
   } = createNamespacedHelpers('CooperatorModule');
 
   export default {
@@ -63,6 +64,9 @@
     methods: {
       ...mapActions({
         searchAdvanced: 'searchAdvanced'
+      }),
+      ...mapMutations({
+        setKeyword: 'setQueryFormDataKeyword'
       }),
       onPageSizeChanged(val) {
         this._reset();
@@ -116,14 +120,16 @@
             id: this.selectSupplier.id,
             name: this.selectSupplier.partner.name,
             person: this.selectSupplier.partner.contactPerson,
-            phone: this.selectSupplier.partner.contactPhone
+            phone: this.selectSupplier.partner.contactPhone,
+            payPlan: this.selectSupplier.payPlan
           };
         } else {
           result = {
             id: this.selectSupplier.id,
             name: this.selectSupplier.name,
             person: this.selectSupplier.contactPerson,
-            phone: this.selectSupplier.contactPhone
+            phone: this.selectSupplier.contactPhone,
+            payPlan: this.selectSupplier.payPlan
           };
         }
         this.$emit('onSelect', result);

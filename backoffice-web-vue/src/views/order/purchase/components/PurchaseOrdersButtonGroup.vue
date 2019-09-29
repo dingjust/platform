@@ -29,12 +29,10 @@
     components: {},
     computed: {
       isMyself: function () {
-        if (this.isBrand()) {
-          return this.$store.getters.currentUser.companyCode == this.slotData.purchaser.uid && this.slotData
-            .belongTo == null;
-        } else {
-          return this.$store.getters.currentUser.companyCode == this.slotData.belongTo.uid && this.slotData
-            .purchaser == null;
+        if(this.slotData.creator!=null){
+          return this.slotData.creator.uid==this.$store.getters.currentUser.companyCode;
+        }else{
+          return flase;
         }
       },
       isProduction: function () {
