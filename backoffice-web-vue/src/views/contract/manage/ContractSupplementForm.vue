@@ -209,6 +209,8 @@
         Bus.$emit('closeContractFrom');
         Bus.$emit('closeDialogOrderVisible');
 
+        console.log(result);
+
         if (result.data != null && result.data != '') {
           Bus.$emit('openContract1', result.data);
         }

@@ -41,8 +41,8 @@ class MyHomePage extends StatelessWidget {
             AppRoutes.ROUTE_MY_ACCOUNT),
         menuSeparator,
         CompanyIntroductionMenuItem(),
-        menuSeparator,
-        CompanyCertificationMenuItem()
+//        menuSeparator,
+//        CompanyCertificationMenuItem()
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.addressManage(width: 24, height: 29), '地址管理',
