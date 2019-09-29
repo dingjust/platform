@@ -29,6 +29,7 @@ class TextFieldComponent extends StatefulWidget {
   final int maxLength;
   bool isInputBorder;
   bool isSteppedPrice;
+  Color dividerColor;
 
 //  final FormFieldValidator<String> _validator;
 
@@ -58,13 +59,13 @@ class TextFieldComponent extends StatefulWidget {
     this.maxLines,
     this.isInputBorder = false,
     this.isSteppedPrice = false,
+    this.dividerColor,
   });
 
   TextFieldComponentState createState() => TextFieldComponentState();
 }
 
 class TextFieldComponentState extends State<TextFieldComponent> {
-  Color _dividerColor = Color(Constants.DIVIDER_COLOR);
 
   @override
   void initState() {
@@ -78,14 +79,14 @@ class TextFieldComponentState extends State<TextFieldComponent> {
     widget.focusNode.addListener(() {
       if (widget.focusNode.hasFocus) {
         setState(() {
-          _dividerColor = Color.fromRGBO(255,214,12, 1);
+          widget.dividerColor == null? widget.dividerColor = Color.fromRGBO(255,214,12, 1):widget.dividerColor = widget.dividerColor;
           if(widget.prefix != null){
             widget.controller.text = widget.controller.text.replaceFirst(widget.prefix, '');
           }
         });
       } else {
         setState(() {
-          _dividerColor = Color(Constants.DIVIDER_COLOR);
+          widget.dividerColor == null? widget.dividerColor = Color(Constants.DIVIDER_COLOR):widget.dividerColor = widget.dividerColor;
           if(widget.prefix != null && widget.controller.text != ''){
             widget.controller.text = widget.prefix + widget.controller.text;
           }
@@ -182,7 +183,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
               children: <Widget>[
                 Divider(
                   height: 0,
-                  color: _dividerColor,
+                  color: widget.dividerColor,
                 ),
                 Offstage(
                   offstage: widget.helperText == null,

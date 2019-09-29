@@ -39,7 +39,8 @@
     computed: {
       ...mapGetters({
         page: "page",
-        keyword: "keyword"
+        keyword: "keyword",
+        type:'type'
       })
     },
     methods: {
@@ -48,8 +49,9 @@
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
+        const type = this.type;
         const url = this.apis().getTemplatesList();
-        this.search({ url, keyword, page, size });
+        this.search({ url, keyword,type, page, size });
       },
       async onDetails(code) {
         const url = this.apis().getTemplates(code);

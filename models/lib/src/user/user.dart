@@ -352,6 +352,7 @@ class ContractModel extends ItemModel {
   ContractStatus state;
   bool available;
   String code;
+  String content;
 
   ContractModel({
     this.title,
@@ -360,6 +361,7 @@ class ContractModel extends ItemModel {
     this.createTime,
     this.state,
     this.available,
+    this.content,
   });
 
 
@@ -419,6 +421,23 @@ class Certification {
 
   static Map<String, dynamic> toJson(Certification model) =>
       _$CertificationToJson(model);
+
+}
+
+@JsonSerializable()
+class CertificationState {
+  final int code;
+  final String msg;
+  final int resultCode;
+  final AuthenticationModel data;
+
+  CertificationState(this.code, this.msg, this.resultCode, this.data);
+
+  factory CertificationState.fromJson(Map<String, dynamic> json) =>
+      _$CertificationStateFromJson(json);
+
+  static Map<String, dynamic> toJson(CertificationState model) =>
+      _$CertificationStateToJson(model);
 
 }
 
@@ -516,5 +535,26 @@ class ContractSaveModel {
 
   static Map<String, dynamic> toJson(ContractSaveModel model) =>
       _$ContractSaveModelToJson(model);
+
+}
+
+@JsonSerializable()
+class ContractCallbackModel {
+  final int code;
+  final String msg;
+  final int resultCode;
+  @JsonKey(toJson: _contractToJson)
+  final ContractModel data;
+
+  ContractCallbackModel(this.code, this.msg, this.resultCode, this.data);
+
+  factory ContractCallbackModel.fromJson(Map<String, dynamic> json) =>
+      _$ContractCallbackModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractCallbackModel model) =>
+      _$ContractCallbackModelToJson(model);
+
+  static Map<String, dynamic> _contractToJson(ContractModel model) =>
+      ContractModel.toJson(model);
 
 }

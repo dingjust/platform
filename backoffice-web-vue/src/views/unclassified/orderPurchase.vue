@@ -921,9 +921,9 @@
     font-size: 10px;
   }
 
-  label {
+  /* label {
     margin-bottom: 0px !important;
-  }
+  } */
 
   .el-input--small .el-input__inner {
     height: 28px;

@@ -5,10 +5,11 @@
         <div class="progress-date-form-title">
           <h6>{{getEnum('productionProgressPhaseTypes', item.phase)}}</h6>
         </div>
-        <el-date-picker v-model="item.estimatedDate" type="date" placeholder="选择日期">
+        <el-date-picker v-model="item.estimatedDate" :picker-options="pickerOptions" type="date" placeholder="选择日期">
         </el-date-picker>
       </el-row>
     </template>
+    <h6 class="progress-date-form-info">预计交货时间：{{slotData.expectedDeliveryDate | formatDate}}</h6>
     <el-row type="flex" justify="center" style="margin-top:20px;">
       <el-button @click="onSubmit" type="primary">确定</el-button>
     </el-row>
@@ -35,7 +36,7 @@
             phase: element.phase,
             quantity: element.quantity,
             sequence: element.sequence,
-            updateOnly:true,
+            updateOnly: true,
           });
         });;
         this.estimateDates = array;
@@ -53,7 +54,14 @@
     },
     data() {
       return {
-        estimateDates: []
+        estimateDates: [],
+        pickerOptions: {
+          disabledDate(time) {
+            let date=new Date();
+            date.setDate(date.getDate()-1);
+            return time.getTime() < date;
+          },
+        }
       };
     },
     created() {
@@ -82,7 +90,13 @@
 
   .progress-date-form-title {
     width: 50px;
+  }
 
+  .progress-date-form-info {
+    color: red;
+    size: 12px;
+    margin-left: 50px;
+    margin-top: 10px;
   }
 
 </style>

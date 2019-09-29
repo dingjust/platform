@@ -1,53 +1,104 @@
+import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:models/models.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:services/services.dart';
 
-class MyAuthenticationEnterpriseResult extends StatefulWidget{
+class MyAuthenticationResult extends StatefulWidget{
 
   @override
-  _MyAuthenticationEnterpriseResultState createState() => _MyAuthenticationEnterpriseResultState();
+  _MyAuthenticationResultState createState() => _MyAuthenticationResultState();
 }
 
-class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnterpriseResult>{
+class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
+  var _futureBuilderFuture;
+
+
+  @override
+  void initState() {
+    _futureBuilderFuture = _getData();
+
+    super.initState();
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('企业认证'),
+          title: Text('个人认证'),
           centerTitle: true,
           elevation: 0.5,
         ),
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              _buildEnterpriseName(),
-              _buildEnterpriseIdCard(),
-              _buildName(),
-              _buildIdCard(),
-              _buildCertificates(),
-            ],
+        body: FutureBuilder<CertificationInfo>(
+          builder: (BuildContext context,
+              AsyncSnapshot<CertificationInfo> snapshot) {
+            if (snapshot.data != null) {
+              return Container(
+                  child:Column(
+                children: <Widget>[
+                  _buildName(snapshot.data.data),
+                  _buildIdCard(snapshot.data.data),
+                ],
+                  )
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }, initialData: null,
+          future: _futureBuilderFuture,
+        ),
+        bottomNavigationBar: Container(
+          color: Colors.white10,
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+            color: Colors.red,
+            child: Text(
+              '重新认证',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: (){
+              Navigator.push(
+                context,MaterialPageRoute(builder: (context) => AuthenticationPersonFromPage()),
+              );
+            },
           ),
         )
     );
   }
 
-  Widget _buildEnterpriseName(){
+  Future<CertificationInfo> _getData() async {
+    // 查询明细
+    CertificationInfo model = await ContractRepository().getAuthenticationInfo();
+
+    return model;
+  }
+
+  Widget _buildName(AuthenticationInfoModel authenticationModel){
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
       child: ListTile(
         title: Text(
-          '企业名称',
+          '姓名',
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12,
           ),
         ),
         subtitle: Text(
-          'ray',
+          '${authenticationModel.name}',
           style: TextStyle(
             fontSize: 16,
           ),
@@ -56,20 +107,20 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildEnterpriseIdCard(){
+  Widget _buildIdCard(AuthenticationInfoModel authenticationModel){
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
       child: ListTile(
         title: Text(
-          '工商注册号或统一社会信用代码',
+          '身份证号码',
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12,
           ),
         ),
         subtitle: Text(
-          '4186659784125542',
+          '${authenticationModel.idCard}',
           style: TextStyle(
             fontSize: 16,
           ),
@@ -78,42 +129,20 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildName(){
+  Widget _buildPhone(){
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
       child: ListTile(
         title: Text(
-          '法定代表人',
+          '手机号码',
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12,
           ),
         ),
         subtitle: Text(
-          'ray',
-          style: TextStyle(
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIdCard(){
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 5),
-      child: ListTile(
-        title: Text(
-          '法定代表人证件',
-          style: TextStyle(
-            color: Colors.grey,
-            fontSize: 12,
-          ),
-        ),
-        subtitle: Text(
-          '4186659784125542',
+          '13664154778',
           style: TextStyle(
             fontSize: 16,
           ),

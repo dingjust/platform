@@ -69,6 +69,7 @@ const mutations = {
   page: (state, page) => state.page = page,
   orderPage: (state, page) => state.orderPage = page,
   setQueryFormData: (state, query) => state.queryFormData = query,
+  setQueryFormDataKeyword: (state, keyword) => state.queryFormData.keyword = keyword,
   setOrdersQueryFormData: (state, query) => state.ordersQueryFormData = query,
   setFormData: (state, data) => state.formData = data,
   setEditFormData: (state, data) => state.editFormData = data

@@ -235,6 +235,9 @@
       Bus.$on('closePdfView', args => {
         this.pdfVisible = false;
       });
+      Bus.$on('closeBCXYFrom', args => {
+        this.dialogOrderVisible = false;
+      });
       // Bus.$on('openContract', args => {
       //   this.pdfVisible = !this.pdfVisible;
       //   this.previewPdf('',args);

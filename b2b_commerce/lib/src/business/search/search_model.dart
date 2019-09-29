@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/business/search/purchase_order_search_result.da
 import 'package:b2b_commerce/src/business/search/quotes_search_result.dart';
 import 'package:b2b_commerce/src/business/search/requirement_search_result.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:b2b_commerce/src/my/contract/contract_search_result.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -86,6 +87,9 @@ enum SearchModelType {
   //产品选择
   PRODUCT_SELECT,
 
+  //合同
+  CONTRACT_SEARCH,
+
 }
 
 class _SearchModelPageState extends State<SearchModelPage> {
@@ -110,6 +114,8 @@ class _SearchModelPageState extends State<SearchModelPage> {
       searchText = '请输入编码，名称，货号搜索';
     }else if(SearchModelType.FACTORY == widget.searchModel.searchModelType){
       searchText = '请输入编码，名称搜索';
+    }else if(SearchModelType.CONTRACT_SEARCH == widget.searchModel.searchModelType){
+      searchText = '请输入合同编号搜索';
     }else{
       searchText = '请输入订单号，名称，货号搜索';
     }
@@ -117,18 +123,6 @@ class _SearchModelPageState extends State<SearchModelPage> {
 //    getHistory();
   }
 
-  //获取本地搜索历史记录
-  void getHistory() async {
-    //解析
-    String jsonStr =
-    await LocalStorage.get(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY);
-    if (jsonStr != null && jsonStr != '') {
-      List<dynamic> list = json.decode(jsonStr);
-      widget.searchModel.historyKeywords = list.map((item) => item as String).toList();
-    } else {
-      widget.searchModel.historyKeywords = [];
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -395,9 +389,20 @@ class _SearchModelPageState extends State<SearchModelPage> {
       }
       Navigator.of(context).pop();
     }
-//    if(widget.searchModel.searchModelType == SearchModelType.){
-//
-//    }
+    if (widget.searchModel.searchModelType == SearchModelType.CONTRACT_SEARCH) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ContractSearchResultPage(
+                    searchModel: widget.searchModel,
+                  )));
+      if (controller.text != '' && controller.text.isNotEmpty) {
+        widget.searchModel.historyKeywords.add(controller.text);
+        LocalStorage.save(GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
+            json.encode(widget.searchModel.historyKeywords));
+      }
+    }
   }
 
   delayedLoading(){
@@ -569,6 +574,15 @@ class _SearchModelPageState extends State<SearchModelPage> {
                       Navigator.of(context).pop();
                     });
                     Navigator.of(context).pop();
+                  }
+                  if(widget.searchModel.searchModelType == SearchModelType.CONTRACT_SEARCH) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ContractSearchResultPage(
+                                  searchModel: widget.searchModel,
+                                )));
                   }
                 },
               ))

@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn content order-purchase-form">
     <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body>
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
@@ -8,6 +8,9 @@
     </el-dialog>
     <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
       <address-select @onSelect="onAddressSelect" />
+    </el-dialog>
+    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body>
+      <pay-plan-select @onSelect="onPayPlanSelect" />
     </el-dialog>
     <el-card class="box-card">
       <el-form :model="form" :rules="rules" ref="form">
@@ -118,7 +121,8 @@
                     :prop="'entries.' + productIndex+'.expectedDeliveryDate'">
                     <el-row type="flex" align="middle">
                       <h6 class="info-input-prepend">交货日期</h6>
-                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期">
+                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期"
+                        :picker-options="pickerOptions">
                       </el-date-picker>
                     </el-row>
                   </el-form-item>
@@ -276,14 +280,12 @@
                 </template>
               </el-row>
             </el-col>
-            <!-- <el-col :span="10">
+            <el-col :span="10">
               <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend" style="margin-right:20px;width:80px">选用我的账务方案</h6>
-                <el-radio class="info-radio" v-model="form.plan" label="1">方案1</el-radio>
-                <el-radio class="info-radio" v-model="form.plan" label="2">方案2</el-radio>
-                <el-radio class="info-radio" v-model="form.plan" label="3">方案3</el-radio>
+                <!-- <h6 class="info-input-prepend" style="margin-right:20px;width:80px">选用我的账务方案</h6> -->
+                <el-button style="margin-right:20px;width:150px" @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用我的账务方案</el-button>
               </el-row>
-            </el-col> -->
+            </el-col>
           </el-row>
           <el-row class="info-order-row" v-if="form.isHaveDeposit" type="flex" justify="start" align="middle"
             :gutter="10">
@@ -552,6 +554,7 @@
   import SupplierSelect from '@/components/custom/SupplierSelect';
   import AddressSelect from '@/components/custom/AddressSelect';
   import ImagesUpload from '@/components/custom/ImagesUpload';
+  import PayPlanSelect from '@/components/custom/PayPlanSelect';
 
   export default {
     name: 'orderPurchase',
@@ -561,7 +564,8 @@
       ProductSelect,
       ImagesUpload,
       SupplierSelect,
-      AddressSelect
+      AddressSelect,
+      PayPlanSelect
     },
     mixins: [],
     computed: {
@@ -866,6 +870,14 @@
                   });
                 }
               }
+
+              var totalPercent = 0;
+              for (var i = 0; i++; i < payPlanItems.length - 1) {
+                totalPercent += payPlanItems[i].payPercent;
+              }
+
+              payPlanItems[payPlanItems.lastIndexOf] = totalPercent;
+
               //组合表单参数
               let form = {
                 companyOfSeller: this.form.companyOfSeller,
@@ -903,7 +915,7 @@
             }
             this.$router.push("order/purchase");
           } else {
-            this.$message('请完善表单信息');
+            this.$message.error('请完善表单信息');
             return false;
           }
         });
@@ -923,6 +935,10 @@
         this.form.contactPersonOfSeller = val.person;
         this.form.contactOfSeller = val.phone;
         this.form.cooperator.id = val.id;
+        if (val.payPlan != null) {
+          this.setPayPlan(val.payPlan);
+          this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
+        }
       },
       addressSelect(index) {
         this.currentProductIndex = index;
@@ -948,6 +964,39 @@
         } else {
           return product.code != null && product.code != '';
         }
+      },
+      setPayPlan(payPlan) {
+        this.form.isHaveDeposit = payPlan.isHaveDeposit;
+        this.form.payPlanType = payPlan.payPlanType;
+        payPlan.payPlanItems.forEach((item) => {
+          switch (item.moneyType) {
+            case 'PHASEONE':
+              this.form.balance1.percent = item.payPercent;
+              this.form.balance1.event = item.triggerEvent;
+              this.form.balance1.time = item.triggerDays;
+              this.form.balance1.range = item.triggerType;
+              break;
+            case 'PHASETWO':
+              this.form.balance2.percent = item.payPercent;
+              this.form.balance2.event = item.triggerEvent;
+              this.form.balance2.time = item.triggerDays;
+              this.form.balance2.range = item.triggerType;
+              break;
+            case 'DEPOSIT':
+              this.form.deposit.percent = item.payPercent;
+              this.form.deposit.event = item.triggerEvent;
+              this.form.deposit.time = item.triggerDays;
+              this.form.deposit.range = item.triggerType;
+              break;
+            case 'MONTHLY_SETTLEMENT':
+              this.form.monthBalance.event = item.triggerEvent;
+              break;
+          }
+        });
+      },
+      onPayPlanSelect(item) {
+        this.setPayPlan(item);
+        this.payPlanSelectDialogVisible = false;
       }
     },
     data() {
@@ -955,6 +1004,7 @@
         productSelectVisible: false,
         suppliersSelectVisible: false,
         addressSelectVisible: false,
+        payPlanSelectDialogVisible: false,
         currentProductIndex: 0,
         regions: [],
         freightPayer: {
@@ -1074,6 +1124,13 @@
             message: '请填写联系方式',
             trigger: 'blur'
           }, ],
+        },
+        pickerOptions: {
+          disabledDate(time) {
+            let date = new Date();
+            date.setDate(date.getDate() - 1);
+            return time.getTime() < date;
+          },
         }
       }
     },
@@ -1287,7 +1344,7 @@
     font-size: 10px;
   }
 
-  label {
+  .order-purchase-form label {
     margin-bottom: 0px !important;
   }
 

@@ -416,9 +416,6 @@
     /*padding: 10px 60px;*/
   }
 
-  label {
-    margin-bottom: 0px !important;
-  }
 
   .el-input.is-disabled .el-input__inner {
     cursor: pointer;
