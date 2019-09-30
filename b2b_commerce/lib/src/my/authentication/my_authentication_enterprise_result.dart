@@ -12,7 +12,9 @@ import 'authentication_enterprise_from.dart';
 class MyAuthenticationEnterpriseResult extends StatefulWidget{
   bool isCompany;
   AuthenticationModel authenticationModel;
-  MyAuthenticationEnterpriseResult({this.isCompany:false,this.authenticationModel});
+
+  MyAuthenticationEnterpriseResult(
+      {this.isCompany: false, this.authenticationModel});
 
   @override
   _MyAuthenticationEnterpriseResultState createState() => _MyAuthenticationEnterpriseResultState();
@@ -76,8 +78,9 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildButton(){
-    if(widget.authenticationModel.companyState == AuthenticationState.SUCCESS){
+  Widget _buildButton() {
+    if (widget.authenticationModel.companyState ==
+        AuthenticationState.SUCCESS) {
       return Container(
         color: Colors.white10,
         margin: EdgeInsets.all(10),
@@ -94,7 +97,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5))),
-          onPressed: (){
+          onPressed: () {
             Navigator.push(
               context, MaterialPageRoute(
                 builder: (context) => AuthenticationEnterpriseFromPage()),
@@ -102,7 +105,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
           },
         ),
       );
-    }else{
+    } else {
       Container();
     }
 //    if(authenticationModel.companyState == AuthenticationState.CHECK){
@@ -130,20 +133,23 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
 //    }
   }
 
-  keepOnAuthentication(AuthenticationInfoModel model){
-      Map map = {
-        'companyName': '${model.name}',
-        'organization': model.organization,
-        'role': '${model.agent!=null? '我是法人':'我是代理人'}',
-        'username': '${model.agent!=null?model.agent.name:''}',
-        'idCardNum': '${model.agent!=null?(model.agent.idCardNum==null?'':model.agent.idCardNum):(model.legal.idCardNum==null?'':model.legal.idCardNum)}',
-        'verifyWay': 'WAY1',
-        'companyType': 'TYPE1'
-      };
-      enterprise(map);
+  keepOnAuthentication(AuthenticationInfoModel model) {
+    Map map = {
+      'companyName': '${model.name}',
+      'organization': model.organization,
+      'role': '${model.agent != null ? '我是法人' : '我是代理人'}',
+      'username': '${model.agent != null ? model.agent.name : ''}',
+      'idCardNum': '${model.agent != null ? (model.agent.idCardNum == null
+          ? ''
+          : model.agent.idCardNum) : (model.legal.idCardNum == null ? '' : model
+          .legal.idCardNum)}',
+      'verifyWay': 'WAY1',
+      'companyType': 'TYPE1'
+    };
+    enterprise(map);
   }
 
-  enterprise(Map map){
+  enterprise(Map map) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -158,11 +164,12 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
         }).then((value) {
       Certification certification = value;
       if (certification != null) {
-        if(certification.data !=  null){
+        if (certification.data != null) {
           Navigator.push(
-            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString :certification.data)),
+            context, MaterialPageRoute(builder: (context) =>
+              WebView111Page(urlString: certification.data)),
           );
-        }else{
+        } else {
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -177,7 +184,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
                 );
               });
         }
-      }else{
+      } else {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -200,8 +207,10 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
       children: <Widget>[
         _buildInfo('公司名称', '${model.name}'),
         _buildInfo('社会信用代码', '${model.organization}'),
-        _buildInfo('法定代表人', '${model.agent.name!=null?model.agent.name:''}'),
-        _buildInfo('身份证号码', '${model.agent.idCardNum!=null?model.agent.idCardNum:''}'),
+        _buildInfo(
+            '法定代表人', '${model.agent.name != null ? model.agent.name : ''}'),
+        _buildInfo('身份证号码',
+            '${model.agent.idCardNum != null ? model.agent.idCardNum : ''}'),
         _buildCertificates(),
       ],
     );
@@ -212,10 +221,16 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
       children: <Widget>[
         _buildInfo('企业名称', '${model.name}'),
         _buildInfo('社会信用代码', '${model.organization}'),
-        _buildInfo('法定代表人', '${model.agent!=null?model.agent.name:''}'),
+        _buildInfo('法定代表人', '${model.agent != null ? model.agent.name : ''}'),
         _buildInfo('我的身份', '${model.agent!=null? '我是法人':'我是代理人'}'),
-        _buildInfo('我的姓名', '${model.agent!=null?(model.agent.name==null?'':model.agent.name):(model.legal.name==null?'':model.legal.name)}'),
-        _buildInfo('身份证号码', '${model.agent!=null?(model.agent.idCardNum==null?'':model.agent.idCardNum):(model.legal.idCardNum==null?'':model.legal.idCardNum)}'),
+        _buildInfo('我的姓名',
+            '${model.agent != null ? (model.agent.name == null ? '' : model
+                .agent.name) : (model.legal.name == null ? '' : model.legal
+                .name)}'),
+        _buildInfo('身份证号码',
+            '${model.agent != null ? (model.agent.idCardNum == null ? '' : model
+                .agent.idCardNum) : (model.legal.idCardNum == null ? '' : model
+                .legal.idCardNum)}'),
         _buildInfo('银行账号', '${model.bankCardNo}'),
         _buildInfo('开户银行', '${model.bankName}'),
         _buildInfo('开户支行', '${model.bankDetailName}'),
@@ -321,12 +336,13 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
   }
 
   Widget _buildCertificates(){
-   return GestureDetector(
-     onTap: (){
-       onPreview(context, 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg');
-     },
-     child: Container(
-       margin: EdgeInsets.symmetric(vertical: 20),
+    return GestureDetector(
+      onTap: () {
+        onPreview(context,
+            'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg');
+      },
+      child: Container(
+          margin: EdgeInsets.symmetric(vertical: 20),
           child: CachedNetworkImage(
               imageUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg',
               fit: BoxFit.cover,
@@ -357,7 +373,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
           )),
-   );
+    );
   }
 
 
