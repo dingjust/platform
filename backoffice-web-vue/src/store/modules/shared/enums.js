@@ -833,6 +833,7 @@ const state = {
       name: '500以上'
     }
   ],
+  //产值
   scaleRanges: [{
       code: 'SR001',
       name: '0-100万'
@@ -854,6 +855,7 @@ const state = {
       name: '5000万以上'
     }
   ],
+  //月均产能
   monthlyCapacityRanges: [{
       code: 'MCR001',
       name: '0-5000件'
@@ -871,6 +873,7 @@ const state = {
       name: '30000件以上'
     }
   ],
+  //合作方式
   cooperationModes: [{
       code: 'LABOR_AND_MATERIAL',
       name: '包工包料'
@@ -880,6 +883,7 @@ const state = {
       name: '清加工'
     }
   ],
+  //人数
   populationScales: [{
       code: 'N01',
       name: '50人以下'
@@ -897,6 +901,221 @@ const state = {
       name: '200人以上'
     }
   ],
+  //生产模式
+  ProductionModes: [
+    {
+      code: 'SINGLE_PIECE_PRODUCTION_LINE',
+      name: '单件流水生产线'
+    },
+    {
+      code: 'HANGING_PRODUCTION_LINE',
+      name: '吊挂生产流水线'
+    },
+    {
+      code: 'PIPELINE_PRODUCTION_LINE',
+      name: '扎流生产线'
+    }
+  ],
+  //设计
+  FactoryDesign:[
+    {
+      code: 'SUPPORTED',
+      name: '支持'
+    },
+    {
+      code: 'NOT_SUPPORTED',
+      name: '不支持'
+    }
+   ],
+  //打板
+  FactoryPattern:[
+    {
+      code: 'SUPPORTED',
+      name: '支持'
+    },
+    {
+      code: 'NOT_SUPPORTED',
+      name: '不支持'
+    }
+   ],
+  //免费打样
+  FactoryFreeProofing:[
+    {
+      code: 'SUPPORTED',
+      name: '支持'
+    },
+    {
+      code: 'NOT_SUPPORTED',
+      name: '不支持'
+    }
+   ],
+  //服务
+  FactoryService:[
+    {
+      code: 'SUPPORTED',
+      name: '支持'
+    },
+    {
+      code: 'NOT_SUPPORTED',
+      name: '不支持'
+    }
+   ],
+  //质量等级
+  FactoryQualityLevel:[
+    {
+      code: 'A_CHAIN',
+      name: '一线连锁'
+    },
+    {
+      code: 'REGIONAL_CHAIN',
+      name: '区域连锁'
+    },
+    {
+      code: 'STALL_WHOLESALE',
+      name: '档口批发'
+    },
+    {
+      code: 'ELECTRONIC_COMMERCE_QUALITY',
+      name: '电商品质'
+    },
+    {
+      code: 'WHOLESALE_TRADE',
+      name: '外贸批发'
+    }
+   ],
+  //裁剪部
+  CuttingDepartment:[
+    {
+      code: 'COMPUTER_AUTOMATIC_CUTTING_MACHINE',
+      name: '电脑全自动裁床'
+    },
+    {
+      code: 'MANUAL_BED_CUTTING',
+      name: '手工裁床'
+    },
+    {
+      code: 'FULLY_AUTOMATIC_BROACHING_MACHINE',
+      name: '全自动拉布机'
+    },
+    {
+      code: 'SHRINKING_MACHINE',
+      name: '缩水机'
+    },
+    {
+      code: 'PRESSING_MACHINE',
+      name: '压朴机'
+    },
+    {
+      code: 'PLATE_CHANGING_MACHINE',
+      name: '改板机'
+    },
+    {
+      code: 'LOOSENING_MACHINE',
+      name: '松布机'
+    },
+    {
+      code: 'CLOTH_INSPECTING_MACHINE',
+      name: '验布机'
+    },
+   ],
+  //生产车间
+  ProductionWorkshop:[
+    {
+      code: 'COMPUTERIZED_FLATCAR',
+      name: '电脑平车'
+    },
+    {
+      code: 'COMPUTERIZED_THREE_LINE_OVERLOCK_SEWING_MACHINE',
+      name: '电脑三线包缝机'
+    },
+    {
+      code: 'COMPUTER_FIVE_LINE_SEWING_MACHINE',
+      name: '电脑五线拼缝机'
+    },
+    {
+      code: 'TWIN_NEEDLES_MACHINE',
+      name: '双针车'
+    },
+    {
+      code: 'POCKET_HOLE_SEWING_MACHINE',
+      name: '开袋机'
+    },
+    {
+      code: 'KNIFE_MACHINE',
+      name: '刀车'
+    },
+    {
+      code: 'FLATLOCK_MACHINE',
+      name: '冚车'
+    },
+    {
+      code: 'CHAIN_STITCH_FEED_OFF_ARM_MACHINE',
+      name: '埋夹车'
+    },
+    {
+      code: 'FOUR_LINE_FLAT_SEWING_MACHINE',
+      name: '四线平缝车'
+    },
+    {
+      code: 'FULLY_AUTOMATIC_TEMPLATE_MACHINE',
+      name: '全自动模板车'
+    },
+    {
+      code: 'AUTOMATIC_BAG_STICKING_MACHINE',
+      name: '自动贴袋车'
+    },
+    {
+      code: 'WOOL_FILLING_MACHINE',
+      name: '充绒机'
+    },
+    {
+      code: 'ZIGZAG_SEWING_MACHINE',
+      name: '人字车'
+    }
+   ],
+  //尾部
+  LastDepartment:[
+    {
+      code: 'EYELET_END_MACHINE',
+      name: '凤眼车'
+    },
+    {
+      code: 'DIRECT_EYE_MACHINE',
+      name: '直眼车'
+    },
+    {
+      code: 'BUTTON_ATTACHING_MACHINE',
+      name: '钉扣机'
+    },
+    {
+      code: 'JUJUBE_PRINTER_MACHINE',
+      name: '打枣机'
+    },
+    {
+      code: 'RIVET_MACHINE',
+      name: '撞钉机'
+    },
+    {
+      code: 'BLINDING_MACHINE',
+      name: '挑脚机'
+    },
+    {
+      code: 'BAHT_EDGE_MACHINE',
+      name: '铢边'
+    },
+    {
+      code: 'BRACE_MACHINE',
+      name: '拉筋机'
+    },
+    {
+      code: 'SUCTION_LINE_MACHINE',
+      name: '吸线机'
+    },
+    {
+      code: 'NEEDLE_INSPECTING_MACHINE',
+      name: '验针机'
+    }
+   ],
   // 合同状态
   contractStates: [{
       code: 'INITIATE',

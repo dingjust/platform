@@ -140,6 +140,11 @@ export default {
         //   icon: 'iconNone'
         // },
         {
+          name: '主页',
+          url: '/account/index',
+          icon: 'iconNone'
+        },
+        {
           name: '认证中心',
           url: '/Authentication',
           icon: 'iconNone',
