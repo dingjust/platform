@@ -154,7 +154,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
           if (model.companyState == AuthenticationState.SUCCESS) {
             Navigator.push(
               context, MaterialPageRoute(
-                builder: (context) => MyAuthenticationEnterpriseResult(isCompany: _isCompany,)),
+                builder: (context) => MyAuthenticationEnterpriseResult(isCompany: _isCompany,authenticationModel: model,)),
             );
           }
           if(model.companyState == AuthenticationState.FAILED){
@@ -184,7 +184,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                 ),
               ),
             Expanded(
-              child: setAuthenticationStateText(model),
+              child: _isCompany?setAuthenticationStateText(model):Container(),
               flex: 2,
             ),
             Container(
@@ -253,7 +253,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                child: setAuthenticationStateText(model),
+                child: _isCompany?Container():setAuthenticationStateText(model),
               ),
               flex: 2,
             ),
@@ -323,7 +323,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                child: setPersonalAuthenticationStateText(model),
+                child: model.companyState == AuthenticationState.UNCERTIFIED?setPersonalAuthenticationStateText(model):Container(),
               ),
               flex: 2,
             ),

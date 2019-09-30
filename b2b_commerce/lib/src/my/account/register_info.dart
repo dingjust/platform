@@ -185,58 +185,58 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: onLocation,
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    width: 0.5,
-                                    color: Color.fromRGBO(200, 200, 200, 1)))),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              width: 100,
-                              // margin: EdgeInsets.only(right: 20),
-                              child: Text(
-                                '选择定位',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(36, 38, 41, 1),
-                                    fontSize: 18),
-                              ),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(right: 20),
-                                      child: Text(
-                                        '',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.red),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        locationAddress != null
-                                            ? '${locationAddress}'
-                                            : '点击选择定位',
-                                        style: TextStyle(
-                                            color: Color.fromRGBO(
-                                                150, 150, 150, 1),
-                                            fontSize: 18),
-                                      ),
-                                    )
-                                  ],
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
+//                    GestureDetector(
+//                      onTap: onLocation,
+//                      child: Container(
+//                        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+//                        decoration: BoxDecoration(
+//                            border: Border(
+//                                bottom: BorderSide(
+//                                    width: 0.5,
+//                                    color: Color.fromRGBO(200, 200, 200, 1)))),
+//                        child: Row(
+//                          crossAxisAlignment: CrossAxisAlignment.center,
+//                          children: <Widget>[
+//                            Container(
+//                              width: 100,
+//                              // margin: EdgeInsets.only(right: 20),
+//                              child: Text(
+//                                '选择定位',
+//                                style: TextStyle(
+//                                    color: Color.fromRGBO(36, 38, 41, 1),
+//                                    fontSize: 18),
+//                              ),
+//                            ),
+//                            Expanded(
+//                                flex: 1,
+//                                child: Row(
+//                                  children: <Widget>[
+//                                    Container(
+//                                      margin: EdgeInsets.only(right: 20),
+//                                      child: Text(
+//                                        '',
+//                                        style: TextStyle(
+//                                            fontSize: 20, color: Colors.red),
+//                                      ),
+//                                    ),
+//                                    Expanded(
+//                                      flex: 1,
+//                                      child: Text(
+//                                        locationAddress != null
+//                                            ? '${locationAddress}'
+//                                            : '点击选择定位',
+//                                        style: TextStyle(
+//                                            color: Color.fromRGBO(
+//                                                150, 150, 150, 1),
+//                                            fontSize: 18),
+//                                      ),
+//                                    )
+//                                  ],
+//                                )),
+//                          ],
+//                        ),
+//                      ),
+//                    ),
                     InputRow(
                         label: '详细地址',
                         isRequired: true,

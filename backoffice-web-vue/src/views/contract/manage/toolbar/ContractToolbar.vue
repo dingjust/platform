@@ -67,6 +67,7 @@
         this.keyword = '';
         this.dateTime = '';
         this.ordercode = '';
+        this.type = '';
       },
     },
     data() {

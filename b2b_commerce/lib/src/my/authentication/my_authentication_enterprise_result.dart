@@ -1,13 +1,18 @@
+import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
+
+import 'authentication_enterprise_from.dart';
 
 class MyAuthenticationEnterpriseResult extends StatefulWidget{
   bool isCompany;
-  MyAuthenticationEnterpriseResult({this.isCompany:false});
+  AuthenticationModel authenticationModel;
+  MyAuthenticationEnterpriseResult({this.isCompany:false,this.authenticationModel});
 
   @override
   _MyAuthenticationEnterpriseResultState createState() => _MyAuthenticationEnterpriseResultState();
@@ -16,6 +21,7 @@ class MyAuthenticationEnterpriseResult extends StatefulWidget{
 class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnterpriseResult>{
   var _futureBuilderFuture;
 
+  CertificationInfo certificationInfo;
 
   @override
   void initState() {
@@ -27,9 +33,20 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
   Future<CertificationInfo> _getData() async {
     // 查询明细
     CertificationInfo model = await ContractRepository().getAuthenticationInfoEnterprise();
-
+    certificationInfo = model;
+//    _getState();
     return model;
   }
+
+//  Future<AuthenticationModel> _getState() async {
+//    // 查询明细
+//    CertificationState model = await ContractRepository()
+//        .getAuthenticationState();
+//    authenticationModel = model.data;
+//    print(model);
+//    print(authenticationModel);
+//    return model.data;
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,27 +72,127 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
           }, initialData: null,
           future: _futureBuilderFuture,
         ),
-        bottomNavigationBar: Container(
-          color: Colors.white10,
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          height: 50,
-          child: RaisedButton(
-            color: Colors.red,
-            child: Text(
-              '重新认证',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-              ),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: (){
-            },
-          ),
-        )
+        bottomNavigationBar: _buildButton()
     );
+  }
+
+  Widget _buildButton(){
+    if(widget.authenticationModel.companyState == AuthenticationState.SUCCESS){
+      return Container(
+        color: Colors.white10,
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        height: 50,
+        child: RaisedButton(
+          color: Colors.red,
+          child: Text(
+            '重新认证',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5))),
+          onPressed: (){
+            Navigator.push(
+              context, MaterialPageRoute(
+                builder: (context) => AuthenticationEnterpriseFromPage()),
+            );
+          },
+        ),
+      );
+    }else{
+      Container();
+    }
+//    if(authenticationModel.companyState == AuthenticationState.CHECK){
+//      return Container(
+//        color: Colors.white10,
+//        margin: EdgeInsets.all(10),
+//        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+//        height: 50,
+//        child: RaisedButton(
+//          color: Colors.red,
+//          child: Text(
+//            '继续认证',
+//            style: TextStyle(
+//              color: Colors.white,
+//              fontSize: 18,
+//            ),
+//          ),
+//          shape: RoundedRectangleBorder(
+//              borderRadius: BorderRadius.all(Radius.circular(5))),
+//          onPressed: (){
+//            keepOnAuthentication(certificationInfo.data);
+//          },
+//        ),
+//      );
+//    }
+  }
+
+  keepOnAuthentication(AuthenticationInfoModel model){
+      Map map = {
+        'companyName': '${model.name}',
+        'organization': model.organization,
+        'role': '${model.agent!=null? '我是法人':'我是代理人'}',
+        'username': '${model.agent!=null?model.agent.name:''}',
+        'idCardNum': '${model.agent!=null?(model.agent.idCardNum==null?'':model.agent.idCardNum):(model.legal.idCardNum==null?'':model.legal.idCardNum)}',
+        'verifyWay': 'WAY1',
+        'companyType': 'TYPE1'
+      };
+      enterprise(map);
+  }
+
+  enterprise(Map map){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack:
+            ContractRepository().enterpriseAuthentication(map),
+            outsideDismiss: false,
+            loadingText: '请稍候。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      Certification certification = value;
+      if (certification != null) {
+        if(certification.data !=  null){
+          Navigator.push(
+            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString :certification.data)),
+          );
+        }else{
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.RESULT_DIALOG,
+                  failTips: certification.msg,
+                  callbackResult: false,
+                  confirmAction: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+              });
+        }
+      }else{
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '认证失败',
+                callbackResult: false,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            });
+      }
+    });
   }
 
   Widget _buildIndividualBusiness(AuthenticationInfoModel model){
@@ -83,8 +200,8 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
       children: <Widget>[
         _buildInfo('公司名称', '${model.name}'),
         _buildInfo('社会信用代码', '${model.organization}'),
-        _buildInfo('法定代表人', '${model.agent.name}'),
-        _buildInfo('身份证号码', '${model.agent.idCardNum}'),
+        _buildInfo('法定代表人', '${model.agent.name!=null?model.agent.name:''}'),
+        _buildInfo('身份证号码', '${model.agent.idCardNum!=null?model.agent.idCardNum:''}'),
         _buildCertificates(),
       ],
     );
@@ -95,14 +212,14 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
       children: <Widget>[
         _buildInfo('企业名称', '${model.name}'),
         _buildInfo('社会信用代码', '${model.organization}'),
-        _buildInfo('法定代表人', '${model.agent.name}'),
+        _buildInfo('法定代表人', '${model.agent!=null?model.agent.name:''}'),
         _buildInfo('我的身份', '${model.agent!=null? '我是法人':'我是代理人'}'),
-        _buildInfo('我的姓名', '${model.agent!=null?model.agent.name:model.legal.name}'),
-        _buildInfo('身份证号码', '${model.agent!=null?model.agent.idCardNum:model.legal.idCardNum}'),
+        _buildInfo('我的姓名', '${model.agent!=null?(model.agent.name==null?'':model.agent.name):(model.legal.name==null?'':model.legal.name)}'),
+        _buildInfo('身份证号码', '${model.agent!=null?(model.agent.idCardNum==null?'':model.agent.idCardNum):(model.legal.idCardNum==null?'':model.legal.idCardNum)}'),
         _buildInfo('银行账号', '${model.bankCardNo}'),
         _buildInfo('开户银行', '${model.bankName}'),
         _buildInfo('开户支行', '${model.bankDetailName}'),
-        _buildCertificates(),
+//        _buildCertificates(),
       ],
     );
   }

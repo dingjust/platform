@@ -149,6 +149,6 @@
   }
 
   .el-divider--vertical{
-    height: 13em;
+    height: auto;
   }
 </style>
