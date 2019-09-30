@@ -62,7 +62,12 @@
       </el-table-column>
       <el-table-column label="订单标签">
         <template slot-scope="scope">
-          <img width="40px" height="15px" :src="getPaymentStatusTag(scope.row)" />
+          <el-row>
+            <img width="40px" height="15px" :src="getPaymentStatusTag(scope.row)" />
+          </el-row>
+          <el-row>
+            <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
+          </el-row>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
@@ -143,7 +148,14 @@
       },
       getPaymentStatusTag(row) {
         return row.balancePaid ? 'static/img/paid.png' : 'static/img/arrears.png';
-      }
+      },
+      getSignedTag(row) {
+        if (row.userAgreementIsSigned == null) {
+          return 'static/img/not_signed.png';
+        } else {
+          return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
+        }
+      },
     },
     data() {
       return {

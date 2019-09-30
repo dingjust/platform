@@ -117,11 +117,11 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择日期', trigger: 'change' ,type: 'date'}]" :key="product.key"
+                { required: true, message: '请选择天期', trigger: 'change' ,type: 'date'}]" :key="product.key"
                     :prop="'entries.' + productIndex+'.expectedDeliveryDate'">
                     <el-row type="flex" align="middle">
-                      <h6 class="info-input-prepend">交货日期</h6>
-                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期"
+                      <h6 class="info-input-prepend">交货天期</h6>
+                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择天期"
                         :picker-options="pickerOptions">
                       </el-date-picker>
                     </el-row>
@@ -283,7 +283,8 @@
             <el-col :span="10">
               <el-row type="flex" align="middle">
                 <!-- <h6 class="info-input-prepend" style="margin-right:20px;width:80px">选用我的账务方案</h6> -->
-                <el-button style="margin-right:20px;width:150px" @click="payPlanSelectDialogVisible=true" type="primary" plain size="mini">选用我的账务方案</el-button>
+                <el-button style="margin-right:20px;width:150px" @click="payPlanSelectDialogVisible=true" type="primary"
+                  plain size="mini">选用我的账务方案</el-button>
               </el-row>
             </el-col>
           </el-row>
@@ -577,46 +578,52 @@
       resultPreview: function () {
         var result;
         if (this.form.isHaveDeposit && this.form.payPlanType == 'PHASETWO') {
-          result = '定金+2期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后，甲方应向乙方支付生效订单总金额的' +
+          result = '定金+2期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit
+            .time +
+            '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' +
             this.form.deposit
             .percent * 100 +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form.balance1
             .time +
-            '日' + this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +
+            '天' + this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +
             '%。在产品入库并经甲方检验全部产品合格' +
             this.triggerEvent[this.form.balance2.event] + '后' +
-            this.form.balance2.time + '日' + this.triggerType[this.form.balance2.range] +
+            this.form.balance2.time + '天' + this.triggerType[this.form.balance2.range] +
             '未发现任何产品质量问题的，则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (this.form.isHaveDeposit && this.form.payPlanType == 'PHASEONE') {
-          result = '定金+1期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后，甲方应向乙方支付生效订单总金额的' +
+          result = '定金+1期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit
+            .time +
+            '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' +
             this.form.deposit
             .percent * 100 +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.triggerEvent[this.form.balance1.event] + '后' +
             this.form.balance1
             .time +
-            '日' + this.triggerType[this.form.balance1.range] +
+            '天' + this.triggerType[this.form.balance1.range] +
             '未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (!this.form.isHaveDeposit && this.form.payPlanType == 'PHASEONE') {
           result = '无定金1期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form
-            .balance1.time + '日' +
+            .balance1.time + '天' +
             this.triggerType[this.form.balance1.range] +
             '未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。'
         }
         if (!this.form.isHaveDeposit && this.form.payPlanType == 'PHASETWO') {
           result = '无定金2期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form
-            .balance1.time + '日' +
+            .balance1.time + '天' +
             this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +
             '%。在产品入库并经甲方检验全部产品合格' + this.triggerEvent[this.form.balance2.event] + '后' + this.form.balance2.time +
-            '日' + this.triggerType[this.form.balance2.range] +
+            '天' + this.triggerType[this.form.balance2.range] +
             '未发现任何产品质量问题的，则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (this.form.isHaveDeposit && this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
-          result = '有定金+月结\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后，甲方应向乙方支付生效订单总金额的' + this
+          result = '有定金+月结\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit
+            .time +
+            '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' + this
             .form.deposit
             .percent * 100 +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance.event] +
