@@ -1,26 +1,28 @@
 <template>
   <el-form :inline="true">
-    <el-form-item label="品牌名">
-      <el-input placeholder="输入品牌名" v-model="queryFormData.purchasers[0]"  class="purchase-toolbar-input"></el-input>
-    </el-form-item>
+    <!-- <el-form-item label="品牌名"> -->
+      <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword" class="purchase-toolbar-input"></el-input>
+    <!-- </el-form-item> -->
     <el-form-item label="日期">
       <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
         value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
         :picker-options="pickerOptions">
       </el-date-picker>
     </el-form-item>
-    <el-form-item label="跟单员">
+    <!-- <el-form-item label="跟单员">
       <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="分类">
       <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
-      <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable reserve-keyword
-        clearable>
+      <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
+        reserve-keyword clearable>
         <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
           <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name" :value="level2.name">
           </el-option>
         </el-option-group>
-      </el-select>
+      </el-select> -->
+      <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories" :props="{ label: 'name',value:'code'}" clearable>
+      </el-cascader>
     </el-form-item>
     <el-button-group>
       <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
@@ -48,7 +50,7 @@
         setQueryFormData: 'queryFormData',
       }),
       onSearch() {
-        this.$store.state.PurchaseOrdersModule.keyword=this.keyword;
+        this.$store.state.PurchaseOrdersModule.keyword = this.keyword;
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },

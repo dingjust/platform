@@ -592,8 +592,11 @@ let NONE_TENANT_APIS = {
     return '/b2b/orders/quote';
   },
   getPurchaseOrders() {
-    return '/b2b/orders/purchase';
+    return '/b2b/orders/purchase/search';
   },
+  //   getPurchaseOrders() {
+  //   return '/b2b/orders/purchase';
+  // },
   confirmDeliveringOfProductionOrder(code) {
     return '/b2b/orders/purchase/' + code + '/delivering';
   },
