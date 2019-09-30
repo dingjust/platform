@@ -238,10 +238,11 @@
       Bus.$on('closeBCXYFrom', args => {
         this.dialogOrderVisible = false;
       });
-      // Bus.$on('openContract', args => {
-      //   this.pdfVisible = !this.pdfVisible;
-      //   this.previewPdf('',args);
-      // });
+      Bus.$on('openContract1', args => {
+        this.dialogOrderVisible = false;
+        this.pdfVisible = false
+        this.previewPdf('',args);
+      });
     }
   }
 
