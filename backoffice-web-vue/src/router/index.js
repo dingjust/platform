@@ -136,7 +136,13 @@ const router = new Router({
               return c('router-view');
             }
           },
-          children: [{
+          children: [
+            {
+              path: 'index',
+              name: '主页',
+              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage')
+            },
+            {
               path: 'my',
               name: '认证信息',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
