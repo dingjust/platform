@@ -217,11 +217,11 @@
 
         const searchUrl = this.apis().getContractsList();
 
-        this.refresh({
-          searchUrl
-        });
+        // this.refresh({
+        //   searchUrl
+        // });
 
-        this.fn.closeSlider(true);
+        // this.fn.closeSlider(true);
       },
       async onSave() {
         if (this.selectFile.id == null || this.selectFile.id == '') {
@@ -250,10 +250,10 @@
         Bus.$emit('closeDialogOrderVisible');
         const searchUrl = this.apis().getContractsList();
 
-        this.refresh({
-          searchUrl
-        });
-        this.fn.closeSlider(true);
+        // this.refresh({
+        //   searchUrl
+        // });
+        // this.fn.closeSlider(true);
       },
       onSetOrderCode() {
         if (this.slotData != null && this.slotData != '') {
