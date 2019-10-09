@@ -28,21 +28,21 @@
             </el-col>
           </el-row>
           <el-divider ></el-divider>
-          <el-row type="flex">
-            <el-col :span="1">
-              <i class="factory-info">&#xe693;</i>
-            </el-col>
-            <el-col :span="11">
-                  <factory-service-info-page :slotData="slotData"/>
-            </el-col>
-            <el-col :span="1">
+          <!--<el-row type="flex">-->
+            <!--<el-col :span="1">-->
+              <!--<i class="factory-info">&#xe693;</i>-->
+            <!--</el-col>-->
+            <!--<el-col :span="11">-->
+                  <!--<factory-service-info-page :slotData="slotData"/>-->
+            <!--</el-col>-->
+            <!--<el-col :span="1">-->
 
-            </el-col>
-            <el-col :span="11">
-              <!--<factory-scale-info-page :slotData="slotData"/>-->
-            </el-col>
-          </el-row>
-          <el-divider ></el-divider>
+            <!--</el-col>-->
+            <!--<el-col :span="11">-->
+              <!--&lt;!&ndash;<factory-scale-info-page :slotData="slotData"/>&ndash;&gt;-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+          <!--<el-divider ></el-divider>-->
           <el-row type="flex">
             <el-col :span="1">
               <i class="factory-info">&#xe68f;</i>
@@ -57,8 +57,14 @@
       </el-row>
     </el-card>
 
-    <el-dialog width="80%" :visible.sync="factoryFormVisible" class="purchase-dialog" append-to-body>
-      <factory-from :formData = "formData" @onSave="onSave" :cities="cities" :cityDistricts="cityDistricts"></factory-from>
+    <!--给el-dialog加上v-if可以在其关闭时销毁 -->
+    <el-dialog width="80%"
+               :visible="factoryFormVisible"
+               class="purchase-dialog"
+               append-to-body
+               @close="onClose"
+    >
+      <factory-from :formData = "formData" @onSave="onSave" ></factory-from>
     </el-dialog>
   </div>
 </template>
@@ -89,11 +95,20 @@
       FactoryCardInfoPage},
     computed: {
       ...mapGetters({
-        formData: 'formData'
+        formData: 'formData',
+        factoryFormVisible: 'factoryFormVisible',
+        isCitiesChanged: 'isCitiesChanged',
+        isDistrictsChanged: 'isDistrictsChanged',
+        cities: 'cities',
+        cityDistricts: 'cityDistricts'
       })
     },
     methods: {
       ...mapMutations({
+        setFormData: 'setFormData',
+        setFactoryFormVisible: 'setFactoryFormVisible',
+        setIsCitiesChanged: 'setIsCitiesChanged',
+        setIsDistrictsChanged: 'setIsDistrictsChanged'
       }),
       ...mapActions({
         clearFormData: 'clearFormData'
@@ -116,16 +131,19 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        Object.assign(this.formData, result);
 
-        if (this.formData.contactAddress.region != null) {
+        this.setFormData(Object.assign({}, result));
+
+        if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
           this.getCities(this.formData.contactAddress.region);
+          this.setIsCitiesChanged(false);
         }
-        if (this.formData.contactAddress.city != null) {
+        if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
           this.getCityDistricts(this.formData.contactAddress.city);
+          this.setIsDistrictsChanged(false);
         }
 
-        this.factoryFormVisible = true;
+        this.setFactoryFormVisible(true);
       },
       async onSave () {
         var uid = this.$store.getters.currentUser.companyCode;
@@ -137,7 +155,7 @@
         }
 
         this.getFactory();
-        this.factoryFormVisible = false;
+        this.setFactoryFormVisible(false);
         this.$message.success('编辑工厂信息成功');
       },
       async getRegions () {
@@ -159,7 +177,7 @@
           return;
         }
 
-        this.cities = result;
+        this.$store.state.FactoriesModule.cities = result;
       },
       async getCityDistricts (city) {
         const url = this.apis().getDistricts(city.code);
@@ -170,22 +188,15 @@
           return;
         }
 
-        this.cityDistricts = result;
+        this.$store.state.FactoriesModule.cityDistricts = result;
+      },
+      onClose () {
+        this.setFactoryFormVisible(false);
       }
     },
     data () {
       return {
-        slotData: '',
-        factoryFormVisible: false,
-        cities: '',
-        cityDistricts: ''
-      }
-    },
-    watch: {
-      'factoryFormVisible': function (n, o) {
-        if (n === false) {
-          this.clearFormData();
-        }
+        slotData: ''
       }
     },
     created () {

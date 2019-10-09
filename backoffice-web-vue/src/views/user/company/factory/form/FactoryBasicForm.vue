@@ -11,6 +11,9 @@
               <h6>
                 上传头像：
               </h6>
+              <h6 style="color: grey">
+                (最多一张)
+              </h6>
             </el-col>
             <el-col :span="10">
               <images-upload class="factory-upload" :limit="1" :slot-data="this.profilePictures" />
@@ -19,9 +22,12 @@
               <h6>
                 上传资质荣誉照片：
               </h6>
+              <h6 style="color: grey">
+                (最多五张)
+              </h6>
             </el-col>
             <el-col :span="10">
-              <images-upload class="factory-upload" :slot-data="formData.certificates" />
+              <images-upload class="factory-upload" :limit="5" :slot-data="formData.certificates" />
             </el-col>
         </el-row>
         <el-row class="rowClass">
@@ -77,6 +83,15 @@
         labels: [],
         profilePictures: []
       };
+    },
+    watch: {
+      'profilePictures': function (n, o) {
+        if (n != null && n.length > 0) {
+          this.formData.profilePicture = n[0];
+        } else {
+          this.formData.profilePicture = null;
+        }
+      }
     },
     created () {
       this.getLabels();

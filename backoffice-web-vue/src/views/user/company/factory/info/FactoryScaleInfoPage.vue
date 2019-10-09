@@ -32,7 +32,7 @@
         <h6 class="titleTextClass">产值</h6>
       </el-col>
       <el-col :span="20">
-        <h6>{{getEnum('scaleRanges',slotData.scaleRange)}}</h6>
+        <h6>{{getEnum('scaleRanges',slotData.scaleRange)}}件</h6>
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
@@ -49,6 +49,30 @@
       </el-col>
       <el-col :span="20">
         <h6>{{equipments}}</h6>
+      </el-col>
+    </el-row>
+    <el-row type="flex" class="rowClass">
+      <el-col :span="4">
+        <h6 class="titleTextClass">免费打样</h6>
+      </el-col>
+      <el-col :span="20">
+        <h6 v-if="slotData.freeProofing">{{getEnum('FactoryFreeProofing',slotData.freeProofing)}}</h6>
+      </el-col>
+    </el-row>
+    <el-row type="flex" class="rowClass">
+      <el-col :span="4">
+        <h6 class="titleTextClass">合作方式</h6>
+      </el-col>
+      <el-col :span="20">
+        <h6>{{cooperationModes}}</h6>
+      </el-col>
+    </el-row>
+    <el-row type="flex" class="rowClass">
+      <el-col :span="4">
+        <h6 class="titleTextClass">质量等级</h6>
+      </el-col>
+      <el-col :span="20">
+        <h6 v-if="slotData.qualityLevel != null">{{getEnum('FactoryQualityLevel',slotData.qualityLevel)}}</h6>
       </el-col>
     </el-row>
   </div>
@@ -76,6 +100,18 @@
         if(result.length > 0){
           result = result.slice(0,result.lastIndexOf('，'));
         }
+        return result;
+      },
+      cooperationModes: function () {
+        if(this.slotData.cooperationModes === undefined){
+          return '';
+        }
+
+        var result = '';
+        for (var item of this.slotData.cooperationModes) {
+          result += this.getEnum('cooperationModes', item) + '、';
+        }
+        result = result.slice(0, result.lastIndexOf('、'));
         return result;
       }
     }

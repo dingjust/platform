@@ -60,6 +60,9 @@ const state = {
     certificates: [],
     productionMode: '',
     starLevel:0,
+    cuttingDepartment: [],
+    productionWorkshop: [],
+    lastDepartment: []
   },
   queryFormData: {
     labels: [],
@@ -77,7 +80,10 @@ const state = {
   cities: [],
   cityDistricts: [],
   labels: [],
-  categories: []
+  categories: [],
+  factoryFormVisible: false,
+  isCitiesChanged: false,
+  isDistrictsChanged: false,
 };
 
 const mutations = {
@@ -91,6 +97,9 @@ const mutations = {
   labels: (state,labels) => state.labels = labels,
   cities: (state,cities) => state.cities = cities,
   cityDistricts: (state,cityDistricts) => state.cityDistricts = cityDistricts,
+  setFactoryFormVisible: (state,factoryFormVisible) => state.factoryFormVisible = factoryFormVisible,
+  setIsCitiesChanged: (state,isCitiesChanged) => state.isCitiesChanged = isCitiesChanged,
+  setIsDistrictsChanged: (state,isDistrictsChanged) => state.isDistrictsChanged = isDistrictsChanged,
 };
 
 const actions = {
@@ -200,6 +209,9 @@ const getters = {
   cities: state => state.cities,
   labels: state => state.labels,
   cityDistricts: state => state.cityDistricts,
+  factoryFormVisible: state => state.factoryFormVisible,
+  isCitiesChanged: state => state.isCitiesChanged,
+  isDistrictsChanged: state => state.isDistrictsChanged
 };
 
 export default {

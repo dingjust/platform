@@ -11,7 +11,7 @@
           <factory-basic-form :form-data="formData"></factory-basic-form>
         </el-row>
         <el-row>
-          <factory-contact-form :form-data="formData" :cities="cities" :cityDistricts="cityDistricts"></factory-contact-form>
+          <factory-contact-form :form-data="formData"></factory-contact-form>
         </el-row>
         <el-row>
           <factory-scale-form :form-data="formData"></factory-scale-form>
@@ -56,10 +56,10 @@
     },
     computed: {
       ...mapGetters({
-        formData: 'formData'
+        factoryFormVisible: 'factoryFormVisible'
       })
     },
-    props: ['cities', 'cityDistricts'],
+    props: ['formData'],
     methods: {
       onSave () {
         this.$emit('onSave');

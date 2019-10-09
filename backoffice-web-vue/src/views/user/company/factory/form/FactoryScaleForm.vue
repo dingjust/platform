@@ -10,7 +10,7 @@
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle">
-                  <h6 class="info-input-prepend">工厂人数</h6>
+                  <h6 class="info-select-prepend">工厂人数</h6>
                   <el-select v-model="formData.populationScale" placeholder="请选择" size="mini">
                     <el-option
                       v-for="item in populationScales"
@@ -30,13 +30,14 @@
                             v-model.number="formData.factoryBuildingsQuantity"
                             size="mini">
                   </el-input>
+                  <span style="margin-left: 5px">m<sup>2</sup></span>
                 </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle" >
-                  <h6 class="info-input-prepend">产值规模</h6>
+                  <h6 class="info-select-prepend">产值规模</h6>
                   <el-select v-model="formData.scaleRange" placeholder="请选择" size="mini">
                     <el-option
                       v-for="item in scaleRanges"
@@ -45,6 +46,7 @@
                       :value="item.code">
                     </el-option>
                   </el-select>
+                  <span style="margin-left: 10px">件</span>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -55,13 +57,14 @@
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">产线数量</h6>
                   <el-input placeholder="请填写产线数量" v-model.number="formData.productionLineQuantity" size="mini"></el-input>
+                  <span style="margin-left: 10px">条</span>
                 </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle">
-                  <h6 class="info-input-prepend">生产模式</h6>
+                  <h6 class="info-select-prepend">生产模式</h6>
                   <el-select v-model="formData.productionMode" placeholder="请选择" size="mini">
                     <el-option
                       v-for="item in productionModes"
@@ -80,7 +83,7 @@
                 <h6 class="info-input-prepend">拥有设备<span style="color: red">*</span></h6>
               </el-col>
               <el-col :span="22">
-                <enum-select :mapData="mapData" :mapSelectData="mapSelectData"></enum-select>
+                <enum-select  v-if="factoryFormVisible" :mapData="mapData" :mapSelectData="mapSelectData"></enum-select>
               </el-col>
             </el-row>
           </el-form-item>
@@ -89,6 +92,9 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters} = createNamespacedHelpers('FactoriesModule');
 
   import EnumSelect from "../../../../../components/custom/EnumSelect";
   export default {
@@ -96,6 +102,9 @@
     props: ['formData'],
     components: {EnumSelect},
     computed: {
+      ...mapGetters({
+        factoryFormVisible: 'factoryFormVisible'
+      })
     },
     methods: {
     },
@@ -113,10 +122,19 @@
           '裁剪部': this.formData.cuttingDepartment == null ? [] : this.formData.cuttingDepartment,
           '生产车间': this.formData.productionWorkshop == null ? [] : this.formData.productionWorkshop,
           '尾部': this.formData.lastDepartment == null ? [] : this.formData.lastDepartment
-        }
+        },
       };
     },
     watch: {
+      'formData.cuttingDepartment': function (n, o) {
+        this.mapSelectData.裁剪部 = n;
+      },
+      'formData.productionWorkshop': function (n, o) {
+        this.mapSelectData.生产车间 = n;
+      },
+      'formData.lastDepartment': function (n, o) {
+        this.mapSelectData.尾部 = n;
+      },
       'mapSelectData.裁剪部': function (n, o) {
         this.formData.cuttingDepartment = n;
       },
@@ -164,8 +182,15 @@
     font-size: 10px;
   }
 
+  .factory-scale .info-select-prepend {
+    display: inline-block;
+    width: 60px;
+    font-weight: bold;
+    font-size: 10px;
+  }
+
   .factory-scale .el-input--mini .el-input__inner{
-    width: 250px;
+    width: 235px;
   }
 
 </style>

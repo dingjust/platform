@@ -11,24 +11,9 @@
             <el-form-item>
               <el-row type="flex" align="middle">
                 <h6 class="info-input-prepend">免费打样</h6>
-                <el-select v-model="formData.freeProofing" @change="$forceUpdate()" placeholder="请选择" size="mini">
+                <el-select v-model="formData.freeProofing" placeholder="请选择" size="mini">
                   <el-option
                     v-for="item in factoryFreeProofings"
-                    :key="item.code"
-                    :label="item.name"
-                    :value="item.code">
-                  </el-option>
-                </el-select>
-              </el-row>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item>
-              <el-row type="flex" align="middle" >
-                <h6 class="info-input-prepend">服务</h6>
-                <el-select v-model="formData.service" @change="$forceUpdate()" placeholder="请选择" size="mini">
-                  <el-option
-                    v-for="item in factoryServices"
                     :key="item.code"
                     :label="item.name"
                     :value="item.code">
@@ -52,21 +37,21 @@
               </el-row>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item>
-            <el-row type="flex" align="middle" >
-              <h6 class="info-input-prepend">质量等级</h6>
-              <el-select v-model="formData.qualityLevel" @change="$forceUpdate()" placeholder="请选择" size="mini">
-                <el-option
-                  v-for="item in factoryQualityLevels"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code">
-                </el-option>
-              </el-select>
-            </el-row>
-          </el-form-item>
+          <el-col :span="8">
+            <el-form-item>
+              <el-row type="flex" align="middle" >
+                <h6 class="info-input-prepend">质量等级</h6>
+                <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini">
+                  <el-option
+                    v-for="item in factoryQualityLevels"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
+              </el-row>
+            </el-form-item>
+          </el-col>
         </el-row>
       </div>
   </div>
