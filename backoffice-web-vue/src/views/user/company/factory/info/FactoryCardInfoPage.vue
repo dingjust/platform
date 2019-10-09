@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn factory-card">
       <el-row type="flex" justify="center" class="rowClass">
-        <img style="border-radius:50%;" width="100px" height="100px" :src="slotData.profilePicture != null ? slotData.profilePicture.url : 'static/img/nopicture'" />
+        <img style="border-radius:50%;" width="100px" height="100px" :src="slotData.profilePicture != null ? slotData.profilePicture.url : 'static/img/nopicture.png'" />
       </el-row>
       <el-row type="flex" justify="center" class="rowClass">
         <h6 class="textClass">{{slotData.name}}</h6>
