@@ -276,7 +276,6 @@
     border-radius: 8px;
     border-width: 1px;
     margin-top: -12px;
-    height: fit-content;
   }
 
   .factory-detail .buttonClass{

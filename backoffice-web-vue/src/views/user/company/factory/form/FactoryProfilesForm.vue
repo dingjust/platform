@@ -5,6 +5,9 @@
         <h6 class="factory-info-title_text">图文详情</h6>
       </div>
     </el-row>
+    <el-row type="flex">
+      <h6 style="color: grey;font-size: 10px">建议上传图片的分辨率尺寸为16:9</h6>
+    </el-row>
     <div class="titleCardClass">
       <el-row type="flex" v-for="item of profiles" style="margin-bottom: 20px">
         <el-col :span="8">
