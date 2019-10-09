@@ -144,6 +144,10 @@
     display: none!important;
   }
 
+  .image-upload  .el-upload-list__item {
+    transition: none !important;
+  }
+
   .image-upload .picClass .el-upload-list--picture-card .el-upload-list__item{
     width: 100%;
     height: 100%;
