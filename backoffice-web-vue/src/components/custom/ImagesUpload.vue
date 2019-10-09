@@ -1,10 +1,11 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn image-upload">
     <el-row :gutter="10">
       <el-col :span="24">
         <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
           :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
-          :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove">
+          :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
+          :class="{disabled:uploadDisabled,picClass:picClass}">
           <i class="el-icon-plus" slot="default"></i>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible" :modal="false">
@@ -26,20 +27,29 @@
       limit: {
         type: Number,
         default: 5
+      },
+      picClass: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
-      onBeforeUpload(file) {
+      onBeforeUpload (file) {
         if (file.size > 1024 * 1024 * 10) {
           this.$message.error('上传的文件不允许超过10M');
           return false;
         }
         return true;
       },
-      onSuccess(response) {
+      onSuccess (response) {
         this.slotData.push(response);
+        if (this.slotData.length === this.limit) {
+          this.uploadDisabled = true;
+        } else {
+          this.uploadDisabled = false;
+        }
       },
-      async handleRemove(file) {
+      async handleRemove (file) {
         // console.log(JSON.stringify(file));
         // TODO: 自定义删除方法（删除图片之前，清理product的others属性
         // const url = this.apis().removeMedia(file.id);
@@ -63,14 +73,19 @@
         const images = this.fileList || [];
         const index = images.indexOf(file);
         this.slotData.splice(index, 1);
+        if (this.slotData.length === this.limit) {
+          this.uploadDisabled = true;
+        } else {
+          this.uploadDisabled = false;
+        }
       },
-      handlePreview(file) {
+      handlePreview (file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      handleExceed(files, fileList) {
+      handleExceed (files, fileList) {
         this.$message.warning('当前限制选择' + this.limit + ' 个图片');
-      },
+      }
     },
     computed: {
       fileList: function () {
@@ -78,9 +93,9 @@
         if (this.slotData && this.slotData.length > 0) {
           this.slotData.forEach(image => {
             let file = {
-              id: "",
-              url: "",
-              artworkUrl: "",
+              id: '',
+              url: '',
+              artworkUrl: ''
             }
             file.id = image.id;
             file.artworkUrl = image.url;
@@ -88,19 +103,24 @@
             // image.url = '';
             if (image.convertedMedias.length > 0) {
               image.convertedMedias.forEach(convertedMedia => {
-                if (convertedMedia.mediaFormat === 'DefaultProductPreview')
-                  file.url = convertedMedia.url;
+                if (convertedMedia.mediaFormat === 'DefaultProductPreview') { file.url = convertedMedia.url; }
               })
             }
             files.push(file);
           })
+        }
+
+        if (this.slotData.length === this.limit) {
+          this.uploadDisabled = true;
+        } else {
+          this.uploadDisabled = false;
         }
         return files;
       },
       uploadFormData: function () {
         return {
           fileFormat: 'DefaultFileFormat',
-          conversionGroup: 'DefaultProductConversionGroup',
+          conversionGroup: 'DefaultProductConversionGroup'
         };
       },
       headers: function () {
@@ -109,12 +129,23 @@
         }
       }
     },
-    data() {
+    data () {
       return {
         dialogImageUrl: '',
-        dialogVisible: false
+        dialogVisible: false,
+        uploadDisabled: false
       }
-    },
+    }
   };
-
 </script>
+
+<style>
+  .image-upload .disabled .el-upload--picture-card {
+    display: none!important;
+  }
+
+  .image-upload .picClass .el-upload-list--picture-card .el-upload-list__item{
+    width: 100%;
+    height: 100%;
+  }
+</style>

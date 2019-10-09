@@ -12,7 +12,7 @@
           disabled
           :colors="starColors"
           disabled-void-color="#D3D3D3"
-          show-text>
+          >
         </el-rate>
       </el-row>
       <el-row class="rowClass">

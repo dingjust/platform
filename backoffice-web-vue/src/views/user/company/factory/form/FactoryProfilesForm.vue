@@ -1,28 +1,27 @@
 <template>
-  <div class="animated fadeIn factory-edit">
+  <div class="animated fadeIn factory-profiles">
     <el-row class="factory-info-title-row">
       <div class="factory-info-title">
-        <h6 class="factory-info-title_text">编辑资料</h6>
+        <h6 class="factory-info-title_text">图文详情</h6>
       </div>
     </el-row>
     <div class="titleCardClass">
-      <el-form :model="formData">
-        <el-row>
-          <factory-basic-form v-if="factoryFormVisible" :form-data="formData"></factory-basic-form>
-        </el-row>
-        <el-row>
-          <factory-contact-form :form-data="formData"></factory-contact-form>
-        </el-row>
-        <el-row>
-          <factory-scale-form :form-data="formData"></factory-scale-form>
-        </el-row>
-        <el-row>
-          <factory-capacity-form :form-data="formData"></factory-capacity-form>
-        </el-row>
-        <el-row>
-          <factory-service-form :form-data="formData"></factory-service-form>
-        </el-row>
-      </el-form>
+      <el-row type="flex" v-for="item of profiles" style="margin-bottom: 20px">
+        <el-col :span="8">
+          <images-upload :limit="1" :picClass="true" :slot-data="item.medias" >
+          </images-upload>
+        </el-col>
+        <el-col :span="16" :offset="2">
+          <el-input type="textarea"
+                    v-model="item.description"
+                    maxlength="200"
+                    placeholder="请输入文本"
+                    :show-word-limit="true"
+                    rows="6">
+
+          </el-input>
+        </el-col>
+      </el-row>
     </div>
 
     <el-row type="flex" justify="center">
@@ -43,10 +42,12 @@
   import FactoryScaleForm from './FactoryScaleForm';
   import FactoryCapacityForm from './FactoryCapacityForm';
   import FactoryServiceForm from './FactoryServiceForm';
+  import ImagesUpload from '../../../../../components/custom/ImagesUpload';
 
   export default {
-    name: 'FactoryFrom',
+    name: 'FactoryProfilesFrom',
     components: {
+      ImagesUpload,
       FactoryServiceForm,
       FactoryCapacityForm,
       FactoryScaleForm,
@@ -59,11 +60,17 @@
         factoryFormVisible: 'factoryFormVisible'
       })
     },
-    props: ['formData'],
+    props: ['profiles'],
     methods: {
       onSave () {
         this.$emit('onSave');
       }
+    },
+    watch: {
+      'profiles': function (n, o) {
+        console.log(n);
+      },
+      deep: true
     },
     data () {
       return {
@@ -75,25 +82,25 @@
 </script>
 
 <style>
-  .factory-edit .factory-info-title {
+  .factory-profiles .factory-info-title {
     width: 100%;
     border-left: 2px solid #FFD60C;
     padding-left: 10px;
     height: 14px;
   }
 
-  .factory-edit .factory-info-title_text {
+  .factory-profiles .factory-info-title_text {
     font-size: 12px;
     font-weight: 500;
     color: rgba(0, 0, 0, 1);
     opacity: 0.65;
   }
 
-  .factory-edit .factory-info-title-row {
+  .factory-profiles .factory-info-title-row {
     margin-bottom: 20px;
   }
 
-  .factory-edit .buttonClass{
+  .factory-profiles .buttonClass{
     padding: 10px 120px 0px 120px;
     margin-top: 40px;
     background-color: #ffd60c;
@@ -101,11 +108,14 @@
     border-radius: 8px;
   }
 
-  .factory-edit .titleCardClass{
+  .factory-profiles .titleCardClass{
     border-style: solid;
     border-width: 1px;
     border-top: white;
     border-color: #DCDCDC;
   }
 
+  .factory-profiles .el-textarea .el-input__count{
+    bottom: 10px
+  }
 </style>

@@ -94,7 +94,7 @@ const mutations = {
   setFormData: (state, formData) => state.formData = formData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
-  labels: (state,labels) => state.labels = labels,
+  setLabels: (state,labels) => state.labels = labels,
   cities: (state,cities) => state.cities = cities,
   cityDistricts: (state,cityDistricts) => state.cityDistricts = cityDistricts,
   setFactoryFormVisible: (state,factoryFormVisible) => state.factoryFormVisible = factoryFormVisible,

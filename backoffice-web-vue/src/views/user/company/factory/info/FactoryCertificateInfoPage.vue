@@ -4,9 +4,9 @@
       <h6 class="textClass">资质荣誉</h6>
     </el-row>
     <el-row type="flex" v-for="(row,index) in imgDatas" :key="index" style="margin-bottom: 20px">
-      <div v-for="(item,i) of row" :key="i">
-        <img :src="item.url" width="200px" height="280px" style="margin-right: 15px"/>
-      </div>
+      <el-col v-for="(item,i) of row" :key="i" :span="5"  style="margin-right: 10px">
+        <img :src="item.url" width="100%" height="250px"/>
+      </el-col>
     </el-row>
   </div>
 
@@ -18,21 +18,21 @@
     props: ['slotData'],
     computed: {
     },
-    methods:{
+    methods: {
     },
-    watch:{
+    watch: {
       'slotData': function () {
         let index = 0;
         var newArray = [];
         while (index < this.slotData.certificates.length) {
-          newArray.push(this.slotData.certificates.slice(index, index += 4));
+          newArray.push(this.slotData.certificates.slice(index, index += 5));
         }
         this.imgDatas = newArray;
       }
     },
-    data(){
-      return{
-        imgDatas:[]
+    data () {
+      return {
+        imgDatas: []
       }
     }
   }
