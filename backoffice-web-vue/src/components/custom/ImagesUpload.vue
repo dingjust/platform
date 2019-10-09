@@ -35,8 +35,8 @@
     },
     methods: {
       onBeforeUpload (file) {
-        if (file.size > 1024 * 1024 * 10) {
-          this.$message.error('上传的文件不允许超过10M');
+        if (file.size > 1024 * 1024 * 5) {
+          this.$message.error('上传的文件不允许超过5M');
           return false;
         }
         return true;
