@@ -32,7 +32,7 @@
         <h6 class="titleTextClass">产值</h6>
       </el-col>
       <el-col :span="20">
-        <h6>{{getEnum('scaleRanges',slotData.scaleRange)}}件</h6>
+        <h6>{{getEnum('scaleRanges',slotData.scaleRange)}}元</h6>
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">

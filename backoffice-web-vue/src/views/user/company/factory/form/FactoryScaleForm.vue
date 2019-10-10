@@ -10,43 +10,57 @@
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle">
-                  <h6 class="info-select-prepend">工厂人数</h6>
-                  <el-select v-model="formData.populationScale" placeholder="请选择" size="mini">
-                    <el-option
-                      v-for="item in populationScales"
-                      :key="item.code"
-                      :label="item.name"
-                      :value="item.code">
-                    </el-option>
-                  </el-select>
+                  <el-col :span="6">
+                    <h6 class="info-select-prepend">工厂人数</h6>
+                  </el-col>
+                  <el-col :span="18">
+                    <el-select v-model="formData.populationScale" placeholder="请选择" size="mini">
+                      <el-option
+                        v-for="item in populationScales"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
+                      </el-option>
+                    </el-select>
+                  </el-col>
                 </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle">
-                  <h6 class="info-input-prepend">厂房数量</h6>
-                  <el-input placeholder="请填写厂房数量"
-                            v-model.number="formData.factoryBuildingsQuantity"
-                            size="mini">
-                  </el-input>
-                  <span style="margin-left: 5px">m<sup>2</sup></span>
+                  <el-col :span="6">
+                    <h6 class="info-input-prepend">厂房数量</h6>
+                  </el-col>
+                  <el-col :span="18">
+                    <el-input placeholder="请填写厂房数量"
+                              v-model.number="formData.factoryBuildingsQuantity"
+                              size="mini">
+                    </el-input>
+                  </el-col>
+                  <el-col :span="2">
+                    <span>m<sup>2</sup></span>
+                  </el-col>
                 </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle" >
-                  <h6 class="info-select-prepend">产值规模</h6>
-                  <el-select v-model="formData.scaleRange" placeholder="请选择" size="mini">
-                    <el-option
-                      v-for="item in scaleRanges"
-                      :key="item.code"
-                      :label="item.name"
-                      :value="item.code">
-                    </el-option>
-                  </el-select>
-                  <span style="margin-left: 10px">件</span>
+                  <el-col :span="6">
+                    <h6 class="info-select-prepend">产值规模</h6>
+                  </el-col>
+                  <el-col :span="18">
+                    <el-select v-model="formData.scaleRange" placeholder="请选择" size="mini">
+                      <el-option
+                        v-for="item in scaleRanges"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
+                      </el-option>
+                    </el-select>
+                    <span>元</span>
+                  </el-col>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -55,24 +69,34 @@
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle">
-                  <h6 class="info-input-prepend">产线数量</h6>
-                  <el-input placeholder="请填写产线数量" v-model.number="formData.productionLineQuantity" size="mini"></el-input>
-                  <span style="margin-left: 10px">条</span>
+                  <el-col :span="6">
+                    <h6 class="info-input-prepend">产线数量</h6>
+                  </el-col>
+                  <el-col :span="17">
+                    <el-input placeholder="请填写产线数量" v-model.number="formData.productionLineQuantity" size="mini"></el-input>
+                  </el-col>
+                  <el-col :span="1">
+                    <span>条</span>
+                  </el-col>
                 </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle">
-                  <h6 class="info-select-prepend">生产模式</h6>
-                  <el-select v-model="formData.productionMode" placeholder="请选择" size="mini">
-                    <el-option
-                      v-for="item in productionModes"
-                      :key="item.code"
-                      :label="item.name"
-                      :value="item.code">
-                    </el-option>
-                  </el-select>
+                  <el-col :span="6">
+                    <h6 class="info-select-prepend">生产模式</h6>
+                  </el-col>
+                  <el-col :span="18">
+                    <el-select v-model="formData.productionMode" placeholder="请选择" size="mini">
+                      <el-option
+                        v-for="item in productionModes"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
+                      </el-option>
+                    </el-select>
+                  </el-col>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -190,7 +214,7 @@
   }
 
   .factory-scale .el-input--mini .el-input__inner{
-    width: 235px;
+    width: 100%;
   }
 
 </style>

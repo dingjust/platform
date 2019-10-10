@@ -149,7 +149,14 @@
   }
 
   .image-upload .picClass .el-upload-list--picture-card .el-upload-list__item{
-    width: 100%;
-    height: 100%;
+    width: 320px;
+    height: 180px;
+    position:absolute;left:0px; top:0px;clip:rect(0px 320px 180px 0px)
+  }
+
+  .image-upload .picClass .el-upload--picture-card {
+    width:120px;
+    height: 120px;
+    line-height: 120px;
   }
 </style>

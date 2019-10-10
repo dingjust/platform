@@ -26,7 +26,7 @@
             <el-col :span="8">
               <el-form-item>
                 <el-row type="flex" align="middle" >
-                  <h6 class="info-input-prepend">座机号码<span style="color: red">*</span></h6>
+                  <h6 class="info-input-prepend">座机号码</h6>
                   <el-input placeholder="座机号码" v-model="formData.phone" size="mini"></el-input>
                 </el-row>
               </el-form-item>

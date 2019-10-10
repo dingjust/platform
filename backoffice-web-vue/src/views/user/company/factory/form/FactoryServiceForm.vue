@@ -112,7 +112,7 @@
   }
 
   .factory-service .el-input--mini .el-input__inner{
-    width: 249px;
+    width: 100%;
   }
 
 </style>
