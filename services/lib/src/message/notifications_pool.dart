@@ -78,12 +78,12 @@ class NotificationsPool {
 
   ///新增通知
   void add(WebsocketResponse noticication) async {
-    if (noticication.module != MsgModule.DEFAULT) {
-      //TODO 判断如生产订单类型、加入 _productionNotifications
-      ns$.showNotification(noticication.hashCode, '${noticication.title}',
-          '${noticication.body}',
-          payload: json.encode(WebsocketResponse.toJson(noticication)));
-    }
+    // if (noticication.module != MsgModule.DEFAULT) {
+    //   //TODO 判断如生产订单类型、加入 _productionNotifications
+    //   ns$.showNotification(noticication.hashCode, '${noticication.title}',
+    //       '${noticication.body}',
+    //       payload: json.encode(WebsocketResponse.toJson(noticication)));
+    // }
   }
 
   ///点击消息置为已阅

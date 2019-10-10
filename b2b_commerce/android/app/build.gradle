@@ -64,18 +64,23 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['release', 'debug']
         }
         debug {
             signingConfig signingConfigs.release
+            matchingFallbacks = ['release', 'debug']
         }
         dynamicProfile {
             signingConfig signingConfigs.release
+            matchingFallbacks = ['release', 'debug']
         }
         dynamicRelease {
             signingConfig signingConfigs.release
+            matchingFallbacks = ['release', 'debug']
         }
         profile {
             signingConfig signingConfigs.release
+            matchingFallbacks = ['release', 'debug']
         }
     }
 

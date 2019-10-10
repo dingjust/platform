@@ -6,7 +6,7 @@ import 'package:widgets/widgets.dart';
 class NotificationHomePage extends StatefulWidget {
   final MessageRepository repository;
 
-  NotificationHomePage({@required this.repository});
+  NotificationHomePage({this.repository});
 
   @override
   State<StatefulWidget> createState() => new _NotificationHomePageState();

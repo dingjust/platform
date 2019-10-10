@@ -1,12 +1,19 @@
 import 'package:b2b_commerce/src/my/authentication/authentication_business_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_enterprise_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
+import 'package:b2b_commerce/src/my/contract/float_select_page.dart';
+import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:b2b_commerce/src/my/authentication/my_authentication_enterprise_result.dart';
 import 'package:b2b_commerce/src/my/authentication/my_authentication_result.dart';
-import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:services/servicesany;
+import 'package:services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:widgets/widgets.dart';
+
+
+class MyAuthentication extends StatefulWidget {
+  CompanyModel company;
 
   MyAuthentication({this.company});
 
