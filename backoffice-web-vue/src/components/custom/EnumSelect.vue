@@ -57,7 +57,7 @@
     data () {
       return {
         activeName: '',
-        activeColor: '',
+        activeColor: ''
       }
     },
     created () {

@@ -28,22 +28,22 @@
             </el-col>
           </el-row>
           <el-divider ></el-divider>
-          <el-row type="flex">
-            <el-col :span="1">
-              <i class="factory-info">&#xe693;</i>
-            </el-col>
-            <el-col :span="11">
-                  <factory-service-info-page :slotData="slotData"/>
-            </el-col>
-            <el-col :span="1">
+          <!--<el-row type="flex">-->
+            <!--<el-col :span="1">-->
+              <!--<i class="factory-info">&#xe693;</i>-->
+            <!--</el-col>-->
+            <!--<el-col :span="11">-->
+                  <!--<factory-service-info-page :slotData="slotData"/>-->
+            <!--</el-col>-->
+            <!--<el-col :span="1">-->
 
-            </el-col>
-            <el-col :span="11">
-              <!--<factory-scale-info-page :slotData="slotData"/>-->
-            </el-col>
-          </el-row>
-          <el-divider ></el-divider>
-          <el-row type="flex">
+            <!--</el-col>-->
+            <!--<el-col :span="11">-->
+              <!--&lt;!&ndash;<factory-scale-info-page :slotData="slotData"/>&ndash;&gt;-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+          <!--<el-divider ></el-divider>-->
+          <el-row type="flex" style="margin-top: 20px">
             <el-col :span="1">
               <i class="factory-info">&#xe68f;</i>
             </el-col>
@@ -52,13 +52,30 @@
             </el-col>
           </el-row>
           <el-divider ></el-divider>
-
+          <el-row type="flex" justify="end"  style="margin-top: 10px">
+            <el-button class="buttonClass" @click="onEditProfiles">编辑</el-button>
+          </el-row>
+          <el-row type="flex">
+              <factory-profiles-info-page :slotData="slotData"/>
+          </el-row>
         </el-col>
       </el-row>
     </el-card>
 
-    <el-dialog width="80%" :visible.sync="factoryFormVisible" class="purchase-dialog" append-to-body>
-      <factory-from :formData = "formData" @onSave="onSave" :cities="cities" :cityDistricts="cityDistricts"></factory-from>
+    <el-dialog width="80%"
+               :visible="factoryFormVisible"
+               class="purchase-dialog"
+               append-to-body
+               @close="onClose">
+      <factory-from :formData = "formData" @onSave="onSave" ></factory-from>
+    </el-dialog>
+
+    <el-dialog width="80%"
+               v-if="factoryProfilesFormVisible"
+               :visible.sync="factoryProfilesFormVisible"
+               class="purchase-dialog"
+               append-to-body>
+      <factory-profiles-from :profiles = "formData.profiles" @onSave="onSaveProfiles" ></factory-profiles-from>
     </el-dialog>
   </div>
 </template>
@@ -75,11 +92,15 @@
   import FactoryCertificateForm from '../form/FactoryCertificateForm';
   import FactoryCertificateInfoPage from '../info/FactoryCertificateInfoPage';
   import FactoryFrom from '../form/FactoryForm';
+  import FactoryProfilesInfoPage from "../info/FactoryProfilesInfoPage";
+  import FactoryProfilesFrom from "../form/FactoryProfilesForm";
 
   export default {
     name: 'FactoryDetailsPage',
     props: [],
     components: {
+      FactoryProfilesFrom,
+      FactoryProfilesInfoPage,
       FactoryFrom,
       FactoryCertificateInfoPage,
       FactoryCertificateForm,
@@ -89,11 +110,20 @@
       FactoryCardInfoPage},
     computed: {
       ...mapGetters({
-        formData: 'formData'
+        formData: 'formData',
+        factoryFormVisible: 'factoryFormVisible',
+        isCitiesChanged: 'isCitiesChanged',
+        isDistrictsChanged: 'isDistrictsChanged',
+        cities: 'cities',
+        cityDistricts: 'cityDistricts'
       })
     },
     methods: {
       ...mapMutations({
+        setFormData: 'setFormData',
+        setFactoryFormVisible: 'setFactoryFormVisible',
+        setIsCitiesChanged: 'setIsCitiesChanged',
+        setIsDistrictsChanged: 'setIsDistrictsChanged'
       }),
       ...mapActions({
         clearFormData: 'clearFormData'
@@ -116,16 +146,19 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        Object.assign(this.formData, result);
 
-        if (this.formData.contactAddress.region != null) {
+        this.setFormData(Object.assign({}, result));
+
+        if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
           this.getCities(this.formData.contactAddress.region);
+          this.setIsCitiesChanged(false);
         }
-        if (this.formData.contactAddress.city != null) {
+        if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
           this.getCityDistricts(this.formData.contactAddress.city);
+          this.setIsDistrictsChanged(false);
         }
 
-        this.factoryFormVisible = true;
+        this.setFactoryFormVisible(true);
       },
       async onSave () {
         var uid = this.$store.getters.currentUser.companyCode;
@@ -137,7 +170,7 @@
         }
 
         this.getFactory();
-        this.factoryFormVisible = false;
+        this.setFactoryFormVisible(false);
         this.$message.success('编辑工厂信息成功');
       },
       async getRegions () {
@@ -159,7 +192,7 @@
           return;
         }
 
-        this.cities = result;
+        this.$store.state.FactoriesModule.cities = result;
       },
       async getCityDistricts (city) {
         const url = this.apis().getDistricts(city.code);
@@ -170,22 +203,40 @@
           return;
         }
 
-        this.cityDistricts = result;
-      }
+        this.$store.state.FactoriesModule.cityDistricts = result;
+      },
+      onClose () {
+        this.setFactoryFormVisible(false);
+      },
+      async onEditProfiles(){
+        var uid = this.$store.getters.currentUser.companyCode;
+        let url = this.apis().getFactory(uid);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.setFormData(Object.assign({}, result));
+        this.factoryProfilesFormVisible = !this.factoryProfilesFormVisible;
+      },
+      async onSaveProfiles () {
+        var uid = this.$store.getters.currentUser.companyCode;
+        let url = this.apis().updateFactory(uid);
+        const result = await this.$http.put(url, this.formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.getFactory();
+        this.factoryProfilesFormVisible = false;
+        this.$message.success('编辑图文详情信息成功');
+      },
     },
     data () {
       return {
         slotData: '',
-        factoryFormVisible: false,
-        cities: '',
-        cityDistricts: ''
-      }
-    },
-    watch: {
-      'factoryFormVisible': function (n, o) {
-        if (n === false) {
-          this.clearFormData();
-        }
+        factoryProfilesFormVisible: false
       }
     },
     created () {
@@ -217,7 +268,7 @@
     height: auto;
   }
   .factory-detail .el-divider--horizontal{
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 0px 0px;
   }
 
   .factory-detail .factory-card-class{
@@ -225,6 +276,12 @@
     border-radius: 8px;
     border-width: 1px;
     margin-top: -12px;
-    height: fit-content;
+  }
+
+  .factory-detail .buttonClass{
+    padding: 8px 35px 8px 35px;
+    margin-bottom: 10px;
+    background-color: #ffd60c;
+    color: #0b0e0f;
   }
 </style>

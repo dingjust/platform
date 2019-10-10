@@ -54,7 +54,7 @@
             <el-col :span="6">
               <el-form-item>
                 <el-row type="flex" align="middle">
-                  <h6 class="info-input-prepend">送货地址</h6>
+                  <h6 class="info-input-prepend">地址</h6>
                   <el-select class="w-100" v-model="formData.contactAddress.region" size="mini" value-key="isocode"
                              @change="onRegionChanged">
                     <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
@@ -107,20 +107,41 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  import AddressSelect from "../../../../../components/custom/AddressSelect";
+  import AddressSelect from '../../../../../components/custom/AddressSelect';
 
-  const {mapGetters} = createNamespacedHelpers('FactoriesModule');
+  const {mapGetters,mapMutations} = createNamespacedHelpers('FactoriesModule');
 
   export default {
     name: 'FactoryContactForm',
-    props: ['formData','cities','cityDistricts'],
+    props: ['formData'],
     components: {AddressSelect},
     computed: {
       ...mapGetters({
-
-      })
+        isCitiesChanged: 'isCitiesChanged',
+        isDistrictsChanged: 'isDistrictsChanged',
+      }),
+      cities: {
+        get () {
+          return this.$store.state.FactoriesModule.cities
+        },
+        set (newValue) {
+          this.$store.state.FactoriesModule.cities = newValue
+        }
+      },
+      cityDistricts: {
+        get () {
+          return this.$store.state.FactoriesModule.cityDistricts
+        },
+        set (newValue) {
+          this.$store.state.FactoriesModule.cityDistricts = newValue
+        }
+      }
     },
     methods: {
+      ...mapMutations({
+        setIsCitiesChanged: 'setIsCitiesChanged',
+        setIsDistrictsChanged: 'setIsDistrictsChanged'
+      }),
       async getRegions () {
         const url = this.apis().getRegions();
         const result = await this.$http.get(url);
@@ -135,6 +156,8 @@
         this.formData.contactAddress.id = null;
         this.getCities(current);
         this.cityDistricts = [];
+        this.setIsCitiesChanged(true);
+        this.setIsDistrictsChanged(true);
       },
       async getCities (region) {
         const url = this.apis().getCities(region.isocode);
@@ -152,7 +175,8 @@
           return;
         }
         this.formData.contactAddress.id = null;
-        this.getCityDistricts(current)
+        this.getCityDistricts(current);
+        this.setIsDistrictsChanged(true);
       },
       async getCityDistricts (city) {
         const url = this.apis().getDistricts(city.code);
@@ -165,16 +189,16 @@
 
         this.cityDistricts = result;
       },
-      onCityDistrictChanged() {
+      onCityDistrictChanged () {
         this.formData.contactAddress.id = null;
       },
-      async onAddressSelect(val) {
+      async onAddressSelect (val) {
         console.log(val);
         this.addressSelectVisible = false;
         this.formData.contactAddress = val;
         this.region = val.region;
         this.city = val.city;
-      },
+      }
     },
     watch: {
       'region': function (n, o) {
@@ -193,7 +217,7 @@
         region: '',
         city: '',
         regions: [],
-        addressSelectVisible:false
+        addressSelectVisible: false
       };
     },
     created () {

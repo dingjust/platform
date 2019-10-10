@@ -103,12 +103,15 @@
     data () {
       return {
         activeName: '',
-        activeColor: '',
         selectCodes: [],
         selectCounts: {}
       }
     },
     created () {
+      console.log(this.listData);
+      if (this.listData.length > 0) {
+        this.init();
+      }
     }
   }
 </script>

@@ -11,7 +11,7 @@
               <el-form-item>
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">设计</h6>
-                  <el-select v-model="formData.design" @change="$forceUpdate()" size="mini" placeholder="请选择">
+                  <el-select v-model="formData.design" size="mini" placeholder="请选择">
                     <el-option
                       v-for="item in factoryDesigns"
                       :key="item.code"
@@ -26,7 +26,7 @@
               <el-form-item>
                 <el-row type="flex" align="middle" >
                   <h6 class="info-input-prepend">打板</h6>
-                  <el-select v-model="formData.pattern" @change="$forceUpdate()" size="mini" placeholder="请选择">
+                  <el-select v-model="formData.pattern" size="mini" placeholder="请选择">
                     <el-option
                       v-for="item in factoryPatterns"
                       :key="item.code"
@@ -61,7 +61,7 @@
                 </el-col>
                 <el-col :span="22">
                   <!--<enum-select :mapData="mapData" :mapSelectData="mapSelectData"></enum-select>-->
-                  <category-select :listData="categories" :selectDatas="formData.adeptAtCategories"></category-select>
+                  <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"></category-select>
                 </el-col>
               </el-row>
             </el-form-item>
@@ -70,12 +70,19 @@
 </template>
 
 <script>
-  import CategorySelect from "../../../../../components/custom/CategorySelect";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters} = createNamespacedHelpers('FactoriesModule');
+
+  import CategorySelect from '../../../../../components/custom/CategorySelect';
   export default {
     name: 'FactoryCapacityForm',
     props: ['formData'],
     components: {CategorySelect},
     computed: {
+      ...mapGetters({
+        factoryFormVisible: 'factoryFormVisible'
+      })
     },
     methods: {
       async getCategories () {

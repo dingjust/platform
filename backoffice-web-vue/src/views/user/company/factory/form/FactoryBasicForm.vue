@@ -11,17 +11,23 @@
               <h6>
                 上传头像：
               </h6>
+              <h6 style="color: grey">
+                (最多一张)
+              </h6>
             </el-col>
-            <el-col :span="10">
-              <images-upload class="factory-upload" :limit="1" :slot-data="this.profilePictures" />
+            <el-col :span="6">
+              <images-upload :limit="1" :slot-data="this.profilePictures"/>
             </el-col>
             <el-col :span="2" style="margin-left: 20px">
               <h6>
                 上传资质荣誉照片：
               </h6>
+              <h6 style="color: grey">
+                (最多五张)
+              </h6>
             </el-col>
-            <el-col :span="10">
-              <images-upload class="factory-upload" :slot-data="formData.certificates" />
+            <el-col :span="14">
+              <images-upload :limit="5" :slot-data="formData.certificates" />
             </el-col>
         </el-row>
         <el-row class="rowClass">
@@ -52,6 +58,9 @@
 </template>
 
 <script>
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapMutations} = createNamespacedHelpers('FactoriesModule');
   import ImagesUpload from '../../../../../components/custom/ImagesUpload';
 
   export default {
@@ -59,8 +68,14 @@
     props: ['formData'],
     components: {ImagesUpload},
     computed: {
+      ...mapGetters({
+        labels: 'labels'
+      })
     },
     methods: {
+      ...mapMutations({
+        setLabels: 'setLabels'
+      }),
       async getLabels () {
         const url = this.apis().getGroupLabels('FACTORY');
         const result = await this.$http.get(url);
@@ -69,17 +84,28 @@
           return;
         }
 
-        this.labels = result;
+        this.setLabels(result);
       }
     },
     data () {
       return {
-        labels: [],
         profilePictures: []
       };
     },
+    watch: {
+      'profilePictures': function (n, o) {
+        console.log(n);
+        if (n != null && n.length > 0) {
+          this.formData.profilePicture = n[0];
+        } else {
+          this.formData.profilePicture = null;
+        }
+      }
+    },
     created () {
-      this.getLabels();
+      if (this.labels <= 0) {
+        this.getLabels();
+      }
       this.profilePictures = [this.formData.profilePicture];
     }
   };
@@ -95,10 +121,6 @@
     background-color: #DCDCDC;
   }
 
- .factory-basic .factory-upload {
-    /*margin-left: 80px;*/
-    /*margin-top: 20px;*/
-  }
  .factory-basic .el-col-24 {
    width: auto;
   }
