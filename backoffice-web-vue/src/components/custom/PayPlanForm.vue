@@ -2,79 +2,77 @@
 <template>
   <div class="animated fadeIn">
 
-  <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
-    <el-col :span="6">
-      <el-row type="flex" align="middle">
-        <h6 class="info-input-prepend">有无定金</h6>
-        <el-radio class="info-radio" v-model="formData.isHaveDeposit" :label="true">有定金</el-radio>
-        <el-radio class="info-radio" v-model="formData.isHaveDeposit" :label="false">无定金</el-radio>
-      </el-row>
-    </el-col>
-    <el-col :span="8">
-      <el-row type="flex" align="middle">
-        <h6 class="info-input-prepend">尾款期数</h6>
-        <template v-for="item in payPlanTypes">
-          <el-radio class="info-radio" v-model="formData.payPlanType" :label="item.code">{{item.name}}</el-radio>
-        </template>
-      </el-row>
-    </el-col>
-  </el-row>
+    <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="35">
+      <el-col :span="6">
+        <el-row type="flex" align="middle">
+          <h6 class="info-input-prepend">有无定金</h6>
+          <el-radio class="info-radio" v-model="formData.isHaveDeposit" :label="true">有定金</el-radio>
+          <el-radio class="info-radio" v-model="formData.isHaveDeposit" :label="false">无定金</el-radio>
+        </el-row>
+      </el-col>
+      <el-col :span="8">
+        <el-row type="flex" align="middle">
+          <h6 class="info-input-prepend">尾款期数</h6>
+          <template v-for="item in payPlanTypes">
+            <el-radio class="info-radio" v-model="formData.payPlanType" :label="item.code">{{item.name}}</el-radio>
+          </template>
+        </el-row>
+      </el-col>
+    </el-row>
 
     <div v-for="(item,index) in payPlanItems">
       <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
         <el-col :span="7">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend" style="width: 60px;">{{getEnum('PayMoneyType',item.moneyType)}}</h6>
-            <el-input placeholder="选择事件" class="purchase-order-input_select"
-                      :value ="getEnum('TriggerEvent',item.triggerEvent)" :readonly="true" size="mini">
-              <template slot="prepend">事件</template>
-              <template slot="append">
-                <el-select  v-model="item.triggerEvent" filterable @change="$forceUpdate()" placeholder="请选择" >
-                  <el-option v-for="event in triggerEvents" :label="event.name" :value="event.code"></el-option>
-                </el-select>
-              </template>
-            </el-input>
+            <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
+            <el-select v-model="item.triggerEvent" filterable @change="$forceUpdate()" placeholder="请选择">
+              <el-option v-for="event in triggerEvents" :label="event.name" :value="event.code"></el-option>
+            </el-select>
           </el-row>
         </el-col>
-        <el-col :span="6" v-if="!item.isLast || item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'">
+        <el-col :span="4" v-if="!item.isLast || item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'">
           <el-row type="flex" align="middle" justify="start">
-            <h6 class="info-input-prepend2">后</h6>
-            <el-input placeholder="选择天数" class="purchase-order-input_select" v-model="item.triggerDays"
-                      :readonly="true" size="mini" min>
-              <template slot="prepend">时长</template>
-              <el-select slot="append" v-model="item.triggerDays" @change="$forceUpdate()" placeholder="请选择">
+            <el-col :span="6">
+              <h6 class="info-input-prepend2" style="width:50px;">后时长</h6>
+            </el-col>
+            <el-col :span="18">
+              <el-select v-model="item.triggerDays" @change="$forceUpdate()" placeholder="请选择">
                 <el-option v-for="val in triggerDays" :label="val" :value="val"></el-option>
               </el-select>
-            </el-input>
+            </el-col>
           </el-row>
         </el-col>
-        <h6 v-if="item.isLast && formData.payPlanType == 'MONTHLY_SETTLEMENT'" class="info-input-prepend2" style="width: 200px">后, 次月月底支付剩余全部款项</h6>
+        <h6 v-if="item.isLast && formData.payPlanType == 'MONTHLY_SETTLEMENT'" class="info-input-prepend2"
+          style="width: 200px">后, 次月月底支付剩余全部款项</h6>
         <el-col v-if="!item.isLast || item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" :span="4">
           <el-row type="flex" align="middle" justify="start">
-            <h6 class="info-input-prepend2">天</h6>
-            <el-input class="purchase-order-input_select" :value="getEnum('TriggerType',item.triggerType)"
-                      :readonly="true" size="mini">
-              <el-select slot="append" v-model="item.triggerType" @change="$forceUpdate()" placeholder="请选择">
+            <el-col :span="6">
+              <h6 class="info-input-prepend2">天</h6>
+            </el-col>
+            <el-col :span="18">
+              <el-select v-model="item.triggerType" @change="$forceUpdate()" placeholder="请选择">
                 <template v-for="type in triggerTypes">
                   <el-option :label="type.name" :value="type.code"></el-option>
                 </template>
               </el-select>
-            </el-input>
+            </el-col>
           </el-row>
         </el-col>
-        <h6 v-if="item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
-        <el-col v-if="!item.isLast" :span="7">
+        <h6 v-if="item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" class="info-input-prepend2"
+          style="width: 200px;">支付剩余全部款项</h6>
+        <el-col v-if="!item.isLast" :span="4">
           <el-row v-if="!item.isLast" type="flex" align="middle" justify="start">
-            <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
-            <el-input class="purchase-order-input_select" v-model="item.payPercent*100+'%'" :readonly="true"
-                      size="mini">
-              <template slot="prepend">金额比例</template>
-              <el-select slot="append" v-model="item.payPercent" @change="$forceUpdate()">
-                <el-option v-for="percent in percents"  :value="percent">{{percent*100+'%'}}</el-option>
+            <el-col :span="6">
+              <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
+            </el-col>
+            <el-col :span="18">
+              <el-select v-model="item.payPercent" @change="$forceUpdate()">
+                <el-option v-for="percent in percents" :value="percent" :label="percent*100+'%'"></el-option>
               </el-select>
-            </el-input>
+            </el-col>
           </el-row>
-      </el-col>
+        </el-col>
       </el-row>
     </div>
 
@@ -91,28 +89,31 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
-  const {mapGetters} = createNamespacedHelpers('PayPlanModule');
+  const {
+    mapGetters
+  } = createNamespacedHelpers('PayPlanModule');
 
   export default {
     name: 'PayPlanForm',
-    props:['formData'],
+    props: ['formData'],
     computed: {
-      ...mapGetters({
-      }),
+      ...mapGetters({}),
       payPlanItems: function () {
         let result = [];
-        if(this.formData.isHaveDeposit){
+        if (this.formData.isHaveDeposit) {
           var flag = false;
-          for(var item of this.formData.payPlanItems){
-            if(item.moneyType === 'DEPOSIT') {
+          for (var item of this.formData.payPlanItems) {
+            if (item.moneyType === 'DEPOSIT') {
               result.push(item);
               flag = true;
               break;
             }
           }
-          if(!flag){
+          if (!flag) {
             result.push({
               payPercent: 0.3,
               triggerEvent: 'ORDER_CONFIRMED',
@@ -126,15 +127,15 @@
         switch (this.formData.payPlanType) {
           case 'PHASEONE':
             var flag = false;
-            for(var item of this.formData.payPlanItems){
-              if(item.moneyType === 'PHASEONE') {
+            for (var item of this.formData.payPlanItems) {
+              if (item.moneyType === 'PHASEONE') {
                 item.isLast = true;
                 result.push(item);
                 flag = true;
                 break;
               }
             }
-            if(!flag){
+            if (!flag) {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -147,15 +148,15 @@
             break;
           case 'PHASETWO':
             var flag = false;
-            for(var item of this.formData.payPlanItems){
-              if(item.moneyType === 'PHASEONE'){
+            for (var item of this.formData.payPlanItems) {
+              if (item.moneyType === 'PHASEONE') {
                 item.isLast = false;
                 result.push(item);
                 flag = true;
                 break;
               }
             }
-            if(!flag){
+            if (!flag) {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -165,15 +166,15 @@
               });
             }
             flag = false;
-            for(var item of this.formData.payPlanItems){
-              if(item.moneyType === 'PHASETWO'){
+            for (var item of this.formData.payPlanItems) {
+              if (item.moneyType === 'PHASETWO') {
                 item.isLast = true;
                 result.push(item);
                 flag = true;
                 break;
               }
             }
-            if(!flag){
+            if (!flag) {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -186,15 +187,15 @@
             break;
           case 'MONTHLY_SETTLEMENT':
             var flag = false;
-            for(var item of this.formData.payPlanItems){
-              if(item.moneyType === 'MONTHLY_SETTLEMENT'){
+            for (var item of this.formData.payPlanItems) {
+              if (item.moneyType === 'MONTHLY_SETTLEMENT') {
                 item.isLast = true;
                 result.push(item);
                 flag = true;
                 break;
               }
             }
-            if(!flag){
+            if (!flag) {
               result.push({
                 payPercent: 0.3,
                 triggerEvent: 'ORDER_CONFIRMED',
@@ -210,9 +211,9 @@
         this.formData.payPlanItems = result;
         return result;
       },
-      percents:function () {
+      percents: function () {
         let result = [
-          0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1
+          0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
         ];
 
         var percent = 1;
@@ -261,34 +262,35 @@
             result += '甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库，在' +
               this.getEnum('TriggerEvent', oneData.triggerEvent) + '后' + oneData.triggerDays + '日' +
               this.getEnum('TriggerType', oneData.triggerType) + '支付合同总价的' + oneData.payPercent * 100 + '%。' +
-              '在产品入库并经甲方检验全部产品合格'+this.getEnum('TriggerEvent', twoData.triggerEvent)+'后'+twoData.triggerDays+'日' +
-              this.getEnum('TriggerType', twoData.triggerType)+'未发现任何产品质量问题的'+'，则甲方向乙方支付剩余全部款项' +
+              '在产品入库并经甲方检验全部产品合格' + this.getEnum('TriggerEvent', twoData.triggerEvent) + '后' + twoData.triggerDays +
+              '日' +
+              this.getEnum('TriggerType', twoData.triggerType) + '未发现任何产品质量问题的' + '，则甲方向乙方支付剩余全部款项' +
               '（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
             break;
           case 'MONTHLY_SETTLEMENT':
             let monthData = this.payPlanItems.filter(item => item.moneyType === 'MONTHLY_SETTLEMENT')[0];
-            result += ' 甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在'+
-              this.getEnum('TriggerEvent', monthData.triggerEvent)+'完成的次月月底支付剩余全部款项' +
+            result += ' 甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' +
+              this.getEnum('TriggerEvent', monthData.triggerEvent) + '完成的次月月底支付剩余全部款项' +
               '（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
             break;
         }
         return result;
       }
     },
-    methods: {
-    },
-    data () {
+    methods: {},
+    data() {
       return {
         payPlanTypes: this.$store.state.EnumsModule.PayPlanType,
         payMoneyTypes: this.$store.state.EnumsModule.PayMoneyType,
         triggerEvents: this.$store.state.EnumsModule.TriggerEvent,
         triggerTypes: this.$store.state.EnumsModule.TriggerType,
-        triggerDays:[
-          5,7,15
+        triggerDays: [
+          5, 7, 15
         ],
       }
     }
   }
+
 </script>
 
 <style>

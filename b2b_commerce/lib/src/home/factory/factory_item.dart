@@ -236,19 +236,19 @@ class StarLevelAndOrdersCountText extends StatelessWidget {
               starLevel: model.starLevel ?? 0,
             ),
           ),
-          RichText(
-            text: TextSpan(
-                text: '已接',
-                style: TextStyle(color: Colors.grey),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: '${model.historyOrdersCount}',
-                    style: TextStyle(
-                        color: Colors.red, fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: '单')
-                ]),
-          ),
+          // RichText(
+          //   text: TextSpan(
+          //       text: '已接',
+          //       style: TextStyle(color: Colors.grey),
+          //       children: <TextSpan>[
+          //         TextSpan(
+          //           text: '${model.historyOrdersCount}',
+          //           style: TextStyle(
+          //               color: Colors.red, fontWeight: FontWeight.bold),
+          //         ),
+          //         TextSpan(text: '单')
+          //       ]),
+          // ),
         ],
       ),
     );
