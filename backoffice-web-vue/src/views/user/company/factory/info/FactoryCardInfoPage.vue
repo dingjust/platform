@@ -38,7 +38,7 @@
       </el-row>
       <el-row class="rowClass" type="flex" justify="space-between">
         <el-col :span="8">
-          <h6>联系人</h6>
+          <h6 class="textClass2">联系人</h6>
         </el-col>
         <el-col :span="16">
           <h6>{{slotData.contactPerson}}</h6>
@@ -46,7 +46,7 @@
       </el-row>
       <el-row class="rowClass" type="flex" justify="space-between">
         <el-col :span="8">
-          <h6>联系电话</h6>
+          <h6 class="textClass2">联系电话</h6>
         </el-col>
         <el-col :span="16">
           <h6>{{slotData.contactPhone}}</h6>
@@ -54,7 +54,7 @@
       </el-row>
       <el-row class="rowClass" type="flex" justify="space-between">
         <el-col :span="8">
-          <h6>座机电话</h6>
+          <h6 class="textClass2">座机电话</h6>
         </el-col>
         <el-col :span="16">
           <h6>{{slotData.phone}}</h6>
@@ -62,7 +62,7 @@
       </el-row>
       <el-row class="rowClass" type="flex" justify="space-between">
         <el-col :span="8">
-          <h6>微信</h6>
+          <h6 class="textClass2">微信</h6>
         </el-col>
         <el-col :span="16">
           <h6>{{slotData.wechat}}</h6>
@@ -70,7 +70,7 @@
       </el-row>
       <el-row class="rowClass" type="flex" justify="space-between">
         <el-col :span="8">
-          <h6>QQ号码</h6>
+          <h6 class="textClass2">QQ号码</h6>
         </el-col>
         <el-col :span="16">
           <h6>{{slotData.qq}}</h6>
@@ -86,7 +86,7 @@
       <!--</el-row>-->
       <el-row class="rowClass" type="flex" justify="space-between">
         <el-col :span="8">
-          <h6>
+          <h6 class="textClass2">
             经营地址
           </h6>
         </el-col>
@@ -98,7 +98,7 @@
       </el-row>
       <el-row class="rowClass" type="flex" justify="space-between" >
         <el-col :span="8">
-          <h6>坐标定位</h6>
+          <h6 class="textClass2">坐标定位</h6>
         </el-col>
         <el-col :span="16">
           <h6>{{slotData.locationAddress}}</h6>
@@ -135,6 +135,12 @@
   .factory-card .textClass{
     font-size: 15px;
     font-weight: bold;
+  }
+  .factory-card .textClass2{
+    text-align: justify;
+    text-align-last: justify;
+    display: block;
+    width: 57px;
   }
   .factory-card .buttonClass{
     padding: 10px;background-color: #FFD60C;

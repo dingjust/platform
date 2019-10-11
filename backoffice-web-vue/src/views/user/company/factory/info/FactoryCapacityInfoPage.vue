@@ -4,7 +4,7 @@
       <h6 class="textClass">工厂能力</h6>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">设计</h6>
       </el-col>
       <el-col :span="20">
@@ -12,7 +12,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">打板</h6>
       </el-col>
       <el-col :span="20">
@@ -20,7 +20,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">合作商</h6>
       </el-col>
       <el-col :span="20">
@@ -28,7 +28,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">覆盖范围</h6>
       </el-col>
       <el-col :span="20">
@@ -36,7 +36,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">优势品类</h6>
       </el-col>
       <el-col :span="20">
@@ -49,7 +49,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">关键词</h6>
       </el-col>
       <el-col :span="20">
@@ -57,7 +57,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">自营产品</h6>
       </el-col>
       <el-col :span="20">
@@ -116,6 +116,10 @@
   }
   .factory-capacity .titleTextClass{
     color: #C0C0C0;
+    text-align: justify;
+    text-align-last: justify;
+    display: block;
+    width: 57px;
   }
 
 </style>
