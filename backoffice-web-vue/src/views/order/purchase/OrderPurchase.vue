@@ -12,6 +12,20 @@
     <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body>
       <pay-plan-select @onSelect="onPayPlanSelect" />
     </el-dialog>
+    <el-dialog title="保存账务方案" :visible.sync="dialogPayPlanFormVisible">
+      <el-form :model="payPlanForm">
+        <el-form-item label="方案名称">
+          <el-input v-model="payPlanForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input type="textarea" :rows="3" placeholder="请输入备注留言..." v-model="payPlanForm.remarks"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogPayPlanFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onPayPlanSave">确 定</el-button>
+      </div>
+    </el-dialog>
     <el-card class="box-card">
       <el-form :model="form" :rules="rules" ref="form">
         <div class="info-order-body">
@@ -285,10 +299,13 @@
               </el-row>
             </el-col>
             <el-col :span="10">
-              <el-row type="flex" align="middle">
-                <!-- <h6 class="info-input-prepend" style="margin-right:20px;width:80px">选用我的账务方案</h6> -->
-                <el-button style="margin-right:20px;width:150px" @click="payPlanSelectDialogVisible=true" type="primary"
+              <el-row type="flex" align="middle" justify="space-between">
+                <h6 class="info-input-prepend" style="margin-right:5px;width:100px">
+                  {{currentFinancialPlan!=''?'当前选中方案：'+currentFinancialPlan:'当前未选择账务方案'}}</h6>
+                <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary"
                   plain size="mini">选用我的账务方案</el-button>
+                <el-button @click="dialogPayPlanFormVisible=true" type="success"
+                  plain size="mini">保存账务方案</el-button>
               </el-row>
             </el-col>
           </el-row>
@@ -998,7 +1015,64 @@
       },
       onPayPlanSelect(item) {
         this.setPayPlan(item);
+        this.currentFinancialPlan = item.name;
         this.payPlanSelectDialogVisible = false;
+      },
+      async onPayPlanSave() {
+        //组合账务参数
+        var payPlanItems = [];
+        if (this.form.isHaveDeposit) {
+          payPlanItems.push({
+            payPercent: this.form.deposit.percent,
+            triggerEvent: this.form.deposit.event,
+            triggerDays: this.form.deposit.time,
+            moneyType: 'DEPOSIT',
+            triggerType: this.form.deposit.range,
+          });
+        }
+        if (this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
+          payPlanItems.push({
+            triggerEvent: this.form.monthBalance.event,
+            moneyType: 'MONTHLY_SETTLEMENT',
+          });
+        } else {
+          payPlanItems.push({
+            payPercent: this.form.balance1.percent,
+            triggerEvent: this.form.balance1.event,
+            triggerDays: this.form.balance1.time,
+            moneyType: 'PHASEONE',
+            triggerType: this.form.balance1.range,
+          });
+          if (this.form.payPlanType == 'PHASETWO') {
+            payPlanItems.push({
+              payPercent: this.form.balance2.percent,
+              triggerEvent: this.form.balance2.event,
+              triggerDays: this.form.balance2.time,
+              moneyType: 'PHASETWO',
+              triggerType: this.form.balance2.range,
+            });
+          }
+        }
+
+        var payPlanForm = {
+          name: this.payPlanForm.name,
+          payPlanType: this.form.payPlanType,
+          isHaveDeposit: this.form.isHaveDeposit,
+          payPlanItems: payPlanItems,
+          remarks: this.payPlanForm.remarks
+        }
+
+        // 提交数据
+        const url = this.apis().createPayPlan();
+        const result = await this.$http.post(url, payPlanForm);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('创建账务方案成功');
+        this.payPlanForm.name = '';
+        this.payPlanForm.remarks = '';
+        this.dialogPayPlanFormVisible = false;
       }
     },
     data() {
@@ -1007,8 +1081,14 @@
         suppliersSelectVisible: false,
         addressSelectVisible: false,
         payPlanSelectDialogVisible: false,
+        dialogPayPlanFormVisible: false,
         currentProductIndex: 0,
+        currentFinancialPlan: '',
         regions: [],
+        payPlanForm: {
+          name: '',
+          remarks: ''
+        },
         freightPayer: {
           'PARTYA': '甲方',
           'PARTYB': '乙方'
