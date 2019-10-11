@@ -80,7 +80,7 @@
         }
       },
       handlePreview (file) {
-        this.dialogImageUrl = file.url;
+        this.dialogImageUrl = file.artworkUrl;
         this.dialogVisible = true;
       },
       handleExceed (files, fileList) {
@@ -104,6 +104,7 @@
             if (image.convertedMedias.length > 0) {
               image.convertedMedias.forEach(convertedMedia => {
                 if (convertedMedia.mediaFormat === 'DefaultProductPreview') { file.url = convertedMedia.url; }
+                if (convertedMedia.mediaFormat === 'DefaultProductDetail') { file.artworkUrl = convertedMedia.url; }
               })
             }
             files.push(file);

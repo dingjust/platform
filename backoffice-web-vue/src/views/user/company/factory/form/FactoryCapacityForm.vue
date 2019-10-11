@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn factory-capacity">
+  <div class="animated fadeIn factory-capacity-form">
         <el-row>
           <div class="titleClass">
             <h6>工厂能力</h6>
@@ -11,7 +11,7 @@
               <el-form-item>
                 <el-row type="flex" align="middle">
                   <el-col :span="6">
-                    <h6 class="info-input-prepend">设计</h6>
+                    <h6 class="titleTextClass">设计</h6>
                   </el-col>
                   <el-col :span="18">
                     <el-select v-model="formData.design" size="mini" placeholder="请选择">
@@ -30,7 +30,7 @@
               <el-form-item>
                 <el-row type="flex" align="middle" >
                   <el-col :span="6">
-                    <h6 class="info-input-prepend">打板</h6>
+                    <h6 class="titleTextClass">打板</h6>
                   </el-col>
                   <el-col :span="18">
                     <el-select v-model="formData.pattern" size="mini" placeholder="请选择">
@@ -49,7 +49,7 @@
               <el-form-item>
                 <el-row type="flex" align="middle">
                   <el-col :span="6">
-                    <h6 class="info-input-prepend">覆盖范围</h6>
+                    <h6 class="titleTextClass">覆盖范围</h6>
                   </el-col>
                   <el-col :span="18">
                     <el-input placeholder="请填写覆盖范围" v-model="formData.coverageArea" size="mini"></el-input>
@@ -62,7 +62,7 @@
             <el-form-item>
               <el-row type="flex">
                 <el-col :span="2">
-                  <h6 class="info-input-prepend">合作商</h6>
+                  <h6 class="titleTextClass">合作商</h6>
                 </el-col>
                 <el-col :span="23">
                   <tags-of-text @remove="onRemoveCooperativeBrand" @add="onAddCooperativeBrand" :textData="formData.cooperativeBrand" :symbol="'，'"></tags-of-text>
@@ -74,7 +74,7 @@
             <el-form-item>
               <el-row type="flex">
                 <el-col :span="2">
-                  <h6 class="info-input-prepend">选择品类<span style="color: red">*</span></h6>
+                  <h6 class="titleTextClass">选择品类<span style="color: red">*</span></h6>
                 </el-col>
                 <el-col :span="22">
                   <!--<enum-select :mapData="mapData" :mapSelectData="mapSelectData"></enum-select>-->
@@ -87,7 +87,7 @@
             <el-form-item>
               <el-row type="flex">
                 <el-col :span="2">
-                  <h6 class="info-input-prepend">关键词</h6>
+                  <h6 class="titleTextClass">关键词</h6>
                 </el-col>
                 <el-col :span="22">
                   <tags-of-text @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword" :symbol="'，'"></tags-of-text>
@@ -213,38 +213,47 @@
 </script>
 
 <style>
-  .factory-capacity .rowClass{
+  .factory-capacity-form .rowClass{
     margin-top:20px;
   }
 
-  .factory-capacity .titleClass{
+  .factory-capacity-form .titleClass{
     padding: 10px 0px 1px 10px;
     background-color: #DCDCDC;
   }
 
- .factory-capacity .factory-upload {
+ .factory-capacity-form .factory-upload {
     margin-left: 80px;
   }
 
-  .factory-capacity .factory-upload .el-upload--picture-card {
+  .factory-capacity-form .factory-upload .el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  .factory-capacity .factory-upload .el-upload-list--picture-card .el-upload-list__item {
+  .factory-capacity-form .factory-upload .el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }
 
-  .factory-capacity .info-input-prepend {
+  .factory-capacity-form .info-input-prepend {
     display: inline-block;
     width: 70px;
     font-weight: bold;
     font-size: 10px;
   }
 
-  .factory-capacity .el-input--mini .el-input__inner{
+  .factory-capacity-form .titleTextClass{
+    text-align: justify;
+    text-align-last: justify;
+    display: inline-block;
+    width: 57px;
+    font-size: 10px;
+    font-weight: bold;
+  }
+
+  .factory-capacity-form .el-input--mini .el-input__inner{
     width: 100%;
   }
 

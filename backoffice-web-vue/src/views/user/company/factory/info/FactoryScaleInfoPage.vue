@@ -4,7 +4,7 @@
       <h6 class="textClass">工厂规模</h6>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">人数</h6>
       </el-col>
       <el-col :span="20">
@@ -12,7 +12,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">厂房</h6>
       </el-col>
       <el-col :span="20">
@@ -20,7 +20,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">产线</h6>
       </el-col>
       <el-col :span="20">
@@ -28,7 +28,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">产值</h6>
       </el-col>
       <el-col :span="20">
@@ -36,7 +36,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">生产模式</h6>
       </el-col>
       <el-col :span="20">
@@ -44,7 +44,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">设备</h6>
       </el-col>
       <el-col :span="20">
@@ -52,7 +52,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">免费打样</h6>
       </el-col>
       <el-col :span="20">
@@ -60,7 +60,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">合作方式</h6>
       </el-col>
       <el-col :span="20">
@@ -68,7 +68,7 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
-      <el-col :span="4">
+      <el-col :span="5">
         <h6 class="titleTextClass">质量等级</h6>
       </el-col>
       <el-col :span="20">
@@ -131,6 +131,10 @@
   }
   .factory-scale .titleTextClass{
     color: #C0C0C0;
+    text-align: justify;
+    text-align-last: justify;
+    display: block;
+    width: 57px;
   }
 
 </style>
