@@ -45,9 +45,8 @@
             <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}}
               {{this.slotData.contactPersonOfSeller}} {{this.slotData.contactOfSeller}}</orders-info-item>
           </el-row>
-          <el-row type="flex" justify="space-between" align="middle">
+          <!-- <el-row type="flex" justify="space-between" align="middle">
             <el-row type="flex" justify="start" align="middle">
-              <!-- <el-col :span="13"> -->
               <div class="info-detail-logistics_info">
                 <el-row>
                   <h6 class="info-detail-logistics_info-text">
@@ -55,10 +54,9 @@
                   </h6>
                 </el-row>
               </div>
-              <!-- </el-col> -->
               <el-button class="info-detail-logistics_info-btn1">查看物流</el-button>
             </el-row>
-          </el-row>
+          </el-row> -->
           <el-row class="info-detail-item_row2">
             <orders-info-table :slotData="slotData.entries" class="info-detail-table" />
           </el-row>

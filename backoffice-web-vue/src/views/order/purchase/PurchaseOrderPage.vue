@@ -1,7 +1,9 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%" class="purchase-dialog">
-      <purchase-order-details-page :contracts="contracts" :slotData="contentData" :dialogDetailVisible="dialogDetailVisible" />
+    <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%"
+      class="purchase-dialog">
+      <purchase-order-details-page :contracts="contracts" :slotData="contentData"
+        :dialogDetailVisible="dialogDetailVisible" />
     </el-dialog>
     <div class="report">
       <purchase-orders-report />
@@ -21,7 +23,7 @@
             <span slot="label">
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
-            <purchase-order-search-result-list :page="page" @onDetails="onDetails"  @onSearch="onSearch"
+            <purchase-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
               @onAdvancedSearch="onAdvancedSearch" />
           </el-tab-pane>
         </template>
@@ -99,7 +101,7 @@
           size
         });
       },
-    onNew(formData) {
+      onNew(formData) {
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       },
       handleClick(tab, event) {
@@ -126,18 +128,22 @@
       onNew(formData) {
         this.fn.openSlider("创建手工单", PurchaseOrderDetailsPage, formData);
       },
-      async getContract(){
+      async getContract() {
         console.log(this.contentData);
         const url = this.apis().getContractsList();
-        const result = await http.post(url,{orderCode:this.contentData.code},{page:0,
-          size:100});
-        for(var i=0;i<result.content.length;i++){
-          if(result.content[i].state != 'INVALID'){
+        const result = await http.post(url, {
+          orderCode: this.contentData.code
+        }, {
+          page: 0,
+          size: 100
+        });
+        for (var i = 0; i < result.content.length; i++) {
+          if (result.content[i].state != 'INVALID') {
             this.contracts.push(result.content[i]);
           }
         }
       },
-      initContract(){
+      initContract() {
         this.contracts = [];
       },
     },
@@ -151,17 +157,17 @@
           code: "ALL",
           name: "全部"
         }],
-        contracts:[],
+        contracts: [],
       };
     },
     created() {
+      this.onSearch();
       this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
         this.statues.push(element);
       });
       Bus.$on('my-event', args => {
         // this.dialogDetailVisible = !this.dialogDetailVisible;
-      }),
-      this.onSearch("");
+      });
     },
     mounted() {
 

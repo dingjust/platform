@@ -25,6 +25,9 @@
         <account-entry-card />
         </el-row>
         <el-row>
+          <progress-card/>
+        </el-row>
+        <el-row>
         <img class="dashboard-img" src="/resource/hb7/haa/8807140098078.png"/>
         </el-row>
       </el-col>
@@ -38,6 +41,7 @@
   import ChartCard from '../shared/ChartCard';
   import MonthIncomeCard from '../shared/MonthIncomeCard';
   import AccountEntryCard from '../shared/AccountEntryCard';
+  import ProgressCard from '../shared/ProgressCard';
 
   export default {
     name: 'FactoryDashboardPage',
@@ -46,7 +50,8 @@
       ToolbarCard,
       ChartCard,
       MonthIncomeCard,
-      AccountEntryCard
+      AccountEntryCard,
+      ProgressCard
     },
     computed: {
 

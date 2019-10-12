@@ -5,8 +5,10 @@ import com.yangyxd.alipayme.AlipayMePlugin;
 import com.jzoom.amaplocation.AmapLocationPlugin;
 import com.example.citypickers.CityPickersPlugin;
 import io.flutter.plugins.connectivity.ConnectivityPlugin;
-import com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin;
+import com.pichillilorenzo.flutter_inappbrowser.InAppBrowserFlutterPlugin;
+import io.github.ponnamkarthik.flutterwebview.FlutterNativeWebPlugin;
 import com.github.marekchen.flutterqq.FlutterQqPlugin;
+import com.flutter_webview_plugin.FlutterWebviewPlugin;
 import com.jarvan.fluwx.FluwxPlugin;
 import vn.hunghd.flutter.plugins.imagecropper.ImageCropperPlugin;
 import io.flutter.plugins.imagepicker.ImagePickerPlugin;
@@ -16,10 +18,13 @@ import com.crazecoder.openfile.OpenFilePlugin;
 import io.flutter.plugins.packageinfo.PackageInfoPlugin;
 import io.flutter.plugins.pathprovider.PathProviderPlugin;
 import com.baseflow.permissionhandler.PermissionHandlerPlugin;
+import flutter.plugins.screen.screen.ScreenPlugin;
 import io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin;
 import com.tekartik.sqflite.SqflitePlugin;
 import com.danieldallos.storeredirect.StoreRedirectPlugin;
 import io.flutter.plugins.urllauncher.UrlLauncherPlugin;
+import io.flutter.plugins.videoplayer.VideoPlayerPlugin;
+import io.flutter.plugins.webviewflutter.WebViewFlutterPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -33,8 +38,10 @@ public final class GeneratedPluginRegistrant {
     AmapLocationPlugin.registerWith(registry.registrarFor("com.jzoom.amaplocation.AmapLocationPlugin"));
     CityPickersPlugin.registerWith(registry.registrarFor("com.example.citypickers.CityPickersPlugin"));
     ConnectivityPlugin.registerWith(registry.registrarFor("io.flutter.plugins.connectivity.ConnectivityPlugin"));
-    FlutterLocalNotificationsPlugin.registerWith(registry.registrarFor("com.dexterous.flutterlocalnotifications.FlutterLocalNotificationsPlugin"));
+    InAppBrowserFlutterPlugin.registerWith(registry.registrarFor("com.pichillilorenzo.flutter_inappbrowser.InAppBrowserFlutterPlugin"));
+    FlutterNativeWebPlugin.registerWith(registry.registrarFor("io.github.ponnamkarthik.flutterwebview.FlutterNativeWebPlugin"));
     FlutterQqPlugin.registerWith(registry.registrarFor("com.github.marekchen.flutterqq.FlutterQqPlugin"));
+    FlutterWebviewPlugin.registerWith(registry.registrarFor("com.flutter_webview_plugin.FlutterWebviewPlugin"));
     FluwxPlugin.registerWith(registry.registrarFor("com.jarvan.fluwx.FluwxPlugin"));
     ImageCropperPlugin.registerWith(registry.registrarFor("vn.hunghd.flutter.plugins.imagecropper.ImageCropperPlugin"));
     ImagePickerPlugin.registerWith(registry.registrarFor("io.flutter.plugins.imagepicker.ImagePickerPlugin"));
@@ -44,10 +51,13 @@ public final class GeneratedPluginRegistrant {
     PackageInfoPlugin.registerWith(registry.registrarFor("io.flutter.plugins.packageinfo.PackageInfoPlugin"));
     PathProviderPlugin.registerWith(registry.registrarFor("io.flutter.plugins.pathprovider.PathProviderPlugin"));
     PermissionHandlerPlugin.registerWith(registry.registrarFor("com.baseflow.permissionhandler.PermissionHandlerPlugin"));
+    ScreenPlugin.registerWith(registry.registrarFor("flutter.plugins.screen.screen.ScreenPlugin"));
     SharedPreferencesPlugin.registerWith(registry.registrarFor("io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin"));
     SqflitePlugin.registerWith(registry.registrarFor("com.tekartik.sqflite.SqflitePlugin"));
     StoreRedirectPlugin.registerWith(registry.registrarFor("com.danieldallos.storeredirect.StoreRedirectPlugin"));
     UrlLauncherPlugin.registerWith(registry.registrarFor("io.flutter.plugins.urllauncher.UrlLauncherPlugin"));
+    VideoPlayerPlugin.registerWith(registry.registrarFor("io.flutter.plugins.videoplayer.VideoPlayerPlugin"));
+    WebViewFlutterPlugin.registerWith(registry.registrarFor("io.flutter.plugins.webviewflutter.WebViewFlutterPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

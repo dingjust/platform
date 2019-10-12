@@ -32,24 +32,32 @@
         </el-row>
         <el-row class="rowClass">
           <el-form-item>
-            <el-row type="flex" align="middle">
-              <h6 class="info-input-prepend">公司名称<span style="color: red">*</span></h6>
-              <el-input placeholder="请填写公司名称" v-model="formData.name" size="mini"></el-input>
+            <el-row type="flex">
+              <el-col :span="2">
+                <h6 class="titleTextClass">公司名称</h6>
+              </el-col>
+              <el-col :span="22">
+                <el-input placeholder="请填写公司名称" v-model="formData.name" size="mini" :disabled="formData.approvalStatus === 'approved'"></el-input>
+              </el-col>
             </el-row>
           </el-form-item>
         </el-row>
         <el-row class="rowClass">
           <el-form-item class="purchase-form-item">
             <el-row type="flex">
-              <h6 class="info-input-prepend">自选标签</h6>
-              <el-select v-model="formData.labels" multiple value-key="id" size="mini" placeholder="请选择">
-                <el-option
-                  v-for="item in labels"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item">
-                </el-option>
-              </el-select>
+              <el-col :span="2">
+                <h6 class="titleTextClass">自选标签</h6>
+              </el-col>
+              <el-col :span="22" >
+                <el-select v-model="formData.labels" multiple value-key="id" size="mini" placeholder="请选择">
+                  <el-option
+                    v-for="item in labels"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item">
+                  </el-option>
+                </el-select>
+              </el-col>
             </el-row>
           </el-form-item>
         </el-row>
@@ -144,8 +152,17 @@
     font-size: 10px;
   }
 
+  .factory-basic .titleTextClass{
+    text-align: justify;
+    text-align-last: justify;
+    display: inline-block;
+    width: 57px;
+    font-size: 10px;
+    font-weight: bold;
+  }
+
   .factory-basic .el-input--mini .el-input__inner{
-    width: 262px;
+    width: 100%;
   }
 
 </style>

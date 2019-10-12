@@ -13,12 +13,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '8'
+    flutterVersionCode = '9'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0.10'
+    flutterVersionName = '1.1.0'
 }
 
 apply plugin: 'com.android.application'
@@ -44,7 +44,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
-        versionCode 8
+        versionCode 9
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        ndk {
@@ -64,18 +64,23 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['release', 'debug']
         }
         debug {
             signingConfig signingConfigs.release
+            matchingFallbacks = ['release', 'debug']
         }
         dynamicProfile {
             signingConfig signingConfigs.release
+            matchingFallbacks = ['release', 'debug']
         }
         dynamicRelease {
             signingConfig signingConfigs.release
+            matchingFallbacks = ['release', 'debug']
         }
         profile {
             signingConfig signingConfigs.release
+            matchingFallbacks = ['release', 'debug']
         }
     }
 
