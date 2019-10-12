@@ -62,7 +62,7 @@
       </el-table-column>
       <el-table-column label="订单标签">
         <template slot-scope="scope">
-          <el-row>
+          <el-row v-if="scope.row.payStatus != null && scope.row.payStatus != 'UNPAID'">
             <img width="40px" height="15px" :src="getPaymentStatusTag(scope.row)" />
           </el-row>
           <el-row>
@@ -147,7 +147,7 @@
         return amount;
       },
       getPaymentStatusTag(row) {
-        return row.balancePaid ? 'static/img/paid.png' : 'static/img/arrears.png';
+        return row.payStatus === 'PAID' ? 'static/img/paid.png' : 'static/img/arrears.png';
       },
       getSignedTag(row) {
         if (row.userAgreementIsSigned == null) {
