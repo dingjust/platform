@@ -23,7 +23,7 @@
             <el-col :span="24">
               <h5
                 :class="contractType!='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-                新签合同（电子签章）———{{contractType!='2'?'使用平台电子模板':'上传纸质合同文件'}}</h5>
+                新签合同（电子签章）———{{contractType!='2'?'使用平台电子模板':'上传自定义合同文件'}}</h5>
             </el-col>
           </el-row>
           <el-row>

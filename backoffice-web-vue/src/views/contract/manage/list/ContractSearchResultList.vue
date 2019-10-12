@@ -243,6 +243,9 @@
         this.pdfVisible = false
         this.previewPdf('',args);
       });
+      Bus.$on('closeSeal', args => {
+        this.dialogSealVisible = false;
+      });
     }
   }
 

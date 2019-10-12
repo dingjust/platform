@@ -68,9 +68,16 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签">
-        <!--<el-tag type="danger">欠款</el-tag>-->
-      </el-table-column>
+        <el-table-column label="订单标签">
+          <template slot-scope="scope">
+            <el-row>
+              <img width="40px" height="15px" :src="getPaymentStatusTag(scope.row)" />
+            </el-row>
+            <el-row>
+              <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
+            </el-row>
+          </template>
+        </el-table-column>
       <!--<el-table-column label="操作" min-width="100">-->
         <!--<template slot-scope="scope">-->
           <!--<el-row>-->
@@ -183,6 +190,16 @@
       //选中行
       handleCurrentChange(val) {
         this.selectedItem = val;
+      },
+      getPaymentStatusTag(row) {
+        return row.balancePaid ? 'static/img/paid.png' : 'static/img/arrears.png';
+      },
+      getSignedTag(row) {
+        if (row.userAgreementIsSigned == null) {
+          return 'static/img/not_signed.png';
+        } else {
+          return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
+        }
       },
     },
     data() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card class="box-card">
       <el-row :gutter="20">
         <el-col :span="8">
@@ -9,10 +9,10 @@
         </el-col>
         <el-col :span="8">
           <el-row class="seal_custom-row" type="flex" align="middle">
-            <el-col :span="3">
-              <span>名称：</span>
+            <el-col :span="5">
+              <span>印章名称：</span>
             </el-col>
-            <el-col :span="21">
+            <el-col :span="19">
               <el-input size="mini" placeholder="请输入名称" v-model="name"></el-input>
             </el-col>
           </el-row>
@@ -40,19 +40,19 @@
             </el-radio-group>
           </el-row>
           <el-row class="seal_custom-row" type="flex" align="middle">
-            <el-col :span="4">
+            <el-col :span="5">
               <span>横向文：</span>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="19">
               <el-input @change="createSeal" :disabled="sealRole == 'sealRole1'" size="mini" placeholder="请输入横向文" v-model="sealType">
               </el-input>
             </el-col>
           </el-row>
           <el-row class="seal_custom-row" type="flex" align="middle">
-            <el-col :span="4">
+            <el-col :span="5">
               <span>下弦文：</span>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="19">
               <el-input  @change="createSeal" :disabled="sealRole == 'sealRole1'" size="mini" placeholder="请输入下弦文" v-model="sealRemarks">
               </el-input>
             </el-col>
@@ -71,6 +71,7 @@
   import {createNamespacedHelpers} from 'vuex';
   import CDS from "./utils/canvasdrawseal.js";
   import http from '@/common/js/http';
+  import Bus from '@/common/js/bus.js';
   const {mapActions} = createNamespacedHelpers('ContractSealModule');
 
   export default {
@@ -175,6 +176,7 @@
           return;
         }
         this.$message.success(result.msg);
+        Bus.$emit('closeFrom');
         this.refresh();
         this.fn.closeSlider(true);
       },
