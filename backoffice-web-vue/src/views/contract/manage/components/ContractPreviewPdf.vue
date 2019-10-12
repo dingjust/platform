@@ -14,9 +14,23 @@
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning" class="toolbar-search_input"
         @click="onRevokeConfirm(slotData.code)">撤回</el-button>
     </div>
+    <!--<center>-->
+      <!--<table height="150px" border="0" id='waitPage'>-->
+        <!--<tr>-->
+          <!--<td>-->
+            <!--<img width='28' height='28' id='myImage' src='http://img.zcool.cn/community/0179f1574d2d656ac72525ae5f181d.gif' />-->
+          <!--</td>-->
+          <!--<td>加载中，请等待...</td>-->
+        <!--</tr>-->
+      <!--</table>-->
+    <!--</center>-->
+    <div v-if="!isLoading" style="width: 100px; height: 100px; z-index: 100; position: fixed; margin: 50px auto auto -50px; top: 50%; left: 50%;">加载中....</div>
     <iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
       height="480" width="100%">
     </iframe>
+    <!--<iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl"-->
+            <!--height="480" width="100%">-->
+    <!--</iframe>-->
   </div>
 </template>
 
@@ -34,12 +48,16 @@
       ContractSealList,
       ContractSupplementForm,
     },
+    mounted(){
+      this.isLoading = true;
+    },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
         sealPage: '',
         reFresh:true,
         dialogOrderVisible:false,
+        isLoading:false,
       }
     },
     methods: {

@@ -576,8 +576,8 @@ html[dir='rtl'] #toolbarContainer, .findbar, .secondaryToolbar {
   position: relative;
   width: 100%;
   height: 4px;
-  background-color: #333;
-  border-bottom: 1px solid #333;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #FFFFFF;
 }
 
 #loadingBar .progress {
@@ -586,7 +586,7 @@ html[dir='rtl'] #toolbarContainer, .findbar, .secondaryToolbar {
   left: 0;
   width: 0%;
   height: 100%;
-  background-color: #FFFFFF;
+  background-color: #FFD60C;
   overflow: hidden;
   -webkit-transition: width 200ms;
   transition: width 200ms;

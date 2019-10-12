@@ -130,6 +130,7 @@
           this.personalReadOnly = true;
           this.getPersonalData();
         }
+        this.checkState();
       },
       personal(){
         if(this.currentUser.type == 'BRAND'){
@@ -142,18 +143,18 @@
         //控制tab不可点逻辑
         if(this.companyState != 'UNCERTIFIED' && this.companyState != 'FAILED'){
             if(this.companyType == 'ENTERPRISE'){
-              this.isBusiness = false;
-              this.isCompany = true;
-            }else if(this.companyType == 'INDIVIDUAL'){
               this.isBusiness = true;
               this.isCompany = false;
+            }else if(this.companyType == 'INDIVIDUAL'){
+              this.isBusiness = false;
+              this.isCompany = true;
             }else{
               this.isBusiness = false;
               this.isCompany = false;
             }
         }
         if(this.companyState == 'SUCCESS'){
-          this.isPersonal = true;
+          this.isPersonal = false;
         }
 
       },
@@ -203,7 +204,7 @@
     },
     created() {
       this.getAuthenticationState();
-      this.checkState();
+
     },
     mounted() {}
 

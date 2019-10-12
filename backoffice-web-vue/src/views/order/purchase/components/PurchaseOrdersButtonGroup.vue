@@ -1,6 +1,6 @@
 <template>
   <el-row class="purchase-order-row" type="flex" justify="center" align="middle" :gutter="50">
-    <el-button class="purchase-order-btn" v-if="isMyself&&isPending" @click="onUniqueCode">唯一码
+    <el-button class="purchase-order-btn" v-if="isMyself&&isPending&&isOffline" @click="onUniqueCode">唯一码
     </el-button>
     <el-button class="purchase-order-btn" v-if="isBrand()&&!isPending&&!isCompleted" @click="onCreateReceive">收货
     </el-button>
@@ -49,6 +49,9 @@
       },
       isCompleted: function () {
         return this.slotData.status == 'COMPLETED';
+      },
+      isOffline:function(){
+        return this.slotData.cooperator.type=='OFFLINE'
       },
       hasReconciliationOrders: function () {
         return this.slotData.reconciliationOrders != null && this.slotData.reconciliationOrders.length != 0

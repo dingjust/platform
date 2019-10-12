@@ -8,7 +8,7 @@
           </el-row>
           <el-row :span="3" v-for="(item, index) in mockData" :key="index" :offset="0">
             <div :class="item.code==selectedCode?'template-file_selected':'template-file'" @click="onSelect(item)">
-              <a href="#here"><div class="template-ban" v-show="item.baned">
+              <a href="#template"><div class="template-ban" v-show="item.baned">
                 <i class="el-icon-remove template-ban_icon"></i>
               </div>
               <el-row type="flex" justify="center">
@@ -24,7 +24,7 @@
           </el-row>
         </el-aside>
         <el-main style="margin-left: 150px">
-          <div  id="here">
+          <div  id="template">
             <el-row type="flex" justify="space-between" align="middle">
               <el-col :span="4">
                 <div class="template-form-header">
@@ -47,17 +47,17 @@
               </el-input>
             </el-row>
             <el-row class="contract_custom-row"><span></span></el-row>
-            <el-row class="contract_custom-row text-align-left"><span>固定条款</span></el-row>
+            <el-row class="contract_custom-row text-align-left"><h6>固定条款</h6></el-row>
             <el-row>
               <div class="contract_custom-fixed_terms">
                 <Viewer :value="viewerText" class="contract_custom-viewer" />
               </div>
             </el-row>
-            <el-row class="contract_custom-row text-align-left"><span>自定义条款</span></el-row>
+            <el-row class="contract_custom-row text-align-left"><h6>自定义条款</h6></el-row>
             <el-row>
               <div class="contract_custom-custom_terms">
-                <Editor v-model="editorText" :html="editorHtml" :options="editorOptions" :visible="editorVisible"
-                  previewStyle="vertical" />
+                <Editor v-model="editorText" :html="editorHtml" :options="editorOptions"
+                        :visible="editorVisible"  class="contract_custom-editor"/>
               </div>
             </el-row>
           </div>
@@ -283,6 +283,10 @@
     border-color: #ffd60c;
     margin-left: 20px;
     color: #000;
+  }
+
+  .contract_custom-editor{
+    min-height: 550px;
   }
 
 </style>

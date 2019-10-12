@@ -8,7 +8,7 @@
       <el-input style="width: 250px" placeholder="合同号/订单号/签署对象/合同名称" v-model="keyword"></el-input>
     </el-form-item>
     <el-form-item label="日期">
-      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator=" 至 "
+      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator=" - "
         start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" :picker-options="pickerOptions">
       </el-date-picker>
     </el-form-item>
