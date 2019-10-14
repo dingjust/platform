@@ -66,11 +66,15 @@
         </el-col>
       </el-row>
       <el-row class="create-contract-row" type="flex" justify="start">
-        <el-col :push="2" :span="8">
-          <span class="tips">合同有效期</span>
+        <el-col :push="2" :span="3">
+        <div style="margin-top: 20px;"><span class="tips">合同有效期</span></div>
+        </el-col>
+        <el-col :push="1" :span="8">
+          <div>
             <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="至"
                             value-format="yyyy-MM-dd"  start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
             </el-date-picker>
+          </div>
         </el-col>
       </el-row>
       <el-row class="create-contract-row" type="flex" justify="start">
