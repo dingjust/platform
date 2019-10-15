@@ -1,204 +1,221 @@
 <template>
-  <div class="animated fadeIn">
-    <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
-    <requirement-order-operate-toolbar :read-only="slotData.editable" :can-recommended="slotData.status=='PENDING_QUOTE'" @onUpdate="onUpdate" @onReview="onReview" @onRecommended="onRecommended"/>
-    <div class="pt-2"></div>
-    <requirement-order-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
-    <div class="pt-2"></div>
-    <requirement-order-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
-    
-    <el-dialog title="审核" width="450px" :visible.sync="this.reviewVisible" :before-close="handleClose"
-               append-to-body>
-      <requirement-order-labels-form :slotData = "slotData" :read-only="false"></requirement-order-labels-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="update()">确 定</el-button>
+  <div class="animated fadeIn requirement-detail">
+    <div class="box" v-if="!readOnly">
+      <div class="boxButton">
+        <el-row type="flex" justify="center">
+          <div class="buttonIconClass">
+            <svg t="1570870182765" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4529" width="100%" height="100%">
+              <path d="M481.83 855.3c16.21 0 29.25 12.82 29.25 28.52s-13.14 28.53-29.25 28.53H306.06c-80.82 0.09-146.43-63.9-146.43-142.72V255.4c0-78.83 65.61-142.82 146.43-142.82h410c80.92 0 146.43 64 146.43 142.82v228.49c0 15.81-13.14 28.53-29.25 28.53S804 499.6 804 483.89V255.4c0-47.32-39.33-85.67-87.84-85.67h-410c-48.52 0-87.84 38.36-87.84 85.67v514.23c0 47.32 39.32 85.67 87.84 85.67zM364.65 284h292.86c16.2 0 29.25 12.82 29.25 28.53s-13.14 28.53-29.25 28.53H364.65c-16.21 0-29.25-12.82-29.25-28.53s13-28.53 29.25-28.53z m0 171.34h292.86c16.2 0 29.25 12.82 29.25 28.52s-13 28.62-29.25 28.62H364.65c-16.21 0-29.25-12.82-29.25-28.53s13-28.62 29.25-28.62z m0 171.44h117.18c16.21 0 29.25 12.82 29.25 28.53s-13.14 28.52-29.25 28.52H364.65c-16.21 0-29.25-12.81-29.25-28.52s13-28.53 29.25-28.53z m0 0" fill="#505766" p-id="4530"></path><path d="M768.87 781.1l85.07 83a28 28 0 0 1 0 40.38 29.74 29.74 0 0 1-41.4 0l-85.07-83-85.08 83a29.74 29.74 0 0 1-41.4 0 28 28 0 0 1 0-40.38l85.07-83-85.07-83a28 28 0 0 1 0-40.38 29.75 29.75 0 0 1 41.4 0l85.08 83 85.07-83a29.75 29.75 0 0 1 41.4 0 28 28 0 0 1 0 40.38z m0 0" fill="#FFD60C" p-id="4531"></path>
+            </svg>
+          </div>
+        </el-row>
+        <el-row type="flex" justify="center">
+          <span class="buttonTextClass">邀请报价</span>
+        </el-row>
       </div>
-    </el-dialog>
+      <div class="boxButton">
+        <el-row type="flex" justify="center">
+          <div class="buttonIconClass">
+            <svg t="1570872740453" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4753" width="100%" height="100%">
+              <path d="M878.706111 98.25436m23.273401 21.962441l0 0q23.273401 21.962441 1.310961 45.235842l-488.369182 517.520441q-21.962441 23.273401-45.235842 1.310961l0 0q-23.273401-21.962441-1.310961-45.235842l488.369182-517.520441q21.962441-23.273401 45.235842-1.310961Z" fill="#FFD60C" p-id="4754"></path><path d="M835.65 455.5a28.17 28.17 0 0 0-28.36 28.17v334.65c0 19.8-14.47 36.16-32.74 36.16H246.8c-18.27 0-32.74-16.37-32.74-36.16V285.59c0-19.8 14.47-36.16 32.74-36.16H485c14.47 0 27-12.56 27-27s-12.56-27-27-27H246.8c-49.11 0-87.18 40-87.18 90.6v536.48a87.18 87.18 0 0 0 87.18 87.18h529.65c47.21 0 87.18-40 87.18-90.6V483.67a28.17 28.17 0 0 0-28-28.17z" fill="#505766" p-id="4755"></path>
+            </svg>
+          </div>
+        </el-row>
+        <el-row type="flex" justify="center">
+          <span class="buttonTextClass">修改</span>
+        </el-row>
+      </div>
+      <div class="boxButton">
+        <el-row type="flex" justify="center">
+          <div class="buttonIconClass">
+            <svg t="1570870292198" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4641" width="100%" height="100%">
+              <path d="M306.16 170.54c-48.52 0-87.84 38.26-87.84 85.46v513c0 47.2 39.32 85.46 87.84 85.46h410c48.52 0 87.84-38.26 87.84-85.46V541c0-15.67 13.14-28.46 29.25-28.46S862.5 525.23 862.5 541v228c0 78.63-65.51 142.46-146.43 142.46h-410c-80.82 0-146.43-63.83-146.43-142.46V256c0-78.63 65.61-142.46 146.43-142.37h175.76c16.11 0 29.25 12.69 29.25 28.46s-13 28.45-29.25 28.45z m58.49 569.86c-16.21 0-29.25-12.79-29.25-28.45s13-28.45 29.25-28.45h292.86c16.1 0 29.25 12.79 29.25 28.45s-13 28.45-29.25 28.45z m0-170.92c-16.21 0-29.25-12.88-29.25-28.55s13-28.45 29.25-28.45H476.2c16.2 0 29.25 12.88 29.25 28.55s-13 28.45-29.25 28.45z m0-171" fill="#505766" p-id="4642"></path><path d="M856.39 170.53a14 14 0 0 0-5.3-9.48l-56.38-44.28a14.8 14.8 0 0 0-10.71-3.06 14.61 14.61 0 0 0-9.76 5.18l-237 284.88a14.32 14.32 0 0 0-2.55 4.71l-0.07 0.25-22.9 72.27a13.88 13.88 0 0 0 4.75 15.11l11.27 8.89a14.85 14.85 0 0 0 16.21 1.32l67.87-36.93 0.24-0.14a14.72 14.72 0 0 0 4.21-3.41l237-284.88a13.82 13.82 0 0 0 3.12-10.43z" fill="#FFD60C" p-id="4643"></path>
+            </svg>
+          </div>
+        </el-row>
+        <el-row type="flex" justify="center">
+          <span class="buttonTextClass">重新报价</span>
+        </el-row>
+      </div>
+    </div>
+    <el-row class="factory-info-title-row" type="flex" justify="space-between">
+      <div class="factory-info-title">
+        <h6 class="factory-info-title_text">需求订单详情</h6>
+      </div>
+      <!--<i class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>-->
+    </el-row>
+    <el-row type="flex" justify="space-between" align="middle">
+      <h6>需求信息</h6>
+      <div>
+        <span style="color: #C0C0C0">需求编号：{{slotData.code}}</span>&nbsp;&nbsp;&nbsp;
+        <span style="color: #C0C0C0">当前状态：<span :style="{color: statusColor}">{{getEnum('requirementOrderStatuses',slotData.status)}}</span></span>&nbsp;&nbsp;&nbsp;
+        <span style="color: #C0C0C0">发布日期：{{slotData.creationtime | formatDate}}</span>
+      </div>
+    </el-row>
+    <el-divider></el-divider>
+    <requirement-order-basic-info-page :slotData="slotData" style="margin: 20px 0px"/>
+    <el-divider></el-divider>
+    <requirement-order-belong-to-info-page :slotData="slotData" style="margin: 20px 0px -20px 0px"/>
+    <el-divider ></el-divider>
+    <el-row type="flex" justify="space-between" align="middle" style="margin-top: 20px" v-if="!readOnly">
+      <h6>报价详情</h6>
+    </el-row>
+    <requirement-order-quote-list :page="quotePage" @onSearch="onSearchQuotes" v-if="!readOnly">
+      <template slot="operations" slot-scope="props">
+        <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">
+          确认工厂
+        </el-button>
+        <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">
+          拒绝工厂
+        </el-button>
+        <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">
+          查看详细报价
+        </el-button>
+      </template>
+    </requirement-order-quote-list>
 
-    <el-dialog title="修改" width="600px" :visible.sync="this.updateVisible" :before-close="handleClose"
-               append-to-body>
-      <requirement-order-update-form :slotData = "slotData"></requirement-order-update-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="update()">确 定</el-button>
-      </div>
-    </el-dialog>
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :append-to-body="true">
+      <quote-details-page :slotData="quoteData" :readOnly="true">
 
-    <el-dialog title="推荐工厂" width="600px" :visible.sync="recommendedVisible" :before-close="handleClose"
-               append-to-body>
-      <el-select v-model="recommendedFactories" placeholder="请选择"
-                 multiple class="w-100"
-                 filterable
-                 remote
-                 :remote-method="getFactories">
-        <el-option
-          v-for="item in factories"
-          :key="item.uid"
-          :label="item.name"
-          :value="item.uid">
-        </el-option>
-      </el-select>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="recommended()">确 定</el-button>
-      </div>
+      </quote-details-page>
     </el-dialog>
   </div>
 </template>
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
+  import RequirementOrderBasicInfoPage from '../info/RequirementOrderBasicInfoPage';
+  import RequirementOrderBelongToInfoPage from '../info/RequirementOrderBelongToInfoPage';
+  import RequirementOrderQuoteList from '../list/RequirementOrderQuoteList';
+  import QuoteDetailsPage from "../../quote/details/QuoteDetailsPage";
 
-  const {mapActions} = createNamespacedHelpers('RequirementOrdersModule');
-
-  import RequirementOrderFormToolbar from '../toolbar/RequirementOrderFormToolbar';
-  import RequirementOrderOperateToolbar from '../toolbar/RequirementOrderOperateToolbar';
-  import RequirementOrderForm from '../form/RequirementOrderForm';
-  import RequirementOrderUpdateForm from '../form/RequirementOrderUpdateForm';
-  import RequirementOrderLabelsForm from '../form/RequirementOrderLabelsForm';
+  const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
     name: 'RequirementOrderDetailsPage',
-    props: ['slotData'],
-    components: {
-      RequirementOrderFormToolbar,
-      RequirementOrderOperateToolbar,
-      RequirementOrderForm,
-      RequirementOrderUpdateForm,
-      RequirementOrderLabelsForm
+    props: {
+      slotData: {
+        type: Object,
+        required: true
+      },
+      readOnly: {
+        type: Boolean,
+        default: true
+      }
     },
-    methods: {
-      ...mapActions({
-        refresh: 'refresh'
-      }),
-      handleClose(done) {
-        this.reviewVisible = false;
-        this.updateVisible = false;
-        this.recommendedVisible = false;
-      },
-      async recommended() {
-        console.log(this.recommendedFactories);
+    components: {
+      QuoteDetailsPage,
+      RequirementOrderQuoteList,
+      RequirementOrderBelongToInfoPage,
+      RequirementOrderBasicInfoPage
 
-        if (this.recommendedFactories == '') {
-          this.$message.error('请选择工厂推荐');
-          return false;
-        }
-        const url = this.apis().recommendRequirementOrderToFactory(this.slotData.code,this.recommendedFactories);
-        const result = await this.$http.put(url,{});
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('推荐成功'+this.slotData.code);
-        this.recommendedVisible = false;
-        this.fn.closeSlider(true);
-
-      },
-      async update() {
-        console.log(this.slotData);
-        const expectedDeliveryDate = this.slotData.details.expectedDeliveryDate;
-        if (this.compareDate(new Date(), new Date(expectedDeliveryDate))) {
-          this.$message.error('预计完成时间不能小于当前时间');
-          return false;
-        }
-        let formData = this.slotData;
-
-        const url = this.apis().updateRequirementOrder(formData.code);
-        const result = await this.$http.put(url, formData);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.$message.success('更新成功，订单编号： ' + result);
-        this.$set(this.slotData, 'code', result);
-        this.refresh();
-        this.fn.closeSlider(true);
-        this.updateVisible = false;
-        this.reviewVisible = false;
-      },
-
-      onUpdate() {
-        this.reviewVisible = false;
-        this.updateVisible = true;
-
-      },
-      onReview() {
-        this.reviewVisible = true;
-        this.updateVisible = false;
-      },
-      onRecommended() {
-        this.recommendedVisible = true;
-      },
-      onSubmit() {
-        this.$refs['form'].validate((valid) => {
-          if (valid) {
-
-            this._onSubmit();
-            return true;
-          }
-
-          return false;
-        });
-      },
-      _getDate(timestamp) {
-        const result = new Date(timestamp);
-        return result.getFullYear() + '' + result.getMonth() + '' + result.getDate();
-      },
-      onCancel() {
-        this.fn.closeSlider();
-      },
-      async _onSubmit() {
-        let formData = this.slotData;
-
-        const url = this.apis().createRequirementOrder();
-        const result = await this.$http.post(url, formData);
-        console.log(result);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.$message.success('发布需求成功，订单编号： ' + result);
-        this.$set(this.slotData, 'code', result);
-        this.refresh();
-        this.fn.closeSlider(true);
-      },
-      async getFactories(query) {
-        const url = this.apis().getFactories();
-        const result = await this.$http.post(url,{keyword:query},{
-          page: 0,
-          size: 10
-        });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        this.factories = result.content;
-      },
     },
     computed: {
+      ...mapGetters({
+        quotePage: 'quotePage',
+      }),
+      statusColor: function () {
+        var color = '';
+        switch (this.slotData.status) {
+          case 'PENDING_QUOTE':
+            color = 'red';
+            break;
+          case 'COMPLETED':
+            color = 'green';
+            break;
+          case 'CANCELLED':
+            color = 'grey';
+            break;
+        }
+        return color;
+      }
+    },
+    methods: {
+      ...mapMutations({
+      }),
+      ...mapActions({
+      }),
+      async onDetails(item) {
+        const url = this.apis().getQuote(item.code);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
 
-      isNewlyCreated: function () {
-        return this.slotData.id === null;
+        this.quoteData = result;
+        this.detailsDialogVisible = !this.detailsDialogVisible;
+      },
+      onClose () {
+        this.setFactoryFormVisible(false);
+      },
+      onSearchQuotes(page, size){
+        this.$emit('onSearchQuotes',page,size);
       }
     },
-    created() {
-      if (!this.isFactory()) {
-        this.getFactories();
-      }
-    },
-    data() {
+    data () {
       return {
-        updateVisible:false,
-        reviewVisible:false,
-        recommendedVisible:false,
-        item:{},
-        recommendedFactories:'',
-        factories:[],
-
+        detailsDialogVisible: false,
+        quoteData: ''
       }
+    },
+    created () {
     }
   }
 </script>
+
+<style scoped>
+  .requirement-detail .factory-info-title {
+    width: 100%;
+    border-left: 2px solid #FFD60C;
+    padding-left: 10px;
+    height: 14px;
+  }
+
+  .requirement-detail .factory-info-title_text {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.65;
+  }
+
+  .requirement-detail .factory-info-title-row {
+    margin-bottom: 20px;
+  }
+
+  .requirement-detail .el-divider--horizontal{
+    margin: 0px 0px -1px 0px;
+  }
+
+  .requirement-detail .buttonClass{
+    padding: 8px 35px 8px 35px;
+    margin-bottom: 10px;
+    background-color: #ffd60c;
+    color: #0b0e0f;
+  }
+
+  .requirement-detail .box{
+    width: 50px;
+    position: fixed;
+    right: 152px;
+    top: 300px;
+    z-index:1;
+  }
+  .requirement-detail .boxButton{
+    width: 50px;
+    height: 50px;
+    font-size: 10px;
+    cursor: pointer;
+    border: 1px solid #DCDFE6;
+  }
+
+  .requirement-detail .buttonIconClass{
+    width: 30px;
+    height: 30px;
+    margin-bottom: 8px;
+  }
+
+  .requirement-detail .buttonTextClass{
+    transform:scale(0.7);
+  }
+</style>

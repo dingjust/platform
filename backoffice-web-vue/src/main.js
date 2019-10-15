@@ -113,8 +113,12 @@ Vue.mixin({
     },
     // 枚举类型
     getEnum (enumsName, code) {
-      const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);
-      return result ? result['name'] : 'UNKNOWN';
+      if (code !== null && code !== '') {
+        const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);
+        return result ? result['name'] : 'UNKNOWN';
+      } else {
+        return '';
+      }
     }
   }
 });

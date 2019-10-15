@@ -1,62 +1,247 @@
 <template>
-  <div class="animated fadeIn">
-    <quote-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
-    <div class="pt-2"></div>
-    <el-card>
-    <quote-form :slot-data="slotData" :read-only="!isNewlyCreated"/>
-    </el-card>
-    <div class="pt-2"></div>
-    <quote-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+  <div class="animated fadeIn quote-detail">
+    <div class="box" v-if="!readOnly">
+      <div class="boxButton">
+        <el-row type="flex" justify="center">
+          <div class="buttonIconClass">
+            <svg t="1570870292198" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4641" width="100%" height="100%">
+              <path d="M306.16 170.54c-48.52 0-87.84 38.26-87.84 85.46v513c0 47.2 39.32 85.46 87.84 85.46h410c48.52 0 87.84-38.26 87.84-85.46V541c0-15.67 13.14-28.46 29.25-28.46S862.5 525.23 862.5 541v228c0 78.63-65.51 142.46-146.43 142.46h-410c-80.82 0-146.43-63.83-146.43-142.46V256c0-78.63 65.61-142.46 146.43-142.37h175.76c16.11 0 29.25 12.69 29.25 28.46s-13 28.45-29.25 28.45z m58.49 569.86c-16.21 0-29.25-12.79-29.25-28.45s13-28.45 29.25-28.45h292.86c16.1 0 29.25 12.79 29.25 28.45s-13 28.45-29.25 28.45z m0-170.92c-16.21 0-29.25-12.88-29.25-28.55s13-28.45 29.25-28.45H476.2c16.2 0 29.25 12.88 29.25 28.55s-13 28.45-29.25 28.45z m0-171" fill="#505766" p-id="4642"></path><path d="M856.39 170.53a14 14 0 0 0-5.3-9.48l-56.38-44.28a14.8 14.8 0 0 0-10.71-3.06 14.61 14.61 0 0 0-9.76 5.18l-237 284.88a14.32 14.32 0 0 0-2.55 4.71l-0.07 0.25-22.9 72.27a13.88 13.88 0 0 0 4.75 15.11l11.27 8.89a14.85 14.85 0 0 0 16.21 1.32l67.87-36.93 0.24-0.14a14.72 14.72 0 0 0 4.21-3.41l237-284.88a13.82 13.82 0 0 0 3.12-10.43z" fill="#FFD60C" p-id="4643"></path>
+            </svg>
+          </div>
+        </el-row>
+        <el-row type="flex" justify="center">
+          <h6 class="buttonTextClass">创建打样订单</h6>
+        </el-row>
+      </div>
+      <div class="boxButton">
+        <el-row type="flex" justify="center">
+          <div class="buttonIconClass">
+            <svg t="1570870292198" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4641" width="100%" height="100%">
+              <path d="M306.16 170.54c-48.52 0-87.84 38.26-87.84 85.46v513c0 47.2 39.32 85.46 87.84 85.46h410c48.52 0 87.84-38.26 87.84-85.46V541c0-15.67 13.14-28.46 29.25-28.46S862.5 525.23 862.5 541v228c0 78.63-65.51 142.46-146.43 142.46h-410c-80.82 0-146.43-63.83-146.43-142.46V256c0-78.63 65.61-142.46 146.43-142.37h175.76c16.11 0 29.25 12.69 29.25 28.46s-13 28.45-29.25 28.45z m58.49 569.86c-16.21 0-29.25-12.79-29.25-28.45s13-28.45 29.25-28.45h292.86c16.1 0 29.25 12.79 29.25 28.45s-13 28.45-29.25 28.45z m0-170.92c-16.21 0-29.25-12.88-29.25-28.55s13-28.45 29.25-28.45H476.2c16.2 0 29.25 12.88 29.25 28.55s-13 28.45-29.25 28.45z m0-171" fill="#505766" p-id="4642"></path><path d="M856.39 170.53a14 14 0 0 0-5.3-9.48l-56.38-44.28a14.8 14.8 0 0 0-10.71-3.06 14.61 14.61 0 0 0-9.76 5.18l-237 284.88a14.32 14.32 0 0 0-2.55 4.71l-0.07 0.25-22.9 72.27a13.88 13.88 0 0 0 4.75 15.11l11.27 8.89a14.85 14.85 0 0 0 16.21 1.32l67.87-36.93 0.24-0.14a14.72 14.72 0 0 0 4.21-3.41l237-284.88a13.82 13.82 0 0 0 3.12-10.43z" fill="#FFD60C" p-id="4643"></path>
+            </svg>
+          </div>
+        </el-row>
+        <el-row type="flex" justify="center">
+          <h6 class="buttonTextClass">创建生产订单</h6>
+        </el-row>
+      </div>
+    </div>
+    <el-row class="factory-info-title-row" type="flex" justify="space-between">
+      <div class="factory-info-title">
+        <h6 class="info-title-text">报价单详情</h6>
+      </div>
+      <!--<i class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>-->
+    </el-row>
+    <el-row type="flex" justify="space-between" align="middle">
+      <h6 class="info-title-text">报价详情</h6>
+      <div>
+        <span style="color: #C0C0C0">报价单号：{{slotData.code}}</span>&nbsp;&nbsp;&nbsp;
+        <span style="color: #C0C0C0">当前状态：<span :style="{color: statusColor}">{{getEnum('quoteStates',slotData.state)}}</span></span>&nbsp;&nbsp;&nbsp;
+        <span style="color: #C0C0C0">发布日期：{{slotData.creationtime | formatDate}}</span>
+      </div>
+    </el-row>
+    <el-divider></el-divider>
+    <quote-basic-info-page :slotData="slotData" style="margin: 20px 0px"/>
+    <el-divider></el-divider>
+    <el-row type="flex" justify="space-between" align="middle" style="margin-top: 20px">
+      <h6 class="info-title-text">需求信息</h6>
+    </el-row>
+    <requirement-order-basic-info-page :slotData="slotData.requirementOrder" style="margin: 20px 0px"/>
+    <el-divider></el-divider>
+    <el-row type="flex" justify="space-between" align="middle" style="margin-top: 20px">
+      <h6 class="info-title-text">发布需求者</h6>
+    </el-row>
+    <requirement-order-belong-to-info-page :slotData="slotData.requirementOrder" style="margin: 20px 0px -20px 0px"/>
+    <el-divider></el-divider>
   </div>
 </template>
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
+  import QuoteBasicInfoPage from "../info/QuoteBasicInfoPage";
+  import RequirementOrderBasicInfoPage from "../../requirement/info/RequirementOrderBasicInfoPage";
+  import RequirementOrderBelongToInfoPage from "../../requirement/info/RequirementOrderBelongToInfoPage";
 
-  const {mapActions} = createNamespacedHelpers('QuotesModule');
-
-  import QuoteFormToolbar from "../toolbar/QuoteFormToolbar";
-  import QuoteForm from '../form/QuoteForm';
+  const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
     name: 'QuoteDetailsPage',
-    props: ['slotData', 'readOnly'],
-    components: {QuoteFormToolbar, QuoteForm},
-    methods: {
-      ...mapActions({
-        refresh: 'refresh'
+    props: {
+      slotData: {
+        type: Object,
+        required: true
+      },
+      readOnly: {
+        type: Boolean,
+        default: true
+      }
+    },
+    components: {
+      RequirementOrderBelongToInfoPage,
+      RequirementOrderBasicInfoPage,
+      QuoteBasicInfoPage,
+    },
+    computed: {
+      ...mapGetters({
+
       }),
-      async onSubmit() {
-
-        if (this.compareDate(new Date(), new Date(this.slotData.expectedDeliveryDate))) {
-          this.$message.error('确认交货时间不能小于当前时间');
-
-          return false;
+      statusColor: function () {
+        var color = '';
+        switch (this.slotData.state) {
+          case 'SELLER_SUBMITTED':
+            color = 'red';
+            break;
+          case 'BUYER_APPROVED':
+            color = 'green';
+            break;
+          case 'BUYER_REJECTED':
+            color = 'grey';
+            break;
         }
-        const url = this.apis().createQuote();
-        const result = await this.$http.post(url, this.slotData);
+        return color;
+      }
+    },
+    methods: {
+      ...mapMutations({
+      }),
+      ...mapActions({
+      }),
+      async onEdit () {
+        var uid = this.$store.getters.currentUser.companyCode;
+        let url = this.apis().getFactory(uid);
+        const result = await this.$http.get(url);
         if (result['errors']) {
-          this.$message.error('获取数据失败，原因：' + result['errors'][0].message);
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success('报价单创建成功，订单号：' + result);
+        this.setFormData(Object.assign({}, result));
 
-        this.refresh();
+        if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
+          this.getCities(this.formData.contactAddress.region);
+          this.setIsCitiesChanged(false);
+        }
+        if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
+          this.getCityDistricts(this.formData.contactAddress.city);
+          this.setIsDistrictsChanged(false);
+        }
 
-        this.fn.closeSlider();
+        this.setFactoryFormVisible(true);
       },
-      onCancel() {
-        this.fn.closeSlider();
+      async onSave () {
+        var uid = this.$store.getters.currentUser.companyCode;
+        let url = this.apis().updateFactory(uid);
+        const result = await this.$http.put(url, this.formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.setFactoryFormVisible(false);
+        this.$message.success('编辑工厂信息成功');
+      },
+      async getRegions () {
+        const url = this.apis().getRegions();
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.regions = result;
+      },
+      async getCities (region, index) {
+        const url = this.apis().getCities(region.isocode);
+        const result = await this.$http.get(url);
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$store.state.FactoriesModule.cities = result;
+      },
+      async getCityDistricts (city) {
+        const url = this.apis().getDistricts(city.code);
+        const result = await this.$http.get(url);
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$store.state.FactoriesModule.cityDistricts = result;
+      },
+      onClose () {
+        this.setFactoryFormVisible(false);
       }
     },
-    computed: {
-      isNewlyCreated: function () {
-        return this.slotData.id === null;
+    data () {
+      return {
       }
     },
-    data() {
-      return {}
+    created () {
     }
   }
 </script>
+
+<style scoped>
+  .quote-detail .factory-info-title {
+    width: 100%;
+    border-left: 2px solid #FFD60C;
+    padding-left: 10px;
+    height: 14px;
+  }
+
+  .quote-detail .info-title-text {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.65;
+  }
+
+  .quote-detail .factory-info-title-row {
+    margin-bottom: 20px;
+  }
+
+  .quote-detail .el-divider--horizontal{
+    margin: 0px 0px -1px 0px;
+  }
+
+  .quote-detail .buttonClass{
+    padding: 8px 35px 8px 35px;
+    margin-bottom: 10px;
+    background-color: #ffd60c;
+    color: #0b0e0f;
+  }
+
+  .quote-detail .box{
+    width: 50px;
+    position: fixed;
+    right: 152px;
+    top: 300px;
+    z-index:1;
+  }
+  .quote-detail .boxButton{
+    width: 50px;
+    height: 50px;
+    font-size: 10px;
+    cursor: pointer;
+    border: 1px solid #DCDFE6;
+  }
+
+  .quote-detail .buttonIconClass{
+    width: 30px;
+    height: 30px;
+    margin-bottom: -8px;
+  }
+
+  .quote-detail .buttonTextClass{
+    font-size: 12px;
+    transform:scale(0.7);
+  }
+
+  .v-modal{
+    display: none;
+  }
+</style>

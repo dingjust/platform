@@ -14,6 +14,12 @@
         </template>
       </requirement-order-search-result-list>
     </el-card>
+
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
+      <requirement-order-details-page :slotData="slotData" @onSearchQuotes="onSearchQuotes">
+
+      </requirement-order-details-page>
+    </el-dialog>
   </div>
 </template>
 
@@ -30,6 +36,7 @@
   export default {
     name: 'RequirementOrderPage',
     components: {
+      RequirementOrderDetailsPage,
       RequirementOrderToolbar,
       RequirementOrderSearchResultList
     },
@@ -38,12 +45,14 @@
         page: 'page',
         keyword: 'keyword',
         queryFormData: 'queryFormData',
+        quoteQueryFormData: 'quoteQueryFormData'
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        searchQuotesAdvanced: 'searchQuotesAdvanced'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch'
@@ -71,7 +80,9 @@
           return;
         }
 
-        this.fn.openSlider('需求订单：' + item.code, RequirementOrderDetailsPage, result);
+        this.slotData = result;
+        this.detailsDialogVisible = !this.detailsDialogVisible;
+        this.onSearchQuotes(0, 8);
       },
       async onCancelled(item) {
         const url = this.apis().cancelledRequirementOrder(item.code);
@@ -89,10 +100,19 @@
       onSimpleNew(formData) {
         this.fn.openSlider('急速发布需求', RequirementOrderSimpleForm, formData);
       },
+      onSearchQuotes (page, size) {
+        const url = this.apis().getQuotes();
+        var queryFormData = Object.assign({}, this.quoteQueryFormData);
+        queryFormData.requirementOrderRef = this.slotData.code;
+
+        this.searchQuotesAdvanced({url, query: queryFormData, page, size});
+      },
     },
     data() {
       return {
+        slotData: '',
         isAdvancedSearch: this.$store.state.RequirementOrdersModule.isAdvancedSearch,
+        detailsDialogVisible: false
       };
     },
     created() {
