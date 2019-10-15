@@ -16,7 +16,7 @@
     </el-card>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
-      <requirement-order-details-page :slotData="slotData" @onSearchQuotes="onSearchQuotes">
+      <requirement-order-details-page :slotData="slotData" @onSearchQuotes="onSearchQuotes" :readOnly="false">
 
       </requirement-order-details-page>
     </el-dialog>
