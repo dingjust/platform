@@ -1,13 +1,13 @@
 <template>
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
-      <el-table-column type="expand" fixed>
-        <template slot-scope="props">
-          <requirement-order-request-form :read-only="true"
-                                          :slot-data="props.row.requirementOrder.details">
-          </requirement-order-request-form>
-        </template>
-      </el-table-column>
+      <!--<el-table-column type="expand" fixed>-->
+        <!--<template slot-scope="props">-->
+          <!--<requirement-order-request-form :read-only="true"-->
+                                          <!--:slot-data="props.row.requirementOrder.details">-->
+          <!--</requirement-order-request-form>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="报价单号" prop="code" width="250" fixed></el-table-column>
       <el-table-column label="状态" prop="state" fixed>
         <template slot-scope="scope">

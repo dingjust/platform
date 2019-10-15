@@ -26,6 +26,12 @@
         </template>
       </quote-search-result-list>
     </el-card>
+
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
+      <quote-details-page :slotData="slotData" :readOnly="false">
+
+      </quote-details-page>
+    </el-dialog>
   </div>
 </template>
 
@@ -43,6 +49,7 @@
   export default {
     name: 'QuotePage',
     components: {
+      QuoteDetailsPage,
       QuoteToolbar,
       QuoteSearchResultList
     },
@@ -79,7 +86,8 @@
           return;
         }
 
-        this.fn.openSlider('报价单明细，单号：' + item.code, QuoteDetailsPage, result);
+        this.slotData = result;
+        this.detailsDialogVisible = !this.detailsDialogVisible;
       },
       onCreatePurchaseOrder(item) {
         let formData = {};
@@ -111,6 +119,8 @@
         purchaseOrderFormData: this.$store.state.PurchaseOrdersModule.formData,
         proofingFormData: this.$store.state.ProofingsModule.formData,
         isAdvancedSearch: this.$store.state.QuotesModule.isAdvancedSearch,
+        detailsDialogVisible: false,
+        slotData: ''
       };
     },
     created() {
