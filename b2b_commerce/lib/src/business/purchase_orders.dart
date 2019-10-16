@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
-import 'package:b2b_commerce/src/production/v2/production_offline_order_from_v2.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -11,9 +10,9 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../_shared/orders/purchase/purchase_order_list.dart';
 import '../_shared/widgets/app_bar_factory.dart';
 import '../_shared/widgets/tab_factory.dart';
-import '../_shared/orders/purchase/purchase_order_list.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -172,12 +171,8 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage>
               onTap: () {
                 Navigator.push(
                   context,
-                  //旧线下订单
-                  // MaterialPageRoute(
-                  //   builder: (context) => ProductionOfflineOrder(),
-                  // ),
                   MaterialPageRoute(
-                    builder: (context) => ProductionOfflineOrderV2(),
+                    builder: (context) => ProductionOfflineOrder(),
                   ),
                 );
               },

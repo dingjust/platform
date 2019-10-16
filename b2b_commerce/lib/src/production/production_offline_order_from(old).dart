@@ -14,18 +14,17 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class ProductionOfflineOrderV2 extends StatefulWidget {
+class ProductionOfflineOrder extends StatefulWidget {
   final ApparelProductModel product;
 
   Map<ColorModel, List<SizeQuantityItem>> colorSizeQuantityList;
 
-  ProductionOfflineOrderV2({this.product, this.colorSizeQuantityList});
+  ProductionOfflineOrder({this.product, this.colorSizeQuantityList});
 
-  _ProductionOfflineOrderV2State createState() =>
-      _ProductionOfflineOrderV2State();
+  _ProductionOfflineOrderState createState() => _ProductionOfflineOrderState();
 }
 
-class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
+class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   AddressModel addressModel = AddressModel(
     region: null,
     fullname: null,
@@ -89,15 +88,15 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
         ),
         body: Container(
             child: ListView(
-          children: <Widget>[
-            _buildCenter(context),
-            Divider(
-              height: 0,
-            ),
-            _buildBottom(context),
+              children: <Widget>[
+                _buildCenter(context),
+                Divider(
+                  height: 0,
+                ),
+                _buildBottom(context),
 //                _buildCommitButton(context),
-          ],
-        )),
+              ],
+            )),
         bottomNavigationBar: Container(
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -208,49 +207,52 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
             children: <Widget>[
               productModel.thumbnail != null
                   ? Container(
-                      width: 80,
-                      height: 80,
-                      child: CachedNetworkImage(
-                          imageUrl: '${productModel.thumbnail.actualUrl}',
-                          fit: BoxFit.cover,
-                          imageBuilder: (context, imageProvider) => Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                          placeholder: (context, url) => SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              ),
-                          errorWidget: (context, url, error) => SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              )),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    )
-                  : Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'temp/picture.png',
-                              package: "assets",
+                width: 80,
+                height: 80,
+                child: CachedNetworkImage(
+                    imageUrl: '${productModel.thumbnail.actualUrl}',
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
-                          )),
-                    ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              )
+                  : Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'temp/picture.png',
+                        package: "assets",
+                      ),
+                      fit: BoxFit.cover,
+                    )),
+              ),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
@@ -302,7 +304,9 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
           dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductSelectPage(),
+              builder: (context) =>
+                  ProductSelectPage(
+                  ),
             ),
           );
           if (result != null) {
@@ -342,14 +346,14 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
 
               colors.forEach((color) {
                 ColorModel itemColor = _newItems.keys.firstWhere(
-                    (key) => key.code == color.code,
+                        (key) => key.code == color.code,
                     orElse: () => null);
 
                 if (itemColor != null) {
                   _items[itemColor] = sizes.map((size) {
                     SizeQuantityItem item = _newItems[itemColor].firstWhere(
-                        (SizeQuantityItem) =>
-                            SizeQuantityItem.size.code == size.code,
+                            (SizeQuantityItem) =>
+                        SizeQuantityItem.size.code == size.code,
                         orElse: () => null);
                     if (item != null) {
                       return item;
@@ -399,10 +403,14 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
                 )),
           ),
           onTap: () async {
+
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductSelectPage(),
+                builder: (context) =>
+                    ProductSelectPage(
+
+                    ),
               ),
             );
             if (result != null) {
@@ -442,14 +450,14 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
 
                 colors.forEach((color) {
                   ColorModel itemColor = _newItems.keys.firstWhere(
-                      (key) => key.code == color.code,
+                          (key) => key.code == color.code,
                       orElse: () => null);
 
                   if (itemColor != null) {
                     _items[itemColor] = sizes.map((size) {
                       SizeQuantityItem item = _newItems[itemColor].firstWhere(
-                          (SizeQuantityItem) =>
-                              SizeQuantityItem.size.code == size.code,
+                              (SizeQuantityItem) =>
+                          SizeQuantityItem.size.code == size.code,
                           orElse: () => null);
                       if (item != null) {
                         return item;
@@ -490,12 +498,12 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
             trailing: _totalQuantity == null || _totalQuantity < 0
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
-                    _totalQuantity.toString(),
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
+              _totalQuantity.toString(),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
+            ),
           ),
         ),
         onTap: () {
@@ -536,23 +544,24 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
               trailing: company == null || company.name == null
                   ? Icon(Icons.keyboard_arrow_right)
                   : Container(
-                      width: 150,
-                      child: Text(
-                        company.name,
-                        textAlign: TextAlign.end,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey),
-                      ),
-                    )),
+                width: 150,
+                child: Text(
+                  company.name,
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey),
+                ),
+              )),
         ),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderFactroyInput(
+                builder: (context) =>
+                    OfflineOrderFactroyInput(
                       model: company,
                       type: '工厂',
                     )),
@@ -579,23 +588,24 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
               trailing: company == null || company.name == null
                   ? Icon(Icons.keyboard_arrow_right)
                   : Container(
-                      width: 150,
-                      child: Text(
-                        company.name,
-                        textAlign: TextAlign.end,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey),
-                      ),
-                    )),
+                width: 150,
+                child: Text(
+                  company.name,
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey),
+                ),
+              )),
         ),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineOrderFactroyInput(
+                builder: (context) =>
+                    OfflineOrderFactroyInput(
                       model: company,
                       type: '品牌',
                     )),
@@ -652,16 +662,16 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
               trailing: deliveryDate == null
                   ? Icon(Icons.keyboard_arrow_right)
                   : Container(
-                      width: 150,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(DateFormatUtil.formatYMD(deliveryDate),
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey),
-                            overflow: TextOverflow.ellipsis),
-                      ))),
+                  width: 150,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(DateFormatUtil.formatYMD(deliveryDate),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                        overflow: TextOverflow.ellipsis),
+                  ))),
         ),
         onTap: () {
           _showDatePicker();
@@ -680,25 +690,26 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
               ),
             ),
             trailing: earnest == null ||
-                    earnest.earnestMoney == null ||
-                    earnest.earnestMoney == ''
+                earnest.earnestMoney == null ||
+                earnest.earnestMoney == ''
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
-                    earnest.earnestMoney,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
+              earnest.earnestMoney,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
+            ),
           ),
         ),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductionEarnestMoney(
-                earnest: earnest,
-              ),
+              builder: (context) =>
+                  ProductionEarnestMoney(
+                    earnest: earnest,
+                  ),
             ),
           ).then((value) {
             setState(() {
@@ -722,16 +733,16 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
               trailing: address == null || address == ''
                   ? Icon(Icons.keyboard_arrow_right)
                   : Container(
-                      width: 150,
-                      child: Text(
-                        address,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey),
-                      ),
-                    )),
+                width: 150,
+                child: Text(
+                  address,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey),
+                ),
+              )),
         ),
         onTap: () {
           address = '';
@@ -766,21 +777,22 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
             trailing: addressModel == null || addressModel.region == null
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
-                    addressModel.region.name +
-                        addressModel.city.name +
-                        addressModel.cityDistrict.name,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
+              addressModel.region.name +
+                  addressModel.city.name +
+                  addressModel.cityDistrict.name,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
+            ),
           ),
         ),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OfflineContactsInput(
+                builder: (context) =>
+                    OfflineContactsInput(
                       model: addressModel,
                     )),
             //接收返回数据并处理
@@ -813,12 +825,12 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
             trailing: machiningType == null
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
-                    MachiningTypeLocalizedMap[machiningType],
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
+              MachiningTypeLocalizedMap[machiningType],
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
+            ),
           ),
         ),
         onTap: () {
@@ -847,12 +859,12 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
             trailing: isInvoice == null
                 ? Icon(Icons.keyboard_arrow_right)
                 : Text(
-                    isInvoice == true ? '开发票' : '不开发票',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
+              isInvoice == true ? '开发票' : '不开发票',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
+            ),
           ),
         ),
         onTap: () {
@@ -1068,7 +1080,7 @@ class _ProductionOfflineOrderV2State extends State<ProductionOfflineOrderV2> {
         builder: (_) {
           return RequestDataLoading(
             requestCallBack:
-                PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder),
+            PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: 'createPurchaseOrder',
