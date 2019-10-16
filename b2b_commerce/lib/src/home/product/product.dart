@@ -21,13 +21,22 @@ class RecommendProductItem extends StatelessWidget {
     // print('=====${model.thumbnails[0].normalUrl()}');
     return GestureDetector(
       onTap: () async {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            });
         //TODO: 跳转到产品详情页
         ApparelProductModel detailProduct =
-            await ProductRepositoryImpl().detail(model.code);
+        await ProductRepositoryImpl().detail(model.code);
+        Navigator.of(context).pop();
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ProductDetailPage(
-                  product: detailProduct,
-                )));
+              product: detailProduct,
+            )));
       },
       child: Container(
         decoration: BoxDecoration(

@@ -26,10 +26,11 @@ class MyContractPage extends StatefulWidget {
 }
 
 class _MyContractPageState extends State<MyContractPage> with SingleTickerProviderStateMixin ,AutomaticKeepAliveClientMixin{
-
   final GlobalKey _globalKey = GlobalKey<_MyContractPageState>();
   List<String> historyKeywords;
   var controller;
+
+
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
       length: statuses.length,
       vsync: this, //动画效果的异步处理，默认格式
     );
+
     super.initState();
   }
 
@@ -49,7 +51,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
             barrierDismissible: false,
             builder: (_) {
               return RequestDataLoading(
-                requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+                requestCallBack: LocalStorage.get(GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY),
                 outsideDismiss: false,
                 loadingText: '加载中。。。',
                 entrance: '',
@@ -71,7 +73,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
                     searchModel:SearchModel(
                       historyKeywords: historyKeywords,
                       searchModelType: SearchModelType.PURCHASE_ORDER,
-                      route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+                      route: GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
                     ),
                   ),
             ),
@@ -117,7 +119,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
             child: RaisedButton(
               color: Color.fromRGBO(255, 214, 12, 1),
               child: Text(
-                '签署新合同',
+                '创建新合同',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18,
@@ -185,7 +187,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<MyContractBLoC>(context);
-
+    print(widget.status.code);
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
@@ -199,8 +201,8 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
             StreamBuilder<ContractData>(
               stream: widget.status == null
                   ? bloc.stream
-                  : bloc.stream.where((purchaseData) =>
-              purchaseData.status == widget.status.code),
+                  : bloc.stream.where((data) =>
+              data.status == widget.status.code),
               // initialData: null,
               builder:
                   (BuildContext context, AsyncSnapshot<ContractData> snapshot) {
@@ -230,26 +232,11 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
                             AppBLoC.instance.getConnectivityResult ==
                                 ConnectivityResult.none
                                 ? '网络链接不可用请重试'
-                                : '没有相关订单数据',
+                                : '没有相关数据',
                             style: TextStyle(
                               color: Colors.grey,
                             ),
                           )),
-                      AppBLoC.instance.getConnectivityResult !=
-                          ConnectivityResult.none
-                          ? Container(
-                        child: FlatButton(
-                          color: Color.fromRGBO(255, 214, 12, 1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => MyHelpPage()));
-                          },
-                          child: Text('如何创建订单？'),
-                        ),
-                      )
-                          : Container()
                     ],
                   );
                 }

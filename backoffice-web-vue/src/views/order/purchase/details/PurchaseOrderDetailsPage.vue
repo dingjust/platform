@@ -1,14 +1,15 @@
 <template>
   <div class="animated fadeIn">
-    <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
+    <!-- <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
                                  @onSubmit="onSubmit"
-                                 @onCancel="onCancel"/>
+                                 @onCancel="onCancel"/> -->
     <div class="pt-2"></div>
-    <purchase-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/>
+    <!-- <purchase-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/> -->
+    <purchase-order-info :slot-data="slotData" :contracts="contracts"/>
     <div class="pt-2"></div>
-    <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
+    <!-- <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
                                  @onSubmit="onSubmit"
-                                 @onCancel="onCancel"/>
+                                 @onCancel="onCancel"/> -->
   </div>
 </template>
 
@@ -17,18 +18,19 @@
 
   const {mapActions} = createNamespacedHelpers('PurchaseOrdersModule');
 
-  import PurchaseOrderFormToolbar from "../toolbar/PurchaseOrderFormToolbar";
+  import PurchaseOrderFormToolbar from '../toolbar/PurchaseOrderFormToolbar';
   import PurchaseOrderForm from '../form/PurchaseOrderForm';
+  import PurchaseOrderInfo from '../info/PurchaseOrderInfo';
 
   export default {
     name: 'PurchaseOrderDetailsPage',
-    props: ['slotData'],
-    components: {PurchaseOrderFormToolbar, PurchaseOrderForm},
+    props: ['slotData','contracts'],
+    components: {PurchaseOrderFormToolbar, PurchaseOrderForm, PurchaseOrderInfo},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
-      async onSubmit() {
+      async onSubmit () {
         // console.log("submitted data: " + JSON.stringify(this.slotData));
 
         const expectedDeliveryDate = this.slotData.expectedDeliveryDate;
@@ -54,10 +56,10 @@
 
         this.fn.closeSlider();
       },
-      onCancel() {
+      onCancel () {
         this.fn.closeSlider();
       },
-      confirmDelivering() {
+      confirmDelivering () {
 
       }
     },
@@ -66,7 +68,7 @@
         return this.slotData.id === null;
       }
     },
-    data() {
+    data () {
       return {}
     }
   }

@@ -62,16 +62,17 @@ let http = {
   /** post 请求
    * @param  {接口地址} url
    * @param  {请求参数} data
-   * @param  {headers参数} params
+   * @param  {路由参数} params
    */
   post: function (url, data, params) {
     let loading = Loading.service(this.options);
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.post(url, data, {
-        params: params
+        params: params,
       }).then((response) => {
         loading.close();
+        console.log(response);
         return resolve(response.data);
       })
         .catch((error) => {
@@ -133,7 +134,32 @@ let http = {
           }
         });
     });
-  }
+  },
+    /** upload
+   * @param  {接口地址} url
+   * @param  {请求参数} data
+   */
+  formdataPost: function (url, data,) {
+    let loading = Loading.service(this.options);
+    setAuthorization();
+    return new Promise((resolve, reject) => {
+      axios.post(url, data, {
+        headers:{'Content-Type':'multipart/form-data'}
+      }).then((response) => {
+        loading.close();
+        return resolve(response.data);
+      })
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            loading.close();
+            return resolve(error.response.data);
+          } else {
+            loading.close();
+            return resolve(error.response);
+          }
+        });
+    });
+  },
 };
 
 export default http;

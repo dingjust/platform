@@ -77,8 +77,10 @@ const state = {
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
     createdDateTo: null,
-    belongTos: [],
-    purchasers:[],
+    // belongTos: [],
+    // purchasers:[],
+    keyword:'',
+    categories:[]
   },
   addressFormData: {
     id: null,

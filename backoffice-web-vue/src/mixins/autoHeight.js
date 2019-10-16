@@ -39,7 +39,7 @@ export default {
   },
 
   mounted () {
-    this.$nextTick(() => { this.getAutoHeight(190) })
+    this.$nextTick(() => { this.getAutoHeight(120) })
     window.addEventListener('resize', (e) => { this.isHeightComputed = false; this.getAutoHeight() })
   }
 }

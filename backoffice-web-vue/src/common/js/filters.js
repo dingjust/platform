@@ -13,7 +13,7 @@ export function formatDate (date, fmt) {
     'd+': date.getDate(),
     'h+': date.getHours(),
     'm+': date.getMinutes(),
-    's+': date.getSeconds(),
+    's+': date.getSeconds()
   };
   for (let k in o) {
     if (new RegExp(`(${k})`).test(fmt)) {
@@ -269,7 +269,95 @@ const ENUMS = {
     REVIEWED: {
       code: 'REVIEWED',
       name: '已审核'
+    }
+  },
+  PayStatus: {
+    UNPAID: {
+      code: 'UNPAID',
+      name: '未付'
     },
+    PAID: {
+      code: 'PAID',
+      name: '已付'
+    },
+    ARREARS: {
+      code: 'ARREARS',
+      name: '欠款'
+    }
+  },
+  payPlanType: {
+    PHASEONE: {
+      code: 'PHASEONE',
+      name: '一期款'
+    },
+    PHASETWO: {
+      code: 'PHASETWO',
+      name: '二期款'
+    },
+    MONTHLY_SETTLEMENT: {
+      code: 'MONTHLY_SETTLEMENT',
+      name: '月结'
+    }
+  },
+  // PaymentType: {
+  //   PARTPAID: {
+  //     code: 'PARTPAID',
+  //     name: '部分付款'
+  //   },
+  //   ALLPAID: {
+  //     code: 'ALLPAID',
+  //     name: '全部付款'
+  //   }
+  // },
+  TriggerType: {
+    INSIDE: {
+      code: 'INSIDE',
+      name: '以内'
+    },
+    OUTSIDE: {
+      code: 'OUTSIDE',
+      name: '以外'
+    }
+  },
+  PayMoneyType: {
+    DEPOSIT: {
+      code: 'DEPOSIT',
+      name: '定金'
+    },
+    PHASEONE: {
+      code: 'PHASEONE',
+      name: '一期款'
+    },
+    PHASETWO: {
+      code: 'PHASETWO',
+      name: '二期款'
+    },
+    MONTHLY_SETTLEMENT: {
+      code: 'MONTHLY_SETTLEMENT',
+      name: '月结'
+    }
+  },
+  TriggerEvent: {
+    ORDER_CONFIRMED: {
+      code: 'ORDER_CONFIRMED',
+      name: '确认订单'
+    },
+    CONTRACT_SIGNED: {
+      code: 'CONTRACT_SIGNED',
+      name: '签署合同'
+    },
+    DELIVERY_CONFIRMED: {
+      code: 'DELIVERY_CONFIRMED',
+      name: '确认收货'
+    },
+    RECONCILIATION_CONFIRMED: {
+      code: 'RECONCILIATION_CONFIRMED',
+      name: '确认对账'
+    },
+    INVOICE_RECEIVED: {
+      code: 'INVOICE_RECEIVED',
+      name: '收到发票'
+    }
   }
 };
 
@@ -305,4 +393,28 @@ export function postponedDays (statuDateList) {
   const mss = finishDate - estimatedDate;
   const days = parseInt(mss / (1000 * 60 * 60 * 24));
   return days;
+}
+
+// 两个数相除
+export function numDiv (num1, num2) {
+  var baseNum1 = 0, baseNum2 = 0;
+  var baseNum3, baseNum4;
+  try {
+    baseNum1 = num1.toString().split('.')[1].length;
+  } catch (e) {
+    baseNum1 = 0;
+  }
+  try {
+    baseNum2 = num2.toString().split('.')[1].length;
+  } catch (e) {
+    baseNum2 = 0;
+  }
+  baseNum3 = Math.Number(num1.toString().replace('.', ''));
+  baseNum4 = Math.Number(num2.toString().replace('.', ''));
+  return (baseNum3 / baseNum4) * Math.pow(10, baseNum2 - baseNum1);
+};
+
+// 两个数相乘
+export function floatFormat (num1, count) {
+  return (Math.round(num1 * 100) / 100).toFixed(count);
 }

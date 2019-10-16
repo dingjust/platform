@@ -1,25 +1,30 @@
 <template>
-  <div class="animated fadeIn">
-    <apparel-product-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
+  <div class="animated fadeIn content">
+    <apparel-product-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" />
     <div class="pt-2"></div>
-    <apparel-product-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
+    <apparel-product-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated" />
     <div class="pt-2"></div>
-    <apparel-product-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
   </div>
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
-  const {mapActions} = createNamespacedHelpers('ApparelProductsModule');
+  const {
+    mapActions
+  } = createNamespacedHelpers('ApparelProductsModule');
 
   import ApparelProductFormToolbar from '../toolbar/ApparelProductFormToolbar';
   import ApparelProductForm from '../form/ApparelProductForm';
 
   export default {
     name: 'ApparelProductDetailsPage',
-    props: ['slotData'],
-    components: {ApparelProductFormToolbar, ApparelProductForm},
+    components: {
+      ApparelProductFormToolbar,
+      ApparelProductForm
+    },
     methods: {
       ...mapActions({
         refresh: 'refresh'
@@ -46,15 +51,26 @@
         this.$set(this.slotData, 'code', result);
         this.refresh();
         this.fn.closeSlider(true);
+        this.$emit('afterCreate');
       }
     },
     computed: {
       isNewlyCreated: function () {
         return this.slotData.id === null;
-      }
+      },
     },
     data() {
-      return {}
+      return {
+        slotData: {}
+      }
+    },
+    created() {
+      if (this.$route.params.slotData != null) {
+        this.slotData = this.$route.params.slotData;
+      }else{
+        this.slotData=this.$store.state.ApparelProductsModule.formData;
+      }
     }
   }
+
 </script>

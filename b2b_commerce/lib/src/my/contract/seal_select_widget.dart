@@ -1,75 +1,63 @@
-import 'dart:convert';
-
-import 'package:b2b_commerce/src/my/contract/contract_template.dart';
+import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
-typedef void ChangeData(Map<String, dynamic> map);
+typedef void ChangeData(SealModel map);
 typedef List<Widget> CreateWidgetList();
-
-const contractTypes = <EnumModel>[
-  EnumModel('1', '框架协议'),
-  EnumModel('2', '附件合同'),
-  EnumModel('3', '采购合同'),
-  EnumModel('4', '意向合同'),
-];
 
 class SealSelectWidget {
   Function cacel;
+  List<SealModel> rightData;
+  String code;
 
-  SealSelectWidget({this.cacel}){
+  SealSelectWidget({this.cacel,this.rightData,this.code}){
     if(this.cacel == null) this.cacel = (){};
   }
 
-  void showAddressPicker(BuildContext context, {
+  void showPicker(BuildContext context, {
     ChangeData selectType,
     ChangeData selectTemplate,
   }) {
-    rootBundle.loadString('data/province.json').then((v) {
-      List data = json.decode(v);
-      Navigator.push(
-        context,
-         _AddressPickerRoute(
-          data: data,
-          selectProvince: selectType,
-          selectCity: selectTemplate,
-          theme: Theme.of(context, shadowThemeOnly: true),
-          barrierLabel:
-          MaterialLocalizations
-              .of(context)
-              .modalBarrierDismissLabel,
-          cacel:cacel,
-           leftData: contractTypes,
-           rightData: ContractData().getConList(),
-        ),
-      );
-    });
+    Navigator.push(
+      context,
+      _sealPickerRoute(
+        selectType: selectType,
+        selectTemplate: selectTemplate,
+        theme: Theme.of(context, shadowThemeOnly: true),
+        barrierLabel:
+        MaterialLocalizations
+            .of(context)
+            .modalBarrierDismissLabel,
+        cacel:cacel,
+        rightData: rightData,
+        contractCode: code,
+      ),
+    );
   }
 }
 
-class _AddressPickerRoute<T> extends PopupRoute<T> {
+class _sealPickerRoute<T> extends PopupRoute<T> {
   final ThemeData theme;
   final String barrierLabel;
   final List data;
-  final ChangeData selectProvince;
-  final ChangeData selectCity;
-  final ChangeData selectArea;
+  final ChangeData selectType;
+  final ChangeData selectTemplate;
   Function cacel;
-  List leftData;
   List rightData;
+  String contractCode;
 
-  _AddressPickerRoute({
+  _sealPickerRoute({
     this.theme,
     this.barrierLabel,
     this.data,
-    this.selectProvince,
-    this.selectCity,
-    this.selectArea,
+    this.selectType,
+    this.selectTemplate,
     this.cacel,
-    this.leftData,
     this.rightData,
+    this.contractCode,
   });
 
   @override
@@ -98,15 +86,14 @@ class _AddressPickerRoute<T> extends PopupRoute<T> {
     Widget bottomSheet =  MediaQuery.removePadding(
       removeTop: true,
       context: context,
-      child:  _AddressPickerWidget(
+      child:  _sealPickerWidget(
         route: this,
         data: data,
-        selectProvince: selectProvince,
-        selectCity: selectCity,
-        selectArea: selectArea,
+        selectType: selectType,
+        selectTemplate: selectTemplate,
         cacel:cacel,
-        leftData: leftData,
         rightData: rightData,
+        contractCode: contractCode,
       ),
     );
     if (theme != null) {
@@ -116,63 +103,51 @@ class _AddressPickerRoute<T> extends PopupRoute<T> {
   }
 }
 
-class _AddressPickerWidget extends StatefulWidget {
-  final _AddressPickerRoute route;
+class _sealPickerWidget extends StatefulWidget {
+  final _sealPickerRoute route;
   final List data;
-  final ChangeData selectProvince;
-  final ChangeData selectCity;
-  final ChangeData selectArea;
+  final ChangeData selectType;
+  final ChangeData selectTemplate;
   Function cacel;
-  List<EnumModel> leftData;
-  List<Contract> rightData;
+  List rightData;
+  String contractCode;
 
-  _AddressPickerWidget({Key key,
+  _sealPickerWidget({Key key,
     @required this.route,
     this.data,
-    this.selectProvince,
-    this.selectCity,
-    this.selectArea,
+    this.selectType,
+    this.selectTemplate,
     this.cacel,
     this.rightData,
-    this.leftData,
+    this.contractCode,
   });
 
   @override
   State createState() {
-    return  _AddressPickerState();
+    return  _sealPickerState();
   }
 }
 
-class _AddressPickerState extends State<_AddressPickerWidget> {
+class _sealPickerState extends State<_sealPickerWidget> {
   FixedExtentScrollController provinceController;
   FixedExtentScrollController cityController;
-  int provinceIndex = 0,
-      cityIndex = 0;
-  List lData =  List();
+  SealModel sealModel ;
+  String type;
+  String temp;
+  int rIndex = 0;
   List rData =  List();
-
-  String parent = '1';
 
   @override
   void initState() {
     super.initState();
     provinceController =  FixedExtentScrollController();
     cityController =  FixedExtentScrollController();
-    setState(() {
-      lData = widget.leftData;
-
-      for (int i = 0; i < widget.rightData.length; i++) {
-        if (parent == widget.rightData[i].parent) {
-          rData.add(widget.rightData[i]);
-        }
-      }
-    });
+    rData = widget.rightData;
   }
 
   Widget _bottomView() {
     return WillPopScope(
       onWillPop: () {
-//        Navigator.pop(context);
         return Future.value(false);
       },
       child:  Container(
@@ -180,7 +155,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
           color: Colors.white,
           child:  Column(
             children: <Widget>[
-               Expanded(
+              Expanded(
                 child:  Container(
                   child: Row(
                     children: <Widget>[
@@ -204,7 +179,10 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         margin: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
                         child: FlatButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            sealModel = rData[rIndex];
+                            widget.selectType(sealModel);
+//                            Navigator.pop(context);
+                            flowContract(widget.contractCode,sealModel);
                           },
                           child:  Text(
                             '确定',
@@ -223,21 +201,21 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
                   decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.grey[200],width: 1))
+                      border: Border(bottom: BorderSide(color: Colors.grey[200],width: 1))
                   ),
                 ),
               ),
-               Container(
-                 child: Row(
+              Container(
+                child: Row(
                   children: <Widget>[
-                     _MyAddressPicker(
+                    _MyAddressPicker(
                       key: Key('province'),
                       controller: provinceController,
                       createWidgetList: () {
-                        return lData.map((v) {
+                        return rData.map((v) {
                           return  Align(
                             child:  Text(
-                              v.name,
+                              v.name != null && v.name != '' ? v.name : '',
                               textScaleFactor: 1.2,
                             ),
                             alignment: Alignment.center,
@@ -246,24 +224,70 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                       },
                       changed: (index) {
                         setState(() {
-                          parent = lData[index].code;
-                          print(parent);
-                          rData.clear();
-                          for (int i = 0; i < widget.rightData.length; i++) {
-                            if (parent == widget.rightData[i].parent) {
-                              rData.add(widget.rightData[i]);
-                            }
-                          }
-                          cityController.jumpToItem(0);
+                          rIndex = index;
                         });
                       },
                     ),
                   ],
-              ),
-               )
+                ),
+              )
             ],
           )),
     );
+  }
+
+  flowContract(String code, SealModel sealModel){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack:
+            ContractRepository().flowContract(code, sealModel.code),
+            outsideDismiss: false,
+            loadingText: '请稍候。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      Certification certification = value;
+      if (certification != null) {
+        if(certification.data !=  null){
+          Navigator.push(
+            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString:certification.data)),
+          );
+        }else{
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.RESULT_DIALOG,
+                  failTips: certification.msg,
+                  callbackResult: false,
+                  confirmAction: () {
+                    Navigator.of(context).pop();
+                    Navigator.pop(context);
+                  },
+                );
+              });
+        }
+      }else{
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.RESULT_DIALOG,
+                failTips: '签署失败',
+                callbackResult: false,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                  Navigator.pop(context);
+                },
+              );
+            });
+      }
+    });
   }
 
   @override

@@ -26,15 +26,19 @@ import ProofingsModule from './order/proofings';
 import SampleProductModule from './miscs/sampleProduct';
 import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
 import SuppliersModule from './miscs/suppliers';
+import CooperatorModule from './miscs/cooperator';
 import IndustrialClustersModule from './miscs/industrial-clusters';
 import LabelsModule from './miscs/labels';
 import CarouselsModule from './miscs/carousels';
+import PayPlanModule from './miscs/payPlan';
 import OperationCoursesModule from './miscs/operationCourses';
 import WalletModule from './miscs/wallet';
 import CashOutManagerModule from './miscs/cashOutManager';
-import ContractModule from './miscs/contract';
-import ContractTemplateModule from './miscs/contractTemplate'
-import ContractSealModule from './miscs/contractSeal'
+
+// contract
+import ContractModule from './contract/contract';
+import ContractTemplateModule from './contract/contractTemplate'
+import ContractSealModule from './contract/contractSeal'
 
 export {
   // shared
@@ -66,9 +70,12 @@ export {
   SampleProductModule,
   SampleCheckoutHistModule,
   SuppliersModule,
+  CooperatorModule,
+  PayPlanModule,
   OperationCoursesModule,
   WalletModule,
   CashOutManagerModule,
+  //contract
   ContractModule,
   ContractTemplateModule,
   ContractSealModule,

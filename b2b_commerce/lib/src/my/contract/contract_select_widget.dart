@@ -1,40 +1,34 @@
-import 'dart:convert';
-
-import 'package:b2b_commerce/src/my/contract/contract_template.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 
-typedef void ChangeData(Map<String, dynamic> map);
+typedef void ChangeData(ContractTemplateModel map);
 typedef List<Widget> CreateWidgetList();
 
 const contractTypes = <EnumModel>[
-  EnumModel('1', '框架协议'),
-  EnumModel('2', '附件合同'),
-  EnumModel('3', '采购合同'),
-  EnumModel('4', '意向合同'),
+  EnumModel('KJXY', '框架协议'),
+  EnumModel('CGDD', '采购订单'),
+  EnumModel('WTSCHT', '委托生产合同'),
+  EnumModel('BCXY', '补充协议'),
 ];
 
 class ContractSelectWidget {
   Function cacel;
+  List<ContractTemplateModel> rightData;
 
-  ContractSelectWidget({this.cacel}){
+  ContractSelectWidget({this.cacel,this.rightData}){
     if(this.cacel == null) this.cacel = (){};
   }
 
-  void showAddressPicker(BuildContext context, {
+  void showPicker(BuildContext context, {
     ChangeData selectType,
     ChangeData selectTemplate,
   }) {
-    rootBundle.loadString('data/province.json').then((v) {
-      List data = json.decode(v);
       Navigator.push(
         context,
-         _AddressPickerRoute(
-          data: data,
-          selectProvince: selectType,
-          selectCity: selectTemplate,
+        _contractPickerRoute(
+          selectType: selectType,
+          selectTemplate: selectTemplate,
           theme: Theme.of(context, shadowThemeOnly: true),
           barrierLabel:
           MaterialLocalizations
@@ -42,31 +36,28 @@ class ContractSelectWidget {
               .modalBarrierDismissLabel,
           cacel:cacel,
            leftData: contractTypes,
-           rightData: ContractData().getConList(),
+           rightData: rightData,
         ),
       );
-    });
   }
 }
 
-class _AddressPickerRoute<T> extends PopupRoute<T> {
+class _contractPickerRoute<T> extends PopupRoute<T> {
   final ThemeData theme;
   final String barrierLabel;
   final List data;
-  final ChangeData selectProvince;
-  final ChangeData selectCity;
-  final ChangeData selectArea;
+  final ChangeData selectType;
+  final ChangeData selectTemplate;
   Function cacel;
   List leftData;
   List rightData;
 
-  _AddressPickerRoute({
+  _contractPickerRoute({
     this.theme,
     this.barrierLabel,
     this.data,
-    this.selectProvince,
-    this.selectCity,
-    this.selectArea,
+    this.selectType,
+    this.selectTemplate,
     this.cacel,
     this.leftData,
     this.rightData,
@@ -98,12 +89,11 @@ class _AddressPickerRoute<T> extends PopupRoute<T> {
     Widget bottomSheet =  MediaQuery.removePadding(
       removeTop: true,
       context: context,
-      child:  _AddressPickerWidget(
+      child:  _contractPickerWidget(
         route: this,
         data: data,
-        selectProvince: selectProvince,
-        selectCity: selectCity,
-        selectArea: selectArea,
+        selectType: selectType,
+        selectTemplate: selectTemplate,
         cacel:cacel,
         leftData: leftData,
         rightData: rightData,
@@ -116,22 +106,20 @@ class _AddressPickerRoute<T> extends PopupRoute<T> {
   }
 }
 
-class _AddressPickerWidget extends StatefulWidget {
-  final _AddressPickerRoute route;
+class _contractPickerWidget extends StatefulWidget {
+  final _contractPickerRoute route;
   final List data;
-  final ChangeData selectProvince;
-  final ChangeData selectCity;
-  final ChangeData selectArea;
+  final ChangeData selectType;
+  final ChangeData selectTemplate;
   Function cacel;
   List<EnumModel> leftData;
-  List<Contract> rightData;
+  List rightData;
 
-  _AddressPickerWidget({Key key,
+  _contractPickerWidget({Key key,
     @required this.route,
     this.data,
-    this.selectProvince,
-    this.selectCity,
-    this.selectArea,
+    this.selectType,
+    this.selectTemplate,
     this.cacel,
     this.rightData,
     this.leftData,
@@ -139,19 +127,21 @@ class _AddressPickerWidget extends StatefulWidget {
 
   @override
   State createState() {
-    return  _AddressPickerState();
+    return  _contractPickerState();
   }
 }
 
-class _AddressPickerState extends State<_AddressPickerWidget> {
+class _contractPickerState extends State<_contractPickerWidget> {
   FixedExtentScrollController provinceController;
   FixedExtentScrollController cityController;
-  int provinceIndex = 0,
-      cityIndex = 0;
+  ContractTemplateModel templateModel ;
+  String type;
+  String temp;
+  int rIndex = 0;
   List lData =  List();
   List rData =  List();
 
-  String parent = '1';
+  String parent = 'KJXY';
 
   @override
   void initState() {
@@ -162,8 +152,9 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
       lData = widget.leftData;
 
       for (int i = 0; i < widget.rightData.length; i++) {
-        if (parent == widget.rightData[i].parent) {
+        if (parent == AgreementTemplateTypeMap[widget.rightData[i].type]) {
           rData.add(widget.rightData[i]);
+          templateModel = widget.rightData[i];
         }
       }
     });
@@ -204,6 +195,12 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         margin: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
                         child: FlatButton(
                           onPressed: () {
+                            for (int i = 0; i < rData.length; i++) {
+                              if (i == rIndex) {
+                                templateModel = rData[i];
+                              }
+                            }
+                            widget.selectTemplate(templateModel);
                             Navigator.pop(context);
                           },
                           child:  Text(
@@ -247,10 +244,9 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                       changed: (index) {
                         setState(() {
                           parent = lData[index].code;
-                          print(parent);
                           rData.clear();
                           for (int i = 0; i < widget.rightData.length; i++) {
-                            if (parent == widget.rightData[i].parent) {
+                            if (parent == AgreementTemplateTypeMap[widget.rightData[i].type]) {
                               rData.add(widget.rightData[i]);
                             }
                           }
@@ -265,7 +261,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         return rData.map((v) {
                           return  Align(
                             child:  Text(
-                              v.name,
+                              v.title,
                               textScaleFactor: 1.2,
                             ),
                             alignment: Alignment.center,
@@ -274,8 +270,10 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                       },
                        changed: (index) {
                          setState(() {
-                           Contract temp = rData[index];
-                           print(temp.name);
+                           if(index!=null){
+                             rIndex = index;
+                           }
+                           templateModel = rData[rIndex];
                          });
                        },
                     ),

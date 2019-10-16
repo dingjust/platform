@@ -20,7 +20,7 @@ class MyContractBLoC extends BLoCBase {
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'INITIATE':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'SIGN':
+    'INVALID':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'COMPLETE':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
@@ -46,10 +46,11 @@ class MyContractBLoC extends BLoCBase {
   getData(String status) async {
 
     //若没有数据则查询
+    if(_dataMap != null && _dataMap.length > 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-          'state': status
+        'state': status
       };
 
       Response<Map<String, dynamic>> response;
@@ -72,8 +73,44 @@ class MyContractBLoC extends BLoCBase {
         _dataMap[status].data.clear();
         _dataMap[status].data.addAll(contractResponse.content);
       }
-
+    }
     _controller.sink.add(ContractData(status: status, data: _dataMap[status].data));
+
+  }
+
+  getDataByKeyword(String keyword) async {
+
+    //若没有数据则查询
+    if(_dataMap != null && _dataMap.length > 0) {
+      //  分页拿数据，response.data;
+      //请求参数
+      Map data = {
+        'state': 'ALL',
+        'code':keyword
+      };
+
+      Response<Map<String, dynamic>> response;
+
+      try {
+        response = await http$
+            .post(UserApis.contractList, data: data, queryParameters: {
+          'page': _dataMap['ALL'].currentPage,
+          'size': _dataMap['ALL'].size,
+        });
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (response != null && response.statusCode == 200) {
+        ContractResponse contractResponse =
+        ContractResponse.fromJson(response.data);
+        _dataMap['ALL'].totalPages = contractResponse.totalPages;
+        _dataMap['ALL'].totalElements = contractResponse.totalElements;
+        _dataMap['ALL'].data.clear();
+        _dataMap['ALL'].data.addAll(contractResponse.content);
+      }
+    }
+    _controller.sink.add(ContractData(status: 'ALL', data: _dataMap['ALL'].data));
 
   }
 
@@ -88,6 +125,19 @@ class MyContractBLoC extends BLoCBase {
 
     loadingController.sink.add(false);
     _controller.sink.add(ContractData(status: status, data: _dataMap[status].data));
+  }
+
+  loadingMoreByKeyword(String keyword) async {
+    //数据到底
+    if (_dataMap['ALL'].currentPage + 1 == _dataMap['ALL'].totalPages) {
+      //通知显示已经到底部
+      bottomController.sink.add(true);
+    } else {
+      getDataByKeyword(keyword);
+    }
+
+    loadingController.sink.add(false);
+    _controller.sink.add(ContractData(status: 'ALL', data: _dataMap['ALL'].data));
   }
 
   refreshData(String status) async {

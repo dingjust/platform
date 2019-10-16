@@ -1,308 +1,168 @@
 <template>
-  <div class="animated fadeIn">
-    <el-form ref="form" label-position="top" :model="slotData" :rules="rules" :disabled="readOnly">
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="工厂名称" prop="name">
-            <el-input v-model="slotData.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="经营地址" prop="contactAddress">
-            <el-input v-model="address" :disabled="true">
-              <el-button slot="append" icon="el-icon-search" @click="onAddressInput"></el-button>
-            </el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="联系人" prop="contactPerson">
-            <el-input v-model="slotData.contactPerson"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="联系电话" prop="contactPhone">
-            <el-input v-model="slotData.contactPhone"></el-input>
-          </el-form-item>
-        </el-col>
+  <div class="animated fadeIn factory-basic">
+      <el-row>
+        <div class="titleClass">
+          <h6>基本信息</h6>
+        </div>
       </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="slotData.email"></el-input>
+      <div style="margin: 20px 20px 40px 40px">
+        <el-row type="flex" justify="start" align="center">
+            <el-col :span="2">
+              <h6>
+                上传头像：
+              </h6>
+              <h6 style="color: grey">
+                (最多一张)
+              </h6>
+            </el-col>
+            <el-col :span="6">
+              <images-upload :limit="1" :slot-data="this.profilePictures"/>
+            </el-col>
+            <el-col :span="2" style="margin-left: 20px">
+              <h6>
+                上传资质荣誉照片：
+              </h6>
+              <h6 style="color: grey">
+                (最多五张)
+              </h6>
+            </el-col>
+            <el-col :span="14">
+              <images-upload :limit="5" :slot-data="formData.certificates" />
+            </el-col>
+        </el-row>
+        <el-row class="rowClass">
+          <el-form-item>
+            <el-row type="flex">
+              <el-col :span="2">
+                <h6 class="titleTextClass">公司名称</h6>
+              </el-col>
+              <el-col :span="22">
+                <el-input placeholder="请填写公司名称" v-model="formData.name" size="mini" :disabled="formData.approvalStatus === 'approved'"></el-input>
+              </el-col>
+            </el-row>
           </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="座机" prop="phone">
-            <el-input v-model="slotData.phone"></el-input>
+        </el-row>
+        <el-row class="rowClass">
+          <el-form-item class="purchase-form-item">
+            <el-row type="flex">
+              <el-col :span="2">
+                <h6 class="titleTextClass">自选标签</h6>
+              </el-col>
+              <el-col :span="22" >
+                <el-select v-model="formData.labels" multiple value-key="id" size="mini" placeholder="请选择">
+                  <el-option
+                    v-for="item in labels"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item">
+                  </el-option>
+                </el-select>
+              </el-col>
+            </el-row>
           </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="合作品牌" prop="cooperativeBrand">
-            <el-input v-model="slotData.cooperativeBrand"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="开发能力" prop="developmentCapacity">
-            <el-radio-group v-model="slotData.developmentCapacity">
-              <el-radio :label="true">是</el-radio>
-              <el-radio :label="false">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="月均产能" prop="monthlyCapacityRange">
-            <el-select v-model="slotData.monthlyCapacityRange" class="w-100">
-              <el-option v-for="item in monthlyCapacityRanges" :key="item.code" :label="item.name"
-                         :value="item.code"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="产值规模" prop="scaleRange">
-            <el-select v-model="slotData.scaleRange" class="w-100">
-              <el-option v-for="item in scaleRanges" :key="item.code" :label="item.name" :value="item.code"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="合作方式" prop="cooperationModes">
-            <el-select v-model="slotData.cooperationModes" class="w-100" multiple>
-              <el-option v-for="item in cooperationModes" :key="item.code" :label="item.name"
-                         :value="item.code"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="公司规模" prop="populationScale">
-            <el-select v-model="slotData.populationScale" class="w-100">
-              <el-option v-for="item in populationScales"
-                         :key="item.code"
-                         :label="item.name"
-                         :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="车位数量" prop="latheQuantity">
-            <el-input-number class="w-100" v-model="slotData.latheQuantity" :min="0"></el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="生产大类" prop="categories">
-            <el-select class="w-100" v-model="slotData.categories" value-key="code" multiple>
-              <el-option v-for="item in categories" :label="item.name" :key="item.code" :value="item">
-                {{item.name}}
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="优势品类" prop="adeptAtCategories">
-            <el-select class="w-100"
-                       placeholder="请选择"
-                       v-model="slotData.adeptAtCategories"
-                       value-key="code" multiple>
-              <el-option-group
-                v-for="group in adeptAtCategories"
-                :key="group.code"
-                :label="group.name">
-                <el-option
-                  v-for="item in group.children"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item">
-                </el-option>
-              </el-option-group>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="标签" prop="labels">
-            <el-select class="w-100" v-model="slotData.labels" value-key="id" multiple>
-              <el-option v-for="item in labels"
-                         :label="item.name"
-                         :key="item.id"
-                         :value="item">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-form-item label="产业集群" prop="industrialCluster">
-            <el-select class="w-100"
-                       placeholder="请选择"
-                       v-model="slotData.industrialCluster"
-                       value-key="code">
-              <el-option-group
-                v-for="label in industrialClusterLabels"
-                :key="label.id"
-                :label="label.name">
-                <el-option
-                  v-for="cluster in label.clusters"
-                  :key="cluster.code"
-                  :label="cluster.name"
-                  :value="cluster">
-                </el-option>
-              </el-option-group>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
-               :show-close="false" append-to-body width="50%">
-      <address-form ref="addressForm" :slot-data="addressFormData" :isCompany = "true"/>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="onAddressInputCanceled">取 消</el-button>
-        <el-button type="primary" @click="onAddressInputConfirmed">确 定</el-button>
-      </span>
-    </el-dialog>
+        </el-row>
+      </div>
   </div>
 </template>
 
 <script>
-  import AddressForm from "@/views/shared/user/address/AddressForm";
+  import {createNamespacedHelpers} from 'vuex';
+
+  const {mapGetters, mapMutations} = createNamespacedHelpers('FactoriesModule');
+  import ImagesUpload from '../../../../../components/custom/ImagesUpload';
 
   export default {
     name: 'FactoryBasicForm',
-    props: ['slotData', 'readOnly'],
-    components: {AddressForm},
+    props: ['formData'],
+    components: {ImagesUpload},
     computed: {
-      address: function () {
-        if (!this.addressFormData) {
-          return '';
-        }
-        const region = this.addressFormData.region;
-        const city = this.addressFormData.city;
-        const cityDistrict = this.addressFormData.cityDistrict;
-        const line1 = this.addressFormData.line1;
-
-        // 省份和城市相同的情况
-        if (region.name === city.name) {
-          return region.name + cityDistrict.name + line1;
-        }
-
-        return region.name + city.name + cityDistrict.name + line1;
-      }
+      ...mapGetters({
+        labels: 'labels'
+      })
     },
     methods: {
-      validate() {
-        this.$refs['form'].validate(valid => {
-          if (!valid) {
-            this.$message.error('验证失败');
-            return false;
-          }
-
-          return true;
-        });
-      },
-      onAddressInput() {
-        this._copyContactAddress();
-        this.addressDialogVisible = true;
-      },
-      onAddressInputCanceled() {
-        this.addressDialogVisible = false;
-      },
-      onAddressInputConfirmed() {
-        if (this.$refs['addressForm'].validate()) {
-          this.$set(this.slotData, 'contactAddress', this.addressFormData);
-          if(this.addressFormData.longitude){
-            this.slotData.longitude = this.addressFormData.longitude;
-            this.slotData.latitude = this.addressFormData.latitude;
-          }
-          this.addressDialogVisible = false;
-        }
-      },
-      async getMinorCategories() {
-        const url = this.apis().getMinorCategories();
-        const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.adeptAtCategories = result;
-      },
-      async getCategories() {
-        const url = this.apis().getMajorCategories();
-        const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.categories = result;
-      },
-      async getLabels() {
+      ...mapMutations({
+        setLabels: 'setLabels'
+      }),
+      async getLabels () {
         const url = this.apis().getGroupLabels('FACTORY');
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.labels = result;
-      },
-      async getIndustrialClusterLabels() {
-        const url = this.apis().getIndustrialClusterLabels();
-        const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.industrialClusterLabels = result;
-      },
-      _copyContactAddress() {
-        if (this.slotData.contactAddress) {
-          this.addressFormData = Object.assign({}, this.slotData.contactAddress);
+        this.setLabels(result);
+      }
+    },
+    data () {
+      return {
+        profilePictures: []
+      };
+    },
+    watch: {
+      'profilePictures': function (n, o) {
+        console.log(n);
+        if (n != null && n.length > 0) {
+          this.formData.profilePicture = n[0];
         } else {
-          this.addressFormData = this.$store.state.FactoriesModule.addressFormData;
+          this.formData.profilePicture = null;
         }
       }
     },
-    data() {
-      return {
-        labels: [],
-        industrialClusterLabels: [],
-        categories: [],
-        adeptAtCategories: [],
-        addressFormData: this.$store.state.FactoriesModule.addressFormData,
-        addressDialogVisible: false,
-        rules: {
-          name: [{required: true, message: '必填', trigger: 'blur'}],
-          contactPerson: [{required: true, message: '必填', trigger: 'blur'}],
-          contactPhone: [
-            {required: false, message: '手机号码不正确', trigger: 'blur', pattern: 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/}
-          ],
-          contactAddress: [{required: true, message: '必填', trigger: 'blur'}],
-          email: [
-            {
-              message: '邮箱格式不正确',
-              trigger: 'blur',
-              pattern: /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
-            }
-          ]
-        },
-        cooperationModes: this.$store.state.EnumsModule.cooperationModes,
-        scaleRanges: this.$store.state.EnumsModule.scaleRanges,
-        monthlyCapacityRanges: this.$store.state.EnumsModule.monthlyCapacityRanges,
-        populationScales: this.$store.state.EnumsModule.populationScales,
-      };
-    },
-    created() {
-      this.getCategories();
-      this.getMinorCategories();
-      this.getLabels();
-      this.getIndustrialClusterLabels();
-      this._copyContactAddress();
+    created () {
+      if (this.labels <= 0) {
+        this.getLabels();
+      }
+      this.profilePictures = [this.formData.profilePicture];
     }
   };
 </script>
+
+<style>
+  .factory-basic .rowClass{
+    margin-top:20px;
+  }
+
+  .factory-basic .titleClass{
+    padding: 10px 0px 1px 10px;
+    background-color: #DCDCDC;
+  }
+
+ .factory-basic .el-col-24 {
+   width: auto;
+  }
+
+  .factory-basic .factory-upload .el-upload--picture-card {
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+  }
+
+  .factory-basic .factory-upload .el-upload-list--picture-card .el-upload-list__item {
+    width: 100px;
+    height: 100px;
+  }
+
+  .factory-basic .info-input-prepend {
+    display: inline-block;
+    margin: 0 5px;
+    width: 70px;
+    font-weight: bold;
+    font-size: 10px;
+  }
+
+  .factory-basic .titleTextClass{
+    text-align: justify;
+    text-align-last: justify;
+    display: inline-block;
+    width: 57px;
+    font-size: 10px;
+    font-weight: bold;
+  }
+
+  .factory-basic .el-input--mini .el-input__inner{
+    width: 100%;
+  }
+
+</style>

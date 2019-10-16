@@ -2,8 +2,12 @@
   <div class="animated fadeIn">
     <b-nav-item-dropdown right no-caret>
       <template slot="button-content">
-        {{currentUser.username}}
-        <img src="static/img/avatars/user.jpg" class="img-avatar" alt=""/>
+        <div @click="onArrowDown">
+          <img src="static/img/avatars/user.jpg" class="img-avatar" alt="" />
+          <span class="name">{{currentUser.username}}</span>
+          <i class="el-icon-arrow-down arrow" v-show="arrowDown"></i>
+          <i class="el-icon-arrow-up arrow" v-show="!arrowDown"></i>
+        </div>
       </template>
       <b-dropdown-header tag="div" class="text-center">
         <strong>我的</strong>
@@ -15,33 +19,35 @@
         <i class="fa fa-lock"></i> 退出登录
       </b-dropdown-item>
     </b-nav-item-dropdown>
-    <el-dialog title="修改密码"
-               :visible.sync="dialogVisible"
-               :modal="false"
-               width="30%">
-      <change-password-page :username="currentUser.username"
-                            :ignore-old-password="false"
-                            @onChangePassword="doChangePassword"
-                            @onCancel="onCancel"/>
+    <el-dialog title="修改密码" :visible.sync="dialogVisible" :modal="false" width="30%">
+      <change-password-page :username="currentUser.username" :ignore-old-password="false"
+        @onChangePassword="doChangePassword" @onCancel="onCancel" />
     </el-dialog>
   </div>
 </template>
 <script>
-  import axios from 'axios';
+  import axios from "axios";
   import ChangePasswordPage from "@/views/shared/account/password/ChangePasswordPage";
+  import {
+    log
+  } from "util";
 
   export default {
-    name: 'header-dropdown-accnt',
-    components: {ChangePasswordPage},
+    name: "header-dropdown-accnt",
+    components: {
+      ChangePasswordPage
+    },
     methods: {
+      onArrowDown() {
+        this.arrowDown = !this.arrowDown;
+      },
       onChangePassword() {
         this.dialogVisible = true;
       },
       onLogout() {
-        axios.post('/logout')
-          .finally(() => {
-            this.$router.push('/login');
-          });
+        axios.post("/logout").finally(() => {
+          this.$router.push("/login");
+        });
       },
       onCancel() {
         this.dialogVisible = false;
@@ -60,16 +66,30 @@
 
         this.dialogVisible = false;
 
-        this.$message.success('密码修改成功');
+        this.$message.success("密码修改成功");
       }
     },
-    created() {
-    },
+    created() {},
     data() {
       return {
         dialogVisible: false,
-        currentUser: this.$store.getters.currentUser
-      }
+        currentUser: this.$store.getters.currentUser,
+        arrowDown: true
+      };
+    },
+    mounted() {
+      this.$root.$on("bv::dropdown::show", bvEvent => {
+        console.log("Dropdown is about to be shown", bvEvent);
+      });
     }
-  }
+  };
+
 </script>
+<style>
+  .arrow {
+    color: #000;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+</style>

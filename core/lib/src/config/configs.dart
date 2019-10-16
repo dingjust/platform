@@ -2,16 +2,16 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
   //测试
-//  static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-//  static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+  // static const CONTEXT_PATH = 'http://sc.nbyjy.net';
+  // static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
 
-  // static const CONTEXT_PATH = 'https://192.168.1.161:9002/djwebservices/v2';
-  // static const MEDIA_CONTEXT_PATH =
-  //     'https://192.168.1.161:9002/djwebservices/v2';
+//   static const CONTEXT_PATH = 'https://192.168.1.146:9002/djwebservices/v2';
+//   static const MEDIA_CONTEXT_PATH =
+//       'https://192.168.1.146:9002/djwebservices/v2';
 
   // 生产
-   static const CONTEXT_PATH = 'http://ht.nbyjy.net';
-   static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+ static const CONTEXT_PATH = 'http://ht.nbyjy.net';
+ static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
@@ -28,8 +28,8 @@ class GlobalConfigs {
 
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
 
-  // static const AUTH_SERVER_URL =
-  //     'https://192.168.1.161:9002/authorizationserver';
+//   static const AUTH_SERVER_URL =
+//       'https://192.168.1.146:9002/authorizationserver';
   static const AUTH_TOKEN_URL = '$AUTH_SERVER_URL/oauth/token';
   static const AUTH_CHECK_TOKEN_URL = '$AUTH_SERVER_URL/oauth/check_token';
   static const AUTH_CLIENT_ID_KEY = 'client_id';
@@ -40,8 +40,7 @@ class GlobalConfigs {
   static const PRODUCTION_HISTORY_KEYWORD_KEY =
       'production_history_keyword_key';
   static const PRODUCT_HISTORY_KEYWORD_KEY = 'product_history_keyword_key';
-  static const PRODUCT_SELECT_HISTORY_KEYWORD_KEY =
-      'product_select_history_keyword_key';
+  static const PRODUCT_SELECT_HISTORY_KEYWORD_KEY = 'product_select_history_keyword_key';
   static const ORDER_PRODUCT_HISTORY_KEYWORD_KEY =
       'order_product_history_keyword_key';
   static const FACTORY_HISTORY_KEYWORD_KEY = 'factory_history_keyword_key';
@@ -49,6 +48,9 @@ class GlobalConfigs {
       'brand_index_history_keyword_key';
   static const Requirement_HISTORY_KEYWORD_KEY =
       'requirement_history_keyword_key';
+
+  static const CONTRACT_HISTORY_KEYWORD_KEY =
+      'contract_history_keyword_key';
 
   /// grant types
   static const GRANT_TYPE_PASSWORD = 'password';
@@ -65,7 +67,7 @@ class GlobalConfigs {
   /// 通过nginx代理所有b2b前缀的请求
   static const B2B_API_PREFIX = 'b2b';
 
-  // static const B2B_API_PREFIX = 'b2b-apparel-zh';
+//   static const B2B_API_PREFIX = 'b2b-apparel-zh';
   static const B2B_CLIENT_ID = 'nbyjy';
   static const B2B_CLIENT_SECRET = 'password';
 

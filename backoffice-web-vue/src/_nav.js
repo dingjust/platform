@@ -129,17 +129,17 @@ export default {
           children: [
             {
               name: '合同管理',
-              url: '/miscs/contract/manage/contract',
+              url: '/contract/manage/contract',
               icon: 'iconNone',
             },
             {
               name: '合同模板',
-              url: '/miscs/contract/template/template',
+              url: '/contract/template/template',
               icon: 'iconNone',
             },
             {
               name: '印章管理',
-              url: '/miscs/contract/seal/seal',
+              url: '/contract/seal/seal',
               icon: 'iconNone',
             },
           ]
@@ -175,7 +175,7 @@ export default {
           children: [
             {
               name: '下单',
-              url: '/unclassified/orderPurchase',
+              url: '/orderPurchase',
               icon: 'iconNone',
             },
             {
@@ -183,11 +183,11 @@ export default {
               url: '/unclassified/sealManagement',
               icon: 'iconNone',
             },
-            {
-              name: '创建合同',
-              url: '/unclassified/createContract',
-              icon: 'iconNone',
-            },
+            // {
+            //   name: '创建合同',
+            //   url: '/unclassified/createContract',
+            //   icon: 'iconNone',
+            // },
             {
               name: 'markdown',
               url: '/unclassified/markDown',

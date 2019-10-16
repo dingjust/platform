@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class BottomNavigation extends StatelessWidget {
-  BottomNavigation({Key key, this.currentIndex: 0, @required this.onChanged}) : super(key: key);
+  BottomNavigation({Key key, this.currentIndex: 0, this.onChanged}) : super(key: key);
 
   final int currentIndex;
   final ValueChanged<int> onChanged;

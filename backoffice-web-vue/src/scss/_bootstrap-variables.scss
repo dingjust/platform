@@ -26,6 +26,8 @@ $yellow:                          #ffc107 !default;
 $green:                           #bdea74;
 $teal:                            #20c997 !default;
 $cyan:                            #67c2ef;
+$theme:                           #ffd60c;
+
 
 $colors: (
   blue:                           $blue,
@@ -44,7 +46,7 @@ $colors: (
 );
 
 $theme-colors: (
-  primary:                        $blue,
+  primary:                        $theme,
   secondary:                      $gray-300,
   success:                        $green,
   info:                           $cyan,
@@ -74,6 +76,7 @@ $body-color:                      $gray-800;
 
 $font-size-base:                  0.875rem;
 $text-muted:                      $gray-600;
+$line-height:                     0;
 
 // Breadcrumbs
 

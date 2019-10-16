@@ -31,6 +31,22 @@ class UserGroupModel extends PrincipalGroupModel {
       _$UserGroupModelToJson(model);
 }
 
+///认证状态
+enum AuthenticationStatus {
+  CHECK,
+  UNCERTIFIED,
+  SUCCESS,
+  FAILED,
+}
+
+// TODO: i18n处理
+const AuthenticationStatusLocalizedMap = {
+  AuthenticationStatus.CHECK: '认证中',
+  AuthenticationStatus.UNCERTIFIED : '未认证',
+  AuthenticationStatus.SUCCESS : '认证成功',
+  AuthenticationStatus.FAILED : '认证失败',
+};
+
 /// 公司
 @JsonSerializable()
 class CompanyModel extends UserGroupModel {
@@ -85,8 +101,10 @@ class CompanyModel extends UserGroupModel {
   //企业类型
   CompanyType type;
 
-  //认证状态
   ArticleApprovalStatus approvalStatus;
+
+//认证状态
+  AuthenticationStatus authenticationStatus;
 
   //图文详情列表
   @JsonKey(toJson: _companyProfilesToJson)
@@ -824,3 +842,166 @@ const PriceRangesLocalizedMap = {
   PriceRanges.PR005: '301-500',
   PriceRanges.PR006: '500以上',
 };
+
+enum AuthenticationState {
+  UNCERTIFIED,
+  CHECK,
+  SUCCESS,
+  FAILED,
+}
+
+const AuthenticationStateLocalizedMap = {
+  AuthenticationState.UNCERTIFIED: '未认证',
+  AuthenticationState.CHECK: '认证中',
+  AuthenticationState.SUCCESS: '认证成功',
+  AuthenticationState.FAILED: '认证失败',
+};
+
+enum CompanyTypeState {
+  ENTERPRISE,
+  INDIVIDUAL,
+}
+
+const CompanyTypeStateLocalizedMap = {
+  CompanyTypeState.ENTERPRISE: '企业',
+  CompanyTypeState.INDIVIDUAL: '个体户',
+};
+
+
+//认证状态model
+@JsonSerializable()
+class AuthenticationModel extends ItemModel {
+  AuthenticationState personalState;
+  AuthenticationState companyState;
+  CompanyTypeState companyType;
+
+  AuthenticationModel({
+    this.personalState,
+    this.companyState,
+    this.companyType
+  });
+
+  factory AuthenticationModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthenticationModelFromJson(json);
+
+  static Map<String, dynamic> toJson(AuthenticationModel model) =>
+      _$AuthenticationModelToJson(model);
+}
+
+//认证信息model
+@JsonSerializable()
+class AuthenticationInfoModel extends ItemModel {
+  //个人认证code
+  String code;
+  //个人认证姓名
+  String name;
+  //个人认证身份证号码
+  String idCard;
+  //个人电话号码
+  String mobile;
+
+  //公司名称
+  String companyName;
+  //公司统一社会代码
+  String organization;
+  //认证人角色 AGENT代理人，LEGAL法人代表
+  String role;
+  //代理人或法人名字
+  String username;
+  //身份证号码
+  String idCardNum;
+  //认证方式
+  String verifyWay;
+  //公司类型
+  String companyType;
+
+  String bankName;
+
+  String bankDetailName;
+
+  String bankCardNo;
+
+  AuthenUserInfo agent;
+
+  AuthenUserInfo legal;
+
+  MediaModel certImg;
+
+  AuthenticationInfoModel({
+    this.code,
+    this.name,
+    this.idCard,
+    this.mobile,
+    this.companyName,
+    this.organization,
+    this.role,
+    this.username,
+    this.idCardNum,
+    this.verifyWay,
+    this.companyType,
+    this.bankName,
+    this.bankDetailName,
+    this.bankCardNo,
+    this.agent,
+    this.legal,
+    this.certImg,
+  });
+
+  factory AuthenticationInfoModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthenticationInfoModelFromJson(json);
+
+  static Map<String, dynamic> toJson(AuthenticationInfoModel model) =>
+      _$AuthenticationInfoModelToJson(model);
+}
+
+@JsonSerializable()
+class CertificationInfo {
+  final int code;
+  final String msg;
+  final int resultCode;
+  final AuthenticationInfoModel data;
+
+  CertificationInfo(this.code, this.msg, this.resultCode, this.data);
+
+  factory CertificationInfo.fromJson(Map<String, dynamic> json) =>
+      _$CertificationInfoFromJson(json);
+
+  static Map<String, dynamic> toJson(CertificationInfo model) =>
+      _$CertificationInfoToJson(model);
+
+}
+
+enum VerifyWay {
+  WAY1,
+  WAY2,
+}
+
+const VerifyWayLocalizedMap = {
+  VerifyWay.WAY1: '银行打款',
+  VerifyWay.WAY2: '纸质材料',
+};
+
+enum AuthenticationRole{
+  AGENT,
+  LEGAL,
+}
+
+const AuthenticationRoleLocalizedMap = {
+  AuthenticationRole.AGENT: '银行打款',
+  AuthenticationRole.LEGAL: '纸质材料',
+};
+
+@JsonSerializable()
+class AuthenUserInfo{
+  String mobile;
+  String idCardNum;
+  String name;
+
+  AuthenUserInfo(this.mobile,this.idCardNum,this.name);
+
+ factory AuthenUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$AuthenUserInfoFromJson(json);
+
+  static Map<String, dynamic> toJson(AuthenUserInfo model) =>
+      _$AuthenUserInfoToJson(model);
+}

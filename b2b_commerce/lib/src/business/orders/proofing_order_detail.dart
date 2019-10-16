@@ -198,7 +198,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    model.entries[0].product.name,
+                    model.product.name,
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -208,7 +208,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      '货号：${model.entries[0].product.skuID}',
+                      '货号：${model.product.skuID}',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ),

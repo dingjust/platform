@@ -55,7 +55,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
       remarks = widget.model.remarks;
       _remarksController.text = widget.model.remarks;
       _unitPriceController.text = widget.model.unitPrice.toString();
-      _countTotalNum();
+//      _countTotalNum();
     } else {
       if (widget.quoteModel.unitPrice != null &&
           widget.quoteModel.unitPrice >= 0) {
@@ -67,6 +67,8 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   @override
   Widget build(BuildContext context) {
+    _countTotalNum();
+
     return WillPopScope(
       child: Scaffold(
           key: _scaffoldKey,
@@ -74,7 +76,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             brightness: Brightness.light,
             centerTitle: true,
             elevation: 0.5,
-            title: Text('创建打样订单'),
+            title: Text(widget.update ? '编辑打样订单':'创建打样订单'),
           ),
           body: Container(
               margin: EdgeInsets.only(bottom: 70),
@@ -268,7 +270,10 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             ],
             hideDivider: true,
             onChanged: (value) {
-              _countTotalPrice(value);
+              setState(() {
+                widget.model.unitPrice = _unitPriceController.text == '' ? 0 : ClassHandleUtil.removeSymbolRMBToDouble(_unitPriceController.text);
+              });
+//              _countTotalPrice(value);
             },
           ),
         ),
@@ -438,7 +443,9 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           ),
         ),
         onTap: () async {
-          _onProductSelect();
+          if(!widget.update){
+            _onProductSelect();
+          }
         });
   }
 

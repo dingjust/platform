@@ -1,127 +1,44 @@
 <template>
   <el-form :inline="true">
-    <el-form-item label="">
-      <el-input placeholder="请输入生产订单编号" v-model="keyword"></el-input>
+    <!-- <el-form-item label="品牌名"> -->
+      <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword" class="purchase-toolbar-input"></el-input>
+    <!-- </el-form-item> -->
+    <el-form-item label="日期">
+      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
+        value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
+        :picker-options="pickerOptions">
+      </el-date-picker>
+    </el-form-item>
+    <!-- <el-form-item label="跟单员">
+      <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
+    </el-form-item> -->
+    <el-form-item label="分类">
+      <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
+      <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
+        reserve-keyword clearable>
+        <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
+          <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name" :value="level2.name">
+          </el-option>
+        </el-option-group>
+      </el-select> -->
+      <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories" :props="{ label: 'name',value:'code'}" clearable>
+      </el-cascader>
     </el-form-item>
     <el-button-group>
-      <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-      <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建手工单</el-button>
+      <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+      <el-button native-type="reset" @click="">重置</el-button>
     </el-button-group>
-    <el-popover placement="bottom" width="800" trigger="click">
-      <el-row :gutter="10">
-        <el-col :span="12">
-          <el-form-item label="订单编号">
-            <el-input v-model="queryFormData.code"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="状态">
-            <el-select v-model="queryFormData.statuses" placeholder="请选择"
-                       multiple class="w-100">
-              <el-option
-                v-for="item in purchaseOrderStatuses"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10" v-if="isTenant()">
-        <el-col :span="12">
-          <el-form-item label="工厂">
-            <el-select v-model="queryFormData.belongTos" placeholder="请选择"
-                       multiple class="w-100"
-                       filterable
-                       remote
-                       :remote-method="getFactories">
-              <el-option
-                v-for="item in factories"
-                :key="item.uid"
-                :label="item.name"
-                :value="item.uid">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="品牌">
-            <el-select v-model="queryFormData.purchasers" placeholder="请选择"
-                       multiple class="w-100"
-                       filterable
-                       remote
-                       :remote-method="getBrands">
-              <el-option
-                v-for="item in brands"
-                :key="item.uid"
-                :label="item.name"
-                :value="item.uid">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="12">
-          <el-form-item label="创建时间从">
-            <el-date-picker
-              v-model="queryFormData.createdDateFrom"
-              value-format="timestamp"
-              type="date"
-              placeholder="请选择生产订单创建时间">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="创建时间到">
-            <el-date-picker
-              v-model="queryFormData.createdDateTo"
-              value-format="timestamp"
-              type="date"
-              placeholder="请选择生产订单创建时间">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="12">
-          <el-form-item label="交货时间从">
-            <el-date-picker
-              v-model="queryFormData.expectedDeliveryDateFrom"
-              value-format="yyyy-MM-dd"
-              type="date"
-              placeholder="请选择客户交期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="交货时间到">
-            <el-date-picker
-              v-model="queryFormData.expectedDeliveryDateTo"
-              value-format="yyyy-MM-dd"
-              type="date"
-              placeholder="请选择客户交期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :span="6">
-          <el-button type="primary" icon="el-icon-search" @click="onAdvancedSearch">查询</el-button>
-        </el-col>
-      </el-row>
-      <el-button-group slot="reference">
-        <el-button type="primary">高级查询</el-button>
-      </el-button-group>
-    </el-popover>
   </el-form>
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
-  const {mapMutations} = createNamespacedHelpers('PurchaseOrdersModule');
+  const {
+    mapMutations
+  } = createNamespacedHelpers('ContractModule');
 
   export default {
     name: 'PurchaseOrderToolbar',
@@ -130,9 +47,10 @@
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
-        setQueryFormData:'queryFormData',
+        setQueryFormData: 'queryFormData',
       }),
       onSearch() {
+        this.$store.state.PurchaseOrdersModule.keyword = this.keyword;
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
@@ -140,15 +58,11 @@
         this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
-      onNew() {
-        let formData = {};
-        Object.assign(formData, this.formData);
-
-        this.$emit('onNew', formData);
-      },
       async getFactories(query) {
         const url = this.apis().getFactories();
-        const result = await this.$http.post(url,{keyword:query},{
+        const result = await this.$http.post(url, {
+          keyword: query
+        }, {
           page: 0,
           size: 10
         });
@@ -160,7 +74,9 @@
       },
       async getBrands(query) {
         const url = this.apis().getBrands();
-        const result = await this.$http.post(url,{keyword:query},{
+        const result = await this.$http.post(url, {
+          keyword: query
+        }, {
           page: 0,
           size: 10
         });
@@ -170,22 +86,89 @@
         }
         this.brands = result.content;
       },
+      onDateChange(values) {
+        console.log(values[0]);
+        this.queryFormData.createdDateFrom = values[0];
+        this.queryFormData.createdDateTo = values[1];
+        this.onAdvancedSearch();
+      },
+      async getCategories() {
+        const url = this.apis().getMinorCategories();
+        const results = await this.$http.get(url);
+        if (!results['errors']) {
+          this.categories = results;
+        }
+      },
     },
     data() {
       return {
-        factories:[],
-        brands:[],
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        dateTime: '',
+        factories: [],
+        brands: [],
         keyword: this.$store.state.PurchaseOrdersModule.keyword,
         formData: this.$store.state.PurchaseOrdersModule.formData,
         queryFormData: this.$store.state.PurchaseOrdersModule.queryFormData,
-        purchaseOrderStatuses: this.$store.state.EnumsModule.purchaseOrderStatuses,
+        categories: [],
       }
     },
     created() {
+      this.getCategories();
       if (this.isTenant()) {
         this.getFactories();
         this.getBrands();
       }
     }
   }
+
 </script>
+<style>
+  .el-input__inner {
+    /* border-radius: 5px; */
+    line-height: 30px;
+  }
+
+  .toolbar-search_input {
+    background-color: #ffd60c;
+    border-color: #ffd60c;
+  }
+
+  .el-date-editor--daterange.el-input__inner {
+    width: 260px;
+  }
+
+  .purchase-toolbar-input {
+    width: 120px;
+  }
+
+  .el-form-item__label {
+    font-size: 13px;
+  }
+
+</style>
