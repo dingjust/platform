@@ -1302,7 +1302,7 @@
 
   .info-order-body {
     width: 100%;
-    padding: 10px 60px;
+    /* padding: 10px 60px; */
   }
 
   .info-order-row {

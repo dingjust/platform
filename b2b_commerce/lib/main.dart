@@ -110,7 +110,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   //初始化监听
   void initListener() {
-    listenMessage();
+    // listenMessage();
     listenLogin();
   }
 

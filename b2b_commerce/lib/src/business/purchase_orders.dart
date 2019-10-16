@@ -10,12 +10,9 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../_shared/widgets/app_bar_factory.dart';
-import '../_shared/widgets/scroll_to_top_button.dart';
-import '../_shared/widgets/tab_factory.dart';
 import '../_shared/orders/purchase/purchase_order_list.dart';
-
-import '../production/production_search.dart';
+import '../_shared/widgets/app_bar_factory.dart';
+import '../_shared/widgets/tab_factory.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -29,7 +26,8 @@ class PurchaseOrdersPage extends StatefulWidget {
   _PurchaseOrdersPageState createState() => _PurchaseOrdersPageState();
 }
 
-class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticKeepAliveClientMixin {
+class _PurchaseOrdersPageState extends State<PurchaseOrdersPage>
+    with AutomaticKeepAliveClientMixin {
   String showText;
   String statusColor;
   String userType;
@@ -39,23 +37,22 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
   Widget _buildSearchButton() {
     return IconButton(
       icon: const Icon(B2BIcons.search, size: 20),
-      onPressed: (){
+      onPressed: () {
         showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) {
               return RequestDataLoading(
-                requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+                requestCallBack: LocalStorage.get(
+                    GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
                 outsideDismiss: false,
                 loadingText: '加载中。。。',
                 entrance: '',
               );
-            }
-        ).then((value){
+            }).then((value) {
           if (value != null && value != '') {
             List<dynamic> list = json.decode(value);
             historyKeywords = list.map((item) => item as String).toList();
-
           } else {
             historyKeywords = [];
           }
@@ -64,11 +61,11 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
             MaterialPageRoute(
               builder: (context) =>
                   SearchModelPage(
-                      searchModel:SearchModel(
-                        historyKeywords: historyKeywords,
-                        searchModelType: SearchModelType.PURCHASE_ORDER,
-                        route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-                      ),
+                    searchModel: SearchModel(
+                      historyKeywords: historyKeywords,
+                      searchModelType: SearchModelType.PURCHASE_ORDER,
+                      route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+                    ),
                   ),
             ),
           );
@@ -110,7 +107,9 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
           child: Scaffold(
             appBar: TabFactory.buildDefaultTabBar(statuses, scrollable: true),
             body: TabBarView(
-              children: statuses.map((status) => PurchaseOrderList(status: status)).toList(),
+              children: statuses
+                  .map((status) => PurchaseOrderList(status: status))
+                  .toList(),
             ),
           ),
         ),
@@ -139,8 +138,8 @@ class _PurchaseOrdersPageState extends State<PurchaseOrdersPage> with AutomaticK
           // backgroundColor: Color.fromRGBO(255,214,12, 1),
           foregroundColor: Colors.black,
           elevation: 8.0,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0)),
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
           children: [
             SpeedDialChild(
               child: Center(
