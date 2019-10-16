@@ -17,7 +17,7 @@
                 <el-col :span="6">
                   <h6 class="titleTextClass">联系人</h6>
                 </el-col>
-                <el-col :span="16" :offset="2">
+                <el-col :span="15" :offset="3">
                   <h6 class="contentTextClass">{{slotData.details.contactPerson}}</h6>
                 </el-col>
               </el-row>
@@ -25,7 +25,7 @@
                 <el-col :span="6">
                   <h6 class="titleTextClass">品牌标题</h6>
                 </el-col>
-                <el-col :span="16" :offset="2">
+                <el-col :span="15" :offset="3">
                   <h6 class="contentTextClass">{{slotData.details.productName}}</h6>
                 </el-col>
               </el-row>
@@ -33,7 +33,7 @@
                 <el-col :span="6">
                   <h6 class="titleTextClass">订购数量</h6>
                 </el-col>
-                <el-col :span="16" :offset="2">
+                <el-col :span="15" :offset="3">
                   <h6 class="contentTextClass">{{slotData.details.expectedMachiningQuantity}}</h6>
                 </el-col>
               </el-row>
@@ -41,7 +41,7 @@
                 <el-col :span="6">
                   <h6 class="titleTextClass">产品品类</h6>
                 </el-col>
-                <el-col :span="16" :offset="2">
+                <el-col :span="15" :offset="3">
                   <h6 class="contentTextClass">{{slotData.details.category != null ? slotData.details.category.name : ''}}</h6>
                 </el-col>
               </el-row>
@@ -51,7 +51,7 @@
                 <el-col :span="6">
                   <h6 class="titleTextClass">交货日期</h6>
                 </el-col>
-                <el-col :span="16" :offset="2">
+                <el-col :span="15" :offset="3">
                   <h6 class="contentTextClass">{{slotData.details.expectedDeliveryDate | timestampToTime}}</h6>
                 </el-col>
               </el-row>
@@ -59,7 +59,7 @@
                 <el-col :span="6">
                   <h6 class="titleTextClass">联系方式</h6>
                 </el-col>
-                <el-col :span="16" :offset="2">
+                <el-col :span="15" :offset="3">
                   <h6 class="contentTextClass">{{slotData.details.contactPhone}}</h6>
                 </el-col>
               </el-row>
@@ -67,7 +67,7 @@
                 <el-col :span="6">
                   <h6 class="titleTextClass">期望价格</h6>
                 </el-col>
-                <el-col :span="16" :offset="2">
+                <el-col :span="15" :offset="3">
                   <h6 class="contentTextClass">{{slotData.details.maxExpectedPrice}}</h6>
                 </el-col>
               </el-row>
@@ -75,7 +75,7 @@
                 <el-col :span="6">
                   <h6 class="titleTextClass">生产地区</h6>
                 </el-col>
-                <el-col :span="16" :offset="2">
+                <el-col :span="15" :offset="3">
                   <h6 class="contentTextClass">{{productionAreas}}</h6>
                 </el-col>
               </el-row>
@@ -137,7 +137,7 @@
               <h6 class="titleTextClass">备注</h6>
             </el-col>
             <el-col :span="22" :offset="1">
-              <h6 class="contentTextClass" style="margin-left: -12px">{{slotData.remarks}}</h6>
+              <h6 class="contentTextClass" style="margin-left: -4px">{{slotData.remarks}}</h6>
             </el-col>
           </el-row>
       </el-col>

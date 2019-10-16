@@ -67,7 +67,7 @@
           <h6 class="titleTextClass">备注</h6>
         </el-col>
         <el-col :span="22" :offset="1">
-          <h6 class="contentTextClass" style="margin-left: -12px">{{slotData.remarks}}</h6>
+          <h6 class="contentTextClass">{{slotData.remarks}}</h6>
         </el-col>
       </el-row>
   </div>
