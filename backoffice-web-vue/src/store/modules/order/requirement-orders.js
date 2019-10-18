@@ -7,7 +7,16 @@ const state = {
   isAdvancedSearch: false,
   currentPageNumber: 0,
   currentPageSize: 10,
+  quoteCurrentPageNumber: 0,
+  quoteCurrentPageSize: 10,
   page: {
+    number: 0, // 当前页，从0开始
+    size: 10, // 每页显示条数
+    totalPages: 1, // 总页数
+    totalElements: 0, // 总数目数
+    content: [] // 当前页数据
+  },
+  quotePage: {
     number: 0, // 当前页，从0开始
     size: 10, // 每页显示条数
     totalPages: 1, // 总页数
@@ -40,7 +49,7 @@ const state = {
     },
     attachments: [],
     labels: [],
-    cancelledDate:''
+    cancelledDate: ''
   },
   queryFormData: {
     code: '',
@@ -49,7 +58,11 @@ const state = {
     expectedDeliveryDateFrom: null,
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
-    createdDateTo: null,
+    createdDateTo: null
+
+  },
+  quoteQueryFormData: {
+    requirementOrderRef: ''
   },
   quoteFormData: {
     id: null,
@@ -62,7 +75,7 @@ const state = {
     costOfSamples: 0,
     expectedDeliveryDate: null,
     remarks: null,
-    attachments: [],
+    attachments: []
   }
 };
 
@@ -70,15 +83,19 @@ const mutations = {
   url: (state, url) => state.url = url,
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
+  quoteCurrentPageNumber: (state, quoteCurrentPageNumber) => state.quoteCurrentPageNumber = quoteCurrentPageNumber,
+  quoteCurrentPageSize: (state, quoteCurrentPageSize) => state.quoteCurrentPageSize = quoteCurrentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   statuses: (state, statuses) => state.statuses = statuses,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
+  quoteQueryFormData: (state, quoteQueryFormData) => state.quoteQueryFormData = quoteQueryFormData,
   page: (state, page) => state.page = page,
-  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
+  quotePage: (state, quotePage) => state.quotePage = quotePage,
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
     commit('url', url);
     commit('keyword', keyword);
     commit('statuses', statuses);
@@ -100,10 +117,12 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
-    commit('currentPageNumber', page);
+    if (page) {
+      commit('currentPageNumber', page);
+    }
     if (size) {
       commit('currentPageSize', size);
     }
@@ -116,7 +135,25 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state}) {
+  async searchQuotesAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
+    commit('quoteQueryFormData', query);
+    if (page) {
+      commit('quoteCurrentPageNumber', page);
+    }
+    if (size) {
+      commit('quoteCurrentPageSize', size);
+    }
+
+    const response = await http.post(url, query, {
+      page: state.quoteCurrentPageNumber,
+      size: state.quoteCurrentPageSize
+    });
+    console.log(response);
+    if (!response['errors']) {
+      commit('quotePage', response);
+    }
+  },
+  refresh ({dispatch, commit, state}) {
     const keyword = state.keyword;
     const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
@@ -132,9 +169,11 @@ const getters = {
   statuses: state => state.statuses,
   isAdvancedSearch: state => state.isAdvancedSearch,
   queryFormData: state => state.queryFormData,
+  quoteQueryFormData: state => state.quoteQueryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  quotePage: state => state.quotePage
 };
 
 export default {

@@ -479,7 +479,7 @@ let TENANT_APIS = {
   getAllRequirementOrders() {
     return this.getRequirementOrders();
   },
-  getQuotes() {
+  getAllQuotes() {
     return '/b2b/orders/quote/all';
   },
   getPurchaseOrders() {

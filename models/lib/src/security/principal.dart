@@ -5,7 +5,6 @@ import 'package:models/models.dart';
 part 'principal.g.dart';
 // import 'package:models/models.dart';
 
-
 @JsonSerializable()
 class PrincipalModel extends ItemModel {
   @JsonKey(toJson: mediaToJson)
@@ -18,6 +17,10 @@ class PrincipalModel extends ItemModel {
   ArticleApprovalStatus approvalStatus;
   @JsonKey(toJson: addressToJson)
   AddressModel contactAddress;
+
+  ///支付方案
+  @JsonKey(toJson: payPlansToJson)
+  List<CompanyPayPlanModel> payPlans;
 
   PrincipalModel({
     this.profilePicture,
@@ -38,6 +41,10 @@ class PrincipalModel extends ItemModel {
 
   static Map<String, dynamic> mediaToJson(MediaModel model) =>
       MediaModel.toJson(model);
+
+  static List<Map<String, dynamic>> payPlansToJson(
+      List<CompanyPayPlanModel> payPlans) =>
+      payPlans.map((plan) => CompanyPayPlanModel.toJson(plan)).toList();
 
   // static Map<String, dynamic> addressToJson(AddressModel model) => AddressModel.toJson(model);
 

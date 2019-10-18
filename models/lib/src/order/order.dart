@@ -48,6 +48,9 @@ const RequirementOrderStatusLocalizedMap = {
 
 /// 采购订单状态
 enum PurchaseOrderStatus {
+  ///待确认
+  PENDING_CONFIRM,
+
   /// 待付款
   PENDING_PAYMENT,
 
@@ -69,6 +72,7 @@ enum PurchaseOrderStatus {
 
 // TODO: i18n处理
 const PurchaseOrderStatusLocalizedMap = {
+  PurchaseOrderStatus.PENDING_CONFIRM: "待确认",
   PurchaseOrderStatus.PENDING_PAYMENT: "待付款",
   PurchaseOrderStatus.IN_PRODUCTION: "生产中",
   PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: "待出库",
@@ -153,6 +157,14 @@ enum MachiningType {
   LIGHT_PROCESSING,
 }
 
+enum CooperationMode {
+  ///包工包料
+  LABOR_AND_MATERIAL,
+
+  ///清加工
+  LIGHT_PROCESSING,
+}
+
 const MachiningTypeMap = {
   MachiningType.LABOR_AND_MATERIAL: "LABOR_AND_MATERIAL",
   MachiningType.LIGHT_PROCESSING: "LIGHT_PROCESSING"
@@ -161,6 +173,11 @@ const MachiningTypeMap = {
 const MachiningTypeLocalizedMap = {
   MachiningType.LABOR_AND_MATERIAL: '包工包料',
   MachiningType.LIGHT_PROCESSING: '清加工',
+};
+
+const CooperationModeLocalizedMap = {
+  CooperationMode.LABOR_AND_MATERIAL: '包工包料',
+  CooperationMode.LIGHT_PROCESSING: '清加工',
 };
 
 enum ProductionProgressPhase {
@@ -191,6 +208,21 @@ const ProductionProgressPhaseLocalizedMap = {
   ProductionProgressPhase.AFTER_FINISHING: "后整",
   ProductionProgressPhase.INSPECTION: "验货",
   ProductionProgressPhase.DELIVERY: "发货"
+};
+
+///合同角色类型
+enum AgreementRoleType {
+  ///甲方
+  PARTYA,
+
+  ///乙方
+  PARTYB
+}
+
+///合同角色类型
+const AgreementRoleTypeLocalizedMap = {
+  AgreementRoleType.PARTYA: "甲方",
+  AgreementRoleType.PARTYB: "乙方"
 };
 
 @JsonSerializable()
@@ -233,8 +265,19 @@ class AbstractOrderModel extends ItemModel {
   @JsonKey(toJson: _principalToJson)
   PrincipalModel supplier;
 
-  AbstractOrderModel({
-    @required this.code,
+  ///发货单
+  @JsonKey(toJson: _shippingOrdersToJson)
+  List<ShippingOrderNoteModel> shippingOrders;
+
+  ///收货单
+  @JsonKey(toJson: _deliveryOrdersToJson)
+  List<DeliveryOrderNoteModel> deliveryOrders;
+
+  ///对账单
+  @JsonKey(toJson: _reconciliationOrdersToJson)
+  List<ReconciliationOrderNoteModel> reconciliationOrders;
+
+  AbstractOrderModel({@required this.code,
     this.totalQuantity = 0,
     this.totalPrice = 0,
     this.creationTime,
@@ -245,7 +288,15 @@ class AbstractOrderModel extends ItemModel {
     this.salesApplication,
     this.consignment,
     this.supplier,
-  });
+    this.shippingOrders,
+    this.deliveryOrders,
+    this.reconciliationOrders});
+
+  factory AbstractOrderModel.fromJson(Map<String, dynamic> json) =>
+      _$AbstractOrderModelFromJson(json);
+
+  static Map<String, dynamic> toJson(AbstractOrderModel model) =>
+      _$AbstractOrderModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
@@ -258,6 +309,24 @@ class AbstractOrderModel extends ItemModel {
 
   static Map<String, dynamic> _principalToJson(PrincipalModel model) =>
       PrincipalModel.toJson(model);
+
+  static List<Map<String, dynamic>> _shippingOrdersToJson(
+      List<ShippingOrderNoteModel> shippingOrders) =>
+      shippingOrders
+          .map((model) => ShippingOrderNoteModel.toJson(model))
+          .toList();
+
+  static List<Map<String, dynamic>> _deliveryOrdersToJson(
+      List<DeliveryOrderNoteModel> deliveryOrders) =>
+      deliveryOrders
+          .map((model) => DeliveryOrderNoteModel.toJson(model))
+          .toList();
+
+  static List<Map<String, dynamic>> _reconciliationOrdersToJson(
+      List<ReconciliationOrderNoteModel> reconciliationOrders) =>
+      reconciliationOrders
+          .map((model) => ReconciliationOrderNoteModel.toJson(model))
+          .toList();
 }
 
 /// 订单
@@ -426,6 +495,9 @@ class ConsignmentModel extends ItemModel {
   @JsonKey(toJson: _carrierToJson)
   CarrierModel carrierDetails;
 
+  @JsonKey(toJson: _orderNoteToJson)
+  AbstractOrderNoteModel orderNote;
+
   ConsignmentModel({
     this.code,
     this.status,
@@ -445,6 +517,10 @@ class ConsignmentModel extends ItemModel {
   static List<Map<String, dynamic>> _entriesToJson(
           List<ConsignmentEntryModel> models) =>
       models.map((model) => ConsignmentEntryModel.toJson(model)).toList();
+
+  static Map<String, dynamic> _orderNoteToJson(
+      AbstractOrderNoteModel orderNote) =>
+      AbstractOrderNoteModel.toJson(orderNote);
 }
 
 @JsonSerializable()
@@ -720,46 +796,46 @@ class PurchaseOrderModel extends OrderModel {
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime expectedDeliveryDate;
 
-  //生产进度
+  ///生产进度
   @JsonKey(toJson: progressesToJson)
   List<ProductionProgressModel> progresses;
 
-  //是否已付定金
+  ///是否已付定金
   bool depositPaid;
 
-  //是否已付尾款
+  ///是否已付尾款
   bool balancePaid;
 
-  //定金
+  ///定金
   double deposit;
 
-  //尾款
+  ///尾款
   double balance;
 
-  //预计支付定金日期
+  ///预计支付定金日期
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime depositPaidDate;
 
-  //预计支付尾款日期
+  ///预计支付尾款日期
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime balancePaidDate;
 
-  //卖方
+  ///卖方
   String companyOfSeller;
 
-  //卖方联系人
+  ///卖方联系人
   String contactPersonOfSeller;
 
-  //卖方联系电话
+  ///卖方联系电话
   String contactOfSeller;
 
-  //单价
+  ///单价
   double unitPrice;
 
-  //是否跳过付尾款环节
+  ///是否跳过付尾款环节
   bool skipPayBalance;
 
-  //唯一码
+  ///唯一码
   String uniqueCode;
 
   //是否延期
@@ -771,6 +847,45 @@ class PurchaseOrderModel extends OrderModel {
   int delayedDays;
 
   bool updated;
+
+  /****** V2  *******/
+
+  ///需要同步的生产进度订单号
+  String targetPurchaseOrderCode;
+
+  ///发票税点
+  double invoiceTaxPoint;
+
+  ///已付金额
+  double paidAmount;
+
+  ///优惠金额
+  double offerAmount;
+
+  ///扣除金额
+  double deductionAmount;
+
+  ///品牌跟单人
+  @JsonKey(toJson: _b2bCustomerToJson)
+  B2BCustomerModel brandOperator;
+
+  ///工厂跟单人
+  @JsonKey(toJson: _b2bCustomerToJson)
+  B2BCustomerModel factoryOperator;
+
+  ///审批人
+  @JsonKey(toJson: _b2bCustomerToJson)
+  B2BCustomerModel approver;
+
+  ///运费支付方
+  AgreementRoleType freightPayer;
+
+  ///账务方案
+  @JsonKey(toJson: _payPlanToJson)
+  OrderPayPlanModel payPlan;
+
+  ///合同是否已签
+  bool userAgreementIsSigned;
 
   // @JsonKey(fromJson: _dateTimefromMilliseconds)
   // DateTime modifiedtime;
@@ -809,7 +924,7 @@ class PurchaseOrderModel extends OrderModel {
       this.uniqueCode,
       this.delayed,
       this.quoteRef,
-      this.updated:false,
+        this.updated: false,
       this.delayedDays,
       DateTime modifiedtime,
       SalesApplication salesApplication,
@@ -862,6 +977,12 @@ class PurchaseOrderModel extends OrderModel {
   static List<Map<String, dynamic>> progressesToJson(
           List<ProductionProgressModel> entries) =>
       entries.map((entry) => ProductionProgressModel.toJson(entry)).toList();
+
+  static Map<String, dynamic> _b2bCustomerToJson(B2BCustomerModel model) =>
+      B2BCustomerModel.toJson(model);
+
+  static Map<String, dynamic> _payPlanToJson(OrderPayPlanModel payPlan) =>
+      OrderPayPlanModel.toJson(payPlan);
 }
 
 /// 采购订单行
@@ -1301,4 +1422,21 @@ class CarrierModel extends ItemModel {
 
   static List<CarrierModel> fromJsonList(List<dynamic> jsons) =>
       jsons.map((json) => CarrierModel.fromJson(json)).toList();
+}
+
+@JsonSerializable()
+class OrderEventRecordModel extends ItemModel {
+  ///触发事件
+  TriggerEvent triggerEvent;
+
+  ///订单编号
+  String orderCode;
+
+  OrderEventRecordModel({this.orderCode, this.triggerEvent});
+
+  factory OrderEventRecordModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderEventRecordModelFromJson(json);
+
+  static Map<String, dynamic> toJson(OrderEventRecordModel model) =>
+      _$OrderEventRecordModelToJson(model);
 }

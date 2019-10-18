@@ -14,8 +14,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'offline_order/offline_order_cooperator_input.dart';
-
 class ProductionOfflineOrder extends StatefulWidget {
   final ApparelProductModel product;
 
@@ -83,7 +81,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('下单'),
+          title: Text('创建线下订单'),
           elevation: 0.5,
           brightness: Brightness.light,
           centerTitle: true,
@@ -154,7 +152,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Divider(
             height: 0,
           ),
-          _buildCooperator(context),
+          userType == 'factory' ? _buildBrand(context) : _buildFactory(context),
           Divider(
             height: 0,
           ),
@@ -306,7 +304,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductSelectPage(),
+              builder: (context) =>
+                  ProductSelectPage(
+                  ),
             ),
           );
           if (result != null) {
@@ -403,10 +403,14 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 )),
           ),
           onTap: () async {
+
             dynamic result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductSelectPage(),
+                builder: (context) =>
+                    ProductSelectPage(
+
+                    ),
               ),
             );
             if (result != null) {
@@ -526,13 +530,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         });
   }
 
-  ///合作商
-  Widget _buildCooperator(BuildContext context) {
+  //生产工厂
+  Widget _buildFactory(BuildContext context) {
     return GestureDetector(
         child: Container(
           child: ListTile(
               leading: Text(
-                '合作商',
+                '生产工厂',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -557,7 +561,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    OfflineOrderCooperatorInput(
+                    OfflineOrderFactroyInput(
                       model: company,
                       type: '工厂',
                     )),
