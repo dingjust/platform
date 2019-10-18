@@ -11,7 +11,7 @@
     </el-row>
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >
       <el-col :span="3" >
-        <el-button style="width: 120px" type="info" disabled >税号</el-button>
+        <el-button style="width: 120px" type="info" disabled >社会统一信用代码</el-button>
       </el-col>
       <el-col :span="12">
         <el-input size="small" v-model="enterpriseSlotData.organization" placeholder="税号" />

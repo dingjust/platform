@@ -154,7 +154,7 @@
             }
         }
         if(this.companyState == 'SUCCESS'){
-          this.isPersonal = false;
+          this.isPersonal = true;
         }
 
       },
