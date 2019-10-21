@@ -8,15 +8,13 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">发货人</h6>
-            <el-input placeholder="输入品牌名" v-model="slotData.consignorName" size="mini">
-            </el-input>
+            <el-input placeholder="输入品牌名" v-model="slotData.consignorName" size="mini"></el-input>
           </el-row>
         </el-col>
         <el-col :span="8">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">联系方式</h6>
-            <el-input placeholder="输入手机号" v-model="slotData.consignorPhone" size="mini">
-            </el-input>
+            <el-input placeholder="输入手机号" v-model="slotData.consignorPhone" size="mini"></el-input>
           </el-row>
         </el-col>
       </el-row>
@@ -24,21 +22,30 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">发货方式</h6>
-            <el-input placeholder="输入方式" v-model="slotData.consignment.carrierDetails.name" size="mini"
-              :disabled="slotData.isOfflineConsignment">
-            </el-input>
+            <template v-if="slotData.consignment!=null">
+              <el-input v-model="slotData.consignment.carrierDetails.name" size="mini"
+                :disabled="slotData.isOfflineConsignment"></el-input>
+            </template>
+            <template v-else>
+              <el-input size="mini" :disabled="slotData.isOfflineConsignment"></el-input>
+            </template>
           </el-row>
         </el-col>
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">发货单号</h6>
-            <el-input placeholder="货运单号" v-model="slotData.consignment.trackingID" size="mini"
-              :disabled="slotData.isOfflineConsignment">
-            </el-input>
+            <template v-if="slotData.consignment!=null">
+              <el-input placeholder="货运单号" v-model="slotData.consignment.trackingID" size="mini"
+                :disabled="slotData.isOfflineConsignment"></el-input>
+            </template>
+            <template v-else>
+              <el-input  size="mini"
+                :disabled="slotData.isOfflineConsignment"></el-input>
+            </template>
           </el-row>
         </el-col>
         <el-col :span="8">
-          <el-checkbox v-model="slotData.isOfflineConsignment" size='mini' class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）
+          <el-checkbox v-model="slotData.isOfflineConsignment" size="mini" class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）
           </el-checkbox>
         </el-col>
       </el-row>
@@ -49,22 +56,19 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">收货人</h6>
-            <el-input placeholder="输入名称" v-model="slotData.consigneeName" size="mini">
-            </el-input>
+            <el-input placeholder="输入名称" v-model="slotData.consigneeName" size="mini"></el-input>
           </el-row>
         </el-col>
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">联系方式</h6>
-            <el-input placeholder="输入方式" v-model="slotData.consigneePhone" size="mini">
-            </el-input>
+            <el-input placeholder="输入方式" v-model="slotData.consigneePhone" size="mini"></el-input>
           </el-row>
         </el-col>
         <el-col :span="12">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">详细地址</h6>
-            <el-input placeholder="输入收货地址" v-model="slotData.consigneeAddress" size="mini">
-            </el-input>
+            <el-input placeholder="输入收货地址" v-model="slotData.consigneeAddress" size="mini"></el-input>
           </el-row>
         </el-col>
       </el-row>
@@ -75,15 +79,13 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">品牌</h6>
-            <el-input placeholder="输入品牌名称" v-model="slotData.brand" size="mini">
-            </el-input>
+            <el-input placeholder="输入品牌名称" v-model="slotData.brand" size="mini"></el-input>
           </el-row>
         </el-col>
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">产品款号</h6>
-            <el-input placeholder="输入款号" v-model="slotData.skuID" size="mini">
-            </el-input>
+            <el-input placeholder="输入款号" v-model="slotData.skuID" size="mini"></el-input>
           </el-row>
         </el-col>
       </el-row>
@@ -110,20 +112,17 @@
         </tr>
         <tr>
           <td>备注</td>
-          <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-            {{slotData.remarks}}
-          </td>
+          <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">{{slotData.remarks}}</td>
         </tr>
         <tr>
           <td>退料</td>
           <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-            {{slotData.withdrawalQuality}} </td>
+            {{slotData.withdrawalQuality}}</td>
         </tr>
         <tr>
           <td>残次品数</td>
           <td :colspan="getColspanLength()+1" class="order-table-input" style="width:120px">
-            {{slotData.defectiveQuality}}
-          </td>
+            {{slotData.defectiveQuality}}</td>
         </tr>
       </table>
     </el-form>
@@ -131,12 +130,12 @@
 </template>
 
 <script>
-  import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
-  import FormLabel from '@/components/custom/FormLabel';
+  import OrdersInfoItem from "@/components/custom/OrdersInfoItem";
+  import FormLabel from "@/components/custom/FormLabel";
 
   export default {
-    name: 'DeliverView',
-    props: ['slotData'],
+    name: "DeliverView",
+    props: ["slotData"],
     components: {
       OrdersInfoItem,
       FormLabel
@@ -160,18 +159,23 @@
       totalAmout: function () {
         var totalAmount = 0;
         this.slotData.entries.forEach(entry => {
-          if (entry.quantity != '') {
+          if (entry.quantity != "") {
             totalAmount += entry.quantity;
           }
         });
         return totalAmount;
+      },
+      consignment: function () {
+        if (this.slotData.consignment == null) {
+          return {};
+        }
       }
     },
     methods: {
       countRowAmount(color) {
         var amount = 0;
         this.slotData.entries.forEach(element => {
-          if (element.color == color&& element.quantity != '') {
+          if (element.color == color && element.quantity != "") {
             let num = parseInt(element.quantity);
             amount = amount + num;
           }
@@ -182,18 +186,18 @@
         return this.colors.size + 2;
       },
       getVariant(color, size) {
-        var result = this.slotData.entries.filter(item => item.color == color && item.size == size);
+        var result = this.slotData.entries.filter(
+          item => item.color == color && item.size == size
+        );
         if (result.length != 0) {
           return result[0].quantity;
         } else {
-          return '';
+          return "";
         }
-      },
+      }
     },
     data() {
-      return {
-        
-      }
+      return {};
     },
     created() {
       //初始化表格
@@ -247,7 +251,7 @@
       }
     },
     mounted() {}
-  }
+  };
 
 </script>
 <style>
@@ -314,14 +318,14 @@
   }
 
   .order-table-btn_add {
-    background-color: #FFD60C;
-    border-color: #FFD60C;
+    background-color: #ffd60c;
+    border-color: #ffd60c;
     color: #000;
   }
 
   .info-receive-submit {
-    background-color: #FFD60C;
-    border-color: #FFD60C;
+    background-color: #ffd60c;
+    border-color: #ffd60c;
     color: #000;
     width: 150px;
   }
