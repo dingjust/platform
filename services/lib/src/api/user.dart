@@ -107,6 +107,21 @@ abstract class UserApis {
   ///合同管理列表
   static get contractList => '/{baseSiteId}/user/agreement/list';
 
+  //获取pdf文件
+  static get downContract =>(code) {
+    return '/{baseSiteId}/user/agreement/get/download/token/'+code;
+  };
+
+  //APP下载PDF
+  static get downContractInApp =>(code) {
+    return '/{baseSiteId}/user/agreement/download/in/app/'+code;
+  };
+
+  //获取合同MediaModel
+  static get getContractPdfMedia =>(code) {
+    return '/{baseSiteId}/user/agreement/preview/'+code;
+  };
+
   ///用户个人认证
   static get personalCertification => '/{baseSiteId}/fdd/api/get/personal/verify/url';
 
@@ -132,6 +147,9 @@ abstract class UserApis {
     return '/{baseSiteId}/user/agreement/start/flow/$code?sealCode=$sealCode';
   };
 
+  //获取合同数量
+  static get getContractCount =>  '/{baseSiteId}/user/agreement/count';
+
   ///查看合同
   static get getContract => (code){
     return '/{baseSiteId}/user/agreement/get/$code';
@@ -151,5 +169,16 @@ abstract class UserApis {
 
   //获取企业认证信息
   static get getAuthenticationEnterprise =>  '/{baseSiteId}/cert/enterprise/cert/info';
+
+  ///撤销合同
+  static get revokeContract => (code){
+    return '/{baseSiteId}/user/agreement/revoke/$code';
+  };
+
+  ///拒签合同
+  static get rejectContract => (code){
+    return '/{baseSiteId}/user/agreement/reject/sign/$code';
+  };
+
 
 }

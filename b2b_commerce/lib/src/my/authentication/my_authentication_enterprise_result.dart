@@ -105,6 +105,29 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
           },
         ),
       );
+    }else if(widget.authenticationModel.companyState ==
+        AuthenticationState.CHECK){
+            return Container(
+              color: Colors.white10,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 50,
+              child: RaisedButton(
+                color: Colors.red,
+                child: Text(
+                  '继续认证',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: () {
+                  keepOnAuthentication(certificationInfo.data);
+                },
+              ),
+            );
     } else {
       Container();
     }
@@ -132,6 +155,8 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
 //      );
 //    }
   }
+
+
 
   keepOnAuthentication(AuthenticationInfoModel model) {
     Map map = {

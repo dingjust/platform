@@ -8,13 +8,13 @@ import 'package:widgets/widgets.dart';
 
 import 'contract_select_widget.dart';
 
-class JoinOrderContractPage extends StatefulWidget{
+class JoinBCXYContractPage extends StatefulWidget{
   String role;
-  JoinOrderContractPage({this.role});
-  _JoinOrderContractPageState createState() => _JoinOrderContractPageState();
+  JoinBCXYContractPage({this.role});
+  _JoinBCXYContractPageState createState() => _JoinBCXYContractPageState();
 }
 
-class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
+class _JoinBCXYContractPageState extends State<JoinBCXYContractPage>{
   PurchaseOrderModel orderModel  = PurchaseOrderModel();
   ContractTemplateModel templateModel = ContractTemplateModel();
   SealModel sealModel = SealModel();

@@ -8,13 +8,13 @@ import 'package:widgets/widgets.dart';
 
 import 'contract_select_widget.dart';
 
-class JoinOrderContractPage extends StatefulWidget{
+class JoinSupplierContractPage extends StatefulWidget{
   String role;
-  JoinOrderContractPage({this.role});
-  _JoinOrderContractPageState createState() => _JoinOrderContractPageState();
+  JoinSupplierContractPage({this.role});
+  _JoinSupplierContractPageState createState() => _JoinSupplierContractPageState();
 }
 
-class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
+class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
   PurchaseOrderModel orderModel  = PurchaseOrderModel();
   ContractTemplateModel templateModel = ContractTemplateModel();
   SealModel sealModel = SealModel();
@@ -36,7 +36,7 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('关联订单合同'),
+          title: Text('非关联订单合同'),
           centerTitle: true,
           elevation: 0.5,
         ),

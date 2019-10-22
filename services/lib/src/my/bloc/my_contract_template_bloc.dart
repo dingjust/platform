@@ -6,33 +6,33 @@ import 'package:services/services.dart';
 import 'package:services/src/my/response/my_response.dart';
 import 'package:services/src/order/PageEntry.dart';
 
-class MyContractBLoC extends BLoCBase {
+class MyContractTemplateBLoC extends BLoCBase {
   // 工厂模式
-  factory MyContractBLoC() => _getInstance();
+  factory MyContractTemplateBLoC() => _getInstance();
 
-  static MyContractBLoC get instance => _getInstance();
-  static MyContractBLoC _instance;
+  static MyContractTemplateBLoC get instance => _getInstance();
+  static MyContractTemplateBLoC _instance;
 
   bool lock = false;
 
   static final Map<String, PageEntry> _dataMap = {
-    'ALL':
-    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'SIGN':
-    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'COMPLETE':
-    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'INVALID':
-    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
+    'CGDD':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractTemplateModel>()),
+    'KJXY':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractTemplateModel>()),
+    'WTSCHT':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractTemplateModel>()),
+    'BCXY':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractTemplateModel>()),
   };
 
-  var _controller = StreamController <ContractData>.broadcast();
+  var _controller = StreamController <TemplateData>.broadcast();
 
-  MyContractBLoC._internal() {}
+  MyContractTemplateBLoC._internal() {}
 
-  static MyContractBLoC _getInstance() {
+  static MyContractTemplateBLoC _getInstance() {
     if (_instance == null) {
-      _instance = MyContractBLoC._internal();
+      _instance = MyContractTemplateBLoC._internal();
     }
     return _instance;
   }
@@ -41,41 +41,40 @@ class MyContractBLoC extends BLoCBase {
 
   setReadStatus (bool isNotRead) => isShowNotRead = isNotRead;
 
-  Stream<ContractData> get stream => _controller.stream;
+  Stream<TemplateData> get stream => _controller.stream;
 
-  getData(String status,String keyword) async {
+  getData(String type) async {
 
     //若没有数据则查询
     if(_dataMap != null && _dataMap.length > 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-        'state': status == null || status == '' || status == 'ALL' ? '' : status,
-        'signState': keyword == null || keyword == '' ? '' : keyword,
+        'type': type == null || type == '' || type == 'ALL' ? '' : type
       };
 
       Response<Map<String, dynamic>> response;
 
       try {
         response = await http$
-            .post(UserApis.contractList, data: data, queryParameters: {
-          'page': _dataMap[status].currentPage,
-          'size': _dataMap[status].size,
+            .post(UserApis.tempList, data: data, queryParameters: {
+          'page': _dataMap[type].currentPage,
+          'size': _dataMap[type].size,
         });
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        ContractResponse contractResponse =
-        ContractResponse.fromJson(response.data);
-        _dataMap[status].totalPages = contractResponse.totalPages;
-        _dataMap[status].totalElements = contractResponse.totalElements;
-        _dataMap[status].data.clear();
-        _dataMap[status].data.addAll(contractResponse.content);
+        ContractTempResponse contractTempResponse =
+        ContractTempResponse.fromJson(response.data);
+        _dataMap[type].totalPages = contractTempResponse.totalPages;
+        _dataMap[type].totalElements = contractTempResponse.totalElements;
+        _dataMap[type].data.clear();
+        _dataMap[type].data.addAll(contractTempResponse.content);
       }
     }
-    _controller.sink.add(ContractData(status: status, data: _dataMap[status].data));
+    _controller.sink.add(TemplateData(status: type, data: _dataMap[type].data));
 
   }
 
@@ -111,21 +110,21 @@ class MyContractBLoC extends BLoCBase {
         _dataMap['ALL'].data.addAll(contractResponse.content);
       }
     }
-    _controller.sink.add(ContractData(status: 'ALL', data: _dataMap['ALL'].data));
+    _controller.sink.add(TemplateData(status: 'ALL', data: _dataMap['ALL'].data));
 
   }
 
-  loadingMoreByStatuses(String status,String keyword) async {
+  loadingMoreByStatuses(String status) async {
     //数据到底
     if (_dataMap[status].currentPage + 1 == _dataMap[status].totalPages) {
       //通知显示已经到底部
       bottomController.sink.add(true);
     } else {
-      getData(status,keyword);
+      getData(status);
     }
 
     loadingController.sink.add(false);
-    _controller.sink.add(ContractData(status: status, data: _dataMap[status].data));
+    _controller.sink.add(TemplateData(status: status, data: _dataMap[status].data));
   }
 
   loadingMoreByKeyword(String keyword) async {
@@ -138,23 +137,23 @@ class MyContractBLoC extends BLoCBase {
     }
 
     loadingController.sink.add(false);
-    _controller.sink.add(ContractData(status: 'ALL', data: _dataMap['ALL'].data));
+    _controller.sink.add(TemplateData(status: 'ALL', data: _dataMap['ALL'].data));
   }
 
-  refreshData(String status,String keyword) async {
+  refreshData(String status) async {
     //重置信息
     _dataMap[status].data.clear();
     _dataMap[status].currentPage = 0;
-    await getData(status,keyword);
+    await getData(status);
   }
 
 
 }
 
-class ContractData {
+class TemplateData {
   String status;
 
-  List<ContractModel> data;
+  List<ContractTemplateModel> data;
 
-  ContractData({this.status, this.data});
+  TemplateData({this.status, this.data});
 }

@@ -346,22 +346,25 @@ class CompanyWalletModel extends ItemModel {
 class ContractModel extends ItemModel {
   String title;
   String contractNumber;
-  String belongTo;
+  String partner;
   @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
   DateTime createTime;
   ContractStatus state;
   bool available;
   String code;
   String content;
+  bool isCreator;
+
 
   ContractModel({
     this.title,
     this.contractNumber,
-    this.belongTo,
+    this.partner,
     this.createTime,
     this.state,
     this.available,
     this.content,
+    this.isCreator,
   });
 
 
@@ -438,6 +441,59 @@ class CertificationState {
 
   static Map<String, dynamic> toJson(CertificationState model) =>
       _$CertificationStateToJson(model);
+
+}
+
+@JsonSerializable()
+class CertificationContractCount {
+  final int code;
+  final String msg;
+  final int resultCode;
+  final ContractCount data;
+
+  CertificationContractCount(this.code, this.msg, this.resultCode, this.data);
+
+  factory CertificationContractCount.fromJson(Map<String, dynamic> json) =>
+      _$CertificationContractCountFromJson(json);
+
+  static Map<String, dynamic> toJson(CertificationContractCount model) =>
+      _$CertificationContractCountToJson(model);
+
+}
+
+@JsonSerializable()
+class ContractCount {
+  final int waitMeSign;
+  final int waitPartnerSign;
+
+  ContractCount(this.waitMeSign, this.waitPartnerSign);
+
+  factory ContractCount.fromJson(Map<String, dynamic> json) =>
+      _$ContractCountFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractCount model) =>
+      _$ContractCountToJson(model);
+
+}
+
+@JsonSerializable()
+class SearchResultModel {
+  final int code;
+  final String msg;
+  final int resultCode;
+  @JsonKey(toJson: _mediaModelToJson)
+  final MediaModel data;
+
+  SearchResultModel(this.code, this.msg, this.resultCode, this.data);
+
+  factory SearchResultModel.fromJson(Map<String, dynamic> json) =>
+      _$SearchResultModelFromJson(json);
+
+  static Map<String, dynamic> toJson(SearchResultModel model) =>
+      _$SearchResultModelToJson(model);
+
+  static Map<String, dynamic> _mediaModelToJson(MediaModel model) =>
+      MediaModel.toJson(model);
 
 }
 

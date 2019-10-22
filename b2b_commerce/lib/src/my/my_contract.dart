@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
+import 'package:b2b_commerce/src/my/contract/contract_select_from_page.dart';
+import 'package:b2b_commerce/src/my/contract/join_supplier_contract_page.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +18,14 @@ import 'my_help.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
-  EnumModel('INITIATE', '待签署'),
+  EnumModel('SIGN', '待签署'),
   EnumModel('COMPLETE', '已签署'),
   EnumModel('INVALID', '已作废'),
 ];
 
 class MyContractPage extends StatefulWidget {
+  String keyword;
+  MyContractPage({this.keyword});
   _MyContractPageState createState() => _MyContractPageState();
 }
 
@@ -108,7 +112,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
                 }).toList(),),
               body: TabBarView(
                 controller: controller,
-                children: statuses.map((status) => MyContractListPage(status: status)).toList(),
+                children: statuses.map((status) => MyContractListPage(status: status,keyword: widget.keyword,)).toList(),
               ),
           ),
           bottomNavigationBar: Container(
@@ -128,7 +132,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               onPressed: () {
-                openSelectButton(context);
+                Navigator.push(context,MaterialPageRoute(builder: (context) =>ContractSelectFromItemPage()));
               },
             ),
           )
@@ -147,6 +151,9 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
             action1: (){
               Navigator.push(context,MaterialPageRoute(builder: (context) =>JoinOrderContractPage()));
             },
+            action2: (){
+              Navigator.push(context,MaterialPageRoute(builder: (context) =>JoinSupplierContractPage()));
+            },
           );
         }
     );
@@ -162,7 +169,7 @@ class MyContractListPage extends StatefulWidget{
 
   final ScrollController scrollController = ScrollController();
 
-  MyContractListPage({this.keyword,this.status});
+  MyContractListPage({this.keyword:'',this.status});
 
   _MyContractListPageState createState() => _MyContractListPageState();
 }
@@ -179,7 +186,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(widget.status.code);
+        bloc.loadingMoreByStatuses(widget.status.code,widget.keyword);
       }
     });
   }
@@ -192,7 +199,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
         onRefresh: () async {
-            return await bloc.refreshData(widget.status.code);
+            return await bloc.refreshData(widget.status.code,widget.keyword);
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -207,7 +214,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
               builder:
                   (BuildContext context, AsyncSnapshot<ContractData> snapshot) {
                 if (snapshot.data == null) {
-                    bloc.getData(widget.status.code);
+                    bloc.getData(widget.status.code,widget.keyword);
 
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();

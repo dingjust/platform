@@ -41,8 +41,8 @@ class MyHomePage extends StatelessWidget {
             AppRoutes.ROUTE_MY_ACCOUNT),
         menuSeparator,
         CompanyIntroductionMenuItem(),
-//        menuSeparator,
-//        CompanyCertificationMenuItem()
+        menuSeparator,
+        CompanyCertificationMenuItem()
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.addressManage(width: 24, height: 29), '地址管理',
@@ -50,9 +50,9 @@ class MyHomePage extends StatelessWidget {
         menuSeparator,
         MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理',
             AppRoutes.ROUTE_MY_INVOICES),
-//        menuSeparator,
-//          MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '合同管理',
-//              AppRoutes.ROUTE_MY_CONTRACT),
+        menuSeparator,
+          MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '合同管理',
+              AppRoutes.ROUTE_MY_CONTRACT),
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服',
