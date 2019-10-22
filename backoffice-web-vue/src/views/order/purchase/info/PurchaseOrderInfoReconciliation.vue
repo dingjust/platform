@@ -51,15 +51,15 @@
         <tr class="order-table-th_row">
           <th>颜色</th>
           <template v-for="item in sizes">
-            <th :colspan="getColspanLength3()">{{item}}</th>
+            <th :key="item" :colspan="getColspanLength3()">{{item}}</th>
           </template>
           <th>数量小计</th>
         </tr>
         <template v-for="(sizeArray,rowIndex) in form.entries">
-          <tr>
+          <tr :key="rowIndex">
             <td style="width:80px">{{sizeArray[0].color}}</td>
-            <template v-for="(item,index) in sizeArray">
-              <td style="width:80px" :colspan="getColspanLength3()">
+            <template v-for="(item) in sizeArray">
+              <td style="width:80px" :key="item" :colspan="getColspanLength3()">
                 <el-input class="order-table-input" v-model="item.quantity" type="number">
                 </el-input>
               </td>
