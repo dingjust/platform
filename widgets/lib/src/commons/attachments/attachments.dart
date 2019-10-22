@@ -48,7 +48,7 @@ class _AttachmentsState extends State<Attachments> {
   Color iconColorRight = Colors.black;
 
   final StreamController _streamController =
-      StreamController<double>.broadcast();
+  StreamController<double>.broadcast();
 
   @override
   Widget build(BuildContext context) {

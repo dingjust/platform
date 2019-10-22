@@ -70,14 +70,14 @@ dependencies:
   jpush_flutter: ^0.1.0
   permission_handler: ^3.1.0
   flutter_widget_from_html: ^0.2.3+3
-  flutter_inappbrowser: 1.2.1
+#  flutter_inappbrowser: 1.2.1
   toast: ^0.1.5
   flutter_webview_plugin: 0.3.5
-  flutter_native_web: ^1.0.3
   flutter_markdown: ^0.2.0
   convert: 2.1.1
   # flutter_full_pdf_viewer: ^1.0.1
   flutter_cupertino_data_picker: ^0.8.6
+  flutter_full_pdf_viewer: ^1.0.6
 
 dev_dependencies:
   flutter_test:
@@ -169,6 +169,15 @@ flutter:
     - packages/assets/temp/select_contract.png
     - packages/assets/temp/select_order.png
     - packages/assets/temp/select_seal.png
+    - packages/assets/temp/cgdd.png
+    - packages/assets/temp/contract_help.png
+    - packages/assets/temp/kjxy.png
+    - packages/assets/temp/wtsc.png
+    - packages/assets/temp/all_seal.png
+    - packages/assets/temp/all_contract.png
+    - packages/assets/temp/all_template.png
+
+
 
   fonts:
     - family: b2bIcons

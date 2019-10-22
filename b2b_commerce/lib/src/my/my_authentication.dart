@@ -162,6 +162,14 @@ class _MyAuthenticationState extends State<MyAuthentication> {
           if(model.companyState == AuthenticationState.FAILED){
 
           }
+          if (model.companyState == AuthenticationState.CHECK) {
+            Navigator.push(
+              context, MaterialPageRoute(
+                builder: (context) =>
+                    MyAuthenticationEnterpriseResult(
+                      isCompany: _isCompany, authenticationModel: model,)),
+            );
+          }
         }else{
           null;
         }
@@ -186,7 +194,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                 ),
               ),
             Expanded(
-              child: _isCompany
+              child: _isCompany || model.companyType == null
                   ? setAuthenticationStateText(model)
                   : Container(),
               flex: 2,
@@ -257,8 +265,8 @@ class _MyAuthenticationState extends State<MyAuthentication> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                child: _isCompany ? Container() : setAuthenticationStateText(
-                    model),
+                child: !_isCompany  || model.companyType == null ? setAuthenticationStateText(
+                    model) : Container(),
               ),
               flex: 2,
             ),

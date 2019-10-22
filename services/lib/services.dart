@@ -21,6 +21,7 @@ export 'src/message/notify_bloc.dart';
 export 'src/my/bloc/amount_flow_bloc.dart';
 export 'src/my/bloc/my_bill_bloc.dart';
 export 'src/my/bloc/my_contract_bloc.dart';
+export 'src/my/bloc/my_contract_template_bloc.dart';
 export 'src/my/bloc/my_help_bloc.dart';
 export 'src/my/repository/bankcard_repository.dart';
 export 'src/my/repository/bill_repository.dart';
