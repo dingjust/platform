@@ -70,48 +70,6 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 color: Color.fromRGBO(255, 214, 12, 1),
                 child: Text(
-                  '去签署',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context, MaterialPageRoute(builder: (context) =>
-                      ContractSealPage(
-                        sealList: sealList, model: widget.contractModel,)),
-                  );
-
-//                  bottomHeight = 250.0;
-//                  SealModel sealModel = SealModel();
-//                  SealSelectWidget(cacel: () {
-//                    Navigator.pop(context);
-//                  }, rightData: sealList, code: widget.contractModel.code)
-//                      .showPicker(
-//                    context,
-//                    selectType: (seal) {
-//                      setState(() {
-//                        sealModel = seal;
-//                      });
-//                      print(sealModel.code);
-//                    },
-//                  );
-                },
-              ),
-            ),
-            Container(
-              color: Colors.white10,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              height: 50,
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                color: Color.fromRGBO(255, 214, 12, 1),
-                child: Text(
                   '拒签',
                   style: TextStyle(
                     color: Colors.black,
@@ -260,7 +218,49 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                   );
                 },
               ),
-            )
+            ),
+            Container(
+              color: Colors.white10,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 50,
+              child: RaisedButton(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                child: Text(
+                  '去签署',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context) =>
+                      ContractSealPage(
+                        sealList: sealList, model: widget.contractModel,)),
+                  );
+
+//                  bottomHeight = 250.0;
+//                  SealModel sealModel = SealModel();
+//                  SealSelectWidget(cacel: () {
+//                    Navigator.pop(context);
+//                  }, rightData: sealList, code: widget.contractModel.code)
+//                      .showPicker(
+//                    context,
+//                    selectType: (seal) {
+//                      setState(() {
+//                        sealModel = seal;
+//                      });
+//                      print(sealModel.code);
+//                    },
+//                  );
+                },
+              ),
+            ),
           ],
         );
     }else if(widget.contractModel.state != ContractStatus.COMPLETE
@@ -268,47 +268,6 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
         && widget.contractModel.isCreator){
       return Row(
         children: <Widget>[
-          Container(
-            color: Colors.white10,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            height: 50,
-            child: RaisedButton(
-              padding: EdgeInsets.symmetric(horizontal: 50),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '去签署',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context, MaterialPageRoute(builder: (context) =>
-                    ContractSealPage(
-                      sealList: sealList, model: widget.contractModel,)),
-                );
-
-//                SealModel sealModel = SealModel();
-//                SealSelectWidget(cacel: () {
-//                  Navigator.pop(context);
-//                }, rightData: sealList, code: widget.contractModel.code)
-//                    .showPicker(
-//                  context,
-//                  selectType: (seal) {
-//                    setState(() {
-//                      sealModel = seal;
-//                    });
-//                    print(sealModel.code);
-//                  },
-//                );
-              },
-            ),
-          ),
           Container(
             color: Colors.white10,
             margin: EdgeInsets.all(10),
@@ -466,7 +425,48 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                 );
               },
             ),
-          )
+          ),
+          Container(
+            color: Colors.white10,
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            height: 50,
+            child: RaisedButton(
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '去签署',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) =>
+                    ContractSealPage(
+                      sealList: sealList, model: widget.contractModel,)),
+                );
+
+//                SealModel sealModel = SealModel();
+//                SealSelectWidget(cacel: () {
+//                  Navigator.pop(context);
+//                }, rightData: sealList, code: widget.contractModel.code)
+//                    .showPicker(
+//                  context,
+//                  selectType: (seal) {
+//                    setState(() {
+//                      sealModel = seal;
+//                    });
+//                    print(sealModel.code);
+//                  },
+//                );
+              },
+            ),
+          ),
         ],
       );
     }else if(widget.contractModel.state == ContractStatus.COMPLETE){

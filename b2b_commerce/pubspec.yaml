@@ -169,6 +169,15 @@ flutter:
     - packages/assets/temp/select_contract.png
     - packages/assets/temp/select_order.png
     - packages/assets/temp/select_seal.png
+    - packages/assets/temp/cgdd.png
+    - packages/assets/temp/contract_help.png
+    - packages/assets/temp/kjxy.png
+    - packages/assets/temp/wtsc.png
+    - packages/assets/temp/all_seal.png
+    - packages/assets/temp/all_contract.png
+    - packages/assets/temp/all_template.png
+
+
 
   fonts:
     - family: b2bIcons
