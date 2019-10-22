@@ -8,6 +8,7 @@ import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
@@ -38,7 +39,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   PurchaseOrderEntryModel entryModel = new PurchaseOrderEntryModel();
   String address;
   MachiningType machiningType;
-  bool isInvoice;
+  bool isInvoice = false;
   String remarks;
   CompanyModel company = new CompanyModel();
   String price;
@@ -64,6 +65,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   TextEditingController _priceController = TextEditingController();
   FocusNode _remarksFocusNode = FocusNode();
   TextEditingController _remarksController = TextEditingController();
+  CooperatorModel cooperatorModel;
+
+  ///选中账务方案
+  CompanyPayPlanModel selectCompanyPayPlanModel;
 
   @override
   void initState() {
@@ -167,7 +172,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Divider(
             height: 0,
           ),
-          _buildEarnestMoney(context),
+          // _buildEarnestMoney(context),
         ],
       ),
     );
@@ -183,6 +188,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             height: 0,
           ),
           _buildInvoice(context),
+          Divider(
+            height: 0,
+          ),
+          _buildFinance(context),
           Divider(
             height: 0,
           ),
@@ -528,6 +537,16 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   ///合作商
   Widget _buildCooperator(BuildContext context) {
+    String cooperatorName = '';
+
+    if (cooperatorModel != null) {
+      if (cooperatorModel.type == CooperatorType.ONLINE) {
+        cooperatorName = cooperatorModel.partner.name;
+      } else {
+        cooperatorName = cooperatorModel.name;
+      }
+    }
+
     return GestureDetector(
         child: Container(
           child: ListTile(
@@ -537,18 +556,17 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   fontSize: 16,
                 ),
               ),
-              trailing: company == null || company.name == null
-                  ? Icon(Icons.keyboard_arrow_right)
-                  : Container(
-                width: 150,
-                child: Text(
-                  company.name,
-                  textAlign: TextAlign.end,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey),
+              trailing: Container(
+                width: 200,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      '${cooperatorName}',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(Icons.keyboard_arrow_right)
+                  ],
                 ),
               )),
         ),
@@ -558,13 +576,14 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             MaterialPageRoute(
                 builder: (context) =>
                     OfflineOrderCooperatorInput(
-                      model: company,
-                      type: '工厂',
+                      model: cooperatorModel,
                     )),
             //接收返回数据并处理
           ).then((value) {
             setState(() {
-              company = value;
+              if (value != null) {
+                cooperatorModel = value;
+              }
             });
           });
         });
@@ -802,70 +821,108 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   //合作方式
   Widget _buildCooperationModes(BuildContext context) {
-    return GestureDetector(
-        child: Container(
-          child: ListTile(
-            leading: Wrap(
-              children: <Widget>[
-                Text('合作方式',
-                    style: TextStyle(
-                      fontSize: 16,
-                    )),
-                Text(' *',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.red,
-                    )),
-              ],
-            ),
-            trailing: machiningType == null
-                ? Icon(Icons.keyboard_arrow_right)
-                : Text(
-              MachiningTypeLocalizedMap[machiningType],
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey),
-            ),
+    return Container(
+      child: ListTile(
+          leading: Wrap(
+            children: <Widget>[
+              Text('合作方式',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
+              Text(' *',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                  )),
+            ],
           ),
-        ),
-        onTap: () {
-          _showTypeSelect();
-        });
+          trailing: Container(
+              width: 200,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: MachiningType.values
+                    .map((type) =>
+                    ChoiceChip(
+                        label: Text(MachiningTypeLocalizedMap[type]),
+                        backgroundColor: Colors.grey[100],
+                        selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                        selected: machiningType == type,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            machiningType = type;
+                          });
+                        }))
+                    .toList(),
+              ))),
+    );
   }
 
 //是否开具发票
   Widget _buildInvoice(BuildContext context) {
+    return Container(
+      child: ListTile(
+          leading: Wrap(
+            children: <Widget>[
+              Text('是否开具发票',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
+              Text(' *',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                  )),
+            ],
+          ),
+          trailing: Switch(
+            value: isInvoice,
+            onChanged: (value) {
+              setState(() {
+                isInvoice = value;
+              });
+            },
+          )),
+    );
+  }
+
+  //账务方案
+  Widget _buildFinance(BuildContext context) {
     return GestureDetector(
-        child: Container(
-          child: ListTile(
+      child: Container(
+        child: ListTile(
             leading: Wrap(
               children: <Widget>[
-                Text('是否开具发票',
+                Text('账务方案',
                     style: TextStyle(
                       fontSize: 16,
-                    )),
-                Text(' *',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.red,
                     )),
               ],
             ),
-            trailing: isInvoice == null
-                ? Icon(Icons.keyboard_arrow_right)
-                : Text(
-              isInvoice == true ? '开发票' : '不开发票',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey),
-            ),
-          ),
-        ),
-        onTap: () {
-          _showIsInvoiceSelect();
-        });
+            trailing: Container(
+              width: 300,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        '${selectCompanyPayPlanModel?.name ?? ''}',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      Icon(Icons.keyboard_arrow_right)
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[],
+                  )
+                ],
+              ),
+            )),
+      ),
+      onTap: onFinanceSelect,
+    );
   }
 
   //订单备注
@@ -931,6 +988,46 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   })),
         ],
       ),
+    );
+  }
+
+  void onFinanceSelect() async {
+    CompanyPayPlanResponse response = await PayPlanRepositoryImpl().all();
+
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          padding: const EdgeInsets.only(top: 6.0),
+          color: CupertinoColors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+              color: CupertinoColors.black,
+              fontSize: 22.0,
+            ),
+            child: GestureDetector(
+              // Blocks taps from propagating to the modal sheet and popping.
+              onTap: () {},
+              child: SafeArea(
+                top: false,
+                child: CupertinoPicker(
+                  backgroundColor: Colors.white, //选择器背景色
+                  itemExtent: 30, //item的高度
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      selectCompanyPayPlanModel = response.content[index];
+                    });
+                  },
+                  children: response.content
+                      .map((payplan) => Text('${payplan.name}'))
+                      .toList(),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

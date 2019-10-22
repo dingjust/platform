@@ -143,33 +143,43 @@ abstract class UserApis {
   static get saveContract => '/{baseSiteId}/user/agreement/save';
 
   ///开启合同
-  static get flowContract => (code,sealCode){
-    return '/{baseSiteId}/user/agreement/start/flow/$code?sealCode=$sealCode';
-  };
+  static get flowContract =>
+          (code, sealCode) {
+        return '/{baseSiteId}/user/agreement/start/flow/$code?sealCode=$sealCode';
+      };
 
   //获取合同数量
   static get getContractCount =>  '/{baseSiteId}/user/agreement/count';
 
   ///查看合同
-  static get getContract => (code){
-    return '/{baseSiteId}/user/agreement/get/$code';
-  };
+  static get getContract =>
+          (code) {
+        return '/{baseSiteId}/user/agreement/get/$code';
+      };
 
   //个人认证
-  static get personalAuthentication =>  '/{baseSiteId}/fdd/api/save/personal/verify/data';
+  static get personalAuthentication =>
+      '/{baseSiteId}/fdd/api/save/personal/verify/data';
 
   //企业认证
-  static get enterpriseAuthentication =>  '/{baseSiteId}/fdd/api/save/enterprise/verify/data';
+  static get enterpriseAuthentication =>
+      '/{baseSiteId}/fdd/api/save/enterprise/verify/data';
 
   //获取认证状态
-  static get getAuthenticationState =>  '/{baseSiteId}/cert/state';
+  static get getAuthenticationState => '/{baseSiteId}/cert/state';
 
   //获取个人认证信息
-  static get getAuthenticationInfo =>  '/{baseSiteId}/cert/personal/cert/info';
+  static get getAuthenticationInfo => '/{baseSiteId}/cert/personal/cert/info';
 
   //获取企业认证信息
-  static get getAuthenticationEnterprise =>  '/{baseSiteId}/cert/enterprise/cert/info';
+  static get getAuthenticationEnterprise =>
+      '/{baseSiteId}/cert/enterprise/cert/info';
 
+  ///合作商列表
+  static get cooperators => '/{baseSiteId}/cooperator?page=0&size=999';
+
+  ///公司账务列表
+  static get payplans => '/{baseSiteId}/payPlan?page=0&size=999';
   ///撤销合同
   static get revokeContract => (code){
     return '/{baseSiteId}/user/agreement/revoke/$code';
