@@ -79,19 +79,19 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
           }
       );
     }
-//    else if(orderModel == null || orderModel.code ==null || orderModel.code == ''){
-//      showDialog(
-//          context: context,
-//          barrierDismissible: false,
-//          builder: (_) {
-//            return CustomizeDialog(
-//              dialogType: DialogType.RESULT_DIALOG,
-//              failTips: '请选择订单',
-//              callbackResult: false,
-//            );
-//          }
-//      );
-//    }
+    else if(orderModel == null || orderModel.code ==null || orderModel.code == ''){
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '请选择订单',
+              callbackResult: false,
+            );
+          }
+      );
+    }
     else if(cgddTemp == null || cgddTemp.code ==null || cgddTemp.code == ''){
       showDialog(
           context: context,
@@ -116,8 +116,8 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
         'role': role,
         'title': '00000',
         'frameAgreementCode': kjxyTemp == null ? '' : kjxyTemp.code,
-//        'orderCode': orderModel.code,
-        'orderCode':'TPO00079001'
+        'orderCode': orderModel.code,
+//        'orderCode':'TPO00079001'
       };
       showDialog(
           context: context,
