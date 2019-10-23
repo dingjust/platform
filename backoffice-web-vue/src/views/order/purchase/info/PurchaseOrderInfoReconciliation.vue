@@ -50,16 +50,16 @@
       <table cellspacing="2" width="100%" :height="form.entries.length*50" class="order-table">
         <tr class="order-table-th_row">
           <th>颜色</th>
-          <template v-for="item in sizes">
-            <th :key="item" :colspan="getColspanLength3()">{{item}}</th>
+          <template v-for="(item,index) in sizes">
+            <th :key="index" :colspan="getColspanLength3()">{{item}}</th>
           </template>
           <th>数量小计</th>
         </tr>
         <template v-for="(sizeArray,rowIndex) in form.entries">
           <tr :key="rowIndex">
             <td style="width:80px">{{sizeArray[0].color}}</td>
-            <template v-for="(item) in sizeArray">
-              <td style="width:80px" :key="item" :colspan="getColspanLength3()">
+            <template v-for="(item,sizeIndex) in sizeArray">
+              <td style="width:80px" :key="sizeIndex" :colspan="getColspanLength3()">
                 <el-input class="order-table-input" v-model="item.quantity" type="number">
                 </el-input>
               </td>
@@ -193,15 +193,18 @@
     computed: {
       sizes: function () {
         var sizes = new Set([]);
-        this.slotData.entries.forEach(element => {
-          sizes.add(element.product.size.name);
+        // this.slotData.entries.forEach(element => {
+        //   sizes.add(element.product.size.name);
+        // });
+        this.slotData.deliveryOrders[0].entries.forEach(element => {
+          sizes.add(element.size);
         });
         return sizes;
       },
       colors: function () {
         var colors = new Set([]);
-        this.slotData.entries.forEach(element => {
-          colors.add(element.product.color.name);
+        this.slotData.deliveryOrders[0].entries.forEach(element => {
+          colors.add(element.color);
         });
         return colors;
       },
@@ -428,11 +431,20 @@
           var sizeArray = [];
           this.sizes.forEach(size => {
             if (this.slotData.reconciliationOrders == null || this.slotData.reconciliationOrders.length == 0) {
-              sizeArray.push({
-                size: size,
-                color: color,
-                quantity: '',
-              });
+              let variant = this.getVariant(color, size, this.slotData.deliveryOrders[0].entries);
+              if (variant != null) {
+                sizeArray.push({
+                  size: size,
+                  color: color,
+                  quantity: variant.quantity,
+                });
+              } else {                
+                sizeArray.push({
+                  size: size,
+                  color: color,
+                  quantity: '',
+                });
+              }
             } else {
               let variant = this.getVariant(color, size, this.slotData.reconciliationOrders[0].entries);
               if (variant != null) {
@@ -470,10 +482,10 @@
         } else {
           this.form.id = '';
           this.form.code = '';
-          this.form.partA = '';
-          this.form.partB = '';
-          this.form.brand = this.slotData.product.brand;
-          this.form.skuID = this.slotData.product.skuID;
+          this.form.partA = this.slotData.purchaser.name;
+          this.form.partB = this.slotData.belongTo.name;
+          this.form.brand = this.slotData.deliveryOrders[0].brand;
+          this.form.skuID = this.slotData.deliveryOrders[0].skuID;
           this.form.cooperationMethod = this.slotData.machiningType;
           this.form.remarks = '';
           this.form.delayDeduction = 0;
