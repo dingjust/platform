@@ -71,11 +71,6 @@ export default {
         //   url: '/unclassified/markDown',
         //   icon: 'iconNone',
         // },
-        {
-          name: '合同模板',
-          url: '/template/create',
-          icon: 'iconNone',
-        }
       ]
     },
     // {

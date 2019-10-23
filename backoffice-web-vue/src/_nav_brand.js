@@ -74,11 +74,6 @@ export default {
         //   url: '/unclassified/markDown',
         //   icon: 'iconNone',
         // },
-        {
-          name: '合同模板',
-          url: '/template/create',
-          icon: 'iconNone',
-        }
       ]
     },
     {
@@ -87,7 +82,7 @@ export default {
       // icon: 'icon-puzzle',
       children: [
         {
-          name: '服装产品',
+          name: '产品管理',
           url: '/product/apparel',
           // icon: 'iconNone',
         },
@@ -109,7 +104,7 @@ export default {
       // icon: 'icon-puzzle',
       children: [
         {
-          name: '认证信息',
+          name: '认证中心',
           url: '/account/my',
           icon: 'iconNone'
         },
@@ -134,7 +129,7 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '地址',
+          name: '地址管理',
           url: '/account/address',
           icon: 'iconNone'
         },
