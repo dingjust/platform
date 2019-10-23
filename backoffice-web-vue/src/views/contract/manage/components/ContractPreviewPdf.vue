@@ -25,8 +25,11 @@
       <!--</table>-->
     <!--</center>-->
     <div v-if="!isLoading" style="width: 100px; height: 100px; z-index: 100; position: fixed; margin: 50px auto auto -50px; top: 50%; left: 50%;">加载中....</div>
-    <iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
-      height="480" width="100%">
+    <!--<iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"-->
+      <!--height="480" width="100%">-->
+
+      <iframe id='previewPdf' :src="'https://ht.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
+              height="480" width="100%">
     </iframe>
     <!--<iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl"-->
             <!--height="480" width="100%">-->
@@ -99,7 +102,9 @@
         const url = this.apis().downContract(code);
         const result = await http.get(url);
 
-        window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
+        window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
       async onSearchSeal() {
         console.log('ffe2')

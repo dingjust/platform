@@ -99,7 +99,10 @@
         const result = await http.get(url);
         console.log(result);
 
-        const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
+        const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
         //
         // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
         this.$set(this.thisContract,'key',this.thisContractKey++);
@@ -146,7 +149,10 @@
         this.thisContract = await this.getContractDetail(code);
         const url = this.apis().downContract(code);
         const result = await http.get(url);
-        const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
+        const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
         this.fileUrl = encodeURIComponent(aa)
         this.pdfVisible = true;
       },

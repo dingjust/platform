@@ -28,7 +28,7 @@ class _ContractSealPageState extends State<ContractSealPage>{
         centerTitle: true,
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 5),
+        margin: EdgeInsets.symmetric(horizontal: 5,vertical: 5),
         child:GridView.builder(
           itemCount: widget.sealList.length,
           //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
@@ -40,7 +40,7 @@ class _ContractSealPageState extends State<ContractSealPage>{
               //横轴间距
               crossAxisSpacing: 0.0,
               //子组件宽高长度比例
-              childAspectRatio: 0.9),
+              childAspectRatio: 0.99),
 
               itemBuilder: (BuildContext context, int index) =>
                   Container(
