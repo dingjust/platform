@@ -12,11 +12,12 @@ export default {
     {
       name: '首页',
       url: '/dashboard',
+      icon:'el-icon-s-home'
     },
     {
       name: '订单',
       url: '/order',
-      // icon: 'icon-puzzle',
+      icon: 'el-icon-s-order',
       children: [
         {
           name: '需求订单',
@@ -43,6 +44,7 @@ export default {
     {
       name: '合同',
       url: '/contract',
+      icon:'el-icon-s-marketing',
       children: [
         {
           name: '合同管理',
@@ -79,7 +81,7 @@ export default {
     {
       name: '产品',
       url: '/product',
-      // icon: 'icon-puzzle',
+      icon: 'el-icon-goods',
       children: [
         {
           name: '产品管理',
@@ -101,7 +103,7 @@ export default {
     {
       name: '公司',
       url: '/account',
-      // icon: 'icon-puzzle',
+      icon: 'el-icon-office-building',
       children: [
         {
           name: '认证中心',
@@ -150,6 +152,7 @@ export default {
     {
       name: '其他',
       url: '/miscs',
+      icon:'el-icon-coin',
       children: [
         {
           name: '认证中心',

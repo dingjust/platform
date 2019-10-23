@@ -1,57 +1,31 @@
 <template>
   <div class="sidebar">
-    <SidebarHeader/>
-    <SidebarForm/>
-    <nav class="sidebar-nav">
-      <div slot="header"></div>
-      <ul class="nav">
-        <template v-for="(item, index) in navItems">
-          <template v-if="item.title">
-            <SidebarNavTitle :name="item.name" :classes="item.class" :wrapper="item.wrapper"/>
-          </template>
-          <template v-else-if="item.divider">
-            <SidebarNavDivider :classes="item.class"/>
-          </template>
-          <template v-else-if="item.label">
-            <SidebarNavLabel :name="item.name" :url="item.url" :icon="item.icon" :label="item.label"
-                             :classes="item.class"/>
-          </template>
-          <template v-else>
-            <template v-if="item.children">
-              <!-- First level dropdown -->
-              <SidebarNavDropdown :name="item.name" :url="item.url" :icon="item.icon">
-                <template v-for="(childL1, index) in item.children">
-                  <template v-if="childL1.children">
-                    <!-- Second level dropdown -->
-                    <SidebarNavDropdown :name="childL1.name" :url="childL1.url" :icon="childL1.icon">
-                      <li class="nav-item" v-for="(childL2, index) in childL1.children">
-                        <SidebarNavLink :name="childL2.name" :url="childL2.url" :icon="childL2.icon"
-                                        :badge="childL2.badge" :variant="item.variant"/>
-                      </li>
-                    </SidebarNavDropdown>
-                  </template>
-                  <template v-else>
-                    <SidebarNavItem :classes="item.class">
-                      <SidebarNavLink :name="childL1.name" :url="childL1.url" :icon="childL1.icon"
-                                      :badge="childL1.badge" :variant="item.variant"/>
-                    </SidebarNavItem>
-                  </template>
-                </template>
-              </SidebarNavDropdown>
+    <el-menu default-active="0" class="el-menu-vertical-demo" active-text-color="#FEB026" @open="handleOpen" @close="handleClose">
+      <template v-for="(item,index) in navItems">
+        <template v-if="item.children!=null">
+          <el-submenu :key="index" :index="index">
+            <template slot="title">
+              <i :class="item.icon"></i>
+              <span>{{item.name}}</span>
             </template>
-            <template v-else>
-              <SidebarNavItem :classes="item.class">
-                <SidebarNavLink :name="item.name" :url="item.url" :icon="item.icon" :badge="item.badge"
-                                :variant="item.variant"/>
-              </SidebarNavItem>
+            <template v-for="(subItem,subIndex) in item.children">
+              <router-link :key="subIndex" :to="subItem.url">
+                <el-menu-item :key="index+'-'+subIndex" :index="index+'-'+subIndex" :route="item.url">{{subItem.name}}
+                </el-menu-item>
+              </router-link>
             </template>
-          </template>
+          </el-submenu>
         </template>
-      </ul>
-      <slot></slot>
-    </nav>
-    <SidebarFooter/>
-    <!-- <SidebarMinimizer/> -->
+        <template v-else>
+          <router-link :key="index" :to="item.url">
+            <el-menu-item :index="''+index">
+              <i v-if="item.icon!=null" :class="item.icon"></i>
+              <span slot="title">{{item.name}}</span>
+            </el-menu-item>
+          </router-link>
+        </template>
+      </template>
+    </el-menu>
   </div>
 </template>
 <script>
@@ -91,13 +65,33 @@
       handleClick(e) {
         e.preventDefault();
         e.target.parentElement.classList.toggle('open')
+      },
+      handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleClose(key, keyPath) {
+        console.log(key, keyPath);
       }
     }
   }
+
 </script>
 
 <style lang="css">
   .nav-link {
     cursor: pointer;
   }
+
+  .sidebar .el-submenu .el-menu-item {
+    height: 50px;
+    line-height: 50px;
+    padding: 0 45px;
+    min-width: 0px;
+  }
+
+  .sidebar .el-menu-item:focus, .el-menu-item:hover {
+    outline: 0;
+    background-color: rgba(254,176,38,0.15);
+}
+
 </style>
