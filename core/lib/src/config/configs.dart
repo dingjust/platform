@@ -2,16 +2,16 @@ class GlobalConfigs {
   static const PAGE_SIZE = 20;
   static const DEBUG = true;
   //测试
-   static const CONTEXT_PATH = 'http://sc.nbyjy.net';
-   static const MEDIA_CONTEXT_PATH = 'http://sc.nbyjy.net';
+  static const CONTEXT_PATH = 'https://sc.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
 
 //   static const CONTEXT_PATH = 'https://192.168.1.146:9002/djwebservices/v2';
 //   static const MEDIA_CONTEXT_PATH =
 //       'https://192.168.1.146:9002/djwebservices/v2';
 
   // 生产
-// static const CONTEXT_PATH = 'http://ht.nbyjy.net';
-// static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+// static const CONTEXT_PATH = 'https://ht.nbyjy.net';
+// static const MEDIA_CONTEXT_PATH = 'https://img.nbyjy.net';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
