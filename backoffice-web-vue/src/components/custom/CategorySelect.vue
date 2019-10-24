@@ -11,7 +11,7 @@
           <el-tag
             v-for="val of item.children"
             class="elTagClass"
-            :color="val.color"
+            :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
             @click="handleTagClick(val)"
             size="medium">
             {{val.name}}
@@ -25,7 +25,20 @@
 <script>
   export default {
     name: 'CategorySelect',
-    props: ['listData', 'selectDatas'],
+    props: {
+      listData: {
+        type: Array,
+        default: []
+      },
+      selectDatas: {
+        type: Array,
+        default: []
+      },
+      multiple: {
+        type: Boolean,
+        default: true
+      }
+    },
     computed: {
     },
     methods: {
@@ -33,25 +46,25 @@
         console.log(tab, event);
       },
       handleTagClick (val) {
-        for (var i = 0; i < this.listData.length; i++) {
-          for (var j = 0; j < this.listData[i].children.length; j++) {
-            if (this.listData[i].children[j].code === val.code) {
-              var index = this.selectCodes.indexOf(val.code);
-              if (index > -1) {
-                this.listData[i].children[j].color = '#ffffff';
-                this.$forceUpdate();
-                this.selectDatas.splice(index, 1);
-                this.selectCodes.splice(index, 1);
-                // this.selectCounts[this.listData[i].code].splice(index, 1);
-              } else {
-                this.listData[i].children[j].color = '#FFD60C';
-                this.$forceUpdate();
-                this.selectDatas.push(this.listData[i].children[j]);
-                this.selectCodes.push(this.listData[i].children[j].code);
-                // this.selectCounts[this.listData[i].code].push(val.code);
-              }
-            }
+        var index = this.selectCodes.indexOf(val.code);
+        if (index > -1) {
+          this.selectDatas.splice(index, 1);
+          this.selectCodes.splice(index, 1);
+        } else {
+          if (!this.multiple) {
+            this.selectDatas.splice(0);
+            this.selectCodes.splice(0);
           }
+          this.selectDatas.push(val);
+          this.selectCodes.push(val.code);
+        }
+      },
+      isSelected (item) {
+        var index = this.selectCodes.indexOf(item.code);
+        if (index > -1) {
+          return true;
+        } else {
+          return false;
         }
       },
       init () {
@@ -67,22 +80,6 @@
         }
         for (var item of this.selectDatas) {
           this.selectCounts[item.parent.code] += 1;
-        }
-
-        this.renderSelect();
-      },
-      renderSelect () {
-        for (var i = 0; i < this.listData.length; i++) {
-          for (var j = 0; j < this.listData[i].children.length; j++) {
-            var index = this.selectCodes.indexOf(this.listData[i].children[j].code);
-            if (index > -1) {
-              this.listData[i].children[j].color = '#FFD60C';
-              this.$forceUpdate();
-            } else {
-              this.listData[i].children[j].color = '#ffffff';
-              this.$forceUpdate();
-            }
-          }
         }
       }
     },
