@@ -3,7 +3,7 @@
     <el-menu default-active="0" class="el-menu-vertical-demo" active-text-color="#FEB026" @open="handleOpen" @close="handleClose">
       <template v-for="(item,index) in navItems">
         <template v-if="item.children!=null">
-          <el-submenu :key="index" :index="index">
+          <el-submenu :key="index" :index="''+index">
             <template slot="title">
               <i :class="item.icon"></i>
               <span>{{item.name}}</span>

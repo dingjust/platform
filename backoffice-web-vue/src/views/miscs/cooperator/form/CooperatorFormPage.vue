@@ -392,7 +392,6 @@
         }else{
           return 'static/img/uncertified.png';
         }
-
       }
     },
     data () {

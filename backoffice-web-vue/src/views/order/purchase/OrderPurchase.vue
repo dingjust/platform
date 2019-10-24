@@ -906,7 +906,7 @@
                 freightPayer: element.freightPayer,
                 machiningType: element.machiningTypes,
                 invoiceTaxPoint: element.invoicePercent,
-                invoiceNeeded: true,
+                invoiceNeeded: element.invoice,
                 unitPrice: element.unitPrice,
                 entries: entries,
                 expectedDeliveryDate: element.expectedDeliveryDate,
