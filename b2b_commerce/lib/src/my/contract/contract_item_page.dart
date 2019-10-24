@@ -1,8 +1,13 @@
 
+import 'dart:async';
+
 import 'package:b2b_commerce/src/my/contract/contract_mark_down_widget.dart';
+import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -14,6 +19,8 @@ class ContractItemPage extends StatefulWidget {
 }
 
 class _ContractItemPageState extends State<ContractItemPage>{
+  final StreamController _streamController =
+  StreamController<double>.broadcast();
 
   static Map<ContractStatus, Color> _statusColors = {
     ContractStatus.INITIATE: Colors.red,
@@ -39,13 +46,14 @@ class _ContractItemPageState extends State<ContractItemPage>{
               );
             }).then((value) {
           if (value != null && value.data != null) {
-            ContractModel model = value.data;
-            Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) =>
-                      ContractMarkDownWidgetPage(model : model)),
-            );
+//            ContractModel model = value.data;
+            _previewFile();
+//            Navigator.push(
+//              context,
+//              new MaterialPageRoute(
+//                  builder: (context) =>
+//                      ContractMarkDownWidgetPage(model : model)),
+//            );
           }
         });
       },
@@ -129,7 +137,7 @@ class _ContractItemPageState extends State<ContractItemPage>{
         children: <Widget>[
           Container(
             child: Text(
-              '${widget.model.belongTo}',
+              '${widget.model.partner}',
               style: TextStyle(
                 color: Colors.black38,
               ),
@@ -138,6 +146,46 @@ class _ContractItemPageState extends State<ContractItemPage>{
         ],
       ),
     );
+  }
+
+  //文件下载打开
+  _previewFile() async {
+    SearchResultModel resultModel = await ContractRepository().getContractPdfMedia(widget.model.code);
+    MediaModel pdf = resultModel.data;
+//    final url = "http://africau.edu/images/default/sample.pdf";
+    //获取应用目录路径
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    print(pdf.name);
+    String fileName = pdf.name;
+    String filePath = "$dir/$fileName";
+    var dio = new Dio();
+
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client.idleTimeout = new Duration(seconds: 0);
+    };
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack:
+            dio.download(pdf.actualUrl, filePath,
+                onReceiveProgress: (received, total) {
+                  print((received / total * 100).toStringAsFixed(0) + "%");
+                  _streamController.sink.add(received / total);
+                }),
+            outsideDismiss: false,
+            loadingText: '请稍候。。。',
+            entrance: '',
+          );
+        }).then((_){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PdfReaderWidget(pathPDF: filePath,contractModel: widget.model,)),
+      );
+    });
   }
 
 }

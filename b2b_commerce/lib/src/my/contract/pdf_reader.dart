@@ -1,78 +1,502 @@
-// import 'dart:async';
-// import 'dart:io';
+import 'dart:async';
 
-// import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
-// import 'package:flutter_full_pdf_viewer/full_pdf_viewer_plugin.dart';
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:b2b_commerce/src/my/contract/contract_seal_page.dart';
+import 'package:b2b_commerce/src/my/contract/pdf_widget.dart';
+import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
 
 
-// class PdfReaderWidget extends StatefulWidget {
-//   @override
-//   _PdfReaderWidgetState createState() => new _PdfReaderWidgetState();
-// }
+class PdfReaderWidget extends StatefulWidget {
 
-// class _PdfReaderWidgetState extends State<PdfReaderWidget> {
-//   String pathPDF = "";
+  ContractModel contractModel;
+  String pathPDF = '';
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     createFileOfPdfUrl().then((f) {
-//       setState(() {
-//         pathPDF = f.path;
-//         print(pathPDF);
-//       });
-//     });
-//   }
+  PdfReaderWidget({this.pathPDF,this.contractModel});
+  @override
+  _PdfReaderWidgetState createState() => new _PdfReaderWidgetState();
+}
 
-//   Future<File> createFileOfPdfUrl() async {
-//     final url = "http://africau.edu/images/default/sample.pdf";
-//     final filename = url.substring(url.lastIndexOf("/") + 1);
-//     var request = await HttpClient().getUrl(Uri.parse(url));
-//     var response = await request.close();
-//     var bytes = await consolidateHttpClientResponseBytes(response);
-//     String dir = (await getApplicationDocumentsDirectory()).path;
-//     File file = new File('$dir/$filename');
-//     await file.writeAsBytes(bytes);
-//     return file;
-//   }
+class _PdfReaderWidgetState extends State<PdfReaderWidget> {
+  List<SealModel> sealList;
+  double bottomHeight;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Plugin example app')),
-//       body: Center(
-//         child: RaisedButton(
-//           child: Text("Open PDF"),
-//           onPressed: () => Navigator.push(
-//             context,
-//             MaterialPageRoute(builder: (context) => PDFScreen(pathPDF)),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  void initState() {
+    initSeal();
+    super.initState();
+  }
 
-// class PDFScreen extends StatelessWidget {
-//   String pathPDF = "";
-//   PDFScreen(this.pathPDF);
+  initSeal() async{
+    sealList = await ContractRepository().getSealList({'type':''}, {'page':'0','size':'100'});
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return PDFViewerScaffold(
-//         appBar: AppBar(
-//           title: Text("Document"),
-//           actions: <Widget>[
-//             IconButton(
-//               icon: Icon(Icons.share),
-//               onPressed: () {},
-//             ),
-//           ],
-//         ),
-//         path: pathPDF);
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    print(widget.contractModel);
+    return Scaffold(
+      backgroundColor: Colors.white,
+        body: Container(
+          height: 500,
+          child: PDFWidget(
+            appBar: AppBar(
+              title: Text("合同详情"),
+              centerTitle: true,
+            ),
+            path: widget.pathPDF,
+            bottomHeight: bottomHeight,
+          ),
+        ),
+        bottomNavigationBar: Container(
+          child: _buildButton(),
+        )
+    );
+  }
+
+  Widget _buildButton(){
+    if(widget.contractModel.state != ContractStatus.COMPLETE
+        && widget.contractModel.state != ContractStatus.INVALID
+        && !widget.contractModel.isCreator){
+        return Row(
+          children: <Widget>[
+            Container(
+              color: Colors.white10,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 50,
+              child: RaisedButton(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                child: Text(
+                  '拒签',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 150,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                height: 30,
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      child: Icon(
+                                        Icons.error,
+                                        size: 20,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text(
+                                          '注意',
+                                          style: TextStyle(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                  height: 50,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 5),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  alignment: Alignment.topLeft,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: <Widget>[
+                                      Container(
+                                        child: Text(
+                                            '是否要拒签该合同'
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Center(
+                                      child: Container(
+                                          child: FlatButton(
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 80),
+                                              child: Text(
+                                                '取消',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(15))),
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                              })),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        child: FlatButton(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 80),
+                                            child: Text(
+                                              '确定',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            onPressed: (){
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (_) {
+                                                    return RequestDataLoading(
+                                                      requestCallBack: ContractRepository().rejectContract(widget.contractModel.code),
+                                                      outsideDismiss: false,
+                                                      loadingText: '撤回中。。。',
+                                                      entrance: '',
+                                                    );
+                                                  }
+                                              ).then((value){
+                                                MyContractBLoC().refreshData('ALL','');
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                                showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (_) {
+                                                      return CustomizeDialog(
+                                                        dialogType: DialogType.RESULT_DIALOG,
+                                                        successTips: '${value.msg}',
+                                                        callbackResult: true,
+                                                      );
+                                                    }
+                                                );
+                                              });
+                                            }
+                                        ),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                left: BorderSide(
+                                                    color: Colors.grey,
+                                                    width: 0.5))),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        top: BorderSide(color: Colors.grey, width: 0.5))),
+                              )
+                            ]
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              color: Colors.white10,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 50,
+              child: RaisedButton(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                child: Text(
+                  '去签署',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context) =>
+                      ContractSealPage(
+                        sealList: sealList, model: widget.contractModel,)),
+                  );
+
+//                  bottomHeight = 250.0;
+//                  SealModel sealModel = SealModel();
+//                  SealSelectWidget(cacel: () {
+//                    Navigator.pop(context);
+//                  }, rightData: sealList, code: widget.contractModel.code)
+//                      .showPicker(
+//                    context,
+//                    selectType: (seal) {
+//                      setState(() {
+//                        sealModel = seal;
+//                      });
+//                      print(sealModel.code);
+//                    },
+//                  );
+                },
+              ),
+            ),
+          ],
+        );
+    }else if(widget.contractModel.state != ContractStatus.COMPLETE
+        && widget.contractModel.state != ContractStatus.INVALID
+        && widget.contractModel.isCreator){
+      return Row(
+        children: <Widget>[
+          Container(
+            color: Colors.white10,
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            height: 50,
+            child: RaisedButton(
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '撤回',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 150,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              height: 30,
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: Icon(
+                                      Icons.error,
+                                      size: 20,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(horizontal: 10),
+                                      child: Text(
+                                        '注意',
+                                        style: TextStyle(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                                height: 50,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 5),
+                                alignment: Alignment.topLeft,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .start,
+                                  children: <Widget>[
+                                    Container(
+                                      child: Text(
+                                          '是否要撤回该合同'
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            ),
+                            Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                 Center(
+                                    child: Container(
+                                        child: FlatButton(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 80),
+                                            child: Text(
+                                              '取消',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            onPressed: (){
+                                              Navigator.pop(context);
+                                            })),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      child: FlatButton(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 80),
+                                          child: Text(
+                                            '确定',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(15))),
+                                          onPressed: (){
+                                            showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (_) {
+                                                  return RequestDataLoading(
+                                                    requestCallBack: ContractRepository().revokeContract(widget.contractModel.code),
+                                                    outsideDismiss: false,
+                                                    loadingText: '撤回中。。。',
+                                                    entrance: '',
+                                                  );
+                                                }
+                                            ).then((value){
+                                              MyContractBLoC().refreshData('ALL','');
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (_) {
+                                                    return CustomizeDialog(
+                                                      dialogType: DialogType.RESULT_DIALOG,
+                                                      successTips: '${value.msg}',
+                                                      callbackResult: true,
+                                                    );
+                                                  }
+                                              );
+                                            });
+                                          }
+                                      ),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              left: BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 0.5))),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      top: BorderSide(color: Colors.grey, width: 0.5))),
+                            )
+                          ]
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          Container(
+            color: Colors.white10,
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            height: 50,
+            child: RaisedButton(
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '去签署',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) =>
+                    ContractSealPage(
+                      sealList: sealList, model: widget.contractModel,)),
+                );
+
+//                SealModel sealModel = SealModel();
+//                SealSelectWidget(cacel: () {
+//                  Navigator.pop(context);
+//                }, rightData: sealList, code: widget.contractModel.code)
+//                    .showPicker(
+//                  context,
+//                  selectType: (seal) {
+//                    setState(() {
+//                      sealModel = seal;
+//                    });
+//                    print(sealModel.code);
+//                  },
+//                );
+              },
+            ),
+          ),
+        ],
+      );
+    }else if(widget.contractModel.state == ContractStatus.COMPLETE){
+      return Container(
+        color: Colors.white10,
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        height: 50,
+        child: RaisedButton(
+          color: Color.fromRGBO(255, 214, 12, 1),
+          child: Text(
+            '增加补充协议',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5))),
+          onPressed: () {
+          },
+        ),
+      );
+    }else if(widget.contractModel.state == ContractStatus.INVALID){
+      return Container(
+        height: 50,
+      );
+    }else{
+      return Container(height: 50,);
+    }
+  }
+
+}

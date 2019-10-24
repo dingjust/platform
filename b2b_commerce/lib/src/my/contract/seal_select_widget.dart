@@ -181,7 +181,6 @@ class _sealPickerState extends State<_sealPickerWidget> {
                           onPressed: () {
                             sealModel = rData[rIndex];
                             widget.selectType(sealModel);
-//                            Navigator.pop(context);
                             flowContract(widget.contractCode,sealModel);
                           },
                           child:  Text(
@@ -216,7 +215,7 @@ class _sealPickerState extends State<_sealPickerWidget> {
                           return  Align(
                             child:  Text(
                               v.name != null && v.name != '' ? v.name : '',
-                              textScaleFactor: 1.2,
+//                              textScaleFactor: 1.2,
                             ),
                             alignment: Alignment.center,
                           );
@@ -304,7 +303,7 @@ class _sealPickerState extends State<_sealPickerWidget> {
                   color: Colors.transparent,
                   child:  Container(
                     width: double.infinity,
-                    height: 400.0,
+                    height: 200.0,
                     child: _bottomView(),
                   ),
                 ),
@@ -341,7 +340,7 @@ class _MyAddressPickerState extends State<_MyAddressPicker> {
       child:  Container(
         padding: const EdgeInsets.all(6.0),
         alignment: Alignment.center,
-        height: 250.0,
+        height: 100.0,
         child: CupertinoPicker(
           backgroundColor: Colors.white,
           scrollController: widget.controller,
@@ -373,7 +372,7 @@ class _BottomPickerLayout extends SingleChildLayoutDelegate {
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
-    double maxHeight = 300.0;
+    double maxHeight = 150.0;
 
     return  BoxConstraints(
       minWidth: constraints.maxWidth,

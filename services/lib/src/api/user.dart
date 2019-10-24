@@ -107,19 +107,31 @@ abstract class UserApis {
   ///合同管理列表
   static get contractList => '/{baseSiteId}/user/agreement/list';
 
+  //获取pdf文件
+  static get downContract =>(code) {
+    return '/{baseSiteId}/user/agreement/get/download/token/'+code;
+  };
+
+  //APP下载PDF
+  static get downContractInApp =>(code) {
+    return '/{baseSiteId}/user/agreement/download/in/app/'+code;
+  };
+
+  //获取合同MediaModel
+  static get getContractPdfMedia =>(code) {
+    return '/{baseSiteId}/user/agreement/preview/'+code;
+  };
+
   ///用户个人认证
-  static get personalCertification =>
-      '/{baseSiteId}/fdd/api/get/personal/verify/url';
+  static get personalCertification => '/{baseSiteId}/fdd/api/get/personal/verify/url';
 
   ///企业认证
-  static get enterpriseCertification =>
-      '/{baseSiteId}/fdd/api/get/enterprise/verify/url';
+  static get enterpriseCertification => '/{baseSiteId}/fdd/api/get/enterprise/verify/url';
 
   ///个体工商户
-  static get individualBusiness =>
-          (verifyType, companyType) {
-        return '/{baseSiteId}/fdd/api/get/enterprise/verify/url?verifyType=$verifyType&companyType=$companyType';
-      };
+  static get individualBusiness =>(verifyType,companyType){
+    return '/{baseSiteId}/fdd/api/get/enterprise/verify/url?verifyType=$verifyType&companyType=$companyType';
+  };
 
   ///合同模板列表
   static get tempList => '/{baseSiteId}/user/agreement/temp/list';
@@ -135,6 +147,9 @@ abstract class UserApis {
           (code, sealCode) {
         return '/{baseSiteId}/user/agreement/start/flow/$code?sealCode=$sealCode';
       };
+
+  //获取合同数量
+  static get getContractCount =>  '/{baseSiteId}/user/agreement/count';
 
   ///查看合同
   static get getContract =>
@@ -165,4 +180,15 @@ abstract class UserApis {
 
   ///公司账务列表
   static get payplans => '/{baseSiteId}/payPlan?page=0&size=999';
+  ///撤销合同
+  static get revokeContract => (code){
+    return '/{baseSiteId}/user/agreement/revoke/$code';
+  };
+
+  ///拒签合同
+  static get rejectContract => (code){
+    return '/{baseSiteId}/user/agreement/reject/sign/$code';
+  };
+
+
 }

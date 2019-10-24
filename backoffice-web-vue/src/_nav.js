@@ -10,14 +10,14 @@ export default {
       }
     },
     {
-      name: '仪表盘',
+      name: '主页',
       url: '/dashboard',
-      icon: 'icon-speedometer'
+      icon:'el-icon-s-home'
     },
     {
       name: '产品管理',
       url: '/product',
-      icon: 'icon-puzzle',
+      icon: 'el-icon-goods',
       children: [
         {
           name: '服装产品',
@@ -60,7 +60,7 @@ export default {
     },
     {
       name: '订单管理',
-      icon: 'icon-puzzle',
+      icon: 'el-icon-s-order',
       children: [
         {
           name: '需求订单',
@@ -92,7 +92,7 @@ export default {
         {
           name: '员工',
           url: '/account/employee',
-          icon: 'iconNone'
+          icon: 'el-icon-user'
         },
         {
           name: '用户组',
@@ -109,7 +109,7 @@ export default {
     {
       name: '报表管理',
       url: '/report',
-      icon: 'icon-puzzle',
+      icon: 'el-icon-s-finance',
       children: [
         {
           name: '生产进度报表',
@@ -121,7 +121,7 @@ export default {
     {
       name: '其他',
       url: '/miscs',
-      icon: 'icon-puzzle',
+      icon:'el-icon-coin',
       children: [
         {
           name: '合同',

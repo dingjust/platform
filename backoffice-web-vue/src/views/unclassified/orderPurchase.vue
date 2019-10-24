@@ -120,8 +120,8 @@
             <el-col :span="6">
               <el-row type="flex" align="middle">
                 <h6 class="info-input-prepend">是否开发票</h6>
-                <el-radio class="info-radio" v-model="product.invoice" label="1">不开发票</el-radio>
-                <el-radio class="info-radio" v-model="product.invoice" label="2">开发票</el-radio>
+                <el-radio class="info-radio" v-model="product.invoice" :label="false">不开发票</el-radio>
+                <el-radio class="info-radio" v-model="product.invoice" :label="true">开发票</el-radio>
               </el-row>
             </el-col>
             <el-col :span="4">
