@@ -5,7 +5,7 @@
     </el-form-item>
     <el-button-group>
       <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
-      <el-button v-if="isBrand()" type="primary" icon="el-icon-plus" @click="onSimpleNew">急速发布需求</el-button>
+      <!--<el-button v-if="isBrand()" type="primary" icon="el-icon-plus" @click="onSimpleNew">急速发布需求</el-button>-->
       <el-button v-if="isBrand()" type="primary" icon="el-icon-plus" @click="onNew">发布需求</el-button>
     </el-button-group>
     <el-popover placement="bottom" width="800" trigger="click">

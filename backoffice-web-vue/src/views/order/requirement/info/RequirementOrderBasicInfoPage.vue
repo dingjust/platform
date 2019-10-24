@@ -99,14 +99,6 @@
               </el-row>
               <el-row type="flex" class="rowClass2">
                 <el-col :span="8">
-                  <h6 class="titleTextClass2">是否需要样衣</h6>
-                </el-col>
-                <el-col :span="14" :offset="2">
-                  <h6 class="contentTextClass">{{getYesNo(slotData.details.samplesNeeded)}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="8">
                   <h6 class="titleTextClass2">是否需要发票</h6>
                 </el-col>
                 <el-col :span="14" :offset="2">
