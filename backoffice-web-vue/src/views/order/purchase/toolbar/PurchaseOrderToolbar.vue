@@ -1,34 +1,54 @@
 <template>
-  <el-form :inline="true">
-    <!-- <el-form-item label="品牌名"> -->
-      <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword" class="purchase-toolbar-input"></el-input>
-    <!-- </el-form-item> -->
-    <el-form-item label="日期">
-      <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
-        value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
-        :picker-options="pickerOptions">
-      </el-date-picker>
-    </el-form-item>
-    <!-- <el-form-item label="跟单员">
+  <div>
+    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
+      <uniquecode-import-form />
+    </el-dialog>
+    <el-form :inline="true">
+      <el-row type="flex">
+        <!-- <el-form-item label="品牌名"> -->
+        <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword"
+          class="purchase-toolbar-input"></el-input>
+        <!-- </el-form-item> -->
+        <el-form-item label="日期">
+          <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
+            value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
+            :picker-options="pickerOptions">
+          </el-date-picker>
+        </el-form-item>
+        <!-- <el-form-item label="跟单员">
       <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
     </el-form-item> -->
-    <el-form-item label="分类">
-      <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
-      <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
+        <el-form-item label="分类">
+          <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
+          <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
         reserve-keyword clearable>
         <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
           <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name" :value="level2.name">
           </el-option>
         </el-option-group>
       </el-select> -->
-      <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories" :props="{ label: 'name',value:'code'}" clearable>
-      </el-cascader>
-    </el-form-item>
-    <el-button-group>
-      <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
-      <el-button native-type="reset" @click="">重置</el-button>
-    </el-button-group>
-  </el-form>
+          <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories"
+            :props="{ label: 'name',value:'code'}" clearable>
+          </el-cascader>
+        </el-form-item>
+        <el-row type="flex" align="top">
+          <el-col :span="12">
+            <el-button-group>
+              <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+              <el-button native-type="reset">重置</el-button>
+            </el-button-group>
+          </el-col>
+          <el-col :span="12">
+            <el-row type="flex">
+              <el-button class="dashboard-toolbar-btn" @click="jumpToOrderPurchase">创建线下订单</el-button>
+              <el-button class="dashboard-toolbar-btn" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入
+              </el-button>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-row>
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -36,13 +56,17 @@
     createNamespacedHelpers
   } from 'vuex';
 
+  import UniquecodeImportForm from '@/components/custom/UniquecodeImportForm';
+
   const {
     mapMutations
   } = createNamespacedHelpers('ContractModule');
 
   export default {
     name: 'PurchaseOrderToolbar',
-    components: {},
+    components: {
+      UniquecodeImportForm,
+    },
     computed: {},
     methods: {
       ...mapMutations({
@@ -99,9 +123,13 @@
           this.categories = results;
         }
       },
+      jumpToOrderPurchase() {
+        this.$router.push("/orderPurchase");
+      },
     },
     data() {
       return {
+        uniquecodeFormVisible: false,
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -169,6 +197,13 @@
 
   .el-form-item__label {
     font-size: 13px;
+  }
+
+  .dashboard-toolbar-btn {
+    border: 0.5px solid rgba(255, 164, 3, 1);
+    color: rgba(255, 164, 3, 1);
+    /* height: ; */
+    font-size: 10px;
   }
 
 </style>

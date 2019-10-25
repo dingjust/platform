@@ -16,6 +16,9 @@
     <b-navbar-nav class="ml-auto">
       <HeaderDropdownAccnt />
     </b-navbar-nav> -->
+    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
+      <uniquecode-import-form />
+    </el-dialog>
     <div class="navbar-logo">
       <!-- <span class="navbar-brand" to="#"></span> -->
       <el-row type="flex" justify="center">
@@ -32,6 +35,16 @@
       </el-row>
     </div>
     <b-navbar-nav class="ml-auto">
+      <el-dropdown style="margin-right:50px;" @command="handleCommand">
+        <span class="el-dropdown-link navbar-dropdown">
+          快捷功能<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="1">创建线下订单</el-dropdown-item>
+          <el-dropdown-item command="2">唯一码导入</el-dropdown-item>
+          <el-dropdown-item command="3">认证中心</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <div class="input">
         <el-input placeholder="搜索..." prefix-icon="el-icon-search" v-model="input2" size="small"
           id="header-input__inner">
@@ -50,11 +63,13 @@
 </template>
 <script>
   import HeaderDropdownAccnt from "./Header/HeaderDropdownAccnt";
+  import UniquecodeImportForm from '@/components/custom/UniquecodeImportForm';
 
   export default {
     name: "AppHeader",
     components: {
-      HeaderDropdownAccnt
+      HeaderDropdownAccnt,
+      UniquecodeImportForm
     },
     computed: {
       authenticated: function () {
@@ -72,11 +87,11 @@
         }
       },
       clientName: function () {
-        if(this.currentUser.type!=null&&this.currentUser.type=='BRAND'){
+        if (this.currentUser.type != null && this.currentUser.type == 'BRAND') {
           return '品牌';
-        }else if(this.currentUser.type!=null&&this.currentUser.type=='FACTORY'){
+        } else if (this.currentUser.type != null && this.currentUser.type == 'FACTORY') {
           return '工厂';
-        }else{
+        } else {
           return '平台';
         }
       }
@@ -84,6 +99,7 @@
     data() {
       return {
         input2: "",
+        uniquecodeFormVisible: false,
         authenticationInfo: this.$store.getters.authenticationInfo,
         currentUser: this.$store.getters.currentUser,
       };
@@ -105,6 +121,21 @@
         e.preventDefault();
         document.body.classList.toggle("aside-menu-hidden");
       },
+      handleCommand(command) {
+        switch (command) {
+          case '1':
+            this.$router.push("orderPurchase");
+            break;
+          case '2':
+            this.uniquecodeFormVisible = !this.uniquecodeFormVisible;
+            break;
+          case '3':
+            this.$router.push("/Authentication");
+            break;
+          default:
+            break;
+        }
+      }
     }
   };
 
@@ -159,8 +190,13 @@
     margin-bottom: 5px;
   }
 
-  .navbar-logo-title{
+  .navbar-logo-title {
     font-size: 8px;
+  }
+
+  .navbar-dropdown {
+    cursor: pointer;
+    font-weight: 600;
   }
 
 </style>
