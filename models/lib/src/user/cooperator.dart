@@ -22,6 +22,8 @@ enum CooperatorCategory {
 /// 合作商
 @JsonSerializable()
 class CooperatorModel extends ItemModel {
+  int id;
+
   ///合作商名称
   String name;
 
@@ -65,6 +67,7 @@ class CooperatorModel extends ItemModel {
   String remarks;
 
   CooperatorModel({
+    this.id,
     this.name,
     this.contactPerson,
     this.contactPhone,
@@ -89,7 +92,6 @@ class CooperatorModel extends ItemModel {
   static Map<String, dynamic> companyToJson(CompanyModel belongTo) =>
       CompanyModel.toJson(belongTo);
 
-  static Map<String, dynamic> companyPayPlanToJson(
-          CompanyPayPlanModel payPlan) =>
+  static Map<String, dynamic> companyPayPlanToJson(CompanyPayPlanModel payPlan) =>
       CompanyPayPlanModel.toJson(payPlan);
 }

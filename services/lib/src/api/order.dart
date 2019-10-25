@@ -59,6 +59,10 @@ class OrderApis {
   //创建线下采购订单 POST
   static get purchaseOfflineOrders => '/{baseSiteId}/orders/purchase/create';
 
+  ///创建线下订单v2
+  static get createOfflinePurchaseOrder =>
+      '/b2b/orders/purchase/createByOffline';
+
   //看款下单创建采购订单 POST
   static get purchaseCreateByProduct =>
           (productBelongTo) =>
