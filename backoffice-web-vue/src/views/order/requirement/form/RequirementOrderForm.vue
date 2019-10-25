@@ -6,7 +6,7 @@
       </div>
     </el-row>
     <div>
-      <el-form ref="requirementForm" :model="formData" :rules="rules" label-position="left" label-width="88px">
+      <el-form ref="requirementForm" :model="formData" :rules="rules" label-position="left" label-width="88px" hide-required-asterisk>
         <el-form-item prop="details.majorCategory">
           <template slot="label">
             <h6 class="titleTextClass">选择类别<span style="color: red">*</span></h6>
@@ -263,8 +263,7 @@
         clearCooperatorQueryFormData: 'clearCooperatorQueryFormData'
       }),
       onSave () {
-        this.$refs['requirementForm'].validate(async(valid) => {
-          console.log(valid);
+        this.$refs['requirementForm'].validate((valid) => {
           if (valid) {
             this.$confirm('是否确认发布!', '提示', {
               confirmButtonText: '确定',

@@ -97,6 +97,7 @@
           text = text.slice(0,text.lastIndexOf('、'));
           result += text+'<br/><br/>';
         }
+        result = result.slice(0,result.lastIndexOf('<br/><br/>'));
         return result;
       }
     }

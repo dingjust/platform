@@ -6,62 +6,50 @@
         </div>
       </el-row>
       <div style="margin: 20px 20px 40px 40px">
-        <el-row type="flex" align="middle" :gutter="10">
+        <el-row type="flex" align="middle" :gutter="20">
           <el-col :span="8">
-            <el-form-item>
-              <el-row type="flex" align="middle">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">免费打样</h6>
-                </el-col>
-                <el-col :span="18">
-                  <el-select v-model="formData.freeProofing" placeholder="请选择" size="mini">
-                    <el-option
-                      v-for="item in factoryFreeProofings"
-                      :key="item.code"
-                      :label="item.name"
-                      :value="item.code">
-                    </el-option>
-                  </el-select>
-                </el-col>
-              </el-row>
+            <el-form-item prop="freeProofing">
+              <template slot="label">
+                <h6 class="titleTextClass">免费打样</h6>
+              </template>
+              <el-select v-model="formData.freeProofing" placeholder="请选择" size="mini" style="width: 100%;">
+                <el-option
+                  v-for="item in factoryFreeProofings"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item>
-              <el-row type="flex" align="middle">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">合作方式</h6>
-                </el-col>
-                <el-col :span="18">
-                  <el-select v-model="formData.cooperationModes" multiple placeholder="请选择" size="mini">
-                    <el-option
-                      v-for="item in cooperationModes"
-                      :key="item.code"
-                      :label="item.name"
-                      :value="item.code">
-                    </el-option>
-                  </el-select>
-                </el-col>
-              </el-row>
+            <el-form-item prop="cooperationModes">
+              <template slot="label">
+                <h6 class="titleTextClass">合作方式</h6>
+              </template>
+              <el-select v-model="formData.cooperationModes" multiple placeholder="请选择" size="mini" style="width: 100%;">
+                <el-option
+                  v-for="item in cooperationModes"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item>
-              <el-row type="flex" align="middle" >
-                <el-col :span="6">
-                  <h6 class="titleTextClass">质量等级</h6>
-                </el-col>
-                <el-col :span="18">
-                  <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini">
-                    <el-option
-                      v-for="item in factoryQualityLevels"
-                      :key="item.code"
-                      :label="item.name"
-                      :value="item.code">
-                    </el-option>
-                  </el-select>
-                </el-col>
-              </el-row>
+            <el-form-item prop="qualityLevel">
+              <template slot="label">
+                <h6 class="titleTextClass">质量等级</h6>
+              </template>
+              <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini" style="width: 100%;">
+                <el-option
+                  v-for="item in factoryQualityLevels"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>

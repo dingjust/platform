@@ -6,95 +6,64 @@
           </div>
         </el-row>
         <div style="margin: 20px 20px 40px 40px">
-          <el-row type="flex" align="middle" :gutter="10">
+          <el-row type="flex" align="middle" :gutter="20">
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">设计</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-select v-model="formData.design" size="mini" placeholder="请选择">
-                      <el-option
-                        v-for="item in factoryDesigns"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code">
-                      </el-option>
-                    </el-select>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="design">
+                <template slot="label">
+                  <h6 class="titleTextClass">设计</h6>
+                </template>
+                <el-select v-model="formData.design" size="mini" placeholder="请选择" style="width: 100%;">
+                  <el-option
+                    v-for="item in factoryDesigns"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle" >
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">打板</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-select v-model="formData.pattern" size="mini" placeholder="请选择">
-                      <el-option
-                        v-for="item in factoryPatterns"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code">
-                      </el-option>
-                    </el-select>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="pattern">
+                <template slot="label">
+                  <h6 class="titleTextClass">打板</h6>
+                </template>
+                <el-select v-model="formData.pattern" size="mini" placeholder="请选择" style="width: 100%;">
+                  <el-option
+                    v-for="item in factoryPatterns"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">覆盖范围</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-input placeholder="请填写覆盖范围" v-model="formData.coverageArea" size="mini"></el-input>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="coverageArea">
+                <template slot="label">
+                  <h6 class="titleTextClass">覆盖范围</h6>
+                </template>
+                <el-input placeholder="请填写覆盖范围" v-model="formData.coverageArea" size="mini"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-form-item>
-              <el-row type="flex">
-                <el-col :span="2">
-                  <h6 class="titleTextClass">合作商</h6>
-                </el-col>
-                <el-col :span="23">
-                  <tags-of-text @remove="onRemoveCooperativeBrand" @add="onAddCooperativeBrand" :textData="formData.cooperativeBrand" :symbol="'，'"></tags-of-text>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-row>
-          <el-row>
-            <el-form-item>
-              <el-row type="flex">
-                <el-col :span="2">
-                  <h6 class="titleTextClass">选择品类<span style="color: red">*</span></h6>
-                </el-col>
-                <el-col :span="22">
-                  <!--<enum-select :mapData="mapData" :mapSelectData="mapSelectData"></enum-select>-->
-                  <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"></category-select>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-row>
-          <el-row>
-            <el-form-item>
-              <el-row type="flex">
-                <el-col :span="2">
-                  <h6 class="titleTextClass">关键词</h6>
-                </el-col>
-                <el-col :span="22">
-                  <tags-of-text @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword" :symbol="'，'"></tags-of-text>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-row>
+          <el-form-item prop="cooperativeBrand">
+            <template slot="label">
+              <h6 class="titleTextClass">合作商</h6>
+            </template>
+            <tags-of-text @remove="onRemoveCooperativeBrand" @add="onAddCooperativeBrand" :textData="formData.cooperativeBrand" :symbol="'，'"></tags-of-text>
+          </el-form-item>
+          <el-form-item prop="adeptAtCategories">
+            <template slot="label">
+              <h6 class="titleTextClass">选择品类<span style="color: red">*</span></h6>
+            </template>
+            <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"></category-select>
+          </el-form-item>
+          <el-form-item prop="keyword">
+            <template slot="label">
+              <h6 class="titleTextClass">关键词</h6>
+            </template>
+            <tags-of-text @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword" :symbol="'，'"></tags-of-text>
+          </el-form-item>
         </div>
   </div>
 </template>
