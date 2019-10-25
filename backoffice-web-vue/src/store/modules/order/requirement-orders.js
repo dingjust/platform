@@ -48,26 +48,19 @@ const state = {
     code: '',
     details: {
       pictures: [],
-      category: {
-        code: '',
-        name: ''
-      },
-      majorCategory: {
-        code: '',
-        name: ''
-      },
+      category: null,
+      majorCategory: null,
       expectedMachiningQuantity: '',
-      machiningType: null,
+      machiningType: 'LABOR_AND_MATERIAL',
       expectedDeliveryDate: null,
       maxExpectedPrice: '',
-      invoiceNeeded: null,
-      samplesNeeded: null,
-      proofingNeeded: null,
+      invoiceNeeded: false,
+      proofingNeeded: false,
       contactPerson: '',
       contactPhone: '',
       productiveOrientations: [],
-      publishingMode: null,
-      effectiveDays: null,
+      publishingMode: 'PUBLIC',
+      effectiveDays: '90',
       salesMarket: []
     },
     attachments: [],
@@ -256,26 +249,19 @@ const actions = {
       code: '',
       details: {
         pictures: [],
-        category: {
-          code: '',
-          name: ''
-        },
-        majorCategory: {
-          code: '',
-          name: ''
-        },
+        category: null,
+        majorCategory: null,
         expectedMachiningQuantity: '',
-        machiningType: null,
+        machiningType: 'LABOR_AND_MATERIAL',
         expectedDeliveryDate: null,
         maxExpectedPrice: '',
-        invoiceNeeded: null,
-        samplesNeeded: null,
-        proofingNeeded: null,
+        invoiceNeeded: false,
+        proofingNeeded: false,
         contactPerson: '',
         contactPhone: '',
         productiveOrientations: [],
-        publishingMode: null,
-        effectiveDays: null,
+        publishingMode: 'PUBLIC',
+        effectiveDays: '90',
         salesMarket: []
       },
       attachments: [],

@@ -6,15 +6,15 @@
       </div>
     </el-row>
     <div>
-      <el-form :model="formData" label-position="left" label-width="88px">
+      <el-form ref="requirementForm" :model="formData" :rules="rules" label-position="left" label-width="88px">
         <el-form-item prop="details.majorCategory">
           <template slot="label">
-            <h6 class="titleTextClass">选择类别</h6>
+            <h6 class="titleTextClass">选择类别<span style="color: red">*</span></h6>
           </template>
           <el-tag
             v-for="item of majorCategories"
             class="elTagClass"
-            :color="formData.details.majorCategory.code === item.code ? '#FFD60C' : '#ffffff'"
+            :color="formData.details.majorCategory && formData.details.majorCategory.code === item.code ? '#FFD60C' : '#ffffff'"
             @click="handleTagClick(item)"
             size="medium">
             {{item.name}}
@@ -63,15 +63,15 @@
               <template slot="label">
                 <h6 class="titleTextClass">期望价格</h6>
               </template>
-              <el-input v-model.number="formData.details.maxExpectedPrice" placeholder="请填写" ></el-input>
+              <el-input :min="0" type="number" v-model.number="formData.details.maxExpectedPrice" placeholder="请填写" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item prop="details.expectedMachiningQuantity">
               <template slot="label">
-                <h6 class="titleTextClass">加工数量</h6>
+                <h6 class="titleTextClass">加工数量<span style="color: red">*</span></h6>
               </template>
-              <el-input v-model.number="formData.details.expectedMachiningQuantity" placeholder="请填写" ></el-input>
+              <el-input :min="0" type="number" v-model.number="formData.details.expectedMachiningQuantity" placeholder="请填写" ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -93,7 +93,7 @@
           <el-col :span="8">
             <el-form-item prop="details.salesMarket">
               <template slot="label">
-                <h6 class="titleTextClass">销售市场</h6>
+                <h6 class="titleTextClass">销售市场<span style="color: red">*</span></h6>
               </template>
               <el-select v-model="formData.details.salesMarket" multiple placeholder="请选择" style="width: 100%">
                 <el-option
@@ -108,7 +108,7 @@
           <el-col :span="8">
             <el-form-item prop="details.contactPerson">
               <template slot="label">
-                <h6 class="titleTextClass">联系人</h6>
+                <h6 class="titleTextClass">联系人<span style="color: red">*</span></h6>
               </template>
               <el-input v-model="formData.details.contactPerson" placeholder="请填写" ></el-input>
             </el-form-item>
@@ -234,7 +234,7 @@
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
   import FactoryCooperatorTransferForm from './FactoryCooperatorTransferForm';
 
-  const {mapGetters, mapMutations,mapActions} = createNamespacedHelpers('RequirementOrdersModule');
+  const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
     name: 'RequirementOrderForm',
@@ -256,23 +256,32 @@
       ...mapMutations({
         setCategories: 'categories',
         setMajorCategories: 'majorCategories',
-        setRegions: 'regions',
+        setRegions: 'regions'
       }),
       ...mapActions({
         clearFactoryQueryFormData: 'clearFactoryQueryFormData',
         clearCooperatorQueryFormData: 'clearCooperatorQueryFormData'
       }),
       onSave () {
-        this.$confirm('是否确认发布!', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if (this.formData.publishingMode === 'PUBLIC') {
-            this.selectUids = [];
+        this.$refs['requirementForm'].validate(async(valid) => {
+          console.log(valid);
+          if (valid) {
+            this.$confirm('是否确认发布!', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              if (this.formData.publishingMode === 'PUBLIC') {
+                this.selectUids = [];
+              }
+              this.$emit('onSave', this.selectUids, this.selectPhoneNumbers);
+            });
+          } else {
+            this.$message.error('请完善需求信息');
+            return false;
           }
-          this.$emit('onSave', this.selectUids, this.selectPhoneNumbers);
         });
+
       },
       async getCategories () {
         const url = this.apis().getMajorCategories();
@@ -296,6 +305,7 @@
       },
       handleTagClick (item) {
         this.formData.details.majorCategory = item;
+        // this.$refs['requirementForm'].validateField('details.majorCategory');
       },
       async getRegions () {
         const url = this.apis().getRegions();
@@ -316,6 +326,7 @@
         } else {
           this.formData.details.productiveOrientations = [];
         }
+        this.$refs['requirementForm'].validateField('details.productiveOrientations');
       },
       publishingModeChanged () {
         this.dialogVisible = !this.dialogVisible;
@@ -328,15 +339,35 @@
         } else {
           this.formData.details.category = null;
         }
+        this.$refs['requirementForm'].validateField('details.category');
       },
-      // 'dialogVisible': function (n, o) {
-      //   if (!n) {
-      //     this.clearFactoryQueryFormData();
-      //     this.clearCooperatorQueryFormData();
-      //   }
-      // }
+      'formData.details.majorCategory': function (n, o) {
+        console.log(n);
+        this.$refs['requirementForm'].validateField('details.majorCategory');
+      }
     },
     data () {
+      var checkCategory = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请选择品类'));
+        } else {
+          callback();
+        }
+      };
+      var checkMajorCategory = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请选择类别'));
+        } else {
+          callback();
+        }
+      };
+      var checkProductiveOrientations = (rule, value, callback) => {
+        if (value.length <= 0) {
+          return callback(new Error('请选择地区'));
+        } else {
+          callback();
+        }
+      };
       return {
         selectDatas: [],
         pickerOptions: {
@@ -355,6 +386,38 @@
         selectPhoneNumbers: [],
         selectFactories: [],
         selectCooperators: [],
+        rules: {
+          'details.maxExpectedPrice': [
+            { required: true, message: '请填写期望价格', trigger: 'blur' }
+          ],
+          'details.productName': [
+            { required: true, message: '请填写标题', trigger: 'blur' }
+          ],
+          'details.expectedMachiningQuantity': [
+            { required: true, message: '请填写加工数量', trigger: 'blur' }
+          ],
+          'details.contactPerson': [
+            { required: true, message: '请填写联系人', trigger: 'blur' }
+          ],
+          'details.contactPhone': [
+            { required: true, message: '请填写联系方式', trigger: 'blur' }
+          ],
+          'details.expectedDeliveryDate': [
+            { type: 'date', required: true, message: '请选择交货日期', trigger: 'change' }
+          ],
+          'details.salesMarket': [
+            { required: true, message: '请选择销售市场', trigger: 'change' }
+          ],
+          'details.category': [
+            { type: 'object', validator: checkCategory, trigger: 'change' }
+          ],
+          'details.majorCategory': [
+            { type: 'object', validator: checkMajorCategory, trigger: 'change' }
+          ],
+          'details.productiveOrientations': [
+            { type: 'array', validator: checkProductiveOrientations, trigger: 'change' }
+          ]
+        }
       }
     },
     created () {

@@ -20,7 +20,7 @@
 
       </requirement-order-details-page>
     </el-dialog>
-    <el-dialog :visible.sync="formDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="formDialogVisible" width="80%"  class="requirement-form-dialog">
       <requirement-order-form v-if="formDialogVisible" :formData="formData" @onSave="onSave">
 
       </requirement-order-form>
@@ -136,6 +136,8 @@
           return;
         }
         this.$message.success('需求订单创建成功，订单编号： ' + result);
+        this.formDialogVisible = !this.formDialogVisible;
+        this.onSearch();
       }
     },
     data () {
@@ -159,3 +161,17 @@
     }
   };
 </script>
+
+<style>
+  .requirement-form-dialog .el-dialog {
+    border-radius: 10px !important;
+  }
+
+  .requirement-form-dialog-header {
+    padding: 0px !important;
+  }
+
+  .requirement-form-dialog .el-dialog__header {
+    padding: 0px !important;
+  }
+</style>
