@@ -1,5 +1,13 @@
 <template>
   <div class="animated fadeIn content">
+    <el-dialog title="修改密码" :visible.sync="dialogVisible" :modal="false" width="30%">
+      <change-password-page
+        :username="currentUser.username"
+        :ignore-old-password="false"
+        @onChangePassword="doChangePassword"
+        @onCancel="onCancel"
+      />
+    </el-dialog>
     <el-card class="box-card">
       <el-form :model="form" :rules="rules" ref="form" label-position="left" label-width="80px">
         <div class="my-form-body">
@@ -18,7 +26,7 @@
           <el-row type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="账号:">
-                <el-input v-model="account" :disabled="true"></el-input>
+                <el-input v-model="currentUser.mobileNumber" :disabled="true"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -39,7 +47,7 @@
           <el-row type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="账户密码:">
-                <el-button type="text">重置密码</el-button>
+                <el-button type="text" @click="onChangePassword">重置密码</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -60,22 +68,48 @@
 
 <script>
 import ImagesUpload from "@/components/custom/ImagesUpload";
+import ChangePasswordPage from "@/views/shared/account/password/ChangePasswordPage";
 
 export default {
   name: "MyPage",
   components: {
-    ImagesUpload
+    ImagesUpload,
+    ChangePasswordPage
   },
   computed: {},
-  methods: {},
+  methods: {
+    onChangePassword() {
+      this.dialogVisible = true;
+    },
+    onCancel() {
+      this.dialogVisible = false;
+    },
+    async doChangePassword(oldPassword, newPassword) {
+      const url = this.apis().changePassword(this.currentUser.username);
+      const result = await this.$http.put(url, null, {
+        old: oldPassword,
+        new: newPassword
+      });
+
+      if (result["errors"]) {
+        this.$message.error(result["errors"][0].message);
+        return;
+      }
+
+      this.dialogVisible = false;
+
+      this.$message.success("密码修改成功");
+    }
+  },
   data() {
     return {
       form: {
         attachments: [],
-        name: "",
+        name: this.$store.getters.currentUser.username,
         contact: ""
       },
-      account: this.$store.getters.currentUser.mobileNumber,
+      dialogVisible: false,
+      currentUser: this.$store.getters.currentUser,
       rules: {
         companyOfSeller: [
           {
