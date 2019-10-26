@@ -3,7 +3,7 @@
     <b-nav-item-dropdown right no-caret>
       <template slot="button-content">
         <div @click="onArrowDown">
-          <img src="static/img/avatars/user.jpg" class="img-avatar" alt="" />
+          <img src="static/img/avatars/user.jpg" class="img-avatar" alt />
           <span class="name">{{currentUser.username}}</span>
           <i class="el-icon-arrow-down arrow" v-show="arrowDown"></i>
           <i class="el-icon-arrow-up arrow" v-show="!arrowDown"></i>
@@ -12,11 +12,14 @@
       <b-dropdown-header tag="div" class="text-center">
         <strong>我的</strong>
       </b-dropdown-header>
-      <b-dropdown-item class="px-3" @click="onChangePassword">
-        <i class="icon-envelope-letter"></i> 重置密码
+      <b-dropdown-item @click="onJumpToMy">
+        <i class="el-icon-user-solid my-icon"></i> 我的
       </b-dropdown-item>
+      <!-- <b-dropdown-item class="px-3" @click="onChangePassword">
+        <i class="icon-envelope-letter"></i> 重置密码
+      </b-dropdown-item>-->
       <b-dropdown-item @click="onLogout">
-        <i class="fa fa-lock"></i> 退出登录
+        <i class="el-icon-s-help my-icon"></i> 退出登录
       </b-dropdown-item>
     </b-nav-item-dropdown>
     <el-dialog title="修改密码" :visible.sync="dialogVisible" :modal="false" width="30%">
@@ -67,6 +70,9 @@
         this.dialogVisible = false;
 
         this.$message.success("密码修改成功");
+      },
+      onJumpToMy() {
+        this.$router.push("/account/my");
       }
     },
     created() {},
@@ -90,6 +96,10 @@
     color: #000;
     font-size: 16px;
     margin-right: 10px;
+  }
+
+  .my-icon{
+    color: #000 !important;
   }
 
 </style>

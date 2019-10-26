@@ -106,8 +106,8 @@ export default {
       icon: 'el-icon-office-building',
       children: [
         {
-          name: '认证中心',
-          url: '/account/my',
+          name: '认证信息',
+          url: '/account/authentication',
           icon: 'iconNone'
         },
         {

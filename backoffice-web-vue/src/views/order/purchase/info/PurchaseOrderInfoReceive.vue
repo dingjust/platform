@@ -745,9 +745,9 @@
   }
 
   .info-receive-refuse {
-    background-color: red;
+    /* background-color: red;
     border-color: red;
-    color: #fff;
+    color: #fff; */
     width: 150px;
   }
 

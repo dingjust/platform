@@ -144,6 +144,11 @@ const router = new Router({
             },
             {
               path: 'my',
+              name: '我的',
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/account/MyPage'),
+            },
+            {
+              path: 'authentication',
               name: '认证信息',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
             },

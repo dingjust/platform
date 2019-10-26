@@ -136,7 +136,7 @@ export default {
       children: [
         // {
         //   name: '认证信息',
-        //   url: '/account/my',
+        //   url: '/account/authentication',
         //   icon: 'iconNone'
         // },
         {

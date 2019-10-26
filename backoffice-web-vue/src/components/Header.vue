@@ -124,7 +124,7 @@
       handleCommand(command) {
         switch (command) {
           case '1':
-            this.$router.push("orderPurchase");
+            this.$router.push("/orderPurchase");
             break;
           case '2':
             this.uniquecodeFormVisible = !this.uniquecodeFormVisible;
