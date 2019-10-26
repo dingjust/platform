@@ -154,7 +154,7 @@
     <el-row type="flex" justify="center" class="info-receive-row">
       <template v-if="isBrand()">
         <el-button class="info-receive-submit" v-if="showSaveBtn" @click="onSubmit">保存并退出</el-button>
-        <el-button class="info-receive-submit" v-if="showCommitBtn" @click="onCommit">
+        <el-button class="info-receive-submit" v-if="showCommitBtn" @click="onCommit" :disabled="form.id==''">
           确认提交</el-button>
         <el-button class="info-receive-submit"
           v-if="slotData.reconciliationOrders!=null&&slotData.reconciliationOrders.length!=0&&slotData.reconciliationOrders[0].status=='PENDING_CONFIRM'"
@@ -333,6 +333,7 @@
         }
         //跟新slotData
         this.$set(this.slotData, 'reconciliationOrders', result.reconciliationOrders);
+        this.$set(this.slotData, "status", result.status);
         this.$emit('afterCreate');
       },
       getVariant(color, size, entries) {
@@ -438,7 +439,7 @@
                   color: color,
                   quantity: variant.quantity,
                 });
-              } else {                
+              } else {
                 sizeArray.push({
                   size: size,
                   color: color,

@@ -304,7 +304,7 @@
         //跟新slotData
         this.$set(this.slotData, "deliveryOrders", result.deliveryOrders);
         this.$set(this.slotData, "status", result.status);
-        this.$emit("afterCreate");
+        // this.$emit("afterCreate");
       },
       getVariant(color, size, entries) {
         var result = entries.filter(
