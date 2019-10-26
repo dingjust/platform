@@ -1,6 +1,10 @@
 // 引入 axios
 import axios from 'axios';
-import { Loading } from 'element-ui';
+import {
+  Loading,
+  Message
+} from 'element-ui';
+import router from '@/router';
 
 axios.defaults.baseURL = '';
 setAuthorization();
@@ -19,6 +23,18 @@ function setAuthorization() {
   }
 }
 
+///错误处理
+function errorHandler(error,loading) {
+  loading.close();
+  //登录token失效
+  if (error.response.status == 401) {
+    Message.closeAll();
+    Message.error('登录过期，请重新登陆');
+    router.push("/login");
+  }
+  return resolve(error.response);
+}
+
 axios.interceptors.request.use(
   function (config) {
     return config;
@@ -29,10 +45,10 @@ axios.interceptors.request.use(
 );
 
 let http = {
-  options:{
-    text:"正在请求，请稍等",
-    background:"rgba(0, 0, 0, 0.8)",
-    spinner:"el-icon-loading"
+  options: {
+    text: "正在请求，请稍等",
+    background: "rgba(0, 0, 0, 0.8)",
+    spinner: "el-icon-loading"
   },
   /** get 请求
    * @param  {接口地址} url
@@ -43,20 +59,12 @@ let http = {
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.get(url, {
-        params: params
-      }).then((response) => {
-        loading.close();
-        return resolve(response.data)
-      })
-        .catch((error) => {
-          if (error.response && error.response.data) {
-            loading.close();
-            return resolve(error.response.data);
-          } else {
-            loading.close();
-            return resolve(error.response);
-          }
-        });
+          params: params
+        }).then((response) => {
+          loading.close();
+          return resolve(response.data)
+        })
+        .catch((error) => errorHandler(error,loading));
     });
   },
   /** post 请求
@@ -69,21 +77,12 @@ let http = {
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.post(url, data, {
-        params: params,
-      }).then((response) => {
-        loading.close();
-        console.log(response);
-        return resolve(response.data);
-      })
-        .catch((error) => {
-          if (error.response && error.response.data) {
-            loading.close();
-            return resolve(error.response.data);
-          } else {
-            loading.close();
-            return resolve(error.response);
-          }
-        });
+          params: params,
+        }).then((response) => {
+          loading.close();
+          return resolve(response.data);
+        })
+        .catch((error) => errorHandler(error,loading));
     });
   },
   /** put 请求
@@ -99,15 +98,7 @@ let http = {
       }).then((response) => {
         loading.close();
         return resolve(response.data)
-      }).catch((error) => {
-          if (error.response && error.response.data) {
-            loading.close();
-            return resolve(error.response.data);
-          } else {
-            loading.close();
-            return resolve(error.response);
-          }
-        });
+      }).catch((error) => errorHandler(error,loading));
     });
   },
   /** delete 请求
@@ -119,45 +110,31 @@ let http = {
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.delete(url, {
-        params: params
-      }).then((response) => {
-        loading.close();
-        return resolve(response.data);
-      })
-        .catch((error) => {
-          if (error.response && error.response.data) {
-            loading.close();
-            return resolve(error.response.data);
-          } else {
-            loading.close();
-            return resolve(error.response);
-          }
-        });
+          params: params
+        }).then((response) => {
+          loading.close();
+          return resolve(response.data);
+        })
+        .catch((error) => errorHandler(error,loading));
     });
   },
-    /** upload
+  /** upload
    * @param  {接口地址} url
    * @param  {请求参数} data
    */
-  formdataPost: function (url, data,) {
+  formdataPost: function (url, data, ) {
     let loading = Loading.service(this.options);
     setAuthorization();
     return new Promise((resolve, reject) => {
       axios.post(url, data, {
-        headers:{'Content-Type':'multipart/form-data'}
-      }).then((response) => {
-        loading.close();
-        return resolve(response.data);
-      })
-        .catch((error) => {
-          if (error.response && error.response.data) {
-            loading.close();
-            return resolve(error.response.data);
-          } else {
-            loading.close();
-            return resolve(error.response);
+          headers: {
+            'Content-Type': 'multipart/form-data'
           }
-        });
+        }).then((response) => {
+          loading.close();
+          return resolve(response.data);
+        })
+        .catch((error) => errorHandler(error,loading));
     });
   },
 };
