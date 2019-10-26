@@ -30,37 +30,25 @@
               <images-upload :limit="5" :slot-data="formData.certificates" />
             </el-col>
         </el-row>
-        <el-row class="rowClass">
-          <el-form-item>
-            <el-row type="flex">
-              <el-col :span="2">
-                <h6 class="titleTextClass">公司名称</h6>
-              </el-col>
-              <el-col :span="22">
-                <el-input placeholder="请填写公司名称" v-model="formData.name" size="mini" :disabled="formData.approvalStatus === 'approved'"></el-input>
-              </el-col>
-            </el-row>
-          </el-form-item>
-        </el-row>
-        <el-row class="rowClass">
-          <el-form-item class="purchase-form-item">
-            <el-row type="flex">
-              <el-col :span="2">
-                <h6 class="titleTextClass">自选标签</h6>
-              </el-col>
-              <el-col :span="22" >
-                <el-select v-model="formData.labels" multiple value-key="id" size="mini" placeholder="请选择">
-                  <el-option
-                    v-for="item in labels"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item">
-                  </el-option>
-                </el-select>
-              </el-col>
-            </el-row>
-          </el-form-item>
-        </el-row>
+        <el-form-item prop="name">
+          <template slot="label">
+            <h6 class="titleTextClass">公司名称<span style="color: red">*</span></h6>
+          </template>
+          <el-input placeholder="请填写公司名称" v-model="formData.name" size="mini" :disabled="formData.approvalStatus === 'approved'"></el-input>
+        </el-form-item>
+        <el-form-item prop="labels">
+          <template slot="label">
+            <h6 class="titleTextClass">自选标签</h6>
+          </template>
+          <el-select v-model="formData.labels" multiple value-key="id" size="mini" placeholder="请选择" style="width: 300px">
+            <el-option
+              v-for="item in labels"
+              :key="item.id"
+              :label="item.name"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </div>
   </div>
 </template>
