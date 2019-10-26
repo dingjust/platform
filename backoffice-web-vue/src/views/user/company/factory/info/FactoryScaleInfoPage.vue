@@ -8,7 +8,7 @@
         <h6 class="titleTextClass">人数</h6>
       </el-col>
       <el-col :span="20">
-        <h6>{{getEnum('populationScales',slotData.populationScale)}}</h6>
+        <h6 v-if="slotData.populationScale">{{getEnum('populationScales',slotData.populationScale)}}</h6>
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">
@@ -32,7 +32,7 @@
         <h6 class="titleTextClass">产值</h6>
       </el-col>
       <el-col :span="20">
-        <h6>{{getEnum('scaleRanges',slotData.scaleRange)}}元</h6>
+        <h6 v-if="slotData.scaleRange">{{getEnum('scaleRanges',slotData.scaleRange)}}元</h6>
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass">

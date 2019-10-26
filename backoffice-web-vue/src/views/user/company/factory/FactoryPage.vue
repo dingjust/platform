@@ -16,6 +16,10 @@
         <el-button type="primary" @click="update()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
+      <factory-details-page :slotData="detailsData"></factory-details-page>
+    </el-dialog>
   </div>
 </template>
 
@@ -33,6 +37,7 @@
     name: 'FactoryPage',
     props: ['slotData'],
     components: {
+      FactoryDetailsPage,
       FactoryToolbar,
       FactoryList,
       FactoryLabelsForm
@@ -95,7 +100,8 @@
           return;
         }
 
-        this.fn.openSlider('工厂：' + item.name, FactoryDetailsPage, result);
+        this.detailsData = result;
+        this.detailsDialogVisible = !this.detailsDialogVisible;
       },
       async onEdit(item) {
         const url = this.apis().getFactory(item.uid);
@@ -116,7 +122,9 @@
 
       return {
         dialogFormVisible: false,
+        detailsDialogVisible: false,
         item: {},
+        detailsData: ''
       };
     },
     created() {
