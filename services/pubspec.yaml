@@ -22,8 +22,8 @@ dependencies:
   b2b_commerce:
     path: ../b2b_commerce/
   connectivity: ^0.3.1
-  # dio: ^2.0.18
-  dio: 2.2.2
+  dio: 2.0.18
+  # dio: 2.2.2
   json_annotation: ^2.0.0
   shared_preferences: ^0.4.2
   fluwx: ^0.6.2

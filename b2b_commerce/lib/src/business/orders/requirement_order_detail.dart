@@ -1025,8 +1025,11 @@ class _RequirementOrderDetailPageState
         description: '$description',
         imageUrl: orderModel.details.pictures.isEmpty
             ? '${GlobalConfigs.LOGO_URL}'
-            : '${orderModel.details.pictures[0].previewUrl()}',
+            : '${orderModel.details.pictures[0].shareUrl()}',
         url: Apis.shareRequirement(orderModel.code));
+
+
+    print('${orderModel.details.pictures[0].shareUrl()}');
   }
 
   void onReview() {
