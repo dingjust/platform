@@ -887,6 +887,10 @@ class PurchaseOrderModel extends OrderModel {
   ///合同是否已签
   bool userAgreementIsSigned;
 
+  ///合作商
+  @JsonKey(toJson: _cooperatorToJson)
+  CooperatorModel cooperator;
+
   // @JsonKey(fromJson: _dateTimefromMilliseconds)
   // DateTime modifiedtime;
 
@@ -928,7 +932,19 @@ class PurchaseOrderModel extends OrderModel {
       this.delayedDays,
       DateTime modifiedtime,
       SalesApplication salesApplication,
-      ConsignmentModel consignment})
+        ConsignmentModel consignment,
+        this.targetPurchaseOrderCode,
+        this.invoiceTaxPoint,
+        this.paidAmount,
+        this.offerAmount,
+        this.deductionAmount,
+        this.brandOperator,
+        this.factoryOperator,
+        this.approver,
+        this.freightPayer,
+        this.payPlan,
+        this.userAgreementIsSigned,
+        this.cooperator})
       : super(
             code: code,
             totalQuantity: totalQuantity,
@@ -983,6 +999,9 @@ class PurchaseOrderModel extends OrderModel {
 
   static Map<String, dynamic> _payPlanToJson(OrderPayPlanModel payPlan) =>
       OrderPayPlanModel.toJson(payPlan);
+
+  static Map<String, dynamic> _cooperatorToJson(CooperatorModel cooperator) =>
+      CooperatorModel.toJson(cooperator);
 }
 
 /// 采购订单行

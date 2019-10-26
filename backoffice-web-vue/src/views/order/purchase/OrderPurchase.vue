@@ -73,7 +73,7 @@
             <form-label label="生产详情" />
           </el-row>
           <template v-for="(product,productIndex) in form.entries">
-            <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
+            <el-row class="info-order-row" type="flex" :key="productIndex" justify="start" align="middle" :gutter="20">
               <el-col :span="7">
                 <el-row type="flex" align="middle">
                   <h6 class="info-input-prepend">产品名</h6>
@@ -90,22 +90,22 @@
                 </el-row>
               </el-col>
             </el-row>
-            <el-row type="flex" v-if="product.code!=null" class="info-order-row">
+            <el-row type="flex" :key="productIndex" v-if="product.code!=null" class="info-order-row">
               <img class="purchase-product-img"
                 :src="product.thumbnail!=null&&product.thumbnail.length!=0?product.thumbnail.url:'static/img/nopicture.png'">
               <table cellspacing="2" width="100%" :height="(form.entries.length+1)*50" class="order-table">
                 <tr class="order-table-th_row">
                   <td style="width:40px">颜色</td>
-                  <template v-for="item in product.sizes">
-                    <th>{{item}}</th>
+                  <template v-for="(item,itemIndex )in product.sizes">
+                    <th :key="itemIndex">{{item}}</th>
                   </template>
                   <th>小计</th>
                 </tr>
                 <template v-for="(color,rowIndex) in product.colors">
-                  <tr>
+                  <tr :key="rowIndex">
                     <td>{{color}}</td>
                     <template v-for="(size,index) in product.sizes">
-                      <td style="width:80px">
+                      <td style="width:80px" :key="index">
                         <el-input class="order-table-input" type="number"
                           v-model="getVariant(color,size,product.variants).num">
                         </el-input>
@@ -294,7 +294,7 @@
               <el-row type="flex" align="middle">
                 <h6 class="info-input-prepend">尾款期数</h6>
                 <template v-for="(value,key) in payPlanType">
-                  <el-radio class="info-radio" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
+                  <el-radio class="info-radio" v-model="form.payPlanType" :key="key" :label="key">{{value}}</el-radio>
                 </template>
               </el-row>
             </el-col>
@@ -317,7 +317,7 @@
                 <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
                 <el-select v-model="form.deposit.event" placeholder="请选择">
                   <template v-for="(value,key) in triggerEvent">
-                    <el-option :label="value" :value="key"></el-option>
+                    <el-option :label="value" :key="key" :value="key"></el-option>
                   </template>
                 </el-select>
               </el-row>
@@ -344,7 +344,7 @@
                 <el-col :span="18">
                   <el-select v-model="form.deposit.range">
                     <template v-for="(value,key) in triggerType">
-                      <el-option :label="value" :value="key"></el-option>
+                      <el-option :label="value" :key="key" :value="key"></el-option>
                     </template>
                   </el-select>
                 </el-col>
@@ -381,7 +381,7 @@
                 <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
                 <el-select v-model="form.balance1.event" placeholder="请选择">
                   <template v-for="(value,key) in triggerEvent">
-                    <el-option :label="value" :value="key"></el-option>
+                    <el-option :label="value" :key="key" :value="key"></el-option>
                   </template>
                 </el-select>
               </el-row>
@@ -408,7 +408,7 @@
                 <el-col :span="18">
                   <el-select v-model="form.balance1.range">
                     <template v-for="(value,key) in triggerType">
-                      <el-option :label="value" :value="key"></el-option>
+                      <el-option :label="value" :key="key" :value="key"></el-option>
                     </template>
                   </el-select>
                 </el-col>
@@ -450,7 +450,7 @@
                 <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
                 <el-select v-model="form.balance2.event" placeholder="请选择">
                   <template v-for="(value,key) in triggerEvent">
-                    <el-option :label="value" :value="key"></el-option>
+                    <el-option :label="value" :key="key" :value="key"></el-option>
                   </template>
                 </el-select>
               </el-row>
@@ -477,7 +477,7 @@
                 <el-col :span="18">
                   <el-select v-model="form.balance2.range">
                     <template v-for="(value,key) in triggerType">
-                      <el-option :label="value" :value="key"></el-option>
+                      <el-option :label="value" :key="key" :value="key"></el-option>
                     </template>
                   </el-select>
                 </el-col>
@@ -497,7 +497,7 @@
                 <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
                 <el-select v-model="form.monthBalance.event" placeholder="请选择">
                   <template v-for="(value,key) in triggerEvent">
-                    <el-option :label="value" :value="key"></el-option>
+                    <el-option :label="value" :key="key" :value="key"></el-option>
                   </template>
                 </el-select>
               </el-row>

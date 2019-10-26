@@ -5,13 +5,13 @@ class GlobalConfigs {
   static const CONTEXT_PATH = 'https://sc.nbyjy.net';
   static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
 
-//   static const CONTEXT_PATH = 'https://192.168.1.146:9002/djwebservices/v2';
-//   static const MEDIA_CONTEXT_PATH =
-//       'https://192.168.1.146:9002/djwebservices/v2';
+  // static const CONTEXT_PATH = 'https://192.168.1.243:9002/djwebservices/v2';
+  // static const MEDIA_CONTEXT_PATH =
+  //     'https://192.168.1.243:9002/djwebservices/v2';
 
   // 生产
-// static const CONTEXT_PATH = 'https://ht.nbyjy.net';
-// static const MEDIA_CONTEXT_PATH = 'https://img.nbyjy.net';
+  // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
+  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
@@ -28,8 +28,8 @@ class GlobalConfigs {
 
   static const AUTH_SERVER_URL = '$CONTEXT_PATH/authorizationserver';
 
-//   static const AUTH_SERVER_URL =
-//       'https://192.168.1.146:9002/authorizationserver';
+  // static const AUTH_SERVER_URL =
+  //     'https://192.168.1.243:9002/authorizationserver';
   static const AUTH_TOKEN_URL = '$AUTH_SERVER_URL/oauth/token';
   static const AUTH_CHECK_TOKEN_URL = '$AUTH_SERVER_URL/oauth/check_token';
   static const AUTH_CLIENT_ID_KEY = 'client_id';
@@ -40,7 +40,8 @@ class GlobalConfigs {
   static const PRODUCTION_HISTORY_KEYWORD_KEY =
       'production_history_keyword_key';
   static const PRODUCT_HISTORY_KEYWORD_KEY = 'product_history_keyword_key';
-  static const PRODUCT_SELECT_HISTORY_KEYWORD_KEY = 'product_select_history_keyword_key';
+  static const PRODUCT_SELECT_HISTORY_KEYWORD_KEY =
+      'product_select_history_keyword_key';
   static const ORDER_PRODUCT_HISTORY_KEYWORD_KEY =
       'order_product_history_keyword_key';
   static const FACTORY_HISTORY_KEYWORD_KEY = 'factory_history_keyword_key';
@@ -49,8 +50,7 @@ class GlobalConfigs {
   static const Requirement_HISTORY_KEYWORD_KEY =
       'requirement_history_keyword_key';
 
-  static const CONTRACT_HISTORY_KEYWORD_KEY =
-      'contract_history_keyword_key';
+  static const CONTRACT_HISTORY_KEYWORD_KEY = 'contract_history_keyword_key';
 
   /// grant types
   static const GRANT_TYPE_PASSWORD = 'password';

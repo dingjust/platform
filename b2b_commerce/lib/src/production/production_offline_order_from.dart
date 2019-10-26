@@ -65,6 +65,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   TextEditingController _priceController = TextEditingController();
   FocusNode _remarksFocusNode = FocusNode();
   TextEditingController _remarksController = TextEditingController();
+
+  ///合作商
   CooperatorModel cooperatorModel;
 
   ///选中账务方案
@@ -191,15 +193,26 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Divider(
             height: 0,
           ),
+          // userType == 'brand'
+          //     ? _buildAddressPick(context)
+          //     : _buildAddress(context),
+          _buildAddressPick(context),
+          Divider(
+            height: 0,
+            thickness: 10,
+            color: Colors.grey[200],
+          ),
           _buildFinance(context),
           Divider(
             height: 0,
+            thickness: 10,
+            color: Colors.grey[200],
           ),
-          userType == 'brand'
-              ? _buildAddressPick(context)
-              : _buildAddress(context),
+          _buildOperator(context),
           Divider(
             height: 0,
+            thickness: 10,
+            color: Colors.grey[200],
           ),
           _buildRemarks(context),
         ],
@@ -874,13 +887,25 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                   )),
             ],
           ),
-          trailing: Switch(
-            value: isInvoice,
-            onChanged: (value) {
-              setState(() {
-                isInvoice = value;
-              });
-            },
+          trailing: Container(
+            width: 150,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(isInvoice ? '开发票' : '不开发票',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                Switch(
+                  value: isInvoice,
+                  onChanged: (value) {
+                    setState(() {
+                      isInvoice = value;
+                    });
+                  },
+                )
+              ],
+            ),
           )),
     );
   }
@@ -889,40 +914,85 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   Widget _buildFinance(BuildContext context) {
     return GestureDetector(
       child: Container(
-        child: ListTile(
-            leading: Wrap(
-              children: <Widget>[
-                Text('账务方案',
-                    style: TextStyle(
-                      fontSize: 16,
-                    )),
-              ],
-            ),
-            trailing: Container(
-              width: 300,
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+          height: 100,
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                  leading: Wrap(
                     children: <Widget>[
-                      Text(
-                        '${selectCompanyPayPlanModel?.name ?? ''}',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Icon(Icons.keyboard_arrow_right)
+                      Text('账务方案',
+                          style: TextStyle(
+                            fontSize: 16,
+                          )),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[],
-                  )
-                ],
-              ),
-            )),
-      ),
+                  trailing: Container(
+                    width: 300,
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Text(
+                              '${selectCompanyPayPlanModel?.name ?? ''}',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            Icon(Icons.keyboard_arrow_right)
+                          ],
+                        ),
+                      ],
+                    ),
+                  )),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      getFinanceString(),
+                      style: TextStyle(color: Colors.red),
+                    )
+                  ],
+                ),
+              )
+            ],
+          )),
       onTap: onFinanceSelect,
     );
+  }
+
+  //跟单员
+  Widget _buildOperator(BuildContext context) {
+    return GestureDetector(
+        child: Container(
+          child: ListTile(
+              leading: Text(
+                '跟单员',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              trailing: Container(
+                width: 300,
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          '${UserBLoC.instance.currentUser.name}',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Icon(Icons.keyboard_arrow_right)
+                      ],
+                    ),
+                  ],
+                ),
+              )),
+        ),
+        onTap: () {});
   }
 
   //订单备注
@@ -991,8 +1061,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     );
   }
 
+  ///账务方案选择
   void onFinanceSelect() async {
     CompanyPayPlanResponse response = await PayPlanRepositoryImpl().all();
+
+    setState(() {
+      selectCompanyPayPlanModel = response.content[0];
+    });
 
     showCupertinoModalPopup<void>(
       context: context,
@@ -1019,6 +1094,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                       selectCompanyPayPlanModel = response.content[index];
                     });
                   },
+
                   children: response.content
                       .map((payplan) => Text('${payplan.name}'))
                       .toList(),
@@ -1094,6 +1170,40 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         entries.add(entryModel);
       }
     }
+
+    //合作商
+    purchaseOrder.cooperator = CooperatorModel(id: cooperatorModel.id);
+    if (cooperatorModel.type == CooperatorType.ONLINE) {
+      purchaseOrder.companyOfSeller = cooperatorModel.partner.name;
+      purchaseOrder.contactPersonOfSeller =
+          cooperatorModel.partner.contactPerson;
+      purchaseOrder.contactOfSeller = cooperatorModel.partner.phone;
+    } else {
+      purchaseOrder.companyOfSeller = cooperatorModel.name;
+      purchaseOrder.contactPersonOfSeller = cooperatorModel.contactPerson;
+      purchaseOrder.contactOfSeller = cooperatorModel.contactPhone;
+    }
+
+    //账务
+    // purchaseOrder.pay
+    List<AbstractPayPlanItemModel> payItems = selectCompanyPayPlanModel
+        .payPlanItems
+        .map((item) =>
+        AbstractPayPlanItemModel(
+            payPercent: item.payPercent,
+            triggerEvent: item.triggerEvent,
+            moneyType: item.moneyType,
+            triggerDays: item.triggerDays,
+            triggerType: item.triggerType))
+        .toList();
+
+    OrderPayPlanModel orderPayPlanModel = OrderPayPlanModel(
+        isHaveDeposit: selectCompanyPayPlanModel.isHaveDeposit,
+        payPlanType: selectCompanyPayPlanModel.payPlanType,
+        name: selectCompanyPayPlanModel.name,
+        payPlanItems: payItems);
+
+    purchaseOrder.payPlan = orderPayPlanModel;
 
     //单价
     if (price != null && double.parse(price) > 0) {
@@ -1173,7 +1283,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         builder: (_) {
           return RequestDataLoading(
             requestCallBack:
-            PurchaseOrderRepository().offlinePurchaseOrder(purchaseOrder),
+            PurchaseOrderRepository().createOfflinePurchaseOrder(purchaseOrder),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: 'createPurchaseOrder',
@@ -1318,5 +1428,17 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
             outsideDismiss: true,
           );
         });
+  }
+
+  String getFinanceString() {
+    if (selectCompanyPayPlanModel != null) {
+      return selectCompanyPayPlanModel.isHaveDeposit
+          ? ''
+          : '无' +
+          '定金+' +
+          PayPlanTypeLocalizedMap[selectCompanyPayPlanModel.payPlanType];
+    } else {
+      return '';
+    }
   }
 }

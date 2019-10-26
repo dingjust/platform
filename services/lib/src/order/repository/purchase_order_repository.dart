@@ -40,6 +40,25 @@ class PurchaseOrderRepository {
     }
   }
 
+  /// 创建线下采购订单V2
+  Future<String> createOfflinePurchaseOrder(PurchaseOrderModel form) async {
+    Response response;
+    try {
+      response = await http$.post(OrderApis.createOfflinePurchaseOrder,
+          data: PurchaseOrderModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return response.toString();
+    } else {
+      return null;
+    }
+  }
+
+
   //创建线上生产订单
   Future<String> onlinePurchaseOrder(
       String quote, PurchaseOrderModel form) async {
