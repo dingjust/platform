@@ -102,9 +102,9 @@
         const url = this.apis().downContract(code);
         const result = await http.get(url);
 
-        window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
-        // window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
       async onSearchSeal() {
         console.log('ffe2')

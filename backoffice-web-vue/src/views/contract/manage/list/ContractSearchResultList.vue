@@ -129,9 +129,9 @@
         const url = this.apis().downContract(code);
         const result = await http.get(url);
 
-        window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
-        // window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
       },
       onConfirm() {
@@ -200,9 +200,9 @@
         const url = this.apis().downContract(queryCode);
         const result = await http.get(url);
 
-        const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
         //
-        // const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
         // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
         this.pdfVisible = true;
         this.fileUrl = encodeURIComponent(aa)
