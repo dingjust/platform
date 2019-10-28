@@ -28,7 +28,7 @@
     <!--<iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"-->
       <!--height="480" width="100%">-->
 
-      <iframe id='previewPdf' :src="'https://ht.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
+      <iframe id='previewPdf' :src="'https://ht.nbyjy.net/static/pdf/web/viewer.html?file=' + fileUrl"
               height="480" width="100%">
     </iframe>
     <!--<iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl"-->
@@ -102,9 +102,9 @@
         const url = this.apis().downContract(code);
         const result = await http.get(url);
 
-        // window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
-        window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
       async onSearchSeal() {
         console.log('ffe2')

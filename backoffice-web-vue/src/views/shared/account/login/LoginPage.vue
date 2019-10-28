@@ -43,13 +43,13 @@
       }
     },
     created(){
-      var vm = this;
-      document.onkeydown = function(e) {
-        var key = window.event.keyCode;
-        if (key == 13) {
-          vm.login();
-        }
-      }
+      // var vm = this;
+      // document.onkeydown = function(e) {
+      //   var key = window.event.keyCode;
+      //   if (key == 13) {
+      //     vm.login();
+      //   }
+      // }
     },
     methods: {
       login() {
