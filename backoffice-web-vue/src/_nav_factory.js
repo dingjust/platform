@@ -175,16 +175,9 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '配置',
-          url: '/account/setting',
-          // icon: 'icon-puzzle',
-          children: [
-            {
-              name: '账务配置',
-              url: '/account/setting/payPlan',
-              icon: 'iconNone'
-            }
-          ]
+          name: '账务配置',
+          url: '/account/setting/payPlan',
+          icon: 'iconNone'
         }
       ]
     },
