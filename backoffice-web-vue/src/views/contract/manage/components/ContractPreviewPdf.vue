@@ -28,7 +28,7 @@
     <!--<iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"-->
       <!--height="480" width="100%">-->
 
-      <iframe id='previewPdf' :src="'https://ht.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
+      <iframe id='previewPdf' :src="'https://ht.nbyjy.net/static/pdf/web/viewer.html?file=' + fileUrl"
               height="480" width="100%">
     </iframe>
     <!--<iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl"-->
