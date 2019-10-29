@@ -53,7 +53,7 @@
         keyword: 'keyword',
         queryFormData: 'queryFormData',
         quoteQueryFormData: 'quoteQueryFormData',
-        formData: 'formData'
+        formData: 'formData',
       })
     },
     methods: {
@@ -64,7 +64,8 @@
         clearFormData: 'clearFormData'
       }),
       ...mapMutations({
-        setIsAdvancedSearch: 'isAdvancedSearch'
+        setIsAdvancedSearch: 'isAdvancedSearch',
+        isShowDetailPrice: 'isShowDetailPrice'
       }),
       onSearch (page, size) {
         this.setIsAdvancedSearch(false);
@@ -153,6 +154,11 @@
         if(!n){
           this.clearFormData();
           // this.clearFactoryQueryFormData();
+        }
+      },
+      'detailsDialogVisible': function (n, o) {
+        if(!n){
+          this.isShowDetailPrice(false);
         }
       }
     },

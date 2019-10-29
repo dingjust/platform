@@ -1,73 +1,80 @@
 <template>
-    <div class="cooperator-info-order-body">
-          <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-            <el-col :span="3">方案名称</el-col>
-            <el-col :span="21">{{itemData.name}}</el-col>
-          </el-row>
-            <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="3">创建日期</el-col>
-              <el-col :span="21">{{itemData.creationtime | formatDateWithSecond}}</el-col>
-            </el-row>
-            <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="3">备注</el-col>
-              <el-col :span="21">{{itemData.remarks}}</el-col>
-            </el-row>
-            <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="3">类型</el-col>
-              <el-col :span="21">
-                <span v-if="itemData.isHaveDeposit">
-                  定金+
-                </span>
-                <span v-else>
-                  无定金+
-                </span>
-                {{getEnum('PayPlanType',itemData.payPlanType)}}
-              </el-col>
-            </el-row>
-            <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="3">账务详情</el-col>
-              <el-col :span="21">
-                <el-row type="flex" v-for="item of itemData.payPlanItems" style="margin-bottom: 20px">
-                  <el-col :span="6">
-                      <span style="color: #C0C0C0">
-                        {{getEnum('PayMoneyType',item.moneyType)}}
-                      </span>
-                  </el-col>
-                  <el-col :span="18">
-                      {{getEnum('TriggerEvent',item.triggerEvent)}}后{{item.triggerDays}}天
-                    {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent * 100}}%作为定金
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-    </div>
+  <div class="cooperator-info-order-body">
+    <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
+      <el-col :span="3">方案名称</el-col>
+      <el-col :span="21">{{itemData.name}}</el-col>
+    </el-row>
+    <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
+      <el-col :span="3">创建日期</el-col>
+      <el-col :span="21">{{itemData.creationtime | formatDateWithSecond}}</el-col>
+    </el-row>
+    <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
+      <el-col :span="3">备注</el-col>
+      <el-col :span="21">{{itemData.remarks}}</el-col>
+    </el-row>
+    <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
+      <el-col :span="3">类型</el-col>
+      <el-col :span="21">
+        <span v-if="itemData.isHaveDeposit">
+          定金+
+        </span>
+        <span v-else>
+          无定金+
+        </span>
+        {{getEnum('PayPlanType',itemData.payPlanType)}}
+      </el-col>
+    </el-row>
+    <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
+      <el-col :span="3">账务详情</el-col>
+      <el-col :span="21">
+        <el-row type="flex" v-for="item of itemData.payPlanItems" style="margin-bottom: 20px">
+          <el-col :span="6">
+            <span style="color: #C0C0C0">
+              {{getEnum('PayMoneyType',item.moneyType)}}
+            </span>
+          </el-col>
+          <el-col :span="18" v-if="item.moneyType!='MONTHLY_SETTLEMENT'">
+            {{getEnum('TriggerEvent',item.triggerEvent)}}后{{item.triggerDays}}天
+            {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent * 100}}%作为定金
+          </el-col>
+          <el-col :span="18" v-else>
+            {{getEnum('TriggerEvent',item.triggerEvent)}}后次月{{item.triggerDays}}号
+            {{getEnum('TriggerType',item.triggerType)}}支付总额的{{item.payPercent * 100}}%作为月结
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('PayPlanModule');
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers('PayPlanModule');
 
   export default {
     name: 'PayPlanInfoPage',
     props: ['itemData'],
     components: {},
     computed: {
-      ...mapGetters({
-      })
+      ...mapGetters({})
     },
     methods: {
-      ...mapActions({
-      }),
+      ...mapActions({}),
     },
     data() {
-      return {
-      };
+      return {};
     },
     created() {
 
     }
   };
+
 </script>
 
 <style scoped>
@@ -133,7 +140,8 @@
     margin-top: 30px;
   }
 
-  .el-divider--vertical{
+  .el-divider--vertical {
     height: 13em;
   }
+
 </style>

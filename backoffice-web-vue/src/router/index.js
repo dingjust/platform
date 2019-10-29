@@ -147,10 +147,15 @@ const router = new Router({
               name: '我的',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/account/MyPage'),
             },
+            // {
+            //   path: 'authentication',
+            //   name: '认证信息',
+            //   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
+            // },
             {
-              path: 'authentication',
-              name: '认证信息',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
+              path: 'Authentication',
+              name: '认证中心',
+              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/dashboard/authentication/AuthenticationPage')
             },
             {
               path: 'employee',

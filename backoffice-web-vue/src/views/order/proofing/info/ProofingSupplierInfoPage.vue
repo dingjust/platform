@@ -1,36 +1,27 @@
 <template>
   <div class="animated fadeIn proofing-basic">
-    <el-row style="margin: 20px 0px">
-      <h6 class="titleTextClass2">合作商信息</h6>
-    </el-row>
     <el-row type="flex">
-      <el-col :span="5">
-        <h6 class="titleTextClass">合作商</h6>
+      <el-col :span="8">
+        <h6 style="font-weight: bold">合作商</h6>
       </el-col>
-      <el-col :span="19">
+      <el-col :span="16">
         <h6 class="contentTextClass">{{isFactory() ? slotData.supplier.name : slotData.belongTo.name}}</h6>
       </el-col>
     </el-row>
     <el-row type="flex">
-      <el-col :span="12">
-        <el-row type="flex">
-          <el-col :span="10">
-            <h6 class="titleTextClass">联系人</h6>
-          </el-col>
-          <el-col :span="14">
-            <h6 class="contentTextClass">{{isFactory() ? slotData.supplier.contactPerson : slotData.belongTo.contactPerson}}</h6>
-          </el-col>
-        </el-row>
+      <el-col :span="8">
+        <h6 style="font-weight: bold">联系人</h6>
       </el-col>
-      <el-col :span="12">
-        <el-row type="flex">
-          <el-col :span="10">
-            <h6 class="titleTextClass">联系方式</h6>
-          </el-col>
-          <el-col :span="14">
-            <h6 class="contentTextClass">{{isFactory() ? slotData.supplier.contactPhone : slotData.belongTo.contactPhone}}</h6>
-          </el-col>
-        </el-row>
+      <el-col :span="16">
+        <h6 class="contentTextClass">{{isFactory() ? slotData.supplier.contactPerson : slotData.belongTo.contactPerson}}</h6>
+      </el-col>
+    </el-row>
+    <el-row type="flex">
+      <el-col :span="8">
+        <h6 style="font-weight: bold">联系方式</h6>
+      </el-col>
+      <el-col :span="16">
+        <h6 class="contentTextClass">{{isFactory() ? slotData.supplier.contactPhone : slotData.belongTo.contactPhone}}</h6>
       </el-col>
     </el-row>
   </div>

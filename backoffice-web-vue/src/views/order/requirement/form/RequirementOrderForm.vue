@@ -53,7 +53,7 @@
         </el-form-item>
         <el-form-item prop="details.productName">
           <template slot="label">
-            <h6 class="titleTextClass">标题</h6>
+            <h6 class="titleTextClass">标题<span style="color: red">*</span></h6>
           </template>
           <el-input v-model="formData.details.productName"  placeholder="请填写" style="width: 50%"></el-input>
         </el-form-item>
@@ -61,7 +61,7 @@
           <el-col :span="8">
             <el-form-item prop="details.maxExpectedPrice">
               <template slot="label">
-                <h6 class="titleTextClass">期望价格</h6>
+                <h6 class="titleTextClass">期望价格<span style="color: red">*</span></h6>
               </template>
               <el-input :min="0" type="number" v-model.number="formData.details.maxExpectedPrice" placeholder="请填写" ></el-input>
             </el-form-item>

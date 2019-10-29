@@ -32,27 +32,50 @@
       </div>
       <!--<i class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>-->
     </el-row>
-    <el-row type="flex" justify="space-between" align="middle">
-      <h6 class="info-title-text">报价详情</h6>
-      <div>
-        <span style="color: #C0C0C0">报价单号：{{slotData.code}}</span>&nbsp;&nbsp;&nbsp;
-        <span style="color: #C0C0C0">当前状态：<span :style="{color: statusColor}">{{getEnum('quoteStates',slotData.state)}}</span></span>&nbsp;&nbsp;&nbsp;
-        <span style="color: #C0C0C0">发布日期：{{slotData.creationtime | formatDate}}</span>
-      </div>
+    <el-row type="flex" align="middle" style="margin-bottom: 20px">
+      <el-col :span="8">
+        <span>报价单号：{{slotData.code}}</span>
+      </el-col>
+      <el-col :span="8">
+        <span>当前状态：<span :style="{color: statusColor}">{{getEnum('quoteStates',slotData.state)}}</span></span>
+      </el-col>
+      <el-col :span="8">
+        <el-row type="flex" justify="end">
+          <span>发布日期：{{slotData.creationtime | formatDate}}</span>
+        </el-row>
+      </el-col>
     </el-row>
-    <el-divider></el-divider>
-    <quote-basic-info-page :slotData="slotData" style="margin: 20px 0px"/>
-    <el-divider></el-divider>
-    <el-row type="flex" justify="space-between" align="middle" style="margin-top: 20px">
-      <h6 class="info-title-text">需求信息</h6>
-    </el-row>
-    <requirement-order-basic-info-page :slotData="slotData.requirementOrder" style="margin: 20px 0px"/>
-    <el-divider></el-divider>
-    <el-row type="flex" justify="space-between" align="middle" style="margin-top: 20px">
-      <h6 class="info-title-text">发布需求者</h6>
-    </el-row>
-    <requirement-order-belong-to-info-page :slotData="slotData.requirementOrder" style="margin: 20px 0px -20px 0px"/>
-    <el-divider></el-divider>
+
+    <div class="titleCardClass">
+      <el-row>
+        <div class="titleClass">
+          <h6>报价详情</h6>
+        </div>
+      </el-row>
+      <quote-basic-info-page :slotData="slotData" style="margin: 20px 20px"/>
+      <el-row type="flex">
+        <el-col :span="18">
+          <el-row>
+            <div class="titleClass">
+              <el-row type="flex" justify="space-between">
+                <h6>需求信息</h6>
+                <h6>需求单号&nbsp;&nbsp;<span style="color:#a9a9a9;">{{slotData.requirementOrder.code}}</span></h6>
+              </el-row>
+            </div>
+          </el-row>
+          <requirement-order-basic-info-page :slotData="slotData.requirementOrder" style="padding:10px"/>
+        </el-col>
+        <el-divider direction="vertical"></el-divider>
+        <el-col :span="6">
+          <el-row>
+            <div class="titleClass">
+              <h6>发布需求者</h6>
+            </div>
+          </el-row>
+          <requirement-order-belong-to-info-page :slotData="slotData" style="margin: 20px 0px 10px 10px;"/>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -243,5 +266,22 @@
 
   .v-modal{
     display: none;
+  }
+
+  .quote-detail .titleClass{
+    padding: 10px 0px 1px 10px;
+    background-color: #F0F0F0;
+  }
+
+  .quote-detail .titleCardClass{
+    border-style: solid;
+    border-width: 1px;
+    border-top: white;
+    border-color: #DCDCDC;
+  }
+
+  .quote-detail .el-divider--vertical{
+    height: auto;
+    margin: 0px;
   }
 </style>

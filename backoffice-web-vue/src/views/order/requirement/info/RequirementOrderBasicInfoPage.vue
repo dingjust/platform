@@ -1,7 +1,8 @@
 <template>
   <div class="animated fadeIn requirement-basic">
+    <!--<el-row><h6>产品图片</h6></el-row>-->
     <el-row type="flex" class="rowClass">
-      <el-col :span="3">
+      <el-col style="width: 130px">
         <div class="demo-image__preview">
           <el-image
             style="width: 100px; height: 100px;border-radius: 9px"
@@ -10,129 +11,107 @@
           </el-image>
         </div>
       </el-col>
-      <el-col :span="21">
-          <el-row type="flex">
-            <el-col :span="5">
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">联系人</h6>
-                </el-col>
-                <el-col :span="15" :offset="3">
-                  <h6 class="contentTextClass">{{slotData.details.contactPerson}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">品牌标题</h6>
-                </el-col>
-                <el-col :span="15" :offset="3">
-                  <h6 class="contentTextClass">{{slotData.details.productName}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">订购数量</h6>
-                </el-col>
-                <el-col :span="15" :offset="3">
-                  <h6 class="contentTextClass">{{slotData.details.expectedMachiningQuantity}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">产品品类</h6>
-                </el-col>
-                <el-col :span="15" :offset="3">
-                  <h6 class="contentTextClass">{{slotData.details.category != null ? slotData.details.category.name : ''}}</h6>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="5">
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">交货日期</h6>
-                </el-col>
-                <el-col :span="15" :offset="3">
-                  <h6 class="contentTextClass">{{slotData.details.expectedDeliveryDate | timestampToTime}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">联系方式</h6>
-                </el-col>
-                <el-col :span="15" :offset="3">
-                  <h6 class="contentTextClass">{{slotData.details.contactPhone}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">期望价格</h6>
-                </el-col>
-                <el-col :span="15" :offset="3">
-                  <h6 class="contentTextClass">{{slotData.details.maxExpectedPrice}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass">生产地区</h6>
-                </el-col>
-                <el-col :span="15" :offset="3">
-                  <h6 class="contentTextClass">{{productionAreas}}</h6>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="6">
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="8">
-                  <h6 class="titleTextClass2">合作方式</h6>
-                </el-col>
-                <el-col :span="14" :offset="2">
-                  <h6 class="contentTextClass">{{getEnum('machiningTypes',slotData.details.machiningType)}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="8">
-                  <h6 class="titleTextClass2">是否需要打样</h6>
-                </el-col>
-                <el-col :span="14" :offset="2">
-                  <h6 class="contentTextClass">{{getYesNo(slotData.details.proofingNeeded)}}</h6>
-                </el-col>
-              </el-row>
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="8">
-                  <h6 class="titleTextClass2">是否需要发票</h6>
-                </el-col>
-                <el-col :span="14" :offset="2">
-                  <h6 class="contentTextClass">{{getYesNo(slotData.details.invoiceNeeded)}}</h6>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="8">
-              <el-row type="flex" class="rowClass2">
-                <el-col :span="6">
-                  <h6 class="titleTextClass2">附件</h6>
-                </el-col>
-                <el-col :span="16" :offset="2">
-                  <el-row type="flex" align="middle" v-for="item of slotData.attachments">
-                    <el-col :span="20">
-                      <h6 class="contentTextClass">{{getFileName(item.url)}}</h6>
-                    </el-col>
-                    <el-col :span="4">
-                      <el-link class="linkClass" :href="item.url" target="_blank" :underline="false">下载</el-link>
-                    </el-col>
-                  </el-row>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <el-row type="flex">
-            <el-col :span="1">
-              <h6 class="titleTextClass">备注</h6>
-            </el-col>
-            <el-col :span="22" :offset="1">
-              <h6 class="contentTextClass" style="margin-left: -4px">{{slotData.remarks}}</h6>
-            </el-col>
-          </el-row>
+      <el-col>
+        <el-row type="flex" class="rowClass">
+          <el-col :span="12">
+            <el-row type="flex">
+              <h6 class="titleTextClass2">标题</h6>
+              <h6 class="contentTextClass">{{slotData.details.productName}}</h6>
+            </el-row>
+          </el-col>
+          <el-col :span="12">
+            <el-row type="flex">
+              <h6 class="titleTextClass2">面料类别</h6>
+              <h6 class="contentTextClass">{{slotData.details.majorCategory ? slotData.details.majorCategory.name : ''}}</h6>
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row type="flex" class="rowClass">
+          <el-col :span="12">
+            <el-row type="flex">
+              <h6 class="titleTextClass2">订购数量</h6>
+              <h6 class="contentTextClass">{{slotData.details.expectedMachiningQuantity}}</h6>
+            </el-row>
+          </el-col>
+          <el-col :span="12">
+            <el-row type="flex">
+              <h6 class="titleTextClass2">产品品类</h6>
+              <h6 class="contentTextClass">{{slotData.details.category != null ? slotData.details.category.name : ''}}</h6>
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row type="flex" class="rowClass">
+          <el-col :span="12">
+            <el-row type="flex">
+              <h6 class="titleTextClass2">联系人</h6>
+              <h6 class="contentTextClass">{{slotData.details.contactPerson}}</h6>
+            </el-row>
+          </el-col>
+          <el-col :span="12">
+            <el-row type="flex">
+              <h6 class="titleTextClass2">联系方式</h6>
+              <h6 class="contentTextClass">{{slotData.details.contactPhone}}</h6>
+            </el-row>
+          </el-col>
+        </el-row>
       </el-col>
+    </el-row>
+    <el-row style="padding:10px;border:1px solid #c8c8c8;border-radius: 8px">
+      <el-row type="flex">
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">期望价格</h6>
+            <h6 class="contentTextClass">{{slotData.details.maxExpectedPrice}}</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">交货日期</h6>
+            <h6 class="contentTextClass">{{slotData.details.expectedDeliveryDate | timestampToTime}}</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">生产地区</h6>
+            <h6 class="contentTextClass">{{productionAreas}}</h6>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row type="flex">
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">合作方式</h6>
+            <h6 class="contentTextClass">{{getEnum('machiningTypes',slotData.details.machiningType)}}</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">是否需要打样</h6>
+            <h6 class="contentTextClass">{{getYesNo(slotData.details.proofingNeeded)}}</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">是否需要发票</h6>
+            <h6 class="contentTextClass">{{getYesNo(slotData.details.invoiceNeeded)}}</h6>
+          </el-row>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="rowClass2">
+        <h6 class="titleTextClass2">备注</h6>
+        <h6 class="contentTextClass">{{slotData.remarks}}</h6>
+      </el-row>
+      <el-row type="flex" class="rowClass2">
+        <el-col style="width: 105px">
+          <h6 class="titleTextClass2">附件</h6>
+        </el-col>
+        <el-col>
+          <el-row type="flex" align="middle" v-for="item of slotData.attachments">
+              <h6 class="contentTextClass" style="margin-right: 20px">{{getFileName(item.url)}}</h6>
+              <el-link class="linkClass" :href="item.url" :download="getFileName(item.url)" target="_blank" :underline="false">下载</el-link>
+          </el-row>
+        </el-col>
+      </el-row>
     </el-row>
   </div>
 </template>
@@ -215,6 +194,7 @@
     display: inline-block;
     width: 85px;
     font-weight: bold;
+    margin-right: 20px;
   }
 
   .requirement-basic .contentTextClass{

@@ -106,8 +106,8 @@ export default {
       icon: 'el-icon-office-building',
       children: [
         {
-          name: '认证信息',
-          url: '/account/authentication',
+          name: '认证中心',
+          url: '/account/Authentication',
           icon: 'iconNone'
         },
         {
@@ -136,16 +136,9 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '配置',
-          url: '/account/setting',
-          // icon: 'icon-puzzle',
-          children: [
-            {
-              name: '账务配置',
-              url: '/account/setting/payPlan',
-              icon: 'iconNone'
-            }
-          ]
+          name: '账务配置',
+          url: '/account/setting/payPlan',
+          icon: 'iconNone'
         }
       ]
     },
@@ -154,11 +147,6 @@ export default {
       url: '/miscs',
       icon:'el-icon-coin',
       children: [
-        {
-          name: '认证中心',
-          url: '/Authentication',
-          icon: 'iconNone',
-        },
         {
           name: '钱包',
           url: '/miscs/wallet',

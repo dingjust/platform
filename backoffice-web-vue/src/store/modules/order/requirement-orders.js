@@ -110,7 +110,8 @@ const state = {
   },
   categories: [],
   majorCategories: [],
-  regions: []
+  regions: [],
+  isShowDetailPrice: false
 };
 
 const mutations = {
@@ -137,7 +138,8 @@ const mutations = {
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
   categories: (state, categories) => state.categories = categories,
   majorCategories: (state, majorCategories) => state.majorCategories = majorCategories,
-  regions: (state, regions) => state.regions = regions
+  regions: (state, regions) => state.regions = regions,
+  isShowDetailPrice: (state, isShowDetailPrice) => state.isShowDetailPrice = isShowDetailPrice,
 };
 
 const actions = {
@@ -308,7 +310,8 @@ const getters = {
   formData: state => state.formData,
   categories: state => state.categories,
   majorCategories: state => state.majorCategories,
-  regions: state => state.regions
+  regions: state => state.regions,
+  isShowDetailPrice: state => state.isShowDetailPrice,
 };
 
 export default {

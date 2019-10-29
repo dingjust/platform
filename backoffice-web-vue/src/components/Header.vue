@@ -130,7 +130,7 @@
             this.uniquecodeFormVisible = !this.uniquecodeFormVisible;
             break;
           case '3':
-            this.$router.push("/Authentication");
+            this.$router.push("/account/Authentication");
             break;
           default:
             break;
