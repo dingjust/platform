@@ -9,26 +9,26 @@
       </div>
     </el-row>
     <el-row type="flex" class="rowClass2">
-      <el-col :span="12">
+      <el-col :span="8">
         <h6 class="titleTextClass">公司</h6>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <h6 class="contentTextClass">{{slotData.belongTo.name}}</h6>
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass2">
-      <el-col :span="12">
+      <el-col :span="8">
         <h6 class="titleTextClass">联系人</h6>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <h6 class="contentTextClass">{{slotData.belongTo.contactPerson}}</h6>
       </el-col>
     </el-row>
     <el-row type="flex" class="rowClass2">
-      <el-col :span="12">
+      <el-col :span="8">
         <h6 class="titleTextClass">联系方式</h6>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <h6 class="contentTextClass">{{slotData.belongTo.contactPhone}}</h6>
       </el-col>
     </el-row>

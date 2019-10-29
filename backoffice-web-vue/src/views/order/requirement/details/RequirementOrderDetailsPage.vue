@@ -45,15 +45,20 @@
       <!--<i class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>-->
     </el-row>
     <el-row type="flex" align="middle" style="margin-bottom: 20px">
-      <el-col :span="8">
+      <el-col :span="6">
         <span>需求编号：{{slotData.code}}</span>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <span>当前状态：<span :style="{color: statusColor}">{{getEnum('requirementOrderStatuses',slotData.status)}}</span></span>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-row type="flex" justify="end">
           <span>发布日期：{{slotData.creationtime | formatDate}}</span>
+        </el-row>
+      </el-col>
+      <el-col :span="6">
+        <el-row type="flex" justify="end">
+          <span>有效期限：{{getEnum('EffectiveDays',slotData.details.effectiveDays == null ? 'null': slotData.details.effectiveDays.toString())}}</span>
         </el-row>
       </el-col>
     </el-row>

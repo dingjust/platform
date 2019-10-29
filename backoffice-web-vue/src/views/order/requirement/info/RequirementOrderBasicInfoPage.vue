@@ -21,8 +21,8 @@
           </el-col>
           <el-col :span="12">
             <el-row type="flex">
-              <h6 class="titleTextClass2">产品品类</h6>
-              <h6 class="contentTextClass">{{slotData.details.category != null ? slotData.details.category.name : ''}}</h6>
+              <h6 class="titleTextClass2">面料类别</h6>
+              <h6 class="contentTextClass">{{slotData.details.majorCategory ? slotData.details.majorCategory.name : ''}}</h6>
             </el-row>
           </el-col>
         </el-row>
@@ -35,8 +35,8 @@
           </el-col>
           <el-col :span="12">
             <el-row type="flex">
-              <h6 class="titleTextClass2">交货日期</h6>
-              <h6 class="contentTextClass">{{slotData.details.expectedDeliveryDate | timestampToTime}}</h6>
+              <h6 class="titleTextClass2">产品品类</h6>
+              <h6 class="contentTextClass">{{slotData.details.category != null ? slotData.details.category.name : ''}}</h6>
             </el-row>
           </el-col>
         </el-row>
@@ -66,18 +66,24 @@
         </el-col>
         <el-col :span="8">
           <el-row type="flex" class="rowClass2">
+            <h6 class="titleTextClass2">交货日期</h6>
+            <h6 class="contentTextClass">{{slotData.details.expectedDeliveryDate | timestampToTime}}</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="8">
+          <el-row type="flex" class="rowClass2">
             <h6 class="titleTextClass2">生产地区</h6>
             <h6 class="contentTextClass">{{productionAreas}}</h6>
           </el-row>
         </el-col>
+      </el-row>
+      <el-row type="flex">
         <el-col :span="8">
           <el-row type="flex" class="rowClass2">
             <h6 class="titleTextClass2">合作方式</h6>
             <h6 class="contentTextClass">{{getEnum('machiningTypes',slotData.details.machiningType)}}</h6>
           </el-row>
         </el-col>
-      </el-row>
-      <el-row type="flex">
         <el-col :span="8">
           <el-row type="flex" class="rowClass2">
             <h6 class="titleTextClass2">是否需要打样</h6>
