@@ -1,8 +1,5 @@
-import 'package:b2b_commerce/src/business/search/purchase_order_search_result.dart';
-import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/contract/contract_suppliers.dart';
 import 'package:b2b_commerce/src/my/contract/contract_temp_page.dart';
-import 'package:b2b_commerce/src/my/contract/contract_seal_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
