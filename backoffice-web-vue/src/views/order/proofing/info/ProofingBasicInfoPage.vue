@@ -12,78 +12,56 @@
       </el-col>
       <el-col :span="20">
         <el-row type="flex" class="rowClass">
-          <el-col :span="6">
-            <el-row>
-              <el-col :span="12">
-                <h6 class="titleTextClass">生产产品</h6>
-              </el-col>
-              <el-col :span="12">
-                <h6 class="contentTextClass">{{slotData.product.name}}</h6>
-              </el-col>
+          <el-col :span="12">
+            <el-row type="flex" >
+              <h6 style="font-weight: bold">生产产品&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+              <h6 class="contentTextClass">{{slotData.product.name}}</h6>
             </el-row>
           </el-col>
-          <el-col :span="6">
-            <el-row>
-              <el-col :span="12">
-                <h6 class="titleTextClass">打样费</h6>
-              </el-col>
-              <el-col :span="12">
-                <h6 class="contentTextClass">{{slotData.unitPrice}}</h6>
-              </el-col>
-            </el-row>
-          </el-col>
-          <el-col :span="6">
-            <el-row>
-              <el-col :span="12">
-                <h6 class="titleTextClass">打样数量</h6>
-              </el-col>
-              <el-col :span="12">
-                <h6 class="contentTextClass">{{slotData.totalQuantity}}件</h6>
-              </el-col>
-            </el-row>
-          </el-col>
-          <el-col :span="6">
-            <el-row>
-              <el-col :span="12">
-                <h6 class="titleTextClass">打样总价</h6>
-              </el-col>
-              <el-col :span="12">
-                <h6 class="contentTextClass">{{slotData.totalPrice}}</h6>
-              </el-col>
+          <el-col :span="12">
+            <el-row type="flex" >
+              <h6 style="font-weight: bold">打样费&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+              <h6 class="contentTextClass" style="color:red">￥{{slotData.unitPrice ? slotData.unitPrice : '--'}}</h6>
             </el-row>
           </el-col>
         </el-row>
-        <el-row type="flex" class="rowClass">
-          <el-col :span="3">
-            <h6 class="titleTextClass">送货地址</h6>
-          </el-col>
-          <el-col :span="21">
-            <h6 class="contentTextClass">{{slotData.deliveryAddress == null ? '' : slotData.deliveryAddress.details + slotData.deliveryAddress.line1}}</h6>
-          </el-col>
-        </el-row>
-        <el-row type="flex" class="rowClass">
-          <el-col :span="16">
-            <el-input :readOnly="true" :value="consignment">
-              <el-button slot="append" style="background-color: #FFD60C;color: #0b0e0f">查看物流</el-button>
-            </el-input>
-          </el-col>
-        </el-row>
-        <el-row type="flex" class="rowClass2">
-          <el-table :data="tableData" width="100%"  border>
-            <el-table-column v-for="(item,index) in tableHead" :key="index" :label="item.label" :property="item.property" align="center">
-              <template slot-scope="scope">{{scope.row[scope.column.property]}}</template>
-            </el-table-column>
-          </el-table>
-        </el-row>
-        <el-row type="flex" class="rowClass">
-          <el-col :span="2">
-            <h6 class="titleTextClass">备注</h6>
-          </el-col>
-          <el-col :span="22">
-            <h6 class="contentTextClass">{{slotData.remarks}}</h6>
-          </el-col>
+      <el-row type="flex" class="rowClass">
+        <h6 style="font-weight: bold">送货地址&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+        <h6 class="contentTextClass">{{slotData.deliveryAddress == null ? '' : slotData.deliveryAddress.details + slotData.deliveryAddress.line1}}</h6>
+      </el-row>
+      <el-row type="flex" class="rowClass">
+        <el-col :span="16">
+          <el-input :readOnly="true" :value="consignment">
+            <el-button slot="append" style="background-color: #FFD60C;color: #0b0e0f">查看物流</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+    </el-col>
+   </el-row>
+    <el-row type="flex" class="rowClass">
+      <el-col :span="12">
+        <el-row type="flex">
+          <h6 style="font-weight: bold">打样数量&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+          <h6 class="contentTextClass" style="color:red">{{slotData.totalQuantity}}件</h6>
         </el-row>
       </el-col>
+      <el-col :span="12">
+        <el-row type="flex">
+          <h6 style="font-weight: bold">打样总价&nbsp;&nbsp;&nbsp;&nbsp; </h6>
+          <h6 class="contentTextClass" style="color:red">￥{{slotData.totalPrice ? slotData.totalPrice : '--'}}</h6>
+        </el-row>
+      </el-col>
+    </el-row>
+    <el-row type="flex" class="rowClass2">
+      <el-table :data="tableData" width="100%"  border>
+        <el-table-column v-for="(item,index) in tableHead" :key="index" :label="item.label" :property="item.property" align="center">
+          <template slot-scope="scope">{{scope.row[scope.column.property]}}</template>
+        </el-table-column>
+      </el-table>
+    </el-row>
+    <el-row type="flex" class="rowClass">
+      <h6 style="font-weight: bold">备注&nbsp;&nbsp;&nbsp;&nbsp; </h6>
+      <h6 class="contentTextClass">{{slotData.remarks}}</h6>
     </el-row>
   </div>
 </template>

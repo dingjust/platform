@@ -44,41 +44,67 @@
       </div>
       <!--<i class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>-->
     </el-row>
-    <el-row type="flex" justify="space-between" align="middle">
-      <h6>需求信息</h6>
-      <div>
-        <span style="color: #C0C0C0">需求编号：{{slotData.code}}</span>&nbsp;&nbsp;&nbsp;
-        <span style="color: #C0C0C0">当前状态：<span :style="{color: statusColor}">{{getEnum('requirementOrderStatuses',slotData.status)}}</span></span>&nbsp;&nbsp;&nbsp;
-        <span style="color: #C0C0C0">发布日期：{{slotData.creationtime | formatDate}}</span>
-      </div>
+    <el-row type="flex" align="middle" style="margin-bottom: 20px">
+      <el-col :span="8">
+        <span>需求编号：{{slotData.code}}</span>
+      </el-col>
+      <el-col :span="8">
+        <span>当前状态：<span :style="{color: statusColor}">{{getEnum('requirementOrderStatuses',slotData.status)}}</span></span>
+      </el-col>
+      <el-col :span="8">
+        <el-row type="flex" justify="end">
+          <span>发布日期：{{slotData.creationtime | formatDate}}</span>
+        </el-row>
+      </el-col>
     </el-row>
-    <el-divider></el-divider>
-    <requirement-order-basic-info-page :slotData="slotData" style="margin: 20px 0px"/>
-    <el-divider></el-divider>
-    <requirement-order-belong-to-info-page :slotData="slotData" style="margin: 20px 0px -20px 0px"/>
-    <el-divider ></el-divider>
-    <el-row type="flex" justify="space-between" align="middle" style="margin-top: 20px" v-if="!readOnly">
-      <h6>报价详情</h6>
-    </el-row>
-    <requirement-order-quote-list :page="quotePage" @onSearch="onSearchQuotes" v-if="!readOnly">
-      <template slot="operations" slot-scope="props">
-        <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">
-          确认工厂
-        </el-button>
-        <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">
-          拒绝工厂
-        </el-button>
-        <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">
-          查看详细报价
-        </el-button>
-      </template>
-    </requirement-order-quote-list>
+    <!--<el-divider></el-divider>-->
 
+    <div class="titleCardClass">
+      <el-row type="flex">
+        <el-col :span="18">
+          <el-row>
+            <div class="titleClass">
+              <h6>需求信息</h6>
+            </div>
+          </el-row>
+          <requirement-order-basic-info-page :slotData="slotData" style="padding:10px"/>
+        </el-col>
+        <el-divider direction="vertical"></el-divider>
+        <el-col :span="6">
+          <el-row>
+            <div class="titleClass">
+              <h6>发布需求者</h6>
+            </div>
+          </el-row>
+          <requirement-order-belong-to-info-page :slotData="slotData" style="margin: 20px 0px 10px 10px;"/>
+        </el-col>
+      </el-row>
+      <el-divider ></el-divider>
+      <el-row v-if="!readOnly">
+        <div class="titleClass">
+          <h6>报价详情</h6>
+        </div>
+      </el-row>
+      <requirement-order-quote-list :page="quotePage" @onSearch="onSearchQuotes" v-if="!readOnly" style="margin-left: 10px">
+        <!--<template slot="operations" slot-scope="props">-->
+          <!--<el-button type="text" style="padding: 5px 15px;background-color: #ffd60c;color: black;">-->
+            <!--确认工厂-->
+          <!--</el-button>-->
+          <!--<el-button type="text" style="padding: 5px 15px;background-color: red;color: white;">-->
+            <!--拒绝工厂-->
+          <!--</el-button>-->
+          <!--&lt;!&ndash;<el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">&ndash;&gt;-->
+        <!--&lt;!&ndash;查看详细报价&ndash;&gt;-->
+        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+        <!--</template>-->
+      </requirement-order-quote-list>
+    </div>
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :append-to-body="true">
       <quote-details-page :slotData="quoteData" :readOnly="true">
 
       </quote-details-page>
     </el-dialog>
+
   </div>
 </template>
 
@@ -217,5 +243,22 @@
 
   .requirement-detail .buttonTextClass{
     transform:scale(0.7);
+  }
+
+  .requirement-detail .titleClass{
+    padding: 10px 0px 1px 10px;
+    background-color: #F0F0F0;
+  }
+
+  .requirement-detail .titleCardClass{
+    border-style: solid;
+    border-width: 1px;
+    border-top: white;
+    border-color: #DCDCDC;
+  }
+
+  .requirement-detail .el-divider--vertical{
+    height: auto;
+    margin: 0px;
   }
 </style>
