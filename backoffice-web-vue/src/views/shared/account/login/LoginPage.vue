@@ -56,14 +56,16 @@
         password: "",
         NC_RESULT: {
           csessionid: '',
-          sig: ''
+          sig: '',
+          value:'',
+          token:''
         }
       };
     },
     computed:{
       captchaPass:function() {
         //人机验证通过 TODO:后端服务调用阿里云验证签名
-        return this.NC_RESULT.csessionid!=''&&this.NC_RESULT.sig!=''&&this.username!=''&&this.password!='';
+        return this.NC_RESULT.csessionid!=''&&this.NC_RESULT.sig!=''&&this.username!=''&&this.password!=''&&this.NC_RESULT.value=='pass';
       }
     },
     created() {},
@@ -127,6 +129,8 @@
           console.log(JSON.stringify(data));
           this.NC_RESULT.csessionid = data.csessionid;
           this.NC_RESULT.sig = data.sig;
+          this.NC_RESULT.token=data.token;
+          this.NC_RESULT.value=data.value;
       }
     }
   };
