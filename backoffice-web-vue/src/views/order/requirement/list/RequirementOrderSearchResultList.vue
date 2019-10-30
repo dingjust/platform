@@ -1,26 +1,42 @@
 <template>
   <div>
-    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange"
+    <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" :row-style="{fontSize:'12px'}"
               v-if="isHeightComputed" :height="autoHeight">
-      <el-table-column label="订单编号" prop="code" width="250">
+      <el-table-column label="需求订单号" prop="code">
+      </el-table-column>
+      <el-table-column label="标题" prop="details.productName" width="200" header-align="center">
+      </el-table-column>
+      <el-table-column label="产品" width="260" header-align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.code}}</span>
+          <el-row type="flex" align="middle" :gutter="10">
+            <el-col :span="8">
+              <img width="70px" height="70px"
+                   :src="scope.row.details.pictures != null && scope.row.details.pictures.length > 0 ?
+                   scope.row.details.pictures[0].url : 'static/img/nopicture.png'" />
+            </el-col>
+            <el-col :span="16">
+              <h6 style="font-size: 12px">品类：{{scope.row.details.category.parent.name}}-{{scope.row.details.category.name}}</h6>
+              <h6 style="font-size: 12px">货号：{{scope.row.details.productSkuID}}</h6>
+              <h6 style="font-size: 12px">数量：{{scope.row.details.expectedMachiningQuantity}}</h6>
+            </el-col>
+          </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="订单状态" prop="status" :column-key="'status'"
-                       :filters="statuses">
-        <template slot-scope="scope">
-          <el-tag disable-transitions>{{getEnum('requirementOrderStatuses', scope.row.status)}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建用户" prop="user">
+      <el-table-column label="发布人" prop="user">
         <template slot-scope="scope">
           <span>{{scope.row.user.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" prop="createdTs">
+      <el-table-column label="发布日期" prop="createdTs">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="订单状态" prop="status" width="150">
+        <template slot-scope="scope">
+          <h6 v-if="scope.row.status == 'PENDING_QUOTE'" style="color: red">{{getEnum('requirementOrderStatuses', scope.row.status)}}（已报价{{scope.row.totalQuotesCount}}）</h6>
+          <h6 v-if="scope.row.status == 'COMPLETED'" style="color: #a9a9a9">{{getEnum('requirementOrderStatuses', scope.row.status)}}</h6>
+          <h6 v-if="scope.row.status == 'CANCELLED'" style="color: #a9a9a9">{{getEnum('requirementOrderStatuses', scope.row.status)}}</h6>
         </template>
       </el-table-column>
       <el-table-column label="操作">

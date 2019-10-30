@@ -421,10 +421,10 @@
     },
     created () {
       if (this.categories <= 0) {
-        this.getCategories();
+        this.getMinorCategories();
       }
       if (this.majorCategories <= 0) {
-        this.getMinorCategories();
+        this.getCategories();
       }
       if (this.regions <= 0) {
         this.getRegions();

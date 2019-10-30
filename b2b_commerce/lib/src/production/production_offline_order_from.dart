@@ -199,19 +199,16 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           _buildAddressPick(context),
           Divider(
             height: 0,
-            thickness: 10,
             color: Colors.grey[200],
           ),
           _buildFinance(context),
           Divider(
             height: 0,
-            thickness: 10,
             color: Colors.grey[200],
           ),
           _buildOperator(context),
           Divider(
             height: 0,
-            thickness: 10,
             color: Colors.grey[200],
           ),
           _buildRemarks(context),

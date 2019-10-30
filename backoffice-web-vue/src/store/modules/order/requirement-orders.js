@@ -68,14 +68,12 @@ const state = {
     cancelledDate: ''
   },
   queryFormData: {
-    code: '',
-    skuID: '',
+    keyword: '',
+    username: '',
     statuses: [],
-    expectedDeliveryDateFrom: null,
-    expectedDeliveryDateTo: null,
+    categories: [],
     createdDateFrom: null,
     createdDateTo: null
-
   },
   quoteQueryFormData: {
     requirementOrderRef: ''
@@ -269,6 +267,16 @@ const actions = {
       attachments: [],
       labels: [],
       cancelledDate: ''
+    });
+  },
+  clearQueryFormData ({dispatch, commit, state}){
+    commit('queryFormData', {
+      keyword: '',
+      username: '',
+      statuses: [],
+      categories: [],
+      createdDateFrom: null,
+      createdDateTo: null
     });
   },
   clearFactoryQueryFormData ({dispatch, commit, state}) {
