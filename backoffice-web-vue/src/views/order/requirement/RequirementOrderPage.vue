@@ -1,18 +1,36 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn content requirement">
     <el-card>
-      <requirement-order-toolbar @onNew="onNew"
+      <el-row  type="flex" justify="space-between" align="middle">
+        <div class="factory-info-title rowClass">
+          <h6 class="factory-info-title_text">需求订单列表</h6>
+        </div>
+        <el-tag style="padding: 14px 15px;margin-bottom:14px;line-height: 0px;background-color: #ffd60c;color: black;cursor: pointer"
+          @click="onNew">
+          <span style="font-size: 14px">+ </span>发布需求
+        </el-tag>
+      </el-row>
+
+      <requirement-order-toolbar
                                  @onSimpleNew="onSimpleNew"
                                  @onSearch="onSearch"
                                  @onAdvancedSearch="onAdvancedSearch"/>
-      <requirement-order-search-result-list :page="page"
-                                            @onSearch="onSearch"
-                                            @onAdvancedSearch="onAdvancedSearch">
-        <template slot="operations" slot-scope="props">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
-          <el-button type="text" v-if="isBrand()&&props.item.status=='PENDING_QUOTE'" icon="el-icon-delete" @click="onCancelled(props.item)">关闭</el-button>
-        </template>
-      </requirement-order-search-result-list>
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+          <requirement-order-search-result-list :page="page"
+                                                @onSearch="onSearch"
+                                                @onAdvancedSearch="onAdvancedSearch">
+            <template slot="operations" slot-scope="props">
+              <el-button-group>
+                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
+                <el-button v-if="props.item.status == 'PENDING_QUOTE'"  type="text" style="cursor: unset;color: black" disabled>|</el-button>
+                <el-button v-if="props.item.status == 'PENDING_QUOTE'" type="text" style="color: black" @click="onCancelled(props.item)">关闭</el-button>
+              </el-button-group>
+            </template>
+          </requirement-order-search-result-list>
+        </el-tab-pane>
+      </el-tabs>
+
     </el-card>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
@@ -54,6 +72,7 @@
         queryFormData: 'queryFormData',
         quoteQueryFormData: 'quoteQueryFormData',
         formData: 'formData',
+        categories: 'categories'
       })
     },
     methods: {
@@ -65,7 +84,8 @@
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
-        isShowDetailPrice: 'isShowDetailPrice'
+        isShowDetailPrice: 'isShowDetailPrice',
+        setCategories: 'categories'
       }),
       onSearch (page, size) {
         this.setIsAdvancedSearch(false);
@@ -74,6 +94,10 @@
 
         const url = this.apis().getRequirementOrders();
         this.search({url, keyword, statuses, page, size});
+
+        if (this.categories <= 0) {
+          this.getMinorCategories();
+        }
       },
       onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
@@ -81,6 +105,10 @@
         const query = this.queryFormData;
         const url = this.apis().getRequirementOrders();
         this.searchAdvanced({url, query, page, size});
+
+        if (this.categories <= 0) {
+          this.getMinorCategories();
+        }
       },
       async onDetails (item) {
         const url = this.apis().getRequirementOrder(item.code);
@@ -95,14 +123,20 @@
         this.onSearchQuotes(0, 8);
       },
       async onCancelled (item) {
-        const url = this.apis().cancelledRequirementOrder(item.code);
-        const result = await this.$http.delete(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        this.$message.success('需求关闭成功，订单编号： ' + result);
-        this.onSearch();
+        this.$confirm('是否确认关闭该订单', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          const url = this.apis().cancelledRequirementOrder(item.code);
+          const result = await this.$http.delete(url);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.$message.success('需求关闭成功，订单编号： ' + result);
+          this.onAdvancedSearch();
+        });
       },
       onNew (formData) {
         this.formDialogVisible = !this.formDialogVisible;
@@ -126,7 +160,7 @@
             text += uid;
             text += ',';
           }
-          text = text.slice(0,text.length-1);
+          text = text.slice(0, text.length - 1);
         }
         console.log(text);
         params['factories'] = text;
@@ -139,6 +173,25 @@
         this.$message.success('需求订单创建成功，订单编号： ' + result);
         this.formDialogVisible = !this.formDialogVisible;
         this.onSearch();
+      },
+      async getMinorCategories () {
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.setCategories(result);
+      },
+      handleTabClick (tab) {
+        if (tab.name !== 'ALL') {
+          this.queryFormData.statuses = tab.name;
+        } else {
+          this.queryFormData.statuses = [];
+        }
+
+        this.onAdvancedSearch();
       }
     },
     data () {
@@ -147,37 +200,73 @@
         isAdvancedSearch: this.$store.state.RequirementOrdersModule.isAdvancedSearch,
         detailsDialogVisible: false,
         formDialogVisible: false,
+        statuses: [
+          {
+            code: 'ALL',
+            name: '全部'
+          },
+          {
+            code: 'PENDING_QUOTE',
+            name: '报价中'
+          },
+          {
+            code: 'COMPLETED',
+            name: '已完成'
+          },
+          {
+            code: 'CANCELLED',
+            name: '已关闭'
+          }
+        ],
+        activeName: 'ALL'
       };
     },
-    watch:{
-      'formDialogVisible':function (n, o) {
-        if(!n){
+    watch: {
+      'formDialogVisible': function (n, o) {
+        if (!n) {
           this.clearFormData();
           // this.clearFactoryQueryFormData();
         }
       },
       'detailsDialogVisible': function (n, o) {
-        if(!n){
+        if (!n) {
           this.isShowDetailPrice(false);
         }
       }
     },
     created () {
-      this.onSearch();
+      this.onAdvancedSearch();
     }
   };
 </script>
 
 <style>
-  .requirement-form-dialog .el-dialog {
+  .requirement .factory-info-title {
+    border-left: 2px solid #FFD60C;
+    padding-left: 10px;
+    height: 14px;
+  }
+
+  .requirement .factory-info-title_text {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.65;
+  }
+
+  .requirement .rowClass {
+    margin-bottom: 20px;
+  }
+
+  .requirement .requirement-form-dialog .el-dialog {
     border-radius: 10px !important;
   }
 
-  .requirement-form-dialog-header {
+  .requirement .requirement-form-dialog-header {
     padding: 0px !important;
   }
 
-  .requirement-form-dialog .el-dialog__header {
+  .requirement .requirement-form-dialog .el-dialog__header {
     padding: 0px !important;
   }
 </style>
