@@ -11,10 +11,10 @@
                 <!--</div>-->
               <!--</el-col>-->
               <!--<el-col :span="4">-->
-                <!--<el-button-group>-->
-                  <!--&lt;!&ndash;<el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>&ndash;&gt;-->
+                <el-button-group>
+                  <el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>
                   <!--<el-button @click="onBack">返回</el-button>-->
-                <!--</el-button-group>-->
+                </el-button-group>
               <!--</el-col>-->
             <!--</el-row>-->
             <el-row class="contract_custom-row">
@@ -35,7 +35,9 @@
             <el-row class="contract_custom-row text-align-left"><span>自定义条款</span></el-row>
             <el-row>
               <div class="contract_custom-fixed_terms">
-                <Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />
+                <!--<Viewer :value="slotData.customizeContent" class="contract_custom-viewer" />-->
+                <Editor v-model="slotData.customizeContent" :html="editorHtml" :options="editorOptions"
+                        :visible="editorVisible"  class="contract_custom-editor"/>
               </div>
             </el-row>
           </div>
@@ -82,25 +84,30 @@
         this.fn.closeSlider(true);
       },
       async onSave(){
-        const url = this.apis().saveTemplate();
-        const tempData = {
-          title: this.tempName,
-          content: this.editorText,
-          customizeContent: this.viewerText,
-          type: this.tempType,
-          available: true,
-          originalTmplCode: this.tempCode,
-          remark: this.remarks
-        };
-        let formData = Object.assign({}, tempData);
-        const result = await http.post(url, formData);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if(this.slotData.title == null || this.slotData.title == ''){
+          this.$message.error('请输入模板名字');
           return;
         }
-        this.$message.success('保存成功');
+        const url = this.apis().saveTemplate();
+        const tempData = {
+          title: this.slotData.title,
+          content: this.slotData.content,
+          customizeContent: this.slotData.customizeContent,
+          type: this.slotData.type,
+          available: true,
+          code: this.slotData.code,
+          remark: this.slotData.remarks,
+          id : this.slotData.id,
+        };
+        console.log(tempData);
+        let formData = Object.assign({}, tempData);
+        const result = await http.post(url, formData);
+        // if (result['errors']) {
+        //   this.$message.error(result['errors'][0].message);
+        //   return;
+        // }
+        this.$message.success(result.msg);
 
-        this.$emit("onSearch",0);
         this.fn.closeSlider(true);
       },
       async getTemplateListPt(){
