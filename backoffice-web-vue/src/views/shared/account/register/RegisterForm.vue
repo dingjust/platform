@@ -236,6 +236,10 @@
     border: none;
   }
 
+  .register-btn.el-button.is-disabled{
+    background-color: #f1f1f1 !important;
+  }
+
   .icon-success {
     color: #7AED8F;
     font-size: 18px;
