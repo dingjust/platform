@@ -24,7 +24,7 @@ function setAuthorization() {
 }
 
 ///错误处理
-function errorHandler(error,loading) {
+function errorHandler(resolve, error, loading) {
   loading.close();
   //登录token失效
   if (error.response.status == 401) {
@@ -32,7 +32,11 @@ function errorHandler(error,loading) {
     Message.error('登录过期，请重新登陆');
     router.push("/login");
   }
-  return resolve(error.response);
+  if (error.response && error.response.data) {
+    return resolve(error.response.data);
+  } else {
+    return resolve(error.response);
+  }
 }
 
 axios.interceptors.request.use(
@@ -64,7 +68,7 @@ let http = {
           loading.close();
           return resolve(response.data)
         })
-        .catch((error) => errorHandler(error,loading));
+        .catch((error) => errorHandler(resolve, error, loading));
     });
   },
   /** post 请求
@@ -82,7 +86,7 @@ let http = {
           loading.close();
           return resolve(response.data);
         })
-        .catch((error) => errorHandler(error,loading));
+        .catch((error) => errorHandler(resolve, error, loading));
     });
   },
   /** put 请求
@@ -98,7 +102,7 @@ let http = {
       }).then((response) => {
         loading.close();
         return resolve(response.data)
-      }).catch((error) => errorHandler(error,loading));
+      }).catch((error) => errorHandler(resolve, error, loading));
     });
   },
   /** delete 请求
@@ -115,7 +119,7 @@ let http = {
           loading.close();
           return resolve(response.data);
         })
-        .catch((error) => errorHandler(error,loading));
+        .catch((error) => errorHandler(resolve, error, loading));
     });
   },
   /** upload
@@ -134,7 +138,7 @@ let http = {
           loading.close();
           return resolve(response.data);
         })
-        .catch((error) => errorHandler(error,loading));
+        .catch((error) => errorHandler(resolve, error, loading));
     });
   },
 };

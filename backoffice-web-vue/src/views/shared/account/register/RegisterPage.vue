@@ -13,14 +13,14 @@
                 <h2 class="register-title">钉单</h2>
               </el-row>
               <el-tabs v-model="form.type" @tab-click="handleClick" :stretch="true" class="register-form-tabs">
-                <el-tab-pane label="品牌注册" name="brand">
+                <el-tab-pane label="品牌注册" name="BRAND">
                   <el-row type="flex" justify="center">
                     <span
                       class="register-info">品牌商：服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。</span>
                   </el-row>
                   <register-form :slot-data="form" />
                 </el-tab-pane>
-                <el-tab-pane label="工厂注册" name="factory">
+                <el-tab-pane label="工厂注册" name="FACTORY">
                   <el-row type="flex" justify="center">
                     <span class="register-info">工 厂：服装生产工厂，需要在钉单APP上寻找各类服装加工订单，管理生产进度的企业选择“工厂”注册。</span>
                   </el-row>
@@ -42,7 +42,7 @@
     data() {
       return {
         form: {
-          type: "brand",
+          type: "BRAND",
           phone: "",
           name: "",
           code: "",

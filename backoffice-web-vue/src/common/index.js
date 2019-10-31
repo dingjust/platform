@@ -1,4 +1,20 @@
 const COMMON_APIS = {
+  //注册
+  fastRegister(type) {
+    return '/b2b/companies/register/fast/' + type;
+  },
+  //是否已注册
+  checkRegistered(phone) {
+    return '/b2b/companies/register/' + phone;
+  },
+  //发送短信验证码
+  sendCaptcha(phone) {
+    return '/b2b/sms/captcha/' + phone;
+  },
+  //校验短信验证码
+  validateCaptcha() {
+    return '/b2b/sms/validate';
+  },
   getAmapTips(key, keyWord, city) {
     return '/amap/v3/assistant/inputtips?key=' + key + '&keywords=' + keyWord + '&city=' + city;
   },
@@ -250,7 +266,7 @@ const COMMON_APIS = {
     return '/b2b/products/apparel/create';
   },
   updateOfApparelProduct(code) {
-    return '/b2b/products/apparel/' + code ;
+    return '/b2b/products/apparel/' + code;
   },
   updateBasicOfApparelProduct(code) {
     return '/b2b/products/apparel/' + code + '/basic';
@@ -303,7 +319,7 @@ const COMMON_APIS = {
   updateProgressOfPurchaseOrder(code, id) {
     return '/b2b/orders/purchase/' + code + '/progress/' + id;
   },
-  updateProgressForBatch(code){
+  updateProgressForBatch(code) {
     return '/b2b/orders/purchase/' + code + '/progresses';
   },
   //生成唯一码
@@ -437,35 +453,35 @@ const COMMON_APIS = {
   deleteReceiptOrder(id) {
     return '/b2b/orders/purchase/deleteReceiptOrder/' + id;
   },
-  getCooperators () {
+  getCooperators() {
     return '/b2b/cooperator';
   },
-  getCooperator (id) {
+  getCooperator(id) {
     return '/b2b/cooperator/' + id;
   },
-  createCooperator () {
+  createCooperator() {
     return '/b2b/cooperator/create';
   },
-  updateCooperator () {
+  updateCooperator() {
     return '/b2b/cooperator/update';
   },
-  deleteCooperator (id) {
+  deleteCooperator(id) {
     return '/b2b/cooperator/delete/' + id;
   },
-  getPayPlans(){
+  getPayPlans() {
     return '/b2b/payPlan';
   },
-  getPayPlan(id){
+  getPayPlan(id) {
     return '/b2b/payPlan/' + id;
   },
-  createPayPlan(){
+  createPayPlan() {
     return '/b2b/payPlan/create';
   },
-  updatePayPlan(id){
-    return '/b2b/payPlan/update/'+id;
+  updatePayPlan(id) {
+    return '/b2b/payPlan/update/' + id;
   },
-  deletePayPlan(id){
-    return 'b2b/payPlan/delete/'+id;
+  deletePayPlan(id) {
+    return 'b2b/payPlan/delete/' + id;
   }
 };
 
@@ -566,14 +582,14 @@ let TENANT_APIS = {
   getAuthenticationEnterprise() {
     return '/b2b/cert/enterprise/cert/info';
   },
-  refuseContract(code){
-    return '/b2b/user/agreement/reject/sign/'+code;
+  refuseContract(code) {
+    return '/b2b/user/agreement/reject/sign/' + code;
   },
-  revokeContract(code){
-    return '/b2b/user/agreement/revoke/'+code;
+  revokeContract(code) {
+    return '/b2b/user/agreement/revoke/' + code;
   },
-  previewPdf(code){
-    return '/b2b/user/agreement/preview/pdf/'+code;
+  previewPdf(code) {
+    return '/b2b/user/agreement/preview/pdf/' + code;
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
@@ -690,14 +706,14 @@ let NONE_TENANT_APIS = {
   getContractDetail(code) {
     return '/b2b/user/agreement/get/' + code;
   },
-  refuseContract(code){
-    return '/b2b/user/agreement/reject/sign/'+code;
+  refuseContract(code) {
+    return '/b2b/user/agreement/reject/sign/' + code;
   },
-  revokeContract(code){
-    return '/b2b/user/agreement/revoke/'+code;
+  revokeContract(code) {
+    return '/b2b/user/agreement/revoke/' + code;
   },
-  previewPdf(code){
-    return '/b2b/user/agreement/preview/pdf/'+code;
+  previewPdf(code) {
+    return '/b2b/user/agreement/preview/pdf/' + code;
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
