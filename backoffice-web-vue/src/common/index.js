@@ -482,6 +482,12 @@ const COMMON_APIS = {
   },
   deletePayPlan(id) {
     return 'b2b/payPlan/delete/' + id;
+  },
+  deletePayPlan(id) {
+    return 'b2b/payPlan/delete/' + id;
+  },
+  updateUserInfo(uid) {
+    return 'b2b/b2bCustomers/'+uid+'/updateUserInfo';
   }
 };
 

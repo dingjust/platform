@@ -195,18 +195,19 @@
         }
       },
       async onSubmit() {
-        const captchaStatus = await this.validateCaptcha();
-        if (!captchaStatus) {
-          this.$message.error('验证码错误');
-          return;
-        }
+        // const captchaStatus = await this.validateCaptcha();
+        // if (!captchaStatus) {
+        //   this.$message.error('验证码错误');
+        //   return;
+        // }
 
         let form = {
           mobileNumber: this.slotData.phone,
           password: this.slotData.password,
           name: this.slotData.companyName,
           contactPerson: this.slotData.name,
-          contactPhone: this.slotData.phone
+          contactPhone: this.slotData.phone,
+          captchaCode:this.slotData.code
         }
         const url = this.apis().fastRegister(this.slotData.type);
         const result = await this.$http.post(url, form);

@@ -94,4 +94,9 @@
     background-color: rgba(254,176,38,0.15);
 }
 
+.sidebar{
+  overflow: auto;
+  /* height: 100%; */
+}
+
 </style>

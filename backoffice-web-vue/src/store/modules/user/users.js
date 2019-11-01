@@ -94,6 +94,27 @@ const actions = {
 
     router.push('/');
   },
+  async getProfile({
+    dispatch,
+    commit,
+    state
+  }, {
+    uid,
+  }) {
+    console.log(JSON.stringify(state.currentUser));
+    // 获取当前登录用户信息
+    const userInfo = await http.get('/b2b/users/' + uid + '/profile');
+    axios.defaults.headers.common['company'] = userInfo['companyCode'];
+    commit('currentUser', userInfo);
+
+    //获取认证信息
+    // const url = this.apis().getAuthenticationState();
+    const result = await http.get('/b2b/cert/state');
+    if (!result['errors']) {
+      commit('authenticationInfo', result.data);
+    }
+    location.reload();
+  },
   async refreshToken({
     dispatch,
     commit,
@@ -119,7 +140,6 @@ const getters = {
     if (!state.currentUser) {
       return JSON.parse(sessionStorage.getItem('currentUser'));
     }
-
     return state.currentUser;
   },
   token() {

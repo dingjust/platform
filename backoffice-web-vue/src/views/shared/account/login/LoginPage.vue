@@ -38,7 +38,7 @@
             </b-input-group>
             <el-row class="login-btn-row" type="flex" justify="space-between">
               <el-button type="text" @click="onRegister" class="login-btn_text">注册</el-button>
-              <el-button type="text" class="login-btn_text">忘记密码</el-button>
+              <!-- <el-button type="text" class="login-btn_text">忘记密码</el-button> -->
             </el-row>
             <div id="nc_captcha" class="nc-container no-captcha-container"></div>
             <el-row type="flex" justify="center">
