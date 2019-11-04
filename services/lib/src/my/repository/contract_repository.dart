@@ -232,4 +232,95 @@ class ContractRepository {
     }
   }
 
+  //获取合同PDF文件
+  Future<String> getContractPdf(String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.downContract(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    print(response.data);
+    if (response != null && response.statusCode == 200) {
+      return response.data['data'].toString();
+    } else {
+      return null;
+    }
+  }
+
+  //APP下载PDF
+  Future downContractPdf(String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.downContractInApp(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    print(response.data);
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
+
+  //获取合同PDF的model
+  Future<SearchResultModel> getContractPdfMedia(String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.getContractPdfMedia(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return SearchResultModel.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  //撤销合同
+  Future<SearchResultModel> revokeContract(String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.revokeContract(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return SearchResultModel.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  //拒签合同
+  Future<SearchResultModel> rejectContract(String code) async {
+    Response response;
+    try {
+      response = await http$.get(UserApis.rejectContract(code));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return SearchResultModel.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  Future<CertificationContractCount> getContractCount() async {
+    Response response;
+    try {
+      response = await http$.post(UserApis.getContractCount,data: {});
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return CertificationContractCount.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
 }

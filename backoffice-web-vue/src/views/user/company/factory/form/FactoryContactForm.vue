@@ -6,124 +6,86 @@
           </div>
         </el-row>
         <div style="margin: 20px 20px 40px 40px">
-          <el-row type="flex" align="middle" :gutter="10">
+          <el-row type="flex" align="middle" :gutter="20">
             <el-col :span="8">
-              <el-form-item style="width: 100%">
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">联系人<span style="color: red">*</span></h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-input placeholder="联系人" v-model="formData.contactPerson" size="mini"></el-input>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="contactPerson">
+                <template slot="label">
+                  <h6 class="titleTextClass">联系人<span style="color: red">*</span></h6>
+                </template>
+                <el-input placeholder="联系人" v-model="formData.contactPerson" size="mini"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">手机号码<span style="color: red">*</span></h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-input placeholder="手机号码" v-model="formData.contactPhone" size="mini"></el-input>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="contactPhone">
+                <template slot="label">
+                  <h6 class="titleTextClass">手机号码<span style="color: red">*</span></h6>
+                </template>
+                <el-input placeholder="手机号码" v-model="formData.contactPhone" size="mini"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">座机号码</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-input placeholder="座机号码" v-model="formData.phone" size="mini"></el-input>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="phone">
+                <template slot="label">
+                  <h6 class="titleTextClass">座机号码</h6>
+                </template>
+                <el-input placeholder="座机号码" v-model="formData.phone" size="mini"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row type="flex" align="middle"  :gutter="10">
+          <el-row type="flex" align="middle"  :gutter="20">
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">QQ号</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-input placeholder="请填写QQ号" v-model="formData.qq" size="mini"></el-input>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="qq">
+                <template slot="label">
+                  <h6 class="titleTextClass">QQ号</h6>
+                </template>
+                <el-input placeholder="请填写QQ号" v-model="formData.qq" size="mini"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">微信号</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-input placeholder="请填写微信号码" v-model="formData.wechat" size="mini"></el-input>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="wechat">
+                <template slot="label">
+                  <h6 class="titleTextClass">微信号</h6>
+                </template>
+                <el-input placeholder="请填写微信号码" v-model="formData.wechat" size="mini"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row  type="flex" align="middle">
-              <el-row type="flex">
-                <el-col :span="2">
-                  <h6 class="titleTextClass">地址</h6>
-                </el-col>
-                <el-col :span="22">
-                  <el-form-item>
-                    <el-row type="flex" align="middle">
-                      <el-col :span="5" style="margin-left: 7px;margin-bottom: 17px">
-                        <el-select class="w-100" v-model="formData.contactAddress.region" size="mini" value-key="isocode"
-                                   @change="onRegionChanged">
-                          <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
-                          </el-option>
-                        </el-select>
-                      </el-col>
-                      <el-col :span="5" style="margin-left: 7px">
-                        <el-form-item>
-                          <el-select class="w-100" size="mini" v-model="formData.contactAddress.city"
-                                     @change="onCityChanged" value-key="code">
-                            <el-option v-for="item in cities" :key="item.code" :label="item.name" :value="item">
-                            </el-option>
-                          </el-select>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="5" style="margin-left: 7px">
-                        <el-form-item>
-                          <el-select class="w-100" size="mini" v-model="formData.contactAddress.cityDistrict"
-                                     value-key="code" @change="onCityDistrictChanged">
-                            <el-option v-for="item in cityDistricts" :key="item.code" :label="item.name"
-                                       :value="item">
-                            </el-option>
-                          </el-select>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="6" style="margin-left: 7px">
-                        <el-form-item>
-                          <el-row type="flex" align="middle">
-                            <el-input placeholder="详细地址" v-model="formData.contactAddress.line1" @change="onCityDistrictChanged" size="mini">
-                            </el-input>
-                          </el-row>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="3" style="margin-left: 7px">
-                        <el-form-item>
-                          <el-row type="flex" align="middle">
-                            <el-button size="mini" @click="addressSelectVisible = !addressSelectVisible">选择</el-button>
-                          </el-row>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-          </el-row>
+          <el-form-item prop="contactAddress">
+            <template slot="label">
+              <h6 class="titleTextClass">地址<span style="color: red">*</span></h6>
+            </template>
+            <el-row  type="flex" align="middle">
+              <el-form-item prop="contactAddress.region">
+                <el-select class="w-100" v-model="formData.contactAddress.region" size="mini" value-key="isocode"
+                           @change="onRegionChanged">
+                  <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="contactAddress.city">
+                <el-select class="w-100" size="mini" v-model="formData.contactAddress.city"
+                           @change="onCityChanged" value-key="code">
+                  <el-option v-for="item in cities" :key="item.code" :label="item.name" :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="contactAddress.cityDistrict">
+                <el-select class="w-100" size="mini" v-model="formData.contactAddress.cityDistrict"
+                           value-key="code" @change="onCityDistrictChanged">
+                  <el-option v-for="item in cityDistricts" :key="item.code" :label="item.name"
+                             :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="contactAddress.line1">
+                <el-input placeholder="详细地址" v-model="formData.contactAddress.line1" @change="onCityDistrictChanged" size="mini">
+                </el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button size="mini" @click="addressSelectVisible = !addressSelectVisible">选择</el-button>
+              </el-form-item>
+            </el-row>
+          </el-form-item>
         </div>
       <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
         <address-select @onSelect="onAddressSelect" />
@@ -180,6 +142,8 @@
       },
       onRegionChanged (current) {
         this.formData.contactAddress.id = null;
+        this.formData.contactAddress.city = null;
+        this.formData.contactAddress.cityDistrict = null;
         this.getCities(current);
         this.cityDistricts = [];
         this.setIsCitiesChanged(true);

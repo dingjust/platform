@@ -31,7 +31,7 @@
             </el-select>
           </el-row>
         </el-col>
-        <el-col :span="4" v-if="!item.isLast || item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'">
+        <el-col :span="4" v-if="!item.isLast || item.isLast">
           <el-row type="flex" align="middle" justify="start">
             <el-col :span="6">
               <h6 class="info-input-prepend2" style="width:50px;">后时长</h6>
@@ -44,7 +44,7 @@
           </el-row>
         </el-col>
         <h6 v-if="item.isLast && formData.payPlanType == 'MONTHLY_SETTLEMENT'" class="info-input-prepend2"
-          style="width: 200px">后, 次月月底支付剩余全部款项</h6>
+          style="width: 200px">后, 次月{{item.triggerDays}}号支付剩余全部款项</h6>
         <el-col v-if="!item.isLast || item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" :span="4">
           <el-row type="flex" align="middle" justify="start">
             <el-col :span="6">

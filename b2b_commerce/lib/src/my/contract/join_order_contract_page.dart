@@ -1,8 +1,6 @@
 import 'package:b2b_commerce/src/business/search/purchase_order_search_result.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/contract/float_select_page.dart';
-import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
-import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -123,7 +121,7 @@ class _JoinOrderContractPageState extends State<JoinOrderContractPage>{
       if (value != null && value.code == 1) {
         result = true;
       }
-      MyContractBLoC().refreshData('ALL');
+      MyContractBLoC().refreshData('ALL','');
       showDialog(
           context: context,
           barrierDismissible: false,

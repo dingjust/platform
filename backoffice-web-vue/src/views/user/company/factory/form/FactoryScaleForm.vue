@@ -6,110 +6,88 @@
           </div>
         </el-row>
         <div style="margin: 20px 20px 40px 40px">
-          <el-row type="flex" align="middle" :gutter="10">
+          <el-row type="flex" align="middle" :gutter="20">
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">工厂人数</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-select v-model="formData.populationScale" placeholder="请选择" size="mini">
-                      <el-option
-                        v-for="item in populationScales"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code">
-                      </el-option>
-                    </el-select>
-                  </el-col>
+              <el-form-item prop="populationScale">
+                <template slot="label">
+                  <h6 class="titleTextClass">工厂人数</h6>
+                </template>
+                <el-select v-model="formData.populationScale" placeholder="请选择" size="mini" style="width: 100%;">
+                  <el-option
+                    v-for="item in populationScales"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item prop="factoryBuildingsQuantity">
+                <template slot="label">
+                  <h6 class="titleTextClass">厂房数量</h6>
+                </template>
+                <el-row type="flex">
+                  <el-input placeholder="请填写厂房数量"
+                            v-model.number="formData.factoryBuildingsQuantity"
+                            size="mini">
+                  </el-input>
+                  <span>m<sup>2</sup></span>
                 </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">厂房数量</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-input placeholder="请填写厂房数量"
-                              v-model.number="formData.factoryBuildingsQuantity"
-                              size="mini">
-                    </el-input>
-                  </el-col>
-                  <el-col :span="2">
-                    <span>m<sup>2</sup></span>
-                  </el-col>
-                </el-row>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle" >
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">产值规模</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-select v-model="formData.scaleRange" placeholder="请选择" size="mini">
-                      <el-option
-                        v-for="item in scaleRanges"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code">
-                      </el-option>
-                    </el-select>
-                    <span>元</span>
-                  </el-col>
+              <el-form-item prop="scaleRange">
+                <template slot="label">
+                  <h6 class="titleTextClass">产值规模</h6>
+                </template>
+                <el-row type="flex">
+                  <el-select v-model="formData.scaleRange" placeholder="请选择" size="mini" style="width: 100%;">
+                    <el-option
+                      v-for="item in scaleRanges"
+                      :key="item.code"
+                      :label="item.name"
+                      :value="item.code">
+                    </el-option>
+                  </el-select>
+                  <span>元</span>
                 </el-row>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row type="flex" align="middle"  :gutter="10">
+          <el-row type="flex" align="middle"  :gutter="20">
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">产线数量</h6>
-                  </el-col>
-                  <el-col :span="17">
-                    <el-input placeholder="请填写产线数量" v-model.number="formData.productionLineQuantity" size="mini"></el-input>
-                  </el-col>
-                  <el-col :span="1">
-                    <span>条</span>
-                  </el-col>
+              <el-form-item prop="productionLineQuantity">
+                <template slot="label">
+                  <h6 class="titleTextClass">产线数量</h6>
+                </template>
+                <el-row type="flex">
+                  <el-input placeholder="请填写产线数量" v-model.number="formData.productionLineQuantity" size="mini"></el-input>
+                  <span>条</span>
                 </el-row>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item>
-                <el-row type="flex" align="middle">
-                  <el-col :span="6">
-                    <h6 class="titleTextClass">生产模式</h6>
-                  </el-col>
-                  <el-col :span="18">
-                    <el-select v-model="formData.productionMode" placeholder="请选择" size="mini">
-                      <el-option
-                        v-for="item in productionModes"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code">
-                      </el-option>
-                    </el-select>
-                  </el-col>
-                </el-row>
+              <el-form-item prop="productionMode">
+                <template slot="label">
+                  <h6 class="titleTextClass">生产模式</h6>
+                </template>
+                <el-select v-model="formData.productionMode" placeholder="请选择" size="mini" style="width: 100%;">
+                  <el-option
+                    v-for="item in productionModes"
+                    :key="item.code"
+                    :label="item.name"
+                    :value="item.code">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-form-item>
-            <el-row type="flex">
-              <el-col :span="2">
-                <h6 class="titleTextClass">拥有设备<span style="color: red">*</span></h6>
-              </el-col>
-              <el-col :span="22">
-                <enum-select  v-if="factoryFormVisible" :mapData="mapData" :mapSelectData="mapSelectData"></enum-select>
-              </el-col>
-            </el-row>
+          <el-form-item prop="equipment">
+            <template slot="label">
+              <h6 class="titleTextClass">拥有设备<span style="color: red">*</span></h6>
+            </template>
+            <enum-select  v-if="factoryFormVisible" :mapData="mapData" :mapSelectData="mapSelectData"></enum-select>
           </el-form-item>
         </div>
   </div>
@@ -120,7 +98,7 @@
 
   const {mapGetters} = createNamespacedHelpers('FactoriesModule');
 
-  import EnumSelect from "../../../../../components/custom/EnumSelect";
+  import EnumSelect from '../../../../../components/custom/EnumSelect';
   export default {
     name: 'FactoryScaleForm',
     props: ['formData'],
@@ -146,18 +124,21 @@
           '裁剪部': this.formData.cuttingDepartment == null ? [] : this.formData.cuttingDepartment,
           '生产车间': this.formData.productionWorkshop == null ? [] : this.formData.productionWorkshop,
           '尾部': this.formData.lastDepartment == null ? [] : this.formData.lastDepartment
-        },
+        }
       };
     },
     watch: {
       'formData.cuttingDepartment': function (n, o) {
         this.mapSelectData.裁剪部 = n;
+        this.$emit('validateField', 'equipment');
       },
       'formData.productionWorkshop': function (n, o) {
         this.mapSelectData.生产车间 = n;
+        this.$emit('validateField', 'equipment');
       },
       'formData.lastDepartment': function (n, o) {
         this.mapSelectData.尾部 = n;
+        this.$emit('validateField', 'equipment');
       },
       'mapSelectData.裁剪部': function (n, o) {
         this.formData.cuttingDepartment = n;
@@ -167,7 +148,7 @@
       },
       'mapSelectData.尾部': function (n, o) {
         this.formData.lastDepartment = n;
-      },
+      }
     },
     created () {
     }

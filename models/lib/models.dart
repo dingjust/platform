@@ -15,6 +15,7 @@ export 'src/report/report.dart';
 export 'src/security/principal.dart';
 export 'src/system/notification/message.dart';
 export 'src/user/dto.dart';
+export 'src/user/cooperator.dart';
 export 'src/user/member.dart';
 export 'src/user/user.dart';
 export 'src/user/user_group.dart';

@@ -1316,7 +1316,53 @@ const state = {
   }, {
     code: 'APPROVED',
     name: '已确定'
-  }]
+  }],
+  //质量等级
+  SalesMarkets:[
+    {
+      code: 'A_CHAIN',
+      name: '一线连锁'
+    },
+    {
+      code: 'REGIONAL_CHAIN',
+      name: '区域连锁'
+    },
+    {
+      code: 'STALL_WHOLESALE',
+      name: '档口批发'
+    },
+    {
+      code: 'ELECTRONIC_COMMERCE_QUALITY',
+      name: '电商品质'
+    },
+    {
+      code: 'WHOLESALE_TRADE',
+      name: '外贸批发'
+    }
+  ],
+  //有效期限
+  EffectiveDays:[
+    {
+      code: '7',
+      name: '7天'
+    },
+    {
+      code: '15',
+      name: '15天'
+    },
+    {
+      code: '30',
+      name: '30天'
+    },
+    {
+      code: '90',
+      name: '90天'
+    },
+    {
+      code: 'null',
+      name: '长期有效'
+    }
+  ],
 };
 
 const mutations = {};

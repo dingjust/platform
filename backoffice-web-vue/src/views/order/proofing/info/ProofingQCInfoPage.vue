@@ -1,50 +1,27 @@
 <template>
   <div class="animated fadeIn proofing-basic">
-    <el-row style="margin: 20px 0px">
-      <h6 class="titleTextClass2">人员设置</h6>
-    </el-row>
-    <el-row type="flex">
+    <el-row type="flex" style="margin-bottom: 10px">
       <el-col :span="12">
-        <el-row type="flex">
-          <el-col :span="12">
-            <h6 class="titleTextClass2">品牌跟单员</h6>
-          </el-col>
-          <el-col :span="12">
-            <h6 class="contentTextClass">{{slotData.brandOperator == null ? '未指定' : slotData.brandOperator.name}}</h6>
-          </el-col>
-        </el-row>
+        <h6 style="font-weight: bold">品牌跟单员</h6>
       </el-col>
       <el-col :span="12">
-        <el-row type="flex">
-          <el-col :span="10">
-            <h6 class="titleTextClass">联系电话</h6>
-          </el-col>
-          <el-col :span="14">
-            <h6 class="contentTextClass">{{slotData.brandOperator == null ? '未指定' : slotData.brandOperator.mobileNumber}}</h6>
-          </el-col>
-        </el-row>
+        <h6 style="color: red" v-if="slotData.brandOperator == null">未指定</h6>
+        <div v-else>
+          <h6 class="contentTextClass" style="margin-bottom: 10px">{{slotData.brandOperator.name}}</h6>
+          <h6 class="contentTextClass">{{slotData.brandOperator.mobileNumber}}</h6>
+        </div>
       </el-col>
     </el-row>
-    <el-row type="flex">
+    <el-row type="flex" style="margin-bottom: 10px">
       <el-col :span="12">
-        <el-row type="flex">
-          <el-col :span="12">
-            <h6 class="titleTextClass2">工厂跟单员</h6>
-          </el-col>
-          <el-col :span="12">
-            <h6 class="contentTextClass">{{slotData.factoryOperator == null ? '未指定' : slotData.factoryOperator.name}}</h6>
-          </el-col>
-        </el-row>
+        <h6 style="font-weight: bold">工厂跟单员</h6>
       </el-col>
       <el-col :span="12">
-        <el-row type="flex">
-          <el-col :span="10">
-            <h6 class="titleTextClass">联系电话</h6>
-          </el-col>
-          <el-col :span="14">
-            <h6 class="contentTextClass">{{slotData.factoryOperator == null ? '未指定' : slotData.factoryOperator.mobileNumber}}</h6>
-          </el-col>
-        </el-row>
+        <h6 style="color: red" v-if="slotData.factoryOperator == null">未指定</h6>
+        <div v-else>
+          <h6 class="contentTextClass" style="margin-bottom: 10px">{{slotData.factoryOperator.name}}</h6>
+          <h6 class="contentTextClass">{{slotData.factoryOperator.mobileNumber}}</h6>
+        </div>
       </el-col>
     </el-row>
   </div>

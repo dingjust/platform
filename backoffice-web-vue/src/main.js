@@ -80,7 +80,7 @@ Vue.mixin({
   },
   methods: {
     apis () {
-      if (this.$store.getters.currentUser.type === 'TENANT') {
+      if (this.$store.getters.currentUser!=null&&this.$store.getters.currentUser.type === 'TENANT') {
         return TENANT_APIS;
       }
 

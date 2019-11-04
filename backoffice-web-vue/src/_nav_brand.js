@@ -12,11 +12,12 @@ export default {
     {
       name: '首页',
       url: '/dashboard',
+      icon:'el-icon-s-home'
     },
     {
       name: '订单',
       url: '/order',
-      // icon: 'icon-puzzle',
+      icon: 'el-icon-s-order',
       children: [
         {
           name: '需求订单',
@@ -43,6 +44,7 @@ export default {
     {
       name: '合同',
       url: '/contract',
+      icon:'el-icon-s-marketing',
       children: [
         {
           name: '合同管理',
@@ -74,20 +76,15 @@ export default {
         //   url: '/unclassified/markDown',
         //   icon: 'iconNone',
         // },
-        {
-          name: '合同模板',
-          url: '/template/create',
-          icon: 'iconNone',
-        }
       ]
     },
     {
       name: '产品',
       url: '/product',
-      // icon: 'icon-puzzle',
+      icon: 'el-icon-goods',
       children: [
         {
-          name: '服装产品',
+          name: '产品管理',
           url: '/product/apparel',
           // icon: 'iconNone',
         },
@@ -106,11 +103,11 @@ export default {
     {
       name: '公司',
       url: '/account',
-      // icon: 'icon-puzzle',
+      icon: 'el-icon-office-building',
       children: [
         {
-          name: '认证信息',
-          url: '/account/my',
+          name: '认证中心',
+          url: '/account/Authentication',
           icon: 'iconNone'
         },
         {
@@ -134,33 +131,22 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '地址',
+          name: '地址管理',
           url: '/account/address',
           icon: 'iconNone'
         },
         {
-          name: '配置',
-          url: '/account/setting',
-          // icon: 'icon-puzzle',
-          children: [
-            {
-              name: '账务配置',
-              url: '/account/setting/payPlan',
-              icon: 'iconNone'
-            }
-          ]
+          name: '账务配置',
+          url: '/account/setting/payPlan',
+          icon: 'iconNone'
         }
       ]
     },
     {
       name: '其他',
       url: '/miscs',
+      icon:'el-icon-coin',
       children: [
-        {
-          name: '认证中心',
-          url: '/Authentication',
-          icon: 'iconNone',
-        },
         {
           name: '钱包',
           url: '/miscs/wallet',

@@ -1,35 +1,45 @@
 <template>
 
-  <div >
+  <div>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <contract-supplement-form  :slotData="slotData" />
+      <contract-supplement-form :slotData="slotData" />
     </el-dialog>
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
-      <el-button type="warning" v-if="slotData.state != 'INVALID'" @click="onBCXY" class="toolbar-search_input">增加补充协议</el-button>
+      <el-button type="warning" v-if="slotData.state != 'INVALID'" @click="onBCXY" class="toolbar-search_input">增加补充协议
+      </el-button>
       <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && !slotData.isCreator"
         type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning" class="toolbar-search_input" @click="onSearchSeal">签署
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
+        class="toolbar-search_input" @click="onSearchSeal">签署
       </el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning" class="toolbar-search_input"
-        @click="onRevokeConfirm(slotData.code)">撤回</el-button>
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning"
+        class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
     </div>
     <!--<center>-->
-      <!--<table height="150px" border="0" id='waitPage'>-->
-        <!--<tr>-->
-          <!--<td>-->
-            <!--<img width='28' height='28' id='myImage' src='http://img.zcool.cn/community/0179f1574d2d656ac72525ae5f181d.gif' />-->
-          <!--</td>-->
-          <!--<td>加载中，请等待...</td>-->
-        <!--</tr>-->
-      <!--</table>-->
+    <!--<table height="150px" border="0" id='waitPage'>-->
+    <!--<tr>-->
+    <!--<td>-->
+    <!--<img width='28' height='28' id='myImage' src='http://img.zcool.cn/community/0179f1574d2d656ac72525ae5f181d.gif' />-->
+    <!--</td>-->
+    <!--<td>加载中，请等待...</td>-->
+    <!--</tr>-->
+    <!--</table>-->
     <!--</center>-->
-    <div v-if="!isLoading" style="width: 100px; height: 100px; z-index: 100; position: fixed; margin: 50px auto auto -50px; top: 50%; left: 50%;">加载中....</div>
-    <iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
+    <div v-if="!isLoading"
+      style="width: 100px; height: 100px; z-index: 100; position: fixed; margin: 50px auto auto -50px; top: 50%; left: 50%;">
+      加载中....</div>
+    <!-- <iframe id='previewPdf' :src="'https://sc.nbyjy.net/dist/b2b/static/pdf/web/viewer.html?file=' + fileUrl"
+      height="480" width="100%"> -->
+
+    <!-- <iframe id='previewPdf' :src="'https://ht.nbyjy.net/static/pdf/web/viewer.html?file=' + fileUrl"
+              height="480" width="100%"> -->
+
+    <iframe id='previewPdf' :src="'static/pdf/web/viewer.html?file=' + fileUrl"
       height="480" width="100%">
     </iframe>
     <!--<iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl"-->
-            <!--height="480" width="100%">-->
+    <!--height="480" width="100%">-->
     <!--</iframe>-->
   </div>
 </template>
@@ -48,20 +58,20 @@
       ContractSealList,
       ContractSupplementForm,
     },
-    mounted(){
+    mounted() {
       this.isLoading = true;
     },
     data() {
       return {
         currentUser: this.$store.getters.currentUser,
         sealPage: '',
-        reFresh:true,
-        dialogOrderVisible:false,
-        isLoading:false,
+        reFresh: true,
+        dialogOrderVisible: false,
+        isLoading: false,
       }
     },
     methods: {
-      onBCXY(){
+      onBCXY() {
         this.dialogOrderVisible = true;
         Bus.$emit('closePdfView');
       },
@@ -74,7 +84,7 @@
           this.onRefuse(code);
         });
       },
-      async onRefuse(code){
+      async onRefuse(code) {
         Bus.$emit('closePdfView');
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
@@ -99,7 +109,11 @@
         const url = this.apis().downContract(code);
         const result = await http.get(url);
 
-        window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        window.location.href = '/b2b/user/agreement/download/' + result.data;
+
+        // window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
+        // window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
       },
       async onSearchSeal() {
         console.log('ffe2')

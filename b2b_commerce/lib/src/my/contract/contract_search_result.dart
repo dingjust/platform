@@ -74,7 +74,7 @@ class _ContractSearchResultPageState extends State<ContractSearchResultPage> {
         ),
         onWillPop: () {
           Navigator.of(context).pop();
-          MyContractBLoC().refreshData('ALL');
+          MyContractBLoC().refreshData('ALL','');
         },
       ),
     );
@@ -127,7 +127,7 @@ class ContractListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<MyContractBLoC>(context);
-    bloc.refreshData('ALL');
+    bloc.refreshData('ALL','');
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {

@@ -18,11 +18,11 @@ class MyContractBLoC extends BLoCBase {
   static final Map<String, PageEntry> _dataMap = {
     'ALL':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'INITIATE':
-    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'INVALID':
+    'SIGN':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'COMPLETE':
+    PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
+    'INVALID':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
   };
 
@@ -43,14 +43,15 @@ class MyContractBLoC extends BLoCBase {
 
   Stream<ContractData> get stream => _controller.stream;
 
-  getData(String status) async {
+  getData(String status,String keyword) async {
 
     //若没有数据则查询
     if(_dataMap != null && _dataMap.length > 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-        'state': status
+        'state': status == null || status == '' || status == 'ALL' ? '' : status,
+        'signState': keyword == null || keyword == '' ? '' : keyword,
       };
 
       Response<Map<String, dynamic>> response;
@@ -114,13 +115,13 @@ class MyContractBLoC extends BLoCBase {
 
   }
 
-  loadingMoreByStatuses(String status) async {
+  loadingMoreByStatuses(String status,String keyword) async {
     //数据到底
     if (_dataMap[status].currentPage + 1 == _dataMap[status].totalPages) {
       //通知显示已经到底部
       bottomController.sink.add(true);
     } else {
-      getData(status);
+      getData(status,keyword);
     }
 
     loadingController.sink.add(false);
@@ -140,11 +141,11 @@ class MyContractBLoC extends BLoCBase {
     _controller.sink.add(ContractData(status: 'ALL', data: _dataMap['ALL'].data));
   }
 
-  refreshData(String status) async {
+  refreshData(String status,String keyword) async {
     //重置信息
     _dataMap[status].data.clear();
     _dataMap[status].currentPage = 0;
-    await getData(status);
+    await getData(status,keyword);
   }
 
 

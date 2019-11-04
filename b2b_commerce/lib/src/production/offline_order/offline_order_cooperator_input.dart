@@ -3,10 +3,11 @@ import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
 class OfflineOrderCooperatorInput extends StatefulWidget {
-  CompanyModel model;
-  String type;
+  CooperatorModel model;
 
-  OfflineOrderCooperatorInput({this.model, this.type});
+  OfflineOrderCooperatorInput({
+    this.model,
+  });
 
   _OfflineOrderCooperatorInputState createState() =>
       _OfflineOrderCooperatorInputState();
@@ -14,23 +15,12 @@ class OfflineOrderCooperatorInput extends StatefulWidget {
 
 class _OfflineOrderCooperatorInputState
     extends State<OfflineOrderCooperatorInput> {
-  FocusNode _factoryFocusNode = FocusNode();
-  FocusNode _nameFocusNode = FocusNode();
-  FocusNode _phoneFocusNode = FocusNode();
-  final TextEditingController _factoryController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  TextEditingController controller = TextEditingController();
-  CompanyModel company = new CompanyModel();
+  CooperatorModel currentModel;
 
   @override
   void initState() {
     if (widget.model != null) {
-      _factoryController.text = widget.model.name;
-      _nameController.text = widget.model.contactPerson;
-      _phoneController.text = widget.model.contactPhone;
-
-      company = widget.model;
+      currentModel = widget.model;
     }
     super.initState();
   }
@@ -55,97 +45,124 @@ class _OfflineOrderCooperatorInputState
                     ),
                   ),
                   onTap: () async {
-                    //带值返回上一页
-                    Navigator.of(context).pop(company);
+                    // 带值返回上一页
+                    Navigator.of(context).pop(currentModel);
                   })
             ]),
         body: Container(
-            color: Colors.white,
             child: ListView(
               children: <Widget>[
-                _buildFactoryInfo(context),
+                CooperatorInfoRow(
+                  label: '我的合作商',
+                  value: '${getCooperatorInfo().name}',
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 25),
+                ),
+                CooperatorInfoRow(
+                  label: '联系人',
+                  value: '${getCooperatorInfo().contactPerson}',
+                  margin: EdgeInsets.only(bottom: 2),
+                ),
+                CooperatorInfoRow(
+                  label: '联系方式',
+                  value: '${getCooperatorInfo().contactPhone}',
+                )
               ],
-            )));
+            )),
+        bottomNavigationBar: Container(
+          height: 50,
+          child: RaisedButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '选择我的合作商',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () async {
+                onCooperatorSelect();
+              }),
+        ));
   }
 
-  Widget _buildFactoryInfo(BuildContext context) {
+  _Cooperator getCooperatorInfo() {
+    _Cooperator result = _Cooperator();
+    if (currentModel != null && currentModel.type == CooperatorType.ONLINE) {
+      result.name = currentModel.partner.name ?? '';
+      result.contactPerson = currentModel.partner.contactPerson ?? '';
+      result.contactPhone = currentModel.partner.contactPhone ?? '';
+    } else {
+      result.name = currentModel?.name ?? '';
+      result.contactPerson = currentModel?.contactPerson ?? '';
+      result.contactPhone = currentModel?.contactPhone ?? '';
+    }
+    return result;
+  }
+
+  void onCooperatorSelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return CooperatorSelect(
+          model: currentModel,
+          onChanged: _handlecurrentModelChanged,
+        );
+      },
+    ).then((a) {});
+  }
+
+  void _handlecurrentModelChanged(CooperatorModel newValue) {
+    setState(() {
+      currentModel = newValue;
+      Navigator.of(context).pop();
+    });
+  }
+}
+
+class CooperatorInfoRow extends StatelessWidget {
+  String label;
+
+  String value;
+
+  final EdgeInsetsGeometry margin;
+
+  final EdgeInsetsGeometry padding;
+
+  CooperatorInfoRow({this.label,
+    this.value,
+    this.margin = const EdgeInsets.all(0),
+    this.padding = const EdgeInsets.fromLTRB(10, 20, 10, 20)});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      child: Column(
+      margin: margin,
+      padding: padding,
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(5),
-            margin: EdgeInsets.all(10),
-            child: TextFieldComponent(
-              textAlign: TextAlign.left,
-              focusNode: _factoryFocusNode,
-              controller: _factoryController,
-              autofocus: true,
-              leadingText: Text('${widget.type}名称',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              hintText: widget.model == null || widget.model.name == null
-                  ? '请输入${widget.type}名称'
-                  : widget.model.name,
-              onChanged: (value) {
-                setState(() {
-                  company.name = value;
-                });
-              },
-            ),
+          Text(
+            '$label',
+            style: TextStyle(),
           ),
-          Container(
-            padding: EdgeInsets.all(5),
-            margin: EdgeInsets.all(10),
-            child: TextFieldComponent(
-              textAlign: TextAlign.left,
-              focusNode: _nameFocusNode,
-              controller: _nameController,
-              leadingText: Text('联系人名',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              hintText:
-                  widget.model == null || widget.model.contactPerson == null
-                      ? '请输入联系人名'
-                      : widget.model.contactPerson,
-              onChanged: (value) {
-                setState(() {
-                  company.contactPerson = value;
-                });
-              },
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(5),
-            margin: EdgeInsets.all(10),
-            child: TextFieldComponent(
-              textAlign: TextAlign.left,
-              focusNode: _phoneFocusNode,
-              controller: _phoneController,
-              leadingText: Text('联系电话',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              hintText:
-                  widget.model == null || widget.model.contactPhone == null
-                      ? '请输入联系电话'
-                      : widget.model.contactPhone,
-              inputType: TextInputType.phone,
-              onChanged: (value) {
-                if (_phoneController.text.length > 11) {
-                  _phoneController.text = controller.text;
-                } else {
-                  controller.text = _phoneController.text;
-                }
-                setState(() {
-                  company.contactPhone = value;
-                });
-              },
-            ),
+          Text(
+            '$value',
+            style: TextStyle(color: Colors.grey),
           ),
         ],
       ),
     );
   }
+}
+
+class _Cooperator {
+  String name;
+  String contactPerson;
+  String contactPhone;
+
+  _Cooperator({this.name, this.contactPerson, this.contactPhone});
 }

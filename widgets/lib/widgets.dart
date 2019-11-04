@@ -33,6 +33,7 @@ export 'src/commons/search/history_tag.dart';
 export 'src/commons/search/suggestions_row.dart';
 export 'src/commons/select/category_select.dart';
 export 'src/commons/select/color_size_select.dart';
+export 'src/commons/select/cooperator_select.dart';
 export 'src/commons/select/enum_selection.dart';
 export 'src/commons/snakebar/snake_bar.dart';
 export 'src/commons/splash/splash.dart';

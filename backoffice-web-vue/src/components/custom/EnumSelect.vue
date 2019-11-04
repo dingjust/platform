@@ -11,8 +11,8 @@
           <el-tag
             v-for="val of values"
             class="elTagClass"
-            :color="val.color"
-            @click="handleTagClick(val)"
+            :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
+            @click="handleTagClick(key,val)"
             size="medium">
             {{val.name}}
           </el-tag>
@@ -32,32 +32,36 @@
       handleClick (tab, event) {
         console.log(tab, event);
       },
-      handleTagClick (val) {
-        for (let key in this.mapData) {
-          for (var value of this.mapData[key]) {
-            if (value.code === val.code) {
-              // this.$set(value, 'color', '#FFD60C');
-              if (value.color.toLowerCase() === '#ffffff') {
-                value.color = '#FFD60C';
-                this.$forceUpdate();
-                this.mapSelectData[key].push(value.code);
-              } else {
-                value.color = '#ffffff';
-                this.$forceUpdate();
-                var index = this.mapSelectData[key].indexOf(value.code);
-                if(index > -1){
-                  this.mapSelectData[key].splice(index,1);
-                }
-              }
-            }
-          }
+      handleTagClick (key,val) {
+        console.log(key);
+        var mapIndex = this.mapSelectData[key].indexOf(val.code);
+        if (mapIndex > -1) {
+          this.mapSelectData[key].splice(mapIndex, 1);
+        } else {
+          this.mapSelectData[key].push(val.code);
         }
-      }
+
+        var index = this.selectCodes.indexOf(val.code);
+        if (index > -1) {
+          this.selectCodes.splice(index, 1);
+        } else {
+          this.selectCodes.push(val.code);
+        }
+      },
+      isSelected (item) {
+        var index = this.selectCodes.indexOf(item.code);
+        if (index > -1) {
+          return true;
+        } else {
+          return false;
+        }
+      },
     },
     data () {
       return {
         activeName: '',
-        activeColor: ''
+        activeColor: '',
+        selectCodes: []
       }
     },
     created () {
@@ -67,19 +71,12 @@
         break;
       }
 
-      // 初始化数据
-      for (let key in this.mapData) {
-        for (var value of this.mapData[key]) {
-          var index = this.mapSelectData[key].indexOf(value.code);
-          if (index > -1) {
-            value.color = '#FFD60C';
-            this.$forceUpdate();
-          } else {
-            value.color = '#ffffff';
-            this.$forceUpdate();
-          }
+      for (let key in this.mapSelectData) {
+        for (var value of this.mapSelectData[key]) {
+          this.selectCodes.push(value);
         }
       }
+
     }
   }
 </script>

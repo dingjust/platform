@@ -48,7 +48,9 @@
         </template>
       </el-table-column>
       <el-table-column label="跟单员">
-        <span>刘少立</span>
+        <template slot-scope="scope">
+          <span>{{getOperator(scope.row)}}</span>
+        </template>
       </el-table-column>
       <!-- <el-table-column label="预计交货时间" prop="expectedDeliveryDate">
         <template slot-scope="scope">
@@ -156,6 +158,15 @@
           return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
         }
       },
+      getOperator(row) {
+        if (this.$store.getters.currentUser.type == 'BRAND'&&row.brandOperator!=null) {
+          return row.brandOperator.name;
+        } else if (this.$store.getters.currentUser.type == 'FACTORY'&&row.factoryOperator!=null) {
+          return row.factoryOperator.name;
+        } else {
+          return '';
+        }
+      }
     },
     data() {
       return {

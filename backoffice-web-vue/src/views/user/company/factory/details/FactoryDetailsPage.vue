@@ -1,11 +1,10 @@
 <template>
   <div class="animated fadeIn factory-detail">
-    <el-card>
       <el-row class="factory-info-title-row" type="flex" justify="space-between">
         <div class="factory-info-title">
           <h6 class="factory-info-title_text">公司信息</h6>
         </div>
-        <i class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>
+        <i v-if="!readOnly" class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>
       </el-row>
       <el-row type="flex" :gutter="20">
         <el-col :span="5" class="factory-card-class">
@@ -52,7 +51,7 @@
             </el-col>
           </el-row>
           <el-divider ></el-divider>
-          <el-row type="flex" justify="end"  style="margin-top: 10px">
+          <el-row v-if="!readOnly" type="flex" justify="end"  style="margin-top: 10px">
             <el-button class="buttonClass" @click="onEditProfiles">编辑</el-button>
           </el-row>
           <el-row type="flex">
@@ -60,7 +59,6 @@
           </el-row>
         </el-col>
       </el-row>
-    </el-card>
 
     <el-dialog width="80%"
                :visible="factoryFormVisible"
@@ -97,7 +95,15 @@
 
   export default {
     name: 'FactoryDetailsPage',
-    props: [],
+    props: {
+      slotData: {
+        type: Object
+      },
+      readOnly: {
+        type: Boolean,
+        default: true
+      }
+    },
     components: {
       FactoryProfilesFrom,
       FactoryProfilesInfoPage,
@@ -235,12 +241,10 @@
     },
     data () {
       return {
-        slotData: '',
         factoryProfilesFormVisible: false
       }
     },
     created () {
-      this.getFactory();
     }
   }
 </script>

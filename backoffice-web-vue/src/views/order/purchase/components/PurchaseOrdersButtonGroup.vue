@@ -7,6 +7,9 @@
     <el-button class="purchase-order-btn" v-if="isBrand()&&isCompleted" @click="onCreateReconciliation">对账单</el-button>
     <!-- <el-button class="purchase-order-btn" v-if="slotData.status=='COMPLETED'" @click="onCreateAgain">
       {{isBrand()?'再下一单':'重新创建'}}</el-button> -->
+    <el-button class="purchase-order-btn2" @click="
+    onCancel" v-if="isPending">{{isMyself?'取消订单':'拒单'}}
+    </el-button>
     <el-button class="purchase-order-btn" v-if="!isMyself&&isPending" @click="onConfirm">接单</el-button>
     <el-button class="purchase-order-btn" v-if="isFactory()&&(isProduction||isWaitForOutOfStore)"
       @click="onDeliverViewsOpen">发货</el-button>
@@ -16,11 +19,8 @@
     <el-button class="purchase-order-btn" :disabled="!hasReconciliationOrders" v-if="isFactory()&&isCompleted"
       @click="onCreateReconciliation">
       {{hasReconciliationOrders?'查看对账单':'对方尚未创建对账单'}}</el-button>
-    <el-button class="purchase-order-btn2" @click="
-    onCancel" v-if="isPending">{{isMyself?'取消订单':'拒单'}}
-    </el-button>
   </el-row>
-</template> 
+</template>
 
 <script>
   export default {
@@ -29,9 +29,9 @@
     components: {},
     computed: {
       isMyself: function () {
-        if(this.slotData.creator!=null){
-          return this.slotData.creator.uid==this.$store.getters.currentUser.companyCode;
-        }else{
+        if (this.slotData.creator != null) {
+          return this.slotData.creator.uid == this.$store.getters.currentUser.companyCode;
+        } else {
           return flase;
         }
       },
@@ -50,8 +50,8 @@
       isCompleted: function () {
         return this.slotData.status == 'COMPLETED';
       },
-      isOffline:function(){
-        return this.slotData.cooperator.type=='OFFLINE'
+      isOffline: function () {
+        return this.slotData.cooperator.type == 'OFFLINE'
       },
       hasReconciliationOrders: function () {
         return this.slotData.reconciliationOrders != null && this.slotData.reconciliationOrders.length != 0
@@ -107,8 +107,8 @@
   }
 
   .purchase-order-btn2 {
-    background: red;
-    color: #fff;
+    /* background: red;
+    color: #fff; */
     width: 200px;
   }
 

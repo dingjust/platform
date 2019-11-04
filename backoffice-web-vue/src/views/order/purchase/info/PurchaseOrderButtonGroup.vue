@@ -4,7 +4,7 @@
       <purchase-order-deliver-views :slotData="slotData" @createNewDeliver="onCreateNewDeliver" />
     </el-dialog>
     <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-info-receive :slotData="slotData" @afterCreate="onAfterCreate" />
+      <purchase-order-info-receive :slotData="slotData" />
     </el-dialog>
     <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
       <purchase-order-info-deliver :slotData="slotData" @afterCreate="onAfterCreate" />

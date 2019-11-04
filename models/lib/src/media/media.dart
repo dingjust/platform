@@ -145,6 +145,19 @@ class MediaModel extends ItemModel {
     }
   }
 
+  ///分享图
+  String shareUrl() {
+    MediaModel mediaModel =
+    getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_PREVIEW]);
+
+    if (mediaModel != null) {
+      // print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');
+      return '${GlobalConfigs.CONTEXT_PATH}${mediaModel.url}';
+    } else {
+      return actualUrl;
+    }
+  }
+
   MediaModel getFormatMedia(String mediaFormat) {
     MediaModel result;
     if (convertedMedias == null || convertedMedias.isEmpty) {

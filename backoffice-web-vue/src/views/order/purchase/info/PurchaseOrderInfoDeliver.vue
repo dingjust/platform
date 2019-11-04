@@ -274,7 +274,7 @@
         form: {
           consignorName:  this.$store.getters.currentUser.username,
           consignorPhone: this.$store.getters.currentUser.mobileNumber,
-          isOfflineConsignment: false,
+          isOfflineConsignment: true,
           consigneeName: this.slotData.deliveryAddress.fullname,
           consigneePhone: this.slotData.deliveryAddress.cellphone,
           consigneeAddress: this.slotData.deliveryAddress.details,

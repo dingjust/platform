@@ -144,8 +144,18 @@ const router = new Router({
             },
             {
               path: 'my',
-              name: '认证信息',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
+              name: '我的',
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/account/MyPage'),
+            },
+            // {
+            //   path: 'authentication',
+            //   name: '认证信息',
+            //   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
+            // },
+            {
+              path: 'Authentication',
+              name: '认证中心',
+              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/dashboard/authentication/AuthenticationPage')
             },
             {
               path: 'employee',
@@ -346,23 +356,29 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/template/contractTemplate')
             }
           ]
-        }
+        },
       ]
     },
     {
       path: '/login',
       name: '用户登录',
-      component: () => import( /* webpackChunkName: 'login' */ 'shared/account/login/LoginPage')
-    }
+      component: () => import( /* webpackChunkName: 'login' */ 'shared/account/login/LoginPage'),
+    },
+    {
+      path: '/register',
+      name: '用户注册',
+      component: () => import( /* webpackChunkName: 'register' */ 'shared/account/register/RegisterPage')
+    },
   ]
 });
 
 const LOGIN_URL = '/login';
 const LOGOUT_URL = '/logout';
+const REGISTER_URL= '/register';
 
 router.beforeEach((to, from, next) => {
   const authorized = sessionStorage.getItem('authorized');
-  if (!authorized && (to.path === LOGIN_URL || to.path === LOGOUT_URL)) {
+  if (!authorized && (to.path === LOGIN_URL || to.path === LOGOUT_URL||to.path===REGISTER_URL)) {
     next();
     return;
   }

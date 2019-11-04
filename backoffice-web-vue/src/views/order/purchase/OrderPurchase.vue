@@ -18,7 +18,7 @@
           <el-input v-model="payPlanForm.name"></el-input>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input type="textarea" :rows="3" placeholder="请输入备注留言..." v-model="payPlanForm.remarks"/>
+          <el-input type="textarea" :rows="3" placeholder="请输入备注留言..." v-model="payPlanForm.remarks" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -302,10 +302,9 @@
               <el-row type="flex" align="middle" justify="space-between">
                 <h6 class="info-input-prepend" style="margin-right:5px;width:100px">
                   {{currentFinancialPlan!=''?'当前选中方案：'+currentFinancialPlan:'当前未选择账务方案'}}</h6>
-                <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary"
-                  plain size="mini">选用我的账务方案</el-button>
-                <el-button @click="dialogPayPlanFormVisible=true" type="success"
-                  plain size="mini">保存账务方案</el-button>
+                <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain
+                  size="mini">选用我的账务方案</el-button>
+                <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
               </el-row>
             </el-col>
           </el-row>
@@ -502,9 +501,28 @@
                 </el-select>
               </el-row>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="4">
               <el-row type="flex" align="middle" justify="start">
-                <h6 class="info-input-prepend2" style="width: 200px">后, 次月月底支付剩余全部款项</h6>
+                <!-- <h6 class="info-input-prepend2" style="width: 200px">后, 次月月底支付剩余全部款项</h6> -->
+                <el-row type="flex" align="middle" justify="space-between" :gutter="20">
+                  <el-col :span="6">
+                    <h6 class="info-input-prepend2" style="width:40px;">后</h6>
+                  </el-col>
+                  <el-col :span="18">
+                    <el-select v-model="form.monthBalance.time" placeholder="请选择">
+                      <el-option label="5" :value="5"></el-option>
+                      <el-option label="7" :value="7"></el-option>
+                      <el-option label="15" :value="15"></el-option>
+                    </el-select>
+                  </el-col>
+                </el-row>
+              </el-row>
+            </el-col>
+            <el-col :span="13">
+              <el-row type="flex" align="middle" justify="start">
+                <el-col :span="24">
+                  <h6 class="info-input-prepend2" style="width: 200px;">号支付剩余全部款项</h6>
+                </el-col>
               </el-row>
             </el-col>
           </el-row>
@@ -639,12 +657,12 @@
             .form.deposit
             .percent * 100 +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance.event] +
-            '完成的次月月底支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
+            '完成的次月' + this.form.monthBalance.time + '号支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (!this.form.isHaveDeposit && this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
           result = '无定金月结\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance
               .event] +
-            '完成的次月月底支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
+            '完成的次月' + this.form.monthBalance.time + '号支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
 
         return result;
@@ -870,6 +888,7 @@
                 payPlanItems.push({
                   triggerEvent: this.form.monthBalance.event,
                   moneyType: 'MONTHLY_SETTLEMENT',
+                  triggerDays: this.form.monthBalance.time,
                 });
               } else {
                 payPlanItems.push({
@@ -906,7 +925,7 @@
                 freightPayer: element.freightPayer,
                 machiningType: element.machiningTypes,
                 invoiceTaxPoint: element.invoicePercent,
-                invoiceNeeded: true,
+                invoiceNeeded: element.invoice,
                 unitPrice: element.unitPrice,
                 entries: entries,
                 expectedDeliveryDate: element.expectedDeliveryDate,
@@ -1009,6 +1028,7 @@
               break;
             case 'MONTHLY_SETTLEMENT':
               this.form.monthBalance.event = item.triggerEvent;
+              this.form.monthBalance.time=item.triggerDays;
               break;
           }
         });
@@ -1034,6 +1054,7 @@
           payPlanItems.push({
             triggerEvent: this.form.monthBalance.event,
             moneyType: 'MONTHLY_SETTLEMENT',
+            triggerDays: this.form.monthBalance.time,
           });
         } else {
           payPlanItems.push({
@@ -1181,6 +1202,7 @@
           },
           monthBalance: {
             event: 'ORDER_CONFIRMED',
+            time: 5
           },
           QC: this.$store.getters.currentUser.username,
           attachments: [],
@@ -1271,6 +1293,7 @@
           },
           monthBalance: {
             event: 'ORDER_CONFIRMED',
+            time: 5
           },
           QC: {},
           attachments: []

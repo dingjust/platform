@@ -6,28 +6,32 @@
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="85%" class="purchase-dialog" append-to-body
       :modal="true">
-      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract"/>
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
     </el-dialog>
     <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">合同（{{contracts==null || contracts == '' || contracts.length <= 0?'未签署':'已有合同'}}）</h6>
+        <h6 class="info-title_text">合同（{{contracts==null || contracts == '' || contracts.length <= 0?'未签署':'已有合同'}}）
+        </h6>
       </div>
-      <el-button v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED'" type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
+      <el-button
+        v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED'"
+        type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
       </el-button>
       <!--<el-button v-if="contract !=null && contract.state != 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同-->
       <!--</el-button>-->
     </el-row>
     <div>
-      <el-row >
-        <el-col v-if="contracts!=null && contracts!= []" :span="4" v-for="(item, index) in contracts" :key="index" :offset="0">
-              <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)">
-                <el-row type="flex" justify="center">
-                  <img src="static/img/word.png" class="info-img-word" alt="" />
-                </el-row>
-                <el-row type="flex" justify="center">
+      <el-row>
+        <el-col v-if="contracts!=null && contracts!= []" :span="4" v-for="(item, index) in contracts" :key="index"
+          :offset="0">
+          <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)">
+            <el-row type="flex" justify="center">
+              <img src="static/img/word.png" class="info-img-word" alt="" />
+            </el-row>
+            <el-row type="flex" justify="center">
               <el-col :span="16">
                 <h6 class="info-template-name">{{item.title}}</h6>
               </el-col>
@@ -99,10 +103,15 @@
         const result = await http.get(url);
         console.log(result);
 
-        const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        const aa = '/b2b/user/agreement/download/' + result.data;
+
+        // const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
+        // const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
         //
         // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
-        this.$set(this.thisContract,'key',this.thisContractKey++);
+        this.$set(this.thisContract, 'key', this.thisContractKey++);
         this.pdfVisible = true;
         this.fileUrl = encodeURIComponent(aa)
       },
@@ -146,7 +155,13 @@
         this.thisContract = await this.getContractDetail(code);
         const url = this.apis().downContract(code);
         const result = await http.get(url);
-        const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
+        const aa = '/b2b/user/agreement/download/' + result.data;
+
+        // const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
+        // const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+
         this.fileUrl = encodeURIComponent(aa)
         this.pdfVisible = true;
       },
@@ -166,7 +181,7 @@
         thisContract: '',
         dialogSealVisible: false,
         sealPage: false,
-        thisContractKey:1
+        thisContractKey: 1
       }
     },
     created() {

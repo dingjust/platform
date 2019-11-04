@@ -6,7 +6,7 @@
       </div>
     </el-row>
     <div class="titleCardClass">
-      <el-form :model="formData">
+      <el-form :model="formData" ref="factoryForm" label-position="left" label-width="75px" :rules="rules" hide-required-asterisk>
         <el-row>
           <factory-basic-form v-if="factoryFormVisible" :form-data="formData"></factory-basic-form>
         </el-row>
@@ -14,7 +14,7 @@
           <factory-contact-form :form-data="formData"></factory-contact-form>
         </el-row>
         <el-row>
-          <factory-scale-form :form-data="formData"></factory-scale-form>
+          <factory-scale-form :form-data="formData" @validateField="validateField"></factory-scale-form>
         </el-row>
         <el-row>
           <factory-capacity-form :form-data="formData"></factory-capacity-form>
@@ -62,11 +62,70 @@
     props: ['formData'],
     methods: {
       onSave () {
-        this.$emit('onSave');
+        this.$refs['factoryForm'].validate((valid) => {
+          if (valid) {
+            this.$confirm('是否确认保存', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$emit('onSave');
+            });
+          } else {
+            this.$message.error('请完善需求信息');
+            return false;
+          }
+        });
+      },
+      validateField(name) {
+        this.$refs.factoryForm.validateField(name);
+      }
+    },
+    watch: {
+      'formData.adeptAtCategories': function (n, o) {
+        this.validateField('adeptAtCategories');
       }
     },
     data () {
+      var cheackEquipment = (rule, value, callback) => {
+        if (this.formData.cuttingDepartment.length <= 0 &&
+          this.formData.productionWorkshop.length <= 0 &&
+          this.formData.lastDepartment.length <= 0) {
+          return callback(new Error('请选择设备'));
+        } else {
+          callback();
+        }
+      };
       return {
+        rules: {
+          'contactAddress.region': [
+            {required: true, message: '请选择省', type: 'object', trigger: 'change'}
+          ],
+          'contactAddress.city': [
+            {required: true, message: '请选择市', type: 'object', trigger: 'change'}
+          ],
+          'contactAddress.cityDistrict': [
+            {required: true, message: '请选择区', type: 'object', trigger: 'change'}
+          ],
+          'contactAddress.line1': [
+            {required: true, message: '请填写详细地址', trigger: 'blur'}
+          ],
+          'name': [
+            {required: true, message: '请填写公司名称', trigger: 'blur'}
+          ],
+          'contactPerson': [
+            {required: true, message: '请填写联系人', trigger: 'blur'}
+          ],
+          'contactPhone': [
+            {required: true, message: '请填写联系方式', trigger: 'blur'}
+          ],
+          'equipment': [
+            {validator: cheackEquipment, type: 'object', trigger: 'change'}
+          ],
+          'adeptAtCategories': [
+            {required: true, message: '请选择品类', type: 'array', trigger: 'change'}
+          ]
+        }
       }
     },
     created () {

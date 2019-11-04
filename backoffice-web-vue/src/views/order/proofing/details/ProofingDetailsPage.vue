@@ -32,28 +32,63 @@
       </div>
       <!--<i class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>-->
     </el-row>
-    <el-row type="flex" justify="space-between" align="middle">
-      <h6 class="info-title-text">打样详情</h6>
-      <div>
-        <span style="color: #C0C0C0">打样订单号：{{slotData.code}}</span>&nbsp;&nbsp;&nbsp;
-        <span style="color: #C0C0C0">当前状态：<span :style="{color: statusColor}">{{getEnum('proofingOrderStatuses',slotData.status)}}</span></span>&nbsp;&nbsp;&nbsp;
-        <span style="color: #C0C0C0">发布日期：{{slotData.creationtime | formatDate}}</span>
-      </div>
-    </el-row>
-    <el-divider></el-divider>
-    <el-row type="flex">
-      <el-col :span="16">
-        <proofing-basic-info-page :slotData="slotData" style="margin: 20px 20px 20px 0px">
-
-        </proofing-basic-info-page>
-      </el-col>
-      <el-divider direction="vertical"></el-divider>
+    <el-row type="flex" align="middle" style="margin-bottom: 20px">
       <el-col :span="8">
-        <proofing-supplier-info-page :slotData="slotData" style="margin: 20px 0px 20px 20px"></proofing-supplier-info-page>
-        <el-divider></el-divider>
-        <proofing-q-c-info-page :slotData="slotData" style="margin: 20px 0px 20px 20px"></proofing-q-c-info-page>
+        <span>打样订单号：{{slotData.code}}</span>
+      </el-col>
+      <el-col :span="8">
+        <span>当前状态：<span :style="{color: statusColor}">{{getEnum('proofingOrderStatuses',slotData.status)}}</span></span>
+      </el-col>
+      <el-col :span="8">
+        <el-row type="flex" justify="end">
+          <span>发布日期：{{slotData.creationtime | formatDate}}</span>
+        </el-row>
       </el-col>
     </el-row>
+
+    <div class="titleCardClass">
+      <el-row type="flex">
+        <el-col :span="18">
+          <el-row>
+            <div class="titleClass">
+              <h6>打样详情</h6>
+            </div>
+          </el-row>
+          <proofing-basic-info-page :slotData="slotData" style="padding:20px 0px 20px 20px">
+
+          </proofing-basic-info-page>
+        </el-col>
+        <el-divider direction="vertical"></el-divider>
+        <el-col :span="6">
+          <el-row>
+            <div class="titleClass">
+              <h6>合作商信息</h6>
+            </div>
+          </el-row>
+          <proofing-supplier-info-page :slotData="slotData" style="margin: 20px 0px 20px 20px"></proofing-supplier-info-page>
+          <el-row>
+            <div class="titleClass">
+              <h6>人员设置</h6>
+            </div>
+          </el-row>
+          <proofing-q-c-info-page :slotData="slotData" style="margin: 20px 0px 20px 20px"></proofing-q-c-info-page>
+        </el-col>
+      </el-row>
+    </div>
+
+    <!--<el-row type="flex">-->
+      <!--<el-col :span="16">-->
+        <!--<proofing-basic-info-page :slotData="slotData" style="margin: 20px 20px 20px 0px">-->
+
+        <!--</proofing-basic-info-page>-->
+      <!--</el-col>-->
+      <!--<el-divider direction="vertical"></el-divider>-->
+      <!--<el-col :span="8">-->
+        <!--<proofing-supplier-info-page :slotData="slotData" style="margin: 20px 0px 20px 20px"></proofing-supplier-info-page>-->
+        <!--<el-divider></el-divider>-->
+        <!--<proofing-q-c-info-page :slotData="slotData" style="margin: 20px 0px 20px 20px"></proofing-q-c-info-page>-->
+      <!--</el-col>-->
+    <!--</el-row>-->
   </div>
 </template>
 
@@ -185,4 +220,20 @@
     transform:scale(0.7);
   }
 
+  .proofing-detail .titleClass{
+    padding: 10px 0px 1px 10px;
+    background-color: #F0F0F0;
+  }
+
+  .proofing-detail .titleCardClass{
+    border-style: solid;
+    border-width: 1px;
+    border-top: white;
+    border-color: #DCDCDC;
+  }
+
+  .proofing-detail .el-divider--vertical{
+    height: auto;
+    margin: 0px;
+  }
 </style>

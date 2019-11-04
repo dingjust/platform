@@ -13,15 +13,13 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">发货人</h6>
-            <el-input placeholder="输入品牌名" v-model="form.consignorName" size="mini">
-            </el-input>
+            <el-input placeholder="输入品牌名" v-model="form.consignorName" size="mini"></el-input>
           </el-row>
         </el-col>
         <el-col :span="8">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">联系方式</h6>
-            <el-input placeholder="输入手机号" v-model="form.consignorPhone" size="mini">
-            </el-input>
+            <el-input placeholder="输入手机号" v-model="form.consignorPhone" size="mini"></el-input>
           </el-row>
         </el-col>
       </el-row>
@@ -31,8 +29,7 @@
             <h6 class="info-input-prepend">发货方式</h6>
             <el-select v-model="form.consignment.carrierDetails.code" placeholder="请选择"
               :disabled="form.isOfflineConsignment">
-              <el-option v-for="item in carriers" :key="item.code" :label="item.name" :value="item.code">
-              </el-option>
+              <el-option v-for="item in carriers" :key="item.code" :label="item.name" :value="item.code"></el-option>
             </el-select>
           </el-row>
         </el-col>
@@ -40,12 +37,11 @@
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">发货单号</h6>
             <el-input placeholder="货运单号" v-model="form.consignment.trackingID" size="mini"
-              :disabled="form.isOfflineConsignment">
-            </el-input>
+              :disabled="form.isOfflineConsignment"></el-input>
           </el-row>
         </el-col>
         <el-col :span="8">
-          <el-checkbox v-model="form.isOfflineConsignment" size='mini' class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）
+          <el-checkbox v-model="form.isOfflineConsignment" size="mini" class="checkbox-text">线下物流（勾选后无需填写发货方式和单号）
           </el-checkbox>
         </el-col>
       </el-row>
@@ -56,22 +52,19 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">收货人</h6>
-            <el-input placeholder="输入名称" v-model="form.consigneeName" size="mini">
-            </el-input>
+            <el-input placeholder="输入名称" v-model="form.consigneeName" size="mini"></el-input>
           </el-row>
         </el-col>
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">联系方式</h6>
-            <el-input placeholder="输入方式" v-model="form.consigneePhone" size="mini">
-            </el-input>
+            <el-input placeholder="输入方式" v-model="form.consigneePhone" size="mini"></el-input>
           </el-row>
         </el-col>
         <el-col :span="12">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">详细地址</h6>
-            <el-input placeholder="输入收货地址" v-model="form.consigneeAddress" size="mini">
-            </el-input>
+            <el-input placeholder="输入收货地址" v-model="form.consigneeAddress" size="mini"></el-input>
           </el-row>
         </el-col>
       </el-row>
@@ -82,15 +75,13 @@
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">品牌</h6>
-            <el-input placeholder="输入品牌名称" v-model="form.brand" size="mini">
-            </el-input>
+            <el-input placeholder="输入品牌名称" v-model="form.brand" size="mini"></el-input>
           </el-row>
         </el-col>
         <el-col :span="6">
           <el-row type="flex" align="middle">
             <h6 class="info-input-prepend">产品款号</h6>
-            <el-input placeholder="输入款号" v-model="form.skuID" size="mini">
-            </el-input>
+            <el-input placeholder="输入款号" v-model="form.skuID" size="mini"></el-input>
           </el-row>
         </el-col>
       </el-row>
@@ -107,8 +98,7 @@
             <td>{{sizeArray[0].color}}</td>
             <template v-for="(size,index) in sizeArray">
               <td style="width:80px">
-                <el-input class="order-table-input" type="number" v-model="size.quantity">
-                </el-input>
+                <el-input class="order-table-input" type="number" v-model="size.quantity"></el-input>
               </td>
             </template>
             <td style="width:100px">{{countRowAmount(rowIndex)}}</td>
@@ -141,38 +131,38 @@
     <el-row type="flex" justify="end" class="info-receive-row">
       <h6 class="order-table-info">品牌跟单员： {{slotData.brandOperator!=null?slotData.brandOperator.name:'未指定'}}</h6>
       <h6 class="order-table-info">工厂跟单员： {{slotData.factoryOperator!=null?slotData.factoryOperator.name:'未指定'}}</h6>
-      <h6 class="order-table-info">发货日期： {{slotData
-        .creationtime | timestampToTime}}</h6>
+      <h6 class="order-table-info">
+        发货日期： {{slotData
+        .creationtime | timestampToTime}}
+      </h6>
     </el-row>
     <el-row type="flex" justify="center" class="info-receive-row">
       <template v-if="isBrand()">
-        <el-button class="info-receive-submit" v-if="showSaveBtn" @click="onSave">
-          保存并退出</el-button>
-        <el-button class="info-receive-submit" :disabled="!showCommitBtn" @click="onCommit">
-          确认完成收货</el-button>
+        <el-button class="info-receive-submit" v-if="showSaveBtn" @click="onSave">保存并退出</el-button>
+        <el-button class="info-receive-submit" :disabled="!showCommitBtn" @click="onCommit">确认完成收货</el-button>
         <el-button class="info-receive-submit"
-          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onWithdraw">
-          撤回</el-button>
+          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onWithdraw">撤回
+        </el-button>
       </template>
       <template v-if="isFactory()">
         <el-button class="info-receive-refuse"
-          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onReject">
-          拒绝</el-button>
+          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onReject">拒绝
+        </el-button>
         <el-button class="info-receive-submit"
-          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onAccept">
-          确认</el-button>
+          v-if="hasDeliveryOrders&&slotData.deliveryOrders[0].status=='PENDING_CONFIRM'" @click="onAccept">确认
+        </el-button>
       </template>
     </el-row>
   </div>
 </template>
 
 <script>
-  import OrdersInfoItem from '@/components/custom/OrdersInfoItem';
-  import FormLabel from '@/components/custom/FormLabel';
+  import OrdersInfoItem from "@/components/custom/OrdersInfoItem";
+  import FormLabel from "@/components/custom/FormLabel";
 
   export default {
-    name: 'PurchaseOrderInfoReceive',
-    props: ['slotData'],
+    name: "PurchaseOrderInfoReceive",
+    props: ["slotData"],
     components: {
       OrdersInfoItem,
       FormLabel
@@ -197,37 +187,54 @@
         var totalAmount = 0;
         this.form.entries.forEach(sizeArray => {
           sizeArray.forEach(item => {
-            if (item.quantity != '') {
+            if (item.quantity != "") {
               totalAmount += parseInt(item.quantity);
             }
-          })
+          });
         });
         return totalAmount;
       },
       hasDeliveryOrders: function () {
-        return this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0
+        return (
+          this.slotData.deliveryOrders != null &&
+          this.slotData.deliveryOrders.length != 0
+        );
       },
       showSaveBtn: function () {
-        if (this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0) {
-          return this.slotData.deliveryOrders[0].status != 'PENDING_CONFIRM';
+        if (
+          this.slotData.deliveryOrders != null &&
+          this.slotData.deliveryOrders.length != 0
+        ) {
+          return this.slotData.deliveryOrders[0].status != "PENDING_CONFIRM";
         } else {
           return true;
         }
       },
       showCommitBtn: function () {
-        if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+        if (
+          this.slotData.deliveryOrders == null ||
+          this.slotData.deliveryOrders.length == 0
+        ) {
           // return this.slotData.status == 'OUT_OF_STORE';
           return false;
         } else {
-          return this.slotData.deliveryOrders[0].status == 'UNCOMMITTED' || this.slotData.deliveryOrders[0].status ==
-            'REJECTED';
+          return (
+            this.slotData.deliveryOrders[0].status == "UNCOMMITTED" ||
+            this.slotData.deliveryOrders[0].status == "REJECTED"
+          );
         }
       },
       receiveOrderStatus: function () {
-        if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
-          return '';
+        if (
+          this.slotData.deliveryOrders == null ||
+          this.slotData.deliveryOrders.length == 0
+        ) {
+          return "";
         } else {
-          return this.getEnum('RemarksOrderStatus', this.slotData.deliveryOrders[0].status);
+          return this.getEnum(
+            "RemarksOrderStatus",
+            this.slotData.deliveryOrders[0].status
+          );
         }
       }
     },
@@ -235,7 +242,7 @@
       countRowAmount(rowIndex) {
         var amount = 0;
         this.form.entries[rowIndex].forEach(element => {
-          if (element.quantity != '') {
+          if (element.quantity != "") {
             let quantity = parseInt(element.quantity);
             amount = amount + quantity;
           }
@@ -250,15 +257,15 @@
         var entries = [];
         this.form.entries.forEach(variants => {
           variants.forEach(variant => {
-            if (variant.quantity != '' && variant.quantity > 0) {
+            if (variant.quantity != "" && variant.quantity > 0) {
               let item = {
                 quantity: variant.quantity,
                 color: variant.color,
                 size: variant.size
-              }
+              };
               entries.push(item);
             }
-          })
+          });
         });
         //表单参数
         var form = {
@@ -279,11 +286,11 @@
 
         const url = this.apis().createDeliveryOrder(this.slotData.code);
         const result = await this.$http.post(url, form);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$message.success('创建成功');
+        this.$message.success("创建成功");
         //刷新数据
         this.refreshData();
       },
@@ -295,12 +302,14 @@
           return;
         }
         //跟新slotData
-        this.$set(this.slotData, 'deliveryOrders', result.deliveryOrders);
-        this.$set(this.slotData, 'status', result.status);
-        this.$emit('afterCreate');
+        this.$set(this.slotData, "deliveryOrders", result.deliveryOrders);
+        this.$set(this.slotData, "status", result.status);
+        // this.$emit("afterCreate");
       },
       getVariant(color, size, entries) {
-        var result = entries.filter(item => item.color == color && item.size == size);
+        var result = entries.filter(
+          item => item.color == color && item.size == size
+        );
         if (result.length != 0) {
           return result[0];
         } else {
@@ -312,10 +321,10 @@
         var entries = [];
         this.form.entries.forEach(variants => {
           variants.forEach(variant => {
-            if (variant.quantity != '' && variant.quantity > 0) {
+            if (variant.quantity != "" && variant.quantity > 0) {
               entries.push(variant);
             }
-          })
+          });
         });
         //表单参数
         var form = {
@@ -335,9 +344,12 @@
           brand: this.form.brand,
           consignment: this.form.consignment
         };
-        var url = '';
-        var result = '';
-        if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+        var url = "";
+        var result = "";
+        if (
+          this.slotData.deliveryOrders == null ||
+          this.slotData.deliveryOrders.length == 0
+        ) {
           url = this.apis().createAndCommitDeliveryOrder();
           result = await this.$http.post(url, form);
         } else {
@@ -345,11 +357,11 @@
           result = await this.$http.put(url, form);
         }
 
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$message.success('保存成功');
+        this.$message.success("保存成功");
         //刷新数据
         this.refreshData();
       },
@@ -374,10 +386,10 @@
         var entries = [];
         this.form.entries.forEach(variants => {
           variants.forEach(variant => {
-            if (variant.quantity != '' && variant.quantity > 0) {
+            if (variant.quantity != "" && variant.quantity > 0) {
               entries.push(variant);
             }
-          })
+          });
         });
         //表单参数
         var form = {
@@ -400,49 +412,52 @@
 
         const url = this.apis().updateDeliveryOrder();
         const result = await this.$http.put(url, form);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$message.success('保存成功');
+        this.$message.success("保存成功");
         //刷新数据
         this.refreshData();
       },
       async onWithdraw() {
         const url = this.apis().withdrawDeliveryOrder(this.form.code);
         const result = await this.$http.put(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$message.success('撤回成功');
+        this.$message.success("撤回成功");
         //刷新数据
         this.refreshData();
       },
       async onAccept() {
         const url = this.apis().confirmDeliveryOrder(this.form.code);
         const result = await this.$http.put(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$message.success('确认成功');
+        this.$message.success("确认成功");
         //刷新数据
         this.refreshData();
       },
       async onReject() {
         const url = this.apis().rejectDeliveryOrder(this.form.code);
         const result = await this.$http.put(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
-        this.$message.success('拒绝成功');
+        this.$message.success("拒绝成功");
         //刷新数据
         this.refreshData();
       },
       initForm() {
-        if (this.slotData.deliveryOrders != null && this.slotData.deliveryOrders.length != 0) {
+        if (
+          this.slotData.deliveryOrders != null &&
+          this.slotData.deliveryOrders.length != 0
+        ) {
           this.form.id = this.slotData.deliveryOrders[0].id;
           this.form.code = this.slotData.deliveryOrders[0].code;
           this.form.consignorName = this.slotData.deliveryOrders[0].consignorName;
@@ -456,13 +471,26 @@
           this.form.remarks = this.slotData.deliveryOrders[0].remarks;
           this.form.defectiveQuality = this.slotData.deliveryOrders[0].defectiveQuality;
           this.form.withdrawalQuality = this.slotData.deliveryOrders[0].withdrawalQuality;
-          this.form.consignment=this.slotData.deliveryOrders[0].consignment;
+          if (this.form.isOfflineConsignment) {
+            this.form.consignment = {
+              trackingID: "",
+              carrierDetails: {
+                name: "",
+                code: ""
+              }
+            };
+          } else {
+            this.form.consignment = this.slotData.deliveryOrders[0].consignment;
+          }
         } else {
-          var lastShippingOrders = this.slotData.shippingOrders[this.slotData.shippingOrders.length - 1];
+          var lastShippingOrders = this.slotData.shippingOrders[
+            this.slotData.shippingOrders.length - 1
+          ];
 
           this.form.consignorName = lastShippingOrders.consignorName;
           this.form.consignorPhone = lastShippingOrders.consignorPhone;
-          this.form.isOfflineConsignment = lastShippingOrders.isOfflineConsignment;
+          this.form.isOfflineConsignment =
+            lastShippingOrders.isOfflineConsignment;
           this.form.consigneeName = lastShippingOrders.consigneeName;
           this.form.consigneePhone = lastShippingOrders.consigneePhone;
           this.form.consigneeAddress = lastShippingOrders.consigneeAddress;
@@ -471,18 +499,28 @@
           this.form.remarks = lastShippingOrders.remarks;
           this.form.defectiveQuality = lastShippingOrders.defectiveQuality;
           this.form.withdrawalQuality = lastShippingOrders.withdrawalQuality;
-          this.form.consignment=lastShippingOrders.consignment;
+          if (this.form.isOfflineConsignment) {
+            this.form.consignment = {
+              trackingID: "",
+              carrierDetails: {
+                name: "",
+                code: ""
+              }
+            };
+          } else {
+            this.form.consignment = lastShippingOrders.consignment;
+          }
         }
       }
     },
     data() {
       return {
         receiveFormVisible: false,
-        activeForm: '1',
+        activeForm: "1",
         carriers: [],
         form: {
-          code: '',
-          id: '',
+          code: "",
+          id: "",
           consignorName: "",
           consignorPhone: "",
           isOfflineConsignment: false,
@@ -492,18 +530,18 @@
           brand: "",
           skuID: "",
           remarks: "",
-          defectiveQuality: '',
-          withdrawalQuality: '',
+          defectiveQuality: "",
+          withdrawalQuality: "",
           consignment: {
-            trackingID: '',
+            trackingID: "",
             carrierDetails: {
-              name: '',
-              code: ''
-            },
+              name: "",
+              code: ""
+            }
           },
           entries: []
-        },
-      }
+        }
+      };
     },
     created() {
       this.getCarriers();
@@ -512,21 +550,28 @@
       this.colors.forEach(color => {
         var sizeArray = [];
         this.sizes.forEach(size => {
-          if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+          if (
+            this.slotData.deliveryOrders == null ||
+            this.slotData.deliveryOrders.length == 0
+          ) {
             sizeArray.push({
-              'size': size,
-              'color': color,
-              'quantity': '',
+              size: size,
+              color: color,
+              quantity: ""
             });
           } else {
-            let variant = this.getVariant(color, size, this.slotData.deliveryOrders[0].entries);
+            let variant = this.getVariant(
+              color,
+              size,
+              this.slotData.deliveryOrders[0].entries
+            );
             if (variant != null) {
               sizeArray.push(variant);
             } else {
               sizeArray.push({
-                'size': size,
-                'color': color,
-                'quantity': '',
+                size: size,
+                color: color,
+                quantity: ""
               });
             }
           }
@@ -541,21 +586,28 @@
           this.colors.forEach(color => {
             var sizeArray = [];
             this.sizes.forEach(size => {
-              if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+              if (
+                this.slotData.deliveryOrders == null ||
+                this.slotData.deliveryOrders.length == 0
+              ) {
                 sizeArray.push({
-                  'size': size,
-                  'color': color,
-                  'quantity': '',
+                  size: size,
+                  color: color,
+                  quantity: ""
                 });
               } else {
-                let variant = this.getVariant(color, size, this.slotData.deliveryOrders[0].entries);
+                let variant = this.getVariant(
+                  color,
+                  size,
+                  this.slotData.deliveryOrders[0].entries
+                );
                 if (variant != null) {
                   sizeArray.push(variant);
                 } else {
                   sizeArray.push({
-                    'size': size,
-                    'color': color,
-                    'quantity': '',
+                    size: size,
+                    color: color,
+                    quantity: ""
                   });
                 }
               }
@@ -571,21 +623,28 @@
           this.colors.forEach(color => {
             var sizeArray = [];
             this.sizes.forEach(size => {
-              if (this.slotData.deliveryOrders == null || this.slotData.deliveryOrders.length == 0) {
+              if (
+                this.slotData.deliveryOrders == null ||
+                this.slotData.deliveryOrders.length == 0
+              ) {
                 sizeArray.push({
-                  'size': size,
-                  'color': color,
-                  'quantity': '',
+                  size: size,
+                  color: color,
+                  quantity: ""
                 });
               } else {
-                let variant = this.getVariant(color, size, this.slotData.deliveryOrders[0].entries);
+                let variant = this.getVariant(
+                  color,
+                  size,
+                  this.slotData.deliveryOrders[0].entries
+                );
                 if (variant != null) {
                   sizeArray.push(variant);
                 } else {
                   sizeArray.push({
-                    'size': size,
-                    'color': color,
-                    'quantity': '',
+                    size: size,
+                    color: color,
+                    quantity: ""
                   });
                 }
               }
@@ -599,13 +658,13 @@
         handler(val, oldVal) {
           this.initForm();
         },
-        deep: true,
+        deep: true
       }
     },
     mounted() {
       this.initForm();
     }
-  }
+  };
 
 </script>
 <style>
@@ -673,22 +732,22 @@
   }
 
   .order-table-btn_add {
-    background-color: #FFD60C;
-    border-color: #FFD60C;
+    background-color: #ffd60c;
+    border-color: #ffd60c;
     color: #000;
   }
 
   .info-receive-submit {
-    background-color: #FFD60C;
-    border-color: #FFD60C;
+    background-color: #ffd60c;
+    border-color: #ffd60c;
     color: #000;
     width: 150px;
   }
 
   .info-receive-refuse {
-    background-color: red;
+    /* background-color: red;
     border-color: red;
-    color: #fff;
+    color: #fff; */
     width: 150px;
   }
 

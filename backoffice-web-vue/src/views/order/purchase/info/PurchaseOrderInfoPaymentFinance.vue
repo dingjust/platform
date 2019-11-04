@@ -22,7 +22,7 @@
               <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">
                   {{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后
                   <span v-if="payPlanItem.moneyType === 'MONTHLY_SETTLEMENT'">
-                    次月月底支付剩余全部款项
+                    次月{{payPlanItem.triggerDays}}支付剩余全部款项
                   </span>
                   <span v-else>
                     {{payPlanItem.triggerDays}}天 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余全部款项

@@ -83,6 +83,7 @@
       async _Update() {
         this.formData = Object.assign({}, this.slotData);
         this.slotData.variants = [];
+        this.steppedPrices=[];
         const url = this.apis().updateOfApparelProduct(this.slotData.code);
         const result = await this.$http.put(url, this.slotData);
         if (result["errors"]) {
