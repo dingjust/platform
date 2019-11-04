@@ -14,29 +14,16 @@
                                     @onSearch="onSearch"
                                     @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
-              <el-button-group v-if="props.item.state == 'SELLER_SUBMITTED'">
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
-                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">修改</el-button>
-                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button type="text" style="color: red" @click="onCancell(props.item)">关闭</el-button>
-              </el-button-group>
-              <el-button-group v-if="props.item.state == 'BUYER_REJECTED'">
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
-                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">重报</el-button>
-                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button type="text" style="color: red" @click="onCancell(props.item)">关闭</el-button>
-              </el-button-group>
-              <el-button-group v-if="props.item.state == 'BUYER_APPROVED'">
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
-                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button v-if="props.item.activeProofing" type="text" style="color: black" @click="onDetails(props.item)">查看打样订单</el-button>
-                <el-button v-else type="text" style="color: black" @click="onDetails(props.item)">创建打样订单</el-button>
-                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button v-if="props.item.activePurchaseOrder" type="text" style="color: black" @click="onDetails(props.item)">查看生产订单</el-button>
-                <el-button v-else type="text" style="color: black" @click="onDetails(props.item)">创建生产订单</el-button>
-              </el-button-group>
+              <el-row v-if="props.item.state == 'SELLER_SUBMITTED'">
+                <el-button type="text" class="quote-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button type="text" class="quote-list-button" @click="onDetails(props.item)">修改</el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button type="text" class="quote-list-button" @click="onCancell(props.item)">关闭</el-button>
+              </el-row>
+              <el-row v-else>
+                <el-button type="text" class="quote-list-button" @click="onDetails(props.item)">详情</el-button>
+              </el-row>
             </template>
           </quote-search-result-list>
         </el-tab-pane>
@@ -195,3 +182,9 @@
     }
   };
 </script>
+
+<style>
+  .quote-list-button{
+    color: #FFA403
+  }
+</style>

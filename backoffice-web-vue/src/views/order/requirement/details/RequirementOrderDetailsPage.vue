@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn requirement-detail">
     <div class="box" v-if="!readOnly">
-      <div class="boxButton">
+      <div class="boxButton" @click="onInvitation">
         <el-row type="flex" justify="center">
           <div class="buttonIconClass">
             <svg t="1570870182765" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4529" width="100%" height="100%">
@@ -25,18 +25,18 @@
           <span class="buttonTextClass">修改</span>
         </el-row>
       </div>
-      <div class="boxButton">
-        <el-row type="flex" justify="center">
-          <div class="buttonIconClass">
-            <svg t="1570870292198" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4641" width="100%" height="100%">
-              <path d="M306.16 170.54c-48.52 0-87.84 38.26-87.84 85.46v513c0 47.2 39.32 85.46 87.84 85.46h410c48.52 0 87.84-38.26 87.84-85.46V541c0-15.67 13.14-28.46 29.25-28.46S862.5 525.23 862.5 541v228c0 78.63-65.51 142.46-146.43 142.46h-410c-80.82 0-146.43-63.83-146.43-142.46V256c0-78.63 65.61-142.46 146.43-142.37h175.76c16.11 0 29.25 12.69 29.25 28.46s-13 28.45-29.25 28.45z m58.49 569.86c-16.21 0-29.25-12.79-29.25-28.45s13-28.45 29.25-28.45h292.86c16.1 0 29.25 12.79 29.25 28.45s-13 28.45-29.25 28.45z m0-170.92c-16.21 0-29.25-12.88-29.25-28.55s13-28.45 29.25-28.45H476.2c16.2 0 29.25 12.88 29.25 28.55s-13 28.45-29.25 28.45z m0-171" fill="#505766" p-id="4642"></path><path d="M856.39 170.53a14 14 0 0 0-5.3-9.48l-56.38-44.28a14.8 14.8 0 0 0-10.71-3.06 14.61 14.61 0 0 0-9.76 5.18l-237 284.88a14.32 14.32 0 0 0-2.55 4.71l-0.07 0.25-22.9 72.27a13.88 13.88 0 0 0 4.75 15.11l11.27 8.89a14.85 14.85 0 0 0 16.21 1.32l67.87-36.93 0.24-0.14a14.72 14.72 0 0 0 4.21-3.41l237-284.88a13.82 13.82 0 0 0 3.12-10.43z" fill="#FFD60C" p-id="4643"></path>
-            </svg>
-          </div>
-        </el-row>
-        <el-row type="flex" justify="center">
-          <span class="buttonTextClass">重新报价</span>
-        </el-row>
-      </div>
+      <!--<div class="boxButton">-->
+        <!--<el-row type="flex" justify="center">-->
+          <!--<div class="buttonIconClass">-->
+            <!--<svg t="1570870292198" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4641" width="100%" height="100%">-->
+              <!--<path d="M306.16 170.54c-48.52 0-87.84 38.26-87.84 85.46v513c0 47.2 39.32 85.46 87.84 85.46h410c48.52 0 87.84-38.26 87.84-85.46V541c0-15.67 13.14-28.46 29.25-28.46S862.5 525.23 862.5 541v228c0 78.63-65.51 142.46-146.43 142.46h-410c-80.82 0-146.43-63.83-146.43-142.46V256c0-78.63 65.61-142.46 146.43-142.37h175.76c16.11 0 29.25 12.69 29.25 28.46s-13 28.45-29.25 28.45z m58.49 569.86c-16.21 0-29.25-12.79-29.25-28.45s13-28.45 29.25-28.45h292.86c16.1 0 29.25 12.79 29.25 28.45s-13 28.45-29.25 28.45z m0-170.92c-16.21 0-29.25-12.88-29.25-28.55s13-28.45 29.25-28.45H476.2c16.2 0 29.25 12.88 29.25 28.55s-13 28.45-29.25 28.45z m0-171" fill="#505766" p-id="4642"></path><path d="M856.39 170.53a14 14 0 0 0-5.3-9.48l-56.38-44.28a14.8 14.8 0 0 0-10.71-3.06 14.61 14.61 0 0 0-9.76 5.18l-237 284.88a14.32 14.32 0 0 0-2.55 4.71l-0.07 0.25-22.9 72.27a13.88 13.88 0 0 0 4.75 15.11l11.27 8.89a14.85 14.85 0 0 0 16.21 1.32l67.87-36.93 0.24-0.14a14.72 14.72 0 0 0 4.21-3.41l237-284.88a13.82 13.82 0 0 0 3.12-10.43z" fill="#FFD60C" p-id="4643"></path>-->
+            <!--</svg>-->
+          <!--</div>-->
+        <!--</el-row>-->
+        <!--<el-row type="flex" justify="center">-->
+          <!--<span class="buttonTextClass">重新发布</span>-->
+        <!--</el-row>-->
+      <!--</div>-->
     </div>
     <el-row class="factory-info-title-row" type="flex" justify="space-between">
       <div class="factory-info-title">
@@ -110,6 +110,16 @@
       </quote-details-page>
     </el-dialog>
 
+    <el-dialog :visible.sync="dialogVisible" width="80%"  class="purchase-dialog" append-to-body>
+      <factory-cooperator-transfer v-if="dialogVisible"
+                                   @onSubmit="onInvitationFactories"
+                                   :selectedTip="tip"
+                                   :selectUids="selectUids">
+
+      </factory-cooperator-transfer>
+    </el-dialog>
+
+
   </div>
 </template>
 
@@ -118,7 +128,8 @@
   import RequirementOrderBasicInfoPage from '../info/RequirementOrderBasicInfoPage';
   import RequirementOrderBelongToInfoPage from '../info/RequirementOrderBelongToInfoPage';
   import RequirementOrderQuoteList from '../list/RequirementOrderQuoteList';
-  import QuoteDetailsPage from "../../quote/details/QuoteDetailsPage";
+  import QuoteDetailsPage from '../../quote/details/QuoteDetailsPage';
+  import FactoryCooperatorTransfer from '../../../../components/custom/FactoryCooperatorTransfer';
 
   const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
@@ -135,6 +146,7 @@
       }
     },
     components: {
+      FactoryCooperatorTransfer,
       QuoteDetailsPage,
       RequirementOrderQuoteList,
       RequirementOrderBelongToInfoPage,
@@ -143,7 +155,7 @@
     },
     computed: {
       ...mapGetters({
-        quotePage: 'quotePage',
+        quotePage: 'quotePage'
       }),
       statusColor: function () {
         var color = '';
@@ -163,10 +175,11 @@
     },
     methods: {
       ...mapMutations({
+        setRegions: 'regions'
       }),
       ...mapActions({
       }),
-      async onDetails(item) {
+      async onDetails (item) {
         const url = this.apis().getQuote(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -177,17 +190,63 @@
         this.quoteData = result;
         this.detailsDialogVisible = !this.detailsDialogVisible;
       },
-      onClose () {
-        this.setFactoryFormVisible(false);
+      onSearchQuotes (page, size) {
+        this.$emit('onSearchQuotes', page, size);
       },
-      onSearchQuotes(page, size){
-        this.$emit('onSearchQuotes',page,size);
+      async onInvitation () {
+        const url = this.apis().getRecommendFactories(this.slotData.code);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.selectUids = result;
+        this.getRegions();
+        this.dialogVisible = !this.dialogVisible;
+      },
+      async getRegions () {
+        const url = this.apis().getRegions();
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.setRegions(result);
+      },
+      // 邀请工厂报价
+      async onInvitationFactories (uids) {
+        if (uids == null || uids.length <= 0) {
+          this.$message.error('请选择工厂');
+          return;
+        }
+        var uidStr = '';
+        for (let uid of uids) {
+          uidStr += uid + ',';
+        }
+        if (uidStr.length > 0) {
+          uidStr = uidStr.slice(0,uidStr.lastIndexOf('，'));
+        }
+
+        const url = this.apis().recommendRequirementOrderToFactory(this.slotData.code, uidStr);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.dialogVisible = false;
+        this.$message.success('邀请工厂报价成功');
       }
     },
     data () {
       return {
         detailsDialogVisible: false,
-        quoteData: ''
+        dialogVisible: false,
+        quoteData: '',
+        selectUids: [],
+        tip: '该工厂已报价'
       }
     },
     created () {

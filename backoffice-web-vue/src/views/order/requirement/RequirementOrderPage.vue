@@ -21,11 +21,14 @@
                                                 @onSearch="onSearch"
                                                 @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
-              <el-button-group>
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
-                <el-button v-if="props.item.status == 'PENDING_QUOTE'"  type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button v-if="props.item.status == 'PENDING_QUOTE'" type="text" style="color: black" @click="onCancelled(props.item)">关闭</el-button>
-              </el-button-group>
+              <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
+                <el-button type="text" class="requirement-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button class="requirement-list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
+              </el-row>
+              <el-row v-else>
+                <el-button type="text" class="requirement-list-button" @click="onDetails(props.item)">详情</el-button>
+              </el-row>
             </template>
           </requirement-order-search-result-list>
         </el-tab-pane>
@@ -272,5 +275,8 @@
 
   .requirement .requirement-form-dialog .el-dialog__header {
     padding: 0px !important;
+  }
+  .requirement-list-button{
+    color: #FFA403;
   }
 </style>

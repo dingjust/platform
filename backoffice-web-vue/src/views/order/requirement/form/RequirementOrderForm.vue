@@ -220,6 +220,8 @@
         :selectFactories="selectFactories"
         :selectCooperators="selectCooperators"
         :selectUids="selectUids"
+        :selectCooperatorIds="selectCooperatorIds"
+        :selectFactoryUids="selectFactoryUids"
         :selectPhoneNumbers="selectPhoneNumbers">
 
       </factory-cooperator-transfer-form>
@@ -382,6 +384,8 @@
         isCountryWide: null,
         dialogVisible: false,
         selectUids: [],
+        selectFactoryUids: [],
+        selectCooperatorIds: [],
         selectPhoneNumbers: [],
         selectFactories: [],
         selectCooperators: [],

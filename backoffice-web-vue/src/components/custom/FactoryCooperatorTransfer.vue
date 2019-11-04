@@ -97,6 +97,7 @@
             <cooperator-item
               class="transfer-item"
               :slotData="item"
+              :selectedTip="selectTempUids.indexOf(item.partner.uid) > -1 ? '该工厂已选择' : selectedTip"
               :isSelected="isCooperatorSelected(item)"
               @handleCooperatorSelectionChange="handleCooperatorSelect">
 
@@ -106,6 +107,7 @@
             <factory-item
               class="transfer-item"
               :slotData="item"
+              :selectedTip="selectTempUids.indexOf(item.uid) > -1 ? '该工厂已选择' : selectedTip"
               :isSelected="isFactorySelected(item)"
               @handleFactorySelectionChange="handleFactorySelect">
 
@@ -165,6 +167,9 @@
         </div>
       </el-col>
     </el-row>
+    <el-row type="flex" justify="center">
+      <el-button class="submit-btn" @click="onSubmit()">确定</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -172,8 +177,8 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import CooperatorItem from "../../../../components/custom/item/CooperatorItem";
-  import FactoryItem from "../../../../components/custom/item/FactoryItem";
+  import CooperatorItem from "./item/CooperatorItem";
+  import FactoryItem from "./item/FactoryItem";
 
   const {
     mapGetters,
@@ -181,8 +186,8 @@
   } = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
-    name: 'FactoryCooperatorTransferForm',
-    props: ['selectUids', 'selectPhoneNumbers','selectFactories','selectCooperators','selectFactoryUids','selectCooperatorIds'],
+    name: 'FactoryCooperatorTransfer',
+    props: ['selectUids', 'selectedTip'],
     computed: {
       ...mapGetters({
         regions: 'regions',
@@ -192,7 +197,7 @@
         cooperatorPage: 'cooperatorPage',
         cooperatorQueryFormData: 'cooperatorQueryFormData',
         factoryQueryFormData: 'factoryQueryFormData'
-      })
+      }),
     },
     components: {FactoryItem, CooperatorItem},
     methods: {
@@ -242,6 +247,7 @@
           this.selectCooperators.push(val);
           if (val.type === 'ONLINE') {
             this.selectUids.push(val.partner.uid);
+            this.selectTempUids.push(val.partner.uid);
           }
         }
       },
@@ -255,6 +261,7 @@
             var index1 = this.selectUids.indexOf(val.partner.uid);
             if (index1 > -1) {
               this.selectUids.splice(index1, 1);
+              this.selectTempUids.splice(index1, 1);
             }
           }
         }
@@ -264,6 +271,7 @@
         if (index <= -1) {
           this.selectFactoryUids.push(val.uid);
           this.selectUids.push(val.uid);
+          this.selectTempUids.push(val.uid);
           this.selectFactories.push(val);
         }
       },
@@ -271,6 +279,7 @@
         var index1 = this.selectUids.indexOf(val.uid);
         if (index1 > -1) {
           this.selectUids.splice(index1, 1);
+          this.selectTempUids.splice(index1, 1);
           var index = this.selectFactoryUids.indexOf(val.uid);
           if (index > -1) {
             this.selectFactoryUids.splice(index, 1);
@@ -374,6 +383,9 @@
           this.factoryQueryFormData.labels.push(item.id);
         }
       },
+      onSubmit() {
+        this.$emit('onSubmit', this.selectTempUids);
+      }
     },
     data () {
       return {
@@ -381,11 +393,16 @@
         selectPayPlan: '',
         keyword: '',
         isFactorySelection: false,
+        selectFactoryUids: [],
+        selectCooperatorIds: [],
         isFactorySearched: false,
         isCooperatorSearched: false,
         machiningTypes: this.$store.state.EnumsModule.machiningTypes,
         populationScales: this.$store.state.EnumsModule.populationScales,
-        labels: []
+        labels: [],
+        selectFactories: [],
+        selectCooperators: [],
+        selectTempUids: []
       }
     },
     created () {
@@ -438,6 +455,12 @@
     cursor:pointer;
   }
 
-
+  .factory-cooperator-transfer .submit-btn {
+    background-color: #FFD60C;
+    border-color: #FFD60C;
+    color: #000;
+    width: 150px;
+    margin-top: 30px;
+  }
 
 </style>

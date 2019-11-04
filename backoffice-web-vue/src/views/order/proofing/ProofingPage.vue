@@ -18,11 +18,14 @@
                                        @onShowQuote="onShowQuote"
                                        @onShowRequirement="onShowRequirement">
             <template slot="operations" slot-scope="props">
-              <el-button-group>
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
-                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">关闭</el-button>
-              </el-button-group>
+              <el-row v-if="props.item.status == 'PENDING_PAYMENT'">
+                <el-button type="text" class="proofing-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button type="text" class="proofing-list-button" @click="onCancell(props.item)">关闭</el-button>
+              </el-row>
+              <el-row v-else>
+                <el-button type="text" class="proofing-list-button" @click="onDetails(props.item)">详情</el-button>
+              </el-row>
             </template>
           </proofing-search-result-list>
         </el-tab-pane>
@@ -202,3 +205,8 @@
     }
   }
 </script>
+<style>
+  .proofing-list-button{
+    color: #FFA403;
+  }
+</style>

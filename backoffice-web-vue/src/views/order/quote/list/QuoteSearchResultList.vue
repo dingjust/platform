@@ -37,7 +37,7 @@
         </template>
       </el-table-column>
       <!--<el-table-column label="需求订单编号" prop="requirementOrder.code"></el-table-column>-->
-      <el-table-column label="操作" header-align="center" width="220" align="center">
+      <el-table-column label="操作" header-align="center" width="150" align="center">
         <template slot-scope="scope">
           <slot name="operations" :item="scope.row"></slot>
         </template>

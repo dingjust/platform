@@ -39,7 +39,7 @@
           <h6 v-if="scope.row.status == 'CANCELLED'" style="color: #a9a9a9">{{getEnum('requirementOrderStatuses', scope.row.status)}}</h6>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作"  header-align="center" align="center">
         <template slot-scope="scope">
           <slot name="operations" :item="scope.row"></slot>
         </template>
