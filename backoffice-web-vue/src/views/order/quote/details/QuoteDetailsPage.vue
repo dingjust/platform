@@ -72,7 +72,7 @@
               <h6>发布需求者</h6>
             </div>
           </el-row>
-          <requirement-order-belong-to-info-page :slotData="slotData" style="margin: 20px 0px 10px 10px;"/>
+          <requirement-order-belong-to-info-page :slotData="slotData.requirementOrder" style="margin: 20px 0px 10px 10px;"/>
         </el-col>
       </el-row>
     </div>

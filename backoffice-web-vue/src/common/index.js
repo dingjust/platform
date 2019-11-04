@@ -283,6 +283,9 @@ const COMMON_APIS = {
   getRequirementOrder(code) {
     return '/b2b/orders/requirement/' + code;
   },
+  getQuotesByRequirementOrder(code) {
+    return '/b2b/orders/requirement/' + code + '/quotes';
+  },
   cancelledRequirementOrder(code) {
     return '/b2b/orders/requirement/cancelled/' + code;
   },
@@ -308,7 +311,10 @@ const COMMON_APIS = {
     return '/b2b/orders/quote/' + code + '/approve';
   },
   updateReject(code) {
-    return '/b2b/orders/quote/' + code + 'reject';
+    return '/b2b/orders/quote/' + code + '/reject';
+  },
+  cancelQuote(code) {
+    return '/b2b/orders/quote/' + code + '/cancel';
   },
   getPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code;

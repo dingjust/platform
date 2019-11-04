@@ -1,12 +1,33 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <proofing-toolbar @onSearch="onSearch"/>
-      <proofing-search-result-list :page="page"
-                                   @onSearch="onSearch"
-                                   @onDetails="onDetails"
-                                   @onShowQuote="onShowQuote"
-                                   @onShowRequirement="onShowRequirement"/>
+      <el-row>
+        <el-col :span="2">
+          <div class="orders-list-title">
+            <h6>打样订单列表</h6>
+          </div>
+        </el-col>
+      </el-row>
+      <proofing-toolbar @onAdvancedSearch="onAdvancedSearch" @clearQueryFormData="clearQueryFormData"/>
+
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+          <proofing-search-result-list :page="page"
+                                       @onSearch="onSearch"
+                                       @onDetails="onDetails"
+                                       @onShowQuote="onShowQuote"
+                                       @onShowRequirement="onShowRequirement">
+            <template slot="operations" slot-scope="props">
+              <el-button-group>
+                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
+                <el-button type="text" style="color: black" @click="onDetails(props.item)">关闭</el-button>
+              </el-button-group>
+            </template>
+          </proofing-search-result-list>
+        </el-tab-pane>
+      </el-tabs>
+
     </el-card>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
@@ -32,7 +53,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('ProofingsModule');
+  const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('ProofingsModule');
 
   import ProofingToolbar from './toolbar/ProofingToolbar';
   import ProofingSearchResultList from './list/ProofingSearchResultList';
@@ -52,20 +73,35 @@
     },
     computed: {
       ...mapGetters({
-        keyword: 'keyword',
+        queryFormData: 'queryFormData',
+        categories: 'categories',
         page: 'page'
       })
     },
     methods: {
+      ...mapMutations({
+        setCategories: 'categories'
+      }),
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       onSearch (page, size) {
         const keyword = this.keyword;
 
         const url = this.apis().getProofings();
         this.search({url, keyword, page, size});
+      },
+      onAdvancedSearch (page, size) {
+        const query = this.queryFormData;
+
+        const url = this.apis().getProofings();
+        this.searchAdvanced({url, query, page, size});
+
+        if (this.categories <= 0) {
+          this.getMinorCategories();
+        }
       },
       async onDetails (row) {
         const url = this.apis().getProofing(row.code);
@@ -100,7 +136,26 @@
 
         this.requirementData = result;
         this.requirementDetailsDialogVisible = !this.requirementDetailsDialogVisible;
-      }
+      },
+      handleTabClick (tab) {
+        if (tab.name !== 'ALL') {
+          this.queryFormData.statuses = tab.name;
+        } else {
+          this.queryFormData.statuses = [];
+        }
+
+        this.onAdvancedSearch();
+      },
+      async getMinorCategories () {
+        const url = this.apis().getMinorCategories();
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.setCategories(result);
+      },
     },
     data () {
       return {
@@ -109,11 +164,41 @@
         requirementDetailsDialogVisible: false,
         quoteData: '',
         requirementData: '',
-        slotData: ''
+        slotData: '',
+        activeName: 'ALL',
+        statuses: [
+          {
+            code: 'ALL',
+            name: '全部'
+          },
+          {
+            code: 'PENDING_PAYMENT',
+            name: '待付款'
+          },
+          {
+            code: 'PENDING_DELIVERY',
+            name: '待发货'
+          },
+          {
+            code: 'SHIPPED',
+            name: '已发货'
+          },
+          {
+            code: 'COMPLETED',
+            name: '已完成'
+          },
+          {
+            code: 'CANCELLED',
+            name: '已取消'
+          }
+        ]
       }
     },
     created () {
-      this.onSearch();
+      this.onAdvancedSearch();
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   }
 </script>

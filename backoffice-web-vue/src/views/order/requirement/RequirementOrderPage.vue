@@ -13,7 +13,7 @@
 
       <requirement-order-toolbar
                                  @onSimpleNew="onSimpleNew"
-                                 @onSearch="onSearch"
+                                 @clearQueryFormData="clearQueryFormData"
                                  @onAdvancedSearch="onAdvancedSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
@@ -80,7 +80,8 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced',
         searchQuotesAdvanced: 'searchQuotesAdvanced',
-        clearFormData: 'clearFormData'
+        clearFormData: 'clearFormData',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
@@ -236,6 +237,9 @@
     },
     created () {
       this.onAdvancedSearch();
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   };
 </script>

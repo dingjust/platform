@@ -1,31 +1,43 @@
 <template>
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
-      <!--<el-table-column type="expand" fixed>-->
-        <!--<template slot-scope="props">-->
-          <!--<requirement-order-request-form :read-only="true"-->
-                                          <!--:slot-data="props.row.requirementOrder.details">-->
-          <!--</requirement-order-request-form>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <el-table-column label="报价单号" prop="code" width="250" fixed></el-table-column>
-      <el-table-column label="状态" prop="state" fixed>
+      <el-table-column label="报价单号" prop="code"></el-table-column>
+      <el-table-column label="产品" header-align="center" width="260">
         <template slot-scope="scope">
-          <span>{{getEnum('quoteStates', scope.row.state)}}</span>
+          <el-row type="flex" align="middle" :gutter="10">
+            <el-col :span="8">
+              <img width="70px" height="70px"
+                   :src="scope.row.requirementOrder.details.pictures != null && scope.row.requirementOrder.details.pictures.length > 0 ?
+                   scope.row.requirementOrder.details.pictures[0].url : 'static/img/nopicture.png'" />
+            </el-col>
+            <el-col :span="16">
+              <h6 style="font-size: 12px">品类：{{scope.row.requirementOrder.details.category.parent.name}}-{{scope.row.requirementOrder.details.category.name}}</h6>
+              <h6 style="font-size: 12px">货号：{{scope.row.requirementOrder.details.productSkuID}}</h6>
+              <h6 style="font-size: 12px">数量：{{scope.row.requirementOrder.details.expectedMachiningQuantity}}</h6>
+            </el-col>
+          </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="创建用户" prop="user">
+      <el-table-column label="品牌" prop="supplier.name" header-align="center" width="180"></el-table-column>
+      <el-table-column label="报价" prop="user">
         <template slot-scope="scope">
-          <span>{{scope.row.user.name}}</span>
+          <span style="color: red">￥{{scope.row.unitPrice}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" prop="createdTs">
+      <el-table-column label="报价日期" prop="createdTs" width="150">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="需求订单编号" prop="requirementOrder.code"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="状态" prop="state" width="80">
+        <template slot-scope="scope">
+          <h6 v-if="scope.row.state == 'SELLER_SUBMITTED'" style="color: red;font-size: 12px">{{getEnum('quoteStates', scope.row.state)}}</h6>
+          <h6 v-if="scope.row.state == 'BUYER_APPROVED'" style="color: green;font-size: 12px">{{getEnum('quoteStates', scope.row.state)}}</h6>
+          <h6 v-if="scope.row.state == 'BUYER_REJECTED'" style="color: #a9a9a9;font-size: 12px">{{getEnum('quoteStates', scope.row.state)}}</h6>
+        </template>
+      </el-table-column>
+      <!--<el-table-column label="需求订单编号" prop="requirementOrder.code"></el-table-column>-->
+      <el-table-column label="操作" header-align="center" width="220" align="center">
         <template slot-scope="scope">
           <slot name="operations" :item="scope.row"></slot>
         </template>

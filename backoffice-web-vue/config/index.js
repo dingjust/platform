@@ -30,75 +30,23 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '',
-    proxyTable: {
-      '/medias': {
-        target: 'https://localhost:9002',
-        "secure": false,
-        pathRewrite: {
-          '^/medias': 'djwebservices/medias'
-        }
-      },
-      '/logout': {
-        target: 'https://localhost:9002',
-        "secure": false,
-        pathRewrite: {
-          '^/logout': 'djwebservices/logout'
-        }
-      },
-      '/authorizationserver': {
-        target: 'https://localhost:9002',
-        changeOrigin: true,
-        "secure": false,
-        pathRewrite: {
-          '^/authorizationserver': 'authorizationserver'
-        }
-      },
-      '/b2b': {
-        target: 'https://localhost:9002',
-        changeOrigin: true,
-        "secure": false,
-        pathRewrite: {
-          '^/b2b': 'djwebservices/v2/b2b-apparel-zh'
-        }
-      },
-      '/c2b': {
-        target: 'https://localhost:9002',
-        changeOrigin: true,
-        "secure": false,
-        pathRewrite: {
-          '^/c2b': 'djwebservices/v2/c2b-apparel-zh'
-        }
-      },
-      '/amap': {
-        target: 'https://restapi.amap.com',
-        changeOrigin: true,
-        "secure": false,
-        pathRewrite: {
-          '^/amap': ''
-        }
-      },
-    },
     // proxyTable: {
-    //   '/resource': {
-    //     target: 'http://sc.nbyjy.net',
-    //     "secure": false,
-    //   },
     //   '/medias': {
-    //     target: 'https://47.106.112.137:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/medias': 'djwebservices/medias'
     //     }
     //   },
     //   '/logout': {
-    //     target: 'https://47.106.112.137:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/logout': 'djwebservices/logout'
     //     }
     //   },
     //   '/authorizationserver': {
-    //     target: 'https://47.106.112.137:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -106,7 +54,7 @@ module.exports = {
     //     }
     //   },
     //   '/b2b': {
-    //     target: 'https://47.106.112.137:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -114,7 +62,7 @@ module.exports = {
     //     }
     //   },
     //   '/c2b': {
-    //     target: 'https://47.106.112.137:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {

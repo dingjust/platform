@@ -66,15 +66,13 @@ const state = {
     }
   },
   queryFormData: {
-    productionOrderCode: '',
-    requirementOrderRef: '',
-    skuID: '',
+    keyword: '',
+    brandOperatorName: '',
+    factoryOperatorName: '',
+    brandReferenceName: '',
+    factoryReferenceName: '',
+    categories: [],
     statuses: [],
-    expectedDeliveryDateFrom: null,
-    expectedDeliveryDateTo: null,
-    createdDateFrom: null,
-    createdDateTo: null,
-    belongTos: [],
   },
   addressFormData: {
     id: null,
@@ -100,7 +98,8 @@ const state = {
       code: '',
       name: ''
     }
-  }
+  },
+  categories: []
 };
 
 const mutations = {
@@ -109,7 +108,8 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  categories: (state, categories) => state.categories = categories,
 };
 
 const actions = {
@@ -136,7 +136,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {query, page, size}) {
+  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
     commit('currentPageNumber', page);
@@ -160,6 +160,17 @@ const actions = {
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
+  },
+  clearQueryFormData({dispatch, commit, state}) {
+    commit('queryFormData', {
+      keyword: '',
+      brandOperatorName: '',
+      factoryOperatorName: '',
+      brandReferenceName: '',
+      belongToName: [],
+      categories: [],
+      statuses: [],
+    });
   }
 };
 
@@ -169,7 +180,8 @@ const getters = {
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  categories: state => state.categories,
 };
 
 export default {

@@ -94,6 +94,9 @@
         </el-row>
       </el-col>
     </el-row>
+    <el-row v-if="page.content.length <= 0" type="flex" justify="center" style="margin-top: 20px">
+      <h6>暂无报价</h6>
+    </el-row>
 
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
                    @size-change="onPageSizeChanged"

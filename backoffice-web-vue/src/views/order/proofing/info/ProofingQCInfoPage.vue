@@ -1,10 +1,10 @@
 <template>
   <div class="animated fadeIn proofing-basic">
     <el-row type="flex" style="margin-bottom: 10px">
-      <el-col :span="12">
+      <el-col :span="8">
         <h6 style="font-weight: bold">品牌跟单员</h6>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <h6 style="color: red" v-if="slotData.brandOperator == null">未指定</h6>
         <div v-else>
           <h6 class="contentTextClass" style="margin-bottom: 10px">{{slotData.brandOperator.name}}</h6>
@@ -13,10 +13,10 @@
       </el-col>
     </el-row>
     <el-row type="flex" style="margin-bottom: 10px">
-      <el-col :span="12">
+      <el-col :span="8">
         <h6 style="font-weight: bold">工厂跟单员</h6>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <h6 style="color: red" v-if="slotData.factoryOperator == null">未指定</h6>
         <div v-else>
           <h6 class="contentTextClass" style="margin-bottom: 10px">{{slotData.factoryOperator.name}}</h6>

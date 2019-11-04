@@ -1,30 +1,48 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <quote-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
-      <quote-search-result-list :page="page"
-                                @onSearch="onSearch"
-                                @onAdvancedSearch="onAdvancedSearch">
-        <template slot="operations" slot-scope="props">
-          <el-button type="text" icon="el-icon-edit"
-                     @click="onDetails(props.item)">
-            明细
-          </el-button>
-          <el-button v-if="isFactory()&&props.item.state=='BUYER_APPROVED'" type="text" icon="el-icon-edit"
-                     @click="onCreatePurchaseOrder(props.item)">
-            生产
-          </el-button>
-          <el-button v-if="isFactory()&&props.item.state=='BUYER_APPROVED'" type="text" icon="el-icon-edit"
-                     @click="onCreateProofing(props.item)">
-            打样
-          </el-button>
-          <el-button v-if="isFactory()&&props.item.state=='BUYER_REJECTED'&&props.item.requirementOrder.status=='PENDING_QUOTE'" type="text" icon="el-icon-edit"
-                     @click="onReQuote(props.item)">
-            重新报价
-          </el-button>
+      <el-row>
+        <div class="orders-list-title">
+          <h6>报价订单列表</h6>
+        </div>
+      </el-row>
+      <quote-toolbar @clearQueryFormData="clearQueryFormData" @onAdvancedSearch="onAdvancedSearch"/>
 
-        </template>
-      </quote-search-result-list>
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+          <quote-search-result-list :page="page"
+                                    @onSearch="onSearch"
+                                    @onAdvancedSearch="onAdvancedSearch">
+            <template slot="operations" slot-scope="props">
+              <el-button-group v-if="props.item.state == 'SELLER_SUBMITTED'">
+                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
+                <el-button type="text" style="color: black" @click="onDetails(props.item)">修改</el-button>
+                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
+                <el-button type="text" style="color: red" @click="onCancell(props.item)">关闭</el-button>
+              </el-button-group>
+              <el-button-group v-if="props.item.state == 'BUYER_REJECTED'">
+                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
+                <el-button type="text" style="color: black" @click="onDetails(props.item)">重报</el-button>
+                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
+                <el-button type="text" style="color: red" @click="onCancell(props.item)">关闭</el-button>
+              </el-button-group>
+              <el-button-group v-if="props.item.state == 'BUYER_APPROVED'">
+                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
+                <el-button v-if="props.item.activeProofing" type="text" style="color: black" @click="onDetails(props.item)">查看打样订单</el-button>
+                <el-button v-else type="text" style="color: black" @click="onDetails(props.item)">创建打样订单</el-button>
+                <el-button type="text" style="cursor: unset;color: black" disabled>|</el-button>
+                <el-button v-if="props.item.activePurchaseOrder" type="text" style="color: black" @click="onDetails(props.item)">查看生产订单</el-button>
+                <el-button v-else type="text" style="color: black" @click="onDetails(props.item)">创建生产订单</el-button>
+              </el-button-group>
+            </template>
+          </quote-search-result-list>
+        </el-tab-pane>
+      </el-tabs>
+
+
     </el-card>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
@@ -42,9 +60,9 @@
 
   import QuoteToolbar from './toolbar/QuoteToolbar';
   import QuoteSearchResultList from './list/QuoteSearchResultList';
-  import QuoteDetailsPage from "./details/QuoteDetailsPage";
-  import PurchaseOrderDetailsPage from "../purchase/details/PurchaseOrderDetailsPage";
-  import ProofingDetailsPage from "../proofing/details/ProofingDetailsPage";
+  import QuoteDetailsPage from './details/QuoteDetailsPage';
+  import PurchaseOrderDetailsPage from '../purchase/details/PurchaseOrderDetailsPage';
+  import ProofingDetailsPage from '../proofing/details/ProofingDetailsPage';
 
   export default {
     name: 'QuotePage',
@@ -56,29 +74,31 @@
     computed: {
       ...mapGetters({
         keyword: 'keyword',
-        page: 'page'
+        page: 'page',
+        queryFormData: 'queryFormData'
       })
     },
     methods: {
       ...mapActions({
         search: 'search',
-        searchAdvanced: 'searchAdvanced'
+        searchAdvanced: 'searchAdvanced',
+        clearQueryFormData: 'clearQueryFormData'
       }),
-      onSearch(page, size) {
+      onSearch (page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
 
         const url = this.apis().getQuotes();
         this.search({url, keyword, statuses, page, size});
       },
-      onAdvancedSearch(page, size) {
+      onAdvancedSearch (page, size) {
         this.isAdvancedSearch = true;
 
         const query = this.queryFormData;
         const url = this.apis().getQuotes();
         this.searchAdvanced({url, query, page, size});
       },
-      async onDetails(item) {
+      async onDetails (item) {
         const url = this.apis().getQuote(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -89,42 +109,89 @@
         this.slotData = result;
         this.detailsDialogVisible = !this.detailsDialogVisible;
       },
-      onCreatePurchaseOrder(item) {
+      onCreatePurchaseOrder (item) {
         let formData = {};
         Object.assign(formData, this.purchaseOrderFormData);
         formData.quoteRef = item.code;
 
         this.fn.openSlider('创建生产订单，报价单号：' + item.code, PurchaseOrderDetailsPage, formData);
       },
-      onCreateProofing(item) {
+      onCreateProofing (item) {
         let formData = {};
         Object.assign(formData, this.proofingFormData);
         formData.quoteRef = item.code;
 
         this.fn.openSlider('创建打样订单，报价单号：' + item.code, ProofingDetailsPage, formData);
       },
-      onReQuote(item) {
+      onReQuote (item) {
         let formData = {};
         Object.assign(formData, item);
         // formData.quoteRef = item.code;
         formData.id = null;
 
         this.fn.openSlider('重新报价，需求单号：' + item.requirementOrder.details.code, QuoteDetailsPage, formData);
+      },
+      handleTabClick (tab) {
+        if (tab.name !== 'ALL') {
+          this.queryFormData.states = tab.name;
+        } else {
+          this.queryFormData.states = [];
+        }
+
+        this.onAdvancedSearch();
+      },
+      async onCancell (item) {
+        const url = this.apis().cancelQuote(item.code);
+        const result = await this.$http.put(url);
+        console.log(result);
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('取消报价成功');
+        this.onAdvancedSearch(this.page.number);
       }
     },
-    data() {
+    data () {
       return {
         formData: this.$store.state.QuotesModule.formData,
-        queryFormData: this.$store.state.QuotesModule.queryFormData,
         purchaseOrderFormData: this.$store.state.PurchaseOrdersModule.formData,
         proofingFormData: this.$store.state.ProofingsModule.formData,
         isAdvancedSearch: this.$store.state.QuotesModule.isAdvancedSearch,
         detailsDialogVisible: false,
-        slotData: ''
+        slotData: '',
+        statuses: [
+          {
+            code: 'ALL',
+            name: '全部'
+          },
+          {
+            code: 'SELLER_SUBMITTED',
+            name: '待处理'
+          },
+          {
+            code: 'BUYER_APPROVED',
+            name: '通过'
+          },
+          {
+            code: 'BUYER_REJECTED',
+            name: '拒绝'
+          },
+          {
+            code: 'CANCELLED',
+            name: '已取消'
+          }
+        ],
+        activeName: 'ALL'
       };
     },
-    created() {
+    created () {
       this.onSearch();
+    },
+    destroyed () {
+      this.clearQueryFormData();
     }
   };
 </script>
