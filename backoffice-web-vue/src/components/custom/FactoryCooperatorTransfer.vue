@@ -182,6 +182,7 @@
 
   const {
     mapGetters,
+    mapMutations,
     mapActions
   } = createNamespacedHelpers('RequirementOrdersModule');
 
@@ -191,6 +192,7 @@
     computed: {
       ...mapGetters({
         regions: 'regions',
+        labels: 'labels',
         categories: 'categories',
         majorCategories: 'majorCategories',
         factoryPage: 'factoryPage',
@@ -201,6 +203,9 @@
     },
     components: {FactoryItem, CooperatorItem},
     methods: {
+      ...mapMutations({
+        setLabels: 'labels',
+      }),
       ...mapActions({
         searchAdvanced: 'searchAdvanced',
         searchCooperatorsAdvanced: 'searchCooperatorsAdvanced',
@@ -237,7 +242,7 @@
           return;
         }
 
-        this.labels = results.content;
+        this.setLabels(results.content);
       },
       handleCooperatorSelect (val) {
         console.log(val);
@@ -399,7 +404,6 @@
         isCooperatorSearched: false,
         machiningTypes: this.$store.state.EnumsModule.machiningTypes,
         populationScales: this.$store.state.EnumsModule.populationScales,
-        labels: [],
         selectFactories: [],
         selectCooperators: [],
         selectTempUids: []

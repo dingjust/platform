@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn factory-cooperator-transfer">
+  <div class="animated fadeIn factory-cooperator-transfer-form">
     <el-row type="flex">
       <el-col :span="12">
         <el-radio-group v-model="isFactorySelection" @change="handleChanged">
@@ -177,6 +177,7 @@
 
   const {
     mapGetters,
+    mapMutations,
     mapActions
   } = createNamespacedHelpers('RequirementOrdersModule');
 
@@ -186,6 +187,7 @@
     computed: {
       ...mapGetters({
         regions: 'regions',
+        labels: 'labels',
         categories: 'categories',
         majorCategories: 'majorCategories',
         factoryPage: 'factoryPage',
@@ -196,6 +198,9 @@
     },
     components: {FactoryItem, CooperatorItem},
     methods: {
+      ...mapMutations({
+        setLabels: 'labels'
+      }),
       ...mapActions({
         searchAdvanced: 'searchAdvanced',
         searchCooperatorsAdvanced: 'searchCooperatorsAdvanced',
@@ -232,7 +237,7 @@
           return;
         }
 
-        this.labels = results.content;
+        this.setLabels(results.content);
       },
       handleCooperatorSelect (val) {
         console.log(val);
@@ -385,7 +390,6 @@
         isCooperatorSearched: false,
         machiningTypes: this.$store.state.EnumsModule.machiningTypes,
         populationScales: this.$store.state.EnumsModule.populationScales,
-        labels: []
       }
     },
     created () {
@@ -398,11 +402,11 @@
   }
 </script>
 <style>
-  .factory-cooperator-transfer .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+  .factory-cooperator-transfer-form .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
     background-color: #ffc107;
   }
 
-  .factory-cooperator-transfer .product-select-btn {
+  .factory-cooperator-transfer-form .product-select-btn {
     width: 90px;
     height: 30px;
     background: #FFD60C;
@@ -413,26 +417,26 @@
     border: 0px solid #FFD60C;
   }
 
-  .factory-cooperator-transfer .el-table__body tr.current-row>td {
+  .factory-cooperator-transfer-form .el-table__body tr.current-row>td {
     background-color: #ffc107;
   }
 
-  .factory-cooperator-transfer .el-transfer-panel{
+  .factory-cooperator-transfer-form .el-transfer-panel{
     width: 400px;
   }
-  .factory-cooperator-transfer .transfer-item{
+  .factory-cooperator-transfer-form .transfer-item{
     border: 1px solid #c8c8c8;
     padding: 10px 0px 10px 10px;
   }
 
-  .factory-cooperator-transfer  .elTagClass{
+  .factory-cooperator-transfer-form  .elTagClass{
     color: #0b0e0f;
     margin-right: 10px;
     margin-bottom: 10px;
     cursor:pointer;
   }
 
-  .factory-cooperator-transfer  .elTagClass2{
+  .factory-cooperator-transfer-form  .elTagClass2{
     color: #0b0e0f;
     margin-bottom: 10px;
     cursor:pointer;
