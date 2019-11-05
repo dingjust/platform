@@ -199,7 +199,7 @@
     methods: {
       ...mapMutations({
         setRegions: 'regions',
-        setFormData: 'formData',
+        setFormData: 'formData'
       }),
       ...mapActions({
       }),
@@ -274,6 +274,7 @@
           return;
         }
 
+        result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
         this.setFormData(Object.assign({}, this.formData, result));
         this.formDialogVisible = !this.formDialogVisible;
       },

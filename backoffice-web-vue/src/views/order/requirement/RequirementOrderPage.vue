@@ -177,6 +177,7 @@
           return;
         }
 
+        result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
         this.setFormData(Object.assign({},this.formData,result));
 
         this.editFormDialogVisible = !this.editFormDialogVisible;

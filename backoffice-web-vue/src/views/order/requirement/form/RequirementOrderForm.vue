@@ -261,7 +261,7 @@
       isCreated: {
         type: Boolean,
         default: false
-      },
+      }
     },
     methods: {
       ...mapMutations({
@@ -282,6 +282,17 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
+              if (typeof this.formData.details.expectedDeliveryDate === 'number') {
+                if (this.formData.details.expectedDeliveryDate <= new Date().getTime()) {
+                  this.$message.error('交货日期不可小于当前时间');
+                  return;
+                }
+              } else {
+                if (this.formData.details.expectedDeliveryDate <= new Date(this.formData.details.expectedDeliveryDate).getTime()) {
+                  this.$message.error('交货日期不可小于当前时间');
+                  return;
+                }
+              }
               if (this.formData.publishingMode === 'PUBLIC') {
                 this.selectUids = [];
               }
@@ -341,7 +352,7 @@
       async publishingModeChanged () {
         this.dialogVisible = !this.dialogVisible;
       },
-      async getSelectUids(){
+      async getSelectUids () {
         if (!this.isCreated) {
           const url = this.apis().getRecommendFactories(this.formData.code);
           const result = await this.$http.get(url);
