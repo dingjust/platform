@@ -181,4 +181,10 @@
   .btnClass1{
     width: 100px;background-color: red;color: white;
   }
+
+  .btnClass{
+    width: 150px;
+    background-color: #FFD60C;
+    color: black;
+  }
 </style>
