@@ -21,6 +21,9 @@ export 'src/user/user.dart';
 export 'src/user/user_group.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
+export 'src/capacity/capacity.dart';
+export 'src/msg/msg.dart';
+
 
 part 'models.g.dart';
 
