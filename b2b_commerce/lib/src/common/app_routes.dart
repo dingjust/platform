@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
-import 'package:b2b_commerce/src/my/capacity/my_capacity_from.dart';
+import 'package:b2b_commerce/src/my/capacity/my_capacity_form.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';

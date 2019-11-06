@@ -36,15 +36,7 @@ class MyBillBLoC extends BLoCBase {
   //锁
   bool lock = false;
 
-  var _controller = StreamController < List < BillModel
-
-  >
-
-  >
-
-      .
-
-  broadcast();
+  var _controller = StreamController<List<BillModel>>.broadcast();
 
   Stream<List<BillModel>> get stream => _controller.stream;
 

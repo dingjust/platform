@@ -8,6 +8,7 @@ export 'src/api/apis.dart';
 export 'src/api/order.dart';
 export 'src/api/product.dart';
 export 'src/api/user.dart';
+export 'src/api/capacity.dart';
 export 'src/bank/bank_response.dart';
 export 'src/bank/bank_service.dart';
 export 'src/home/factory/bloc/factory_bloc.dart';
@@ -91,6 +92,9 @@ export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/websocket/websocket_service.dart';
 export 'src/my/repository/contract_repository.dart';
+export 'src/capacity/state/capacity_state.dart';
+export 'src/capacity/repository/capacity_repository.dart';
+
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();
