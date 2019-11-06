@@ -1,14 +1,11 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-row  type="flex" justify="space-between" align="middle">
-        <div class="info-title rowClass">
+      <el-row  type="flex" justify="space-between" align="middle" style="margin-bottom: 20px">
+        <div class="info-title">
           <h6 class="info-title_text">需求订单列表</h6>
         </div>
-        <el-tag style="padding: 14px 15px;margin-bottom:14px;line-height: 0px;background-color: #ffd60c;color: black;cursor: pointer"
-          @click="onNew">
-          <span style="font-size: 14px">+ </span>发布需求
-        </el-tag>
+        <el-button class="btn-class" @click="onNew"><span style="font-size: 14px">+</span>发布需求</el-button>
       </el-row>
 
       <requirement-order-toolbar
@@ -42,7 +39,8 @@
       <requirement-order-details-page v-if="detailsDialogVisible"
                                     :slotData="slotData"
                                     @onSearchQuotes="onSearchQuotes"
-                                    @onRefresh="onRefreshDetails"
+                                    @onRefresh="onRefresh"
+                                      @onRefreshDetails="onRefreshDetails"
                                     @onEditSave="onEditSave"
                                     :readOnly="false">
 
@@ -140,6 +138,17 @@
         this.onSearchQuotes(0, 8);
       },
       async onRefreshDetails (code) {
+        const url = this.apis().getRequirementOrder(code);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.slotData = result;
+        this.onSearchQuotes(0, 8);
+      },
+      async onRefresh (code) {
         const url = this.apis().getRequirementOrder(code);
         const result = await this.$http.get(url);
         if (result['errors']) {

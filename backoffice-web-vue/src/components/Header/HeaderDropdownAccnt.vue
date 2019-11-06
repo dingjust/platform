@@ -4,7 +4,7 @@
       <template slot="button-content">
         <div @click="onArrowDown">
           <el-row type="flex" align="middle">
-            <el-image :src="currentUser.profilePicture.url" fit="cover" class="img-avatar img-head" alt></el-image>
+            <el-image :src="currentUser.profilePicture != null ? currentUser.profilePicture.url : 'static/img/avatars/user.jpg'" fit="cover" class="img-avatar img-head" alt></el-image>
             <span class="name">{{currentUser.username}}</span>
             <i class="el-icon-arrow-down arrow" v-show="arrowDown"></i>
             <i class="el-icon-arrow-up arrow" v-show="!arrowDown"></i>

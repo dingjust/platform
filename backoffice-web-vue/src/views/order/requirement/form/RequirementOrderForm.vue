@@ -209,8 +209,8 @@
       </el-form>
     </div>
 
-    <el-row type="flex" justify="center">
-      <el-button class="buttonClass" @click="onSave">
+    <el-row type="flex" justify="center" style="margin-top: 40px">
+      <el-button class="btn-class" style="width: 220px;padding-bottom: 0px" @click="onSave">
         <h6>{{this.isCreated ? '确认发布' : '确认修改'}}</h6>
       </el-button>
     </el-row>
@@ -282,17 +282,17 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              if (typeof this.formData.details.expectedDeliveryDate === 'number') {
-                if (this.formData.details.expectedDeliveryDate <= new Date().getTime()) {
-                  this.$message.error('交货日期不可小于当前时间');
-                  return;
-                }
-              } else {
-                if (this.formData.details.expectedDeliveryDate <= new Date(this.formData.details.expectedDeliveryDate).getTime()) {
-                  this.$message.error('交货日期不可小于当前时间');
-                  return;
-                }
-              }
+              // if (typeof this.formData.details.expectedDeliveryDate === 'number') {
+              //   if (this.formData.details.expectedDeliveryDate <= new Date().getTime()) {
+              //     this.$message.error('交货日期不可小于当前时间');
+              //     return;
+              //   }
+              // } else {
+              //   if (this.formData.details.expectedDeliveryDate <= new Date(this.formData.details.expectedDeliveryDate).getTime()) {
+              //     this.$message.error('交货日期不可小于当前时间');
+              //     return;
+              //   }
+              // }
               if (this.formData.publishingMode === 'PUBLIC') {
                 this.selectUids = [];
               }

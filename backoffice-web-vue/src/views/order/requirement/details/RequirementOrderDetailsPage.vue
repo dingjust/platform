@@ -90,14 +90,14 @@
           <h6>报价详情</h6>
         </div>
       </el-row>
-      <requirement-order-quote-list :page="quotePage" @onSearch="onSearchQuotes" v-if="!readOnly" style="margin-left: 10px">
+      <requirement-order-quote-list :page="quotePage" @onSearch="onSearchQuotes" @onRefresh="onRefresh" v-if="!readOnly" style="margin-left: 10px">
       </requirement-order-quote-list>
     </div>
 
     <el-row style="margin-top: 20px" justify="space-around" type="flex">
-      <el-button class="btnClass" @click="onInvitation" v-if="slotData.status == 'PENDING_QUOTE'">邀请报价</el-button>
-      <el-button class="btnClass" @click="onEdit" v-if="slotData.status == 'PENDING_QUOTE' && quotePage.totalElements <= 0">修改</el-button>
-      <el-button class="btnClass" @click="onCancel" v-if="slotData.status == 'PENDING_QUOTE'">关闭</el-button>
+      <el-button class="btn-class" @click="onInvitation" v-if="slotData.status == 'PENDING_QUOTE'">邀请报价</el-button>
+      <el-button class="btn-class" @click="onEdit" v-if="slotData.status == 'PENDING_QUOTE' && quotePage.totalElements <= 0">修改</el-button>
+      <el-button class="btn-class" @click="onCancel" v-if="slotData.status == 'PENDING_QUOTE'">关闭</el-button>
     </el-row>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :append-to-body="true">
@@ -297,8 +297,16 @@
             return;
           }
           this.$message.success('需求关闭成功');
-          this.$emit('onRefresh', this.formData.code);
+          this.$emit('onRefresh', this.slotData.code);
         });
+      },
+      onRefresh (type) {
+        if (type === 'approve') {
+          this.$emit('onSearchQuotes');
+          this.$emit('onRefresh', this.slotData.code);
+        } else {
+          this.$emit('onRefreshDetails', this.slotData.code);
+        }
       }
     },
     data () {
