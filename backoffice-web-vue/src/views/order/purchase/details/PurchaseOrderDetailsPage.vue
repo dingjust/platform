@@ -73,3 +73,32 @@
     }
   }
 </script>
+<style>
+  .info-finance-logistics_info-btn1 {
+    /* width: 50px; */
+    line-height: 8px;
+    height: 20px;
+    background: #FFD60C;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 10px;
+    border-radius: 0px;
+    text-align: center;
+    border: 0px solid #FFD60C;
+    padding-bottom: 15px;
+  }
+
+  .info-finance-logistics_info-btn3 {
+    /* width: 60px; */
+    line-height: 8px;
+    height: 20px;
+    background: #FFD60C;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 10px;
+    border-radius: 0px;
+    text-align: center;
+    border: 0px solid #FFD60C;
+    padding-bottom: 15px;
+  }
+</style>

@@ -83,8 +83,8 @@
       </el-col>
       <el-col :span="6">
         <el-row type="flex" justify="space-around" v-if="item.state == 'SELLER_SUBMITTED'">
-          <el-tag style="padding: 10px 20px;line-height: 3px;background-color: #FFD60C;color: black">确认工厂</el-tag>
-          <el-tag style="padding: 10px 20px;line-height: 3px;background-color: red;color: white">拒绝工厂</el-tag>
+          <el-button class="btnClass" style="width: 100px">确认工厂</el-button>
+          <el-button class="btnClass1">拒绝工厂</el-button>
         </el-row>
         <el-row type="flex" justify="space-around" v-if="item.state == 'BUYER_REJECTED'">
           <el-tag style="padding: 10px 20px;line-height: 3px;background-color: #c8c8c8;color: white">已拒绝</el-tag>
@@ -159,7 +159,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .one{
     width: 100%;
     /*相对位置*/
@@ -177,5 +177,8 @@
     position: absolute;
     top: -10px;
     left: 112px;
+  }
+  .btnClass1{
+    width: 100px;background-color: red;color: white;
   }
 </style>

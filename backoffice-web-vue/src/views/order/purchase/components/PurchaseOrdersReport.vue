@@ -48,7 +48,7 @@
   };
 
 </script>
-<style>
+<style scoped>
   .purchase-grid-content {
     text-align: center;
     border-left: 2px solid rgba(0, 0, 0, 0.09);
@@ -65,7 +65,7 @@
     color: orange;
   }
 
-  .el-card__body {
+  /deep/ .el-card__body {
     padding: 10px;
   }
 

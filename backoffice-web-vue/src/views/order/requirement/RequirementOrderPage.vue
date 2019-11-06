@@ -1,9 +1,9 @@
 <template>
-  <div class="animated fadeIn content requirement">
+  <div class="animated fadeIn content">
     <el-card>
       <el-row  type="flex" justify="space-between" align="middle">
-        <div class="factory-info-title rowClass">
-          <h6 class="factory-info-title_text">需求订单列表</h6>
+        <div class="info-title rowClass">
+          <h6 class="info-title_text">需求订单列表</h6>
         </div>
         <el-tag style="padding: 14px 15px;margin-bottom:14px;line-height: 0px;background-color: #ffd60c;color: black;cursor: pointer"
           @click="onNew">
@@ -22,14 +22,14 @@
                                                 @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
-                <el-button type="text" class="requirement-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button class="requirement-list-button" type="text" @click="onEdit(props.item)">修改</el-button>
+                <el-button class="list-button" type="text" @click="onEdit(props.item)">修改</el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button class="requirement-list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
+                <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
-                <el-button type="text" class="requirement-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
               </el-row>
             </template>
           </requirement-order-search-result-list>
@@ -48,12 +48,12 @@
 
       </requirement-order-details-page>
     </el-dialog>
-    <el-dialog :visible.sync="formDialogVisible" width="80%"  class="requirement-form-dialog">
+    <el-dialog :visible.sync="formDialogVisible" width="80%"  class="purchase-dialog">
       <requirement-order-form v-if="formDialogVisible" :formData="formData" @onSave="onSave" :isCreated="true">
 
       </requirement-order-form>
     </el-dialog>
-    <el-dialog :visible.sync="editFormDialogVisible" width="80%"  class="requirement-form-dialog">
+    <el-dialog :visible.sync="editFormDialogVisible" width="80%"  class="purchase-dialog">
       <requirement-order-form v-if="editFormDialogVisible" :formData="formData" @onSave="onEditSave">
 
       </requirement-order-form>
@@ -301,36 +301,22 @@
   };
 </script>
 
-<style>
-  .requirement .factory-info-title {
+<style scoped>
+   .info-title {
     border-left: 2px solid #FFD60C;
     padding-left: 10px;
     height: 14px;
   }
 
-  .requirement .factory-info-title_text {
+   .info-title_text {
     font-size: 12px;
     font-weight: bold;
     color: rgba(0, 0, 0, 1);
     opacity: 0.65;
   }
 
-  .requirement .rowClass {
+   .rowClass {
     margin-bottom: 20px;
   }
 
-  .requirement .requirement-form-dialog .el-dialog {
-    border-radius: 10px !important;
-  }
-
-  .requirement .requirement-form-dialog-header {
-    padding: 0px !important;
-  }
-
-  .requirement .requirement-form-dialog .el-dialog__header {
-    padding: 0px !important;
-  }
-  .requirement-list-button{
-    color: #FFA403;
-  }
 </style>

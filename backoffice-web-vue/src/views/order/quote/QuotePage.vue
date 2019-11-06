@@ -15,14 +15,14 @@
                                     @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.state == 'SELLER_SUBMITTED'">
-                <el-button type="text" class="quote-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button type="text" class="quote-list-button" @click="onDetails(props.item)">修改</el-button>
+                <el-button type="text" class="list-button" @click="onDetails(props.item)">修改</el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button type="text" class="quote-list-button" @click="onCancell(props.item)">关闭</el-button>
+                <el-button type="text" class="list-button" @click="onCancell(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
-                <el-button type="text" class="quote-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
               </el-row>
             </template>
           </quote-search-result-list>
@@ -182,9 +182,3 @@
     }
   };
 </script>
-
-<style>
-  .quote-list-button{
-    color: #FFA403
-  }
-</style>
