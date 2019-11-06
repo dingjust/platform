@@ -70,7 +70,7 @@
                             <!--<span v-else style="color: #ffa403;margin-left: 10px;font-size: 8px">-->
                               <!--未认证-->
                             <!--</span>-->
-                            <img width="50px" height="40px" :src="getPaymentStatusTag(item)" />
+                            <img width="40px" height="15px" :src="getPaymentStatusTag(item)" />
                           </el-col>
                           <el-col :span="4">
                             <span >{{ item.contactPerson }}</span>

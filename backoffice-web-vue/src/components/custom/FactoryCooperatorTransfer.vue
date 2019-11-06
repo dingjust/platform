@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn factory-cooperator-transfer-form">
+  <div class="animated fadeIn factory-cooperator-transfer">
     <el-row type="flex">
       <el-col :span="12">
         <el-radio-group v-model="isFactorySelection" @change="handleChanged">
@@ -97,6 +97,7 @@
             <cooperator-item
               class="transfer-item"
               :slotData="item"
+              :selectedTip="selectTempUids.indexOf(item.partner.uid) > -1 ? '该工厂已选择' : selectedTip"
               :isSelected="isCooperatorSelected(item)"
               @handleCooperatorSelectionChange="handleCooperatorSelect">
 
@@ -106,6 +107,7 @@
             <factory-item
               class="transfer-item"
               :slotData="item"
+              :selectedTip="selectTempUids.indexOf(item.uid) > -1 ? '该工厂已选择' : selectedTip"
               :isSelected="isFactorySelected(item)"
               @handleFactorySelectionChange="handleFactorySelect">
 
@@ -165,6 +167,9 @@
         </div>
       </el-col>
     </el-row>
+    <el-row type="flex" justify="center">
+      <el-button class="submit-btn" @click="onSubmit()">确定</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -172,8 +177,8 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import CooperatorItem from "../../../../components/custom/item/CooperatorItem";
-  import FactoryItem from "../../../../components/custom/item/FactoryItem";
+  import CooperatorItem from "./item/CooperatorItem";
+  import FactoryItem from "./item/FactoryItem";
 
   const {
     mapGetters,
@@ -182,8 +187,8 @@
   } = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
-    name: 'FactoryCooperatorTransferForm',
-    props: ['selectUids', 'selectPhoneNumbers','selectFactories','selectCooperators','selectFactoryUids','selectCooperatorIds'],
+    name: 'FactoryCooperatorTransfer',
+    props: ['selectUids', 'selectedTip'],
     computed: {
       ...mapGetters({
         regions: 'regions',
@@ -194,12 +199,12 @@
         cooperatorPage: 'cooperatorPage',
         cooperatorQueryFormData: 'cooperatorQueryFormData',
         factoryQueryFormData: 'factoryQueryFormData'
-      })
+      }),
     },
     components: {FactoryItem, CooperatorItem},
     methods: {
       ...mapMutations({
-        setLabels: 'labels'
+        setLabels: 'labels',
       }),
       ...mapActions({
         searchAdvanced: 'searchAdvanced',
@@ -247,6 +252,7 @@
           this.selectCooperators.push(val);
           if (val.type === 'ONLINE') {
             this.selectUids.push(val.partner.uid);
+            this.selectTempUids.push(val.partner.uid);
           }
         }
       },
@@ -260,6 +266,7 @@
             var index1 = this.selectUids.indexOf(val.partner.uid);
             if (index1 > -1) {
               this.selectUids.splice(index1, 1);
+              this.selectTempUids.splice(index1, 1);
             }
           }
         }
@@ -269,6 +276,7 @@
         if (index <= -1) {
           this.selectFactoryUids.push(val.uid);
           this.selectUids.push(val.uid);
+          this.selectTempUids.push(val.uid);
           this.selectFactories.push(val);
         }
       },
@@ -276,6 +284,7 @@
         var index1 = this.selectUids.indexOf(val.uid);
         if (index1 > -1) {
           this.selectUids.splice(index1, 1);
+          this.selectTempUids.splice(index1, 1);
           var index = this.selectFactoryUids.indexOf(val.uid);
           if (index > -1) {
             this.selectFactoryUids.splice(index, 1);
@@ -379,6 +388,9 @@
           this.factoryQueryFormData.labels.push(item.id);
         }
       },
+      onSubmit() {
+        this.$emit('onSubmit', this.selectTempUids);
+      }
     },
     data () {
       return {
@@ -386,10 +398,15 @@
         selectPayPlan: '',
         keyword: '',
         isFactorySelection: false,
+        selectFactoryUids: [],
+        selectCooperatorIds: [],
         isFactorySearched: false,
         isCooperatorSearched: false,
         machiningTypes: this.$store.state.EnumsModule.machiningTypes,
         populationScales: this.$store.state.EnumsModule.populationScales,
+        selectFactories: [],
+        selectCooperators: [],
+        selectTempUids: []
       }
     },
     created () {
@@ -402,11 +419,11 @@
   }
 </script>
 <style>
-  .factory-cooperator-transfer-form .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+  .factory-cooperator-transfer .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
     background-color: #ffc107;
   }
 
-  .factory-cooperator-transfer-form .product-select-btn {
+  .factory-cooperator-transfer .product-select-btn {
     width: 90px;
     height: 30px;
     background: #FFD60C;
@@ -417,31 +434,37 @@
     border: 0px solid #FFD60C;
   }
 
-  .factory-cooperator-transfer-form .el-table__body tr.current-row>td {
+  .factory-cooperator-transfer .el-table__body tr.current-row>td {
     background-color: #ffc107;
   }
 
-  .factory-cooperator-transfer-form .el-transfer-panel{
+  .factory-cooperator-transfer .el-transfer-panel{
     width: 400px;
   }
-  .factory-cooperator-transfer-form .transfer-item{
+  .factory-cooperator-transfer .transfer-item{
     border: 1px solid #c8c8c8;
     padding: 10px 0px 10px 10px;
   }
 
-  .factory-cooperator-transfer-form  .elTagClass{
+  .factory-cooperator-transfer  .elTagClass{
     color: #0b0e0f;
     margin-right: 10px;
     margin-bottom: 10px;
     cursor:pointer;
   }
 
-  .factory-cooperator-transfer-form  .elTagClass2{
+  .factory-cooperator-transfer  .elTagClass2{
     color: #0b0e0f;
     margin-bottom: 10px;
     cursor:pointer;
   }
 
-
+  .factory-cooperator-transfer .submit-btn {
+    background-color: #FFD60C;
+    border-color: #FFD60C;
+    color: #000;
+    width: 150px;
+    margin-top: 30px;
+  }
 
 </style>

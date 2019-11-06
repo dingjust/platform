@@ -168,10 +168,11 @@
               </el-radio-group>
               <el-button
                 v-if="formData.details.publishingMode == 'PRIVATE'"
+                :disabled="!isCreated"
                 @click="publishingModeChanged">选择发布对象
               </el-button>
               <h6 v-if="formData.details.publishingMode == 'PRIVATE'" style="margin-left: 210px">
-                已选择<span style="color: red">{{selectUids.length}}</span>个工厂
+                {{isCreated ? '已选择' : '已邀请'}}<span style="color: red">{{selectUids.length}}</span>个工厂
               </h6>
             </el-form-item>
           </el-col>
@@ -210,7 +211,7 @@
 
     <el-row type="flex" justify="center">
       <el-button class="buttonClass" @click="onSave">
-        <h6>确认发布</h6>
+        <h6>{{this.isCreated ? '确认发布' : '确认修改'}}</h6>
       </el-button>
     </el-row>
 
@@ -220,6 +221,8 @@
         :selectFactories="selectFactories"
         :selectCooperators="selectCooperators"
         :selectUids="selectUids"
+        :selectCooperatorIds="selectCooperatorIds"
+        :selectFactoryUids="selectFactoryUids"
         :selectPhoneNumbers="selectPhoneNumbers">
 
       </factory-cooperator-transfer-form>
@@ -251,7 +254,15 @@
         regions: 'regions'
       })
     },
-    props: ['formData'],
+    props: {
+      formData: {
+        type: Object
+      },
+      isCreated: {
+        type: Boolean,
+        default: false
+      }
+    },
     methods: {
       ...mapMutations({
         setCategories: 'categories',
@@ -259,17 +270,29 @@
         setRegions: 'regions'
       }),
       ...mapActions({
+        clearFormData: 'clearFormData',
         clearFactoryQueryFormData: 'clearFactoryQueryFormData',
         clearCooperatorQueryFormData: 'clearCooperatorQueryFormData'
       }),
       onSave () {
         this.$refs['requirementForm'].validate((valid) => {
           if (valid) {
-            this.$confirm('是否确认发布!', '提示', {
+            this.$confirm(this.isCreated ? '是否确认发布!' : '是否确认修改', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
+              if (typeof this.formData.details.expectedDeliveryDate === 'number') {
+                if (this.formData.details.expectedDeliveryDate <= new Date().getTime()) {
+                  this.$message.error('交货日期不可小于当前时间');
+                  return;
+                }
+              } else {
+                if (this.formData.details.expectedDeliveryDate <= new Date(this.formData.details.expectedDeliveryDate).getTime()) {
+                  this.$message.error('交货日期不可小于当前时间');
+                  return;
+                }
+              }
               if (this.formData.publishingMode === 'PUBLIC') {
                 this.selectUids = [];
               }
@@ -280,7 +303,6 @@
             return false;
           }
         });
-
       },
       async getCategories () {
         const url = this.apis().getMajorCategories();
@@ -327,8 +349,20 @@
         }
         this.$refs['requirementForm'].validateField('details.productiveOrientations');
       },
-      publishingModeChanged () {
+      async publishingModeChanged () {
         this.dialogVisible = !this.dialogVisible;
+      },
+      async getSelectUids () {
+        if (!this.isCreated) {
+          const url = this.apis().getRecommendFactories(this.formData.code);
+          const result = await this.$http.get(url);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+
+          this.selectUids = result;
+        }
       }
     },
     watch: {
@@ -372,7 +406,6 @@
         pickerOptions: {
           disabledDate (time) {
             var date = new Date();
-            date.setDate(date.getDate() - 1);
             return time.getTime() < date;
           }
         },
@@ -382,6 +415,8 @@
         isCountryWide: null,
         dialogVisible: false,
         selectUids: [],
+        selectFactoryUids: [],
+        selectCooperatorIds: [],
         selectPhoneNumbers: [],
         selectFactories: [],
         selectCooperators: [],
@@ -420,6 +455,16 @@
       }
     },
     created () {
+      if (!this.isCreated) {
+        if (this.formData.details.category != null) {
+          this.selectDatas.push(this.formData.details.category);
+        }
+        if (this.formData.details.productiveOrientations != null && this.formData.details.productiveOrientations.length > 0) {
+          if (this.formData.details.productiveOrientations[0].isocode === 'CN-10') {
+            this.isCountryWide = true;
+          }
+        }
+      }
       if (this.categories <= 0) {
         this.getMinorCategories();
       }
@@ -429,6 +474,10 @@
       if (this.regions <= 0) {
         this.getRegions();
       }
+      this.getSelectUids();
+    },
+    destroyed () {
+      this.clearFormData();
     }
   }
 </script>

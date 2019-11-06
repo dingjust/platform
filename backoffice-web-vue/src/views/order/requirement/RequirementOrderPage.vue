@@ -13,7 +13,7 @@
 
       <requirement-order-toolbar
                                  @onSimpleNew="onSimpleNew"
-                                 @onSearch="onSearch"
+                                 @clearQueryFormData="clearQueryFormData"
                                  @onAdvancedSearch="onAdvancedSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
@@ -21,11 +21,16 @@
                                                 @onSearch="onSearch"
                                                 @onAdvancedSearch="onAdvancedSearch">
             <template slot="operations" slot-scope="props">
-              <el-button-group>
-                <el-button type="text" style="color: black" @click="onDetails(props.item)">详情</el-button>
-                <el-button v-if="props.item.status == 'PENDING_QUOTE'"  type="text" style="cursor: unset;color: black" disabled>|</el-button>
-                <el-button v-if="props.item.status == 'PENDING_QUOTE'" type="text" style="color: black" @click="onCancelled(props.item)">关闭</el-button>
-              </el-button-group>
+              <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
+                <el-button type="text" class="requirement-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button class="requirement-list-button" type="text" @click="onEdit(props.item)">修改</el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button class="requirement-list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
+              </el-row>
+              <el-row v-else>
+                <el-button type="text" class="requirement-list-button" @click="onDetails(props.item)">详情</el-button>
+              </el-row>
             </template>
           </requirement-order-search-result-list>
         </el-tab-pane>
@@ -34,12 +39,22 @@
     </el-card>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
-      <requirement-order-details-page :slotData="slotData" @onSearchQuotes="onSearchQuotes" :readOnly="false">
+      <requirement-order-details-page v-if="detailsDialogVisible"
+                                    :slotData="slotData"
+                                    @onSearchQuotes="onSearchQuotes"
+                                    @onRefresh="onRefreshDetails"
+                                    @onEditSave="onEditSave"
+                                    :readOnly="false">
 
       </requirement-order-details-page>
     </el-dialog>
     <el-dialog :visible.sync="formDialogVisible" width="80%"  class="requirement-form-dialog">
-      <requirement-order-form v-if="formDialogVisible" :formData="formData" @onSave="onSave">
+      <requirement-order-form v-if="formDialogVisible" :formData="formData" @onSave="onSave" :isCreated="true">
+
+      </requirement-order-form>
+    </el-dialog>
+    <el-dialog :visible.sync="editFormDialogVisible" width="80%"  class="requirement-form-dialog">
+      <requirement-order-form v-if="editFormDialogVisible" :formData="formData" @onSave="onEditSave">
 
       </requirement-order-form>
     </el-dialog>
@@ -80,12 +95,14 @@
         search: 'search',
         searchAdvanced: 'searchAdvanced',
         searchQuotesAdvanced: 'searchQuotesAdvanced',
-        clearFormData: 'clearFormData'
+        clearFormData: 'clearFormData',
+        clearQueryFormData: 'clearQueryFormData'
       }),
       ...mapMutations({
         setIsAdvancedSearch: 'isAdvancedSearch',
         isShowDetailPrice: 'isShowDetailPrice',
-        setCategories: 'categories'
+        setCategories: 'categories',
+        setFormData: 'formData'
       }),
       onSearch (page, size) {
         this.setIsAdvancedSearch(false);
@@ -122,6 +139,17 @@
         this.detailsDialogVisible = !this.detailsDialogVisible;
         this.onSearchQuotes(0, 8);
       },
+      async onRefreshDetails (code) {
+        const url = this.apis().getRequirementOrder(code);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.slotData = Object.assign({},result);
+        this.onAdvancedSearch();
+      },
       async onCancelled (item) {
         this.$confirm('是否确认关闭该订单', '提示', {
           confirmButtonText: '确定',
@@ -134,12 +162,25 @@
             this.$message.error(result['errors'][0].message);
             return;
           }
-          this.$message.success('需求关闭成功，订单编号： ' + result);
+          this.$message.success('需求关闭成功');
           this.onAdvancedSearch();
         });
       },
       onNew (formData) {
         this.formDialogVisible = !this.formDialogVisible;
+      },
+      async onEdit (item) {
+        const url = this.apis().getRequirementOrder(item.code);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
+        this.setFormData(Object.assign({},this.formData,result));
+
+        this.editFormDialogVisible = !this.editFormDialogVisible;
       },
       onSimpleNew (formData) {
         this.fn.openSlider('急速发布需求', RequirementOrderSimpleForm, formData);
@@ -172,7 +213,29 @@
         }
         this.$message.success('需求订单创建成功，订单编号： ' + result);
         this.formDialogVisible = !this.formDialogVisible;
-        this.onSearch();
+        this.onAdvancedSearch();
+      },
+      async onEditSave (factories, phoneNumbers) {
+        var params = {};
+        if (factories != null) {
+          var text = '';
+          for (let uid of factories) {
+            text += uid;
+            text += ',';
+          }
+          text = text.slice(0, text.length - 1);
+        }
+        console.log(text);
+        params['factories'] = text;
+        const url = this.apis().updateRequirementOrder(this.formData.code);
+        const result = await this.$http.put(url, this.formData, params);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('需求订单修改成功');
+        this.editFormDialogVisible = false;
+        this.onAdvancedSearch();
       },
       async getMinorCategories () {
         const url = this.apis().getMinorCategories();
@@ -200,6 +263,7 @@
         isAdvancedSearch: this.$store.state.RequirementOrdersModule.isAdvancedSearch,
         detailsDialogVisible: false,
         formDialogVisible: false,
+        editFormDialogVisible: false,
         statuses: [
           {
             code: 'ALL',
@@ -222,12 +286,6 @@
       };
     },
     watch: {
-      'formDialogVisible': function (n, o) {
-        if (!n) {
-          this.clearFormData();
-          // this.clearFactoryQueryFormData();
-        }
-      },
       'detailsDialogVisible': function (n, o) {
         if (!n) {
           this.isShowDetailPrice(false);
@@ -236,6 +294,9 @@
     },
     created () {
       this.onAdvancedSearch();
+    },
+    destroyed() {
+      this.clearQueryFormData();
     }
   };
 </script>
@@ -268,5 +329,8 @@
 
   .requirement .requirement-form-dialog .el-dialog__header {
     padding: 0px !important;
+  }
+  .requirement-list-button{
+    color: #FFA403;
   }
 </style>

@@ -35,11 +35,11 @@
       <el-table-column label="订单状态" prop="status" width="150">
         <template slot-scope="scope">
           <h6 v-if="scope.row.status == 'PENDING_QUOTE'" style="color: red">{{getEnum('requirementOrderStatuses', scope.row.status)}}（已报价{{scope.row.totalQuotesCount}}）</h6>
-          <h6 v-if="scope.row.status == 'COMPLETED'" style="color: #a9a9a9">{{getEnum('requirementOrderStatuses', scope.row.status)}}</h6>
+          <h6 v-if="scope.row.status == 'COMPLETED'" style="color: green">{{getEnum('requirementOrderStatuses', scope.row.status)}}</h6>
           <h6 v-if="scope.row.status == 'CANCELLED'" style="color: #a9a9a9">{{getEnum('requirementOrderStatuses', scope.row.status)}}</h6>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作"  header-align="center" align="center" width="150">
         <template slot-scope="scope">
           <slot name="operations" :item="scope.row"></slot>
         </template>

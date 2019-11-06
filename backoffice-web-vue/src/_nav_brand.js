@@ -24,11 +24,11 @@ export default {
           url: '/order/requirement',
           icon: 'iconNone'
         },
-        {
-          name: '报价单',
-          url: '/order/quote',
-          icon: 'iconNone'
-        },
+        // {
+        //   name: '报价单',
+        //   url: '/order/quote',
+        //   icon: 'iconNone'
+        // },
         {
           name: '打样订单',
           url: '/order/proofing',

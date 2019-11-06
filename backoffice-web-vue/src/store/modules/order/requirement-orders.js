@@ -109,6 +109,7 @@ const state = {
   categories: [],
   majorCategories: [],
   regions: [],
+  labels: [],
   isShowDetailPrice: false
 };
 
@@ -137,6 +138,7 @@ const mutations = {
   categories: (state, categories) => state.categories = categories,
   majorCategories: (state, majorCategories) => state.majorCategories = majorCategories,
   regions: (state, regions) => state.regions = regions,
+  labels: (state, labels) => state.labels = labels,
   isShowDetailPrice: (state, isShowDetailPrice) => state.isShowDetailPrice = isShowDetailPrice,
 };
 
@@ -319,6 +321,7 @@ const getters = {
   categories: state => state.categories,
   majorCategories: state => state.majorCategories,
   regions: state => state.regions,
+  labels: state => state.labels,
   isShowDetailPrice: state => state.isShowDetailPrice,
 };
 

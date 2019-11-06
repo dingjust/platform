@@ -250,6 +250,10 @@ const state = {
     {
       code: 'BUYER_REJECTED',
       name: '拒绝'
+    },
+    {
+      code: 'CANCELLED',
+      name: '已取消'
     }
   ],
   approvalStatuses: [{
