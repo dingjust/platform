@@ -376,44 +376,53 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: OutlineButton(
-                        borderSide: BorderSide(color: Colors.black26),
-                        child: new Text(
-                          '编辑',
-                          style:
-                          TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MyCapacityFormPage(
-                                        model: widget.model,
-                                      )));
-                        })),
-                Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: OutlineButton(
-                      borderSide: BorderSide(color: Colors.black26),
-                      child: new Text(
-                        '刷新${timeText == null || timeText == '' ? '' : '(' +
-                            timeText + ')'}',
-                        style:
-                        TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
-                      ),
-                      onPressed:
-                      timeText == '' || timeText == null ? yzmGet : null),
-                ),
-              ],
-            ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: OutlineButton(
+                          borderSide: BorderSide(color: Colors.black26),
+                          child: new Text(
+                            '编辑',
+                            style: TextStyle(
+                                color: Color.fromRGBO(255, 214, 12, 1)),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MyCapacityFormPage(
+                                          model: widget.model,
+                                        )));
+                          })),
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Consumer<MyCapacityState>(
+                      builder: (context, MyCapacityState myCapacityState, _) =>
+                          OutlineButton(
+                            borderSide: BorderSide(color: Colors.black26),
+                            child: Text(
+                              '刷新(${widget.model.remainRefreshTimes})',
+                              style:
+                              TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                            ),
+                            onPressed: () => onRefresh(myCapacityState),
+                          ),
+                    ),
+                  )
+                ]),
           ),
         ],
       ),
     );
+  }
+
+  onRefresh(MyCapacityState myCapacityState) async {
+    CapacityRepository().refresh(widget.model.code).then((value) {
+      if (value) {
+        myCapacityState.clear();
+      }
+    });
   }
 }

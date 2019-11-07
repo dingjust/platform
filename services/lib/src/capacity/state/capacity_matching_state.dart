@@ -16,6 +16,15 @@ class CapacityMatchingState extends PageState {
   ///时间止
   DateTime dateEndPoint;
 
+  ///省
+  RegionModel region;
+
+  ///市
+  CityModel city;
+
+  ///品类
+  CategoryModel category;
+
   List<FactoryCapacityModel> get factoryCapacityModels {
     if (_factoryCapacityModels == null) {
       getData();
@@ -88,6 +97,18 @@ class CapacityMatchingState extends PageState {
     if (dateEndPoint != null) {
       params['dateEndPoint'] = DateFormatUtil.formatYMD(dateEndPoint);
     }
+
+    if (region != null && city == null) {
+      params['location'] = region.isocode;
+    }
+
+    if (city != null) {
+      params['location'] = city.code;
+    }
+
+    if (category != null) {
+      params['categoryCode'] = category.code;
+    }
   }
 
   void setDateStartPoint(DateTime newValue) {
@@ -104,6 +125,19 @@ class CapacityMatchingState extends PageState {
     } else {
       keyword = newValue;
     }
+    clear();
+  }
+
+  void setRegion(RegionModel newValue) {
+    region = newValue;
+  }
+
+  void setCity(CityModel newValue) {
+    city = newValue;
+  }
+
+  void setCategory(CategoryModel newValue) {
+    category = newValue;
     clear();
   }
 }

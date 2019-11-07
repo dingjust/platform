@@ -48,6 +48,9 @@ class FactoryCapacityModel extends ItemModel {
   ///总刷新次数
   int totalRefreshTimes;
 
+  ///剩余刷新次数
+  int remainRefreshTimes;
+
   ///是否长期有效
   bool longTerm;
 
@@ -69,6 +72,7 @@ class FactoryCapacityModel extends ItemModel {
     this.belongTo,
     this.totalRefreshTimes = 0,
     this.longTerm = false,
+    this.remainRefreshTimes,
     this.categoryCapacities = const []});
 
   factory FactoryCapacityModel.fromJson(Map<String, dynamic> json) =>

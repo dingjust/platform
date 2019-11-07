@@ -78,7 +78,7 @@ class CapacityRepository {
   }
 
   ///刷新
-  Future<bool> refresh(String code, bool enabled) async {
+  Future<bool> refresh(String code) async {
     Response response;
     try {
       response = await http$.get(CapacityApis.refresh(code));

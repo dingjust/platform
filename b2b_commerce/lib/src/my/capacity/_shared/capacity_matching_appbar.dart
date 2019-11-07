@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/my/capacity/capacity_search.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -77,12 +78,12 @@ class CapacityCondition extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   FlatButton(
-                      onPressed: () {},
+                      onPressed: () => onAddressSelect(context, state),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            '地区',
+                            generateAddressStr(state),
                             style: TextStyle(
                               fontSize: 15,
                             ),
@@ -90,12 +91,12 @@ class CapacityCondition extends StatelessWidget {
                         ],
                       )),
                   FlatButton(
-                      onPressed: () {},
+                      onPressed: () => onCategorySelect(context, state),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            '品类',
+                            state.category?.name ?? '品类',
                             style: TextStyle(
                               fontSize: 15,
                             ),
@@ -122,6 +123,61 @@ class CapacityCondition extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onAddressSelect(BuildContext context,
+      CapacityMatchingState state) async {
+    RegionModel _regionSelect = RegionModel();
+    List<CityModel> _citySelects = [];
+    List<RegionModel> _regions =
+    await Provider.of<AddressState>(context).getRegions();
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          //地区选择器
+          return RegionCitySelector(
+            regions: _regions,
+            regionSelect: _regionSelect,
+            citySelects: _citySelects,
+            multiple: false,
+          );
+        }).then((a) {
+      state.setRegion(_regionSelect);
+      if (_citySelects.length != 0) {
+        state.setCity(_citySelects[0]);
+      } else {
+        state.setCity(null);
+      }
+      state.clear();
+    });
+  }
+
+  void onCategorySelect(BuildContext context,
+      CapacityMatchingState state) async {
+    List<CategoryModel> categories =
+    await Provider.of<CategoryState>(context).getCascadedCategories();
+    List<CategoryModel> _categorySelected = [];
+
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: CategorySelect(
+            categories: categories,
+            multiple: false,
+            verticalDividerOpacity: 1,
+            categorySelect: _categorySelected,
+            categoryActionType: CategoryActionType.TO_POP,
+          ),
+        );
+      },
+    ).then((a) {
+      if (_categorySelected.length != 0) {
+        state.setCategory(_categorySelected[0]);
+      } else {
+        state.setCategory(null);
+      }
+    });
   }
 
   void onDateRangeSelect(
@@ -158,5 +214,16 @@ class CapacityCondition extends StatelessWidget {
       state.setDateEndPoint(picked[1]);
       state.clear();
     }
+  }
+
+  String generateAddressStr(CapacityMatchingState state) {
+    String addressStr = '地区';
+    if (state.region != null) {
+      addressStr = '${state.region.name}';
+      if (state.city != null) {
+        addressStr = '${state.region.name} ${state.city.name}';
+      }
+    }
+    return addressStr;
   }
 }
