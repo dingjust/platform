@@ -65,7 +65,8 @@ const state = {
     },
     attachments: [],
     labels: [],
-    cancelledDate: ''
+    cancelledDate: '',
+    comment: ''
   },
   queryFormData: {
     keyword: '',
@@ -268,7 +269,8 @@ const actions = {
       },
       attachments: [],
       labels: [],
-      cancelledDate: ''
+      cancelledDate: '',
+      comment: ''
     });
   },
   clearQueryFormData ({dispatch, commit, state}){

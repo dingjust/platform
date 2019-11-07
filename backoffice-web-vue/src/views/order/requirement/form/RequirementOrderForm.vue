@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn requirement-form">
-    <el-row class="requirement-info-title-row">
-      <div class="requirement-info-title">
-        <h6 class="requirement-info-title_text">填写需求信息</h6>
+    <el-row class="info-title-row">
+      <div class="info-title">
+        <h6 class="info-title_text">填写需求信息</h6>
       </div>
     </el-row>
     <div>
@@ -209,8 +209,8 @@
       </el-form>
     </div>
 
-    <el-row type="flex" justify="center">
-      <el-button class="buttonClass" @click="onSave">
+    <el-row type="flex" justify="center" style="margin-top: 40px">
+      <el-button class="btn-class" style="width: 220px;padding-bottom: 0px" @click="onSave">
         <h6>{{this.isCreated ? '确认发布' : '确认修改'}}</h6>
       </el-button>
     </el-row>
@@ -282,17 +282,17 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              if (typeof this.formData.details.expectedDeliveryDate === 'number') {
-                if (this.formData.details.expectedDeliveryDate <= new Date().getTime()) {
-                  this.$message.error('交货日期不可小于当前时间');
-                  return;
-                }
-              } else {
-                if (this.formData.details.expectedDeliveryDate <= new Date(this.formData.details.expectedDeliveryDate).getTime()) {
-                  this.$message.error('交货日期不可小于当前时间');
-                  return;
-                }
-              }
+              // if (typeof this.formData.details.expectedDeliveryDate === 'number') {
+              //   if (this.formData.details.expectedDeliveryDate <= new Date().getTime()) {
+              //     this.$message.error('交货日期不可小于当前时间');
+              //     return;
+              //   }
+              // } else {
+              //   if (this.formData.details.expectedDeliveryDate <= new Date(this.formData.details.expectedDeliveryDate).getTime()) {
+              //     this.$message.error('交货日期不可小于当前时间');
+              //     return;
+              //   }
+              // }
               if (this.formData.publishingMode === 'PUBLIC') {
                 this.selectUids = [];
               }
@@ -482,29 +482,29 @@
   }
 </script>
 
-<style>
-  .requirement-form .rowClass{
+<style scoped>
+  .rowClass{
     margin-top:20px;
   }
-  .requirement-form .requirement-info-title {
+  .info-title {
     width: 100%;
     border-left: 2px solid #FFD60C;
     padding-left: 10px;
     height: 14px;
   }
 
-  .requirement-form .requirement-info-title_text {
+  .info-title_text {
     font-size: 12px;
     font-weight: 500;
     color: rgba(0, 0, 0, 1);
     opacity: 0.65;
   }
 
-  .requirement-form .requirement-info-title-row {
+  .info-title-row {
     margin-bottom: 20px;
   }
 
-  .requirement-form .buttonClass{
+  .buttonClass{
     padding: 10px 120px 0px 120px;
     margin-top: 40px;
     background-color: #ffd60c;
@@ -512,21 +512,21 @@
     border-radius: 8px;
   }
 
-  .requirement-form .titleCardClass{
+  .titleCardClass{
     border-style: solid;
     border-width: 1px;
     border-top: white;
     border-color: #DCDCDC;
   }
 
-  .requirement-form .elTagClass{
+  .elTagClass{
     color: #0b0e0f;
     margin-right: 20px;
     margin-bottom: 10px;
     cursor:pointer;
   }
 
-  .requirement-form .titleTextClass{
+  .titleTextClass{
     text-align: justify;
     text-align-last: justify;
     display: inline-block;
@@ -534,7 +534,7 @@
     font-weight: bold;
   }
 
-  .requirement-form .contentTextClass{
+  .contentTextClass{
     color: #A9A9A9;
     font-weight: 400;
   }

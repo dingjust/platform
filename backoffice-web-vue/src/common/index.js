@@ -310,10 +310,10 @@ const COMMON_APIS = {
   updateQuote(code) {
     return '/b2b/orders/quote/' + code;
   },
-  updateApprove(code) {
+  approveQuote(code) {
     return '/b2b/orders/quote/' + code + '/approve';
   },
-  updateReject(code) {
+  rejectQuote(code) {
     return '/b2b/orders/quote/' + code + '/reject';
   },
   cancelQuote(code) {

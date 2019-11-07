@@ -87,7 +87,7 @@
       },
       async onApprove() {
         let formData = this.slotData;
-        const url = this.apis().updateApprove(formData.code);
+        const url = this.apis().approveQuote(formData.code);
         const result = await this.$http.put(url, formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -106,7 +106,7 @@
         }
         this.refuseVisible = false;
         let formData = this.slotData;
-        const url = this.apis().updateReject(formData.code);
+        const url = this.apis().rejectQuote(formData.code);
         const result = await this.$http.put(url, {"reason": this.reason});
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

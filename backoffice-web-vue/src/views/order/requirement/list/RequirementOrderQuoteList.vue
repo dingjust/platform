@@ -83,8 +83,8 @@
       </el-col>
       <el-col :span="6">
         <el-row type="flex" justify="space-around" v-if="item.state == 'SELLER_SUBMITTED'">
-          <el-tag style="padding: 10px 20px;line-height: 3px;background-color: #FFD60C;color: black">确认工厂</el-tag>
-          <el-tag style="padding: 10px 20px;line-height: 3px;background-color: red;color: white">拒绝工厂</el-tag>
+          <el-button class="btn-class" @click="onApprove(item)">确认工厂</el-button>
+          <el-button class="btn-class-1" @click="writeReason(item)">拒绝工厂</el-button>
         </el-row>
         <el-row type="flex" justify="space-around" v-if="item.state == 'BUYER_REJECTED'">
           <el-tag style="padding: 10px 20px;line-height: 3px;background-color: #c8c8c8;color: white">已拒绝</el-tag>
@@ -107,6 +107,20 @@
                    :page-count="page.totalPages"
                    :total="page.totalElements">
     </el-pagination>
+
+    <el-dialog  :visible.sync="reasonDialogVisible" width="60%" class="purchase-dialog" append-to-body>
+      <el-row type="flex" justify="center">
+        <h6 style="font-size: 18px;font-weight: bold">填写拒绝原因</h6>
+      </el-row>
+      <el-row>
+        <el-input type="textarea" :autosize="{minRows:4,maxRows: 8}" v-model="comment">
+
+        </el-input>
+      </el-row>
+      <el-row type="flex" justify="center">
+        <el-button class="btn-class" style="width: 150px;margin-top: 20px" @click="onReject(code)">确认</el-button>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -151,15 +165,57 @@
       },
       handleChanged(){
         this.setIsShowDetailPrice(!this.isShowDetailPrice);
+      },
+      async onApprove(item){
+        this.$confirm('是否确认报价', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          const url = this.apis().approveQuote(item.code);
+          const result = await this.$http.put(url);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.$message.success('确认报价成功');
+          this.$emit('onRefresh', 'approve');
+        });
+      },
+      writeReason (item) {
+        this.code = item.code;
+        this.reasonDialogVisible = !this.reasonDialogVisible;
+      },
+      async onReject(code) {
+        this.$confirm('是否拒绝报价', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          const url = this.apis().rejectQuote(code);
+          const result = await this.$http.put(url, {
+            reason: this.comment
+          });
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.$message.success('拒绝报价成功');
+          this.$emit('onRefresh', 'reject');
+          this.reasonDialogVisible = false;
+        });
       }
     },
     data () {
       return {
+        reasonDialogVisible: false,
+        comment: '',
+        code: '',
       }
     }
   }
 </script>
-<style>
+<style scoped>
   .one{
     width: 100%;
     /*相对位置*/
@@ -177,5 +233,14 @@
     position: absolute;
     top: -10px;
     left: 112px;
+  }
+  .btnClass1{
+    width: 100px;background-color: red;color: white;
+  }
+
+  .btnClass{
+    width: 100px;
+    background-color: #FFD60C;
+    color: black;
   }
 </style>

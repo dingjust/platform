@@ -11,7 +11,7 @@
                    scope.row.product.pictures[0].url : 'static/img/nopicture.png'" />
             </el-col>
             <el-col :span="16">
-              <h6 style="font-size: 12px">品类：{{scope.row.product.category.parent.name}}-{{scope.row.product.category.name}}</h6>
+              <!--<h6 style="font-size: 12px">品类：{{scope.row.product.category.parent.name}}-{{scope.row.product.category.name}}</h6>-->
               <h6 style="font-size: 12px">货号：{{scope.row.product.skuID}}</h6>
               <h6 style="font-size: 12px">数量：{{scope.row.totalQuantity}}</h6>
             </el-col>

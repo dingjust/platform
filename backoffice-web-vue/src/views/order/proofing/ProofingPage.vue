@@ -2,11 +2,9 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-row>
-        <el-col :span="2">
-          <div class="orders-list-title">
-            <h6>打样订单列表</h6>
-          </div>
-        </el-col>
+        <div class="orders-list-title">
+          <h6>打样订单列表</h6>
+        </div>
       </el-row>
       <proofing-toolbar @onAdvancedSearch="onAdvancedSearch" @clearQueryFormData="clearQueryFormData"/>
 
@@ -19,12 +17,12 @@
                                        @onShowRequirement="onShowRequirement">
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.status == 'PENDING_PAYMENT'">
-                <el-button type="text" class="proofing-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button type="text" class="proofing-list-button" @click="onCancell(props.item)">关闭</el-button>
+                <el-button type="text" class="list-button" @click="onCancell(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
-                <el-button type="text" class="proofing-list-button" @click="onDetails(props.item)">详情</el-button>
+                <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
               </el-row>
             </template>
           </proofing-search-result-list>
@@ -205,8 +203,3 @@
     }
   }
 </script>
-<style>
-  .proofing-list-button{
-    color: #FFA403;
-  }
-</style>
