@@ -6,6 +6,8 @@ part 'capacity.g.dart';
 ///工厂产能信息
 @JsonSerializable()
 class FactoryCapacityModel extends ItemModel {
+  int id;
+
   ///编码
   String code;
 
@@ -13,12 +15,15 @@ class FactoryCapacityModel extends ItemModel {
   String title;
 
   ///最后刷新时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
   DateTime lastRefreshTime;
 
   ///空闲时间起点
+  @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
   DateTime dateStartPoint;
 
   ///空闲时间结束
+  @JsonKey(fromJson: _dateTimefromMilliseconds, toJson: _dateTimetoMilliseconds)
   DateTime dateEndPoint;
 
   ///是否启用
@@ -43,25 +48,28 @@ class FactoryCapacityModel extends ItemModel {
   ///总刷新次数
   int totalRefreshTimes;
 
+  ///是否长期有效
+  bool longTerm;
+
   ///分类产能
   @JsonKey(toJson: _categoryCapacitiesToJson)
   List<FactoryCategoryCapacityModel> categoryCapacities;
 
-  FactoryCapacityModel(
-      {int id,
-      this.code,
-      this.title,
-      this.lastRefreshTime,
-      this.dateStartPoint,
-      this.dateEndPoint,
-      this.enabled = false,
-      this.deleted = false,
-      this.clickTimes = 0,
-      this.showTimes = 0,
-      this.todayRefreshTimes = 0,
-      this.belongTo,
-      this.totalRefreshTimes = 0,
-      this.categoryCapacities = const []});
+  FactoryCapacityModel({this.id,
+    this.code,
+    this.title,
+    this.lastRefreshTime,
+    this.dateStartPoint,
+    this.dateEndPoint,
+    this.enabled = false,
+    this.deleted = false,
+    this.clickTimes = 0,
+    this.showTimes = 0,
+    this.todayRefreshTimes = 0,
+    this.belongTo,
+    this.totalRefreshTimes = 0,
+    this.longTerm = false,
+    this.categoryCapacities = const []});
 
   factory FactoryCapacityModel.fromJson(Map<String, dynamic> json) =>
       _$FactoryCapacityModelFromJson(json);
@@ -73,10 +81,16 @@ class FactoryCapacityModel extends ItemModel {
       FactoryModel.toJson(belongTo);
 
   static List<Map<String, dynamic>> _categoryCapacitiesToJson(
-          List<FactoryCategoryCapacityModel> categoryCapacities) =>
+      List<FactoryCategoryCapacityModel> categoryCapacities) =>
       categoryCapacities
           .map((capacity) => FactoryCategoryCapacityModel.toJson(capacity))
           .toList();
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
+
+  static int _dateTimetoMilliseconds(DateTime date) =>
+      date.millisecondsSinceEpoch;
 }
 
 ///工厂产能分类产能信息

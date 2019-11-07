@@ -49,6 +49,8 @@ class GlobalConfigs {
       'brand_index_history_keyword_key';
   static const Requirement_HISTORY_KEYWORD_KEY =
       'requirement_history_keyword_key';
+  static const CAPACITY_HISTORY_KEYWORD_KEY =
+      'capacity_history_keyword_key';
 
   static const CONTRACT_HISTORY_KEYWORD_KEY = 'contract_history_keyword_key';
 

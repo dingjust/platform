@@ -1,9 +1,8 @@
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
-import 'package:b2b_commerce/src/my/capacity/my_capacity_form.dart';
+import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
-import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
@@ -60,6 +59,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_INVOICES = '/my/my_invoices';
   static const ROUTE_MY_CONTRACT = '/my/my_contract_manage_page';
   static const ROUTE_MY_CAPACITY = '/my/my_capacity_from';
+  static const ROUTE_CAPACITY_MATCHING = '/my/capacity/capacity_matching';
   static const ROUTE_MY_COLLECTIONS = '/my/my_collections';
   static const ROUTE_MY_CLIENT_SERVICES = '/my/my_client_services';
   static const ROUTE_MY_SETTINGS = '/my/my_settings';
@@ -96,6 +96,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_HOT_CATEGORY_PRODUCT: (context) => ProductHotCategoryPage(),
     ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage(),
     ROUTE_MY_BILL: (context) => MyBillPage(),
-    ROUTE_MY_HELP: (context) => MyHelpPage()
+    ROUTE_MY_HELP: (context) => MyHelpPage(),
+    ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage()
   };
 }
