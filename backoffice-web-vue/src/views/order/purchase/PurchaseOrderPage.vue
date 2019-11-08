@@ -19,7 +19,7 @@
       <purchase-order-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
-          <el-tab-pane :name="item.code">
+          <el-tab-pane :name="item.code" :key="index">
             <span slot="label">
               <tab-label-bubble :label="item.name" :num="0" />
             </span>

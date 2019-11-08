@@ -222,7 +222,12 @@ const router = new Router({
                     },
                   ]
 
-                }
+                },
+                {
+                  path: 'capicity',
+                  name: '产能配置',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/capicity/CapicityPage'),
+                },
               ]
             }
           ]

@@ -15,7 +15,7 @@ class CapacityMatchingItem extends StatelessWidget {
         //TODO跳转工厂主页
       },
       child: Container(
-        height: 180,
+        height: 200,
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         padding: EdgeInsets.all(10),
         color: Colors.white,

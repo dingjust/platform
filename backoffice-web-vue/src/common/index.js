@@ -496,8 +496,24 @@ const COMMON_APIS = {
     return 'b2b/payPlan/delete/' + id;
   },
   updateUserInfo(uid) {
-    return 'b2b/b2bCustomers/'+uid+'/updateUserInfo';
-  }
+    return 'b2b/b2bCustomers/' + uid + '/updateUserInfo';
+  },
+  //公司产能
+  getCapacityList() {
+    return 'b2b/factory/capacity/list';
+  },
+  //品牌查询产能列表
+  searchCapacity() {
+    return 'b2b/factory/capacity/search';
+  },
+  //产能切换状态
+  capacitySwitchStatus(code) {
+    return 'b2b/factory/capacity/switch/status/' + code;
+  },
+  //产能刷新
+  capacityRefresh(code) {
+    return 'b2b/factory/capacity/refresh/' + code;
+  },
 };
 
 let TENANT_APIS = {

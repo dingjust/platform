@@ -178,6 +178,11 @@ export default {
           name: '账务配置',
           url: '/account/setting/payPlan',
           icon: 'iconNone'
+        },
+        {
+          name: '产能配置',
+          url: '/account/setting/capicity',
+          icon: 'iconNone'
         }
       ]
     },
