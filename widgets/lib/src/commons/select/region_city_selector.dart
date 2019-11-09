@@ -8,12 +8,12 @@ class RegionCitySelector extends StatefulWidget {
   List<RegionModel> regions;
   RegionModel regionSelect;
   List<CityModel> citySelects;
+  bool multiple;
 
-  RegionCitySelector({
-    this.regions,
+  RegionCitySelector({this.regions,
     this.regionSelect,
     this.citySelects,
-  });
+    this.multiple = true});
 
   _RegionCitySelectorState createState() => _RegionCitySelectorState();
 }
@@ -114,29 +114,40 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                 width: MediaQuery.of(context).size.width / 2,
                 child: ListView(
                   children: widget.regionSelect.cities?.map((city) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (_cityCodeSelects.contains(city.code)) {
-                                  _cityCodeSelects.remove(city.code);
-                                  widget.citySelects.removeWhere(
-                                      (city1) => city.code == city1.code);
-                                } else {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (_cityCodeSelects.contains(city.code)) {
+                            _cityCodeSelects.remove(city.code);
+                            widget.citySelects.removeWhere(
+                                    (city1) => city.code == city1.code);
+                          } else {
+                            if (!widget.multiple) {
+                              widget.citySelects.clear();
                                   widget.citySelects.add(city);
+                              _cityCodeSelects.clear();
                                   _cityCodeSelects.add(city.code);
-                                }
-                              });
-                            },
-                            child: Container(
-                              color: _cityCodeSelects.contains(city.code)
-                                  ? Colors.white
-                                  : Colors.grey[300],
-                              height: 30,
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: Center(child: Text(city.name)),
-                            ),
-                          );
-                        })?.toList() ?? [],
+                            } else {
+                              widget.citySelects.add(city);
+                              _cityCodeSelects.add(city.code);
+                            }
+                          }
+                        });
+                      },
+                      child: Container(
+                        color: _cityCodeSelects.contains(city.code)
+                            ? Colors.white
+                            : Colors.grey[300],
+                        height: 30,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width / 2,
+                        child: Center(child: Text(city.name)),
+                      ),
+                    );
+                  })?.toList() ??
+                      [],
                 ),
               ),
             ],

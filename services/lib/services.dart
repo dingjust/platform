@@ -2,15 +2,20 @@ library app_services;
 
 import 'dart:async';
 
+export 'src/address/address_state.dart';
 export 'src/amap/amap_response.dart';
 export 'src/amap/amap_service.dart';
 export 'src/api/apis.dart';
+export 'src/api/capacity.dart';
 export 'src/api/order.dart';
 export 'src/api/product.dart';
 export 'src/api/user.dart';
-export 'src/api/capacity.dart';
 export 'src/bank/bank_response.dart';
 export 'src/bank/bank_service.dart';
+export 'src/capacity/repository/capacity_repository.dart';
+export 'src/capacity/state/capacity_matching_state.dart';
+export 'src/capacity/state/my_capacity_state.dart';
+export 'src/category/state/category_state.dart';
 export 'src/home/factory/bloc/factory_bloc.dart';
 export 'src/home/factory/response/factory_condition.dart';
 export 'src/home/product/bloc/order_product_bloc.dart';
@@ -25,9 +30,10 @@ export 'src/my/bloc/my_contract_bloc.dart';
 export 'src/my/bloc/my_contract_template_bloc.dart';
 export 'src/my/bloc/my_help_bloc.dart';
 export 'src/my/repository/bankcard_repository.dart';
-export 'src/my/repository/bill_repository.dart';
-export 'src/my/repository/user_guideline_repository.dart';
 export 'src/my/repository/bankcard_repository.dart';
+export 'src/my/repository/bill_repository.dart';
+export 'src/my/repository/contract_repository.dart';
+export 'src/my/repository/user_guideline_repository.dart';
 export 'src/my/repository/wallet_repository.dart';
 export 'src/net/http_manager.dart';
 export 'src/order/bloc/proofing_orders_bloc.dart';
@@ -81,19 +87,16 @@ export 'src/user/district_repository_impl.dart';
 export 'src/user/invoice_title_repository_impl.dart';
 export 'src/user/region_repository.dart';
 export 'src/user/region_repository_impl.dart';
-export 'src/user/repository/reports_repository.dart';
 export 'src/user/repository/cooperator_repository_impl.dart';
 export 'src/user/repository/payplan_repository_impl.dart';
-export 'src/user/response/cooperator_response.dart';
+export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
 export 'src/user/response/company_payplan_response.dart';
+export 'src/user/response/cooperator_response.dart';
 export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/websocket/websocket_service.dart';
-export 'src/my/repository/contract_repository.dart';
-export 'src/capacity/state/capacity_state.dart';
-export 'src/capacity/repository/capacity_repository.dart';
 
 
 abstract class BLoCBase {

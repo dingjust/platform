@@ -26,11 +26,7 @@ class _MyCapacityPageState extends State<MyCapacityPage> {
       floatingActionButton: Consumer<MyCapacityState>(
         builder: (context, MyCapacityState myCapacityState, child) =>
             FloatingActionButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (context) => MyCapacityFormPage()));
-              },
+              onPressed: () => onAdd(myCapacityState),
               child: child,
             ),
         child: Icon(
@@ -39,6 +35,37 @@ class _MyCapacityPageState extends State<MyCapacityPage> {
         ),
       ),
     );
+  }
+
+  void onAdd(MyCapacityState myCapacityState) {
+    if (myCapacityState.factoryCapacityModels.length > 2) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              failTips: '取消失败',
+              title: '你已开启3条产能',
+              contentText1: '普通用户最多智能开启3条产能，成为会员可以同时发布多条产能，并且每条产能可以发布更多品类',
+              isNeedConfirmButton: true,
+              isNeedCancelButton: true,
+              dialogHeight: 200,
+              dialogWidth: 350,
+              confirmButtonText: '成为会员',
+              cancelButtonText: '以后再说',
+              confirmAction: () {
+                //TODO:跳转到会员
+              },
+              cancelAction: () {
+                Navigator.of(context).pop();
+              },
+            );
+          });
+    } else {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => MyCapacityFormPage()));
+    }
   }
 }
 
@@ -81,21 +108,37 @@ class MyCapacitieslist extends StatelessWidget {
 
     return Container(
       child: RefreshIndicator(
-        child: ListView(controller: _scrollController, children: [
-          Column(
-            children: myCapacityState.factoryCapacityModels
-                .map((model) => MyCapacityItem(model))
-                .toList(),
-          ),
-          ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-            opacity: myCapacityState.loadingMore ? 1.0 : 0,
-          )
-        ]),
+        child: ListView(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              Column(
+                children: myCapacityState.factoryCapacityModels
+                    .map((model) => MyCapacityItem(model))
+                    .toList(),
+              ),
+              ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                opacity: myCapacityState.loadingMore ? 1.0 : 0,
+              ),
+              _buildEnd()
+            ]),
         onRefresh: () async {
           myCapacityState.clear();
         },
       ),
     );
+  }
+
+  Widget _buildEnd() {
+    return myCapacityState.isEnd()
+        ? Container(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[Text('已经到底了')],
+      ),
+    )
+        : Container();
   }
 }
 
@@ -220,6 +263,15 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
   }
 
   Widget _buildBodyRight() {
+    String dateStr = '';
+    if (widget.model.longTerm ?? false) {
+      dateStr = '长期有效';
+    } else {
+      dateStr =
+      '${widget.model?.dateStartPoint?.month}.${widget.model?.dateStartPoint
+          ?.day}~${widget.model?.dateEndPoint?.month}.${widget.model
+          ?.dateEndPoint?.day}';
+    }
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -227,9 +279,7 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
           Container(
             margin: EdgeInsets.only(bottom: 5),
             child: Text(
-              '${widget.model?.dateStartPoint?.month}.${widget.model
-                  ?.dateStartPoint?.day}～${widget.model?.dateEndPoint
-                  ?.month}.${widget.model?.dateEndPoint?.day}',
+              dateStr,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -307,8 +357,15 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
                     activeColor: Color.fromRGBO(255, 214, 12, 1), // 激活时原点颜色
                     onChanged: (bool val) {
                       //TODO:调用激活接口
-                      this.setState(() {
-                        widget.model.enabled = !widget.model.enabled;
+                      CapacityRepository()
+                          .switchStatus(
+                          widget.model.code, !widget.model.enabled)
+                          .then((value) {
+                        if (value) {
+                          setState(() {
+                            widget.model.enabled = !widget.model.enabled;
+                          });
+                        }
                       });
                     },
                   ),
@@ -319,44 +376,53 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: OutlineButton(
-                        borderSide: BorderSide(color: Colors.black26),
-                        child: new Text(
-                          '编辑',
-                          style:
-                          TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      MyCapacityFormPage(
-                                        model: widget.model,
-                                      )));
-                        })),
-                Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: OutlineButton(
-                      borderSide: BorderSide(color: Colors.black26),
-                      child: new Text(
-                        '刷新${timeText == null || timeText == '' ? '' : '(' +
-                            timeText + ')'}',
-                        style:
-                        TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
-                      ),
-                      onPressed:
-                      timeText == '' || timeText == null ? yzmGet : null),
-                ),
-              ],
-            ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: OutlineButton(
+                          borderSide: BorderSide(color: Colors.black26),
+                          child: new Text(
+                            '编辑',
+                            style: TextStyle(
+                                color: Color.fromRGBO(255, 214, 12, 1)),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MyCapacityFormPage(
+                                          model: widget.model,
+                                        )));
+                          })),
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Consumer<MyCapacityState>(
+                      builder: (context, MyCapacityState myCapacityState, _) =>
+                          OutlineButton(
+                            borderSide: BorderSide(color: Colors.black26),
+                            child: Text(
+                              '刷新(${widget.model.remainRefreshTimes})',
+                              style:
+                              TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                            ),
+                            onPressed: () => onRefresh(myCapacityState),
+                          ),
+                    ),
+                  )
+                ]),
           ),
         ],
       ),
     );
+  }
+
+  onRefresh(MyCapacityState myCapacityState) async {
+    CapacityRepository().refresh(widget.model.code).then((value) {
+      if (value) {
+        myCapacityState.clear();
+      }
+    });
   }
 }

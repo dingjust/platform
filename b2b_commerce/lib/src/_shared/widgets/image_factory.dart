@@ -7,10 +7,11 @@ import 'package:widgets/widgets.dart';
 /// Image工厂类， 用于存放最通用的组件生成样式
 class ImageFactory {
   /// 缩略图
-  static Widget buildDefaultThumbnailImage({double size = 60}) {
+  static Widget buildDefaultThumbnailImage(
+      {double size = 60, double containerSize = 80}) {
     return Container(
-      width: 80,
-      height: 80,
+      width: containerSize,
+      height: containerSize,
       margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -27,17 +28,19 @@ class ImageFactory {
   static Widget buildThumbnailImage(
     MediaModel media, {
         double size = 80,
+        double containerSize = 80,
     BoxFit fit = BoxFit.cover,
   }) {
     if (media == null) {
-      return buildDefaultThumbnailImage(size: size);
+      return buildDefaultThumbnailImage(
+          size: size, containerSize: containerSize);
     }
 
     // TODO：拿media format为Thumbnail的converted图片
     return Container(
         margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-        width: 90,
-        height: 80,
+        width: containerSize,
+        height: containerSize,
         child:
 //      Image.network(
 //        '${media.previewUrl()}',

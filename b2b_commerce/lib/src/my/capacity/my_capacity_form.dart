@@ -1,8 +1,10 @@
+import 'package:core/core.dart';
+import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 class MyCapacityFormPage extends StatefulWidget {
   FactoryCapacityModel model;
@@ -16,7 +18,8 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
   FactoryCapacityModel form;
 
   TextEditingController titleController = TextEditingController();
-  bool longTerm = false;
+  FocusNode _contentFocusNode = FocusNode();
+
   List<_CapacityEntry> capacityEntries = [];
   ApparelProductModel product;
   List<CategoryModel> _category;
@@ -33,12 +36,18 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
       titleController.text = form.title;
       dateStartPoint = widget.model.dateStartPoint;
       dateEndPoint = widget.model.dateEndPoint;
+      if (widget.model.longTerm == null) {
+        form.longTerm = false;
+      }
       widget.model.categoryCapacities.forEach((categoryCapacity) {
         capacityEntries.add(_CapacityEntry(
-            textController: TextEditingController(), model: categoryCapacity));
+            textController: TextEditingController(
+                text: categoryCapacity.capacityRange.toString()),
+            model: categoryCapacity));
       });
     } else {
       form = FactoryCapacityModel(
+        longTerm: true,
         categoryCapacities: [],
       );
     }
@@ -123,7 +132,7 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
             width: MediaQuery.of(context).size.width - 100,
             child: TextFieldComponent(
               textAlign: TextAlign.left,
-              focusNode: FocusNode(),
+              focusNode: _contentFocusNode,
               controller: titleController,
               autofocus: true,
               inputType: TextInputType.number,
@@ -150,77 +159,77 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
               '空闲时间：',
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              if (!longTerm) {
-                _showDatePicker(1);
-              }
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                dateStartPoint != null
-                    ? Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          '${DateFormatUtil.formatYMD(dateStartPoint)}',
-                          style: TextStyle(fontSize: 16),
+          Expanded(
+              flex: 1,
+              child: GestureDetector(
+                onTap: _showDatePicker,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        dateStartPoint != null
+                            ? Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '${DateFormatUtil.formatYMD(dateStartPoint)}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                            : Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Icon(
+                            Icons.date_range,
+                            size: 20,
+                            color: !form.longTerm
+                                ? Colors.black87
+                                : Colors.grey,
+                          ),
                         ),
-                      )
-                    : Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: Icon(
-                          Icons.date_range,
-                          size: 20,
-                          color: !longTerm ? Colors.black87 : Colors.grey,
-                        ),
+                      ],
+                    ),
+                    Container(
+                      child: Text(
+                        '－',
+                        style: TextStyle(fontSize: 16),
                       ),
-              ],
-            ),
-          ),
-          Container(
-            child: Text(
-              '－',
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              if (!longTerm) {
-                _showDatePicker(2);
-              }
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                dateEndPoint != null
-                    ? Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          '${DateFormatUtil.formatYMD(dateEndPoint)}',
-                          style: TextStyle(fontSize: 16),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        dateEndPoint != null
+                            ? Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '${DateFormatUtil.formatYMD(dateEndPoint)}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                            : Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Icon(
+                            Icons.date_range,
+                            size: 20,
+                            color: !form.longTerm
+                                ? Colors.black87
+                                : Colors.grey,
+                          ),
                         ),
-                      )
-                    : Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: Icon(
-                          Icons.date_range,
-                          size: 20,
-                          color: !longTerm ? Colors.black87 : Colors.grey,
-                        ),
-                      ),
-              ],
-            ),
-          ),
+                      ],
+                    ),
+                  ],
+                ),
+              )),
           Container(
             child: Column(
               children: <Widget>[
                 Switch(
-                  value: longTerm,
+                  value: form.longTerm,
                   activeColor: Color.fromRGBO(255, 214, 12, 1), // 激活时原点颜色
                   onChanged: (bool val) {
                     this.setState(() {
-                      longTerm = !longTerm;
+                      form.longTerm = !form.longTerm;
                       dateStartPoint = null;
                       dateEndPoint = null;
                     });
@@ -293,113 +302,111 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
       child: Column(
           children: capacityEntries
               .map((entry) => Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(
-                              child: Container(
-                                child: Text(
-                                    '${entry.model.category.parent.name}－－${entry.model.category.name}'),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  capacityEntries.remove(entry);
-                                });
-                              },
-                              child: Container(
-                                child: Text(
-                                  '删除',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(
-                              child: Container(
-                                child: Text(
-                                  '日产能：',
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width - 100,
-                              child: TextFieldComponent(
-                                textAlign: TextAlign.right,
-                                focusNode: FocusNode(),
-                                controller: entry.textController,
-                                autofocus: false,
-                                inputType: TextInputType.number,
-                                hideDivider: true,
-                                hintText: '请输入日产能（件）',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: EdgeInsets.symmetric(vertical: 5),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Text('${entry.model?.category?.name}'),
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          capacityEntries.remove(entry);
+                        });
+                      },
+                      child: Container(
+                        child: Text(
+                          '删除',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Text(
+                          '日产能：',
+                        ),
+                      ),
                     ),
-                  ))
+                    Container(
+                      width: MediaQuery.of(context).size.width - 100,
+                      child: TextFieldComponent(
+                        textAlign: TextAlign.right,
+                        focusNode: FocusNode(),
+                        controller: entry.textController,
+                        autofocus: false,
+                        inputType: TextInputType.number,
+                        hideDivider: true,
+                        hintText: '请输入日产能（件）',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ))
               .toList()),
     );
   }
 
   //打开日期选择器`````````
-  void _showDatePicker(int index) {
-    _selectDate(context, index);
-  }
+  void _showDatePicker() async {
+    _contentFocusNode.unfocus();
 
-  //生成日期选择器
-  Future<Null> _selectDate(BuildContext context, int index) async {
-    DateTime nowTime = DateTime.now();
-    final DateTime _picked = await showDatePicker(
+    final List<DateTime> picked = await DateRagePicker.showDatePicker(
         context: context,
-        initialDate: nowTime,
-        firstDate: nowTime,
-        lastDate: DateTime(2999));
-
-    if (_picked != null) {
-      setState(() {
-        if (index == 1) {
-          dateStartPoint = _picked;
-        }
-        if (index == 2) {
-          dateEndPoint = _picked;
-        }
-      });
-    }
+        initialFirstDate: new DateTime.now(),
+        initialLastDate: (new DateTime.now()).add(new Duration(days: 7)),
+        firstDate: DateTime(2019),
+        lastDate: DateTime(2099));
+    print(picked);
+    setState(() {
+      if (picked != null && picked.length == 1) {
+        dateStartPoint = picked[0];
+      } else if (picked != null && picked.length == 2) {
+        dateStartPoint = picked[0];
+        dateEndPoint = picked[1];
+      }
+      form.longTerm = false;
+    });
   }
 
   Widget _buildSubmitBtn() {
-    return Container(
-      height: 40,
-      width: double.infinity,
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-      child: FlatButton(
-        color: Color.fromRGBO(255, 214, 12, 1),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5))),
-        onPressed: onSubmit,
-        child: Text(
-          '保存',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
+    return Consumer<MyCapacityState>(
+      builder: (context, MyCapacityState myCapacityState, _) =>
+          Container(
+            height: 40,
+            width: double.infinity,
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: FlatButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () => onSave(myCapacityState),
+              child: Text(
+                '保存',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -413,16 +420,76 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
     return result;
   }
 
-  void onSubmit() {
+  void onSave(MyCapacityState myCapacityState) {
+    if (capacityEntries.length == 0) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText1: '请添加品类',
+              isNeedConfirmButton: true,
+              confirmButtonText: '确定',
+              cancelButtonText: '以后再说',
+              confirmAction: () {
+                Navigator.of(context).pop();
+              },
+            );
+          });
+    } else {
+      onSubmit(myCapacityState);
+    }
+  }
+
+  void onSubmit(MyCapacityState myCapacityState) {
     //组合表单数据
     form.dateEndPoint = dateEndPoint;
     form.dateStartPoint = dateStartPoint;
     form.title = titleController.text;
+    if (form.longTerm) {
+      form.dateStartPoint = null;
+      form.dateEndPoint = null;
+    }
     form.categoryCapacities = capacityEntries.map((entry) {
-      entry.model.capacityRange = int.parse(entry.textController.text);
+      if (entry.textController.text == '') {
+        entry.model.capacityRange = 0;
+      } else {
+        entry.model.capacityRange = int.parse(entry.textController.text);
+      }
+
       return entry.model;
     }).toList();
-    CapacityRepository().save(form);
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: CapacityRepository().save(form),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: 'purchaseOrders',
+          );
+        }).then((value) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              successTips: '保存成功',
+              failTips: '保存失败',
+              callbackResult: value,
+              confirmAction: () {
+                myCapacityState.clear();
+                Navigator.of(context).pop();
+              },
+            );
+          }).then((v) {
+        myCapacityState.clear();
+        Navigator.of(context).pop();
+      });
+    });
   }
 }
 

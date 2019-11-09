@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:provider/provider.dart';
 
 import 'src/business/orders/requirement_order_from.dart';
 import 'src/common/app_constants.dart';
@@ -51,6 +51,12 @@ void main() async {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(builder: (_) => MyCapacityState()),
+          Provider(
+            builder: (_) => AddressState(),
+          ),
+          Provider(
+            builder: (_) => CategoryState(),
+          ),
         ],
         child: MyApp(),
       ),
