@@ -62,7 +62,8 @@ const state = {
       carrierDetails: {
         code: '',
         name: ''
-      }
+      },
+      isOffline: false
     }
   },
   queryFormData: {
@@ -72,7 +73,7 @@ const state = {
     brandReferenceName: '',
     factoryReferenceName: '',
     categories: [],
-    statuses: [],
+    statuses: []
   },
   addressFormData: {
     id: null,
@@ -109,11 +110,11 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
-  categories: (state, categories) => state.categories = categories,
+  categories: (state, categories) => state.categories = categories
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('url', url);
     commit('keyword', keyword);
     if (page) {
@@ -125,7 +126,7 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword,
+      keyword: state.keyword
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -136,10 +137,13 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
-    commit('currentPageNumber', page);
+    if (page) {
+      commit('currentPageNumber', page);
+    }
+
     if (size) {
       commit('currentPageSize', size);
     }
@@ -154,14 +158,14 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state}) {
+  refresh ({dispatch, commit, state}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
   },
-  clearQueryFormData({dispatch, commit, state}) {
+  clearQueryFormData ({dispatch, commit, state}) {
     commit('queryFormData', {
       keyword: '',
       brandOperatorName: '',
@@ -169,7 +173,7 @@ const actions = {
       brandReferenceName: '',
       belongToName: [],
       categories: [],
-      statuses: [],
+      statuses: []
     });
   }
 };
@@ -181,7 +185,7 @@ const getters = {
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  categories: state => state.categories,
+  categories: state => state.categories
 };
 
 export default {

@@ -18,8 +18,8 @@
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.status == 'PENDING_PAYMENT'">
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
-                <el-divider direction="vertical"></el-divider>
-                <el-button type="text" class="list-button" @click="onCancell(props.item)">关闭</el-button>
+                <el-divider v-if="isFactory()" direction="vertical"></el-divider>
+                <el-button v-if="isFactory()" type="text" class="list-button" @click="onCancel(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
@@ -32,7 +32,7 @@
     </el-card>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
-      <proofing-details-page :slotData="slotData">
+      <proofing-details-page :slotData="slotData" @onRefresh="getProofing" @onAdvancedSearch="onAdvancedSearch">
 
       </proofing-details-page>
     </el-dialog>
@@ -104,8 +104,8 @@
           this.getMinorCategories();
         }
       },
-      async onDetails (row) {
-        const url = this.apis().getProofing(row.code);
+      async getProofing(code){
+        const url = this.apis().getProofing(code);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -114,7 +114,26 @@
         console.log(result);
 
         this.slotData = result;
+      },
+      async onDetails (row) {
+        this.getProofing(row.code);
         this.detailsDialogVisible = !this.detailsDialogVisible;
+      },
+      async onCancel(row) {
+        this.$confirm('是否关闭订单', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          const url = this.apis().cancellingOfProofing(row.code);
+          const result = await this.$http.put(url);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.$message.success('关闭订单成功');
+          this.onAdvancedSearch();
+        });
       },
       async onShowQuote (row) {
         const url = this.apis().getQuote(row.quoteRef);

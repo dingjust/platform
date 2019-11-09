@@ -89,6 +89,76 @@
   width: 100px;
 }
 
+//
+.circular {
+  border-radius: 50%;
+  width: 30px;
+  background-color: white;
+  height: 30px;
+  cursor: pointer;
+  border: 1px solid #c8c8c8
+}
+
+//蓝底圆圈中白勾
+
+.hook {
+  width:30px;
+  height:30px;
+  border-radius:50% ;
+  background:blue;
+  display:block;
+  position: relative;
+  cursor: pointer;
+}
+.hook:before,
+.hook::after {
+  content:"";
+  height:17px;
+  width:2px;
+  border-radius: 10px;
+  display:block;
+  background:white;
+  position: absolute;
+  top:6px;/*40-6=34*/
+  left:17px;/*make the two rects in the middle of the cycle */
+  transform:rotate(45deg);
+  -ms-transform:rotate(45deg);
+}
+.hook::before {
+  height:8px;
+  transform: rotate(-45deg);
+  -ms-transform:rotate(-45deg);
+  position: absolute;
+  top:13px;/*40-18=12 */
+  left:9px;
+}
+
+//×
+.cha{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border: unset;
+  background-color: white;
+  position: relative;
+}
+.cha::before,
+.cha::after{
+  content: "";
+  position: absolute;  /*方便进行定位*/
+  height: 20px;
+  width: 1.5px;
+  top: 2px;
+  right: 9px;  /*设置top和right使图像在20*20框中居中*/
+  background: #0b0e0f;
+}
+.cha::before{
+  transform: rotate(45deg);  /*进行旋转*/
+}
+.cha::after{
+  transform: rotate(-45deg);
+}
+
 @font-face {
   font-family: 'iconfont';  /* project id 1329132 */
   src: url('//at.alicdn.com/t/font_1329132_13da7bmp8pb.eot');
