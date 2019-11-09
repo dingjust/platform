@@ -180,6 +180,7 @@
 
   .login-body {
     width: 100%;
+    overflow: auto;
     margin-right: auto;
     margin-left: auto;
   }

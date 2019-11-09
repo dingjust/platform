@@ -8,8 +8,8 @@
     </el-dialog>
     <el-row type="flex" justify="center">
       <el-col :span="16">
-        <el-form ref="form" :model="slotData" label-width="80px" :rules="rules">
-          <el-form-item label="手机" prop="phone">
+        <el-form ref="form" :model="slotData" label-width="80px" :rules="rules" label-position="left">
+          <el-form-item label="账号" prop="phone">
             <el-input v-model="slotData.phone">
               <template slot="prepend">+86</template>
             </el-input>
@@ -20,7 +20,7 @@
                 @click="getVerifyCode">{{getCode}}</el-button>
             </el-input>
           </el-form-item>
-          <el-form-item label="会员名" prop="name">
+          <el-form-item label="联系人" prop="name">
             <el-input v-model="slotData.name"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
@@ -83,13 +83,13 @@
           callback();
         }
       };
-      var validatePhone =async (rule, value, callback) => {
+      var validatePhone = async (rule, value, callback) => {
         const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
         if (value === '') {
           callback(new Error('请输入手机号码'));
         } else if (!reg.test(value)) {
           callback(new Error('请输入合法手机号码'));
-        }  else {
+        } else {
           callback();
         }
       };
@@ -106,7 +106,7 @@
         },
         rules: {
           phone: [{
-            // required: true,
+            required: true,
             // message: '请输入手机号码',
             trigger: 'blur',
             validator: validatePhone
@@ -122,10 +122,12 @@
             trigger: 'blur'
           }],
           password: [{
+            required: true,
             trigger: 'blur',
             validator: validatePass
           }],
           againPassword: [{
+            required: true,
             trigger: 'blur',
             validator: validatePass2
           }],
@@ -207,7 +209,7 @@
           name: this.slotData.companyName,
           contactPerson: this.slotData.name,
           contactPhone: this.slotData.phone,
-          captchaCode:this.slotData.code
+          captchaCode: this.slotData.code
         }
         const url = this.apis().fastRegister(this.slotData.type);
         const result = await this.$http.post(url, form);
@@ -237,7 +239,7 @@
     border: none;
   }
 
-  .register-btn.el-button.is-disabled{
+  .register-btn.el-button.is-disabled {
     background-color: #f1f1f1 !important;
   }
 
