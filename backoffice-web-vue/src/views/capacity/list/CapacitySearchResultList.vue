@@ -10,7 +10,7 @@
       <el-row :key="rowIndex" type="flex" justify="space-between" class="capacity-list-row">
         <template v-for="(item,index) in row">
           <el-col :span="11" :key="index">
-            <capicity-item :slotData="item" @refresh="onRefresh" />
+            <capacity-item :slotData="item" @refresh="onRefresh" @onDetails="onDetails"/>
           </el-col>
         </template>
       </el-row>
@@ -22,7 +22,7 @@
   import {
     createNamespacedHelpers
   } from "vuex";
-  import CapicityItem from "../components/CapicityItem";
+  import capacityItem from "../components/capacityItem";
 
   const {
     mapActions
@@ -32,7 +32,7 @@
     name: "CapacitySearchResultList",
     props: ["page"],
     components: {
-      CapicityItem
+      capacityItem
     },
     computed: {
       //数据两个一行
@@ -72,8 +72,8 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
-        this.$emit("onDetails", row);
+      onDetails(code) {
+        this.$emit("onDetails", code);
       },
       onRefresh() {
         this.$emit("onSearch");

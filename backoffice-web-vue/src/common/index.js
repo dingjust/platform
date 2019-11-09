@@ -502,6 +502,9 @@ const COMMON_APIS = {
   getCapacityList() {
     return 'b2b/factory/capacity/list';
   },
+  getCapacityByCode(code) {
+    return 'b2b/factory/capacity/get/' + code;
+  },
   //品牌查询产能列表
   searchCapacity() {
     return 'b2b/factory/capacity/search';
@@ -513,6 +516,10 @@ const COMMON_APIS = {
   //产能刷新
   capacityRefresh(code) {
     return 'b2b/factory/capacity/refresh/' + code;
+  },
+  //保存
+  capacitySave() {
+    return 'b2b/factory/capacity/save';
   },
 };
 

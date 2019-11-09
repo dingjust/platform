@@ -54,7 +54,17 @@ const router = new Router({
               path: 'apparelDetail',
               name: '产品详情',
               component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/details/ApparelProductDetailsPage')
-            }
+            },
+            {
+              path: 'capacity',
+              name: '产能配置',
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/capacity/capacityPage'),
+
+            }, {
+              path: 'capacityPublish',
+              name: '发布产能',
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/capacity/capacityFormPage'),
+            },
           ]
         },
         {
@@ -136,11 +146,10 @@ const router = new Router({
               return c('router-view');
             }
           },
-          children: [
-            {
+          children: [{
               path: 'index',
               name: '主页',
-              component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage')
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage')
             },
             {
               path: 'my',
@@ -195,40 +204,32 @@ const router = new Router({
                   return c('router-view');
                 }
               },
-              children: [
-                {
-                  path: 'payPlan',
-                  name: '账务配置',
-                  component: {
-                    render(c) {
-                      return c('router-view');
-                    }
+              children: [{
+                path: 'payPlan',
+                name: '账务配置',
+                component: {
+                  render(c) {
+                    return c('router-view');
+                  }
+                },
+                children: [{
+                    path: '',
+                    name: '账务方案列表',
+                    component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/PayPlanPage'),
                   },
-                  children:[
-                    {
-                      path: '',
-                      name: '账务方案列表',
-                      component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/PayPlanPage'),
-                    },
-                    {
-                      path: 'create',
-                      name: '添加新方案',
-                      component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/form/PayPlanFormPage'),
-                    },
-                    {
-                      path: 'update',
-                      name: '编辑新方案',
-                      component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/form/PayPlanEditFormPage'),
-                    },
-                  ]
+                  {
+                    path: 'create',
+                    name: '添加新方案',
+                    component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/form/PayPlanFormPage'),
+                  },
+                  {
+                    path: 'update',
+                    name: '编辑新方案',
+                    component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/form/PayPlanEditFormPage'),
+                  },
+                ]
 
-                },
-                {
-                  path: 'capicity',
-                  name: '产能配置',
-                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/capicity/CapicityPage'),
-                },
-              ]
+              }, ]
             }
           ]
         },
@@ -272,8 +273,7 @@ const router = new Router({
                   return c('router-view');
                 }
               },
-              children:[
-                {
+              children: [{
                   path: 'cooperatorCreate',
                   name: '添加合作商',
                   component: () => import( /* webpackChunkName: 'operationCourse' */ '@/views/miscs/cooperator/form/CooperatorFormPage')
@@ -379,11 +379,11 @@ const router = new Router({
 
 const LOGIN_URL = '/login';
 const LOGOUT_URL = '/logout';
-const REGISTER_URL= '/register';
+const REGISTER_URL = '/register';
 
 router.beforeEach((to, from, next) => {
   const authorized = sessionStorage.getItem('authorized');
-  if (!authorized && (to.path === LOGIN_URL || to.path === LOGOUT_URL||to.path===REGISTER_URL)) {
+  if (!authorized && (to.path === LOGIN_URL || to.path === LOGOUT_URL || to.path === REGISTER_URL)) {
     next();
     return;
   }

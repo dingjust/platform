@@ -11,6 +11,20 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
+  formData:{
+    id:null,
+    code:null,
+    title:'',
+    lastRefreshTime:null,
+    dateStartPoint:null,
+    dateEndPoint:null,
+    enabled:false,
+    clickTimes:0,
+    showTimes:0,
+    todayRefreshTimes:0,
+    longTerm:true,
+    categoryCapacities:[],
+  }
 };
 
 const mutations = {

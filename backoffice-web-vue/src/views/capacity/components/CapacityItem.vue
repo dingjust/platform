@@ -1,44 +1,44 @@
 <template>
-  <div class="capicity-item-container">
-    <el-card class="capicity-item">
+  <div class="capacity-item-container">
+    <el-card class="capacity-item">
       <el-row type="flex" align="middle">
-        <el-col :span="6" :class="slotData.enabled?'capicity-item-left_active':'capicity-item-left'">
+        <el-col :span="6" :class="slotData.enabled?'capacity-item-left_active':'capacity-item-left'">
           <el-row type="flex" justify="center">
-            <h6 class="capicity-text">{{dateRangeStr}}</h6>
+            <h6 class="capacity-text">{{dateRangeStr}}</h6>
           </el-row>
           <el-row type="flex" justify="center">
-            <h6 class="capicity-text">空闲日期</h6>
+            <h6 class="capacity-text">空闲日期</h6>
           </el-row>
           <el-row type="flex" justify="center" style="margin-top:50px;">
             <el-switch v-model="slotData.enabled" active-text="开" inactive-text="关" active-color="#13ce66"
               inactive-color="#e0e0e0" @change="onStatusChange"></el-switch>
           </el-row>
         </el-col>
-        <el-col :span="18" class="capicity-item-right">
+        <el-col :span="18" class="capacity-item-right">
           <el-row type="flex">
             <el-col :span="6">
-              <h6 class="capicity-text title">标题</h6>
+              <h6 class="capacity-text title">标题</h6>
             </el-col>
             <el-col :span="18">
               <el-row type="flex" justify="center">
-                <h6 class="capicity-text">{{slotData.title}}</h6>
+                <h6 class="capacity-text">{{slotData.title}}</h6>
               </el-row>
             </el-col>
           </el-row>
           <el-row type="flex">
             <el-col :span="16">
               <el-row type="flex">
-                <el-col :span="24" class="capicity-category-container">
+                <el-col :span="24" class="capacity-category-container">
                   <template v-for="(item,index) in slotData.categoryCapacities">
                     <el-row :key="index" type="flex" align="middle" style="margin-top:5px;">
                       <el-col :span="8">
                         <el-row type="flex">
-                          <h6 class="capicity-text" style="margin-left:20px;">{{item.categoryName}}</h6>
+                          <h6 class="capacity-text" style="margin-left:20px;">{{item.categoryName}}</h6>
                         </el-row>
                       </el-col>
                       <el-col :span="16">
                         <el-row type="flex" justify="center">
-                          <h6 class="capicity-text value">{{item.capacityRange}}/天</h6>
+                          <h6 class="capacity-text value">{{item.capacityRange}}/天</h6>
                         </el-row>
                       </el-col>
                     </el-row>
@@ -48,23 +48,23 @@
               <el-row type="flex" align="middle" style="margin-top:10px;">
                 <el-col :span="12">
                   <el-row type="flex">
-                    <h6 class="capicity-text info" style="margin-left:20px;">浏览量：{{slotData.showTimes}}</h6>
+                    <h6 class="capacity-text info" style="margin-left:20px;">浏览量：{{slotData.showTimes}}</h6>
                   </el-row>
                 </el-col>
                 <el-col :span="12">
                   <el-row type="flex" justify="center">
-                    <h6 class="capicity-text info" style="margin-left:20px;">点击量：{{slotData.clickTimes}}</h6>
+                    <h6 class="capacity-text info" style="margin-left:20px;">点击量：{{slotData.clickTimes}}</h6>
                   </el-row>
                 </el-col>
               </el-row>
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="center">
-                <el-button class="capicity-edit">
+                <el-button class="capacity-edit" @click="onDetails">
                   编辑</el-button>
               </el-row>
               <el-row type="flex" justify="center">
-                <el-button class="capicity-refresh" @click="onRefresh"
+                <el-button class="capacity-refresh" @click="onRefresh"
                   :disabled="slotData.remainRefreshTimes==0||!slotData.enabled">
                   刷新({{slotData.remainRefreshTimes}})</el-button>
               </el-row>
@@ -78,7 +78,7 @@
 
 <script>
   export default {
-    name: "CapicityItem",
+    name: "capacityItem",
     props: ["slotData"],
     components: {},
     computed: {
@@ -136,6 +136,9 @@
           this.$message.error('刷新失败 : ' + result.msg);
         }
       },
+      onDetails() {
+        this.$emit("onDetails", this.slotData.code);
+      }
     },
     data() {
       return {};
@@ -146,32 +149,32 @@
 
 </script>
 <style scoped>
-  .capicity-item {
+  .capacity-item {
     height: 220px;
   }
 
-  .capicity-item-left_active {
+  .capacity-item-left_active {
     height: 220px;
     background-color: #fff59d;
     padding-top: 20px;
   }
 
-  .capicity-item-left {
+  .capacity-item-left {
     height: 220px;
     background-color: #eeeeee;
     padding-top: 20px;
   }
 
-  .capicity-item-right {
+  .capacity-item-right {
     height: 220px;
     padding-top: 20px;
   }
 
-  .capicity-item-container>>>.el-card__body {
+  .capacity-item-container>>>.el-card__body {
     padding: 0px;
   }
 
-  .capicity-text {
+  .capacity-text {
     font-size: 14px;
     color: #616161;
   }
@@ -182,7 +185,7 @@
     font-weight: bold;
   }
 
-  .capicity-edit {
+  .capacity-edit {
     background-color: #FFD60C;
     border-color: #FFD60C;
     color: #000;
@@ -190,13 +193,13 @@
     margin-top: 30px;
   }
 
-  .capicity-refresh {
+  .capacity-refresh {
 
     width: 80px;
     margin-top: 30px;
   }
 
-  .capicity-category-container {
+  .capacity-category-container {
     height: 120px;
   }
 

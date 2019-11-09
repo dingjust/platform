@@ -3,12 +3,12 @@
     <el-row type="flex">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane v-for="(item,index) in listData" :label="item.name" :name="item.name">
-          <span slot="label" v-if="selectCounts[item.code]">
+          <!-- <span slot="label" v-if="selectCounts[item.code]" >
             <el-badge :value="selectCounts[item.code]" class="item">
               {{item.name}}
             </el-badge>
-          </span>
-          <el-tag v-for="val of item.children" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
+          </span> -->
+          <el-tag  v-for="val of item.children" class="elTagClass" :color="isSelected(val) ? '#FFD60C' : '#ffffff'"
             @click="handleTagClick(val)" size="medium">
             {{val.name}}
           </el-tag>
@@ -59,7 +59,9 @@
             this.selectDatas.splice(0);
             this.selectCodes.splice(0);
           } else if (this.selectCodes.length < this.maxNum) {
-            this.selectDatas.push(val);
+            this.selectDatas.push(
+              {'category':val,'capacityRange':0}
+            );
             this.selectCodes.push(val.code);
           }
         }
@@ -78,29 +80,20 @@
           this.activeName = this.listData[0].name;
         }
 
-        this.selectCodes = this.selectDatas.map(data => data.code);
+        this.selectCodes = this.selectDatas.map(data => data.category.code);
 
-        for (var data of this.listData) {
-          this.selectCounts[data.code] = 0;
-        }
-        for (var item of this.selectDatas) {
-          this.selectCounts[item.parent.code] += 1;
-        }
+        // for (var data of this.listData) {
+        //   this.selectCounts[data.code] = 0;
+        // }
+        // for (var item of this.selectDatas) {
+        //   this.selectCounts[item.parent.code] += 1;
+        // }
       }
     },
     watch: {
       'listData': function (n, o) {
         this.init();
       },
-      'selectDatas': function (n, o) {
-        for (var data of this.listData) {
-          this.selectCounts[data.code] = 0;
-        }
-
-        for (var item of this.selectDatas) {
-          this.selectCounts[item.parent.code] += 1;
-        }
-      }
     },
     data() {
       return {
