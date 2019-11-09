@@ -43,7 +43,7 @@
           <el-tag
             :title="selectedTip"
             v-if="isSelected"
-            class="demo2">
+            class="hook" style="cursor: not-allowed">
           </el-tag>
           <el-tag
             @click="handleFactorySelectionChange(slotData)"
@@ -112,32 +112,6 @@
 <style>
   .requirement-factory-item .el-rate__icon{
     margin-right: 3px;
-  }
-
-  .cha{
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    border: unset;
-    background-color: white;
-    margin: auto;
-    position: relative;
-  }
-  .cha::before,
-  .cha::after{
-    content: "";
-    position: absolute;  /*方便进行定位*/
-    height: 20px;
-    width: 1.5px;
-    top: 2px;
-    right: 9px;  /*设置top和right使图像在20*20框中居中*/
-    background: #0b0e0f;
-  }
-  .cha::before{
-    transform: rotate(45deg);  /*进行旋转*/
-  }
-  .cha::after{
-    transform: rotate(-45deg);
   }
 
   el-tag:before{ content:attr(title); display:none; }

@@ -2,22 +2,22 @@
   <div>
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :height="autoHeight">
       <el-table-column label="打样订单号" prop="code"></el-table-column>
-      <el-table-column label="产品" header-align="center" width="260">
-        <template slot-scope="scope">
-          <el-row type="flex" align="middle" :gutter="10">
-            <el-col :span="8">
-              <img width="70px" height="70px"
-                   :src="scope.row.product.pictures != null && scope.row.product.pictures.length > 0 ?
-                   scope.row.product.pictures[0].url : 'static/img/nopicture.png'" />
-            </el-col>
-            <el-col :span="16">
-              <!--<h6 style="font-size: 12px">品类：{{scope.row.product.category.parent.name}}-{{scope.row.product.category.name}}</h6>-->
-              <h6 style="font-size: 12px">货号：{{scope.row.product.skuID}}</h6>
-              <h6 style="font-size: 12px">数量：{{scope.row.totalQuantity}}</h6>
-            </el-col>
-          </el-row>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="产品" header-align="center" width="260">-->
+        <!--<template slot-scope="scope">-->
+          <!--<el-row type="flex" align="middle" :gutter="10">-->
+            <!--<el-col :span="8">-->
+              <!--<img width="70px" height="70px"-->
+                   <!--:src="scope.row.product.pictures != null && scope.row.product.pictures.length > 0 ?-->
+                   <!--scope.row.product.pictures[0].url : 'static/img/nopicture.png'" />-->
+            <!--</el-col>-->
+            <!--<el-col :span="16">-->
+              <!--&lt;!&ndash;<h6 style="font-size: 12px">品类：{{scope.row.product.category.parent.name}}-{{scope.row.product.category.name}}</h6>&ndash;&gt;-->
+              <!--<h6 style="font-size: 12px">货号：{{scope.row.product.skuID}}</h6>-->
+              <!--<h6 style="font-size: 12px">数量：{{scope.row.totalQuantity}}</h6>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="品牌" prop="supplier.name" header-align="center" width="180"></el-table-column>
       <el-table-column label="打样订单状态" prop="status" align="center">
         <template slot-scope="scope">

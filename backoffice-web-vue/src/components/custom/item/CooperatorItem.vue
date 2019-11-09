@@ -19,7 +19,7 @@
           <el-tag
             v-if="isSelected"
             :title="selectedTip"
-            class="demo2">
+            class="hook" style="cursor: not-allowed">
             <!--style="border-radius: 50%;background-color: blue;width: 30px;height: 30px;cursor: pointer;cursor: not-allowed">-->
           </el-tag>
           <el-tag
@@ -68,64 +68,7 @@
   }
 </script>
 
-<style>
-  .cha{
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    border: unset;
-    background-color: white;
-    position: relative;
-  }
-  .cha::before,
-  .cha::after{
-    content: "";
-    position: absolute;  /*方便进行定位*/
-    height: 20px;
-    width: 1.5px;
-    top: 2px;
-    right: 9px;  /*设置top和right使图像在20*20框中居中*/
-    background: #0b0e0f;
-  }
-  .cha::before{
-    transform: rotate(45deg);  /*进行旋转*/
-  }
-  .cha::after{
-    transform: rotate(-45deg);
-  }
-
-  .demo2 {
-    width:30px;
-    height:30px;
-    border-radius:50% ;
-    background:blue;
-    display:block;
-    position: relative;
-    cursor: not-allowed;
-  }
-  .demo2:before,
-  .demo2::after {
-    content:"";
-    height:17px;
-    width:2px;
-    border-radius: 10px;
-    display:block;
-    background:white;
-    position: absolute;
-    top:6px;/*40-6=34*/
-    left:17px;/*make the two rects in the middle of the cycle */
-    transform:rotate(45deg);
-    -ms-transform:rotate(45deg);
-  }
-  .demo2::before {
-    height:8px;
-    transform: rotate(-45deg);
-    -ms-transform:rotate(-45deg);
-    position: absolute;
-    top:13px;/*40-18=12 */
-    left:9px;
-  }
-
+<style scoped>
   el-tag:before{ content:attr(title); display:none; }
   el-tag:hover::before{
     width:200px;
