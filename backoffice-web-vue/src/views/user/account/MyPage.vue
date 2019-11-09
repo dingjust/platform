@@ -15,7 +15,7 @@
           <el-row type="flex" justify="center">
             <el-col :span="8">
               <el-form-item label="头像:">
-                <images-upload class="my-form-upload" :slot-data="form.attachments" :limit="1" />
+                <images-upload class="my-form-upload" :slot-data="attachments" :limit="1" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -72,7 +72,15 @@
       ImagesUpload,
       ChangePasswordPage
     },
-    computed: {},
+    computed: {
+      attachments:function() {
+        if(this.$store.getters.currentUser.profilePicture!=null){
+          return [this.$store.getters.currentUser.profilePicture];
+        }else{
+          return [];
+        }
+      }
+    },
     methods: {
       onChangePassword() {
         this.dialogVisible = true;
@@ -100,7 +108,7 @@
         let form = {
           name: this.form.name,
           contactPhone: this.form.contact,
-          profilePicture: this.form.attachments[0],
+          profilePicture: this.attachments[0],
         }
         const url = this.apis().updateUserInfo(this.currentUser.uid);
         const result = await this.$http.put(url, form);
@@ -116,7 +124,6 @@
     data() {
       return {
         form: {
-          attachments: [this.$store.getters.currentUser.profilePicture],
           name: this.$store.getters.currentUser.username,
           contact: this.$store.getters.currentUser.contactPhone
         },

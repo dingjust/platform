@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn factory-cooperator-transfer">
+  <div class="animated fadeIn factory-cooperator-transfer-form">
     <el-row type="flex">
       <el-col :span="12">
         <el-radio-group v-model="isFactorySelection" @change="handleChanged">
@@ -94,22 +94,22 @@
             <el-button @click="onSearch">搜索</el-button>
           </el-row>
           <div v-if="!isFactorySelection" v-for="item of cooperatorPage.content" style="margin-bottom: 10px">
-            <requirement-order-cooperator-item
+            <cooperator-item
               class="transfer-item"
               :slotData="item"
               :isSelected="isCooperatorSelected(item)"
               @handleCooperatorSelectionChange="handleCooperatorSelect">
 
-            </requirement-order-cooperator-item>
+            </cooperator-item>
           </div>
           <div v-if="isFactorySelection" v-for="item of factoryPage.content" style="margin-bottom: 10px">
-            <requirement-order-factory-item
+            <factory-item
               class="transfer-item"
               :slotData="item"
               :isSelected="isFactorySelected(item)"
               @handleFactorySelectionChange="handleFactorySelect">
 
-            </requirement-order-factory-item>
+            </factory-item>
           </div>
           <el-row type="flex" style="position:sticky; bottom:0;background-color: white">
             <el-pagination v-if="!isFactorySelection" layout="total, sizes, prev, pager, next, jumper" small
@@ -143,24 +143,24 @@
       <el-col :span="11">
         <div style="padding: 10px;border:1px solid #c8c8c8;border-radius: 8px;height: 400px;overflow:scroll;">
           <div v-for="item of selectCooperators" style="margin-bottom: 10px">
-            <requirement-order-cooperator-item
+            <cooperator-item
               class="transfer-item"
               :slotData="item"
               :isSelect="true"
               :isSelected="isCooperatorSelected(item)"
               @handleCooperatorSelectionChange="handleCooperatorRemove">
 
-            </requirement-order-cooperator-item>
+            </cooperator-item>
           </div>
           <div v-for="item of selectFactories" style="margin-bottom: 10px">
-              <requirement-order-factory-item
+              <factory-item
                 class="transfer-item"
                 :slotData="item"
                 :isSelect="true"
                 :isSelected="isFactorySelected(item)"
                 @handleFactorySelectionChange="handleFactoryRemove">
 
-              </requirement-order-factory-item>
+              </factory-item>
           </div>
         </div>
       </el-col>
@@ -172,20 +172,22 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import RequirementOrderCooperatorItem from '../info/RequirementOrderCooperatorItem';
-  import RequirementOrderFactoryItem from '../info/RequirementOrderFactoryItem';
+  import CooperatorItem from "../../../../components/custom/item/CooperatorItem";
+  import FactoryItem from "../../../../components/custom/item/FactoryItem";
 
   const {
     mapGetters,
+    mapMutations,
     mapActions
   } = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
     name: 'FactoryCooperatorTransferForm',
-    props: ['selectUids', 'selectPhoneNumbers','selectFactories','selectCooperators'],
+    props: ['selectUids', 'selectPhoneNumbers','selectFactories','selectCooperators','selectFactoryUids','selectCooperatorIds'],
     computed: {
       ...mapGetters({
         regions: 'regions',
+        labels: 'labels',
         categories: 'categories',
         majorCategories: 'majorCategories',
         factoryPage: 'factoryPage',
@@ -194,8 +196,11 @@
         factoryQueryFormData: 'factoryQueryFormData'
       })
     },
-    components: {RequirementOrderFactoryItem, RequirementOrderCooperatorItem},
+    components: {FactoryItem, CooperatorItem},
     methods: {
+      ...mapMutations({
+        setLabels: 'labels'
+      }),
       ...mapActions({
         searchAdvanced: 'searchAdvanced',
         searchCooperatorsAdvanced: 'searchCooperatorsAdvanced',
@@ -232,7 +237,7 @@
           return;
         }
 
-        this.labels = results.content;
+        this.setLabels(results.content);
       },
       handleCooperatorSelect (val) {
         console.log(val);
@@ -301,6 +306,7 @@
       },
       async onSearchCooperator (page, size) {
         const url = this.apis().getCooperators();
+        this.cooperatorQueryFormData.type = 'ONLINE';
         const query = this.cooperatorQueryFormData;
         this.searchCooperatorsAdvanced({
           url,
@@ -380,13 +386,10 @@
         selectPayPlan: '',
         keyword: '',
         isFactorySelection: false,
-        selectFactoryUids: [],
-        selectCooperatorIds: [],
         isFactorySearched: false,
         isCooperatorSearched: false,
         machiningTypes: this.$store.state.EnumsModule.machiningTypes,
         populationScales: this.$store.state.EnumsModule.populationScales,
-        labels: []
       }
     },
     created () {
@@ -399,11 +402,11 @@
   }
 </script>
 <style>
-  .factory-cooperator-transfer .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+  .factory-cooperator-transfer-form .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
     background-color: #ffc107;
   }
 
-  .factory-cooperator-transfer .product-select-btn {
+  .factory-cooperator-transfer-form .product-select-btn {
     width: 90px;
     height: 30px;
     background: #FFD60C;
@@ -414,26 +417,26 @@
     border: 0px solid #FFD60C;
   }
 
-  .factory-cooperator-transfer .el-table__body tr.current-row>td {
+  .factory-cooperator-transfer-form .el-table__body tr.current-row>td {
     background-color: #ffc107;
   }
 
-  .factory-cooperator-transfer .el-transfer-panel{
+  .factory-cooperator-transfer-form .el-transfer-panel{
     width: 400px;
   }
-  .factory-cooperator-transfer .transfer-item{
+  .factory-cooperator-transfer-form .transfer-item{
     border: 1px solid #c8c8c8;
     padding: 10px 0px 10px 10px;
   }
 
-  .factory-cooperator-transfer  .elTagClass{
+  .factory-cooperator-transfer-form  .elTagClass{
     color: #0b0e0f;
     margin-right: 10px;
     margin-bottom: 10px;
     cursor:pointer;
   }
 
-  .factory-cooperator-transfer  .elTagClass2{
+  .factory-cooperator-transfer-form  .elTagClass2{
     color: #0b0e0f;
     margin-bottom: 10px;
     cursor:pointer;

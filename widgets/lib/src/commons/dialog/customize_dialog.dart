@@ -151,16 +151,16 @@ enum DialogType {
   /// 带确认取消按钮结果弹窗
   RESULT_DIALOG,
 
-  // 输入框弹窗
+  /// 输入框弹窗
   INPUTS_DIALOG,
 
-  //定金/单价修改弹窗
+  ///定金/单价修改弹窗
   PRICE_INPUT_DIALOG,
 
-  //尾款修改弹窗
+  ///尾款修改弹窗
   BALANCE_INPUT_DIALOG,
 
-  //弹框输入预计完成时间
+  ///弹框输入预计完成时间
   ESTIMATED_DATE,
 
   ///登录消息弹窗

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -23,6 +24,8 @@ import 'src/my/index.dart';
 import 'src/production/index.dart';
 
 void main() async {
+  Provider.debugCheckInvalidValueType = null;
+
   debugInstrumentationEnabled = true;
 
   // 初始化,检测是否有用户登录信息
@@ -44,7 +47,19 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(BLoCProvider<AppBLoC>(
       bloc: AppBLoC.instance,
-      child: MyApp(),
+      // child: MyApp(),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(builder: (_) => MyCapacityState()),
+          Provider(
+            builder: (_) => AddressState(),
+          ),
+          Provider(
+            builder: (_) => CategoryState(),
+          ),
+        ],
+        child: MyApp(),
+      ),
     ));
   });
 }

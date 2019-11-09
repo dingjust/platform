@@ -3,10 +3,12 @@
     <b-nav-item-dropdown right no-caret>
       <template slot="button-content">
         <div @click="onArrowDown">
-          <img src="static/img/avatars/user.jpg" class="img-avatar" alt />
-          <span class="name">{{currentUser.username}}</span>
-          <i class="el-icon-arrow-down arrow" v-show="arrowDown"></i>
-          <i class="el-icon-arrow-up arrow" v-show="!arrowDown"></i>
+          <el-row type="flex" align="middle">
+            <el-image :src="currentUser.profilePicture != null ? currentUser.profilePicture.url : 'static/img/avatars/user.jpg'" fit="cover" class="img-avatar img-head" alt></el-image>
+            <span class="name">{{currentUser.username}}</span>
+            <i class="el-icon-arrow-down arrow" v-show="arrowDown"></i>
+            <i class="el-icon-arrow-up arrow" v-show="!arrowDown"></i>
+          </el-row>
         </div>
       </template>
       <b-dropdown-header tag="div" class="text-center">
@@ -80,7 +82,7 @@
       return {
         dialogVisible: false,
         currentUser: this.$store.getters.currentUser,
-        arrowDown: true
+        arrowDown: true,
       };
     },
     mounted() {
@@ -98,8 +100,14 @@
     margin-right: 10px;
   }
 
-  .my-icon{
+  .my-icon {
     color: #000 !important;
+  }
+
+  .img-head {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
   }
 
 </style>

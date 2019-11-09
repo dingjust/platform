@@ -13,7 +13,13 @@ const state = {
     totalElements: 0, // 总数目数
     content: [] // 当前页数据
   },
-  queryFormData: {},
+  queryFormData: {
+    'code': '',
+    'requirementOrderRef': '',
+    'brandName': '',
+    'factoryName': '',
+    'states': []
+  }
 };
 
 const mutations = {
@@ -46,12 +52,39 @@ const actions = {
       commit('page', response);
     }
   },
+  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
+    commit('url', url);
+    commit('queryFormData', query);
+    if (page) {
+      commit('currentPageNumber', page);
+    }
+    if (size) {
+      commit('currentPageSize', size);
+    }
+
+    const response = await http.post(url, query, {
+      page: state.currentPageNumber,
+      size: state.currentPageSize
+    });
+    if (!response['errors']) {
+      commit('page', response);
+    }
+  },
   refresh({dispatch, commit, state}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
+  },
+  clearQueryFormData({dispatch, commit, state}) {
+    commit('queryFormData', {
+      'code': '',
+      'requirementOrderRef': '',
+      'brandName': '',
+      'factoryName': '',
+      'states': []
+    });
   }
 };
 
