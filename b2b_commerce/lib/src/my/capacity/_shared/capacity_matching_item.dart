@@ -15,7 +15,7 @@ class CapacityMatchingItem extends StatelessWidget {
         //TODO跳转工厂主页
       },
       child: Container(
-        height: 180,
+        height: 200,
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         padding: EdgeInsets.all(10),
         color: Colors.white,
@@ -40,7 +40,8 @@ class CapacityMatchingItem extends StatelessWidget {
           Text(
             '${model.title}',
             style: TextStyle(fontSize: 18),
-          )
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );
@@ -112,7 +113,7 @@ class CapacityMatchingItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         '${model.belongTo.name}',
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       StarLevelAndOrdersCountText(
                         model: model.belongTo,

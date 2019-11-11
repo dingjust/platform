@@ -40,7 +40,9 @@ import {
   // contract
   ContractModule,
   ContractTemplateModule,
-  ContractSealModule
+  ContractSealModule,
+  //产能
+  CapacityModule
 } from './modules';
 
 // 状态管理
@@ -53,7 +55,7 @@ const getters = {};
 
 // mutations
 const mutations = {
-  sideSliderState_get (state, payload) {
+  sideSliderState_get(state, payload) {
     // 类别
     state.sideSliderState = payload;
   }
@@ -61,7 +63,11 @@ const mutations = {
 
 // actions
 const actions = {
-  sideSliderState_set ({dispatch, commit, state}, payload) {
+  sideSliderState_set({
+    dispatch,
+    commit,
+    state
+  }, payload) {
     commit('sideSliderState_get', payload);
   }
 };
@@ -104,7 +110,9 @@ export default new Vuex.Store({
     // contract
     ContractModule,
     ContractTemplateModule,
-    ContractSealModule
+    ContractSealModule,
+    //产能
+    CapacityModule
   },
   state,
   getters,

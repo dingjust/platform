@@ -124,11 +124,12 @@
               <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
                 <el-col :span="8">
                   <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入报价', trigger: 'blur' ,type: 'number'}]" :key="product.key"
+                { required: true, message: '请输入报价', trigger: 'blur'}]" :key="product.key"
                     :prop="'entries.' + productIndex+'.unitPrice'">
                     <el-row type="flex" align="middle">
                       <h6 class="info-input-prepend">订单报价</h6>
-                      <el-input placeholder="输入报价" v-model.number="product.unitPrice" size="mini">
+                      <el-input placeholder="输入报价" v-model="product.unitPrice" size="mini" type="number"
+                        @input="oninput(product)">
                       </el-input>
                     </el-row>
                   </el-form-item>
@@ -612,10 +613,10 @@
             .time +
             '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' +
             this.form.deposit
-              .percent * 100 +
+            .percent * 100 +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form.balance1
-              .time +
+            .time +
             '天' + this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +
             '%。在产品入库并经甲方检验全部产品合格' +
             this.triggerEvent[this.form.balance2.event] + '后' +
@@ -627,24 +628,24 @@
             .time +
             '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' +
             this.form.deposit
-              .percent * 100 +
+            .percent * 100 +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.triggerEvent[this.form.balance1.event] + '后' +
             this.form.balance1
-              .time +
+            .time +
             '天' + this.triggerType[this.form.balance1.range] +
             '未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (!this.form.isHaveDeposit && this.form.payPlanType == 'PHASEONE') {
           result = '无定金1期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form
-              .balance1.time + '天' +
+            .balance1.time + '天' +
             this.triggerType[this.form.balance1.range] +
             '未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。'
         }
         if (!this.form.isHaveDeposit && this.form.payPlanType == 'PHASETWO') {
           result = '无定金2期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form
-              .balance1.time + '天' +
+            .balance1.time + '天' +
             this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +
             '%。在产品入库并经甲方检验全部产品合格' + this.triggerEvent[this.form.balance2.event] + '后' + this.form.balance2.time +
             '天' + this.triggerType[this.form.balance2.range] +
@@ -654,14 +655,14 @@
           result = '有定金+月结\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit
             .time +
             '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' + this
-              .form.deposit
-              .percent * 100 +
+            .form.deposit
+            .percent * 100 +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance.event] +
             '完成的次月' + this.form.monthBalance.time + '号支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (!this.form.isHaveDeposit && this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
           result = '无定金月结\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance
-            .event] +
+              .event] +
             '完成的次月' + this.form.monthBalance.time + '号支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
 
@@ -674,7 +675,7 @@
         searchAdvanced: 'searchAdvanced',
         refresh: 'refresh'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         const keyword = this.keyword;
         const url = this.apis().getApparelProducts();
         this.search({
@@ -684,7 +685,7 @@
           size
         });
       },
-      countColorsAmount (color, variants) {
+      countColorsAmount(color, variants) {
         var amount = 0;
         variants.forEach(element => {
           if (element.num != '' && element.color.name == color) {
@@ -694,7 +695,7 @@
         });
         return amount;
       },
-      countTotalAmount (variants) {
+      countTotalAmount(variants) {
         var amount = 0;
         variants.forEach(element => {
           if (element.num != '') {
@@ -704,10 +705,10 @@
         });
         return amount;
       },
-      getColspanLength (size) {
+      getColspanLength(size) {
         return size + 2;
       },
-      onProductSelect (product) {
+      onProductSelect(product) {
         var variants = [];
         var sizesSet = new Set([]);
         var colorsSet = new Set([]);
@@ -756,7 +757,7 @@
         // this.form.entries.splice(this.currentProductIndex, 1, entry);
         this.productSelectVisible = false;
       },
-      getVariant (color, size, variants) {
+      getVariant(color, size, variants) {
         var result = variants.filter(item => item.color.name == color && item.size.name == size);
         if (result.length != 0) {
           return result[0];
@@ -764,11 +765,11 @@
           return null;
         }
       },
-      onpenSelect (index) {
+      onpenSelect(index) {
         this.currentProductIndex = index;
         this.productSelectVisible = !this.productSelectVisible;
       },
-      addRow () {
+      addRow() {
         this.form.entries.push({
           unitPrice: '',
           expectedDeliveryDate: '',
@@ -788,10 +789,10 @@
           cityDistricts: []
         });
       },
-      removeRow (index) {
+      removeRow(index) {
         this.form.entries.splice(index, 1);
       },
-      async getRegions () {
+      async getRegions() {
         const url = this.apis().getRegions();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -801,14 +802,14 @@
 
         this.regions = result;
       },
-      onRegionChanged (current, index) {
+      onRegionChanged(current, index) {
         if (!current || current.isocode == '') {
           return;
         }
 
         this._onRegionChanged(current, index);
       },
-      _onRegionChanged (current, index) {
+      _onRegionChanged(current, index) {
         this.form.entries[index].cities = [];
         this.$set(this.form.entries[index].address, 'city', {
           code: '',
@@ -823,7 +824,7 @@
           this.onCityChanged(this.form.entries[index].address.city.code, index);
         }
       },
-      async getCities (region, index) {
+      async getCities(region, index) {
         const url = this.apis().getCities(region.isocode);
         const result = await this.$http.get(url);
 
@@ -834,13 +835,13 @@
 
         this.form.entries[index].cities = result;
       },
-      onCityChanged (current, index) {
+      onCityChanged(current, index) {
         if (!current) {
           return;
         }
         this._onCityChanged(current, index);
       },
-      async _onCityChanged (city, index) {
+      async _onCityChanged(city, index) {
         this.form.entries[index].cityDistricts.clear;
         const url = this.apis().getDistricts(city.code);
         const result = await this.$http.get(url);
@@ -852,7 +853,13 @@
 
         this.form.entries[index].cityDistricts = result;
       },
-      async onSubmit () {
+      async onSubmit() {
+        this.form.entries.forEach(entry => {
+          if (entry.variants == null || entry.variants.length == 0) {
+              this.$message.error('请选择产品');
+              return false;
+            }
+        })
         this.$refs['form'].validate(async (valid) => {
           if (valid) {
             // 分单
@@ -958,7 +965,7 @@
           }
         });
       },
-      async getProductAgain () {
+      async getProductAgain() {
         const url = this.apis().getApparelProduct(this.againData.entries[0].product.baseProduct);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -967,7 +974,7 @@
         }
         this.onProductSelect(result);
       },
-      onSuppliersSelect (val) {
+      onSuppliersSelect(val) {
         this.suppliersSelectVisible = false;
         this.form.companyOfSeller = val.name;
         this.form.contactPersonOfSeller = val.person;
@@ -978,11 +985,11 @@
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
-      addressSelect (index) {
+      addressSelect(index) {
         this.currentProductIndex = index;
         this.addressSelectVisible = !this.addressSelectVisible;
       },
-      async onAddressSelect (val) {
+      async onAddressSelect(val) {
         this.addressSelectVisible = false;
         this.form.entries[this.currentProductIndex].address = val;
         this.getCities(val.region, this.currentProductIndex);
@@ -996,14 +1003,14 @@
 
         this.form.entries[this.currentProductIndex].cityDistricts = result;
       },
-      shouldShow (product, index) {
+      shouldShow(product, index) {
         if (index == 0) {
           return true;
         } else {
           return product.code != null && product.code != '';
         }
       },
-      setPayPlan (payPlan) {
+      setPayPlan(payPlan) {
         this.form.isHaveDeposit = payPlan.isHaveDeposit;
         this.form.payPlanType = payPlan.payPlanType;
         payPlan.payPlanItems.forEach((item) => {
@@ -1033,12 +1040,12 @@
           }
         });
       },
-      onPayPlanSelect (item) {
+      onPayPlanSelect(item) {
         this.setPayPlan(item);
         this.currentFinancialPlan = item.name;
         this.payPlanSelectDialogVisible = false;
       },
-      async onPayPlanSave () {
+      async onPayPlanSave() {
         // 组合账务参数
         var payPlanItems = [];
         if (this.form.isHaveDeposit) {
@@ -1094,9 +1101,13 @@
         this.payPlanForm.name = '';
         this.payPlanForm.remarks = '';
         this.dialogPayPlanFormVisible = false;
-      }
+      },
+      oninput(e) {
+        // // 通过正则过滤小数点后两位
+        e.unitPrice = (e.unitPrice.match(/^\d*(\.?\d{0,2})/g)[0]) || null;
+      },
     },
-    data () {
+    data() {
       return {
         productSelectVisible: false,
         suppliersSelectVisible: false,
@@ -1141,17 +1152,17 @@
           'OUTSIDE': '以外'
         },
         invoicePercent: [{
-          label: '3%税点',
-          value: 0.03
-        },
-        {
-          label: '6%税点',
-          value: 0.06
-        },
-        {
-          label: '13%税点',
-          value: 0.13
-        }
+            label: '3%税点',
+            value: 0.03
+          },
+          {
+            label: '6%税点',
+            value: 0.06
+          },
+          {
+            label: '13%税点',
+            value: 0.13
+          }
         ],
         form: {
           companyOfSeller: '',
@@ -1217,20 +1228,20 @@
             required: true,
             message: '请填写合作商名称',
             trigger: 'blur'
-          } ],
+          }],
           contactPersonOfSeller: [{
             required: true,
             message: '请填写联系人名称',
             trigger: 'blur'
-          } ],
+          }],
           contactOfSeller: [{
             required: true,
             message: '请填写联系方式',
             trigger: 'blur'
-          } ]
+          }]
         },
         pickerOptions: {
-          disabledDate (time) {
+          disabledDate(time) {
             let date = new Date();
             date.setDate(date.getDate() - 1);
             return time.getTime() < date;
@@ -1238,11 +1249,11 @@
         }
       }
     },
-    created () {
+    created() {
       this.onSearch();
       this.getRegions();
     },
-    mounted () {
+    mounted() {
       if (this.isAgain) {
         this.form = {
           companyOfSeller: this.againData.companyOfSeller,
@@ -1302,6 +1313,7 @@
       }
     }
   }
+
 </script>
 <style scoped>
   .info-title {
@@ -1368,7 +1380,7 @@
     overflow-x: scroll;
   }
 
-  .order-table-input >>> .el-input__inner {
+  .order-table-input>>>.el-input__inner {
     /* width: 60px; */
     border: 0px solid #fff;
     padding: 0px;
@@ -1454,27 +1466,27 @@
     margin-left: 50px;
   }
 
-  .order-purchase-upload >>> .el-upload--picture-card {
+  .order-purchase-upload>>>.el-upload--picture-card {
     width: 100px;
     height: 100px;
     line-height: 100px;
   }
 
-  .order-purchase-upload >>> .el-upload-list--picture-card .el-upload-list__item {
+  .order-purchase-upload>>>.el-upload-list--picture-card .el-upload-list__item {
     width: 100px;
     height: 100px;
   }
 
-  .order-purchase-form >>> small.el-form-item {
+  .order-purchase-form>>>small.el-form-item {
     margin-bottom: 0px !important;
   }
 
-  .order-purchase-form >>> .el-form-item--mini.el-form-item,
+  .order-purchase-form>>>.el-form-item--mini.el-form-item,
   .el-form-item--small.el-form-item {
     margin-bottom: 0px !important;
   }
 
-  .order-purchase-form >>> .el-form-item__error {
+  .order-purchase-form>>>.el-form-item__error {
     padding-left: 70px !important;
   }
 

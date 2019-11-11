@@ -81,6 +81,7 @@
     margin-right: auto;
     margin-left: auto;
     padding-top: 50px;
+    overflow: auto;
   }
 
   .tologin-btn {

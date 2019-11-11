@@ -40,6 +40,9 @@ import ContractModule from './contract/contract';
 import ContractTemplateModule from './contract/contractTemplate'
 import ContractSealModule from './contract/contractSeal'
 
+// 产能
+import CapacityModule from './capacity/capacity'
+
 export {
   // shared
   EnumsModule,
@@ -79,4 +82,6 @@ export {
   ContractModule,
   ContractTemplateModule,
   ContractSealModule,
+  //产能
+  CapacityModule
 }

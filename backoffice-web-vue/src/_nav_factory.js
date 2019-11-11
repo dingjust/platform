@@ -127,6 +127,11 @@ export default {
       //   url: '/miscs/sample/sampleCheckoutHist',
       //   icon: 'iconNone',
       // }
+      {
+        name: '产能配置',
+        url: '/product/capacity',
+        icon: 'iconNone'
+      }
     ]
     },
     {
@@ -178,7 +183,7 @@ export default {
           name: '账务配置',
           url: '/account/setting/payPlan',
           icon: 'iconNone'
-        }
+        },
       ]
     },
     {
