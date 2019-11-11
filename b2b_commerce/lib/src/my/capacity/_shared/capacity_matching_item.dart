@@ -40,7 +40,8 @@ class CapacityMatchingItem extends StatelessWidget {
           Text(
             '${model.title}',
             style: TextStyle(fontSize: 18),
-          )
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );
@@ -112,7 +113,7 @@ class CapacityMatchingItem extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         '${model.belongTo.name}',
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       StarLevelAndOrdersCountText(
                         model: model.belongTo,

@@ -309,11 +309,20 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    Text('${entry.model?.category?.name}'),
                     Expanded(
-                      child: Container(
-                        child: Text('${entry.model?.category?.name}'),
-                      ),
-                    ),
+                        flex: 1,
+                        child: Container(
+                          child: TextFieldComponent(
+                            textAlign: TextAlign.center,
+                            focusNode: FocusNode(),
+                            controller: entry.textController,
+                            autofocus: false,
+                            inputType: TextInputType.number,
+                            hideDivider: true,
+                            hintText: '请输入日产能（件）',
+                          ),
+                        )),
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -327,30 +336,6 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
                         ),
                       ),
                     )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          '日产能：',
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 100,
-                      child: TextFieldComponent(
-                        textAlign: TextAlign.right,
-                        focusNode: FocusNode(),
-                        controller: entry.textController,
-                        autofocus: false,
-                        inputType: TextInputType.number,
-                        hideDivider: true,
-                        hintText: '请输入日产能（件）',
-                      ),
-                    ),
                   ],
                 ),
               ],
