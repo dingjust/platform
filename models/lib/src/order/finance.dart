@@ -172,12 +172,16 @@ class AbstractPayPlanItemModel extends ItemModel {
   ///序列号
   int sequence;
 
+  ///支付状态
+  PayStatus payStatus;
+
   AbstractPayPlanItemModel(
       {this.payPercent,
       this.triggerEvent,
       this.triggerDays,
       this.moneyType,
       this.triggerType,
+        this.payStatus,
       this.sequence});
 
   factory AbstractPayPlanItemModel.fromJson(Map<String, dynamic> json) =>

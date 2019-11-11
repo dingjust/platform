@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
+import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/logistics_input_page.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 final List<OrderStatusModel> _statusList = [
@@ -145,8 +147,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   SliverList(
                       delegate: SliverChildListDelegate(
                         <Widget>[
-                          _buildProductHide(context),
                           _buildProductInfo(context),
+                          _buildProductHide(context),
                           (order.status ==
                               PurchaseOrderStatus.PENDING_PAYMENT &&
                               order.depositPaid == false) ||
@@ -159,6 +161,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                               : _buildBrandInfo(context),
                           _buildDocutment(context),
                           _buildRemarks(context),
+                          _buildContracts(context),
+                          _buildFinance(context),
+                          _buildLog(context),
                           _buildBottom(context),
                           _buildCommitButton(context),
                         ],
@@ -175,6 +180,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         initialData: null,
         future: _futureBuilderFuture,
       ),
+      bottomSheet: _bubildBottomSheet(),
     );
   }
 
@@ -375,7 +381,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 Text(
                   '复制',
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: Colors.blue,
                   ),
                 )
               ],
@@ -536,7 +542,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   Container(
                     child: order.invoiceNeeded == null
                         ? Container()
-                        : Text(order.invoiceNeeded == true ? '是' : '否'),
+                        : Text(order.invoiceNeeded == true ? '开具发票' : '不开具发票'),
                   ),
                 ],
               ),
@@ -1282,115 +1288,120 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //产品的颜色尺码及价格
   Widget _buildProductInfo(BuildContext context) {
+    List<ApparelSizeVariantProductEntry> _datas;
+    if (isHide) {
+      _datas = mockData.getRange(0, 1).toList();
+    } else {
+      _datas = mockData;
+    }
+
     return mockData.isEmpty
         ? Container()
-        : Offstage(
-            offstage: isHide,
-            child: Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    color: Colors.white,
-                    child: ColorSizeNumTable(
-                      data: mockData,
-                    ),
-                  ),
-                  Container(
-                    child: ListTile(
-                        leading: Text(
-                          '订单报价',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '￥',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.red,
-                              ),
-                            ),
-                            Text(
-                              '${order.unitPrice == null ? '' : order.unitPrice}',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.red,
-                              ),
-                            )
-                          ],
-                        )),
-                  ),
-                  Container(
-                    child: ListTile(
-                        leading: Text(
-                          '合计',
-                          style: TextStyle(
-                            fontSize: 22,
-                          ),
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '￥',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.red,
-                              ),
-                            ),
-                            Text(
-                              '${order.totalPrice == null ? '' : order.totalPrice}',
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.red,
-                              ),
-                            )
-                          ],
-                        )),
-                  ),
-                  Divider(
-                    height: 1,
-                  ),
-                  Container(
-                    child: ListTile(
-                        leading: Text(
-                          '定金',
-                          style: TextStyle(
-                            fontSize: 22,
-                          ),
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '￥',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.red,
-                              ),
-                            ),
-                            Text(
-                              '${order.deposit == null ? '' : order.deposit}',
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.red,
-                              ),
-                            )
-                          ],
-                        )),
-                  )
-                ],
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-              ),
+        : Container(
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Column(
+        children: <Widget>[
+          Container(
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: ColorSizeNumTable(
+              data: _datas,
             ),
-          );
+          ),
+          Container(
+            child: ListTile(
+                leading: Text(
+                  '订单报价',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      '￥',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                      ),
+                    ),
+                    Text(
+                      '${order.unitPrice == null ? '' : order.unitPrice}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.red,
+                      ),
+                    )
+                  ],
+                )),
+          ),
+          Container(
+            child: ListTile(
+                leading: Text(
+                  '合计',
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      '￥',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                      ),
+                    ),
+                    Text(
+                      '${order.totalPrice == null ? '' : order.totalPrice}',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.red,
+                      ),
+                    )
+                  ],
+                )),
+          ),
+          Divider(
+            height: 1,
+          ),
+          Container(
+            child: ListTile(
+                leading: Text(
+                  '定金',
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      '￥',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                      ),
+                    ),
+                    Text(
+                      '${order.deposit == null ? 0 : order.deposit}',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.red,
+                      ),
+                    )
+                  ],
+                )),
+          )
+        ],
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+      ),
+    );
   }
 
   //备注
@@ -1440,6 +1451,122 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
+      ),
+    );
+  }
+
+  //合同
+  Widget _buildContracts(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+              flex: 1,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Text('订单合同'),
+                  ),
+                  order.userAgreementIsSigned ?? false
+                      ? B2BImage.signed(width: 50, height: 30)
+                      : B2BImage.notSigned(width: 50, height: 30)
+                ],
+              )),
+          FlatButton(
+            color: const Color.fromRGBO(255, 219, 0, 1),
+            onPressed: () {},
+            child: Text('签署合同'),
+          )
+        ],
+      ),
+    );
+  }
+
+  //财务
+  Widget _buildFinance(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                    flex: 1,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(right: 10),
+                          child: Text('财务管理'),
+                        ),
+                      ],
+                    )),
+                FlatButton(
+                  color: const Color.fromRGBO(255, 219, 0, 1),
+                  onPressed: () {},
+                  child: Text('财务详情'),
+                )
+              ],
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: order.payPlan.payPlanItems
+                    .map((item) =>
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                              '${PayMoneyTypeLocalizedMap[item.moneyType]}'),
+                          item.payStatus == PayStatus.PAID
+                              ? B2BImage.paid(width: 40, height: 25)
+                              : B2BImage.notPaid(width: 40, height: 25)
+                        ],
+                      ),
+                    ))
+                    .toList())
+          ],
+        ));
+  }
+
+  //操作日志
+  Widget _buildLog(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {},
+      child: Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('财务管理'),
+                Container(
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          '查看',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 40,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ))
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1499,7 +1626,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   //线下单显示按钮
   Widget _buildOfflineButton(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -2716,5 +2843,96 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             );
           });
     }
+  }
+
+  Widget _bubildBottomSheet() {
+    Widget _contactPerson;
+    if (order?.cooperator == null) {
+      _contactPerson = Container();
+    } else {
+      if (order.cooperator.type == CooperatorType.ONLINE) {
+        _contactPerson = Text('${order.cooperator.partner.contactPerson}');
+      } else {
+        _contactPerson = Text('${order.cooperator.contactPerson}');
+      }
+    }
+
+    return Container(
+      height: 55,
+      color: Colors.white,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                FlatButton(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(right: 20),
+                        child: Icon(
+                          Icons.phone,
+                          size: 28,
+                          color: Colors.green,
+                        ),
+                      ),
+                      _contactPerson
+                    ],
+                  ),
+                  onPressed: () async {
+                    var url = 'tel:';
+                    if (order.cooperator.type == CooperatorType.ONLINE) {
+                      url += order.cooperator.partner.contactPhone;
+                    } else {
+                      url += order.cooperator.contactPhone;
+                    }
+                    await launch(url);
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                    flex: 1,
+                    child: FlatButton(
+                      onPressed: () {},
+                      child: Text(
+                        '查看发货单',
+                        style: TextStyle(fontSize: 15, color: Colors.red),
+                      ),
+                    )),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      height: double.infinity,
+                      child: Builder(
+                        builder: (BuildContext buttonContext) =>
+                            FlatButton(
+                              color: Color.fromRGBO(255, 214, 12, 1),
+                              onPressed: () {},
+                              disabledColor: Colors.grey[300],
+                              child: Text(
+                                '确认收货',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                      )),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
