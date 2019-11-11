@@ -854,6 +854,12 @@
         this.form.entries[index].cityDistricts = result;
       },
       async onSubmit() {
+        this.form.entries.forEach(entry => {
+          if (entry.variants == null || entry.variants.length == 0) {
+              this.$message.error('请选择产品');
+              return false;
+            }
+        })
         this.$refs['form'].validate(async (valid) => {
           if (valid) {
             // 分单
@@ -1098,7 +1104,7 @@
       },
       oninput(e) {
         // // 通过正则过滤小数点后两位
-        e.unitPrice= (e.unitPrice.match(/^\d*(\.?\d{0,2})/g)[0]) || null;
+        e.unitPrice = (e.unitPrice.match(/^\d*(\.?\d{0,2})/g)[0]) || null;
       },
     },
     data() {

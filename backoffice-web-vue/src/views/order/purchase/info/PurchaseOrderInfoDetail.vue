@@ -43,7 +43,7 @@
           </el-row>
           <el-row class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">
             <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}}
-              {{this.slotData.contactPersonOfSeller}} {{this.slotData.contactOfSeller}}</orders-info-item>
+              {{this.slotData.deliveryAddress.fullname}} {{this.slotData.deliveryAddress.cellphone}}</orders-info-item>
           </el-row>
           <!-- <el-row type="flex" justify="space-between" align="middle">
             <el-row type="flex" justify="start" align="middle">
