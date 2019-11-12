@@ -2,7 +2,7 @@
   <div class="info-detail-staff-body">
     <el-dialog :visible.sync="dialogContractVisible" width="85%" :show-close="true" class="purchase-dialog"
       append-to-body :modal="true">
-      <contract-form :slotData="slotData"></contract-form>
+      <contract-form :slotData="slotData" v-if="hackSet"></contract-form>
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="85%" class="purchase-dialog" append-to-body
       :modal="true">
@@ -181,7 +181,8 @@
         thisContract: '',
         dialogSealVisible: false,
         sealPage: false,
-        thisContractKey: 1
+        thisContractKey: 1,
+        hackSet:true
       }
     },
     created() {
@@ -204,6 +205,16 @@
         console.log(2323)
         this.dialogContractVisible = false;
       });
+    },
+    watch: {
+      dialogContractVisible(newValue, oldValue) {
+        if(!newValue&&oldValue){
+          this.hackSet=false;
+          this.$nextTick(()=>{
+            this.hackSet=true;
+          })
+        }
+      }
     }
   }
 
