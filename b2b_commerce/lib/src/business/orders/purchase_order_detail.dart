@@ -11,11 +11,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
+
+import 'form/purchase/purchase_deliver_order_form.dart';
 
 final List<OrderStatusModel> _statusList = [
   OrderStatusModel.fromJson({
@@ -181,6 +184,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         future: _futureBuilderFuture,
       ),
       bottomSheet: _bubildBottomSheet(),
+      floatingActionButton: _buildFAB(context),
+      floatingActionButtonLocation: B2BFloatingActionButtonLocation(0.125),
     );
   }
 
@@ -2905,7 +2910,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 Expanded(
                     flex: 1,
                     child: FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+
+                      },
                       child: Text(
                         '查看发货单',
                         style: TextStyle(fontSize: 15, color: Colors.red),
@@ -2933,6 +2940,95 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildFAB(BuildContext context) {
+    return SpeedDial(
+      // animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: IconThemeData(size: 22.0),
+      // this is ignored if animatedIcon is non null
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '查看单据',
+            style: TextStyle(color: Colors.black, fontSize: 12),
+          )
+        ],
+      ),
+      visible: true,
+      curve: Curves.bounceIn,
+      // overlayColor: Colors.black,
+      overlayOpacity: 0.5,
+      onOpen: () => print('OPENING DIAL'),
+      onClose: () => print('DIAL CLOSED'),
+      tooltip: '查看单据',
+      heroTag: '查看单据',
+      // backgroundColor: Color.fromRGBO(255,214,12, 1),
+      foregroundColor: Colors.black,
+      elevation: 8.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      children: [
+        SpeedDialChild(
+          child: Center(
+            child: Text(
+              '发货单',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ),
+          backgroundColor: Colors.blue,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    DeliverOrderForm(shippingOrders: order.shippingOrders,),
+              ),
+            );
+          },
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        ),
+        SpeedDialChild(
+          child: Center(
+            child: Text(
+              '收货单',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ),
+          backgroundColor: Colors.red,
+          onTap: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => ProductionOfflineOrder(),
+            //   ),
+            // );
+          },
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)),
+        ),
+        SpeedDialChild(
+          child: Center(
+            child: Text(
+              '对账单',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ),
+          backgroundColor: Colors.green,
+          onTap: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => ProductionOfflineOrder(),
+            //   ),
+            // );
+          },
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)),
+        ),
+      ],
     );
   }
 }

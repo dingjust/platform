@@ -418,9 +418,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                     onPressed: () {
                       setState(() {
                         if (totalEditingControllerMap[color].text == '') {
-                          setState(() {
-                            totalEditingControllerMap[color].text = '1';
-                          });
+                          totalEditingControllerMap[color].text = '1';
                           entries.forEach((entry) {
                             entry.controller.text = '1';
                           });
@@ -428,9 +426,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                           int i =
                               int.parse(totalEditingControllerMap[color].text);
                           i++;
-                          setState(() {
-                            totalEditingControllerMap[color].text = '$i';
-                          });
+                          totalEditingControllerMap[color].text = '$i';
                           entries.forEach((entry) {
                             entry.controller.text = '$i';
                           });
@@ -648,7 +644,13 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
         }
       }
     }
-    price = widget.product.steppedPrices.first.price;
+    if (widget.product.steppedPrices != null &&
+        widget.product.steppedPrices.isNotEmpty) {
+      price = widget.product.steppedPrices.first.price;
+    } else {
+      price = 0;
+    }
+
     return price;
   }
 

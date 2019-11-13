@@ -50,8 +50,8 @@ class AbstractOrderNoteModel extends ItemModel {
   OrderNoteStatus status;
 
   ///物流信息
-  @JsonKey(toJson: _consignmentsToJson)
-  List<ConsignmentModel> consignments;
+  @JsonKey(toJson: _consignmentToJson)
+  ConsignmentModel consignment;
 
   AbstractOrderNoteModel(
       {this.code,
@@ -60,7 +60,7 @@ class AbstractOrderNoteModel extends ItemModel {
       this.brandOperator,
       this.factoryOperator,
       this.status,
-      this.consignments});
+        this.consignment});
 
   factory AbstractOrderNoteModel.fromJson(Map<String, dynamic> json) =>
       _$AbstractOrderNoteModelFromJson(json);
@@ -71,11 +71,9 @@ class AbstractOrderNoteModel extends ItemModel {
   static Map<String, dynamic> _b2bCustomerToJson(B2BCustomerModel model) =>
       B2BCustomerModel.toJson(model);
 
-  static List<Map<String, dynamic>> _consignmentsToJson(
-          List<ConsignmentModel> consignments) =>
-      consignments
-          .map((consignment) => ConsignmentModel.toJson(consignment))
-          .toList();
+  static Map<String, dynamic> _consignmentToJson(
+      ConsignmentModel consignment) =>
+      ConsignmentModel.toJson(consignment);
 }
 
 /// 订单记录行抽象
@@ -124,7 +122,7 @@ class OrderNoteModel extends AbstractOrderNoteModel {
     B2BCustomerModel brandOperator,
     B2BCustomerModel factoryOperator,
     OrderNoteStatus status,
-    List<ConsignmentModel> consignments,
+    ConsignmentModel consignment,
     this.belongOrder,
     this.entries,
     this.remarks,
@@ -135,7 +133,7 @@ class OrderNoteModel extends AbstractOrderNoteModel {
             brandOperator: brandOperator,
             factoryOperator: factoryOperator,
             status: status,
-            consignments: consignments);
+      consignment: consignment);
 
   factory OrderNoteModel.fromJson(Map<String, dynamic> json) =>
       _$OrderNoteModelFromJson(json);
@@ -218,7 +216,7 @@ class ShippingOrderNoteModel extends OrderNoteModel {
     B2BCustomerModel brandOperator,
     B2BCustomerModel factoryOperator,
     OrderNoteStatus status,
-    List<ConsignmentModel> consignments,
+    ConsignmentModel consignment,
     AbstractOrderModel belongOrder,
     List<OrderNoteEntryModel> entries,
     String remarks,
@@ -238,7 +236,7 @@ class ShippingOrderNoteModel extends OrderNoteModel {
             brandOperator: brandOperator,
             factoryOperator: factoryOperator,
             status: status,
-            consignments: consignments,
+      consignment: consignment,
             belongOrder: belongOrder,
             entries: entries,
             remarks: remarks);
@@ -304,7 +302,7 @@ class DeliveryOrderNoteModel extends OrderNoteModel {
     B2BCustomerModel brandOperator,
     B2BCustomerModel factoryOperator,
     OrderNoteStatus status,
-    List<ConsignmentModel> consignments,
+    ConsignmentModel consignment,
     AbstractOrderModel belongOrder,
     List<OrderNoteEntryModel> entries,
     String remarks,
@@ -324,7 +322,7 @@ class DeliveryOrderNoteModel extends OrderNoteModel {
             brandOperator: brandOperator,
             factoryOperator: factoryOperator,
             status: status,
-            consignments: consignments,
+      consignment: consignment,
             belongOrder: belongOrder,
             entries: entries,
             remarks: remarks);
@@ -402,7 +400,7 @@ class ReconciliationOrderNoteModel extends OrderNoteModel {
       B2BCustomerModel brandOperator,
       B2BCustomerModel factoryOperator,
       OrderNoteStatus status,
-      List<ConsignmentModel> consignments,
+        ConsignmentModel consignment,
       AbstractOrderModel belongOrder,
       List<OrderNoteEntryModel> entries,
       String remarks,
@@ -426,7 +424,7 @@ class ReconciliationOrderNoteModel extends OrderNoteModel {
             brandOperator: brandOperator,
             factoryOperator: factoryOperator,
             status: status,
-            consignments: consignments,
+      consignment: consignment,
             belongOrder: belongOrder,
             entries: entries,
             remarks: remarks);

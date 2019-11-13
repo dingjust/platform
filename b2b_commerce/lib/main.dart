@@ -57,6 +57,9 @@ void main() async {
           Provider(
             builder: (_) => CategoryState(),
           ),
+          Provider(
+            builder: (_) => CarrierState(),
+          ),
         ],
         child: MyApp(),
       ),
