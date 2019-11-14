@@ -5,10 +5,15 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'components/ColorSizeTable.dart';
+
 class DeliverOrderForm extends StatefulWidget {
+  final List<PurchaseOrderEntryModel> orderEntries;
+
   final DeliveryOrderNoteModel deliveryOrder;
 
-  const DeliverOrderForm({Key key, this.deliveryOrder}) : super(key: key);
+  const DeliverOrderForm({Key key, this.deliveryOrder, this.orderEntries})
+      : super(key: key);
 
   @override
   _DeliverOrderFormState createState() => _DeliverOrderFormState();
@@ -71,7 +76,7 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
                   color: Colors.black),
             ),
           ),
-          bottomSheet: _buildBottomSheet(),
+          // bottomSheet: _buildBottomSheet(),
           body: widget.deliveryOrder != null
               ? Container(
                   color: Colors.white,
@@ -86,6 +91,10 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
                               _buildConsigneeSection(widget.deliveryOrder),
                             ],
                           )),
+                      ColorSizeTable(
+                        noteEntries: widget.deliveryOrder.entries,
+                        orderEntries: widget.orderEntries,
+                      )
                     ],
                   ))
               : Center(

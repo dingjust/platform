@@ -2934,9 +2934,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
                                         DeliverOrderForm(
-                                          deliveryOrder: order
-                                              .deliveryOrders[0],
-                                        )));
+                                            deliveryOrder: order
+                                                .deliveryOrders[0],
+                                            orderEntries: order.entries)));
                               },
                               disabledColor: Colors.grey[300],
                               child: Text(
