@@ -18,6 +18,7 @@ import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
+import 'form/purchase/purchase_deliver_order_form.dart';
 import 'form/purchase/purchase_deliver_order_view.dart';
 import 'form/purchase/purchase_reconciliation_order_view.dart';
 import 'form/purchase/purchase_shipping_order_view.dart';
@@ -78,6 +79,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   PurchaseOrderModel order;
   _PurchaseDetailPageState({this.order});
+
+  B2BFloatingActionButtonLocation fabLocation =
+  B2BFloatingActionButtonLocation(0.125);
 
   @override
   void initState() {
@@ -187,7 +191,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       ),
       bottomSheet: _bubildBottomSheet(),
       floatingActionButton: _buildFAB(context),
-      floatingActionButtonLocation: B2BFloatingActionButtonLocation(0.125),
+      floatingActionButtonLocation: fabLocation,
     );
   }
 
@@ -2926,7 +2930,14 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         builder: (BuildContext buttonContext) =>
                             FlatButton(
                               color: Color.fromRGBO(255, 214, 12, 1),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        DeliverOrderForm(
+                                          deliveryOrder: order
+                                              .deliveryOrders[0],
+                                        )));
+                              },
                               disabledColor: Colors.grey[300],
                               child: Text(
                                 '确认收货',

@@ -71,7 +71,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
                       ],
                     ))
                 : Center(
-                    child: Text('暂无对货单'),
+              child: Text('暂无对账单'),
                   )));
   }
 

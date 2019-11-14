@@ -668,7 +668,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
 
   ///校验表单
   bool validateForm() {
-    return totalNum >= widget.product.steppedPrices[0].minimumQuantity;
+    if (widget.product.steppedPrices.isNotEmpty) {
+      return totalNum >= widget.product.steppedPrices[0].minimumQuantity;
+    } else {
+      return true;
+    }
   }
 
   void onSure() {

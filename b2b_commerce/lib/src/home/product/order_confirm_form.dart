@@ -604,7 +604,12 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         }
       }
     }
-    price = widget.product.steppedPrices.first.price;
+    if (widget.product.steppedPrices != null &&
+        widget.product.steppedPrices.isNotEmpty) {
+      price = widget.product.steppedPrices.first.price;
+    } else {
+      price = 0;
+    }
     return price;
   }
 
@@ -622,11 +627,14 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
   ///校验表单
   bool validateForm() {
-    if (totalNum < widget.product.steppedPrices[0].minimumQuantity &&
-        widget.orderType != OrderType.PROOFING) {
-      Toast.show("未达最低采购量", context,
-          duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
-      return false;
+    if (widget.product.steppedPrices != null &&
+        widget.product.steppedPrices.isNotEmpty) {
+      if (totalNum < widget.product.steppedPrices[0].minimumQuantity &&
+          widget.orderType != OrderType.PROOFING) {
+        Toast.show("未达最低采购量", context,
+            duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+        return false;
+      }
     }
     if (addressModel == null) {
       Toast.show("请选择收货地址", context,
