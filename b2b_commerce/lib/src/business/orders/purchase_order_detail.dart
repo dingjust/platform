@@ -18,7 +18,9 @@ import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
-import 'form/purchase/purchase_deliver_order_form.dart';
+import 'form/purchase/purchase_deliver_order_view.dart';
+import 'form/purchase/purchase_reconciliation_order_view.dart';
+import 'form/purchase/purchase_shipping_order_view.dart';
 
 final List<OrderStatusModel> _statusList = [
   OrderStatusModel.fromJson({
@@ -2910,9 +2912,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 Expanded(
                     flex: 1,
                     child: FlatButton(
-                      onPressed: () {
-
-                      },
+                      onPressed: () {},
                       child: Text(
                         '查看发货单',
                         style: TextStyle(fontSize: 15, color: Colors.red),
@@ -2983,7 +2983,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    DeliverOrderForm(shippingOrders: order.shippingOrders,),
+                    ShippingOrderView(
+                      shippingOrders: order.shippingOrders,
+                    ),
               ),
             );
           },
@@ -2999,12 +3001,17 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           backgroundColor: Colors.red,
           onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => ProductionOfflineOrder(),
-            //   ),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    DeliverOrderView(
+                      deliveryOrder: order.deliveryOrders.isNotEmpty
+                          ? order.deliveryOrders[0]
+                          : null,
+                    ),
+              ),
+            );
           },
           shape: new RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0)),
@@ -3018,12 +3025,17 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           backgroundColor: Colors.green,
           onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => ProductionOfflineOrder(),
-            //   ),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ReconciliationOrderView(
+                      reconciliationOrder: order.reconciliationOrders.isNotEmpty
+                          ? order.reconciliationOrders[0]
+                          : null,
+                    ),
+              ),
+            );
           },
           shape: new RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0)),
