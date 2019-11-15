@@ -20,7 +20,15 @@
         </template>
       </el-table-column>
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
-      <el-table-column label="生产单号" prop="orderCode"></el-table-column>
+      <el-table-column label="生产单号" prop="orderCode">
+        <template slot-scope="scope">
+          <template v-for="(code,index) in scope.row.orderCodes">
+            <el-row :key="index">
+                <span>{{code}}</span>
+            </el-row>
+          </template>
+        </template>
+      </el-table-column>
       <el-table-column label="签署对象" prop="belongTo.name">
         <template slot-scope="scope">
           <span>{{scope.row.partner}}</span>
