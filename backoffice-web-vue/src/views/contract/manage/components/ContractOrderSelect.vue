@@ -1,20 +1,22 @@
 <template>
   <div class="animated fadeIn">
     <div style="height: 50px;">
-    <el-form :inline="true">
-      <!--<el-form-item label="">-->
+      <el-form :inline="true">
+        <!--<el-form-item label="">-->
         <!--<el-input placeholder="请输入产品货号/名称查询" v-model="keyword"></el-input>-->
-      <!--</el-form-item>-->
-      <!-- <el-button-group> -->
-      <!--<el-button type="text" @click="onSearch">查找</el-button>-->
-      <!-- </el-button-group> -->
-      <el-button class="product-select-btn" @click="onSelected">确定</el-button>
-    </el-form>
+        <!--</el-form-item>-->
+        <!-- <el-button-group> -->
+        <!--<el-button type="text" @click="onSearch">查找</el-button>-->
+        <!-- </el-button-group> -->
+        <el-button class="product-select-btn" @click="onSelected">确定</el-button>
+      </el-form>
     </div>
     <!--<el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"-->
-      <!--:height="autoHeight">-->
-      <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
-                highlight-current-row @current-change="handleCurrentChange" @selection-change="handleSelectionChange">
+    <!--:height="autoHeight">-->
+    <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
+        @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55">
+      </el-table-column>
       <el-table-column label="生产订单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
@@ -27,7 +29,8 @@
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
-              <img width="54px" v-if="scope.row.product!=null" height="54px" :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'">
+              <img width="54px" v-if="scope.row.product!=null" height="54px"
+                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'">
             </el-col>
             <el-col :span="16">
               <el-row>
@@ -68,22 +71,22 @@
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
-        <el-table-column label="订单标签">
-          <template slot-scope="scope">
-            <el-row>
-              <img width="40px" height="15px" :src="getPaymentStatusTag(scope.row)" />
-            </el-row>
-            <el-row>
-              <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
-            </el-row>
-          </template>
-        </el-table-column>
+      <el-table-column label="订单标签">
+        <template slot-scope="scope">
+          <el-row>
+            <img width="40px" height="15px" :src="getPaymentStatusTag(scope.row)" />
+          </el-row>
+          <el-row>
+            <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
+          </el-row>
+        </template>
+      </el-table-column>
       <!--<el-table-column label="操作" min-width="100">-->
-        <!--<template slot-scope="scope">-->
-          <!--<el-row>-->
-            <!--<el-button type="text" @click="onSelected(scope.row)" class="purchase-list-button">选择</el-button>-->
-          <!--</el-row>-->
-        <!--</template>-->
+      <!--<template slot-scope="scope">-->
+      <!--<el-row>-->
+      <!--<el-button type="text" @click="onSelected(scope.row)" class="purchase-list-button">选择</el-button>-->
+      <!--</el-row>-->
+      <!--</template>-->
       <!--</el-table-column>-->
     </el-table>
     <div class="pt-2"></div>
@@ -119,7 +122,7 @@
 
         // this.$emit('onSearchOrder','', 0,10);
         const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url,{
+        const result = await this.$http.post(url, {
           keyword: ''
         }, {
           page: 0,
@@ -134,7 +137,7 @@
       async onPageSizeChanged(val) {
         this._reset();
         const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url,{
+        const result = await this.$http.post(url, {
           keyword: ''
         }, {
           page: val,
@@ -148,7 +151,7 @@
       },
       async onCurrentPageChanged(val) {
         const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url,{
+        const result = await this.$http.post(url, {
           keyword: ''
         }, {
           page: val - 1,
@@ -182,14 +185,14 @@
         // } else {
         //   this.selectedItem = item;
         // }
-        this.$emit('onOrderSelectChange',this.selectedItem );
+        this.$emit('onOrderSelectChange', this.selectedItems);
       },
       handleSelectionChange(val) {
-        this.selectedItem = val;
+        this.selectedItems = val;
       },
       //选中行
       handleCurrentChange(val) {
-        this.selectedItem = val;
+        this.selectedItems = val;
       },
       getPaymentStatusTag(row) {
         return row.balancePaid ? 'static/img/paid.png' : 'static/img/arrears.png';
@@ -205,41 +208,42 @@
     data() {
       return {
         statuses: this.$store.state.PurchaseOrdersModule.statuses,
-        selectedItem:{},
-        keyword:''
+        selectedItems: [],
+        keyword: ''
       }
     }
   }
 
 </script>
 <style>
-.purchase-list-button{
-  color: #FFA403;
-}
-.product-info {
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.65);
-  font-size: 12px;
-}
+  .purchase-list-button {
+    color: #FFA403;
+  }
 
-.el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
-  background-color: #ffc107;
-}
+  .product-info {
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 12px;
+  }
 
-.product-select-btn {
-  width: 70px;
-  height: 30px;
-  background: #FFD60C;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.85);
-  font-size: 10px;
-  border-radius: 0px;
-  border: 0px solid #FFD60C;
-  margin-top: 10px;
-}
+  .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+    background-color: #ffc107;
+  }
 
-.el-table__body tr.current-row>td {
-  background-color: #ffc107;
-}
+  .product-select-btn {
+    width: 70px;
+    height: 30px;
+    background: #FFD60C;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 10px;
+    border-radius: 0px;
+    border: 0px solid #FFD60C;
+    margin-top: 10px;
+  }
+
+  .el-table__body tr.current-row>td {
+    background-color: #ffc107;
+  }
+
 </style>
-

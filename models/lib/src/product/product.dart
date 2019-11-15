@@ -732,12 +732,14 @@ class ColorModel extends ItemModel {
   String name;
   bool active;
   String colorCode;
+  int sequence;
 
   ColorModel({
     @required this.code,
     @required this.name,
     this.active,
     this.colorCode,
+    this.sequence
   });
 
   factory ColorModel.fromJson(Map<String, dynamic> json) =>
@@ -752,11 +754,13 @@ class SizeModel extends ItemModel {
   String code;
   String name;
   bool active;
+  int sequence;
 
   SizeModel({
     @required this.code,
     @required this.name,
     this.active,
+    this.sequence
   });
 
   factory SizeModel.fromJson(Map<String, dynamic> json) =>

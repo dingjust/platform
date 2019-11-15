@@ -1,9 +1,10 @@
 <template>
   <div>
-    <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body>
-        <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
-        <el-divider direction="vertical"></el-divider>
-        <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
+    <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog"
+      append-to-body>
+      <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
+      <el-divider direction="vertical"></el-divider>
+      <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" />
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
@@ -32,7 +33,7 @@
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
-          <el-input size="small" placeholder="选择订单" v-model="orderSelectFile.code" :disabled="true">
+          <el-input size="small" placeholder="选择订单" :value="ordersCodeStr" :disabled="true">
             <el-button slot="prepend" :disabled="orderReadOnly" @click="dialogOrderVisible=true">关联订单</el-button>
           </el-input>
         </el-col>
@@ -155,6 +156,13 @@
         return {
           Authorization: this.$store.getters.token
         }
+      },
+      ordersCodeStr: function () {
+        var result = '';
+        this.orderSelectFiles.forEach(element => {
+          result += element.code + ' ';
+        });
+        return result;
       }
     },
     methods: {
@@ -162,7 +170,7 @@
         search: "search",
         refresh: 'refresh'
       }),
-      selectTemp(str){
+      selectTemp(str) {
         if (this.hasFrameworkContract) {
           this.tempType = 'CGDD';
         } else {
@@ -200,7 +208,9 @@
       },
       //订单选择
       onOrderSelectChange(data) {
-        this.orderSelectFile = data;
+        if (data != null) {
+          this.orderSelectFiles = data;
+        }
         this.dialogOrderVisible = false;
       },
       //文件选择确定
@@ -225,21 +235,21 @@
       },
       async onSavePdf() {
         var agreementType = null;
-        if(this.contractType == '3'){
+        if (this.contractType == '3') {
           agreementType = 'CUSTOMIZE_COMPLETED';
         }
-        if(this.contractType == '2'){
+        if (this.contractType == '2') {
           agreementType = 'CUSTOMIZE';
         }
-        if (this.orderSelectFile.code == null || this.orderSelectFile.code == '') {
+        if (this.orderSelectFiles.length == 0) {
           this.$message.error('请选择订单');
           return;
         }
-        if(this.pdfFile.id == null || this.pdfFile.id == ''){
+        if (this.pdfFile.id == null || this.pdfFile.id == '') {
           this.$message.error('请先上传PDF文件');
           return;
         }
-        if(this.contractCode == null || this.contractCode == ''){
+        if (this.contractCode == null || this.contractCode == '') {
           this.$message.error('请输入自定义合同编号');
           return;
         }
@@ -254,9 +264,9 @@
           'pdf': this.pdfFile,
           'role': role,
           'title': '',
-          'customizeCode':this.contractCode,
-          'agreementType':agreementType,
-          'orderCode': this.orderSelectFile.code,
+          'customizeCode': this.contractCode,
+          'agreementType': agreementType,
+          'orderCodes': this.orderSelectFiles,
         }
 
         const url = this.apis().saveContract();
@@ -280,16 +290,20 @@
 
       },
       async onSave() {
-        console.log(this.orderSelectFile.code);
         // return;
-        if (this.orderSelectFile.code == null || this.orderSelectFile.code == '') {
+        if (this.orderSelectFiles.length == 0) {
           this.$message.error('请选择订单');
           return;
         }
-        if(this.orderSelectFile.status == 'PENDING_CONFIRM' || this.orderSelectFile.status == 'CANCELLED'){
-          this.$message.error('当前选择的订单不能是待确认状态和已取消状态');
-          return;
-        }
+
+        this.orderSelectFiles.forEach((file) => {
+          if (file.status == 'PENDING_CONFIRM' || file.status == 'CANCELLED') {
+            this.$message.error('当前选择的订单不能是待确认状态和已取消状态');
+            return;
+          }
+        });
+
+
         if (this.selectFile.id == null || this.selectFile.id == '') {
           this.$message.error('请选择合同模板');
           return;
@@ -301,30 +315,33 @@
           role = 'PARTYB';
         }
         var frameAgreementCode = '';
-        if(this.hasFrameworkContract){
+        if (this.hasFrameworkContract) {
           this.agreementType = '';
-          if(this.selectContract.code == null || this.selectContract.code == ''){
+          if (this.selectContract.code == null || this.selectContract.code == '') {
             return;
           }
 
-          if(this.selectContract.code != null &&this.selectContract.code != ''){
+          if (this.selectContract.code != null && this.selectContract.code != '') {
             frameAgreementCode = this.selectContract.code;
           }
         }
-
 
         let data = {
           'userTempCode': this.selectFile.code,
           'role': role,
           'title': '',
-          'frameAgreementCode' : frameAgreementCode,
-          'orderCode': this.orderSelectFile.code,
+          'frameAgreementCode': frameAgreementCode,
+          'orderCodes': this.orderSelectFiles,
         }
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
 
-        this.$message.success(result.msg);
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+        }
 
         if (result.data != null && result.data != '') {
           Bus.$emit('openContract', result.data);
@@ -339,7 +356,7 @@
       },
       onSetOrderCode() {
         if (this.slotData != null && this.slotData != '') {
-          this.orderSelectFile = this.slotData;
+          this.orderSelectFiles.push(this.slotData);
           this.orderReadOnly = true;
           if (this.currentUser.type == 'BRAND') {
             this.partyA = true;
@@ -368,29 +385,29 @@
       onSuccess(response) {
         this.pdfFile = response;
       },
-      async getContractList(uid){
+      async getContractList(uid) {
         const url = this.apis().getContractsList();
         const result = await http.post(url, {
-          isFrame:true,
+          isFrame: true,
           partyACompany: uid,
-          state:'COMPLETE',
+          state: 'COMPLETE',
         }, {
           page: 0,
           size: 100
         });
         this.mockData = result.content;
       },
-      openKJHTSelect(){
-        if (this.orderSelectFile == null) {
+      openKJHTSelect() {
+        if (this.orderSelectFiles.length == null) {
           return;
         }
 
-        if(this.currentUser.type == 'BRAND'){
-          if(this.orderSelectFile.purchaser != null){
-            this.companyUid = this.orderSelectFile.purchaser.uid;
+        if (this.currentUser.type == 'BRAND') {
+          if (this.orderSelectFiles[0].purchaser != null) {
+            this.companyUid = this.orderSelectFiles[0].purchaser.uid;
           }
-        }else{
-          if(this.orderSelectFile.belongTo != null){
+        } else {
+          if (this.orderSelectFiles[0].belongTo != null) {
             this.companyUid = this.belongTo.uid;
           }
         }
@@ -407,7 +424,7 @@
         dialogTemplateVisible: false,
         dialogOrderVisible: false,
         cacheSelectFile: {},
-        orderSelectFile: {},
+        orderSelectFiles: [],
         selectFile: {},
         selectContract: {},
         fileList: [],
@@ -421,14 +438,14 @@
         pdfVisible: false,
         fileUrl: '',
         thisContract: '',
-        agreementType:'',
-        tempType:'',
-        tempData:[],
-        allData:[],
-        companyUid:'',
-        dialogContractVisible:false,
-        cacheSelectContract:'',
-        contractCode:'',
+        agreementType: '',
+        tempType: '',
+        tempData: [],
+        allData: [],
+        companyUid: '',
+        dialogContractVisible: false,
+        cacheSelectContract: '',
+        contractCode: '',
       };
     },
     created() {

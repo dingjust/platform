@@ -133,4 +133,20 @@ class B2BImage {
   static Image qqZone({double width, double height}) {
     return getImage('temp/common/qq_zone.png', width: width, height: height);
   }
+
+  static Image signed({double width, double height}) {
+    return getImage('temp/icon/signed.png', width: width, height: height);
+  }
+
+  static Image notSigned({double width, double height}) {
+    return getImage('temp/icon/not_signed.png', width: width, height: height);
+  }
+
+  static Image paid({double width, double height}) {
+    return getImage('temp/icon/paid.png', width: width, height: height);
+  }
+
+  static Image notPaid({double width, double height}) {
+    return getImage('temp/icon/arrears.png', width: width, height: height);
+  }
 }

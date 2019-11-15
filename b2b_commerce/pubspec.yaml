@@ -178,7 +178,10 @@ flutter:
     - packages/assets/temp/all_seal.png
     - packages/assets/temp/all_contract.png
     - packages/assets/temp/all_template.png
-
+    - packages/assets/temp/icon/signed.png
+    - packages/assets/temp/icon/not_signed.png
+    - packages/assets/temp/icon/arrears.png
+    - packages/assets/temp/icon/paid.png
 
 
   fonts:

@@ -84,6 +84,7 @@ class HttpManager {
       return response; // continue
     }, onError: (DioError e) {
       print('${e.type}');
+      print('${e.response}');
       //未登录或token失效
       if (e?.response != null && e.response.statusCode == 401) {
         //已登录，token失效

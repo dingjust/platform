@@ -943,7 +943,7 @@ class PurchaseOrderModel extends OrderModel {
         this.approver,
         this.freightPayer,
         this.payPlan,
-        this.userAgreementIsSigned,
+        this.userAgreementIsSigned = false,
         this.cooperator})
       : super(
             code: code,

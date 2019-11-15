@@ -112,6 +112,11 @@
         this.formData.keyword = text;
       },
       onAddKeyword (word) {
+        if (this.formData.keyword == null || this.formData.keyword === '') {
+          this.formData.keyword = word;
+          this.$forceUpdate();
+          return;
+        }
         var keywords = this.formData.keyword.split('，');
         if (keywords.length >= 10) {
           this.$message.error('最多添加10个关键词');
@@ -130,6 +135,8 @@
         } else {
           this.formData.keyword = word;
         }
+
+        this.$forceUpdate();
       },
       onRemoveCooperativeBrand (word) {
         var keywords = this.formData.cooperativeBrand.split('，');
@@ -148,6 +155,10 @@
         this.formData.cooperativeBrand = text;
       },
       onAddCooperativeBrand (word) {
+        if (this.formData.cooperativeBrand == null || this.formData.cooperativeBrand === '') {
+          this.formData.cooperativeBrand = word;
+          return;
+        }
         var keywords = this.formData.cooperativeBrand.split('，');
         if (keywords.length >= 10) {
           this.$message.error('最多添加10个关键词');
