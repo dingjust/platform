@@ -90,8 +90,8 @@
   import FactoryCertificateForm from '../form/FactoryCertificateForm';
   import FactoryCertificateInfoPage from '../info/FactoryCertificateInfoPage';
   import FactoryFrom from '../form/FactoryForm';
-  import FactoryProfilesInfoPage from "../info/FactoryProfilesInfoPage";
-  import FactoryProfilesFrom from "../form/FactoryProfilesForm";
+  import FactoryProfilesInfoPage from '../info/FactoryProfilesInfoPage';
+  import FactoryProfilesFrom from '../form/FactoryProfilesForm';
 
   export default {
     name: 'FactoryDetailsPage',
@@ -214,7 +214,7 @@
       onClose () {
         this.setFactoryFormVisible(false);
       },
-      async onEditProfiles(){
+      async onEditProfiles () {
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().getFactory(uid);
         const result = await this.$http.get(url);
@@ -237,7 +237,7 @@
         this.getFactory();
         this.factoryProfilesFormVisible = false;
         this.$message.success('编辑图文详情信息成功');
-      },
+      }
     },
     data () {
       return {

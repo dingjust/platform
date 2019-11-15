@@ -5,10 +5,9 @@
        <el-button slot="append" @click="onKeywordAdd">添加关键词</el-button>
      </el-input>
    </el-row>
-    <el-row>
+    <el-row v-if="textData != null && textData != ''">
       <el-tag class="elTagTextClass"
               style="margin-right: 10px"
-              v-if="textData != ''"
               v-for="keyword of keywords"
               @close="onKeywordRemove(keyword)"
               closable>
@@ -28,7 +27,6 @@
     },
     methods: {
       onKeywordRemove (keywrod) {
-        console.log(keywrod);
         this.$emit('remove', keywrod);
       },
       onKeywordAdd () {

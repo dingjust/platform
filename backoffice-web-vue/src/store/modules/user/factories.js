@@ -62,7 +62,8 @@ const state = {
     starLevel:0,
     cuttingDepartment: [],
     productionWorkshop: [],
-    lastDepartment: []
+    lastDepartment: [],
+    keyword: ''
   },
   queryFormData: {
     labels: [],
@@ -192,7 +193,8 @@ const actions = {
       longitude: 0,
       latitude: 0,
       certificates: [],
-      productionMode: ''
+      productionMode: '',
+      keyword: ''
     };
     commit('setFormData', data);
   }
