@@ -213,4 +213,46 @@ class OrderApis {
   static get proofingConfirm => (code) {
     return '/{baseSiteId}/orders/proofing/$code/paid';
   };
+
+  ///创建收货单
+  static get createDeliveryOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/createDeliveryOrder';
+      };
+
+  ///创建并提交收货单
+  static get createAndCommitDeliveryOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/createAndCommitDeliveryOrder';
+      };
+
+  ///提交收货单
+  static get commitDeliveryOrder =>
+          () {
+        return '/b2b/orders/purchase/commitDeliveryOrder';
+      };
+
+  ///保存收货单
+  static get updateDeliveryOrder =>
+          () {
+        return '/b2b/orders/purchase/updateDeliveryOrder';
+      };
+
+  ///撤回收货单
+  static get withdrawDeliveryOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/recallDelivery';
+      };
+
+  ///确认收货单
+  static get confirmDeliveryOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/confirmDelivery';
+      };
+
+  ///拒绝收货单
+  static get rejectDeliveryOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/rejectDelivery';
+      };
 }

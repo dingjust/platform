@@ -2934,8 +2934,11 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
                                         DeliverOrderForm(
-                                            deliveryOrder: order
-                                                .deliveryOrders[0],
+                                            purchaseOrderCode: order.code,
+                                            deliveryOrder:
+                                            order.deliveryOrders.isNotEmpty
+                                                ? order.deliveryOrders.first
+                                                : null,
                                             orderEntries: order.entries)));
                               },
                               disabledColor: Colors.grey[300],

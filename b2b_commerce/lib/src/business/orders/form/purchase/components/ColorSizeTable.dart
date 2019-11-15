@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:b2b_commerce/src/business/orders/form/purchase/ColorSizeEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
@@ -10,10 +11,15 @@ class ColorSizeTable extends StatefulWidget {
 
   final List<PurchaseOrderEntryModel> orderEntries;
 
+  final List<ColorSizeEntry> colorSizeEntries;
+
   final int rowHeith;
 
-  ColorSizeTable(
-      {Key key, this.noteEntries, this.rowHeith = 50, this.orderEntries})
+  ColorSizeTable({Key key,
+    this.noteEntries,
+    this.rowHeith = 50,
+    @required this.orderEntries,
+    @required this.colorSizeEntries})
       : super(key: key);
 
   @override
@@ -23,45 +29,22 @@ class ColorSizeTable extends StatefulWidget {
 class _ColorSizeTableState extends State<ColorSizeTable> {
   List<ColorModel> colors = [];
   List<SizeModel> sizes = [];
-  List<_ColorSizeEntry> colorSizeEntries = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     init();
   }
 
   @override
   Widget build(BuildContext context) {
-    // List<Tab> tabs = [];
-
-    // List<List<OrderNoteEntryModel>> tabEntries = [];
-    // //初始化按颜色分组
-    // Map<String, List<OrderNoteEntryModel>> dataMap = {};
-    // noteEntries.forEach((entry) {
-    //   if (dataMap[entry.color] == null) {
-    //     dataMap[entry.color] = [];
-    //   }
-    //   dataMap[entry.color].add(entry);
-    // });
-
-    // dataMap.forEach((key, list) {
-    //   tabs.add(Tab(
-    //     text: '$key',
-    //   ));
-    //   tabEntries.add(list);
-    // });
-
     return Container(
         height: _getContainerHeight(sizes.length),
         child: DefaultTabController(
           length: colors.length,
           child: Scaffold(
               appBar: TabBar(
-                  tabs: colors
-                      .map((color) => Tab(text: '${color.name}'))
-                      .toList()),
+                  tabs: colors.map((color) => _buildTab(color)).toList()),
               body: TabBarView(
                 children: colors
                     .map((color) => Container(
@@ -75,6 +58,74 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
                     .toList(),
               )),
         ));
+  }
+
+  Widget _buildTab(ColorModel color) {
+    String colorCode = color.colorCode?.replaceAll(RegExp('#'), '');
+    int sum = getColorTotalNum(color);
+    return Tab(
+      child: Container(
+        width: 60,
+        height: 30,
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            color.colorCode != null
+                ? Positioned(
+              left: 0,
+              top: 12,
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                    color: Color(int.parse('0xFF${colorCode}')),
+                    border:
+                    Border.all(width: 0.5, color: Colors.grey[300])),
+                child: Text(''),
+              ),
+            )
+                : Container(),
+            Container(
+              margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+              child: Text(
+                '${color.name}',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            sum > 0
+                ? Positioned(
+                right: 0,
+                top: 0,
+                child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
+                    ),
+                    child: Center(
+                      child: Text(
+                        getColorTotalNum(color) > 99 ? '···' : '$sum',
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    )))
+                : Container()
+          ],
+        ),
+      ),
+    );
+  }
+
+  int getColorTotalNum(ColorModel color) {
+    int sum = 0;
+    widget.colorSizeEntries
+        .where((entry) => entry.color == color.name)
+        .forEach((colorEntry) {
+      if (colorEntry.controller.text != '') {
+        sum += int.parse(colorEntry.controller.text);
+      }
+    });
+    return sum;
   }
 
   double _getContainerHeight(int length) {
@@ -103,14 +154,23 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
 
     colors.forEach((color) {
       sizes.forEach((size) {
-        colorSizeEntries.add(
-            _ColorSizeEntry(size.name, color.name, TextEditingController()));
+        widget.colorSizeEntries.add(
+            ColorSizeEntry(size.name, color.name, TextEditingController()));
       });
     });
+
+    //更新
+    if (widget.noteEntries != null && widget.noteEntries.isNotEmpty) {
+      widget.noteEntries.forEach((entry) {
+        getEntry(entry.color, entry.size)
+          ..controller.text = entry.quantity.toString()
+          ..id = entry.id;
+      });
+    }
   }
 
   Widget _buildEntryRow(ColorModel color, SizeModel size) {
-    _ColorSizeEntry entry = getEntry(color.name, size.name);
+    ColorSizeEntry entry = getEntry(color.name, size.name);
 
     return Container(
       decoration: BoxDecoration(
@@ -189,18 +249,8 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
     );
   }
 
-  _ColorSizeEntry getEntry(String color, String size) {
-    return colorSizeEntries
+  ColorSizeEntry getEntry(String color, String size) {
+    return widget.colorSizeEntries
         .firstWhere((entry) => entry.size == size && entry.color == color);
   }
-}
-
-class _ColorSizeEntry {
-  final String size;
-
-  final String color;
-
-  final TextEditingController controller;
-
-  _ColorSizeEntry(this.size, this.color, this.controller);
 }
