@@ -94,6 +94,13 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<String> factoryUpdateProfiles(FactoryModel factory) async {
+    Response response = await http$.put(Apis.factoryUpdateProfiles(factory.uid),
+        data: FactoryModel.toJson(factory));
+    return response.data;
+  }
+
+  @override
   Future<String> applyCertification(CompanyModel form) async {
     Response response = await http$.put(Apis.applyCertification,
         data: CompanyModel.toJson(form));

@@ -18,7 +18,7 @@ abstract class ProductApis {
   ///获取产品列表
   static get list => '/{baseSiteId}/products/apparel';
 
-  //品牌获取工厂的现款产品
+  //品牌获取所有工厂的现款产品
   static get getProductsOfFactories => '/{baseSiteId}/products/apparel/factories';
 
   //品牌获取工厂的现款产品

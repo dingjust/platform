@@ -92,37 +92,44 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
 //        ],
 //      ),
       body: Container(
-        color: Colors.white,
+        color: Colors.grey[200],
         child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+//          padding: EdgeInsets.symmetric(horizontal: 15),
           children: <Widget>[
             _buildContactPerson(context),
             Divider(
-              height: 1,
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
             _buildContactPhone(context),
-            Divider(
-              height: 1,
+             Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
             _buildContactAddress(context),
             Divider(
-              height: 1,
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
             _buildCellPhone(context),
             Divider(
-              height: 1,
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
             _buildEmail(context),
             Divider(
-              height: 1,
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
             _buildQQ(context),
             Divider(
-              height: 1,
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
             _buildWeChar(context),
             Divider(
-              height: 1,
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
           ],
         ),
@@ -201,6 +208,8 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
 
   Widget _buildContactPerson(BuildContext context) {
     return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15),
       child: TextFieldComponent(
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),
@@ -226,6 +235,8 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
 
   Widget _buildContactPhone(BuildContext context) {
     return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15),
       child:TextFieldComponent(
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),
@@ -252,7 +263,8 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
 
   Widget _buildContactAddress(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 20),
+      color: Colors.white,
+      padding: EdgeInsets.all(15),
       child: GestureDetector(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -287,6 +299,8 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
           ],
         ),
         onTap: () {
+          print(widget.company.contactAddress.region.isocode);
+          print(widget.company.contactAddress.region.name);
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -302,6 +316,8 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
 
   Widget _buildCellPhone(BuildContext context) {
     return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15),
       child:TextFieldComponent(
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),
@@ -327,6 +343,8 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
 
   Widget _buildEmail(BuildContext context) {
     return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15),
       child: TextFieldComponent(
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),
@@ -351,6 +369,7 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
   Widget _buildQQ(BuildContext context) {
     return Container(
             color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFieldComponent(
               padding: EdgeInsets.symmetric(vertical: 5),
               dividerPadding: EdgeInsets.only(),
@@ -376,6 +395,8 @@ class _MyFactoryContactFormPageState extends State<MyFactoryContactFormPage> {
 
   Widget _buildWeChar(BuildContext context) {
     return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15),
       child: TextFieldComponent(
         padding: EdgeInsets.symmetric(vertical: 5),
         dividerPadding: EdgeInsets.only(),

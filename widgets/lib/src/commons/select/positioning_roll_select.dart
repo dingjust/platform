@@ -31,13 +31,20 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
   ScrollController _valueController = ScrollController();
   Map<String, dynamic> map = {};
   String _keySelect;
+  List<Attribute> _attributes;
 
   @override
   void initState() {
-    if (widget.attributes != null && widget.attributes.length > 0)
-      _keySelect = widget.attributes[0].code;
+    _attributes = widget.attributes.map((attr) => Attribute(
+      attr.code,attr.name,attr.values,valueSelects: attr.valueSelects.map((val) => val).toList(),multiple: attr.multiple,offset: attr.offset
+    )).toList();
+    print(_attributes);
+    _attributes.forEach((attr) => print(attr.valueSelects));
+    widget.attributes.forEach((attr) => print(attr.valueSelects));
+    if (_attributes != null && _attributes.length > 0)
+      _keySelect = _attributes[0].code;
     double offset = 0.0;
-    widget.attributes.forEach((attr) {
+    _attributes.forEach((attr) {
       int colCount = attr.values.length % widget.crossAxisCount == 0
           ? (attr.values.length / widget.crossAxisCount).toInt()
           : (attr.values.length / widget.crossAxisCount + 1).toInt();
@@ -69,7 +76,7 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
             child: IconButton(
                 icon: Text('确定'),
                 onPressed: () {
-                  widget.attributes.forEach((attribute) {
+                  _attributes.forEach((attribute) {
                     map[attribute.code] = attribute.valueSelects;
                   });
                   Navigator.pop(context, map);
@@ -100,24 +107,24 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
                         return GestureDetector(
                           onTap: () {
                             setState(() {
-                              _keySelect = widget.attributes[index].code;
+                              _keySelect = _attributes[index].code;
                               _valueController.animateTo(
-                                  widget.attributes[index].offset,
+                                  _attributes[index].offset,
                                   duration: Duration(milliseconds: 500),
                                   curve: Curves.ease);
                             });
                           },
                           child: Container(
                             height: 40,
-                            color: _keySelect == widget.attributes[index].code
+                            color: _keySelect == _attributes[index].code
                                 ? Colors.white
                                 : Colors.grey[200],
                             child: Center(
-                                child: Text(widget.attributes[index].name)),
+                                child: Text(_attributes[index].name)),
                           ),
                         );
                       },
-                      childCount: widget.attributes.length,
+                      childCount: _attributes.length,
                     ),
                   ),
                 ],
@@ -141,7 +148,7 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
   List<Widget> buildSlivers() {
     List<Widget> _slivers = [];
 
-    widget.attributes.forEach((item) {
+    _attributes.forEach((item) {
       Widget sliverTitle = SliverPadding(
         padding: EdgeInsets.symmetric(vertical: 10),
         sliver: SliverToBoxAdapter(
@@ -208,6 +215,8 @@ class Attribute {
         this.offset = 0.0,
         this.multiple = false,
       }) {
-    this.valueSelects = [];
+    if(this.valueSelects == null){
+      this.valueSelects = [];
+    }
   }
 }

@@ -48,35 +48,35 @@ class WebSocketService {
 
   //创建websocket连接
   void _tryConnect() {
-    // print('========Socket连接=========');
-    // print(
-    //     'Connecting........  ws:${this.hashCode}  ----  socket:${_socket
-    //         .hashCode} ');
-    // WebSocket.connect(GlobalConfigs.WEBSOCKET_URL(
-    //     http$.getToken(), UserBLoC.instance.currentUser.mobileNumber))
-    //     .then((ws) {
-    //   _socket = ws;
-    //   _socket.listen(
-    //         (dynamic message) {
-    //       print('========收到推送=========');
-    //       print('$message');
-    //       notificationsPool$.checkUnread();
-    //       try {
-    //         WebsocketResponse response =
-    //         WebsocketResponse.fromJson(json.decode(message));
-    //         if (response != null) {
-    //           notificationsPool$.add(response);
-    //         }
-    //         //系统通知
-    //       } catch (e) {
-    //         print(e);
-    //       }
-    //     },
-    //     onDone: _onDisconnected,
-    //     onError: (dynamic error) => _onDisconnected(),
-    //   );
-    //   _socket.done.then((dynamic _) => _onDisconnected());
-    // });
+//    print('========Socket连接=========');
+//    print(
+//        'Connecting........  ws:${this.hashCode}  ----  socket:${_socket
+//            .hashCode} ');
+//    WebSocket.connect(GlobalConfigs.WEBSOCKET_URL(
+//        http$.getToken(), UserBLoC.instance.currentUser.mobileNumber))
+//        .then((ws) {
+//      _socket = ws;
+//      _socket.listen(
+//            (dynamic message) {
+//          print('========收到推送=========');
+//          print('$message');
+//          notificationsPool$.checkUnread();
+//          try {
+//            WebsocketResponse response =
+//            WebsocketResponse.fromJson(json.decode(message));
+//            if (response != null) {
+//              notificationsPool$.add(response);
+//            }
+//            //系统通知
+//          } catch (e) {
+//            print(e);
+//          }
+//        },
+//        onDone: _onDisconnected,
+//        onError: (dynamic error) => _onDisconnected(),
+//      );
+//      _socket.done.then((dynamic _) => _onDisconnected());
+//    });
   }
 
   ///推送消息

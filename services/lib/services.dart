@@ -1,7 +1,6 @@
 library app_services;
 
 import 'dart:async';
-
 export 'src/amap/amap_response.dart';
 export 'src/amap/amap_service.dart';
 export 'src/api/apis.dart';
@@ -63,9 +62,6 @@ export 'src/product/response/sample_products_response.dart';
 export 'src/production/bloc/production_bloc.dart';
 export 'src/production/bloc/production_search_result_bloc.dart';
 export 'src/qq/qq_service.dart';
-export 'src/state/address_state.dart';
-export 'src/state/carrier_state.dart';
-export 'src/state/category_state.dart';
 export 'src/supplier/bloc/suppliers_bloc.dart';
 export 'src/supplier/bloc/suppliers_bloc.dart';
 export 'src/system/bloc/app_bloc.dart';
@@ -99,6 +95,13 @@ export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/websocket/websocket_service.dart';
+export 'src/my/state/cash_products_state.dart';
+export 'src/my/state/my_factory_state.dart';
+export 'src/my/state/my_factory_capacity_state.dart';
+
+export 'src/state/category_state.dart';
+export 'src/state/address_state.dart';
+export 'src/state/carrier_state.dart';
 
 abstract class BLoCBase {
   var _loadingController = StreamController<bool>.broadcast();

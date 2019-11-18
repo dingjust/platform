@@ -51,5 +51,6 @@ export 'src/commons/dialog/customize_dialog.dart';
 export 'src/commons/dialog/request_data_loading.dart';
 export 'src/commons/list_tile/list_title.dart';
 export 'src/commons/table/report_table.dart';
+export 'src/commons/menu/single_enum_select.dart';
 export 'src/commons/fab/floating_action_button.dart';
 export 'src/commons/basic/info_row.dart';

@@ -34,9 +34,14 @@ class Apis {
     return '/{baseSiteId}/factories/$uid';
   };
 
-  /// 获取工厂明细 GET
+  /// 更新工厂 PUT
   static get factoryUpdate => (uid) {
     return '/{baseSiteId}/factories/$uid';
+  };
+
+  /// 更新工厂图文详情 PUT
+  static get factoryUpdateProfiles => (uid) {
+    return '/{baseSiteId}/factories/$uid/profiles';
   };
 
   /// 图片上传

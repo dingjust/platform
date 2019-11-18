@@ -4,7 +4,6 @@ import 'package:services/src/amap/amap_response.dart';
 import 'package:services/src/api/apis.dart';
 import 'package:services/src/net/http_manager.dart';
 import 'package:amap_location/amap_location.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class AmapService {
   // 工厂模式
@@ -73,25 +72,25 @@ class AmapService {
     AMapLocationClient.startup(AMapLocationOption(
         desiredAccuracy: CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
     //Android获取权限，IOS不需要
-    PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.locationWhenInUse);
-    print('check==============');
-
-    if (permission != PermissionStatus.granted) {
-      print('request==============');
-
-      Map<PermissionGroup, PermissionStatus> permissions =
-      await PermissionHandler()
-          .requestPermissions([PermissionGroup.locationWhenInUse]);
-
-      print('request==============');
-
-      if (permissions[PermissionGroup.locationWhenInUse] !=
-          PermissionStatus.granted) {
-        print('定位权限失败');
-        return null;
-      }
-    }
+//    PermissionStatus permission = await PermissionHandler()
+//        .checkPermissionStatus(PermissionGroup.locationWhenInUse);
+//    print('check==============');
+//
+//    if (permission != PermissionStatus.granted) {
+//      print('request==============');
+//
+//      Map<PermissionGroup, PermissionStatus> permissions =
+//      await PermissionHandler()
+//          .requestPermissions([PermissionGroup.locationWhenInUse]);
+//
+//      print('request==============');
+//
+//      if (permissions[PermissionGroup.locationWhenInUse] !=
+//          PermissionStatus.granted) {
+//        print('定位权限失败');
+//        return null;
+//      }
+//    }
     //END
 
     AMapLocation aMapLocation = await AMapLocationClient.getLocation(true);
