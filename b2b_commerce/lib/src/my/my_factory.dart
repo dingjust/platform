@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
-
+import 'package:b2b_commerce/src/business/products/product_select.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
+as dj;
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
+import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_company_contact_from_widget.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
@@ -307,7 +310,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                                   builder: (BuildContext buttonContext) =>
                                       FlatButton(
                                     color: Color.fromRGBO(255, 245, 157, 1),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _createPurchaseByFactoryProduct();
+                                    },
                                     disabledColor: Colors.grey[300],
                                     child: Text(
                                       '下单',
@@ -344,6 +349,24 @@ class _MyFactoryPageState extends State<MyFactoryPage>
         ],
       ),
     );
+  }
+
+  _createPurchaseByFactoryProduct() async{
+    dynamic result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductSelectPage(),
+      ),
+    );
+
+    print(result);
+    if(result != null){
+      dj.showModalBottomSheet<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return BuyPurchaseForm(result);
+          });
+    }
   }
 
   _publishRequirement() {
