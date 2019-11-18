@@ -46,13 +46,12 @@ class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
               ),
             ),
             onPressed: () {
-              print(widget.company.profiles);
               widget.company.profiles = _companyProfiles;
               widget.company.profiles.forEach((profile){
                 print(CompanyProfileModel.toJson(profile));
               });
 
-              UserRepositoryImpl().factoryUpdate(widget.company).then((a)=>Navigator.pop(context));
+              UserRepositoryImpl().factoryUpdateProfiles(widget.company).then((a)=>Navigator.pop(context));
             },
           ),
         ],

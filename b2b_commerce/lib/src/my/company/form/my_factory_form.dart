@@ -8,7 +8,7 @@ import 'my_factory_base_form.dart';
 import 'my_factory_contact_form.dart';
 
 class MyFactoryFormPage extends StatefulWidget {
-  FactoryModel factory;
+  final FactoryModel factory;
 
   MyFactoryFormPage({this.factory});
 
@@ -28,8 +28,8 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: _states.length);
-//    _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
-    FactoryModel.populator(widget.factory, _factory);
+    _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
+//    FactoryModel.populator(widget.factory, _factory);
     if (widget.factory.profilePicture != null) {
       _medias = [widget.factory.profilePicture];
     }
@@ -69,6 +69,8 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
                   isEditing: true,
                 );
                 break;
+              default:
+                return MyFactoryBaseFormPage(_factory,medias: _medias,);
             }
           }).toList()),
         ),
@@ -89,6 +91,8 @@ class _MyFactoryFormPageState extends State<MyFactoryFormPage>
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             onPressed: () async {
+              print(widget.factory.factoryBuildingsQuantity);
+              print(widget.factory.productionLineQuantity);
               _factory.profilePicture = _medias.isNotEmpty ? _medias[0] : null;
 
               if(_factory.contactPerson == null){

@@ -29,6 +29,9 @@ abstract class UserRepository {
   //更新工厂
   Future<String> factoryUpdate(FactoryModel factory);
 
+  //更新工厂图文详情
+  Future<String> factoryUpdateProfiles(FactoryModel factory);
+
   //公司认证
   Future<String> applyCertification(CompanyModel form);
 

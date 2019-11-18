@@ -94,6 +94,10 @@ export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/websocket/websocket_service.dart';
+export 'src/my/state/cash_products_state.dart';
+export 'src/my/state/my_factory_state.dart';
+export 'src/my/state/my_factory_capacity_state.dart';
+
 export 'src/state/category_state.dart';
 export 'src/state/address_state.dart';
 export 'src/state/carrier_state.dart';

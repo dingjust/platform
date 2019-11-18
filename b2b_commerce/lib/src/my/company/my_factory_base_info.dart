@@ -12,6 +12,11 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'my_factory_ability_info.dart';
+import 'my_factory_capacity_info.dart';
+import 'my_factory_scale_info.dart';
+import 'my_factory_service_info.dart';
+
 class MyFactoryBaseInfo extends StatefulWidget {
   MyFactoryBaseInfo(
     this.factory, {
@@ -108,78 +113,94 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
         ),
       );
     });
-    return ListView(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildFactoryItem(_buildFactoryHeaderRow),
-              ),
-              Divider(height: 0),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildhistoryOrdersCount(),
-              ),
-              Divider(height: 0),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildMonthCapacityRange(),
-              ),
-              Divider(height: 0),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildScaleRange(),
-              ),
-              Divider(
-                height: 0,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildPopulationScale(),
-              ),
-              Divider(height: 0),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildCooperationModes(),
-              ),
-              Divider(height: 0),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildCategories(),
-              ),
-              Divider(
-                height: 0,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildAdeptAtCategories(),
-              ),
-              Divider(height: 0),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildCooperativeBrand(),
-              ),
-              Divider(height: 0),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: _buildCreationTime(),
-              ),
-              Divider(height: 0),
-            ],
+    return Container(
+      child: ListView(
+        children: <Widget>[
+          Container(
+//          padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+                  child: _buildFactoryItem(_buildFactoryHeaderRow),
+                ),
+                Divider(height: 0),
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+                  child: _buildhistoryOrdersCount(),
+                ),
+                SizedBox(
+                  height: 10,
+                  child: Container(
+                    color: Colors.grey[100] ,
+                  ),
+                ),
+                 Container(
+                  color: Colors.white,
+                  height: 202,
+                  padding: EdgeInsets.only(top: 15,right: 10,bottom: 10),
+                  child: MyCompanyCapacityInfo(widget.factory,isSupplier: widget.isSupplier),
+                ),
+                SizedBox(
+                  height: 10,
+                  child: Container(
+                    color: Colors.grey[100] ,
+                  ),
+                ),
+                 Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.only(top: 15,left: 15),
+                  child: MyFactoryScaleInfo(widget.factory,isSupplier: widget.isSupplier),
+                ),
+                SizedBox(
+                  height: 10,
+                  child: Container(
+                    color: Colors.grey[100] ,
+                  ),
+                ),
+                 Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.only(top: 15,left: 15),
+                  child: MyFactoryAbilityInfo(widget.factory,isSupplier: widget.isSupplier),
+                ),
+                SizedBox(
+                  height: 10,
+                  child: Container(
+                    color: Colors.grey[100] ,
+                  ),
+                ),
+                 Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.only(top: 15,left: 15),
+                  child: MyFactoryServiceInfo(widget.factory,isSupplier: widget.isSupplier),
+                ),
+                SizedBox(
+                  height: 10,
+                  child: Container(
+                    color: Colors.grey[100] ,
+                  ),
+                ),
+                 Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+                  child: _buildCreationTime(),
+                ),
+                Divider(height: 0),
+              ],
+            ),
           ),
-        ),
-        Offstage(
-          offstage: !widget.isSupplier,
-          child: _buildNewestQuote(),
-        ),
-        Offstage(
-          offstage: !widget.isSupplier,
-          child: _buildNewestPurchase(),
-        ),
-      ],
+          Offstage(
+            offstage: !widget.isSupplier,
+            child: _buildNewestQuote(),
+          ),
+          Offstage(
+            offstage: !widget.isSupplier,
+            child: _buildNewestPurchase(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -297,7 +318,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          '注册时间',
+          '用户注册日期',
           style: const TextStyle(color: Colors.black, fontSize: 16),
         ),
         Text(

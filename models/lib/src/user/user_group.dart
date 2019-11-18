@@ -475,50 +475,104 @@ class FactoryModel extends B2BUnitModel {
   @JsonKey(toJson: _industrialClusterToJson)
   IndustrialClusterModel industrialCluster;
 
+  //厂房数量
+  int factoryBuildingsQuantity;
+
+  //产线数量
+  int productionLineQuantity;
+
+  //生产模式
+  String productionMode;
+
+  //设备
+  //裁剪部
+  List<String> cuttingDepartment;
+
+  //生产车间
+  List<String> productionWorkshop;
+
+  //尾部
+  List<String> lastDepartment;
+
+  //设计
+  String design;
+
+  //打板
+  String pattern;
+
+  //覆盖范围
+  String coverageArea;
+
+  //自营产品
+  int proprietaryProducts;
+
+  //免费打样
+  String freeProofing;
+
+  //质量等级
+  String qualityLevel;
+
+  //产能
+  @JsonKey(toJson: _capacitiesToJson)
+  List<FactoryCapacityModel> capacities;
+
   FactoryModel(
       {MediaModel profilePicture,
-      String uid,
-      String name,
-      List<PrincipalModel> members,
-      String path,
-      bool active,
-      int starLevel,
-      AddressModel contactAddress,
-      String address,
-      String describe,
-      DateTime creationTime,
-      String taxNumber,
-      String bankOfDeposit,
-      List<MediaModel> certificates,
-      String contactPerson,
-      String contactPhone,
-      String cooperativeBrand,
-      String qq,
-      String wechat,
-      String businessRegistrationNo,
-      String legalRepresentative,
-      String certificateOfLegal,
-      CompanyType type,
-      ArticleApprovalStatus approvalStatus,
-      List<CompanyProfileModel> companyProfiles,
-      List<LabelModel> labels,
-      this.historyOrdersCount,
-      this.orderedSuccessRate,
-      this.monthlyCapacityRange,
-      this.categories,
-      this.scaleRange,
-      this.developmentCapacity,
-      this.latheQuantity,
-      this.cooperationModes,
-      this.responseQuotedTime,
-      this.products,
-      this.adeptAtCategories,
-      this.locationX,
-      this.locationY,
-      this.industrialCluster,
-      this.invited,
+        String uid,
+        String name,
+        List<PrincipalModel> members,
+        String path,
+        bool active,
+        int starLevel,
+        AddressModel contactAddress,
+        String address,
+        String describe,
+        DateTime creationTime,
+        String taxNumber,
+        String bankOfDeposit,
+        List<MediaModel> certificates,
+        String contactPerson,
+        String contactPhone,
+        String cooperativeBrand,
+        String qq,
+        String wechat,
+        String businessRegistrationNo,
+        String legalRepresentative,
+        String certificateOfLegal,
+        CompanyType type,
+        ArticleApprovalStatus approvalStatus,
+        List<CompanyProfileModel> companyProfiles,
+        List<LabelModel> labels,
+        this.historyOrdersCount,
+        this.orderedSuccessRate,
+        this.monthlyCapacityRange,
+        this.categories,
+        this.scaleRange,
+        this.developmentCapacity,
+        this.latheQuantity,
+        this.cooperationModes,
+        this.responseQuotedTime,
+        this.products,
+        this.adeptAtCategories,
+        this.locationX,
+        this.locationY,
+        this.industrialCluster,
+        this.invited,
         this.distance,
-      this.populationScale})
+        this.productionMode,
+        this.cuttingDepartment,
+        this.productionWorkshop,
+        this.lastDepartment,
+        this.qualityLevel,
+        this.design,
+        this.pattern,
+        this.freeProofing,
+        this.productionLineQuantity,
+        this.factoryBuildingsQuantity,
+        this.coverageArea,
+        this.proprietaryProducts,
+        this.capacities,
+       this.populationScale})
       : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -558,6 +612,10 @@ class FactoryModel extends B2BUnitModel {
           List<CategoryModel> categories) =>
       categories.map((category) => CategoryModel.toJson(category)).toList();
 
+  static List<Map<String, dynamic>> _capacitiesToJson(
+          List<FactoryCapacityModel> capacities) =>
+      capacities.map((capacity) => FactoryCapacityModel.toJson(capacity)).toList();
+
   static List<Map<String, dynamic>> _productToJson(
           List<ProductModel> products) =>
       products.map((product) => ProductModel.toJson(product)).toList();
@@ -566,57 +624,6 @@ class FactoryModel extends B2BUnitModel {
           IndustrialClusterModel model) =>
       IndustrialClusterModel.toJson(model);
 
-  static void populator(FactoryModel source,FactoryModel target){
-    target.id = source.id;
-    target.uid = source.uid;
-    target.name = source.name;
-    target.phone = source.phone;
-    target.email = source.email;
-    target.address = source.address;
-    target.contactAddress = source.contactAddress;
-    target.contactPerson = source.contactPerson;
-    target.contactPhone = source.contactPhone;
-    target.categories = source.categories;
-    target.profilePicture = source.profilePicture;
-    target.profiles = source.profiles;
-    target.creationTime = source.creationTime;
-    target.type = source.type;
-    target.products = source.products;
-    target.approvalStatus = source.approvalStatus;
-    target.labels = source.labels;
-    target.taxNumber = source.taxNumber;
-    target.bankOfDeposit = source.bankOfDeposit;
-    target.adeptAtCategories = source.adeptAtCategories;
-    target.cooperationModes = source.cooperationModes;
-    target.cooperativeBrand = source.cooperativeBrand;
-    target.populationScale = source.populationScale;
-    target.scaleRange = source.scaleRange;
-    target.wechat = source.wechat;
-    target.certificates = source.certificates;
-    target..starLevel = source.starLevel;
-    target.certificateOfLegal = source.certificateOfLegal;
-    target.legalRepresentative = source.legalRepresentative;
-    target.businessRegistrationNo = source.businessRegistrationNo;
-    target.qq = source.qq;
-    target.active = source.active;
-    target.responseQuotedTime = source.responseQuotedTime;
-    target.describe = source.describe;
-    target.historyOrdersCount = source.historyOrdersCount;
-    target.developmentCapacity = source.developmentCapacity;
-    target.distance = source.distance;
-    target.industrialCluster = source.industrialCluster;
-    target.invited = source.invited;
-    target.latheQuantity = source.latheQuantity;
-    target.latitude = source.latitude;
-    target.locationAddress = source.locationAddress;
-    target.locationX = source.locationX;
-    target.locationY = source.locationY;
-    target.longitude = source.longitude;
-    target.members = source.members;
-    target.monthlyCapacityRange = source.monthlyCapacityRange;
-    target.orderedSuccessRate = source.orderedSuccessRate;
-    target.path = source.path;
-  }
 }
 
 @JsonSerializable()
@@ -802,6 +809,181 @@ const PopulationScaleLocalizedMap = {
   PopulationScale.N02: "51~100人",
   PopulationScale.N03: "101~200人",
   PopulationScale.N04: "200人以上",
+};
+
+//生产模式
+enum ProductionMode {
+  SINGLE_PIECE_PRODUCTION_LINE,
+
+  HANGING_PRODUCTION_LINE,
+
+  PIPELINE_PRODUCTION_LINE
+}
+
+const ProductionModeLocalizedMap = {
+  ProductionMode.SINGLE_PIECE_PRODUCTION_LINE: "单件流水生产线",
+  ProductionMode.HANGING_PRODUCTION_LINE: "吊挂生产流水线",
+  ProductionMode.PIPELINE_PRODUCTION_LINE: "扎流生产线"
+};
+
+//裁剪部
+enum CuttingDepartment {
+  COMPUTER_AUTOMATIC_CUTTING_MACHINE,
+
+  MANUAL_BED_CUTTING,
+
+  FULLY_AUTOMATIC_BROACHING_MACHINE,
+
+  SHRINKING_MACHINE,
+
+  PRESSING_MACHINE,
+
+  PLATE_CHANGING_MACHINE,
+
+  LOOSENING_MACHINE,
+
+  CLOTH_INSPECTING_MACHINE
+}
+
+const CuttingDepartmentLocalizedMap = {
+  CuttingDepartment.COMPUTER_AUTOMATIC_CUTTING_MACHINE: "电脑全自动裁床",
+  CuttingDepartment.MANUAL_BED_CUTTING: "手工裁床",
+  CuttingDepartment.FULLY_AUTOMATIC_BROACHING_MACHINE: "全自动拉布机",
+  CuttingDepartment.SHRINKING_MACHINE: "缩水机",
+  CuttingDepartment.PRESSING_MACHINE: "压朴机",
+  CuttingDepartment.PLATE_CHANGING_MACHINE: "改板机",
+  CuttingDepartment.LOOSENING_MACHINE: "松布机",
+  CuttingDepartment.CLOTH_INSPECTING_MACHINE: "验布机",
+};
+
+//生产车间
+enum ProductionWorkshop {
+  COMPUTERIZED_FLATCAR,
+
+  COMPUTERIZED_THREE_LINE_OVERLOCK_SEWING_MACHINE,
+
+  COMPUTER_FIVE_LINE_SEWING_MACHINE,
+
+  TWIN_NEEDLES_MACHINE,
+
+  POCKET_HOLE_SEWING_MACHINE,
+
+  KNIFE_MACHINE,
+
+  FLATLOCK_MACHINE,
+
+  CHAIN_STITCH_FEED_OFF_ARM_MACHINE,
+
+  FOUR_LINE_FLAT_SEWING_MACHINE,
+
+  FULLY_AUTOMATIC_TEMPLATE_MACHINE,
+
+  AUTOMATIC_BAG_STICKING_MACHINE,
+
+  WOOL_FILLING_MACHINE,
+
+  ZIGZAG_SEWING_MACHINE,
+}
+
+const ProductionWorkshopLocalizedMap = {
+  ProductionWorkshop.COMPUTERIZED_FLATCAR: "电脑平车",
+  ProductionWorkshop.COMPUTERIZED_THREE_LINE_OVERLOCK_SEWING_MACHINE: "电脑三线包缝机",
+  ProductionWorkshop.COMPUTER_FIVE_LINE_SEWING_MACHINE: "电脑五线拼缝机",
+  ProductionWorkshop.TWIN_NEEDLES_MACHINE: "双针车",
+  ProductionWorkshop.POCKET_HOLE_SEWING_MACHINE: "开袋机",
+  ProductionWorkshop.KNIFE_MACHINE: "刀车",
+  ProductionWorkshop.FLATLOCK_MACHINE: "冚车",
+  ProductionWorkshop.CHAIN_STITCH_FEED_OFF_ARM_MACHINE: "埋夹车",
+  ProductionWorkshop.FOUR_LINE_FLAT_SEWING_MACHINE: "四线平缝车",
+  ProductionWorkshop.FULLY_AUTOMATIC_TEMPLATE_MACHINE: "全自动模板车",
+  ProductionWorkshop.AUTOMATIC_BAG_STICKING_MACHINE: "自动贴袋车",
+  ProductionWorkshop.WOOL_FILLING_MACHINE: "充绒机",
+  ProductionWorkshop.ZIGZAG_SEWING_MACHINE: "人字车"
+};
+
+//尾部
+enum LastDepartment {
+  EYELET_END_MACHINE,
+
+  DIRECT_EYE_MACHINE,
+
+  BUTTON_ATTACHING_MACHINE,
+
+  JUJUBE_PRINTER_MACHINE,
+
+  RIVET_MACHINE,
+
+  BLINDING_MACHINE,
+
+  BAHT_EDGE_MACHINE,
+
+  BRACE_MACHINE,
+
+  SUCTION_LINE_MACHINE,
+
+  NEEDLE_INSPECTING_MACHINE
+}
+
+const LastDepartmentLocalizedMap = {
+  LastDepartment.EYELET_END_MACHINE: "凤眼车",
+  LastDepartment.DIRECT_EYE_MACHINE: "直眼车",
+  LastDepartment.BUTTON_ATTACHING_MACHINE: "钉扣机",
+  LastDepartment.JUJUBE_PRINTER_MACHINE: "打枣机",
+  LastDepartment.RIVET_MACHINE: "撞钉机",
+  LastDepartment.BLINDING_MACHINE: "挑脚机",
+  LastDepartment.BAHT_EDGE_MACHINE: "铢边",
+  LastDepartment.BRACE_MACHINE: "拉筋机",
+  LastDepartment.SUCTION_LINE_MACHINE: "吸线机",
+  LastDepartment.NEEDLE_INSPECTING_MACHINE: "验针机",
+};
+
+//设计
+enum FactoryDesign {
+  SUPPORTED,
+  NOT_SUPPORTED
+}
+
+const FactoryDesignLocalizedMap = {
+  FactoryDesign.SUPPORTED: '支持',
+  FactoryDesign.NOT_SUPPORTED: '不支持'
+};
+//打板
+enum FactoryPattern {
+  SUPPORTED,
+  NOT_SUPPORTED
+}
+
+const FactoryPatternLocalizedMap = {
+  FactoryPattern.SUPPORTED: '支持',
+  FactoryPattern.NOT_SUPPORTED: '不支持'
+};
+
+//免费打样
+enum FactoryFreeProofing {
+  SUPPORTED,
+  NOT_SUPPORTED
+}
+
+const FactoryFreeProofingLocalizedMap = {
+  FactoryFreeProofing.SUPPORTED: '支持',
+  FactoryFreeProofing.NOT_SUPPORTED: '不支持'
+};
+
+//质量等级
+enum FactoryQualityLevel {
+  A_CHAIN,
+  REGIONAL_CHAIN,
+  STALL_WHOLESALE,
+  ELECTRONIC_COMMERCE_QUALITY,
+  WHOLESALE_TRADE
+}
+
+const FactoryQualityLevelLocalizedMap = {
+  FactoryQualityLevel.A_CHAIN: '一线连锁',
+  FactoryQualityLevel.REGIONAL_CHAIN: '区域连锁',
+  FactoryQualityLevel.STALL_WHOLESALE: '档口批发',
+  FactoryQualityLevel.ELECTRONIC_COMMERCE_QUALITY: '电商品质',
+  FactoryQualityLevel.WHOLESALE_TRADE: '外贸批发',
 };
 
 //年龄段

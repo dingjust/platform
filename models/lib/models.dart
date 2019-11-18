@@ -48,6 +48,9 @@ class EnumModel {
 
 ///根据code获取name
 String enumMap(dynamic enumModels, dynamic code) {
+  if(code == null){
+    return '';
+  }
   String text = '';
   EnumModel model = enumModels.firstWhere((enumModel) => enumModel.code == code,
       orElse: () => null);
@@ -376,6 +379,82 @@ const DightEnum = <EnumModel>[
   EnumModel(1,'一'),
   EnumModel(2,'二'),
   EnumModel(3,'三'),
+];
+
+//生产模式
+const ProductionModesEnum = <EnumModel>[
+  EnumModel('SINGLE_PIECE_PRODUCTION_LINE', '单件流水生产线'),
+  EnumModel('HANGING_PRODUCTION_LINE', '吊挂生产流水线'),
+  EnumModel('PIPELINE_PRODUCTION_LINE', '扎流生产线'),
+];
+
+
+//裁剪部
+const CuttingDepartmentsEnum = <EnumModel>[
+  EnumModel('COMPUTER_AUTOMATIC_CUTTING_MACHINE', '电脑全自动裁床'),
+  EnumModel('MANUAL_BED_CUTTING', '手工裁床'),
+  EnumModel('FULLY_AUTOMATIC_BROACHING_MACHINE', '全自动拉布机'),
+  EnumModel('SHRINKING_MACHINE', '缩水机'),
+  EnumModel('PRESSING_MACHINE', '压朴机'),
+  EnumModel('PLATE_CHANGING_MACHINE', '改板机'),
+  EnumModel('LOOSENING_MACHINE', '松布机'),
+  EnumModel('CLOTH_INSPECTING_MACHINE', '验布机'),
+];
+
+//生产车间
+const ProductionWorkshopsEnum = <EnumModel>[
+  EnumModel('COMPUTERIZED_FLATCAR', '电脑平车'),
+  EnumModel('COMPUTERIZED_THREE_LINE_OVERLOCK_SEWING_MACHINE', '电脑三线包缝机'),
+  EnumModel('COMPUTER_FIVE_LINE_SEWING_MACHINE', '电脑五线拼缝机'),
+  EnumModel('TWIN_NEEDLES_MACHINE', '双针车'),
+  EnumModel('POCKET_HOLE_SEWING_MACHINE', '开袋机'),
+  EnumModel('KNIFE_MACHINE', '刀车'),
+  EnumModel('FLATLOCK_MACHINE', '冚车'),
+  EnumModel('CHAIN_STITCH_FEED_OFF_ARM_MACHINE', '埋夹车'),
+  EnumModel('FOUR_LINE_FLAT_SEWING_MACHINE', '四线平缝车'),
+  EnumModel('FULLY_AUTOMATIC_TEMPLATE_MACHINE', '全自动模板车'),
+  EnumModel('AUTOMATIC_BAG_STICKING_MACHINE', '自动贴袋车'),
+  EnumModel('WOOL_FILLING_MACHINE', '充绒机'),
+  EnumModel('ZIGZAG_SEWING_MACHINE', '人字车'),
+];
+
+//尾部
+const LastDepartmentsEnum = [
+  EnumModel('EYELET_END_MACHINE', '凤眼车'),
+  EnumModel('DIRECT_EYE_MACHINE', '直眼车'),
+  EnumModel('BUTTON_ATTACHING_MACHINE', '钉扣机'),
+  EnumModel('JUJUBE_PRINTER_MACHINE', '打枣机'),
+  EnumModel('RIVET_MACHINE', '撞钉机'),
+  EnumModel('BLINDING_MACHINE', '挑脚机'),
+  EnumModel('BAHT_EDGE_MACHINE', '铢边'),
+  EnumModel('BRACE_MACHINE', '拉筋机'),
+  EnumModel('SUCTION_LINE_MACHINE', '吸线机'),
+  EnumModel('NEEDLE_INSPECTING_MACHINE', '验针机'),
+];
+
+//设计
+const FactoryDesignsEnum = [
+  EnumModel('SUPPORTED', '支持'),
+  EnumModel('NOT_SUPPORTED', '不支持')
+];
+//打板
+const FactoryPatternsEnum = [
+  EnumModel('SUPPORTED', '支持'),
+  EnumModel('NOT_SUPPORTED', '不支持')
+];
+//免费打样
+const FactoryFreeProofingsEnum = [
+  EnumModel('SUPPORTED', '支持'),
+  EnumModel('NOT_SUPPORTED', '不支持')
+];
+
+
+const FactoryQualityLevelsEnum = [
+  EnumModel('A_CHAIN', '一线连锁'),
+  EnumModel('REGIONAL_CHAIN', '区域连锁'),
+  EnumModel('STALL_WHOLESALE', '档口批发'),
+  EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
+  EnumModel('WHOLESALE_TRADE', '外贸批发'),
 ];
 
 /// 分页数据

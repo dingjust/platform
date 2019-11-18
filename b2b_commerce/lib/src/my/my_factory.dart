@@ -8,13 +8,18 @@ import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 import './company/form/my_company_profile_form.dart';
 import '../business/orders/requirement_order_from.dart';
+import 'company/_shared/cash_products.dart';
 import 'company/form/my_factory_contact_form.dart';
 import 'company/form/my_factory_form.dart';
+import 'company/info/my_company_certificate_info.dart';
+import 'company/info/my_company_contact_info.dart';
 import 'company/my_company_cash_products_widget.dart';
 
 /// 认证信息
@@ -42,9 +47,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   List<EnumModel> _states = [
     EnumModel('a', '资料介绍'),
-    EnumModel('b', '联系方式'),
-    EnumModel('c', '产品物料'),
-    EnumModel('d', '公司认证'),
+    EnumModel('b', '公司认证'),
+    EnumModel('c', '上架产品'),
+    EnumModel('d', '联系方式'),
   ];
 
   FactoryModel _factory;
@@ -94,13 +99,13 @@ class _MyFactoryPageState extends State<MyFactoryPage>
         return _buildBaseInfo(factory);
         break;
       case 'b':
-        return _buildContactWay(factory);
+        return _buildCompanyCertificate(factory);
         break;
       case 'c':
         return _buildCashProducts(factory);
         break;
       case 'd':
-        return _buildCompanyCertificate(factory);
+        return _buildContactWay(factory);
         break;
       default:
         return _buildBaseInfo(factory);
@@ -110,133 +115,248 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('公司介绍'),
-        centerTitle: true,
-        elevation: 0.5,
-        actions: <Widget>[
-          StreamBuilder(
-            stream: _showEidtIconStreamController.stream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data) {
-                return PopupMenuButton<String>(
-                  onSelected: (v) => onMenuSelect(v),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            builder: (_) => MyFactoryState(factoryUid: widget.factoryUid)),
+        ChangeNotifierProvider(
+            builder: (_) => CashProductsState(factoryUid: widget.factoryUid)),
+        ChangeNotifierProvider(builder: (_) => MyFactoryCapacityState()),
+      ],
+      child: Consumer<MyFactoryState>(
+        builder: (context, MyFactoryState factoryState, _) {
+          _factory = factoryState.model;
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('公司介绍'),
+              centerTitle: true,
+              elevation: 0.5,
+              actions: <Widget>[
+                PopupMenuButton<String>(
+                  onSelected: (v) => onMenuSelect(v, factoryState),
                   padding: EdgeInsets.only(right: 10),
                   icon: Icon(
                     B2BIcons.more,
                     size: 5,
                   ),
                   offset: Offset(0, 50),
-                  itemBuilder: (BuildContext context) =>
-                  widget.isFactoryDetail
+                  itemBuilder: (BuildContext context) => widget.isFactoryDetail
                       ? <PopupMenuItem<String>>[
-                    PopupMenuItem<String>(
-                      value: 'share',
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(right: 20),
-                            child: Icon(Icons.share),
+                          PopupMenuItem<String>(
+                            value: 'share',
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(right: 20),
+                                  child: Icon(Icons.share),
+                                ),
+                                Text('分享')
+                              ],
+                            ),
                           ),
-                          Text('分享')
-                        ],
-                      ),
-                    ),
-                  ]
+                        ]
                       : <PopupMenuItem<String>>[
-                    PopupMenuItem<String>(
-                      value: 'edit',
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(right: 20),
-                            child: Icon(Icons.edit),
+                          PopupMenuItem<String>(
+                            value: 'edit',
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(right: 20),
+                                  child: Icon(Icons.edit),
+                                ),
+                                Text('编辑')
+                              ],
+                            ),
                           ),
-                          Text('编辑')
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'share',
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(right: 20),
-                            child: Icon(Icons.share),
+                          PopupMenuItem<String>(
+                            value: 'share',
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(right: 20),
+                                  child: Icon(Icons.share),
+                                ),
+                                Text('分享')
+                              ],
+                            ),
                           ),
-                          Text('分享')
                         ],
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-        ],
-      ),
-      body: FutureBuilder<FactoryModel>(
-          future: _getFactoryFuture,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 200),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            } else {
-              _profiles = _factory.profiles.where((profile) {
-                return profile.medias.isNotEmpty;
-              }).toList();
-              return Container(
-                color: Colors.white,
-                child: NestedScrollView(
-                  headerSliverBuilder: _sliverBuilder,
-                  body: TabBarView(
-                    controller: _tabController,
-                    children: _states.map((state) {
-                      return _buildView(state.code, snapshot.data);
-                    }).toList(),
-                  ),
                 ),
-              );
-            }
-          }),
-      bottomNavigationBar: Offstage(
-        offstage: !widget.isFactoryDetail,
-        child: Container(
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          height: 50,
-          child: RaisedButton(
-            color: Color.fromRGBO(255, 214, 12, 1),
-            child: Text(
-              '发需求',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-              ),
+              ],
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: () {
-              RequirementOrderModel orderModel = RequirementOrderModel(
-                  details: RequirementInfoModel(), attachments: []);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => RequirementOrderFrom(
-                            order: orderModel,
-                            isCreate: true,
-                            factoryUid: widget.factoryUid,
-                          )));
-            },
-          ),
+            body: factoryState.model != null
+                ? _buildBody(factoryState.model)
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ),
+//          FutureBuilder<FactoryModel>(
+//              future: _getFactoryFuture,
+//              builder: (context, snapshot) {
+//                if (!snapshot.hasData) {
+//                  return Padding(
+//                    padding: EdgeInsets.symmetric(vertical: 200),
+//                    child: Center(child: CircularProgressIndicator()),
+//                  );
+//                } else {
+//                  _profiles = _factory.profiles.where((profile) {
+//                    return profile.medias.isNotEmpty;
+//                  }).toList();
+//                  return Container(
+//                    color: Colors.grey[100],
+//                    child: NestedScrollView(
+//                      headerSliverBuilder: _sliverBuilder,
+//                      body: TabBarView(
+//                        controller: _tabController,
+//                        children: _states.map((state) {
+//                          return _buildView(state.code, snapshot.data);
+//                        }).toList(),
+//                      ),
+//                    ),
+//                  );
+//                }
+//              }),
+            bottomNavigationBar: Offstage(
+              offstage: !widget.isFactoryDetail,
+              child: _buildBottomButtons(factoryState.model),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody(FactoryModel model) {
+    _profiles = model.profiles.where((profile) {
+      return profile.medias.isNotEmpty;
+    }).toList();
+    return Container(
+      color: Colors.grey[100],
+      child: NestedScrollView(
+        headerSliverBuilder: _sliverBuilder,
+        body: TabBarView(
+          controller: _tabController,
+          children: _states.map((state) {
+            return _buildView(state.code, model);
+          }).toList(),
         ),
       ),
     );
+  }
+
+  Widget _buildBottomButtons(FactoryModel model) {
+    return Container(
+      height: 65,
+      child: Column(
+        children: <Widget>[
+          Divider(
+            height: 0,
+          ),
+          Container(
+            height: 65,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Icon(
+                                Icons.phone,
+                                color: Colors.white,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(8)),
+                              padding: EdgeInsets.all(2),
+                            ),
+                            Text(model?.contactPerson ?? ''),
+                          ],
+                        ),
+                        onPressed: () {
+                          _selectActionButton(model.contactPhone);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                            height: double.infinity,
+                            child: Theme(
+                                data: ThemeData(
+                                  canvasColor: Colors.transparent,
+                                  primaryColor: Colors.white,
+                                  accentColor: Color.fromRGBO(255, 214, 12, 1),
+                                  bottomAppBarColor: Colors.grey,
+                                ),
+                                child: Builder(
+                                  builder: (BuildContext buttonContext) =>
+                                      FlatButton(
+                                    color: Color.fromRGBO(255, 245, 157, 1),
+                                    onPressed: () {},
+                                    disabledColor: Colors.grey[300],
+                                    child: Text(
+                                      '下单',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  ),
+                                ))),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                            height: double.infinity,
+                            child: Builder(
+                              builder: (BuildContext buttonContext) =>
+                                  FlatButton(
+                                color: Color.fromRGBO(255, 214, 12, 1),
+                                onPressed: () {
+                                  _publishRequirement();
+                                },
+                                disabledColor: Colors.grey[300],
+                                child: Text(
+                                  '发需求',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ),
+                            )),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _publishRequirement() {
+    RequirementOrderModel orderModel =
+        RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RequirementOrderFrom(
+                  order: orderModel,
+                  isCreate: true,
+                  factoryUid: widget.factoryUid,
+                )));
   }
 
   List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {
@@ -244,7 +364,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
       SliverAppBar(
         backgroundColor: Color.fromRGBO(232, 232, 232, 1),
         expandedHeight:
-        widget.isFactoryDetail && _profiles.length <= 0 ? 0 : 188,
+            widget.isFactoryDetail && _profiles.length <= 0 ? 0 : 188,
         leading: Container(),
         brightness: Brightness.dark,
         pinned: false,
@@ -273,10 +393,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                     ),
                   ],
                   position: RelativeRect.fromLTRB(
-                      (MediaQueryData
-                          .fromWindow(window)
-                          .size
-                          .width - 180) / 2,
+                      (MediaQueryData.fromWindow(window).size.width - 180) / 2,
                       100,
                       (MediaQueryData.fromWindow(window).size.width) / 2,
                       (MediaQueryData.fromWindow(window).size.height - 60) /
@@ -287,16 +404,16 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             height: 188,
             child: _profiles.isEmpty
                 ? Center(
-              child: Stack(
-                children: <Widget>[
-                  Text(
-                    widget.isFactoryDetail ? '该工厂无轮播图' : '点击此处，添加或更换轮播图',
-                    style:
-                    TextStyle(fontSize: 17, color: Colors.grey[700]),
-                  ),
-                ],
-              ),
-            )
+                    child: Stack(
+                      children: <Widget>[
+                        Text(
+                          widget.isFactoryDetail ? '该工厂无轮播图' : '点击此处，添加或更换轮播图',
+                          style:
+                              TextStyle(fontSize: 17, color: Colors.grey[700]),
+                        ),
+                      ],
+                    ),
+                  )
                 : _buildCarousel(),
           ),
         ),
@@ -341,9 +458,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             context,
             MaterialPageRoute(
               builder: (context) => MyFactoryContactFormPage(
-                    company: _factory,
-                    isEditing: true,
-                  ),
+                company: _factory,
+                isEditing: true,
+              ),
             ),
           );
         },
@@ -358,63 +475,51 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 
   Widget _buildContactWay(FactoryModel factory) {
     return Container(
-      color: Colors.white,
-      child: MyCompanyContactFromWidgetPage(
-        company: factory,
-      ),
+      child: MyCompanyContactInfo(factory),
     );
   }
 
   //现款产品
   Widget _buildCashProducts(FactoryModel factory) {
-    return MyCompanyCashProducts(
-      factory,
-      getProductsFuture: _getProductData(),
-    );
+    return CashProducts();
   }
 
   Widget _buildCompanyCertificate(FactoryModel factory) {
-    return Container(
-      color: Colors.white,
-      child: MyCompanyCertificateWidget(
-        factory,
-        onlyRead: true,
-      ),
+    return MyCompanyCertificateInfo(
+      factory,
+      onlyRead: true,
     );
   }
 
-  onMenuSelect(String value) async {
+  onMenuSelect(String value, MyFactoryState state) async {
     switch (value) {
       case 'edit':
-        onEdit();
+        onEdit(state);
         break;
       case 'share':
-        onShare();
+        onShare(state);
         break;
       default:
     }
   }
 
-  void onEdit() {
+  void onEdit(MyFactoryState state) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                MyFactoryFormPage(
-                  factory: _factory,
+            builder: (context) => MyFactoryFormPage(
+                  factory: state.model,
                 ))).then((v) {
-      setState(() {
-        _getFactoryFuture = _getFactoryData();
-      });
+      state.refresh();
     });
   }
 
   ///TODO分享
-  void onShare() {
+  void onShare(MyFactoryState state) {
     String description = "";
     int i = 0;
 
-    _factory.adeptAtCategories.forEach((v) {
+    state.model.adeptAtCategories.forEach((v) {
       if (i < 4) {
         description = "${description} ${v.name}";
         i++;
@@ -422,12 +527,44 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     });
 
     ShareDialog.showShareDialog(context,
-        title: '${_factory.name}',
+        title: '${state.model.name}',
         description: '$description ...',
-        imageUrl: _factory.profilePicture == null
+        imageUrl: state.model.profilePicture == null
             ? '${GlobalConfigs.LOGO_URL}'
-            : '${_factory.profilePicture.previewUrl()}',
+            : '${state.model.profilePicture.previewUrl()}',
         url: Apis.shareFactory(widget.factoryUid));
+  }
+
+  //拨打电话或发短信
+  void _selectActionButton(String tel) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('拨打电话'),
+              onTap: () async {
+                var url = 'tel:' + tel;
+                await launch(url);
+              },
+            ),
+            tel.indexOf('-') > -1
+                ? Container()
+                : ListTile(
+                    leading: Icon(Icons.message),
+                    title: Text('发送短信'),
+                    onTap: () async {
+                      var url = 'sms:' + tel;
+                      await launch(url);
+                    },
+                  ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -480,5 +617,6 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
 class RefreshNotification extends ScrollNotification {
   bool refresh;
+
   RefreshNotification(this.refresh);
 }

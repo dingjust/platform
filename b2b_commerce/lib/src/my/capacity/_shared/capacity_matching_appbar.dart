@@ -13,7 +13,9 @@ class CapacitySearch extends StatelessWidget {
         builder: (context, CapacityMatchingState state, _) => Row(
               children: <Widget>[
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
                   child: Container(
                     child: Icon(
                       Icons.keyboard_arrow_left,
