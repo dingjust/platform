@@ -11,6 +11,8 @@ import 'components/ColorSizeTable.dart';
 class DeliverOrderForm extends StatefulWidget {
   final List<PurchaseOrderEntryModel> orderEntries;
 
+  final ShippingOrderNoteModel shippingOrder;
+
   final DeliveryOrderNoteModel deliveryOrder;
 
   final String purchaseOrderCode;
@@ -21,7 +23,8 @@ class DeliverOrderForm extends StatefulWidget {
     this.deliveryOrder,
     this.orderEntries,
     this.purchaseOrderCode,
-    this.onCallback})
+    this.onCallback,
+    this.shippingOrder})
       : super(key: key);
 
   @override
@@ -59,6 +62,8 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
     //更新或创建
     if (widget.deliveryOrder != null) {
       initDeliveryUpdate(widget.deliveryOrder);
+    } else if (widget.shippingOrder != null) {
+      initDeliveryCreate(widget.shippingOrder);
     }
   }
 
@@ -404,37 +409,43 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Expanded(
+          showSaveBtn()
+              ? Expanded(
             flex: 1,
             child: Container(
                 height: double.infinity,
                 child: Builder(
-                  builder: (BuildContext buttonContext) => FlatButton(
-                    onPressed: onSave,
-                    disabledColor: Colors.grey[300],
-                    child: Text(
-                      '保存并退出',
-                      style: TextStyle(fontSize: 15, color: Colors.red),
-                    ),
-                  ),
-                )),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-                height: double.infinity,
-                child: Builder(
-                  builder: (BuildContext buttonContext) => FlatButton(
-                    color: Color.fromRGBO(255, 214, 12, 1),
-                    onPressed: () {},
-                    disabledColor: Colors.grey[300],
-                    child: Text(
-                      '确认完成收货',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
+                  builder: (BuildContext buttonContext) =>
+                      FlatButton(
+                        onPressed: onSave,
+                        disabledColor: Colors.grey[300],
+                        child: Text(
+                          '保存并退出',
+                          style: TextStyle(fontSize: 15, color: Colors.red),
+                        ),
+                      ),
                 )),
           )
+              : Container(),
+          showConfirmBtn()
+              ? Expanded(
+            flex: 1,
+            child: Container(
+                height: double.infinity,
+                child: Builder(
+                  builder: (BuildContext buttonContext) =>
+                      FlatButton(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        onPressed: onConfirm,
+                        disabledColor: Colors.grey[300],
+                        child: Text(
+                          '确认完成收货',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                )),
+          )
+              : Container()
         ],
       ),
     );
@@ -480,15 +491,22 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
     });
   }
 
-  void onCreate() {
-    DeliveryOrderNoteModel model = getDeliveryForCreate(colorSizeEntries);
+  void onConfirm() {
+    DeliveryOrderNoteModel model;
+    if (widget.deliveryOrder == null) {
+      model = getDeliveryForCreate(colorSizeEntries);
+    } else {
+      model = getDeliveryForUpdate(widget.deliveryOrder, colorSizeEntries);
+    }
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: DeliveryOrderRepository()
-                .createDeliveryOrder(widget.purchaseOrderCode, model),
+            requestCallBack: widget.deliveryOrder == null
+                ? DeliveryOrderRepository().createAndCommitDeliveryOrder(
+                widget.purchaseOrderCode, model)
+                : DeliveryOrderRepository().updateAndCommitDeliveryOrder(model),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: '',
@@ -504,12 +522,37 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
           builder: (_) {
             return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
-              failTips: '下单失败',
-              successTips: '下单成功',
+              failTips: '保存失败',
+              successTips: '保存成功',
               callbackResult: result,
               confirmAction: widget.onCallback,
             );
           });
     });
+  }
+
+  bool showSaveBtn() {
+    if (widget.deliveryOrder == null) {
+      return true;
+    } else {
+      if (widget.deliveryOrder.status == OrderNoteStatus.UNCOMMITTED ||
+          widget.deliveryOrder.status == OrderNoteStatus.REJECTED) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  bool showConfirmBtn() {
+    if (widget.deliveryOrder == null) {
+      return false;
+    } else {
+      if (widget.deliveryOrder.status == OrderNoteStatus.UNCOMMITTED) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 }

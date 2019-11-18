@@ -18,8 +18,8 @@ import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
-import 'form/purchase/purchase_deliver_order_form.dart';
 import 'form/purchase/purchase_deliver_order_view.dart';
+import 'form/purchase/purchase_detail_btn_group.dart';
 import 'form/purchase/purchase_reconciliation_order_view.dart';
 import 'form/purchase/purchase_shipping_order_view.dart';
 
@@ -1602,7 +1602,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              _buildBrandButton(context),
+              // _buildBrandButton(context),
               _buildOfflineButton(context),
             ],
           ),
@@ -1610,7 +1610,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       } else {
         return Container(
           margin: EdgeInsets.only(bottom: 10),
-          child: _buildBrandButton(context),
+          // child: _buildBrandButton(context),
         );
       }
     } else {
@@ -2910,48 +2910,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
             ),
           ),
           Expanded(
-            flex: 3,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                    flex: 1,
-                    child: FlatButton(
-                      onPressed: () {},
-                      child: Text(
-                        '查看发货单',
-                        style: TextStyle(fontSize: 15, color: Colors.red),
-                      ),
-                    )),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                      height: double.infinity,
-                      child: Builder(
-                        builder: (BuildContext buttonContext) =>
-                            FlatButton(
-                              color: Color.fromRGBO(255, 214, 12, 1),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        DeliverOrderForm(
-                                            purchaseOrderCode: order.code,
-                                            deliveryOrder:
-                                            order.deliveryOrders.isNotEmpty
-                                                ? order.deliveryOrders.first
-                                                : null,
-                                            orderEntries: order.entries)));
-                              },
-                              disabledColor: Colors.grey[300],
-                              child: Text(
-                                '确认收货',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ),
-                      )),
-                )
-              ],
-            ),
-          )
+              flex: 3,
+              child: PurchaseDetailBtnGroup(
+                order: order,
+              ))
         ],
       ),
     );

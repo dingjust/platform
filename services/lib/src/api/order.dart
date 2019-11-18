@@ -226,6 +226,12 @@ class OrderApis {
         return '/b2b/orders/purchase/$code/createAndCommitDeliveryOrder';
       };
 
+  ///更新并提交收货单
+  static get updateAndCommitDeliveryOrder =>
+          () {
+        return '/b2b/orders/purchase/updateAndCommitDeliveryOrder';
+      };
+
   ///提交收货单
   static get commitDeliveryOrder =>
           () {

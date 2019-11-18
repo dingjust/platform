@@ -38,4 +38,40 @@ class DeliveryOrderRepository {
       return null;
     }
   }
+
+  ///创建并提交
+  Future<String> createAndCommitDeliveryOrder(String code,
+      DeliveryOrderNoteModel form) async {
+    Response response;
+    try {
+      response = await http$.post(OrderApis.createAndCommitDeliveryOrder(code),
+          data: DeliveryOrderNoteModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
+
+  ///更新并提交
+  Future<String> updateAndCommitDeliveryOrder(
+      DeliveryOrderNoteModel form) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.updateAndCommitDeliveryOrder(),
+          data: DeliveryOrderNoteModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
 }

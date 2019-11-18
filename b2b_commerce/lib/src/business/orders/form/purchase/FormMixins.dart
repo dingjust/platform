@@ -75,10 +75,27 @@ class DeliverAndShippingFormMixins {
     isOfflineConsignment = false;
   }
 
+  void initDeliveryCreate(ShippingOrderNoteModel order) {
+    consignorNameController.text = order.consignorName;
+    consignorPhoneController.text = order.consignorPhone;
+    if (!order.isOfflineConsignment && order.consignment != null) {
+      trackingIDController.text = order.consignment.trackingID;
+    }
+    brandController.text = order.brand;
+    skuIDController.text = order.skuID;
+    withdrawalQualityController.text = order.withdrawalQuality;
+    defectiveQualityController.text = order.defectiveQuality;
+    consigneeNameController.text = order.consigneeName;
+    consigneePhoneController.text = order.consigneePhone;
+    consigneeAddressController.text = order.consigneeAddress;
+    isOfflineConsignment = order.isOfflineConsignment;
+    consignment = order.consignment;
+  }
+
   void initDeliveryUpdate(DeliveryOrderNoteModel order) {
     consignorNameController.text = order.consignorName;
     consignorPhoneController.text = order.consignorPhone;
-    if (!order.isOfflineConsignment) {
+    if (!order.isOfflineConsignment && order.consignment != null) {
       trackingIDController.text = order.consignment.trackingID;
     }
     brandController.text = order.brand;
@@ -95,7 +112,7 @@ class DeliverAndShippingFormMixins {
   void initShippingUpdate(ShippingOrderNoteModel order) {
     consignorNameController.text = order.consignorName;
     consignorPhoneController.text = order.consignorPhone;
-    if (!order.isOfflineConsignment) {
+    if (!order.isOfflineConsignment && order.consignment != null) {
       trackingIDController.text = order.consignment.trackingID;
     }
     brandController.text = order.brand;
@@ -124,6 +141,9 @@ class DeliverAndShippingFormMixins {
         isOfflineConsignment: isOfflineConsignment,
         consignment: consignment);
     if (!order.isOfflineConsignment) {
+      if (order.consignment == null) {
+        order.consignment = ConsignmentModel();
+      }
       order.consignment.trackingID = trackingIDController.text;
     }
 
@@ -154,20 +174,23 @@ class DeliverAndShippingFormMixins {
       ..isOfflineConsignment = isOfflineConsignment
       ..consignorPhone = consignorPhoneController.text;
     if (!order.isOfflineConsignment) {
+      if (order.consignment == null) {
+        order.consignment = ConsignmentModel();
+      }
       order.consignment.trackingID = trackingIDController.text;
     }
 
-    List<OrderNoteEntryModel> entries = colorSizeEntries
+    List<DeliveryOrderNoteEntryModel> entries = [];
+    colorSizeEntries
         .where((entry) => entry.controller.text != '')
-        .map((entry) {
-      print(entry.id);
-      return OrderNoteEntryModel(
+        .forEach((entry) {
+      DeliveryOrderNoteEntryModel model = DeliveryOrderNoteEntryModel(
           color: entry.color,
           size: entry.size,
-          id: entry.id,
           quantity: int.parse(entry.controller.text));
-    }).toList();
-
+      model.id = entry.id;
+      entries.add(model);
+    });
     order.entries = entries;
     return order;
   }

@@ -88,9 +88,8 @@ class AbstractOrderNoteEntryModel extends ItemModel {
   ///尺码文本
   String size;
 
-  int id;
 
-  AbstractOrderNoteEntryModel({this.quantity, this.color, this.size, this.id});
+  AbstractOrderNoteEntryModel({this.quantity, this.color, this.size});
 
   factory AbstractOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
       _$AbstractOrderNoteEntryModelFromJson(json);
@@ -156,14 +155,11 @@ class OrderNoteEntryModel extends AbstractOrderNoteEntryModel {
   @JsonKey(toJson: orderToJson)
   OrderNoteModel order;
 
-  int id;
-
   OrderNoteEntryModel({
     int quantity,
     String color,
     String size,
     this.order,
-    this.id,
   }) : super(quantity: quantity, color: color, size: size);
 
   factory OrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
