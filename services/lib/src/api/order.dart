@@ -214,6 +214,20 @@ class OrderApis {
     return '/{baseSiteId}/orders/proofing/$code/paid';
   };
 
+  // ========需求=========
+
+  ///生产单拒单
+  static get cancellingOfPurchaseOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/cancelling';
+      };
+
+  ///确认线下生产订单
+  static get confirmProductionByOffline =>
+          (code) {
+        return '/b2b/orders/purchase/$code/confirmProductionByOffline';
+      };
+
   ///创建收货单
   static get createDeliveryOrder =>
           (code) {

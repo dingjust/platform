@@ -74,4 +74,52 @@ class DeliveryOrderRepository {
       return null;
     }
   }
+
+  ///撤回
+  Future<String> recallDelivery(String code) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.withdrawDeliveryOrder(code),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
+
+  ///确认收货单
+  Future<String> confirmDeliveryOrder(String code) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.confirmDeliveryOrder(code),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
+
+  ///拒绝收货单
+  Future<String> rejectDeliveryOrder(String code) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.rejectDeliveryOrder(code),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
 }

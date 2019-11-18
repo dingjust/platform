@@ -891,8 +891,14 @@ class PurchaseOrderModel extends OrderModel {
   @JsonKey(toJson: _cooperatorToJson)
   CooperatorModel cooperator;
 
+  ///创建者
+  @JsonKey(toJson: _companyToJson)
+  CompanyModel creator;
+
   // @JsonKey(fromJson: _dateTimefromMilliseconds)
   // DateTime modifiedtime;
+
+  // @JsonKey(toJson:_)
 
   PurchaseOrderModel(
       {String code,
@@ -974,6 +980,9 @@ class PurchaseOrderModel extends OrderModel {
 
   static Map<String, dynamic> _factoryToJson(FactoryModel model) =>
       FactoryModel.toJson(model);
+
+  static Map<String, dynamic> _companyToJson(CompanyModel model) =>
+      CompanyModel.toJson(model);
 
   static List<Map<String, dynamic>> entriesToJson(
           List<PurchaseOrderEntryModel> entries) =>
