@@ -350,7 +350,7 @@
           this.slotData.deliveryOrders == null ||
           this.slotData.deliveryOrders.length == 0
         ) {
-          url = this.apis().createAndCommitDeliveryOrder();
+          url = this.apis().createAndCommitDeliveryOrder(this.slotData.code);
           result = await this.$http.post(url, form);
         } else {
           url = this.apis().commitDeliveryOrder();

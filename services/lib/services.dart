@@ -39,6 +39,7 @@ export 'src/order/bloc/quote_orders_bloc.dart';
 export 'src/order/bloc/requirement_order_bloc.dart';
 export 'src/order/bloc/requirement_pool_bloc.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
+export 'src/order/repository/order_note_respository.dart';
 export 'src/order/repository/proofing_order_respository.dart';
 export 'src/order/repository/purchase_order_repository.dart';
 export 'src/order/repository/quote_order_respository.dart';

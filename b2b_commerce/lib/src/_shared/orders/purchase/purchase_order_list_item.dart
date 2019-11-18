@@ -534,99 +534,99 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
           );
         }
       }
-      //确认收货
-      if (widget.order.status == PurchaseOrderStatus.OUT_OF_STORE) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Expanded(
-              child: Container(),
-            ),
-            Expanded(
-              child: Container(
-                  height: 30,
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
-                  child: FlatButton(
-                      color: Color(0xFFFFD600),
-                      child: Text(
-                        '确认收货',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      onPressed: () async {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) {
-                              return RequestDataLoading(
-                                requestCallBack: PurchaseOrderRepository()
-                                    .purchaseOrderShipped(
-                                    widget.order.code, widget.order),
-                                outsideDismiss: false,
-                                loadingText: '保存中。。。',
-                                entrance: 'purchaseOrders',
-                              );
-                            });
-                      })),
-            ),
-          ],
-        );
-      }
+      // //确认收货
+      // if (widget.order.status == PurchaseOrderStatus.OUT_OF_STORE) {
+      //   return Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //     children: <Widget>[
+      //       Expanded(
+      //         child: Container(),
+      //       ),
+      //       Expanded(
+      //         child: Container(
+      //             height: 30,
+      //             padding:
+      //             const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+      //             child: FlatButton(
+      //                 color: Color(0xFFFFD600),
+      //                 child: Text(
+      //                   '确认收货',
+      //                   style: const TextStyle(
+      //                     color: Colors.black,
+      //                     fontSize: 16,
+      //                   ),
+      //                 ),
+      //                 shape: const RoundedRectangleBorder(
+      //                   borderRadius: const BorderRadius.all(
+      //                     Radius.circular(5),
+      //                   ),
+      //                 ),
+      //                 onPressed: () async {
+      //                   showDialog(
+      //                       context: context,
+      //                       barrierDismissible: false,
+      //                       builder: (_) {
+      //                         return RequestDataLoading(
+      //                           requestCallBack: PurchaseOrderRepository()
+      //                               .purchaseOrderShipped(
+      //                               widget.order.code, widget.order),
+      //                           outsideDismiss: false,
+      //                           loadingText: '保存中。。。',
+      //                           entrance: 'purchaseOrders',
+      //                         );
+      //                       });
+      //                 })),
+      //       ),
+      //     ],
+      //   );
+      // }
     } else {
       //确认收货
-      if (widget.order.status == PurchaseOrderStatus.OUT_OF_STORE) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Expanded(
-              child: Container(),
-            ),
-            Expanded(
-              child: Container(
-                  height: 30,
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
-                  child: FlatButton(
-                      color: Color(0xFFFFD600),
-                      child: Text(
-                        '确认收货',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      onPressed: () async {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (_) {
-                              return RequestDataLoading(
-                                requestCallBack: PurchaseOrderRepository()
-                                    .purchaseOrderShipped(
-                                    widget.order.code, widget.order),
-                                outsideDismiss: false,
-                                loadingText: '保存中。。。',
-                                entrance: 'purchaseOrders',
-                              );
-                            });
-                      })),
-            ),
-          ],
-        );
-      }
+      // if (widget.order.status == PurchaseOrderStatus.OUT_OF_STORE) {
+      //   return Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //     children: <Widget>[
+      //       Expanded(
+      //         child: Container(),
+      //       ),
+      //       Expanded(
+      //         child: Container(
+      //             height: 30,
+      //             padding:
+      //             const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
+      //             child: FlatButton(
+      //                 color: Color(0xFFFFD600),
+      //                 child: Text(
+      //                   '确认收货',
+      //                   style: const TextStyle(
+      //                     color: Colors.black,
+      //                     fontSize: 16,
+      //                   ),
+      //                 ),
+      //                 shape: const RoundedRectangleBorder(
+      //                   borderRadius: const BorderRadius.all(
+      //                     Radius.circular(5),
+      //                   ),
+      //                 ),
+      //                 onPressed: () async {
+      //                   showDialog(
+      //                       context: context,
+      //                       barrierDismissible: false,
+      //                       builder: (_) {
+      //                         return RequestDataLoading(
+      //                           requestCallBack: PurchaseOrderRepository()
+      //                               .purchaseOrderShipped(
+      //                               widget.order.code, widget.order),
+      //                           outsideDismiss: false,
+      //                           loadingText: '保存中。。。',
+      //                           entrance: 'purchaseOrders',
+      //                         );
+      //                       });
+      //                 })),
+      //       ),
+      //     ],
+      //   );
+      // }
     }
     return Container();
   }
