@@ -7,7 +7,10 @@ import 'components/ColorSizeView.dart';
 class ReconciliationOrderView extends StatefulWidget {
   final ReconciliationOrderNoteModel reconciliationOrder;
 
-  const ReconciliationOrderView({Key key, this.reconciliationOrder})
+  final String purchaseOrderCode;
+
+  const ReconciliationOrderView(
+      {Key key, this.reconciliationOrder, this.purchaseOrderCode})
       : super(key: key);
 
   @override

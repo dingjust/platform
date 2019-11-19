@@ -1,10 +1,14 @@
+import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_deliver_order_view.dart';
+import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_shipping_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
 
 import 'purchase_deliver_order_form.dart';
+import 'purchase_reconciliation_order_view.dart';
 import 'purchase_shipping_order_view.dart';
 
 class PurchaseDetailBtnGroup extends StatelessWidget {
@@ -15,21 +19,104 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: _btnGroup(context),
+      children: UserBLoC.instance.currentUser.type == UserType.FACTORY
+          ? _factoryBtnGroup(context)
+          : _brandBtnGroup(context),
     );
   }
 
-  List<Widget> _btnGroup(BuildContext context) {
+  List<Widget> _factoryBtnGroup(BuildContext context) {
+    if (order == null) {
+      return [];
+    }
+    if (order.status == PurchaseOrderStatus.IN_PRODUCTION ||
+        order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE ||
+        order.status == PurchaseOrderStatus.OUT_OF_STORE) {
+      return [
+        Expanded(
+            flex: 1,
+            child: FlatButton(
+              onPressed: () => onDeliverOrder(context),
+              child: Text(
+                '查看收货单',
+                style: TextStyle(fontSize: 15, color: Colors.red),
+              ),
+            )),
+        UserBLoC.instance.currentUser.type == UserType.FACTORY
+            ? Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: () => onShippingForm(context),
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '发货',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+              )),
+        )
+            : Container()
+      ];
+    } else if (order.status == PurchaseOrderStatus.COMPLETED) {
+      return [
+        Expanded(
+            flex: 1,
+            child: FlatButton(
+              onPressed: () => onReconciliationOrder(context),
+              child: Text(
+                '查看对账单',
+                style: TextStyle(fontSize: 15, color: Colors.red),
+              ),
+            )),
+      ];
+    } else if (!isMine() &&
+        order.status == PurchaseOrderStatus.PENDING_CONFIRM) {
+      return [
+        Expanded(
+            flex: 1,
+            child: FlatButton(
+              onPressed: () => onCancel(context),
+              child: Text(
+                '拒单',
+                style: TextStyle(fontSize: 15, color: Colors.red),
+              ),
+            )),
+        Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: () => onConfirm(context),
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '接单',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+              )),
+        )
+      ];
+    } else {
+      return [];
+    }
+  }
+
+  List<Widget> _brandBtnGroup(BuildContext context) {
     if (order == null) {
       return [];
     }
     if ((order.status == PurchaseOrderStatus.IN_PRODUCTION ||
         order.status == PurchaseOrderStatus.OUT_OF_STORE ||
         order.status == PurchaseOrderStatus.PENDING_PAYMENT ||
-        (order.status == PurchaseOrderStatus.COMPLETED &&
-            order.deliveryOrders.isNotEmpty &&
-            order.deliveryOrders.first.status ==
-                OrderNoteStatus.PENDING_CONFIRM))) {
+        order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)) {
       return [
         Expanded(
             flex: 1,
@@ -48,27 +135,30 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
                 builder: (BuildContext buttonContext) =>
                     FlatButton(
                       color: Color.fromRGBO(255, 214, 12, 1),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                DeliverOrderForm(
-                                    purchaseOrderCode: order.code,
-                                    deliveryOrder: order.deliveryOrders
-                                        .isNotEmpty
-                                        ? order.deliveryOrders.first
-                                        : null,
-                                    shippingOrder: order.deliveryOrders
-                                        .isNotEmpty
-                                        ? null
-                                        : (order.shippingOrders.isNotEmpty
-                                        ? order.shippingOrders.last
-                                        : null),
-                                    orderEntries: order.entries,
-                                    onCallback: () => jumpToDetail(context))));
-                      },
+                      onPressed: () => onDeliverForm(context),
                       disabledColor: Colors.grey[300],
                       child: Text(
                         '收货',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+              )),
+        )
+      ];
+    } else if (order.status == PurchaseOrderStatus.COMPLETED) {
+      return [
+        Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: () => onConfirm(context),
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '对账',
                         style: TextStyle(fontSize: 15),
                       ),
                     ),
@@ -118,6 +208,14 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
     }
   }
 
+  void onShippingForm(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            ShippingOrderForm(
+                purchaseOrder: order,
+                onCallback: () => jumpToDetail(context))));
+  }
+
   void onShippingOrders(BuildContext context) {
     Navigator.push(
       context,
@@ -125,6 +223,51 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
         builder: (context) =>
             ShippingOrderView(
               shippingOrders: order.shippingOrders,
+            ),
+      ),
+    );
+  }
+
+  void onDeliverOrder(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            DeliverOrderView(
+              purchaseOrderCode: order.code,
+              deliveryOrder:
+              order.deliveryOrders.isNotEmpty ? order.deliveryOrders[0] : null,
+            ),
+      ),
+    );
+  }
+
+  void onDeliverForm(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            DeliverOrderForm(
+                purchaseOrder: order,
+                deliveryOrder: order.deliveryOrders.isNotEmpty
+                    ? order.deliveryOrders.first
+                    : null,
+                shippingOrder: order.deliveryOrders.isNotEmpty
+                    ? null
+                    : (order.shippingOrders.isNotEmpty
+                    ? order.shippingOrders.last
+                    : null),
+                onCallback: () => jumpToDetail(context))));
+  }
+
+  void onReconciliationOrder(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            ReconciliationOrderView(
+              purchaseOrderCode: order.code,
+              reconciliationOrder: order.reconciliationOrders.isNotEmpty
+                  ? order.reconciliationOrders[0]
+                  : null,
             ),
       ),
     );

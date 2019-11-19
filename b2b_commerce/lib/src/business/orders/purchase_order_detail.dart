@@ -2982,6 +2982,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               MaterialPageRoute(
                 builder: (context) =>
                     DeliverOrderView(
+                      purchaseOrderCode: order.code,
                       deliveryOrder: order.deliveryOrders.isNotEmpty
                           ? order.deliveryOrders[0]
                           : null,
@@ -3006,6 +3007,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               MaterialPageRoute(
                 builder: (context) =>
                     ReconciliationOrderView(
+                      purchaseOrderCode: order.code,
                       reconciliationOrder: order.reconciliationOrders.isNotEmpty
                           ? order.reconciliationOrders[0]
                           : null,

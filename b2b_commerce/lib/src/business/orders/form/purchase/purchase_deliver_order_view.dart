@@ -1,13 +1,19 @@
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
 
 import 'components/ColorSizeView.dart';
 
 class DeliverOrderView extends StatefulWidget {
   final DeliveryOrderNoteModel deliveryOrder;
 
-  const DeliverOrderView({Key key, this.deliveryOrder}) : super(key: key);
+  final String purchaseOrderCode;
+
+  const DeliverOrderView({Key key, this.deliveryOrder, this.purchaseOrderCode})
+      : super(key: key);
 
   @override
   _DeliverOrderViewState createState() => _DeliverOrderViewState();
@@ -55,26 +61,27 @@ class _DeliverOrderViewState extends State<DeliverOrderView>
             ),
             body: widget.deliveryOrder != null
                 ? Container(
-                    color: Colors.white,
-                    child: ListView(
-                      children: <Widget>[
-                        Container(
-                            height: 365,
-                            child: TabBarView(
-                              children: <Widget>[
-                                _buildDetailSection(widget.deliveryOrder),
-                                _buildConsignorSection(widget.deliveryOrder),
-                                _buildConsigneeSection(widget.deliveryOrder),
-                              ],
-                            )),
-                        ColorSizeView(
-                          entries: widget.deliveryOrder.entries,
-                        )
-                      ],
-                    ))
+                color: Colors.white,
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                        height: 365,
+                        child: TabBarView(
+                          children: <Widget>[
+                            _buildDetailSection(widget.deliveryOrder),
+                            _buildConsignorSection(widget.deliveryOrder),
+                            _buildConsigneeSection(widget.deliveryOrder),
+                          ],
+                        )),
+                    ColorSizeView(
+                      entries: widget.deliveryOrder.entries,
+                    ),
+                    _buildBottomSheet()
+                  ],
+                ))
                 : Center(
-                    child: Text('暂无收货单'),
-                  )));
+              child: Text('暂无收货单'),
+            )));
   }
 
   ///发货人
@@ -200,5 +207,138 @@ class _DeliverOrderViewState extends State<DeliverOrderView>
         ],
       ),
     );
+  }
+
+  Widget _buildBottomSheet() {
+    return Container(
+      height: 55,
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 150.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: UserBLoC.instance.currentUser.type == UserType.FACTORY
+            ? _buildDeliverConfirmAndRejectBtns()
+            : [],
+      ),
+    );
+  }
+
+  List<Widget> _buildDeliverConfirmAndRejectBtns() {
+    if (widget.deliveryOrder != null &&
+        widget.deliveryOrder.status == OrderNoteStatus.PENDING_CONFIRM &&
+        UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      return <Widget>[
+        Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      onPressed: rejectDeliveryOrder,
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '拒绝',
+                        style: TextStyle(fontSize: 15, color: Colors.red),
+                      ),
+                    ),
+              )),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: onDeliverConfirm,
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '确认',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+              )),
+        ),
+      ];
+    } else {
+      return [];
+    }
+  }
+
+  ///确认收货单
+  void onDeliverConfirm() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: DeliveryOrderRepository()
+                .confirmDeliveryOrder(widget.deliveryOrder.code),
+            outsideDismiss: false,
+            loadingText: '确认中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '确认失败',
+              successTips: '确认成功',
+              callbackResult: result,
+              confirmAction: jumpToDetail,
+            );
+          });
+    });
+  }
+
+  ///拒绝收货单
+  void rejectDeliveryOrder() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: DeliveryOrderRepository()
+                .rejectDeliveryOrder(widget.deliveryOrder.code),
+            outsideDismiss: false,
+            loadingText: '拒绝中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '拒绝失败',
+              successTips: '拒绝成功',
+              callbackResult: result,
+              confirmAction: jumpToDetail,
+            );
+          });
+    });
+  }
+
+  void jumpToDetail() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) =>
+                PurchaseOrderDetailPage(code: widget.purchaseOrderCode)),
+        ModalRoute.withName('/'));
   }
 }

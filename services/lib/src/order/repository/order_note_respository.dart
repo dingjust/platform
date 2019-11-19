@@ -123,3 +123,42 @@ class DeliveryOrderRepository {
     }
   }
 }
+
+///发货单
+class ShippingOrderRepository {
+  ///部分发货
+  Future<String> partShippingOrder(String code,
+      ShippingOrderNoteModel form) async {
+    Response response;
+    try {
+      response = await http$.post(OrderApis.createShippingOrder(code),
+          data: ShippingOrderNoteModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
+
+  ///全部发货
+  Future<String> fullShippingOrder(String code,
+      ShippingOrderNoteModel form) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.confirmShipping(code),
+          data: ShippingOrderNoteModel.toJson(form),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return response.data;
+    } else {
+      return null;
+    }
+  }
+}

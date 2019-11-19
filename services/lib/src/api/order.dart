@@ -214,7 +214,7 @@ class OrderApis {
     return '/{baseSiteId}/orders/proofing/$code/paid';
   };
 
-  // ========需求=========
+  // ========生产单=========
 
   ///生产单拒单
   static get cancellingOfPurchaseOrder =>
@@ -226,6 +226,18 @@ class OrderApis {
   static get confirmProductionByOffline =>
           (code) {
         return '/b2b/orders/purchase/$code/confirmProductionByOffline';
+      };
+
+  ///创建部分发货单
+  static get createShippingOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/createShippingOrder';
+      };
+
+  ///创建全部发货单
+  static get confirmShipping =>
+          (code) {
+        return '/b2b/orders/purchase/$code/confirmShipping';
       };
 
   ///创建收货单
