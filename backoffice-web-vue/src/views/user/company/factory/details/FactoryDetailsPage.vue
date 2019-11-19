@@ -227,7 +227,7 @@
       },
       async onSaveProfiles () {
         var uid = this.$store.getters.currentUser.companyCode;
-        let url = this.apis().updateFactory(uid);
+        let url = this.apis().updateFactoryProfiles(uid);
         const result = await this.$http.put(url, this.formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
