@@ -59,10 +59,10 @@ class _MyCompanyCapacityInfoState extends State<MyCompanyCapacityInfo> {
                           pageController.jumpToPage(state.capacityIndex);
                         } : null,
                         child: SizedBox(
-                          width: 30,
+                          width: 25,
                           child: Icon(
                             Icons.keyboard_arrow_left,
-                            size: 40,
+                            size: 35,
                           ),
                         ),
                       ),
@@ -94,10 +94,10 @@ class _MyCompanyCapacityInfoState extends State<MyCompanyCapacityInfo> {
                           pageController.jumpToPage(state.capacityIndex);
                         } : null,
                         child: SizedBox(
-                          width: 30,
+                          width: 25,
                           child: Icon(
                             Icons.keyboard_arrow_right,
-                            size: 40,
+                            size: 35,
                           ),
                         ),
                       ),
