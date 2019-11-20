@@ -183,6 +183,8 @@
     overflow: auto;
     margin-right: auto;
     margin-left: auto;
+    padding-bottom: 50px;
+    padding-right: 20px;
   }
 
   .login-logo {

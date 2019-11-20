@@ -1504,7 +1504,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         color: Colors.white,
-        child: Column(
+        child: order.payPlan != null
+            ? Column(
           children: <Widget>[
             Row(
               children: <Widget>[
@@ -1537,12 +1538,16 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                               '${PayMoneyTypeLocalizedMap[item.moneyType]}'),
                           item.payStatus == PayStatus.PAID
                               ? B2BImage.paid(width: 40, height: 25)
-                              : B2BImage.notPaid(width: 40, height: 25)
+                              : B2BImage.notPaid(
+                              width: 40, height: 25)
                         ],
                       ),
                     ))
                     .toList())
           ],
+        )
+            : Center(
+          child: Text('暂无财务'),
         ));
   }
 
