@@ -287,4 +287,46 @@ class OrderApis {
           (code) {
         return '/b2b/orders/purchase/$code/rejectDelivery';
       };
+
+  ///创建对账单
+  static get createReconciliationOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/createReconciliationOrder';
+      };
+
+  ///创建并提交对账单
+  static get createAndCommitReconciliationOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/createAndCommitReconciliationOrder';
+      };
+
+  ///更新对账单
+  static get updateReconciliationOrder =>
+          () {
+        return '/b2b/orders/purchase/updateReconciliationOrder';
+      };
+
+  ///更新并提交对账单
+  static get updateAndCommitReconciliationOrder =>
+          () {
+        return '/b2b/orders/purchase/updateAndCommitReconciliationOrder';
+      };
+
+  ///撤回对账单
+  static get recallReconciliationOrder =>
+          () {
+        return '/b2b/orders/purchase/recallReconciliationOrder';
+      };
+
+  ///确认对账单
+  static get confirmReconciliation =>
+          (code) {
+        return '/b2b/orders/purchase/$code/confirmReconciliation';
+      };
+
+  ///拒绝对账单
+  static get rejectReconciliation =>
+          (code) {
+        return '/b2b/orders/purchase/$code/rejectReconciliation';
+      };
 }

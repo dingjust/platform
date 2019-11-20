@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_deliver_order_view.dart';
+import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_reconciliation_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_shipping_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +156,7 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
                 builder: (BuildContext buttonContext) =>
                     FlatButton(
                       color: Color.fromRGBO(255, 214, 12, 1),
-                      onPressed: () => onConfirm(context),
+                      onPressed: () => onReconciliationForm(context),
                       disabledColor: Colors.grey[300],
                       child: Text(
                         '对账',
@@ -268,6 +269,27 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
               reconciliationOrder: order.reconciliationOrders.isNotEmpty
                   ? order.reconciliationOrders[0]
                   : null,
+            ),
+      ),
+    );
+  }
+
+  void onReconciliationForm(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            ReconciliationOrderForm(
+              purchaseOrder: order,
+              reconciliationOrder: order.reconciliationOrders.isNotEmpty
+                  ? order.reconciliationOrders.first
+                  : null,
+              deliveryOrder: order.reconciliationOrders.isNotEmpty
+                  ? null
+                  : (order.deliveryOrders.isNotEmpty
+                  ? order.deliveryOrders.first
+                  : null),
+              onCallback: () => jumpToDetail(context),
             ),
       ),
     );

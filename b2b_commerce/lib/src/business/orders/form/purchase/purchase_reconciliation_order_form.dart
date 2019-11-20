@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/form/purchase/ColorSizeEntry.dart';
-import 'package:b2b_commerce/src/business/orders/form/purchase/FormMixins.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +5,10 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'ColorSizeEntry.dart';
+import 'FormMixins.dart';
 import 'components/ColorSizeTable.dart';
+import 'purchase_reconciliation_order_view.dart';
 
 class ReconciliationOrderForm extends StatefulWidget {
   final DeliveryOrderNoteModel deliveryOrder;
@@ -32,7 +33,7 @@ class ReconciliationOrderForm extends StatefulWidget {
 }
 
 class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
-    with SingleTickerProviderStateMixin, DeliverAndShippingFormMixin {
+    with SingleTickerProviderStateMixin, ReconciliationFormMixin {
   List<ColorSizeEntry> colorSizeEntries;
 
   List<Widget> tabs = <Widget>[
@@ -57,11 +58,11 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
   void initForm() {
     super.initForm();
     //更新或创建
-    // if (widget.deliveryOrder != null) {
-    //   initDeliveryUpdate(widget.deliveryOrder);
-    // } else if (widget.shippingOrder != null) {
-    //   initDeliveryCreate(widget.shippingOrder);
-    // }
+    if (widget.reconciliationOrder != null) {
+      initReconciliationUpdate(widget.reconciliationOrder);
+    } else if (widget.deliveryOrder != null) {
+      initReconciliationCreate(widget.purchaseOrder);
+    }
   }
 
   @override
@@ -95,7 +96,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
               child: ListView(
                 children: <Widget>[
                   Container(
-                      height: 365,
+                      height: 550,
                       child: TabBarView(
                         children: <Widget>[
                           _buildDetailSection(),
@@ -103,7 +104,11 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
                         ],
                       )),
                   ColorSizeTable(
-                    noteEntries: widget?.deliveryOrder?.entries ?? null,
+                    noteEntries: widget.reconciliationOrder != null
+                        ? widget.reconciliationOrder.entries ?? null
+                        : (widget.deliveryOrder != null
+                        ? widget.deliveryOrder.entries ?? null
+                        : null),
                     orderEntries: widget.purchaseOrder.entries,
                     colorSizeEntries: colorSizeEntries,
                   ),
@@ -114,7 +119,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
   }
 
   String orderStatus() {
-    if (widget.deliveryOrder == null) {
+    if (widget.reconciliationOrder == null) {
       return '';
     } else {
       return '(${OrderNoteStatusLocalizedMap[widget.reconciliationOrder.status]})';
@@ -128,6 +133,32 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: <Widget>[
+          TextFieldComponent(
+            focusNode: partAFocusNode,
+            controller: partAController,
+            leadingText: Text('甲方',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            hintText: '填写',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          TextFieldComponent(
+            focusNode: partBFocusNode,
+            controller: partBController,
+            leadingText: Text('乙方',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            hintText: '填写',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
           TextFieldComponent(
             focusNode: brandFocusNode,
             controller: brandController,
@@ -154,38 +185,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
               fontSize: 16,
             ),
           ),
-          TextFieldComponent(
-            focusNode: withdrawalQualityFocusNode,
-            controller: withdrawalQualityController,
-            leadingText: Text('退料',
-                style: TextStyle(
-                  fontSize: 16,
-                )),
-            inputFormatters: [
-              DecimalInputFormat(),
-            ],
-            hintText: '填写',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
-          ),
-          TextFieldComponent(
-            focusNode: defectiveQualityFocusNode,
-            controller: defectiveQualityController,
-            leadingText: Text('残次品数',
-                style: TextStyle(
-                  fontSize: 16,
-                )),
-            inputFormatters: [
-              DecimalInputFormat(),
-            ],
-            hintText: '填写',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
-          ),
+          _buildCooperationModeSelect()
         ],
       ),
     );
@@ -199,9 +199,25 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
       child: Column(
         children: <Widget>[
           TextFieldComponent(
-            focusNode: consigneeNameFocusNode,
-            controller: consigneeNameController,
-            leadingText: Text('收货人',
+            focusNode: delayDeductionFocusNode,
+            controller: delayDeductionController,
+            inputType: TextInputType.number,
+            leadingText: Text('延期扣款',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          TextFieldComponent(
+            focusNode: delayDeductionRemarksFocusNode,
+            controller: delayDeductionRemarksController,
+            leadingText: Text('扣款备注',
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -211,26 +227,88 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
               fontSize: 16,
             ),
           ),
+          ItemDivider(),
           TextFieldComponent(
-            focusNode: consigneePhoneFocusNode,
-            controller: consigneePhoneController,
-            leadingText: Text('联系方式',
+            focusNode: qualityDeductionFocusNode,
+            controller: qualityDeductionController,
+            inputType: TextInputType.number,
+            leadingText: Text('质量扣款',
                 style: TextStyle(
                   fontSize: 16,
                 )),
             inputFormatters: [
               DecimalInputFormat(),
             ],
-            hintText: '电话号码',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 16,
             ),
           ),
           TextFieldComponent(
-            focusNode: consigneeAddressFocusNode,
-            controller: consigneeAddressController,
-            leadingText: Text('收货地址',
+            focusNode: qualityDeductionRemarksFocusNode,
+            controller: qualityDeductionRemarksController,
+            inputType: TextInputType.number,
+            leadingText: Text('扣款备注',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            hintText: '填写',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          ItemDivider(),
+          TextFieldComponent(
+            focusNode: otherDeductionFocusNode,
+            controller: otherDeductionController,
+            inputType: TextInputType.number,
+            leadingText: Text('其他扣款',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          TextFieldComponent(
+            focusNode: otherDeductionRemarksFocusNode,
+            controller: otherDeductionRemarksController,
+            leadingText: Text('扣款备注',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            hintText: '填写',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          ItemDivider(),
+          TextFieldComponent(
+            focusNode: otherFundsFocusNode,
+            controller: otherFundsController,
+            inputType: TextInputType.number,
+            leadingText: Text('其他增款',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          TextFieldComponent(
+            focusNode: otherFundsRemarksFocusNode,
+            controller: otherFundsRemarksController,
+            leadingText: Text('备注',
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -255,25 +333,22 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: UserBLoC.instance.currentUser.type == UserType.BRAND
             ? <Widget>[
-                showSaveBtn()
-                    ? Expanded(
-                        flex: 1,
-                        child: Container(
-                            height: double.infinity,
-                            child: Builder(
-                              builder: (BuildContext buttonContext) =>
-                                  FlatButton(
-                                onPressed: onSave,
-                                disabledColor: Colors.grey[300],
-                                child: Text(
-                                  '保存并退出',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.red),
-                                ),
-                              ),
-                            )),
-                      )
-                    : Container(),
+          Expanded(
+            flex: 1,
+            child: Container(
+                height: double.infinity,
+                child: Builder(
+                  builder: (BuildContext buttonContext) =>
+                      FlatButton(
+                        onPressed: onSave,
+                        disabledColor: Colors.grey[300],
+                        child: Text(
+                          '保存并退出',
+                          style: TextStyle(fontSize: 15, color: Colors.red),
+                        ),
+                      ),
+                )),
+          ),
                 showConfirmBtn()
                     ? Expanded(
                         flex: 1,
@@ -318,45 +393,77 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
     );
   }
 
+  Widget _buildCooperationModeSelect() {
+    return B2BInfoRow(
+      hasBottomBorder: true,
+      label: '加工方式',
+      value: Row(
+        children: CooperationMode.values
+            .map((value) =>
+            Container(
+              margin: EdgeInsets.only(left: 20),
+              child: Row(
+                children: <Widget>[
+                  Text('${CooperationModeLocalizedMap[value]}'),
+                  Radio(
+                    groupValue: cooperationMethod,
+                    value: value,
+                    onChanged: (val) {
+                      setState(() {
+                        cooperationMethod = val;
+                      });
+                    },
+                  )
+                ],
+              ),
+            ))
+            .toList(),
+      ),
+    );
+  }
+
   ///保存
   void onSave() {
-    // DeliveryOrderNoteModel model;
-    // if (widget.deliveryOrder == null) {
-    //   model = getDeliveryForCreate(colorSizeEntries);
-    // } else {
-    //   model = getDeliveryForUpdate(widget.deliveryOrder, colorSizeEntries);
-    // }
-    // showDialog(
-    //     context: context,
-    //     barrierDismissible: false,
-    //     builder: (_) {
-    //       return RequestDataLoading(
-    //         requestCallBack: widget.deliveryOrder == null
-    //             ? DeliveryOrderRepository()
-    //                 .createDeliveryOrder(widget.purchaseOrder.code, model)
-    //             : DeliveryOrderRepository().updateDeliveryOrder(model),
-    //         outsideDismiss: false,
-    //         loadingText: '保存中。。。',
-    //         entrance: '',
-    //       );
-    //     }).then((value) {
-    //   bool result = false;
-    //   if (value != null) {
-    //     result = true;
-    //   }
-    //   showDialog(
-    //       context: context,
-    //       barrierDismissible: false,
-    //       builder: (_) {
-    //         return CustomizeDialog(
-    //           dialogType: DialogType.RESULT_DIALOG,
-    //           failTips: '保存失败',
-    //           successTips: '保存成功',
-    //           callbackResult: result,
-    //           confirmAction: jumpToDetail,
-    //         );
-    //       });
-    // });
+    ReconciliationOrderNoteModel model;
+
+    if (widget.reconciliationOrder == null) {
+      model = getReconciliationForCreate(colorSizeEntries);
+    } else {
+      model = getReconciliationForUpdate(
+          widget.reconciliationOrder, colorSizeEntries);
+    }
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: widget.reconciliationOrder == null
+                ? ReconciliationOrderRepository()
+                .createReconciliationOrder(widget.purchaseOrder.code, model)
+                : ReconciliationOrderRepository()
+                .updateReconciliationOrder(model),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '保存失败',
+              successTips: '保存成功',
+              callbackResult: result,
+              confirmAction: jumpToDetail,
+            );
+          });
+    });
   }
 
   ///提交收货单

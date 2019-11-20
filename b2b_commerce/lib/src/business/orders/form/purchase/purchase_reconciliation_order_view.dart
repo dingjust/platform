@@ -106,7 +106,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
             label: '扣款备注',
             value: Text('${order.delayDeductionRemarks}'),
           ),
-          _ItemDivider(),
+          ItemDivider(),
           B2BInfoRow(
             hasBottomBorder: true,
             label: '质量扣款',
@@ -128,7 +128,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
             label: '扣款备注',
             value: Text('${order.qualityDeductionRemarks}'),
           ),
-          _ItemDivider(),
+          ItemDivider(),
           B2BInfoRow(
               hasBottomBorder: true,
               label: '其他扣款',
@@ -149,7 +149,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
             label: '扣款备注',
             value: Text('${order.otherDeductionRemarks}'),
           ),
-          _ItemDivider(),
+          ItemDivider(),
           B2BInfoRow(
               hasBottomBorder: true,
               label: '其他增款',
@@ -167,7 +167,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
               )),
           B2BInfoRow(
             hasBottomBorder: true,
-            label: '扣款备注',
+            label: '备注',
             value: Text('${order.otherFundsRemarks}'),
           ),
         ],
@@ -214,7 +214,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
   }
 }
 
-class _ItemDivider extends StatelessWidget {
+class ItemDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(height: 10, color: Colors.grey[50]);

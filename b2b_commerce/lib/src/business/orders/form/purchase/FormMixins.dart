@@ -237,20 +237,29 @@ class ReconciliationFormMixin {
 
   CooperationMode cooperationMethod;
 
-  FocusNode withdrawalQualityFocusNode;
-  TextEditingController withdrawalQualityController;
+  FocusNode delayDeductionFocusNode;
+  TextEditingController delayDeductionController;
 
-  FocusNode defectiveQualityFocusNode;
-  TextEditingController defectiveQualityController;
+  FocusNode delayDeductionRemarksFocusNode;
+  TextEditingController delayDeductionRemarksController;
 
-  FocusNode consigneeNameFocusNode;
-  TextEditingController consigneeNameController;
+  FocusNode qualityDeductionFocusNode;
+  TextEditingController qualityDeductionController;
 
-  FocusNode consigneePhoneFocusNode;
-  TextEditingController consigneePhoneController;
+  FocusNode qualityDeductionRemarksFocusNode;
+  TextEditingController qualityDeductionRemarksController;
 
-  FocusNode consigneeAddressFocusNode;
-  TextEditingController consigneeAddressController;
+  FocusNode otherDeductionFocusNode;
+  TextEditingController otherDeductionController;
+
+  FocusNode otherDeductionRemarksFocusNode;
+  TextEditingController otherDeductionRemarksController;
+
+  FocusNode otherFundsFocusNode;
+  TextEditingController otherFundsController;
+
+  FocusNode otherFundsRemarksFocusNode;
+  TextEditingController otherFundsRemarksController;
 
   void initForm() {
     partAFocusNode = FocusNode();
@@ -265,54 +274,131 @@ class ReconciliationFormMixin {
     skuIDFocusNode = FocusNode();
     skuIDController = TextEditingController();
 
-    withdrawalQualityFocusNode = FocusNode();
-    withdrawalQualityController = TextEditingController();
+    delayDeductionFocusNode = FocusNode();
+    delayDeductionController = TextEditingController();
 
-    defectiveQualityFocusNode = FocusNode();
-    defectiveQualityController = TextEditingController();
+    delayDeductionRemarksFocusNode = FocusNode();
+    delayDeductionRemarksController = TextEditingController();
 
-    consigneeNameFocusNode = FocusNode();
-    consigneeNameController = TextEditingController();
+    qualityDeductionFocusNode = FocusNode();
+    qualityDeductionController = TextEditingController();
 
-    consigneePhoneFocusNode = FocusNode();
-    consigneePhoneController = TextEditingController();
+    qualityDeductionRemarksFocusNode = FocusNode();
+    qualityDeductionRemarksController = TextEditingController();
 
-    consigneeAddressFocusNode = FocusNode();
-    consigneeAddressController = TextEditingController();
+    otherDeductionFocusNode = FocusNode();
+    otherDeductionController = TextEditingController();
+
+    otherDeductionRemarksFocusNode = FocusNode();
+    otherDeductionRemarksController = TextEditingController();
+
+    otherFundsFocusNode = FocusNode();
+    otherFundsController = TextEditingController();
+
+    otherFundsRemarksFocusNode = FocusNode();
+    otherFundsRemarksController = TextEditingController();
   }
 
-// void initDeliveryCreate(ShippingOrderNoteModel order) {
-//   consignorNameController.text = order.consignorName;
-//   consignorPhoneController.text = order.consignorPhone;
-//   if (!order.isOfflineConsignment && order.consignment != null) {
-//     trackingIDController.text = order.consignment.trackingID;
-//   }
-//   brandController.text = order.brand;
-//   skuIDController.text = order.skuID;
-//   withdrawalQualityController.text = order.withdrawalQuality;
-//   defectiveQualityController.text = order.defectiveQuality;
-//   consigneeNameController.text = order.consigneeName;
-//   consigneePhoneController.text = order.consigneePhone;
-//   consigneeAddressController.text = order.consigneeAddress;
-//   isOfflineConsignment = order.isOfflineConsignment;
-//   consignment = order.consignment;
-// }
+  void initReconciliationCreate(PurchaseOrderModel purchaseOrder) {
+    partAController.text = purchaseOrder.purchaser.name;
+    partBController.text = purchaseOrder.belongTo.name;
+    if (purchaseOrder.deliveryOrders.isNotEmpty) {
+      brandController.text = purchaseOrder.deliveryOrders.first.brand;
+      skuIDController.text = purchaseOrder.deliveryOrders.first.skuID;
+    }
+  }
 
-// void initDeliveryUpdate(DeliveryOrderNoteModel order) {
-//   consignorNameController.text = order.consignorName;
-//   consignorPhoneController.text = order.consignorPhone;
-//   if (!order.isOfflineConsignment && order.consignment != null) {
-//     trackingIDController.text = order.consignment.trackingID;
-//   }
-//   brandController.text = order.brand;
-//   skuIDController.text = order.skuID;
-//   withdrawalQualityController.text = order.withdrawalQuality;
-//   defectiveQualityController.text = order.defectiveQuality;
-//   consigneeNameController.text = order.consigneeName;
-//   consigneePhoneController.text = order.consigneePhone;
-//   consigneeAddressController.text = order.consigneeAddress;
-//   isOfflineConsignment = order.isOfflineConsignment;
-//   consignment = order.consignment;
-// }
+  void initReconciliationUpdate(ReconciliationOrderNoteModel order) {
+    partAController.text = order.partA;
+    partBController.text = order.partB;
+    brandController.text = order.brand;
+    skuIDController.text = order.skuID;
+    delayDeductionController.text = order.delayDeduction.toString();
+    delayDeductionRemarksController.text = order.delayDeductionRemarks;
+    qualityDeductionController.text = order.qualityDeduction.toString();
+    qualityDeductionRemarksController.text = order.qualityDeductionRemarks;
+    otherDeductionController.text = order.otherDeduction.toString();
+    otherDeductionRemarksController.text = order.otherDeductionRemarks;
+    otherFundsController.text = order.otherFunds.toString();
+    otherFundsRemarksController.text = order.otherFundsRemarks;
+  }
 
+  ReconciliationOrderNoteModel getReconciliationForCreate(
+      List<ColorSizeEntry> colorSizeEntries) {
+    ReconciliationOrderNoteModel order = ReconciliationOrderNoteModel(
+        partA: partAController.text,
+        partB: partBController.text,
+        brand: brandController.text,
+        skuID: skuIDController.text,
+        cooperationMethod: cooperationMethod,
+        delayDeductionRemarks: delayDeductionRemarksController.text,
+        qualityDeductionRemarks: qualityDeductionRemarksController.text,
+        otherDeductionRemarks: otherDeductionRemarksController.text,
+        otherFundsRemarks: otherFundsRemarksController.text);
+
+    order
+      ..delayDeduction = getDoubleFromController(delayDeductionController)
+      ..qualityDeduction = getDoubleFromController(qualityDeductionController)
+      ..otherDeduction = getDoubleFromController(otherDeductionController)
+      ..otherFunds = getDoubleFromController(otherFundsController);
+
+    List<OrderNoteEntryModel> entries = colorSizeEntries
+        .where((entry) => entry.controller.text != '')
+        .map((entry) =>
+        OrderNoteEntryModel(
+            color: entry.color,
+            size: entry.size,
+            quantity: getIntFromController(entry.controller)))
+        .toList();
+
+    order.entries = entries;
+    return order;
+  }
+
+  ReconciliationOrderNoteModel getReconciliationForUpdate(
+      ReconciliationOrderNoteModel order,
+      List<ColorSizeEntry> colorSizeEntries) {
+    order
+      ..partA = partAController.text
+      ..partB = partBController.text
+      ..brand = brandController.text
+      ..skuID = skuIDController.text
+      ..cooperationMethod = cooperationMethod
+      ..delayDeductionRemarks = delayDeductionRemarksController.text
+      ..qualityDeductionRemarks = qualityDeductionRemarksController.text
+      ..otherDeductionRemarks = otherDeductionRemarksController.text
+      ..otherFundsRemarks = otherFundsRemarksController.text
+      ..delayDeduction = getDoubleFromController(delayDeductionController)
+      ..qualityDeduction = getDoubleFromController(qualityDeductionController)
+      ..otherDeduction = getDoubleFromController(otherDeductionController)
+      ..otherFunds = getDoubleFromController(otherFundsController);
+
+    List<DeliveryOrderNoteEntryModel> entries = [];
+    colorSizeEntries
+        .where((entry) => entry.controller.text != '')
+        .forEach((entry) {
+      DeliveryOrderNoteEntryModel model = DeliveryOrderNoteEntryModel(
+          color: entry.color,
+          size: entry.size,
+          quantity: getIntFromController(entry.controller));
+      model.id = entry.id;
+      entries.add(model);
+    });
+    order.entries = entries;
+    return order;
+  }
+
+  double getDoubleFromController(TextEditingController controller) {
+    if (controller.text == '') {
+      return 0;
+    }
+    return double.tryParse(controller.text) ?? 0;
+  }
+
+  int getIntFromController(TextEditingController controller) {
+    if (controller.text == '') {
+      return 0;
+    }
+    return int.tryParse(controller.text) ?? 0;
+  }
 }
