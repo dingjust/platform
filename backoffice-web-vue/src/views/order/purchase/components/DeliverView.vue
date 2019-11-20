@@ -39,8 +39,7 @@
                 :disabled="slotData.isOfflineConsignment"></el-input>
             </template>
             <template v-else>
-              <el-input  size="mini"
-                :disabled="slotData.isOfflineConsignment"></el-input>
+              <el-input size="mini" :disabled="slotData.isOfflineConsignment"></el-input>
             </template>
           </el-row>
         </el-col>
@@ -89,11 +88,11 @@
           </el-row>
         </el-col>
       </el-row>
-      <table cellspacing="2" width="100%" :height="(slotData.entries.length+1)*50" class="order-table">
+      <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
         <tr class="order-table-th_row">
           <td style="width:40px">颜色</td>
           <template v-for="item in sizes">
-            <th>{{item}}</th>
+            <th :key="item.code">{{item.name}}</th>
           </template>
           <th>数量小计</th>
         </tr>
@@ -101,7 +100,7 @@
           <tr>
             <td>{{color}}</td>
             <template v-for="size in sizes">
-              <td style="width:80px">{{getVariant(color, size)}}</td>
+              <td style="width:80px">{{getVariant(color, size.name)}}</td>
             </template>
             <td style="width:100px">{{countRowAmount(color)}}</td>
           </tr>
@@ -135,7 +134,7 @@
 
   export default {
     name: "DeliverView",
-    props: ["slotData"],
+    props: ["slotData","purchaseOrder"],
     components: {
       OrdersInfoItem,
       FormLabel
@@ -143,11 +142,13 @@
     mixins: [],
     computed: {
       sizes: function () {
-        var sizes = new Set([]);
-        this.slotData.entries.forEach(element => {
-          sizes.add(element.size);
+        var sizes = [];
+        this.purchaseOrder.entries.forEach(element => {
+          sizes.push(element.product.size);
         });
-        return sizes;
+        const res = new Map();
+        var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
+        return result.sort((o1, o2) => o1.sequence - o2.sequence);
       },
       colors: function () {
         var colors = new Set([]);
@@ -183,7 +184,7 @@
         return amount;
       },
       getColspanLength() {
-        return this.colors.size + 2;
+        return this.sizes.length ;
       },
       getVariant(color, size) {
         var result = this.slotData.entries.filter(
