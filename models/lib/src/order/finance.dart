@@ -137,8 +137,12 @@ class AbstractPayPlanModel extends ItemModel {
   @JsonKey(toJson: itemsToJson)
   List<AbstractPayPlanItemModel> payPlanItems;
 
-  AbstractPayPlanModel(
-      {this.name, this.isHaveDeposit, this.payPlanType, this.payPlanItems});
+  AbstractPayPlanModel({
+    this.name,
+    this.isHaveDeposit,
+    this.payPlanType,
+    this.payPlanItems,
+  });
 
   factory AbstractPayPlanModel.fromJson(Map<String, dynamic> json) =>
       _$AbstractPayPlanModelFromJson(json);
@@ -254,11 +258,15 @@ class OrderPayPlanModel extends AbstractPayPlanModel {
   /// 所属订单
   AbstractOrderModel belongOrder;
 
+  ///已付
+  double paidAmount;
+
   OrderPayPlanModel({
     String name,
     bool isHaveDeposit,
     PayPlanType payPlanType,
     List<AbstractPayPlanItemModel> payPlanItems,
+    this.paidAmount,
     this.belongOrder,
   }) : super(
             name: name,

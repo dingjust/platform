@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/form/purchase/components/ColorSizeView.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +20,11 @@ class ReconciliationOrderForm extends StatefulWidget {
 
   final VoidCallback onCallback;
 
-  const ReconciliationOrderForm(
-      {Key key,
-      this.deliveryOrder,
-      this.onCallback,
-      this.reconciliationOrder,
-      this.purchaseOrder})
+  const ReconciliationOrderForm({Key key,
+    this.deliveryOrder,
+    this.onCallback,
+    this.reconciliationOrder,
+    this.purchaseOrder})
       : super(key: key);
 
   @override
@@ -96,21 +96,15 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
               child: ListView(
                 children: <Widget>[
                   Container(
-                      height: 550,
+                      height: 650,
                       child: TabBarView(
                         children: <Widget>[
                           _buildDetailSection(),
                           _buildMoneySection(),
                         ],
                       )),
-                  ColorSizeTable(
-                    noteEntries: widget.reconciliationOrder != null
-                        ? widget.reconciliationOrder.entries ?? null
-                        : (widget.deliveryOrder != null
-                        ? widget.deliveryOrder.entries ?? null
-                        : null),
-                    orderEntries: widget.purchaseOrder.entries,
-                    colorSizeEntries: colorSizeEntries,
+                  ColorSizeView(
+                    entries: widget.reconciliationOrder.entries ?? [],
                   ),
                   _buildBottomSheet()
                 ],
@@ -185,7 +179,36 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
               fontSize: 16,
             ),
           ),
-          _buildCooperationModeSelect()
+          _buildCooperationModeSelect(),
+          ItemDivider(),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '数量合计',
+            value: Text('${totalAmount()}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '金额合计',
+            value: Text(
+                '￥${widget.purchaseOrder.unitPrice}X${totalAmount()}=￥${widget
+                    .purchaseOrder.unitPrice * totalAmount()}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '实际应付总额',
+            value: Text('￥${shouldPay()}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '已付',
+            value: Text('￥${widget.purchaseOrder.payPlan.paidAmount}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '剩余应付金额	',
+            value: Text(
+                '￥${shouldPay() - widget.purchaseOrder.payPlan.paidAmount}'),
+          ),
         ],
       ),
     );
@@ -333,7 +356,8 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: UserBLoC.instance.currentUser.type == UserType.BRAND
             ? <Widget>[
-          Expanded(
+          showSaveBtn()
+              ? Expanded(
             flex: 1,
             child: Container(
                 height: double.infinity,
@@ -344,80 +368,85 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
                         disabledColor: Colors.grey[300],
                         child: Text(
                           '保存并退出',
-                          style: TextStyle(fontSize: 15, color: Colors.red),
+                          style: TextStyle(
+                              fontSize: 15, color: Colors.red),
                         ),
                       ),
                 )),
-          ),
-                showConfirmBtn()
-                    ? Expanded(
-                        flex: 1,
-                        child: Container(
-                            height: double.infinity,
-                            child: Builder(
-                              builder: (BuildContext buttonContext) =>
-                                  FlatButton(
-                                color: Color.fromRGBO(255, 214, 12, 1),
-                                onPressed: onConfirm,
-                                disabledColor: Colors.grey[300],
-                                child: Text(
-                                  '确认完成收货',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ),
-                            )),
-                      )
-                    : Container(),
-                showRecallBtn()
-                    ? Expanded(
-                        flex: 1,
-                        child: Container(
-                            height: double.infinity,
-                            child: Builder(
-                              builder: (BuildContext buttonContext) =>
-                                  FlatButton(
-                                onPressed: onRecall,
-                                disabledColor: Colors.grey[300],
-                                child: Text(
-                                  '撤回',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.red),
-                                ),
-                              ),
-                            )),
-                      )
-                    : Container(),
-              ]
+          )
+              : Container(),
+          showConfirmBtn()
+              ? Expanded(
+            flex: 1,
+            child: Container(
+                height: double.infinity,
+                child: Builder(
+                  builder: (BuildContext buttonContext) =>
+                      FlatButton(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        onPressed: onConfirm,
+                        disabledColor: Colors.grey[300],
+                        child: Text(
+                          '确认完成收货',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                )),
+          )
+              : Container(),
+          showRecallBtn()
+              ? Expanded(
+            flex: 1,
+            child: Container(
+                height: double.infinity,
+                child: Builder(
+                  builder: (BuildContext buttonContext) =>
+                      FlatButton(
+                        onPressed: onRecall,
+                        disabledColor: Colors.grey[300],
+                        child: Text(
+                          '撤回',
+                          style: TextStyle(
+                              fontSize: 15, color: Colors.red),
+                        ),
+                      ),
+                )),
+          )
+              : Container(),
+        ]
             : [],
       ),
     );
   }
 
   Widget _buildCooperationModeSelect() {
-    return B2BInfoRow(
-      hasBottomBorder: true,
-      label: '加工方式',
-      value: Row(
-        children: CooperationMode.values
-            .map((value) =>
-            Container(
-              margin: EdgeInsets.only(left: 20),
-              child: Row(
-                children: <Widget>[
-                  Text('${CooperationModeLocalizedMap[value]}'),
-                  Radio(
-                    groupValue: cooperationMethod,
-                    value: value,
-                    onChanged: (val) {
-                      setState(() {
-                        cooperationMethod = val;
-                      });
-                    },
-                  )
-                ],
-              ),
-            ))
-            .toList(),
+    return Padding(
+      padding: EdgeInsets.only(left: 15),
+      child: B2BInfoRow(
+        hasBottomBorder: true,
+        label: '加工方式',
+        value: Row(
+          children: CooperationMode.values
+              .map((value) =>
+              Container(
+                margin: EdgeInsets.only(left: 20),
+                child: Row(
+                  children: <Widget>[
+                    Text('${CooperationModeLocalizedMap[value]}'),
+                    Radio(
+                      groupValue: cooperationMethod,
+                      value: value,
+                      onChanged: (val) {
+                        setState(() {
+                          cooperationMethod = val;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ))
+              .toList(),
+        ),
       ),
     );
   }
@@ -466,56 +495,61 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
     });
   }
 
-  ///提交收货单
+  ///提交对账单
   void onConfirm() {
-    // DeliveryOrderNoteModel model;
-    // if (widget.deliveryOrder == null) {
-    //   model = getDeliveryForCreate(colorSizeEntries);
-    // } else {
-    //   model = getDeliveryForUpdate(widget.deliveryOrder, colorSizeEntries);
-    // }
-    // showDialog(
-    //     context: context,
-    //     barrierDismissible: false,
-    //     builder: (_) {
-    //       return RequestDataLoading(
-    //         requestCallBack: widget.deliveryOrder == null
-    //             ? DeliveryOrderRepository().createAndCommitDeliveryOrder(
-    //                 widget.purchaseOrder.code, model)
-    //             : DeliveryOrderRepository().updateAndCommitDeliveryOrder(model),
-    //         outsideDismiss: false,
-    //         loadingText: '保存中。。。',
-    //         entrance: '',
-    //       );
-    //     }).then((value) {
-    //   bool result = false;
-    //   if (value != null) {
-    //     result = true;
-    //   }
-    //   showDialog(
-    //       context: context,
-    //       barrierDismissible: false,
-    //       builder: (_) {
-    //         return CustomizeDialog(
-    //           dialogType: DialogType.RESULT_DIALOG,
-    //           failTips: '保存失败',
-    //           successTips: '保存成功',
-    //           callbackResult: result,
-    //           confirmAction: jumpToDetail,
-    //         );
-    //       });
-    // });
-  }
-
-  ///撤回
-  void onRecall() {
+    ReconciliationOrderNoteModel model;
+    if (widget.reconciliationOrder == null) {
+      model = getReconciliationForCreate(colorSizeEntries);
+    } else {
+      model = getReconciliationForUpdate(
+          widget.reconciliationOrder, colorSizeEntries);
+    }
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: DeliveryOrderRepository()
-                .recallDelivery(widget.deliveryOrder.code),
+            requestCallBack: widget.reconciliationOrder == null
+                ? ReconciliationOrderRepository()
+                .createAndCommitReconciliationOrder(
+                widget.purchaseOrder.code, model)
+                : ReconciliationOrderRepository()
+                .updateAndCommitReconciliationOrder(model),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '保存失败',
+              successTips: '保存成功',
+              callbackResult: result,
+              confirmAction: jumpToDetail,
+            );
+          });
+    });
+  }
+
+  ///撤回
+  void onRecall() {
+    ReconciliationOrderNoteModel model = ReconciliationOrderNoteModel();
+    model.id = widget.reconciliationOrder.id;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: ReconciliationOrderRepository()
+                .recallReconciliationOrder(model),
             outsideDismiss: false,
             loadingText: '撤回中。。。',
             entrance: '',
@@ -541,11 +575,11 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
   }
 
   bool showSaveBtn() {
-    if (widget.deliveryOrder == null) {
+    if (widget.reconciliationOrder == null) {
       return true;
     } else {
-      if (widget.deliveryOrder.status == OrderNoteStatus.UNCOMMITTED ||
-          widget.deliveryOrder.status == OrderNoteStatus.REJECTED) {
+      if (widget.reconciliationOrder.status == OrderNoteStatus.UNCOMMITTED ||
+          widget.reconciliationOrder.status == OrderNoteStatus.REJECTED) {
         return true;
       } else {
         return false;
@@ -554,12 +588,12 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
   }
 
   bool showConfirmBtn() {
-    if (widget.purchaseOrder.status != PurchaseOrderStatus.OUT_OF_STORE) {
+    if (widget.purchaseOrder.status != PurchaseOrderStatus.COMPLETED) {
       return false;
-    } else if (widget.deliveryOrder == null) {
+    } else if (widget.reconciliationOrder == null) {
       return true;
     } else {
-      if (widget.deliveryOrder.status == OrderNoteStatus.UNCOMMITTED) {
+      if (widget.reconciliationOrder.status == OrderNoteStatus.UNCOMMITTED) {
         return true;
       } else {
         return false;
@@ -568,12 +602,30 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
   }
 
   bool showRecallBtn() {
-    if (widget.deliveryOrder != null &&
-        widget.deliveryOrder.status == OrderNoteStatus.PENDING_CONFIRM) {
+    if (widget.reconciliationOrder != null &&
+        widget.reconciliationOrder.status == OrderNoteStatus.PENDING_CONFIRM) {
       return true;
     } else {
       return false;
     }
+  }
+
+  ///总数
+  int totalAmount() {
+    int result = 0;
+    widget.reconciliationOrder.entries.forEach((entry) {
+      result += entry.quantity;
+    });
+    return result;
+  }
+
+  ///应付
+  double shouldPay() {
+    return totalAmount() * widget.purchaseOrder.unitPrice -
+        getDoubleFromController(delayDeductionController) -
+        getDoubleFromController(qualityDeductionController) -
+        getDoubleFromController(otherDeductionController) +
+        getDoubleFromController(otherFundsController);
   }
 
   void jumpToDetail() {

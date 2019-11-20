@@ -3007,7 +3007,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               MaterialPageRoute(
                 builder: (context) =>
                     ReconciliationOrderView(
-                      purchaseOrderCode: order.code,
+                      purchaseOrder: order,
                       reconciliationOrder: order.reconciliationOrders.isNotEmpty
                           ? order.reconciliationOrders[0]
                           : null,

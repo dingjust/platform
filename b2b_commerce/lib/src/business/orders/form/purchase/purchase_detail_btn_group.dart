@@ -2,11 +2,11 @@ import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_deliver_
 import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_reconciliation_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_shipping_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 import 'purchase_deliver_order_form.dart';
 import 'purchase_reconciliation_order_view.dart';
@@ -265,7 +265,7 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) =>
             ReconciliationOrderView(
-              purchaseOrderCode: order.code,
+              purchaseOrder: order,
               reconciliationOrder: order.reconciliationOrders.isNotEmpty
                   ? order.reconciliationOrders[0]
                   : null,

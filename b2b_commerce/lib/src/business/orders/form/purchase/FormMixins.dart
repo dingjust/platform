@@ -313,6 +313,7 @@ class ReconciliationFormMixin {
     partBController.text = order.partB;
     brandController.text = order.brand;
     skuIDController.text = order.skuID;
+    cooperationMethod = order.cooperationMethod;
     delayDeductionController.text = order.delayDeduction.toString();
     delayDeductionRemarksController.text = order.delayDeductionRemarks;
     qualityDeductionController.text = order.qualityDeduction.toString();

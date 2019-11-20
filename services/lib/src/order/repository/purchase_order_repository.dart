@@ -105,6 +105,8 @@ class PurchaseOrderRepository {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
+      print('============');
+      print(response);
       PurchaseOrderModel model = PurchaseOrderModel.fromJson(response.data);
       return model;
     } else
