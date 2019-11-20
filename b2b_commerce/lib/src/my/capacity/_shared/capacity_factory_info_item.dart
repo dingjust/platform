@@ -68,6 +68,7 @@ class CapacityFactoryInfoItem extends StatelessWidget {
                           child: Container(
                               child: Text(
                                 capacity.category == null ? '' : '${capacity.category.parent == null ? '' : capacity.category.parent.name + '-'}'+'${capacity.category.name}',
+                                  overflow: TextOverflow.ellipsis
                           )),
                         ),
                         Container(

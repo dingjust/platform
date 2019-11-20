@@ -171,6 +171,9 @@ const COMMON_APIS = {
   updateFactory(uid) {
     return '/b2b/factories/' + uid;
   },
+  updateFactoryProfiles(uid) {
+    return '/b2b/factories/' + uid + '/profiles';
+  },
   getFactories() {
     return '/b2b/factories';
   },
