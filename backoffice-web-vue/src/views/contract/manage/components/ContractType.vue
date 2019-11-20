@@ -1,12 +1,12 @@
 <template>
-  <el-row type="flex" justify="space-around">
+  <el-row type="flex" justify="space-around" :gutter="50">
     <el-col :span="8">
       <div :class="contractType=='1'?'create-contract-type_select':'create-contract-type_not_select'"
            @click="onCreateOrderContract">
         <el-row>
           <el-col :span="24">
             <h5 :class="contractType=='1'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-              订单关联合同</h5>
+              委托生产合同</h5>
           </el-col>
         </el-row>
         <el-row>
@@ -24,13 +24,31 @@
         <el-row>
           <el-col :span="24">
             <h5 :class="contractType=='2'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-              非订单关联合同</h5>
+              采购订单</h5>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="20">
             <h6
               :class="contractType=='2'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              对已签署的合同签署补充协议</h6>
+          </el-col>
+        </el-row>
+      </div>
+    </el-col>
+    <el-col :span="8">
+      <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
+        @click="onCreateSupplementContract">
+        <el-row>
+          <el-col :span="24">
+            <h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+              框架协议</h5>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="20">
+            <h6
+              :class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
               与合作商签订长期合作合同，即框架协议</h6>
           </el-col>
         </el-row>
@@ -84,6 +102,11 @@
         Bus.$emit('openContractType');
         this.fn.openSlider('创建', ContractSupplementForm, '');
       },
+      // onCreateSupplementContract(){
+      //   this.contractType='3';
+      //   Bus.$emit('openContractType');
+      //   this.fn.openSlider('创建', ContractSupplementForm, '');
+      // },
     },
     data() {
       return {
@@ -102,13 +125,14 @@
     },
     watch: {
       contractType: function (newType, oldType) {
+          console.log('============'+newType);
         this.$emit('contractTypeChange',newType);
       }
     }
   };
 
 </script>
-<style>
+<style scoped>
   .create-contract-title {
     font-weight: bold;
     font-size: 18px;
@@ -116,7 +140,7 @@
   }
 
   .create-contract-type_select {
-    width: 350px;
+    width: 280px;
     height: 110px;
     background: rgba(255, 164, 3, 1);
     opacity: 0.85;
@@ -131,7 +155,7 @@
   }
 
   .create-contract-type_not_select {
-    width: 350px;
+    width: 280px;
     height: 110px;
     /* background: rgba(255, 164, 3, 1); */
     background-color: #fff;

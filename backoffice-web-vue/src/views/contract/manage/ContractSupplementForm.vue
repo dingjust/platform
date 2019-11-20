@@ -359,7 +359,7 @@
   };
 
 </script>
-<style>
+<style scoped>
   .create-contract-title {
     font-weight: bold;
     font-size: 18px;
