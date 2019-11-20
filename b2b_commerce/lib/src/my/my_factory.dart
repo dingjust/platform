@@ -130,6 +130,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
         builder: (context, MyFactoryState factoryState, _) {
           _factory = factoryState.model;
           return Scaffold(
+            resizeToAvoidBottomInset: true,
             appBar: AppBar(
               title: Text('公司介绍'),
               centerTitle: true,
@@ -299,27 +300,29 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                         flex: 1,
                         child: Container(
                             height: double.infinity,
-                            child: Theme(
-                                data: ThemeData(
-                                  canvasColor: Colors.transparent,
-                                  primaryColor: Colors.white,
-                                  accentColor: Color.fromRGBO(255, 214, 12, 1),
-                                  bottomAppBarColor: Colors.grey,
-                                ),
-                                child: Builder(
-                                  builder: (BuildContext buttonContext) =>
-                                      FlatButton(
-                                    color: Color.fromRGBO(255, 245, 157, 1),
-                                    onPressed: () {
-                                      _createPurchaseByFactoryProduct();
-                                    },
-                                    disabledColor: Colors.grey[300],
-                                    child: Text(
-                                      '下单',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  ),
-                                ))),
+                            child:Container()
+//                            Theme(
+//                                data: ThemeData(
+//                                  canvasColor: Colors.transparent,
+//                                  primaryColor: Colors.white,
+//                                  accentColor: Color.fromRGBO(255, 214, 12, 1),
+//                                  bottomAppBarColor: Colors.grey,
+//                                ),
+//                                child: Builder(
+//                                  builder: (BuildContext buttonContext) =>
+//                                      FlatButton(
+//                                    color: Color.fromRGBO(255, 245, 157, 1),
+//                                    onPressed: () {
+//                                      _createPurchaseByFactoryProduct(context);
+//                                    },
+//                                    disabledColor: Colors.grey[300],
+//                                    child: Text(
+//                                      '下单',
+//                                      style: TextStyle(fontSize: 15),
+//                                    ),
+//                                  ),
+//                                ))
+                        ),
                       ),
                       Expanded(
                         flex: 1,
@@ -351,7 +354,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     );
   }
 
-  _createPurchaseByFactoryProduct() async{
+  _createPurchaseByFactoryProduct(BuildContext pageContext) async{
     dynamic result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -362,9 +365,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     print(result);
     if(result != null){
       dj.showModalBottomSheet<void>(
-          context: context,
+          context: pageContext,
           builder: (BuildContext context) {
-            return BuyPurchaseForm(result);
+            return BuyPurchaseForm(result,heightScale: 0.9,);
           });
     }
   }

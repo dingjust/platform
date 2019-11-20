@@ -4,7 +4,7 @@ import 'package:models/models.dart';
 
 import '../../../services.dart';
 
-///品类状态管理
+///工厂空闲产能状态管理
 class MyFactoryCapacityState with ChangeNotifier{
   int _capacityIndex = 0;
 
