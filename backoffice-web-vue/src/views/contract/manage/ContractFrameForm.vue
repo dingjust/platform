@@ -20,9 +20,16 @@
     </el-dialog>
     <div>
       <el-row type="flex" justify="center" align="middle">
-        <span class="create-contract-title">创建合同</span>
+        <span class="create-contract-title">框架协议</span>
       </el-row>
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
+      <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
+        <el-col :push="2" :span="8">
+          <span class="tips">合同类型</span>
+          <el-radio v-model="contractType" label="1">模板合同</el-radio>
+          <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
+        </el-col>
+      </el-row>
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择合作商" v-model="suppliers.name" :disabled="true">
@@ -87,7 +94,7 @@
 
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
-          <!--<el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
+<!--          <el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
         </el-col>
         <el-col :span="4" :offset="2">
           <el-button v-if="contractType == '1'" class="create-contract-button" @click="onSave">生成合同</el-button>
@@ -102,28 +109,26 @@
 <script>
   import {
     createNamespacedHelpers
-  } from "vuex";
-  import ContractTypeSelect from "./components/ContractTypeSelect";
-  import ContractTemplateSelect from "./components/ContractTemplateSelect";
-  import ContractPreview from "./components/ContractPreview";
-  import ContractOrderSelect from "./components/ContractOrderSelect";
+  } from 'vuex';
+  import ContractTypeSelect from './components/ContractTypeSelect';
+  import ContractTemplateSelect from './components/ContractTemplateSelect';
+  import ContractPreview from './components/ContractPreview';
+  import ContractOrderSelect from './components/ContractOrderSelect';
   import http from '@/common/js/http';
-  import TemplateForm from "../../contract/template/components/TemplateForm";
+  import TemplateForm from '../../contract/template/components/TemplateForm';
   import Bus from '@/common/js/bus.js';
   import ContractPreviewPdf from './components/ContractPreviewPdf'
   import SupplierSelect from './components/SupplierSelect';
-
 
   const {
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    "ContractModule"
+    'ContractModule'
   );
 
-
   export default {
-    name: "ContractFrameForm",
+    name: 'ContractFrameForm',
     props: ['slotData'],
     components: {
       ContractTypeSelect,
@@ -132,17 +137,17 @@
       ContractOrderSelect,
       TemplateForm,
       ContractPreviewPdf,
-      SupplierSelect,
+      SupplierSelect
     },
     computed: {
       ...mapGetters({
-        page: "page",
-        keyword: "keyword"
+        page: 'page',
+        keyword: 'keyword'
       }),
       uploadFormData: function () {
         return {
           fileFormat: 'DefaultFileFormat',
-          conversionGroup: 'DefaultProductConversionGroup',
+          conversionGroup: 'DefaultProductConversionGroup'
         };
       },
       headers: function () {
@@ -153,17 +158,17 @@
     },
     methods: {
       ...mapActions({
-        search: "search",
+        search: 'search',
         refresh: 'refresh'
       }),
-      selectTemp(str){
-        if(str == 'KJXY'){
+      selectTemp (str) {
+        if (str == 'KJXY') {
           this.tempType = 'KJXY';
         }
 
-        this.dialogTemplateVisible=true;
+        this.dialogTemplateVisible = true;
       },
-      async onSearchOrder(keyword, page, size) {
+      async onSearchOrder (keyword, page, size) {
         if (keyword == null) {
           keyword = '';
         }
@@ -174,41 +179,40 @@
           page: page,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.orderPage = result;
       },
-      onContractTypeChange(val) {
+      onContractTypeChange (val) {
         this.contractType = val;
       },
-      //文件选择（缓存，并未确定）
-      onFileSelectChange(data) {
+      // 文件选择（缓存，并未确定）
+      onFileSelectChange (data) {
         this.cacheSelectFile = data;
       },
-      //订单选择
-      onOrderSelectChange(data) {
+      // 订单选择
+      onOrderSelectChange (data) {
         this.orderSelectFile = data;
         this.dialogOrderVisible = false;
       },
-      //文件选择确定
-      onFileSelectSure() {
+      // 文件选择确定
+      onFileSelectSure () {
         this.dialogTemplateVisible = false;
         this.selectFile = this.cacheSelectFile;
       },
-      handleExceed(files, fileList) {
+      handleExceed (files, fileList) {
         if (fileList > 1) {
           this.$message.warning(`已达最大文件数`);
           return false;
         }
-
       },
-      handleRemove(file) {
+      handleRemove (file) {
         this.fileList = [];
         this.pdfFile = '';
       },
-      async onSavePdf() {
+      async onSavePdf () {
         if (this.pdfFile.id == null || this.pdfFile.id == '') {
           this.$message.error('请上传PDF');
           return;
@@ -217,11 +221,11 @@
           this.$message.error('请选择合作商');
           return;
         }
-        if(this.dateTime == '' || this.dateTime == null){
+        if (this.dateTime == '' || this.dateTime == null) {
           this.$message.error('请选择合同有效期');
           return;
         }
-        if(this.contractCode == null || this.contractCode == ''){
+        if (this.contractCode == null || this.contractCode == '') {
           this.$message.error('请输入自定义合同编号');
           return;
         }
@@ -238,9 +242,9 @@
           'title': '',
           'validityEnd': this.dateTime[1],
           'validityStart': this.dateTime[0],
-          'isFrame' : true,
-          'customizeCode':this.contractCode,
-          'partnerCompanyCode':this.suppliers.id,
+          'isFrame': true,
+          'customizeCode': this.contractCode,
+          'partnerCompanyCode': this.suppliers.id
         }
 
         const url = this.apis().saveContract();
@@ -261,7 +265,7 @@
 
         this.fn.closeSlider(true);
       },
-      async onSave() {
+      async onSave () {
         if (this.suppliers.id == null || this.suppliers.id == '') {
           this.$message.error('请选择合作商');
           return;
@@ -270,7 +274,7 @@
           this.$message.error('请选择合同模板');
           return;
         }
-        if(this.dateTime == '' || this.dateTime == null){
+        if (this.dateTime == '' || this.dateTime == null) {
           this.$message.error('请选择合同有效期');
           return;
         }
@@ -286,8 +290,8 @@
           'validityStart': this.dateTime[0],
           'role': role,
           'title': '',
-          'isFrame' : true,
-          'partnerCompanyCode':this.suppliers.id,
+          'isFrame': true,
+          'partnerCompanyCode': this.suppliers.id
         }
 
         const url = this.apis().saveContract();
@@ -307,7 +311,7 @@
         });
         this.fn.closeSlider(true);
       },
-      onSetOrderCode() {
+      onSetOrderCode () {
         if (this.slotData != null && this.slotData != '') {
           this.orderSelectFile = this.slotData;
           this.orderReadOnly = true;
@@ -318,35 +322,35 @@
           }
         }
       },
-      onCreateTemp() {
+      onCreateTemp () {
         this.dialogTemplateVisible = false;
         this.fn.closeSlider(false);
         // this.$router.push("templateForm");
-        this.fn.openSlider("创建", TemplateForm);
+        this.fn.openSlider('创建', TemplateForm);
       },
-      handlePreview(file) {
+      handlePreview (file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      onBeforeUpload(file) {
+      onBeforeUpload (file) {
         if (file.type !== 'application/pdf') {
           this.$message.error('选择的文件不是PDF文件');
           return false;
         }
         return true;
       },
-      onSuccess(response) {
+      onSuccess (response) {
         this.pdfFile = response;
       },
-      onSuppliersSelect(val) {
+      onSuppliersSelect (val) {
         this.suppliers = val;
         this.suppliersSelectVisible = false;
         // this.form.companyOfSeller = val.name;
         // this.form.contactPersonOfSeller = val.contactPerson;
         // this.form.contactOfSeller = val.contactPhone;
-      },
+      }
     },
-    data() {
+    data () {
       return {
         currentUser: this.$store.getters.currentUser,
         contractType: '1',
@@ -368,16 +372,16 @@
         pdfVisible: false,
         fileUrl: '',
         thisContract: '',
-        agreementType:'',
-        tempType:'KJXY',
-        tempData:[],
-        allData:[],
-        dateTime:'',
-        contractCode:'',
+        agreementType: '',
+        tempType: 'KJXY',
+        tempData: [],
+        allData: [],
+        dateTime: '',
+        contractCode: '',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
@@ -385,7 +389,7 @@
             }
           }, {
             text: '最近一个月',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
@@ -393,7 +397,7 @@
             }
           }, {
             text: '最近三个月',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
@@ -401,16 +405,15 @@
             }
           }]
         },
-        suppliersSelectVisible:false,
-        suppliers:'',
+        suppliersSelectVisible: false,
+        suppliers: ''
       };
     },
-    created() {
+    created () {
       this.onSearchOrder('', 0, 10);
       this.onSetOrderCode();
     }
   };
-
 </script>
 <style>
   .create-contract-title {

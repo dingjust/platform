@@ -17,7 +17,7 @@
 <!--            </el-col>-->
 <!--          </el-row>-->
 <!--        </template>-->
-        <div  @click="contractType=1"
+        <div  @click="contractType='1'"
           :class="contractType!='3'?'create-contract-type_select':'create-contract-type_not_select'">
           <el-row>
             <el-col :span="24">
@@ -62,34 +62,33 @@
 
 <script>
   export default {
-    name: "ContractTypeSelect",
+    name: 'ContractTypeSelect',
     methods: {
-      onSelectOption(val) {
+      onSelectOption (val) {
         this.contractType = val;
       }
     },
-    data() {
+    data () {
       return {
         visible: false,
-        contractType: "1",
+        contractType: '1',
         data: [{
-            label: "使用平台电子模板",
-            value: "1"
-          },
-          {
-            label: "上传纸质合同文件",
-            value: "2"
-          }
+          label: '使用平台电子模板',
+          value: '1'
+        },
+        {
+          label: '上传纸质合同文件',
+          value: '2'
+        }
         ]
       };
     },
     watch: {
       contractType: function (newType, oldType) {
-        this.$emit('contractTypeChange',newType);
+        this.$emit('contractTypeChange', newType);
       }
     }
   };
-
 </script>
 <style scoped>
   .create-contract-title {
