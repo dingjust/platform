@@ -1,43 +1,43 @@
 <template>
   <el-row type="flex" justify="space-around">
     <el-col :span="8">
-      <el-popover placement="bottom" width="320" trigger="hover" v-model="visible">
-        <template v-for="item in data">
-          <el-row justify="space-between" type="flex">
-            <el-col :span="24">
-              <div class="create-contract-type_option" @click="onSelectOption(item.value)">
-                <el-row justify="space-between" type="flex" align="middle">
-                  <el-col :span="2">
-                  </el-col>
-                  <el-col :span="22">
-                    <el-radio v-model="contractType" :label="item.value">{{item.label}}</el-radio>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-col>
-          </el-row>
-        </template>
-        <div slot="reference"
+<!--      <el-popover placement="bottom" width="320" trigger="hover" v-model="visible">-->
+<!--        <template v-for="item in data">-->
+<!--          <el-row justify="space-between" type="flex">-->
+<!--            <el-col :span="24">-->
+<!--              <div class="create-contract-type_option" @click="onSelectOption(item.value)">-->
+<!--                <el-row justify="space-between" type="flex" align="middle">-->
+<!--                  <el-col :span="2">-->
+<!--                  </el-col>-->
+<!--                  <el-col :span="22">-->
+<!--                    <el-radio v-model="contractType" :label="item.value">{{item.label}}</el-radio>-->
+<!--                  </el-col>-->
+<!--                </el-row>-->
+<!--              </div>-->
+<!--            </el-col>-->
+<!--          </el-row>-->
+<!--        </template>-->
+        <div  @click="contractType='1'"
           :class="contractType!='3'?'create-contract-type_select':'create-contract-type_not_select'">
           <el-row>
             <el-col :span="24">
               <h5
                 :class="contractType!='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-                新签合同（电子签章）———{{contractType!='2'?'使用平台电子模板':'上传自定义合同文件'}}</h5>
+                新建合同（电子签章）——— 纸质合同</h5>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="20">
               <h6
                 :class="contractType!='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
-                平台电子模板或者上传自定义合同,使用在线电子签章合同</h6>
+                新创建电子合同或上传未签署的纸质合同文件使用在线电子签章签署合同</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="center" align="center">
-            <div class="create-contract-type_icon" :class="visible?'el-icon-arrow-down':'el-icon-arrow-up'"></div>
-          </el-row>
+<!--          <el-row type="flex" justify="center" align="center">-->
+<!--            <div class="create-contract-type_icon" :class="visible?'el-icon-arrow-down':'el-icon-arrow-up'"></div>-->
+<!--          </el-row>-->
         </div>
-      </el-popover>
+<!--      </el-popover>-->
     </el-col>
     <el-col :span="8">
       <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
@@ -45,7 +45,7 @@
         <el-row>
           <el-col :span="24">
             <h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-              上传已签纸质合同</h5>
+              已签纸质合同</h5>
           </el-col>
         </el-row>
         <el-row>
@@ -62,36 +62,35 @@
 
 <script>
   export default {
-    name: "ContractTypeSelect",
+    name: 'ContractTypeSelect',
     methods: {
-      onSelectOption(val) {
+      onSelectOption (val) {
         this.contractType = val;
       }
     },
-    data() {
+    data () {
       return {
         visible: false,
-        contractType: "1",
+        contractType: '1',
         data: [{
-            label: "使用平台电子模板",
-            value: "1"
-          },
-          {
-            label: "上传纸质合同文件",
-            value: "2"
-          }
+          label: '使用平台电子模板',
+          value: '1'
+        },
+        {
+          label: '上传纸质合同文件',
+          value: '2'
+        }
         ]
       };
     },
     watch: {
       contractType: function (newType, oldType) {
-        this.$emit('contractTypeChange',newType);
+        this.$emit('contractTypeChange', newType);
       }
     }
   };
-
 </script>
-<style>
+<style scoped>
   .create-contract-title {
     font-weight: bold;
     font-size: 18px;

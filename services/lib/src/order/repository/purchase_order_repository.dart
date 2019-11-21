@@ -105,6 +105,8 @@ class PurchaseOrderRepository {
       print(e);
     }
     if (response != null && response.statusCode == 200) {
+      print('============');
+      print(response);
       PurchaseOrderModel model = PurchaseOrderModel.fromJson(response.data);
       return model;
     } else
@@ -419,5 +421,35 @@ class PurchaseOrderRepository {
       return null;
   }
 
+  ///拒单
+  Future<bool> cancellingOfPurchaseOrder(String code) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.cancellingOfPurchaseOrder(code),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
+  ///接单
+  Future<bool> confirmProductionByOffline(String code) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.confirmProductionByOffline(code),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

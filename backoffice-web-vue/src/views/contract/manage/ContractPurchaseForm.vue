@@ -28,7 +28,7 @@
     </el-dialog>
     <el-form ref="requirementForm" label-position="left" label-width="88px" hide-required-asterisk>
       <el-row type="flex" justify="center" align="middle">
-        <span class="create-contract-title">委托生产合同</span>
+        <span class="create-contract-title">采购订单</span>
       </el-row>
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect"/>
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
@@ -42,6 +42,13 @@
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择订单" :value="ordersCodeStr" :disabled="true">
             <el-button slot="prepend" :disabled="orderReadOnly" @click="dialogOrderVisible=true">关联订单</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row">
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="选择框架协议" v-model="selectContract.title" :disabled="true">
+            <el-button slot="prepend" @click="openKJHTSelect">选择已签协议</el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -81,6 +88,7 @@
           </el-upload>
         </el-col>
       </el-row>
+
       <!--      <el-row class="create-contract-row" v-if="contractType=='1'" type="flex" justify="start">-->
       <!--        <el-col :push="2" :span="8">-->
       <!--          <span class="tips">合同类型</span>-->
@@ -137,7 +145,7 @@
     );
 
     export default {
-      name: 'ContractForm',
+      name: 'ContractPurchaseForm',
       props: ['slotData'],
       components: {
         ContractTypeSelect,
@@ -178,11 +186,11 @@
           refresh: 'refresh'
         }),
         selectTemp (str) {
-          if (this.hasFrameworkContract) {
-            this.tempType = 'CGDD';
-          } else {
-            this.tempType = 'WTSCHT';
-          }
+          this.tempType = 'CGDD';
+          //   if (this.hasFrameworkContract) {
+          // } else {
+          //   this.tempType = 'WTSCHT';
+          // }
 
           this.dialogTemplateVisible = true;
         },
@@ -402,7 +410,8 @@
           this.mockData = result.content;
         },
         openKJHTSelect () {
-          if (this.orderSelectFiles.length == null) {
+          if (this.orderSelectFiles == null || this.orderSelectFiles.length == 0) {
+            this.$message.error('请选择关联订单');
             return;
           }
 
@@ -412,7 +421,7 @@
             }
           } else {
             if (this.orderSelectFiles[0].belongTo != null) {
-              this.companyUid = this.belongTo.uid;
+              this.companyUid = this.orderSelectFiles[0].belongTo.uid;
             }
           }
           this.getContractList(this.companyUid);

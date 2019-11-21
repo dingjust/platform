@@ -79,7 +79,9 @@ class CapacityMatchingItem extends StatelessWidget {
                         Expanded(
                           child: Container(
                               child: Text(
-                            '${capacity.category.name}',
+                                '${capacity.category.parent.name}-${capacity
+                                    .category.name}',
+                                overflow: TextOverflow.ellipsis,
                           )),
                         ),
                         Container(

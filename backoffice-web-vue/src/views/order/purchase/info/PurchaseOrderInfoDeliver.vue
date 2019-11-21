@@ -29,7 +29,8 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">发货方式</h6>
-          <el-select v-model="form.consignment.carrierDetails.code" placeholder="请选择" :disabled="form.isOfflineConsignment">
+          <el-select v-model="form.consignment.carrierDetails.code" placeholder="请选择"
+            :disabled="form.isOfflineConsignment">
             <el-option v-for="item in carriers" :key="item.code" :label="item.name" :value="item.code">
             </el-option>
           </el-select>
@@ -38,7 +39,8 @@
       <el-col :span="6">
         <el-row type="flex" align="middle">
           <h6 class="info-input-prepend">发货单号</h6>
-          <el-input placeholder="货运单号" v-model="form.consignment.trackingID" size="mini" :disabled="form.isOfflineConsignment">
+          <el-input placeholder="货运单号" v-model="form.consignment.trackingID" size="mini"
+            :disabled="form.isOfflineConsignment">
           </el-input>
         </el-row>
       </el-col>
@@ -96,7 +98,7 @@
       <tr class="order-table-th_row">
         <td style="width:40px">颜色</td>
         <template v-for="item in sizes">
-          <th>{{item}}</th>
+          <th>{{item.name}}</th>
         </template>
         <th>数量小计</th>
       </tr>
@@ -104,7 +106,7 @@
         <tr>
           <td>{{sizeArray[0].color}}</td>
           <template v-for="(size,index) in sizeArray">
-            <td style="width:80px">
+            <td style="width:80px" :key="index">
               <el-input class="order-table-input" type="number" v-model="size.num" placeholder="输入">
               </el-input>
             </td>
@@ -158,11 +160,13 @@
     mixins: [],
     computed: {
       sizes: function () {
-        var sizes = new Set([]);
+        var sizes = [];
         this.slotData.entries.forEach(element => {
-          sizes.add(element.product.size.name);
+          sizes.push(element.product.size);
         });
-        return sizes;
+        const res = new Map();
+        var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
+        return result.sort((o1, o2) => o1.sequence - o2.sequence);
       },
       colors: function () {
         var colors = new Set([]);
@@ -195,7 +199,7 @@
         return amount;
       },
       getColspanLength() {
-        return this.colors.size + 2;
+        return this.sizes.length + 1;
       },
       async onSubmit(isAll) {
         //组合订单行参数
@@ -226,7 +230,7 @@
           remarks: this.form.remarks,
           skuID: this.form.skuID,
           brand: this.form.brand,
-          consignment:this.form.consignment
+          consignment: this.form.consignment
         };
         var result;
         if (isAll) {
@@ -270,24 +274,24 @@
         receiveFormVisible: false,
         activeForm: '1',
         mockData: [],
-        carriers:[],
+        carriers: [],
         form: {
-          consignorName:  this.$store.getters.currentUser.username,
+          consignorName: this.$store.getters.currentUser.username,
           consignorPhone: this.$store.getters.currentUser.mobileNumber,
           isOfflineConsignment: true,
           consigneeName: this.slotData.deliveryAddress.fullname,
           consigneePhone: this.slotData.deliveryAddress.cellphone,
           consigneeAddress: this.slotData.deliveryAddress.details,
-          brand:  this.slotData.product.brand,
+          brand: this.slotData.product.brand,
           skuID: this.slotData.product.skuID,
           remarks: "",
           imperfectionsNum: '',
           returnNum: '',
-          consignment:{
-            trackingID:'',
-            carrierDetails:{
-              name:'',
-              code:''
+          consignment: {
+            trackingID: '',
+            carrierDetails: {
+              name: '',
+              code: ''
             },
           },
           entries: []
@@ -302,7 +306,7 @@
         var sizeArray = [];
         this.sizes.forEach(size => {
           sizeArray.push({
-            'size': size,
+            'size': size.name,
             'color': color,
             'num': '',
           })
@@ -319,7 +323,7 @@
             var sizeArray = [];
             this.sizes.forEach(size => {
               sizeArray.push({
-                'size': size,
+                'size': size.name,
                 'color': color,
                 'num': '',
               })
@@ -336,7 +340,7 @@
             var sizeArray = [];
             this.sizes.forEach(size => {
               sizeArray.push({
-                'size': size,
+                'size': size.name,
                 'color': color,
                 'num': '',
               })

@@ -8,9 +8,9 @@
           </template>
         </el-table-column>
         <template v-for="(item,index) in sizes">
-          <el-table-column :label="item">
+          <el-table-column :label="item.name" :key="index">
             <template slot-scope="scope">
-              <span>{{colorSizeFilter(scope.row,item)}}</span>
+              <span>{{colorSizeFilter(scope.row,item.name)}}</span>
             </template>
           </el-table-column>
         </template>
@@ -30,11 +30,18 @@
     components: {},
     computed: {
       sizes: function () {
-        var sizes = new Set([]);
-        this.slotData.forEach(element => {
-          sizes.add(element.product.size.name);
+        // var sizes = new Set([]);
+        // this.slotData.forEach(element => {
+        //   sizes.add(element.product.size.name);
+        // });
+        // return  Array.from(sizes);
+        var sizes = [];
+        this.slotData.forEach(element => {          
+          sizes.push(element.product.size);
         });
-        return  Array.from(sizes);
+        const res = new Map();
+        var result= sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
+        return result.sort((o1,o2)=>o1.sequence-o2.sequence);
       },
       colors: function () {
         var colors = new Set([]);
@@ -47,18 +54,14 @@
     methods: {
       onClickShowTable() {
         this.showTable = !this.showTable;
-        if (this.tableData.length == 1) {
-          this.tableData = this.mockData;
-        } else {
-          this.tableData = [this.mockData[0]];
-        }
       },
       //颜色尺码筛选
       colorSizeFilter(color, size) {
-        var result=this.slotData.find(element => element.product.color.name == color && element.product.size.name == size);
-        if(result!=null){
-        return result.quantity;
-        }else{
+        var result = this.slotData.find(element => element.product.color.name == color && element.product.size.name ==
+          size);
+        if (result != null) {
+          return result.quantity;
+        } else {
           return '';
         }
       }
@@ -68,127 +71,6 @@
         showTable: false,
         tableData: [],
         previewTableData: [],
-        mockData: [{
-            'name': '白色',
-            size: [{
-                'name': 'S',
-                'num': 1
-              },
-              {
-                'name': 'M',
-                'num': 2
-              },
-              {
-                'name': 'L',
-                'num': 3
-              },
-              {
-                'name': 'XL',
-                'num': 2
-              },
-              {
-                'name': 'XLL',
-                'num': 4
-              }
-            ]
-          },
-          {
-            'name': '黑色',
-            size: [{
-                'name': 'S',
-                'num': 1
-              },
-              {
-                'name': 'M',
-                'num': 2
-              },
-              {
-                'name': 'L',
-                'num': 3
-              },
-              {
-                'name': 'XL',
-                'num': 2
-              },
-              {
-                'name': 'XLL',
-                'num': 4
-              }
-            ]
-          },
-          {
-            'name': '红色',
-            size: [{
-                'name': 'S',
-                'num': 1
-              },
-              {
-                'name': 'M',
-                'num': 2
-              },
-              {
-                'name': 'L',
-                'num': 3
-              },
-              {
-                'name': 'XL',
-                'num': 2
-              },
-              {
-                'name': 'XLL',
-                'num': 4
-              }
-            ]
-          },
-          {
-            'name': '绿色',
-            size: [{
-                'name': 'S',
-                'num': 1
-              },
-              {
-                'name': 'M',
-                'num': 2
-              },
-              {
-                'name': 'L',
-                'num': 3
-              },
-              {
-                'name': 'XL',
-                'num': 2
-              },
-              {
-                'name': 'XLL',
-                'num': 4
-              }
-            ]
-          },
-          {
-            'name': '白色',
-            size: [{
-                'name': 'S',
-                'num': 1
-              },
-              {
-                'name': 'M',
-                'num': 2
-              },
-              {
-                'name': 'L',
-                'num': 3
-              },
-              {
-                'name': 'XL',
-                'num': 2
-              },
-              {
-                'name': 'XLL',
-                'num': 4
-              }
-            ]
-          }
-        ],
         tableHead: [],
       };
     },

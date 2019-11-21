@@ -56,7 +56,7 @@
             <template slot="label">
               <h6 class="titleTextClass">选择品类<span style="color: red">*</span></h6>
             </template>
-            <category-select v-if="factoryFormVisible"  :selectDatas="formData.adeptAtCategories"></category-select>
+            <category-select  v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"></category-select>
           </el-form-item>
           <el-form-item prop="keyword">
             <template slot="label">
