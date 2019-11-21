@@ -19,18 +19,18 @@
       </div>
     </el-col>
     <el-col :span="8">
-      <div :class="contractType=='2'?'create-contract-type_select':'create-contract-type_not_select'"
-        @click="onCreateFrameContract">
+      <div :class="contractType=='4'?'create-contract-type_select':'create-contract-type_not_select'"
+        @click="onCreatePurchaseContract">
         <el-row>
           <el-col :span="24">
-            <h5 :class="contractType=='2'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+            <h5 :class="contractType=='4'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
               采购订单</h5>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="20">
             <h6
-              :class="contractType=='2'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+              :class="contractType=='4'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
               对已签署的合同签署补充协议</h6>
           </el-col>
         </el-row>
@@ -80,42 +80,48 @@
   import ContractForm from '../ContractForm'
   import ContractFrameForm from '../ContractFrameForm'
   import ContractSupplementForm from '../ContractSupplementForm'
+  import ContractPurchaseForm from '../ContractPurchaseForm'
 
   export default {
-    name: "ContractType",
+    name: 'ContractType',
     methods: {
-      onSelectOption(val) {
+      onSelectOption (val) {
         this.contractType = val;
       },
-      onCreateOrderContract(){
-        this.contractType='1';
+      onCreateOrderContract () {
+        this.contractType = '1';
         Bus.$emit('openContractType');
         this.fn.openSlider('创建', ContractForm, '');
       },
-      onCreateFrameContract(){
-        this.contractType='2';
+      onCreateSupplementContract () {
+        this.contractType = '2';
         Bus.$emit('openContractType');
         this.fn.openSlider('创建', ContractFrameForm, '');
       },
-      onCreateSupplementContract(){
-        this.contractType='3';
+      onCreateFrameContract () {
+        this.contractType = '3';
         Bus.$emit('openContractType');
         this.fn.openSlider('创建', ContractSupplementForm, '');
       },
+      onCreatePurchaseContract () {
+        this.contractType = '4';
+        Bus.$emit('openContractType');
+        this.fn.openSlider('创建', ContractPurchaseForm, '');
+      }
       // onCreateSupplementContract(){
       //   this.contractType='3';
       //   Bus.$emit('openContractType');
       //   this.fn.openSlider('创建', ContractSupplementForm, '');
       // },
     },
-    data() {
+    data () {
       return {
         visible: false,
-        contractType: "1",
+        contractType: '1',
         data: [{
-            label: "使用平台电子模板",
-            value: "1"
-          },
+          label: '使用平台电子模板',
+          value: '1'
+        }
           // {
           //   label: "上传纸质合同文件",
           //   value: "2"
@@ -125,12 +131,11 @@
     },
     watch: {
       contractType: function (newType, oldType) {
-          console.log('============'+newType);
-        this.$emit('contractTypeChange',newType);
+        console.log('============' + newType);
+        this.$emit('contractTypeChange', newType);
       }
     }
   };
-
 </script>
 <style scoped>
   .create-contract-title {
