@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/business/products/product_search.dart';
+import 'package:b2b_commerce/src/my/contract/contract_search_result.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -74,7 +75,8 @@ class _HistorySearchState extends State<HistorySearch> {
                             decoration: InputDecoration(
                               hintText: '${widget.hintText}',
                               hintStyle: TextStyle(
-                                  color: Colors.grey
+                                  color: Colors.grey,
+                                fontSize: 12
                               ),
                               contentPadding: EdgeInsets.all(0),
                               disabledBorder: InputBorder.none,
@@ -155,6 +157,11 @@ class _HistorySearchState extends State<HistorySearch> {
 //            keyword: controller.text,
 //          )));
 //          break;
+        case GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY:
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ContractSearchResultPage(
+            keyword: controller.text,
+          )));
+          break;
         default :
           Navigator.pop(context,controller.text);
           break;

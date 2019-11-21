@@ -74,11 +74,11 @@ class _MyCompanyCapacityInfoState extends State<MyCompanyCapacityInfo> {
                         },
                         physics: AlwaysScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
-                        children: widget.factory.capacities
-                            .map((capacity) => CapacityFactoryInfoItem(
+                        children: widget.factory?.capacities
+                            ?.map((capacity) => CapacityFactoryInfoItem(
                           model: capacity,
                         ))
-                            .toList(),
+                            ?.toList() ?? Container(),
                         controller: pageController,
                       ),
                     ),

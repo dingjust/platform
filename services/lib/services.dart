@@ -98,6 +98,7 @@ export 'src/websocket/websocket_service.dart';
 export 'src/my/state/cash_products_state.dart';
 export 'src/my/state/my_factory_state.dart';
 export 'src/my/state/my_factory_capacity_state.dart';
+export 'src/my/state/my_contract_state.dart';
 
 export 'src/state/category_state.dart';
 export 'src/state/address_state.dart';
