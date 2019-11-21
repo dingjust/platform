@@ -54,6 +54,47 @@ const state = {
     steppedPrices:[]
 
   },
+  newFormData: {
+    id: null,
+    images: [],
+    details:[],
+    code: '',
+    skuID: '',
+    name: '',
+    price: 0.00,
+    minPrice: 0.00,
+    maxPrice: 0.00,
+    category: {
+      code: '',
+      name: ''
+    },
+    brand: '',
+    gramWeight: 0.0,
+    variants: [],
+    colors: [],
+    sizes: [],
+    attributes: {
+      styles: [],
+      fabricCompositions: [],
+      editionType: '',
+      pattern: '',
+      sleeveType: '',
+      sleeveLength: '',
+      decorativePatterns: [],
+      popularElements: [],
+      filler: '',
+      thickness: '',
+      season: '',
+      taggable: false,
+      placket: ''
+    },
+    belongTo: {
+      uid: '',
+      name: ''
+    },
+    steppedPrices:[]
+
+  },
   queryFormData: {
     skuID: '',
     name: '',

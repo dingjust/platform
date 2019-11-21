@@ -97,7 +97,7 @@
                 <tr class="order-table-th_row">
                   <td style="width:40px">颜色</td>
                   <template v-for="item in product.sizes">
-                    <th>{{item}}</th>
+                    <th>{{item.name}}</th>
                   </template>
                   <th>小计</th>
                 </tr>
@@ -107,7 +107,7 @@
                     <template v-for="(size,index) in product.sizes">
                       <td style="width:80px">
                         <el-input class="order-table-input" type="number"
-                          v-model="getVariant(color,size,product.variants).num">
+                          v-model="getVariant(color,size.name,product.variants).num">
                         </el-input>
                       </td>
                     </template>
@@ -116,7 +116,7 @@
                 </template>
                 <tr>
                   <td>合计</td>
-                  <td :colspan="getColspanLength(product.sizes.size)+1">{{countTotalAmount(product.variants)}}</td>
+                  <td :colspan="getColspanLength(product.sizes.length)+1">{{countTotalAmount(product.variants)}}</td>
                 </tr>
               </table>
             </el-row>
@@ -710,7 +710,7 @@
       },
       onProductSelect(product) {
         var variants = [];
-        var sizesSet = new Set([]);
+        var sizes = [];
         var colorsSet = new Set([]);
         product.variants.forEach(varaint => {
           var item = {
@@ -719,35 +719,16 @@
             color: varaint.color,
             size: varaint.size,
             num: ''
-          };
-          sizesSet.add(varaint.size.name);
+          };          
+          sizes.push(varaint.size);
           colorsSet.add(varaint.color.name);
           variants.push(item);
         });
-        // var entry = {
-        //   thumbnail: product.thumbnail,
-        //   name: product.name,
-        //   code: product.code,
-        //   variants: variants,
-        //   sizes: sizesSet,
-        //   colors: colorsSet,
-        //   unitPrice: '',
-        //   expectedDeliveryDate: '',
-        //   machiningTypes: '',
-        //   freightPayer: '',
-        //   invoice: true,
-        //   invoicePercent: '',
-        //   address: {
-        //     city: '',
-        //     cityDistrict: '',
-        //     region: '',
-        //     line1: '',
-        //     fullname: '',
-        //     cellphone: ''
-        //   },
-        //   cities: [],
-        //   cityDistricts: [],
-        // };
+
+        const res = new Map();
+        var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
+        var sizesSet= result.sort((o1, o2) => o1.sequence - o2.sequence);
+        
         this.$set(this.form.entries[this.currentProductIndex], 'thumbnail', product.thumbnail);
         this.$set(this.form.entries[this.currentProductIndex], 'name', product.name);
         this.$set(this.form.entries[this.currentProductIndex], 'code', product.code);

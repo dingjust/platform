@@ -101,7 +101,7 @@
     data() {
       return {
         keyword: '',
-        formData: this.$store.state.ApparelProductsModule.formData,
+        formData: this.$store.state.ApparelProductsModule.newFormData,
         queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
         approvalStatuses: this.$store.state.EnumsModule.approvalStatuses,
         categories: [],
