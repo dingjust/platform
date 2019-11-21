@@ -399,7 +399,7 @@ const COMMON_APIS = {
   createReconciliationOrder(code) {
     return '/b2b/orders/purchase/' + code + '/createReconciliationOrder';
   },
-  //创建对账单
+  //创建并提交对账单
   createAndCommitReconciliationOrder(code) {
     return '/b2b/orders/purchase/' + code + '/createAndCommitReconciliationOrder';
   },

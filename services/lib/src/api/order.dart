@@ -214,6 +214,32 @@ class OrderApis {
     return '/{baseSiteId}/orders/proofing/$code/paid';
   };
 
+  // ========生产单=========
+
+  ///生产单拒单
+  static get cancellingOfPurchaseOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/cancelling';
+      };
+
+  ///确认线下生产订单
+  static get confirmProductionByOffline =>
+          (code) {
+        return '/b2b/orders/purchase/$code/confirmProductionByOffline';
+      };
+
+  ///创建部分发货单
+  static get createShippingOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/createShippingOrder';
+      };
+
+  ///创建全部发货单
+  static get confirmShipping =>
+          (code) {
+        return '/b2b/orders/purchase/$code/confirmShipping';
+      };
+
   ///创建收货单
   static get createDeliveryOrder =>
           (code) {
@@ -260,5 +286,47 @@ class OrderApis {
   static get rejectDeliveryOrder =>
           (code) {
         return '/b2b/orders/purchase/$code/rejectDelivery';
+      };
+
+  ///创建对账单
+  static get createReconciliationOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/createReconciliationOrder';
+      };
+
+  ///创建并提交对账单
+  static get createAndCommitReconciliationOrder =>
+          (code) {
+        return '/b2b/orders/purchase/$code/createAndCommitReconciliationOrder';
+      };
+
+  ///更新对账单
+  static get updateReconciliationOrder =>
+          () {
+        return '/b2b/orders/purchase/updateReconciliationOrder';
+      };
+
+  ///更新并提交对账单
+  static get updateAndCommitReconciliationOrder =>
+          () {
+        return '/b2b/orders/purchase/updateAndCommitReconciliationOrder';
+      };
+
+  ///撤回对账单
+  static get recallReconciliationOrder =>
+          () {
+        return '/b2b/orders/purchase/recallReconciliationOrder';
+      };
+
+  ///确认对账单
+  static get confirmReconciliation =>
+          (code) {
+        return '/b2b/orders/purchase/$code/confirmReconciliation';
+      };
+
+  ///拒绝对账单
+  static get rejectReconciliation =>
+          (code) {
+        return '/b2b/orders/purchase/$code/rejectReconciliation';
       };
 }

@@ -1,49 +1,48 @@
-import 'package:b2b_commerce/src/business/orders/form/purchase/ColorSizeEntry.dart';
-import 'package:b2b_commerce/src/business/orders/form/purchase/FormMixins.dart';
+import 'package:b2b_commerce/src/business/orders/form/purchase/components/ColorSizeView.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'ColorSizeEntry.dart';
+import 'FormMixins.dart';
 import 'components/ColorSizeTable.dart';
+import 'purchase_reconciliation_order_view.dart';
 
-class DeliverOrderForm extends StatefulWidget {
-  final ShippingOrderNoteModel shippingOrder;
-
+class ReconciliationOrderForm extends StatefulWidget {
   final DeliveryOrderNoteModel deliveryOrder;
 
   final PurchaseOrderModel purchaseOrder;
 
+  final ReconciliationOrderNoteModel reconciliationOrder;
+
   final VoidCallback onCallback;
 
-  const DeliverOrderForm({Key key,
+  const ReconciliationOrderForm({Key key,
     this.deliveryOrder,
     this.onCallback,
-    this.shippingOrder,
+    this.reconciliationOrder,
     this.purchaseOrder})
       : super(key: key);
 
   @override
-  _DeliverOrderFormState createState() => _DeliverOrderFormState();
+  _ReconciliationOrderFormState createState() =>
+      _ReconciliationOrderFormState();
 }
 
-class _DeliverOrderFormState extends State<DeliverOrderForm>
-    with SingleTickerProviderStateMixin, DeliverAndShippingFormMixin {
+class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
+    with SingleTickerProviderStateMixin, ReconciliationFormMixin {
   List<ColorSizeEntry> colorSizeEntries;
 
   List<Widget> tabs = <Widget>[
     Tab(
-      text: '发货单信息',
+      text: '对账单信息',
     ),
     Tab(
-      text: '发货人',
+      text: '款项',
     ),
-    Tab(
-      text: '收货人',
-    )
   ];
 
   @override
@@ -59,15 +58,11 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
   void initForm() {
     super.initForm();
     //更新或创建
-    if (widget.deliveryOrder != null) {
-      initDeliveryUpdate(widget.deliveryOrder);
-    } else if (widget.shippingOrder != null) {
-      initDeliveryCreate(widget.shippingOrder);
+    if (widget.reconciliationOrder != null) {
+      initReconciliationUpdate(widget.reconciliationOrder);
+    } else if (widget.deliveryOrder != null) {
+      initReconciliationCreate(widget.purchaseOrder);
     }
-  }
-
-  Future<List<CarrierModel>> _getCarriers() {
-    return Provider.of<CarrierState>(context).getCarriers();
   }
 
   @override
@@ -82,7 +77,7 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
             iconTheme: IconThemeData(color: Colors.black),
             centerTitle: true,
             title: Text(
-              '收货单${orderStatus()}',
+              '对账单${orderStatus()}',
               style: TextStyle(color: Colors.black),
             ),
             bottom: TabBar(
@@ -101,18 +96,15 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
               child: ListView(
                 children: <Widget>[
                   Container(
-                      height: 365,
+                      height: 650,
                       child: TabBarView(
                         children: <Widget>[
                           _buildDetailSection(),
-                          _buildConsignorSection(),
-                          _buildConsigneeSection(),
+                          _buildMoneySection(),
                         ],
                       )),
-                  ColorSizeTable(
-                    noteEntries: widget?.deliveryOrder?.entries ?? null,
-                    orderEntries: widget.purchaseOrder.entries,
-                    colorSizeEntries: colorSizeEntries,
+                  ColorSizeView(
+                    entries: widget.reconciliationOrder.entries ?? [],
                   ),
                   _buildBottomSheet()
                 ],
@@ -121,23 +113,24 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
   }
 
   String orderStatus() {
-    if (widget.deliveryOrder == null) {
+    if (widget.reconciliationOrder == null) {
       return '';
     } else {
-      return '(${OrderNoteStatusLocalizedMap[widget.deliveryOrder.status]})';
+      return '(${OrderNoteStatusLocalizedMap[widget.reconciliationOrder.status]})';
     }
   }
 
-  ///发货人
-  Widget _buildConsignorSection() {
+  ///对账单信息
+  Widget _buildDetailSection() {
     return Container(
       color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: <Widget>[
           TextFieldComponent(
-            focusNode: consignorNameFocusNode,
-            controller: consignorNameController,
-            leadingText: Text('发货人',
+            focusNode: partAFocusNode,
+            controller: partAController,
+            leadingText: Text('甲方',
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -148,148 +141,18 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
             ),
           ),
           TextFieldComponent(
-            focusNode: consignorPhoneFocusNode,
-            controller: consignorPhoneController,
-            leadingText: Text('联系方式',
+            focusNode: partBFocusNode,
+            controller: partBController,
+            leadingText: Text('乙方',
                 style: TextStyle(
                   fontSize: 16,
                 )),
-            inputFormatters: [
-              DecimalInputFormat(),
-            ],
-            hintText: '电话号码',
+            hintText: '填写',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 16,
             ),
           ),
-          isOfflineConsignment
-              ? Container()
-              : Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom:
-                    BorderSide(color: Colors.grey[300], width: 0.5))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '发货方式',
-                  style: TextStyle(fontSize: 16),
-                ),
-                Row(
-                  children: <Widget>[
-                    FutureBuilder<List<CarrierModel>>(
-                        future: _getCarriers(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<CarrierModel>> snapshot) {
-                          if (snapshot.data != null) {
-                            return PopupMenuButton<CarrierModel>(
-                              onSelected: (val) {
-                                setState(() {
-                                  if (consignment?.carrierDetails !=
-                                      null) {
-                                    consignment.carrierDetails = val;
-                                  } else {
-                                    consignment = ConsignmentModel();
-                                    consignment.carrierDetails = val;
-                                  }
-                                });
-                              },
-                              itemBuilder: (BuildContext context) =>
-                                  snapshot.data
-                                      .map((carrier) =>
-                                      PopupMenuItem<CarrierModel>(
-                                        value: carrier,
-                                        child: new Text(carrier.name),
-                                      ))
-                                      .toList(),
-                              child: Text(
-                                consignment != null
-                                    ? '${consignment?.carrierDetails?.name ??
-                                    '选择物流公司'}'
-                                    : '选择物流公司',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
-                    Icon(
-                      Icons.chevron_right,
-                      color: Colors.grey,
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          isOfflineConsignment
-              ? Container()
-              : TextFieldComponent(
-            focusNode: trackingIDFocusNode,
-            controller: trackingIDController,
-            leadingText: Text('发货单号',
-                style: TextStyle(
-                  fontSize: 16,
-                )),
-            hintText: '请填写',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('是否线下发货'),
-                      Text(
-                        '选择线下发货可不填方式和单号',
-                        style: TextStyle(color: Colors.red, fontSize: 12),
-                      )
-                    ],
-                  ),
-                ),
-                Row(
-                  children: <Widget>[
-                    Text(isOfflineConsignment ? '是' : '否'),
-                    Switch(
-                      value: isOfflineConsignment,
-                      onChanged: (val) {
-                        setState(() {
-                          isOfflineConsignment = val;
-                        });
-                      },
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  ///发货单信息
-  Widget _buildDetailSection() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: <Widget>[
           TextFieldComponent(
             focusNode: brandFocusNode,
             controller: brandController,
@@ -316,54 +179,68 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
               fontSize: 16,
             ),
           ),
-          TextFieldComponent(
-            focusNode: withdrawalQualityFocusNode,
-            controller: withdrawalQualityController,
-            leadingText: Text('退料',
-                style: TextStyle(
-                  fontSize: 16,
-                )),
-            inputFormatters: [
-              DecimalInputFormat(),
-            ],
-            hintText: '填写',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
+          _buildCooperationModeSelect(),
+          ItemDivider(),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '数量合计',
+            value: Text('${totalAmount()}'),
           ),
-          TextFieldComponent(
-            focusNode: defectiveQualityFocusNode,
-            controller: defectiveQualityController,
-            leadingText: Text('残次品数',
-                style: TextStyle(
-                  fontSize: 16,
-                )),
-            inputFormatters: [
-              DecimalInputFormat(),
-            ],
-            hintText: '填写',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '金额合计',
+            value: Text(
+                '￥${widget.purchaseOrder.unitPrice}X${totalAmount()}=￥${widget
+                    .purchaseOrder.unitPrice * totalAmount()}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '实际应付总额',
+            value: Text('￥${shouldPay()}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '已付',
+            value: Text('￥${widget.purchaseOrder.payPlan.paidAmount}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '剩余应付金额	',
+            value: Text(
+                '￥${shouldPay() - widget.purchaseOrder.payPlan.paidAmount}'),
           ),
         ],
       ),
     );
   }
 
-  ///收货人
-  Widget _buildConsigneeSection() {
+  ///款项
+  Widget _buildMoneySection() {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: <Widget>[
           TextFieldComponent(
-            focusNode: consigneeNameFocusNode,
-            controller: consigneeNameController,
-            leadingText: Text('收货人',
+            focusNode: delayDeductionFocusNode,
+            controller: delayDeductionController,
+            inputType: TextInputType.number,
+            leadingText: Text('延期扣款',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          TextFieldComponent(
+            focusNode: delayDeductionRemarksFocusNode,
+            controller: delayDeductionRemarksController,
+            leadingText: Text('扣款备注',
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -373,26 +250,88 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
               fontSize: 16,
             ),
           ),
+          ItemDivider(),
           TextFieldComponent(
-            focusNode: consigneePhoneFocusNode,
-            controller: consigneePhoneController,
-            leadingText: Text('联系方式',
+            focusNode: qualityDeductionFocusNode,
+            controller: qualityDeductionController,
+            inputType: TextInputType.number,
+            leadingText: Text('质量扣款',
                 style: TextStyle(
                   fontSize: 16,
                 )),
             inputFormatters: [
               DecimalInputFormat(),
             ],
-            hintText: '电话号码',
             style: TextStyle(
               color: Colors.grey,
               fontSize: 16,
             ),
           ),
           TextFieldComponent(
-            focusNode: consigneeAddressFocusNode,
-            controller: consigneeAddressController,
-            leadingText: Text('收货地址',
+            focusNode: qualityDeductionRemarksFocusNode,
+            controller: qualityDeductionRemarksController,
+            inputType: TextInputType.number,
+            leadingText: Text('扣款备注',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            hintText: '填写',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          ItemDivider(),
+          TextFieldComponent(
+            focusNode: otherDeductionFocusNode,
+            controller: otherDeductionController,
+            inputType: TextInputType.number,
+            leadingText: Text('其他扣款',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          TextFieldComponent(
+            focusNode: otherDeductionRemarksFocusNode,
+            controller: otherDeductionRemarksController,
+            leadingText: Text('扣款备注',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            hintText: '填写',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          ItemDivider(),
+          TextFieldComponent(
+            focusNode: otherFundsFocusNode,
+            controller: otherFundsController,
+            inputType: TextInputType.number,
+            leadingText: Text('其他增款',
+                style: TextStyle(
+                  fontSize: 16,
+                )),
+            inputFormatters: [
+              DecimalInputFormat(),
+            ],
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+            ),
+          ),
+          TextFieldComponent(
+            focusNode: otherFundsRemarksFocusNode,
+            controller: otherFundsRemarksController,
+            leadingText: Text('备注',
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -480,23 +419,58 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
     );
   }
 
+  Widget _buildCooperationModeSelect() {
+    return Padding(
+      padding: EdgeInsets.only(left: 15),
+      child: B2BInfoRow(
+        hasBottomBorder: true,
+        label: '加工方式',
+        value: Row(
+          children: CooperationMode.values
+              .map((value) =>
+              Container(
+                margin: EdgeInsets.only(left: 20),
+                child: Row(
+                  children: <Widget>[
+                    Text('${CooperationModeLocalizedMap[value]}'),
+                    Radio(
+                      groupValue: cooperationMethod,
+                      value: value,
+                      onChanged: (val) {
+                        setState(() {
+                          cooperationMethod = val;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ))
+              .toList(),
+        ),
+      ),
+    );
+  }
+
   ///保存
   void onSave() {
-    DeliveryOrderNoteModel model;
-    if (widget.deliveryOrder == null) {
-      model = getDeliveryForCreate(colorSizeEntries);
+    ReconciliationOrderNoteModel model;
+
+    if (widget.reconciliationOrder == null) {
+      model = getReconciliationForCreate(colorSizeEntries);
     } else {
-      model = getDeliveryForUpdate(widget.deliveryOrder, colorSizeEntries);
+      model = getReconciliationForUpdate(
+          widget.reconciliationOrder, colorSizeEntries);
     }
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: widget.deliveryOrder == null
-                ? DeliveryOrderRepository()
-                .createDeliveryOrder(widget.purchaseOrder.code, model)
-                : DeliveryOrderRepository().updateDeliveryOrder(model),
+            requestCallBack: widget.reconciliationOrder == null
+                ? ReconciliationOrderRepository()
+                .createReconciliationOrder(widget.purchaseOrder.code, model)
+                : ReconciliationOrderRepository()
+                .updateReconciliationOrder(model),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: '',
@@ -521,23 +495,26 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
     });
   }
 
-  ///提交收货单
+  ///提交对账单
   void onConfirm() {
-    DeliveryOrderNoteModel model;
-    if (widget.deliveryOrder == null) {
-      model = getDeliveryForCreate(colorSizeEntries);
+    ReconciliationOrderNoteModel model;
+    if (widget.reconciliationOrder == null) {
+      model = getReconciliationForCreate(colorSizeEntries);
     } else {
-      model = getDeliveryForUpdate(widget.deliveryOrder, colorSizeEntries);
+      model = getReconciliationForUpdate(
+          widget.reconciliationOrder, colorSizeEntries);
     }
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: widget.deliveryOrder == null
-                ? DeliveryOrderRepository().createAndCommitDeliveryOrder(
+            requestCallBack: widget.reconciliationOrder == null
+                ? ReconciliationOrderRepository()
+                .createAndCommitReconciliationOrder(
                 widget.purchaseOrder.code, model)
-                : DeliveryOrderRepository().updateAndCommitDeliveryOrder(model),
+                : ReconciliationOrderRepository()
+                .updateAndCommitReconciliationOrder(model),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: '',
@@ -564,13 +541,15 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
 
   ///撤回
   void onRecall() {
+    ReconciliationOrderNoteModel model = ReconciliationOrderNoteModel();
+    model.id = widget.reconciliationOrder.id;
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: DeliveryOrderRepository()
-                .recallDelivery(widget.deliveryOrder.code),
+            requestCallBack: ReconciliationOrderRepository()
+                .recallReconciliationOrder(model),
             outsideDismiss: false,
             loadingText: '撤回中。。。',
             entrance: '',
@@ -596,11 +575,11 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
   }
 
   bool showSaveBtn() {
-    if (widget.deliveryOrder == null) {
+    if (widget.reconciliationOrder == null) {
       return true;
     } else {
-      if (widget.deliveryOrder.status == OrderNoteStatus.UNCOMMITTED ||
-          widget.deliveryOrder.status == OrderNoteStatus.REJECTED) {
+      if (widget.reconciliationOrder.status == OrderNoteStatus.UNCOMMITTED ||
+          widget.reconciliationOrder.status == OrderNoteStatus.REJECTED) {
         return true;
       } else {
         return false;
@@ -609,12 +588,12 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
   }
 
   bool showConfirmBtn() {
-    if (widget.purchaseOrder.status != PurchaseOrderStatus.OUT_OF_STORE) {
+    if (widget.purchaseOrder.status != PurchaseOrderStatus.COMPLETED) {
       return false;
-    } else if (widget.deliveryOrder == null) {
+    } else if (widget.reconciliationOrder == null) {
       return true;
     } else {
-      if (widget.deliveryOrder.status == OrderNoteStatus.UNCOMMITTED) {
+      if (widget.reconciliationOrder.status == OrderNoteStatus.UNCOMMITTED) {
         return true;
       } else {
         return false;
@@ -623,12 +602,30 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
   }
 
   bool showRecallBtn() {
-    if (widget.deliveryOrder != null &&
-        widget.deliveryOrder.status == OrderNoteStatus.PENDING_CONFIRM) {
+    if (widget.reconciliationOrder != null &&
+        widget.reconciliationOrder.status == OrderNoteStatus.PENDING_CONFIRM) {
       return true;
     } else {
       return false;
     }
+  }
+
+  ///总数
+  int totalAmount() {
+    int result = 0;
+    widget.reconciliationOrder.entries.forEach((entry) {
+      result += entry.quantity;
+    });
+    return result;
+  }
+
+  ///应付
+  double shouldPay() {
+    return totalAmount() * widget.purchaseOrder.unitPrice -
+        getDoubleFromController(delayDeductionController) -
+        getDoubleFromController(qualityDeductionController) -
+        getDoubleFromController(otherDeductionController) +
+        getDoubleFromController(otherFundsController);
   }
 
   void jumpToDetail() {

@@ -51,7 +51,7 @@
         <tr class="order-table-th_row">
           <th>颜色</th>
           <template v-for="(item,index) in sizes">
-            <th :key="index" :colspan="getColspanLength3()">{{item}}</th>
+            <th :key="index" :colspan="getColspanLength3()">{{item.name}}</th>
           </template>
           <th>数量小计</th>
         </tr>
@@ -192,14 +192,13 @@
     mixins: [],
     computed: {
       sizes: function () {
-        var sizes = new Set([]);
-        // this.slotData.entries.forEach(element => {
-        //   sizes.add(element.product.size.name);
-        // });
-        this.slotData.deliveryOrders[0].entries.forEach(element => {
-          sizes.add(element.size);
+        var sizes = [];
+        this.slotData.entries.forEach(element => {
+          sizes.push(element.product.size);
         });
-        return sizes;
+        const res = new Map();
+        var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
+        return result.sort((o1, o2) => o1.sequence - o2.sequence);
       },
       colors: function () {
         var colors = new Set([]);
@@ -272,13 +271,13 @@
         return amount;
       },
       getColspanLength() {
-        return this.sizes.size;
+        return this.sizes.length;
       },
       getColspanLength2() {
-        return this.sizes.size > 1 ? this.sizes.size : 2;
+        return this.sizes.length > 1 ? this.sizes.length : 2;
       },
       getColspanLength3() {
-        return this.sizes.size > 1 ? 1 : 2;
+        return this.sizes.length > 1 ? 1 : 2;
       },
       async onSubmit() {
         //组合订单行参数
@@ -432,27 +431,27 @@
           var sizeArray = [];
           this.sizes.forEach(size => {
             if (this.slotData.reconciliationOrders == null || this.slotData.reconciliationOrders.length == 0) {
-              let variant = this.getVariant(color, size, this.slotData.deliveryOrders[0].entries);
+              let variant = this.getVariant(color, size.name, this.slotData.deliveryOrders[0].entries);
               if (variant != null) {
                 sizeArray.push({
-                  size: size,
+                  size: size.name,
                   color: color,
                   quantity: variant.quantity,
                 });
               } else {
                 sizeArray.push({
-                  size: size,
+                  size: size.name,
                   color: color,
                   quantity: '',
                 });
               }
             } else {
-              let variant = this.getVariant(color, size, this.slotData.reconciliationOrders[0].entries);
+              let variant = this.getVariant(color, size.name, this.slotData.reconciliationOrders[0].entries);
               if (variant != null) {
                 sizeArray.push(variant);
               } else {
                 sizeArray.push({
-                  size: size,
+                  size: size.name,
                   color: color,
                   quantity: '',
                 });

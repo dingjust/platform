@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
 
+import '../../purchase_order_detail.dart';
 import 'components/ColorSizeView.dart';
 
 class ReconciliationOrderView extends StatefulWidget {
   final ReconciliationOrderNoteModel reconciliationOrder;
 
-  const ReconciliationOrderView({Key key, this.reconciliationOrder})
+  final PurchaseOrderModel purchaseOrder;
+
+  const ReconciliationOrderView(
+      {Key key, this.reconciliationOrder, this.purchaseOrder})
       : super(key: key);
 
   @override
@@ -58,7 +64,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
                     child: ListView(
                       children: <Widget>[
                         Container(
-                            height: 550,
+                            height: 650,
                             child: TabBarView(
                               children: <Widget>[
                                 _buildDetailSection(widget.reconciliationOrder),
@@ -67,7 +73,8 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
                             )),
                         ColorSizeView(
                           entries: widget.reconciliationOrder.entries,
-                        )
+                        ),
+                        _buildBottomSheet()
                       ],
                     ))
                 : Center(
@@ -103,7 +110,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
             label: '扣款备注',
             value: Text('${order.delayDeductionRemarks}'),
           ),
-          _ItemDivider(),
+          ItemDivider(),
           B2BInfoRow(
             hasBottomBorder: true,
             label: '质量扣款',
@@ -125,7 +132,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
             label: '扣款备注',
             value: Text('${order.qualityDeductionRemarks}'),
           ),
-          _ItemDivider(),
+          ItemDivider(),
           B2BInfoRow(
               hasBottomBorder: true,
               label: '其他扣款',
@@ -146,7 +153,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
             label: '扣款备注',
             value: Text('${order.otherDeductionRemarks}'),
           ),
-          _ItemDivider(),
+          ItemDivider(),
           B2BInfoRow(
               hasBottomBorder: true,
               label: '其他增款',
@@ -164,7 +171,7 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
               )),
           B2BInfoRow(
             hasBottomBorder: true,
-            label: '扣款备注',
+            label: '备注',
             value: Text('${order.otherFundsRemarks}'),
           ),
         ],
@@ -205,13 +212,193 @@ class _ReconciliationOrderViewState extends State<ReconciliationOrderView>
             value:
                 Text('${CooperationModeLocalizedMap[order.cooperationMethod]}'),
           ),
+          ItemDivider(),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '数量合计',
+            value: Text('${totalAmount()}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '金额合计',
+            value: Text(
+                '￥${widget.purchaseOrder.unitPrice}X${totalAmount()}=￥${widget
+                    .purchaseOrder.unitPrice * totalAmount()}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '实际应付总额',
+            value: Text('￥${shouldPay()}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '已付',
+            value: Text('￥${widget.purchaseOrder.payPlan.paidAmount}'),
+          ),
+          B2BInfoRow(
+            hasBottomBorder: true,
+            label: '剩余应付金额	',
+            value: Text(
+                '￥${shouldPay() - widget.purchaseOrder.payPlan.paidAmount}'),
+          ),
         ],
       ),
     );
   }
+
+  Widget _buildBottomSheet() {
+    return Container(
+      height: 55,
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 150.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: UserBLoC.instance.currentUser.type == UserType.FACTORY
+            ? _buildDeliverConfirmAndRejectBtns()
+            : [],
+      ),
+    );
+  }
+
+  List<Widget> _buildDeliverConfirmAndRejectBtns() {
+    if (widget.reconciliationOrder != null &&
+        widget.reconciliationOrder.status == OrderNoteStatus.PENDING_CONFIRM &&
+        UserBLoC.instance.currentUser.type == UserType.FACTORY) {
+      return <Widget>[
+        Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      onPressed: rejectReconciliationOrder,
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '拒绝',
+                        style: TextStyle(fontSize: 15, color: Colors.red),
+                      ),
+                    ),
+              )),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: onReconciliationConfirm,
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '确认',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+              )),
+        ),
+      ];
+    } else {
+      return [];
+    }
+  }
+
+  ///确认对账单
+  void onReconciliationConfirm() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: ReconciliationOrderRepository()
+                .confirmReconciliation(widget.reconciliationOrder.code),
+            outsideDismiss: false,
+            loadingText: '确认中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '确认失败',
+              successTips: '确认成功',
+              callbackResult: result,
+              confirmAction: jumpToDetail,
+            );
+          });
+    });
+  }
+
+  ///拒绝对账单
+  void rejectReconciliationOrder() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: ReconciliationOrderRepository()
+                .rejectReconciliation(widget.reconciliationOrder.code),
+            outsideDismiss: false,
+            loadingText: '拒绝中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '拒绝失败',
+              successTips: '拒绝成功',
+              callbackResult: result,
+              confirmAction: jumpToDetail,
+            );
+          });
+    });
+  }
+
+  void jumpToDetail() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) =>
+                PurchaseOrderDetailPage(code: widget.purchaseOrder.code)),
+        ModalRoute.withName('/'));
+  }
+
+  ///总数
+  int totalAmount() {
+    int result = 0;
+    widget.reconciliationOrder.entries.forEach((entry) {
+      result += entry.quantity;
+    });
+    return result;
+  }
+
+  ///应付
+  double shouldPay() {
+    return totalAmount() * widget.purchaseOrder.unitPrice -
+        widget.reconciliationOrder.delayDeduction -
+        widget.reconciliationOrder.qualityDeduction -
+        widget.reconciliationOrder.otherDeduction +
+        widget.reconciliationOrder.otherFunds;
+  }
 }
 
-class _ItemDivider extends StatelessWidget {
+class ItemDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(height: 10, color: Colors.grey[50]);
