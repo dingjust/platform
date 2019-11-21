@@ -89,7 +89,7 @@
         <tr class="order-table-th_row">
           <td style="width:40px">颜色</td>
           <template v-for="item in sizes">
-            <th>{{item}}</th>
+            <th>{{item.name}}</th>
           </template>
           <th>数量小计</th>
         </tr>
@@ -170,11 +170,13 @@
     mixins: [],
     computed: {
       sizes: function () {
-        var sizes = new Set([]);
+        var sizes = [];
         this.slotData.entries.forEach(element => {
-          sizes.add(element.product.size.name);
+          sizes.push(element.product.size);
         });
-        return sizes;
+        const res = new Map();
+        var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
+        return result.sort((o1, o2) => o1.sequence - o2.sequence);
       },
       colors: function () {
         var colors = new Set([]);
@@ -205,7 +207,7 @@
           this.slotData.deliveryOrders != null &&
           this.slotData.deliveryOrders.length != 0
         ) {
-          return this.slotData.deliveryOrders[0].status != "PENDING_CONFIRM";
+          return this.slotData.deliveryOrders[0].status == "UNCOMMITTED"||this.slotData.deliveryOrders[0].status == 'REJECTED';
         } else {
           return true;
         }
@@ -250,7 +252,7 @@
         return amount;
       },
       getColspanLength() {
-        return this.colors.size + 2;
+        return this.sizes.length + 1;
       },
       async onSubmit() {
         //组合订单行参数
@@ -555,21 +557,21 @@
             this.slotData.deliveryOrders.length == 0
           ) {
             sizeArray.push({
-              size: size,
+              size: size.name,
               color: color,
               quantity: ""
             });
           } else {
             let variant = this.getVariant(
               color,
-              size,
+              size.name,
               this.slotData.deliveryOrders[0].entries
             );
             if (variant != null) {
               sizeArray.push(variant);
             } else {
               sizeArray.push({
-                size: size,
+                size: size.name,
                 color: color,
                 quantity: ""
               });
@@ -591,21 +593,21 @@
                 this.slotData.deliveryOrders.length == 0
               ) {
                 sizeArray.push({
-                  size: size,
+                  size: size.name,
                   color: color,
                   quantity: ""
                 });
               } else {
                 let variant = this.getVariant(
                   color,
-                  size,
+                  size.name,
                   this.slotData.deliveryOrders[0].entries
                 );
                 if (variant != null) {
                   sizeArray.push(variant);
                 } else {
                   sizeArray.push({
-                    size: size,
+                    size: size.name,
                     color: color,
                     quantity: ""
                   });
@@ -628,14 +630,14 @@
                 this.slotData.deliveryOrders.length == 0
               ) {
                 sizeArray.push({
-                  size: size,
+                  size: size.name,
                   color: color,
                   quantity: ""
                 });
               } else {
                 let variant = this.getVariant(
                   color,
-                  size,
+                  size.name,
                   this.slotData.deliveryOrders[0].entries
                 );
                 if (variant != null) {

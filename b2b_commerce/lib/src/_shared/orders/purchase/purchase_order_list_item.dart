@@ -247,6 +247,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                             ? Container()
                             : Text(
                                 '${widget.order.product.name}',
+                          overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w500),
                               ),

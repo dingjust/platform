@@ -10,27 +10,22 @@ import 'package:widgets/widgets.dart';
 
 import 'components/ColorSizeTable.dart';
 
-class DeliverOrderForm extends StatefulWidget {
-  final ShippingOrderNoteModel shippingOrder;
-
-  final DeliveryOrderNoteModel deliveryOrder;
-
+class ShippingOrderForm extends StatefulWidget {
   final PurchaseOrderModel purchaseOrder;
 
   final VoidCallback onCallback;
 
-  const DeliverOrderForm({Key key,
-    this.deliveryOrder,
+  const ShippingOrderForm({
+    Key key,
     this.onCallback,
-    this.shippingOrder,
-    this.purchaseOrder})
-      : super(key: key);
+    this.purchaseOrder,
+  }) : super(key: key);
 
   @override
-  _DeliverOrderFormState createState() => _DeliverOrderFormState();
+  _ShippingOrderFormState createState() => _ShippingOrderFormState();
 }
 
-class _DeliverOrderFormState extends State<DeliverOrderForm>
+class _ShippingOrderFormState extends State<ShippingOrderForm>
     with SingleTickerProviderStateMixin, DeliverAndShippingFormMixin {
   List<ColorSizeEntry> colorSizeEntries;
 
@@ -58,12 +53,7 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
   @override
   void initForm() {
     super.initForm();
-    //更新或创建
-    if (widget.deliveryOrder != null) {
-      initDeliveryUpdate(widget.deliveryOrder);
-    } else if (widget.shippingOrder != null) {
-      initDeliveryCreate(widget.shippingOrder);
-    }
+    initShippingCreate(widget.purchaseOrder);
   }
 
   Future<List<CarrierModel>> _getCarriers() {
@@ -82,7 +72,7 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
             iconTheme: IconThemeData(color: Colors.black),
             centerTitle: true,
             title: Text(
-              '收货单${orderStatus()}',
+              '发货单',
               style: TextStyle(color: Colors.black),
             ),
             bottom: TabBar(
@@ -110,7 +100,7 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
                         ],
                       )),
                   ColorSizeTable(
-                    noteEntries: widget?.deliveryOrder?.entries ?? null,
+                    noteEntries: null,
                     orderEntries: widget.purchaseOrder.entries,
                     colorSizeEntries: colorSizeEntries,
                   ),
@@ -118,14 +108,6 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
                 ],
               ))),
     );
-  }
-
-  String orderStatus() {
-    if (widget.deliveryOrder == null) {
-      return '';
-    } else {
-      return '(${OrderNoteStatusLocalizedMap[widget.deliveryOrder.status]})';
-    }
   }
 
   ///发货人
@@ -166,81 +148,80 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
           isOfflineConsignment
               ? Container()
               : Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom:
-                    BorderSide(color: Colors.grey[300], width: 0.5))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '发货方式',
-                  style: TextStyle(fontSize: 16),
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom:
+                              BorderSide(color: Colors.grey[300], width: 0.5))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '发货方式',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          FutureBuilder<List<CarrierModel>>(
+                              future: _getCarriers(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<CarrierModel>> snapshot) {
+                                if (snapshot.data != null) {
+                                  return PopupMenuButton<CarrierModel>(
+                                    onSelected: (val) {
+                                      setState(() {
+                                        if (consignment?.carrierDetails !=
+                                            null) {
+                                          consignment.carrierDetails = val;
+                                        } else {
+                                          consignment = ConsignmentModel();
+                                          consignment.carrierDetails = val;
+                                        }
+                                      });
+                                    },
+                                    itemBuilder: (BuildContext context) =>
+                                        snapshot.data
+                                            .map((carrier) =>
+                                                PopupMenuItem<CarrierModel>(
+                                                  value: carrier,
+                                                  child: new Text(carrier.name),
+                                                ))
+                                            .toList(),
+                                    child: Text(
+                                      consignment != null
+                                          ? '${consignment?.carrierDetails?.name ?? '选择物流公司'}'
+                                          : '选择物流公司',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }),
+                          Icon(
+                            Icons.chevron_right,
+                            color: Colors.grey,
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                Row(
-                  children: <Widget>[
-                    FutureBuilder<List<CarrierModel>>(
-                        future: _getCarriers(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<CarrierModel>> snapshot) {
-                          if (snapshot.data != null) {
-                            return PopupMenuButton<CarrierModel>(
-                              onSelected: (val) {
-                                setState(() {
-                                  if (consignment?.carrierDetails !=
-                                      null) {
-                                    consignment.carrierDetails = val;
-                                  } else {
-                                    consignment = ConsignmentModel();
-                                    consignment.carrierDetails = val;
-                                  }
-                                });
-                              },
-                              itemBuilder: (BuildContext context) =>
-                                  snapshot.data
-                                      .map((carrier) =>
-                                      PopupMenuItem<CarrierModel>(
-                                        value: carrier,
-                                        child: new Text(carrier.name),
-                                      ))
-                                      .toList(),
-                              child: Text(
-                                consignment != null
-                                    ? '${consignment?.carrierDetails?.name ??
-                                    '选择物流公司'}'
-                                    : '选择物流公司',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
-                    Icon(
-                      Icons.chevron_right,
-                      color: Colors.grey,
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
           isOfflineConsignment
               ? Container()
               : TextFieldComponent(
-            focusNode: trackingIDFocusNode,
-            controller: trackingIDController,
-            leadingText: Text('发货单号',
-                style: TextStyle(
-                  fontSize: 16,
-                )),
-            hintText: '请填写',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
-          ),
+                  focusNode: trackingIDFocusNode,
+                  controller: trackingIDController,
+                  leadingText: Text('发货单号',
+                      style: TextStyle(
+                        fontSize: 16,
+                      )),
+                  hintText: '请填写',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                ),
           Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             decoration: BoxDecoration(
@@ -415,88 +396,63 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: UserBLoC.instance.currentUser.type == UserType.BRAND
+        children: UserBLoC.instance.currentUser.type == UserType.FACTORY
             ? <Widget>[
-          showSaveBtn()
-              ? Expanded(
-            flex: 1,
-            child: Container(
-                height: double.infinity,
-                child: Builder(
-                  builder: (BuildContext buttonContext) =>
-                      FlatButton(
-                        onPressed: onSave,
-                        disabledColor: Colors.grey[300],
-                        child: Text(
-                          '保存并退出',
-                          style: TextStyle(
-                              fontSize: 15, color: Colors.red),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      height: double.infinity,
+                      child: Builder(
+                        builder: (BuildContext buttonContext) => FlatButton(
+                          onPressed: () => onSubmit(false),
+                          disabledColor: Colors.grey[300],
+                          child: Text(
+                            '部分发货',
+                            style: TextStyle(fontSize: 15, color: Colors.red),
+                          ),
                         ),
-                      ),
-                )),
-          )
-              : Container(),
-          showConfirmBtn()
-              ? Expanded(
-            flex: 1,
-            child: Container(
-                height: double.infinity,
-                child: Builder(
-                  builder: (BuildContext buttonContext) =>
-                      FlatButton(
-                        color: Color.fromRGBO(255, 214, 12, 1),
-                        onPressed: onConfirm,
-                        disabledColor: Colors.grey[300],
-                        child: Text(
-                          '确认完成收货',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                )),
-          )
-              : Container(),
-          showRecallBtn()
-              ? Expanded(
-            flex: 1,
-            child: Container(
-                height: double.infinity,
-                child: Builder(
-                  builder: (BuildContext buttonContext) =>
-                      FlatButton(
-                        onPressed: onRecall,
-                        disabledColor: Colors.grey[300],
-                        child: Text(
-                          '撤回',
-                          style: TextStyle(
-                              fontSize: 15, color: Colors.red),
-                        ),
-                      ),
-                )),
-          )
-              : Container(),
-        ]
+                      )),
+                ),
+                widget.purchaseOrder.status ==
+                        PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE
+                    ? Expanded(
+                        flex: 1,
+                        child: Container(
+                            height: double.infinity,
+                            child: Builder(
+                              builder: (BuildContext buttonContext) =>
+                                  FlatButton(
+                                color: Color.fromRGBO(255, 214, 12, 1),
+                                onPressed: () => onSubmit(true),
+                                disabledColor: Colors.grey[300],
+                                child: Text(
+                                  '全部发货',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ),
+                            )),
+                      )
+                    : Container(),
+              ]
             : [],
       ),
     );
   }
 
-  ///保存
-  void onSave() {
-    DeliveryOrderNoteModel model;
-    if (widget.deliveryOrder == null) {
-      model = getDeliveryForCreate(colorSizeEntries);
-    } else {
-      model = getDeliveryForUpdate(widget.deliveryOrder, colorSizeEntries);
-    }
+  ///发货
+  void onSubmit(bool isFull) {
+    ShippingOrderNoteModel model = getShippingOrder(colorSizeEntries);
+
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: widget.deliveryOrder == null
-                ? DeliveryOrderRepository()
-                .createDeliveryOrder(widget.purchaseOrder.code, model)
-                : DeliveryOrderRepository().updateDeliveryOrder(model),
+            requestCallBack: isFull
+                ? ShippingOrderRepository()
+                    .fullShippingOrder(widget.purchaseOrder.code, model)
+                : ShippingOrderRepository()
+                    .partShippingOrder(widget.purchaseOrder.code, model),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: '',
@@ -519,116 +475,6 @@ class _DeliverOrderFormState extends State<DeliverOrderForm>
             );
           });
     });
-  }
-
-  ///提交收货单
-  void onConfirm() {
-    DeliveryOrderNoteModel model;
-    if (widget.deliveryOrder == null) {
-      model = getDeliveryForCreate(colorSizeEntries);
-    } else {
-      model = getDeliveryForUpdate(widget.deliveryOrder, colorSizeEntries);
-    }
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return RequestDataLoading(
-            requestCallBack: widget.deliveryOrder == null
-                ? DeliveryOrderRepository().createAndCommitDeliveryOrder(
-                widget.purchaseOrder.code, model)
-                : DeliveryOrderRepository().updateAndCommitDeliveryOrder(model),
-            outsideDismiss: false,
-            loadingText: '保存中。。。',
-            entrance: '',
-          );
-        }).then((value) {
-      bool result = false;
-      if (value != null) {
-        result = true;
-      }
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '保存失败',
-              successTips: '保存成功',
-              callbackResult: result,
-              confirmAction: jumpToDetail,
-            );
-          });
-    });
-  }
-
-  ///撤回
-  void onRecall() {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return RequestDataLoading(
-            requestCallBack: DeliveryOrderRepository()
-                .recallDelivery(widget.deliveryOrder.code),
-            outsideDismiss: false,
-            loadingText: '撤回中。。。',
-            entrance: '',
-          );
-        }).then((value) {
-      bool result = false;
-      if (value != null) {
-        result = true;
-      }
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '撤回失败',
-              successTips: '撤回成功',
-              callbackResult: result,
-              confirmAction: jumpToDetail,
-            );
-          });
-    });
-  }
-
-  bool showSaveBtn() {
-    if (widget.deliveryOrder == null) {
-      return true;
-    } else {
-      if (widget.deliveryOrder.status == OrderNoteStatus.UNCOMMITTED ||
-          widget.deliveryOrder.status == OrderNoteStatus.REJECTED) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
-  bool showConfirmBtn() {
-    if (widget.purchaseOrder.status != PurchaseOrderStatus.OUT_OF_STORE) {
-      return false;
-    } else if (widget.deliveryOrder == null) {
-      return true;
-    } else {
-      if (widget.deliveryOrder.status == OrderNoteStatus.UNCOMMITTED) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
-  bool showRecallBtn() {
-    if (widget.deliveryOrder != null &&
-        widget.deliveryOrder.status == OrderNoteStatus.PENDING_CONFIRM) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   void jumpToDetail() {

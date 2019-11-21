@@ -7,8 +7,8 @@
     </el-row>
     <el-tabs v-model="activeOrder" type="card" :editable="isFactory()" @edit="handleTabsEdit">
       <template v-for="(order,index) in slotData.shippingOrders">
-        <el-tab-pane :label="''+(index+1)+'('+getDeliverOrderType(order)+')'" :name="''+index">
-          <deliver-view :slotData="order" />
+        <el-tab-pane :label="''+(index+1)+'('+getDeliverOrderType(order)+')'" :name="''+index" :key="index">
+          <deliver-view :slotData="order" :purchaseOrder="slotData" />
         </el-tab-pane>
       </template>
     </el-tabs>

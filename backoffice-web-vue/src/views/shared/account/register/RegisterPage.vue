@@ -15,8 +15,8 @@
               <el-tabs v-model="form.type" @tab-click="handleClick" :stretch="true" class="register-form-tabs">
                 <el-tab-pane label="品牌注册" name="BRAND">
                   <el-row type="flex" justify="center">
-                    <h6
-                      class="register-info">品牌商：服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。</h6>
+                    <h6 class="register-info">品牌商：服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。
+                    </h6>
                   </el-row>
                   <register-form :slot-data="form" />
                 </el-tab-pane>
@@ -82,6 +82,8 @@
     margin-left: auto;
     padding-top: 50px;
     overflow: auto;
+    padding-bottom: 50px;
+    padding-right: 20px;
   }
 
   .tologin-btn {
