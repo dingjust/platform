@@ -26,7 +26,7 @@
     <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract"/>
     </el-dialog>
-    <el-form ref="requirementForm" label-position="left" label-width="88px" hide-required-asterisk>
+    <el-form ref="contractPurchaseForm" :model="contractPurchaseFormData" label-position="left" :rules="rules" label-width="88px" hide-required-asterisk>
       <el-row type="flex" justify="center" align="middle">
         <span class="create-contract-title">采购订单</span>
       </el-row>
@@ -38,13 +38,13 @@
           <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
         </el-col>
       </el-row>
-      <el-row class="create-contract-row">
-        <el-col :span="20" :offset="2">
-          <el-input size="small" placeholder="选择订单" :value="ordersCodeStr" :disabled="true">
-            <el-button slot="prepend" :disabled="orderReadOnly" @click="dialogOrderVisible=true">关联订单</el-button>
-          </el-input>
-        </el-col>
-      </el-row>
+     <el-row class="create-contract-row">
+       <el-col :span="20" :offset="2">
+         <el-input size="small" placeholder="选择订单" :value="ordersCodeStr" :disabled="true">
+           <el-button slot="prepend" :disabled="orderReadOnly" @click="dialogOrderVisible=true">关联订单</el-button>
+         </el-input>
+       </el-col>
+     </el-row>
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择框架协议" v-model="selectContract.title" :disabled="true">
@@ -146,7 +146,7 @@
 
     export default {
       name: 'ContractPurchaseForm',
-      props: ['slotData'],
+      props: ['slotData', 'formData'],
       components: {
         ContractTypeSelect,
         ContractTemplateSelect,
@@ -250,6 +250,10 @@
           this.pdfFile = '';
         },
         async onSavePdf () {
+          if (!this.isOrderClickPass) {
+            this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
+            return;
+          }
           var agreementType = null;
           if (this.contractType == '3') {
             agreementType = 'CUSTOMIZE_COMPLETED';
@@ -304,6 +308,10 @@
           this.fn.closeSlider(true);
         },
         async onSave () {
+          if (!this.isOrderClickPass) {
+            this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
+            return;
+          }
           // return;
           if (this.orderSelectFiles.length == 0) {
             this.$message.error('请选择订单');
@@ -426,6 +434,28 @@
           }
           this.getContractList(this.companyUid);
           this.dialogContractVisible = true;
+        },
+        //  订单验证
+        async orderContractClick () {
+          if (this.orderSelectFiles != null || this.orderSelectFiles.length > 0) {
+            var codes = this.orderSelectFiles.map((order) => order.code);
+          }
+          var flag = false
+          if (this.contractType != '1') {
+            flag = true
+          }
+          let data = {
+            'orderCodes': codes,
+            'type': 'CGDD',
+            'isPdfAgreement': flag
+          }
+          const url = this.apis().orderContractClick();
+          const result = await http.post(url, data);
+          if (result.code === 0) {
+            this.$message.error(result.msg);
+          } else if (result.code === 1) {
+            this.isOrderClickPass = true;
+          }
         }
       },
       data () {
@@ -458,12 +488,20 @@
           companyUid: '',
           dialogContractVisible: false,
           cacheSelectContract: '',
-          contractCode: ''
+          contractCode: '',
+          isOrderClickPass: false
         };
       },
       created () {
         this.onSearchOrder('', 0, 10);
         this.onSetOrderCode();
+      },
+      watch: {
+        dialogOrderVisible: function (n, o) {
+          if (!n) {
+            this.orderContractClick();
+          }
+        }
       }
     };
 </script>

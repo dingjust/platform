@@ -631,6 +631,9 @@ let TENANT_APIS = {
   },
   previewPdf(code) {
     return '/b2b/user/agreement/preview/pdf/' + code;
+  },
+  orderContractClick() {
+    return '/b2b/user/agreement/order/validate';
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
@@ -755,6 +758,9 @@ let NONE_TENANT_APIS = {
   },
   previewPdf(code) {
     return '/b2b/user/agreement/preview/pdf/' + code;
+  },
+  orderContractClick() {
+    return '/b2b/user/agreement/order/validate';
   }
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

@@ -387,7 +387,7 @@
         this.payPlanSelectDialogVisible = false;
       },
       getPaymentStatusTag(item) {
-        if(item.approvalStatus == 'approval'){
+        if(item.approvalStatus == 'approved'){
           return 'static/img/certified.png';
         }else{
           return 'static/img/uncertified.png';
