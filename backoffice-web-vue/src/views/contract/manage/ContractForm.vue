@@ -242,6 +242,10 @@
           this.pdfFile = '';
         },
         async onSavePdf () {
+          if (!this.isOrderClickPass) {
+            this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
+            return;
+          }
           var agreementType = null;
           if (this.contractType == '3') {
             agreementType = 'CUSTOMIZE_COMPLETED';
@@ -296,6 +300,10 @@
           this.fn.closeSlider(true);
         },
         async onSave () {
+          if (!this.isOrderClickPass) {
+            this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
+            return;
+          }
           // return;
           if (this.orderSelectFiles.length == 0) {
             this.$message.error('请选择订单');
@@ -417,6 +425,28 @@
           }
           this.getContractList(this.companyUid);
           this.dialogContractVisible = true;
+        },
+        //  订单验证
+        async orderContractClick () {
+          if (this.orderSelectFiles != null || this.orderSelectFiles.length > 0) {
+            var codes = this.orderSelectFiles.map((order) => order.code);
+          }
+          var flag = false
+          if (this.contractType != '1') {
+            flag = true
+          }
+          let data = {
+            'orderCodes': codes,
+            'type': 'WTSCHT',
+            'isPdfAgreement': flag
+          }
+          const url = this.apis().orderContractClick();
+          const result = await http.post(url, data);
+          if (result.code === 0) {
+            this.$message.error(result.msg);
+          } else if (result.code === 1) {
+            this.isOrderClickPass = true;
+          }
         }
       },
       data () {
@@ -449,12 +479,20 @@
           companyUid: '',
           dialogContractVisible: false,
           cacheSelectContract: '',
-          contractCode: ''
+          contractCode: '',
+          isOrderClickPass: false
         };
       },
       created () {
         this.onSearchOrder('', 0, 10);
         this.onSetOrderCode();
+      },
+      watch: {
+        dialogOrderVisible: function (n, o) {
+          if (!n) {
+            this.orderContractClick();
+          }
+        }
       }
     };
 </script>
