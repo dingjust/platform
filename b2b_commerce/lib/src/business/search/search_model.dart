@@ -388,20 +388,20 @@ class _SearchModelPageState extends State<SearchModelPage> {
       }
       Navigator.of(context).pop();
     }
-    if (widget.searchModel.searchModelType == SearchModelType.CONTRACT_SEARCH) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  ContractSearchResultPage(
-                    searchModel: widget.searchModel,
-                  )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-    }
+//    if (widget.searchModel.searchModelType == SearchModelType.CONTRACT_SEARCH) {
+//      Navigator.push(
+//          context,
+//          MaterialPageRoute(
+//              builder: (context) =>
+//                  ContractSearchResultPage(
+//                    searchModel: widget.searchModel,
+//                  )));
+//      if (controller.text != '' && controller.text.isNotEmpty) {
+//        widget.searchModel.historyKeywords.add(controller.text);
+//        LocalStorage.save(GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
+//            json.encode(widget.searchModel.historyKeywords));
+//      }
+//    }
   }
 
   delayedLoading(){
@@ -574,15 +574,15 @@ class _SearchModelPageState extends State<SearchModelPage> {
                     });
                     Navigator.of(context).pop();
                   }
-                  if(widget.searchModel.searchModelType == SearchModelType.CONTRACT_SEARCH) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ContractSearchResultPage(
-                                  searchModel: widget.searchModel,
-                                )));
-                  }
+//                  if(widget.searchModel.searchModelType == SearchModelType.CONTRACT_SEARCH) {
+//                    Navigator.push(
+//                        context,
+//                        MaterialPageRoute(
+//                            builder: (context) =>
+//                                ContractSearchResultPage(
+//                                  searchModel: widget.searchModel,
+//                                )));
+//                  }
                 },
               ))
                   .toList()),
