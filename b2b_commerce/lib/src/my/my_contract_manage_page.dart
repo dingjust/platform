@@ -204,7 +204,7 @@ class _MyContractManagePageState extends State<MyContractManagePage>{
           GestureDetector(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => MyContractPage(type: 'WAIT_HIM_SIGN')));
+                  builder: (context) => MyContractPage(type: 'WAIT_PARTNER_SIGN')));
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 2,

@@ -20,7 +20,7 @@ class MyContractState extends PageState {
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'WAIT_ME_SIGN':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'WAIT_HIM_SIGN':
+    'WAIT_PARTNER_SIGN':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'COMPLETE':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
@@ -49,14 +49,14 @@ class MyContractState extends PageState {
   void getData() async {
     String _status = '';
     String signState = '';
-    if(status == 'WAIT_ME_SIGN' || status == 'WAIT_HIM_SIGN'){
+    if(status == 'WAIT_ME_SIGN' || status == 'WAIT_PARTNER_SIGN'){
       _status = 'SIGN';
     }else{
       _status = status;
     }
     if(status == 'WAIT_ME_SIGN'){
       signState = '1';
-    }else if(status == 'WAIT_HIM_SIGN'){
+    }else if(status == 'WAIT_PARTNER_SIGN'){
       signState = '0';
     }
 
@@ -105,14 +105,14 @@ class MyContractState extends PageState {
       if (currentPage + 1 != totalPages) {
         String _status = '';
         String signState = '';
-        if(status == 'WAIT_ME_SIGN' || status == 'WAIT_HIM_SIGN'){
+        if(status == 'WAIT_ME_SIGN' || status == 'WAIT_PARTNER_SIGN'){
           _status = 'SIGN';
         }else{
           _status = status;
         }
         if(status == 'WAIT_ME_SIGN'){
           signState = '1';
-        }else if(status == 'WAIT_HIM_SIGN'){
+        }else if(status == 'WAIT_PARTNER_SIGN'){
           signState = '0';
         }
 
