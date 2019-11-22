@@ -34,7 +34,7 @@
         <el-button type="info" v-if="enterpriseSlotData.role=='LEGAL'" style="width: 120px" disabled >法定代表人</el-button>
       </el-col>
       <el-col :span="12">
-        <el-input size="small" v-model="enterpriseSlotData.username" placeholder="姓名" />
+        <el-input size="small" v-model="enterpriseSlotData.username" placeholder="姓名(与身份证一致)" />
       </el-col>
     </el-row>
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >

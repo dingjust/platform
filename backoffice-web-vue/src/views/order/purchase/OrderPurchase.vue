@@ -147,125 +147,6 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
-                <el-col :span="7">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择合作方式', trigger: 'change'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.machiningTypes'">
-                    <el-row type="flex" align="middle">
-                      <h6 class="info-input-prepend">合作方式</h6>
-                      <template v-for="(value,key) in machiningTypes">
-                        <el-radio class="info-radio" v-model="product.machiningTypes" :label="key">{{value}}
-                        </el-radio>
-                      </template>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="7">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择承担运费方', trigger: 'change'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.freightPayer'">
-                    <el-row type="flex" align="middle">
-                      <h6 class="info-input-prepend">承担运费</h6>
-                      <template v-for="(value,key) in freightPayer">
-                        <el-radio class="info-radio" v-model="product.freightPayer" :label="key">{{value}}</el-radio>
-                      </template>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择是否开发票', trigger: 'change'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.invoice'">
-                    <el-row type="flex" align="middle">
-                      <h6 class="info-input-prepend">是否开发票</h6>
-                      <el-radio class="info-radio" v-model="product.invoice" :label="false">不开发票</el-radio>
-                      <el-radio class="info-radio" v-model="product.invoice" :label="true">开发票</el-radio>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-select v-model="product.invoicePercent" :disabled="!product.invoice" placeholder="税点">
-                    <el-option v-for="item in invoicePercent" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10" class="info-order-row" type="flex" align="middle">
-                <el-col :span="6">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择省', trigger: 'change'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.address.region'">
-                    <el-row type="flex" align="middle">
-                      <h6 class="info-input-prepend">送货地址</h6>
-                      <el-select class="w-100" v-model="product.address.region" value-key="isocode"
-                        @change="(val)=>onRegionChanged(val,productIndex)">
-                        <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
-                        </el-option>
-                      </el-select>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择市', trigger: 'change'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.address.city'">
-                    <el-select class="w-100" v-model="product.address.city"
-                      @change="(val)=>onCityChanged(val,productIndex)" value-key="code">
-                      <el-option v-for="item in product.cities" :key="item.code" :label="item.name" :value="item">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择区', trigger: 'change'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.address.cityDistrict'">
-                    <el-select class="w-100" v-model="product.address.cityDistrict" value-key="code">
-                      <el-option v-for="item in product.cityDistricts" :key="item.code" :label="item.name"
-                        :value="item">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请详细地址', trigger: 'change'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.address.line1'">
-                    <el-row type="flex" align="middle">
-                      <el-input placeholder="详细地址" v-model="product.address.line1" size="mini">
-                      </el-input>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-button size="mini" @click="addressSelect(productIndex)">选择</el-button>
-                </el-col>
-              </el-row>
-              <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
-                <el-col :span="6">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请填写收货人', trigger: 'blur'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.address.fullname'">
-                    <el-row type="flex" align="middle">
-                      <h6 class="info-input-prepend">收货人</h6>
-                      <el-input placeholder="名称" v-model="product.address.fullname" size="mini">
-                      </el-input>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                  <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请填写联系方式', trigger: 'blur'}]" :key="product.key"
-                    :prop="'entries.' + productIndex+'.address.cellphone'">
-                    <el-row type="flex" align="middle">
-                      <h6 class="info-input-prepend">联系方式</h6>
-                      <el-input placeholder="电话" v-model="product.address.cellphone" size="mini">
-                      </el-input>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-              </el-row>
             </template>
             <el-row>
               <el-col :span="24">
@@ -278,6 +159,115 @@
               <div class="order-purchase-table-btn_add" @click="addRow">
                 +添加另一款产品
               </div>
+            </el-col>
+          </el-row>
+          <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
+            <el-col :span="7">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择合作方式', trigger: 'change'}]" prop="machiningTypes">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">合作方式</h6>
+                  <template v-for="(value,key) in machiningTypes">
+                    <el-radio class="info-radio" v-model="form.machiningTypes" :label="key">{{value}}
+                    </el-radio>
+                  </template>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <el-col :span="7">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择承担运费方', trigger: 'change'}]" prop="freightPayer">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">承担运费</h6>
+                  <template v-for="(value,key) in freightPayer">
+                    <el-radio class="info-radio" v-model="form.freightPayer" :label="key">{{value}}</el-radio>
+                  </template>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择是否开发票', trigger: 'change'}]" prop="invoice">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">是否开发票</h6>
+                  <el-radio class="info-radio" v-model="form.invoice" :label="false">不开发票</el-radio>
+                  <el-radio class="info-radio" v-model="form.invoice" :label="true">开发票</el-radio>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-select v-model="form.invoicePercent" :disabled="!form.invoice" placeholder="税点">
+                <el-option v-for="item in invoicePercent" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10" class="info-order-row" type="flex" align="middle">
+            <el-col :span="6">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择省', trigger: 'change'}]" :prop="'address.region'">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">送货地址</h6>
+                  <el-select class="w-100" v-model="form.address.region" value-key="isocode"
+                    @change="(val)=>onRegionChanged(val)">
+                    <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
+                    </el-option>
+                  </el-select>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择市', trigger: 'change'}]" prop="address.city">
+                <el-select class="w-100" v-model="form.address.city" @change="(val)=>onCityChanged(val)"
+                  value-key="code">
+                  <el-option v-for="item in form.cities" :key="item.code" :label="item.name" :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请选择区', trigger: 'change'}]" prop="address.cityDistrict">
+                <el-select class="w-100" v-model="form.address.cityDistrict" value-key="code">
+                  <el-option v-for="item in form.cityDistricts" :key="item.code" :label="item.name" :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请详细地址', trigger: 'change'}]" prop="address.line1">
+                <el-row type="flex" align="middle">
+                  <el-input placeholder="详细地址" v-model="form.address.line1" size="mini">
+                  </el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-button size="mini" @click="addressSelect">选择</el-button>
+            </el-col>
+          </el-row>
+          <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="20">
+            <el-col :span="6">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请填写收货人', trigger: 'blur'}]" prop="address.fullname">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">收货人</h6>
+                  <el-input placeholder="名称" v-model="form.address.fullname" size="mini">
+                  </el-input>
+                </el-row>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item class="purchase-form-item" :rules="[
+                { required: true, message: '请填写联系方式', trigger: 'blur'}]" prop="address.cellphone">
+                <el-row type="flex" align="middle">
+                  <h6 class="info-input-prepend">联系方式</h6>
+                  <el-input placeholder="电话" v-model="form.address.cellphone" size="mini">
+                  </el-input>
+                </el-row>
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row class="info-order-row">
@@ -322,32 +312,14 @@
                 </el-select>
               </el-row>
             </el-col>
-            <el-col :span="4">
-              <el-row type="flex" align="middle" justify="space-between" :gutter="20">
+            <el-col :span="5">
+              <el-row type="flex" align="middle" justify="start" :gutter="20">
                 <el-col :span="6">
                   <h6 class="info-input-prepend2" style="width:50px;">后时长</h6>
                 </el-col>
-                <el-col :span="18">
-                  <el-select v-model="form.deposit.time" placeholder="请选择">
-                    <el-option label="5" :value="5"></el-option>
-                    <el-option label="7" :value="7"></el-option>
-                    <el-option label="15" :value="15"></el-option>
-                  </el-select>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="4">
-              <el-row type="flex" align="middle" justify="space-between">
-                <el-col :span="6">
-                  <h6 class="info-input-prepend2">天</h6>
-                </el-col>
-                <el-col :span="18">
-                  <el-select v-model="form.deposit.range">
-                    <template v-for="(value,key) in triggerType">
-                      <el-option :label="value" :value="key"></el-option>
-                    </template>
-                  </el-select>
-                </el-col>
+                <el-input-number v-model="form.deposit.time" :precision="0" :step="1" :min="1" size="mini">
+                </el-input-number>
+                <h6 class="info-input-prepend2">天以内</h6>
               </el-row>
             </el-col>
             <el-col :span="4">
@@ -356,19 +328,10 @@
                   <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
                 </el-col>
                 <el-col :span="18">
-                  <el-select v-model="form.deposit.percent">
-                    <el-option label="0%" :value="0"></el-option>
-                    <el-option label="10%" :value="0.1"></el-option>
-                    <el-option label="20%" :value="0.2"></el-option>
-                    <el-option label="30%" :value="0.3"></el-option>
-                    <el-option label="40%" :value="0.4"></el-option>
-                    <el-option label="50%" :value="0.5"></el-option>
-                    <el-option label="60%" :value="0.6"></el-option>
-                    <el-option label="70%" :value="0.7"></el-option>
-                    <el-option label="80%" :value="0.8"></el-option>
-                    <el-option label="90%" :value="0.9"></el-option>
-                    <el-option label="100%" :value="1"></el-option>
-                  </el-select>
+                  <el-input-number v-model="form.deposit.percent" :precision="0" :step="1" :min="1" :max="99"
+                    size="mini">
+                  </el-input-number>
+                  %
                 </el-col>
               </el-row>
             </el-col>
@@ -386,32 +349,14 @@
                 </el-select>
               </el-row>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="5">
               <el-row type="flex" align="middle" justify="start" :gutter="20">
                 <el-col :span="6">
                   <h6 class="info-input-prepend2" style="width:40px;">后时长</h6>
                 </el-col>
-                <el-col :span="18">
-                  <el-select v-model="form.balance1.time" placeholder="请选择">
-                    <el-option label="5" :value="5"></el-option>
-                    <el-option label="7" :value="7"></el-option>
-                    <el-option label="15" :value="15"></el-option>
-                  </el-select>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="4">
-              <el-row type="flex" align="middle" justify="start">
-                <el-col :span="6">
-                  <h6 class="info-input-prepend2">天</h6>
-                </el-col>
-                <el-col :span="18">
-                  <el-select v-model="form.balance1.range">
-                    <template v-for="(value,key) in triggerType">
-                      <el-option :label="value" :value="key"></el-option>
-                    </template>
-                  </el-select>
-                </el-col>
+                <el-input-number v-model="form.balance1.time" :precision="0" :step="1" :min="1" size="mini">
+                </el-input-number>
+                <h6 class="info-input-prepend2">天以内</h6>
               </el-row>
             </el-col>
             <el-col :span="7" v-if="form.payPlanType=='PHASEONE'">
@@ -425,19 +370,10 @@
                   <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
                 </el-col>
                 <el-col :span="18">
-                  <el-select v-model="form.balance1.percent">
-                    <el-option label="0%" :value="0"></el-option>
-                    <el-option label="10%" :value="0.1"></el-option>
-                    <el-option label="20%" :value="0.2"></el-option>
-                    <el-option label="30%" :value="0.3"></el-option>
-                    <el-option label="40%" :value="0.4"></el-option>
-                    <el-option label="50%" :value="0.5"></el-option>
-                    <el-option label="60%" :value="0.6"></el-option>
-                    <el-option label="70%" :value="0.7"></el-option>
-                    <el-option label="80%" :value="0.8"></el-option>
-                    <el-option label="90%" :value="0.9"></el-option>
-                    <el-option label="100%" :value="1"></el-option>
-                  </el-select>
+                  <el-input-number v-model="form.balance1.percent" :precision="0" :step="1" :min="1" :max="99"
+                    size="mini">
+                  </el-input-number>
+                  %
                 </el-col>
               </el-row>
             </el-col>
@@ -455,32 +391,14 @@
                 </el-select>
               </el-row>
             </el-col>
-            <el-col :span="4">
-              <el-row type="flex" align="middle" justify="space-between" :gutter="20">
+            <el-col :span="5">
+              <el-row type="flex" align="middle" justify="start" :gutter="20">
                 <el-col :span="6">
                   <h6 class="info-input-prepend2" style="width:40px;">后时长</h6>
                 </el-col>
-                <el-col :span="18">
-                  <el-select v-model="form.balance2.time" placeholder="请选择">
-                    <el-option label="5" :value="5"></el-option>
-                    <el-option label="7" :value="7"></el-option>
-                    <el-option label="15" :value="15"></el-option>
-                  </el-select>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="4">
-              <el-row type="flex" align="middle" justify="space-between">
-                <el-col :span="6">
-                  <h6 class="info-input-prepend2">天</h6>
-                </el-col>
-                <el-col :span="18">
-                  <el-select v-model="form.balance2.range">
-                    <template v-for="(value,key) in triggerType">
-                      <el-option :label="value" :value="key"></el-option>
-                    </template>
-                  </el-select>
-                </el-col>
+                <el-input-number v-model="form.balance2.time" :precision="0" :step="1" :min="1" size="mini">
+                </el-input-number>
+                <h6 class="info-input-prepend2">天以内</h6>
               </el-row>
             </el-col>
             <el-col :span="7">
@@ -511,9 +429,10 @@
                   </el-col>
                   <el-col :span="18">
                     <el-select v-model="form.monthBalance.time" placeholder="请选择">
-                      <el-option label="5" :value="5"></el-option>
-                      <el-option label="7" :value="7"></el-option>
-                      <el-option label="15" :value="15"></el-option>
+                      <template v-for="val in 28">
+                      <el-option :label="val" :value="val" :key="val"></el-option>                                            
+                      </template>
+                      <el-option label="月底" :value="-1" :key="-1"></el-option>
                     </el-select>
                   </el-col>
                 </el-row>
@@ -608,16 +527,22 @@
       }),
       resultPreview: function () {
         var result;
+        var monthTimeStr='';
+        if(this.form.monthBalance.time>0){
+          monthTimeStr=this.form.monthBalance.time+'号';
+        }else{
+          monthTimeStr='月底'
+        }
         if (this.form.isHaveDeposit && this.form.payPlanType == 'PHASETWO') {
           result = '定金+2期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit
             .time +
             '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' +
             this.form.deposit
-            .percent * 100 +
+            .percent +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form.balance1
             .time +
-            '天' + this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +
+            '天' + this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent +
             '%。在产品入库并经甲方检验全部产品合格' +
             this.triggerEvent[this.form.balance2.event] + '后' +
             this.form.balance2.time + '天' + this.triggerType[this.form.balance2.range] +
@@ -628,7 +553,7 @@
             .time +
             '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' +
             this.form.deposit
-            .percent * 100 +
+            .percent +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.triggerEvent[this.form.balance1.event] + '后' +
             this.form.balance1
             .time +
@@ -646,7 +571,7 @@
           result = '无定金2期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
             '后' + this.form
             .balance1.time + '天' +
-            this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent * 100 +
+            this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent +
             '%。在产品入库并经甲方检验全部产品合格' + this.triggerEvent[this.form.balance2.event] + '后' + this.form.balance2.time +
             '天' + this.triggerType[this.form.balance2.range] +
             '未发现任何产品质量问题的，则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
@@ -656,14 +581,14 @@
             .time +
             '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' + this
             .form.deposit
-            .percent * 100 +
+            .percent +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance.event] +
-            '完成的次月' + this.form.monthBalance.time + '号支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
+            '完成的次月' + monthTimeStr + '支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (!this.form.isHaveDeposit && this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
           result = '无定金月结\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance
               .event] +
-            '完成的次月' + this.form.monthBalance.time + '号支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
+            '完成的次月' + monthTimeStr + '支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
 
         return result;
@@ -719,7 +644,7 @@
             color: varaint.color,
             size: varaint.size,
             num: ''
-          };          
+          };
           sizes.push(varaint.size);
           colorsSet.add(varaint.color.name);
           variants.push(item);
@@ -727,8 +652,8 @@
 
         const res = new Map();
         var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
-        var sizesSet= result.sort((o1, o2) => o1.sequence - o2.sequence);
-        
+        var sizesSet = result.sort((o1, o2) => o1.sequence - o2.sequence);
+
         this.$set(this.form.entries[this.currentProductIndex], 'thumbnail', product.thumbnail);
         this.$set(this.form.entries[this.currentProductIndex], 'name', product.name);
         this.$set(this.form.entries[this.currentProductIndex], 'code', product.code);
@@ -754,20 +679,6 @@
         this.form.entries.push({
           unitPrice: '',
           expectedDeliveryDate: '',
-          machiningTypes: '',
-          freightPayer: '',
-          invoice: true,
-          invoicePercent: 0.03,
-          address: {
-            city: '',
-            cityDistrict: '',
-            region: '',
-            line1: '',
-            fullname: '',
-            cellphone: ''
-          },
-          cities: [],
-          cityDistricts: []
         });
       },
       removeRow(index) {
@@ -783,29 +694,29 @@
 
         this.regions = result;
       },
-      onRegionChanged(current, index) {
+      onRegionChanged(current) {
         if (!current || current.isocode == '') {
           return;
         }
 
-        this._onRegionChanged(current, index);
+        this._onRegionChanged(current);
       },
-      _onRegionChanged(current, index) {
-        this.form.entries[index].cities = [];
-        this.$set(this.form.entries[index].address, 'city', {
+      _onRegionChanged(current) {
+        this.form.cities = [];
+        this.$set(this.form.address, 'city', {
           code: '',
           name: ''
         });
-        this.$set(this.form.entries[index].address, 'cityDistrict', {
+        this.$set(this.form.address, 'cityDistrict', {
           code: '',
           name: ''
         });
-        this.getCities(current, index);
-        if (this.form.entries[index].address.city && this.form.entries[index].address.city.code) {
-          this.onCityChanged(this.form.entries[index].address.city.code, index);
+        this.getCities(current);
+        if (this.form.address.city && this.form.address.city.code) {
+          this.onCityChanged(this.form.address.city.code);
         }
       },
-      async getCities(region, index) {
+      async getCities(region) {
         const url = this.apis().getCities(region.isocode);
         const result = await this.$http.get(url);
 
@@ -814,16 +725,16 @@
           return;
         }
 
-        this.form.entries[index].cities = result;
+        this.form.cities = result;
       },
-      onCityChanged(current, index) {
+      onCityChanged(current) {
         if (!current) {
           return;
         }
-        this._onCityChanged(current, index);
+        this._onCityChanged(current);
       },
-      async _onCityChanged(city, index) {
-        this.form.entries[index].cityDistricts.clear;
+      async _onCityChanged(city) {
+        this.form.cityDistricts.clear;
         const url = this.apis().getDistricts(city.code);
         const result = await this.$http.get(url);
 
@@ -832,14 +743,14 @@
           return;
         }
 
-        this.form.entries[index].cityDistricts = result;
+        this.form.cityDistricts = result;
       },
       async onSubmit() {
         this.form.entries.forEach(entry => {
           if (entry.variants == null || entry.variants.length == 0) {
-              this.$message.error('请选择产品');
-              return false;
-            }
+            this.$message.error('请选择产品');
+            return false;
+          }
         })
         this.$refs['form'].validate(async (valid) => {
           if (valid) {
@@ -865,7 +776,7 @@
               var payPlanItems = [];
               if (this.form.isHaveDeposit) {
                 payPlanItems.push({
-                  payPercent: this.form.deposit.percent,
+                  payPercent: this.form.deposit.percent * 0.01,
                   triggerEvent: this.form.deposit.event,
                   triggerDays: this.form.deposit.time,
                   moneyType: 'DEPOSIT',
@@ -880,7 +791,7 @@
                 });
               } else {
                 payPlanItems.push({
-                  payPercent: this.form.balance1.percent,
+                  payPercent: this.form.balance1.percent * 0.01,
                   triggerEvent: this.form.balance1.event,
                   triggerDays: this.form.balance1.time,
                   moneyType: 'PHASEONE',
@@ -898,22 +809,21 @@
               }
 
               var totalPercent = 0;
-              for (var i = 0; i++; i < payPlanItems.length - 1) {
+              for (let i = 0; i < payPlanItems.length - 1; i++) {
                 totalPercent += payPlanItems[i].payPercent;
               }
-
-              payPlanItems[payPlanItems.lastIndexOf] = totalPercent;
+              payPlanItems[payPlanItems.length - 1].payPercent = this.Subtr(1.00, totalPercent);
 
               // 组合表单参数
               let form = {
                 companyOfSeller: this.form.companyOfSeller,
                 contactOfSeller: this.form.contactOfSeller,
                 contactPersonOfSeller: this.form.contactPersonOfSeller,
-                deliveryAddress: element.address,
-                freightPayer: element.freightPayer,
-                machiningType: element.machiningTypes,
-                invoiceTaxPoint: element.invoicePercent,
-                invoiceNeeded: element.invoice,
+                deliveryAddress: this.form.address,
+                freightPayer: this.form.freightPayer,
+                machiningType: this.form.machiningTypes,
+                invoiceTaxPoint: this.form.invoicePercent,
+                invoiceNeeded: this.form.invoice,
                 unitPrice: element.unitPrice,
                 entries: entries,
                 expectedDeliveryDate: element.expectedDeliveryDate,
@@ -966,14 +876,13 @@
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
-      addressSelect(index) {
-        this.currentProductIndex = index;
+      addressSelect() {
         this.addressSelectVisible = !this.addressSelectVisible;
       },
       async onAddressSelect(val) {
         this.addressSelectVisible = false;
-        this.form.entries[this.currentProductIndex].address = val;
-        this.getCities(val.region, this.currentProductIndex);
+        this.form.address = val;
+        this.getCities(val.region);
         const url = this.apis().getDistricts(val.city.code);
         const result = await this.$http.get(url);
 
@@ -982,7 +891,7 @@
           return;
         }
 
-        this.form.entries[this.currentProductIndex].cityDistricts = result;
+        this.form.cityDistricts = result;
       },
       shouldShow(product, index) {
         if (index == 0) {
@@ -997,19 +906,19 @@
         payPlan.payPlanItems.forEach((item) => {
           switch (item.moneyType) {
             case 'PHASEONE':
-              this.form.balance1.percent = item.payPercent;
+              this.form.balance1.percent = item.payPercent * 100;
               this.form.balance1.event = item.triggerEvent;
               this.form.balance1.time = item.triggerDays;
               this.form.balance1.range = item.triggerType;
               break;
             case 'PHASETWO':
-              this.form.balance2.percent = item.payPercent;
+              this.form.balance2.percent = item.payPercent * 100;
               this.form.balance2.event = item.triggerEvent;
               this.form.balance2.time = item.triggerDays;
               this.form.balance2.range = item.triggerType;
               break;
             case 'DEPOSIT':
-              this.form.deposit.percent = item.payPercent;
+              this.form.deposit.percent = item.payPercent * 100;
               this.form.deposit.event = item.triggerEvent;
               this.form.deposit.time = item.triggerDays;
               this.form.deposit.range = item.triggerType;
@@ -1031,7 +940,7 @@
         var payPlanItems = [];
         if (this.form.isHaveDeposit) {
           payPlanItems.push({
-            payPercent: this.form.deposit.percent,
+            payPercent: this.form.deposit.percent * 0.01,
             triggerEvent: this.form.deposit.event,
             triggerDays: this.form.deposit.time,
             moneyType: 'DEPOSIT',
@@ -1046,7 +955,7 @@
           });
         } else {
           payPlanItems.push({
-            payPercent: this.form.balance1.percent,
+            payPercent: this.form.balance1.percent * 0.01,
             triggerEvent: this.form.balance1.event,
             triggerDays: this.form.balance1.time,
             moneyType: 'PHASEONE',
@@ -1054,7 +963,7 @@
           });
           if (this.form.payPlanType == 'PHASETWO') {
             payPlanItems.push({
-              payPercent: this.form.balance2.percent,
+              payPercent: this.form.balance2.percent * 0.01,
               triggerEvent: this.form.balance2.event,
               triggerDays: this.form.balance2.time,
               moneyType: 'PHASETWO',
@@ -1062,6 +971,12 @@
             });
           }
         }
+
+        var totalPercent = 0;
+        for (let i = 0; i < payPlanItems.length - 1; i++) {
+          totalPercent += payPlanItems[i].payPercent;
+        }
+        payPlanItems[payPlanItems.length - 1].payPercent = this.Subtr(1.00, totalPercent);
 
         var payPlanForm = {
           name: this.payPlanForm.name,
@@ -1087,6 +1002,23 @@
         // // 通过正则过滤小数点后两位
         e.unitPrice = (e.unitPrice.match(/^\d*(\.?\d{0,2})/g)[0]) || null;
       },
+      //减法
+      Subtr(arg1, arg2) {
+        var r1, r2, m, n;
+        try {
+          r1 = arg1.toString().split(".")[1].length
+        } catch (e) {
+          r1 = 0
+        }
+        try {
+          r2 = arg2.toString().split(".")[1].length
+        } catch (e) {
+          r2 = 0
+        }
+        m = Math.pow(10, Math.max(r1, r2));
+        n = (r1 >= r2) ? r1 : r2;
+        return ((arg1 * m - arg2 * m) / m).toFixed(n);
+      }
     },
     data() {
       return {
@@ -1151,23 +1083,23 @@
           productBrandName: '',
           productSKU: '',
           remarks: '',
+          machiningTypes: '',
+          freightPayer: '',
+          invoice: false,
+          invoicePercent: 0.03,
+          address: {
+            city: '',
+            cityDistrict: '',
+            region: '',
+            line1: '',
+            fullname: '',
+            cellphone: ''
+          },
+          cities: [],
+          cityDistricts: [],
           entries: [{
             unitPrice: '',
             expectedDeliveryDate: '',
-            machiningTypes: '',
-            freightPayer: '',
-            invoice: false,
-            invoicePercent: 0.03,
-            address: {
-              city: '',
-              cityDistrict: '',
-              region: '',
-              line1: '',
-              fullname: '',
-              cellphone: ''
-            },
-            cities: [],
-            cityDistricts: []
           }],
           contactPersonOfSeller: '',
           contactOfSeller: '',
@@ -1242,23 +1174,23 @@
           productBrandName: '',
           productSKU: '',
           remarks: this.againData.remarks,
+          machiningTypes: '',
+          freightPayer: '',
+          invoice: true,
+          invoicePercent: 0.03,
+          address: {
+            city: '',
+            cityDistrict: '',
+            region: '',
+            line1: '',
+            fullname: '',
+            cellphone: ''
+          },
+          cities: [],
+          cityDistricts: [],
           entries: [{
             unitPrice: '',
             expectedDeliveryDate: '',
-            machiningTypes: '',
-            freightPayer: '',
-            invoice: true,
-            invoicePercent: 0.03,
-            address: {
-              city: '',
-              cityDistrict: '',
-              region: '',
-              line1: '',
-              fullname: '',
-              cellphone: ''
-            },
-            cities: [],
-            cityDistricts: []
           }],
           contactPersonOfSeller: this.againData.contactPersonOfSeller,
           contactOfSeller: this.againData.contactOfSeller,
@@ -1335,7 +1267,7 @@
   .info-input-prepend2 {
     display: inline-block;
     margin: 0 5px;
-    width: 20px;
+    width: 50px;
     font-size: 10px;
     color: rgba(0, 0, 0, 0.45);
   }
