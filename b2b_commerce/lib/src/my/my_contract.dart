@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/contract/contract_select_from_page.dart';
 import 'package:b2b_commerce/src/my/contract/join_supplier_contract_page.dart';
@@ -18,14 +20,16 @@ import 'my_help.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
-  EnumModel('SIGN', '待签署'),
+  EnumModel('WAIT_ME_SIGN', '待我签署'),
+  EnumModel('WAIT_HIM_SIGN', '待他签署'),
   EnumModel('COMPLETE', '已签署'),
   EnumModel('INVALID', '已作废'),
 ];
 
 class MyContractPage extends StatefulWidget {
   String keyword;
-  MyContractPage({this.keyword});
+  String type;
+  MyContractPage({this.keyword,this.type});
   _MyContractPageState createState() => _MyContractPageState();
 }
 
@@ -34,11 +38,10 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
   List<String> historyKeywords;
   var controller;
 
-
-
   @override
   void initState() {
     controller = TabController(
+      initialIndex: widget.type == 'WAIT_ME_SIGN' ? 1 : widget.type == 'WAIT_HIM_SIGN' ? 2 : 0,
       length: statuses.length,
       vsync: this, //动画效果的异步处理，默认格式
     );
@@ -46,45 +49,21 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
     super.initState();
   }
 
+  @override
+  void dispose(){
+    MyContractBLoC.instance.clear();
+    super.dispose();
+  }
+
   Widget _buildSearchButton() {
     return IconButton(
       icon: const Icon(B2BIcons.search, size: 20),
       onPressed: (){
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return RequestDataLoading(
-                requestCallBack: LocalStorage.get(GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY),
-                outsideDismiss: false,
-                loadingText: '加载中。。。',
-                entrance: '',
-              );
-            }
-        ).then((value){
-          if (value != null && value != '') {
-            List<dynamic> list = json.decode(value);
-            historyKeywords = list.map((item) => item as String).toList();
-
-          } else {
-            historyKeywords = [];
-          }
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  SearchModelPage(
-                    searchModel:SearchModel(
-                      historyKeywords: historyKeywords,
-                      searchModelType: SearchModelType.PURCHASE_ORDER,
-                      route: GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
-                    ),
-                  ),
-            ),
-          );
-        });
-      },
-//      onPressed: () => showSearch(context: context, delegate: PurchaseOrderSearchDelegate()),
+        Navigator.push(context, MaterialPageRoute(builder: (context) => HistorySearch(
+          hintText: '请输入编号，名称，订单号，合作商名称搜索',
+          historyKey: GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
+        )));
+      }
     );
   }
 
@@ -102,6 +81,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
           body: Scaffold(
               appBar: TabBar(
                 controller: controller,
+                isScrollable: true,
                 unselectedLabelColor: Colors.black26,
                 labelColor: Colors.black,
                 indicatorSize: TabBarIndicatorSize.label,
@@ -169,7 +149,7 @@ class MyContractListPage extends StatefulWidget{
 
   final ScrollController scrollController = ScrollController();
 
-  MyContractListPage({this.keyword:'',this.status});
+  MyContractListPage({this.keyword:'',this.status = const EnumModel('ALL','全部')});
 
   _MyContractListPageState createState() => _MyContractListPageState();
 }
@@ -180,21 +160,20 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
   void initState() {
     super.initState();
 
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<MyContractBLoC>(context);
 
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
         bloc.loadingStart();
-        bloc.loadingMoreByStatuses(widget.status.code,widget.keyword);
+        bloc.loadingMore(status: widget.status.code);
       }
     });
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<MyContractBLoC>(context);
-    print(widget.status.code);
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
@@ -214,7 +193,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
               builder:
                   (BuildContext context, AsyncSnapshot<ContractData> snapshot) {
                 if (snapshot.data == null) {
-                    bloc.getData(widget.status.code,widget.keyword);
+                    bloc.getData(status: widget.status.code);
 
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
@@ -261,12 +240,27 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
               },
             ),
             StreamBuilder<bool>(
+              stream: bloc.bottomStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return ScrolledToEndTips(
+                  hasContent: snapshot.data,
+                  scrollController: widget.scrollController,
+                );
+              },
+            ),
+            StreamBuilder<bool>(
               stream: bloc.loadingStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory
-                    .buildPaddedOpacityProgressIndicator(
-                  opacity: snapshot.data ? 1.0 : 0,
+                return Opacity(
+                  opacity: snapshot.data ? 1 : 0,
+                  child: Container(
+                    height: 80,
+                    child: Center(
+                      child: const CircularProgressIndicator(),
+                    ),
+                  ),
                 );
               },
             ),

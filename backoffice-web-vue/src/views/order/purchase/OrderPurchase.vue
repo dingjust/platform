@@ -136,11 +136,11 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请选择天期', trigger: 'change' ,type: 'date'}]" :key="product.key"
+                { required: true, message: '请选择日期', trigger: 'change' ,type: 'date'}]" :key="product.key"
                     :prop="'entries.' + productIndex+'.expectedDeliveryDate'">
                     <el-row type="flex" align="middle">
-                      <h6 class="info-input-prepend">交货天期</h6>
-                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择天期"
+                      <h6 class="info-input-prepend">交货日期</h6>
+                      <el-date-picker v-model="product.expectedDeliveryDate" type="date" placeholder="选择日期"
                         :picker-options="pickerOptions">
                       </el-date-picker>
                     </el-row>
