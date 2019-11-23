@@ -1,7 +1,7 @@
 <template>
   <div>
-  <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" >
-    <contract-type />
+  <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog">
+    <contract-type @onSearch="onSearch" @closeContractTypeDialog="onCloseDialog"/>
   </el-dialog>
   <el-form :inline="true">
     <el-form-item>
@@ -77,6 +77,9 @@
         this.dateTime = '';
         this.ordercode = '';
         this.type = '';
+      },
+      onCloseDialog(){
+        this.dialogVisible = false;
       }
     },
     data () {

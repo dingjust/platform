@@ -9,6 +9,7 @@ const state = {
   type: '',
   currentPageNumber: 0,
   currentPageSize: 10,
+  purchaseOrders: [],
   page: {
     number: 0, // 当前页，从0开始
     size: 10, // 每页显示条数

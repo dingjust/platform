@@ -8,7 +8,7 @@
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <contract-order-select :page="orderPage" :onSearchOrder="onSearchOrder"
+      <contract-order-select :page="orderPage" @onSearchOrder="onSearchOrder"
                              @onOrderSelectChange="onOrderSelectChange"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogContractVisible" width="80%" class="purchase-dialog" append-to-body>
@@ -103,7 +103,7 @@
 
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
-<!--          <el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
+          <!--          <el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
         </el-col>
         <el-col :span="4" :offset="2">
           <el-button v-if="contractType == '1'" class="create-contract-button" @click="onSave">生成合同</el-button>
@@ -116,385 +116,398 @@
 </template>
 
 <script>
-    import {
-      createNamespacedHelpers
-    } from 'vuex';
-    import ContractTypeSelect from './components/ContractTypeSelect';
-    import ContractTemplateSelect from './components/ContractTemplateSelect';
-    import ContractPreview from './components/ContractPreview';
-    import ContractOrderSelect from './components/ContractOrderSelect';
-    import http from '@/common/js/http';
-    import TemplateForm from '../../contract/template/components/TemplateForm';
-    import Bus from '@/common/js/bus.js';
-    import ContractPreviewPdf from './components/ContractPreviewPdf'
-    import ContractSelect from './components/ContractSelect';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+  import ContractTypeSelect from './components/ContractTypeSelect';
+  import ContractTemplateSelect from './components/ContractTemplateSelect';
+  import ContractPreview from './components/ContractPreview';
+  import ContractOrderSelect from './components/ContractOrderSelect';
+  import http from '@/common/js/http';
+  import TemplateForm from '../../contract/template/components/TemplateForm';
+  import Bus from '@/common/js/bus.js';
+  import ContractPreviewPdf from './components/ContractPreviewPdf'
+  import ContractSelect from './components/ContractSelect';
 
-    const {
-      mapGetters,
-      mapActions
-    } = createNamespacedHelpers(
-      'ContractModule'
-    );
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers(
+    'ContractModule'
+  );
 
-    export default {
-      name: 'ContractForm',
-      props: ['slotData'],
-      components: {
-        ContractTypeSelect,
-        ContractTemplateSelect,
-        ContractPreview,
-        ContractOrderSelect,
-        TemplateForm,
-        ContractPreviewPdf,
-        ContractSelect
-      },
-      computed: {
-        ...mapGetters({
-          page: 'page',
-          keyword: 'keyword'
-        }),
-        uploadFormData: function () {
-          return {
-            fileFormat: 'DefaultFileFormat',
-            conversionGroup: 'DefaultProductConversionGroup'
-          };
-        },
-        headers: function () {
-          return {
-            Authorization: this.$store.getters.token
-          }
-        },
-        ordersCodeStr: function () {
-          var result = '';
-          this.orderSelectFiles.forEach(element => {
-            result += element.code + ' ';
-          });
-          return result;
-        }
-      },
-      methods: {
-        ...mapActions({
-          search: 'search',
-          refresh: 'refresh'
-        }),
-        selectTemp (str) {
-          if (this.hasFrameworkContract) {
-            this.tempType = 'CGDD';
-          } else {
-            this.tempType = 'WTSCHT';
-          }
+  export default {
+    name: 'ContractForm',
+    props: ['slotData'],
+    components: {
+      ContractTypeSelect,
+      ContractTemplateSelect,
+      ContractPreview,
+      ContractOrderSelect,
+      TemplateForm,
+      ContractPreviewPdf,
+      ContractSelect
+    },
+    computed: {
+      ...mapGetters({
+        page: 'page',
+        keyword: 'keyword'
+      }),
 
-          this.dialogTemplateVisible = true;
-        },
-        async onSearchOrder (keyword, page, size) {
-          if (keyword == null) {
-            keyword = '';
-          }
-          const url = this.apis().getPurchaseOrders();
-          const result = await this.$http.post(url, {
-            keyword: keyword
-          }, {
-            page: page,
-            size: 10
-          });
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
-            return;
-          }
-          this.orderPage = result;
-        },
-        onContractTypeChange (val) {
-          if (val != null || val != '') {
-            this.contractType = val;
-          }
-        },
-        // 文件选择（缓存，并未确定）
-        onFileSelectChange (data) {
-          this.cacheSelectFile = data;
-        },
-        onContractSelectChange (data) {
-          this.cacheSelectContract = data;
-        },
-        // 订单选择
-        onOrderSelectChange (data) {
-          if (data != null) {
-            this.orderSelectFiles = data;
-          }
-          this.dialogOrderVisible = false;
-        },
-        // 文件选择确定
-        onFileSelectSure () {
-          this.dialogTemplateVisible = false;
-          this.selectFile = this.cacheSelectFile;
-        },
-        onContractSelectSure () {
-          this.dialogContractVisible = false;
-          this.selectContract = this.cacheSelectContract;
-        },
-        handleExceed (files, fileList) {
-          if (fileList > 1) {
-            this.$message.warning(`已达最大文件数`);
-            return false;
-          }
-        },
-        handleRemove (file) {
-          this.fileList = [];
-          this.pdfFile = '';
-        },
-        async onSavePdf () {
-          if (!this.isOrderClickPass) {
-            this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
-            return;
-          }
-          var agreementType = null;
-          if (this.contractType == '3') {
-            agreementType = 'CUSTOMIZE_COMPLETED';
-          }
-          if (this.contractType == '2') {
-            agreementType = 'CUSTOMIZE';
-          }
-          if (this.orderSelectFiles.length == 0) {
-            this.$message.error('请选择订单');
-            return;
-          }
-          if (this.pdfFile.id == null || this.pdfFile.id == '') {
-            this.$message.error('请先上传PDF文件');
-            return;
-          }
-          if (this.contractCode == null || this.contractCode == '') {
-            this.$message.error('请输入自定义合同编号');
-            return;
-          }
-          let role = '';
-          if (this.partyA) {
-            role = 'PARTYA';
-          } else {
-            role = 'PARTYB';
-          }
-
-          let data = {
-            'pdf': this.pdfFile,
-            'role': role,
-            'title': '',
-            'customizeCode': this.contractCode,
-            'agreementType': agreementType,
-            'orderCodes': this.orderSelectFiles
-          }
-
-          const url = this.apis().saveContract();
-          let formData = Object.assign({}, data);
-          const result = await http.post(url, formData);
-
-          this.$message.success(result.msg);
-
-          if (result.data != null && result.data != '') {
-            Bus.$emit('openContract', result.data);
-          }
-
-          const searchUrl = this.apis().getContractsList();
-
-          this.refresh({
-            searchUrl
-          });
-          Bus.$emit('closeContractFrom');
-          this.fn.closeSlider(true);
-        },
-        async onSave () {
-          if (!this.isOrderClickPass) {
-            this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
-            return;
-          }
-          // return;
-          if (this.orderSelectFiles.length == 0) {
-            this.$message.error('请选择订单');
-            return;
-          }
-
-          this.orderSelectFiles.forEach((file) => {
-            if (file.status == 'PENDING_CONFIRM' || file.status == 'CANCELLED') {
-              this.$message.error('当前选择的订单不能是待确认状态和已取消状态');
-            }
-          });
-
-          if (this.selectFile.id == null || this.selectFile.id == '') {
-            this.$message.error('请选择合同模板');
-            return;
-          }
-          let role = '';
-          if (this.partyA) {
-            role = 'PARTYA';
-          } else {
-            role = 'PARTYB';
-          }
-          var frameAgreementCode = '';
-          if (this.hasFrameworkContract) {
-            this.agreementType = '';
-            if (this.selectContract.code == null || this.selectContract.code == '') {
-              return;
-            }
-
-            if (this.selectContract.code != null && this.selectContract.code != '') {
-              frameAgreementCode = this.selectContract.code;
-            }
-          }
-
-          let data = {
-            'userTempCode': this.selectFile.code,
-            'role': role,
-            'title': '',
-            'frameAgreementCode': frameAgreementCode,
-            'orderCodes': this.orderSelectFiles
-          }
-          const url = this.apis().saveContract();
-          let formData = Object.assign({}, data);
-          const result = await http.post(url, formData);
-
-          if (result.code == 1) {
-            this.$message.success(result.msg);
-          } else if (result.code == 0) {
-            this.$message.error(result.msg);
-          }
-
-          if (result.data != null && result.data != '') {
-            Bus.$emit('openContract', result.data);
-          }
-          Bus.$emit('closeContractFrom');
-          const searchUrl = this.apis().getContractsList();
-
-          this.refresh({
-            searchUrl
-          });
-          this.fn.closeSlider(true);
-        },
-        onSetOrderCode () {
-          if (this.slotData != null && this.slotData != '') {
-            this.orderSelectFiles.push(this.slotData);
-            this.orderReadOnly = true;
-            if (this.currentUser.type == 'BRAND') {
-              this.partyA = true;
-            } else {
-              this.partyA = false;
-            }
-          }
-        },
-        onCreateTemp () {
-          this.dialogTemplateVisible = false;
-          this.fn.closeSlider(false);
-          // this.$router.push("templateForm");
-          this.fn.openSlider('创建', TemplateForm);
-        },
-        handlePreview (file) {
-          this.dialogImageUrl = file.url;
-          this.dialogVisible = true;
-        },
-        onBeforeUpload (file) {
-          if (file.type !== 'application/pdf') {
-            this.$message.error('选择的文件不是PDF文件');
-            return false;
-          }
-          return true;
-        },
-        onSuccess (response) {
-          this.pdfFile = response;
-        },
-        async getContractList (uid) {
-          const url = this.apis().getContractsList();
-          const result = await http.post(url, {
-            isFrame: true,
-            partyACompany: uid,
-            state: 'COMPLETE'
-          }, {
-            page: 0,
-            size: 100
-          });
-          this.mockData = result.content;
-        },
-        openKJHTSelect () {
-          if (this.orderSelectFiles.length == null) {
-            return;
-          }
-
-          if (this.currentUser.type == 'BRAND') {
-            if (this.orderSelectFiles[0].purchaser != null) {
-              this.companyUid = this.orderSelectFiles[0].purchaser.uid;
-            }
-          } else {
-            if (this.orderSelectFiles[0].belongTo != null) {
-              this.companyUid = this.belongTo.uid;
-            }
-          }
-          this.getContractList(this.companyUid);
-          this.dialogContractVisible = true;
-        },
-        //  订单验证
-        async orderContractClick () {
-          if (this.orderSelectFiles != null || this.orderSelectFiles.length > 0) {
-            var codes = this.orderSelectFiles.map((order) => order.code);
-          }
-          var flag = false
-          if (this.contractType != '1') {
-            flag = true
-          }
-          let data = {
-            'orderCodes': codes,
-            'type': 'WTSCHT',
-            'isPdfAgreement': flag
-          }
-          const url = this.apis().orderContractClick();
-          const result = await http.post(url, data);
-          if (result.code === 0) {
-            this.$message.error(result.msg);
-          } else if (result.code === 1) {
-            this.isOrderClickPass = true;
-          }
-        }
-      },
-      data () {
+      uploadFormData: function () {
         return {
-          currentUser: this.$store.getters.currentUser,
-          contractType: '1',
-          hasFrameworkContract: false,
-          partyA: true,
-          dialogTemplateVisible: false,
-          dialogOrderVisible: false,
-          cacheSelectFile: {},
-          orderSelectFiles: [],
-          selectFile: {},
-          selectContract: {},
-          fileList: [],
-          dialogPreviewVisible: false,
-          orderReadOnly: false,
-          input1: '',
-          mockData: [],
-          orderPage: [],
-          disabled: false,
-          pdfFile: '',
-          pdfVisible: false,
-          fileUrl: '',
-          thisContract: '',
-          agreementType: '',
-          tempType: '',
-          tempData: [],
-          allData: [],
-          companyUid: '',
-          dialogContractVisible: false,
-          cacheSelectContract: '',
-          contractCode: '',
-          isOrderClickPass: false
+          fileFormat: 'DefaultFileFormat',
+          conversionGroup: 'DefaultProductConversionGroup'
         };
       },
-      created () {
-        this.onSearchOrder('', 0, 10);
-        this.onSetOrderCode();
+      headers: function () {
+        return {
+          Authorization: this.$store.getters.token
+        }
       },
-      watch: {
-        dialogOrderVisible: function (n, o) {
-          if (!n) {
-            this.orderContractClick();
+      ordersCodeStr: function () {
+        var result = '';
+        this.orderSelectFiles.forEach(element => {
+          result += element.code + ' ';
+        });
+        return result;
+      }
+    },
+    methods: {
+      ...mapActions({
+        search: 'search',
+        refresh: 'refresh'
+      }),
+      selectTemp (str) {
+        if (this.hasFrameworkContract) {
+          this.tempType = 'CGDD';
+        } else {
+          this.tempType = 'WTSCHT';
+        }
+
+        this.dialogTemplateVisible = true;
+      },
+      async onSearchOrder (page, size) {
+        var _page = 0;
+        var _size = 10;
+        if (page) {
+          _page = page;
+        }
+        if (size) {
+          _size = size;
+        }
+        const url = this.apis().getPurchaseOrders();
+        const result = await this.$http.post(url, {
+          statuses: ['PENDING_PAYMENT', 'IN_PRODUCTION', 'WAIT_FOR_OUT_OF_STORE', 'OUT_OF_STORE', 'COMPLETED']
+        }, {
+          page: _page,
+          size: _size
+        });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.orderPage = result;
+      },
+      onContractTypeChange (val) {
+        if (val != null || val != '') {
+          this.contractType = val;
+        }
+      },
+      // 文件选择（缓存，并未确定）
+      onFileSelectChange (data) {
+        this.cacheSelectFile = data;
+      },
+      onContractSelectChange (data) {
+        this.cacheSelectContract = data;
+      },
+      // 订单选择
+      onOrderSelectChange (data) {
+        if (data != null) {
+          this.orderSelectFiles = data;
+        }
+
+        this.orderContractClick().then(value => {
+          if (value) {
+            this.dialogOrderVisible = false;
+          }
+        });
+      },
+      // 文件选择确定
+      onFileSelectSure () {
+        this.dialogTemplateVisible = false;
+        this.selectFile = this.cacheSelectFile;
+      },
+      onContractSelectSure () {
+        this.dialogContractVisible = false;
+        this.selectContract = this.cacheSelectContract;
+      },
+      handleExceed (files, fileList) {
+        if (fileList > 1) {
+          this.$message.warning(`已达最大文件数`);
+          return false;
+        }
+      },
+      handleRemove (file) {
+        this.fileList = [];
+        this.pdfFile = '';
+      },
+      async onSavePdf () {
+        // if (!this.isOrderClickPass) {
+        //   this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
+        //   return;
+        // }
+        var agreementType = null;
+        if (this.contractType == '3') {
+          agreementType = 'CUSTOMIZE_COMPLETED';
+        }
+        if (this.contractType == '2') {
+          agreementType = 'CUSTOMIZE';
+        }
+        if (this.orderSelectFiles.length == 0) {
+          this.$message.error('请选择订单');
+          return;
+        }
+        if (this.pdfFile.id == null || this.pdfFile.id == '') {
+          this.$message.error('请先上传PDF文件');
+          return;
+        }
+        if (this.contractCode == null || this.contractCode == '') {
+          this.$message.error('请输入自定义合同编号');
+          return;
+        }
+        let role = '';
+        if (this.partyA) {
+          role = 'PARTYA';
+        } else {
+          role = 'PARTYB';
+        }
+
+        let data = {
+          'pdf': this.pdfFile,
+          'role': role,
+          'title': '',
+          'customizeCode': this.contractCode,
+          'agreementType': agreementType,
+          'orderCodes': this.orderSelectFiles
+        }
+
+        const url = this.apis().saveContract();
+        let formData = Object.assign({}, data);
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          Bus.$emit('openContract', result.data);
+        }
+
+        this.$emit('onSearch');
+        this.$emit('closeContractFormDialog');
+        this.$emit('closeContractTypeDialog');
+      },
+      async onSave () {
+        if (this.orderSelectFiles.length === 0) {
+          this.$message.error('请选择订单');
+          return;
+        }
+
+        // if (!this.isOrderClickPass) {
+        //   this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
+        //   return;
+        // }
+
+        // let bool = false;
+        // this.orderSelectFiles.every((file) => {
+        //   if (file.status == 'PENDING_CONFIRM' || file.status == 'CANCELLED') {
+        //     bool = true;
+        //   }
+        // });
+        // if (bool) {
+        //   this.$message.error('当前选择的订单不能是待确认状态和已取消状态');
+        //   return;
+        // }
+
+        if (this.selectFile.id == null || this.selectFile.id == '') {
+          this.$message.error('请选择合同模板');
+          return;
+        }
+        let role = '';
+        if (this.partyA) {
+          role = 'PARTYA';
+        } else {
+          role = 'PARTYB';
+        }
+        var frameAgreementCode = '';
+        if (this.hasFrameworkContract) {
+          this.agreementType = '';
+          if (this.selectContract.code == null || this.selectContract.code == '') {
+            return;
+          }
+
+          if (this.selectContract.code != null && this.selectContract.code != '') {
+            frameAgreementCode = this.selectContract.code;
           }
         }
+
+        let data = {
+          'userTempCode': this.selectFile.code,
+          'role': role,
+          'title': '',
+          'frameAgreementCode': frameAgreementCode,
+          'orderCodes': this.orderSelectFiles.map((order) => order.code)
+        }
+        const url = this.apis().saveContract();
+        let formData = Object.assign({}, data);
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          Bus.$emit('openContract', result.data);
+        }
+
+        this.$emit('onSearch');
+        this.$emit('closeContractFormDialog');
+        this.$emit('closeContractTypeDialog');
+      },
+      onSetOrderCode () {
+        if (this.slotData != null && this.slotData != '') {
+          this.orderSelectFiles.push(this.slotData);
+          this.orderReadOnly = true;
+          if (this.currentUser.type == 'BRAND') {
+            this.partyA = true;
+          } else {
+            this.partyA = false;
+          }
+        }
+      },
+      onCreateTemp () {
+        this.dialogTemplateVisible = false;
+        this.fn.closeSlider(false);
+        // this.$router.push("templateForm");
+        this.fn.openSlider('创建', TemplateForm);
+      },
+      handlePreview (file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      onBeforeUpload (file) {
+        if (file.type !== 'application/pdf') {
+          this.$message.error('选择的文件不是PDF文件');
+          return false;
+        }
+        return true;
+      },
+      onSuccess (response) {
+        this.pdfFile = response;
+      },
+      async getContractList (uid) {
+        const url = this.apis().getContractsList();
+        const result = await http.post(url, {
+          isFrame: true,
+          partyACompany: uid,
+          state: 'COMPLETE'
+        }, {
+          page: 0,
+          size: 100
+        });
+        this.mockData = result.content;
+      },
+      openKJHTSelect () {
+        if (this.orderSelectFiles.length == null) {
+          return;
+        }
+
+        if (this.currentUser.type == 'BRAND') {
+          if (this.orderSelectFiles[0].purchaser != null) {
+            this.companyUid = this.orderSelectFiles[0].purchaser.uid;
+          }
+        } else {
+          if (this.orderSelectFiles[0].belongTo != null) {
+            this.companyUid = this.belongTo.uid;
+          }
+        }
+        this.getContractList(this.companyUid);
+        this.dialogContractVisible = true;
+      },
+      //  订单验证
+      async orderContractClick () {
+        var flag = false
+        if (this.contractType != '1') {
+          flag = true
+        }
+        let data = {
+          'orderCodes': this.orderSelectFiles.map((order) => order.code),
+          'type': 'WTSCHT',
+          'isPdfAgreement': flag
+        }
+        const url = this.apis().orderContractClick();
+        const result = await http.post(url, data);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return false;
+        } else if (result.code === 1) {
+          return true;
+        }
       }
-    };
+    },
+    data () {
+      return {
+        currentUser: this.$store.getters.currentUser,
+        contractType: '1',
+        hasFrameworkContract: false,
+        partyA: true,
+        dialogTemplateVisible: false,
+        dialogOrderVisible: false,
+        cacheSelectFile: {},
+        orderSelectFiles: [],
+        selectFile: {},
+        selectContract: {},
+        fileList: [],
+        dialogPreviewVisible: false,
+        orderReadOnly: false,
+        input1: '',
+        mockData: [],
+        orderPage: [],
+        disabled: false,
+        pdfFile: '',
+        pdfVisible: false,
+        fileUrl: '',
+        thisContract: '',
+        agreementType: '',
+        tempType: '',
+        tempData: [],
+        allData: [],
+        companyUid: '',
+        dialogContractVisible: false,
+        cacheSelectContract: '',
+        contractCode: '',
+        isOrderClickPass: false
+      };
+    },
+    created () {
+      this.onSearchOrder('', 0, 10);
+      this.onSetOrderCode();
+    },
+    watch: {
+      // dialogOrderVisible: function (n, o) {
+      //   if (!n) {
+      //     this.orderContractClick();
+      //   }
+      // }
+    }
+  };
 </script>
 <style scoped>
   .create-contract-title {

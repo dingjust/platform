@@ -8,7 +8,7 @@
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <contract-order-select :page="orderPage" :onSearchOrder="onSearchOrder"
+      <contract-order-select v-if="dialogOrderVisible" :page="orderPage" @onSearchOrder="onSearchOrder"
                              @onOrderSelectChange="onOrderSelectChange"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogContractVisible" width="80%" class="purchase-dialog" append-to-body>
@@ -195,15 +195,20 @@
           this.dialogTemplateVisible = true;
         },
         async onSearchOrder (keyword, page, size) {
-          if (keyword == null) {
-            keyword = '';
+          var _page = 0;
+          var _size = 10;
+          if (page) {
+            _page = page;
+          }
+          if (size) {
+            _size = size;
           }
           const url = this.apis().getPurchaseOrders();
           const result = await this.$http.post(url, {
-            keyword: keyword
+            statuses: ['PENDING_PAYMENT', 'IN_PRODUCTION', 'WAIT_FOR_OUT_OF_STORE', 'OUT_OF_STORE', 'COMPLETED']
           }, {
-            page: page,
-            size: 10
+            page: _page,
+            size: _size
           });
           if (result['errors']) {
             this.$message.error(result['errors'][0].message);
@@ -225,10 +230,12 @@
         },
         // 订单选择
         onOrderSelectChange (data) {
-          if (data != null) {
-            this.orderSelectFiles = data;
-          }
-          this.dialogOrderVisible = false;
+          this.orderContractClick(data).then(value => {
+            if (value) {
+              this.orderSelectFiles = data;
+              this.dialogOrderVisible = false;
+            }
+          });
         },
         // 文件选择确定
         onFileSelectSure () {
@@ -250,10 +257,10 @@
           this.pdfFile = '';
         },
         async onSavePdf () {
-          if (!this.isOrderClickPass) {
-            this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
-            return;
-          }
+          // if (!this.isOrderClickPass) {
+          //   this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
+          //   return;
+          // }
           var agreementType = null;
           if (this.contractType == '3') {
             agreementType = 'CUSTOMIZE_COMPLETED';
@@ -286,43 +293,47 @@
             'title': '',
             'customizeCode': this.contractCode,
             'agreementType': agreementType,
-            'orderCodes': this.orderSelectFiles
+            'orderCodes': this.orderSelectFiles.map((order) => order.code)
           }
 
           const url = this.apis().saveContract();
           let formData = Object.assign({}, data);
           const result = await http.post(url, formData);
 
-          this.$message.success(result.msg);
+          if (result.code == 1) {
+            this.$message.success(result.msg);
+          } else if (result.code == 0) {
+            this.$message.error(result.msg);
+            return;
+          }
 
           if (result.data != null && result.data != '') {
             Bus.$emit('openContract', result.data);
           }
 
-          const searchUrl = this.apis().getContractsList();
-
-          this.refresh({
-            searchUrl
-          });
-          Bus.$emit('closeContractFrom');
-          this.fn.closeSlider(true);
+          this.$emit('onSearch');
+          this.$emit('closeContractPurchaseFormDialog');
+          this.$emit('closeContractTypeDialog');
         },
         async onSave () {
-          if (!this.isOrderClickPass) {
-            this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
-            return;
-          }
+          // if (!this.isOrderClickPass) {
+          //   this.$message.error('订单的相关品牌与工厂不一致，请重新选择');
+          //   return;
+          // }
           // return;
           if (this.orderSelectFiles.length == 0) {
             this.$message.error('请选择订单');
             return;
           }
 
+          let bool = false;
           this.orderSelectFiles.forEach((file) => {
             if (file.status == 'PENDING_CONFIRM' || file.status == 'CANCELLED') {
               this.$message.error('当前选择的订单不能是待确认状态和已取消状态');
+              bool = true;
             }
           });
+          if(bool) return;
 
           if (this.selectFile.id == null || this.selectFile.id == '') {
             this.$message.error('请选择合同模板');
@@ -346,12 +357,13 @@
             }
           }
 
+
           let data = {
             'userTempCode': this.selectFile.code,
             'role': role,
             'title': '',
             'frameAgreementCode': frameAgreementCode,
-            'orderCodes': this.orderSelectFiles
+            'orderCodes': this.orderSelectFiles.map((order) => order.code)
           }
           const url = this.apis().saveContract();
           let formData = Object.assign({}, data);
@@ -361,18 +373,15 @@
             this.$message.success(result.msg);
           } else if (result.code == 0) {
             this.$message.error(result.msg);
+            return;
           }
 
           if (result.data != null && result.data != '') {
             Bus.$emit('openContract', result.data);
           }
-          Bus.$emit('closeContractFrom');
-          const searchUrl = this.apis().getContractsList();
-
-          this.refresh({
-            searchUrl
-          });
-          this.fn.closeSlider(true);
+          this.$emit('onSearch');
+          this.$emit('closeContractPurchaseFormDialog');
+          this.$emit('closeContractTypeDialog');
         },
         onSetOrderCode () {
           if (this.slotData != null && this.slotData != '') {
@@ -436,16 +445,13 @@
           this.dialogContractVisible = true;
         },
         //  订单验证
-        async orderContractClick () {
-          if (this.orderSelectFiles != null || this.orderSelectFiles.length > 0) {
-            var codes = this.orderSelectFiles.map((order) => order.code);
-          }
+        async orderContractClick (orders) {
           var flag = false
           if (this.contractType != '1') {
             flag = true
           }
           let data = {
-            'orderCodes': codes,
+            'orderCodes': orders.map((order) => order.code),
             'type': 'CGDD',
             'isPdfAgreement': flag
           }
@@ -453,8 +459,10 @@
           const result = await http.post(url, data);
           if (result.code === 0) {
             this.$message.error(result.msg);
+            return false;
           } else if (result.code === 1) {
             this.isOrderClickPass = true;
+            return true;
           }
         }
       },
