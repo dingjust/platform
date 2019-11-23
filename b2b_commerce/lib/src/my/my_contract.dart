@@ -21,7 +21,7 @@ import 'my_help.dart';
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
   EnumModel('WAIT_ME_SIGN', '待我签署'),
-  EnumModel('WAIT_HIM_SIGN', '待他签署'),
+  EnumModel('WAIT_PARTNER_SIGN', '待他签署'),
   EnumModel('COMPLETE', '已签署'),
   EnumModel('INVALID', '已作废'),
 ];
@@ -41,7 +41,7 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
   @override
   void initState() {
     controller = TabController(
-      initialIndex: widget.type == 'WAIT_ME_SIGN' ? 1 : widget.type == 'WAIT_HIM_SIGN' ? 2 : 0,
+      initialIndex: widget.type == 'WAIT_ME_SIGN' ? 1 : widget.type == 'WAIT_PARTNER_SIGN' ? 2 : 0,
       length: statuses.length,
       vsync: this, //动画效果的异步处理，默认格式
     );

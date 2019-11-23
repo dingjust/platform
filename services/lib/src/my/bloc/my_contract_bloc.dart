@@ -20,7 +20,7 @@ class MyContractBLoC extends BLoCBase {
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'WAIT_ME_SIGN':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
-    'WAIT_HIM_SIGN':
+    'WAIT_PARTNER_SIGN':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
     'COMPLETE':
     PageEntry(currentPage: 0, size: 10, data: List<ContractModel>()),
@@ -49,25 +49,25 @@ class MyContractBLoC extends BLoCBase {
 
   getData({String status,String keyword}) async {
     print(status);
-    String _status = '';
-    String signState = '';
-    if(status == 'WAIT_ME_SIGN' || status == 'WAIT_HIM_SIGN'){
-      _status = 'SIGN';
-    }else{
-      _status = status;
-    }
-    if(status == 'WAIT_ME_SIGN'){
-      signState = '1';
-    }else if(status == 'WAIT_HIM_SIGN'){
-      signState = '0';
-    }
+//    String _status = '';
+//    String signState = '';
+//    if(status == 'WAIT_ME_SIGN' || status == 'WAIT_HIM_SIGN'){
+//      _status = 'SIGN';
+//    }else{
+//      _status = status;
+//    }
+//    if(status == 'WAIT_ME_SIGN'){
+//      signState = '1';
+//    }else if(status == 'WAIT_HIM_SIGN'){
+//      signState = '0';
+//    }
     //若没有数据则查询
     if(_dataMap[status].data == null || _dataMap[status].data.length == 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-        'state': _status == null || _status == '' || _status == 'ALL'  ? '' : _status,
-        'signState': signState,
+        'state': status == null || status == '' || status == 'ALL'  ? '' : status,
+//        'signState': signState,
       };
 
       Response<Map<String, dynamic>> response;
@@ -135,24 +135,24 @@ class MyContractBLoC extends BLoCBase {
 //      loadingEnd();
       bottomController.sink.add(true);
     } else {
-      String _status = '';
-      String signState = '';
-      if(status == 'WAIT_ME_SIGN' || status == 'WAIT_HIM_SIGN'){
-//        _status = 'SIGN';
-        _status = '';
-      }else{
-        _status = status;
-      }
-      if(status == 'WAIT_ME_SIGN'){
-        signState = '1';
-      }else if(status == 'WAIT_HIM_SIGN'){
-        signState = '0';
-      }
+//      String _status = '';
+//      String signState = '';
+//      if(status == 'WAIT_ME_SIGN' || status == 'WAIT_HIM_SIGN'){
+////        _status = 'SIGN';
+//        _status = '';
+//      }else{
+//        _status = status;
+//      }
+//      if(status == 'WAIT_ME_SIGN'){
+//        signState = '1';
+//      }else if(status == 'WAIT_HIM_SIGN'){
+//        signState = '0';
+//      }
 
       //请求参数
       Map data = {
-        'state': _status == null || _status == '' || _status == 'ALL' ? '' : _status,
-        'signState': signState,
+        'state': status == null || status == '' || status == 'ALL' ? '' : status,
+//        'signState': signState,
       };
       Response<Map<String, dynamic>> response;
       try {

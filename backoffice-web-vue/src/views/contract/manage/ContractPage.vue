@@ -14,7 +14,7 @@
           </div>
         </el-col>
       </el-row>
-      <contract-toolbar style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
+      <contract-toolbar :queryFormData="queryFormData" style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="(item, index) in contractStatues">
           <el-tab-pane :name="item">
@@ -32,66 +32,58 @@
 <script>
   import {
     createNamespacedHelpers
-  } from "vuex";
+  } from 'vuex';
 
   const {
     mapGetters,
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    "ContractModule"
+    'ContractModule'
   );
 
-  import ContractToolbar from "./toolbar/ContractToolbar";
-  import ContractSearchResultList from "./list/ContractSearchResultList";
-  import ContractReport from "./components/ContractReport";
-  import ContractDetails from "./components/ContractDetails";
-  import TabLabelBubble from "./components/TabLabelBubble";
+  import ContractToolbar from './toolbar/ContractToolbar';
+  import ContractSearchResultList from './list/ContractSearchResultList';
+  import ContractReport from './components/ContractReport';
+  import ContractDetails from './components/ContractDetails';
+  import TabLabelBubble from './components/TabLabelBubble';
 
   // import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
   export default {
-    name: "ContractPage",
+    name: 'ContractPage',
     components: {
       ContractToolbar,
       ContractSearchResultList,
       ContractReport,
       TabLabelBubble,
-      ContractDetails,
+      ContractDetails
     },
-    provide:{
-        onSearch: this.onSearch
+    provide: {
+      onSearch: this.onSearch
     },
     computed: {
       ...mapGetters({
-        page: "page",
-        keyword: "keyword",
-        orderCode:'orderCode',
-        dateTime:'dateTime',
-        queryFormData: "queryFormData",
-        type:'type'
+        page: 'page',
+        keyword: 'keyword',
+        orderCode: 'orderCode',
+        dateTime: 'dateTime',
+        queryFormData: 'queryFormData',
+        type: 'type'
       })
     },
     methods: {
       ...mapActions({
-        search: "search",
+        search: 'search'
       }),
       ...mapMutations({
       }),
-      onSearch(page, size) {
-        const keyword = this.keyword;
-        const orderCode = this.orderCode;
-        const statuses = this.state;
-        const dateTime = this.dateTime;
-        const type = this.type;
+      onSearch (page, size) {
+        const query = this.queryFormData;
         const url = this.apis().getContractsList();
         this.search({
           url,
-          keyword,
-          orderCode,
-          dateTime,
-          type,
-          statuses,
+          query,
           page,
           size
         });
@@ -107,55 +99,61 @@
       //     size
       //   });
       // },
-      async onDetails(row) {
+      async onDetails (row) {
         const url = this.apis().getContractDetail(row.code);
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
         this.contractData = result.data;
         this.dialogTableVisible = true;
       },
-      onNew(formData) {
+      onNew (formData) {
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       },
-      handleClick(tab, event) {
-        this.state = this.getEnumCode(tab.name);
-        if (tab.name == 'ALL') {
-          this.state = '';
-          this.onSearch("");
+      handleClick (tab, event) {
+        var state = this.getEnumCode(tab.name);
+        if (tab.name === '全部') {
+          this.queryFormData.state = '';
+          this.onSearch();
         } else {
-          this.onSearch('');
+          this.queryFormData.state = state;
+          this.onSearch();
         }
       },
       getEnumCode (name) {
-        if(name == '待签署'){
+        if (name === '待签署') {
           return 'SIGN'
         }
-        if(name == '已完成'){
+        if (name === '待我签署') {
+          return 'WAIT_ME_SIGN'
+        }
+        if (name === '待他签署') {
+          return 'WAIT_PARTNER_SIGN'
+        }
+        if (name === '已签署') {
           return 'COMPLETE'
         }
-        if(name == '已作废'){
+        if (name === '已作废') {
           return 'INVALID'
         }
       }
     },
-    data() {
+    data () {
       return {
         formData: this.$store.state.PurchaseOrdersModule.formData,
-        activeName: "全部",
-        contractStatues: ["全部", "待签署", "已完成", "已作废"],
-        dialogTableVisible:false,
-        contractData:'',
+        activeName: '全部',
+        contractStatues: ['全部', '待我签署', '待他签署', '已签署', '已作废'],
+        dialogTableVisible: false,
+        contractData: ''
       };
     },
-    created() {
-      this.onSearch("");
+    created () {
+      this.onSearch('');
     }
   };
-
 </script>
 <style>
   .report {
