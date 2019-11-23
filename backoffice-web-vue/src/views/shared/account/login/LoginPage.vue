@@ -78,7 +78,10 @@
         );
       }
     },
-    created() {},
+    created() {
+      var ua = navigator.userAgent.toLowerCase(); //判断浏览器的类型
+      console.log(ua);
+    },
     mounted() {
       var nc_token = [
         "FFFF0N00000000008691",
@@ -154,7 +157,7 @@
 <style>
   .login-card {
     margin-top: 50px;
-    background-color: #0000005e !important;
+    background-color: rgba(0, 0, 0, 0.35) !important;
     border: none !important;
     width: 350px;
   }

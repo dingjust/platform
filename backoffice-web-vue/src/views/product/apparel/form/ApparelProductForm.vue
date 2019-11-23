@@ -70,6 +70,10 @@
     props: ['slotData', 'readOnly'],
     methods: {
       onUpdate() {
+        if (this.slotData.images == null || this.slotData.images.length == 0) {
+          this.$message.error('请上次产品主图');
+          return
+        }
         this.$refs['form'].validate(valid => {
           if (valid) {
             this._Update();
@@ -83,7 +87,7 @@
       async _Update() {
         this.formData = Object.assign({}, this.slotData);
         this.slotData.variants = [];
-        this.steppedPrices=[];
+        this.steppedPrices = [];
         const url = this.apis().updateOfApparelProduct(this.slotData.code);
         const result = await this.$http.put(url, this.slotData);
         if (result["errors"]) {
@@ -91,8 +95,13 @@
           return;
         }
         this.$message.success('更新基本信息成功');
+        this.$router.go(-1);
       },
       onCreate() {
+        if (this.slotData.images == null || this.slotData.images.length == 0) {
+          this.$message.error('请上次产品主图');
+          return
+        }
         this.$refs['form'].validate(valid => {
           if (valid) {
             this._Create();
@@ -113,8 +122,8 @@
         }
 
         this.$message.success('产品创建成功，产品编号： ' + result);
-        this.$set(this.slotData, 'code', result);
-
+        // this.$set(this.slotData, 'code', result);
+        this.$router.go(-1);
       }
     },
     computed: {},

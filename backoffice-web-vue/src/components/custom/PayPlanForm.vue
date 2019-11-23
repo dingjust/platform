@@ -37,9 +37,8 @@
               <h6 class="info-input-prepend2" style="width:50px;">后时长</h6>
             </el-col>
             <el-col :span="18">
-              <el-select v-model="item.triggerDays" @change="$forceUpdate()" placeholder="请选择">
-                <el-option v-for="val in triggerDays" :label="val" :value="val"></el-option>
-              </el-select>
+              <el-input-number v-model="item.triggerDays" :precision="0" :step="1" :min="1" size="mini">
+              </el-input-number>
             </el-col>
           </el-row>
         </el-col>
@@ -48,27 +47,20 @@
         <el-col v-if="!item.isLast || item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" :span="4">
           <el-row type="flex" align="middle" justify="start">
             <el-col :span="6">
-              <h6 class="info-input-prepend2">天</h6>
-            </el-col>
-            <el-col :span="18">
-              <el-select v-model="item.triggerType" @change="$forceUpdate()" placeholder="请选择">
-                <template v-for="type in triggerTypes">
-                  <el-option :label="type.name" :value="type.code"></el-option>
-                </template>
-              </el-select>
+              <h6 class="info-input-prepend2">天付款</h6>
             </el-col>
           </el-row>
         </el-col>
         <h6 v-if="item.isLast && formData.payPlanType != 'MONTHLY_SETTLEMENT'" class="info-input-prepend2"
-          style="width: 200px;">支付剩余全部款项</h6>
+          style="width: 200px;">剩余全部款项</h6>
         <el-col v-if="!item.isLast" :span="4">
           <el-row v-if="!item.isLast" type="flex" align="middle" justify="start">
-            <el-col :span="6">
+            <!-- <el-col :span="6">
               <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
-            </el-col>
+            </el-col> -->
             <el-col :span="18">
               <el-select v-model="item.payPercent" @change="$forceUpdate()">
-                <el-option v-for="percent in percents" :value="percent" :label="percent*100+'%'"></el-option>
+                <el-option v-for="percent in 99" :value="percent*0.01" :label="percent+'%'"></el-option>
               </el-select>
             </el-col>
           </el-row>
@@ -332,7 +324,7 @@
   .info-input-prepend2 {
     display: inline-block;
     margin: 0 5px;
-    width: 20px;
+    width: 50px;
     font-size: 10px;
     color: rgba(0, 0, 0, 0.45);
   }

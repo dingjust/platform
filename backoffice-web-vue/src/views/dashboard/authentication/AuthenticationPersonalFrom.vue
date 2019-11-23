@@ -6,7 +6,7 @@
         <el-button type="info" style="width: 120px" disabled >个人姓名</el-button>
       </el-col>
       <el-col :span="12">
-        <el-input size="small" v-model="personalSlotData.username" placeholder="个人姓名" />
+        <el-input size="small" v-model="personalSlotData.username" placeholder="个人姓名(与身份证一致)" />
       </el-col>
     </el-row>
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >

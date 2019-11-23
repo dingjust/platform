@@ -6,7 +6,7 @@
     </el-dialog>
     <el-row type="flex" justify="space-between">
       <template v-for="(item,index) in slotData.progresses">
-        <el-col :span="5">
+        <el-col :span="5" class="progress-block" :key="index">
           <el-row type="flex" justify="center" align="middle">
             <h6 class="progress-status">{{getEnum('productionProgressPhaseTypes', item.phase)}}</h6>
           </el-row>
@@ -278,6 +278,10 @@
 
   .progress-info-row {
     text-align: center;
+  }
+
+  .progress-block:hover{
+    background-color: rgba(0, 0, 0, 0.35);
   }
 
 </style>

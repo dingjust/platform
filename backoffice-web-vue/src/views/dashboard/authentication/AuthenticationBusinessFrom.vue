@@ -25,7 +25,7 @@
         <el-button  style="width: 120px" type="info" disabled >法人名称</el-button>
       </el-col>
       <el-col :span="12">
-        <el-input size="small" v-model="businessSlotData.username" placeholder="法人名称" />
+        <el-input size="small" v-model="businessSlotData.username" placeholder="法人名称(与身份证一致)" />
       </el-col>
     </el-row>
     <el-row class="form-row" type="flex" justify="center" :gutter=15 >
