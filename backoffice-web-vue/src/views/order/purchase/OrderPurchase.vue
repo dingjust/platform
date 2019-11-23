@@ -972,12 +972,6 @@
           }
         }
 
-        var totalPercent = 0;
-        for (let i = 0; i < payPlanItems.length - 1; i++) {
-          totalPercent += payPlanItems[i].payPercent;
-        }
-        payPlanItems[payPlanItems.length - 1].payPercent = this.Subtr(1.00, totalPercent);
-
         var payPlanForm = {
           name: this.payPlanForm.name,
           payPlanType: this.form.payPlanType,
