@@ -1,10 +1,13 @@
 <template>
   <div>
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body>
-        <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
+      <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
         <el-divider direction="vertical"></el-divider>
-        <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" />
+      <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
+      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
+    </el-dialog>
+    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
       <supplier-select @onSelect="onSuppliersSelect" />
@@ -76,28 +79,26 @@
 <script>
   import {
     createNamespacedHelpers
-  } from "vuex";
-  import ContractTypeSelect from "./components/ContractTypeSelect";
-  import ContractTemplateSelect from "./components/ContractTemplateSelect";
-  import ContractPreview from "./components/ContractPreview";
-  import ContractOrderSelect from "./components/ContractOrderSelect";
+  } from 'vuex';
+  import ContractTypeSelect from './components/ContractTypeSelect';
+  import ContractTemplateSelect from './components/ContractTemplateSelect';
+  import ContractPreview from './components/ContractPreview';
+  import ContractOrderSelect from './components/ContractOrderSelect';
   import http from '@/common/js/http';
-  import TemplateForm from "../../contract/template/components/TemplateForm";
+  import TemplateForm from '../../contract/template/components/TemplateForm';
   import Bus from '@/common/js/bus.js';
   import ContractPreviewPdf from './components/ContractPreviewPdf'
   import SupplierSelect from '@/components/custom/SupplierSelect';
-
 
   const {
     mapGetters,
     mapActions
   } = createNamespacedHelpers(
-    "ContractModule"
+    'ContractModule'
   );
 
-
   export default {
-    name: "ContractSupplementForm",
+    name: 'ContractSupplementForm',
     props: ['slotData'],
     components: {
       ContractTypeSelect,
@@ -106,17 +107,17 @@
       ContractOrderSelect,
       TemplateForm,
       ContractPreviewPdf,
-      SupplierSelect,
+      SupplierSelect
     },
     computed: {
       ...mapGetters({
-        page: "page",
-        keyword: "keyword"
+        page: 'page',
+        keyword: 'keyword'
       }),
       uploadFormData: function () {
         return {
           fileFormat: 'DefaultFileFormat',
-          conversionGroup: 'DefaultProductConversionGroup',
+          conversionGroup: 'DefaultProductConversionGroup'
         };
       },
       headers: function () {
@@ -127,17 +128,17 @@
     },
     methods: {
       ...mapActions({
-        search: "search",
+        search: 'search',
         refresh: 'refresh'
       }),
-      selectTemp(str){
-        if(str == 'BCXY'){
+      selectTemp (str) {
+        if (str == 'BCXY') {
           this.tempType = 'BCXY';
         }
 
-        this.dialogTemplateVisible=true;
+        this.dialogTemplateVisible = true;
       },
-      async onSearchOrder(keyword, page, size) {
+      async onSearchOrder (keyword, page, size) {
         if (keyword == null) {
           keyword = '';
         }
@@ -148,42 +149,40 @@
           page: page,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.orderPage = result;
       },
-      onContractTypeChange(val) {
+      onContractTypeChange (val) {
         this.contractType = val;
       },
-      //文件选择（缓存，并未确定）
-      onFileSelectChange(data) {
+      // 文件选择（缓存，并未确定）
+      onFileSelectChange (data) {
         this.cacheSelectFile = data;
       },
-      //订单选择
-      onOrderSelectChange(data) {
+      // 订单选择
+      onOrderSelectChange (data) {
         this.orderSelectFile = data;
         this.dialogOrderVisible = false;
       },
-      //文件选择确定
-      onFileSelectSure() {
+      // 文件选择确定
+      onFileSelectSure () {
         this.dialogTemplateVisible = false;
         this.selectFile = this.cacheSelectFile;
       },
-      handleExceed(files, fileList) {
+      handleExceed (files, fileList) {
         if (fileList > 1) {
           this.$message.warning(`已达最大文件数`);
           return false;
         }
-
       },
-      handleRemove(file) {
+      handleRemove (file) {
         this.fileList = [];
         this.pdfFile = '';
       },
-      async onSavePdf() {
-
+      async onSavePdf () {
         if (this.pdfFile.id == null || this.pdfFile.id == '') {
           this.$message.error('请上传PDF文件');
           return;
@@ -196,9 +195,9 @@
         let data = {
           'pdf': this.pdfFile,
           'title': '',
-          'isFrame' : false,
-          'mainAgreementCode':this.slotData.code,
-          'isSupplementary':true,
+          'isFrame': false,
+          'mainAgreementCode': this.slotData.code,
+          'isSupplementary': true
         }
 
         const url = this.apis().saveContract();
@@ -223,19 +222,18 @@
 
         // this.fn.closeSlider(true);
       },
-      async onSave() {
+      async onSave () {
         if (this.selectFile.id == null || this.selectFile.id == '') {
           this.$message.error('请选择合同模板');
           return;
         }
         let data = {
           'title': '',
-          'mainAgreementCode':this.slotData.code,
-          'isSupplementary':true,
-          'isFrame' : false,
-          'userTempCode': this.selectFile.code,
+          'mainAgreementCode': this.slotData.code,
+          'isSupplementary': true,
+          'isFrame': false,
+          'userTempCode': this.selectFile.code
         }
-
 
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
@@ -255,7 +253,7 @@
         // });
         // this.fn.closeSlider(true);
       },
-      onSetOrderCode() {
+      onSetOrderCode () {
         if (this.slotData != null && this.slotData != '') {
           this.orderSelectFile = this.slotData;
           this.orderReadOnly = true;
@@ -266,35 +264,39 @@
           }
         }
       },
-      onCreateTemp() {
-        this.dialogTemplateVisible = false;
+      onCreateTemp () {
+        // this.dialogTemplateVisible = false;
         Bus.$emit('closeBCXYFrom');
         // this.$router.push("templateForm");
-        this.fn.openSlider("创建", TemplateForm);
+        // this.fn.openSlider('创建', TemplateForm);
+        this.tempFormVisible = true;
       },
-      handlePreview(file) {
+      handlePreview (file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      onBeforeUpload(file) {
+      onBeforeUpload (file) {
         if (file.type !== 'application/pdf') {
           this.$message.error('选择的文件不是PDF文件');
           return false;
         }
         return true;
       },
-      onSuccess(response) {
+      onSuccess (response) {
         this.pdfFile = response;
       },
-      onSuppliersSelect(val) {
+      onSuppliersSelect (val) {
         this.suppliers = val;
         this.suppliersSelectVisible = false;
         // this.form.companyOfSeller = val.name;
         // this.form.contactPersonOfSeller = val.contactPerson;
         // this.form.contactOfSeller = val.contactPhone;
       },
+      contractTemplateSelect () {
+        this.$refs.contractTemplateSelect.onSearchTemp();
+      }
     },
-    data() {
+    data () {
       return {
         currentUser: this.$store.getters.currentUser,
         contractType: '1',
@@ -316,15 +318,15 @@
         pdfVisible: false,
         fileUrl: '',
         thisContract: '',
-        agreementType:'',
-        tempType:'BCXY',
-        tempData:[],
-        allData:[],
-        dateTime:'',
+        agreementType: '',
+        tempType: 'BCXY',
+        tempData: [],
+        allData: [],
+        dateTime: '',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
@@ -332,7 +334,7 @@
             }
           }, {
             text: '最近一个月',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
@@ -340,7 +342,7 @@
             }
           }, {
             text: '最近三个月',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
@@ -348,16 +350,16 @@
             }
           }]
         },
-        suppliersSelectVisible:false,
-        suppliers:'',
+        suppliersSelectVisible: false,
+        tempFormVisible: false,
+        suppliers: ''
       };
     },
-    created() {
+    created () {
       this.onSearchOrder('', 0, 10);
       this.onSetOrderCode();
     }
   };
-
 </script>
 <style scoped>
   .create-contract-title {
@@ -470,6 +472,7 @@
     border: 0px solid #FFD60C;
     margin-top: 10px;
     margin-left: 10px;
+    margin-bottom: 10px;
   }
 
   .tips {

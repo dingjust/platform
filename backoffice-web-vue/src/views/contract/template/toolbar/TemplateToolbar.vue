@@ -1,4 +1,8 @@
 <template>
+  <div>
+  <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
+    <template-form v-if="tempFormVisible" @onSearch="onSearch" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"></template-form>
+  </el-dialog>
   <el-form :inline="true">
     <el-form-item>
       <el-input style="width: 250px" placeholder="模板名称" v-model="keyword"></el-input>
@@ -31,22 +35,23 @@
       <!--&lt;!&ndash;</el-col>&ndash;&gt;-->
     <!--</el-row>-->
   <!--</el-form>-->
+  </div>
 </template>
 
 <script>
   import {
     createNamespacedHelpers
-  } from "vuex";
-  import TemplateForm from "../components/TemplateForm";
-  import TemplateSearchResultList from "../list/TemplateSearchResultList";
+  } from 'vuex';
+  import TemplateForm from '../components/TemplateForm';
+  import TemplateSearchResultList from '../list/TemplateSearchResultList';
 
   const {
     mapMutations
-  } = createNamespacedHelpers("ContractTemplateModule");
+  } = createNamespacedHelpers('ContractTemplateModule');
 
   export default {
-    name: "TemplateToolbar",
-    props: ["code"],
+    name: 'TemplateToolbar',
+    props: ['code'],
     components: {
       TemplateForm,
       TemplateSearchResultList
@@ -54,53 +59,57 @@
     computed: {},
     methods: {
       ...mapMutations({
-        setKeyword: "keyword",
-        setType:'type',
-        type:'type'
+        setKeyword: 'keyword',
+        setType: 'type',
+        type: 'type'
       }),
-      onSearch() {
+      onSearch () {
         this.setKeyword(this.keyword);
         this.setType(this.type);
-        this.$emit("onSearch", 0);
+        this.$emit('onSearch', 0);
       },
-      onCreate() {
+      onCreate () {
         // this.$router.push("templateForm");
-        this.fn.openSlider("创建", TemplateForm);
+        // this.fn.openSlider("创建", TemplateForm);
+        this.tempFormVisible = true;
       },
-      async onDel(){
+      async onDel () {
         console.log(this.$parent.selectedCode);
         // const url = this.apis().deleteTemplate(code);
         // const result = await this.$http.get(url);
       },
+      turnTempFormVisible () {
+        this.tempFormVisible = !this.tempFormVisible;
+      }
     },
-    data() {
+    data () {
       return {
+        tempFormVisible: false,
         keyword: this.$store.state.ContractTemplateModule.keyword,
         formData: this.$store.state.ContractTemplateModule.formData,
         queryFormData: this.$store.state.ContractTemplateModule.queryFormData,
-        type:this.$store.state.ContractTemplateModule.type,
+        type: this.$store.state.ContractTemplateModule.type,
         TemplateType: [{
           code: 'BCXY',
           name: '补充协议'
         },
-          {
-            code: 'WTSCHT',
-            name: '委托生产合同'
-          },
-          {
-            code: 'CGDD',
-            name: '采购订单'
-          },
-          {
-            code: 'KJXY',
-            name: '框架协议'
-          }
-        ],
+        {
+          code: 'WTSCHT',
+          name: '委托生产合同'
+        },
+        {
+          code: 'CGDD',
+          name: '采购订单'
+        },
+        {
+          code: 'KJXY',
+          name: '框架协议'
+        }
+        ]
       };
     },
-    created() {}
+    created () {}
   };
-
 </script>
 <style>
   .el-input__inner {

@@ -5,7 +5,10 @@
       <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
       <el-divider direction="vertical"></el-divider>
       <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange"/>
+      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
+    </el-dialog>
+    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
       <contract-order-select v-if="dialogOrderVisible" :page="orderPage" @onSearchOrder="onSearchOrder"
@@ -395,10 +398,11 @@
           }
         },
         onCreateTemp () {
-          this.dialogTemplateVisible = false;
+          // this.dialogTemplateVisible = false;
           this.fn.closeSlider(false);
           // this.$router.push("templateForm");
-          this.fn.openSlider('创建', TemplateForm);
+          // this.fn.openSlider('创建', TemplateForm);
+          this.tempFormVisible = true;
         },
         handlePreview (file) {
           this.dialogImageUrl = file.url;
@@ -464,6 +468,12 @@
             this.isOrderClickPass = true;
             return true;
           }
+        },
+        turnTempFormVisible () {
+          this.tempFormVisible = !this.tempFormVisible;
+        },
+        contractTemplateSelect () {
+          this.$refs.contractTemplateSelect.onSearchTemp();
         }
       },
       data () {
@@ -497,7 +507,8 @@
           dialogContractVisible: false,
           cacheSelectContract: '',
           contractCode: '',
-          isOrderClickPass: false
+          isOrderClickPass: false,
+          tempFormVisible: false
         };
       },
       created () {
