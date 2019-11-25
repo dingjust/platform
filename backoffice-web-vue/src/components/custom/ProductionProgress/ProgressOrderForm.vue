@@ -8,7 +8,7 @@
     <div class="form-main">
             <el-row type="flex" align="middle" class="progress-update-form-row">
         <el-col :span="2">
-          <h6 class="progress-update-form-text1">上报时间:</h6>
+          <h6 class="progress-update-form-text1">工单号:{{progress.id}}</h6>
         </el-col>
         <el-col :span="6" :offset="1">
           <div style="width:100%;">
