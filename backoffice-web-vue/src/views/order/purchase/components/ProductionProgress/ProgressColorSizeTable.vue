@@ -1,7 +1,7 @@
 <template>
   <div class="table-body">
     <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
-      <span>{{noteVariantTota}}/{{orderEntriesTotal}}</span>
+      <span>{{noteVariantTotal}}/{{orderEntriesTotal}}</span>
       <el-button size="mini" class="form-btn" @click="onOrder">上报数量</el-button>
     </el-row>
     <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
@@ -58,7 +58,7 @@
         });
         return colors;
       },
-      noteVariantTota: function () {
+      noteVariantTotal: function () {
         var result = 0;
         this.noteEntries.forEach((entry) => {
           entry.entries.forEach(item => {

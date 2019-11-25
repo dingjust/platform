@@ -39,7 +39,7 @@
       <el-row v-if="allOrdersShow">
         <progress-orders-table :orders="slotData.productionProgressOrders" />
       </el-row>
-      <el-row type="flex" align="top" class="progress-update-form-row">
+      <el-row type="flex" align="top" class="progress-update-form-row" style="margin-top:20px;">
         <el-col :span="2">
           <h6 class="progress-update-form-text1">上传图片:</h6>
         </el-col>
@@ -115,6 +115,8 @@
             id: ''
           },
           reportTime: '',
+          remarks:'',
+          entries:[]
         },
         form: {
           date: '',
@@ -145,7 +147,7 @@
   }
 
   .progress-update-form-row {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .order-purchase-upload {}
