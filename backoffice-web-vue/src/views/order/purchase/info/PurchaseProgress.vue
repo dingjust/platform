@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import PurchaseOrderProgress from '@/components/custom/PurchaseOrderProgress';
+  import PurchaseOrderProgress from '@/components/custom/ProductionProgress/PurchaseOrderProgress';
   import ProgressDateSettingForm from '../components/ProgressDateSettingForm';
 
   export default {

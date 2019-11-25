@@ -1,4 +1,4 @@
-export function formatDate (date, fmt) {
+export function formatDate(date, fmt) {
   if (!date) {
     return '';
   }
@@ -358,10 +358,21 @@ const ENUMS = {
       code: 'INVOICE_RECEIVED',
       name: '收到发票'
     }
+  },
+  ///生产进度单据状态
+  ProgressOrderStatus: {
+    PASS: {
+      code: 'PASS',
+      name: '通过'
+    },
+    CANCEL: {
+      code: 'CANCEL',
+      name: '作废'
+    }
   }
 };
 
-export function enumTranslate (enumVal, enumType) {
+export function enumTranslate(enumVal, enumType) {
   if (!ENUMS[enumType][enumVal]) {
     return 'UNKNOWN';
   }
@@ -369,24 +380,24 @@ export function enumTranslate (enumVal, enumType) {
   return ENUMS[enumType][enumVal].name;
 }
 
-function padLeftZero (str) {
+function padLeftZero(str) {
   return ('00' + str).substr(str.length);
 }
 
-export function timestampToTime (timestamp) {
-  const date = new Date(timestamp);// 时间戳为10位需*1000，时间戳为13位的话不需乘1000
-  const Y = date.getFullYear() + '-';// 此时为四位数字表示 getYear()的话为两位数字表示
-  const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';// 当前月份(0-11,0代表1月)
-  const D = date.getDate() + ' ';// 当前日(1-31)
+export function timestampToTime(timestamp) {
+  const date = new Date(timestamp); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  const Y = date.getFullYear() + '-'; // 此时为四位数字表示 getYear()的话为两位数字表示
+  const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'; // 当前月份(0-11,0代表1月)
+  const D = date.getDate() + ' '; // 当前日(1-31)
   /* const h = date.getHours() + ':';
    const  m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
    const s = date.getSeconds() + ':';
    const ms = date.getMilliseconds();//毫秒值 */
 
-  return Y + M + D;// 此处可以自定义需要的显示类型
+  return Y + M + D; // 此处可以自定义需要的显示类型
 }
 
-export function postponedDays (statuDateList) {
+export function postponedDays(statuDateList) {
   console.log(statuDateList);
   const estimatedDate = statuDateList[0];
   const finishDate = statuDateList[1];
@@ -396,8 +407,9 @@ export function postponedDays (statuDateList) {
 }
 
 // 两个数相除
-export function numDiv (num1, num2) {
-  var baseNum1 = 0, baseNum2 = 0;
+export function numDiv(num1, num2) {
+  var baseNum1 = 0,
+    baseNum2 = 0;
   var baseNum3, baseNum4;
   try {
     baseNum1 = num1.toString().split('.')[1].length;
@@ -415,6 +427,6 @@ export function numDiv (num1, num2) {
 };
 
 // 两个数相乘
-export function floatFormat (num1, count) {
+export function floatFormat(num1, count) {
   return (Math.round(num1 * 100) / 100).toFixed(count);
 }
