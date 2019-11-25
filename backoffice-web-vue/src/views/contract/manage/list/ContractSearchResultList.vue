@@ -1,10 +1,10 @@
 <template>
   <div class="animated fadeIn">
-    <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
+    <el-dialog :visible.sync="dialogSealVisible" class="purchase-dialog" :show-close="true">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%;height:720px;" append-to-body>
-      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" class="purchase-dialog" append-to-body>
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @closePdfVisible="closePdfVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
       <contract-supplement-form  :slotData="thisContract" />
@@ -198,6 +198,9 @@
           this.$message.success(result.msg);
         }
       },
+        closePdfVisible(){
+          this.pdfVisible = false;
+        },
       async previewPdf(val,code) {
         this.thisContract = val;
         let queryCode = '';
@@ -244,7 +247,7 @@
         this.dialogSealVisible = true;
       });
       Bus.$on('openList', args => {
-        this.dialogSealVisible = true;
+        // this.dialogSealVisible = true;
       });
       Bus.$on('closePdfView', args => {
         this.pdfVisible = false;
