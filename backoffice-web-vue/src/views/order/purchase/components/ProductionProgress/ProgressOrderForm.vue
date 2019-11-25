@@ -17,34 +17,63 @@
           <h6 class="info-title_text">合作商:{{cooperatorName}}</h6>
         </el-col>
       </el-row>
-      <el-row type="flex" :gutter="50" align="middle" class="progress-update-form-row">
-        <el-col :span="8">
-          <el-row type="flex" justify="space-between">
-            <h6 class="progress-update-form-text1">上报时间:</h6>
-            <div style="width:100%;">
-              <el-date-picker style="width:100%;" class="progress-update-form-datepicker"
-                v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
-              </el-date-picker>
-            </div>
+      <el-row type="flex" :gutter="150" align="middle" class="progress-update-form-row">
+        <el-col :span="12">
+          <el-row type="flex" justify="space-between" align="middle" :gutter="10">
+            <el-col :span="6">
+              <h6 class="progress-update-form-text1">上报时间:</h6>
+            </el-col>
+            <el-col :span="18">
+              <div style="width:100%;">
+                <el-date-picker style="width:100%;" class="progress-update-form-datepicker"
+                  v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
+                </el-date-picker>
+              </div>
+            </el-col>
           </el-row>
         </el-col>
-        <el-col :span="6">
-          <el-row type="flex">
-            <h6 class="progress-update-form-text1">上报人员:</h6>
-            <el-select v-model="operator" :disabled="true">
-              <el-option label="采购部-刘少立" value="确认订单"></el-option>
-            </el-select>
+        <el-col :span="12">
+          <el-row type="flex" align="middle" justify="space-between" :gutter="10">
+            <el-col :span="6">
+              <h6 class="progress-update-form-text1">上报人员:</h6>
+            </el-col>
+            <el-col :span="18">
+              <el-select v-model="operator" :disabled="true">
+                <el-option label="采购部-刘少立" value="确认订单"></el-option>
+              </el-select>
+            </el-col>
           </el-row>
         </el-col>
       </el-row>
+      <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
+        <span>{{variantTotal}}/{{purchaseOrder.totalQuantity}}</span>
+      </el-row>
       <el-row type="flex">
+        <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
+          <tr class="order-table-th_row">
+            <td style="width:40px">颜色</td>
+            <template v-for="item in sizes">
+              <th :key="item.code">{{item.name}}</th>
+            </template>
+          </tr>
+          <template v-for="(sizeArray,colorIndex) in entries">
+            <tr :key="colorIndex">
+              <td>{{sizeArray[0].color}}</td>
+              <template v-for="(item,sizeIndex) in sizeArray">
+                <td style="width:80px" :key="sizeIndex">
+                  <el-input class="order-table-input" type="number" v-model="item.quantity"></el-input>
+                </td>
+              </template>
+            </tr>
+          </template>
+        </table>
       </el-row>
       <el-row type="flex" align="top" class="progress-update-form-row">
         <el-col :span="2">
           <h6 class="progress-update-form-text1">上传图片:</h6>
         </el-col>
         <el-col :span="22" :offset="1">
-          <!-- <media-image-card-show :medias="slotData.medias" /> -->
+          <images-upload class="order-purchase-upload" :slot-data="progressOrder.medias" />
         </el-col>
       </el-row>
       <el-row type="flex" align="top" class="progress-update-form-row">
@@ -52,8 +81,8 @@
           <h6 class="progress-update-form-text1">备注:</h6>
         </el-col>
         <el-col :span="22" :offset="1">
-          <!-- <el-input type="textarea" readonly :rows="3" placeholder="填写备注" v-model="slotData.remarks">
-          </el-input> -->
+          <el-input type="textarea" :rows="3" placeholder="填写备注" v-model="progressOrder.remarks">
+          </el-input>
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
@@ -64,13 +93,15 @@
 </template>
 
 <script>
-  // import ImagesUpload from '../ImagesUpload';
+  import ImagesUpload from '@/components/custom/ImagesUpload';
   import ProgressColorSizeTable from './ProgressColorSizeTable';
 
   export default {
     name: 'ProgressOrderForm',
     props: ['progressOrder', 'purchaseOrder', 'progress'],
-    components: {},
+    components: {
+      ImagesUpload
+    },
     mixins: [],
     computed: {
       cooperatorName: function () {
@@ -80,9 +111,50 @@
           return this.purchaseOrder.cooperator.name;
         }
       },
-
+      sizes: function () {
+        var sizes = [];
+        this.purchaseOrder.entries.forEach(element => {
+          sizes.push(element.product.size);
+        });
+        const res = new Map();
+        var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
+        return result.sort((o1, o2) => o1.sequence - o2.sequence);
+      },
+      colors: function () {
+        var colors = new Set([]);
+        this.purchaseOrder.entries.forEach(element => {
+          colors.add(element.product.color.name);
+        });
+        return colors;
+      },
+      variantTotal: function () {
+        var result = 0;
+        this.entries.forEach(entry => {
+          entry.forEach(item => {
+            console.log(JSON.stringify(item));
+            if (item.quantity != '') {
+              let num = parseInt(item.quantity);
+              console.log(num);
+              if (num != null && num != '') {
+                result = num + result;
+              }
+            }
+          });
+        });
+        return result;
+      }
     },
     methods: {
+      getVariant(color, size, entries) {
+        var result = entries.filter(
+          item => item.color == color && item.size == size
+        );
+        if (result.length != 0) {
+          return result[0];
+        } else {
+          return null;
+        }
+      },
       async onSubmit() {
         // if (this.compareDate(new Date(), new Date(this.slotData.estimatedDate))) {
         //   this.$message.error('预计完成时间不能小于当前时间');
@@ -102,6 +174,7 @@
       return {
         allOrdersShow: false,
         operator: this.$store.getters.currentUser.username,
+        entries: [],
         form: {
           date: '',
           num: '',
@@ -111,7 +184,36 @@
       }
     },
     created() {
-
+      //初始化表格
+      this.entries = [];
+      this.colors.forEach(color => {
+        var sizeArray = [];
+        this.sizes.forEach(size => {
+          if (this.progressOrder.entries.length == 0) {
+            sizeArray.push({
+              size: size.name,
+              color: color,
+              quantity: ""
+            });
+          } else {
+            let variant = this.getVariant(
+              color,
+              size.name,
+              this.progressOrder.entries
+            );
+            if (variant != null) {
+              sizeArray.push(variant);
+            } else {
+              sizeArray.push({
+                size: size.name,
+                color: color,
+                quantity: ""
+              });
+            }
+          }
+        });
+        this.entries.push(sizeArray);
+      });
     },
     mounted() {}
 
@@ -119,6 +221,48 @@
 
 </script>
 <style scoped>
+  .order-table {
+    /* width: 600px;
+    height: 600px; */
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  .order-table tr td,
+  .order-table tr th {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    text-align: center;
+    height: 30px;
+    font-size: 10px;
+  }
+
+  /* .order-table-th_row {
+    height: 80px;
+  } */
+
+  .order-table-input .el-input__inner {
+    /* width: 60px; */
+    border: 0px solid #fff;
+  }
+
+  .order-table-btn {
+    padding-left: 10px;
+    width: 30px;
+  }
+
+  .order-table-info {
+    font-size: 10px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.65);
+    margin-left: 20px;
+  }
+
+  .order-table-btn_add {
+    background-color: #ffd60c;
+    border-color: #ffd60c;
+    color: #000;
+  }
+
   .progress-update-form-text1 {
     font-weight: 500;
     color: rgba(0, 0, 0, 0.85);
