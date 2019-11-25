@@ -18,6 +18,9 @@
                 <el-button v-if="itemData.partner.type === 'FACTORY'" class="btn-class" style="padding: 3px 4px;" @click="onFactoryDetail">
                   查看公司详情
                 </el-button>
+                <el-button v-else class="btn-class" style="padding: 3px 4px;" @click="onBrandDetail">
+                  查看公司详情
+                </el-button>
               </el-row>
               <div v-else>
                 {{itemData.partner == null ? itemData.name : itemData.partner.name}}
@@ -70,19 +73,23 @@
     <el-dialog :visible.sync="factoryDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body>
       <factory-details-page :slotData="factoryDetailsData"></factory-details-page>
     </el-dialog>
+    <el-dialog :visible.sync="brandDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body>
+      <brand-details-page :slotData="brandDetailsData"></brand-details-page>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
   import FactoryDetailsPage from '../../../user/company/factory/details/FactoryDetailsPage';
+  import BrandDetailsPage from '../../../user/company/brand/details/BrandDetailsPage';
 
   const {mapGetters, mapActions} = createNamespacedHelpers('CooperatorModule');
 
   export default {
     name: 'CooperatorInfoPage',
     props: ['itemData'],
-    components: {FactoryDetailsPage},
+    components: {BrandDetailsPage, FactoryDetailsPage},
     computed: {
       ...mapGetters({
       })
@@ -110,12 +117,28 @@
 
         this.factoryDetailsData = result;
         this.factoryDetailsDialogVisible = !this.factoryDetailsDialogVisible;
+      },
+      async onBrandDetail () {
+        let url = this.apis().getBrand(this.itemData.partner.uid);
+        if (this.isTenant()) {
+          url += '?sort=creationtime,desc';
+        }
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.brandDetailsData = result;
+        this.brandDetailsDialogVisible = !this.brandDetailsDialogVisible;
       }
     },
     data () {
       return {
         factoryDetailsDialogVisible: false,
-        factoryDetailsData: ''
+        factoryDetailsData: '',
+        brandDetailsDialogVisible: false,
+        brandDetailsData: ''
       };
     },
     created () {

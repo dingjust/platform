@@ -98,6 +98,7 @@
         }
         const url = this.apis().getTemplatesList();
         const result = await this.$http.post(url,{
+            type: this.tempType,
           keyword: keyword
         }, {
           page: 0,

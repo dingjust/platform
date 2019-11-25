@@ -1,6 +1,6 @@
 <template>
-  <div class="animated fadeIn content">
-    <el-card>
+  <div class="animated fadeIn">
+<!--    <el-card>-->
       <el-container>
         <el-aside width="150px" class="template-aside">
           <el-row justify="center" type="flex">
@@ -23,8 +23,8 @@
             </div>
           </el-row>
         </el-aside>
-        <el-main style="margin-left: 150px">
-          <div  id="template">
+        <el-main style="margin-left: 30px">
+          <div id="template">
             <el-row type="flex" justify="space-between" align="middle">
               <el-col :span="4">
                 <div class="template-form-header">
@@ -63,49 +63,49 @@
           </div>
         </el-main>
       </el-container>
-    </el-card>
+<!--    </el-card>-->
   </div>
 </template>
 <script>
-  import "tui-editor/dist/tui-editor.css";
-  import "tui-editor/dist/tui-editor-contents.css";
-  import "highlight.js/styles/github.css";
-  import "codemirror/lib/codemirror.css";
+  import 'tui-editor/dist/tui-editor.css';
+  import 'tui-editor/dist/tui-editor-contents.css';
+  import 'highlight.js/styles/github.css';
+  import 'codemirror/lib/codemirror.css';
   import http from '@/common/js/http';
 
   import {
     Viewer,
     Editor
-  } from "@toast-ui/vue-editor";
+  } from '@toast-ui/vue-editor';
 
   import {createNamespacedHelpers} from 'vuex';
 
   const {mapActions} = createNamespacedHelpers('ContractTemplateModule');
 
   export default {
-    name: "TemplateForm",
-    props: ["propdata"],
+    name: 'TemplateForm',
+    props: ['propdata', 'tempFormVisible'],
     methods: {
       ...mapActions({
         refresh: 'refresh',
-        search: "search"
+        search: 'search'
       }),
-      onSelect(item) {
+      onSelect (item) {
         this.selectedCode = item.code;
         this.viewerText = item.header;
         this.editorText = item.content;
         this.tempCode = item.code;
         this.tempType = item.type;
       },
-      async getTemplate(code) {
+      async getTemplate (code) {
         const url = this.apis().getTemplates(code);
         const result = await this.$http.get(url);
       },
-      onBack(){
+      onBack () {
         this.fn.closeSlider(true);
       },
-      async onSave(){
-        if(this.tempName == null || this.tempName == ''){
+      async onSave () {
+        if (this.tempName == null || this.tempName == '') {
           this.$message.error('请输入模板名字');
           return;
         }
@@ -126,10 +126,12 @@
         //   return;
         // }
         this.$message.success(result.msg);
-
+        this.$emit('turnTempFormVisible', false);
+        this.$emit('onSearch');
+        this.$emit('contractTemplateSelect');
         this.fn.closeSlider(true);
       },
-      async getTemplateListPt(){
+      async getTemplateListPt () {
         const url = this.apis().getTemplatesListPt();
         const result = await http.post(url, {
           keyword: ''
@@ -139,42 +141,42 @@
         });
         console.log(result);
         this.mockData = result.content;
-      },
+      }
     },
-    data() {
+    data () {
       return {
-        input1: "",
-        input2: "",
-        keyword:'',
-        viewerText: "",
-        editorText: "",
-        editorHtml: "",
+        input1: '',
+        input2: '',
+        keyword: '',
+        viewerText: '',
+        editorText: '',
+        editorHtml: '',
         editorOptions: {
-          minHeight: "400px",
-          language: "zh_CN",
+          minHeight: '400px',
+          language: 'zh_CN',
           useCommandShortcut: true,
           useDefaultHTMLSanitizer: true,
           usageStatistics: true,
           hideModeSwitch: true
         },
-        tempContent:'',
+        tempContent: '',
         selectedCode: '1',
         editorVisible: true,
         mockData: [],
         tempName: '',
         remarks: '',
         tempType: '',
-        tempCode:'',
+        tempCode: '',
         slotData: {
           title: '',
           content: '',
           customizeContent: '',
-          type:'',
-          available:'',
+          type: '',
+          available: '',
           originalTmplCode: '',
           remark: '',
-          header:'',
-        },
+          header: ''
+        }
       };
     },
 
@@ -184,21 +186,20 @@
     },
 
     computed: {
-      contractName() {
+      contractName () {
         return this.propdata.contractName;
       }
     },
 
     watch: {
-      propdata(newValue, oldValue) {
+      propdata (newValue, oldValue) {
         console.log(newValue);
       }
     },
-    created(){
+    created () {
       this.getTemplateListPt();
     }
   };
-
 </script>
 <style lang="scss" scoped>
   .template-file {
@@ -232,7 +233,7 @@
     border-right: 5px solid #E6E6E6;
     // border-radius: 20px;
     padding-right: 10px;
-    position: fixed;
+    // position: fixed;
   }
 
   .template-aside_text {
