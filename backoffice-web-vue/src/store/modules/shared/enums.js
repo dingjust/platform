@@ -906,8 +906,7 @@ const state = {
     }
   ],
   //生产模式
-  ProductionModes: [
-    {
+  ProductionModes: [{
       code: 'SINGLE_PIECE_PRODUCTION_LINE',
       name: '单件流水生产线'
     },
@@ -921,8 +920,7 @@ const state = {
     }
   ],
   //设计
-  FactoryDesign:[
-    {
+  FactoryDesign: [{
       code: 'SUPPORTED',
       name: '支持'
     },
@@ -930,10 +928,9 @@ const state = {
       code: 'NOT_SUPPORTED',
       name: '不支持'
     }
-   ],
+  ],
   //打板
-  FactoryPattern:[
-    {
+  FactoryPattern: [{
       code: 'SUPPORTED',
       name: '支持'
     },
@@ -941,10 +938,9 @@ const state = {
       code: 'NOT_SUPPORTED',
       name: '不支持'
     }
-   ],
+  ],
   //免费打样
-  FactoryFreeProofing:[
-    {
+  FactoryFreeProofing: [{
       code: 'SUPPORTED',
       name: '支持'
     },
@@ -952,10 +948,9 @@ const state = {
       code: 'NOT_SUPPORTED',
       name: '不支持'
     }
-   ],
+  ],
   //服务
-  FactoryService:[
-    {
+  FactoryService: [{
       code: 'SUPPORTED',
       name: '支持'
     },
@@ -963,10 +958,9 @@ const state = {
       code: 'NOT_SUPPORTED',
       name: '不支持'
     }
-   ],
+  ],
   //质量等级
-  FactoryQualityLevel:[
-    {
+  FactoryQualityLevel: [{
       code: 'A_CHAIN',
       name: '一线连锁'
     },
@@ -986,10 +980,9 @@ const state = {
       code: 'WHOLESALE_TRADE',
       name: '外贸批发'
     }
-   ],
+  ],
   //裁剪部
-  CuttingDepartment:[
-    {
+  CuttingDepartment: [{
       code: 'COMPUTER_AUTOMATIC_CUTTING_MACHINE',
       name: '电脑全自动裁床'
     },
@@ -1021,10 +1014,9 @@ const state = {
       code: 'CLOTH_INSPECTING_MACHINE',
       name: '验布机'
     },
-   ],
+  ],
   //生产车间
-  ProductionWorkshop:[
-    {
+  ProductionWorkshop: [{
       code: 'COMPUTERIZED_FLATCAR',
       name: '电脑平车'
     },
@@ -1076,10 +1068,9 @@ const state = {
       code: 'ZIGZAG_SEWING_MACHINE',
       name: '人字车'
     }
-   ],
+  ],
   //尾部
-  LastDepartment:[
-    {
+  LastDepartment: [{
       code: 'EYELET_END_MACHINE',
       name: '凤眼车'
     },
@@ -1119,7 +1110,7 @@ const state = {
       code: 'NEEDLE_INSPECTING_MACHINE',
       name: '验针机'
     }
-   ],
+  ],
   // 合同状态
   contractStates: [{
       code: 'INITIATE',
@@ -1228,8 +1219,7 @@ const state = {
     }
   ],
   // 账期支付类型
-  PayMoneyType: [
-    {
+  PayMoneyType: [{
       code: 'DEPOSIT',
       name: '定金'
     },
@@ -1246,8 +1236,7 @@ const state = {
       name: '月结'
     }
   ],
-  TriggerEvent: [
-    {
+  TriggerEvent: [{
       code: 'ORDER_CONFIRMED',
       name: '确认订单'
     },
@@ -1268,8 +1257,7 @@ const state = {
       name: '收到发票'
     }
   ],
-  TriggerType: [
-    {
+  TriggerType: [{
       code: 'INSIDE',
       name: '以内'
     },
@@ -1278,8 +1266,7 @@ const state = {
       name: '以外'
     }
   ],
-  CooperatorType: [
-    {
+  CooperatorType: [{
       code: 'ONLINE',
       name: '线上合作商'
     },
@@ -1288,8 +1275,7 @@ const state = {
       name: '自定义合作商'
     }
   ],
-  CooperatorCategory: [
-    {
+  CooperatorCategory: [{
       code: 'SUPPLIER',
       name: '供应商'
     },
@@ -1322,8 +1308,7 @@ const state = {
     name: '已确定'
   }],
   //质量等级
-  SalesMarkets:[
-    {
+  SalesMarkets: [{
       code: 'A_CHAIN',
       name: '一线连锁'
     },
@@ -1345,8 +1330,7 @@ const state = {
     }
   ],
   //有效期限
-  EffectiveDays:[
-    {
+  EffectiveDays: [{
       code: '7',
       name: '7天'
     },
@@ -1367,6 +1351,14 @@ const state = {
       name: '长期有效'
     }
   ],
+  ///生产进度单据状态
+  ProgressOrderStatus: [{
+    code: 'PASS',
+    name: '通过'
+  }, {
+    code: 'CANCEL',
+    name: '作废'
+  }]
 };
 
 const mutations = {};
