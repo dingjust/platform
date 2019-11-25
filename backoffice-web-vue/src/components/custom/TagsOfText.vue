@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn tags-of-text">
    <el-row type="flex" style="margin-bottom: 10px">
-     <el-input placeholder="请输入关键词"  v-model="keywordInput" size="mini" style="width: 300px">
-       <el-button slot="append" @click="onKeywordAdd">添加关键词</el-button>
+     <el-input :placeholder="placeholder"  v-model="keywordInput" size="mini" style="width: 300px">
+       <el-button slot="append" @click="onKeywordAdd">添加{{label}}</el-button>
      </el-input>
    </el-row>
     <el-row v-if="textData != null && textData != ''">
@@ -19,10 +19,26 @@
 <script>
   export default {
     name: 'TagsOfText',
-    props: ['textData', 'symbol'],
+    props: {
+      textData: {
+        type: String,
+        default: ''
+      },
+      symbol: {
+        type: String,
+        default: '，'
+      },
+      label: {
+        type: String,
+        default: ''
+      }
+    },
     computed: {
       keywords: function () {
         return this.textData.split(this.symbol);
+      },
+      placeholder: function () {
+        return '请输入' + this.label;
       }
     },
     methods: {

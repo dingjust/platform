@@ -71,7 +71,7 @@
     data () {
       return {
         visible: false,
-        contractType: '1',
+        contractType: '',
         data: [{
           label: '使用平台电子模板',
           value: '1'
@@ -113,6 +113,7 @@
   }
 
   .create-contract-type_not_select {
+    border: 1px solid black;
     width: 350px;
     height: 110px;
     /* background: rgba(255, 164, 3, 1); */
@@ -126,6 +127,29 @@
     padding-right: 15px;
     padding-top: 20px;
     cursor: pointer;
+  }
+
+  .create-contract-type_not_select:hover{
+    width: 350px;
+    height: 110px;
+    background: rgba(255, 164, 3, 1);
+    opacity: 0.85;
+    border-radius: 9px;
+    box-shadow: 0px 8px 5px rgba(255, 164, 3, 0.2);
+    /* background: radial-gradient(rgba(255, 164, 3, 1), rgba(191,123,2, 1)); */
+    /* padding-bottom: 50px; */
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 20px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .create-contract-type_not_select:hover .create-contract-type_option_title_not{
+    color:white;
+  }
+  .create-contract-type_not_select:hover .create-contract-type_option_content_not{
+    color:white;
   }
 
   .create-contract-type_option {
@@ -169,12 +193,13 @@
     opacity: 0.65;
     font-size: 15px;
     font-weight: bold;
+    /*border: 1px solid black;*/
   }
 
   .create-contract-type_option_content_not {
     font-size: 14px;
     color: rgba(0, 0, 0, 1);
-    opacity: 0.45;
+    opacity: 0.65;
     /* margin-top: 5px; */
   }
 

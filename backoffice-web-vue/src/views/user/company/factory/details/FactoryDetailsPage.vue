@@ -13,14 +13,14 @@
         <el-col :span="19">
           <el-row type="flex">
             <el-col :span="1">
-              <i class="factory-info">&#xe690;</i>
+              <i class="factory-info" style="position: relative;top: -25px;">&#xe690;</i>
             </el-col>
             <el-col :span="11">
                   <factory-scale-info-page :slotData="slotData"/>
             </el-col>
             <el-divider direction="vertical"></el-divider>
             <el-col :span="1">
-              <i class="factory-info">&#xe691;</i>
+              <i class="factory-info" style="position: relative;top: -25px;">&#xe691;</i>
             </el-col>
             <el-col :span="11" >
               <factory-capacity-info-page :slotData="slotData"/>
@@ -44,7 +44,7 @@
           <!--<el-divider ></el-divider>-->
           <el-row type="flex" style="margin-top: 20px">
             <el-col :span="1">
-              <i class="factory-info">&#xe68f;</i>
+              <i class="factory-info" style="position: relative;top: -25px;">&#xe68f;</i>
             </el-col>
             <el-col :span="23">
                   <factory-certificate-info-page :slotData="slotData"/>
@@ -54,7 +54,7 @@
           <el-row v-if="!readOnly" type="flex" justify="end"  style="margin-top: 10px">
             <el-button class="buttonClass" @click="onEditProfiles">编辑</el-button>
           </el-row>
-          <el-row type="flex">
+          <el-row type="flex" style="margin-top: 20px">
               <factory-profiles-info-page :slotData="slotData"/>
           </el-row>
         </el-col>
@@ -271,7 +271,7 @@
   .factory-detail .el-divider--vertical{
     height: auto;
   }
-  .factory-detail .el-divider--horizontal{
+  .factory-detail >>> .el-divider--horizontal{
     margin: 0px 0px 0px 0px;
   }
 

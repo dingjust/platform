@@ -1,78 +1,98 @@
 <template>
-  <el-row type="flex" justify="space-around" :gutter="50">
-    <el-col :span="8">
-      <div :class="contractType=='1'?'create-contract-type_select':'create-contract-type_not_select'"
-           @click="onCreateOrderContract">
-        <el-row>
-          <el-col :span="24">
-            <h5 :class="contractType=='1'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-              委托生产合同</h5>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="20">
-            <h6
-              :class="contractType=='1'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
-              以某一份生产订单内容为合同标的的合同</h6>
-          </el-col>
-        </el-row>
-      </div>
-    </el-col>
-    <el-col :span="8">
-      <div :class="contractType=='4'?'create-contract-type_select':'create-contract-type_not_select'"
-        @click="onCreatePurchaseContract">
-        <el-row>
-          <el-col :span="24">
-            <h5 :class="contractType=='4'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-              采购订单</h5>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="20">
-            <h6
-              :class="contractType=='4'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
-              对已签署的合同签署补充协议</h6>
-          </el-col>
-        </el-row>
-      </div>
-    </el-col>
-    <el-col :span="8">
-      <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
-        @click="onCreateSupplementContract">
-        <el-row>
-          <el-col :span="24">
-            <h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
-              框架协议</h5>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="20">
-            <h6
-              :class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
-              与合作商签订长期合作合同，即框架协议</h6>
-          </el-col>
-        </el-row>
-      </div>
-    </el-col>
-    <!--<el-col :span="8">-->
+  <div>
+    <el-row type="flex" justify="space-around" :gutter="50">
+      <el-col :span="8">
+        <div :class="contractType=='1'?'create-contract-type_select':'create-contract-type_not_select'"
+             @click="onCreateOrderContract">
+          <el-row>
+            <el-col :span="24">
+              <h5
+                :class="contractType=='1'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+                委托生产合同</h5>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <h6
+                :class="contractType=='1'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+                以某一份生产订单内容为合同标的的合同</h6>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div :class="contractType=='4'?'create-contract-type_select':'create-contract-type_not_select'"
+             @click="onCreatePurchaseContract">
+          <el-row>
+            <el-col :span="24">
+              <h5
+                :class="contractType=='4'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+                采购订单</h5>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <h6
+                :class="contractType=='4'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+                对已签署的合同签署补充协议</h6>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
+             @click="onCreateSupplementContract">
+          <el-row>
+            <el-col :span="24">
+              <h5
+                :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">
+                框架协议</h5>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <h6
+                :class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">
+                与合作商签订长期合作合同，即框架协议</h6>
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+      <!--<el-col :span="8">-->
       <!--<div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"-->
-           <!--@click="onCreateSupplementContract">-->
-        <!--<el-row>-->
-          <!--<el-col :span="24">-->
-            <!--<h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">-->
-              <!--补充协议</h5>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
-        <!--<el-row>-->
-          <!--<el-col :span="20">-->
-            <!--<h6-->
-              <!--:class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">-->
-              <!--对已签署的合同签署补充协议</h6>-->
-          <!--</el-col>-->
-        <!--</el-row>-->
+      <!--@click="onCreateSupplementContract">-->
+      <!--<el-row>-->
+      <!--<el-col :span="24">-->
+      <!--<h5 :class="contractType=='3'?'create-contract-type_option_title':'create-contract-type_option_title_not'">-->
+      <!--补充协议</h5>-->
+      <!--</el-col>-->
+      <!--</el-row>-->
+      <!--<el-row>-->
+      <!--<el-col :span="20">-->
+      <!--<h6-->
+      <!--:class="contractType=='3'?'create-contract-type_option_content':'create-contract-type_option_content_not'">-->
+      <!--对已签署的合同签署补充协议</h6>-->
+      <!--</el-col>-->
+      <!--</el-row>-->
       <!--</div>-->
-    <!--</el-col>-->
-  </el-row>
+      <!--</el-col>-->
+    </el-row>
+    <el-dialog :visible.sync="contractFormDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+      <contract-form v-if="contractFormDialogVisible" @onSearch="onSearch"
+                     @closeContractFormDialog="closeContractFormDialog"
+                     @closeContractTypeDialog="closeContractTypeDialog"/>
+    </el-dialog>
+    <el-dialog :visible.sync="contractFormPurchaseDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+      <contract-purchase-form v-if="contractFormPurchaseDialogVisible" @onSearch="onSearch"
+                              @closeContractPurchaseFormDialog="closeContractPurchaseFormDialog"
+                              @closeContractTypeDialog="closeContractTypeDialog"/>
+    </el-dialog>
+    <el-dialog :visible.sync="contractFormFrameDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+      <contract-frame-form v-if="contractFormFrameDialogVisible" @onSearch="onSearch"
+                           @closeContractFrameFormDialog="closeContractFrameFormDialog"
+                           @closeContractTypeDialog="closeContractTypeDialog"/>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -84,29 +104,48 @@
 
   export default {
     name: 'ContractType',
+    components: {ContractFrameForm, ContractPurchaseForm, ContractForm},
     methods: {
-      onSelectOption (val) {
+      onSearch() {
+        this.$emit('onSearch', 0);
+      },
+      onSelectOption(val) {
         this.contractType = val;
       },
-      onCreateOrderContract () {
+      onCreateOrderContract() {
         this.contractType = '1';
-        Bus.$emit('openContractType');
-        this.fn.openSlider('创建', ContractForm, '');
+        // Bus.$emit('openContractType');
+        // this.fn.openSlider('创建', ContractForm, '');
+        this.contractFormDialogVisible = !this.contractFormDialogVisible;
       },
-      onCreateSupplementContract () {
+      closeContractFormDialog() {
+        this.contractFormDialogVisible = false;
+      },
+      closeContractPurchaseFormDialog() {
+        this.contractFormPurchaseDialogVisible = false;
+      },
+      closeContractFrameFormDialog() {
+        this.contractFormFrameDialogVisible = false;
+      },
+      onCreateSupplementContract() {
         this.contractType = '2';
-        Bus.$emit('openContractType');
-        this.fn.openSlider('创建', ContractFrameForm, '');
+        // Bus.$emit('openContractType');
+        // this.fn.openSlider('创建', ContractFrameForm, '');
+        this.contractFormFrameDialogVisible = !this.contractFormFrameDialogVisible;
       },
-      onCreateFrameContract () {
+      onCreateFrameContract() {
         this.contractType = '3';
         Bus.$emit('openContractType');
         this.fn.openSlider('创建', ContractSupplementForm, '');
       },
-      onCreatePurchaseContract () {
+      onCreatePurchaseContract() {
         this.contractType = '4';
-        Bus.$emit('openContractType');
-        this.fn.openSlider('创建', ContractPurchaseForm, '');
+        // Bus.$emit('openContractType');
+        // this.fn.openSlider('创建', ContractPurchaseForm, '');
+        this.contractFormPurchaseDialogVisible = !this.contractFormPurchaseDialogVisible;
+      },
+      closeContractTypeDialog() {
+        this.$emit('closeContractTypeDialog');
       }
       // onCreateSupplementContract(){
       //   this.contractType='3';
@@ -114,10 +153,13 @@
       //   this.fn.openSlider('创建', ContractSupplementForm, '');
       // },
     },
-    data () {
+    data() {
       return {
+        contractFormDialogVisible: false,
+        contractFormPurchaseDialogVisible: false,
+        contractFormFrameDialogVisible: false,
         visible: false,
-        contractType: '1',
+        contractType: '',
         data: [{
           label: '使用平台电子模板',
           value: '1'
@@ -151,8 +193,6 @@
     opacity: 0.85;
     border-radius: 9px;
     box-shadow: 0px 8px 5px rgba(255, 164, 3, 0.2);
-    /* background: radial-gradient(rgba(255, 164, 3, 1), rgba(191,123,2, 1)); */
-    /* padding-bottom: 50px; */
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 20px;
@@ -166,14 +206,25 @@
     background-color: #fff;
     opacity: 0.85;
     border-radius: 9px;
-    /* box-shadow: 0px 8px 5px rgba(255, 164, 3, 0.2); */
-    /* background: radial-gradient(rgba(255, 164, 3, 1), rgba(191,123,2, 1)); */
-    /* padding-bottom: 50px; */
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 20px;
     cursor: pointer;
-    border:1px gray solid;
+    border: 1px solid black;
+  }
+
+  .create-contract-type_not_select:hover {
+    background: rgba(255, 164, 3, 1);
+    box-shadow: 0px 8px 5px rgba(255, 164, 3, 0.2);
+    border: none
+  }
+
+  .create-contract-type_not_select:hover .create-contract-type_option_title_not {
+    color: rgba(255, 255, 255, 1);;
+  }
+
+  .create-contract-type_not_select:hover .create-contract-type_option_content_not {
+    color: rgba(255, 255, 255, 1);
   }
 
   .create-contract-type_option {
@@ -222,7 +273,7 @@
   .create-contract-type_option_content_not {
     font-size: 14px;
     color: rgba(0, 0, 0, 1);
-    opacity: 0.45;
+    opacity: 0.65;
     /* margin-top: 5px; */
   }
 
