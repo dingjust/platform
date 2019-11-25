@@ -1,71 +1,88 @@
 <template>
+  <div class="animated fadeIn ">
     <div class="cooperator-info-order-body">
       <el-row type="flex">
         <el-col :span="11">
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-            <el-col :span="8">合作商类型</el-col>
-            <el-col :span="16">{{getEnum('CooperatorType',itemData.type)}}</el-col>
+            <el-col :span="6">合作商类型</el-col>
+            <el-col :span="18">{{getEnum('CooperatorType',itemData.type)}}</el-col>
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-            <el-col :span="8">合作商名称</el-col>
-            <el-col :span="16">{{itemData.partner == null ? itemData.name : itemData.partner.name}}</el-col>
+            <el-col :span="6">合作商名称</el-col>
+            <el-col :span="18">
+              <el-row type="flex" justify="space-between" v-if="itemData.type == 'ONLINE'">
+                <div>
+                  {{itemData.partner == null ? itemData.name : itemData.partner.name}}
+                  <img width="40px" height="15px" :src="getPaymentStatusTag(itemData.partner)" />
+                </div>
+                <el-button v-if="itemData.partner.type === 'FACTORY'" class="btn-class" style="padding: 3px 4px;" @click="onFactoryDetail">
+                  查看公司详情
+                </el-button>
+              </el-row>
+              <div v-else>
+                {{itemData.partner == null ? itemData.name : itemData.partner.name}}
+              </div>
+            </el-col>
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-            <el-col :span="8">联系人</el-col>
-            <el-col :span="16">{{itemData.partner == null ? itemData.contactPerson : itemData.partner.contactPerson}}</el-col>
+            <el-col :span="6">联系人</el-col>
+            <el-col :span="18">{{itemData.partner == null ? itemData.contactPerson : itemData.partner.contactPerson}}</el-col>
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-            <el-col :span="8">联系方式</el-col>
-            <el-col :span="16">{{itemData.partner == null ? itemData.contactPhone : itemData.partner.contactPhone}}</el-col>
+            <el-col :span="6">联系方式</el-col>
+            <el-col :span="18">{{itemData.partner == null ? itemData.contactPhone : itemData.partner.contactPhone}}</el-col>
           </el-row>
           <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-            <el-col :span="8">身份类型</el-col>
-            <el-col :span="16">
+            <el-col :span="6">身份类型</el-col>
+            <el-col :span="18">
               {{getEnum('CooperatorCategory',itemData.category)}}
-              <span v-if="itemData.detailedIdentity != null">{{'('}}{{itemData.detailedIdentity}}{{')'}}</span>
+              <span v-if="itemData.detailedIdentity != null && itemData.detailedIdentity != ''">{{'('}}{{itemData.detailedIdentity}}{{')'}}</span>
             </el-col>
           </el-row>
         </el-col>
-        <el-col :span="2">
-          <el-divider direction="vertical"></el-divider>
-        </el-col>
-        <el-col :span="11">
+        <el-divider direction="vertical"></el-divider>
+        <el-col :span="12">
           <div class="grid-content bg-purple-light">
             <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="8">开户行</el-col>
-              <el-col :span="16">{{itemData.bankOfDeposit}}</el-col>
+              <el-col :span="6">开户行</el-col>
+              <el-col :span="18">{{itemData.bankOfDeposit}}</el-col>
             </el-row>
             <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="8">银行账号</el-col>
-              <el-col :span="16">{{itemData.bankAccount}}</el-col>
+              <el-col :span="6">银行账号</el-col>
+              <el-col :span="18">{{itemData.bankAccount}}</el-col>
             </el-row>
             <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="8">税号</el-col>
-              <el-col :span="16">{{itemData.taxNumber}}</el-col>
+              <el-col :span="6">税号</el-col>
+              <el-col :span="18">{{itemData.taxNumber}}</el-col>
             </el-row>
             <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="8">绑定账务方案</el-col>
-              <el-col :span="16">{{itemData.payPlan != null ? itemData.payPlan.name : ''}}</el-col>
+              <el-col :span="6">绑定账务方案</el-col>
+              <el-col :span="18">{{itemData.payPlan != null ? itemData.payPlan.name : ''}}</el-col>
             </el-row>
             <el-row type="flex" justify="space-between" class="cooperator-info-order-row">
-              <el-col :span="8">备注</el-col>
-              <el-col :span="16">{{itemData.remarks}}</el-col>
+              <el-col :span="6">备注</el-col>
+              <el-col :span="18">{{itemData.remarks}}</el-col>
             </el-row>
           </div>
         </el-col>
       </el-row>
     </div>
+    <el-dialog :visible.sync="factoryDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body>
+      <factory-details-page :slotData="factoryDetailsData"></factory-details-page>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
+  import FactoryDetailsPage from '../../../user/company/factory/details/FactoryDetailsPage';
 
   const {mapGetters, mapActions} = createNamespacedHelpers('CooperatorModule');
 
   export default {
     name: 'CooperatorInfoPage',
     props: ['itemData'],
-    components: {},
+    components: {FactoryDetailsPage},
     computed: {
       ...mapGetters({
       })
@@ -73,12 +90,35 @@
     methods: {
       ...mapActions({
       }),
+      getPaymentStatusTag (item) {
+        if (item.approvalStatus === 'approved') {
+          return 'static/img/certified.png';
+        } else {
+          return 'static/img/uncertified.png';
+        }
+      },
+      async onFactoryDetail () {
+        let url = this.apis().getFactory(this.itemData.partner.uid);
+        if (this.isTenant()) {
+          url += '?sort=creationtime,desc';
+        }
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.factoryDetailsData = result;
+        this.factoryDetailsDialogVisible = !this.factoryDetailsDialogVisible;
+      }
     },
-    data() {
+    data () {
       return {
+        factoryDetailsDialogVisible: false,
+        factoryDetailsData: ''
       };
     },
-    created() {
+    created () {
 
     }
   };
@@ -126,19 +166,11 @@
     line-height: normal;
   }
 
-  .el-input.is-disabled .el-input__inner {
+  /deep/ .el-input.is-disabled .el-input__inner {
     cursor: pointer;
     background-color: #fff;
   }
 
-  .cooperator-form-item small.el-form-item {
-    margin-bottom: 0px !important;
-  }
-
-  .cooperator-form-item .el-form-item--mini.el-form-item,
-  .el-form-item--small.el-form-item {
-    margin-bottom: 0px !important;
-  }
 
   .cooperator-info-order-submit {
     background-color: #FFD60C;

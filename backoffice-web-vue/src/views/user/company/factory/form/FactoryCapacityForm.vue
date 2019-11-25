@@ -50,7 +50,7 @@
             <template slot="label">
               <h6 class="titleTextClass">合作商</h6>
             </template>
-            <tags-of-text @remove="onRemoveCooperativeBrand" @add="onAddCooperativeBrand" :textData="formData.cooperativeBrand" :symbol="'，'"></tags-of-text>
+            <tags-of-text :label="'合作商'" @remove="onRemoveCooperativeBrand" @add="onAddCooperativeBrand" :textData="formData.cooperativeBrand" :symbol="'，'"></tags-of-text>
           </el-form-item>
           <el-form-item prop="adeptAtCategories">
             <template slot="label">
@@ -62,7 +62,7 @@
             <template slot="label">
               <h6 class="titleTextClass">关键词</h6>
             </template>
-            <tags-of-text @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword" :symbol="'，'"></tags-of-text>
+            <tags-of-text :label="'关键词'" @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword" :symbol="'，'"></tags-of-text>
           </el-form-item>
         </div>
   </div>

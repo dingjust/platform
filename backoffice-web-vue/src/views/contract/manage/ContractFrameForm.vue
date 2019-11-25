@@ -251,19 +251,20 @@
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
 
-        this.$message.success(result.msg);
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
 
         if (result.data != null && result.data != '') {
           Bus.$emit('openContract', result.data);
         }
 
-        const searchUrl = this.apis().getContractsList();
-
-        this.refresh({
-          searchUrl
-        });
-
-        this.fn.closeSlider(true);
+        this.$emit('onSearch');
+        this.$emit('closeContractFrameFormDialog');
+        this.$emit('closeContractTypeDialog');
       },
       async onSave () {
         if (this.suppliers.id == null || this.suppliers.id == '') {
@@ -298,18 +299,20 @@
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
 
-        this.$message.success(result.msg);
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
 
         if (result.data != null && result.data != '') {
           Bus.$emit('openContract', result.data);
         }
 
-        const searchUrl = this.apis().getContractsList();
-
-        this.refresh({
-          searchUrl
-        });
-        this.fn.closeSlider(true);
+        this.$emit('onSearch');
+        this.$emit('closeContractFrameFormDialog');
+        this.$emit('closeContractTypeDialog');
       },
       onSetOrderCode () {
         if (this.slotData != null && this.slotData != '') {

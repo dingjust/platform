@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="cooperatorDetailsDialogVisible" @close="onDialogClose" width="80%" height="100%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="cooperatorDetailsDialogVisible" @close="onDialogClose" width="80%"  class="purchase-dialog" append-to-body>
       <cooperator-details-page :itemData="itemData"
                                @onSearch="onSearch"
                                @onDetails="onDetails"
@@ -104,9 +104,9 @@
         }
 
         const url = this.apis().getPurchaseOrders();
-        if (this.isFactory()) {
+        if (this.isFactory() && this.itemData.type === 'ONLINE') {
           this.ordersQueryFormData.purchasers = [this.itemData.partner.uid];
-        } else if (this.isBrand()) {
+        } else if (this.isBrand() && this.itemData.type === 'ONLINE') {
           this.ordersQueryFormData.belongTos = [this.itemData.partner.uid];
         }
 

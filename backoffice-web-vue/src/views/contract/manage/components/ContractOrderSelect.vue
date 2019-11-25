@@ -136,32 +136,10 @@
       },
       async onPageSizeChanged(val) {
         this._reset();
-        const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url, {
-          keyword: ''
-        }, {
-          page: val,
-          size: 10
-        });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        this.page = result;
+        this.$emit('onSearchOrder',0,val);
       },
       async onCurrentPageChanged(val) {
-        const url = this.apis().getPurchaseOrders();
-        const result = await this.$http.post(url, {
-          keyword: ''
-        }, {
-          page: val - 1,
-          size: 10
-        });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-        this.page = result;
+        this.$emit('onSearchOrder',val-1);
       },
       _reset() {
         this.$refs.resultTable.clearSort();
