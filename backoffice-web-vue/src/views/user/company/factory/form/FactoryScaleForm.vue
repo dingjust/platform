@@ -121,33 +121,62 @@
           '尾部': this.$store.state.EnumsModule.LastDepartment
         },
         mapSelectData: {
-          '裁剪部': this.formData.cuttingDepartment == null ? [] : this.formData.cuttingDepartment,
-          '生产车间': this.formData.productionWorkshop == null ? [] : this.formData.productionWorkshop,
-          '尾部': this.formData.lastDepartment == null ? [] : this.formData.lastDepartment
+          '裁剪部': (this.formData.cuttingDepartment == null || this.formData.cuttingDepartment === undefined) ? [] : this.formData.cuttingDepartment,
+          '生产车间': (this.formData.productionWorkshop == null || this.formData.productionWorkshop === undefined) ? [] : this.formData.productionWorkshop,
+          '尾部': (this.formData.lastDepartment == null || this.formData.lastDepartment === undefined) ? [] : this.formData.lastDepartment
         }
       };
     },
     watch: {
       'formData.cuttingDepartment': function (n, o) {
-        this.mapSelectData.裁剪部 = n;
+        console.log(n);
+        if (n === null || n === undefined) {
+          this.mapSelectData.裁剪部 = [];
+        }else {
+          this.mapSelectData.裁剪部 = n;
+        }
+
         this.$emit('validateField', 'equipment');
       },
       'formData.productionWorkshop': function (n, o) {
-        this.mapSelectData.生产车间 = n;
+        if (n === null || n === undefined) {
+          this.mapSelectData.生产车间 = [];
+        } else {
+          this.mapSelectData.生产车间 = n;
+        }
+
         this.$emit('validateField', 'equipment');
       },
       'formData.lastDepartment': function (n, o) {
-        this.mapSelectData.尾部 = n;
+        if (n === null || n === undefined) {
+          this.mapSelectData.尾部 = [];
+        } else {
+          this.mapSelectData.尾部 = n;
+        }
+
         this.$emit('validateField', 'equipment');
       },
       'mapSelectData.裁剪部': function (n, o) {
-        this.formData.cuttingDepartment = n;
+        console.log(n);
+        if (n === null || n === undefined) {
+          this.formData.cuttingDepartment = [];
+        } else {
+          this.formData.cuttingDepartment = n;
+        }
       },
       'mapSelectData.生产车间': function (n, o) {
-        this.formData.productionWorkshop = n;
+        if (n === null || n === undefined) {
+          this.formData.productionWorkshop = [];
+        } else {
+          this.formData.productionWorkshop = n;
+        }
       },
       'mapSelectData.尾部': function (n, o) {
-        this.formData.lastDepartment = n;
+        if (n === null || n === undefined) {
+          this.formData.lastDepartment = [];
+        } else {
+          this.formData.lastDepartment = n;
+        }
       }
     },
     created () {

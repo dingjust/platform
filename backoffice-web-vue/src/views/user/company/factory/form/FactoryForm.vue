@@ -14,7 +14,7 @@
           <factory-contact-form :form-data="formData"></factory-contact-form>
         </el-row>
         <el-row>
-          <factory-scale-form :form-data="formData" @validateField="validateField"></factory-scale-form>
+          <factory-scale-form v-if="factoryFormVisible" :form-data="formData" @validateField="validateField"></factory-scale-form>
         </el-row>
         <el-row>
           <factory-capacity-form :form-data="formData"></factory-capacity-form>
@@ -88,9 +88,9 @@
     },
     data () {
       var cheackEquipment = (rule, value, callback) => {
-        if (this.formData.cuttingDepartment.length <= 0 &&
-          this.formData.productionWorkshop.length <= 0 &&
-          this.formData.lastDepartment.length <= 0) {
+        if ((this.formData.cuttingDepartment == null || this.formData.cuttingDepartment.length <= 0) &&
+          (this.formData.productionWorkshop == null || this.formData.productionWorkshop.length <= 0) &&
+          (this.formData.lastDepartment == null || this.formData.lastDepartment.length <= 0)) {
           return callback(new Error('请选择设备'));
         } else {
           callback();

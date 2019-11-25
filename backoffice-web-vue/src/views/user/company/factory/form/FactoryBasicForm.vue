@@ -7,17 +7,15 @@
       </el-row>
       <div style="margin: 20px 20px 40px 40px">
         <el-row type="flex" justify="start" align="center">
-            <el-col :span="2">
-              <h6>
-                上传头像：
-              </h6>
-              <h6 style="color: grey">
-                (最多一张)
-              </h6>
-            </el-col>
-            <el-col :span="6">
-              <images-upload :limit="1" :slot-data="this.profilePictures"/>
-            </el-col>
+            <h6>
+              上传企业logo：
+            </h6>
+            <!--<h6 style="color: grey">-->
+              <!--(最多一张)-->
+            <!--</h6>-->
+          <!--</el-col>-->
+          <!--<el-col :span="6">-->
+            <images-upload :limit="1" :slot-data="this.profilePictures"/>
             <el-col :span="2" style="margin-left: 20px">
               <h6>
                 上传资质荣誉照片：
