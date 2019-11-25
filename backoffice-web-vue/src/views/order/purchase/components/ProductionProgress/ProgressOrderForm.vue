@@ -1,50 +1,50 @@
 <template>
   <div class="finance-form-body">
-    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body>
-      <progress-order-form :purchaseOrder="order" :progress="slotData"/>
-    </el-dialog>
     <el-row class="info-title-row" type="flex" justify="space-between">
       <div class="info-title">
-        <h6 class="info-title_text">{{getEnum('productionProgressPhaseTypes', slotData.phase)}}</h6>
+        <h6 class="info-title_text">{{getEnum('productionProgressPhaseTypes', progress.phase)}}</h6>
       </div>
-      <h6 class="info-title_text" style="width:300px;">数据最新更新时间：{{slotData.modifiedtime | timestampToTime}}</h6>
     </el-row>
     <div class="form-main">
-      <el-row type="flex" align="middle" class="progress-update-form-row">
-        <el-col :span="2">
-          <h6 class="progress-update-form-text1">预计完成日期:</h6>
-        </el-col>
-        <el-col :span="6" :offset="1">
-          <div style="width:100%;">
-            <el-date-picker style="width:100%;" class="progress-update-form-datepicker" v-model="slotData.estimatedDate"
-              type="date" placeholder="选择日期">
-            </el-date-picker>
-          </div>
+      <el-row type="flex" align="middle" class="progress-update-form-row" justify="space-between">
+        <el-col :span="6">
+          <h6 class="progress-update-form-text1">工单号:{{progress.id}}</h6>
         </el-col>
         <el-col :span="4" :offset="1">
-          <h6 class="info-title_text">款号:{{order.product.skuID}}</h6>
+          <h6 class="info-title_text">款号:{{purchaseOrder.product.skuID}}</h6>
         </el-col>
         <el-col :span="8">
           <h6 class="info-title_text">合作商:{{cooperatorName}}</h6>
         </el-col>
       </el-row>
+      <el-row type="flex" :gutter="50" align="middle" class="progress-update-form-row">
+        <el-col :span="8">
+          <el-row type="flex" justify="space-between">
+            <h6 class="progress-update-form-text1">上报时间:</h6>
+            <div style="width:100%;">
+              <el-date-picker style="width:100%;" class="progress-update-form-datepicker"
+                v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
+              </el-date-picker>
+            </div>
+          </el-row>
+        </el-col>
+        <el-col :span="6">
+          <el-row type="flex">
+            <h6 class="progress-update-form-text1">上报人员:</h6>
+            <el-select v-model="operator" :disabled="true">
+              <el-option label="采购部-刘少立" value="确认订单"></el-option>
+            </el-select>
+          </el-row>
+        </el-col>
+      </el-row>
       <el-row type="flex">
-        <progress-color-size-table :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"
-          @onOrder="formVisible=true" :orderEntriesTotal="order.totalQuantity" />
-      </el-row>
-      <el-row type="flex" justify="end" align="center" class="show-btn-row">
-        <i class="iconfont icon_arrow" v-if="!allOrdersShow" @click="allOrdersShow=true">&#xe714;&nbsp;展开全部单据</i>
-        <i class="iconfont icon_arrow" v-if="allOrdersShow" @click="allOrdersShow=false">&#xe713;&nbsp;收回全部单据</i>
-      </el-row>
-      <el-row v-if="allOrdersShow">
-        <progress-orders-table :orders="slotData.productionProgressOrders" />
       </el-row>
       <el-row type="flex" align="top" class="progress-update-form-row">
         <el-col :span="2">
           <h6 class="progress-update-form-text1">上传图片:</h6>
         </el-col>
         <el-col :span="22" :offset="1">
-          <media-image-card-show :medias="slotData.medias" />
+          <!-- <media-image-card-show :medias="slotData.medias" /> -->
         </el-col>
       </el-row>
       <el-row type="flex" align="top" class="progress-update-form-row">
@@ -52,8 +52,8 @@
           <h6 class="progress-update-form-text1">备注:</h6>
         </el-col>
         <el-col :span="22" :offset="1">
-          <el-input type="textarea" readonly :rows="3" placeholder="填写备注" v-model="slotData.remarks">
-          </el-input>
+          <!-- <el-input type="textarea" readonly :rows="3" placeholder="填写备注" v-model="slotData.remarks">
+          </el-input> -->
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
@@ -64,29 +64,20 @@
 </template>
 
 <script>
-  import ImagesUpload from '../ImagesUpload';
+  // import ImagesUpload from '../ImagesUpload';
   import ProgressColorSizeTable from './ProgressColorSizeTable';
-  import MediaImageCardShow from './MediaImageCardShow';
-  import ProgressOrdersTable from './ProgressOrdersTable';
-  import ProgressOrderForm from './ProgressOrderForm';
 
   export default {
-    name: 'OrderProgressUpdateForm',
-    props: ['slotData', 'order'],
-    components: {
-      ImagesUpload,
-      ProgressColorSizeTable,
-      MediaImageCardShow,
-      ProgressOrdersTable,
-      ProgressOrderForm
-    },
+    name: 'ProgressOrderForm',
+    props: ['progressOrder', 'purchaseOrder', 'progress'],
+    components: {},
     mixins: [],
     computed: {
       cooperatorName: function () {
-        if (this.order.cooperator.type == 'ONLINE') {
-          return this.order.cooperator.partner.name;
+        if (this.purchaseOrder.cooperator.type == 'ONLINE') {
+          return this.purchaseOrder.cooperator.partner.name;
         } else {
-          return this.order.cooperator.name;
+          return this.purchaseOrder.cooperator.name;
         }
       },
 
@@ -110,7 +101,7 @@
     data() {
       return {
         allOrdersShow: false,
-        formVisible: false,
+        operator: this.$store.getters.currentUser.username,
         form: {
           date: '',
           num: '',
