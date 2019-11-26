@@ -160,16 +160,20 @@
       onSubmit() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
-            this._onSubmit();
+            if (this.progressOrder.id != null && this.progressOrder.id != "") {
+              this._onUpdate();
+            } else {
+              this._onCreate();
+            }
           }
         });
       },
-      async _onSubmit() {
+      async _onCreate() {
         const url = this.apis().createProductionProgressOrder(this.progress.id);
         let form = Object.assign({}, this.progressOrder);
-        let variantEntries=[];
-        this.entries.forEach(sizeArray=>{
-          sizeArray.filter(item=>item.quantity!='').forEach(item=>{
+        let variantEntries = [];
+        this.entries.forEach(sizeArray => {
+          sizeArray.filter(item => item.quantity != '').forEach(item => {
             variantEntries.push(item);
           });
         });
@@ -181,6 +185,26 @@
           return;
         }
         this.$message.success('创建成功');
+        this.$emit('callback');
+      },
+      async _onUpdate() {
+        const url = this.apis().updateProductionProgressOrder(this.progress.id, this.progressOrder.id);
+        let form = Object.assign({}, this.progressOrder);
+        form.id = "";
+        let variantEntries = [];
+        this.entries.forEach(sizeArray => {
+          sizeArray.filter(item => item.quantity != '').forEach(item => {
+            variantEntries.push(item);
+          });
+        });
+        form.entries = variantEntries;
+        form.operator.id = this.$store.getters.currentUser.id;
+        const result = await this.$http.put(url, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('修改成功');
         this.$emit('callback');
       },
     },
