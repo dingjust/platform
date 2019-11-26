@@ -524,6 +524,18 @@ const COMMON_APIS = {
   capacitySave() {
     return 'b2b/factory/capacity/save';
   },
+  ///创建生产进度单据
+  createProductionProgressOrder(id){
+    return 'b2b/orders/purchase/progress/'+id+'/order';
+  },
+  ///作废生产进度单据
+  deleteProductionProgressOrder(id,orderId){
+    return  'b2b/orders/purchase/progress/'+id+'/order/'+orderId;
+  },
+  ///修改生产进度单据
+  updateProductionProgressOrder(id,orderId){
+    return  'b2b/orders/purchase/progress/'+id+'/order/'+orderId;
+  }
 };
 
 let TENANT_APIS = {
