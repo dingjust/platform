@@ -47,7 +47,7 @@
         <el-col :span="2">
           <h6 class="progress-update-form-text1">上传图片:</h6>
         </el-col>
-        <el-col :span="22" :offset="1">
+        <el-col :span="21" :offset="1">
           <media-image-card-show :medias="allMedias" />
         </el-col>
       </el-row>
@@ -108,7 +108,7 @@
       },
       allMedias:function(){
         var result=[];
-        this.slotData.productionProgressOrders.forEach(order => {
+        this.slotData.productionProgressOrders.filter(order=>order.status=='PASS').forEach(order => {
           order.medias.forEach(media=>{
             result.push(media);
           });
