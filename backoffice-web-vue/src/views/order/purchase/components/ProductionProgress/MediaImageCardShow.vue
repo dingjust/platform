@@ -1,11 +1,11 @@
 <template>
   <div class="show-body">
-    <el-row type="flex">
-      <template v-for="(item,index) in medias">
-        <el-image class="show-image" :src="item.url" :key="index" :preview-src-list="previewList">
-        </el-image>
-      </template>
-    </el-row>
+    <!-- <el-row type="flex"> -->
+    <template v-for="(item,index) in medias">
+      <el-image class="show-image" :src="item.url" :key="index" :preview-src-list="previewList">
+      </el-image>
+    </template>
+    <!-- </el-row> -->
   </div>
 </template>
 
@@ -55,9 +55,10 @@
     padding: 20px;
   }
 
-  .show-image{
-    width:18%;
+  .show-image {
+    width: 160px;
     height: 120px;
-    margin-right: 1%;
+    margin-right: 10px;
   }
+
 </style>
