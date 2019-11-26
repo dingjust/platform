@@ -1,7 +1,8 @@
 <template>
   <div class="finance-form-body">
     <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body>
-      <progress-order-form :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder" />
+      <progress-order-form :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder" v-if="hackSet"
+        @callback="onCallback" />
     </el-dialog>
     <el-row class="info-title-row" type="flex" justify="space-between">
       <div class="info-title">
@@ -30,7 +31,7 @@
       </el-row>
       <el-row type="flex">
         <progress-color-size-table :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"
-          @onOrder="formVisible=true" :orderEntriesTotal="order.totalQuantity" />
+          @onOrder="onOrder" :orderEntriesTotal="order.totalQuantity" />
       </el-row>
       <el-row type="flex" justify="end" align="center" class="show-btn-row">
         <i class="iconfont icon_arrow" v-if="!allOrdersShow" @click="allOrdersShow=true">&#xe714;&nbsp;展开全部单据</i>
@@ -64,6 +65,19 @@
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from "vuex";
+  import Bus from '@/common/js/bus.js';
+
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers(
+    "PurchaseOrdersModule"
+  );
+
   import ProgressColorSizeTable from './ProgressColorSizeTable';
   import MediaImageCardShow from './MediaImageCardShow';
   import ProgressOrdersTable from './ProgressOrdersTable';
@@ -90,6 +104,9 @@
 
     },
     methods: {
+      ...mapActions({
+        refreshDetail: "refreshDetail",
+      }),
       async onSubmit() {
         // if (this.compareDate(new Date(), new Date(this.slotData.estimatedDate))) {
         //   this.$message.error('预计完成时间不能小于当前时间');
@@ -104,26 +121,43 @@
         // this.$message.success('更新成功');
         this.$emit('editSubmit');
       },
-    },
-    data() {
-      return {
-        allOrdersShow: false,
-        formVisible: false,
-        progressOrder: {
+      onOrder() {
+        this.progressOrder = {
           medias: [],
           operator: {
             id: ''
           },
           reportTime: '',
-          remarks:'',
-          entries:[]
-        },
+          remarks: '',
+          entries: []
+        };
+        this.formVisible = true;
+      },
+      onCallback() {
+        this.formVisible = false;
+        this.$emit('callback');
+      }
+    },
+    data() {
+      return {
+        allOrdersShow: false,
+        formVisible: false,
+        hackSet: true,
+        progressOrder: {},
         form: {
           date: '',
           num: '',
           remarks: '',
           attachments: []
         }
+      }
+    },
+    watch: {
+      formVisible(newValue, oldValue) {
+        this.hackSet = false;
+        this.$nextTick(() => {
+          this.hackSet = true;
+        });
       }
     },
     created() {

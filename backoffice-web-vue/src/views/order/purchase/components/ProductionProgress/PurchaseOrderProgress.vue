@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body>
-      <order-progress-update-form :slotData="selectProgressModel" :order="slotData"
-        @editSubmit="onEditSubmit" />
+      <order-progress-update-form :slotData="selectProgressModel" :order="slotData" @callback="onCallback"
+        v-if="hackSet" @editSubmit="onEditSubmit" />
     </el-dialog>
     <el-row type="flex" justify="space-between">
       <template v-for="(item,index) in slotData.progresses">
@@ -65,6 +65,19 @@
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from "vuex";
+  import Bus from '@/common/js/bus.js';
+
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers(
+    "PurchaseOrdersModule"
+  );
+
   import OrderProgressUpdateForm from './OrderProgressUpdateForm';
 
   export default {
@@ -74,6 +87,9 @@
       OrderProgressUpdateForm
     },
     computed: {
+      ...mapGetters({
+        contentData: "detailData"
+      }),
       currentSequence: function () {
         var result = 0;
         this.slotData.progresses.forEach(element => {
@@ -85,6 +101,9 @@
       },
     },
     methods: {
+      ...mapActions({
+        refreshDetail: "refreshDetail",
+      }),
       ///判断左边线样式
       getLeftLine(index, data) {
         if (index == 0) {
@@ -168,11 +187,20 @@
           'width': width + '%',
           'left': width * index + '%',
         }
+      },
+      async onCallback() {
+        await this.refreshDetail();
+        this.contentData.progresses.forEach(item => {
+          if (item.id == this.selectProgressModel.id) {            
+            this.selectProgressModel=item;            
+          }
+        });
       }
     },
     data() {
       return {
         updateFormVisible: false,
+        hackSet: true,
         phaseIcon: {
           MATERIAL_PREPARATION: '&#xe675;',
           CUTTING: '&#xe677;',
