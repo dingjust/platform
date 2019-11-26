@@ -322,9 +322,9 @@
                 <h6 class="info-input-prepend2">天以内</h6>
               </el-row>
             </el-col>
-            <el-col :span="4">
-              <el-row type="flex" align="middle" justify="space-between">
-                <el-col :span="6">
+            <el-col :span="8">
+              <el-row type="flex" align="middle" justify="start">
+                <el-col :span="4">
                   <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
                 </el-col>
                 <el-col :span="18">
@@ -364,9 +364,9 @@
                 <h6 class="info-input-prepend2" style="width: 200px;">支付剩余全部款项</h6>
               </el-row>
             </el-col>
-            <el-col :span="4" v-if="form.payPlanType!='PHASEONE'">
+            <el-col :span="8" v-if="form.payPlanType!='PHASEONE'">
               <el-row type="flex" align="middle" justify="start">
-                <el-col :span="6">
+                <el-col :span="4">
                   <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
                 </el-col>
                 <el-col :span="18">
