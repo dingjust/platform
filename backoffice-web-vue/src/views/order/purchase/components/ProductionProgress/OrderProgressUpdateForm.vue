@@ -4,6 +4,9 @@
       <progress-order-form :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder" v-if="hackSet"
         @callback="onCallback" />
     </el-dialog>
+    <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body>
+      <progress-order-view :purchaseOrder="order" :progress="slotData" :progressOrder="selectProgressOrder" />
+    </el-dialog>
     <el-row class="info-title-row" type="flex" justify="space-between">
       <div class="info-title">
         <h6 class="info-title_text">{{getEnum('productionProgressPhaseTypes', slotData.phase)}}</h6>
@@ -38,14 +41,14 @@
         <i class="iconfont icon_arrow" v-if="allOrdersShow" @click="allOrdersShow=false">&#xe713;&nbsp;收回全部单据</i>
       </el-row>
       <el-row v-if="allOrdersShow">
-        <progress-orders-table :orders="slotData.productionProgressOrders" />
+        <progress-orders-table :orders="slotData.productionProgressOrders" @onDetail="onDetail" @onCencel="onCencel" @onUpdate="onUpdate"/>
       </el-row>
       <el-row type="flex" align="top" class="progress-update-form-row" style="margin-top:20px;">
         <el-col :span="2">
           <h6 class="progress-update-form-text1">上传图片:</h6>
         </el-col>
         <el-col :span="22" :offset="1">
-          <media-image-card-show :medias="slotData.medias" />
+          <media-image-card-show :medias="allMedias" />
         </el-col>
       </el-row>
       <el-row type="flex" align="top" class="progress-update-form-row">
@@ -82,6 +85,7 @@
   import MediaImageCardShow from './MediaImageCardShow';
   import ProgressOrdersTable from './ProgressOrdersTable';
   import ProgressOrderForm from './ProgressOrderForm';
+  import ProgressOrderView from './ProgressOrderView';
 
   export default {
     name: 'OrderProgressUpdateForm',
@@ -90,7 +94,8 @@
       ProgressColorSizeTable,
       MediaImageCardShow,
       ProgressOrdersTable,
-      ProgressOrderForm
+      ProgressOrderForm,
+      ProgressOrderView
     },
     mixins: [],
     computed: {
@@ -101,7 +106,15 @@
           return this.order.cooperator.name;
         }
       },
-
+      allMedias:function(){
+        var result=[];
+        this.slotData.productionProgressOrders.forEach(order => {
+          order.medias.forEach(media=>{
+            result.push(media);
+          });
+        });
+        return result;
+      }
     },
     methods: {
       ...mapActions({
@@ -136,14 +149,43 @@
       onCallback() {
         this.formVisible = false;
         this.$emit('callback');
+      },
+      onDetail(progressOrder) {
+        this.selectProgressOrder = progressOrder;
+        this.viewVisible = true;
+      },
+      onUpdate(progressOrder){
+        this.progressOrder=progressOrder;
+        this.formVisible=true;
+      },
+      onCencel(id) {
+        this.$confirm('是否作废该单据?', '', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._onCancel(id);
+        });
+      },
+      async _onCancel(id) {
+        const url = this.apis().deleteProductionProgressOrder(this.slotData.id,id);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('作废成功');
+        this.$emit('callback');
       }
     },
     data() {
       return {
         allOrdersShow: false,
         formVisible: false,
+        viewVisible: false,
         hackSet: true,
         progressOrder: {},
+        selectProgressOrder: {},
         form: {
           date: '',
           num: '',

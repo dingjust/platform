@@ -3,28 +3,28 @@
     <el-table :data="orders" border style="width: 100%">
       <el-table-column prop="id" label="单号">
       </el-table-column>
-      <el-table-column label="上报时间" >
+      <el-table-column label="上报时间">
         <template slot-scope="scope">
           <span>{{scope.row.reportTime|| timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上报人员" >
+      <el-table-column label="上报人员">
         <template slot-scope="scope">
           <span>{{scope.row.operator.name}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="amount" label="上报数量">
       </el-table-column>
-      <el-table-column label="状态" >
+      <el-table-column label="状态">
         <template slot-scope="scope">
           <span>{{getEnum('ProgressOrderStatus', scope.row.status)}}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
-          <el-button  type="text" size="small">查看</el-button>
-          <el-button type="text" size="small">修改</el-button>
-          <el-button type="text" size="small">作废</el-button>
+          <el-button type="text" size="small" @click="onDetail(scope.row)">查看</el-button>
+          <el-button type="text" size="small" @click="onUpdate(scope.row)">修改</el-button>
+          <el-button type="text" size="small" @click="onCencel(scope.row.id)">作废</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,7 +44,15 @@
 
     },
     methods: {
-
+      onDetail(data) {
+        this.$emit('onDetail', data);
+      },
+      onCencel(id) {
+        this.$emit('onCencel', id);
+      },
+      onUpdate(data) {
+        this.$emit('onUpdate', data);
+      },
     },
     created() {},
     data() {
