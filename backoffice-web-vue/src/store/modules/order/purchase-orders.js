@@ -106,6 +106,9 @@ const state = {
       code: '',
       name: ''
     }
+  },
+  detailData:{
+
   }
 };
 
@@ -118,6 +121,7 @@ const mutations = {
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
+  detailData: (state, detailData) => state.detailData = detailData,
 };
 
 const actions = {
@@ -172,6 +176,13 @@ const actions = {
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
+  },
+  async refreshDetail({dispatch, commit, state}){
+    const url = '/b2b/orders/purchase/'+state.detailData.code;
+    const result = await http.get(url);
+    if (!result['errors']) {
+      commit('detailData', result);
+    }
   }
 };
 
@@ -183,7 +194,8 @@ const getters = {
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  detailData:state=>state.detailData
 };
 
 export default {

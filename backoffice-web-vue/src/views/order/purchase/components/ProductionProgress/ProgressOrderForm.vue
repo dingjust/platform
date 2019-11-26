@@ -5,90 +5,94 @@
         <h6 class="info-title_text">{{getEnum('productionProgressPhaseTypes', progress.phase)}}</h6>
       </div>
     </el-row>
-    <div class="form-main">
-      <el-row type="flex" align="middle" class="progress-update-form-row" justify="space-between">
-        <el-col :span="6">
-          <h6 class="progress-update-form-text1">工单号:{{progress.id}}</h6>
-        </el-col>
-        <el-col :span="4" :offset="1">
-          <h6 class="info-title_text">款号:{{purchaseOrder.product.skuID}}</h6>
-        </el-col>
-        <el-col :span="8">
-          <h6 class="info-title_text">合作商:{{cooperatorName}}</h6>
-        </el-col>
-      </el-row>
-      <el-row type="flex" :gutter="150" align="middle" class="progress-update-form-row">
-        <el-col :span="12">
-          <el-row type="flex" justify="space-between" align="middle" :gutter="10">
-            <el-col :span="6">
-              <h6 class="progress-update-form-text1">上报时间:</h6>
-            </el-col>
-            <el-col :span="18">
-              <div style="width:100%;">
-                <el-date-picker style="width:100%;" class="progress-update-form-datepicker"
-                  v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
-                </el-date-picker>
-              </div>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="12">
-          <el-row type="flex" align="middle" justify="space-between" :gutter="10">
-            <el-col :span="6">
-              <h6 class="progress-update-form-text1">上报人员:</h6>
-            </el-col>
-            <el-col :span="18">
-              <el-select v-model="operator" :disabled="true">
-                <el-option label="采购部-刘少立" value="确认订单"></el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
-        <span>{{variantTotal}}/{{purchaseOrder.totalQuantity}}</span>
-      </el-row>
-      <el-row type="flex">
-        <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
-          <tr class="order-table-th_row">
-            <td style="width:40px">颜色</td>
-            <template v-for="item in sizes">
-              <th :key="item.code">{{item.name}}</th>
-            </template>
-          </tr>
-          <template v-for="(sizeArray,colorIndex) in entries">
-            <tr :key="colorIndex">
-              <td>{{sizeArray[0].color}}</td>
-              <template v-for="(item,sizeIndex) in sizeArray">
-                <td style="width:80px" :key="sizeIndex">
-                  <el-input class="order-table-input" type="number" v-model="item.quantity"></el-input>
-                </td>
+    <el-form ref="form" :model="progressOrder" :rules="rules">
+      <div class="form-main">
+        <el-row type="flex" align="middle" class="progress-update-form-row" justify="space-between">
+          <el-col :span="6">
+            <h6 class="progress-update-form-text1">工单号:{{progress.id}}</h6>
+          </el-col>
+          <el-col :span="4" :offset="1">
+            <h6 class="info-title_text">款号:{{purchaseOrder.product.skuID}}</h6>
+          </el-col>
+          <el-col :span="8">
+            <h6 class="info-title_text">合作商:{{cooperatorName}}</h6>
+          </el-col>
+        </el-row>
+        <el-row type="flex" :gutter="150" align="middle" class="progress-update-form-row">
+          <el-col :span="12">
+            <el-form-item prop="reportTime">
+              <el-row type="flex" justify="space-between" align="middle" :gutter="10">
+                <el-col :span="6">
+                  <h6 class="progress-update-form-text1">上报时间:</h6>
+                </el-col>
+                <el-col :span="18">
+                  <div style="width:100%;">
+                    <el-date-picker style="width:100%;" class="progress-update-form-datepicker"
+                      v-model="progressOrder.reportTime" type="date" placeholder="选择日期">
+                    </el-date-picker>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-row type="flex" align="middle" justify="space-between" :gutter="10">
+              <el-col :span="6">
+                <h6 class="progress-update-form-text1">上报人员:</h6>
+              </el-col>
+              <el-col :span="18">
+                <el-select v-model="operator" :disabled="true">
+                  <el-option label="采购部-刘少立" value="确认订单"></el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
+          <span>{{variantTotal}}/{{purchaseOrder.totalQuantity}}</span>
+        </el-row>
+        <el-row type="flex">
+          <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
+            <tr class="order-table-th_row">
+              <td style="width:40px">颜色</td>
+              <template v-for="item in sizes">
+                <th :key="item.code">{{item.name}}</th>
               </template>
             </tr>
-          </template>
-        </table>
-      </el-row>
-      <el-row type="flex" align="top" class="progress-update-form-row">
-        <el-col :span="2">
-          <h6 class="progress-update-form-text1">上传图片:</h6>
-        </el-col>
-        <el-col :span="22" :offset="1">
-          <images-upload class="order-purchase-upload" :slot-data="progressOrder.medias" />
-        </el-col>
-      </el-row>
-      <el-row type="flex" align="top" class="progress-update-form-row">
-        <el-col :span="2">
-          <h6 class="progress-update-form-text1">备注:</h6>
-        </el-col>
-        <el-col :span="22" :offset="1">
-          <el-input type="textarea" :rows="3" placeholder="填写备注" v-model="progressOrder.remarks">
-          </el-input>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
-        <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
-      </el-row>
-    </div>
+            <template v-for="(sizeArray,colorIndex) in entries">
+              <tr :key="colorIndex">
+                <td>{{sizeArray[0].color}}</td>
+                <template v-for="(item,sizeIndex) in sizeArray">
+                  <td style="width:80px" :key="sizeIndex">
+                    <el-input class="order-table-input" type="number" v-model="item.quantity"></el-input>
+                  </td>
+                </template>
+              </tr>
+            </template>
+          </table>
+        </el-row>
+        <el-row type="flex" align="top" class="progress-update-form-row">
+          <el-col :span="2">
+            <h6 class="progress-update-form-text1">上传图片:</h6>
+          </el-col>
+          <el-col :span="22" :offset="1">
+            <images-upload class="order-purchase-upload" :slot-data="progressOrder.medias" />
+          </el-col>
+        </el-row>
+        <el-row type="flex" align="top" class="progress-update-form-row">
+          <el-col :span="2">
+            <h6 class="progress-update-form-text1">备注:</h6>
+          </el-col>
+          <el-col :span="22" :offset="1">
+            <el-input type="textarea" :rows="3" placeholder="填写备注" v-model="progressOrder.remarks">
+            </el-input>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
+          <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
+        </el-row>
+      </div>
+    </el-form>
   </div>
 </template>
 
@@ -131,10 +135,8 @@
         var result = 0;
         this.entries.forEach(entry => {
           entry.forEach(item => {
-            console.log(JSON.stringify(item));
             if (item.quantity != '') {
               let num = parseInt(item.quantity);
-              console.log(num);
               if (num != null && num != '') {
                 result = num + result;
               }
@@ -155,19 +157,31 @@
           return null;
         }
       },
-      async onSubmit() {
-        // if (this.compareDate(new Date(), new Date(this.slotData.estimatedDate))) {
-        //   this.$message.error('预计完成时间不能小于当前时间');
-        //   return false;
-        // }
-        // const url = this.apis().updateProgressOfPurchaseOrder(this.orderCode, this.slotData.id);
-        // const result = await this.$http.put(url, this.slotData);
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        //   return;
-        // }
-        // this.$message.success('更新成功');
-        this.$emit('editSubmit');
+      onSubmit() {
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this._onSubmit();
+          }
+        });
+      },
+      async _onSubmit() {
+        const url = this.apis().createProductionProgressOrder(this.progress.id);
+        let form = Object.assign({}, this.progressOrder);
+        let variantEntries=[];
+        this.entries.forEach(sizeArray=>{
+          sizeArray.filter(item=>item.quantity!='').forEach(item=>{
+            variantEntries.push(item);
+          });
+        });
+        form.entries = variantEntries;
+        form.operator.id = this.$store.getters.currentUser.id;
+        const result = await this.$http.post(url, form);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('创建成功');
+        this.$emit('callback');
       },
     },
     data() {
@@ -176,10 +190,16 @@
         operator: this.$store.getters.currentUser.username,
         entries: [],
         form: {
-          date: '',
-          num: '',
-          remarks: '',
-          attachments: []
+          reportTime: '',
+
+        },
+        rules: {
+          reportTime: [{
+            type: 'date',
+            required: true,
+            message: '请选择日期',
+            trigger: 'blur'
+          }],
         }
       }
     },
