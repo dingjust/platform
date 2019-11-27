@@ -8,7 +8,6 @@ import 'package:widgets/widgets.dart';
 
 import 'ColorSizeEntry.dart';
 import 'FormMixins.dart';
-import 'components/ColorSizeTable.dart';
 import 'purchase_reconciliation_order_view.dart';
 
 class ReconciliationOrderForm extends StatefulWidget {
@@ -103,8 +102,10 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
                           _buildMoneySection(),
                         ],
                       )),
-                  ColorSizeView(
-                    entries: widget.reconciliationOrder.entries ?? [],
+                  ColorSizeTable(
+                    noteEntries: widget?.deliveryOrder?.entries ?? null,
+                    orderEntries: widget.purchaseOrder.entries,
+                    colorSizeEntries: colorSizeEntries,
                   ),
                   _buildBottomSheet()
                 ],
@@ -387,7 +388,7 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
                         onPressed: onConfirm,
                         disabledColor: Colors.grey[300],
                         child: Text(
-                          '确认完成收货',
+                          '确认完成对账',
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
@@ -613,9 +614,11 @@ class _ReconciliationOrderFormState extends State<ReconciliationOrderForm>
   ///总数
   int totalAmount() {
     int result = 0;
-    widget.reconciliationOrder.entries.forEach((entry) {
-      result += entry.quantity;
-    });
+    if (widget.reconciliationOrder != null) {
+      widget.reconciliationOrder.entries.forEach((entry) {
+        result += entry.quantity;
+      });
+    }
     return result;
   }
 
