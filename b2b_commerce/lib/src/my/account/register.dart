@@ -225,7 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               )),
           InputRow(
-            label: '账号',
+            label: '账        号',
             isRequired: true,
             field: TextField(
               autofocus: false,
@@ -248,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           InputRow(
-            label: '验证码',
+            label: '验  证  码',
             isRequired: true,
             field: TextField(
               autofocus: false,
@@ -353,7 +353,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 color: Colors.grey,
               )),
           InputRow(
-              label: '联系人',
+              label: '联  系  人',
               isRequired: true,
               field: TextField(
                 autofocus: false,
