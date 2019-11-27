@@ -5,7 +5,7 @@
       </el-table-column>
       <el-table-column label="上报时间">
         <template slot-scope="scope">
-          <span>{{scope.row.reportTime|| timestampToTime}}</span>
+          <span>{{scope.row.reportTime|timestampToTime}}</span>
         </template>
       </el-table-column>
       <el-table-column label="上报人员">
