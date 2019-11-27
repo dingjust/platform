@@ -573,24 +573,33 @@ class InputRow extends StatelessWidget {
           label != null
               ? Container(
             width: labelWidth,
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                        color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+            child: RichText(
+              text: TextSpan(
+                text: label,
+                style: const TextStyle(
+                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: isRequired ? ' *' : '',
+                    style:
+                    const TextStyle(color: Colors.red, fontSize: 20),
+                  ),
+                ],
+              ),
                   ),
                 )
               : Container(),
-          isRequired
-              ? Container(
-            margin: EdgeInsets.only(right: 10),
-            child: Text(
-              '*',
-              style: TextStyle(color: Colors.red, fontSize: 20),
-            ),
-          )
-              : Container(
-            margin: EdgeInsets.only(right: 20),
-          ),
+          // isRequired
+          //     ? Container(
+          //         margin: EdgeInsets.only(right: 10),
+          //         child: Text(
+          //           '*',
+          //           style: TextStyle(color: Colors.red, fontSize: 20),
+          //         ),
+          //       )
+          //     : Container(
+          //         margin: EdgeInsets.only(right: 20),
+          //       ),
           leading != null ? leading : Container(),
           Expanded(
             flex: 1,
