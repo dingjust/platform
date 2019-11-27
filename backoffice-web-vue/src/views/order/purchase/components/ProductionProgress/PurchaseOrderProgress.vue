@@ -47,16 +47,18 @@
               <h6 class="progress-info">备注: {{item.remarks}}</h6>
             </el-col>
           </el-row> -->
-          <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
-            v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-            <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
-              {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
-          </el-row>
           <div class="progress-block-modal" :style="getBlockStyle(index)" v-show="showButtonArray[index]">
             <el-row type="flex" justify="center" align="middle" class="progress-block-modal-row"
               v-if="item.sequence>=currentSequence&&slotData.status=='IN_PRODUCTION'&&isFactory()">
               <el-button type="primary" plain @click="onEdit(item)">编辑</el-button>
             </el-row>
+          </div>
+          <div style="height:20%;">
+          <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
+            v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
+            <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
+              {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
+          </el-row>
           </div>
         </el-col>
       </template>
@@ -191,8 +193,8 @@
       async onCallback() {
         await this.refreshDetail();
         this.contentData.progresses.forEach(item => {
-          if (item.id == this.selectProgressModel.id) {            
-            this.selectProgressModel=item;            
+          if (item.id == this.selectProgressModel.id) {
+            this.selectProgressModel = item;
           }
         });
       }
@@ -335,7 +337,7 @@
     position: absolute;
     background-color: rgba(255, 214, 12, 0.35);
     /* width: 100%; */
-    height: 100%;
+    height: 80%;
     /* left: 0px; */
     top: 0px;
     z-index: 2;

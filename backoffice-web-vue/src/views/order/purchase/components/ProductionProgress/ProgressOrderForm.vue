@@ -36,6 +36,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item>
             <el-row type="flex" align="middle" justify="space-between" :gutter="10">
               <el-col :span="6">
                 <h6 class="progress-update-form-text1">上报人员:</h6>
@@ -46,6 +47,7 @@
                 </el-select>
               </el-col>
             </el-row>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
@@ -64,7 +66,8 @@
                 <td>{{sizeArray[0].color}}</td>
                 <template v-for="(item,sizeIndex) in sizeArray">
                   <td style="width:80px" :key="sizeIndex">
-                    <el-input class="order-table-input" type="number" v-model="item.quantity"></el-input>
+                    <el-input class="order-table-input" type="number" v-model="item.quantity"
+                      :placeholder="countRemainNum(item.color,item.size)"></el-input>
                   </td>
                 </template>
               </tr>
@@ -207,6 +210,24 @@
         this.$message.success('修改成功');
         this.$emit('callback');
       },
+      countRemainNum(color, size) {
+        var need = this.purchaseOrder.entries.filter(
+          item => item.product.color.name == color && item.product.size.name == size
+        );
+        if (need.length != 0) {        
+          var sum = 0;
+          var result = this.progress.productionProgressOrders.forEach(order => {
+            var result = order.entries.filter(entry => entry.color == color && entry
+              .size == size);
+            if (result.length != 0 && result[0].quantity != '') {
+              sum += result[0].quantity;
+            }
+          });
+          return '剩余未报' + (need[0].quantity - sum);
+        } else {
+          return "";
+        }
+      }
     },
     data() {
       return {
