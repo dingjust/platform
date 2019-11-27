@@ -15,8 +15,7 @@
         <tr :key="colorIndex">
           <td>{{color}}</td>
           <template v-for="(size,sizeIndex) in sizes">
-            <td style="width:80px" :key="sizeIndex">
-              {{getNoteVariantSum(color, size.name)}}/{{getOrderVariant(color, size.name)}}</td>
+            <td style="width:80px" :key="sizeIndex">{{getVarinatStr(color,size.name)}}</td>
           </template>
         </tr>
       </template>
@@ -94,7 +93,18 @@
         });
         return sum;
       },
-      onOrder(){
+      getVarinatStr(color, size) {
+        if (this.getOrderVariant(color, size) == "") {
+          if (this.getNoteVariantSum(color, size) != 0) {
+            return "+" + this.getNoteVariantSum(color, size);
+          } else {
+            return "";
+          }
+        } else {
+          return this.getNoteVariantSum(color, size) + '/' + this.getOrderVariant(color, size);
+        }
+      },
+      onOrder() {
         this.$emit('onOrder')
       }
     },
