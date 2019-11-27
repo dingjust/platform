@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/form/purchase/components/ColorSizeView.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:widgets/widgets.dart';
 
 import 'ColorSizeEntry.dart';
 import 'FormMixins.dart';
+import 'components/ColorSizeTable.dart';
 import 'purchase_reconciliation_order_view.dart';
 
 class ReconciliationOrderForm extends StatefulWidget {
