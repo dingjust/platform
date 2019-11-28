@@ -106,7 +106,7 @@
                     <td>{{color}}</td>
                     <template v-for="(size,index) in product.sizes">
                       <td style="width:80px">
-                        <el-input class="order-table-input" type="number"
+                        <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="1"
                           v-model="getVariant(color,size.name,product.variants).num">
                         </el-input>
                       </td>
@@ -129,7 +129,7 @@
                     <el-row type="flex" align="middle">
                       <h6 class="info-input-prepend">订单报价</h6>
                       <el-input placeholder="输入报价" v-model="product.unitPrice" size="mini" type="number"
-                        @input="oninput(product)">
+                        @mousewheel.native.prevent :min="0" @input="oninput(product)">
                       </el-input>
                     </el-row>
                   </el-form-item>
@@ -430,7 +430,7 @@
                   <el-col :span="18">
                     <el-select v-model="form.monthBalance.time" placeholder="请选择">
                       <template v-for="val in 28">
-                      <el-option :label="val" :value="val" :key="val"></el-option>                                            
+                        <el-option :label="val" :value="val" :key="val"></el-option>
                       </template>
                       <el-option label="月底" :value="-1" :key="-1"></el-option>
                     </el-select>
@@ -527,11 +527,11 @@
       }),
       resultPreview: function () {
         var result;
-        var monthTimeStr='';
-        if(this.form.monthBalance.time>0){
-          monthTimeStr=this.form.monthBalance.time+'号';
-        }else{
-          monthTimeStr='月底'
+        var monthTimeStr = '';
+        if (this.form.monthBalance.time > 0) {
+          monthTimeStr = this.form.monthBalance.time + '号';
+        } else {
+          monthTimeStr = '月底'
         }
         if (this.form.isHaveDeposit && this.form.payPlanType == 'PHASETWO') {
           result = '定金+2期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit

@@ -60,7 +60,7 @@
             <td style="width:80px">{{sizeArray[0].color}}</td>
             <template v-for="(item,sizeIndex) in sizeArray">
               <td style="width:80px" :key="sizeIndex" :colspan="getColspanLength3()">
-                <el-input class="order-table-input" v-model="item.quantity" type="number">
+                <el-input class="order-table-input" v-model="item.quantity" type="number" @mousewheel.native.prevent>
                 </el-input>
               </td>
             </template>
@@ -82,7 +82,8 @@
         <tr>
           <td>延期扣款</td>
           <td class="order-table-input">
-            <el-input v-model.number="form.delayDeduction" prefix-icon="el-icon-minus" type="number"></el-input>
+            <el-input v-model.number="form.delayDeduction" prefix-icon="el-icon-minus" type="number"
+              @mousewheel.native.prevent :min="0"></el-input>
           </td>
           <td>扣款备注</td>
           <td :colspan="getColspanLength()" class="order-table-input">
@@ -93,7 +94,8 @@
         <tr>
           <td>质量扣款</td>
           <td class="order-table-input">
-            <el-input v-model.number="form.qualityDeduction" type="number" prefix-icon="el-icon-minus"></el-input>
+            <el-input v-model.number="form.qualityDeduction" type="number" prefix-icon="el-icon-minus"
+              @mousewheel.native.prevent :min="0"></el-input>
           </td>
           <td>扣款备注</td>
           <td :colspan="getColspanLength()" class="order-table-input">
@@ -104,7 +106,8 @@
         <tr>
           <td>其他扣款</td>
           <td class="order-table-input">
-            <el-input v-model.number="form.otherDeduction" type="number" prefix-icon="el-icon-minus"></el-input>
+            <el-input v-model.number="form.otherDeduction" type="number" prefix-icon="el-icon-minus"
+              @mousewheel.native.prevent :min="0"></el-input>
           </td>
           <td>扣款备注</td>
           <td :colspan="getColspanLength()" class="order-table-input">
@@ -115,7 +118,8 @@
         <tr>
           <td>其他增款</td>
           <td class="order-table-input">
-            <el-input v-model.number="form.otherFunds" type="number" prefix-icon="el-icon-plus"></el-input>
+            <el-input v-model.number="form.otherFunds" type="number" prefix-icon="el-icon-plus"
+              @mousewheel.native.prevent :min="0"></el-input>
           </td>
           <td>扣款备注</td>
           <td :colspan="getColspanLength()" class="order-table-input">
