@@ -113,7 +113,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 controller: _scrollController,
                 slivers: <Widget>[
                   SliverAppBar(
-                    expandedHeight: 220.0,
+                    expandedHeight: 230.0,
                     pinned: true,
                     elevation: 0.5,
                     centerTitle: true,
@@ -316,7 +316,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   child: Container(
                     padding:
                     EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    height: 80,
+                    height: 95,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
