@@ -728,7 +728,15 @@ class _RequirementOrderDetailPageState
             ),
           ),
           Row(
-            children: <Widget>[Text(orderModel.remarks ?? '')],
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Text(
+                  orderModel.remarks ?? '',
+                  overflow: TextOverflow.clip,
+                ),
+              )
+            ],
           )
         ],
       ),
@@ -1027,7 +1035,6 @@ class _RequirementOrderDetailPageState
             ? '${GlobalConfigs.LOGO_URL}'
             : '${orderModel.details.pictures[0].shareUrl()}',
         url: Apis.shareRequirement(orderModel.code));
-
 
     print('${orderModel.details.pictures[0].shareUrl()}');
   }
