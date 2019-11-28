@@ -204,15 +204,31 @@ class _AttachmentsState extends State<Attachments> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return GestureDetector(
-          child: Container(
-              child: PhotoView(
-            imageProvider: NetworkImage(url),
-          )),
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-        );
+        return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                PhotoView(
+                  imageProvider: NetworkImage(url),
+                  onTapUp: (context, detail, val) {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            ));
       },
     );
   }
@@ -574,15 +590,15 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                         ),
                       ),
                   placeholder: (context, url) => SpinKitRing(
-                        color: Colors.black12,
-                        lineWidth: 2,
-                        size: 30,
-                      ),
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
                   errorWidget: (context, url, error) => SpinKitRing(
-                        color: Colors.black12,
-                        lineWidth: 2,
-                        size: 30,
-                      ),
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -619,19 +635,31 @@ class _EditableAttachmentsState extends State<EditableAttachments>
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          onLongPress: () async {
-            _previewFile(url, name, 'jpeg');
-            // downLoadImage(url, name, 'jpeg');
-          },
-          child: Container(
-              child: PhotoView(
-            imageProvider: NetworkImage(url),
-          )),
-        );
+        return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                PhotoView(
+                  imageProvider: NetworkImage(url),
+                  onTapUp: (context, detail, val) {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            ));
       },
     );
   }
@@ -998,7 +1026,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
   int _addFile(File file) {
     setState(() {
       _uploadFileList.add(file);
-      _streamControllerList.add(StreamController < double>.broadcast());
+      _streamControllerList.add(StreamController<double>.broadcast());
     });
     return _uploadFileList.indexOf(file);
   }

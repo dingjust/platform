@@ -591,9 +591,12 @@ class RequirementPoolOrderItem extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  '${order.belongTo.name}',
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '${order.belongTo.name}',
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 order.belongTo.approvalStatus == ArticleApprovalStatus.approved
                     ? Tag(
