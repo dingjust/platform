@@ -186,7 +186,11 @@ flutter:
     - packages/assets/temp/icon/not_signed.png
     - packages/assets/temp/icon/arrears.png
     - packages/assets/temp/icon/paid.png
-
+    - packages/assets/temp/contract/all_contract.png
+    - packages/assets/temp/contract/my_contract.png
+    - packages/assets/temp/contract/my_seal.png
+    - packages/assets/temp/contract/my_sign.png
+    - packages/assets/temp/contract/other_sign.png
 
   fonts:
     - family: b2bIcons
