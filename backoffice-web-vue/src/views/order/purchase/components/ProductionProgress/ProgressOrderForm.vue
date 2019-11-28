@@ -37,16 +37,16 @@
           </el-col>
           <el-col :span="12">
             <el-form-item>
-            <el-row type="flex" align="middle" justify="space-between" :gutter="10">
-              <el-col :span="6">
-                <h6 class="progress-update-form-text1">上报人员:</h6>
-              </el-col>
-              <el-col :span="18">
-                <el-select v-model="operator" :disabled="true">
-                  <el-option label="采购部-刘少立" value="确认订单"></el-option>
-                </el-select>
-              </el-col>
-            </el-row>
+              <el-row type="flex" align="middle" justify="space-between" :gutter="10">
+                <el-col :span="6">
+                  <h6 class="progress-update-form-text1">上报人员:</h6>
+                </el-col>
+                <el-col :span="18">
+                  <el-select v-model="operator" :disabled="true">
+                    <el-option label="采购部-刘少立" value="确认订单"></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-col>
         </el-row>
@@ -66,7 +66,7 @@
                 <td>{{sizeArray[0].color}}</td>
                 <template v-for="(item,sizeIndex) in sizeArray">
                   <td style="width:80px" :key="sizeIndex">
-                    <el-input class="order-table-input" type="number" v-model="item.quantity"
+                    <el-input class="order-table-input" type="number" @mousewheel.native.prevent v-model="item.quantity" :min="1"
                       :placeholder="countRemainNum(item.color,item.size)"></el-input>
                   </td>
                 </template>
@@ -214,16 +214,16 @@
         var need = this.purchaseOrder.entries.filter(
           item => item.product.color.name == color && item.product.size.name == size
         );
-        if (need.length != 0) {        
+        if (need.length != 0) {
           var sum = 0;
-          var result = this.progress.productionProgressOrders.filter(order=>order.status=='PASS').forEach(order => {
+          var result = this.progress.productionProgressOrders.filter(order => order.status == 'PASS').forEach(order => {
             var result = order.entries.filter(entry => entry.color == color && entry
               .size == size);
             if (result.length != 0 && result[0].quantity != '') {
               sum += result[0].quantity;
             }
           });
-          if(need[0].quantity<sum){
+          if (need[0].quantity < sum) {
             return "";
           }
           return '剩余未报' + (need[0].quantity - sum);

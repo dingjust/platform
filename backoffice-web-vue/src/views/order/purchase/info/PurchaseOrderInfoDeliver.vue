@@ -107,7 +107,8 @@
           <td>{{sizeArray[0].color}}</td>
           <template v-for="(size,index) in sizeArray">
             <td style="width:80px" :key="index">
-              <el-input class="order-table-input" type="number" v-model="size.num" placeholder="输入">
+              <el-input class="order-table-input" type="number" v-model="size.num" placeholder="输入" :min="1"
+                @mousewheel.native.prevent>
               </el-input>
             </td>
           </template>
