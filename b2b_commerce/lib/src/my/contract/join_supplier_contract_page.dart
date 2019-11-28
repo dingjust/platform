@@ -8,21 +8,23 @@ import 'package:widgets/widgets.dart';
 
 import 'contract_select_widget.dart';
 
-class JoinSupplierContractPage extends StatefulWidget{
+class JoinSupplierContractPage extends StatefulWidget {
   String role;
   JoinSupplierContractPage({this.role});
-  _JoinSupplierContractPageState createState() => _JoinSupplierContractPageState();
+
+  _JoinSupplierContractPageState createState() =>
+      _JoinSupplierContractPageState();
 }
 
-class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
-  PurchaseOrderModel orderModel  = PurchaseOrderModel();
+class _JoinSupplierContractPageState extends State<JoinSupplierContractPage> {
+  PurchaseOrderModel orderModel = PurchaseOrderModel();
   ContractTemplateModel templateModel = ContractTemplateModel();
   SealModel sealModel = SealModel();
   List<ContractTemplateModel> tempList;
 
-
   initTemplate() async {
-    tempList = await ContractRepository().getContractTemplateList({'type':''}, {'page':'0','size':'100'});
+    tempList = await ContractRepository()
+        .getContractTemplateList({'type': ''}, {'page': '0', 'size': '100'});
   }
 
   @override
@@ -65,12 +67,11 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
             ),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: (){
+            onPressed: () {
               openSelectButton(context);
             },
           ),
-        )
-    );
+        ));
   }
 
   openSelectButton(BuildContext context) {
@@ -83,36 +84,35 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
             buttonText2: '我是乙方',
             action1: () async {
               Map data = {
-                'userTempCode' : templateModel.code,
-                'userSignCode' : sealModel.code,
-                'role':'PARTYA',
-                'title':'00000',
-                'orderCode':orderModel.code,
+                'userTempCode': templateModel.code,
+                'userSignCode': sealModel.code,
+                'role': 'PARTYA',
+                'title': '00000',
+                'orderCode': orderModel.code,
               };
               saveContract(data);
             },
             action2: () async {
               Map data = {
-                'userTempCode' : templateModel.code,
-                'userSignCode' : sealModel.code,
-                'role':'PARTYB',
-                'title':'00000',
-                'orderCode':orderModel.code,
+                'userTempCode': templateModel.code,
+                'userSignCode': sealModel.code,
+                'role': 'PARTYB',
+                'title': '00000',
+                'orderCode': orderModel.code,
               };
               saveContract(data);
             },
           );
-        }
-    );
+        });
   }
 
-  saveContract(Map data) async{
+  saveContract(Map data) async {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:ContractRepository().SignaContract(data),
+            requestCallBack: ContractRepository().SignaContract(data),
             outsideDismiss: false,
             loadingText: '保存中。。。',
           );
@@ -121,14 +121,15 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
       if (value != null && value.code == 1) {
         result = true;
       }
-      MyContractBLoC().refreshData('ALL','');
+      MyContractBLoC().refreshData('ALL', '');
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) {
             return CustomizeDialog(
               dialogType: DialogType.RESULT_DIALOG,
-              failTips: '${value != null && value.msg != null ? value.msg : '创建合同失败'}',
+              failTips:
+              '${value != null && value.msg != null ? value.msg : '创建合同失败'}',
               successTips: '创建合同成功',
               callbackResult: result,
               confirmAction: () {
@@ -142,7 +143,7 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
     });
   }
 
-  Widget _buildSelectOrderItem(){
+  Widget _buildSelectOrderItem() {
     return GestureDetector(
       onTap: () {
         SearchModel searchModel = SearchModel(keyword: '');
@@ -153,10 +154,8 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
                     PurchaseOrderSearchResultPage(
                       searchModel: searchModel,
                       isContractSelect: true,
-                    )
-            )
-        ).then((value) {
-          if(value != null) {
+                    ))).then((value) {
+          if (value != null) {
             orderModel = value;
           }
         });
@@ -178,7 +177,9 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: RichText(
                 text: TextSpan(
-                    text: orderModel.code != null ? '生产订单：${orderModel.code}':'选择关联订单',
+                    text: orderModel.code != null
+                        ? '生产订单：${orderModel.code}'
+                        : '选择关联订单',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -197,18 +198,20 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(width: 3, color: Colors.black38)
-        ),
+            border: Border.all(width: 3, color: Colors.black38)),
       ),
     );
   }
 
-  Widget _buildSelectContractItem(){
+  Widget _buildSelectContractItem() {
     return GestureDetector(
-      onTap: (){
-        ContractSelectWidget(cacel: () {
-          Navigator.pop(context);
-        }, rightData: tempList).showPicker(
+      onTap: () {
+        ContractSelectWidget(
+            cacel: () {
+              Navigator.pop(context);
+            },
+            rightData: tempList)
+            .showPicker(
           context,
           selectTemplate: (template) {
             setState(() {
@@ -223,7 +226,7 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
         child: Row(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               width: 80,
               height: 80,
               child: Image.asset(
@@ -232,15 +235,16 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: Column(
                 children: <Widget>[
                   Container(
                     child: RichText(
                       text: TextSpan(
                           text: templateModel != null &&
-                              templateModel.title != null ? '${templateModel
-                              .title}' : '选择合同模板',
+                              templateModel.title != null
+                              ? '${templateModel.title}'
+                              : '选择合同模板',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -271,10 +275,8 @@ class _JoinSupplierContractPageState extends State<JoinSupplierContractPage>{
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(width: 3,color: Colors.black38)
-        ),
+            border: Border.all(width: 3, color: Colors.black38)),
       ),
     );
   }
-
 }

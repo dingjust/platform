@@ -149,4 +149,32 @@ class B2BImage {
   static Image notPaid({double width, double height}) {
     return getImage('temp/icon/arrears.png', width: width, height: height);
   }
+
+  ///全部合同
+  static Image allContract({double width, double height}) {
+    return getImage('temp/contract/all_contract.png',
+        width: width, height: height);
+  }
+
+  ///我的合同
+  static Image myContract({double width, double height}) {
+    return getImage('temp/contract/my_contract.png',
+        width: width, height: height);
+  }
+
+  ///我的合同
+  static Image mySeal({double width, double height}) {
+    return getImage('temp/contract/my_seal.png', width: width, height: height);
+  }
+
+  ///待我签署
+  static Image waitMySign({double width, double height}) {
+    return getImage('temp/contract/my_sign.png', width: width, height: height);
+  }
+
+  ///待他签署
+  static Image waitOtherSign({double width, double height}) {
+    return getImage('temp/contract/other_sign.png',
+        width: width, height: height);
+  }
 }

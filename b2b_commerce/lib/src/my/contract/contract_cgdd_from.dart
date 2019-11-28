@@ -1,7 +1,6 @@
 import 'package:b2b_commerce/src/business/search/purchase_order_search_result.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/contract/contract_temp_page.dart';
-import 'package:b2b_commerce/src/my/contract/contract_seal_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -12,7 +11,7 @@ class ContractCGDDFrom extends StatefulWidget {
 }
 
 class _ContractCGDDFromState extends State<ContractCGDDFrom> {
-  PurchaseOrderModel orderModel ;
+  PurchaseOrderModel orderModel;
   bool isA = false;
   bool isB = false;
   List<ContractTemplateModel> cgddTempList;
@@ -26,20 +25,22 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
     super.initState();
   }
 
-  initSeal() async{
-    cgddTempList = await ContractRepository().getContractTemplateList({'type':'CGDD'}, {'page':'0','size':'100'});
-    kjxyTempList = await ContractRepository().getContractTemplateList({'type':'KJXY'}, {'page':'0','size':'100'});
+  initSeal() async {
+    cgddTempList = await ContractRepository().getContractTemplateList(
+        {'type': 'CGDD'}, {'page': '0', 'size': '100'});
+    kjxyTempList = await ContractRepository().getContractTemplateList(
+        {'type': 'KJXY'}, {'page': '0', 'size': '100'});
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('采购订单合同'),
-        elevation: 0.5,
-        centerTitle: true,
-      ),
-      body: _buildMain(),
+        appBar: AppBar(
+          title: Text('采购订单合同'),
+          elevation: 0.5,
+          centerTitle: true,
+        ),
+        body: _buildMain(),
         bottomNavigationBar: Container(
           color: Colors.white10,
           margin: EdgeInsets.all(10),
@@ -60,13 +61,12 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               saveContract();
             },
           ),
-        )
-    );
+        ));
   }
 
-  saveContract() async{
+  saveContract() async {
     String role = '';
-    if(!isA && !isB){
+    if (!isA && !isB) {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -76,10 +76,10 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               failTips: '请选择甲乙方',
               callbackResult: false,
             );
-          }
-      );
-    }
-    else if(orderModel == null || orderModel.code ==null || orderModel.code == ''){
+          });
+    } else if (orderModel == null ||
+        orderModel.code == null ||
+        orderModel.code == '') {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -89,10 +89,10 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               failTips: '请选择订单',
               callbackResult: false,
             );
-          }
-      );
-    }
-    else if(cgddTemp == null || cgddTemp.code ==null || cgddTemp.code == ''){
+          });
+    } else if (cgddTemp == null ||
+        cgddTemp.code == null ||
+        cgddTemp.code == '') {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -102,12 +102,11 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               failTips: '请选择模板',
               callbackResult: false,
             );
-          }
-      );
-    }else {
-      if(isA){
+          });
+    } else {
+      if (isA) {
         role = 'PARTYA';
-      }else if(isB){
+      } else if (isB) {
         role = 'PARTYB';
       }
       Map data = {
@@ -133,25 +132,24 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
         if (value != null && value.code == 1) {
           result = true;
         }
-        MyContractBLoC().refreshData('ALL','');
+        MyContractBLoC().refreshData('ALL', '');
         showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) {
               return CustomizeDialog(
                 dialogType: DialogType.RESULT_DIALOG,
-                failTips: '${value != null && value.msg != null
-                    ? value.msg
-                    : '创建合同失败'}',
+                failTips:
+                '${value != null && value.msg != null ? value.msg : '创建合同失败'}',
                 successTips: '创建合同成功',
                 callbackResult: result,
                 confirmAction: () {
-                  if(result) {
+                  if (result) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
-                  }else{
+                  } else {
                     Navigator.of(context).pop();
                   }
                 },
@@ -161,13 +159,13 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
     }
   }
 
-  Widget _buildMain(){
+  Widget _buildMain() {
     return Container(
       child: Column(
         children: <Widget>[
           Container(
             color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -175,20 +173,16 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                        '签订方式',
-                      style: TextStyle(
-                        fontSize: 18
-                      ),
+                      '签订方式',
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
-                      '新签电子合同',
-                    style: TextStyle(
-                        fontSize: 18
-                    ),
+                    '新签电子合同',
+                    style: TextStyle(fontSize: 18),
                   ),
                 ),
                 Container(
@@ -201,10 +195,9 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               ],
             ),
           ),
-          Divider(
-              height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
+          Divider(height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               SearchModel searchModel = SearchModel(keyword: '');
               Navigator.push(
                   context,
@@ -213,17 +206,15 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
                           PurchaseOrderSearchResultPage(
                             searchModel: searchModel,
                             isContractSelect: true,
-                          )
-                  )
-              ).then((value) {
-                if(value != null) {
+                          ))).then((value) {
+                if (value != null) {
                   orderModel = value;
                 }
               });
             },
             child: Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -232,19 +223,15 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         '选择订单',
-                        style: TextStyle(
-                            fontSize: 18
-                        ),
+                        style: TextStyle(fontSize: 18),
                       ),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      '${orderModel != null? orderModel.code:''}',
-                      style: TextStyle(
-                          fontSize: 18
-                      ),
+                      '${orderModel != null ? orderModel.code : ''}',
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                   Container(
@@ -258,23 +245,23 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               ),
             ),
           ),
-          Divider(
-              height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
+          Divider(height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          ContractTempSelectPage(list: kjxyTempList,title: '框架协议合同模板',)
-                  )
-              ).then((value) {
+                          ContractTempSelectPage(
+                            list: kjxyTempList,
+                            title: '框架协议合同模板',
+                          ))).then((value) {
                 kjxyTemp = value;
               });
             },
             child: Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -283,19 +270,15 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         '选择框架协议',
-                        style: TextStyle(
-                            fontSize: 18
-                        ),
+                        style: TextStyle(fontSize: 18),
                       ),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      '${kjxyTemp == null? '':kjxyTemp.title}',
-                      style: TextStyle(
-                          fontSize: 18
-                      ),
+                      '${kjxyTemp == null ? '' : kjxyTemp.title}',
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                   Container(
@@ -309,23 +292,23 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               ),
             ),
           ),
-          Divider(
-              height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
+          Divider(height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          ContractTempSelectPage(list: cgddTempList,title: '采购订单合同模板',)
-                  )
-              ).then((value) {
+                          ContractTempSelectPage(
+                            list: cgddTempList,
+                            title: '采购订单合同模板',
+                          ))).then((value) {
                 cgddTemp = value;
               });
             },
             child: Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -334,19 +317,15 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         '选择模板',
-                        style: TextStyle(
-                            fontSize: 18
-                        ),
+                        style: TextStyle(fontSize: 18),
                       ),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      '${cgddTemp == null ? '':cgddTemp.title}',
-                      style: TextStyle(
-                          fontSize: 18
-                      ),
+                      '${cgddTemp == null ? '' : cgddTemp.title}',
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                   Container(
@@ -360,49 +339,57 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
               ),
             ),
           ),
-          Divider(
-              height: 2, color: Color.fromRGBO(245, 245, 245, 30)
-          ),
+          Divider(height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
           Container(
             margin: EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      isA = !isA;
-                      isB = false;
-                    });
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    width: MediaQuery.of(context).size.width / 2.1,
-                    height: 60,
-                    child: Center(child: Text('我是甲方')),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black54,width: 1),
-                      borderRadius: BorderRadius.circular(8),
-                      color: isA?Color.fromRGBO(255, 214, 12, 1):Colors.white,
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isA = !isA;
+                        isB = false;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Center(child: Text('我是甲方')),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black54, width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                        color: isA
+                            ? Color.fromRGBO(255, 214, 12, 1)
+                            : Colors.white,
+                      ),
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      isB = !isB;
-                      isA = false;
-                    });
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    width: MediaQuery.of(context).size.width / 2.1,
-                    height: 60,
-                    child: Center(child: Text('我是乙方')),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black54,width: 1),
-                      borderRadius: BorderRadius.circular(8),
-                      color: isB?Color.fromRGBO(255, 214, 12, 1):Colors.white,
+                Container(
+                  width: 20,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isB = !isB;
+                        isA = false;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Center(child: Text('我是乙方')),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black54, width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                        color: isB
+                            ? Color.fromRGBO(255, 214, 12, 1)
+                            : Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -413,6 +400,4 @@ class _ContractCGDDFromState extends State<ContractCGDDFrom> {
       ),
     );
   }
-
-
 }
