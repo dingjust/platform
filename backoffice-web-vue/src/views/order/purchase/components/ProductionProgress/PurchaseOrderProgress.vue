@@ -34,12 +34,12 @@
           </el-row> -->
           <el-row type="flex" justify="center" align="middle" class="progress-info-row" v-if="item.estimatedDate!=null">
             <el-col :span="19">
-              <h6 class="progress-info">完成日期: {{item.estimatedDate | timestampToTime}}</h6>
+              <h6 class="progress-info">预计完成日期: {{item.estimatedDate | timestampToTime}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="center" class="progress-info-row" align="middle" v-if="item.quantity!=null">
+          <el-row v-if="item.finishDate!=null" type="flex" justify="center" class="progress-info-row" align="middle">
             <el-col :span="19">
-              <h6 class="progress-info">完成数量: {{item.quantity}}</h6>
+              <h6 class="progress-info">实际完成日期: {{item.finishDate|timestampToTime}}</h6>
             </el-col>
           </el-row>
           <!-- <el-row type="flex" justify="center" class="progress-info-row" align="middle" v-if="item.remarks!=null">
@@ -54,11 +54,11 @@
             </el-row>
           </div>
           <div style="height:20%;">
-          <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
-            v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-            <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
-              {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
-          </el-row>
+            <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
+              v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
+              <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
+                {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
+            </el-row>
           </div>
         </el-col>
       </template>
