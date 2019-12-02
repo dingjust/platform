@@ -20,7 +20,7 @@
           <span>{{getEnum('ProgressOrderStatus', scope.row.status)}}</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column fixed="right" label="操作" v-if="!readonly">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="onDetail(scope.row)">查看</el-button>
           <el-button type="text" size="small" @click="onUpdate(scope.row)">修改</el-button>
@@ -39,6 +39,10 @@
         type: Array,
         default: [],
       },
+      readonly: {
+        type: Boolean,
+        default: false
+      }
     },
     computed: {
 

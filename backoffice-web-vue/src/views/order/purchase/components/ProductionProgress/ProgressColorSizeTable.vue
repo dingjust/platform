@@ -2,7 +2,7 @@
   <div class="table-body">
     <el-row type="flex" justify="space-between" align="middle" style="margin-bottom:20px;">
       <span>{{noteVariantTotal}}/{{orderEntriesTotal}}</span>
-      <el-button size="mini" class="form-btn" @click="onOrder">上报数量</el-button>
+      <el-button size="mini" class="form-btn" @click="onOrder" v-if="!readonly">上报数量</el-button>
     </el-row>
     <table cellspacing="2" width="100%" :height="(colors.length+5)*30" class="order-table">
       <tr class="order-table-th_row">
@@ -38,6 +38,10 @@
       orderEntriesTotal: {
         type: Number,
         default: 0
+      },
+      readonly:{
+        type:Boolean,
+        default:false
       }
     },
     computed: {
