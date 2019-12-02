@@ -108,10 +108,10 @@
       },
       handleClick(tab, event) {
         // console.log(tab.name);
-        this.queryFormData.statuses = [tab.name];
         if (tab.name == 'ALL') {
           this.onSearch("");
         } else {
+          this.queryFormData.statuses = [tab.name];
           this.onAdvancedSearch();
         }
       },
