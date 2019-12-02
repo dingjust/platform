@@ -141,6 +141,7 @@
       this.getTemplateListPt();
       // this.onSearchTemp();
       this.mockData = [];
+      this.onSearchTemp();
     }
   };
 

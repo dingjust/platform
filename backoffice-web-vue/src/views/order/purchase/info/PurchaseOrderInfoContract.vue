@@ -2,7 +2,7 @@
   <div class="info-detail-staff-body">
     <el-dialog :visible.sync="dialogContractVisible" width="85%" :show-close="true" class="purchase-dialog"
       append-to-body :modal="true">
-      <contract-form :slotData="slotData" v-if="hackSet"></contract-form>
+      <contract-form @closeContractFormDialog="closeContractFormDialog" :slotData="slotData" v-if="hackSet"></contract-form>
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="85%" class="purchase-dialog" append-to-body
       :modal="true">
@@ -49,7 +49,7 @@
   // import contractPage from '../../../contract/manage/ContractPage'
   import Bus from '@/common/js/bus.js';
   import http from '@/common/js/http';
-  import ContractDetails from "../../../contract/manage/components/ContractDetails";
+  import ContractDetails from '../../../contract/manage/components/ContractDetails';
   import ContractPreviewPdf from '../../../contract/manage/components/ContractPreviewPdf'
   import ContractSealList from '../../../contract/manage/components/ContractSealList'
 
@@ -60,14 +60,14 @@
       ContractSealList,
       contractForm,
       ContractDetails,
-      ContractPreviewPdf,
+      ContractPreviewPdf
     },
     mixins: [],
     computed: {
 
     },
     methods: {
-      async onCreate() {
+      async onCreate () {
         const url = this.apis().getAuthenticationState();
         const result = await http.get(url);
         console.log(result);
@@ -75,11 +75,9 @@
         if (result.data.personalState == 'SUCCESS' || result.data.companyState == 'SUCCESS') {
           // this.fn.openSlider("创建", contractForm, this.slotData);
           this.dialogContractVisible = true;
-
         } else {
           this.$message.error('当前账号未通过认证');
         }
-
       },
       // async openContract(){
       //   const url = this.apis().getContractDetail(this.contract.code);
@@ -96,7 +94,7 @@
       //   }
       //
       // },
-      async showContract(item) {
+      async showContract (item) {
         this.thisContract = item;
 
         const url = this.apis().downContract(item.code);
@@ -115,7 +113,7 @@
         this.pdfVisible = true;
         this.fileUrl = encodeURIComponent(aa)
       },
-      async onSearchSeal(vel, keyword, page, size) {
+      async onSearchSeal (vel, keyword, page, size) {
         if (vel != null) {
           this.contractCode = vel.code;
         }
@@ -131,14 +129,14 @@
           page: page,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.sealPage = result;
         this.dialogSealVisible = true
       },
-      async onSealSelectChange(data) {
+      async onSealSelectChange (data) {
         this.dialogSealVisible = false;
         const sealCode = data.code;
 
@@ -151,7 +149,7 @@
           this.$message.success(result.msg);
         }
       },
-      async previewPdf(code) {
+      async previewPdf (code) {
         this.thisContract = await this.getContractDetail(code);
         const url = this.apis().downContract(code);
         const result = await http.get(url);
@@ -165,13 +163,36 @@
         this.fileUrl = encodeURIComponent(aa)
         this.pdfVisible = true;
       },
-      async getContractDetail(code) {
+      async getContractDetail (code) {
         const url = this.apis().getContractDetail(code);
         const result = await http.get(url);
         return result.data;
+      },
+      async closeContractFormDialog () {
+        this.dialogContractVisible = false;
+        this.getContractsList();
+      },
+      async closeContractPdfViewDialog () {
+        this.pdfVisible = false;
+        this.getContractsList();
+      },
+      async getContractsList () {
+        const url = this.apis().getContractsList();
+        const result = await http.post(url, {
+          orderCode: this.slotData.code
+        }, {
+          page: 0,
+          size: 100
+        });
+        this.contracts = [];
+        for (var i = 0; i < result.content.length; i++) {
+          if (result.content[i].state != 'INVALID') {
+            this.contracts.push(result.content[i]);
+          }
+        }
       }
     },
-    data() {
+    data () {
       return {
         dialogContractVisible: false,
         dialogTableVisible: false,
@@ -182,10 +203,10 @@
         dialogSealVisible: false,
         sealPage: false,
         thisContractKey: 1,
-        hackSet:true
+        hackSet: true
       }
     },
-    created() {
+    created () {
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
         this.pdfVisible = false;
@@ -200,6 +221,7 @@
       });
       Bus.$on('closePdfView', args => {
         this.pdfVisible = false;
+        this.getContractsList();
       });
       Bus.$on('closeContractFrom', args => {
         console.log(2323)
@@ -207,17 +229,16 @@
       });
     },
     watch: {
-      dialogContractVisible(newValue, oldValue) {
-        if(!newValue&&oldValue){
-          this.hackSet=false;
-          this.$nextTick(()=>{
-            this.hackSet=true;
+      dialogContractVisible (newValue, oldValue) {
+        if (!newValue && oldValue) {
+          this.hackSet = false;
+          this.$nextTick(() => {
+            this.hackSet = true;
           })
         }
-      }
+      },
     }
   }
-
 </script>
 <style>
   .info-detail-staff-body {
