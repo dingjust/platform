@@ -138,22 +138,22 @@ export default {
         }
       ]
     },
-    {
-      name: '报表',
-      url: '/report',
-      icon: 'el-icon-s-data',
-      children: [{
-          name: '生产进度',
-          url: 'production-progress',
-          icon: 'iconNone',
-        },
-        {
-          name: '收货单',
-          url: 'receipt',
-          icon: 'iconNone',
-        },
-      ]
-    },
+    // {
+    //   name: '报表',
+    //   url: '/report',
+    //   icon: 'el-icon-s-data',
+    //   children: [{
+    //       name: '生产进度',
+    //       url: 'production-progress',
+    //       icon: 'iconNone',
+    //     },
+    //     {
+    //       name: '收货单',
+    //       url: 'receipt',
+    //       icon: 'iconNone',
+    //     },
+    //   ]
+    // },
     {
       name: '其他',
       url: '/miscs',
