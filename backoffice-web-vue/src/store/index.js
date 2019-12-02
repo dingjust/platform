@@ -42,7 +42,9 @@ import {
   ContractTemplateModule,
   ContractSealModule,
   //产能
-  CapacityModule
+  CapacityModule,
+  //报表
+  ReceiptReportModule
 } from './modules';
 
 // 状态管理
@@ -112,7 +114,9 @@ export default new Vuex.Store({
     ContractTemplateModule,
     ContractSealModule,
     //产能
-    CapacityModule
+    CapacityModule,
+    //报表
+    ReceiptReportModule
   },
   state,
   getters,
