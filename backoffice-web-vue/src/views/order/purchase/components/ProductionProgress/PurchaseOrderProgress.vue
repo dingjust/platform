@@ -2,7 +2,7 @@
   <div>
     <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body>
       <order-progress-update-form :slotData="selectProgressModel" :order="slotData" @callback="onCallback"
-        v-if="hackSet" @editSubmit="onEditSubmit" />
+        :readonly="readonly" v-if="hackSet" @editSubmit="onEditSubmit" />
     </el-dialog>
     <el-row type="flex" justify="space-between">
       <template v-for="(item,index) in slotData.progresses">
@@ -48,9 +48,8 @@
             </el-col>
           </el-row> -->
           <div class="progress-block-modal" :style="getBlockStyle(index)" v-show="showButtonArray[index]">
-            <el-row type="flex" justify="center" align="middle" class="progress-block-modal-row"
-              v-if="item.sequence>=currentSequence&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-              <el-button type="primary" plain @click="onEdit(item)">编辑</el-button>
+            <el-row type="flex" justify="center" align="middle" class="progress-block-modal-row">
+              <el-button type="primary" plain @click="onEdit(item)">{{judgeReadonly(item)?'查看':'编辑'}}</el-button>
             </el-row>
           </div>
           <div style="height:20%;">
@@ -143,6 +142,7 @@
         }
       },
       onEdit(item) {
+        this.readonly=this.judgeReadonly(item);
         this.selectProgressModel = item;
         this.selectProgressModel.updateOnly = true;
         this.updateFormVisible = !this.updateFormVisible;
@@ -197,6 +197,13 @@
             this.selectProgressModel = item;
           }
         });
+      },
+      judgeReadonly(item) {
+        if (item.sequence >= this.currentSequence && this.slotData.status == 'IN_PRODUCTION' && this.isFactory()) {          
+          return false;
+        } else {          
+          return true;
+        }
       }
     },
     data() {
@@ -212,6 +219,7 @@
         },
         selectProgressModel: '',
         showButtonArray: [],
+        readonly:false
       };
     },
     created() {

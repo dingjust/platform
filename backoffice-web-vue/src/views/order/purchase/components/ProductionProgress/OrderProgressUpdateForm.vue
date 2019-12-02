@@ -20,8 +20,8 @@
         </el-col>
         <el-col :span="6" :offset="1">
           <div style="width:100%;">
-            <el-date-picker style="width:100%;" class="progress-update-form-datepicker" v-model="slotData.estimatedDate"
-              type="date" placeholder="选择日期">
+            <el-date-picker :readonly="readonly" style="width:100%;" class="progress-update-form-datepicker"
+              v-model="slotData.estimatedDate" type="date" placeholder="选择日期">
             </el-date-picker>
           </div>
         </el-col>
@@ -34,14 +34,15 @@
       </el-row>
       <el-row type="flex">
         <progress-color-size-table :orderEntries="order.entries" :noteEntries="slotData.productionProgressOrders"
-          @onOrder="onOrder" :orderEntriesTotal="order.totalQuantity" />
+          :readonly="readonly" @onOrder="onOrder" :orderEntriesTotal="order.totalQuantity" />
       </el-row>
       <el-row type="flex" justify="end" align="center" class="show-btn-row">
         <i class="iconfont icon_arrow" v-if="!allOrdersShow" @click="allOrdersShow=true">&#xe714;&nbsp;展开全部单据</i>
         <i class="iconfont icon_arrow" v-if="allOrdersShow" @click="allOrdersShow=false">&#xe713;&nbsp;收回全部单据</i>
       </el-row>
       <el-row v-if="allOrdersShow">
-        <progress-orders-table :orders="slotData.productionProgressOrders" @onDetail="onDetail" @onCencel="onCencel" @onUpdate="onUpdate"/>
+        <progress-orders-table :orders="slotData.productionProgressOrders" @onDetail="onDetail" @onCencel="onCencel"
+          :readonly="readonly" @onUpdate="onUpdate" />
       </el-row>
       <el-row type="flex" align="top" class="progress-update-form-row" style="margin-top:20px;">
         <el-col :span="2">
@@ -56,11 +57,11 @@
           <h6 class="progress-update-form-text1">备注:</h6>
         </el-col>
         <el-col :span="22" :offset="1">
-          <el-input type="textarea" readonly :rows="3" placeholder="填写备注" v-model="slotData.remarks">
+          <el-input type="textarea" readonly :rows="3" v-model="slotData.remarks">
           </el-input>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="center" align="top" class="progress-update-form-row">
+      <el-row type="flex" justify="center" align="top" class="progress-update-form-row" v-if="!readonly">
         <el-button size="mini" class="update-form-submit" @click="onSubmit">确定</el-button>
       </el-row>
     </div>
@@ -89,7 +90,7 @@
 
   export default {
     name: 'OrderProgressUpdateForm',
-    props: ['slotData', 'order'],
+    props: ['slotData', 'order', 'readonly'],
     components: {
       ProgressColorSizeTable,
       MediaImageCardShow,
@@ -106,10 +107,10 @@
           return this.order.cooperator.name;
         }
       },
-      allMedias:function(){
-        var result=[];
-        this.slotData.productionProgressOrders.filter(order=>order.status=='PASS').forEach(order => {
-          order.medias.forEach(media=>{
+      allMedias: function () {
+        var result = [];
+        this.slotData.productionProgressOrders.filter(order => order.status == 'PASS').forEach(order => {
+          order.medias.forEach(media => {
             result.push(media);
           });
         });
@@ -154,9 +155,9 @@
         this.selectProgressOrder = progressOrder;
         this.viewVisible = true;
       },
-      onUpdate(progressOrder){
-        this.progressOrder=progressOrder;
-        this.formVisible=true;
+      onUpdate(progressOrder) {
+        this.progressOrder = progressOrder;
+        this.formVisible = true;
       },
       onCencel(id) {
         this.$confirm('是否作废该单据?', '', {
@@ -168,7 +169,7 @@
         });
       },
       async _onCancel(id) {
-        const url = this.apis().deleteProductionProgressOrder(this.slotData.id,id);
+        const url = this.apis().deleteProductionProgressOrder(this.slotData.id, id);
         const result = await this.$http.delete(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
