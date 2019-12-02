@@ -1,6 +1,5 @@
 export default {
-  items: [
-    {
+  items: [{
       title: true,
       name: '平台',
       class: '',
@@ -12,14 +11,13 @@ export default {
     {
       name: '主页',
       url: '/dashboard',
-      icon:'el-icon-s-home'
+      icon: 'el-icon-s-home'
     },
     {
       name: '产品管理',
       url: '/product',
       icon: 'el-icon-goods',
-      children: [
-        {
+      children: [{
           name: '服装产品',
           url: '/product/apparel',
           icon: 'iconNone'
@@ -45,8 +43,7 @@ export default {
       name: '商家管理',
       url: '/backoffice/customer',
       icon: 'icon-puzzle',
-      children: [
-        {
+      children: [{
           name: '品牌',
           url: '/user/brand',
           icon: 'iconNone'
@@ -61,8 +58,7 @@ export default {
     {
       name: '订单管理',
       icon: 'el-icon-s-order',
-      children: [
-        {
+      children: [{
           name: '需求订单',
           url: '/order/requirement',
           icon: 'iconNone'
@@ -88,8 +84,7 @@ export default {
       name: '账户管理',
       url: '/account',
       icon: 'icon-puzzle',
-      children: [
-        {
+      children: [{
           name: '员工',
           url: '/account/employee',
           icon: 'el-icon-user'
@@ -107,13 +102,17 @@ export default {
       ]
     },
     {
-      name: '报表管理',
+      name: '报表',
       url: '/report',
-      icon: 'el-icon-s-finance',
-      children: [
+      icon: 'el-icon-s-data',
+      children: [{
+          name: '生产进度',
+          url: 'production-progress',
+          icon: 'iconNone',
+        },
         {
-          name: '生产进度报表',
-          url: '/report/production-progress',
+          name: '收货单',
+          url: 'receipt',
           icon: 'iconNone',
         },
       ]
@@ -121,13 +120,11 @@ export default {
     {
       name: '其他',
       url: '/miscs',
-      icon:'el-icon-coin',
-      children: [
-        {
+      icon: 'el-icon-coin',
+      children: [{
           name: '合同',
           icon: 'iconNone',
-          children: [
-            {
+          children: [{
               name: '合同管理',
               url: '/contract/manage/contract',
               icon: 'iconNone',
@@ -172,8 +169,7 @@ export default {
         {
           name: '未分类',
           icon: 'iconNone',
-          children: [
-            {
+          children: [{
               name: '下单',
               url: '/orderPurchase',
               icon: 'iconNone',

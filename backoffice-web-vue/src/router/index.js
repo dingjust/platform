@@ -136,6 +136,10 @@ const router = new Router({
             path: 'production-progress',
             name: '生产进度报表',
             component: () => import( /* webpackChunkName: 'reports' */ '@/views/report/production-progress/ProductionProgressReportPage')
+          }, {
+            path: 'receipt',
+            name: '收货单报表',
+            component: () => import( /* webpackChunkName: 'reports' */ '@/views/report/receipt/ReceiptReportPage')
           }]
         },
         {
