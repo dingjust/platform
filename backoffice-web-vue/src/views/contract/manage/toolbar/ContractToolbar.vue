@@ -1,7 +1,7 @@
 <template>
   <div>
   <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog">
-    <contract-type @onSearch="onSearch" @closeContractTypeDialog="onCloseDialog"/>
+    <contract-type @onSearch="onSearch" @closeContractTypeDialog="onCloseDialog" @openPreviewPdf="openPreviewPdf"/>
   </el-dialog>
   <el-form :inline="true">
     <el-form-item>
@@ -78,8 +78,11 @@
         this.ordercode = '';
         this.type = '';
       },
-      onCloseDialog(){
+      onCloseDialog () {
         this.dialogVisible = false;
+      },
+      openPreviewPdf(val, code) {
+        this.$emit('openPreviewPdf', val, code)
       }
     },
     data () {

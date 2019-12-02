@@ -8,7 +8,9 @@
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
-      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect"
+                     :tempFormVisible="tempFormVisible"
+                     v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
       <contract-order-select :page="orderPage" @onSearchOrder="onSearchOrder"
@@ -187,7 +189,6 @@
         } else {
           this.tempType = 'WTSCHT';
         }
-
         this.dialogTemplateVisible = true;
       },
       async onSearchOrder (page, size) {
@@ -307,7 +308,16 @@
         }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');
@@ -378,7 +388,16 @@
         }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');
@@ -471,6 +490,17 @@
       },
       contractTemplateSelect () {
         this.$refs.contractTemplateSelect.onSearchTemp();
+      },
+      async getContract (code) {
+        var url = this.apis().getContractDetail(code);
+        const result = await http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.thisContract = result.data;
+        console.log(result);
+        console.log(this.thisContract);
       }
     },
     data () {

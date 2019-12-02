@@ -67,9 +67,9 @@
           <!--<el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
         </el-col>
         <el-col :span="4" :offset="2">
-          <el-button v-if="contractType == '1'" class="create-contract-button" @click="onSave">生成合同</el-button>
+          <el-button type="text" v-if="contractType == '1'" class="create-contract-button" @click="onSave">生成合同</el-button>
 
-          <el-button v-else class="create-contract-button" @click="onSavePdf">生成合同</el-button>
+          <el-button type="text" v-else class="create-contract-button" @click="onSavePdf">生成合同</el-button>
         </el-col>
       </el-row>
     </div>
@@ -98,7 +98,6 @@
   );
 
   export default {
-    name: 'ContractSupplementForm',
     props: ['slotData'],
     components: {
       ContractTypeSelect,
@@ -187,10 +186,10 @@
           this.$message.error('请上传PDF文件');
           return;
         }
-        if (this.suppliers.uid == null || this.suppliers.uid) {
-          this.$message.error('请选择合作商');
-          return;
-        }
+        // if (this.suppliers.uid == null || this.suppliers.uid) {
+        //   this.$message.error('请选择合作商');
+        //   return;
+        // }
 
         let data = {
           'pdf': this.pdfFile,
@@ -205,8 +204,8 @@
         const result = await http.post(url, formData);
 
         this.$message.success(result.msg);
-        Bus.$emit('closeContractFrom');
-        Bus.$emit('closeDialogOrderVisible');
+        // Bus.$emit('closeContractFrom');
+        // Bus.$emit('closeDialogOrderVisible');
 
         console.log(result);
 
@@ -291,6 +290,9 @@
         // this.form.companyOfSeller = val.name;
         // this.form.contactPersonOfSeller = val.contactPerson;
         // this.form.contactOfSeller = val.contactPhone;
+      },
+      turnTempFormVisible () {
+        this.tempFormVisible = !this.tempFormVisible;
       },
       contractTemplateSelect () {
         this.$refs.contractTemplateSelect.onSearchTemp();
