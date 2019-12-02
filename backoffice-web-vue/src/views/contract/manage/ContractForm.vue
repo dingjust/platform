@@ -292,7 +292,7 @@
           'title': '',
           'customizeCode': this.contractCode,
           'agreementType': agreementType,
-          'orderCodes': this.orderSelectFiles
+          'orderCodes': this.orderSelectFiles.map((order) => order.code)
         }
 
         const url = this.apis().saveContract();
@@ -365,6 +365,7 @@
           'frameAgreementCode': frameAgreementCode,
           'orderCodes': this.orderSelectFiles.map((order) => order.code)
         }
+        console.log(data);
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);

@@ -1,5 +1,10 @@
 <template>
   <div class="animated fadeIn content">
+    <el-dialog :visible.sync="sizeDetailsPageVisible" width="80%" class="purchase-dialog" append-to-body>
+      <size-details-page v-if="sizeDetailsPageVisible" :slot-data="itemData"
+                         @sizeDetailsPageVisibleTurn="sizeDetailsPageVisibleTurn"
+                          @onSearch="onSearch"/>
+    </el-dialog>
     <el-card>
       <size-toolbar @onNew="onNew" @onSearch="onSearch"/>
       <size-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
@@ -19,42 +24,53 @@
   export default {
     name: 'SizePage',
     components: {
+      SizeDetailsPage,
       SizeToolbar,
       SizeList
     },
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword',
+        keyword: 'keyword'
       })
     },
     methods: {
       ...mapActions({
-        search: 'search',
+        search: 'search'
       }),
-      onSearch(page, size) {
+      onSearch (page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getSizes();
+        const url = this.apis().getSizesSearch();
         this.search({url, keyword, page, size});
       },
-      async onDetails(item) {
-        const url = this.apis().getSize(item.code);
+      async onDetails (item) {
+        const url = this.apis().getSizeSearch(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-
-        this.fn.openSlider('尺码：' + item.name, SizeDetailsPage, result);
+        this.itemData = Object.assign({}, result);
+        this.sizeDetailsPageVisible = !this.sizeDetailsPageVisible;
+        // this.fn.openSlider('尺码：' + item.name, SizeDetailsPage, result);
       },
-      onNew(formData) {
-        this.fn.openSlider('创建尺码', SizeDetailsPage, formData);
+      onNew (formData) {
+        this.itemData = Object.assign({}, formData);
+        this.sizeDetailsPageVisible = !this.sizeDetailsPageVisible;
+        // this.fn.openSlider('创建尺码', SizeDetailsPage, formData);
       },
+      sizeDetailsPageVisibleTurn () {
+        this.sizeDetailsPageVisible = !this.sizeDetailsPageVisible;
+      }
     },
-    data() {
-      return {};
+    data () {
+      return {
+        sizeDetailsPageVisible: false,
+        itemData: '',
+        result: ''
+      };
     },
-    created() {
+    created () {
       this.onSearch();
     }
   };
