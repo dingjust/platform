@@ -98,7 +98,8 @@
             <td>{{sizeArray[0].color}}</td>
             <template v-for="(size,index) in sizeArray">
               <td style="width:80px">
-                <el-input class="order-table-input" type="number" v-model="size.quantity"></el-input>
+                <el-input class="order-table-input" type="number" v-model="size.quantity" @mousewheel.native.prevent>
+                </el-input>
               </td>
             </template>
             <td style="width:100px">{{countRowAmount(rowIndex)}}</td>
@@ -207,7 +208,8 @@
           this.slotData.deliveryOrders != null &&
           this.slotData.deliveryOrders.length != 0
         ) {
-          return this.slotData.deliveryOrders[0].status == "UNCOMMITTED"||this.slotData.deliveryOrders[0].status == 'REJECTED';
+          return this.slotData.deliveryOrders[0].status == "UNCOMMITTED" || this.slotData.deliveryOrders[0].status ==
+            'REJECTED';
         } else {
           return true;
         }

@@ -12,7 +12,7 @@ export default {
     {
       name: '首页',
       url: '/dashboard',
-      icon:'el-icon-s-home'
+      icon: 'el-icon-s-home'
     },
     {
       name: '订单',
@@ -43,7 +43,7 @@ export default {
     {
       name: '合同',
       url: '/contract',
-      icon:'el-icon-s-marketing',
+      icon: 'el-icon-s-marketing',
       children: [{
           name: '合同管理',
           url: '/manage',
@@ -113,26 +113,26 @@ export default {
       url: '/product',
       icon: 'el-icon-goods',
       children: [{
-        name: '产品管理',
-        url: '/product/apparel',
-        icon: 'iconNone',
-      },
-      {
-        name: '样衣管理',
-        url: '/product/sample/sampleProduct',
-        icon: 'iconNone',
-      },
-      // {
-      //   name: '样衣借还记录',
-      //   url: '/miscs/sample/sampleCheckoutHist',
-      //   icon: 'iconNone',
-      // }
-      {
-        name: '产能配置',
-        url: '/product/capacity',
-        icon: 'iconNone'
-      }
-    ]
+          name: '产品管理',
+          url: '/product/apparel',
+          icon: 'iconNone',
+        },
+        {
+          name: '样衣管理',
+          url: '/product/sample/sampleProduct',
+          icon: 'iconNone',
+        },
+        // {
+        //   name: '样衣借还记录',
+        //   url: '/miscs/sample/sampleCheckoutHist',
+        //   icon: 'iconNone',
+        // }
+        {
+          name: '产能配置',
+          url: '/product/capacity',
+          icon: 'iconNone'
+        }
+      ]
     },
     {
       name: '公司',
@@ -186,17 +186,31 @@ export default {
         },
       ]
     },
+    // {
+    //   name: '报表',
+    //   url: '/report',
+    //   icon: 'el-icon-s-data',
+    //   children: [{
+    //       name: '生产进度',
+    //       url: '/report/production-progress',
+    //       icon: 'iconNone',
+    //     },
+    //     {
+    //       name: '收货单',
+    //       url: '/report/receipt',
+    //       icon: 'iconNone',
+    //     },
+    //   ]
+    // },
     {
       name: '其他',
       url: '/miscs',
-      icon:'el-icon-coin',
-      children: [
-        {
-          name: '钱包',
-          url: '/miscs/wallet',
-          icon: 'iconNone',
-        }
-      ]
+      icon: 'el-icon-coin',
+      children: [{
+        name: '钱包',
+        url: '/miscs/wallet',
+        icon: 'iconNone',
+      }]
     }
   ]
 }

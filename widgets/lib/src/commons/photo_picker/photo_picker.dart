@@ -36,10 +36,9 @@ class PhotoPicker extends StatefulWidget {
 }
 
 class _PhotoPickerState extends State<PhotoPicker> {
-
   @override
   void initState() {
-    if(widget.images == null) widget.images = [];
+    if (widget.images == null) widget.images = [];
 
     // TODO: implement initState
     super.initState();
@@ -191,9 +190,30 @@ class _PhotoPickerState extends State<PhotoPicker> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-            child: PhotoView(
-          imageProvider: FileImage(file),
+        return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                PhotoView(
+                  imageProvider: FileImage(file),
+                  onTapUp: (context, detail, val) {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
         ));
       },
     );

@@ -6,15 +6,13 @@ import 'package:models/models.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:services/services.dart';
 
-class MyAuthenticationResult extends StatefulWidget{
-
+class MyAuthenticationResult extends StatefulWidget {
   @override
   _MyAuthenticationResultState createState() => _MyAuthenticationResultState();
 }
 
-class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
+class _MyAuthenticationResultState extends State<MyAuthenticationResult> {
   var _futureBuilderFuture;
-
 
   @override
   void initState() {
@@ -22,7 +20,6 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
 
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +34,19 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
               AsyncSnapshot<CertificationInfo> snapshot) {
             if (snapshot.data != null) {
               return Container(
-                  child:Column(
+                  child: Column(
                 children: <Widget>[
                   _buildName(snapshot.data.data),
                   _buildIdCard(snapshot.data.data),
                 ],
-                  )
-              );
+                  ));
             } else {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
-          }, initialData: null,
+          },
+          initialData: null,
           future: _futureBuilderFuture,
         ),
         bottomNavigationBar: Container(
@@ -68,24 +65,26 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
             ),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5))),
-            onPressed: (){
+            onPressed: () {
               Navigator.push(
-                context,MaterialPageRoute(builder: (context) => AuthenticationPersonFromPage()),
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AuthenticationPersonFromPage()),
               );
             },
           ),
-        )
-    );
+        ));
   }
 
   Future<CertificationInfo> _getData() async {
     // 查询明细
-    CertificationInfo model = await ContractRepository().getAuthenticationInfo();
+    CertificationInfo model =
+    await ContractRepository().getAuthenticationInfo();
 
     return model;
   }
 
-  Widget _buildName(AuthenticationInfoModel authenticationModel){
+  Widget _buildName(AuthenticationInfoModel authenticationModel) {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
@@ -107,7 +106,7 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
     );
   }
 
-  Widget _buildIdCard(AuthenticationInfoModel authenticationModel){
+  Widget _buildIdCard(AuthenticationInfoModel authenticationModel) {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
@@ -129,7 +128,7 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
     );
   }
 
-  Widget _buildPhone(){
+  Widget _buildPhone() {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
@@ -151,19 +150,24 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
     );
   }
 
-  Widget _buildCertificates(){
-   return GestureDetector(
-     onTap: (){
-       onPreview(context, 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg');
-     },
-     child: Container(
-       margin: EdgeInsets.symmetric(vertical: 20),
+  Widget _buildCertificates() {
+    return GestureDetector(
+      onTap: () {
+        onPreview(context,
+            'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg');
+      },
+      child: Container(
+          margin: EdgeInsets.symmetric(vertical: 20),
           child: CachedNetworkImage(
-              imageUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg',
+              imageUrl:
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg',
               fit: BoxFit.cover,
               imageBuilder: (context, imageProvider) =>
                   Container(
-                    width: MediaQuery.of(context).size.width-100,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width - 100,
                     height: 200,
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -188,9 +192,8 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
           )),
-   );
+    );
   }
-
 
   //图片预览
   void onPreview(BuildContext context, String url) {
@@ -198,17 +201,32 @@ class _MyAuthenticationResultState extends State<MyAuthenticationResult>{
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return GestureDetector(
-          child: Container(
-              child: PhotoView(
-                imageProvider: NetworkImage(url),
-              )),
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-        );
+        return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                PhotoView(
+                  imageProvider: NetworkImage(url),
+                  onTapUp: (context, detail, val) {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            ));
       },
     );
   }
-
 }

@@ -8,12 +8,14 @@
     <el-row :gutter="10" type="flex" align="center">
       <el-col :span="9" class="product-form-row">
         <el-form-item class="product-form-item" :rules="[
-                { required: true, message: '请输入打样费', trigger: 'blur'}]" :prop="currentUser.type=='FACTORY'?'proofingFee':''">
+                { required: true, message: '请输入打样费', trigger: 'blur'}]"
+          :prop="currentUser.type=='FACTORY'?'proofingFee':''">
           <el-row type="flex" align="middle" justify="start">
             <div style="width:80px">
               <h6 class="info-input-prepend">打样费：</h6>
             </div>
-            <el-input placeholder="请输入打样费" v-model="slotData.proofingFee" type="number" size="mini">
+            <el-input placeholder="请输入打样费" v-model="slotData.proofingFee" type="number" size="mini"
+              @mousewheel.native.prevent :min="0">
             </el-input>
             <div style="width:230px">
               <h6 class="info-title_text-sub_warning">（卖家承担运费）</h6>
@@ -74,7 +76,8 @@
     <el-row :gutter="20" type="flex" align="center">
       <el-col :span="5" class="product-form-row">
         <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入产量', trigger: 'blur'}]" :prop="currentUser.type=='FACTORY'?'basicProduction':''">
+                { required: true, message: '请输入产量', trigger: 'blur'}]"
+          :prop="currentUser.type=='FACTORY'?'basicProduction':''">
           <el-row type="flex" align="middle">
             <div style="width:100px">
               <h6 class="info-input-prepend" style="width:100px">基础生产量:</h6>
@@ -86,7 +89,8 @@
       </el-col>
       <el-col :span="5" class="product-form-row">
         <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入价格', trigger: 'blur' ,type: 'number'}]" :prop="currentUser.type=='FACTORY'?'productionDays':''">
+                { required: true, message: '请输入价格', trigger: 'blur' ,type: 'number'}]"
+          :prop="currentUser.type=='FACTORY'?'productionDays':''">
           <el-row type="flex" align="middle">
             <div style="width:85px">
               <h6 class="info-input-prepend">生产天数：</h6>
@@ -98,7 +102,8 @@
       </el-col>
       <el-col :span="7" class="product-form-row">
         <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入生产增量', trigger: 'blur'}]" :prop="currentUser.type=='FACTORY'?'productionIncrement':''">
+                { required: true, message: '请输入生产增量', trigger: 'blur'}]"
+          :prop="currentUser.type=='FACTORY'?'productionIncrement':''">
           <el-row type="flex" align="middle">
             <div style="width:150px">
               <h6 class="info-input-prepend" style="width:150px">生产增量（数量/天）：</h6>

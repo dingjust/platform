@@ -36,11 +36,20 @@ const COMMON_APIS = {
   createColor() {
     return '/b2b/colors/create';
   },
+  updateColor(code) {
+    return '/b2b/colors/update/' + code;
+  },
   getColors() {
     return '/b2b/colors';
   },
+  getColorsSearch() {
+    return '/b2b/colors/search';
+  },
   getColor(code) {
     return '/b2b/colors/' + code;
+  },
+  getColorSearch(code) {
+    return '/b2b/colors/search/' + code;
   },
   getAllColors() {
     return '/b2b/colors/all';
@@ -48,11 +57,20 @@ const COMMON_APIS = {
   createSize() {
     return '/b2b/sizes/create';
   },
+  updateSize(code) {
+    return '/b2b/sizes/update/' + code;
+  },
   getSizes() {
     return '/b2b/sizes';
   },
+  getSizesSearch() {
+    return '/b2b/sizes/search';
+  },
   getSize(code) {
     return '/b2b/sizes/' + code;
+  },
+  getSizeSearch(code) {
+    return '/b2b/sizes/search/' + code;
   },
   getAllSizes() {
     return '/b2b/sizes/all';
@@ -245,6 +263,9 @@ const COMMON_APIS = {
   },
   getCategories() {
     return '/b2b/categories/categories';
+  },
+  getCategory(code) {
+    return '/b2b/categories/category/' + code;
   },
   createCategories() {
     return '/b2b/categories';
@@ -524,6 +545,18 @@ const COMMON_APIS = {
   capacitySave() {
     return 'b2b/factory/capacity/save';
   },
+  ///创建生产进度单据
+  createProductionProgressOrder(id){
+    return 'b2b/orders/purchase/progress/'+id+'/order';
+  },
+  ///作废生产进度单据
+  deleteProductionProgressOrder(id,orderId){
+    return  'b2b/orders/purchase/progress/'+id+'/order/'+orderId;
+  },
+  ///修改生产进度单据
+  updateProductionProgressOrder(id,orderId){
+    return  'b2b/orders/purchase/progress/'+id+'/order/'+orderId;
+  }
 };
 
 let TENANT_APIS = {

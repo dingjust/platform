@@ -1,9 +1,8 @@
 <template>
   <div class="animated fadeIn">
-    <size-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
-    <div class="pt-2"></div>
+<!--    <div class="pt-2"></div>-->
     <size-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"/>
-    <div class="pt-2"></div>
+<!--    <div class="pt-2"></div>-->
     <size-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel"/>
   </div>
 </template>
@@ -24,15 +23,20 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      onSubmit() {
+      onSubmit () {
         if (this.$refs['form'].validate()) {
-          this._onSubmit();
+          if (this.isNewlyCreated) {
+            this._onSubmit();
+          } else {
+            this._updateSize();
+          }
         }
       },
-      onCancel() {
-        this.fn.closeSlider();
+      onCancel () {
+        // this.fn.closeSlider();
+        this.$emit('sizeDetailsPageVisibleTurn');
       },
-      async _onSubmit() {
+      async _onSubmit () {
         let formData = this.slotData;
 
         const url = this.apis().createSize();
@@ -45,7 +49,26 @@
         this.$message.success('尺码创建成功');
         this.$set(this.slotData, 'code', result);
         this.refresh(this.apis().getSizes());
-        this.fn.closeSlider(true);
+        // this.fn.closeSlider(true);
+        this.$emit('onSearch');
+        this.$emit('sizeDetailsPageVisibleTurn');
+      },
+      async _updateSize () {
+        let formData = this.slotData;
+
+        const url = this.apis().updateSize(formData.code);
+        const result = await this.$http.put(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$message.success('尺码修改成功');
+        this.$set(this.slotData, 'code', result);
+        this.refresh(this.apis().getSizes());
+        // this.fn.closeSlider(true);
+        this.$emit('onSearch')
+        this.$emit('sizeDetailsPageVisibleTurn');
       }
     },
     computed: {
@@ -53,7 +76,7 @@
         return this.slotData.id === null;
       }
     },
-    data() {
+    data () {
       return {}
     }
   }

@@ -5,7 +5,10 @@
       <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
       <el-divider direction="vertical"></el-divider>
       <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange"/>
+      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
+    </el-dialog>
+    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
       <contract-order-select v-if="dialogOrderVisible" :page="orderPage" @onSearchOrder="onSearchOrder"
@@ -272,6 +275,10 @@
             this.$message.error('请选择订单');
             return;
           }
+          if (this.selectContract == null || this.selectContract == undefined) {
+            this.$message.error('请选择框架协议');
+            return;
+          }
           if (this.pdfFile.id == null || this.pdfFile.id == '') {
             this.$message.error('请先上传PDF文件');
             return;
@@ -308,7 +315,16 @@
           }
 
           if (result.data != null && result.data != '') {
-            Bus.$emit('openContract', result.data);
+            var url1 = this.apis().getContractDetail(result.data);
+            const result1 = await http.get(url1);
+            if (result1['errors']) {
+              this.$message.error(result1['errors'][0].message);
+              return;
+            }
+            this.thisContract = result1.data;
+            console.log(this.thisContract);
+
+            this.$emit('openPreviewPdf', this.thisContract, '');
           }
 
           this.$emit('onSearch');
@@ -326,6 +342,11 @@
             return;
           }
 
+          if (this.selectContract == null || this.selectContract == undefined) {
+            this.$message.error('请选择框架协议');
+            return;
+          }
+
           let bool = false;
           this.orderSelectFiles.forEach((file) => {
             if (file.status == 'PENDING_CONFIRM' || file.status == 'CANCELLED') {
@@ -333,7 +354,7 @@
               bool = true;
             }
           });
-          if(bool) return;
+          if (bool) return;
 
           if (this.selectFile.id == null || this.selectFile.id == '') {
             this.$message.error('请选择合同模板');
@@ -357,7 +378,6 @@
             }
           }
 
-
           let data = {
             'userTempCode': this.selectFile.code,
             'role': role,
@@ -377,8 +397,18 @@
           }
 
           if (result.data != null && result.data != '') {
-            Bus.$emit('openContract', result.data);
+            var url1 = this.apis().getContractDetail(result.data);
+            const result1 = await http.get(url1);
+            if (result1['errors']) {
+              this.$message.error(result1['errors'][0].message);
+              return;
+            }
+            this.thisContract = result1.data;
+            console.log(this.thisContract);
+
+            this.$emit('openPreviewPdf', this.thisContract, '');
           }
+
           this.$emit('onSearch');
           this.$emit('closeContractPurchaseFormDialog');
           this.$emit('closeContractTypeDialog');
@@ -395,10 +425,11 @@
           }
         },
         onCreateTemp () {
-          this.dialogTemplateVisible = false;
+          // this.dialogTemplateVisible = false;
           this.fn.closeSlider(false);
           // this.$router.push("templateForm");
-          this.fn.openSlider('创建', TemplateForm);
+          // this.fn.openSlider('创建', TemplateForm);
+          this.tempFormVisible = true;
         },
         handlePreview (file) {
           this.dialogImageUrl = file.url;
@@ -464,6 +495,12 @@
             this.isOrderClickPass = true;
             return true;
           }
+        },
+        turnTempFormVisible () {
+          this.tempFormVisible = !this.tempFormVisible;
+        },
+        contractTemplateSelect () {
+          this.$refs.contractTemplateSelect.onSearchTemp();
         }
       },
       data () {
@@ -497,7 +534,8 @@
           dialogContractVisible: false,
           cacheSelectContract: '',
           contractCode: '',
-          isOrderClickPass: false
+          isOrderClickPass: false,
+          tempFormVisible: false
         };
       },
       created () {

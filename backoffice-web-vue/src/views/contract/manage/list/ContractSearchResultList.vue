@@ -1,13 +1,11 @@
 <template>
   <div class="animated fadeIn">
-    <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
+    <el-dialog :visible.sync="dialogSealVisible" class="purchase-dialog" :show-close="true">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%;height:720px;" append-to-body>
-      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
-    </el-dialog>
+
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <contract-supplement-form  :slotData="thisContract" />
+      <contract-supplement-form v-if="dialogOrderVisible" :slotData="thisContract" />
     </el-dialog>
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
               :height="autoHeight">
@@ -76,7 +74,7 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import ContractSealList from "../components/ContractSealList";
+  import ContractSealList from '../components/ContractSealList';
   import ContractPreviewPdf from '../components/ContractPreviewPdf'
   import Bus from '@/common/js/bus.js';
   import ContractSupplementForm from '../ContractSupplementForm'
@@ -86,11 +84,11 @@
   } = createNamespacedHelpers('ContractModule');
   const {mapGettersSeal, mapActionsSeal} = createNamespacedHelpers('ContractSealModule');
 
-  import ContractDetails from "../components/ContractDetails";
+  import ContractDetails from '../components/ContractDetails';
 
   export default {
     name: 'ContractSearchResultList',
-    props: ["page"],
+    props: ['page'],
     components: {
       ContractPreviewPdf,
       ContractDetails,
@@ -102,12 +100,12 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      handleFilterChange(val) {
+      handleFilterChange (val) {
         this.statuses = val.status;
 
         this.$emit('onSearch', 0);
       },
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.$store.state.ContractModule.isAdvancedSearch) {
@@ -117,7 +115,7 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.$store.state.ContractModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
@@ -125,15 +123,15 @@
 
         this.$emit('onSearch', val - 1);
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
+      onDetails (row) {
         this.$emit('onDetails', row);
       },
-      async onDownload(code){
+      async onDownload (code) {
         const url = this.apis().downContract(code);
         const result = await http.get(url);
 
@@ -141,9 +139,8 @@
         // window.location.href = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
 
         // window.location.href = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
-
       },
-      onConfirm() {
+      onConfirm () {
         this.$confirm('是否确认接单?', '接单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -152,117 +149,121 @@
           console.log('ffff');
         });
       },
-      async onRefuse(code){
+      async onRefuse (code) {
         const url = this.apis().refuseContract(code);
         const result = await this.$http.get(url);
         this.$message.error(result.msg);
       },
-      async onRevoke(code){
+      async onRevoke (code) {
         const url = this.apis().revokeContract(code);
         const result = await this.$http.get(url);
         this.$message.error(result.msg);
       },
-      async onSearchSeal(vel,keyword,page, size) {
-        if(vel != null){
+      async onSearchSeal (vel, keyword, page, size) {
+        if (vel != null) {
           this.contractCode = vel.code;
         }
 
-        if(keyword == null){
+        if (keyword == null) {
           keyword = '';
         }
         const url = this.apis().getSealsList();
-        const result = await this.$http.post(url,{
+        const result = await this.$http.post(url, {
           keyword: keyword
         }, {
           page: page,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.sealPage = result;
-        this.dialogSealVisible=true
+        this.dialogSealVisible = true
       },
-      async onSealSelectChange(data) {
+      async onSealSelectChange (data) {
         console.log(data);
         this.dialogSealVisible = false;
         const sealCode = data.code;
 
-        const url = this.apis().flowContract(this.thisContract.code,sealCode);
+        const url = this.apis().flowContract(this.thisContract.code, sealCode);
         const result = await http.get(url);
 
-        if(result.data !=  null){
+        if (result.data != null) {
           window.open(result.data, '_blank');
-        }else{
+        } else {
           this.$message.success(result.msg);
         }
       },
-      async previewPdf(val,code) {
-        this.thisContract = val;
-        let queryCode = '';
-        if(code != null && code !=''){
-          queryCode = code;
-        }else{
-          queryCode = val.code;
-        }
-        const url = this.apis().downContract(queryCode);
-        const result = await http.get(url);
-
-        const aa = '/b2b/user/agreement/download/' + result.data;
-
-        // const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
-        //
-        // const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
-        // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
-        this.pdfVisible = true;
-        this.fileUrl = encodeURIComponent(aa)
+      closePdfVisible () {
+        this.$emit('closePdfVisible');
       },
-      onBCXY(val){
+      async previewPdf (val, code) {
+        this.$emit('previewPdf',val,code);
+        // this.thisContract = val;
+        // console.log(this.thisContract);
+        // let queryCode = '';
+        // if (code != null && code != '') {
+        //   queryCode = code;
+        // } else {
+        //   queryCode = val.code;
+        // }
+        // const url = this.apis().downContract(queryCode);
+        // const result = await http.get(url);
+        //
+        // const aa = '/b2b/user/agreement/download/' + result.data;
+        //
+        // // const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // //
+        // // const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
+        // this.pdfVisible = true;
+        // this.fileUrl = encodeURIComponent(aa)
+      },
+      onBCXY (val) {
         this.thisContract = val;
         this.dialogOrderVisible = true;
-      },
+      }
     },
-    data() {
+    data () {
       return {
         statuses: this.$store.state.ContractModule.statuses,
         dialogTableVisible: false,
-        sealPage:[],
-        dialogSealVisible:false,
-        contractCode:'',
+        sealPage: [],
+        dialogSealVisible: false,
+        contractCode: '',
         pdfVisible: false,
         currentUser: this.$store.getters.currentUser,
-        fileUrl : '',
-        thisContract:'',
-        dialogOrderVisible:false
+        fileUrl: '',
+        thisContract: '',
+        dialogOrderVisible: false
       }
     },
-    created(){
+    created () {
       Bus.$on('openSeal', args => {
         this.onSearchSeal();
-        this.pdfVisible = false;
+        this.closePdfVisible();
         this.dialogSealVisible = true;
       });
       Bus.$on('openList', args => {
-        this.dialogSealVisible = true;
+        // this.dialogSealVisible = true;
       });
       Bus.$on('closePdfView', args => {
-        this.pdfVisible = false;
+        this.closePdfVisible();
       });
       Bus.$on('closeBCXYFrom', args => {
         this.dialogOrderVisible = false;
       });
       Bus.$on('openContract1', args => {
         this.dialogOrderVisible = false;
-        this.pdfVisible = false
-        this.previewPdf('',args);
+        this.closePdfVisible();
+        this.previewPdf('', args);
       });
       Bus.$on('closeSeal', args => {
         this.dialogSealVisible = false;
       });
     }
   }
-
 </script>
 <style>
   .el-table th {

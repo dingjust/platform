@@ -66,16 +66,18 @@
       ...mapGetters({
         page: "page",
         keyword: "keyword",
-        queryFormData: "queryFormData"
+        queryFormData: "queryFormData",
+        contentData:"detailData"
       })
     },
     methods: {
       ...mapActions({
         search: "search",
-        searchAdvanced: "searchAdvanced"
+        searchAdvanced: "searchAdvanced",        
       }),
       ...mapMutations({
-        setIsAdvancedSearch: "isAdvancedSearch"
+        setIsAdvancedSearch: "isAdvancedSearch",
+        setDetailData:'detailData'
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
@@ -106,10 +108,10 @@
       },
       handleClick(tab, event) {
         // console.log(tab.name);
-        this.queryFormData.statuses = [tab.name];
         if (tab.name == 'ALL') {
           this.onSearch("");
         } else {
+          this.queryFormData.statuses = [tab.name];
           this.onAdvancedSearch();
         }
       },
@@ -122,7 +124,8 @@
         }
 
         // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
-        this.contentData = result;
+        // this.contentData = result;
+        this.setDetailData(result);
         this.dialogDetailVisible = true;
       },
       onNew(formData) {
@@ -150,7 +153,7 @@
     data() {
       return {
         dialogDetailVisible: false,
-        contentData: {},
+        // contentData: {},
         formData: this.$store.state.PurchaseOrdersModule.formData,
         activeStatus: 'ALL',
         statues: [{

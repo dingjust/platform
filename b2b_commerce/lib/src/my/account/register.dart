@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/my/account/register_info.dart';
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -19,6 +20,10 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _captchaController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _againPasswordController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _contactPersonController = TextEditingController();
+  UserType userType;
 
   bool _isAgree = false;
   String _userType = "brand";
@@ -28,6 +33,8 @@ class _RegisterPageState extends State<RegisterPage> {
   bool validate = false;
   bool _isPasswordHide = true;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  bool _hasReadBrand = false;
+  bool _hasReadFactory = false;
 
   String phoneValidateStr = "";
 
@@ -83,14 +90,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     fit: StackFit.expand,
                     children: <Widget>[
                       _buildLogo(),
-                      Positioned(
-                        bottom: 5,
-                        left: 5,
-                        child: Text(
-                          '当前选择:${UserTypeLocalizedMap[UserBLoC.instance.currentUser.type]}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      )
+                      // Positioned(
+                      //   bottom: 5,
+                      //   left: 5,
+                      //   child: Text(
+                      //     '当前选择:${UserTypeLocalizedMap[UserBLoC.instance.currentUser.type]}',
+                      //     style: TextStyle(fontSize: 16),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -99,8 +106,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   delegate: SliverChildListDelegate(
                 [
                   _buildInputArea(),
+                  _buildProtocolArea(),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
+                    margin: EdgeInsets.only(bottom: 20),
                     child: RaisedButton(
                       onPressed: validate ? () => onNext(context) : null,
                       shape: RoundedRectangleBorder(
@@ -108,12 +117,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Color.fromRGBO(255, 214, 12, 1),
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Text(
-                        '下一步',
+                        '注册',
                         style: TextStyle(color: Colors.black, fontSize: 18),
                       ),
                     ),
                   ),
-                  _buildProtocolArea()
                 ],
               )),
             ],
@@ -130,20 +138,95 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildInputArea() {
     return Container(
-      margin: EdgeInsets.only(bottom: 50),
-      padding: const EdgeInsets.fromLTRB(10, 20.0, 10, 20),
+      padding: const EdgeInsets.fromLTRB(25, 20.0, 25, 20),
       child: Column(
         children: <Widget>[
-          InputRow(
-            // label: '手机号',
-            leading: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              // padding: EdgeInsets.only(top: 25),
-              child: Icon(
-                Icons.phone_iphone,
-                color: Colors.grey,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    userType = UserType.BRAND;
+                  });
+                },
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Radio(
+                        groupValue: userType,
+                        value: UserType.BRAND,
+                        onChanged: (val) {
+                          setState(() {
+                            userType = val;
+                          });
+                          if (!_hasReadBrand) {
+                            showSureMessage(context);
+                            _hasReadBrand = true;
+                          }
+                        },
+                      ),
+                      Text('${UserTypeLocalizedMap[UserType.BRAND]}'),
+                    ],
+                  ),
+                ),
               ),
-            ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    userType = UserType.FACTORY;
+                  });
+                },
+                child: Container(
+                  margin: EdgeInsets.only(left: 20),
+                  child: Row(
+                    children: <Widget>[
+                      Radio(
+                        groupValue: userType,
+                        value: UserType.FACTORY,
+                        onChanged: (val) {
+                          setState(() {
+                            userType = val;
+                          });
+                          if (!_hasReadFactory) {
+                            showSureMessage(context);
+                            _hasReadFactory = true;
+                          }
+                        },
+                      ),
+                      Text('${UserTypeLocalizedMap[UserType.FACTORY]}'),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+          GestureDetector(
+              onTap: () {
+                showMessage(context);
+              },
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: Text(
+                        '如何选择身份',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    Icon(
+                      B2BIcons.question,
+                      color: Colors.red,
+                      size: 18,
+                    ),
+                  ],
+                ),
+              )),
+          InputRow(
+            label: '账        号',
+            isRequired: true,
             field: TextField(
               autofocus: false,
               onChanged: (value) async {
@@ -155,8 +238,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 WhitelistingTextInputFormatter.digitsOnly,
               ],
               controller: _phoneController,
-              decoration:
-                  InputDecoration(hintText: '请输入', border: InputBorder.none),
+              decoration: InputDecoration(border: InputBorder.none),
             ),
             surfix: Container(
               child: Text(
@@ -166,13 +248,8 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           InputRow(
-            leading: Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: Icon(
-                Icons.sms,
-                color: Colors.grey,
-              ),
-            ),
+            label: '验  证  码',
+            isRequired: true,
             field: TextField(
               autofocus: false,
               onChanged: (value) {
@@ -184,8 +261,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 WhitelistingTextInputFormatter.digitsOnly,
               ],
               controller: _captchaController,
-              decoration:
-                  InputDecoration(hintText: '请输入', border: InputBorder.none),
+              decoration: InputDecoration(border: InputBorder.none),
             ),
             surfix: FlatButton(
               shape: RoundedRectangleBorder(
@@ -210,17 +286,8 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           InputRow(
-            leading: Container(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                child: Container(
-                  child: Icon(
-                    Icons.lock,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
+            label: '登录密码',
+            isRequired: true,
             field: TextField(
               autofocus: false,
               obscureText: _isPasswordHide,
@@ -228,8 +295,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 formValidate();
               },
               controller: _passwordController,
-              decoration:
-                  InputDecoration(hintText: '请输入', border: InputBorder.none),
+              decoration: InputDecoration(border: InputBorder.none),
             ),
             surfix: GestureDetector(
                 onTap: () {
@@ -262,7 +328,53 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               )
             ],
-          )
+          ),
+          InputRow(
+              label: '确认密码',
+              isRequired: true,
+              field: TextField(
+                autofocus: false,
+                obscureText: _isPasswordHide,
+                onChanged: (value) {
+                  formValidate();
+                },
+                controller: _againPasswordController,
+                decoration: InputDecoration(border: InputBorder.none),
+              ),
+              surfix:
+              _passwordController.text == _againPasswordController.text &&
+                  RegexUtil.password(_passwordController.text)
+                  ? Icon(
+                Icons.check_box,
+                color: Colors.green,
+              )
+                  : Icon(
+                Icons.check_box_outline_blank,
+                color: Colors.grey,
+              )),
+          InputRow(
+              label: '联  系  人',
+              isRequired: true,
+              field: TextField(
+                autofocus: false,
+                onChanged: (value) {
+                  formValidate();
+                },
+                controller: _contactPersonController,
+                decoration: InputDecoration(border: InputBorder.none),
+              )),
+          InputRow(
+            label: '公司名称',
+            isRequired: true,
+            field: TextField(
+              autofocus: false,
+              onChanged: (value) {
+                formValidate();
+              },
+              controller: _nameController,
+              decoration: InputDecoration(border: InputBorder.none),
+            ),
+          ),
         ],
       ),
     );
@@ -270,7 +382,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildProtocolArea() {
     return Container(
-        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
         child: Row(
           children: <Widget>[
             Checkbox(
@@ -374,6 +486,18 @@ class _RegisterPageState extends State<RegisterPage> {
       validate = _phoneController.text.trim().length > 0 &&
           _captchaController.text.trim().length > 0 &&
           _passwordController.text.trim().length > 0 &&
+          _againPasswordController.text
+              .trim()
+              .length > 0 &&
+          _nameController.text
+              .trim()
+              .length > 0 &&
+          _contactPersonController.text
+              .trim()
+              .length > 0 &&
+          _passwordController.text == _againPasswordController.text &&
+          RegexUtil.password(_passwordController.text) &&
+          userType != null &&
           _isAgree;
     });
   }
@@ -398,12 +522,12 @@ class _RegisterPageState extends State<RegisterPage> {
               );
             });
       } else {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                RegisterInfoPage(
-                  phone: _phoneController.text,
-                  password: _passwordController.text,
-                )));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => RegisterInfoPage(
+        //           phone: _phoneController.text,
+        //           password: _passwordController.text,
+        //         )));
+        onSubmit();
       }
     } else {
       showDialog(
@@ -421,6 +545,59 @@ class _RegisterPageState extends State<RegisterPage> {
           });
 //      (_scaffoldKey.currentState)
 //          .showSnackBar(SnackBar(content: Text('验证不正确')));
+    }
+  }
+
+  void onSubmit() async {
+    CompanyRegisterDTO form = CompanyRegisterDTO();
+    form
+      ..name = _nameController.text
+      ..contactPerson = _contactPersonController.text
+      ..contactPhone = _phoneController.text
+      ..mobileNumber = _phoneController.text
+      ..password = _passwordController.text;
+
+    // 加载条
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          ProgressIndicatorFactory.buildDefaultProgressIndicator(),
+    );
+
+    String response = await UserRepositoryImpl()
+        .register(type: UserTypeMap[userType], form: form);
+
+    if (response != null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                B2BLoginPage(
+                  snackBarMessage: '注册成功',
+                )),
+        ModalRoute.withName('/'),
+      );
+    } else {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (context) {
+          return AlertDialog(
+            title: Text('注册失败'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -493,96 +670,112 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
   }
-}
 
-class UserTypeEntry {
-  final String label;
-  final String value;
-  final Icon icon;
-
-  UserTypeEntry({this.label, this.value, this.icon});
-}
-
-class UserTypeSelector extends StatelessWidget {
-  const UserTypeSelector(
-      {Key key, @required this.value, this.userTypeEntries, this.onChanged})
-      : super(key: key);
-
-  final String value;
-  final List<UserTypeEntry> userTypeEntries;
-
-  final ValueChanged<String> onChanged;
-
-  void _handleTap(String v) {
-    onChanged(v);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> widgetList = userTypeEntries
-        .map((v) => GestureDetector(
-              onTap: () {
-                _handleTap(v.value);
-              },
-              child: Container(
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      child: v.icon,
+  void showMessage(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Center(
+                    child: Text(
+                      '如何选择用户身份类型',
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      v.label,
-                      style: TextStyle(
-                          color: v.value == value
-                              ? Color.fromRGBO(255, 214, 12, 1)
-                              : Colors.black54),
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ))
-        .toList();
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: widgetList,
+                RichText(
+                  text: TextSpan(
+                      text: '品牌商：',
+                      style: TextStyle(fontSize: 16, color: Colors.red),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:
+                            '服装品牌商、贴牌贸易商、设计工作室、批发档口、电商网红等，需要在钉单APP寻找优质工厂或者服装款式服务的企业或个人，选择“品牌商”注册。',
+                            style: TextStyle(color: Colors.black))
+                      ]),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child: RichText(
+                    text: TextSpan(
+                        text: '工 厂：',
+                        style: TextStyle(fontSize: 16, color: Colors.red),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text:
+                              '服装生产工厂，需要在钉单APP上寻找各类服装加工订单，管理生产进度的企业选择“工厂”注册。',
+                              style: TextStyle(color: Colors.black))
+                        ]),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  child: Text('我知道了'),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
-}
 
-class RegisterInput extends StatelessWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final String remind;
-  final bool validate;
-
-  const RegisterInput(
-      {Key key,
-      @required this.controller,
-      @required this.labelText,
-      @required this.remind,
-      this.validate = true})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-      child: TextFormField(
-          autofocus: false,
-          controller: controller,
-          decoration: InputDecoration(
-              labelText: labelText, hintText: '请输入', border: InputBorder.none),
-          // 校验用户名
-          validator: (v) {
-            if (validate) {
-              return v.trim().length > 0 ? null : remind;
-            } else {
-              return null;
-            }
-          }),
+  void showSureMessage(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 50),
+                  child: RichText(
+                    text: TextSpan(
+                        text: '您当前选择的是"',
+                        style: TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: '${UserTypeLocalizedMap[userType]}',
+                              style:
+                              TextStyle(fontSize: 16, color: Colors.red)),
+                          TextSpan(
+                            text: '" 身份注册，',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          TextSpan(
+                              text: '一经注册不能更改!',
+                              style:
+                              TextStyle(fontSize: 16, color: Colors.red)),
+                        ]),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  child: Text('我知道了'),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -26,10 +26,7 @@
           <h6 class="finance-form-text1">收款类型</h6>
           <div style="margin-left: 20px">
             <el-radio-group v-model="form.paymentType" size="mini" fill="#FFD60C">
-              <el-radio-button v-for="item in receiptTypes"
-                               :label="item.code"
-                               :key="item.code"
-                               :value="item.code">
+              <el-radio-button v-for="item in receiptTypes" :label="item.code" :key="item.code" :value="item.code">
                 {{item.name}}
               </el-radio-button>
             </el-radio-group>
@@ -39,23 +36,26 @@
       <el-col :span="8">
         <el-row type="flex" align="middle">
           <el-col :span="8">
-            <h6 class="finance-form-text1" >本次收款金额</h6>
+            <h6 class="finance-form-text1">本次收款金额</h6>
           </el-col>
           <el-col :span="16">
-            <el-input class="finance-form" v-model="form.amount" type="number" :min="0" ></el-input>
+            <el-input class="finance-form" v-model="form.amount" type="number" :min="0" @mousewheel.native.prevent>
+            </el-input>
           </el-col>
         </el-row>
       </el-col>
     </el-row>
     <el-row type="flex" align="middle" style="margin-bottom:5px;">
-      <el-col :span="4"><h6 class="finance-form-text1" >本次收款凭证</h6></el-col>
+      <el-col :span="4">
+        <h6 class="finance-form-text1">本次收款凭证</h6>
+      </el-col>
 
       <el-link class="finance-form-link" v-if="form.payCertificate!=''" :href="form.payCertificate.url" target="_blank">
         {{form.payCertificate.name}}</el-link>
-        <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" :show-file-list="false"
-                   :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers">
-          <el-button type="text" size="mini">点击上传</el-button>
-        </el-upload>
+      <el-upload name="file" :action="mediaUploadUrl" :data="uploadFormData" :show-file-list="false"
+        :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers">
+        <el-button type="text" size="mini">点击上传</el-button>
+      </el-upload>
     </el-row>
     <el-row type="flex" align="middle" :gutter="20">
       <el-col :span="16">
@@ -69,12 +69,12 @@
         </el-row>
       </el-col>
       <el-col :span="8">
-        <el-button class="finance-form-btn" @click="createReceiptOrder" >确认</el-button>
+        <el-button class="finance-form-btn" @click="createReceiptOrder">确认</el-button>
       </el-col>
     </el-row>
     <el-row>
       <purchase-order-info-receipt :slot-data="slotData" :receiptOrders="receiptOrders" @refreshItem="refreshItem"
-                                   @refreshData="refreshData()"/>
+        @refreshData="refreshData()" />
     </el-row>
   </div>
 </template>
@@ -97,7 +97,7 @@
       }
     },
     methods: {
-      onBeforeUpload (file) {
+      onBeforeUpload(file) {
         if (file.size > 1024 * 1024 * 10) {
           this.$message.error('上传的文件不允许超过10M');
           return false;
@@ -105,14 +105,14 @@
 
         return true;
       },
-      onSuccess (response) {
+      onSuccess(response) {
         this.form.payCertificate = response;
       },
-      handlePreview (file) {
+      handlePreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      async createReceiptOrder () {
+      async createReceiptOrder() {
         if (this.form.paymentType === '') {
           this.$message.error('请选择收款类型');
           return;
@@ -131,7 +131,8 @@
           }).then(() => {
             this.commit();
           });
-        }else if (this.form.paymentType === 'ALLPAID' && this.payPlanItem.remainingUnReceiptAmount > parseFloat(this.form.amount)) {
+        } else if (this.form.paymentType === 'ALLPAID' && this.payPlanItem.remainingUnReceiptAmount > parseFloat(this
+            .form.amount)) {
           this.$confirm('全部收款金额低于剩余收付金额', '是否确认创建收款单', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -143,7 +144,7 @@
           this.commit();
         }
       },
-      async commit () {
+      async commit() {
         if (this.form.payCertificate === '') {
           this.form.payCertificate = null;
         }
@@ -154,14 +155,14 @@
         this.$emit('clearFormData');
         this.$emit('refreshItem');
       },
-      async refreshItem () {
+      async refreshItem() {
         this.$emit('refreshItem');
       },
-      async refreshData () {
+      async refreshData() {
         this.$emit('refreshData');
       }
     },
-    data () {
+    data() {
       return {
         paymentTypes: this.$store.state.EnumsModule.PaymentType,
         receiptTypes: this.$store.state.EnumsModule.ReceiptType,
@@ -171,12 +172,13 @@
         }
       }
     },
-    created () {
+    created() {
 
     },
-    mounted () {}
+    mounted() {}
 
   }
+
 </script>
 <style>
   .finance-form-body {

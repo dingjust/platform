@@ -88,7 +88,7 @@
                   <td>{{color}}</td>
                   <template v-for="(size,index) in product.sizes">
                     <td style="width:80px">
-                      <el-input class="order-table-input" type="number"
+                      <el-input class="order-table-input" type="number" @mousewheel.native.prevent :min="0"
                         v-model="getVariant(color,size,product.variants).num">
                       </el-input>
                     </td>
@@ -183,7 +183,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-                  <el-divider></el-divider>
+              <el-divider></el-divider>
             </el-col>
           </el-row>
         </template>
@@ -502,35 +502,43 @@
       resultPreview: function () {
         var result;
         if (this.form.hasDeposit && this.form.periods == 2) {
-          result = '定金+2期尾款\n        定金：在双方' + this.form.deposit.event + '后，甲方应向乙方支付生效订单总金额的' + this.form.deposit.percent * 100 +
-            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.form.balance1.event + '后' + this.form.balance1.time +
+          result = '定金+2期尾款\n        定金：在双方' + this.form.deposit.event + '后，甲方应向乙方支付生效订单总金额的' + this.form.deposit
+            .percent * 100 +
+            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.form.balance1.event + '后' + this.form.balance1
+            .time +
             '日' + this.form.balance1.range + '支付合同总价的' + this.form.balance1.percent * 100 + '%。在产品入库并经甲方检验全部产品合格' +
             this.form.balance2.event + '后' +
             this.form.balance2.time + '日' + this.form.balance2.range +
             '未发现任何产品质量问题的，则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (this.form.hasDeposit && this.form.periods == 1) {
-          result = '定金+1期尾款\n        定金：在双方' + this.form.deposit.event + '后，甲方应向乙方支付生效订单总金额的' + this.form.deposit.percent * 100 +
-            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.form.balance1.event + '后' + this.form.balance1.time +
+          result = '定金+1期尾款\n        定金：在双方' + this.form.deposit.event + '后，甲方应向乙方支付生效订单总金额的' + this.form.deposit
+            .percent * 100 +
+            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.form.balance1.event + '后' + this.form.balance1
+            .time +
             '日' + this.form.balance1.range + '未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (!this.form.hasDeposit && this.form.periods == 1) {
-          result = '无定金1期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.form.balance1.event + '后' + this.form.balance1.time + '日' +
+          result = '无定金1期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.form.balance1.event + '后' + this.form
+            .balance1.time + '日' +
             this.form.balance1.range + '未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。'
         }
         if (!this.form.hasDeposit && this.form.periods == 2) {
-          result = '无定金2期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.form.balance1.event + '后' + this.form.balance1.time + '日' +
+          result = '无定金2期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.form.balance1.event + '后' + this.form
+            .balance1.time + '日' +
             this.form.balance1.range + '支付合同总价的' + this.form.balance1.percent * 100 + '%。在产品入库并经甲方检验全部产品合格' + this
             .form.balance2.event + '后' + this.form.balance2.time + '日' + this.form.balance2.range +
             '未发现任何产品质量问题的，则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (this.form.hasDeposit && this.form.periods == 3) {
-          result = '有定金+月结\n        定金：在双方' + this.form.deposit.event + '后，甲方应向乙方支付生效订单总金额的' + this.form.deposit.percent * 100 +
+          result = '有定金+月结\n        定金：在双方' + this.form.deposit.event + '后，甲方应向乙方支付生效订单总金额的' + this.form.deposit
+            .percent * 100 +
             '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.form.monthBalance +
             '完成的次月月底支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
         if (!this.form.hasDeposit && this.form.periods == 3) {
-          result = '无定金月结\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在'+this.form.monthBalance.event+'完成的次月月底支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
+          result = '无定金月结\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.form.monthBalance.event +
+            '完成的次月月底支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
         }
 
         return result;

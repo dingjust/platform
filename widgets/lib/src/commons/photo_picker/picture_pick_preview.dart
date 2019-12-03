@@ -55,13 +55,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
   String userType;
 
   final StreamController _streamController =
-      StreamController < double
-
-  >
-
-      .
-
-  broadcast();
+  StreamController<double>.broadcast();
 
   List<MediaModel> mediaList;
   @override
@@ -242,15 +236,31 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return GestureDetector(
-          child: Container(
-              child: PhotoView(
-                imageProvider: NetworkImage(url),
-              )),
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-        );
+        return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                PhotoView(
+                  imageProvider: NetworkImage(url),
+                  onTapUp: (context, detail, val) {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            ));
       },
     );
   }
@@ -309,6 +319,9 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
           return Container(
               child: PhotoView(
                 imageProvider: NetworkImage(url),
+                onTapUp: (context, detail, val) {
+                  Navigator.of(context).pop();
+                },
               ));
         },
       );

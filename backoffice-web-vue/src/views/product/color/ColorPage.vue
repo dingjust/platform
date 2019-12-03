@@ -1,5 +1,10 @@
 <template>
   <div class="animated fadeIn content">
+    <el-dialog :visible.sync="colorDetailsPageVisible" width="80%" class="purchase-dialog" append-to-body>
+      <color-details-page v-if="colorDetailsPageVisible" :slot-data="itemData"
+                          @colorDetailsPageVisibleTurn="colorDetailsPageVisibleTurn"
+                          @onSearch="onSearch"/>
+    </el-dialog>
     <el-card>
       <color-toolbar @onNew="onNew" @onSearch="onSearch"/>
       <color-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
@@ -19,42 +24,53 @@
   export default {
     name: 'ColorPage',
     components: {
+      ColorDetailsPage,
       ColorToolbar,
       ColorList
     },
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword',
+        keyword: 'keyword'
       })
     },
     methods: {
       ...mapActions({
-        search: 'search',
+        search: 'search'
       }),
-      onSearch(page, size) {
+      onSearch (page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getColors();
+        const url = this.apis().getColorsSearch();
         this.search({url, keyword, page, size});
       },
-      async onDetails(item) {
-        const url = this.apis().getColor(item.code);
+      async onDetails (item) {
+        const url = this.apis().getColorSearch(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-
-        this.fn.openSlider('颜色：' + item.name, ColorDetailsPage, result);
+        this.itemData = Object.assign({}, result);
+        this.colorDetailsPageVisible = true;
+        // this.fn.openSlider('颜色：' + item.name, ColorDetailsPage, result);
       },
-      onNew(formData) {
-        this.fn.openSlider('创建颜色', ColorDetailsPage, formData);
+      onNew (formData) {
+        this.itemData = Object.assign({}, formData);
+        this.colorDetailsPageVisible = true;
+        // this.fn.openSlider('创建颜色', ColorDetailsPage, formData);
       },
+      colorDetailsPageVisibleTurn () {
+        this.colorDetailsPageVisible = !this.colorDetailsPageVisible;
+      }
     },
-    data() {
-      return {};
+    data () {
+      return {
+        itemData: '',
+        colorDetailsPageVisible: false,
+        result: ''
+      };
     },
-    created() {
+    created () {
       this.onSearch();
     }
   };

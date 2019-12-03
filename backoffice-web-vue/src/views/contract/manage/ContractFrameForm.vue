@@ -4,7 +4,10 @@
         <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
         <el-divider direction="vertical"></el-divider>
         <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" />
+        <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
+    </el-dialog>
+    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
       <supplier-select @onSelect="onSuppliersSelect" />
@@ -74,7 +77,7 @@
       </el-row>
       <el-row class="create-contract-row" type="flex" justify="start">
         <el-col :push="2" :span="3">
-        <div style="margin-top: 20px;"><span class="tips">合同有效期</span></div>
+        <div style="margin-top: 5px;"><span class="tips">合同有效期</span></div>
         </el-col>
         <el-col :push="1" :span="8">
           <div>
@@ -259,7 +262,16 @@
         }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+            var url1 = this.apis().getContractDetail(result.data);
+            const result1 = await http.get(url1);
+            if (result1['errors']) {
+                this.$message.error(result1['errors'][0].message);
+                return;
+            }
+            this.thisContract = result1.data;
+            console.log(this.thisContract);
+
+            this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');
@@ -307,7 +319,16 @@
         }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+            var url1 = this.apis().getContractDetail(result.data);
+            const result1 = await http.get(url1);
+            if (result1['errors']) {
+                this.$message.error(result1['errors'][0].message);
+                return;
+            }
+            this.thisContract = result1.data;
+            console.log(this.thisContract);
+
+            this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');
@@ -326,10 +347,11 @@
         }
       },
       onCreateTemp () {
-        this.dialogTemplateVisible = false;
-        this.fn.closeSlider(false);
+        // this.dialogTemplateVisible = false;
+        // this.fn.closeSlider(false);
+        this.tempFormVisible = true;
         // this.$router.push("templateForm");
-        this.fn.openSlider('创建', TemplateForm);
+        // this.fn.openSlider('创建', TemplateForm);
       },
       handlePreview (file) {
         this.dialogImageUrl = file.url;
@@ -351,6 +373,12 @@
         // this.form.companyOfSeller = val.name;
         // this.form.contactPersonOfSeller = val.contactPerson;
         // this.form.contactOfSeller = val.contactPhone;
+      },
+      turnTempFormVisible () {
+        this.tempFormVisible = !this.tempFormVisible;
+      },
+      contractTemplateSelect () {
+        this.$refs.contractTemplateSelect.onSearchTemp();
       }
     },
     data () {
@@ -409,6 +437,7 @@
           }]
         },
         suppliersSelectVisible: false,
+        tempFormVisible: false,
         suppliers: ''
       };
     },
@@ -418,7 +447,7 @@
     }
   };
 </script>
-<style>
+<style scoped>
   .create-contract-title {
     font-weight: bold;
     font-size: 18px;
@@ -529,6 +558,7 @@
     border: 0px solid #FFD60C;
     margin-top: 10px;
     margin-left: 10px;
+    margin-bottom: 10px;
   }
 
   .tips {

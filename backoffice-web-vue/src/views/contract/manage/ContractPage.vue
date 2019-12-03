@@ -3,6 +3,9 @@
     <el-dialog :visible.sync="dialogTableVisible" width="80%">
       <contract-details  :slotData="contractData" />
     </el-dialog>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" class="purchase-dialog" append-to-body>
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @closePdfVisible="pdfVisible=false"/>
+    </el-dialog>
     <!--<div class="report">-->
       <!--<contract-report />-->
     <!--</div>-->
@@ -14,14 +17,14 @@
           </div>
         </el-col>
       </el-row>
-      <contract-toolbar :queryFormData="queryFormData" style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
+      <contract-toolbar @openPreviewPdf="openPreviewPdf" :queryFormData="queryFormData" style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="(item, index) in contractStatues">
           <el-tab-pane :name="item">
             <span slot="label">
               <tab-label-bubble :label="item" :num="index" />
             </span>
-            <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" />
+            <contract-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @closePdfVisible="pdfVisible = false" @previewPdf="openPreviewPdf"/>
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -47,12 +50,14 @@
   import ContractReport from './components/ContractReport';
   import ContractDetails from './components/ContractDetails';
   import TabLabelBubble from './components/TabLabelBubble';
+  import ContractPreviewPdf from "./components/ContractPreviewPdf";
 
   // import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
   export default {
     name: 'ContractPage',
     components: {
+        ContractPreviewPdf,
       ContractToolbar,
       ContractSearchResultList,
       ContractReport,
@@ -139,6 +144,27 @@
         if (name === '已作废') {
           return 'INVALID'
         }
+      },
+      async openPreviewPdf (val, code) {
+        this.thisContract = val;
+        console.log(this.thisContract);
+        let queryCode = '';
+        if (code != null && code != '') {
+          queryCode = code;
+        } else {
+          queryCode = val.code;
+        }
+        const url = this.apis().downContract(queryCode);
+        const result = await this.$http.get(url);
+
+        const aa = '/b2b/user/agreement/download/' + result.data;
+
+        // const aa = 'https://sc.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        //
+        // const aa = 'https://ht.nbyjy.net/b2b/user/agreement/download/' + result.data;
+        // window.open('/static/pdf/web/viewer.html?file=' + encodeURIComponent(aa))
+        this.pdfVisible = true;
+        this.fileUrl = encodeURIComponent(aa)
       }
     },
     data () {
@@ -147,7 +173,10 @@
         activeName: '全部',
         contractStatues: ['全部', '待我签署', '待他签署', '已签署', '已作废'],
         dialogTableVisible: false,
-        contractData: ''
+        contractData: '',
+        pdfVisible: false,
+        fileUrl: '',
+        thisContract: ''
       };
     },
     created () {

@@ -2,7 +2,7 @@
   <div class="animated fadeIn image-upload">
     <el-row :gutter="10">
       <el-col :span="24">
-        <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+        <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData" :disabled="disabled"
           :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
           :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
           :class="{disabled:uploadDisabled,picClass:picClass}">
@@ -31,6 +31,10 @@
       picClass: {
         type: Boolean,
         default: false
+      },
+      disabled:{
+        type:Boolean,
+        default:false
       }
     },
     methods: {

@@ -14,7 +14,7 @@
     <!--<el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"-->
     <!--:height="autoHeight">-->
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange" @row-click="clickRow">
       <el-table-column type="selection" width="55">
       </el-table-column>
       <el-table-column label="生产订单号" min-width="130">
@@ -110,14 +110,14 @@
 
   export default {
     name: 'ContractOrderSelect',
-    props: ["page"],
+    props: ['page'],
     components: {},
     computed: {},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
-      async handleFilterChange(val) {
+      async handleFilterChange (val) {
         this.statuses = val.status;
 
         // this.$emit('onSearchOrder','', 0,10);
@@ -128,35 +128,35 @@
           page: 0,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.page = result;
       },
-      async onPageSizeChanged(val) {
+      async onPageSizeChanged (val) {
         this._reset();
-        this.$emit('onSearchOrder',0,val);
+        this.$emit('onSearchOrder', 0, val);
       },
-      async onCurrentPageChanged(val) {
-        this.$emit('onSearchOrder',val-1);
+      async onCurrentPageChanged (val) {
+        this.$emit('onSearchOrder', val - 1);
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
+      onDetails (row) {
         this.$emit('onDetails', row);
       },
-      countTotalQuantity(entries) {
+      countTotalQuantity (entries) {
         let amount = 0;
         entries.forEach(element => {
           amount += element.quantity;
         });
         return amount;
       },
-      onSelected() {
+      onSelected () {
         // if (item.code == this.selectedItem.code) {
         //   //空选择
         //   this.selectedItem = {};
@@ -165,25 +165,28 @@
         // }
         this.$emit('onOrderSelectChange', this.selectedItems);
       },
-      handleSelectionChange(val) {
+      handleSelectionChange (val) {
         this.selectedItems = val;
       },
-      //选中行
-      handleCurrentChange(val) {
+      // 选中行
+      handleCurrentChange (val) {
         this.selectedItems = val;
       },
-      getPaymentStatusTag(row) {
+      getPaymentStatusTag (row) {
         return row.balancePaid ? 'static/img/paid.png' : 'static/img/arrears.png';
       },
-      getSignedTag(row) {
+      getSignedTag (row) {
         if (row.userAgreementIsSigned == null) {
           return 'static/img/not_signed.png';
         } else {
           return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
         }
       },
+      clickRow (row) {
+        this.$refs.resultTable.toggleRowSelection(row);
+      }
     },
-    data() {
+    data () {
       return {
         statuses: this.$store.state.PurchaseOrdersModule.statuses,
         selectedItems: [],
@@ -191,7 +194,6 @@
       }
     }
   }
-
 </script>
 <style>
   .purchase-list-button {

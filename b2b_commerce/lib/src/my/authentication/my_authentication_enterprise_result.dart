@@ -9,7 +9,7 @@ import 'package:widgets/widgets.dart';
 
 import 'authentication_enterprise_from.dart';
 
-class MyAuthenticationEnterpriseResult extends StatefulWidget{
+class MyAuthenticationEnterpriseResult extends StatefulWidget {
   bool isCompany;
   AuthenticationModel authenticationModel;
 
@@ -17,10 +17,12 @@ class MyAuthenticationEnterpriseResult extends StatefulWidget{
       {this.isCompany: false, this.authenticationModel});
 
   @override
-  _MyAuthenticationEnterpriseResultState createState() => _MyAuthenticationEnterpriseResultState();
+  _MyAuthenticationEnterpriseResultState createState() =>
+      _MyAuthenticationEnterpriseResultState();
 }
 
-class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnterpriseResult>{
+class _MyAuthenticationEnterpriseResultState
+    extends State<MyAuthenticationEnterpriseResult> {
   var _futureBuilderFuture;
 
   CertificationInfo certificationInfo;
@@ -34,7 +36,8 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
 
   Future<CertificationInfo> _getData() async {
     // 查询明细
-    CertificationInfo model = await ContractRepository().getAuthenticationInfoEnterprise();
+    CertificationInfo model =
+    await ContractRepository().getAuthenticationInfoEnterprise();
     certificationInfo = model;
 //    _getState();
     return model;
@@ -54,7 +57,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('${widget.isCompany?'企业认证':'个体户认证'}'),
+          title: Text('${widget.isCompany ? '企业认证' : '个体户认证'}'),
           centerTitle: true,
           elevation: 0.5,
         ),
@@ -63,19 +66,19 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
               AsyncSnapshot<CertificationInfo> snapshot) {
             if (snapshot.data != null) {
               return Container(
-                  child: widget.isCompany ? _buildEnterprise(snapshot.data.data)
-                      :_buildIndividualBusiness(snapshot.data.data)
-              );
+                  child: widget.isCompany
+                      ? _buildEnterprise(snapshot.data.data)
+                      : _buildIndividualBusiness(snapshot.data.data));
             } else {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
-          }, initialData: null,
+          },
+          initialData: null,
           future: _futureBuilderFuture,
         ),
-        bottomNavigationBar: _buildButton()
-    );
+        bottomNavigationBar: _buildButton());
   }
 
   Widget _buildButton() {
@@ -99,35 +102,36 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
               borderRadius: BorderRadius.all(Radius.circular(5))),
           onPressed: () {
             Navigator.push(
-              context, MaterialPageRoute(
-                builder: (context) => AuthenticationEnterpriseFromPage()),
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AuthenticationEnterpriseFromPage()),
             );
           },
         ),
       );
-    }else if(widget.authenticationModel.companyState ==
-        AuthenticationState.CHECK){
-            return Container(
-              color: Colors.white10,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              height: 50,
-              child: RaisedButton(
-                color: Colors.red,
-                child: Text(
-                  '继续认证',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                onPressed: () {
-                  keepOnAuthentication(certificationInfo.data);
-                },
-              ),
-            );
+    } else if (widget.authenticationModel.companyState ==
+        AuthenticationState.CHECK) {
+      return Container(
+        color: Colors.white10,
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        height: 50,
+        child: RaisedButton(
+          color: Colors.red,
+          child: Text(
+            '继续认证',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5))),
+          onPressed: () {
+            keepOnAuthentication(certificationInfo.data);
+          },
+        ),
+      );
     } else {
       Container();
     }
@@ -156,18 +160,16 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
 //    }
   }
 
-
-
   keepOnAuthentication(AuthenticationInfoModel model) {
     Map map = {
       'companyName': '${model.name}',
       'organization': model.organization,
       'role': '${model.agent != null ? '我是法人' : '我是代理人'}',
       'username': '${model.agent != null ? model.agent.name : ''}',
-      'idCardNum': '${model.agent != null ? (model.agent.idCardNum == null
-          ? ''
-          : model.agent.idCardNum) : (model.legal.idCardNum == null ? '' : model
-          .legal.idCardNum)}',
+      'idCardNum':
+      '${model.agent != null ? (model.agent.idCardNum == null ? '' : model.agent
+          .idCardNum) : (model.legal.idCardNum == null ? '' : model.legal
+          .idCardNum)}',
       'verifyWay': 'WAY1',
       'companyType': 'TYPE1'
     };
@@ -180,8 +182,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:
-            ContractRepository().enterpriseAuthentication(map),
+            requestCallBack: ContractRepository().enterpriseAuthentication(map),
             outsideDismiss: false,
             loadingText: '请稍候。。。',
             entrance: '',
@@ -191,8 +192,10 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
       if (certification != null) {
         if (certification.data != null) {
           Navigator.push(
-            context, MaterialPageRoute(builder: (context) =>
-              WebView111Page(urlString: certification.data)),
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    WebView111Page(urlString: certification.data)),
           );
         } else {
           showDialog(
@@ -227,7 +230,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     });
   }
 
-  Widget _buildIndividualBusiness(AuthenticationInfoModel model){
+  Widget _buildIndividualBusiness(AuthenticationInfoModel model) {
     return ListView(
       children: <Widget>[
         _buildInfo('公司名称', '${model.name}'),
@@ -241,13 +244,13 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildEnterprise(AuthenticationInfoModel model){
+  Widget _buildEnterprise(AuthenticationInfoModel model) {
     return ListView(
       children: <Widget>[
         _buildInfo('企业名称', '${model.name}'),
         _buildInfo('社会信用代码', '${model.organization}'),
         _buildInfo('法定代表人', '${model.agent != null ? model.agent.name : ''}'),
-        _buildInfo('我的身份', '${model.agent!=null? '我是法人':'我是代理人'}'),
+        _buildInfo('我的身份', '${model.agent != null ? '我是法人' : '我是代理人'}'),
         _buildInfo('我的姓名',
             '${model.agent != null ? (model.agent.name == null ? '' : model
                 .agent.name) : (model.legal.name == null ? '' : model.legal
@@ -264,11 +267,11 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildInfo(String left,String right){
+  Widget _buildInfo(String left, String right) {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
-      padding: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -294,7 +297,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildEnterpriseIdCard(){
+  Widget _buildEnterpriseIdCard() {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
@@ -316,7 +319,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildName(){
+  Widget _buildName() {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
@@ -338,7 +341,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildIdCard(){
+  Widget _buildIdCard() {
     return Container(
       color: Colors.white,
       margin: EdgeInsets.only(top: 5),
@@ -360,7 +363,7 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-  Widget _buildCertificates(){
+  Widget _buildCertificates() {
     return GestureDetector(
       onTap: () {
         onPreview(context,
@@ -369,11 +372,15 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
       child: Container(
           margin: EdgeInsets.symmetric(vertical: 20),
           child: CachedNetworkImage(
-              imageUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg',
+              imageUrl:
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564572398419&di=5f454cdb224a745763f902c3b2c7ece7&imgtype=0&src=http%3A%2F%2Fimg3.ph.126.net%2FUCMw7q9k63MQ5gGkZZeDBQ%3D%3D%2F2564518512827789673.jpg',
               fit: BoxFit.cover,
               imageBuilder: (context, imageProvider) =>
                   Container(
-                    width: MediaQuery.of(context).size.width-100,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width - 100,
                     height: 200,
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -401,24 +408,38 @@ class _MyAuthenticationEnterpriseResultState extends State<MyAuthenticationEnter
     );
   }
 
-
   //图片预览
   void onPreview(BuildContext context, String url) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return GestureDetector(
-          child: Container(
-              child: PhotoView(
-                imageProvider: NetworkImage(url),
-              )),
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-        );
+        return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                PhotoView(
+                  imageProvider: NetworkImage(url),
+                  onTapUp: (context, detail, val) {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            ));
       },
     );
   }
-
 }

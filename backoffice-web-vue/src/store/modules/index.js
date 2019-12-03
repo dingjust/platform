@@ -43,6 +43,9 @@ import ContractSealModule from './contract/contractSeal'
 // 产能
 import CapacityModule from './capacity/capacity'
 
+// 报表
+import ReceiptReportModule from './report/receipt'
+
 export {
   // shared
   EnumsModule,
@@ -83,5 +86,7 @@ export {
   ContractTemplateModule,
   ContractSealModule,
   //产能
-  CapacityModule
+  CapacityModule,
+  //报表
+  ReceiptReportModule
 }

@@ -1,12 +1,13 @@
 <template>
   <div>
-    <el-dialog :visible.sync="updateFormVisible" width="50%" class="purchase-dialog" append-to-body>
-      <order-progress-update-form :slotData="selectProgressModel" :orderCode="slotData.code"
-        @editSubmit="onEditSubmit" />
+    <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body>
+      <order-progress-update-form :slotData="selectProgressModel" :order="slotData" @callback="onCallback"
+        :readonly="readonly" v-if="hackSet" @editSubmit="onEditSubmit" />
     </el-dialog>
     <el-row type="flex" justify="space-between">
       <template v-for="(item,index) in slotData.progresses">
-        <el-col :span="5" class="progress-block" :key="index">
+        <el-col :span="5" :key="index" class="progress-block" @mouseenter.native="onShowButton(true,index)"
+          @mouseleave.native="onShowButton(false,index)">
           <el-row type="flex" justify="center" align="middle">
             <h6 class="progress-status">{{getEnum('productionProgressPhaseTypes', item.phase)}}</h6>
           </el-row>
@@ -17,7 +18,7 @@
                 :class="item.sequence<=currentSequence?'progress-icon-container':isDoing(index,slotData.progresses)?'progress-icon-container_doing':'progress-icon-container_none'">
                 <i class="iconfont2 progress-icon" v-html="phaseIcon[item.phase]"
                   v-if="!isDoing(index,slotData.progresses)"></i>
-                <h6 v-if="isDoing(index,slotData.progresses)" class="progress-icon-container_text">进行中</h6>
+                <h6 v-if="isDoing(index,slotData.progresses)" class="progress-icon-container_text">进行</h6>
               </div>
             </el-col>
             <div :class="getRightLine(index,slotData.progresses)" />
@@ -28,33 +29,36 @@
             </div>
             <div class="progress-line-horizon_none" />
           </el-row>
-          <el-row type="flex" justify="center" align="middle" v-if="item.medias!=null&&item.medias.length!=0">
+          <!-- <el-row type="flex" justify="center" align="middle" v-if="item.medias!=null&&item.medias.length!=0">
             <img class="progress-img" :src="item.medias[0].url">
-          </el-row>
+          </el-row> -->
           <el-row type="flex" justify="center" align="middle" class="progress-info-row" v-if="item.estimatedDate!=null">
             <el-col :span="19">
-              <h6 class="progress-info">完成日期: {{item.estimatedDate | timestampToTime}}</h6>
+              <h6 class="progress-info">预计完成日期: {{item.estimatedDate | timestampToTime}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="center" class="progress-info-row" align="middle" v-if="item.quantity!=null">
+          <el-row v-if="item.finishDate!=null" type="flex" justify="center" class="progress-info-row" align="middle">
             <el-col :span="19">
-              <h6 class="progress-info">完成数量: {{item.quantity}}</h6>
+              <h6 class="progress-info">实际完成日期: {{item.finishDate|timestampToTime}}</h6>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="center" class="progress-info-row" align="middle" v-if="item.remarks!=null">
+          <!-- <el-row type="flex" justify="center" class="progress-info-row" align="middle" v-if="item.remarks!=null">
             <el-col :span="19">
               <h6 class="progress-info">备注: {{item.remarks}}</h6>
             </el-col>
-          </el-row>
-          <el-row type="flex" justify="center" align="middle"
-            v-if="item.sequence>=currentSequence&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-            <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onEdit(item)">编辑</el-button>
-          </el-row>
-          <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
-            v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-            <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
-              {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
-          </el-row>
+          </el-row> -->
+          <div class="progress-block-modal" :style="getBlockStyle(index)" v-show="showButtonArray[index]">
+            <el-row type="flex" justify="center" align="middle" class="progress-block-modal-row">
+              <el-button type="primary" plain @click="onEdit(item)">{{judgeReadonly(item)?'查看':'编辑'}}</el-button>
+            </el-row>
+          </div>
+          <div style="height:20%;">
+            <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
+              v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
+              <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
+                {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
+            </el-row>
+          </div>
         </el-col>
       </template>
     </el-row>
@@ -62,6 +66,19 @@
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from "vuex";
+  import Bus from '@/common/js/bus.js';
+
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers(
+    "PurchaseOrdersModule"
+  );
+
   import OrderProgressUpdateForm from './OrderProgressUpdateForm';
 
   export default {
@@ -71,6 +88,9 @@
       OrderProgressUpdateForm
     },
     computed: {
+      ...mapGetters({
+        contentData: "detailData"
+      }),
       currentSequence: function () {
         var result = 0;
         this.slotData.progresses.forEach(element => {
@@ -82,6 +102,9 @@
       },
     },
     methods: {
+      ...mapActions({
+        refreshDetail: "refreshDetail",
+      }),
       ///判断左边线样式
       getLeftLine(index, data) {
         if (index == 0) {
@@ -119,6 +142,7 @@
         }
       },
       onEdit(item) {
+        this.readonly=this.judgeReadonly(item);
         this.selectProgressModel = item;
         this.selectProgressModel.updateOnly = true;
         this.updateFormVisible = !this.updateFormVisible;
@@ -153,10 +177,39 @@
           this.slotData.status = 'WAIT_FOR_OUT_OF_STORE';
         }
       },
+      onShowButton(value, index) {
+        this.$set(this.showButtonArray, index, value);
+      },
+      getShowVal(index) {
+        return this.showButtonArray[index];
+      },
+      getBlockStyle(index) {
+        var width = 100 / this.slotData.progresses.length;
+        return {
+          'width': width + '%',
+          'left': width * index + '%',
+        }
+      },
+      async onCallback() {
+        await this.refreshDetail();
+        this.contentData.progresses.forEach(item => {
+          if (item.id == this.selectProgressModel.id) {
+            this.selectProgressModel = item;
+          }
+        });
+      },
+      judgeReadonly(item) {
+        if (item.sequence >= this.currentSequence && this.slotData.status == 'IN_PRODUCTION' && this.isFactory()) {          
+          return false;
+        } else {          
+          return true;
+        }
+      }
     },
     data() {
       return {
         updateFormVisible: false,
+        hackSet: true,
         phaseIcon: {
           MATERIAL_PREPARATION: '&#xe675;',
           CUTTING: '&#xe677;',
@@ -165,10 +218,12 @@
           INSPECTION: '&#xe689;',
         },
         selectProgressModel: '',
+        showButtonArray: [],
+        readonly:false
       };
     },
     created() {
-
+      this.showButtonArray = this.slotData.progresses.map((val) => false);
     }
   };
 
@@ -280,8 +335,25 @@
     text-align: center;
   }
 
-  .progress-block:hover{
-    background-color: rgba(0, 0, 0, 0.35);
+  .progress-block {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+
+  .progress-block-modal {
+    position: absolute;
+    background-color: rgba(255, 214, 12, 0.35);
+    /* width: 100%; */
+    height: 80%;
+    /* left: 0px; */
+    top: 0px;
+    z-index: 2;
+  }
+
+  .progress-block-modal-row {
+    height: 100%;
+    width: 100%;
   }
 
 </style>

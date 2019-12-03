@@ -220,11 +220,13 @@ class CapacityCondition extends StatelessWidget {
 
   String generateAddressStr(CapacityMatchingState state) {
     String addressStr = '地区';
-    if (state.region != null) {
+    if (state.region != null && state.region.name != null) {
       addressStr = '${state.region.name}';
       if (state.city != null) {
         addressStr = '${state.region.name} ${state.city.name}';
       }
+    } else {
+      addressStr = '地区';
     }
     return addressStr;
   }

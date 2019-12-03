@@ -5,7 +5,12 @@
       <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
       <el-divider direction="vertical"></el-divider>
       <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange"/>
+      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
+    </el-dialog>
+    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect"
+                     :tempFormVisible="tempFormVisible"
+                     v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
       <contract-order-select :page="orderPage" @onSearchOrder="onSearchOrder"
@@ -184,7 +189,6 @@
         } else {
           this.tempType = 'WTSCHT';
         }
-
         this.dialogTemplateVisible = true;
       },
       async onSearchOrder (page, size) {
@@ -289,7 +293,7 @@
           'title': '',
           'customizeCode': this.contractCode,
           'agreementType': agreementType,
-          'orderCodes': this.orderSelectFiles
+          'orderCodes': this.orderSelectFiles.map((order) => order.code)
         }
 
         const url = this.apis().saveContract();
@@ -304,7 +308,16 @@
         }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');
@@ -362,6 +375,7 @@
           'frameAgreementCode': frameAgreementCode,
           'orderCodes': this.orderSelectFiles.map((order) => order.code)
         }
+        console.log(data);
         const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
@@ -374,7 +388,16 @@
         }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');
@@ -393,10 +416,11 @@
         }
       },
       onCreateTemp () {
-        this.dialogTemplateVisible = false;
+        // this.dialogTemplateVisible = false;
         this.fn.closeSlider(false);
         // this.$router.push("templateForm");
-        this.fn.openSlider('创建', TemplateForm);
+        // this.fn.openSlider('创建', TemplateForm);
+        this.tempFormVisible = true;
       },
       handlePreview (file) {
         this.dialogImageUrl = file.url;
@@ -460,6 +484,23 @@
         } else if (result.code === 1) {
           return true;
         }
+      },
+      turnTempFormVisible () {
+        this.tempFormVisible = !this.tempFormVisible;
+      },
+      contractTemplateSelect () {
+        this.$refs.contractTemplateSelect.onSearchTemp();
+      },
+      async getContract (code) {
+        var url = this.apis().getContractDetail(code);
+        const result = await http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.thisContract = result.data;
+        console.log(result);
+        console.log(this.thisContract);
       }
     },
     data () {
@@ -493,7 +534,8 @@
         dialogContractVisible: false,
         cacheSelectContract: '',
         contractCode: '',
-        isOrderClickPass: false
+        isOrderClickPass: false,
+        tempFormVisible: false
       };
     },
     created () {

@@ -6,17 +6,15 @@
       </div>
     </el-row>
     <div>
-      <el-form ref="requirementForm" :model="formData" :rules="rules" label-position="left" label-width="88px" hide-required-asterisk>
+      <el-form ref="requirementForm" :model="formData" :rules="rules" label-position="left" label-width="88px"
+        hide-required-asterisk>
         <el-form-item prop="details.majorCategory">
           <template slot="label">
             <h6 class="titleTextClass">选择类别<span style="color: red">*</span></h6>
           </template>
-          <el-tag
-            v-for="item of majorCategories"
-            class="elTagClass"
+          <el-tag v-for="item of majorCategories" class="elTagClass"
             :color="formData.details.majorCategory && formData.details.majorCategory.code === item.code ? '#FFD60C' : '#ffffff'"
-            @click="handleTagClick(item)"
-            size="medium">
+            @click="handleTagClick(item)" size="medium">
             {{item.name}}
           </el-tag>
         </el-form-item>
@@ -35,18 +33,9 @@
               <el-radio border :label="true">全国</el-radio>
               <el-radio border :label="false">自定义</el-radio>
             </el-radio-group>
-            <el-select
-              v-if="isCountryWide == false"
-              v-model="formData.details.productiveOrientations"
-              value-key="isocode"
-              multiple
-              placeholder="请选择"
-              style="width: 300px;margin-bottom: 7px">
-              <el-option
-                v-for="item in regions"
-                :key="item.isocode"
-                :label="item.name"
-                :value="item">
+            <el-select v-if="isCountryWide == false" v-model="formData.details.productiveOrientations"
+              value-key="isocode" multiple placeholder="请选择" style="width: 300px;margin-bottom: 7px">
+              <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
               </el-option>
             </el-select>
           </el-row>
@@ -55,7 +44,7 @@
           <template slot="label">
             <h6 class="titleTextClass">标题<span style="color: red">*</span></h6>
           </template>
-          <el-input v-model="formData.details.productName"  placeholder="请填写" style="width: 50%"></el-input>
+          <el-input v-model="formData.details.productName" placeholder="请填写" style="width: 50%"></el-input>
         </el-form-item>
         <el-row type="flex" :gutter="20">
           <el-col :span="8">
@@ -63,7 +52,8 @@
               <template slot="label">
                 <h6 class="titleTextClass">期望价格<span style="color: red">*</span></h6>
               </template>
-              <el-input :min="0" type="number" v-model.number="formData.details.maxExpectedPrice" placeholder="请填写" ></el-input>
+              <el-input :min="0" type="number" v-model.number="formData.details.maxExpectedPrice" placeholder="请填写"
+                @mousewheel.native.prevent></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -71,7 +61,8 @@
               <template slot="label">
                 <h6 class="titleTextClass">加工数量<span style="color: red">*</span></h6>
               </template>
-              <el-input :min="0" type="number" v-model.number="formData.details.expectedMachiningQuantity" placeholder="请填写" ></el-input>
+              <el-input :min="0" type="number" v-model.number="formData.details.expectedMachiningQuantity"
+                placeholder="请填写" @mousewheel.native.prevent></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -79,12 +70,8 @@
               <template slot="label">
                 <h6 class="titleTextClass">交货日期<span style="color: red">*</span></h6>
               </template>
-              <el-date-picker
-                v-model="formData.details.expectedDeliveryDate"
-                type="date"
-                style="width: 100%"
-                :picker-options="pickerOptions"
-                placeholder="选择日期">
+              <el-date-picker v-model="formData.details.expectedDeliveryDate" type="date" style="width: 100%"
+                :picker-options="pickerOptions" placeholder="选择日期">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -96,11 +83,7 @@
                 <h6 class="titleTextClass">销售市场<span style="color: red">*</span></h6>
               </template>
               <el-select v-model="formData.details.salesMarket" multiple placeholder="请选择" style="width: 100%">
-                <el-option
-                  v-for="item in salesMarkets"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code">
+                <el-option v-for="item in salesMarkets" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -110,7 +93,7 @@
               <template slot="label">
                 <h6 class="titleTextClass">联系人<span style="color: red">*</span></h6>
               </template>
-              <el-input v-model="formData.details.contactPerson" placeholder="请填写" ></el-input>
+              <el-input v-model="formData.details.contactPerson" placeholder="请填写"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -118,7 +101,7 @@
               <template slot="label">
                 <h6 class="titleTextClass">联系方式<span style="color: red">*</span></h6>
               </template>
-              <el-input v-model="formData.details.contactPhone" placeholder="请填写" ></el-input>
+              <el-input v-model="formData.details.contactPhone" placeholder="请填写"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -166,9 +149,7 @@
                 <el-radio label="PUBLIC">公开发布</el-radio>
                 <el-radio label="PRIVATE">私密发布</el-radio>
               </el-radio-group>
-              <el-button
-                v-if="formData.details.publishingMode == 'PRIVATE'"
-                :disabled="!isCreated"
+              <el-button v-if="formData.details.publishingMode == 'PRIVATE'" :disabled="!isCreated"
                 @click="publishingModeChanged">选择发布对象
               </el-button>
               <h6 v-if="formData.details.publishingMode == 'PRIVATE'" style="margin-left: 210px">
@@ -182,11 +163,7 @@
                 <h6 class="titleTextClass">有效期限</h6>
               </template>
               <el-select v-model="formData.details.effectiveDays" placeholder="请选择" style="width: 240px">
-                <el-option
-                  v-for="item in effectiveDays"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code">
+                <el-option v-for="item in effectiveDays" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -215,15 +192,10 @@
       </el-button>
     </el-row>
 
-    <el-dialog :visible.sync="dialogVisible" width="80%"  class="purchase-dialog" append-to-body>
-      <factory-cooperator-transfer-form
-        v-if="dialogVisible"
-        :selectFactories="selectFactories"
-        :selectCooperators="selectCooperators"
-        :selectUids="selectUids"
-        :selectCooperatorIds="selectCooperatorIds"
-        :selectFactoryUids="selectFactoryUids"
-        :selectPhoneNumbers="selectPhoneNumbers">
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body>
+      <factory-cooperator-transfer-form v-if="dialogVisible" :selectFactories="selectFactories"
+        :selectCooperators="selectCooperators" :selectUids="selectUids" :selectCooperatorIds="selectCooperatorIds"
+        :selectFactoryUids="selectFactoryUids" :selectPhoneNumbers="selectPhoneNumbers">
 
       </factory-cooperator-transfer-form>
     </el-dialog>
@@ -231,13 +203,19 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
   import CategorySelect from '../../../../components/custom/CategorySelect';
   import TemplateDetail from '../../../contract/template/detail/TemplateDetail';
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
   import FactoryCooperatorTransferForm from './FactoryCooperatorTransferForm';
 
-  const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
+  const {
+    mapGetters,
+    mapMutations,
+    mapActions
+  } = createNamespacedHelpers('RequirementOrdersModule');
 
   export default {
     name: 'RequirementOrderForm',
@@ -274,7 +252,7 @@
         clearFactoryQueryFormData: 'clearFactoryQueryFormData',
         clearCooperatorQueryFormData: 'clearCooperatorQueryFormData'
       }),
-      onSave () {
+      onSave() {
         this.$refs['requirementForm'].validate((valid) => {
           if (valid) {
             this.$confirm(this.isCreated ? '是否确认发布!' : '是否确认修改', '提示', {
@@ -304,7 +282,7 @@
           }
         });
       },
-      async getCategories () {
+      async getCategories() {
         const url = this.apis().getMajorCategories();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -314,7 +292,7 @@
 
         this.setMajorCategories(result);
       },
-      async getMinorCategories () {
+      async getMinorCategories() {
         const url = this.apis().getMinorCategories();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -324,11 +302,11 @@
 
         this.setCategories(result);
       },
-      handleTagClick (item) {
+      handleTagClick(item) {
         this.formData.details.majorCategory = item;
         // this.$refs['requirementForm'].validateField('details.majorCategory');
       },
-      async getRegions () {
+      async getRegions() {
         const url = this.apis().getRegions();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -338,7 +316,7 @@
 
         this.setRegions(result);
       },
-      radioChanged (val) {
+      radioChanged(val) {
         if (val) {
           // 'CN-10'代表全国
           this.formData.details.productiveOrientations = [{
@@ -349,10 +327,10 @@
         }
         this.$refs['requirementForm'].validateField('details.productiveOrientations');
       },
-      async publishingModeChanged () {
+      async publishingModeChanged() {
         this.dialogVisible = !this.dialogVisible;
       },
-      async getSelectUids () {
+      async getSelectUids() {
         if (!this.isCreated) {
           const url = this.apis().getRecommendFactories(this.formData.code);
           const result = await this.$http.get(url);
@@ -379,7 +357,7 @@
         this.$refs['requirementForm'].validateField('details.majorCategory');
       }
     },
-    data () {
+    data() {
       var checkCategory = (rule, value, callback) => {
         if (!value) {
           return callback(new Error('请选择品类'));
@@ -404,7 +382,7 @@
       return {
         selectDatas: [],
         pickerOptions: {
-          disabledDate (time) {
+          disabledDate(time) {
             var date = new Date();
             return time.getTime() < date;
           }
@@ -421,45 +399,67 @@
         selectFactories: [],
         selectCooperators: [],
         rules: {
-          'details.maxExpectedPrice': [
-            { required: true, message: '请填写期望价格', trigger: 'blur' }
-          ],
-          'details.productName': [
-            { required: true, message: '请填写标题', trigger: 'blur' }
-          ],
-          'details.expectedMachiningQuantity': [
-            { required: true, message: '请填写加工数量', trigger: 'blur' }
-          ],
-          'details.contactPerson': [
-            { required: true, message: '请填写联系人', trigger: 'blur' }
-          ],
-          'details.contactPhone': [
-            { required: true, message: '请填写联系方式', trigger: 'blur' }
-          ],
-          'details.expectedDeliveryDate': [
-            { type: 'date', required: true, message: '请选择交货日期', trigger: 'change' }
-          ],
-          'details.salesMarket': [
-            { required: true, message: '请选择销售市场', trigger: 'change' }
-          ],
-          'details.category': [
-            { type: 'object', validator: checkCategory, trigger: 'change' }
-          ],
-          'details.majorCategory': [
-            { type: 'object', validator: checkMajorCategory, trigger: 'change' }
-          ],
-          'details.productiveOrientations': [
-            { type: 'array', validator: checkProductiveOrientations, trigger: 'change' }
-          ]
+          'details.maxExpectedPrice': [{
+            required: true,
+            message: '请填写期望价格',
+            trigger: 'blur'
+          }],
+          'details.productName': [{
+            required: true,
+            message: '请填写标题',
+            trigger: 'blur'
+          }],
+          'details.expectedMachiningQuantity': [{
+            required: true,
+            message: '请填写加工数量',
+            trigger: 'blur'
+          }],
+          'details.contactPerson': [{
+            required: true,
+            message: '请填写联系人',
+            trigger: 'blur'
+          }],
+          'details.contactPhone': [{
+            required: true,
+            message: '请填写联系方式',
+            trigger: 'blur'
+          }],
+          'details.expectedDeliveryDate': [{
+            type: 'date',
+            required: true,
+            message: '请选择交货日期',
+            trigger: 'change'
+          }],
+          'details.salesMarket': [{
+            required: true,
+            message: '请选择销售市场',
+            trigger: 'change'
+          }],
+          'details.category': [{
+            type: 'object',
+            validator: checkCategory,
+            trigger: 'change'
+          }],
+          'details.majorCategory': [{
+            type: 'object',
+            validator: checkMajorCategory,
+            trigger: 'change'
+          }],
+          'details.productiveOrientations': [{
+            type: 'array',
+            validator: checkProductiveOrientations,
+            trigger: 'change'
+          }]
         }
       }
     },
-    created () {
+    created() {
       if (!this.isCreated) {
         if (this.formData.details.category != null) {
           this.selectDatas.push(this.formData.details.category);
         }
-        if (this.formData.details.productiveOrientations != null && this.formData.details.productiveOrientations.length > 0) {
+        if (this.formData.details.productiveOrientations != null && this.formData.details.productiveOrientations
+          .length > 0) {
           if (this.formData.details.productiveOrientations[0].isocode === 'CN-10') {
             this.isCountryWide = true;
           }
@@ -476,16 +476,18 @@
       }
       this.getSelectUids();
     },
-    destroyed () {
+    destroyed() {
       this.clearFormData();
     }
   }
+
 </script>
 
 <style scoped>
-  .rowClass{
-    margin-top:20px;
+  .rowClass {
+    margin-top: 20px;
   }
+
   .info-title {
     width: 100%;
     border-left: 2px solid #FFD60C;
@@ -504,7 +506,7 @@
     margin-bottom: 20px;
   }
 
-  .buttonClass{
+  .buttonClass {
     padding: 10px 120px 0px 120px;
     margin-top: 40px;
     background-color: #ffd60c;
@@ -512,21 +514,21 @@
     border-radius: 8px;
   }
 
-  .titleCardClass{
+  .titleCardClass {
     border-style: solid;
     border-width: 1px;
     border-top: white;
     border-color: #DCDCDC;
   }
 
-  .elTagClass{
+  .elTagClass {
     color: #0b0e0f;
     margin-right: 20px;
     margin-bottom: 10px;
-    cursor:pointer;
+    cursor: pointer;
   }
 
-  .titleTextClass{
+  .titleTextClass {
     text-align: justify;
     text-align-last: justify;
     display: inline-block;
@@ -534,7 +536,7 @@
     font-weight: bold;
   }
 
-  .contentTextClass{
+  .contentTextClass {
     color: #A9A9A9;
     font-weight: 400;
   }

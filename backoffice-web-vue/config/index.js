@@ -132,25 +132,25 @@ module.exports = {
     // },
     // proxyTable: {
     //   '/resource': {
-    //     target: 'http://192.168.31.177',
+    //     target: 'http://192.168.31.179',
     //     "secure": false,
     //   },
     //   '/medias': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/medias': 'djwebservices/medias'
     //     }
     //   },
     //   '/logout': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     "secure": false,
     //     pathRewrite: {
     //       '^/logout': 'djwebservices/logout'
     //     }
     //   },
     //   '/authorizationserver': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -158,7 +158,7 @@ module.exports = {
     //     }
     //   },
     //   '/b2b': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {
@@ -166,7 +166,7 @@ module.exports = {
     //     }
     //   },
     //   '/c2b': {
-    //     target: 'https://192.168.31.177:9002',
+    //     target: 'https://192.168.31.179:9002',
     //     changeOrigin: true,
     //     "secure": false,
     //     pathRewrite: {

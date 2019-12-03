@@ -32,13 +32,13 @@
         Object.assign(formData, this.formData);
 
         this.$emit('onNew', formData);
-      },
+      }
     },
     data() {
       return {
         keyword: '',
         formData: this.$store.state.ColorsModule.formData,
-        categories: [],
+        categories: []
       }
     }
   }

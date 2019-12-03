@@ -105,7 +105,8 @@
         <tr>
           <template v-for="(item,index) in sizes">
             <td style="width:80px">
-              <el-input class="order-table-input" type="number" v-model="sizesForm[rowIndex][index]" placeholder="输入">
+              <el-input class="order-table-input" type="number" v-model="sizesForm[rowIndex][index]" placeholder="输入"
+                @mousewheel.native.prevent>
               </el-input>
             </td>
           </template>
@@ -118,7 +119,7 @@
             </el-checkbox-group>
           </td>
           <td class="order-table-btn" style="border: 0px solid #ffffff;">
-            <el-button type="text"  @click="removeRow(rowIndex)" size="mini">删除</el-button>
+            <el-button type="text" @click="removeRow(rowIndex)" size="mini">删除</el-button>
           </td>
         </tr>
       </template>
@@ -238,7 +239,7 @@
         //添加颜色选择行
         this.colorSelect.splice(rowIndex, 1);
       },
-      onSubmit(){
+      onSubmit() {
 
       }
     },

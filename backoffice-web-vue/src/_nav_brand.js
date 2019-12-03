@@ -12,14 +12,13 @@ export default {
     {
       name: '首页',
       url: '/dashboard',
-      icon:'el-icon-s-home'
+      icon: 'el-icon-s-home'
     },
     {
       name: '订单',
       url: '/order',
       icon: 'el-icon-s-order',
-      children: [
-        {
+      children: [{
           name: '需求订单',
           url: '/order/requirement',
           icon: 'iconNone'
@@ -44,9 +43,8 @@ export default {
     {
       name: '合同',
       url: '/contract',
-      icon:'el-icon-s-marketing',
-      children: [
-        {
+      icon: 'el-icon-s-marketing',
+      children: [{
           name: '合同管理',
           url: '/manage',
           icon: 'iconNone',
@@ -82,8 +80,7 @@ export default {
       name: '产品',
       url: '/product',
       icon: 'el-icon-goods',
-      children: [
-        {
+      children: [{
           name: '产品管理',
           url: '/product/apparel',
           // icon: 'iconNone',
@@ -104,8 +101,7 @@ export default {
       name: '公司',
       url: '/account',
       icon: 'el-icon-office-building',
-      children: [
-        {
+      children: [{
           name: '认证中心',
           url: '/account/Authentication',
           icon: 'iconNone'
@@ -142,17 +138,31 @@ export default {
         }
       ]
     },
+    // {
+    //   name: '报表',
+    //   url: '/report',
+    //   icon: 'el-icon-s-data',
+    //   children: [{
+    //       name: '生产进度',
+    //       url: 'production-progress',
+    //       icon: 'iconNone',
+    //     },
+    //     {
+    //       name: '收货单',
+    //       url: 'receipt',
+    //       icon: 'iconNone',
+    //     },
+    //   ]
+    // },
     {
       name: '其他',
       url: '/miscs',
-      icon:'el-icon-coin',
-      children: [
-        {
-          name: '钱包',
-          url: '/miscs/wallet',
-          icon: 'iconNone',
-        }
-      ]
+      icon: 'el-icon-coin',
+      children: [{
+        name: '钱包',
+        url: '/miscs/wallet',
+        icon: 'iconNone',
+      }]
     }
   ]
 };
