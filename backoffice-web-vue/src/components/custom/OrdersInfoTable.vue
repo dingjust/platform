@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-table :data="showTable?colors:colors.slice(0,1)" border style="width: 100%">
-        <el-table-column label="颜色">
+        <el-table-column label="颜色" fixed="left">
           <template slot-scope="scope">
             <span>{{scope.row}}</span>
           </template>

@@ -7,7 +7,9 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="center">
       <el-col :span="3">
-        <img :src="slotData.product.thumbnail!=null&&slotData.product.thumbnail.length!=0?slotData.product.thumbnail.url:'static/img/nopicture.png'" class="info-detail-thumnail" />
+        <img
+          :src="slotData.product.thumbnail!=null&&slotData.product.thumbnail.length!=0?slotData.product.thumbnail.url:'static/img/nopicture.png'"
+          class="info-detail-thumnail" />
       </el-col>
       <el-col :span="21">
         <div>
@@ -31,14 +33,17 @@
               <orders-info-item :slotData="'交货日期'">{{slotData.expectedDeliveryDate | timestampToTime}}
               </orders-info-item>
             </el-col>
-            <el-col :span="6" :offset="1">
+            <el-col :span="4" :offset="1">
               <orders-info-item :slotData="'生产数量'">{{totalQuantity}}(件)</orders-info-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <orders-info-item :slotData="'生产总额'">￥{{this.slotData.totalPrice}}</orders-info-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <orders-info-item :slotData="'订单报价'">￥{{this.slotData.unitPrice}}</orders-info-item>
+            </el-col>
+            <el-col :span="4">
+              <orders-info-item :slotData="'款号'">{{this.slotData.product.skuID}}</orders-info-item>
             </el-col>
           </el-row>
           <el-row class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">
