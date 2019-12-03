@@ -285,11 +285,13 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 widget.contentText2 != ''
                                 ? Container(
                               margin: EdgeInsets.only(top: 10),
-                              child: Text(
-                                '${widget.contentText2}',
-                                style: widget.contentTextStyle2 != null
-                                    ? widget.contentTextStyle2
-                                    : null,
+                              child: Center(
+                                child: Text(
+                                  '${widget.contentText2}',
+                                  style: widget.contentTextStyle2 != null
+                                      ? widget.contentTextStyle2
+                                      : TextStyle(fontSize: 16),
+                                ),
                               ),
                             )
                                 : Container()

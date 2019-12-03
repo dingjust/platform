@@ -14,42 +14,41 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
+    now = now.add(Duration(days: 1));
 
     return GestureDetector(
-        child: Container(
-          child: ListTile(
-              leading: Wrap(
-                children: <Widget>[
-                  Text(
-                    '交货时间',
+        child: ListTile(
+            leading: Wrap(
+              children: <Widget>[
+                Text(
+                  '交货日期',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black
+                  ),
+                ),
+                Text(
+                    ' *',
                     style: TextStyle(
                         fontSize: 16,
-                        color: Colors.black
-                    ),
-                  ),
-                  Text(
-                      ' *',
+                        color: Colors.red)
+                ),
+              ],
+            ),
+            trailing: Container(
+                width: 150,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                      DateFormatUtil.formatYMD(
+                              widget.item.details?.expectedDeliveryDate) ??
+                          '选取',
                       style: TextStyle(
                           fontSize: 16,
-                          color: Colors.red)
-                  ),
-                ],
-              ),
-              trailing: Container(
-                  width: 150,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                        DateFormatUtil.formatYMD(
-                                widget.item.details?.expectedDeliveryDate) ??
-                            '选取',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey),
-                        overflow: TextOverflow.ellipsis),
-                  ))),
-        ),
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey),
+                      overflow: TextOverflow.ellipsis),
+                ))),
         onTap: () {
           showDatePicker(
             context: context,
@@ -58,7 +57,10 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
             lastDate: DateTime(2999),
           ).then((value) {
             setState(() {
-              widget.item.details?.expectedDeliveryDate = value;
+              if(value != null){
+                widget.item.details?.expectedDeliveryDate = value;
+              }
+
             });
           });
         });
