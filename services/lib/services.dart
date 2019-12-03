@@ -85,7 +85,7 @@ export 'src/user/district_repository_impl.dart';
 export 'src/user/invoice_title_repository_impl.dart';
 export 'src/user/region_repository.dart';
 export 'src/user/region_repository_impl.dart';
-export 'src/user/repository/cooperator_repository_impl.dart';
+export 'package:services/src/cooperator/repository/cooperator_repository_impl.dart';
 export 'src/user/repository/payplan_repository_impl.dart';
 export 'src/user/repository/reports_repository.dart';
 export 'src/user/response/address_response.dart';
@@ -99,8 +99,11 @@ export 'src/my/state/cash_products_state.dart';
 export 'src/my/state/my_factory_state.dart';
 export 'src/my/state/my_factory_capacity_state.dart';
 export 'src/my/state/my_contract_state.dart';
+export 'src/order/state/requirement_order_form_state.dart';
+export 'src/cooperator/state/cooperator_state.dart';
 
 export 'src/state/category_state.dart';
+export 'src/state/major_category_state.dart';
 export 'src/state/address_state.dart';
 export 'src/state/carrier_state.dart';
 

@@ -111,7 +111,7 @@ class _CooperatorSelectState extends State<CooperatorSelect> {
   }
 
   Future<CooperatorResponse> _getData() async {
-    CooperatorResponse response = await CooperatorRepositoryImpl().all();
+    CooperatorResponse response = await CooperatorRepositoryImpl().list();
     return response;
   }
 }
