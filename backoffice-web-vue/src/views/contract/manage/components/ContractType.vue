@@ -79,16 +79,19 @@
     </el-row>
     <el-dialog :visible.sync="contractFormDialogVisible" width="80%" class="purchase-dialog" append-to-body>
       <contract-form v-if="contractFormDialogVisible" @onSearch="onSearch"
+                     @openPreviewPdf="openPreviewPdf"
                      @closeContractFormDialog="closeContractFormDialog"
                      @closeContractTypeDialog="closeContractTypeDialog"/>
     </el-dialog>
     <el-dialog :visible.sync="contractFormPurchaseDialogVisible" width="80%" class="purchase-dialog" append-to-body>
       <contract-purchase-form v-if="contractFormPurchaseDialogVisible" @onSearch="onSearch"
+                              @openPreviewPdf="openPreviewPdf"
                               @closeContractPurchaseFormDialog="closeContractPurchaseFormDialog"
                               @closeContractTypeDialog="closeContractTypeDialog"/>
     </el-dialog>
     <el-dialog :visible.sync="contractFormFrameDialogVisible" width="80%" class="purchase-dialog" append-to-body>
       <contract-frame-form v-if="contractFormFrameDialogVisible" @onSearch="onSearch"
+                           @openPreviewPdf="openPreviewPdf"
                            @closeContractFrameFormDialog="closeContractFrameFormDialog"
                            @closeContractTypeDialog="closeContractTypeDialog"/>
     </el-dialog>
@@ -106,54 +109,57 @@
     name: 'ContractType',
     components: {ContractFrameForm, ContractPurchaseForm, ContractForm},
     methods: {
-      onSearch() {
+      onSearch () {
         this.$emit('onSearch', 0);
       },
-      onSelectOption(val) {
+      onSelectOption (val) {
         this.contractType = val;
       },
-      onCreateOrderContract() {
+      onCreateOrderContract () {
         this.contractType = '1';
         // Bus.$emit('openContractType');
         // this.fn.openSlider('创建', ContractForm, '');
         this.contractFormDialogVisible = !this.contractFormDialogVisible;
       },
-      closeContractFormDialog() {
+      closeContractFormDialog () {
         this.contractFormDialogVisible = false;
       },
-      closeContractPurchaseFormDialog() {
+      closeContractPurchaseFormDialog () {
         this.contractFormPurchaseDialogVisible = false;
       },
-      closeContractFrameFormDialog() {
+      closeContractFrameFormDialog () {
         this.contractFormFrameDialogVisible = false;
       },
-      onCreateSupplementContract() {
+      onCreateSupplementContract () {
         this.contractType = '2';
         // Bus.$emit('openContractType');
         // this.fn.openSlider('创建', ContractFrameForm, '');
         this.contractFormFrameDialogVisible = !this.contractFormFrameDialogVisible;
       },
-      onCreateFrameContract() {
+      onCreateFrameContract () {
         this.contractType = '3';
         Bus.$emit('openContractType');
         this.fn.openSlider('创建', ContractSupplementForm, '');
       },
-      onCreatePurchaseContract() {
+      onCreatePurchaseContract () {
         this.contractType = '4';
         // Bus.$emit('openContractType');
         // this.fn.openSlider('创建', ContractPurchaseForm, '');
         this.contractFormPurchaseDialogVisible = !this.contractFormPurchaseDialogVisible;
       },
-      closeContractTypeDialog() {
+      closeContractTypeDialog () {
         this.$emit('closeContractTypeDialog');
-      }
+      },
       // onCreateSupplementContract(){
       //   this.contractType='3';
       //   Bus.$emit('openContractType');
       //   this.fn.openSlider('创建', ContractSupplementForm, '');
       // },
+      openPreviewPdf(val, code) {
+        this.$emit('openPreviewPdf', val, code)
+      }
     },
-    data() {
+    data () {
       return {
         contractFormDialogVisible: false,
         contractFormPurchaseDialogVisible: false,

@@ -262,7 +262,16 @@
         }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+            var url1 = this.apis().getContractDetail(result.data);
+            const result1 = await http.get(url1);
+            if (result1['errors']) {
+                this.$message.error(result1['errors'][0].message);
+                return;
+            }
+            this.thisContract = result1.data;
+            console.log(this.thisContract);
+
+            this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');
@@ -310,7 +319,16 @@
         }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract', result.data);
+            var url1 = this.apis().getContractDetail(result.data);
+            const result1 = await http.get(url1);
+            if (result1['errors']) {
+                this.$message.error(result1['errors'][0].message);
+                return;
+            }
+            this.thisContract = result1.data;
+            console.log(this.thisContract);
+
+            this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');

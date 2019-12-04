@@ -54,6 +54,8 @@ class GlobalConfigs {
 
   static const CONTRACT_HISTORY_KEYWORD_KEY = 'contract_history_keyword_key';
 
+  static const COOPERATOR_SELECT_HISTORY_KEYWORD_KEY = 'cooperator_select_history_keyword_key';
+
   /// grant types
   static const GRANT_TYPE_PASSWORD = 'password';
   static const GRANT_TYPE_CLIENT_CREDENTIALS = 'client_credentials';

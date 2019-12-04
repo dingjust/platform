@@ -44,7 +44,9 @@ class ContactWayFieldState extends State<ContactWayField>{
                 ),
               ],
             ),
-            trailing: Text(
+            trailing: widget.item.details?.contactPerson == null && widget.item.details?.contactPhone == null ?
+            Icon(Icons.chevron_right,color: Colors.black,) :
+            Text(
               formatContactWayText(),
               style: TextStyle(
                   fontSize: 16,

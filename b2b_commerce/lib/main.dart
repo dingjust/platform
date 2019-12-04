@@ -1,5 +1,6 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
@@ -56,6 +57,9 @@ void main() async {
           ),
           Provider(
             builder: (_) => CategoryState(),
+          ),
+          Provider(
+            builder: (_) => MajorCategoryState(),
           ),
           Provider(
             builder: (_) => CarrierState(),
@@ -168,9 +172,17 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            RequirementOrderFrom(
-              isCreate: true,
-              order: requirementOrderModel,
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  builder: (_) => RequirementOrderFormState(),
+                ),
+              ],
+              child: Consumer(
+                builder:(context, RequirementOrderFormState state, _) => RequirementOrderFirstForm(
+                  formState: state,
+                ),
+              ),
             ),
       ),
     );

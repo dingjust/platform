@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:services/services.dart';
+
+///发货，收货单表单控件变量Mixins
+class RequirementFormMixin {
+  FocusNode productNameFocusNode;
+  TextEditingController productNameController;
+
+  FocusNode maxExpectedPriceFocusNode;
+  TextEditingController maxExpectedPriceController;
+
+  FocusNode expectedMachiningQuantityNode;
+  TextEditingController expectedMachiningQuantityController;
+
+//  FocusNode contactPersonFocusNode;
+//  TextEditingController contactPersonController;
+//
+//  FocusNode contactPhoneFocusNode;
+//  TextEditingController contactPhoneController;
+
+  FocusNode remarksFocusNode;
+  TextEditingController remarksController;
+
+  void initForm() {
+    productNameFocusNode = FocusNode();
+    productNameController = TextEditingController();
+
+    maxExpectedPriceFocusNode = FocusNode();
+    maxExpectedPriceController = TextEditingController();
+
+    expectedMachiningQuantityNode = FocusNode();
+    expectedMachiningQuantityController = TextEditingController();
+
+//    contactPersonFocusNode = FocusNode();
+//    contactPersonController = TextEditingController();
+//
+//    contactPhoneFocusNode = FocusNode();
+//    contactPhoneController = TextEditingController();
+
+    remarksFocusNode = FocusNode();
+    remarksController = TextEditingController();
+  }
+
+  void initCreate(RequirementOrderModel order) {
+    productNameController.text = order.details.productName;
+    maxExpectedPriceController.text = order.details.maxExpectedPrice?.toString();
+    expectedMachiningQuantityController.text = order.details.expectedMachiningQuantity?.toString();
+//    contactPersonController.text = order.details.contactPerson;
+//    contactPhoneController.text = order.details.contactPhone;
+    remarksController.text = order.remarks;
+  }
+
+}
