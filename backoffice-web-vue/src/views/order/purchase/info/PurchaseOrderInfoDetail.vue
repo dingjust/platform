@@ -14,36 +14,38 @@
       <el-col :span="21">
         <div>
           <el-row type="flex" align="center" class="info-detail-item_row">
-            <el-col :span="7">
-              <orders-info-item :slotData="'生产单号'">{{slotData.code}}</orders-info-item>
+            <orders-info-item :slotData="'产品名称'">{{slotData.product.name}}</orders-info-item>
+          </el-row>
+          <el-row type="flex" align="center" class="info-detail-item_row">
+            <el-col :span="6">
+              <orders-info-item :slotData="'产品货号'">{{slotData.product.skuID}}</orders-info-item>
             </el-col>
-            <el-col :span="6" :offset="1">
-              <orders-info-item :slotData="'生产产品'">{{slotData.product.name}}</orders-info-item>
+            <el-col :span="6">
+              <orders-info-item :slotData="'生产数量'">{{totalQuantity}}(件)</orders-info-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
+              <orders-info-item :slotData="'订单报价'">￥{{this.slotData.unitPrice}}</orders-info-item>
+            </el-col>
+            <el-col :span="6">
+              <orders-info-item :slotData="'生产总额'">￥{{this.slotData.totalPrice | numFilter}}</orders-info-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex" align="center" class="info-detail-item_row">
+            <el-col :span="6">
               <orders-info-item :slotData="'合作方式'">{{getEnum('machiningTypes', slotData.machiningType)}}
               </orders-info-item>
             </el-col>
             <el-col :span="6">
-              <orders-info-item :slotData="'是否开发票'">{{slotData.invoiceNeeded?'开发票':'不开发票'}}</orders-info-item>
+              <orders-info-item :slotData="'运费承担'">{{slotData.freightPayer=='PARTYA'?'甲方':'乙方'}}
+              </orders-info-item>
             </el-col>
-          </el-row>
-          <el-row type="flex" align="center" class="info-detail-item_row">
-            <el-col :span="7">
+            <el-col :span="6">
               <orders-info-item :slotData="'交货日期'">{{slotData.expectedDeliveryDate | timestampToTime}}
               </orders-info-item>
             </el-col>
-            <el-col :span="4" :offset="1">
-              <orders-info-item :slotData="'生产数量'">{{totalQuantity}}(件)</orders-info-item>
-            </el-col>
-            <el-col :span="4">
-              <orders-info-item :slotData="'生产总额'">￥{{this.slotData.totalPrice}}</orders-info-item>
-            </el-col>
-            <el-col :span="4">
-              <orders-info-item :slotData="'订单报价'">￥{{this.slotData.unitPrice}}</orders-info-item>
-            </el-col>
-            <el-col :span="4">
-              <orders-info-item :slotData="'款号'">{{this.slotData.product.skuID}}</orders-info-item>
+            <el-col :span="6">
+              <orders-info-item :slotData="'是否开发票'">
+                {{slotData.invoiceNeeded?('开发票'+slotData.invoiceTaxPoint*100+'%税点'):'不开发票'}}</orders-info-item>
             </el-col>
           </el-row>
           <el-row class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">

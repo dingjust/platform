@@ -430,3 +430,14 @@ export function numDiv(num1, num2) {
 export function floatFormat(num1, count) {
   return (Math.round(num1 * 100) / 100).toFixed(count);
 }
+
+export function numFilter(value) {
+  let realVal = ''
+  if (value) {
+    // 截取当前数据到小数点后两位
+    realVal = parseFloat(value).toFixed(2)
+  } else {
+    realVal = '--'
+  }
+  return realVal
+}

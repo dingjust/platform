@@ -15,6 +15,9 @@
     <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body>
       <purchase-order-info-reconciliation :slotData="slotData" />
     </el-dialog>
+    <el-row type="flex" justify="center">
+      <span>订单号：{{slotData.code}}</span>
+    </el-row>
     <el-row>
       <el-col :span="16">
         <purchase-order-info-main :slotData="slotData" />
