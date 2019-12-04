@@ -5,5 +5,5 @@ import 'package:services/src/user/response/cooperator_response.dart';
 ///合作商
 abstract class CooperatorRepository {
   /// 获取合作商
-  Future<CooperatorResponse> all();
+  Future<CooperatorResponse> list({Map<String,dynamic> data, Map<String,dynamic> params});
 }

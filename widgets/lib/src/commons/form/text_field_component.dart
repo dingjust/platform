@@ -140,14 +140,14 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   child: Wrap(
                     children: <Widget>[
                       widget.leadingText ?? Text(''),
-                      widget.isRequired ? Text(' *',style: TextStyle(fontSize: widget.leadingText.style.fontSize,color: Colors.red,)) : Text(''),
+                      widget.isRequired ? Text(' *',style: TextStyle(fontSize: widget.leadingText.style?.fontSize ?? 16,color: Colors.red,)) : Text(''),
                     ],
                   ),
                 ),
               ),
               Expanded(
                 child: TextField(
-                  style: widget.style ?? TextStyle(color: Colors.grey,fontSize: widget.leadingText == null ? 16 : widget.leadingText.style.fontSize,),
+                  style: widget.style ?? TextStyle(color: Colors.grey,fontSize: widget.leadingText?.style == null ? 16 : widget.leadingText.style.fontSize,),
                   controller: widget.controller,
                   keyboardType: widget.inputType ?? TextInputType.text,
                   decoration: InputDecoration(

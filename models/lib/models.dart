@@ -88,8 +88,11 @@ List<String> enumCodesToNames(List<String> codes, dynamic enumModels) {
 
 //格式选中的枚举（多选）
 String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,
-    int count) {
+    int count,{String customText}) {
   String text = '';
+  if(customText != null && (codes == null || codes.length == 0)){
+    return  customText;
+  }
 
   if (codes != null) {
     text = '';
@@ -447,8 +450,31 @@ const FactoryFreeProofingsEnum = [
   EnumModel('SUPPORTED', '支持'),
   EnumModel('NOT_SUPPORTED', '不支持')
 ];
+//销售市场
+const SalesMarketsEnum = [
+  EnumModel('A_CHAIN', '一线连锁'),
+  EnumModel('REGIONAL_CHAIN', '区域连锁'),
+  EnumModel('STALL_WHOLESALE', '档口批发'),
+  EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
+  EnumModel('WHOLESALE_TRADE', '外贸批发'),
+];
 
+//发布方式
+const PublishingModesEnum = [
+  EnumModel('PUBLIC', '公开发布'),
+  EnumModel('PRIVATE', '私有发布'),
+];
 
+//发布方式
+const EffectiveDaysEnum = [
+  EnumModel('7', '7天'),
+  EnumModel('15', '15天'),
+  EnumModel('30', '30天'),
+  EnumModel('90', '90天'),
+  EnumModel('-1', '长期有效'),
+];
+
+//质量等级
 const FactoryQualityLevelsEnum = [
   EnumModel('A_CHAIN', '一线连锁'),
   EnumModel('REGIONAL_CHAIN', '区域连锁'),

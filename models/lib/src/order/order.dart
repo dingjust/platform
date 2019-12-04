@@ -612,13 +612,22 @@ class RequirementInfoModel extends ItemModel {
   //产品的Code
   String productCode;
 
+  //销售市场
+  List<String> salesMarket;
+
+  //发布方式
+  String publishingMode;
+
+  //有效期限
+  int effectiveDays;
+
   RequirementInfoModel({
     this.expectedDeliveryDate,
     this.maxExpectedPrice,
     this.machiningType,
-    this.invoiceNeeded,
-    this.proofingNeeded,
-    this.samplesNeeded,
+    this.invoiceNeeded = false,
+    this.proofingNeeded = false,
+    this.samplesNeeded = false,
     this.pictures,
     this.contactPerson,
     this.contactPhone,
@@ -630,6 +639,9 @@ class RequirementInfoModel extends ItemModel {
     this.category,
     this.majorCategory,
     this.productCode,
+    this.salesMarket,
+    this.publishingMode,
+    this.effectiveDays,
   });
 
   factory RequirementInfoModel.fromJson(Map<String, dynamic> json) =>
