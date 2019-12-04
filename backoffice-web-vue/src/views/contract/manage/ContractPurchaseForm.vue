@@ -367,17 +367,16 @@
             role = 'PARTYB';
           }
           var frameAgreementCode = '';
-          if (this.hasFrameworkContract) {
-            this.agreementType = '';
-            if (this.selectContract.code == null || this.selectContract.code == '') {
-              return;
-            }
-
-            if (this.selectContract.code != null && this.selectContract.code != '') {
-              frameAgreementCode = this.selectContract.code;
-            }
+          console.log(this.selectContract);
+          this.agreementType = '';
+          if (this.selectContract.code == null || this.selectContract.code == '') {
+            return;
           }
 
+          if (this.selectContract.code != null && this.selectContract.code != '') {
+            frameAgreementCode = this.selectContract.code;
+          }
+          console.log(frameAgreementCode);
           let data = {
             'userTempCode': this.selectFile.code,
             'role': role,
