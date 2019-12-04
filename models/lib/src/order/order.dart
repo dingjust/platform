@@ -1277,6 +1277,10 @@ class ProductionProgressModel extends ItemModel {
 
   int delayedDays;
 
+  ///生产进度单据
+  @JsonKey(toJson: _productionProgressOrdersToJson)
+  List<ProductionProgressOrderModel> productionProgressOrders;
+
   ProductionProgressModel(
       {this.phase,
       this.quantity,
@@ -1303,6 +1307,12 @@ class ProductionProgressModel extends ItemModel {
 
   static Map<String, dynamic> _purchaseOrderToJson(PurchaseOrderModel model) =>
       PurchaseOrderModel.toJson(model);
+
+  static List<Map<String, dynamic>> _productionProgressOrdersToJson(
+      List<ProductionProgressOrderModel> models) =>
+      models
+          .map((model) => ProductionProgressOrderModel.toJson(model))
+          .toList();
 }
 
 //订单状态model，用于订单状态控件的List传入

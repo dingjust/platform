@@ -2,11 +2,19 @@ import 'package:intl/intl.dart';
 
 class DateFormatUtil {
   static String format(DateTime date) {
-    return DateFormat('yyyy-MM-dd HH:mm').format(date);
+    if (date != null) {
+      return DateFormat('yyyy-MM-dd HH:mm').format(date);
+    } else {
+      return '';
+    }
   }
 
   static String formatYMDHMS(DateTime date) {
-    return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+    if (date != null) {
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+    } else {
+      return '';
+    }
   }
 
   static String formatYMD(DateTime date) {
@@ -14,6 +22,8 @@ class DateFormatUtil {
     if (date != null) {
       text = DateFormat('yyyy-MM-dd').format(date);
       return text;
+    } else {
+      return '';
     }
   }
 
