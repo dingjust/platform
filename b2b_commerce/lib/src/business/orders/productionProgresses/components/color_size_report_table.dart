@@ -251,9 +251,9 @@ class _ColorSizeReportDataTableState extends State<ColorSizeReportDataTable> {
   ///计算格子宽度
   double generateColumnWidth(BoxConstraints boxConstraints) {
     if (widget.sizes.length < 5) {
-      return 0.9 * boxConstraints.maxWidth / widget.sizes.length;
+      return 0.8 * boxConstraints.maxWidth / widget.sizes.length;
     } else {
-      return 0.9 * boxConstraints.maxWidth / 6;
+      return 0.8 * boxConstraints.maxWidth / 8;
     }
   }
 
