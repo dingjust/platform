@@ -20,11 +20,22 @@
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
       <el-table-column label="生产单号" prop="orderCode">
         <template slot-scope="scope">
-          <template v-for="(code,index) in scope.row.orderCodes">
-            <el-row :key="index">
+          <div v-if="isShowMore(scope.row.orderCodes) && isMore">
+            <div v-for="(code,index) in scope.row.orderCodes">
+              <el-row v-if="index < 5" :key="index">
                 <span>{{code}}</span>
-            </el-row>
-          </template>
+              </el-row>
+            </div>
+            <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && isMore" @click="turnIsMore()">显示更多>></h6>
+          </div>
+          <div v-else>
+            <div v-for="(code,index) in scope.row.orderCodes">
+              <el-row :key="index">
+                <span>{{code}}</span>
+              </el-row>
+            </div>
+            <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && !isMore" @click="turnIsMore()">点击拉起>></h6>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="签署对象" prop="belongTo.name">
@@ -122,6 +133,9 @@
         }
 
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        })
       },
       _reset () {
         this.$refs.resultTable.clearSort();
@@ -199,7 +213,7 @@
         this.$emit('closePdfVisible');
       },
       async previewPdf (val, code) {
-        this.$emit('previewPdf',val,code);
+        this.$emit('previewPdf', val, code);
         // this.thisContract = val;
         // console.log(this.thisContract);
         // let queryCode = '';
@@ -223,6 +237,16 @@
       onBCXY (val) {
         this.thisContract = val;
         this.dialogOrderVisible = true;
+      },
+      isShowMore (codes) {
+        if (codes.length > 5) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      turnIsMore () {
+        this.isMore = !this.isMore;
       }
     },
     data () {
@@ -236,7 +260,8 @@
         currentUser: this.$store.getters.currentUser,
         fileUrl: '',
         thisContract: '',
-        dialogOrderVisible: false
+        dialogOrderVisible: false,
+        isMore: true
       }
     },
     created () {
