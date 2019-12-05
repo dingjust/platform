@@ -5,6 +5,7 @@ import 'package:core/core.dart';
 import 'package:widgets/widgets.dart';
 
 import 'components/progress_abbreviation_table.dart';
+import 'components/progress_full_table.dart';
 
 class ProductionProgressDetailPage extends StatefulWidget {
   final PurchaseOrderModel order;
@@ -20,6 +21,10 @@ class ProductionProgressDetailPage extends StatefulWidget {
 
 class _ProductionProgressDetailPageState
     extends State<ProductionProgressDetailPage> {
+  final GlobalKey globalKey = GlobalKey();
+  double tableWidth = 0;
+  double tableHeight = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,13 +82,66 @@ class _ProductionProgressDetailPageState
 
   Widget _buildTableBlock() {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        color: Colors.white,
-        child: ProgressAbbreviationTable(
-          entries: widget.order.entries,
-          productionProgressOrders: widget.progress.productionProgressOrders,
-        ));
+      margin: EdgeInsets.symmetric(vertical: 10),
+      color: Colors.white,
+      child: FlatButton(
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) =>
+                  ProgressFullTable(
+                    entries: widget.order.entries,
+                  )));
+        },
+        child: Container(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  key: globalKey,
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  child: ProgressAbbreviationTable(
+                    entries: widget.order.entries,
+                    productionProgressOrders:
+                    widget.progress.productionProgressOrders,
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: 5,
+                  child: Icon(
+                    Icons.loupe,
+                    size: 25,
+                    color: Colors.grey,
+                  ),
+                ),
+                // FutureBuilder<BuildContext>(
+                //   future: _getTableContext(),
+                //   builder:
+                //       (BuildContext context, AsyncSnapshot<BuildContext> snapshot) {
+                //     if (tableHeight == 0 && tableWidth == 0) {
+                //       _getTableContext();
+                //       return Container();
+                //     } else {
+                //       return Container(
+                //         width: tableWidth,
+                //         height: tableHeight,
+                //         color: Color.fromRGBO(0, 0, 0, 0.2),
+                //         child: Center(
+                //             child: FlatButton(
+                //           onPressed: () {},
+                //           child: Container(
+                //             color: Colors.white60,
+                //             padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                //             child: Text('编辑'),
+                //           ),
+                //         )),
+                //       );
+                //     }
+                //   },
+                // )
+              ],
+            )),
+      ),
+    );
   }
 
   Widget _buildMediasBlock() {
@@ -107,9 +165,9 @@ class _ProductionProgressDetailPageState
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) =>
                     Attachments(
-                  list: attachments,
-                  width: constraints.maxWidth,
-                ),
+                      list: attachments,
+                      width: constraints.maxWidth,
+                    ),
               ))
         ],
       ),
@@ -151,4 +209,16 @@ class _ProductionProgressDetailPageState
       ),
     );
   }
+
+// Future<BuildContext> _getTableContext() async {
+//   Future.delayed(Duration(milliseconds: 100)).then((e) {
+//     if (globalKey.currentContext == null) {
+//       return _getTableContext();
+//     } else {
+//       tableWidth = globalKey.currentContext.size.width;
+//       tableHeight = globalKey.currentContext.size.height;
+//       return globalKey.currentContext;
+//     }
+//   });
+// }
 }
