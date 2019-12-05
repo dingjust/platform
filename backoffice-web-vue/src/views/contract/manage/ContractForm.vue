@@ -191,7 +191,7 @@
         }
         this.dialogTemplateVisible = true;
       },
-      async onSearchOrder (page, size) {
+      async onSearchOrder (page, size, keyword) {
         var _page = 0;
         var _size = 10;
         if (page) {
@@ -202,7 +202,8 @@
         }
         const url = this.apis().getPurchaseOrders();
         const result = await this.$http.post(url, {
-          statuses: ['PENDING_PAYMENT', 'IN_PRODUCTION', 'WAIT_FOR_OUT_OF_STORE', 'OUT_OF_STORE', 'COMPLETED']
+          statuses: ['PENDING_PAYMENT', 'IN_PRODUCTION', 'WAIT_FOR_OUT_OF_STORE', 'OUT_OF_STORE', 'COMPLETED'],
+          keyword: keyword,
         }, {
           page: _page,
           size: _size
@@ -539,7 +540,7 @@
       };
     },
     created () {
-      this.onSearchOrder('', 0, 10);
+      this.onSearchOrder(0, 10);
       this.onSetOrderCode();
     },
     watch: {
