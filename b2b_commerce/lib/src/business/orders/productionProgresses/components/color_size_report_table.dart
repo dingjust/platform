@@ -6,6 +6,10 @@ class ColorSizeReportDataTable extends StatefulWidget {
 
   final List<ColorModel> colors;
 
+  final List<PurchaseOrderEntryModel> entries;
+
+  final List<ProductionProgressOrderModel> productionProgressOrders;
+
   final String index;
 
   final double cellWidthScale;
@@ -20,7 +24,9 @@ class ColorSizeReportDataTable extends StatefulWidget {
         this.textStyle,
         this.onChanged,
         this.sizes,
-        this.colors})
+        this.colors,
+        this.entries,
+        this.productionProgressOrders})
       : super(key: key);
 
   @override
@@ -33,7 +39,7 @@ class _ColorSizeReportDataTableState extends State<ColorSizeReportDataTable> {
   ScrollController bodyScrollController;
 
   List<String> columnsHeaderKeys;
-  List<TableCell> columnsHeaders = [];
+  List<DataColumn> columnsHeaders = [];
 
   @override
   void initState() {
@@ -45,8 +51,6 @@ class _ColorSizeReportDataTableState extends State<ColorSizeReportDataTable> {
       headerScrollController.jumpTo(bodyScrollController.offset);
     });
 
-    initColumnHeader();
-
     super.initState();
   }
 
@@ -55,108 +59,70 @@ class _ColorSizeReportDataTableState extends State<ColorSizeReportDataTable> {
     return Column(
       children: <Widget>[
         Table(
-          // border: TableBorder.all(color: Colors.grey, width: 0.5),
+          border: TableBorder.all(color: Colors.grey, width: 0.5),
           columnWidths: <int, TableColumnWidth>{
             0: FlexColumnWidth(0.1),
             1: FlexColumnWidth(0.9),
           },
           children: [
             TableRow(children: [
-              Table(
-                children: [
-                  TableRow(children: [
-                    TableCell(
-                        child: Container(
-                          width: 50,
-                          child: Center(
-                            child: Text(
-                              '${widget.index}',
-                              style: widget.textStyle,
-                            ),
-                          ),
-                        ))
-                  ])
+              DataTable(
+                columns: [
+                  DataColumn(
+                      label: Center(
+                        child: Text(
+                          '${widget.index}',
+                          style: widget.textStyle,
+                        ),
+                      ))
                 ],
+                rows: [],
               ),
-              SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  // dragStartBehavior: widget.dragStartBehavior,
-                  controller: headerScrollController,
-                  child: Container(
-                    // constraints: BoxConstraints.expand(),
-                    // width: 500,
-                    // width: double.infinity,
-                    child: Table(
-                      children: [
-                        TableRow(
-                            children: widget.sizes
-                                .map((size) =>
-                                TableCell(
-                                  child: Container(
-                                    width: 100,
-                                    child: Text(
-                                      '${size.name}',
-                                      style: widget.textStyle,
-                                    ),
-                                  ),
-                                ))
-                                .toList())
-                      ],
-                    ),
-                  )),
+              LayoutBuilder(
+                builder:
+                    (BuildContext context, BoxConstraints boxConstraints) =>
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        controller: headerScrollController,
+                        child: DataTable(
+                          columns: getColumnHeader(boxConstraints),
+                          rows: [],
+                        )),
+              )
             ])
           ],
         ),
-        // Expanded(
-        //   flex: 1,
-        //   child: SingleChildScrollView(
-        //       child: Table(
-        //     // border: TableBorder.all(color: Colors.grey, width: 0.5),
-        //     columnWidths: <int, TableColumnWidth>{
-        //       0: FlexColumnWidth(0.1),
-        //       1: FlexColumnWidth(0.9),
-        //     },
-        //     children: [
-        //       TableRow(children: [
-        //         Table(
-        //           children: widget.colors
-        //               .map((color) => TableRow(children: [
-        //                     TableCell(
-        //                       child: Container(
-        //                         child: Center(
-        //                           child: Text(
-        //                             '${color.name}',
-        //                             style: widget.textStyle,
-        //                           ),
-        //                         ),
-        //                       ),
-        //                     )
-        //                   ]))
-        //               .toList(),
-        //         ),
-        //         SingleChildScrollView(
-        //             scrollDirection: Axis.horizontal,
-        //             // dragStartBehavior: widget.dragStartBehavior,
-        //             controller: bodyScrollController,
-        //             child: Table(
-        //               children: widget.colors
-        //                   .map((color) => TableRow(
-        //                       children: widget.sizes
-        //                           .map((size) => TableCell(
-        //                                 child: Center(
-        //                                   child: Text(
-        //                                     '${size.name}/${color.name}',
-        //                                     style: widget.textStyle,
-        //                                   ),
-        //                                 ),
-        //                               ))
-        //                           .toList()))
-        //                   .toList(),
-        //             )),
-        //       ])
-        //     ],
-        //   )),
-        // )
+        Expanded(
+          flex: 1,
+          child: SingleChildScrollView(
+              child: Table(
+                border: TableBorder.all(color: Colors.grey, width: 0.5),
+                columnWidths: <int, TableColumnWidth>{
+                  0: FlexColumnWidth(0.1),
+                  1: FlexColumnWidth(0.9),
+                },
+                children: [
+                  TableRow(children: [
+                    DataTable(
+                      columns: [getR1C1()],
+                      rows: getC1(),
+                    ),
+                    LayoutBuilder(
+                      builder:
+                          (BuildContext context,
+                          BoxConstraints boxConstraints) =>
+                          SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              controller: bodyScrollController,
+                              child: DataTable(
+                                columns: generateDataColumn(boxConstraints),
+                                rows: generateDataRow(boxConstraints),
+                              )),
+                    ),
+                  ])
+                ],
+              )),
+        )
       ],
     );
   }
@@ -165,61 +131,81 @@ class _ColorSizeReportDataTableState extends State<ColorSizeReportDataTable> {
     widget.onChanged(value);
   }
 
-  void initColumnHeader() {
-    columnsHeaders = widget.sizes
-        .map((size) =>
-        TableCell(
-          child: Container(
-            // width: generateColumnWidth(size.name),
-              child: Center(
-                child: Text(
-                  '${size.name}',
-                  style: widget.textStyle,
-                ),
-              )),
-        ))
-        .toList();
-  }
-
-  List<DataColumn> generateDataColumn() {
+  List<DataColumn> getColumnHeader(BoxConstraints boxConstraints) {
     return widget.sizes
         .map((size) =>
         DataColumn(
-            label: GestureDetector(
-              onTap: () {
-                // _handleTap(firstItem[widget.index]);
-              },
-              child: Container(
-                width: generateColumnWidth(size.name),
+            label: Container(
+                width: generateColumnWidth(boxConstraints),
                 child: Center(
                   child: Text(
                     '${size.name}',
                     style: widget.textStyle,
                   ),
-                ),
-              ),
-            )))
+                ))))
         .toList();
   }
 
-  List<DataRow> generateDataRow() {
+  List<DataColumn> generateDataColumn(BoxConstraints boxConstraints) {
+    return widget.sizes.map((size) {
+      //字符处理
+      int actualSum = getActualSum(widget.colors[0].name, size.name);
+      int need = getNeed(widget.colors[0].name, size.name);
+      String value = '';
+      if (need < 1) {
+        if (actualSum > 0) {
+          value = '+$actualSum';
+        }
+      } else {
+        value = '$actualSum/$need';
+      }
+      return DataColumn(
+          label: GestureDetector(
+            onTap: () {
+              // _handleTap(firstItem[widget.index]);
+            },
+            child: Container(
+              width: generateColumnWidth(boxConstraints),
+              child: Center(
+                child: Text(
+                  '$value',
+                  style: widget.textStyle,
+                ),
+              ),
+            ),
+          ));
+    }).toList();
+  }
+
+  List<DataRow> generateDataRow(BoxConstraints boxConstraints) {
     return widget.colors
+        .skip(1)
         .map((color) =>
         DataRow(
-            cells: widget.sizes
-                .map((size) =>
-                DataCell(GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: generateColumnWidth(size.name),
-                    child: Center(
-                        child: Text(
-                          '${color.name}/${size.name}',
-                          style: widget.textStyle,
-                        )),
-                  ),
-                )))
-                .toList()))
+            cells: widget.sizes.map((size) {
+              //字符处理
+              int actualSum = getActualSum(color.name, size.name);
+              int need = getNeed(color.name, size.name);
+              String value = '';
+              if (need < 1) {
+                if (actualSum > 0) {
+                  value = '+$actualSum';
+                }
+              } else {
+                value = '$actualSum/$need';
+              }
+              return DataCell(GestureDetector(
+                onTap: () {},
+                child: Container(
+                  width: generateColumnWidth(boxConstraints),
+                  child: Center(
+                      child: Text(
+                        '$value',
+                        style: widget.textStyle,
+                      )),
+                ),
+              ));
+            }).toList()))
         .toList();
   }
 
@@ -244,6 +230,7 @@ class _ColorSizeReportDataTableState extends State<ColorSizeReportDataTable> {
   ///获取第一列第一行之后
   List<DataRow> getC1() {
     return widget.colors
+        .skip(1)
         .map((color) =>
         DataRow(cells: [
           DataCell(GestureDetector(
@@ -262,13 +249,39 @@ class _ColorSizeReportDataTableState extends State<ColorSizeReportDataTable> {
   }
 
   ///计算格子宽度
-  double generateColumnWidth(String key) {
-    if (key.length < 4) {
-      return 50;
+  double generateColumnWidth(BoxConstraints boxConstraints) {
+    if (widget.sizes.length < 5) {
+      return 0.9 * boxConstraints.maxWidth / widget.sizes.length;
     } else {
-      return key
-          .toString()
-          .length * widget.cellWidthScale;
+      return 0.9 * boxConstraints.maxWidth / 6;
     }
+  }
+
+  int getNeed(String color, String size) {
+    //空处理替代对象
+    PurchaseOrderEntryModel emptyObj = PurchaseOrderEntryModel(quantity: 0);
+    return widget.entries
+        .firstWhere(
+            (entry) =>
+        entry.product.color.name == color &&
+            entry.product.size.name == size,
+        orElse: () => emptyObj)
+        .quantity;
+  }
+
+  int getActualSum(String color, String size) {
+    //空处理替代对象
+    OrderNoteEntryModel emptyObj = OrderNoteEntryModel(quantity: 0);
+
+    int result = 0;
+    widget.productionProgressOrders
+        .where((order) => order.status != ProductionProgressOrderStatus.CANCEL)
+        .forEach((order) {
+      result += order.entries
+          .firstWhere((entry) => entry.color == color && entry.size == size,
+          orElse: () => emptyObj)
+          .quantity;
+    });
+    return result;
   }
 }

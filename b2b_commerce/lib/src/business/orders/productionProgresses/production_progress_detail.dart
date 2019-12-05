@@ -1,7 +1,6 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-
-import 'package:core/core.dart';
 import 'package:widgets/widgets.dart';
 
 import 'components/progress_abbreviation_table.dart';
@@ -19,8 +18,7 @@ class ProductionProgressDetailPage extends StatefulWidget {
       _ProductionProgressDetailPageState();
 }
 
-class _ProductionProgressDetailPageState
-    extends State<ProductionProgressDetailPage> {
+class _ProductionProgressDetailPageState extends State<ProductionProgressDetailPage> {
   final GlobalKey globalKey = GlobalKey();
   double tableWidth = 0;
   double tableHeight = 0;
@@ -90,6 +88,8 @@ class _ProductionProgressDetailPageState
               MaterialPageRoute(builder: (context) =>
                   ProgressFullTable(
                     entries: widget.order.entries,
+                    productionProgressOrders: widget.progress
+                        .productionProgressOrders,
                   )));
         },
         child: Container(

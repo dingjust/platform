@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:orientation/orientation.dart';
-import 'package:widgets/widgets.dart';
 
 class ProgressFullTable extends StatefulWidget {
   final List<PurchaseOrderEntryModel> entries;
@@ -78,6 +77,9 @@ class _ProgressFullTableState extends State<ProgressFullTable> {
                         '属性',
                         colors: colors,
                         sizes: sizes,
+                        entries: widget.entries,
+                        productionProgressOrders:
+                        widget.productionProgressOrders,
                       )))
             ],
           )),
