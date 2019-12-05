@@ -46,6 +46,7 @@ class _ReportDataTableState extends State<ReportDataTable> {
     return Column(
       children: <Widget>[
         Table(
+          border: TableBorder.all(color: Colors.grey, width: 0.5),
           columnWidths: <int, TableColumnWidth>{
             0: FlexColumnWidth(0.1),
             1: FlexColumnWidth(0.9),
@@ -56,11 +57,11 @@ class _ReportDataTableState extends State<ReportDataTable> {
                 columns: [
                   DataColumn(
                       label: Center(
-                    child: Text(
-                      '${widget.index}',
-                      style: widget.textStyle,
-                    ),
-                  ))
+                        child: Text(
+                          '${widget.index}',
+                          style: widget.textStyle,
+                        ),
+                      ))
                 ],
                 rows: [],
               ),
