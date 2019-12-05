@@ -176,7 +176,7 @@ abstract class UserApis {
       '/{baseSiteId}/cert/enterprise/cert/info';
 
   ///合作商列表
-  static get cooperators => '/{baseSiteId}/cooperator?page=0&size=999';
+  static get cooperators => '/{baseSiteId}/cooperator';
 
   ///公司账务列表
   static get payplans => '/{baseSiteId}/payPlan?page=0&size=999';
