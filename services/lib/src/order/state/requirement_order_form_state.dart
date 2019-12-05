@@ -13,14 +13,17 @@ class RequirementOrderFormState with ChangeNotifier{
 
   RequirementOrderModel _model;
 
-
-
   RequirementOrderModel get model {
     if(_model == null){
       _model = RequirementOrderModel(
           details: RequirementInfoModel(
-              productiveOrientations: [],
-              salesMarket: [],
+            productiveOrientations: [],
+            salesMarket: [],
+            machiningType: MachiningType.LABOR_AND_MATERIAL,
+            proofingNeeded: false,
+            invoiceNeeded: false,
+            publishingMode: 'PUBLIC',
+            effectiveDays: 90,
           ),
         attachments: [],
       );
@@ -32,23 +35,36 @@ class RequirementOrderFormState with ChangeNotifier{
     _model = value;
   }
 
+  List<CooperatorModel> _cooperatorModels;
+  List<FactoryModel> _factoryModels;
+
+
+  List<CooperatorModel> get cooperatorModels {
+    if(_cooperatorModels == null){
+      _cooperatorModels = [];
+    }
+    return _cooperatorModels;
+  }
+
+  set cooperatorModels(List<CooperatorModel> value) {
+    _cooperatorModels = value;
+  }
+
+  List<FactoryModel> get factoryModels {
+   if(_factoryModels == null){
+     _factoryModels = [];
+   }
+   return _factoryModels;
+  }
+
+  set factoryModels(List<FactoryModel> value) {
+    _factoryModels = value;
+  }
+
+
   //刷新model
   refresh(){
     _model = null;
     notifyListeners();
-  }
-
-  static Future<void> validateMessage(BuildContext context, String message) async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.RESULT_DIALOG,
-            failTips: '${message}',
-            callbackResult: false,
-            outsideDismiss: true,
-          );
-        });
   }
 }

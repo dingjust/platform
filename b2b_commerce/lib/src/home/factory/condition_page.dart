@@ -301,7 +301,7 @@ class _ConditionPageState extends State<ConditionPage> {
               }),
             );
           },
-          childCount: widget.labels.length,
+          childCount: widget.labels?.length ?? 0,
         ),
       ),
     );
@@ -400,7 +400,7 @@ class _ConditionPageState extends State<ConditionPage> {
               }),
             );
           },
-          childCount: widget.categories.length,
+          childCount: widget.categories?.length ?? 0,
         ),
       ),
     );

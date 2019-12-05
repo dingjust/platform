@@ -59,8 +59,6 @@ class HttpManager {
     _instance.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
       // 在请求被发送之前做一些事情
-
-      //检测网络状态
       // var result = await Connectivity().checkConnectivity();
       // AppBLoC.instance.setConnectivityResult(result);
       // if (result == ConnectivityResult.none) {

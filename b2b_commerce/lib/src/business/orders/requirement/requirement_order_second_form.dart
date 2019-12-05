@@ -31,6 +31,7 @@ class RequirementOrderSecondForm extends StatefulWidget {
 class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
     with RequirementFormMixin {
   GlobalKey _scaffoldKey = GlobalKey();
+  List<String> _factoryUids = [];
 
   @override
   void initState() {
@@ -438,8 +439,11 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                     Offstage(
                       offstage: widget.formState.model.details.publishingMode != 'PRIVATE',
                       child: GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm()));
+                        onTap: ()async{
+                          dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
+                          if(result != null){
+                            _factoryUids = result;
+                          }
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -455,6 +459,22 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                             Icon(Icons.chevron_right, size: 20),
                           ],
                         ),
+                      ),
+                    ),
+                    Offstage(
+                      offstage: widget.formState.model.details.publishingMode != 'PRIVATE',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          RichText(text: TextSpan(
+                            style:TextStyle(fontSize: 13),
+                            children: [
+                              TextSpan(text: '已选择',style: TextStyle(color: Colors.black),),
+                              TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
+                              TextSpan(text: '家工厂',style: TextStyle(color: Colors.black),),
+                            ]
+                          ),)
+                        ],
                       ),
                     )
                   ],
@@ -615,7 +635,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack: RequirementOrderRepository().publishNewRequirement(widget.formState.model,null,false),
+              requestCallBack: RequirementOrderRepository().publishNewRequirement(widget.formState.model,null,false,factories: _factoryUids.join(',')),
               outsideDismiss: false,
               loadingText: '正在保存。。。',
               entrance: '',

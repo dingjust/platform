@@ -27,8 +27,8 @@ class ImageFactory {
 
   static Widget buildThumbnailImage(
     MediaModel media, {
-        double size = 80,
-        double containerSize = 80,
+        double size = 60,
+        double containerSize = 60,
     BoxFit fit = BoxFit.cover,
   }) {
     if (media == null) {

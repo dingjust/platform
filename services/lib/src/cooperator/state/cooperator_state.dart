@@ -10,6 +10,7 @@ import '../../../services.dart';
 class CooperatorState extends PageState {
   String factoryUid;
   CooperatorState({this.factoryUid});
+  Map<String,Object> _queryFormData = {};
 
   List<CooperatorModel> _cooperatorModels;
   bool _showTopBtn = false;
@@ -30,16 +31,25 @@ class CooperatorState extends PageState {
     notifyListeners();
   }
 
+
+  Map<String, Object> get queryFormData => _queryFormData;
+
+  set queryFormData(Map<String, Object> value) {
+    _queryFormData = value;
+  }
+
   @override
   void getData() async {
+    print(_queryFormData);
+    isDownEnd = false;
     var response;
     if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-      response = await CooperatorRepositoryImpl().list(data:{}, params:{
+      response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
         'page': currentPage,
         'size': pageSize,
       });
     }else{
-      response = await CooperatorRepositoryImpl().list(data:{}, params:{
+      response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
         'page': currentPage,
         'size': pageSize,
       });
@@ -65,6 +75,7 @@ class CooperatorState extends PageState {
       workingStart();
       //接口调用：
       if (currentPage + 1 != totalPages) {
+        isDownEnd = false;
         var response;
         if(UserBLoC.instance.currentUser.type == UserType.BRAND){
           response = await ProductRepositoryImpl().getProductsOfFactory({}, {
@@ -85,6 +96,9 @@ class CooperatorState extends PageState {
           totalPages = response.totalPages;
           totalElements = response.totalElements;
         }
+
+      }else{
+        isDownEnd = true;
       }
       //异步调用结束，通知加载组件
       workingEnd();
