@@ -2,20 +2,25 @@
   <div class="animated fadeIn">
     <div style="height: 50px;">
       <el-form :inline="true">
-        <!--<el-form-item label="">-->
-        <!--<el-input placeholder="请输入产品货号/名称查询" v-model="keyword"></el-input>-->
-        <!--</el-form-item>-->
-        <!-- <el-button-group> -->
-        <!--<el-button type="text" @click="onSearch">查找</el-button>-->
-        <!-- </el-button-group> -->
-        <el-button class="product-select-btn" @click="onSelected">确定</el-button>
+        <el-form-item label="">
+          <el-input placeholder="请输入生产订单号/产品货啊好/品牌查询" v-model="keyword"></el-input>
+        </el-form-item>
+        <el-form-item label="">
+          <el-button type="primary" class="toolbar-search_input" @click="onSearch">查找</el-button>
+        </el-form-item>
+        <el-form-item label="">
+          <el-button  native-type="reset" @click="onReset">重置</el-button>
+        </el-form-item>
+        <el-form-item label="">
+          <el-button type="primary" class="toolbar-search_input" @click="onSelected">确定</el-button>
+        </el-form-item>
       </el-form>
     </div>
     <!--<el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"-->
     <!--:height="autoHeight">-->
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight"
-        @selection-change="handleSelectionChange" @row-click="clickRow">
-      <el-table-column type="selection" width="55">
+        @selection-change="handleSelectionChange" @row-click="clickRow" :row-key="getRowKeys">
+      <el-table-column type="selection" width="55" :reserve-selection="true">
       </el-table-column>
       <el-table-column label="生产订单号" min-width="130">
         <template slot-scope="scope">
@@ -125,8 +130,8 @@
         const result = await this.$http.post(url, {
           keyword: ''
         }, {
-          page: 0,
-          size: 10
+          page: this.page.number,
+          size: this.page.size
         });
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -134,12 +139,20 @@
         }
         this.page = result;
       },
+      async onSearch () {
+        this.$emit('onSearchOrder', null,null,this.keyword);
+      },
+      onReset () {
+        this.keyword = '';
+        this._reset();
+        this.onSearch();
+      },
       async onPageSizeChanged (val) {
         this._reset();
         this.$emit('onSearchOrder', 0, val);
       },
       async onCurrentPageChanged (val) {
-        this.$emit('onSearchOrder', val - 1);
+        this.$emit('onSearchOrder', val - 1 , null, this.keyword);
       },
       _reset () {
         this.$refs.resultTable.clearSort();
@@ -184,6 +197,9 @@
       },
       clickRow (row) {
         this.$refs.resultTable.toggleRowSelection(row);
+      },
+      getRowKeys (row) {
+        return row.id;
       }
     },
     data () {
@@ -224,6 +240,11 @@
 
   .el-table__body tr.current-row>td {
     background-color: #ffc107;
+  }
+
+  .toolbar-search_input{
+    background-color: #ffd60c;
+    border-color: #ffd60c;
   }
 
 </style>

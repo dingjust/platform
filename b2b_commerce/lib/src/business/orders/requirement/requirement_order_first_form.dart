@@ -34,8 +34,8 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
-        ShowDialogUtil.showChoseDiglog(context, '正在创建订单，是否确认退出', (){
+      onWillPop: () {
+        ShowDialogUtil.showChoseDiglog(context, '正在创建订单，是否确认退出', () {
           Navigator.pop(context);
           Navigator.pop(context);
         });
@@ -76,7 +76,11 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                   ShowDialogUtil.showValidateMsg(context, '请选择品类');
                   return;
                 }
-                if(widget.formState.model.details.productiveOrientations == null || widget.formState.model.details.productiveOrientations.length == 0){
+                if (widget.formState.model.details.productiveOrientations ==
+                        null ||
+                    widget.formState.model.details.productiveOrientations
+                            .length ==
+                        0) {
                   ShowDialogUtil.showValidateMsg(context, '请选择工厂区域');
                   return;
                 }
@@ -95,7 +99,7 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<CategoryModel>> snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
+                    return Container(child: SizedBox(height: 100,child: Center(child: CircularProgressIndicator()),),color: Colors.white,);
                   } else {
                     return Container(
                       padding: EdgeInsets.symmetric(
@@ -111,15 +115,17 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                               left: 15,
                               right: 15,
                             ),
-                            child:  RichText(
+                            child: RichText(
                               text: TextSpan(children: [
                                 TextSpan(
                                   text: '选择面料类型',
-                                  style: TextStyle(fontSize: 16, color: Colors.black),
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
                                 ),
                                 TextSpan(
                                   text: ' *',
-                                  style: TextStyle(fontSize: 16, color: Colors.red),
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.red),
                                 )
                               ]),
                             ),
@@ -144,12 +150,13 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
               thickness: 1.5,
             ),
             Consumer(
-              builder: (context, CategoryState categoryState, _) => FutureBuilder(
+              builder: (context, CategoryState categoryState, _) =>
+                  FutureBuilder(
                 future: categoryState.getCascadedCategories(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<CategoryModel>> snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
+                    return Container(child: SizedBox(height: 100,child: Center(child: CircularProgressIndicator()),),color: Colors.white,);
                   } else {
                     return Container(
                       padding: EdgeInsets.symmetric(
@@ -190,7 +197,8 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: '${widget.formState.model.details.category?.parent != null ? widget.formState.model.details.category.parent.name + '-' : ''}'
+                                      text:
+                                          '${widget.formState.model.details.category?.parent != null ? widget.formState.model.details.category.parent.name + '-' : ''}'
                                           '${widget.formState.model.details.category?.name ?? ''}',
                                       style: TextStyle(
                                         color: Colors.black,
@@ -212,8 +220,8 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                                       builder: (context,
                                               CategoryState categoryState, _) =>
                                           FutureBuilder(
-                                        future:
-                                            categoryState.getCascadedCategories(),
+                                        future: categoryState
+                                            .getCascadedCategories(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<List<CategoryModel>>
                                                 snapshot) {
@@ -291,7 +299,10 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                             ),
                           ),
                           TextSpan(
-                            text: formatAreaSelectsText(widget.formState.model.details.productiveOrientations, 2),
+                            text: formatAreaSelectsText(
+                                widget.formState.model.details
+                                    .productiveOrientations,
+                                2),
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
@@ -308,7 +319,8 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                         onTap: () {
                           //CN-10代表全国
                           setState(() {
-                            widget.formState.model.details.productiveOrientations
+                            widget
+                                .formState.model.details.productiveOrientations
                                 .add(RegionModel(isocode: 'CN-10'));
                           });
                           dynamic m = widget
@@ -320,8 +332,11 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                         child: Container(
                           height: 40,
                           width: 100,
-                          decoration: ClassHandleUtil.isNotEmpty(widget.formState
-                                      .model.details.productiveOrientations) &&
+                          decoration: ClassHandleUtil.isNotEmpty(widget
+                                      .formState
+                                      .model
+                                      .details
+                                      .productiveOrientations) &&
                                   widget.formState.model.details
                                           .productiveOrientations
                                           .indexWhere(
@@ -329,7 +344,6 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                                       ) >
                                       -1
                               ? BoxDecoration(
-                                  border: Border.all(),
                                   borderRadius: BorderRadius.circular(10),
                                   color: Color(0xffffd60c))
                               : BoxDecoration(
@@ -343,7 +357,9 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                         onTap: () {
                           setState(() {
                             //获取所有省份
-                            rootBundle.loadString('data/province.json').then((v) {
+                            rootBundle
+                                .loadString('data/province.json')
+                                .then((v) {
                               List data = json.decode(v);
                               showModalBottomSheet(
                                 context: context,
@@ -351,18 +367,19 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                                   return RegionSelector(
                                     regions: data
                                         .map<RegionModel>((region) =>
-                                        RegionModel.fromJson(region))
+                                            RegionModel.fromJson(region))
                                         .toList(),
-                                    regionSelects: widget.formState.model.details
-                                        .productiveOrientations,
+                                    regionSelects: widget.formState.model
+                                        .details.productiveOrientations,
                                     multiple: true,
                                   );
                                 },
-                              ).then((v){
+                              ).then((v) {
                                 setState(() {
-                                  widget.formState.model.details.productiveOrientations
-                                      .removeWhere(
-                                          (region) => region.isocode == 'CN-10');
+                                  widget.formState.model.details
+                                      .productiveOrientations
+                                      .removeWhere((region) =>
+                                          region.isocode == 'CN-10');
                                 });
                               });
                             });
@@ -371,15 +388,18 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                         child: Container(
                           height: 40,
                           width: 150,
-                          decoration: ClassHandleUtil.isNotEmpty(widget.formState
-                                      .model.details.productiveOrientations) &&
+                          decoration: ClassHandleUtil.isNotEmpty(widget
+                                      .formState
+                                      .model
+                                      .details
+                                      .productiveOrientations) &&
                                   widget.formState.model.details
                                           .productiveOrientations
                                           .indexWhere(
                                         (region) => region.isocode == 'CN-10',
-                                      ) < 0
+                                      ) <
+                                      0
                               ? BoxDecoration(
-                                  border: Border.all(),
                                   borderRadius: BorderRadius.circular(10),
                                   color: Color(0xffffd60c))
                               : BoxDecoration(
@@ -403,7 +423,10 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
   String formatAreaSelectsText(List<RegionModel> selects, int count) {
     String text = '';
 
-    if( widget.formState.model.details.productiveOrientations.indexWhere((region) => region.isocode == 'CN-10',) > -1){
+    if (widget.formState.model.details.productiveOrientations.indexWhere(
+          (region) => region.isocode == 'CN-10',
+        ) >
+        -1) {
       return '全国';
     }
 
