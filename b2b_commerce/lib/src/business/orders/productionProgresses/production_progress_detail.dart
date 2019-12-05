@@ -5,6 +5,8 @@ import 'package:widgets/widgets.dart';
 
 import 'components/progress_abbreviation_table.dart';
 import 'components/progress_full_table.dart';
+import 'components/progress_orders_table.dart';
+import 'production_progress_order_detail.dart';
 
 class ProductionProgressDetailPage extends StatefulWidget {
   final PurchaseOrderModel order;
@@ -18,10 +20,12 @@ class ProductionProgressDetailPage extends StatefulWidget {
       _ProductionProgressDetailPageState();
 }
 
-class _ProductionProgressDetailPageState extends State<ProductionProgressDetailPage> {
+class _ProductionProgressDetailPageState
+    extends State<ProductionProgressDetailPage> {
   final GlobalKey globalKey = GlobalKey();
   double tableWidth = 0;
   double tableHeight = 0;
+  bool showAllOrders = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,8 @@ class _ProductionProgressDetailPageState extends State<ProductionProgressDetailP
             _buildTableBlock(),
             _buildMediasBlock(),
             _buildRemarksBlock(),
+            _buildReadOrderBtn(),
+            _buildProgressOrdersBlock(),
             _buildBtn()
           ],
         ),
@@ -84,12 +90,12 @@ class _ProductionProgressDetailPageState extends State<ProductionProgressDetailP
       color: Colors.white,
       child: FlatButton(
         onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) =>
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
                   ProgressFullTable(
                     entries: widget.order.entries,
-                    productionProgressOrders: widget.progress
-                        .productionProgressOrders,
+                    productionProgressOrders:
+                    widget.progress.productionProgressOrders,
                   )));
         },
         child: Container(
@@ -177,22 +183,55 @@ class _ProductionProgressDetailPageState extends State<ProductionProgressDetailP
   Widget _buildRemarksBlock() {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('备注：'),
-          Expanded(flex: 1, child: Text('${widget.progress.remarks}'))
+          Expanded(flex: 1, child: Text('${widget.progress.remarks ?? ''}'))
         ],
       ),
     );
   }
 
+  Widget _buildReadOrderBtn() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: FlatButton(
+        onPressed: () {
+          setState(() {
+            showAllOrders = !showAllOrders;
+          });
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(showAllOrders ? '收起所有单据' : '查看所有上报单据'),
+            Icon(showAllOrders ? Icons.arrow_drop_up : Icons.arrow_drop_down)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressOrdersBlock() {
+    return showAllOrders
+        ? Container(
+      color: Colors.white,
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      child: ProgressOrdersTable(
+        productionProgressOrders:
+        widget.progress.productionProgressOrders,
+        onDetail: _onOrderDetail,
+      ),
+    )
+        : Container();
+  }
+
   Widget _buildBtn() {
     return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
+      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
       child: FlatButton(
         color: Color.fromRGBO(255, 214, 12, 1),
         child: Text(
@@ -208,6 +247,13 @@ class _ProductionProgressDetailPageState extends State<ProductionProgressDetailP
         onPressed: () {},
       ),
     );
+  }
+
+  void _onOrderDetail(ProductionProgressOrderModel model) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            ProductionProgressOrderDetailPage(
+                order: widget.order, progress: widget.progress, model: model)));
   }
 
 // Future<BuildContext> _getTableContext() async {

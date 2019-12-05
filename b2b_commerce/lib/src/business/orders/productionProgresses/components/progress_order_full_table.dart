@@ -1,25 +1,25 @@
 import 'dart:collection';
 
-import 'package:b2b_commerce/src/business/orders/productionProgresses/components/color_size_report_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:orientation/orientation.dart';
 
-class ProgressFullTable extends StatefulWidget {
+import 'single_color_size_report_table.dart';
+
+class ProgressOrderFullTable extends StatefulWidget {
   final List<PurchaseOrderEntryModel> entries;
 
-  final List<ProductionProgressOrderModel> productionProgressOrders;
+  final ProductionProgressOrderModel order;
 
-  const ProgressFullTable(
-      {Key key, this.entries, this.productionProgressOrders})
+  const ProgressOrderFullTable({Key key, this.entries, this.order})
       : super(key: key);
 
   @override
-  _ProgressFullTableState createState() => _ProgressFullTableState();
+  _ProgressOrderFullTableState createState() => _ProgressOrderFullTableState();
 }
 
-class _ProgressFullTableState extends State<ProgressFullTable> {
+class _ProgressOrderFullTableState extends State<ProgressOrderFullTable> {
   @override
   void initState() {
     OrientationPlugin.forceOrientation(DeviceOrientation.landscapeLeft);
@@ -73,13 +73,11 @@ class _ProgressFullTableState extends State<ProgressFullTable> {
                   flex: 1,
                   child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: ColorSizeReportDataTable(
+                      child: SingleColorSizeReportDataTable(
                         '属性',
                         colors: colors,
                         sizes: sizes,
-                        entries: widget.entries,
-                        productionProgressOrders:
-                        widget.productionProgressOrders,
+                        order: widget.order,
                       )))
             ],
           )),
