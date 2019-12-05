@@ -512,7 +512,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     if (isSubmit) {
       if (widget.isCreate) {
         String code = await RequirementOrderRepository().publishNewRequirement(
-            widget.order, factoryUid, factoryUid != null ? true : false);
+            widget.order, factoryUid, false);
         if (code != null && code != '') {
           widget.order.code = code;
           //根据code查询明

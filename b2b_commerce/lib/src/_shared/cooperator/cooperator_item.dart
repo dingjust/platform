@@ -2,31 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
 class CooperatorItem extends StatelessWidget {
-  const CooperatorItem(
-      {Key key, this.model, this.imageSize = 200, this.showAddress = false})
-      : super(key: key);
+  const CooperatorItem({
+    Key key,
+    @required this.model,this.onTap
+  }) : super(key: key);
 
   final CooperatorModel model;
 
-  final double imageSize;
-
-  final bool showAddress;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
-    // print('=====${model.thumbnails[0].normalUrl()}');
     return GestureDetector(
-      onTap: () async {
-
-      },
+      onTap:() => onTap == null ? null : onTap(),
       child: Container(
-        height: 100,
+        height: 60,
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(5)),
-        child: Column(
-          children: <Widget>[
-            Center(child: Text('${model?.partner?.name}'))
-          ],
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+//            border: Border.all(color: Colors.grey),
+        ),
+        child: Center(
+          child: Text('${model?.partner?.name}'),
         ),
       ),
     );
