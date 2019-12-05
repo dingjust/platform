@@ -1,10 +1,7 @@
 import 'package:core/core.dart';
 import 'package:models/models.dart';
-import 'package:services/src/capacity/repository/capacity_repository.dart';
-import 'package:services/src/product/product_repository.dart';
+import 'package:services/services.dart';
 import 'package:services/src/state/state.dart';
-
-import '../../../services.dart';
 
 ///工厂产能状态管理
 class CooperatorState extends PageState {
@@ -43,17 +40,17 @@ class CooperatorState extends PageState {
     print(_queryFormData);
     isDownEnd = false;
     var response;
-    if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+//    if(UserBLoC.instance.currentUser.type == UserType.BRAND){
       response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
         'page': currentPage,
         'size': pageSize,
       });
-    }else{
-      response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
-        'page': currentPage,
-        'size': pageSize,
-      });
-    }
+//    }else{
+//      response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
+//        'page': currentPage,
+//        'size': pageSize,
+//      });
+//    }
 
     if (response != null) {
       _cooperatorModels = response.content;
@@ -77,17 +74,10 @@ class CooperatorState extends PageState {
       if (currentPage + 1 != totalPages) {
         isDownEnd = false;
         var response;
-        if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-          response = await ProductRepositoryImpl().getProductsOfFactory({}, {
-            'page': currentPage,
-            'size': pageSize,
-          },factoryUid);
-        }else{
-          response = await ProductRepositoryImpl().list({}, {
-            'page': currentPage,
-            'size': pageSize,
-          });
-        }
+        response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
+          'page': currentPage + 1,
+          'size': pageSize,
+        });
 
         if (response != null) {
           _cooperatorModels.addAll(response.content);
