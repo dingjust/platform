@@ -45,33 +45,30 @@ class _SingleMajorCategorySelectState extends State<SingleMajorCategorySelect> {
       },
       child: Container(
         margin: EdgeInsets.only(right: 10),
-//        decoration: BoxDecoration(
-////            borderRadius: BorderRadius.circular(20),
-//            border: Border.all(
-//                color: _selectRights == category.code
-//                    ? Color.fromRGBO(255, 219, 0, 1)
-//                    : Colors.white)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            category.thumbnail != null ? Container(
+              width: 60,
+              height: 60,
+              decoration: ShapeDecoration(
+                shadows: _selectRights == category.code ? [BoxShadow(color: Colors.grey,blurRadius: 5)] :[],
+                shape: CircleBorder(),
+                image: DecorationImage(
+                    image: NetworkImage('${category.thumbnail.actualUrl}'),
+                    fit: BoxFit.cover),
+              )
+            ) :
             Container(
               width: 60,
               height: 60,
-              decoration: _selectRights == category.code ? ShapeDecoration(
-                shadows: [BoxShadow(color: Colors.grey,blurRadius: 5)],
-                color: Color.fromRGBO(243, 243, 243, 1),
-                shape: CircleBorder(),
-              ): ShapeDecoration(
+              decoration: ShapeDecoration(
+                shadows: _selectRights == category.code ? [BoxShadow(color: Colors.grey,blurRadius: 5)] :[],
                 color: Color.fromRGBO(243, 243, 243, 1),
                 shape: CircleBorder(),
               ),
-              child: category.thumbnail != null
-                  ? Image.network(
-                      '${category.thumbnail.actualUrl}',
-                      fit: BoxFit.cover,
-                    )
-                  : Icon(
+              child: Icon(
                       B2BIcons.noPicture,
                       color: Color.fromRGBO(200, 200, 200, 1),
                       size: 40,

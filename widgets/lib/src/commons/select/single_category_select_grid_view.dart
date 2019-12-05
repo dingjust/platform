@@ -29,10 +29,9 @@ class _SingleMajorCategorySelectGridViewState extends State<SingleMajorCategoryS
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectRight = category.code;
+//          _selectRight = category.code;
           widget.onItemTap(category);
         });
-
       },
       child: Container(
         margin: EdgeInsets.only(right: 10),
@@ -40,27 +39,30 @@ class _SingleMajorCategorySelectGridViewState extends State<SingleMajorCategoryS
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            category.thumbnail != null ? Container(
+                width: 60,
+                height: 60,
+                decoration: ShapeDecoration(
+                  shadows: _selectRight == category.code ? [BoxShadow(color: Colors.grey,blurRadius: 5)] :[],
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  image: DecorationImage(
+                      image: NetworkImage('${category.thumbnail.actualUrl}'),
+                      fit: BoxFit.cover),
+                )
+            ) :
             Container(
               width: 60,
               height: 60,
-              decoration: _selectRight == category.code ? ShapeDecoration(
-                shadows: [BoxShadow(color: Colors.grey,blurRadius: 5)],
+              decoration: ShapeDecoration(
+                shadows: _selectRight == category.code ? [BoxShadow(color: Colors.grey,blurRadius: 5)] :[],
                 color: Color.fromRGBO(243, 243, 243, 1),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ): ShapeDecoration(
-                color: Color.fromRGBO(243, 243, 243, 1),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: CircleBorder(),
               ),
-              child: category.thumbnail != null
-                  ? Image.network(
-                      '${category.thumbnail.actualUrl}',
-                      fit: BoxFit.cover,
-                    )
-                  : Icon(
-                      B2BIcons.noPicture,
-                      color: Color.fromRGBO(200, 200, 200, 1),
-                      size: 40,
-                    ),
+              child: Icon(
+                B2BIcons.noPicture,
+                color: Color.fromRGBO(200, 200, 200, 1),
+                size: 40,
+              ),
             ),
             SizedBox(height: 10,),
             Text(

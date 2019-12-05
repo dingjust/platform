@@ -103,6 +103,7 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
       } else if (isB) {
         role = 'PARTYB';
       }
+
       Map data = {
         'userTempCode': temp.code,
         'userSignCode': '',

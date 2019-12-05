@@ -1,11 +1,12 @@
 import 'dart:convert';
 
-import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
+import 'package:b2b_commerce/src/my/company/_shared/factory_list_item.dart';
+import 'package:b2b_commerce/src/my/company/_shared/factory_selected_list_item.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,28 +14,26 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class FactoryPage extends StatefulWidget {
-  FactoryPage(this.factoryCondition, {
-    this.route,
-    this.requirementCode,
+class FactorySelectPage extends StatefulWidget {
+  FactorySelectPage({
+    this.factoryCondition,
     this.categories,
     this.labels,
+    this.factoryModels,
   });
+
+  List<FactoryModel> factoryModels;
 
   final List<CategoryModel> categories;
 
   List<LabelModel> labels;
 
-  String route;
-
-  // 邀请工厂报价的需求订单号
-  final String requirementCode;
   final FactoryCondition factoryCondition;
 
-  _FactoryPageState createState() => _FactoryPageState();
+  _FactorySelectPageState createState() => _FactorySelectPageState();
 }
 
-class _FactoryPageState extends State<FactoryPage> {
+class _FactorySelectPageState extends State<FactorySelectPage> {
   final GlobalKey _factoryBLoCProviderKey = GlobalKey();
 
   FactoryCondition factoryCondition;
@@ -61,7 +60,6 @@ class _FactoryPageState extends State<FactoryPage> {
   String labText = '综合';
   String _categorySelectText = '分类';
   String _areaSelectText = '地区';
-  String _localSelectText = '50公里内';
 
   List<CategoryModel> _category;
   List<CategoryModel> _categorySelected = [];
@@ -75,51 +73,33 @@ class _FactoryPageState extends State<FactoryPage> {
     FilterConditionEntry(label: '100公里内', value: '100000'),
     FilterConditionEntry(label: '200公里内', value: '200000'),
   ];
-  double xLocal;
-  double yLocal;
 
   bool isLocalFind = false;
 
   bool inited = false;
 
-  AMapLocation aMapLocation;
-
-  String addressLine;
-
   List<String> historyKeywords;
 
   bool lock = false;
 
+  List<CategoryModel> _majorCategories;
+  List<LabelModel> _labels;
+  List<FactoryModel> _factorySelectModels = [];
+
   @override
   void initState() {
+    if(widget.factoryModels != null){
+      _factorySelectModels = List.from(widget.factoryModels);
+    }
+
     if (widget.factoryCondition != null) {
-      if (widget.route == '就近找厂') {
-        isLocalFind = true;
-        factoryCondition = FactoryCondition(
-          starLevel: 0,
-          adeptAtCategories: [],
-          labels: [],
-          cooperationModes: [],
-        );
-      } else {
         factoryCondition = widget.factoryCondition;
-      }
     } else {
-      if (widget.route == '就近找厂') {
-        isLocalFind = true;
-        factoryCondition = FactoryCondition(
-          starLevel: 0,
-          adeptAtCategories: [],
-          labels: [],
-          cooperationModes: [],
-        );
-      } else {
         factoryCondition = FactoryCondition(
             starLevel: 0,
             adeptAtCategories: [],
             labels: [],
             cooperationModes: []);
-      }
     }
     super.initState();
   }
@@ -134,7 +114,7 @@ class _FactoryPageState extends State<FactoryPage> {
   @override
   void dispose() {
     //注意这里关闭
-    AMapLocationClient.shutdown();
+//    AMapLocationClient.shutdown();
     super.dispose();
   }
 
@@ -186,12 +166,6 @@ class _FactoryPageState extends State<FactoryPage> {
                                 ),
                           ),
                         );
-//                      String keyword = await showSearch(
-//                        context: context,
-//                        delegate: FactorySearchDelegate(),
-//                      );
-//                      factoryCondition.setKeyword(keyword);
-//                      FactoryBLoC.instance.clear();
                     },
                     child: Container(
                       height: 28,
@@ -218,42 +192,27 @@ class _FactoryPageState extends State<FactoryPage> {
               ],
             ),
             actions: <Widget>[
-              GestureDetector(
-                child: widget.route == '就近找厂'
-                    ? Container(
-                    width: addressLine != null &&
-                        addressLine != '' &&
-                        addressLine.length < 5
-                        ? (15 * addressLine.length + 5).toDouble()
-                        : 80,
-                    child: Center(
-                        child: Text(
-                          '${addressLine != null ? addressLine : ''}',
-                          overflow: TextOverflow.ellipsis,
-                        )))
-                    : Container(),
-                onTap: () {
-                  if (widget.route == '就近找厂') {
-                    onLocation();
-                  }
-                },
-              ),
-              GestureDetector(
-                child: widget.route == '就近找厂'
-                    ? Container(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Icon(
-                    Icons.location_on,
-                  ),
-                )
-                    : Container(),
-                onTap: () {
-                  if (widget.route == '就近找厂') {
-                    onLocation();
-                  }
-                },
-              ),
             ],
+          ),
+          bottomNavigationBar: Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            height: 50,
+            child: RaisedButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '确定',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(50))),
+              onPressed: (){
+                Navigator.pop(context,_factorySelectModels);
+              },
+            ),
           ),
           body: FutureBuilder<bool>(
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -269,14 +228,7 @@ class _FactoryPageState extends State<FactoryPage> {
                             showDateFilterMenu = !showDateFilterMenu;
                           });
                         }),
-                        widget.route == '就近找厂'
-                            ? FilterEntry(_localSelectText, () {
-                          setState(() {
-                            showLocalFilterMenu = !showLocalFilterMenu;
-                            showDateFilterMenu = true;
-                          });
-                        })
-                            : FilterEntry(_areaSelectText, () {
+                        FilterEntry(_areaSelectText, () {
                           //获取所有省份
                           rootBundle
                               .loadString('data/province.json')
@@ -309,7 +261,6 @@ class _FactoryPageState extends State<FactoryPage> {
                                 factoryCondition.cities = _citySelects;
                                 FactoryBLoC.instance.filterByCondition(
                                   factoryCondition,
-                                  requirementCode: widget.requirementCode,
                                 );
                               });
                             });
@@ -341,7 +292,6 @@ class _FactoryPageState extends State<FactoryPage> {
                               }
                               FactoryBLoC.instance.filterByCondition(
                                 factoryCondition,
-                                requirementCode: widget.requirementCode,
                               );
                             });
                           });
@@ -358,8 +308,8 @@ class _FactoryPageState extends State<FactoryPage> {
                   endDrawer: Drawer(
                     child: ConditionPage(
                       factoryCondition: factoryCondition,
-                      categories: widget.categories,
-                      labels: widget.labels,
+                      categories: _majorCategories,
+                      labels: _labels,
                     ),
                   ),
                   body: Column(
@@ -402,12 +352,6 @@ class _FactoryPageState extends State<FactoryPage> {
                           afterPressed: (String str) {
                             print(str);
                             setState(() {
-                              if (str == '全部') {
-                                _localSelectText = '距离';
-                              } else {
-                                _localSelectText = str;
-                              }
-                              FilterConditionEntry selected;
                               for (int i = 0;
                               i < filterLocalEntries.length;
                               i++) {
@@ -423,7 +367,6 @@ class _FactoryPageState extends State<FactoryPage> {
                               showLocalFilterMenu = !showLocalFilterMenu;
                               FactoryBLoC.instance.filterByCondition(
                                 factoryCondition,
-                                requirementCode: widget.requirementCode,
                               );
                             });
                           },
@@ -432,11 +375,9 @@ class _FactoryPageState extends State<FactoryPage> {
                       Expanded(
                           child: FactoryListView(
                             factoryCondition: factoryCondition,
-                            showButton: widget.requirementCode != null,
-                            requirementCode: widget.requirementCode,
                             currentCondition: currentCondition,
                             currentLocalCondition: currentLocalCondition,
-                            isLocalFind: isLocalFind,
+                            factoryModels: _factorySelectModels,
                           ))
                     ],
                   ),
@@ -453,68 +394,27 @@ class _FactoryPageState extends State<FactoryPage> {
         ));
   }
 
-  void onLocation() async {
-    // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
-    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => AmapSearchPage(city: aMapLocation.city)));
-    print(tip.name);
-    setState(() {
-      List<String> locationArray = tip.location.split(',');
-      addressLine = tip.name;
-
-      factoryCondition.longitude = double.parse(locationArray[0]);
-      factoryCondition.latitude = double.parse(locationArray[1]);
-
-      FactoryBLoC.instance.filterByCondition(
-        factoryCondition,
-        requirementCode: widget.requirementCode,
-      );
-    });
-  }
-
   Future<bool> _initData() async {
+    _majorCategories = await ProductRepositoryImpl().majorCategories();
+    _labels = await UserRepositoryImpl().labels();
+    _labels = _labels
+        .where((label) =>
+    label.group == 'FACTORY' || label.group == 'PLATFORM')
+        .toList();
+
     if (!inited && !lock) {
       lock = true;
       print('----------------------');
-      aMapLocation = await AmapService.instance.location();
       _category = await ProductRepositoryImpl().cascadedCategories();
       print(isLocalFind);
       if (widget.factoryCondition != null) {
-        if (widget.route == '就近找厂') {
-          isLocalFind = true;
-          // _initLocation();
-          factoryCondition = FactoryCondition(
-              starLevel: 0,
-              adeptAtCategories: [],
-              labels: [],
-              cooperationModes: [],
-              longitude: aMapLocation.longitude,
-              latitude: aMapLocation.latitude,
-              distance: 50000);
-          addressLine = aMapLocation.AOIName;
-        } else {
-          factoryCondition = widget.factoryCondition;
-        }
+        factoryCondition = widget.factoryCondition;
       } else {
-        if (widget.route == '就近找厂') {
-          isLocalFind = true;
-          // _initLocation();
-          factoryCondition = FactoryCondition(
-              starLevel: 0,
-              adeptAtCategories: [],
-              labels: [],
-              cooperationModes: [],
-              longitude: aMapLocation.longitude,
-              latitude: aMapLocation.latitude,
-              distance: 50000);
-          addressLine = aMapLocation.AOIName;
-        } else {
           factoryCondition = FactoryCondition(
               starLevel: 0,
               adeptAtCategories: [],
               labels: [],
               cooperationModes: []);
-        }
       }
       setState(() {
         inited = true;
@@ -526,7 +426,7 @@ class _FactoryPageState extends State<FactoryPage> {
 
   String generateTitle() {
     if (factoryCondition.keyword == null || factoryCondition.keyword == '') {
-      return widget.route ?? '全部工厂';
+      return '全部工厂';
     } else {
       return '${factoryCondition.keyword}';
     }
@@ -570,21 +470,15 @@ class ConditionPageButton extends StatelessWidget {
 }
 
 class FactoryListView extends StatefulWidget {
-  FactoryListView(
-      {this.showButton = false,
+  FactoryListView({
         this.factoryCondition,
-        this.requirementCode,
+        this.factoryModels,
         this.currentLocalCondition,
-        this.isLocalFind = false,
         @required this.currentCondition});
 
   FactoryCondition factoryCondition;
+  List<FactoryModel> factoryModels;
 
-  final String requirementCode;
-
-  final bool showButton;
-
-  bool isLocalFind;
 
   /// 当前选中头部排序条件
   FilterConditionEntry currentCondition;
@@ -599,9 +493,14 @@ class FactoryListView extends StatefulWidget {
 class _FactoryListViewState extends State<FactoryListView> {
   final ScrollController _scrollController = ScrollController();
 
+  List<String> _factoryUids = [];
+
   @override
   void initState() {
     // TODO: implement initState
+    if(widget.factoryModels != null){
+      _factoryUids = widget.factoryModels.map((model) => model.uid).toList();
+    }
 
     super.initState();
   }
@@ -626,14 +525,12 @@ class _FactoryListViewState extends State<FactoryListView> {
             widget.factoryCondition,
             condition: widget.currentCondition.value,
             sort: widget.currentCondition.isDESC ? 'desc' : 'asc',
-            requirementCode: widget.requirementCode,
           );
         } else {
           bloc.loadingMoreByCondition(
             widget.factoryCondition,
             condition: widget.currentCondition.value,
             sort: widget.currentCondition.isDESC ? 'desc' : 'asc',
-            requirementCode: widget.requirementCode,
           );
         }
       }
@@ -661,7 +558,6 @@ class _FactoryListViewState extends State<FactoryListView> {
                     widget.factoryCondition,
                     condition: widget.currentCondition.value,
                     sort: widget.currentCondition.isDESC ? 'desc' : 'asc',
-                    requirementCode: widget.requirementCode,
                   );
 
                   return Padding(
@@ -698,11 +594,32 @@ class _FactoryListViewState extends State<FactoryListView> {
                 if (snapshot.hasData) {
                   return Column(
                     children: snapshot.data.map((item) {
-                      return FactoryItem(
-                        model: item,
-                        requirementCode: widget.requirementCode,
-                        showButton: widget.showButton,
-                        isLocalFind: widget.isLocalFind,
+                      return Container(
+                        margin: EdgeInsets.all(15),
+                        child: GestureDetector(
+                          onTap: (){
+                            setState(() {
+                              if(_factoryUids.contains(item.uid)){
+                                _factoryUids.remove(item.uid);
+                                widget.factoryModels.removeWhere((model) => model.uid == item.uid);
+                              }else{
+                                widget.factoryModels.add(item);
+                                _factoryUids.add(item.uid);
+                              }
+                            });
+                            print('${_factoryUids}------');
+                            print(widget.factoryModels);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            decoration: ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),color: Colors.white,),
+                            child: _factoryUids .contains(item.uid) ? FactorySelectedListItem(
+                              model: item,
+                            ) : FactoryListItem(
+                              model: item,
+                            ),
+                          ),
+                        ),
                       );
                     }).toList(),
                   );

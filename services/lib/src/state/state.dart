@@ -8,6 +8,14 @@ abstract class PageState with ChangeNotifier {
   int totalElements = 0;
   bool loadingMore = false;
   bool lock = false;
+  bool _isDownEnd = false;
+
+
+  bool get isDownEnd => _isDownEnd;
+
+  set isDownEnd(bool value) {
+    _isDownEnd = value;
+  }
 
   ///获取数据
   getData();
