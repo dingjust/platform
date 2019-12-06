@@ -68,6 +68,7 @@
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>-->
           <el-button type="text" v-if="scope.row.state != 'INVALID'" @click="onBCXY(scope.row)">增加补充协议</el-button>
+          <el-button type="text" v-if="scope.row.isOffline == true" @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -238,6 +239,25 @@
       onBCXY (val) {
         this.thisContract = val;
         this.dialogOrderVisible = true;
+      },
+      onDelete (val) {
+        this.$confirm('此操作将永久删除该合同, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.DeleteContract(val.code);
+        })
+      },
+      async  DeleteContract (code) {
+        const url = this.apis().deleteContract(code);
+        const result = await http.get(url);
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+        }
+        this.$emit('onSearch');
       },
       isShowMore (codes) {
         if (codes.length > 5) {
