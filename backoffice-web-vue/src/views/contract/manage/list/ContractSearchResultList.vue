@@ -5,7 +5,8 @@
     </el-dialog>
 
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <contract-supplement-form v-if="dialogOrderVisible" :slotData="thisContract" />
+      <contract-supplement-form v-if="dialogOrderVisible" @openPreviewPdf="previewPdf"
+                                :slotData="thisContract" @onSearch="onSearch" @closeDialogOrderVisible="closeDialogOrderVisible"/>
     </el-dialog>
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
               :height="autoHeight">
@@ -247,6 +248,12 @@
       },
       turnIsMore () {
         this.isMore = !this.isMore;
+      },
+      onSearch () {
+        this.$emit('onSearch');
+      },
+      closeDialogOrderVisible () {
+        this.dialogOrderVisible = false;
       }
     },
     data () {

@@ -103,19 +103,19 @@
 
   export default {
     name: 'PurchaseOrderSearchResultList',
-    props: ["page"],
+    props: ['page'],
     components: {},
     computed: {},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
-      handleFilterChange(val) {
+      handleFilterChange (val) {
         this.statuses = val.status;
 
         this.$emit('onSearch', 0);
       },
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
@@ -125,56 +125,58 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
         }
 
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
+      onDetails (row) {
         this.$emit('onDetails', row);
       },
-      countTotalQuantity(entries) {
+      countTotalQuantity (entries) {
         let amount = 0;
         entries.forEach(element => {
           amount += element.quantity;
         });
         return amount;
       },
-      getPaymentStatusTag(row) {
+      getPaymentStatusTag (row) {
         return row.payStatus === 'PAID' ? 'static/img/paid.png' : 'static/img/arrears.png';
       },
-      getSignedTag(row) {
+      getSignedTag (row) {
         if (row.userAgreementIsSigned == null) {
           return 'static/img/not_signed.png';
         } else {
           return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
         }
       },
-      getOperator(row) {
-        if (this.$store.getters.currentUser.type == 'BRAND'&&row.brandOperator!=null) {
+      getOperator (row) {
+        if (this.$store.getters.currentUser.type == 'BRAND' && row.brandOperator != null) {
           return row.brandOperator.name;
-        } else if (this.$store.getters.currentUser.type == 'FACTORY'&&row.factoryOperator!=null) {
+        } else if (this.$store.getters.currentUser.type == 'FACTORY' && row.factoryOperator != null) {
           return row.factoryOperator.name;
         } else {
           return '';
         }
       }
     },
-    data() {
+    data () {
       return {
-        statuses: this.$store.state.PurchaseOrdersModule.statuses,
+        statuses: this.$store.state.PurchaseOrdersModule.statuses
       }
     }
   }
-
 </script>
 <style>
   .purchase-list-button {
