@@ -10,7 +10,7 @@
       <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
-      <supplier-select @onSelect="onSuppliersSelect" />
+      <suppliers-select @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
       <el-row slot="title">
@@ -113,15 +113,15 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import ContractTypeSelect from './components/ContractTypeSelect';
-  import ContractTemplateSelect from './components/ContractTemplateSelect';
-  import ContractPreview from './components/ContractPreview';
-  import ContractOrderSelect from './components/ContractOrderSelect';
   import http from '@/common/js/http';
-  import TemplateForm from '../../contract/template/components/TemplateForm';
   import Bus from '@/common/js/bus.js';
-  import ContractPreviewPdf from './components/ContractPreviewPdf'
-  import SupplierSelect from './components/SupplierSelect';
+  import TemplateForm from '../../../../contract/template/components/TemplateForm';
+  import ContractTemplateSelect from '../../../../contract/manage/components/ContractTemplateSelect';
+  import ContractOrderSelect from '../../../../contract/manage/components/ContractOrderSelect';
+  import ContractPreview from '../../../../contract/manage/components/ContractPreview';
+  import ContractPreviewPdf from '../../../../contract/manage/components/ContractPreviewPdf';
+  import ContractTypeSelect from '../../../../contract/manage/components/ContractTypeSelect';
+  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
 
   const {
     mapGetters,
@@ -131,16 +131,16 @@
   );
 
   export default {
-    name: 'ContractFrameForm',
+    name: 'PurchaseContractFrameForm',
     props: ['slotData'],
     components: {
+      SuppliersSelect,
       ContractTypeSelect,
       ContractTemplateSelect,
       ContractPreview,
       ContractOrderSelect,
       TemplateForm,
-      ContractPreviewPdf,
-      SupplierSelect
+      ContractPreviewPdf
     },
     computed: {
       ...mapGetters({
@@ -238,13 +238,13 @@
         } else {
           role = 'PARTYB';
         }
-          var agreementType = null;
-          if (this.contractType == '3') {
-              agreementType = 'CUSTOMIZE_COMPLETED';
-          }
-          if (this.contractType == '2') {
-              agreementType = 'CUSTOMIZE';
-          }
+        var agreementType = null;
+        if (this.contractType == '3') {
+          agreementType = 'CUSTOMIZE_COMPLETED';
+        }
+        if (this.contractType == '2') {
+          agreementType = 'CUSTOMIZE';
+        }
         let data = {
           'pdf': this.pdfFile,
           'role': role,
@@ -253,36 +253,13 @@
           'validityStart': this.dateTime[0],
           'isFrame': true,
           'customizeCode': this.contractCode,
+          'agreementType': agreementType,
           'partnerCompanyCode': this.suppliers.id
         }
 
-        const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
-        const result = await http.post(url, formData);
-
-        if (result.code == 1) {
-          this.$message.success(result.msg);
-        } else if (result.code == 0) {
-          this.$message.error(result.msg);
-          return;
-        }
-
-        if (result.data != null && result.data != '') {
-            var url1 = this.apis().getContractDetail(result.data);
-            const result1 = await http.get(url1);
-            if (result1['errors']) {
-                this.$message.error(result1['errors'][0].message);
-                return;
-            }
-            this.thisContract = result1.data;
-            console.log(this.thisContract);
-
-            this.$emit('openPreviewPdf', this.thisContract, '');
-        }
-
-        this.$emit('onSearch');
+        this.$emit('onSaveContractFrameFormPdf', formData);
         this.$emit('closeContractFrameFormDialog');
-        this.$emit('closeContractTypeDialog');
       },
       async onSave () {
         if (this.suppliers.id == null || this.suppliers.id == '') {
@@ -313,33 +290,9 @@
           'partnerCompanyCode': this.suppliers.id
         }
 
-        const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
-        const result = await http.post(url, formData);
-
-        if (result.code == 1) {
-          this.$message.success(result.msg);
-        } else if (result.code == 0) {
-          this.$message.error(result.msg);
-          return;
-        }
-
-        if (result.data != null && result.data != '') {
-            var url1 = this.apis().getContractDetail(result.data);
-            const result1 = await http.get(url1);
-            if (result1['errors']) {
-                this.$message.error(result1['errors'][0].message);
-                return;
-            }
-            this.thisContract = result1.data;
-            console.log(this.thisContract);
-
-            this.$emit('openPreviewPdf', this.thisContract, '');
-        }
-
-        this.$emit('onSearch');
+        this.$emit('onSaveContractFrameForm', formData);
         this.$emit('closeContractFrameFormDialog');
-        this.$emit('closeContractTypeDialog');
       },
       onSetOrderCode () {
         if (this.slotData != null && this.slotData != '') {
@@ -444,10 +397,17 @@
         },
         suppliersSelectVisible: false,
         tempFormVisible: false,
-        suppliers: ''
+        suppliers: {
+          id: '',
+          name: ''
+        }
       };
     },
     created () {
+      if (this.slotData != null || this.slotData != undefined) {
+        this.suppliers.name = this.slotData.companyOfSeller;
+        this.suppliers.id = this.slotData.cooperator.id;
+      };
       this.onSearchOrder('', 0, 10);
       this.onSetOrderCode();
     }
