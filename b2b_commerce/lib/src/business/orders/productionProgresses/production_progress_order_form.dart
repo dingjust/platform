@@ -1,12 +1,13 @@
 import 'package:b2b_commerce/src/business/orders/form/purchase/ColorSizeEntry.dart';
-import 'package:b2b_commerce/src/business/orders/form/purchase/components/ColorSizeTable.dart';
+import 'package:b2b_commerce/src/business/orders/productionProgresses/production_progress_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'components/progress_order_full_table_form.dart';
+import 'components/ProgressColorSizeTabTable.dart';
 
 class ProductionProgressOrderForm extends StatefulWidget {
   final PurchaseOrderModel order;
@@ -36,7 +37,15 @@ class _ProductionProgressOrderFormState
   @override
   void initState() {
     super.initState();
-    form = ProductionProgressOrderModel(medias: [], entries: []);
+
+    ///新建
+    if (widget.progressOrder == null) {
+      form = ProductionProgressOrderModel(medias: [], entries: []);
+    } else {
+      ///修改
+      form = widget.progressOrder;
+      remarksController.text = form.remarks;
+    }
     colorSizeEntries = [];
   }
 
@@ -246,7 +255,9 @@ class _ProductionProgressOrderFormState
         ),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
-        onPressed: () {},
+        onPressed: () {
+          _onSubmit();
+        },
       ),
     );
   }
@@ -264,11 +275,11 @@ class _ProductionProgressOrderFormState
   // }
 
   Widget _buildColorSizeTabForm() {
-    return ColorSizeTable(
-      noteEntries: widget?.progressOrder?.entries ?? null,
-      orderEntries: widget.order.entries,
-      colorSizeEntries: colorSizeEntries,
-    );
+    return ProgressColorSizeTabTable(
+        noteEntries: widget?.progressOrder?.entries ?? null,
+        orderEntries: widget.order.entries,
+        colorSizeEntries: colorSizeEntries,
+        productionProgressOrders: widget.progress.productionProgressOrders);
   }
 
   ///选取时间
@@ -288,12 +299,138 @@ class _ProductionProgressOrderFormState
     });
   }
 
-  ///调整颜色尺码数量编辑页
-  void _onEditEntries() {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ProgressOrderFullTableForm(
-              entries: widget.order.entries,
-              order: form,
-            )));
+  // ///调整颜色尺码数量编辑页
+  // void _onEditEntries() {
+  //   Navigator.of(context).push(MaterialPageRoute(
+  //       builder: (context) => ProgressOrderFullTableForm(
+  //             entries: widget.order.entries,
+  //             order: form,
+  //           )));
+  // }
+
+  void _onSubmit() {
+    //校验
+    String validateStr = '';
+    if (form.reportTime == null) {
+      validateStr = '请选择上报时间';
+    }
+    if (colorSizeEntries
+        .where((entry) => entry.controller.text != '')
+        .length ==
+        0) {
+      validateStr = '请填写上报数量';
+    }
+
+    if (validateStr != '') {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '$validateStr',
+              isNeedConfirmButton: true,
+              isNeedCancelButton: false,
+              confirmButtonText: '是',
+              dialogHeight: 180,
+              confirmAction: () {
+                Navigator.of(context).pop();
+              },
+            );
+          });
+    } else {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.CONFIRM_DIALOG,
+              contentText2: '是否确认上报?',
+              isNeedConfirmButton: true,
+              isNeedCancelButton: true,
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              dialogHeight: 180,
+              confirmAction: () {
+                Navigator.of(context).pop();
+                _create();
+              },
+            );
+          });
+    }
+  }
+
+  ///上报
+  Future<void> _create() async {
+    form
+      ..remarks = remarksController.text
+      ..operator = B2BCustomerModel(id: UserBLoC.instance.currentUser.id)
+      ..entries = colorSizeEntries
+          .where((entry) => entry.controller.text != '')
+          .map((entry) =>
+          OrderNoteEntryModel(
+              color: entry.color,
+              size: entry.size,
+              quantity: getIntFromController(entry.controller)))
+          .toList();
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: widget.progressOrder == null
+                ? ProgressOrderRepository()
+                .createProductionProgressOrder(widget.progress.id, form)
+                : ProgressOrderRepository().updateProductionProgressOrder(
+                widget.progress.id, widget.progressOrder.id, form),
+            outsideDismiss: false,
+            loadingText: '上报中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '上报失败',
+              successTips: '上报成功',
+              callbackResult: result,
+              confirmAction: () => jumpToDetail(int.tryParse(value)),
+            );
+          });
+    });
+  }
+
+  int getIntFromController(TextEditingController controller) {
+    if (controller.text == '') {
+      return 0;
+    }
+    return int.tryParse(controller.text) ?? 0;
+  }
+
+  void jumpToDetail(int id) async {
+    final state = Provider.of<ProductionProgressState>(context);
+    PurchaseOrderModel order = await state.refreshPurchaseOrder();
+    ProductionProgressOrderModel newOrder = state
+        .progress.productionProgressOrders
+        .firstWhere((order) => order.id == id, orElse: () => null);
+    if (newOrder != null) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) =>
+              ProductionProgressOrderDetailPage(
+                model: newOrder,
+              )));
+    } else {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
   }
 }

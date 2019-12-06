@@ -1,6 +1,8 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'components/progress_abbreviation_table.dart';
@@ -10,12 +12,7 @@ import 'production_progress_order_detail.dart';
 import 'production_progress_order_form.dart';
 
 class ProductionProgressDetailPage extends StatefulWidget {
-  final PurchaseOrderModel order;
-
-  final ProductionProgressModel progress;
-
-  const ProductionProgressDetailPage({Key key, this.order, this.progress})
-      : super(key: key);
+  const ProductionProgressDetailPage({Key key}) : super(key: key);
 
   _ProductionProgressDetailPageState createState() =>
       _ProductionProgressDetailPageState();
@@ -30,32 +27,36 @@ class _ProductionProgressDetailPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-            '${ProductionProgressPhaseLocalizedMap[widget.progress.phase]}'),
-        backgroundColor: Constants.THEME_COLOR_MAIN,
-      ),
-      body: Container(
-        color: Constants.THEME_COLOR_BACKGROUND,
-        child: ListView(
-          children: <Widget>[
-            _buildInfoBlock(),
-            _buildTableBlock(),
-            _buildMediasBlock(),
-            _buildRemarksBlock(),
-            _buildReadOrderBtn(),
-            _buildProgressOrdersBlock(),
-            _buildBtn()
-          ],
+    return Consumer<ProductionProgressState>(
+      builder: (context, ProductionProgressState state, _) =>
+          Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              elevation: 0.5,
+              title: Text(
+                  '${ProductionProgressPhaseLocalizedMap[state.progress
+                      .phase]}'),
+              backgroundColor: Constants.THEME_COLOR_MAIN,
+            ),
+            body: Container(
+              color: Constants.THEME_COLOR_BACKGROUND,
+              child: ListView(
+                children: <Widget>[
+                  _buildInfoBlock(state),
+                  _buildTableBlock(state),
+                  _buildMediasBlock(state),
+                  _buildRemarksBlock(state),
+                  _buildReadOrderBtn(),
+                  _buildProgressOrdersBlock(state),
+                  _buildBtn(state)
+                ],
+              ),
         ),
       ),
     );
   }
 
-  Widget _buildInfoBlock() {
+  Widget _buildInfoBlock(ProductionProgressState state) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       color: Colors.white,
@@ -66,10 +67,11 @@ class _ProductionProgressDetailPageState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                  '预计完成时间：${DateFormatUtil.formatYMD(widget.progress.estimatedDate)}'),
+                  '预计完成时间：${DateFormatUtil.formatYMD(
+                      state.progress.estimatedDate)}'),
               Text(
-                widget.progress.delayedDays != 0
-                    ? '已延期${widget.progress.delayedDays}天'
+                state.progress.delayedDays != 0
+                    ? '已延期${state.progress.delayedDays}天'
                     : '',
                 style: TextStyle(color: Colors.red),
               )
@@ -77,15 +79,15 @@ class _ProductionProgressDetailPageState
           ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 10),
-            child: Text('款号：${widget.order.product.skuID ?? ''}'),
+            child: Text('款号：${state.order.product.skuID ?? ''}'),
           ),
-          Text('合作商：${widget.order.cooperator.getName()}')
+          Text('合作商：${state.order.cooperator.getName()}')
         ],
       ),
     );
   }
 
-  Widget _buildTableBlock() {
+  Widget _buildTableBlock(ProductionProgressState state) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       color: Colors.white,
@@ -94,9 +96,9 @@ class _ProductionProgressDetailPageState
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
                   ProgressFullTable(
-                    entries: widget.order.entries,
+                    entries: state.order.entries,
                     productionProgressOrders:
-                    widget.progress.productionProgressOrders,
+                    state.progress.productionProgressOrders,
                   )));
         },
         child: Container(
@@ -106,9 +108,9 @@ class _ProductionProgressDetailPageState
                   key: globalKey,
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   child: ProgressAbbreviationTable(
-                    entries: widget.order.entries,
+                    entries: state.order.entries,
                     productionProgressOrders:
-                    widget.progress.productionProgressOrders,
+                    state.progress.productionProgressOrders,
                   ),
                 ),
                 Positioned(
@@ -126,10 +128,10 @@ class _ProductionProgressDetailPageState
     );
   }
 
-  Widget _buildMediasBlock() {
+  Widget _buildMediasBlock(ProductionProgressState state) {
     //整合全部单据图片
     List<MediaModel> attachments = [];
-    widget.progress.productionProgressOrders
+    state.progress.productionProgressOrders
         .where((order) => order.status != ProductionProgressOrderStatus.CANCEL)
         .forEach((order) {
       attachments.addAll(order.medias);
@@ -156,7 +158,7 @@ class _ProductionProgressDetailPageState
     );
   }
 
-  Widget _buildRemarksBlock() {
+  Widget _buildRemarksBlock(ProductionProgressState state) {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -165,7 +167,7 @@ class _ProductionProgressDetailPageState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('备注：'),
-          Expanded(flex: 1, child: Text('${widget.progress.remarks ?? ''}'))
+          Expanded(flex: 1, child: Text('${state.progress.remarks ?? ''}'))
         ],
       ),
     );
@@ -191,21 +193,25 @@ class _ProductionProgressDetailPageState
     );
   }
 
-  Widget _buildProgressOrdersBlock() {
+  Widget _buildProgressOrdersBlock(ProductionProgressState state) {
     return showAllOrders
         ? Container(
       color: Colors.white,
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: ProgressOrdersTable(
-        productionProgressOrders:
-        widget.progress.productionProgressOrders,
+        productionProgressOrders: state.progress.productionProgressOrders,
         onDetail: _onOrderDetail,
       ),
     )
         : Container();
   }
 
-  Widget _buildBtn() {
+  Widget _buildBtn(ProductionProgressState state) {
+    if (UserBLoC.instance.currentUser.type != UserType.FACTORY ||
+        state.order.currentPhase != state.progress.phase) {
+      return Container();
+    }
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
       child: FlatButton(
@@ -224,8 +230,8 @@ class _ProductionProgressDetailPageState
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) =>
                   ProductionProgressOrderForm(
-                    order: widget.order,
-                    progress: widget.progress,
+                    order: state.order,
+                    progress: state.progress,
                   )));
         },
       ),
@@ -233,9 +239,8 @@ class _ProductionProgressDetailPageState
   }
 
   void _onOrderDetail(ProductionProgressOrderModel model) {
+    final state = Provider.of<ProductionProgressState>(context);
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            ProductionProgressOrderDetailPage(
-                order: widget.order, progress: widget.progress, model: model)));
+        builder: (context) => ProductionProgressOrderDetailPage(model: model)));
   }
 }

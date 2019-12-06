@@ -333,18 +333,18 @@ class OrderApis {
   ///创建生产进度单据
   static get createProductionProgressOrder =>
           (id) {
-        return 'b2b/orders/purchase/progress/$id/order';
+        return '/b2b/orders/purchase/progress/$id/order';
       };
 
   ///作废生产进度单据
   static get deleteProductionProgressOrder =>
           (id, orderId) {
-        return 'b2b/orders/purchase/progress/$id/order/$orderId';
+        return '/b2b/orders/purchase/progress/$id/order/$orderId';
       };
 
   ///修改生产进度单据
   static get updateProductionProgressOrder =>
           (id, orderId) {
-        return 'b2b/orders/purchase/progress/$id/order/$orderId';
+        return '/b2b/orders/purchase/progress/$id/order/$orderId';
       };
 }

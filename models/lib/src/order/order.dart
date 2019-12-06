@@ -1266,6 +1266,10 @@ class ProductionProgressModel extends ItemModel {
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime finishDate;
 
+  ///修改时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime modifiedtime;
+
   ///备注
   String remarks;
 
@@ -1288,6 +1292,7 @@ class ProductionProgressModel extends ItemModel {
       this.sequence,
       this.estimatedDate,
       this.finishDate,
+        this.modifiedtime,
       this.order,
       this.updateOnly,
       this.delayedDays,
