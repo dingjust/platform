@@ -7,6 +7,7 @@ import 'components/progress_abbreviation_table.dart';
 import 'components/progress_full_table.dart';
 import 'components/progress_orders_table.dart';
 import 'production_progress_order_detail.dart';
+import 'production_progress_order_form.dart';
 
 class ProductionProgressDetailPage extends StatefulWidget {
   final PurchaseOrderModel order;
@@ -119,31 +120,6 @@ class _ProductionProgressDetailPageState
                     color: Colors.grey,
                   ),
                 ),
-                // FutureBuilder<BuildContext>(
-                //   future: _getTableContext(),
-                //   builder:
-                //       (BuildContext context, AsyncSnapshot<BuildContext> snapshot) {
-                //     if (tableHeight == 0 && tableWidth == 0) {
-                //       _getTableContext();
-                //       return Container();
-                //     } else {
-                //       return Container(
-                //         width: tableWidth,
-                //         height: tableHeight,
-                //         color: Color.fromRGBO(0, 0, 0, 0.2),
-                //         child: Center(
-                //             child: FlatButton(
-                //           onPressed: () {},
-                //           child: Container(
-                //             color: Colors.white60,
-                //             padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                //             child: Text('编辑'),
-                //           ),
-                //         )),
-                //       );
-                //     }
-                //   },
-                // )
               ],
             )),
       ),
@@ -244,7 +220,14 @@ class _ProductionProgressDetailPageState
         ),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  ProductionProgressOrderForm(
+                    order: widget.order,
+                    progress: widget.progress,
+                  )));
+        },
       ),
     );
   }
@@ -255,16 +238,4 @@ class _ProductionProgressDetailPageState
             ProductionProgressOrderDetailPage(
                 order: widget.order, progress: widget.progress, model: model)));
   }
-
-// Future<BuildContext> _getTableContext() async {
-//   Future.delayed(Duration(milliseconds: 100)).then((e) {
-//     if (globalKey.currentContext == null) {
-//       return _getTableContext();
-//     } else {
-//       tableWidth = globalKey.currentContext.size.width;
-//       tableHeight = globalKey.currentContext.size.height;
-//       return globalKey.currentContext;
-//     }
-//   });
-// }
 }
