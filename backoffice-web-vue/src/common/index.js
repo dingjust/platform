@@ -759,6 +759,9 @@ let NONE_TENANT_APIS = {
   saveContract() {
     return '/b2b/user/agreement/save';
   },
+  deleteContract(code) {
+    return '/b2b/user/agreement/delete/' + code;
+  },
   downContract(code) {
     return '/b2b/user/agreement/get/download/token/' + code;
   },
