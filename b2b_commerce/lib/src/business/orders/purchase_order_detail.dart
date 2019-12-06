@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
@@ -904,6 +905,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       onPressed: () {
+                        ///更新生产进度状态数据模型
+                        final state =
+                        Provider.of<ProductionProgressState>(context);
+                        state.setOrder(order);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -11,11 +12,16 @@ class ProductionItem extends StatelessWidget {
 
   final PurchaseOrderModel order;
 
-  Future<void> requestCallBack(BuildContext context)async{
+  Future<void> requestCallBack(BuildContext context) async {
     PurchaseOrderModel model =
     await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
 
-    Navigator.push(context, MaterialPageRoute(
+    ///更新生产进度状态数据模型
+    final state = Provider.of<ProductionProgressState>(context);
+    state.setOrder(model);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
         builder: (context) => ProductionProgressesPage(
           order: model,
         ),
@@ -26,7 +32,7 @@ class ProductionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async{
+      onTap: () async {
         //修改消息阅读进度
         order.updated = false;
         showDialog(
@@ -34,25 +40,28 @@ class ProductionItem extends StatelessWidget {
             barrierDismissible: false,
             builder: (_) {
               return RequestDataLoading(
-                requestCallBack: PurchaseOrderRepository().getPurchaseOrderDetail(order.code),
+                requestCallBack: PurchaseOrderRepository()
+                    .getPurchaseOrderDetail(order.code),
                 outsideDismiss: false,
                 loadingText: '加载中。。。',
                 entrance: '',
               );
-            }
-        ).then((value){
-          if(value != null){
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) =>
-                  ProductionProgressesPage(
-                    order: value,
-                  ),
-            ),
+            }).then((value) {
+          if (value != null) {
+            ///更新生产进度状态数据模型
+            final state = Provider.of<ProductionProgressState>(context);
+            state.setOrder(value);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ProductionProgressesPage(
+                      order: value,
+                    ),
+              ),
             );
           }
-
         });
-
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -72,11 +81,8 @@ class ProductionItem extends StatelessWidget {
     );
   }
 
-  Future<void> openPage(BuildContext context,PurchaseOrderModel model) async {
-
-    if (model != null) {
-
-    }
+  Future<void> openPage(BuildContext context, PurchaseOrderModel model) async {
+    if (model != null) {}
   }
 
   Widget _buildCompanyName(BuildContext context) {
@@ -145,7 +151,8 @@ class ProductionItem extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              order.updated !=null && order.updated?Container(
+              order.updated != null && order.updated
+                  ? Container(
                 margin: EdgeInsets.symmetric(horizontal: 5),
                 width: 10,
                 height: 10,
@@ -153,7 +160,8 @@ class ProductionItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                   color: Colors.red,
                 ),
-              ):Container()
+              )
+                  : Container()
             ],
           ),
         ],

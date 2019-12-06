@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
@@ -216,12 +217,12 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
     for (int i = 0; i < order.progresses.length; i++) {
       _list.add(GestureDetector(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  ProductionProgressDetailPage(
-                    order: widget.order,
-                    progress: order.progresses[i],
-                  )));
+          final state = Provider.of<ProductionProgressState>(context);
+          state.jumpToProgressDetail(
+              context: context,
+              materialPageRoute: MaterialPageRoute(
+                  builder: (context) => ProductionProgressDetailPage()),
+              progress: order.progresses[i]);
         },
         child: Card(
           margin: EdgeInsets.fromLTRB(10, 5, 10, 8),

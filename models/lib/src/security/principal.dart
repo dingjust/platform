@@ -9,6 +9,7 @@ part 'principal.g.dart';
 class PrincipalModel extends ItemModel {
   @JsonKey(toJson: mediaToJson)
   MediaModel profilePicture;
+  int id;
   String uid;
   String name;
   String phone;
@@ -25,6 +26,7 @@ class PrincipalModel extends ItemModel {
   PrincipalModel({
     this.profilePicture,
     @required this.uid,
+    this.id,
     this.name,
     this.phone,
     this.approvalStatus,
