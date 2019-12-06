@@ -26,6 +26,13 @@
         <span class="create-contract-title">补充协议</span>
       </el-row>
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
+      <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
+        <el-col :push="2" :span="8">
+          <span class="tips">合同类型</span>
+          <el-radio v-model="contractType" label="1">模板合同</el-radio>
+          <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
+        </el-col>
+      </el-row>
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择已签合同" v-model="slotData.code" :disabled="true">
@@ -189,6 +196,10 @@
         this.pdfFile = '';
       },
       async onSavePdf () {
+        if (this.contractCode == null || this.contractCode == '') {
+          this.$message.error('请输入自定义合同编号');
+          return;
+        }
         if (this.pdfFile.id == null || this.pdfFile.id == '') {
           this.$message.error('请上传PDF文件');
           return;
