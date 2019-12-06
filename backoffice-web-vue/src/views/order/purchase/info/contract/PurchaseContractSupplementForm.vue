@@ -1,16 +1,16 @@
 <template>
   <div>
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog" append-to-body>
-        <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
+      <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
         <el-divider direction="vertical"></el-divider>
-        <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
-        <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
+      <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
+      <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
       <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body>
-      <supplier-select @onSelect="onSuppliersSelect" />
+      <suppliers-select @onSelect="onSuppliersSelect" />
     </el-dialog>
     <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
       <el-row slot="title">
@@ -19,11 +19,11 @@
       <contract-preview />
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
-      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
+      <purchase-contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
     </el-dialog>
     <div>
       <el-row type="flex" justify="center" align="middle">
-        <span class="create-contract-title">框架协议</span>
+        <span class="create-contract-title">补充协议</span>
       </el-row>
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
       <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
@@ -35,15 +35,8 @@
       </el-row>
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
-          <el-input size="small" placeholder="选择合作商" v-model="suppliers.name" :disabled="true">
-            <el-button slot="prepend" :disabled="orderReadOnly" @click="suppliersSelectVisible=true">合作商</el-button>
-          </el-input>
-        </el-col>
-      </el-row>
-      <el-row class="create-contract-row" v-if="contractType=='1'">
-        <el-col :span="20" :offset="2">
-          <el-input size="small" placeholder="选择合同模板" v-model="selectFile.title" :disabled="true">
-            <el-button slot="prepend" @click="selectTemp('')">合同模板</el-button>
+          <el-input size="small" placeholder="选择已签合同" v-model="slotData.code" :disabled="true">
+            <el-button slot="prepend" :disabled="true" @click="suppliersSelectVisible=true">已签合同</el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -51,6 +44,13 @@
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="请输入合同编号" v-model="contractCode">
             <el-button slot="prepend" :disabled="true">合同编号</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType=='1'">
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="选择合同模板" v-model="selectFile.title" :disabled="true">
+            <el-button slot="prepend" @click="selectTemp('')">合同模板</el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -75,34 +75,15 @@
           </el-upload>
         </el-col>
       </el-row>
-      <el-row class="create-contract-row" type="flex" justify="start">
-        <el-col :push="2" :span="3">
-        <div style="margin-top: 5px;"><span class="tips">合同有效期</span></div>
-        </el-col>
-        <el-col :push="1" :span="8">
-          <div>
-            <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="至"
-                            value-format="yyyy-MM-dd"  start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
-            </el-date-picker>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row class="create-contract-row" type="flex" justify="start">
-        <el-col :push="2" :span="8">
-          <span class="tips">我的身份</span>
-          <el-radio v-model="partyA" :label="true">我是甲方</el-radio>
-          <el-radio v-model="partyA" :label="false">我是乙方</el-radio>
-        </el-col>
-      </el-row>
 
       <el-row class="create-contract-row" type="flex" justify="center">
         <el-col :span="4" :offset="-2">
-<!--          <el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
+          <!--<el-button class="create-contract-button" @click="dialogPreviewVisible=true">预览合同</el-button>-->
         </el-col>
         <el-col :span="4" :offset="2">
-          <el-button v-if="contractType == '1'" class="create-contract-button" @click="onSave">生成合同</el-button>
+          <el-button type="text" v-if="contractType == '1'" class="create-contract-button" @click="onSave">生成合同</el-button>
 
-          <el-button v-else class="create-contract-button" @click="onSavePdf">生成合同</el-button>
+          <el-button type="text" v-else class="create-contract-button" @click="onSavePdf">生成合同</el-button>
         </el-col>
       </el-row>
     </div>
@@ -113,15 +94,15 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import ContractTypeSelect from './components/ContractTypeSelect';
-  import ContractTemplateSelect from './components/ContractTemplateSelect';
-  import ContractPreview from './components/ContractPreview';
-  import ContractOrderSelect from './components/ContractOrderSelect';
   import http from '@/common/js/http';
-  import TemplateForm from '../../contract/template/components/TemplateForm';
   import Bus from '@/common/js/bus.js';
-  import ContractPreviewPdf from './components/ContractPreviewPdf'
-  import SupplierSelect from './components/SupplierSelect';
+  import ContractTemplateSelect from '../../../../contract/manage/components/ContractTemplateSelect';
+  import TemplateForm from '../../../../contract/template/components/TemplateForm';
+  import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
+  import ContractPreview from '../../../../contract/manage/components/ContractPreview';
+  import ContractPreviewPdf from '../../../../contract/manage/components/ContractPreviewPdf';
+  import PurchaseContractPreviewPdf from './PurchaseContractPreviewPdf';
+  import ContractTypeSelect from '../../../../contract/manage/components/ContractTypeSelect';
 
   const {
     mapGetters,
@@ -131,16 +112,15 @@
   );
 
   export default {
-    name: 'ContractFrameForm',
     props: ['slotData'],
     components: {
       ContractTypeSelect,
-      ContractTemplateSelect,
-      ContractPreview,
-      ContractOrderSelect,
-      TemplateForm,
+      PurchaseContractPreviewPdf,
       ContractPreviewPdf,
-      SupplierSelect
+      ContractPreview,
+      SuppliersSelect,
+      TemplateForm,
+      ContractTemplateSelect
     },
     computed: {
       ...mapGetters({
@@ -165,8 +145,8 @@
         refresh: 'refresh'
       }),
       selectTemp (str) {
-        if (str == 'KJXY') {
-          this.tempType = 'KJXY';
+        if (str == 'BCXY') {
+          this.tempType = 'BCXY';
         }
 
         this.dialogTemplateVisible = true;
@@ -216,28 +196,18 @@
         this.pdfFile = '';
       },
       async onSavePdf () {
-        if (this.pdfFile.id == null || this.pdfFile.id == '') {
-          this.$message.error('请上传PDF');
-          return;
-        }
-        if (this.suppliers.id == null || this.suppliers.id == '') {
-          this.$message.error('请选择合作商');
-          return;
-        }
-        if (this.dateTime == '' || this.dateTime == null) {
-          this.$message.error('请选择合同有效期');
-          return;
-        }
         if (this.contractCode == null || this.contractCode == '') {
           this.$message.error('请输入自定义合同编号');
           return;
         }
-        let role = '';
-        if (this.partyA) {
-          role = 'PARTYA';
-        } else {
-          role = 'PARTYB';
+        if (this.pdfFile.id == null || this.pdfFile.id == '') {
+          this.$message.error('请上传PDF文件');
+          return;
         }
+        // if (this.suppliers.uid == null || this.suppliers.uid) {
+        //   this.$message.error('请选择合作商');
+        //   return;
+        // }
         var agreementType = null;
         if (this.contractType == '3') {
           agreementType = 'CUSTOMIZE_COMPLETED';
@@ -247,100 +217,34 @@
         }
         let data = {
           'pdf': this.pdfFile,
-          'role': role,
           'title': '',
-          'validityEnd': this.dateTime[1],
-          'validityStart': this.dateTime[0],
-          'isFrame': true,
-          'agreementType': agreementType,
+          'isFrame': false,
+          'mainAgreementCode': this.slotData.code,
           'customizeCode': this.contractCode,
-          'partnerCompanyCode': this.suppliers.id
+          'agreementType': agreementType,
+          'isSupplementary': true
         }
 
-        const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
-        const result = await http.post(url, formData);
-
-        if (result.code == 1) {
-          this.$message.success(result.msg);
-        } else if (result.code == 0) {
-          this.$message.error(result.msg);
-          return;
-        }
-
-        if (result.data != null && result.data != '') {
-          var url1 = this.apis().getContractDetail(result.data);
-          const result1 = await http.get(url1);
-          if (result1['errors']) {
-            this.$message.error(result1['errors'][0].message);
-            return;
-          }
-          this.thisContract = result1.data;
-          console.log(this.thisContract);
-
-          this.$emit('openPreviewPdf', this.thisContract, '');
-        }
-
-        this.$emit('onSearch');
-        this.$emit('closeContractFrameFormDialog');
-        this.$emit('closeContractTypeDialog');
+        this.$emit('onSaveContractSupplementFormPdf', formData);
+        this.$emit('closeDialogOrderVisible');
       },
       async onSave () {
-        if (this.suppliers.id == null || this.suppliers.id == '') {
-          this.$message.error('请选择合作商');
-          return;
-        }
         if (this.selectFile.id == null || this.selectFile.id == '') {
           this.$message.error('请选择合同模板');
           return;
         }
-        if (this.dateTime == '' || this.dateTime == null) {
-          this.$message.error('请选择合同有效期');
-          return;
-        }
-        let role = '';
-        if (this.partyA) {
-          role = 'PARTYA';
-        } else {
-          role = 'PARTYB';
-        }
         let data = {
-          'userTempCode': this.selectFile.code,
-          'validityEnd': this.dateTime[1],
-          'validityStart': this.dateTime[0],
-          'role': role,
           'title': '',
-          'isFrame': true,
-          'partnerCompanyCode': this.suppliers.id
+          'mainAgreementCode': this.slotData.code,
+          'isSupplementary': true,
+          'isFrame': false,
+          'userTempCode': this.selectFile.code
         }
 
-        const url = this.apis().saveContract();
         let formData = Object.assign({}, data);
-        const result = await http.post(url, formData);
-
-        if (result.code == 1) {
-          this.$message.success(result.msg);
-        } else if (result.code == 0) {
-          this.$message.error(result.msg);
-          return;
-        }
-
-        if (result.data != null && result.data != '') {
-          var url1 = this.apis().getContractDetail(result.data);
-          const result1 = await http.get(url1);
-          if (result1['errors']) {
-            this.$message.error(result1['errors'][0].message);
-            return;
-          }
-          this.thisContract = result1.data;
-          console.log(this.thisContract);
-
-          this.$emit('openPreviewPdf', this.thisContract, '');
-        }
-
-        this.$emit('onSearch');
-        this.$emit('closeContractFrameFormDialog');
-        this.$emit('closeContractTypeDialog');
+        this.$emit('onSaveContractSupplementForm', formData);
+        this.$emit('closeDialogOrderVisible');
       },
       onSetOrderCode () {
         if (this.slotData != null && this.slotData != '') {
@@ -355,10 +259,10 @@
       },
       onCreateTemp () {
         // this.dialogTemplateVisible = false;
-        // this.fn.closeSlider(false);
-        this.tempFormVisible = true;
+        Bus.$emit('closeBCXYFrom');
         // this.$router.push("templateForm");
         // this.fn.openSlider('创建', TemplateForm);
+        this.tempFormVisible = true;
       },
       handlePreview (file) {
         this.dialogImageUrl = file.url;
@@ -411,7 +315,7 @@
         fileUrl: '',
         thisContract: '',
         agreementType: '',
-        tempType: 'KJXY',
+        tempType: 'BCXY',
         tempData: [],
         allData: [],
         dateTime: '',

@@ -5,7 +5,8 @@
     </el-dialog>
 
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <contract-supplement-form v-if="dialogOrderVisible" :slotData="thisContract" />
+      <contract-supplement-form v-if="dialogOrderVisible" @openPreviewPdf="previewPdf"
+                                :slotData="thisContract" @onSearch="onSearch" @closeDialogOrderVisible="closeDialogOrderVisible"/>
     </el-dialog>
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
               :height="autoHeight">
@@ -20,11 +21,22 @@
       <el-table-column label="合同编号" prop="customizeCode"></el-table-column>
       <el-table-column label="生产单号" prop="orderCode">
         <template slot-scope="scope">
-          <template v-for="(code,index) in scope.row.orderCodes">
-            <el-row :key="index">
+          <div v-if="isShowMore(scope.row.orderCodes) && isMore">
+            <div v-for="(code,index) in scope.row.orderCodes">
+              <el-row v-if="index < 5" :key="index">
                 <span>{{code}}</span>
-            </el-row>
-          </template>
+              </el-row>
+            </div>
+            <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && isMore" @click="turnIsMore()">显示更多>></h6>
+          </div>
+          <div v-else>
+            <div v-for="(code,index) in scope.row.orderCodes">
+              <el-row :key="index">
+                <span>{{code}}</span>
+              </el-row>
+            </div>
+            <h6 style="color: #4a86e8;font-size: 10px" v-if="isShowMore(scope.row.orderCodes) && !isMore" @click="turnIsMore()">点击拉起>></h6>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="签署对象" prop="belongTo.name">
@@ -56,6 +68,7 @@
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text"  @click="onSearchSeal(scope.row)">签署</el-button>-->
           <!--<el-button v-if="scope.row.state != 'COMPLETE' && scope.row.state != 'INVALID'" type="text" @click="onRevoke(scope.row.code)">撤回</el-button>-->
           <el-button type="text" v-if="scope.row.state != 'INVALID'" @click="onBCXY(scope.row)">增加补充协议</el-button>
+          <el-button type="text" v-if="scope.row.isOffline == true" @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -122,6 +135,9 @@
         }
 
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        })
       },
       _reset () {
         this.$refs.resultTable.clearSort();
@@ -199,7 +215,7 @@
         this.$emit('closePdfVisible');
       },
       async previewPdf (val, code) {
-        this.$emit('previewPdf',val,code);
+        this.$emit('previewPdf', val, code);
         // this.thisContract = val;
         // console.log(this.thisContract);
         // let queryCode = '';
@@ -223,6 +239,41 @@
       onBCXY (val) {
         this.thisContract = val;
         this.dialogOrderVisible = true;
+      },
+      onDelete (val) {
+        this.$confirm('此操作将永久删除该合同, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.DeleteContract(val.code);
+        })
+      },
+      async  DeleteContract (code) {
+        const url = this.apis().deleteContract(code);
+        const result = await http.get(url);
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+        }
+        this.$emit('onSearch');
+      },
+      isShowMore (codes) {
+        if (codes.length > 5) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      turnIsMore () {
+        this.isMore = !this.isMore;
+      },
+      onSearch () {
+        this.$emit('onSearch');
+      },
+      closeDialogOrderVisible () {
+        this.dialogOrderVisible = false;
       }
     },
     data () {
@@ -236,7 +287,8 @@
         currentUser: this.$store.getters.currentUser,
         fileUrl: '',
         thisContract: '',
-        dialogOrderVisible: false
+        dialogOrderVisible: false,
+        isMore: true
       }
     },
     created () {

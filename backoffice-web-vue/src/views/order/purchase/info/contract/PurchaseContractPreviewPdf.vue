@@ -1,8 +1,11 @@
 <template>
 
   <div>
-    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
-      <contract-supplement-form :slotData="slotData" />
+    <el-dialog v-if="dialogOrderVisible" :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
+      <purchase-contract-supplement-form :slotData="slotData"
+                                         @onSaveContractSupplementForm="onSaveContractSupplementForm"
+                                         @onSaveContractSupplementFormPdf="onSaveContractSupplementFormPdf"
+                                         @closeDialogOrderVisible="closeDialogOrderVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogSealVisible" :show-close="true">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
@@ -50,16 +53,16 @@
 
 <script>
   import http from '@/common/js/http';
-  import ContractSealList from '../components/ContractSealList';
   import Bus from '@/common/js/bus.js';
-  import ContractSupplementForm from '../ContractSupplementForm'
+  import ContractSealList from '../../../../contract/manage/components/ContractSealList';
+  import PurchaseContractSupplementForm from './PurchaseContractSupplementForm';
 
   export default {
-    name: 'ContractPreviewPdf',
+    name: 'PurchaseContractPreviewPdf',
     props: ['slotData', 'fileUrl'],
     components: {
-      ContractSealList,
-      ContractSupplementForm
+      PurchaseContractSupplementForm,
+      ContractSealList
     },
     mounted () {
       this.isLoading = true;
@@ -75,6 +78,41 @@
       }
     },
     methods: {
+      closeDialogOrderVisible () {
+        this.dialogOrderVisible = false;
+      },
+      async onSaveContractSupplementForm (formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+        this.$message.success(result.msg);
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+          }
+          this.thisContract = result1.data;
+          this.$emit('showContract', this.thisContract);
+        }
+        this.$emit('getContractsList');
+      },
+      async onSaveContractSupplementFormPdf (formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+        this.$message.success(result.msg);
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+          }
+          this.thisContract = result1.data;
+          this.$emit('showContract', this.thisContract);
+        }
+        this.$emit('getContractsList');
+      },
       onBCXY () {
         this.dialogOrderVisible = true;
         Bus.$emit('closePdfView');

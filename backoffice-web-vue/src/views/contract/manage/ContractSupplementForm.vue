@@ -26,6 +26,13 @@
         <span class="create-contract-title">补充协议</span>
       </el-row>
       <contract-type-select @contractTypeChange="onContractTypeChange" class="contractTypeSelect" />
+      <el-row class="create-contract-row" type="flex" justify="start" v-if="contractType!='3'">
+        <el-col :push="2" :span="8">
+          <span class="tips">合同类型</span>
+          <el-radio v-model="contractType" label="1">模板合同</el-radio>
+          <el-radio v-model="contractType" label="2">自定义合同上传</el-radio>
+        </el-col>
+      </el-row>
       <el-row class="create-contract-row">
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择已签合同" v-model="slotData.code" :disabled="true">
@@ -37,6 +44,13 @@
         <el-col :span="20" :offset="2">
           <el-input size="small" placeholder="选择合同模板" v-model="selectFile.title" :disabled="true">
             <el-button slot="prepend" @click="selectTemp('')">合同模板</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType!='1'">
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="请输入合同编号" v-model="contractCode">
+            <el-button slot="prepend" :disabled="true">合同编号</el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -182,6 +196,10 @@
         this.pdfFile = '';
       },
       async onSavePdf () {
+        if (this.contractCode == null || this.contractCode == '') {
+          this.$message.error('请输入自定义合同编号');
+          return;
+        }
         if (this.pdfFile.id == null || this.pdfFile.id == '') {
           this.$message.error('请上传PDF文件');
           return;
@@ -190,12 +208,20 @@
         //   this.$message.error('请选择合作商');
         //   return;
         // }
-
+        var agreementType = null;
+        if (this.contractType == '3') {
+          agreementType = 'CUSTOMIZE_COMPLETED';
+        }
+        if (this.contractType == '2') {
+          agreementType = 'CUSTOMIZE';
+        }
         let data = {
           'pdf': this.pdfFile,
           'title': '',
           'isFrame': false,
           'mainAgreementCode': this.slotData.code,
+          'customizeCode': this.contractCode,
+          'agreementType': agreementType,
           'isSupplementary': true
         }
 
@@ -203,17 +229,42 @@
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
 
-        this.$message.success(result.msg);
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.$emit('openPreviewPdf', this.thisContract, '');
+        }
+
+        // Bus.$emit('closeContractFrom');
+        // Bus.$emit('closeDialogOrderVisible');
+        this.$emit('closeDialogOrderVisible');
+        this.$emit('onSearch');
+        // this.$message.success(result.msg);
         // Bus.$emit('closeContractFrom');
         // Bus.$emit('closeDialogOrderVisible');
 
-        console.log(result);
-
-        if (result.data != null && result.data != '') {
-          Bus.$emit('openContract1', result.data);
-        }
-
-        const searchUrl = this.apis().getContractsList();
+        // console.log(result);
+        //
+        // if (result.data != null && result.data != '') {
+        //   Bus.$emit('openContract1', result.data);
+        // }
+        //
+        // const searchUrl = this.apis().getContractsList();
+        // this.$emit('onSearch');
 
         // this.refresh({
         //   searchUrl
@@ -238,14 +289,30 @@
         let formData = Object.assign({}, data);
         const result = await http.post(url, formData);
 
-        this.$message.success(result.msg);
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
 
         if (result.data != null && result.data != '') {
-          Bus.$emit('openContract1', result.data);
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.$emit('openPreviewPdf', this.thisContract, '');
         }
-        Bus.$emit('closeContractFrom');
-        Bus.$emit('closeDialogOrderVisible');
-        const searchUrl = this.apis().getContractsList();
+
+        // Bus.$emit('closeContractFrom');
+        // Bus.$emit('closeDialogOrderVisible');
+        this.$emit('closeDialogOrderVisible');
+        this.$emit('onSearch');
 
         // this.refresh({
         //   searchUrl
@@ -325,6 +392,7 @@
         tempData: [],
         allData: [],
         dateTime: '',
+        contractCode: '',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',

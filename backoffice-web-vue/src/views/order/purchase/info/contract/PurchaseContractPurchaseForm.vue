@@ -73,7 +73,7 @@
         <el-col :span="8" :offset="2">
           <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
                      :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
-                     :on-exceed="handleExceed" :on-progress="uploadVideoProcess"
+                     :on-exceed="handleExceed"
                      :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
             <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
             <i class="el-icon-plus"></i>
@@ -130,15 +130,15 @@
     import {
       createNamespacedHelpers
     } from 'vuex';
-    import ContractTypeSelect from './components/ContractTypeSelect';
-    import ContractTemplateSelect from './components/ContractTemplateSelect';
-    import ContractPreview from './components/ContractPreview';
-    import ContractOrderSelect from './components/ContractOrderSelect';
     import http from '@/common/js/http';
-    import TemplateForm from '../../contract/template/components/TemplateForm';
     import Bus from '@/common/js/bus.js';
-    import ContractPreviewPdf from './components/ContractPreviewPdf'
-    import ContractSelect from './components/ContractSelect';
+    import TemplateForm from '../../../../contract/template/components/TemplateForm';
+    import ContractTemplateSelect from '../../../../contract/manage/components/ContractTemplateSelect';
+    import ContractOrderSelect from '../../../../contract/manage/components/ContractOrderSelect';
+    import ContractSelect from '../../../../contract/manage/components/ContractSelect';
+    import ContractPreview from '../../../../contract/manage/components/ContractPreview';
+    import ContractPreviewPdf from '../../../../contract/manage/components/ContractPreviewPdf';
+    import ContractTypeSelect from '../../../../contract/manage/components/ContractTypeSelect';
 
     const {
       mapGetters,
@@ -148,7 +148,7 @@
     );
 
     export default {
-      name: 'ContractPurchaseForm',
+      name: 'PurchaseContractPurchaseForm',
       props: ['slotData', 'formData'],
       components: {
         ContractTypeSelect,
@@ -295,51 +295,18 @@
             role = 'PARTYB';
           }
 
-          var frameAgreementCode = '';
-          if (this.selectContract.code == null || this.selectContract.code == '') {
-            return;
-          }
-
-          if (this.selectContract.code != null && this.selectContract.code != '') {
-            frameAgreementCode = this.selectContract.code;
-          }
           let data = {
             'pdf': this.pdfFile,
             'role': role,
             'title': '',
             'customizeCode': this.contractCode,
             'agreementType': agreementType,
-            'frameAgreementCode': frameAgreementCode,
             'orderCodes': this.orderSelectFiles.map((order) => order.code)
           }
 
-          const url = this.apis().saveContract();
           let formData = Object.assign({}, data);
-          const result = await http.post(url, formData);
-
-          if (result.code == 1) {
-            this.$message.success(result.msg);
-          } else if (result.code == 0) {
-            this.$message.error(result.msg);
-            return;
-          }
-
-          if (result.data != null && result.data != '') {
-            var url1 = this.apis().getContractDetail(result.data);
-            const result1 = await http.get(url1);
-            if (result1['errors']) {
-              this.$message.error(result1['errors'][0].message);
-              return;
-            }
-            this.thisContract = result1.data;
-            console.log(this.thisContract);
-
-            this.$emit('openPreviewPdf', this.thisContract, '');
-          }
-
-          this.$emit('onSearch');
+          this.$emit('onSaveContractPurchaseFormPdf', formData);
           this.$emit('closeContractPurchaseFormDialog');
-          this.$emit('closeContractTypeDialog');
         },
         async onSave () {
           // if (!this.isOrderClickPass) {
@@ -352,7 +319,7 @@
             return;
           }
 
-          if (this.selectContract.code == null || this.selectContract.code == undefined) {
+          if (this.selectContract == null || this.selectContract == undefined) {
             this.$message.error('请选择框架协议');
             return;
           }
@@ -380,6 +347,7 @@
           console.log(this.selectContract);
           this.agreementType = '';
           if (this.selectContract.code == null || this.selectContract.code == '') {
+            this.$message.error('请选择框架协议');
             return;
           }
 
@@ -394,33 +362,9 @@
             'frameAgreementCode': frameAgreementCode,
             'orderCodes': this.orderSelectFiles.map((order) => order.code)
           }
-          const url = this.apis().saveContract();
           let formData = Object.assign({}, data);
-          const result = await http.post(url, formData);
-
-          if (result.code == 1) {
-            this.$message.success(result.msg);
-          } else if (result.code == 0) {
-            this.$message.error(result.msg);
-            return;
-          }
-
-          if (result.data != null && result.data != '') {
-            var url1 = this.apis().getContractDetail(result.data);
-            const result1 = await http.get(url1);
-            if (result1['errors']) {
-              this.$message.error(result1['errors'][0].message);
-              return;
-            }
-            this.thisContract = result1.data;
-            console.log(this.thisContract);
-
-            this.$emit('openPreviewPdf', this.thisContract, '');
-          }
-
-          this.$emit('onSearch');
+          this.$emit('onSaveContractPurchaseForm', formData);
           this.$emit('closeContractPurchaseFormDialog');
-          this.$emit('closeContractTypeDialog');
         },
         onSetOrderCode () {
           if (this.slotData != null && this.slotData != '') {

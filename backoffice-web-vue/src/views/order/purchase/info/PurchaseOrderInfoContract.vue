@@ -1,12 +1,21 @@
 <template>
   <div class="info-detail-staff-body">
-    <el-dialog :visible.sync="dialogContractVisible" width="85%" :show-close="true" class="purchase-dialog"
-      append-to-body :modal="true">
-      <contract-form @closeContractFormDialog="closeContractFormDialog" :slotData="slotData" v-if="hackSet"></contract-form>
+    <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" append-to-body>
+      <purchase-contract-type @closeContractT="onCloseDialog" :slotData="slotData" v-if="hackSet"
+                              @onSaveContractForm="onSaveContractForm"
+                              @onSaveContractFormPdf="onSaveContractFormPdf"
+                              @onSaveContractPurchaseForm="onSaveContractPurchaseForm"
+                              @onSaveContractPurchaseFormPdf="onSaveContractPurchaseFormPdf"
+                              @onSaveContractFrameForm="onSaveContractFrameForm"
+                              @onSaveContractFrameFormPdf="onSaveContractFrameFormPdf"/>
     </el-dialog>
+<!--    <el-dialog :visible.sync="dialogContractVisible" width="85%" :show-close="true" class="purchase-dialog"-->
+<!--      append-to-body :modal="true">-->
+<!--      <contract-form @closeContractFormDialog="closeContractFormDialog" :slotData="slotData" v-if="hackSet"></contract-form>-->
+<!--    </el-dialog>-->
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="85%" class="purchase-dialog" append-to-body
       :modal="true">
-      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" />
+      <purchase-contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @getContractsList="getContractsList" @showContract="showContract"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
@@ -27,13 +36,13 @@
       <el-row>
         <el-col v-if="contracts!=null && contracts!= []" :span="4" v-for="(item, index) in contracts" :key="index"
           :offset="0">
-          <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)">
+          <div class="template-file" v-if="item.title!=null && item.title!=''" @click="showContract(item)" :title="item.title">
             <el-row type="flex" justify="center">
-              <img src="static/img/word.png" class="info-img-word" alt="" />
+              <img src="static/img/word.png" class="info-img-word" alt="" :title="item.title"/>
             </el-row>
             <el-row type="flex" justify="center">
               <el-col :span="16">
-                <h6 class="info-template-name">{{item.title}}</h6>
+                <h6 class="info-template-name" >{{ item.title }}</h6>
               </el-col>
             </el-row>
           </div>
@@ -45,20 +54,21 @@
 </template>
 
 <script>
-  import contractForm from '../../../contract/manage/ContractForm'
-  // import contractPage from '../../../contract/manage/ContractPage'
   import Bus from '@/common/js/bus.js';
   import http from '@/common/js/http';
   import ContractDetails from '../../../contract/manage/components/ContractDetails';
   import ContractPreviewPdf from '../../../contract/manage/components/ContractPreviewPdf'
   import ContractSealList from '../../../contract/manage/components/ContractSealList'
+  import PurchaseContractType from './contract/PurchaseContractType';
+  import PurchaseContractPreviewPdf from './contract/PurchaseContractPreviewPdf';
 
   export default {
     name: 'PurchaseOrderInfoContract',
     props: ['slotData', 'contracts'],
     components: {
+      PurchaseContractPreviewPdf,
+      PurchaseContractType,
       ContractSealList,
-      contractForm,
       ContractDetails,
       ContractPreviewPdf
     },
@@ -67,6 +77,160 @@
 
     },
     methods: {
+      async onSaveContractForm (formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+
+          this.showContract(this.thisContract);
+        }
+        this.getContractsList();
+      },
+      async onSaveContractFormPdf (formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.showContract(this.thisContract);
+        }
+
+        this.getContractsList();
+      },
+      async onSaveContractPurchaseForm (formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.showContract(this.thisContract);
+        }
+
+        this.getContractsList();
+      },
+      async onSaveContractPurchaseFormPdf (formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.showContract(this.thisContract);
+        }
+
+        this.getContractsList();
+      },
+      async onSaveContractFrameForm (formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.showContract(this.thisContract);
+        }
+
+        this.getContractsList();
+      },
+      async onSaveContractFrameFormPdf (formData) {
+        const url = this.apis().saveContract();
+        const result = await http.post(url, formData);
+
+        if (result.code == 1) {
+          this.$message.success(result.msg);
+        } else if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+
+        if (result.data != null && result.data != '') {
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
+
+          this.showContract(this.thisContract);
+        }
+
+        this.getContractsList();
+      },
       async onCreate () {
         const url = this.apis().getAuthenticationState();
         const result = await http.get(url);
@@ -74,10 +238,11 @@
         Bus.$emit('my-event');
         if (result.data.personalState == 'SUCCESS' || result.data.companyState == 'SUCCESS') {
           // this.fn.openSlider("创建", contractForm, this.slotData);
-          this.dialogContractVisible = true;
+          this.dialogVisible = true;
         } else {
           this.$message.error('当前账号未通过认证');
         }
+        console.log(this.slotData);
       },
       // async openContract(){
       //   const url = this.apis().getContractDetail(this.contract.code);
@@ -190,10 +355,14 @@
             this.contracts.push(result.content[i]);
           }
         }
+      },
+      onCloseDialog () {
+        this.dialogVisible = false;
       }
     },
     data () {
       return {
+        dialogVisible: false,
         dialogContractVisible: false,
         dialogTableVisible: false,
         contractData: '',
@@ -236,7 +405,7 @@
             this.hackSet = true;
           })
         }
-      },
+      }
     }
   }
 </script>
@@ -253,6 +422,11 @@
   .info-template-name {
     text-align: center;
     font-size: 12px;
+    width: 35px;
+    height: 15px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
   }
 
   .info-img-word {
