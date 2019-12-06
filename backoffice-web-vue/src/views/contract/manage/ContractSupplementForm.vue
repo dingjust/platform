@@ -41,6 +41,13 @@
         </el-col>
       </el-row>
       <el-row class="create-contract-row" v-if="contractType!='1'">
+        <el-col :span="20" :offset="2">
+          <el-input size="small" placeholder="请输入合同编号" v-model="contractCode">
+            <el-button slot="prepend" :disabled="true">合同编号</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-row class="create-contract-row" v-if="contractType!='1'">
         <el-col :span="8" :offset="2">
           <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
                      :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
@@ -190,12 +197,20 @@
         //   this.$message.error('请选择合作商');
         //   return;
         // }
-
+        var agreementType = null;
+        if (this.contractType == '3') {
+          agreementType = 'CUSTOMIZE_COMPLETED';
+        }
+        if (this.contractType == '2') {
+          agreementType = 'CUSTOMIZE';
+        }
         let data = {
           'pdf': this.pdfFile,
           'title': '',
           'isFrame': false,
           'mainAgreementCode': this.slotData.code,
+          'customizeCode': this.contractCode,
+          'agreementType': agreementType,
           'isSupplementary': true
         }
 
@@ -366,6 +381,7 @@
         tempData: [],
         allData: [],
         dateTime: '',
+        contractCode: '',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
