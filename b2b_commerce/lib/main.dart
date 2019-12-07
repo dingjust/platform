@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'src/business/orders/requirement_order_from.dart';
 import 'src/common/app_constants.dart';
 import 'src/common/app_keys.dart';
 import 'src/common/app_routes.dart';
@@ -52,6 +51,7 @@ void main() async {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(builder: (_) => MyCapacityState()),
+          ChangeNotifierProvider(builder: (_) => ProductionProgressState()),
           Provider(
             builder: (_) => AddressState(),
           ),
@@ -179,9 +179,10 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                 ),
               ],
               child: Consumer(
-                builder:(context, RequirementOrderFormState state, _) => RequirementOrderFirstForm(
-                  formState: state,
-                ),
+                builder: (context, RequirementOrderFormState state, _) =>
+                    RequirementOrderFirstForm(
+                      formState: state,
+                    ),
               ),
             ),
       ),

@@ -95,9 +95,17 @@ class MyHomePage extends StatelessWidget {
                     return Container(
                       child: Column(
                         children: <Widget>[
-                          Text(
-                            '${snapshot.data.name}',
-                            style: const TextStyle(color: Colors.white),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  '${snapshot.data.name}',
+                                  style: const TextStyle(color: Colors.white),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
                           )
                         ],
                       ),
@@ -132,7 +140,10 @@ class MyHomePage extends StatelessWidget {
         child: Row(
           children: <Widget>[
             _buildPortrait(context, user),
-            _buildInformation(context, user),
+            Expanded(
+              flex: 1,
+              child: _buildInformation(context, user),
+            )
           ],
         ),
         decoration: const BoxDecoration(
@@ -161,26 +172,27 @@ class MyHomePage extends StatelessWidget {
   Widget _buildInformation(BuildContext context, UserModel user) {
     if (user.status == UserStatus.ONLINE) {
       return Container(
-        height: 80,
+        height: 100,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      "${user.name}",
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: const Color.fromRGBO(36, 38, 41, 1),
+            Row(
+              children: <Widget>[
+                Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        "${user.name}",
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: const Color.fromRGBO(36, 38, 41, 1),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
+                    ))
+              ],
             ),
             Container(
               child: Text(

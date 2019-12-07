@@ -83,6 +83,7 @@ dependencies:
   flutter_swiper : ^1.1.6
   common_utils: ^1.1.3
   flustars: ^0.2.6+1
+  orientation: ^1.1.0
 
 
 dev_dependencies:

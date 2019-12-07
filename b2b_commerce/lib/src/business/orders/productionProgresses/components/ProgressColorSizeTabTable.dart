@@ -4,29 +4,33 @@ import 'package:b2b_commerce/src/business/orders/form/purchase/ColorSizeEntry.da
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
-class ColorSizeTable extends StatefulWidget {
+class ProgressColorSizeTabTable extends StatefulWidget {
   final List<OrderNoteEntryModel> noteEntries;
 
   final List<PurchaseOrderEntryModel> orderEntries;
 
   final List<ColorSizeEntry> colorSizeEntries;
 
+  final List<ProductionProgressOrderModel> productionProgressOrders;
+
   final int rowHeith;
 
-  ColorSizeTable({Key key,
-    this.noteEntries,
-    this.rowHeith = 50,
-    @required this.orderEntries,
-    @required this.colorSizeEntries})
+  ProgressColorSizeTabTable(
+      {Key key,
+      this.noteEntries,
+      this.rowHeith = 60,
+      @required this.orderEntries,
+      @required this.colorSizeEntries,
+      this.productionProgressOrders})
       : super(key: key);
 
   @override
-  _ColorSizeTableState createState() => _ColorSizeTableState();
+  _ProgressColorSizeTabTableState createState() =>
+      _ProgressColorSizeTabTableState();
 }
 
-class _ColorSizeTableState extends State<ColorSizeTable> {
+class _ProgressColorSizeTabTableState extends State<ProgressColorSizeTabTable> {
   List<ColorModel> colors = [];
   List<SizeModel> sizes = [];
 
@@ -72,18 +76,18 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
           children: <Widget>[
             color.colorCode != null
                 ? Positioned(
-              left: 0,
-              top: 12,
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                    color: Color(int.parse('0xFF${colorCode}')),
-                    border:
-                    Border.all(width: 0.5, color: Colors.grey[300])),
-                child: Text(''),
-              ),
-            )
+                    left: 0,
+                    top: 12,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                          color: Color(int.parse('0xFF${colorCode}')),
+                          border:
+                              Border.all(width: 0.5, color: Colors.grey[300])),
+                      child: Text(''),
+                    ),
+                  )
                 : Container(),
             Container(
               margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
@@ -94,21 +98,21 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
             ),
             sum > 0
                 ? Positioned(
-                right: 0,
-                top: 0,
-                child: Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red,
-                    ),
-                    child: Center(
-                      child: Text(
-                        getColorTotalNum(color) > 99 ? '···' : '$sum',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    )))
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                        width: 15,
+                        height: 15,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                        child: Center(
+                          child: Text(
+                            getColorTotalNum(color) > 99 ? '···' : '$sum',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        )))
                 : Container()
           ],
         ),
@@ -148,7 +152,6 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
 
     //排序赋值
     colors = colorsSet.toList();
-    // colors.sort((o1, o2) => (o1.sequence - o2.sequence));
     sizes = sizesSet.toList();
     sizes.sort((o1, o2) => (o1.sequence - o2.sequence));
 
@@ -185,31 +188,16 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
           ),
           Row(
             children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  B2BIcons.remove_rect,
-                  color: Colors.grey[300],
-                ),
-                onPressed: () {
-                  if (int.parse(entry.controller.text) > 0) {
-                    setState(() {
-                      if (entry.controller.text == '1') {
-                        entry.controller.text = '';
-                      } else {
-                        int i = int.parse(entry.controller.text);
-                        i--;
-                        entry.controller.text = '$i';
-                      }
-                    });
-                  }
-                },
-              ),
               Container(
-                width: 40,
+                width: 150,
+                margin: EdgeInsets.symmetric(vertical: 5),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey[300], width: 0.5)),
                 child: TextField(
                   controller: entry.controller,
-                  decoration:
-                      InputDecoration(border: InputBorder.none, hintText: '0'),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: '${getRemindStr(color.name, size.name)}'),
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
                   //只能输入数字
@@ -225,23 +213,6 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
                   },
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  B2BIcons.add_rect,
-                  color: Colors.grey[300],
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (entry.controller.text == '') {
-                      entry.controller.text = '1';
-                    } else {
-                      int i = int.parse(entry.controller.text);
-                      i++;
-                      entry.controller.text = '$i';
-                    }
-                  });
-                },
-              )
             ],
           )
         ],
@@ -252,5 +223,42 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
   ColorSizeEntry getEntry(String color, String size) {
     return widget.colorSizeEntries
         .firstWhere((entry) => entry.size == size && entry.color == color);
+  }
+
+  int getNeed(String color, String size) {
+    //空处理替代对象
+    PurchaseOrderEntryModel emptyObj = PurchaseOrderEntryModel(quantity: 0);
+    return widget.orderEntries
+        .firstWhere(
+            (entry) =>
+                entry.product.color.name == color &&
+                entry.product.size.name == size,
+            orElse: () => emptyObj)
+        .quantity;
+  }
+
+  int getActualSum(String color, String size) {
+    //空处理替代对象
+    OrderNoteEntryModel emptyObj = OrderNoteEntryModel(quantity: 0);
+
+    int result = 0;
+    widget.productionProgressOrders
+        .where((order) => order.status != ProductionProgressOrderStatus.CANCEL)
+        .forEach((order) {
+      result += order.entries
+          .firstWhere((entry) => entry.color == color && entry.size == size,
+              orElse: () => emptyObj)
+          .quantity;
+    });
+    return result;
+  }
+
+  String getRemindStr(String color, String size) {
+    int result = getNeed(color, size) - getActualSum(color, size);
+    if (result > 0) {
+      return '剩余未报$result';
+    } else {
+      return '0';
+    }
   }
 }

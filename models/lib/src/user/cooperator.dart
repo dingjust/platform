@@ -92,6 +92,15 @@ class CooperatorModel extends ItemModel {
   static Map<String, dynamic> companyToJson(CompanyModel belongTo) =>
       CompanyModel.toJson(belongTo);
 
-  static Map<String, dynamic> companyPayPlanToJson(CompanyPayPlanModel payPlan) =>
+  static Map<String, dynamic> companyPayPlanToJson(
+      CompanyPayPlanModel payPlan) =>
       CompanyPayPlanModel.toJson(payPlan);
+
+  String getName() {
+    if (type == CooperatorType.ONLINE) {
+      return partner.name ?? '';
+    } else {
+      return name ?? '';
+    }
+  }
 }
