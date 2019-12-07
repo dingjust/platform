@@ -5,9 +5,9 @@
       <purchase-order-details-page :contracts="contracts" :slotData="contentData"
         :dialogDetailVisible="dialogDetailVisible" />
     </el-dialog>
-    <div class="report">
+    <!-- <div class="report">
       <purchase-orders-report />
-    </div>
+    </div> -->
     <el-card>
       <el-row>
         <el-col :span="2">
@@ -49,7 +49,7 @@
   import PurchaseOrderToolbar from "./toolbar/PurchaseOrderToolbar";
   import PurchaseOrderSearchResultList from "./list/PurchaseOrderSearchResultList";
   import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
-  import PurchaseOrdersReport from "./components/PurchaseOrdersReport";
+  // import PurchaseOrdersReport from "./components/PurchaseOrdersReport";
   import TabLabelBubble from "@/components/custom/TabLabelBubble";
   import http from '@/common/js/http';
 
@@ -58,7 +58,7 @@
     components: {
       PurchaseOrderToolbar,
       PurchaseOrderSearchResultList,
-      PurchaseOrdersReport,
+      // PurchaseOrdersReport,
       TabLabelBubble,
       PurchaseOrderDetailsPage
     },
