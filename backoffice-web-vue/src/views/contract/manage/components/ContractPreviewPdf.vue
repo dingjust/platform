@@ -44,6 +44,7 @@
     <!--<iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl"-->
     <!--height="480" width="100%">-->
     <!--</iframe>-->
+    <a id="a" href="" target="_blank"></a>
   </div>
 </template>
 
@@ -71,7 +72,8 @@
         reFresh: true,
         dialogOrderVisible: false,
         dialogSealVisible: false,
-        isLoading: false
+        isLoading: false,
+        openUrl: '',
       }
     },
     methods: {
@@ -151,7 +153,10 @@
         const result = await http.get(url);
 
         if (result.data != null) {
-          window.open(result.data, '_blank');
+          // window.open(result.data, '_blank');
+          // this.openUrl = result.data;
+          document.getElementById("a").href = result.data;
+          window.open(document.getElementById("a").href);
           this.$emit('closePdfVisible');
         } else {
           this.$message.error(result.msg);
