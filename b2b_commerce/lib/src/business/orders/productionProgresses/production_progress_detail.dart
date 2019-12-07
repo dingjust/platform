@@ -213,34 +213,103 @@ class _ProductionProgressDetailPageState
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
-      child: FlatButton(
-        color: Color.fromRGBO(255, 214, 12, 1),
-        child: Text(
-          '上报数量',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-            fontSize: 18,
-          ),
-        ),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5))),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  ProductionProgressOrderForm(
-                    order: state.order,
-                    progress: state.progress,
-                  )));
-        },
-      ),
-    );
+        padding: EdgeInsets.symmetric(vertical: 50),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 25),
+                  child: FlatButton(
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    child: Text(
+                      '上报数量',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              ProductionProgressOrderForm(
+                                order: state.order,
+                                progress: state.progress,
+                              )));
+                    },
+                  ),
+                )),
+            Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 25),
+                  child: FlatButton(
+                    color: Color.fromRGBO(255, 214, 12, 1),
+                    child: Text(
+                      '${ProductionProgressPhaseLocalizedMap[state.progress
+                          .phase]}完成',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    onPressed: () {
+                      _neverComplete(state);
+                    },
+                  ),
+                ))
+          ],
+        ));
   }
 
   void _onOrderDetail(ProductionProgressOrderModel model) {
     final state = Provider.of<ProductionProgressState>(context);
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ProductionProgressOrderDetailPage(model: model)));
+  }
+
+  //确认完成按钮方法
+  Future<void> _neverComplete(ProductionProgressState state) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 200,
+            contentText2: '确定完成当前生产进度吗？',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: () {
+              Navigator.of(context).pop();
+              submit(state);
+            },
+          );
+        });
+  }
+
+  void submit(ProductionProgressState state) {
+    state.progress.updateOnly = false;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: PurchaseOrderRepository().productionProgressUpload(
+                state.order.code, state.progress.id.toString(), state.progress),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: 'createPurchaseOrder',
+          );
+        }).then((value) {
+      state.refreshPurchaseOrder();
+    });
   }
 }

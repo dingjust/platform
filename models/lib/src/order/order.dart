@@ -1318,6 +1318,17 @@ class ProductionProgressModel extends ItemModel {
       models
           .map((model) => ProductionProgressOrderModel.toJson(model))
           .toList();
+
+  ///统计计算实际数量
+  int get totalQuantity {
+    int result = 0;
+    productionProgressOrders
+        .where((order) => order.status == ProductionProgressOrderStatus.PASS)
+        .forEach((order) {
+      result += order.amount;
+    });
+    return result;
+  }
 }
 
 //订单状态model，用于订单状态控件的List传入
