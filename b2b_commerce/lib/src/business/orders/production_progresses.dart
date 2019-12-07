@@ -222,7 +222,10 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               context: context,
               materialPageRoute: MaterialPageRoute(
                   builder: (context) => ProductionProgressDetailPage()),
-              progress: order.progresses[i]);
+              progress: order.progresses[i],
+              callBack: () {
+                refreshData();
+              });
         },
         child: Card(
           margin: EdgeInsets.fromLTRB(10, 5, 10, 8),
@@ -318,7 +321,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
                           ? '预计完成时间: ${DateFormatUtil.formatYMD(
                           progress.estimatedDate)}'
                           : ''),
-                      Text('数量: ${progress.quantity}'),
+                      Text('数量: ${progress.totalQuantity}'),
                       Text('备注: ${progress.remarks ?? ''}')
                     ],
                   ),
@@ -381,31 +384,26 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
               width: double.infinity,
               margin: EdgeInsets.only(top: 10),
               padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-              child: phase == currentPhase &&
-                  progress.finishDate == null &&
-                  userType != null &&
-                  userType == 'factory' &&
-                  order.status == PurchaseOrderStatus.IN_PRODUCTION
-                  ? RaisedButton(
+              child: RaisedButton(
                 color: Colors.white,
                 child: Text(
-                  '${ProductionProgressPhaseLocalizedMap[progress.phase]}完成',
+                  '查看详情',
                   style: TextStyle(color: Colors.black),
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 onPressed: () {
-                  if ((phase == currentPhase) &&
-                      (progress.phase ==
-                          ProductionProgressPhase.INSPECTION) &&
-                      order.salesApplication == SalesApplication.ONLINE) {
-                    _showBalanceDialog(context, order);
-                  } else {
-                    _showTipsDialog(progress);
-                  }
+                  final state = Provider.of<ProductionProgressState>(context);
+                  state.jumpToProgressDetail(
+                      context: context,
+                      materialPageRoute: MaterialPageRoute(
+                          builder: (context) => ProductionProgressDetailPage()),
+                      progress: progress,
+                      callBack: () {
+                        refreshData();
+                      });
                 },
-              )
-                  : null),
+              )),
         ],
       ),
     );
@@ -624,11 +622,6 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   void _showRemarksDialog(ProductionProgressModel model, String type,
       String remakrs) {
     _neverRemarks(context, model, type, remakrs);
-  }
-
-//确认是否完成动作
-  void _showTipsDialog(ProductionProgressModel model) {
-    _neverComplete(context, model);
   }
 
   void _showMessage(BuildContext context, bool result) async {

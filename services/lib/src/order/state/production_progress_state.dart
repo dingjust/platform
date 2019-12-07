@@ -30,7 +30,8 @@ class ProductionProgressState with ChangeNotifier {
 
   void jumpToProgressDetail({BuildContext context,
     MaterialPageRoute materialPageRoute,
-    ProductionProgressModel progress}) {
+    ProductionProgressModel progress,
+    VoidCallback callBack}) async {
     ///比较数据时间
     ProductionProgressModel currentProgress = _order.progresses.firstWhere(
             (innerProgress) => innerProgress.id == progress.id,
@@ -48,7 +49,11 @@ class ProductionProgressState with ChangeNotifier {
       _progress = progress;
     }
 
-    Navigator.of(context).push(materialPageRoute);
+    await Navigator.of(context).push(materialPageRoute);
+    if (callBack != null &&
+        progress.modifiedtime.compareTo(_progress.modifiedtime) < 0) {
+      callBack();
+    }
   }
 
   Future<PurchaseOrderModel> refreshPurchaseOrder() async {
