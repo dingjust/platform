@@ -182,15 +182,21 @@
       },
       async onSealSelectChange (data) {
         console.log(data);
-        this.dialogSealVisible = false;
         const sealCode = data.code;
 
         const url = this.apis().flowContract(this.slotData.code, sealCode);
         const result = await http.get(url);
 
         if (result.data != null) {
-          window.open(result.data, '_blank');
-          this.$emit('closePdfVisible');
+            this.$confirm('是否跳转到合同签署页面?', '', {
+                confirmButtonText: '是',
+                cancelButtonText: '否',
+                type: 'warning'
+            }).then(() => {
+                this.dialogSealVisible = false;
+                this.$emit('closePdfVisible');
+                window.open(result.data);
+            });
         } else {
           this.$message.error(result.msg);
         }

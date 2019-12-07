@@ -12,7 +12,7 @@
               :height="autoHeight">
       <el-table-column label="合同名称" fixed>
         <template slot-scope="scope">
-          <span>
+          <span class="ellipsis-name" :title="scope.row.title">
             {{scope.row.title}}
             <!--<el-link @click="dialogTableVisible = true">{{scope.row.title}}</el-link>-->
           </span>
@@ -334,5 +334,10 @@
   /*font-size: 14px;*/
   /*word-break: break-all;*/
   /*}*/
-
+  .ellipsis-name {
+    width: 50px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+  }
 </style>

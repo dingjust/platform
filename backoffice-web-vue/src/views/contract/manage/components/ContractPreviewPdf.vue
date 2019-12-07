@@ -7,6 +7,14 @@
     <el-dialog :visible.sync="dialogSealVisible" :show-close="true">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
+<!--    <el-dialog :visible.sync="dialogOrderVisible" width="50%" class="purchase-dialog" append-to-body>-->
+<!--      <el-row :justify="center">-->
+<!--        <h6>是否跳转到合同签署页面？</h6>-->
+<!--      </el-row>-->
+<!--      <el-row :justify="space-around">-->
+<!--        <h6>是否跳转到合同签署页面？</h6>-->
+<!--      </el-row>-->
+<!--    </el-dialog>-->
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
       <el-button type="warning" v-if="slotData.state != 'INVALID'" @click="onBCXY" class="toolbar-search_input">增加补充协议
       </el-button>
@@ -44,7 +52,7 @@
     <!--<iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl"-->
     <!--height="480" width="100%">-->
     <!--</iframe>-->
-    <a id="a" href="" target="_blank"></a>
+    <a id="a"  target="_blank"></a>
   </div>
 </template>
 
@@ -146,18 +154,22 @@
       },
       async onSealSelectChange (data) {
         console.log(data);
-        this.dialogSealVisible = false;
         const sealCode = data.code;
 
         const url = this.apis().flowContract(this.slotData.code, sealCode);
         const result = await http.get(url);
 
         if (result.data != null) {
-          // window.open(result.data, '_blank');
-          // this.openUrl = result.data;
-          document.getElementById("a").href = result.data;
-          window.open(document.getElementById("a").href);
-          this.$emit('closePdfVisible');
+          this.openUrl = result.data;
+          this.$confirm('是否跳转到合同签署页面?', '', {
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              type: 'warning'
+          }).then(() => {
+              this.dialogSealVisible = false;
+              this.$emit('closePdfVisible');
+              window.open(result.data);
+          });
         } else {
           this.$message.error(result.msg);
         }
