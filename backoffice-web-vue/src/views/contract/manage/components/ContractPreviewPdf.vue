@@ -21,11 +21,11 @@
       <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && !slotData.isCreator"
         type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
-        class="toolbar-search_input" @click="onSearchSeal">签署
-      </el-button>
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning"
         class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
+                 class="toolbar-search_input" @click="onSearchSeal">签署
+      </el-button>
     </div>
     <!--<center>-->
     <!--<table height="150px" border="0" id='waitPage'>-->
