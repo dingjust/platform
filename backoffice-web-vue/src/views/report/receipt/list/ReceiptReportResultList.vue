@@ -8,11 +8,18 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="产品名">
+      <el-table-column label="产品名">
+        <template slot-scope="scope">
+          <span>{{scope.row.product.name}}</span>
+        </template>
       </el-table-column>
-      <el-table-column prop="name" label="货号">
+      <el-table-column label="货号">
+        <template slot-scope="scope">
+          <span>{{scope.row.product.skuID}}</span>
+        </template>
       </el-table-column>
       <el-table-column prop="name" label="跟单员">
+        
       </el-table-column>
       <el-table-column prop="name" label="工厂/客户">
       </el-table-column>
@@ -24,7 +31,7 @@
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
-      </el-table-column>      
+      </el-table-column>
       <el-table-column label="状态" prop="status" :column-key="'status'" :filters="statuses">
         <template slot-scope="scope">
           <span>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</span>
@@ -40,7 +47,7 @@
       <el-table-column prop="name" label="正负数">
       </el-table-column>
       <el-table-column prop="name" label="备注">
-      </el-table-column>      
+      </el-table-column>
     </el-table>
     <div class="pt-2"></div>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
@@ -59,7 +66,7 @@
     mapActions
   } = createNamespacedHelpers('ReceiptReportModule');
 
- export default {
+  export default {
     name: 'ReceiptReportResultList',
     props: ['page'],
     components: {},
@@ -68,12 +75,12 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      handleFilterChange (val) {
+      handleFilterChange(val) {
         this.statuses = val.status;
 
         this.$emit('onSearch', 0);
       },
-      onPageSizeChanged (val) {
+      onPageSizeChanged(val) {
         this._reset();
 
         if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
@@ -83,7 +90,7 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged (val) {
+      onCurrentPageChanged(val) {
         if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
@@ -94,32 +101,32 @@
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
-      _reset () {
+      _reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails (row) {
+      onDetails(row) {
         this.$emit('onDetails', row);
       },
-      countTotalQuantity (entries) {
+      countTotalQuantity(entries) {
         let amount = 0;
         entries.forEach(element => {
           amount += element.quantity;
         });
         return amount;
       },
-      getPaymentStatusTag (row) {
+      getPaymentStatusTag(row) {
         return row.payStatus === 'PAID' ? 'static/img/paid.png' : 'static/img/arrears.png';
       },
-      getSignedTag (row) {
+      getSignedTag(row) {
         if (row.userAgreementIsSigned == null) {
           return 'static/img/not_signed.png';
         } else {
           return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
         }
       },
-      getOperator (row) {
+      getOperator(row) {
         if (this.$store.getters.currentUser.type == 'BRAND' && row.brandOperator != null) {
           return row.brandOperator.name;
         } else if (this.$store.getters.currentUser.type == 'FACTORY' && row.factoryOperator != null) {
@@ -129,12 +136,13 @@
         }
       }
     },
-    data () {
+    data() {
       return {
         statuses: this.$store.state.PurchaseOrdersModule.statuses
       }
     }
   }
+
 </script>
 <style>
   .purchase-list-button {

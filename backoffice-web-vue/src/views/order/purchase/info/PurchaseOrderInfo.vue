@@ -23,12 +23,12 @@
         <purchase-order-info-main :slotData="slotData" />
       </el-col>
       <el-col :span="8">
-        <purchase-order-info-aside :slotData="slotData"  :contracts="contracts" />
+        <purchase-order-info-aside :slotData="slotData" :contracts="contracts" />
       </el-col>
     </el-row>
     <purchase-orders-button-group :slotData="slotData" @onUniqueCode="onUniqueCode" @onConfirm="onConfirm"
-      @onDeliverViewsOpen="onDeliverViewsOpen" @onCreateAgain="onCreateAgain" @onCreateReceive="onCreateReceive"
-      @onReconciliation="onReconciliation" @onCancel="onCancel" />
+      @onDeliverViewsOpen="onDeliverViewsOpen" @onCreateAgain="onCreateAgain" @onUpdate="onUpdate"
+      @onCreateReceive="onCreateReceive" @onReconciliation="onReconciliation" @onCancel="onCancel" />
   </div>
 </template>
 
@@ -44,7 +44,7 @@
 
   export default {
     name: 'PurchaseOrderInfo',
-    props: ['slotData','contracts'],
+    props: ['slotData', 'contracts'],
     components: {
       PurchaseOrderInfoMain,
       PurchaseOrderInfoAside,
@@ -106,6 +106,15 @@
           name: "下单",
           params: {
             isAgain: true,
+            data: this.slotData
+          }
+        });
+      },
+      onUpdate() {
+        this.$router.push({
+          name: "下单",
+          params: {
+            isUpdate: true,
             data: this.slotData
           }
         });

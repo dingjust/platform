@@ -24,7 +24,7 @@
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
             <purchase-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-              @onAdvancedSearch="onAdvancedSearch" />
+              @onUpdate="onUpdate" @onAdvancedSearch="onAdvancedSearch" />
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -67,17 +67,17 @@
         page: "page",
         keyword: "keyword",
         queryFormData: "queryFormData",
-        contentData:"detailData"
+        contentData: "detailData"
       })
     },
     methods: {
       ...mapActions({
         search: "search",
-        searchAdvanced: "searchAdvanced",        
+        searchAdvanced: "searchAdvanced",
       }),
       ...mapMutations({
         setIsAdvancedSearch: "isAdvancedSearch",
-        setDetailData:'detailData'
+        setDetailData: 'detailData'
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
@@ -122,11 +122,25 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-
         // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
         // this.contentData = result;
         this.setDetailData(result);
         this.dialogDetailVisible = true;
+      },
+      async onUpdate(row) {
+        const url = this.apis().getPurchaseOrder(row.code);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$router.push({
+          name: "下单",
+          params: {
+            isUpdate: true,
+            data: result
+          }
+        });
       },
       onNew(formData) {
         this.fn.openSlider("创建手工单", PurchaseOrderDetailsPage, formData);

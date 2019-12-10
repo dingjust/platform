@@ -373,6 +373,9 @@ const COMMON_APIS = {
   createOfflinePurchaseOrder() {
     return '/b2b/orders/purchase/createByOffline';
   },
+  updateOfflinePurchaseOrder() {
+    return '/b2b/orders/purchase/updateByOffline';
+  },
   createPurchaseOrderOfQuote(quote) {
     return '/b2b/orders/purchase/create/' + quote;
   },

@@ -7,6 +7,7 @@
     <el-button class="purchase-order-btn" v-if="isBrand()&&isCompleted" @click="onCreateReconciliation">对账单</el-button>
     <!-- <el-button class="purchase-order-btn" v-if="slotData.status=='COMPLETED'" @click="onCreateAgain">
       {{isBrand()?'再下一单':'重新创建'}}</el-button> -->
+          <el-button class="purchase-order-btn" v-if="isPending&&isMyself" @click="onUpdate">修改订单</el-button>
     <el-button class="purchase-order-btn2" @click="
     onCancel" v-if="isPending">{{isMyself?'取消订单':'拒单'}}
     </el-button>
@@ -90,6 +91,9 @@
       },
       onCreateReconciliation() {
         this.$emit('onReconciliation');
+      },
+      onUpdate(){
+        this.$emit('onUpdate');
       }
     },
     data() {
