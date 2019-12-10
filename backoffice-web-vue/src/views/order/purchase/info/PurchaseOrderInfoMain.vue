@@ -1,6 +1,6 @@
 <template>
   <div class="info-main-body">
-    <purchase-order-info-detail :slotData="slotData" />
+    <purchase-order-info-detail :slotData="slotData" @onAddressModifyFormVisible="onAddressModifyFormVisible"/>
     <purchase-progress :slotData="slotData" />
     <purchase-order-info-payment-finance :slotData="slotData" v-if="isBrand() && slotData.payPlan!= null"/>
     <purchase-order-info-receipt-finance :slotData="slotData" v-if="isFactory() && slotData.payPlan!= null"/>
@@ -29,13 +29,16 @@
     computed: {
 
     },
-    methods: {},
-    data() {
+    methods: {
+      onAddressModifyFormVisible () {
+        this.$emit('onAddressModifyFormVisible');
+      }
+    },
+    data () {
       return {}
     },
-    created() {}
+    created () {}
   }
-
 </script>
 <style>
   .info-main-body {

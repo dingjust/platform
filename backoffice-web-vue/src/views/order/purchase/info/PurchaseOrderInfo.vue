@@ -15,19 +15,24 @@
     <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body>
       <purchase-order-info-reconciliation :slotData="slotData" />
     </el-dialog>
+    <el-dialog :visible.sync="addressModifyFormVisible" width="80%" class="purchase-dialog" append-to-body>
+      <purchase-order-info-address-modify :slotData="slotData"
+        @closeAddressModifyFormVisible="closeAddressModifyFormVisible"
+        @_updateDeliveryAddress="_updateDeliveryAddress" />
+    </el-dialog>
     <el-row type="flex" justify="center">
       <span>订单号：{{slotData.code}}</span>
     </el-row>
     <el-row>
       <el-col :span="16">
-        <purchase-order-info-main :slotData="slotData" />
+        <purchase-order-info-main :slotData="slotData" @onAddressModifyFormVisible="onAddressModifyFormVisible" />
       </el-col>
       <el-col :span="8">
         <purchase-order-info-aside :slotData="slotData" :contracts="contracts" />
       </el-col>
     </el-row>
     <purchase-orders-button-group :slotData="slotData" @onUniqueCode="onUniqueCode" @onConfirm="onConfirm"
-      @onDeliverViewsOpen="onDeliverViewsOpen" @onCreateAgain="onCreateAgain" @onUpdate="onUpdate"
+      @onUpdate="onUpdate" @onDeliverViewsOpen="onDeliverViewsOpen" @onCreateAgain="onCreateAgain"
       @onCreateReceive="onCreateReceive" @onReconciliation="onReconciliation" @onCancel="onCancel" />
   </div>
 </template>
@@ -41,11 +46,15 @@
   import PurchaseOrderDeliverViews from './PurchaseOrderDeliverViews';
   import PurchaseOrderInfoReconciliation from './PurchaseOrderInfoReconciliation';
   import PurchaseOrderInfoDeliver from './PurchaseOrderInfoDeliver';
+  import PurchaseOrderInfoAddressModify from './PurchaseOrderInfoAddressModify';
+  import AddressSelect from '../../../../components/custom/AddressSelect';
 
   export default {
     name: 'PurchaseOrderInfo',
     props: ['slotData', 'contracts'],
     components: {
+      AddressSelect,
+      PurchaseOrderInfoAddressModify,
       PurchaseOrderInfoMain,
       PurchaseOrderInfoAside,
       UniquecodeGenerateForm,
@@ -60,6 +69,26 @@
 
     },
     methods: {
+      async _updateDeliveryAddress(formData) {
+        const url = this.apis().updateDeliveryAddressOfPurchaseOrder(this.slotData.code);
+        const result = await this.$http.put(url, {
+          'deliveryAddress': formData
+        });
+        //
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        //
+        // // 更新当前的地址，避免调后台
+        // this.$set(this.slotData, 'deliveryAddress', formData);
+        //
+        this.$message.success('地址更新成功');
+        let row = {
+          'code': result
+        };
+        this.$emit('onDetails', row);
+      },
       onUniqueCode() {
         this.uniquecodeFormVisible = !this.uniquecodeFormVisible;
       },
@@ -99,11 +128,11 @@
           return;
         }
         this.$message.success('取消成功');
-        this.$router.push("order/purchase");
+        this.$router.push('order/purchase');
       },
       onCreateAgain() {
         this.$router.push({
-          name: "下单",
+          name: '下单',
           params: {
             isAgain: true,
             data: this.slotData
@@ -135,6 +164,12 @@
       onCreateNewDeliver() {
         this.deliverViewsVisible = false;
         this.deliverFormVisible = true;
+      },
+      onAddressModifyFormVisible() {
+        this.addressModifyFormVisible = true;
+      },
+      closeAddressModifyFormVisible() {
+        this.addressModifyFormVisible = false;
       }
     },
     data() {
@@ -144,6 +179,8 @@
         deliverViewsVisible: false,
         reconciliatioFormVisible: false,
         deliverFormVisible: false,
+        addressModifyFormVisible: false,
+        deliveryAddress: ''
       }
     },
     created() {
