@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <apparel-product-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" />
     <div class="pt-2"></div>
     <apparel-product-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated" />

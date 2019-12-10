@@ -2,7 +2,7 @@
   <div class="animated fadeIn content">
     <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%"
       class="purchase-dialog">
-      <purchase-order-details-page :contracts="contracts" :slotData="contentData"
+      <purchase-order-details-page :contracts="contracts" :slotData="contentData" @onDetails="onDetails"
         :dialogDetailVisible="dialogDetailVisible" />
     </el-dialog>
     <div class="report">
@@ -73,7 +73,7 @@
     methods: {
       ...mapActions({
         search: "search",
-        searchAdvanced: "searchAdvanced",        
+        searchAdvanced: "searchAdvanced",
       }),
       ...mapMutations({
         setIsAdvancedSearch: "isAdvancedSearch",
