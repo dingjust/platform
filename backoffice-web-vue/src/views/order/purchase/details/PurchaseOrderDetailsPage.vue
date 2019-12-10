@@ -5,7 +5,7 @@
                                  @onCancel="onCancel"/> -->
     <div class="pt-2"></div>
     <!-- <purchase-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/> -->
-    <purchase-order-info :slot-data="slotData" :contracts="contracts"/>
+    <purchase-order-info :slot-data="slotData" :contracts="contracts" @onDetails="onDetails"/>
     <div class="pt-2"></div>
     <!-- <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
                                  @onSubmit="onSubmit"
@@ -24,12 +24,15 @@
 
   export default {
     name: 'PurchaseOrderDetailsPage',
-    props: ['slotData','contracts'],
+    props: ['slotData', 'contracts'],
     components: {PurchaseOrderFormToolbar, PurchaseOrderForm, PurchaseOrderInfo},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
+      onDetails (row) {
+        this.$emit('onDetails', row);
+      },
       async onSubmit () {
         // console.log("submitted data: " + JSON.stringify(this.slotData));
 

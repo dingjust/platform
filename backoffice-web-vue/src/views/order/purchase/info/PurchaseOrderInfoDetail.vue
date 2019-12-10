@@ -48,9 +48,14 @@
                 {{slotData.invoiceNeeded?('开发票'+slotData.invoiceTaxPoint*100+'%税点'):'不开发票'}}</orders-info-item>
             </el-col>
           </el-row>
-          <el-row class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">
-            <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}}
-              {{this.slotData.deliveryAddress.fullname}} {{this.slotData.deliveryAddress.cellphone}}</orders-info-item>
+          <el-row type="flex" justify="space-between" align="center" class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">
+            <el-col :span="20">
+              <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}}
+                {{this.slotData.deliveryAddress.fullname}} {{this.slotData.deliveryAddress.cellphone}}</orders-info-item>
+            </el-col>
+            <el-col :span="4">
+              <el-button style="padding-top: 0px" v-if="hasAddressModify" size="mini" type="text" @click="onAddressModifyFormVisible">修改地址</el-button>
+            </el-col>
           </el-row>
           <!-- <el-row type="flex" justify="space-between" align="middle">
             <el-row type="flex" justify="start" align="middle">
@@ -85,7 +90,7 @@
     props: ['slotData'],
     components: {
       OrdersInfoItem,
-      OrdersInfoTable,
+      OrdersInfoTable
     },
     mixins: [],
     computed: {
@@ -96,18 +101,28 @@
         });
         return result;
       },
-    },
-    methods: {
-
-    },
-    data() {
-      return {
-
+      hasAddressModify: function () {
+        if (this.slotData.creator.uid === this.$store.getters.currentUser.companyCode) {
+          return true;
+        } else {
+          return false;
+        }
       }
     },
-    created() {}
+    methods: {
+      onAddressModifyFormVisible () {
+        console.log(this.slotData);
+        console.log(this.$store.getters.currentUser);
+        this.$emit('onAddressModifyFormVisible');
+      }
+    },
+    data () {
+      return {
+      }
+    },
+    created () {
+    }
   }
-
 </script>
 <style>
   .info-detail-body {
