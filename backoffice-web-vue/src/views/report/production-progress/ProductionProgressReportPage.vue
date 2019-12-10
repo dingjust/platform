@@ -1,118 +1,118 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <production-progress-report-toolbar @onSearch="onSearch"/>
-      <production-progress-report-list :page="page" @onSearch="onSearch"/>
+      <el-row>
+        <el-col :span="2">
+          <div class="orders-list-title">
+            <h6>生产进度</h6>
+          </div>
+        </el-col>
+      </el-row>
+      <production-progress-report-toolbar  @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+      <production-progress-report-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
     </el-card>
   </div>
 </template>
 
 <script>
-  import {ExcelExportMixin} from '@/mixins';
+  import {
+    createNamespacedHelpers
+  } from "vuex";
 
-  import {createNamespacedHelpers} from 'vuex';
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers(
+    "ProductionProgressReportModule"
+  );
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('ProductionProgressReportsModule');
-
-  import ProductionProgressReportToolbar from './toolbar/ProductionProgressReportToolbar';
-  import ProductionProgressReportList from './list/ProductionProgressReportList';
+  import ProductionProgressReportToolbar from "./toolbar/ProductionProgressReportToolbar";
+  import ProductionProgressReportList from "./list/ProductionProgressReportList";
+  import http from '@/common/js/http';
 
   export default {
-    name: 'ProductionProgressReportPage',
-    mixins: [ExcelExportMixin],
+    name: "ProductionProgressReportPage",
     components: {
-      ProductionProgressReportToolbar,
-      ProductionProgressReportList
+      ProductionProgressReportList,
+      ProductionProgressReportToolbar
     },
     computed: {
       ...mapGetters({
-        page: 'page',
-        keyword: 'keyword',
-      }),
-      data: function () {
-        return {
-          format: this.slotData.format.value,
-          files: this.files
-        };
-      },
+        page: "page",
+        keyword: "keyword",
+        queryFormData: "queryFormData",
+        contentData: "detailData"
+      })
     },
     methods: {
       ...mapActions({
-        search: 'search',
+        search: "search",
+        searchAdvanced: "searchAdvanced",
+      }),
+      ...mapMutations({
+        setIsAdvancedSearch: "isAdvancedSearch",
+        setDetailData: 'detailData'
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getProductionProgressReports();
-        this.search({url, keyword, page, size});
-      },
-      async getBrands() {
-        const result = await this.$http.get('/djbrand/brand', {
-          text: '',
+        const statuses = this.statuses;
+        const url = this.apis().getPurchaseOrders();
+        this.setIsAdvancedSearch(false);
+        this.search({
+          url,
+          keyword,
+          statuses,
+          page,
+          size
         });
-
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.brands = result.content;
       },
-      async getFactories() {
-        const result = await this.$http.get('/djfactory/factory', {
-          text: '',
+      onAdvancedSearch(page, size) {
+        this.setIsAdvancedSearch(true);
+        const query = this.queryFormData;
+        const url = this.apis().getPurchaseOrders();
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size
         });
-
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
-          return;
-        }
-
-        this.factories = result.content;
       },
     },
     data() {
       return {
-        URLS: {
-          exportUrl: '/djbackoffice/report/production/progress/export',
-        },
-        excelExportTemplateName: '生产进度报表' + new Date().getTime() + '.xlsx',
-        page: {
-          number: 0, // 当前页，从0开始
-          size: 10, // 每页显示条数
-          totalPages: 1, // 总页数
-          totalElements: 0, // 总数目数
-          content: [] // 当前页数据
-        },
-        query: {
-          requirementOrderCode: '',
-          productionOrderCode: '',
-          brand: null,
-          factory: null,
-          isDelay: true,
-          status: [],
-          expectedDeliveryDateFrom: null,
-          expectedDeliveryDateTo: null,
-          createdDateFrom: null,
-          createdDateTo: null,
-        },
-        brands: [],
-        factories: [],
-        value: '',
-        statuses: [
-          {code: 'WAIT_FOR_ALLOCATION', name: '待分配'},
-          {code: 'WAIT_FOR_PURCHASE', name: '备料中'},
-          {code: 'PENDING_CUTTING', name: '待裁剪'},
-          {code: 'CUTTING', name: '裁剪中'},
-          {code: 'STITCHING', name: '车缝中'},
-          {code: 'QC', name: '待验货'},
-          {code: 'PENDING_DELIVERY', name: '待发货'},
-          {code: 'DELIVERING', name: '已发货'},
-          {code: 'DELIVERY_COMPLETED', name: '已完成'},
-        ]
+        contracts: [],
       };
     },
     created() {
       this.onSearch();
+    },
+    mounted() {
+
     }
   };
+
 </script>
+<style>
+  .report {
+    margin-bottom: 10px;
+  }
+
+  .orders-list-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
+
+  .purchase-dialog .el-dialog {
+    border-radius: 10px !important;
+  }
+
+  .purchase-dialog-header {
+    padding: 0px !important;
+  }
+
+  .purchase-dialog .el-dialog__header {
+    padding: 0px !important;
+  }
+
+</style>
