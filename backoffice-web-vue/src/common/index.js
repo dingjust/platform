@@ -716,6 +716,9 @@ let NONE_TENANT_APIS = {
   cancellingOfPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code + '/cancelling';
   },
+  changeCannelStatus(code) {
+    return '/b2b/orders/purchase/' + code + '/changeCannelStatus';
+  },
   completedOfPurchaseOrder(code) {
     return '/b2b/orders/purchase/' + code + '/shipped';
   },
