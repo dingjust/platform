@@ -238,7 +238,13 @@
         } else {
           role = 'PARTYB';
         }
-
+        var agreementType = null;
+        if (this.contractType == '3') {
+          agreementType = 'CUSTOMIZE_COMPLETED';
+        }
+        if (this.contractType == '2') {
+          agreementType = 'CUSTOMIZE';
+        }
         let data = {
           'pdf': this.pdfFile,
           'role': role,
@@ -246,6 +252,7 @@
           'validityEnd': this.dateTime[1],
           'validityStart': this.dateTime[0],
           'isFrame': true,
+          'agreementType': agreementType,
           'customizeCode': this.contractCode,
           'partnerCompanyCode': this.suppliers.id
         }
@@ -262,16 +269,16 @@
         }
 
         if (result.data != null && result.data != '') {
-            var url1 = this.apis().getContractDetail(result.data);
-            const result1 = await http.get(url1);
-            if (result1['errors']) {
-                this.$message.error(result1['errors'][0].message);
-                return;
-            }
-            this.thisContract = result1.data;
-            console.log(this.thisContract);
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
 
-            this.$emit('openPreviewPdf', this.thisContract, '');
+          this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');
@@ -319,16 +326,16 @@
         }
 
         if (result.data != null && result.data != '') {
-            var url1 = this.apis().getContractDetail(result.data);
-            const result1 = await http.get(url1);
-            if (result1['errors']) {
-                this.$message.error(result1['errors'][0].message);
-                return;
-            }
-            this.thisContract = result1.data;
-            console.log(this.thisContract);
+          var url1 = this.apis().getContractDetail(result.data);
+          const result1 = await http.get(url1);
+          if (result1['errors']) {
+            this.$message.error(result1['errors'][0].message);
+            return;
+          }
+          this.thisContract = result1.data;
+          console.log(this.thisContract);
 
-            this.$emit('openPreviewPdf', this.thisContract, '');
+          this.$emit('openPreviewPdf', this.thisContract, '');
         }
 
         this.$emit('onSearch');

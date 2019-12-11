@@ -17,8 +17,7 @@
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
               <img width="54px" v-if="scope.row.product!=null" height="54px"
-                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'">
-              </img>
+                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'" />
             </el-col>
             <el-col :span="16">
               <el-row>
@@ -78,6 +77,9 @@
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>
             <el-divider direction="vertical"></el-divider>
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">账务</el-button>
+            <el-divider direction="vertical"></el-divider>
+            <el-button type="text" v-if="scope.row.status=='PENDING_CONFIRM'" @click="onUpdate(scope.row)"
+              class="purchase-list-button">修改订单</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -103,7 +105,7 @@
 
   export default {
     name: 'PurchaseOrderSearchResultList',
-    props: ["page"],
+    props: ['page'],
     components: {},
     computed: {},
     methods: {
@@ -132,6 +134,9 @@
         }
 
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       _reset() {
         this.$refs.resultTable.clearSort();
@@ -159,18 +164,21 @@
         }
       },
       getOperator(row) {
-        if (this.$store.getters.currentUser.type == 'BRAND'&&row.brandOperator!=null) {
+        if (this.$store.getters.currentUser.type == 'BRAND' && row.brandOperator != null) {
           return row.brandOperator.name;
-        } else if (this.$store.getters.currentUser.type == 'FACTORY'&&row.factoryOperator!=null) {
+        } else if (this.$store.getters.currentUser.type == 'FACTORY' && row.factoryOperator != null) {
           return row.factoryOperator.name;
         } else {
           return '';
         }
+      },
+      onUpdate(row) {
+        this.$emit('onUpdate', row);
       }
     },
     data() {
       return {
-        statuses: this.$store.state.PurchaseOrdersModule.statuses,
+        statuses: this.$store.state.PurchaseOrdersModule.statuses
       }
     }
   }

@@ -4,7 +4,7 @@
       <contract-details  :slotData="contractData" />
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" class="purchase-dialog" append-to-body>
-      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @closePdfVisible="pdfVisible=false"/>
+      <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @closePdfVisible="pdfVisible=false" @onSearch="onSearch"/>
     </el-dialog>
     <!--<div class="report">-->
       <!--<contract-report />-->

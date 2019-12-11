@@ -2,12 +2,12 @@
   <div class="animated fadeIn content">
     <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%"
       class="purchase-dialog">
-      <purchase-order-details-page :contracts="contracts" :slotData="contentData"
+      <purchase-order-details-page :contracts="contracts" :slotData="contentData" @onDetails="onDetails"
         :dialogDetailVisible="dialogDetailVisible" />
     </el-dialog>
-    <div class="report">
+    <!-- <div class="report">
       <purchase-orders-report />
-    </div>
+    </div> -->
     <el-card>
       <el-row>
         <el-col :span="2">
@@ -24,7 +24,7 @@
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
             <purchase-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-              @onAdvancedSearch="onAdvancedSearch" />
+              @onUpdate="onUpdate" @onAdvancedSearch="onAdvancedSearch" />
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -49,7 +49,7 @@
   import PurchaseOrderToolbar from "./toolbar/PurchaseOrderToolbar";
   import PurchaseOrderSearchResultList from "./list/PurchaseOrderSearchResultList";
   import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
-  import PurchaseOrdersReport from "./components/PurchaseOrdersReport";
+  // import PurchaseOrdersReport from "./components/PurchaseOrdersReport";
   import TabLabelBubble from "@/components/custom/TabLabelBubble";
   import http from '@/common/js/http';
 
@@ -58,7 +58,7 @@
     components: {
       PurchaseOrderToolbar,
       PurchaseOrderSearchResultList,
-      PurchaseOrdersReport,
+      // PurchaseOrdersReport,
       TabLabelBubble,
       PurchaseOrderDetailsPage
     },
@@ -67,17 +67,17 @@
         page: "page",
         keyword: "keyword",
         queryFormData: "queryFormData",
-        contentData:"detailData"
+        contentData: "detailData"
       })
     },
     methods: {
       ...mapActions({
         search: "search",
-        searchAdvanced: "searchAdvanced",        
+        searchAdvanced: "searchAdvanced",
       }),
       ...mapMutations({
         setIsAdvancedSearch: "isAdvancedSearch",
-        setDetailData:'detailData'
+        setDetailData: 'detailData'
       }),
       onSearch(page, size) {
         const keyword = this.keyword;
@@ -122,11 +122,25 @@
           this.$message.error(result["errors"][0].message);
           return;
         }
-
         // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
         // this.contentData = result;
         this.setDetailData(result);
         this.dialogDetailVisible = true;
+      },
+      async onUpdate(row) {
+        const url = this.apis().getPurchaseOrder(row.code);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$router.push({
+          name: "下单",
+          params: {
+            isUpdate: true,
+            data: result
+          }
+        });
       },
       onNew(formData) {
         this.fn.openSlider("创建手工单", PurchaseOrderDetailsPage, formData);

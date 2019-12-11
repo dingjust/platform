@@ -3,10 +3,20 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import ElementUI from 'element-ui';
-import {TENANT_APIS, NONE_TENANT_APIS} from '@/common';
+import {
+  TENANT_APIS,
+  NONE_TENANT_APIS
+} from '@/common';
 import router from '@/router';
 import store from '@/store';
-import {formatDate, enumTranslate, timestampToTime, postponedDays, floatFormat} from '@/common/js/filters';
+import {
+  formatDate,
+  enumTranslate,
+  timestampToTime,
+  postponedDays,
+  floatFormat,
+  numFilter
+} from '@/common/js/filters';
 import HttpServletPlugin from '@/plugins/HttpServletPlugin.js';
 import http from '@/common/js/http';
 import autoHeight from '@/mixins/autoHeight';
@@ -16,7 +26,7 @@ import App from './App';
 
 // 时间过滤器
 Vue.filter('formatDate', time => {
-  if (time === null) {
+  if (time === null || time == '') {
     return '';
   }
   let date = new Date(time);
@@ -47,10 +57,16 @@ Vue.filter('postponedDays', function (timestamp) {
 Vue.filter('floatFormat', function (num1, num2) {
   return floatFormat(num1, num2);
 });
+Vue.filter('numFilter', function (num) {
+  return numFilter(num);
+});
+
 
 Vue.use(BootstrapVue);
 Vue.use(HttpServletPlugin);
-Vue.use(ElementUI, {size: 'small'});
+Vue.use(ElementUI, {
+  size: 'small'
+});
 // Vue.use(directives);
 Vue.prototype.fn = {};
 Vue.prototype.$http = http;
@@ -60,7 +76,7 @@ import _nav_brand from '@/_nav_brand.js';
 import _nav_factory from '@/_nav_factory.js';
 
 Vue.prototype.CONFIG = {
-  nav (type = process.env.NAV) {
+  nav(type = process.env.NAV) {
     return type === 'FACTORY' ? _nav_factory : (type === 'BRAND' ? _nav_brand : _nav);
   }
 };
@@ -68,7 +84,7 @@ Vue.prototype.CONFIG = {
 Vue.mixin({
   props: ['viewMode'],
   mixins: [autoHeight],
-  data () {
+  data() {
     return {
       defaultDateValueFormat: 'yyyy-MM-dd"T"HH:mm:ssZ',
       mediaUploadUrl: '/b2b/media/file/upload',
@@ -76,26 +92,25 @@ Vue.mixin({
       VIEW_MODE_TABS: 'TABS'
     }
   },
-  computed: {
-  },
+  computed: {},
   methods: {
-    apis () {
-      if (this.$store.getters.currentUser!=null&&this.$store.getters.currentUser.type === 'TENANT') {
+    apis() {
+      if (this.$store.getters.currentUser != null && this.$store.getters.currentUser.type === 'TENANT') {
         return TENANT_APIS;
       }
 
       return NONE_TENANT_APIS;
     },
-    isBrand () {
+    isBrand() {
       return this.$store.getters.currentUser.type === 'BRAND';
     },
-    isFactory () {
+    isFactory() {
       return this.$store.getters.currentUser.type === 'FACTORY';
     },
-    isTenant () {
+    isTenant() {
       return this.$store.getters.currentUser.type === 'TENANT';
     },
-    compareDate (date1, date2) {
+    compareDate(date1, date2) {
       let result = false;
       if (date1.getFullYear() > date2.getFullYear()) {
         result = true;
@@ -112,7 +127,7 @@ Vue.mixin({
       return result;
     },
     // 枚举类型
-    getEnum (enumsName, code) {
+    getEnum(enumsName, code) {
       if (code !== null && code !== '') {
         const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);
         return result ? result['name'] : 'UNKNOWN';

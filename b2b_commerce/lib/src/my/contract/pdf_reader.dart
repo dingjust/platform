@@ -23,7 +23,7 @@ class PdfReaderWidget extends StatefulWidget {
 
 class _PdfReaderWidgetState extends State<PdfReaderWidget> {
   List<SealModel> sealList;
-  double bottomHeight;
+  double bottomHeight = 150.0;
   bool _showPdf = true;
 
   @override
@@ -73,6 +73,171 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
     if(widget.contractModel.state != ContractStatus.COMPLETE
         && widget.contractModel.state != ContractStatus.INVALID
         && !widget.contractModel.isCreator){
+      if(widget.contractModel.isSigned){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              color: Colors.white10,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 50,
+              child: RaisedButton(
+                padding: EdgeInsets.symmetric(horizontal: 100),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                child: Text(
+                  '拒签',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 150,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                height: 30,
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      child: Icon(
+                                        Icons.error,
+                                        size: 20,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text(
+                                          '注意',
+                                          style: TextStyle(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                  height: 50,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 5),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  alignment: Alignment.topLeft,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: <Widget>[
+                                      Container(
+                                        child: Text(
+                                            '是否要拒签该合同'
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Center(
+                                      child: Container(
+                                          child: FlatButton(
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 80),
+                                              child: Text(
+                                                '取消',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(15))),
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                              })),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        child: FlatButton(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 80),
+                                            child: Text(
+                                              '确定',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            onPressed: (){
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (_) {
+                                                    return RequestDataLoading(
+                                                      requestCallBack: ContractRepository().rejectContract(widget.contractModel.code),
+                                                      outsideDismiss: false,
+                                                      loadingText: '撤回中。。。',
+                                                      entrance: '',
+                                                    );
+                                                  }
+                                              ).then((value){
+                                                MyContractBLoC().refreshData('ALL','');
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                                showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (_) {
+                                                      return CustomizeDialog(
+                                                        dialogType: DialogType.RESULT_DIALOG,
+                                                        successTips: '${value.msg}',
+                                                        callbackResult: true,
+                                                      );
+                                                    }
+                                                );
+                                              });
+                                            }
+                                        ),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                left: BorderSide(
+                                                    color: Colors.grey,
+                                                    width: 0.5))),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        top: BorderSide(color: Colors.grey, width: 0.5))),
+                              )
+                            ]
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      }else{
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -271,205 +436,372 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
             ),
           ],
         );
+      }
     }else if(widget.contractModel.state != ContractStatus.COMPLETE
         && widget.contractModel.state != ContractStatus.INVALID
         && widget.contractModel.isCreator){
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Container(
-            color: Colors.white10,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            height: 50,
-            child: RaisedButton(
-              padding: EdgeInsets.symmetric(horizontal: 50),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '撤回',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
+      if(widget.contractModel.isSigned){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Container(
+              color: Colors.white10,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 50,
+              child: RaisedButton(
+                padding: EdgeInsets.symmetric(horizontal: 100),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                child: Text(
+                  '撤回',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 150,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              height: 30,
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    child: Icon(
-                                      Icons.error,
-                                      size: 20,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      margin: EdgeInsets.symmetric(horizontal: 10),
-                                      child: Text(
-                                        '注意',
-                                        style: TextStyle(),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                                height: 50,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 5),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                alignment: Alignment.topLeft,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .start,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 150,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                height: 30,
+                                child: Row(
                                   children: <Widget>[
                                     Container(
-                                      child: Text(
-                                          '是否要撤回该合同'
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      child: Icon(
+                                        Icons.error,
+                                        size: 20,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text(
+                                          '注意',
+                                          style: TextStyle(),
+                                        ),
                                       ),
                                     ),
                                   ],
-                                )
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                 Center(
-                                    child: Container(
+                                ),
+                              ),
+                              Container(
+                                  height: 50,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 5),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  alignment: Alignment.topLeft,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: <Widget>[
+                                      Container(
+                                        child: Text(
+                                            '是否要撤回该合同'
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Center(
+                                      child: Container(
+                                          child: FlatButton(
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 80),
+                                              child: Text(
+                                                '取消',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(15))),
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                              })),
+                                    ),
+                                    Center(
+                                      child: Container(
                                         child: FlatButton(
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 10, horizontal: 80),
                                             child: Text(
-                                              '取消',
+                                              '确定',
                                               style: TextStyle(
-                                                color: Colors.grey,
+                                                color: Colors.black,
                                               ),
                                             ),
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15))),
                                             onPressed: (){
-                                              Navigator.pop(context);
-                                            })),
-                                  ),
-                                  Center(
-                                    child: Container(
-                                      child: FlatButton(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 80),
-                                          child: Text(
-                                            '确定',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(15))),
-                                          onPressed: (){
-                                            showDialog(
-                                                context: context,
-                                                barrierDismissible: false,
-                                                builder: (_) {
-                                                  return RequestDataLoading(
-                                                    requestCallBack: ContractRepository().revokeContract(widget.contractModel.code),
-                                                    outsideDismiss: false,
-                                                    loadingText: '撤回中。。。',
-                                                    entrance: '',
-                                                  );
-                                                }
-                                            ).then((value){
-                                              MyContractBLoC().refreshData('ALL','');
-                                              Navigator.of(context).pop();
-                                              Navigator.of(context).pop();
                                               showDialog(
                                                   context: context,
                                                   barrierDismissible: false,
                                                   builder: (_) {
-                                                    return CustomizeDialog(
-                                                      dialogType: DialogType.RESULT_DIALOG,
-                                                      successTips: '${value.msg}',
-                                                      callbackResult: true,
+                                                    return RequestDataLoading(
+                                                      requestCallBack: ContractRepository().revokeContract(widget.contractModel.code),
+                                                      outsideDismiss: false,
+                                                      loadingText: '撤回中。。。',
+                                                      entrance: '',
                                                     );
                                                   }
-                                              );
-                                            });
-                                          }
+                                              ).then((value){
+                                                MyContractBLoC().refreshData('ALL','');
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                                showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (_) {
+                                                      return CustomizeDialog(
+                                                        dialogType: DialogType.RESULT_DIALOG,
+                                                        successTips: '${value.msg}',
+                                                        callbackResult: true,
+                                                      );
+                                                    }
+                                                );
+                                              });
+                                            }
+                                        ),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                left: BorderSide(
+                                                    color: Colors.grey,
+                                                    width: 0.5))),
                                       ),
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              left: BorderSide(
-                                                  color: Colors.grey,
-                                                  width: 0.5))),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      top: BorderSide(color: Colors.grey, width: 0.5))),
-                            )
-                          ]
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-          Container(
-            color: Colors.white10,
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            height: 50,
-            child: RaisedButton(
-              padding: EdgeInsets.symmetric(horizontal: 50),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '去签署',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                ),
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        top: BorderSide(color: Colors.grey, width: 0.5))),
+                              )
+                            ]
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              onPressed: ()async {
-                setState(() {
-                  _showPdf = false;
-                });
-                Navigator.push(
-                  context, MaterialPageRoute(builder: (context) =>
-                    ContractSealPage(
-                      sealList: sealList, model: widget.contractModel,)),
-                ).then((val){
-                  setState(() {
-                    _showPdf = true;
-                  });
-                });
-              },
             ),
-          ),
-        ],
-      );
+          ],
+        );
+      }else{
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Container(
+              color: Colors.white10,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 50,
+              child: RaisedButton(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                child: Text(
+                  '撤回',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 150,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                height: 30,
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      child: Icon(
+                                        Icons.error,
+                                        size: 20,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text(
+                                          '注意',
+                                          style: TextStyle(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                  height: 50,
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 5),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  alignment: Alignment.topLeft,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: <Widget>[
+                                      Container(
+                                        child: Text(
+                                            '是否要撤回该合同'
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Center(
+                                      child: Container(
+                                          child: FlatButton(
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 80),
+                                              child: Text(
+                                                '取消',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(15))),
+                                              onPressed: (){
+                                                Navigator.pop(context);
+                                              })),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        child: FlatButton(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 80),
+                                            child: Text(
+                                              '确定',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(15))),
+                                            onPressed: (){
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (_) {
+                                                    return RequestDataLoading(
+                                                      requestCallBack: ContractRepository().revokeContract(widget.contractModel.code),
+                                                      outsideDismiss: false,
+                                                      loadingText: '撤回中。。。',
+                                                      entrance: '',
+                                                    );
+                                                  }
+                                              ).then((value){
+                                                MyContractBLoC().refreshData('ALL','');
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
+                                                showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (_) {
+                                                      return CustomizeDialog(
+                                                        dialogType: DialogType.RESULT_DIALOG,
+                                                        successTips: '${value.msg}',
+                                                        callbackResult: true,
+                                                      );
+                                                    }
+                                                );
+                                              });
+                                            }
+                                        ),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                left: BorderSide(
+                                                    color: Colors.grey,
+                                                    width: 0.5))),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        top: BorderSide(color: Colors.grey, width: 0.5))),
+                              )
+                            ]
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              color: Colors.white10,
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              height: 50,
+              child: RaisedButton(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                color: Color.fromRGBO(255, 214, 12, 1),
+                child: Text(
+                  '去签署',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: ()async {
+                  setState(() {
+                    _showPdf = false;
+                  });
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context) =>
+                      ContractSealPage(
+                        sealList: sealList, model: widget.contractModel,)),
+                  ).then((val){
+                    setState(() {
+                      _showPdf = true;
+                    });
+                  });
+                },
+              ),
+            ),
+          ],
+        );
+      }
     }else if(widget.contractModel.state == ContractStatus.COMPLETE){
       return Container(
         color: Colors.white10,

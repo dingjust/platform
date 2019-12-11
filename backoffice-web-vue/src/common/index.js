@@ -373,6 +373,9 @@ const COMMON_APIS = {
   createOfflinePurchaseOrder() {
     return '/b2b/orders/purchase/createByOffline';
   },
+  updateOfflinePurchaseOrder() {
+    return '/b2b/orders/purchase/updateByOffline';
+  },
   createPurchaseOrderOfQuote(quote) {
     return '/b2b/orders/purchase/create/' + quote;
   },
@@ -758,6 +761,9 @@ let NONE_TENANT_APIS = {
   },
   saveContract() {
     return '/b2b/user/agreement/save';
+  },
+  deleteContract(code) {
+    return '/b2b/user/agreement/delete/' + code;
   },
   downContract(code) {
     return '/b2b/user/agreement/get/download/token/' + code;

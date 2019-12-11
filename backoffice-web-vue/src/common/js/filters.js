@@ -1,4 +1,7 @@
 export function formatDate(date, fmt) {
+  if (date == null || date == '') {
+    return '';
+  }
   if (!date) {
     return '';
   }
@@ -393,7 +396,6 @@ export function timestampToTime(timestamp) {
    const  m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
    const s = date.getSeconds() + ':';
    const ms = date.getMilliseconds();//毫秒值 */
-
   return Y + M + D; // 此处可以自定义需要的显示类型
 }
 
@@ -429,4 +431,15 @@ export function numDiv(num1, num2) {
 // 两个数相乘
 export function floatFormat(num1, count) {
   return (Math.round(num1 * 100) / 100).toFixed(count);
+}
+
+export function numFilter(value) {
+  let realVal = ''
+  if (value) {
+    // 截取当前数据到小数点后两位
+    realVal = parseFloat(value).toFixed(2)
+  } else {
+    realVal = '--'
+  }
+  return realVal
 }

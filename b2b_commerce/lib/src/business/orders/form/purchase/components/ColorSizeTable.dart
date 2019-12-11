@@ -148,7 +148,7 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
 
     //排序赋值
     colors = colorsSet.toList();
-    colors.sort((o1, o2) => (o1.sequence - o2.sequence));
+    // colors.sort((o1, o2) => (o1.sequence - o2.sequence));
     sizes = sizesSet.toList();
     sizes.sort((o1, o2) => (o1.sequence - o2.sequence));
 

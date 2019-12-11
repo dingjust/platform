@@ -61,6 +61,8 @@ class MyContractBLoC extends BLoCBase {
 //    }else if(status == 'WAIT_HIM_SIGN'){
 //      signState = '0';
 //    }
+    print(keyword);
+    print('${_dataMap[status].data}');
     //若没有数据则查询
     if(_dataMap[status].data == null || _dataMap[status].data.length == 0) {
       //  分页拿数据，response.data;

@@ -53,6 +53,7 @@
       <el-button v-if="companyState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
       <el-button v-if="companyState == 'SUCCESS' || companyState == 'FAILED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="reAuthentication" >重新认证</el-button>
     </el-row>
+    <a id="a" href="" target="_blank"></a>
   </div>
 </template>
 
@@ -99,7 +100,13 @@
           let formData = Object.assign({}, tempData);
           const result = await http.post(url, formData);
           if(result.data !=  null){
-            window.open(result.data, '_blank');
+            this.$confirm('是否跳转到认证页面？', '', {
+                confirmButtonText: '是',
+                cancelButtonText: '否',
+                type: 'warning'
+            }).then(() => {
+                window.open(result.data);
+            });
           }else{
             this.$message.success(result.msg);
           }

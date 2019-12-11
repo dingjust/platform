@@ -60,6 +60,7 @@ class UserModel extends PrincipalModel {
 
   UserModel(
       {MediaModel profilePicture,
+        int id,
       String uid,
       String name,
       this.loginDisabled,
@@ -69,9 +70,10 @@ class UserModel extends PrincipalModel {
         this.mobileNumber,
       this.b2bUnit})
       : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
+    id: id,
+    profilePicture: profilePicture,
+    uid: uid,
+    name: name,
         );
 
   UserModel.empty() {
@@ -91,8 +93,6 @@ class UserModel extends PrincipalModel {
 
   static List<Map<String, dynamic>> _rolesToJson(List<RoleModel> models) =>
       models.map((model) => RoleModel.toJson(model)).toList();
-
-
 }
 
 /// 客户
@@ -101,6 +101,7 @@ class CustomerModel extends UserModel {
   // String mobileNumber;
 
   CustomerModel({
+    int id,
     MediaModel profilePicture,
     String uid,
     String name,
@@ -108,6 +109,7 @@ class CustomerModel extends UserModel {
     List<RoleModel> roles,
     String mobileNumber,
   }) : super(
+      id: id,
       profilePicture: profilePicture,
       uid: uid,
       name: name,
@@ -130,6 +132,7 @@ class B2BCustomerModel extends CustomerModel {
   B2BUnitModel defaultB2BUnit;
 
   B2BCustomerModel({
+    int id,
     MediaModel profilePicture,
     String uid,
     String name,
@@ -139,12 +142,13 @@ class B2BCustomerModel extends CustomerModel {
     this.active,
     this.defaultB2BUnit,
   }) : super(
-          profilePicture: profilePicture,
-          uid: uid,
-          name: name,
-          loginDisabled: loginDisabled,
-          mobileNumber: mobileNumber,
-          roles: roles,
+    id: id,
+    profilePicture: profilePicture,
+    uid: uid,
+    name: name,
+    loginDisabled: loginDisabled,
+    mobileNumber: mobileNumber,
+    roles: roles,
         );
 
   factory B2BCustomerModel.fromJson(Map<String, dynamic> json) =>
@@ -191,7 +195,10 @@ class AddressModel extends ItemModel {
           : region.name + city.name + cityDistrict.name;
 
   String get details =>
-      ('${region.name ?? ''}' + '${city.name}' + '${cityDistrict.name}' + '${line1 ?? ''}');
+      ('${region.name ?? ''}' +
+          '${city.name}' +
+          '${cityDistrict.name}' +
+          '${line1 ?? ''}');
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);
@@ -211,14 +218,17 @@ class AddressModel extends ItemModel {
 
   static Map<String, dynamic> addressToJson(AddressModel model) {
     return {
-      'id':model.id,
+      'id': model.id,
       'fullname': model.fullname,
       'cellphone': model.cellphone,
       'line1': model.line1,
       'defaultAddress': model.defaultAddress,
-      'region': {'isocode': model.region.isocode,'name': model.region.name},
-      'city': {'code': model.city.code,'name': model.city.name},
-      'cityDistrict': {'code': model.cityDistrict.code,'name': model.cityDistrict.name}
+      'region': {'isocode': model.region.isocode, 'name': model.region.name},
+      'city': {'code': model.city.code, 'name': model.city.name},
+      'cityDistrict': {
+        'code': model.cityDistrict.code,
+        'name': model.cityDistrict.name
+      }
     };
   }
 }
@@ -311,7 +321,6 @@ class RoleModel extends ItemModel {
       _$RoleModelToJson(model);
 }
 
-
 ///钱包
 @JsonSerializable()
 class CompanyWalletModel extends ItemModel {
@@ -340,7 +349,6 @@ class CompanyWalletModel extends ItemModel {
       _$CompanyWalletModelToJson(model);
 }
 
-
 //合同
 @JsonSerializable()
 class ContractModel extends ItemModel {
@@ -354,7 +362,7 @@ class ContractModel extends ItemModel {
   String code;
   String content;
   bool isCreator;
-
+  bool isSigned;
 
   ContractModel({
     this.title,
@@ -365,8 +373,8 @@ class ContractModel extends ItemModel {
     this.available,
     this.content,
     this.isCreator,
+    this.isSigned,
   });
-
 
   factory ContractModel.fromJson(Map<String, dynamic> json) =>
       _$ContractModelFromJson(json);
@@ -376,7 +384,6 @@ class ContractModel extends ItemModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
-
 }
 
 enum ContractStatus {
@@ -397,7 +404,6 @@ enum ContractStatus {
 
   //作废
   INVALID,
-
 }
 
 // TODO: i18n处理
@@ -424,7 +430,6 @@ class Certification {
 
   static Map<String, dynamic> toJson(Certification model) =>
       _$CertificationToJson(model);
-
 }
 
 @JsonSerializable()
@@ -441,7 +446,6 @@ class CertificationState {
 
   static Map<String, dynamic> toJson(CertificationState model) =>
       _$CertificationStateToJson(model);
-
 }
 
 @JsonSerializable()
@@ -458,7 +462,6 @@ class CertificationContractCount {
 
   static Map<String, dynamic> toJson(CertificationContractCount model) =>
       _$CertificationContractCountToJson(model);
-
 }
 
 @JsonSerializable()
@@ -473,7 +476,6 @@ class ContractCount {
 
   static Map<String, dynamic> toJson(ContractCount model) =>
       _$ContractCountToJson(model);
-
 }
 
 @JsonSerializable()
@@ -494,10 +496,9 @@ class SearchResultModel {
 
   static Map<String, dynamic> _mediaModelToJson(MediaModel model) =>
       MediaModel.toJson(model);
-
 }
 
-enum AgreementTemplateType{
+enum AgreementTemplateType {
   ///框架协议
   KJXY,
 
@@ -509,7 +510,6 @@ enum AgreementTemplateType{
 
   ///补充协议
   BCXY,
-
 }
 
 const AgreementTemplateTypeLocalizedMap = {
@@ -537,7 +537,12 @@ class ContractTemplateModel {
   @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
   final DateTime createTime;
 
-  ContractTemplateModel({this.code, this.title, this.type, this.available,this.remark,this.createTime});
+  ContractTemplateModel({this.code,
+    this.title,
+    this.type,
+    this.available,
+    this.remark,
+    this.createTime});
 
   factory ContractTemplateModel.fromJson(Map<String, dynamic> json) =>
       _$ContractTemplateModelFromJson(json);
@@ -547,7 +552,6 @@ class ContractTemplateModel {
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       DateTime.fromMillisecondsSinceEpoch(date);
-
 }
 
 @JsonSerializable()
@@ -562,7 +566,7 @@ class SealModel {
   @JsonKey(name: "creationtime", fromJson: _dateTimefromMilliseconds)
   final DateTime createTime;
 
-  SealModel({this.code, this.name, this.enabled, this.media,this.createTime});
+  SealModel({this.code, this.name, this.enabled, this.media, this.createTime});
 
   factory SealModel.fromJson(Map<String, dynamic> json) =>
       _$SealModelFromJson(json);
@@ -575,6 +579,23 @@ class SealModel {
 
   static Map<String, dynamic> _mediaToJson(MediaModel model) =>
       MediaModel.toJson(model);
+}
+
+@JsonSerializable()
+class ContractSaveModel {
+  final String userTempCode;
+  final String userSignCode;
+  final String role;
+  final String orderCode;
+
+  ContractSaveModel(
+      {this.userTempCode, this.userSignCode, this.role, this.orderCode});
+
+  factory ContractSaveModel.fromJson(Map<String, dynamic> json) =>
+      _$ContractSaveModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractSaveModel model) =>
+      _$ContractSaveModelToJson(model);
 }
 
 @JsonSerializable()
@@ -595,22 +616,4 @@ class ContractCallbackModel {
 
   static Map<String, dynamic> _contractToJson(ContractModel model) =>
       ContractModel.toJson(model);
-
-}
-
-@JsonSerializable()
-class ContractSaveModel {
-  final String userTempCode;
-  final String userSignCode;
-  final String role;
-  final String orderCode;
-
-  ContractSaveModel({this.userTempCode, this.userSignCode, this.role, this.orderCode});
-
-  factory ContractSaveModel.fromJson(Map<String, dynamic> json) =>
-      _$ContractSaveModelFromJson(json);
-
-  static Map<String, dynamic> toJson(ContractSaveModel model) =>
-      _$ContractSaveModelToJson(model);
-
 }

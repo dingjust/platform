@@ -88,7 +88,6 @@ class AbstractOrderNoteEntryModel extends ItemModel {
   ///尺码文本
   String size;
 
-
   AbstractOrderNoteEntryModel({this.quantity, this.color, this.size});
 
   factory AbstractOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
@@ -445,4 +444,86 @@ class ReconciliationOrderNoteEntryModel extends OrderNoteEntryModel {
 
   static Map<String, dynamic> toJson(ReconciliationOrderNoteEntryModel model) =>
       _$ReconciliationOrderNoteEntryModelToJson(model);
+}
+
+///生产进度单据状态
+enum ProductionProgressOrderStatus {
+  ///通过
+  PASS,
+
+  ///作废
+  CANCEL,
+}
+
+///订单记录状态
+const ProductionProgressOrderStatusLocalizedMap = {
+  ProductionProgressOrderStatus.PASS: "通过",
+  ProductionProgressOrderStatus.CANCEL: "作废",
+};
+
+/// 生产进度单据
+@JsonSerializable()
+class ProductionProgressOrderModel {
+  int id;
+
+  ///工厂跟单人
+  @JsonKey(toJson: _operatorToJson)
+  B2BCustomerModel operator;
+
+  ///状态
+  ProductionProgressOrderStatus status;
+
+  ///附件
+  @JsonKey(toJson: _mediasToJson)
+  List<MediaModel> medias;
+
+  ///上报数量
+  int amount;
+
+  ///上报时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime reportTime;
+
+  ///备注
+  String remarks;
+
+  ///所属生产进度节点
+  @JsonKey(toJson: _progressToJson)
+  ProductionProgressModel belong;
+
+  ///单据行
+  @JsonKey(toJson: _entriesToJson)
+  List<OrderNoteEntryModel> entries;
+
+  ProductionProgressOrderModel({this.id,
+    this.operator,
+    this.status,
+    this.medias,
+    this.amount,
+    this.reportTime,
+    this.remarks,
+    this.belong,
+    this.entries});
+
+  factory ProductionProgressOrderModel.fromJson(Map<String, dynamic> json) =>
+      _$ProductionProgressOrderModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ProductionProgressOrderModel model) =>
+      _$ProductionProgressOrderModelToJson(model);
+
+  static Map<String, dynamic> _operatorToJson(B2BCustomerModel model) =>
+      B2BCustomerModel.toJson(model);
+
+  static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
+      models.map((model) => MediaModel.toJson(model)).toList();
+
+  static Map<String, dynamic> _progressToJson(ProductionProgressModel model) =>
+      ProductionProgressModel.toJson(model);
+
+  static List<Map<String, dynamic>> _entriesToJson(
+      List<OrderNoteEntryModel> models) =>
+      models.map((model) => OrderNoteEntryModel.toJson(model)).toList();
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      DateTime.fromMillisecondsSinceEpoch(date);
 }

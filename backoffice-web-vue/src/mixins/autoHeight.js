@@ -30,7 +30,7 @@ export default {
       if (el && typeof el === 'object') {
         height = el.getBoundingClientRect().height
       } else {
-        height = innerHeight - 100
+        height = innerHeight - 208
       }
 
       this.autoHeight = height > 0 ? height - offsetTop : null

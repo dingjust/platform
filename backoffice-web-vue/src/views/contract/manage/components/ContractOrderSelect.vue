@@ -140,7 +140,7 @@
         this.page = result;
       },
       async onSearch () {
-        this.$emit('onSearchOrder', null,null,this.keyword);
+        this.$emit('onSearchOrder', null, null, this.keyword);
       },
       onReset () {
         this.keyword = '';
@@ -152,7 +152,10 @@
         this.$emit('onSearchOrder', 0, val);
       },
       async onCurrentPageChanged (val) {
-        this.$emit('onSearchOrder', val - 1 , null, this.keyword);
+        this.$emit('onSearchOrder', val - 1, null, this.keyword);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       _reset () {
         this.$refs.resultTable.clearSort();

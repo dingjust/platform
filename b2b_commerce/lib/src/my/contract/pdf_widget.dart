@@ -44,6 +44,8 @@ class _PDFWidgetState extends State<PDFWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print(bottomHeight);
+    bottomHeight = widget.bottomHeight==null?150.0:widget.bottomHeight;
     if (_rect == null) {
       _rect = _buildRect(context);
       pdfViwerRef.launch(
@@ -54,10 +56,10 @@ class _PDFWidgetState extends State<PDFWidget> {
       final rect = _buildRect(context);
       if (_rect != rect) {
         _rect = rect;
-//        _resizeTimer?.cancel();
-//        _resizeTimer = new Timer(new Duration(milliseconds: 300), () {
+        _resizeTimer?.cancel();
+        _resizeTimer = new Timer(new Duration(milliseconds: 300), () {
           pdfViwerRef.resize(_rect);
-//        });
+        });
       }
     }
     return new Scaffold(

@@ -7,43 +7,55 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="center">
       <el-col :span="3">
-        <img :src="slotData.product.thumbnail!=null&&slotData.product.thumbnail.length!=0?slotData.product.thumbnail.url:'static/img/nopicture.png'" class="info-detail-thumnail" />
+        <img
+          :src="slotData.product.thumbnail!=null&&slotData.product.thumbnail.length!=0?slotData.product.thumbnail.url:'static/img/nopicture.png'"
+          class="info-detail-thumnail" />
       </el-col>
       <el-col :span="21">
         <div>
           <el-row type="flex" align="center" class="info-detail-item_row">
-            <el-col :span="7">
-              <orders-info-item :slotData="'生产单号'">{{slotData.code}}</orders-info-item>
-            </el-col>
-            <el-col :span="6" :offset="1">
-              <orders-info-item :slotData="'生产产品'">{{slotData.product.name}}</orders-info-item>
-            </el-col>
-            <el-col :span="5">
-              <orders-info-item :slotData="'合作方式'">{{getEnum('machiningTypes', slotData.machiningType)}}
-              </orders-info-item>
-            </el-col>
-            <el-col :span="6">
-              <orders-info-item :slotData="'是否开发票'">{{slotData.invoiceNeeded?'开发票':'不开发票'}}</orders-info-item>
-            </el-col>
+            <orders-info-item :slotData="'产品名称'">{{slotData.product.name}}</orders-info-item>
           </el-row>
           <el-row type="flex" align="center" class="info-detail-item_row">
-            <el-col :span="7">
-              <orders-info-item :slotData="'交货日期'">{{slotData.expectedDeliveryDate | timestampToTime}}
-              </orders-info-item>
+            <el-col :span="6">
+              <orders-info-item :slotData="'产品货号'">{{slotData.product.skuID}}</orders-info-item>
             </el-col>
-            <el-col :span="6" :offset="1">
+            <el-col :span="6">
               <orders-info-item :slotData="'生产数量'">{{totalQuantity}}(件)</orders-info-item>
-            </el-col>
-            <el-col :span="5">
-              <orders-info-item :slotData="'生产总额'">￥{{this.slotData.totalPrice}}</orders-info-item>
             </el-col>
             <el-col :span="6">
               <orders-info-item :slotData="'订单报价'">￥{{this.slotData.unitPrice}}</orders-info-item>
             </el-col>
+            <el-col :span="6">
+              <orders-info-item :slotData="'生产总额'">￥{{this.slotData.totalPrice | numFilter}}</orders-info-item>
+            </el-col>
           </el-row>
-          <el-row class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">
-            <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}}
-              {{this.slotData.deliveryAddress.fullname}} {{this.slotData.deliveryAddress.cellphone}}</orders-info-item>
+          <el-row type="flex" align="center" class="info-detail-item_row">
+            <el-col :span="6">
+              <orders-info-item :slotData="'合作方式'">{{getEnum('machiningTypes', slotData.machiningType)}}
+              </orders-info-item>
+            </el-col>
+            <el-col :span="6">
+              <orders-info-item :slotData="'运费承担'">{{slotData.freightPayer=='PARTYA'?'甲方':'乙方'}}
+              </orders-info-item>
+            </el-col>
+            <el-col :span="6">
+              <orders-info-item :slotData="'交货日期'">{{slotData.expectedDeliveryDate | timestampToTime}}
+              </orders-info-item>
+            </el-col>
+            <el-col :span="6">
+              <orders-info-item :slotData="'是否开发票'">
+                {{slotData.invoiceNeeded?('开发票'+slotData.invoiceTaxPoint*100+'%税点'):'不开发票'}}</orders-info-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="space-between" align="center" class="info-detail-item_row" v-if="slotData.deliveryAddress!=null">
+            <el-col :span="20">
+              <orders-info-item :slotData="'送货地址'">{{this.slotData.deliveryAddress.details}}
+                {{this.slotData.deliveryAddress.fullname}} {{this.slotData.deliveryAddress.cellphone}}</orders-info-item>
+            </el-col>
+            <el-col :span="4">
+              <el-button style="padding-top: 0px" v-if="hasAddressModify" size="mini" type="text" @click="onAddressModifyFormVisible">修改地址</el-button>
+            </el-col>
           </el-row>
           <!-- <el-row type="flex" justify="space-between" align="middle">
             <el-row type="flex" justify="start" align="middle">
@@ -78,7 +90,7 @@
     props: ['slotData'],
     components: {
       OrdersInfoItem,
-      OrdersInfoTable,
+      OrdersInfoTable
     },
     mixins: [],
     computed: {
@@ -89,18 +101,28 @@
         });
         return result;
       },
-    },
-    methods: {
-
-    },
-    data() {
-      return {
-
+      hasAddressModify: function () {
+        if (this.slotData.creator.uid === this.$store.getters.currentUser.companyCode) {
+          return true;
+        } else {
+          return false;
+        }
       }
     },
-    created() {}
+    methods: {
+      onAddressModifyFormVisible () {
+        console.log(this.slotData);
+        console.log(this.$store.getters.currentUser);
+        this.$emit('onAddressModifyFormVisible');
+      }
+    },
+    data () {
+      return {
+      }
+    },
+    created () {
+    }
   }
-
 </script>
 <style>
   .info-detail-body {

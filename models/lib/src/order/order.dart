@@ -1266,6 +1266,10 @@ class ProductionProgressModel extends ItemModel {
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime finishDate;
 
+  ///修改时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime modifiedtime;
+
   ///备注
   String remarks;
 
@@ -1277,6 +1281,10 @@ class ProductionProgressModel extends ItemModel {
 
   int delayedDays;
 
+  ///生产进度单据
+  @JsonKey(toJson: _productionProgressOrdersToJson)
+  List<ProductionProgressOrderModel> productionProgressOrders;
+
   ProductionProgressModel(
       {this.phase,
       this.quantity,
@@ -1284,6 +1292,7 @@ class ProductionProgressModel extends ItemModel {
       this.sequence,
       this.estimatedDate,
       this.finishDate,
+        this.modifiedtime,
       this.order,
       this.updateOnly,
       this.delayedDays,
@@ -1303,6 +1312,23 @@ class ProductionProgressModel extends ItemModel {
 
   static Map<String, dynamic> _purchaseOrderToJson(PurchaseOrderModel model) =>
       PurchaseOrderModel.toJson(model);
+
+  static List<Map<String, dynamic>> _productionProgressOrdersToJson(
+      List<ProductionProgressOrderModel> models) =>
+      models
+          .map((model) => ProductionProgressOrderModel.toJson(model))
+          .toList();
+
+  ///统计计算实际数量
+  int get totalQuantity {
+    int result = 0;
+    productionProgressOrders
+        .where((order) => order.status == ProductionProgressOrderStatus.PASS)
+        .forEach((order) {
+      result += order.amount;
+    });
+    return result;
+  }
 }
 
 //订单状态model，用于订单状态控件的List传入

@@ -73,7 +73,7 @@
         <el-col :span="8" :offset="2">
           <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
                      :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers"
-                     :on-exceed="handleExceed"
+                     :on-exceed="handleExceed" :on-progress="uploadVideoProcess"
                      :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
             <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
             <i class="el-icon-plus"></i>
@@ -197,7 +197,7 @@
 
           this.dialogTemplateVisible = true;
         },
-        async onSearchOrder (keyword, page, size) {
+        async onSearchOrder (page, size, keyword) {
           var _page = 0;
           var _size = 10;
           if (page) {
@@ -208,7 +208,8 @@
           }
           const url = this.apis().getPurchaseOrders();
           const result = await this.$http.post(url, {
-            statuses: ['PENDING_PAYMENT', 'IN_PRODUCTION', 'WAIT_FOR_OUT_OF_STORE', 'OUT_OF_STORE', 'COMPLETED']
+            statuses: ['PENDING_PAYMENT', 'IN_PRODUCTION', 'WAIT_FOR_OUT_OF_STORE', 'OUT_OF_STORE', 'COMPLETED'],
+            keyword: keyword
           }, {
             page: _page,
             size: _size
@@ -275,7 +276,7 @@
             this.$message.error('请选择订单');
             return;
           }
-          if (this.selectContract == null || this.selectContract == undefined) {
+          if (this.selectContract.code == null || this.selectContract.code == undefined) {
             this.$message.error('请选择框架协议');
             return;
           }
@@ -294,12 +295,21 @@
             role = 'PARTYB';
           }
 
+          var frameAgreementCode = '';
+          if (this.selectContract.code == null || this.selectContract.code == '') {
+            return;
+          }
+
+          if (this.selectContract.code != null && this.selectContract.code != '') {
+            frameAgreementCode = this.selectContract.code;
+          }
           let data = {
             'pdf': this.pdfFile,
             'role': role,
             'title': '',
             'customizeCode': this.contractCode,
             'agreementType': agreementType,
+            'frameAgreementCode': frameAgreementCode,
             'orderCodes': this.orderSelectFiles.map((order) => order.code)
           }
 
@@ -342,7 +352,7 @@
             return;
           }
 
-          if (this.selectContract == null || this.selectContract == undefined) {
+          if (this.selectContract.code == null || this.selectContract.code == undefined) {
             this.$message.error('请选择框架协议');
             return;
           }
@@ -538,7 +548,7 @@
         };
       },
       created () {
-        this.onSearchOrder('', 0, 10);
+        this.onSearchOrder(0, 10);
         this.onSetOrderCode();
       },
       watch: {

@@ -7,17 +7,25 @@
     <el-dialog :visible.sync="dialogSealVisible" :show-close="true">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
+<!--    <el-dialog :visible.sync="dialogOrderVisible" width="50%" class="purchase-dialog" append-to-body>-->
+<!--      <el-row :justify="center">-->
+<!--        <h6>是否跳转到合同签署页面？</h6>-->
+<!--      </el-row>-->
+<!--      <el-row :justify="space-around">-->
+<!--        <h6>是否跳转到合同签署页面？</h6>-->
+<!--      </el-row>-->
+<!--    </el-dialog>-->
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
       <el-button type="warning" v-if="slotData.state != 'INVALID'" @click="onBCXY" class="toolbar-search_input">增加补充协议
       </el-button>
       <el-button type="warning" @click="onDownload(slotData.code)" class="toolbar-search_input">下载</el-button>
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && !slotData.isCreator"
         type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
-        class="toolbar-search_input" @click="onSearchSeal">签署
-      </el-button>
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning"
         class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
+                 class="toolbar-search_input" @click="onSearchSeal">签署
+      </el-button>
     </div>
     <!--<center>-->
     <!--<table height="150px" border="0" id='waitPage'>-->
@@ -44,6 +52,7 @@
     <!--<iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl"-->
     <!--height="480" width="100%">-->
     <!--</iframe>-->
+    <a id="a"  target="_blank"></a>
   </div>
 </template>
 
@@ -71,7 +80,8 @@
         reFresh: true,
         dialogOrderVisible: false,
         dialogSealVisible: false,
-        isLoading: false
+        isLoading: false,
+        openUrl: '',
       }
     },
     methods: {
@@ -108,6 +118,7 @@
         const result = await this.$http.get(url);
         this.$message.success(result.msg);
         Bus.$emit('closePdfView');
+        this.$emit('onSearch');
       },
       async onDownload (code) {
         const url = this.apis().downContract(code);
@@ -143,15 +154,22 @@
       },
       async onSealSelectChange (data) {
         console.log(data);
-        this.dialogSealVisible = false;
         const sealCode = data.code;
 
         const url = this.apis().flowContract(this.slotData.code, sealCode);
         const result = await http.get(url);
 
         if (result.data != null) {
-          window.open(result.data, '_blank');
-          this.$emit('closePdfVisible');
+          this.openUrl = result.data;
+          this.$confirm('是否跳转到合同签署页面?', '', {
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              type: 'warning'
+          }).then(() => {
+              this.dialogSealVisible = false;
+              this.$emit('closePdfVisible');
+              window.open(result.data);
+          });
         } else {
           this.$message.error(result.msg);
         }
