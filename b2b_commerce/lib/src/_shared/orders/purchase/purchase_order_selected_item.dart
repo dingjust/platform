@@ -11,17 +11,17 @@ import '../../../business/orders/purchase_order_detail.dart';
 import '../../../common/logistics_input_page.dart';
 import '../../../common/order_payment.dart';
 
-class PurchaseOrderListItem extends StatefulWidget {
-  PurchaseOrderListItem({Key key, this.order, this.isContractSelect: false})
+class PurchaseOrderSelectedItem extends StatefulWidget {
+  PurchaseOrderSelectedItem({Key key, this.order, this.isContractSelect: false})
       : super(key: key);
 
   final PurchaseOrderModel order;
   bool isContractSelect;
 
-  _PurchaseOrderListItemState createState() => _PurchaseOrderListItemState();
+  _PurchaseOrderSelectedItemState createState() => _PurchaseOrderSelectedItemState();
 }
 
-class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
+class _PurchaseOrderSelectedItemState extends State<PurchaseOrderSelectedItem>
     with AutomaticKeepAliveClientMixin {
   static Map<PurchaseOrderStatus, Color> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
@@ -58,17 +58,6 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
           borderRadius: BorderRadius.circular(5),
         ),
       ),
-      onTap: () async {
-        if (widget.isContractSelect) {
-          Navigator.of(context).pop(widget.order);
-        } else {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    PurchaseOrderDetailPage(code: widget.order.code)),
-          );
-        }
-      },
     );
   }
 
@@ -285,7 +274,11 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                               ),
                             )
                     ],
-                  )))
+                  ))),
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: Icon(Icons.check),
+          ),
         ],
       ),
     );

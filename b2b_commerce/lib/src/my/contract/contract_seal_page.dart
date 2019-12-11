@@ -60,7 +60,7 @@ class _ContractSealPageState extends State<ContractSealPage>{
   Widget _buildItems(BuildContext context, SealModel model) {
     return GestureDetector(
       onTap: () {
-        flowContract(widget.model.code,model);
+        flowContract(widget.model?.code,model);
       },
       child: Container(
         child: Column(

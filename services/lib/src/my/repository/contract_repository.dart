@@ -57,22 +57,22 @@ class ContractRepository {
     return certification;
   }
 
-  Future<ContractResponse> getContractTempList(
+  Future<ContractTempResponse> getContractTempList(
       dynamic data, Map<String, dynamic> parames) async {
-    ContractResponse contractResponse;
+    ContractTempResponse contractTempResponse;
     Response response;
     try {
-      response = await http$.post(UserApis.contractList,
+      response = await http$.post(UserApis.tempList,
           data: data, queryParameters: parames);
     } on DioError catch (e) {
       print(e);
     }
 
     if (response != null && response.statusCode == 200) {
-      contractResponse = ContractResponse.fromJson(response.data);
+      contractTempResponse = ContractTempResponse.fromJson(response.data);
     }
 
-    return contractResponse;
+    return contractTempResponse;
   }
 
   Future<List<ContractTemplateModel>> getContractTemplateList(
@@ -318,6 +318,31 @@ class ContractRepository {
     }
     if (response != null && response.statusCode == 200) {
       return CertificationContractCount.fromJson(response.data);
+    } else {
+      return null;
+    }
+  }
+
+  ///合同订单验证
+  Future<SearchResultModel> validateContractOrders(
+      {dynamic data, Map<String, dynamic> parames}) async {
+    if(data == null){
+      data = {};
+    }
+    if(parames == null){
+      parames = {};
+    }
+
+    Response response;
+    try {
+      response = await http$.post(UserApis.contractOrdersValidate,
+          data: data, queryParameters: parames);
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return SearchResultModel.fromJson(response.data);
     } else {
       return null;
     }

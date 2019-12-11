@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
+import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
@@ -58,6 +59,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_CART = '/my/my_cart';
   static const ROUTE_MY_INVOICES = '/my/my_invoices';
   static const ROUTE_MY_CONTRACT = '/my/my_contract_manage_page';
+  static const ROUTE_MY_CONTRACT_LIST = '/my/my_contract';
   static const ROUTE_MY_CAPACITY = '/my/my_capacity_from';
   static const ROUTE_CAPACITY_MATCHING = '/my/capacity/capacity_matching';
   static const ROUTE_MY_COLLECTIONS = '/my/my_collections';
@@ -88,6 +90,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
     ROUTE_MY_CONTRACT: (context) => MyContractManagePage(),
+    ROUTE_MY_CONTRACT_LIST: (context) => MyContractPage(),
     ROUTE_MY_CAPACITY: (context) => MyCapacityPage(),
     ROUTE_MY_CLIENT_SERVICES: (context) => MyClientServicesPage(),
     ROUTE_MY_SETTINGS: (context) => MySettingsPage(),
@@ -97,6 +100,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_PROOFING_ORDERS: (context) => ProofingOrdersPage(),
     ROUTE_MY_BILL: (context) => MyBillPage(),
     ROUTE_MY_HELP: (context) => MyHelpPage(),
-    ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage()
+    ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage(),
   };
 }

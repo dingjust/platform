@@ -160,12 +160,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
   void initState() {
     super.initState();
 
-  }
-
-  @override
-  Widget build(BuildContext context) {
     var bloc = BLoCProvider.of<MyContractBLoC>(context);
-
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels ==
           widget.scrollController.position.maxScrollExtent) {
@@ -173,7 +168,11 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
         bloc.loadingMore(status: widget.status.code);
       }
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    var bloc = BLoCProvider.of<MyContractBLoC>(context);
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
@@ -192,6 +191,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
               // initialData: null,
               builder:
                   (BuildContext context, AsyncSnapshot<ContractData> snapshot) {
+                print('${snapshot.data?.data?.length}----=====');
                 if (snapshot.data == null) {
                     bloc.getData(status: widget.status.code);
 
