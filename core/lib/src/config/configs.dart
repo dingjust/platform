@@ -10,8 +10,8 @@ class GlobalConfigs {
   //     'https://192.168.31.218:9002/djwebservices/v2';
 
   // 生产
-  // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+//   static const CONTEXT_PATH = 'https://ht.nbyjy.net';
+//   static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
