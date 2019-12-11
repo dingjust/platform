@@ -2,21 +2,21 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/my/contract/contract_seal_page.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_widget.dart';
-import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
-
 
 class PdfReaderWidget extends StatefulWidget {
   Route route;
   ContractModel contractModel;
   String pathPDF = '';
 
-  PdfReaderWidget({this.pathPDF,this.contractModel,this.route,});
+  PdfReaderWidget({
+    this.pathPDF,
+    this.contractModel,
+    this.route,
+  });
   @override
   _PdfReaderWidgetState createState() => new _PdfReaderWidgetState();
 }
@@ -32,48 +32,52 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
     super.initState();
   }
 
-  initSeal() async{
-    sealList = await ContractRepository().getSealList({'type':''}, {'page':'0','size':'100'});
+  initSeal() async {
+    sealList = await ContractRepository()
+        .getSealList({'type': ''}, {'page': '0', 'size': '100'});
   }
 
   @override
   Widget build(BuildContext context) {
     print(widget.contractModel);
     return WillPopScope(
-      onWillPop: (){
-        if(widget.route != null){
+      onWillPop: () {
+        if (widget.route != null) {
           Navigator.pushReplacement(context, widget.route);
-        }else{
+        } else {
           Navigator.pop(context);
         }
 
         return Future.value(false);
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+          backgroundColor: Colors.white,
           body: Container(
             height: 500,
-            child:  _showPdf?PDFWidget(
-              appBar:AppBar(
+            child: _showPdf
+                ? PDFWidget(
+              appBar: AppBar(
                 title: Text("合同详情"),
                 centerTitle: true,
               ),
               path: widget.pathPDF,
               bottomHeight: bottomHeight,
-            ):Center(child: CircularProgressIndicator(),),
+            )
+                : Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
           bottomNavigationBar: Container(
             child: _buildButton(),
-          )
-      ),
+          )),
     );
   }
 
-  Widget _buildButton(){
-    if(widget.contractModel.state != ContractStatus.COMPLETE
-        && widget.contractModel.state != ContractStatus.INVALID
-        && !widget.contractModel.isCreator){
-      if(widget.contractModel.isSigned){
+  Widget _buildButton() {
+    if (widget.contractModel.state != ContractStatus.COMPLETE &&
+        widget.contractModel.state != ContractStatus.INVALID &&
+        !widget.contractModel.isCreator) {
+      if (widget.contractModel.isSigned) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -119,7 +123,8 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                     ),
                                     Expanded(
                                       child: Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         child: Text(
                                           '注意',
                                           style: TextStyle(),
@@ -137,17 +142,14 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                       vertical: 5, horizontal: 5),
                                   alignment: Alignment.topLeft,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        child: Text(
-                                            '是否要拒签该合同'
-                                        ),
+                                        child: Text('是否要拒签该合同'),
                                       ),
                                     ],
-                                  )
-                              ),
+                                  )),
                               Container(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -155,8 +157,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                     Center(
                                       child: Container(
                                           child: FlatButton(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 80),
+                                              padding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                  horizontal: 80),
                                               child: Text(
                                                 '取消',
                                                 style: TextStyle(
@@ -164,9 +168,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                                 ),
                                               ),
                                               shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
+                                                  borderRadius:
+                                                  BorderRadius.all(
                                                       Radius.circular(15))),
-                                              onPressed: (){
+                                              onPressed: () {
                                                 Navigator.pop(context);
                                               })),
                                     ),
@@ -184,20 +189,24 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15))),
-                                            onPressed: (){
+                                            onPressed: () {
                                               showDialog(
                                                   context: context,
                                                   barrierDismissible: false,
                                                   builder: (_) {
                                                     return RequestDataLoading(
-                                                      requestCallBack: ContractRepository().rejectContract(widget.contractModel.code),
+                                                      requestCallBack:
+                                                      ContractRepository()
+                                                          .rejectContract(widget
+                                                          .contractModel
+                                                          .code),
                                                       outsideDismiss: false,
                                                       loadingText: '撤回中。。。',
                                                       entrance: '',
                                                     );
-                                                  }
-                                              ).then((value){
-                                                MyContractBLoC().refreshData('ALL','');
+                                                  }).then((value) {
+                                                MyContractBLoC()
+                                                    .refreshData('ALL', '');
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context).pop();
                                                 showDialog(
@@ -205,15 +214,15 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                                     barrierDismissible: false,
                                                     builder: (_) {
                                                       return CustomizeDialog(
-                                                        dialogType: DialogType.RESULT_DIALOG,
-                                                        successTips: '${value.msg}',
+                                                        dialogType: DialogType
+                                                            .RESULT_DIALOG,
+                                                        successTips:
+                                                        '${value.msg}',
                                                         callbackResult: true,
                                                       );
-                                                    }
-                                                );
+                                                    });
                                               });
-                                            }
-                                        ),
+                                            }),
                                         decoration: BoxDecoration(
                                             border: Border(
                                                 left: BorderSide(
@@ -225,10 +234,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                 ),
                                 decoration: BoxDecoration(
                                     border: Border(
-                                        top: BorderSide(color: Colors.grey, width: 0.5))),
+                                        top: BorderSide(
+                                            color: Colors.grey, width: 0.5))),
                               )
-                            ]
-                        ),
+                            ]),
                       );
                     },
                   );
@@ -237,210 +246,232 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
             ),
           ],
         );
-      }else{
+      } else {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Container(
-              color: Colors.white10,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              height: 50,
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                color: Color.fromRGBO(255, 214, 12, 1),
-                child: Text(
-                  '拒签',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
+            Expanded(
+              flex: 1,
+              child: Container(
+                color: Colors.white10,
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                height: 50,
+                child: RaisedButton(
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  child: Text(
+                    '拒签',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Container(
-                        height: 150,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                height: 30,
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
-                                      child: Icon(
-                                        Icons.error,
-                                        size: 20,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text(
-                                          '注意',
-                                          style: TextStyle(),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                  height: 50,
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 5),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 5),
-                                  alignment: Alignment.topLeft,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: 150,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  height: 30,
+                                  child: Row(
                                     children: <Widget>[
                                       Container(
-                                        child: Text(
-                                            '是否要拒签该合同'
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        child: Icon(
+                                          Icons.error,
+                                          size: 20,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: Text(
+                                            '注意',
+                                            style: TextStyle(),
+                                          ),
                                         ),
                                       ),
                                     ],
-                                  )
-                              ),
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Center(
-                                      child: Container(
+                                  ),
+                                ),
+                                Container(
+                                    height: 50,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 5),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 5),
+                                    alignment: Alignment.topLeft,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Text('是否要拒签该合同'),
+                                        ),
+                                      ],
+                                    )),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Center(
+                                        child: Container(
+                                            child: FlatButton(
+                                                padding:
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 10,
+                                                    horizontal: 80),
+                                                child: Text(
+                                                  '取消',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius.all(
+                                                        Radius.circular(
+                                                            15))),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                })),
+                                      ),
+                                      Center(
+                                        child: Container(
                                           child: FlatButton(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 80),
+                                              padding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                  horizontal: 80),
                                               child: Text(
-                                                '取消',
+                                                '确定',
                                                 style: TextStyle(
-                                                  color: Colors.grey,
+                                                  color: Colors.black,
                                                 ),
                                               ),
                                               shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
+                                                  borderRadius:
+                                                  BorderRadius.all(
                                                       Radius.circular(15))),
-                                              onPressed: (){
-                                                Navigator.pop(context);
-                                              })),
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        child: FlatButton(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10, horizontal: 80),
-                                            child: Text(
-                                              '确定',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(15))),
-                                            onPressed: (){
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false,
-                                                  builder: (_) {
-                                                    return RequestDataLoading(
-                                                      requestCallBack: ContractRepository().rejectContract(widget.contractModel.code),
-                                                      outsideDismiss: false,
-                                                      loadingText: '撤回中。。。',
-                                                      entrance: '',
-                                                    );
-                                                  }
-                                              ).then((value){
-                                                MyContractBLoC().refreshData('ALL','');
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop();
+                                              onPressed: () {
                                                 showDialog(
                                                     context: context,
                                                     barrierDismissible: false,
                                                     builder: (_) {
-                                                      return CustomizeDialog(
-                                                        dialogType: DialogType.RESULT_DIALOG,
-                                                        successTips: '${value.msg}',
-                                                        callbackResult: true,
+                                                      return RequestDataLoading(
+                                                        requestCallBack:
+                                                        ContractRepository()
+                                                            .rejectContract(
+                                                            widget
+                                                                .contractModel
+                                                                .code),
+                                                        outsideDismiss: false,
+                                                        loadingText: '撤回中。。。',
+                                                        entrance: '',
                                                       );
-                                                    }
-                                                );
-                                              });
-                                            }
+                                                    }).then((value) {
+                                                  MyContractBLoC()
+                                                      .refreshData('ALL', '');
+                                                  Navigator.of(context).pop();
+                                                  Navigator.of(context).pop();
+                                                  showDialog(
+                                                      context: context,
+                                                      barrierDismissible: false,
+                                                      builder: (_) {
+                                                        return CustomizeDialog(
+                                                          dialogType: DialogType
+                                                              .RESULT_DIALOG,
+                                                          successTips:
+                                                          '${value.msg}',
+                                                          callbackResult: true,
+                                                        );
+                                                      });
+                                                });
+                                              }),
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  left: BorderSide(
+                                                      color: Colors.grey,
+                                                      width: 0.5))),
                                         ),
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                left: BorderSide(
-                                                    color: Colors.grey,
-                                                    width: 0.5))),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        top: BorderSide(color: Colors.grey, width: 0.5))),
-                              )
-                            ]
-                        ),
-                      );
-                    },
-                  );
-                },
+                                    ],
+                                  ),
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          top: BorderSide(
+                                              color: Colors.grey, width: 0.5))),
+                                )
+                              ]),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
             Container(
-              color: Colors.white10,
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              width: 20,
               height: 50,
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                color: Color.fromRGBO(255, 214, 12, 1),
-                child: Text(
-                  '去签署',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                onPressed: () {
-                  setState(() {
-                    _showPdf = false;
-                  });
-//                  Navigator.pop(context);
-                  print(widget.contractModel.state);
-                  Navigator.push(
-                    context, MaterialPageRoute(builder: (context) =>
-                      ContractSealPage(
-                        sealList: sealList, model: widget.contractModel,)),
-                  ).then((v){
-                    setState(() {
-                      _showPdf = true;
-                    });
-                  });
-                },
-              ),
             ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                color: Colors.white10,
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                height: 50,
+                child: RaisedButton(
+                  color: Color.fromRGBO(255, 214, 12, 1),
+                  child: Text(
+                    '去签署',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  onPressed: () {
+                    setState(() {
+                      _showPdf = false;
+                    });
+//                  Navigator.pop(context);
+                    print(widget.contractModel.state);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ContractSealPage(
+                                sealList: sealList,
+                                model: widget.contractModel,
+                              )),
+                    ).then((v) {
+                      setState(() {
+                        _showPdf = true;
+                      });
+                    });
+                  },
+                ),
+              ),
+            )
           ],
         );
       }
-    }else if(widget.contractModel.state != ContractStatus.COMPLETE
-        && widget.contractModel.state != ContractStatus.INVALID
-        && widget.contractModel.isCreator){
-      if(widget.contractModel.isSigned){
+    } else if (widget.contractModel.state != ContractStatus.COMPLETE &&
+        widget.contractModel.state != ContractStatus.INVALID &&
+        widget.contractModel.isCreator) {
+      if (widget.contractModel.isSigned) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -486,7 +517,8 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                     ),
                                     Expanded(
                                       child: Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         child: Text(
                                           '注意',
                                           style: TextStyle(),
@@ -504,17 +536,14 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                       vertical: 5, horizontal: 5),
                                   alignment: Alignment.topLeft,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        child: Text(
-                                            '是否要撤回该合同'
-                                        ),
+                                        child: Text('是否要撤回该合同'),
                                       ),
                                     ],
-                                  )
-                              ),
+                                  )),
                               Container(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -522,8 +551,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                     Center(
                                       child: Container(
                                           child: FlatButton(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 80),
+                                              padding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                  horizontal: 80),
                                               child: Text(
                                                 '取消',
                                                 style: TextStyle(
@@ -531,9 +562,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                                 ),
                                               ),
                                               shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
+                                                  borderRadius:
+                                                  BorderRadius.all(
                                                       Radius.circular(15))),
-                                              onPressed: (){
+                                              onPressed: () {
                                                 Navigator.pop(context);
                                               })),
                                     ),
@@ -551,20 +583,24 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15))),
-                                            onPressed: (){
+                                            onPressed: () {
                                               showDialog(
                                                   context: context,
                                                   barrierDismissible: false,
                                                   builder: (_) {
                                                     return RequestDataLoading(
-                                                      requestCallBack: ContractRepository().revokeContract(widget.contractModel.code),
+                                                      requestCallBack:
+                                                      ContractRepository()
+                                                          .revokeContract(widget
+                                                          .contractModel
+                                                          .code),
                                                       outsideDismiss: false,
                                                       loadingText: '撤回中。。。',
                                                       entrance: '',
                                                     );
-                                                  }
-                                              ).then((value){
-                                                MyContractBLoC().refreshData('ALL','');
+                                                  }).then((value) {
+                                                MyContractBLoC()
+                                                    .refreshData('ALL', '');
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context).pop();
                                                 showDialog(
@@ -572,15 +608,15 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                                     barrierDismissible: false,
                                                     builder: (_) {
                                                       return CustomizeDialog(
-                                                        dialogType: DialogType.RESULT_DIALOG,
-                                                        successTips: '${value.msg}',
+                                                        dialogType: DialogType
+                                                            .RESULT_DIALOG,
+                                                        successTips:
+                                                        '${value.msg}',
                                                         callbackResult: true,
                                                       );
-                                                    }
-                                                );
+                                                    });
                                               });
-                                            }
-                                        ),
+                                            }),
                                         decoration: BoxDecoration(
                                             border: Border(
                                                 left: BorderSide(
@@ -592,10 +628,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                 ),
                                 decoration: BoxDecoration(
                                     border: Border(
-                                        top: BorderSide(color: Colors.grey, width: 0.5))),
+                                        top: BorderSide(
+                                            color: Colors.grey, width: 0.5))),
                               )
-                            ]
-                        ),
+                            ]),
                       );
                     },
                   );
@@ -604,7 +640,7 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
             ),
           ],
         );
-      }else{
+      } else {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -650,7 +686,8 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                     ),
                                     Expanded(
                                       child: Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 10),
                                         child: Text(
                                           '注意',
                                           style: TextStyle(),
@@ -668,17 +705,14 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                       vertical: 5, horizontal: 5),
                                   alignment: Alignment.topLeft,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        child: Text(
-                                            '是否要撤回该合同'
-                                        ),
+                                        child: Text('是否要撤回该合同'),
                                       ),
                                     ],
-                                  )
-                              ),
+                                  )),
                               Container(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -686,8 +720,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                     Center(
                                       child: Container(
                                           child: FlatButton(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 80),
+                                              padding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                  horizontal: 80),
                                               child: Text(
                                                 '取消',
                                                 style: TextStyle(
@@ -695,9 +731,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                                 ),
                                               ),
                                               shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.all(
+                                                  borderRadius:
+                                                  BorderRadius.all(
                                                       Radius.circular(15))),
-                                              onPressed: (){
+                                              onPressed: () {
                                                 Navigator.pop(context);
                                               })),
                                     ),
@@ -715,20 +752,24 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(15))),
-                                            onPressed: (){
+                                            onPressed: () {
                                               showDialog(
                                                   context: context,
                                                   barrierDismissible: false,
                                                   builder: (_) {
                                                     return RequestDataLoading(
-                                                      requestCallBack: ContractRepository().revokeContract(widget.contractModel.code),
+                                                      requestCallBack:
+                                                      ContractRepository()
+                                                          .revokeContract(widget
+                                                          .contractModel
+                                                          .code),
                                                       outsideDismiss: false,
                                                       loadingText: '撤回中。。。',
                                                       entrance: '',
                                                     );
-                                                  }
-                                              ).then((value){
-                                                MyContractBLoC().refreshData('ALL','');
+                                                  }).then((value) {
+                                                MyContractBLoC()
+                                                    .refreshData('ALL', '');
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context).pop();
                                                 showDialog(
@@ -736,15 +777,15 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                                     barrierDismissible: false,
                                                     builder: (_) {
                                                       return CustomizeDialog(
-                                                        dialogType: DialogType.RESULT_DIALOG,
-                                                        successTips: '${value.msg}',
+                                                        dialogType: DialogType
+                                                            .RESULT_DIALOG,
+                                                        successTips:
+                                                        '${value.msg}',
                                                         callbackResult: true,
                                                       );
-                                                    }
-                                                );
+                                                    });
                                               });
-                                            }
-                                        ),
+                                            }),
                                         decoration: BoxDecoration(
                                             border: Border(
                                                 left: BorderSide(
@@ -756,10 +797,10 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                                 ),
                                 decoration: BoxDecoration(
                                     border: Border(
-                                        top: BorderSide(color: Colors.grey, width: 0.5))),
+                                        top: BorderSide(
+                                            color: Colors.grey, width: 0.5))),
                               )
-                            ]
-                        ),
+                            ]),
                       );
                     },
                   );
@@ -783,15 +824,19 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                 ),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
-                onPressed: ()async {
+                onPressed: () async {
                   setState(() {
                     _showPdf = false;
                   });
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context) =>
-                      ContractSealPage(
-                        sealList: sealList, model: widget.contractModel,)),
-                  ).then((val){
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ContractSealPage(
+                              sealList: sealList,
+                              model: widget.contractModel,
+                            )),
+                  ).then((val) {
                     setState(() {
                       _showPdf = true;
                     });
@@ -802,7 +847,7 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
           ],
         );
       }
-    }else if(widget.contractModel.state == ContractStatus.COMPLETE){
+    } else if (widget.contractModel.state == ContractStatus.COMPLETE) {
       return Container(
         color: Colors.white10,
         margin: EdgeInsets.all(10),
@@ -819,17 +864,17 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5))),
-          onPressed: () {
-          },
+          onPressed: () {},
         ),
       );
-    }else if(widget.contractModel.state == ContractStatus.INVALID){
+    } else if (widget.contractModel.state == ContractStatus.INVALID) {
       return Container(
         height: 50,
       );
-    }else{
-      return Container(height: 50,);
+    } else {
+      return Container(
+        height: 50,
+      );
     }
   }
-
 }

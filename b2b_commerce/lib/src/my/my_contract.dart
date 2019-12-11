@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
-import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/contract/contract_select_from_page.dart';
 import 'package:b2b_commerce/src/my/contract/join_supplier_contract_page.dart';
 import 'package:connectivity/connectivity.dart';
@@ -16,7 +13,6 @@ import 'package:widgets/widgets.dart';
 import 'contract/contract_item_page.dart';
 import 'contract/float_select_page.dart';
 import 'contract/join_order_contract_page.dart';
-import 'my_help.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -29,11 +25,13 @@ const statuses = <EnumModel>[
 class MyContractPage extends StatefulWidget {
   String keyword;
   String type;
-  MyContractPage({this.keyword,this.type});
+
+  MyContractPage({this.keyword, this.type});
   _MyContractPageState createState() => _MyContractPageState();
 }
 
-class _MyContractPageState extends State<MyContractPage> with SingleTickerProviderStateMixin ,AutomaticKeepAliveClientMixin{
+class _MyContractPageState extends State<MyContractPage>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final GlobalKey _globalKey = GlobalKey<_MyContractPageState>();
   List<String> historyKeywords;
   var controller;
@@ -41,7 +39,9 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
   @override
   void initState() {
     controller = TabController(
-      initialIndex: widget.type == 'WAIT_ME_SIGN' ? 1 : widget.type == 'WAIT_PARTNER_SIGN' ? 2 : 0,
+      initialIndex: widget.type == 'WAIT_ME_SIGN'
+          ? 1
+          : widget.type == 'WAIT_PARTNER_SIGN' ? 2 : 0,
       length: statuses.length,
       vsync: this, //动画效果的异步处理，默认格式
     );
@@ -50,23 +50,25 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
   }
 
   @override
-  void dispose(){
+  void dispose() {
     MyContractBLoC.instance.clear();
     super.dispose();
   }
 
   Widget _buildSearchButton() {
     return IconButton(
-      icon: const Icon(B2BIcons.search, size: 20),
-      onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => HistorySearch(
-          hintText: '请输入编号，名称，订单号，合作商名称搜索',
-          historyKey: GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
-        )));
-      }
-    );
+        icon: const Icon(B2BIcons.search, size: 20),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      HistorySearch(
+                        hintText: '请输入编号，名称，订单号，合作商名称搜索',
+                        historyKey: GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY,
+                      )));
+        });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,21 +81,30 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
             actions: <Widget>[_buildSearchButton()],
           ),
           body: Scaffold(
-              appBar: TabBar(
-                controller: controller,
-                isScrollable: true,
-                unselectedLabelColor: Colors.black26,
-                labelColor: Colors.black,
-                indicatorSize: TabBarIndicatorSize.label,
-                labelStyle: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-                tabs: statuses.map((tab) {
-                  return Tab(text: tab.name);
-                }).toList(),),
-              body: TabBarView(
-                controller: controller,
-                children: statuses.map((status) => MyContractListPage(status: status,keyword: widget.keyword,)).toList(),
-              ),
+            appBar: TabBar(
+              controller: controller,
+              isScrollable: true,
+              unselectedLabelColor: Colors.black26,
+              labelColor: Colors.black,
+              indicatorSize: TabBarIndicatorSize.label,
+              labelStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
+              tabs: statuses.map((tab) {
+                return Tab(text: tab.name);
+              }).toList(),
+            ),
+            body: TabBarView(
+              controller: controller,
+              children: statuses
+                  .map((status) =>
+                  MyContractListPage(
+                    status: status,
+                    keyword: widget.keyword,
+                  ))
+                  .toList(),
+            ),
           ),
           bottomNavigationBar: Container(
             color: Colors.white10,
@@ -112,11 +123,13 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>ContractSelectFromItemPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ContractSelectFromItemPage()));
               },
             ),
-          )
-      ),
+          )),
     );
   }
 
@@ -128,34 +141,40 @@ class _MyContractPageState extends State<MyContractPage> with SingleTickerProvid
           return FloatSelectPage(
             buttonText1: '关联订单合同',
             buttonText2: '非关联订单合同',
-            action1: (){
-              Navigator.push(context,MaterialPageRoute(builder: (context) =>JoinOrderContractPage()));
+            action1: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => JoinOrderContractPage()));
             },
-            action2: (){
-              Navigator.push(context,MaterialPageRoute(builder: (context) =>JoinSupplierContractPage()));
+            action2: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => JoinSupplierContractPage()));
             },
           );
-        }
-    );
+        });
   }
 
   @override
   bool get wantKeepAlive => false;
 }
 
-class MyContractListPage extends StatefulWidget{
+class MyContractListPage extends StatefulWidget {
   final String keyword;
   final EnumModel status;
 
   final ScrollController scrollController = ScrollController();
 
-  MyContractListPage({this.keyword:'',this.status = const EnumModel('ALL','全部')});
+  MyContractListPage(
+      {this.keyword: '', this.status = const EnumModel('ALL', '全部')});
 
   _MyContractListPageState createState() => _MyContractListPageState();
 }
 
-class _MyContractListPageState extends State<MyContractListPage> with AutomaticKeepAliveClientMixin{
-
+class _MyContractListPageState extends State<MyContractListPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -177,7 +196,7 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: RefreshIndicator(
         onRefresh: () async {
-            return await bloc.refreshData(widget.status.code,widget.keyword);
+          return await bloc.refreshData(widget.status.code, widget.keyword);
         },
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -186,19 +205,29 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
             StreamBuilder<ContractData>(
               stream: widget.status == null
                   ? bloc.stream
-                  : bloc.stream.where((data) =>
-              data.status == widget.status.code),
+                  : bloc.stream
+                  .where((data) => data.status == widget.status.code),
               // initialData: null,
               builder:
                   (BuildContext context, AsyncSnapshot<ContractData> snapshot) {
-                print('${snapshot.data?.data?.length}----=====');
                 if (snapshot.data == null) {
-                    bloc.getData(status: widget.status.code);
-
+                  bloc.getData(status: widget.status.code);
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
                 }
-                if (snapshot.data.data.length <= 0) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.data.isNotEmpty) {
+                    return Column(
+                      children: snapshot.data.data.map((model) {
+                        return ContractItemPage(
+                          model: model,
+                        );
+                      }).toList(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                } else {
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -225,17 +254,6 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
                           )),
                     ],
                   );
-                }
-                if (snapshot.hasData) {
-                  return Column(
-                    children: snapshot.data.data.map((model) {
-                      return ContractItemPage(
-                        model: model,
-                      );
-                    }).toList(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
                 }
               },
             ),
@@ -272,8 +290,4 @@ class _MyContractListPageState extends State<MyContractListPage> with AutomaticK
 
   @override
   bool get wantKeepAlive => false;
-
-
 }
-
-
