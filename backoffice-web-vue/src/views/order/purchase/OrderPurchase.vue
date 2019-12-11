@@ -828,7 +828,7 @@
 
               // 组合表单参数
               let form = {
-                id:this.againData.id,
+                id:this.againData!=null?this.againData.id:'',
                 companyOfSeller: this.form.companyOfSeller,
                 contactOfSeller: this.form.contactOfSeller,
                 contactPersonOfSeller: this.form.contactPersonOfSeller,
