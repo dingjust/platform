@@ -40,9 +40,8 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                      DateFormatUtil.formatYMD(
-                              widget.item.details?.expectedDeliveryDate) ??
-                          '选取',
+                      widget.item.details?.expectedDeliveryDate == null ? '选取' :
+                          DateFormatUtil.formatYMD(widget.item.details?.expectedDeliveryDate),
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

@@ -142,7 +142,7 @@ class _WebView111PageState extends State<WebView111Page> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        //签署成功则跳转到合同列表页
+        //签署成功跳转到合同列表页
         if(_goContractListPage){
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyContractPage()), ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
         }else{
@@ -152,25 +152,7 @@ class _WebView111PageState extends State<WebView111Page> {
         return Future.value(false);
       },
       child: WebviewScaffold(
-        appBar: AppBar(
-//        title: TextField(
-//          autofocus: false,
-//          controller: controller,
-//          textInputAction: TextInputAction.go,
-//          onSubmitted: (url) => launchUrl(),
-//          style: TextStyle(color: Colors.white),
-//          decoration: InputDecoration(
-//            border: InputBorder.none,
-//            hintStyle: TextStyle(color: Colors.white),
-//          ),
-//        ),
-          actions: <Widget>[
-//          IconButton(
-//            icon: Icon(Icons.navigate_next),
-//            onPressed: () => launchUrl(),
-//          )
-          ],
-        ),
+        appBar: AppBar(),
         url: widget.urlString,
       ),
     );
