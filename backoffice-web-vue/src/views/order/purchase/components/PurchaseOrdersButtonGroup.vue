@@ -33,7 +33,7 @@
         if (this.slotData.creator != null) {
           return this.slotData.creator.uid == this.$store.getters.currentUser.companyCode;
         } else {
-          return flase;
+          return false;
         }
       },
       isProduction: function () {
@@ -43,7 +43,22 @@
         return this.slotData.status == 'WAIT_FOR_OUT_OF_STORE';
       },
       isPending: function () {
-        return this.slotData.status == 'PENDING_CONFIRM';
+        // 没有creator字段均没有 取消订单/拒单 选项
+        if (this.slotData.creator == null || this.slotData.creator == undefined){
+          return false;
+        }
+        if (this.isMyself) {
+          if (this.slotData.status == 'PENDING_CONFIRM' || this.slotData.status == 'PENDING_PAYMENT') {
+            return true;
+          }
+          // 生产中且（备料未完成/未签合同）
+          if (this.slotData.status == 'IN_PRODUCTION' && (this.slotData.currentPhase == 'MATERIAL_PREPARATION' || (this.contracts == null || this.contracts == '' || this.contracts.length <= 0))) {
+            return true;
+          }
+          return false
+        } else {
+          return this.slotData.status == 'PENDING_CONFIRM';
+        }
       },
       isOutStore: function () {
         return this.slotData.status == 'OUT_OF_STORE';
@@ -74,8 +89,12 @@
       onUniqueCode() {
         this.$emit('onUniqueCode');
       },
-      onCancel() {
-        this.$emit('onCancel');
+      onCancel () {
+        if (this.isMyself) {
+          this.$emit('onCancel');
+        } else {
+          this.$emit('onRefuse');
+        }
       },
       onConfirm() {
         this.$emit('onConfirm');

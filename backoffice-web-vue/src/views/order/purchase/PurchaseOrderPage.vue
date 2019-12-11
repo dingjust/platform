@@ -3,7 +3,12 @@
     <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%"
       class="purchase-dialog">
       <purchase-order-details-page :contracts="contracts" :slotData="contentData" @onDetails="onDetails"
-        :dialogDetailVisible="dialogDetailVisible" />
+                                   :dialogDetailVisible="dialogDetailVisible" @onSearch="onSearch"
+                                   @closeDialogDetailVisible="closeDialogDetailVisible"/>
+    </el-dialog>
+    <el-dialog :visible.sync="cannelMsgVisible" width="50%" class="purchase-dialog" append-to-body>
+      <purchase-order-cannel-msg-dialog :contracts="contracts" :slotData="contentData"
+                                        @closeCannelMsgVisible="closeCannelMsgVisible" @onSearch="onSearch"/>
     </el-dialog>
     <!-- <div class="report">
       <purchase-orders-report />
@@ -43,19 +48,21 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    "PurchaseOrdersModule"
+    'PurchaseOrdersModule'
   );
 
-  import PurchaseOrderToolbar from "./toolbar/PurchaseOrderToolbar";
-  import PurchaseOrderSearchResultList from "./list/PurchaseOrderSearchResultList";
-  import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
-  // import PurchaseOrdersReport from "./components/PurchaseOrdersReport";
-  import TabLabelBubble from "@/components/custom/TabLabelBubble";
+  import PurchaseOrderToolbar from './toolbar/PurchaseOrderToolbar';
+  import PurchaseOrderSearchResultList from './list/PurchaseOrderSearchResultList';
+  import PurchaseOrderDetailsPage from './details/PurchaseOrderDetailsPage';
+  import PurchaseOrdersReport from './components/PurchaseOrdersReport';
+  import TabLabelBubble from '@/components/custom/TabLabelBubble';
   import http from '@/common/js/http';
+  import PurchaseOrderCannelMsgDialog from './info/PurchaseOrderCannelMsgDialog';
 
   export default {
-    name: "PurchaseOrderPage",
+    name: 'PurchaseOrderPage',
     components: {
+      PurchaseOrderCannelMsgDialog,
       PurchaseOrderToolbar,
       PurchaseOrderSearchResultList,
       // PurchaseOrdersReport,
@@ -64,22 +71,22 @@
     },
     computed: {
       ...mapGetters({
-        page: "page",
-        keyword: "keyword",
-        queryFormData: "queryFormData",
-        contentData: "detailData"
+        page: 'page',
+        keyword: 'keyword',
+        queryFormData: 'queryFormData',
+        contentData: 'detailData'
       })
     },
     methods: {
       ...mapActions({
-        search: "search",
-        searchAdvanced: "searchAdvanced",
+        search: 'search',
+        searchAdvanced: 'searchAdvanced'
       }),
       ...mapMutations({
-        setIsAdvancedSearch: "isAdvancedSearch",
+        setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch(page, size) {
+      onSearch (page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
         const url = this.apis().getPurchaseOrders();
@@ -92,7 +99,7 @@
           size
         });
       },
-      onAdvancedSearch(page, size) {
+      onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getPurchaseOrders();
@@ -103,30 +110,39 @@
           size
         });
       },
-      onNew(formData) {
+      onNew (formData) {
         // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       },
-      handleClick(tab, event) {
+      handleClick (tab, event) {
         // console.log(tab.name);
         if (tab.name == 'ALL') {
-          this.onSearch("");
+          this.onSearch('');
         } else {
           this.queryFormData.statuses = [tab.name];
           this.onAdvancedSearch();
         }
       },
-      async onDetails(row) {
+      async onDetails (row) {
         const url = this.apis().getPurchaseOrder(row.code);
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
-        // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
         // this.contentData = result;
         this.setDetailData(result);
+        if (result.status != 'CANCELLED' && (result.creator != null || result.creator != undefined)) {
+          if ((result.creator.uid != this.$store.getters.currentUser.companyCode) && result.cannelStatus == 'APPLYING') {
+            console.log(this.contentData);
+            this.cannelMsgVisible = true;
+            return;
+          }
+        }
+        // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
         this.dialogDetailVisible = true;
       },
+      onNew (formData) {
+        this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
       async onUpdate(row) {
         const url = this.apis().getPurchaseOrder(row.code);
         const result = await this.$http.get(url);
@@ -145,7 +161,7 @@
       onNew(formData) {
         this.fn.openSlider("创建手工单", PurchaseOrderDetailsPage, formData);
       },
-      async getContract() {
+      async getContract () {
         console.log(this.contentData);
         const url = this.apis().getContractsList();
         const result = await http.post(url, {
@@ -158,26 +174,34 @@
           if (result.content[i].state != 'INVALID') {
             this.contracts.push(result.content[i]);
           }
-        }
+        };
+        console.log(this.contracts);
       },
-      initContract() {
+      initContract () {
         this.contracts = [];
       },
+      closeCannelMsgVisible () {
+        this.cannelMsgVisible = false;
+      },
+      closeDialogDetailVisible () {
+        this.dialogDetailVisible = false;
+      }
     },
-    data() {
+    data () {
       return {
         dialogDetailVisible: false,
+        cannelMsgVisible: false,
         // contentData: {},
         formData: this.$store.state.PurchaseOrdersModule.formData,
         activeStatus: 'ALL',
         statues: [{
-          code: "ALL",
-          name: "全部"
+          code: 'ALL',
+          name: '全部'
         }],
-        contracts: [],
+        contracts: []
       };
     },
-    created() {
+    created () {
       this.onSearch();
       this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
         this.statues.push(element);
@@ -186,7 +210,7 @@
         // this.dialogDetailVisible = !this.dialogDetailVisible;
       });
     },
-    mounted() {
+    mounted () {
 
     }
   };

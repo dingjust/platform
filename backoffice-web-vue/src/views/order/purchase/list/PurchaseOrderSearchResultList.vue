@@ -17,7 +17,8 @@
           <el-row type="flex" justify="space-between" align="middle" :gutter="50">
             <el-col :span="6">
               <img width="54px" v-if="scope.row.product!=null" height="54px"
-                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'" />
+                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'">
+              </img>
             </el-col>
             <el-col :span="16">
               <el-row>
@@ -69,6 +70,9 @@
           <el-row>
             <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
           </el-row>
+          <el-row v-if="scope.row.cannelStatus == 'APPLYING'">
+            <img width="40px" height="15px" :src="getCannelTag(scope.row)" />
+          </el-row>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
@@ -112,12 +116,12 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      handleFilterChange(val) {
+      handleFilterChange (val) {
         this.statuses = val.status;
 
         this.$emit('onSearch', 0);
       },
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
@@ -127,7 +131,7 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.$store.state.PurchaseOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
@@ -138,32 +142,32 @@
           this.$refs.resultTable.bodyWrapper.scrollTop = 0
         });
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
+      onDetails (row) {
         this.$emit('onDetails', row);
       },
-      countTotalQuantity(entries) {
+      countTotalQuantity (entries) {
         let amount = 0;
         entries.forEach(element => {
           amount += element.quantity;
         });
         return amount;
       },
-      getPaymentStatusTag(row) {
+      getPaymentStatusTag (row) {
         return row.payStatus === 'PAID' ? 'static/img/paid.png' : 'static/img/arrears.png';
       },
-      getSignedTag(row) {
+      getSignedTag (row) {
         if (row.userAgreementIsSigned == null) {
           return 'static/img/not_signed.png';
         } else {
           return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
         }
       },
-      getOperator(row) {
+      getOperator (row) {
         if (this.$store.getters.currentUser.type == 'BRAND' && row.brandOperator != null) {
           return row.brandOperator.name;
         } else if (this.$store.getters.currentUser.type == 'FACTORY' && row.factoryOperator != null) {
@@ -176,7 +180,7 @@
         this.$emit('onUpdate', row);
       }
     },
-    data() {
+    data () {
       return {
         statuses: this.$store.state.PurchaseOrdersModule.statuses
       }
