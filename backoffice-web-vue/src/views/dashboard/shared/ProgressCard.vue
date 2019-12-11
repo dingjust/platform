@@ -12,12 +12,12 @@
       </el-col>
       <el-col :span="6">
         <el-row type="flex" justify="end">
-          <h6 class="progress-card-btn_all" v-if="showDelieryOrder">剩余10条记录</h6>
-          <h6 class="progress-card-btn_all" v-if="!showDelieryOrder">剩余1条记录</h6>
+          <h6 class="progress-card-btn_all" v-if="showDelieryOrder">剩余{{data.progress.totalElements-data.progress.numberOfElements}}条记录</h6>
+          <h6 class="progress-card-btn_all" v-if="!showDelieryOrder">剩余{{data.order.totalElements-data.order.numberOfElements}}条记录</h6>
         </el-row>
       </el-col>
     </el-row>
-    <template v-if="!showDelieryOrder" v-for="item in onlineOrders">
+    <template v-if="!showDelieryOrder" v-for="item in data.progress.content">
       <div class="warning-progress-row">
         <el-row type="flex" justify="space-between">
           <h6 class="progress-card-info">{{item.code}}</h6>
@@ -28,7 +28,7 @@
         <warning-progress :remainDay="item.remainDays" />
       </div>
     </template>
-    <template v-if="showDelieryOrder" v-for="item in deliveryOrders">
+    <template v-if="showDelieryOrder" v-for="item in data.order.content">
       <div class="warning-progress-row">
         <el-row type="flex" justify="space-between">
           <h6 class="progress-card-info">{{item.code}}</h6>
@@ -56,6 +56,15 @@
     methods: {
       isDelay(remainDays) {
         return remainDays < 0;
+      },
+      async getData() {
+        const url = this.apis().reportsProgress();
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.data = result;
       }
     },
     data() {
@@ -99,10 +108,36 @@
             code: "TP00001",
             remainDays: -2,
           }
-        ]
+        ],
+        data: {
+          progress: {
+            content: [],
+            last: false,
+            totalElements: 0,
+            totalPages: 0,
+            size: 5,
+            number: 1,
+            sort: null,
+            first: false,
+            numberOfElements: 5
+          },
+          order: {
+            content: [],
+            last: false,
+            totalElements: 0,
+            totalPages: 0,
+            size: 5,
+            number: 1,
+            sort: null,
+            first: false,
+            numberOfElements: 5
+          }
+        },
       };
     },
-    created() {}
+    created() {
+      this.getData();
+    }
   };
 
 </script>
