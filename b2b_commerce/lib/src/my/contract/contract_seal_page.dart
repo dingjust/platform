@@ -3,7 +3,6 @@ import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -11,8 +10,9 @@ import 'package:widgets/widgets.dart';
 class ContractSealPage extends StatefulWidget {
   List<SealModel> sealList;
   ContractModel model;
+  bool isSelect;
 
-  ContractSealPage({this.model, this.sealList});
+  ContractSealPage({this.model, this.sealList,this.isSelect = true,});
   _ContractSealPageState createState() => _ContractSealPageState();
 }
 
@@ -60,7 +60,10 @@ class _ContractSealPageState extends State<ContractSealPage>{
   Widget _buildItems(BuildContext context, SealModel model) {
     return GestureDetector(
       onTap: () {
-        flowContract(widget.model?.code,model);
+        if(widget.isSelect){
+          flowContract(widget.model?.code,model);
+        }
+
       },
       child: Container(
         child: Column(
