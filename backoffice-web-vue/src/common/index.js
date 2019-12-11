@@ -373,6 +373,9 @@ const COMMON_APIS = {
   createOfflinePurchaseOrder() {
     return '/b2b/orders/purchase/createByOffline';
   },
+  updateOfflinePurchaseOrder() {
+    return '/b2b/orders/purchase/updateByOffline';
+  },
   createPurchaseOrderOfQuote(quote) {
     return '/b2b/orders/purchase/create/' + quote;
   },
@@ -556,6 +559,14 @@ const COMMON_APIS = {
   ///修改生产进度单据
   updateProductionProgressOrder(id,orderId){
     return  'b2b/orders/purchase/progress/'+id+'/order/'+orderId;
+  },
+  /// 生意/订单/合同/财务统计
+  reportsTab1(){
+    return  'b2b/company/reports/tab1';
+  },
+  ///上线倒计时/交货倒计时统计
+  reportsProgress(){
+    return  'b2b/company/reports/progress'; 
   }
 };
 

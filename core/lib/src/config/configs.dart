@@ -10,8 +10,8 @@ class GlobalConfigs {
   //     'https://192.168.31.218:9002/djwebservices/v2';
 
   // 生产
-  // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+//   static const CONTEXT_PATH = 'https://ht.nbyjy.net';
+//   static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
@@ -54,7 +54,11 @@ class GlobalConfigs {
 
   static const CONTRACT_HISTORY_KEYWORD_KEY = 'contract_history_keyword_key';
 
+  //合作商选择页搜索
   static const COOPERATOR_SELECT_HISTORY_KEYWORD_KEY = 'cooperator_select_history_keyword_key';
+
+  //生产订单选择页搜索
+  static const PURCHASE_ORDER_SELECT_HISTORY_KEYWORD_KEY = 'purchase_order_select_history_keyword_key';
 
   /// grant types
   static const GRANT_TYPE_PASSWORD = 'password';

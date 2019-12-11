@@ -1,10 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:widgets/widgets.dart';
 
-import '../../../services.dart';
 
 ///品类状态管理
 class RequirementOrderFormState with ChangeNotifier{

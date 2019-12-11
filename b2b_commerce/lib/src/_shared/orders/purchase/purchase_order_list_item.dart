@@ -11,17 +11,17 @@ import '../../../business/orders/purchase_order_detail.dart';
 import '../../../common/logistics_input_page.dart';
 import '../../../common/order_payment.dart';
 
-class PurchaseOrderItem extends StatefulWidget {
-  PurchaseOrderItem({Key key, this.order, this.isContractSelect: false})
+class PurchaseOrderListItem extends StatefulWidget {
+  PurchaseOrderListItem({Key key, this.order, this.isContractSelect: false})
       : super(key: key);
 
   final PurchaseOrderModel order;
   bool isContractSelect;
 
-  _PurchaseOrderItemState createState() => _PurchaseOrderItemState();
+  _PurchaseOrderListItemState createState() => _PurchaseOrderListItemState();
 }
 
-class _PurchaseOrderItemState extends State<PurchaseOrderItem>
+class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
     with AutomaticKeepAliveClientMixin {
   static Map<PurchaseOrderStatus, Color> _statusColors = {
     PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,

@@ -44,6 +44,8 @@ class _PDFWidgetState extends State<PDFWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print(bottomHeight);
+    bottomHeight = widget.bottomHeight==null?150.0:widget.bottomHeight;
     if (_rect == null) {
       _rect = _buildRect(context);
       pdfViwerRef.launch(
@@ -63,8 +65,11 @@ class _PDFWidgetState extends State<PDFWidget> {
     return new Scaffold(
 
         appBar: widget.appBar,
-        body: const Center(
-            child: const CircularProgressIndicator()));
+        body: Container(
+          height: 500,
+          child: const Center(
+              child: const CircularProgressIndicator()),
+        ));
   }
 
   Rect _buildRect(BuildContext context) {

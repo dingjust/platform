@@ -10,9 +10,9 @@
       <purchase-order-cannel-msg-dialog :contracts="contracts" :slotData="contentData"
                                         @closeCannelMsgVisible="closeCannelMsgVisible" @onSearch="onSearch"/>
     </el-dialog>
-    <div class="report">
+    <!-- <div class="report">
       <purchase-orders-report />
-    </div>
+    </div> -->
     <el-card>
       <el-row>
         <el-col :span="2">
@@ -29,7 +29,7 @@
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
             <purchase-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-              @onAdvancedSearch="onAdvancedSearch" />
+              @onUpdate="onUpdate" @onAdvancedSearch="onAdvancedSearch" />
           </el-tab-pane>
         </template>
       </el-tabs>
@@ -40,7 +40,7 @@
 <script>
   import {
     createNamespacedHelpers
-  } from 'vuex';
+  } from "vuex";
   import Bus from '@/common/js/bus.js';
 
   const {
@@ -65,7 +65,7 @@
       PurchaseOrderCannelMsgDialog,
       PurchaseOrderToolbar,
       PurchaseOrderSearchResultList,
-      PurchaseOrdersReport,
+      // PurchaseOrdersReport,
       TabLabelBubble,
       PurchaseOrderDetailsPage
     },
@@ -143,6 +143,23 @@
       },
       onNew (formData) {
         this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
+      async onUpdate(row) {
+        const url = this.apis().getPurchaseOrder(row.code);
+        const result = await this.$http.get(url);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
+          return;
+        }
+        this.$router.push({
+          name: "下单",
+          params: {
+            isUpdate: true,
+            data: result
+          }
+        });
+      },
+      onNew(formData) {
+        this.fn.openSlider("创建手工单", PurchaseOrderDetailsPage, formData);
       },
       async getContract () {
         console.log(this.contentData);
@@ -197,6 +214,7 @@
 
     }
   };
+
 </script>
 <style>
   .report {

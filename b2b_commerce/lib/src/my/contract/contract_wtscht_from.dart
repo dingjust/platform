@@ -1,29 +1,49 @@
-import 'package:b2b_commerce/src/business/search/purchase_order_search_result.dart';
-import 'package:b2b_commerce/src/business/search/search_model.dart';
+import 'dart:async';
+
+import 'package:b2b_commerce/src/_shared/contract/contract_purchase_order_select.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/contract/contract_temp_page.dart';
+import 'package:b2b_commerce/src/my/contract/contract_temp_select_page.dart';
+import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
+import 'package:b2b_commerce/src/my/my_contract.dart';
+import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
 
 class ContractWTSCHTFrom extends StatefulWidget {
   _ContractWTSCHTFromState createState() => _ContractWTSCHTFromState();
 }
 
 class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
-  PurchaseOrderModel orderModel;
+  final StreamController _streamController = StreamController<double>.broadcast();
   bool isA = false;
   bool isB = false;
   List<ContractTemplateModel> tempList;
   ContractTemplateModel temp;
+  List<PurchaseOrderModel> _orderModels;
 
   @override
   void initState() {
-    initSeal();
+    if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+      isA = true;
+    }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+      isB = true;
+    }
+//    initSeal();
     super.initState();
   }
 
   initSeal() async {
+    // 延时1s执行返回
+    Future.delayed(Duration(seconds: 5), (){
+//      Navigator.of(context).pop();
+      print('延时1s执行');
+    });
     tempList = await ContractRepository().getContractTemplateList(
         {'type': 'WTSCHT'}, {'page': '0', 'size': '100'});
   }
@@ -73,9 +93,7 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
               callbackResult: false,
             );
           });
-    } else if (orderModel == null ||
-        orderModel.code == null ||
-        orderModel.code == '') {
+    } else if (_orderModels == null || _orderModels.length == 0) {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -98,57 +116,60 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
             );
           });
     } else {
-      if (isA) {
-        role = 'PARTYA';
-      } else if (isB) {
-        role = 'PARTYB';
-      }
-
-      Map data = {
-        'userTempCode': temp.code,
-        'userSignCode': '',
-        'role': role,
-        'title': '00000',
-        'orderCode': orderModel.code,
-//        'orderCode':'TPO00079001'
-      };
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: ContractRepository().SignaContract(data),
-              outsideDismiss: false,
-              loadingText: '保存中。。。',
-            );
-          }).then((value) {
-        bool result = false;
-        if (value != null && value.code == 1) {
-          result = true;
+      ShowDialogUtil.showChoseDiglog(context, '是否确认创建委托生产合同', (){
+        Navigator.pop(context);
+        if (isA) {
+          role = 'PARTYA';
+        } else if (isB) {
+          role = 'PARTYB';
         }
-        MyContractBLoC().refreshData('ALL', '');
+
+        Map data = {
+          'userTempCode': temp.code,
+          'userSignCode': '',
+          'role': role,
+          'title': '00000',
+          'orderCodes': _orderModels.map((model) => model.code).toList()
+//        'orderCode':'TPO00079001'
+        };
         showDialog(
             context: context,
             barrierDismissible: false,
             builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.RESULT_DIALOG,
-                failTips:
-                '${value != null && value.msg != null ? value.msg : '创建合同失败'}',
-                successTips: '创建合同成功',
-                callbackResult: result,
-                confirmAction: () {
-                  if (result) {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).pop();
-                  }
-                },
+              return RequestDataLoading(
+                requestCallBack: ContractRepository().SignaContract(data),
+                outsideDismiss: false,
+                loadingText: '保存中。。。',
               );
-            });
+            }).then((value) {
+          bool result = false;
+          if (value != null && value.code == 1) {
+            result = true;
+          }
+          MyContractBLoC().refreshData('ALL', '');
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) {
+                return CustomizeDialog(
+                  dialogType: DialogType.RESULT_DIALOG,
+                  failTips:
+                  '${value != null && value.msg != null ? value.msg : '创建合同失败'}',
+                  successTips: '创建合同成功',
+                  callbackResult: result,
+                  confirmAction: () {
+                    if (result) {
+                      print(value.data);
+                      print(value.msg);
+                      //创建成功跳转到合同详情
+                     _previewFile(value.data);
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                );
+              });
+        });
       });
     }
   }
@@ -191,20 +212,20 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
           ),
           Divider(height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
           GestureDetector(
-            onTap: () {
-              SearchModel searchModel = SearchModel(keyword: '');
-              Navigator.push(
+            onTap: () async {
+              dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          PurchaseOrderSearchResultPage(
-                            searchModel: searchModel,
-                            isContractSelect: true,
-                          ))).then((value) {
-                if (value != null) {
-                  orderModel = value;
-                }
-              });
+                          ContractPurchaseOrderSelectPage(
+                            models: _orderModels,
+                          )));
+
+              if(result != null){
+                print(result);
+                _orderModels = result;
+              }
+              print(_orderModels);
             },
             child: Container(
               color: Colors.white,
@@ -212,27 +233,31 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      '选择订单',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
                   Expanded(
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        '选择订单',
-                        style: TextStyle(fontSize: 18),
+                        '${_orderModels == null || _orderModels.length == 0 ? '' : _orderModels.map((model) => model.code).join(',')}',
+                        style: TextStyle(fontSize: 18,),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      '${orderModel != null ? orderModel.code : ''}',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: Icon(
-                      Icons.keyboard_arrow_right,
-                      size: 30,
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Icon(
+                        Icons.keyboard_arrow_right,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ],
@@ -247,10 +272,13 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
                   MaterialPageRoute(
                       builder: (context) =>
                           ContractTempSelectPage(
-                            list: tempList,
                             title: '委托生产合同模板',
+                            contractTempModel: temp,
+                            type: 'WTSCHT',
                           ))).then((value) {
-                temp = value;
+                            if(value != null){
+                              temp = value;
+                            }
               });
             },
             child: Container(
@@ -268,11 +296,15 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      '${temp == null ? '' : temp.title}',
-                      style: TextStyle(fontSize: 18),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        '${temp == null ? '' : temp.title}',
+                        style: TextStyle(fontSize: 18),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                      ),
                     ),
                   ),
                   Container(
@@ -346,5 +378,49 @@ class _ContractWTSCHTFromState extends State<ContractWTSCHTFrom> {
         ],
       ),
     );
+  }
+
+  //文件下载打开
+  _previewFile(String contractCode) async {
+    if(contractCode == null || contractCode == ''){
+      return;
+    }
+    var contractModel = await ContractRepository().getContract(contractCode);
+    SearchResultModel resultModel = await ContractRepository().getContractPdfMedia(contractCode);
+    MediaModel pdf = resultModel.data;
+//    final url = "http://africau.edu/images/default/sample.pdf";
+    //获取应用目录路径
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    print(pdf.name);
+    String fileName = pdf.name;
+    String filePath = "$dir/$fileName";
+    var dio = new Dio();
+
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client.idleTimeout = new Duration(seconds: 0);
+    };
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack:
+            dio.download(pdf.actualUrl, filePath,
+                onReceiveProgress: (received, total) {
+                  print((received / total * 100).toStringAsFixed(0) + "%");
+                  _streamController.sink.add(received / total);
+                }),
+            outsideDismiss: false,
+            loadingText: '请稍候。。。',
+            entrance: '',
+          );
+        }).then((_){
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) =>
+              PdfReaderWidget(pathPDF: filePath,contractModel: contractModel.data,route: MaterialPageRoute(builder: (context) => MyContractPage()))),
+          ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
+    });
   }
 }

@@ -197,7 +197,7 @@ class ProductionListView extends StatelessWidget {
                   if (snapshot.hasData) {
                     return Column(
                       children: snapshot.data.map((order) {
-                        return PurchaseOrderItem(
+                        return PurchaseOrderListItem(
                           order: order,
                           isContractSelect: isContractSelect,
                         );

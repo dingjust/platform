@@ -81,6 +81,9 @@
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>
             <el-divider direction="vertical"></el-divider>
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">账务</el-button>
+            <el-divider direction="vertical"></el-divider>
+            <el-button type="text" v-if="scope.row.status=='PENDING_CONFIRM'" @click="onUpdate(scope.row)"
+              class="purchase-list-button">修改订单</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -164,9 +167,6 @@
           return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
         }
       },
-      getCannelTag (row) {
-        // TODO: 获取取消图标
-      },
       getOperator (row) {
         if (this.$store.getters.currentUser.type == 'BRAND' && row.brandOperator != null) {
           return row.brandOperator.name;
@@ -175,6 +175,9 @@
         } else {
           return '';
         }
+      },
+      onUpdate(row) {
+        this.$emit('onUpdate', row);
       }
     },
     data () {
@@ -183,6 +186,7 @@
       }
     }
   }
+
 </script>
 <style>
   .purchase-list-button {

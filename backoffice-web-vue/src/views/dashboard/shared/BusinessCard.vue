@@ -10,7 +10,7 @@
         <el-row class="dashboard-row" type="flex" justify="space-between" align="middle">
           <div class="dashboard-content">
             <el-row>
-              <h6 class="dashboard-content_text">6</h6>
+              <h6 class="dashboard-content_text">{{data.requirement1}}</h6>
             </el-row>
             <el-row>
               <h6 class="dashboard-content_text2">个需求待我报价</h6>
@@ -18,7 +18,7 @@
           </div>
           <div class="dashboard-content">
             <el-row>
-              <h6 class="dashboard-content_text">4</h6>
+              <h6 class="dashboard-content_text">{{data.requirement2}}</h6>
             </el-row>
             <el-row>
               <h6 class="dashboard-content_text2">份报价待品牌处理</h6>
@@ -33,7 +33,7 @@
         <el-row type="flex" justify="space-between" align="middle">
           <div class="dashboard-content">
             <el-row>
-              <h6 class="dashboard-content_text">6</h6>
+              <h6 class="dashboard-content_text">{{data.agreement1}}</h6>
             </el-row>
             <el-row>
               <h6 class="dashboard-content_text2">份合同待我签署</h6>
@@ -41,10 +41,10 @@
           </div>
           <div class="dashboard-content">
             <el-row>
-              <h6 class="dashboard-content_text">4</h6>
+              <h6 class="dashboard-content_text">{{data.agreement2}}</h6>
             </el-row>
             <el-row>
-              <h6 class="dashboard-content_text2">份合同待品牌处理</h6>
+              <h6 class="dashboard-content_text2">份合同待对方处理</h6>
             </el-row>
           </div>
         </el-row>
@@ -54,12 +54,12 @@
           <div class="dashboard-title">
             <h6 class="dashboard-title_text">订单</h6>
           </div>
-          <i class="el-icon-setting dashboard-setting-btn" @click="onSetting">设置</i>
+          <i class="el-icon-setting dashboard-setting-btn">设置</i>
         </el-row>
         <el-row class="dashboard-row" type="flex" justify="space-between" align="middle">
           <div class="dashboard-content">
             <el-row>
-              <h6 class="dashboard-content_text">3</h6>
+              <h6 class="dashboard-content_text">{{data.purchase1}}</h6>
             </el-row>
             <el-row>
               <h6 class="dashboard-content_text2">笔订单正在打样</h6>
@@ -67,7 +67,7 @@
           </div>
           <div class="dashboard-content">
             <el-row>
-              <h6 class="dashboard-content_text">4</h6>
+              <h6 class="dashboard-content_text">{{data.purchase2}}</h6>
             </el-row>
             <el-row>
               <h6 class="dashboard-content_text2">笔订单正在生产</h6>
@@ -79,10 +79,10 @@
             <h6 class="dashboard-title_text">财务</h6>
           </div>
         </el-row>
-        <el-row  type="flex" justify="space-between" align="middle">
+        <el-row type="flex" justify="space-between" align="middle">
           <div class="dashboard-content">
             <el-row>
-              <h6 class="dashboard-content_text">3</h6>
+              <h6 class="dashboard-content_text">{{data.wallet1}}</h6>
             </el-row>
             <el-row>
               <h6 class="dashboard-content_text2">条提现申请待审批</h6>
@@ -90,7 +90,7 @@
           </div>
           <div class="dashboard-content">
             <el-row>
-              <h6 class="dashboard-content_text">4</h6>
+              <h6 class="dashboard-content_text">{{data.wallet2}}</h6>
             </el-row>
             <el-row>
               <h6 class="dashboard-content_text2">笔用户打账到款</h6>
@@ -112,16 +112,33 @@
 
     },
     methods: {
-      onSetting(){
-
+      async getData() {
+        const url = this.apis().reportsTab1();
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.data = result.data;
       }
     },
     data() {
       return {
-
+        data: {
+          agreement1: 0,
+          agreement2: 0,
+          requirement1: 0,
+          requirement2: 0,
+          purchase1: 0,
+          purchase2: 0,
+          wallet1: 0,
+          wallet2: 0
+        }
       };
     },
-    created() {}
+    created() {
+      this.getData();
+    }
   };
 
 </script>
@@ -159,7 +176,7 @@
   .dashboard-content_text {
     font-size: 26px;
     font-weight: bold;
-    color: rgba(255,164,3,0.85);
+    color: rgba(255, 164, 3, 0.85);
     margin-bottom: 5px !important;
   }
 
@@ -170,13 +187,13 @@
     margin-bottom: 0px !important;
   }
 
-  .dashboard-setting-btn{
+  .dashboard-setting-btn {
     font-size: 12px;
     width: 50px;
-    color:rgba(153,153,153,1);
+    color: rgba(153, 153, 153, 1);
   }
 
-  .dashboard-setting-btn:hover{
+  .dashboard-setting-btn:hover {
     cursor: pointer;
   }
 

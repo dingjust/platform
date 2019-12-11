@@ -44,7 +44,8 @@ import {
   //产能
   CapacityModule,
   //报表
-  ReceiptReportModule
+  ReceiptReportModule,
+  ProductionProgressReportModule
 } from './modules';
 
 // 状态管理
@@ -116,7 +117,8 @@ export default new Vuex.Store({
     //产能
     CapacityModule,
     //报表
-    ReceiptReportModule
+    ReceiptReportModule,
+    ProductionProgressReportModule
   },
   state,
   getters,

@@ -1,4 +1,7 @@
 export function formatDate(date, fmt) {
+  if (date == null || date == '') {
+    return '';
+  }
   if (!date) {
     return '';
   }
@@ -393,7 +396,6 @@ export function timestampToTime(timestamp) {
    const  m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
    const s = date.getSeconds() + ':';
    const ms = date.getMilliseconds();//毫秒值 */
-
   return Y + M + D; // 此处可以自定义需要的显示类型
 }
 

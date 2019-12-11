@@ -239,6 +239,9 @@ class MyCompanyContactInfoState extends State<MyCompanyContactInfo> {
 
   //拨打电话或发短信
   void _selectActionButton(String tel) async {
+    if(tel == null || tel == ''){
+      return;
+    }
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

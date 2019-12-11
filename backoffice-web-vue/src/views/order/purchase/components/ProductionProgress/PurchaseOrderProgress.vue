@@ -37,7 +37,7 @@
               <h6 class="progress-info">预计完成日期: {{item.estimatedDate | timestampToTime}}</h6>
             </el-col>
           </el-row>
-          <el-row v-if="item.finishDate!=null" type="flex" justify="center" class="progress-info-row" align="middle">
+          <el-row type="flex" justify="center" class="progress-info-row" align="middle">
             <el-col :span="19">
               <h6 class="progress-info">实际完成日期: {{item.finishDate|timestampToTime}}</h6>
             </el-col>

@@ -1,27 +1,30 @@
 import 'package:b2b_commerce/src/_shared/cooperator/cooperator_item.dart';
 import 'package:b2b_commerce/src/_shared/cooperator/cooperator_selected_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_selected_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class CooperatorSearchList extends StatefulWidget {
-  final CooperatorState cooperatorState;
-  List<CooperatorModel> models;
+class PurchaseOrderSelectList extends StatefulWidget {
+  final PurchaseOrderListState purchaseOrderState;
+  List<PurchaseOrderModel> models;
 
-  CooperatorSearchList({Key key, this.cooperatorState,this.models}) : super(key: key);
+  PurchaseOrderSelectList({Key key, this.purchaseOrderState,this.models}) : super(key: key);
 
-  _CooperatorSearchListState createState() => _CooperatorSearchListState();
+  _PurchaseOrderSelectListState createState() => _PurchaseOrderSelectListState();
 }
 
-class _CooperatorSearchListState extends State<CooperatorSearchList> {
+class _PurchaseOrderSelectListState extends State<PurchaseOrderSelectList> {
   ScrollController _scrollController = ScrollController();
-  List<int> _selectIds = List();
+  List<String> _selectCodes = List();
 
   @override
   void initState() {
     if(widget.models != null){
-      _selectIds = widget.models.map((model) => model.id).toList();
+      _selectCodes = widget.models.map((model) => model.code).toList();
     }
 
     // TODO: implement initState
@@ -33,9 +36,9 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
     //监听滚动事件，打印滚动位置
     _scrollController.addListener(() {
       if (_scrollController.offset < 500) {
-        widget.cooperatorState.showTopBtn = false;
+        widget.purchaseOrderState.showTopBtn = false;
       } else if (_scrollController.offset >= 500) {
-        widget.cooperatorState.showTopBtn = true;
+        widget.purchaseOrderState.showTopBtn = true;
       }
     });
 
@@ -43,7 +46,7 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        widget.cooperatorState.loadMore();
+        widget.purchaseOrderState.loadMore();
       }
     });
 
@@ -57,18 +60,18 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
             children: <Widget>[
               _buildItems(),
               ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-                opacity: widget.cooperatorState.loadingMore ? 1.0 : 0,
+                opacity: widget.purchaseOrderState.loadingMore ? 1.0 : 0,
               ),
               _buildEnd(),
             ],
           ),
         ),
         onRefresh: () async {
-          widget.cooperatorState.clear();
+          widget.purchaseOrderState.clear();
         },
       ),
       floatingActionButton: Opacity(
-        opacity: widget.cooperatorState.showTopBtn ? 1 : 0,
+        opacity: widget.purchaseOrderState.showTopBtn ? 1 : 0,
         child: FloatingActionButton(
           child: Icon(
             Icons.arrow_upward,
@@ -86,16 +89,16 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
 
   Widget _buildItems() {
     return Column(
-        children: widget.cooperatorState.cooperatorModels != null
-            ? widget.cooperatorState.cooperatorModels.map((cooperator) {
-                return _selectIds.contains(cooperator.id) ? _buildSelectedRow(cooperator) : _buildRow(cooperator);
+        children: widget.purchaseOrderState.purchaseOrderModels != null
+            ? widget.purchaseOrderState.purchaseOrderModels.map((purchaseOrder) {
+                return _selectCodes.contains(purchaseOrder.code) ? _buildSelectedRow(purchaseOrder) : _buildRow(purchaseOrder);
               }).toList()
             : Center(
                 child: CircularProgressIndicator(),
               ));
   }
 
-  Row _buildSelectedRow(CooperatorModel cooperator) {
+  Row _buildSelectedRow(PurchaseOrderModel purchaseOrderModel) {
     return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -105,17 +108,17 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
                       child: GestureDetector(
                         onTap: (){
                           setState(() {
-                            if(_selectIds.contains(cooperator.id)){
-                              widget.models.removeWhere((model) => model.id == cooperator.id);
-                              _selectIds.remove(cooperator.id);
+                            if(_selectCodes.contains(purchaseOrderModel.code)){
+                              widget.models.removeWhere((model) => model.code == purchaseOrderModel.code);
+                              _selectCodes.remove(purchaseOrderModel.code);
                             }else{
-                              widget.models.add(cooperator);
-                              _selectIds.add(cooperator.id);
+                              widget.models.add(purchaseOrderModel);
+                              _selectCodes.add(purchaseOrderModel.code);
                             }
                           });
                         },
-                        child: CooperatorSelectedItem(
-                          model: cooperator,
+                        child: PurchaseOrderSelectedItem(
+                          order: purchaseOrderModel,
                         ),
                       ),
                     ),
@@ -124,28 +127,30 @@ class _CooperatorSearchListState extends State<CooperatorSearchList> {
                 ],
               );
   }
-  Widget _buildRow(CooperatorModel cooperator) {
+  Widget _buildRow(PurchaseOrderModel purchaseOrderModel) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: CooperatorItem(
-        model: cooperator,
+      child: GestureDetector(
         onTap: (){
           setState(() {
-            if(_selectIds.contains(cooperator.id)){
-              widget.models.removeWhere((model) => model.id == cooperator.id);
-              _selectIds.remove(cooperator.id);
+            if(_selectCodes.contains(purchaseOrderModel.code)){
+              widget.models.removeWhere((model) => model.code == purchaseOrderModel.id);
+              _selectCodes.remove(purchaseOrderModel.code);
             }else{
-              widget.models.add(cooperator);
-              _selectIds.add(cooperator.id);
+              widget.models.add(purchaseOrderModel);
+              _selectCodes.add(purchaseOrderModel.code);
             }
           });
         },
+        child: PurchaseOrderItem(
+          order: purchaseOrderModel,
+        ),
       ),
     );
   }
 
   Widget _buildEnd() {
-    return widget.cooperatorState.isDownEnd
+    return widget.purchaseOrderState.isDownEnd
         ? Container(
             padding: EdgeInsets.only(bottom: 10),
             child: Row(

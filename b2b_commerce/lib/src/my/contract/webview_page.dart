@@ -1,6 +1,11 @@
+import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/my/my_contract.dart';
+import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:services/services.dart';
 
 class WebView111Page extends StatefulWidget {
   String urlString = "";
@@ -14,6 +19,7 @@ class WebView111Page extends StatefulWidget {
 class _WebView111PageState extends State<WebView111Page> {
   TextEditingController controller = TextEditingController();
   FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
+  bool _goContractListPage = false;
 
 
   launchUrl() {
@@ -30,8 +36,12 @@ class _WebView111PageState extends State<WebView111Page> {
     checkPhoto();
     checkStorage();
     super.initState();
-    flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged wvs) {
-      print(wvs.type);
+    flutterWebviewPlugin.onUrlChanged.listen((String url)async {
+      print(url);
+      print(url.contains('result_code=3000'));
+      if(url.contains('result_code=3000')){
+        _goContractListPage = true;
+      }
     });
   }
 
@@ -130,27 +140,39 @@ class _WebView111PageState extends State<WebView111Page> {
 
   @override
   Widget build(BuildContext context) {
-    return WebviewScaffold(
-      appBar: AppBar(
-        title: TextField(
-          autofocus: false,
-          controller: controller,
-          textInputAction: TextInputAction.go,
-          onSubmitted: (url) => launchUrl(),
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.white),
-          ),
+    return WillPopScope(
+      onWillPop: (){
+        //签署成功则跳转到合同列表页
+        if(_goContractListPage){
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MyContractPage()), ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
+        }else{
+          Navigator.pop(context);
+        }
+
+        return Future.value(false);
+      },
+      child: WebviewScaffold(
+        appBar: AppBar(
+//        title: TextField(
+//          autofocus: false,
+//          controller: controller,
+//          textInputAction: TextInputAction.go,
+//          onSubmitted: (url) => launchUrl(),
+//          style: TextStyle(color: Colors.white),
+//          decoration: InputDecoration(
+//            border: InputBorder.none,
+//            hintStyle: TextStyle(color: Colors.white),
+//          ),
+//        ),
+          actions: <Widget>[
+//          IconButton(
+//            icon: Icon(Icons.navigate_next),
+//            onPressed: () => launchUrl(),
+//          )
+          ],
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.navigate_next),
-            onPressed: () => launchUrl(),
-          )
-        ],
+        url: widget.urlString,
       ),
-      url: widget.urlString,
     );
   }
 }

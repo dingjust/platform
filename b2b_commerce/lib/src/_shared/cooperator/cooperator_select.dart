@@ -1,7 +1,4 @@
-import 'dart:convert';
-
-import 'package:b2b_commerce/src/_shared/cooperator/cooperator_search_list.dart';
-import 'package:b2b_commerce/src/_shared/products/apparel_product_search_list.dart';
+import 'package:b2b_commerce/src/_shared/cooperator/cooperator_select_list.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +97,7 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
             ),
             body: Container(
                   child: cooperatorState.cooperatorModels != null
-                      ? CooperatorSearchList(
+                      ? CooperatorSelectList(
                     cooperatorState: cooperatorState,
                     models: _models,
                   )

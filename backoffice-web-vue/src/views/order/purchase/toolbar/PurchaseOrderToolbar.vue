@@ -172,6 +172,17 @@
         this.getFactories();
         this.getBrands();
       }
+    },
+    watch: {
+      dateTime: function (newVal, oldVal) {
+        if (newVal == null) {
+          this.queryFormData.createdDateFrom = null;
+          this.queryFormData.createdDateTo = null;
+        } else {
+          this.queryFormData.createdDateFrom = newVal[0];
+          this.queryFormData.createdDateTo = newVal[1];
+        }
+      }
     }
   }
 

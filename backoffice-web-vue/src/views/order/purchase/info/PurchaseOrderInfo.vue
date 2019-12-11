@@ -182,6 +182,15 @@
           }
         });
       },
+      onUpdate() {
+        this.$router.push({
+          name: "下单",
+          params: {
+            isUpdate: true,
+            data: this.slotData
+          }
+        });
+      },
       onCreateReceive () {
         this.receiveFormVisible = true;
       },
