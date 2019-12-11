@@ -16,8 +16,14 @@
       <purchase-order-info-reconciliation :slotData="slotData" />
     </el-dialog>
     <el-dialog :visible.sync="addressModifyFormVisible" width="80%" class="purchase-dialog" append-to-body>
-      <purchase-order-info-address-modify :slotData="slotData" @closeAddressModifyFormVisible="closeAddressModifyFormVisible"
+      <purchase-order-info-address-modify v-if="addressModifyFormVisible" :slotData="slotData"
+                                          @closeAddressModifyFormVisible="closeAddressModifyFormVisible"
                                           @_updateDeliveryAddress="_updateDeliveryAddress"/>
+    </el-dialog>
+    <el-dialog :visible.sync="purchaseOrderCancelVisible" width="50%" class="purchase-dialog" append-to-body>
+      <purchase-order-cancel-dialog v-if="purchaseOrderCancelVisible"
+                                    @closePurchaseOrderCancelVisible="closePurchaseOrderCancelVisible"
+                                    @_cancel="_cancel"/>
     </el-dialog>
     <el-row type="flex" justify="center">
       <span>订单号：{{slotData.code}}</span>
@@ -27,12 +33,12 @@
         <purchase-order-info-main :slotData="slotData" @onAddressModifyFormVisible="onAddressModifyFormVisible"/>
       </el-col>
       <el-col :span="8">
-        <purchase-order-info-aside :slotData="slotData"  :contracts="contracts" />
+        <purchase-order-info-aside :slotData="slotData" :contracts="contracts"/>
       </el-col>
     </el-row>
-    <purchase-orders-button-group :slotData="slotData" @onUniqueCode="onUniqueCode" @onConfirm="onConfirm"
+    <purchase-orders-button-group :slotData="slotData" :contracts="contracts" @onUniqueCode="onUniqueCode"
       @onDeliverViewsOpen="onDeliverViewsOpen" @onCreateAgain="onCreateAgain" @onCreateReceive="onCreateReceive"
-      @onReconciliation="onReconciliation" @onCancel="onCancel" />
+      @onReconciliation="onReconciliation" @onCancel="onCancel" @onRefuse="onRefuse" @onConfirm="onConfirm"/>
   </div>
 </template>
 
@@ -47,11 +53,13 @@
   import PurchaseOrderInfoDeliver from './PurchaseOrderInfoDeliver';
   import PurchaseOrderInfoAddressModify from './PurchaseOrderInfoAddressModify';
   import AddressSelect from '../../../../components/custom/AddressSelect';
+  import PurchaseOrderCancelDialog from './PurchaseOrderCancelDialog';
 
   export default {
     name: 'PurchaseOrderInfo',
-    props: ['slotData', 'contracts'],
+    props: ['slotData', 'contracts', 'dialogDetailVisible'],
     components: {
+      PurchaseOrderCancelDialog,
       AddressSelect,
       PurchaseOrderInfoAddressModify,
       PurchaseOrderInfoMain,
@@ -111,7 +119,42 @@
         this.$set(this.slotData, 'status', 'IN_PRODUCTION');
       },
       onCancel () {
-        this.$confirm('是否确认取消订单?', '取消订单', {
+        this.purchaseOrderCancelVisible = true;
+      },
+      _cancel (msg) {
+        this.$confirm('是否申请取消订单?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.changeCannelStatus(msg);
+        });
+      },
+      async changeCannelStatus (msg) {
+        console.log(msg);
+        console.log(this.slotData.code);
+        console.log(this.slotData.cannelStatus);
+        if (this.slotData.cannelStatus == 'APPLYING') {
+          this.$message.error('此订单已申请取消');
+          return;
+        }
+        let formData = {
+          'cannelStatus': 'APPLYING',
+          'cannelMsg': msg
+        };
+        const url = this.apis().changeCannelStatus(this.slotData.code);
+        const result = await this.$http.put(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('已申请取消');
+        this.purchaseOrderCancelVisible = false;
+        this.$emit('closeDialogDetailVisible');
+        this.$emit('onSearch')
+      },
+      onRefuse () {
+        this.$confirm('是否确认拒绝订单?', '取消订单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -127,7 +170,8 @@
           return;
         }
         this.$message.success('取消成功');
-        this.$router.push('order/purchase');
+        this.$emit('closeDialogDetailVisible');
+        this.$emit('onSearch')
       },
       onCreateAgain () {
         this.$router.push({
@@ -160,10 +204,14 @@
       },
       closeAddressModifyFormVisible () {
         this.addressModifyFormVisible = false;
+      },
+      closePurchaseOrderCancelVisible () {
+        this.purchaseOrderCancelVisible = false;
       }
     },
     data () {
       return {
+        purchaseOrderCancelVisible: false,
         uniquecodeFormVisible: false,
         receiveFormVisible: false,
         deliverViewsVisible: false,

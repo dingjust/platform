@@ -70,6 +70,9 @@
           <el-row>
             <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
           </el-row>
+          <el-row v-if="scope.row.cannelStatus == 'APPLYING'">
+            <img width="40px" height="15px" :src="getCannelTag(scope.row)" />
+          </el-row>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
@@ -160,6 +163,9 @@
         } else {
           return row.userAgreementIsSigned ? 'static/img/signed.png' : 'static/img/not_signed.png';
         }
+      },
+      getCannelTag (row) {
+        // TODO: 获取取消图标
       },
       getOperator (row) {
         if (this.$store.getters.currentUser.type == 'BRAND' && row.brandOperator != null) {

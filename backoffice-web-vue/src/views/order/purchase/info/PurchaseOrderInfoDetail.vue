@@ -54,7 +54,7 @@
                 {{this.slotData.deliveryAddress.fullname}} {{this.slotData.deliveryAddress.cellphone}}</orders-info-item>
             </el-col>
             <el-col :span="4">
-              <el-button style="padding-top: 0px" v-if="hasAddressModify" size="mini" type="text" @click="onAddressModifyFormVisible">修改地址</el-button>
+              <el-button style="padding-top: 0px" v-if="isMyself" size="mini" type="text" @click="onAddressModifyFormVisible">修改地址</el-button>
             </el-col>
           </el-row>
           <!-- <el-row type="flex" justify="space-between" align="middle">
@@ -101,12 +101,17 @@
         });
         return result;
       },
-      hasAddressModify: function () {
-        if (this.slotData.creator.uid === this.$store.getters.currentUser.companyCode) {
-          return true;
+      isMyself: function () {
+        if (this.slotData.creator != null) {
+          return this.slotData.creator.uid == this.$store.getters.currentUser.companyCode;
         } else {
           return false;
         }
+        // if (this.slotData.creator.uid === this.$store.getters.currentUser.companyCode) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
       }
     },
     methods: {

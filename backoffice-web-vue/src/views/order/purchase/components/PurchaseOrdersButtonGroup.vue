@@ -7,8 +7,7 @@
     <el-button class="purchase-order-btn" v-if="isBrand()&&isCompleted" @click="onCreateReconciliation">对账单</el-button>
     <!-- <el-button class="purchase-order-btn" v-if="slotData.status=='COMPLETED'" @click="onCreateAgain">
       {{isBrand()?'再下一单':'重新创建'}}</el-button> -->
-    <el-button class="purchase-order-btn2" @click="
-    onCancel" v-if="isPending">{{isMyself?'取消订单':'拒单'}}
+    <el-button class="purchase-order-btn2" @click="onCancel" v-if="isPending">{{isMyself?'取消订单':'拒单'}}
     </el-button>
     <el-button class="purchase-order-btn" v-if="!isMyself&&isPending" @click="onConfirm">接单</el-button>
     <el-button class="purchase-order-btn" v-if="isFactory()&&(isProduction||isWaitForOutOfStore)"
@@ -24,15 +23,15 @@
 
 <script>
   export default {
-    name: "PurchaseOrdersButtonGroup",
-    props: ['slotData'],
+    name: 'PurchaseOrdersButtonGroup',
+    props: ['slotData', 'contracts'],
     components: {},
     computed: {
       isMyself: function () {
         if (this.slotData.creator != null) {
           return this.slotData.creator.uid == this.$store.getters.currentUser.companyCode;
         } else {
-          return flase;
+          return false;
         }
       },
       isProduction: function () {
@@ -42,7 +41,22 @@
         return this.slotData.status == 'WAIT_FOR_OUT_OF_STORE';
       },
       isPending: function () {
-        return this.slotData.status == 'PENDING_CONFIRM';
+        // 没有creator字段均没有 取消订单/拒单 选项
+        if (this.slotData.creator == null || this.slotData.creator == undefined){
+          return false;
+        }
+        if (this.isMyself) {
+          if (this.slotData.status == 'PENDING_CONFIRM' || this.slotData.status == 'PENDING_PAYMENT') {
+            return true;
+          }
+          // 生产中且（备料未完成/未签合同）
+          if (this.slotData.status == 'IN_PRODUCTION' && (this.slotData.currentPhase == 'MATERIAL_PREPARATION' || (this.contracts == null || this.contracts == '' || this.contracts.length <= 0))) {
+            return true;
+          }
+          return false
+        } else {
+          return this.slotData.status == 'PENDING_CONFIRM';
+        }
       },
       isOutStore: function () {
         return this.slotData.status == 'OUT_OF_STORE';
@@ -64,40 +78,43 @@
       }
     },
     methods: {
-      isBrand() {
+      isBrand () {
         return this.$store.getters.currentUser.type == 'BRAND';
       },
-      isFactory() {
+      isFactory () {
         return this.$store.getters.currentUser.type == 'FACTORY';
       },
-      onUniqueCode() {
+      onUniqueCode () {
         this.$emit('onUniqueCode');
       },
-      onCancel() {
-        this.$emit('onCancel');
+      onCancel () {
+        if (this.isMyself) {
+          this.$emit('onCancel');
+        } else {
+          this.$emit('onRefuse');
+        }
       },
-      onConfirm() {
+      onConfirm () {
         this.$emit('onConfirm');
       },
-      onCreateAgain() {
+      onCreateAgain () {
         this.$emit('onCreateAgain');
       },
-      onCreateReceive() {
+      onCreateReceive () {
         this.$emit('onCreateReceive');
       },
-      onDeliverViewsOpen() {
+      onDeliverViewsOpen () {
         this.$emit('onDeliverViewsOpen');
       },
-      onCreateReconciliation() {
+      onCreateReconciliation () {
         this.$emit('onReconciliation');
       }
     },
-    data() {
+    data () {
       return {};
     },
-    created() {}
+    created () {}
   };
-
 </script>
 <style>
   .purchase-order-btn {
