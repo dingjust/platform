@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
 
     ///极光初始化
     jpush$.setContext(context);
-    
+
     return Scaffold(
       key: homePageKey,
       body: Container(
@@ -248,15 +248,15 @@ class BrandFirstMenuSection extends StatelessWidget {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    labels: conditionLabels,
-                    cooperationModes: []),
-                route: '快反工厂',
-                categories: categories,
-                labels: labels,
-              ),
+            FactoryCondition(
+                starLevel: 0,
+                adeptAtCategories: [],
+                labels: conditionLabels,
+                cooperationModes: []),
+            route: '快反工厂',
+            categories: categories,
+            labels: labels,
+          ),
         ),
       );
     }
@@ -316,9 +316,9 @@ class BrandSecondMenuSection extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => IndustrialClusterPage(
-                  labels: labels,
-                  factoryLabels: factoryLabels,
-                ),
+              labels: labels,
+              factoryLabels: factoryLabels,
+            ),
           ),
         );
       },
@@ -361,15 +361,15 @@ class BrandSecondMenuSection extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => FactoryPage(
-                    FactoryCondition(
-                        starLevel: 0,
-                        adeptAtCategories: [],
-                        labels: [],
-                        cooperationModes: []),
-                    route: '全部工厂',
-                    categories: categories,
-                    labels: labels,
-                  ),
+                FactoryCondition(
+                    starLevel: 0,
+                    adeptAtCategories: [],
+                    labels: [],
+                    cooperationModes: []),
+                route: '全部工厂',
+                categories: categories,
+                labels: labels,
+              ),
             ),
           );
         }
@@ -418,15 +418,15 @@ class BrandSecondMenuSection extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => FactoryPage(
-              FactoryCondition(
-                  starLevel: 0,
-                  adeptAtCategories: [],
-                  labels: conditionLabels,
-                  cooperationModes: []),
-              route: '优选工厂',
-              categories: categories,
-              labels: labels,
-            ),
+          FactoryCondition(
+              starLevel: 0,
+              adeptAtCategories: [],
+              labels: conditionLabels,
+              cooperationModes: []),
+          route: '优选工厂',
+          categories: categories,
+          labels: labels,
+        ),
       ),
     );
   }

@@ -177,4 +177,57 @@ class B2BImage {
     return getImage('temp/contract/other_sign.png',
         width: width, height: height);
   }
+
+  ///合同管理
+  static Image contractManage({double width, double height}) {
+    return getImage('temp/index/contract_manage.png',
+        width: width, height: height);
+  }
+
+  ///空闲产能
+  static Image freeCapacity({double width, double height}) {
+    return getImage('temp/index/free_capacity.png',
+        width: width, height: height);
+  }
+
+  ///附近工厂
+  static Image nearbyFactory({double width, double height}) {
+    return getImage('temp/index/nearby_factory.png',
+        width: width, height: height);
+  }
+
+  ///订单协同
+  static Image orderCoordination({double width, double height}) {
+    return getImage('temp/index/order_coordination.png',
+        width: width, height: height);
+  }
+
+  ///看款下单
+  static Image productOrdering({double width, double height}) {
+    return getImage('temp/index/product_ordering.png',
+        width: width, height: height);
+  }
+
+  ///生产工厂
+  static Image productionFactory({double width, double height}) {
+    return getImage('temp/index/production_factory.png',
+        width: width, height: height);
+  }
+
+  ///优选工厂
+  static Image qualityFactory({double width, double height}) {
+    return getImage('temp/index/quality_factory.png',
+        width: width, height: height);
+  }
+
+  ///需求
+  static Image requirement({double width, double height}) {
+    return getImage('temp/index/requirement.png', width: width, height: height);
+  }
+
+  ///唯一码导入
+  static Image uniqueImport({double width, double height}) {
+    return getImage('temp/index/unique_import.png',
+        width: width, height: height);
+  }
 }
