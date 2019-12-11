@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
-import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +10,13 @@ import 'package:widgets/widgets.dart';
 
 import '../_shared/shares.dart';
 import '../_shared/widgets/broadcast_factory.dart';
-import '../common/app_image.dart';
 import '../common/app_keys.dart';
-import '../home/factory/factory_list.dart';
-import '../home/factory/industrial_cluster_factory.dart';
 import '../home/pool/requirement_pool_all.dart';
 import '../home/pool/requirement_pool_recommend.dart';
 import '../home/requirement/fast_publish_requirement.dart';
 import '../production/production_offline_order_from.dart';
 import '../production/production_unique_code.dart';
+import '_shared/widgets/brand_section.dart';
 import '_shared/widgets/notifications.dart';
 
 /// 网站主页
@@ -30,12 +27,10 @@ class HomePage extends StatefulWidget {
 
   final Map<UserType, List<Widget>> widgets = <UserType, List<Widget>>{
     UserType.BRAND: <Widget>[
-      BrandFirstMenuSection(),
       BrandSecondMenuSection(),
+      BrandFirstMenuSection(),
       FastPublishRequirement(),
       BroadcastSection(),
-      BrandTrackingProgressSection(),
-      // DividerFactory.buildDivider(40),
     ],
     UserType.FACTORY: <Widget>[
       FactoryRequirementPoolSection(),
@@ -162,7 +157,7 @@ class HomeBrandBannerSection extends StatelessWidget {
   final List<MediaModel> items = <MediaModel>[
     MediaModel(
       url:
-          'http://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%93%81%E7%89%8C%E8%BD%AE%E6%92%AD%E5%9B%BE1.png',
+      'https://yijiayi.oss-cn-shenzhen.aliyuncs.com/%E5%9B%BE%E7%89%87.png',
     ),
     MediaModel(
       url:
@@ -194,354 +189,11 @@ class HomeFactoryBannerSection extends StatelessWidget {
   }
 }
 
-/// 品牌 - 首页Tab部分1
-class BrandFirstMenuSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final List<GridItem> items = <GridItem>[
-      GridItem(
-          title: '快反工厂',
-          onPressed: () async {
-            _jumpToFastFactory(context);
-          },
-          icon: B2BImage.fastFactory(width: 60, height: 80)),
-      GridItem(
-          title: '看款下单',
-          onPressed: () async {
-//            showDialog(
-//                context: context,
-//                barrierDismissible: false,
-//                builder: (_) {
-//                  return RequestDataLoading(
-//                    requestCallBack: ProductRepositoryImpl()
-//                        .cascadedCategories(),
-//                    outsideDismiss: false,
-//                    loadingText: '加载中。。。',
-//                    entrance: '',
-//                  );
-//                }
-//            ).then((value){
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ProductsPage(),
-              ),
-            );
-//            });
-          },
-          icon: B2BImage.order(width: 60, height: 80)),
-    ];
-
-    return EasyGrid(items: items);
-  }
-
-  void _jumpToFastFactory(BuildContext context) async {
-    List<CategoryModel> categories =
-        await ProductRepositoryImpl().majorCategories();
-    List<LabelModel> labels = await UserRepositoryImpl().labels();
-    List<LabelModel> conditionLabels =
-        labels.where((label) => label.name == '快反工厂').toList();
-    labels = labels
-        .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
-        .toList();
-    labels.add(LabelModel(name: '已认证', id: 000000));
-    if (categories != null && labels != null) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => FactoryPage(
-            FactoryCondition(
-                starLevel: 0,
-                adeptAtCategories: [],
-                labels: conditionLabels,
-                cooperationModes: []),
-            route: '快反工厂',
-            categories: categories,
-            labels: labels,
-          ),
-        ),
-      );
-    }
-  }
-}
-
-/// 品牌 - 首页Tab部分2
-class BrandSecondMenuSection extends StatelessWidget {
-  const BrandSecondMenuSection({Key key}) : super(key: key);
-
-  Widget _buildFindFactoriesByMapMenuItem(BuildContext context) {
-    return AdvanceIconButton(
-      onPressed: () async {
-        List<CategoryModel> categories =
-            await ProductRepositoryImpl().majorCategories();
-        List<LabelModel> labels = await UserRepositoryImpl().labels();
-        labels = labels
-            .where((label) =>
-        label.group == 'FACTORY' || label.group == 'PLATFORM')
-            .toList();
-//        labels.add(LabelModel(name: '已认证', id: 1000000));
-        if (categories != null && labels != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    labels: [],
-                    cooperationModes: []),
-                route: '就近找厂',
-                categories: categories,
-                labels: labels,
-              ),
-            ),
-          );
-        }
-      },
-      title: '就近找厂',
-      isHot: true,
-      icon: Icon(
-        B2BIcons.factory_map,
-        color: Color.fromRGBO(97, 164, 251, 1.0),
-        size: 30,
-      ),
-    );
-  }
-
-  Widget _buildFindFactoriesByIndustrialClusterMenuItem(BuildContext context) {
-    return AdvanceIconButton(
-      onPressed: () async {
-        List<LabelModel> labels =
-            await UserRepositoryImpl().industrialClustersFromLabels();
-        List<LabelModel> factoryLabels = await UserRepositoryImpl().labels();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => IndustrialClusterPage(
-              labels: labels,
-              factoryLabels: factoryLabels,
-            ),
-          ),
-        );
-      },
-      title: '产业集群',
-      icon: Icon(
-        B2BIcons.industrial_cluster,
-        color: Color.fromRGBO(105, 210, 217, 1),
-        size: 30,
-      ),
-    );
-  }
-
-  Widget _buildBrandedFactoriesMenuItem(BuildContext context) {
-    return AdvanceIconButton(
-      onPressed: () {
-        _jumpToQualityFactory(context);
-      },
-      title: '优选工厂',
-      icon: Icon(
-        B2BIcons.factory_brand,
-        color: Color.fromRGBO(105, 224, 139, 1),
-        size: 30,
-      ),
-    );
-  }
-
-  Widget _buildAllFactoriesMenuItem(BuildContext context) {
-    return AdvanceIconButton(
-      onPressed: () async {
-        List<CategoryModel> categories =
-            await ProductRepositoryImpl().majorCategories();
-        List<LabelModel> labels = await UserRepositoryImpl().labels();
-        labels = labels
-            .where((label) =>
-                label.group == 'FACTORY' || label.group == 'PLATFORM')
-            .toList();
-//        labels.add(LabelModel(name: '已认证', id: 1000000));
-        if (categories != null && labels != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FactoryPage(
-                FactoryCondition(
-                    starLevel: 0,
-                    adeptAtCategories: [],
-                    labels: [],
-                    cooperationModes: []),
-                route: '全部工厂',
-                categories: categories,
-                labels: labels,
-              ),
-            ),
-          );
-        }
-      },
-      title: '全部工厂',
-      icon: Icon(
-        B2BIcons.factory_all,
-        color: Color.fromRGBO(148, 161, 246, 1.0),
-        size: 30,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      color: Colors.white,
-      child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            _buildFindFactoriesByMapMenuItem(context),
-            _buildFindFactoriesByIndustrialClusterMenuItem(context),
-            _buildBrandedFactoriesMenuItem(context),
-            _buildAllFactoriesMenuItem(context),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _jumpToQualityFactory(BuildContext context) async {
-    List<CategoryModel> categories =
-        await ProductRepositoryImpl().majorCategories();
-    List<LabelModel> labels = await UserRepositoryImpl().labels();
-    List<LabelModel> conditionLabels =
-        labels.where((label) => label.name == '优选工厂').toList();
-    labels = labels
-        .where((label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
-        .toList();
-    labels.add(LabelModel(name: '已认证', id: 1000000));
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => FactoryPage(
-          FactoryCondition(
-              starLevel: 0,
-              adeptAtCategories: [],
-              labels: conditionLabels,
-              cooperationModes: []),
-          route: '优选工厂',
-          categories: categories,
-          labels: labels,
-        ),
-      ),
-    );
-  }
-}
-
 /// 广播部分
 class BroadcastSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BroadcastFactory.buildBroadcast('进入钉单请优先注册并提交认证资料');
-  }
-}
-
-/// 跟踪进度版块
-class BrandTrackingProgressSection extends StatelessWidget {
-  Widget _buildTitle() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(
-          '跟踪进度',
-          style: TextStyle(
-            fontSize: 18,
-            color: Color.fromRGBO(100, 100, 100, 1),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Text(
-          '线下订单',
-          style: TextStyle(
-            fontSize: 15,
-            color: Color.fromRGBO(150, 150, 150, 1),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _buildUniqueCode(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProductionUniqueCodePage(),
-          ),
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(232, 232, 232, 1),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: <Widget>[
-            Text(
-              '请输入工厂发来的唯一码',
-              style: TextStyle(color: Colors.grey, fontSize: 15),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNoUniqueCode(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            '没有唯一码？',
-            style:
-                TextStyle(color: Color.fromRGBO(36, 38, 41, 1), fontSize: 15),
-          ),
-          Container(
-            height: 25,
-            child: FlatButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProductionOfflineOrder()));
-              },
-              child: Text(
-                '去创建',
-                style: TextStyle(
-                    color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-      child: Column(
-        children: <Widget>[
-          _buildTitle(),
-          _buildUniqueCode(context),
-          _buildNoUniqueCode(context),
-        ],
-      ),
-    );
   }
 }
 
