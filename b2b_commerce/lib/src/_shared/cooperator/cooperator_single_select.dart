@@ -1,4 +1,7 @@
-import 'package:b2b_commerce/src/_shared/cooperator/cooperator_select_list.dart';
+import 'dart:convert';
+
+import 'package:b2b_commerce/src/_shared/cooperator/cooperator_single_select_list.dart';
+import 'package:b2b_commerce/src/_shared/products/apparel_product_search_list.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -7,27 +10,23 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class CooperatorSelectPage extends StatefulWidget{
-  CooperatorSelectPage({
+class CooperatorSingleSelectPage extends StatefulWidget{
+  CooperatorSingleSelectPage({
     Key key,
-    this.models,
+    this.model,
   }) : super(key: key);
-  List<CooperatorModel> models;
+  CooperatorModel model;
 
-  _CooperatorSelectPageState createState() => _CooperatorSelectPageState();
+  _CooperatorSingleSelectPageState createState() => _CooperatorSingleSelectPageState();
 }
 
-class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
-  final GlobalKey _globalKey = GlobalKey<_CooperatorSelectPageState>();
+class _CooperatorSingleSelectPageState extends State<CooperatorSingleSelectPage> {
+  final GlobalKey _globalKey = GlobalKey<_CooperatorSingleSelectPageState>();
   String _keyword = '';
-  List<CooperatorModel> _models = [];
   CooperatorState cooperatorState;
 
   @override
   void initState() {
-    if(widget.models != null){
-      _models = List.from(widget.models);
-    }
 
     // TODO: implement initState
     super.initState();
@@ -97,33 +96,13 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
             ),
             body: Container(
                   child: cooperatorState.cooperatorModels != null
-                      ? CooperatorSelectList(
+                      ? CooperatorSingleSelectList(
                     cooperatorState: cooperatorState,
-                    models: _models,
+                    model: widget.model,
                   )
                       : Center(
                     child: CircularProgressIndicator(),
                   ),
-            ),
-            bottomNavigationBar: Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              height: 50,
-              child: RaisedButton(
-                color: Color.fromRGBO(255, 214, 12, 1),
-                child: Text(
-                  '确定',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50))),
-                onPressed: (){
-                  Navigator.pop(context,_models);
-                },
-              ),
             ),
           );}
         ),

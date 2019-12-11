@@ -1,8 +1,18 @@
+import 'dart:async';
+
+import 'package:b2b_commerce/src/_shared/cooperator/cooperator_select.dart';
+import 'package:b2b_commerce/src/_shared/cooperator/cooperator_single_select.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/contract/contract_suppliers.dart';
 import 'package:b2b_commerce/src/my/contract/contract_temp_page.dart';
+import 'package:b2b_commerce/src/my/contract/contract_temp_select_page.dart';
+import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
+import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -11,6 +21,7 @@ class ContractKJXYFrom extends StatefulWidget {
 }
 
 class _ContractKJXYFromState extends State<ContractKJXYFrom> {
+  final StreamController _streamController = StreamController<double>.broadcast();
   PurchaseOrderModel orderModel;
   bool isA = false;
   bool isB = false;
@@ -18,11 +29,16 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
   ContractTemplateModel kjxyTemp;
   DateTime validityStart;
   DateTime validityEnd;
-  FactoryModel supplierModel;
+  CooperatorModel _cooperatorModel;
 
   @override
   void initState() {
-    initSeal();
+    if(UserBLoC.instance.currentUser.type == UserType.BRAND){
+      isA = true;
+    }else if(UserBLoC.instance.currentUser.type == UserType.FACTORY){
+      isB = true;
+    }
+//    initSeal();
     super.initState();
   }
 
@@ -35,7 +51,7 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('采购订单合同'),
+          title: Text('框架协议合同'),
           elevation: 0.5,
           centerTitle: true,
         ),
@@ -64,7 +80,6 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
   }
 
   saveContract() async {
-    String role = '';
     if (!isA && !isB) {
       showDialog(
           context: context,
@@ -76,9 +91,10 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
               callbackResult: false,
             );
           });
-    } else if (supplierModel == null ||
-        supplierModel.uid == null ||
-        supplierModel.uid == '') {
+      return;
+    }
+
+    if (_cooperatorModel == null) {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -89,7 +105,10 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
               callbackResult: false,
             );
           });
-    } else if (validityEnd == null || validityStart == null) {
+      return;
+    }
+
+    if (validityEnd == null || validityStart == null) {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -100,7 +119,10 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
               callbackResult: false,
             );
           });
-    } else if (kjxyTemp == null ||
+      return;
+    }
+
+    if (kjxyTemp == null ||
         kjxyTemp.code == null ||
         kjxyTemp.code == '') {
       showDialog(
@@ -113,7 +135,12 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
               callbackResult: false,
             );
           });
-    } else {
+      return;
+    }
+
+    ShowDialogUtil.showChoseDiglog(context, '是否确认创建框架协议合同', (){
+      Navigator.pop(context);
+      String role = '';
       if (isA) {
         role = 'PARTYA';
       } else if (isB) {
@@ -128,7 +155,7 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
         'validityStart': DateFormatUtil.formatYMD(validityStart),
         'isFrame': true,
 //        'orderCode': orderModel.code,
-        'partnerCompanyCode': supplierModel.id,
+        'partnerCompanyCode': _cooperatorModel.id,
       };
       showDialog(
           context: context,
@@ -157,10 +184,8 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
                 callbackResult: result,
                 confirmAction: () {
                   if (result) {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    //创建成功跳转到合同详情
+                    _previewFile(value.data);
                   } else {
                     Navigator.of(context).pop();
                   }
@@ -168,7 +193,8 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
               );
             });
       });
-    }
+    });
+
   }
 
   Widget _buildMain() {
@@ -209,16 +235,16 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
           ),
           Divider(height: 2, color: Color.fromRGBO(245, 245, 245, 30)),
           GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: ()async {
+              dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ContractSuppliersPage()))
-                  .then((value) {
-                setState(() {
-                  supplierModel = value;
-                });
-              });
+                      builder: (context) =>
+                          CooperatorSingleSelectPage(model: this._cooperatorModel,)));
+
+              if(result != null){
+                this._cooperatorModel = result;
+              }
             },
             child: Container(
               color: Colors.white,
@@ -235,11 +261,15 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      '${supplierModel != null ? supplierModel.name : ''}',
-                      style: TextStyle(fontSize: 18),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        '${_cooperatorModel == null ? '' : _cooperatorModel.partner?.name}',
+                        style: TextStyle(fontSize: 18),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                      ),
                     ),
                   ),
                   Container(
@@ -338,10 +368,13 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
                   MaterialPageRoute(
                       builder: (context) =>
                           ContractTempSelectPage(
-                            list: kjxyTempList,
                             title: '框架协议合同模板',
+                            contractTempModel: kjxyTemp,
+                            type: 'KJXY',
                           ))).then((value) {
-                kjxyTemp = value;
+                            if(value != null){
+                              kjxyTemp = value;
+                            }
               });
             },
             child: Container(
@@ -359,11 +392,15 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      '${kjxyTemp == null ? '' : kjxyTemp.title}',
-                      style: TextStyle(fontSize: 18),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        '${kjxyTemp == null ? '' : kjxyTemp.title}',
+                        style: TextStyle(fontSize: 18),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                      ),
                     ),
                   ),
                   Container(
@@ -437,6 +474,50 @@ class _ContractKJXYFromState extends State<ContractKJXYFrom> {
         ],
       ),
     );
+  }
+
+  //文件下载打开
+  _previewFile(String contractCode) async {
+    if(contractCode == null || contractCode == ''){
+      return;
+    }
+    var contractModel = await ContractRepository().getContract(contractCode);
+    SearchResultModel resultModel = await ContractRepository().getContractPdfMedia(contractCode);
+    MediaModel pdf = resultModel.data;
+//    final url = "http://africau.edu/images/default/sample.pdf";
+    //获取应用目录路径
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    print(pdf.name);
+    String fileName = pdf.name;
+    String filePath = "$dir/$fileName";
+    var dio = new Dio();
+
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client.idleTimeout = new Duration(seconds: 0);
+    };
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack:
+            dio.download(pdf.actualUrl, filePath,
+                onReceiveProgress: (received, total) {
+                  print((received / total * 100).toStringAsFixed(0) + "%");
+                  _streamController.sink.add(received / total);
+                }),
+            outsideDismiss: false,
+            loadingText: '请稍候。。。',
+            entrance: '',
+          );
+        }).then((_){
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) =>
+              PdfReaderWidget(pathPDF: filePath,contractModel: contractModel.data,route: MaterialPageRoute(builder: (context) => MyContractPage()))),
+          ModalRoute.withName(AppRoutes.ROUTE_MY_CONTRACT));
+    });
   }
 
   //打开日期选择器

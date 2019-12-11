@@ -6,14 +6,14 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class ContractTempSelectPage extends StatefulWidget {
+class ContractTempPage extends StatefulWidget {
   List<ContractTemplateModel> list;
   String title;
-  ContractTempSelectPage({this.list,this.title});
-  _ContractTempSelectPageState createState() => _ContractTempSelectPageState();
+  ContractTempPage({this.list,this.title});
+  _ContractTempPageState createState() => _ContractTempPageState();
 }
 
-class _ContractTempSelectPageState extends State<ContractTempSelectPage>{
+class _ContractTempPageState extends State<ContractTempPage>{
   ScrollController scrollController = ScrollController();
 
   @override

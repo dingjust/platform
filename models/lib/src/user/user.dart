@@ -578,23 +578,6 @@ class SealModel {
 }
 
 @JsonSerializable()
-class ContractSaveModel {
-  final String userTempCode;
-  final String userSignCode;
-  final String role;
-  final String orderCode;
-
-  ContractSaveModel({this.userTempCode, this.userSignCode, this.role, this.orderCode});
-
-  factory ContractSaveModel.fromJson(Map<String, dynamic> json) =>
-      _$ContractSaveModelFromJson(json);
-
-  static Map<String, dynamic> toJson(ContractSaveModel model) =>
-      _$ContractSaveModelToJson(model);
-
-}
-
-@JsonSerializable()
 class ContractCallbackModel {
   final int code;
   final String msg;
@@ -612,5 +595,22 @@ class ContractCallbackModel {
 
   static Map<String, dynamic> _contractToJson(ContractModel model) =>
       ContractModel.toJson(model);
+
+}
+
+@JsonSerializable()
+class ContractSaveModel {
+  final String userTempCode;
+  final String userSignCode;
+  final String role;
+  final String orderCode;
+
+  ContractSaveModel({this.userTempCode, this.userSignCode, this.role, this.orderCode});
+
+  factory ContractSaveModel.fromJson(Map<String, dynamic> json) =>
+      _$ContractSaveModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ContractSaveModel model) =>
+      _$ContractSaveModelToJson(model);
 
 }

@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:b2b_commerce/src/_shared/widgets/browser.dart';
 import 'package:b2b_commerce/src/my/contract/contract_mark_down_widget.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:core/core.dart';
@@ -156,6 +157,7 @@ class _ContractItemPageState extends State<ContractItemPage>{
     //获取应用目录路径
     String dir = (await getApplicationDocumentsDirectory()).path;
     print(pdf.name);
+    print(dir);
     String fileName = pdf.name;
     String filePath = "$dir/$fileName";
     var dio = new Dio();
@@ -181,10 +183,17 @@ class _ContractItemPageState extends State<ContractItemPage>{
             entrance: '',
           );
         }).then((_){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => PdfReaderWidget(pathPDF: filePath,contractModel: widget.model,)),
-      );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PdfReaderWidget(pathPDF: filePath,contractModel: widget.model,)),
+        );
+//        Navigator.of(context)
+//            .push(new MaterialPageRoute(builder: (_) {
+//          return new Browser(
+//            url: filePath,
+//            title: "合同详情",
+//          );
+//        }));
     });
   }
 

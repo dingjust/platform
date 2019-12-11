@@ -172,7 +172,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
             offstage: !(snapshot.hasData && snapshot.data != null),
             child: Column(
               children: <Widget>[
-                PurchaseOrderItem(
+                PurchaseOrderListItem(
                   order: snapshot.data,
                 ),
                 Container(

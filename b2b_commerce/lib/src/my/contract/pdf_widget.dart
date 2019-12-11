@@ -54,17 +54,20 @@ class _PDFWidgetState extends State<PDFWidget> {
       final rect = _buildRect(context);
       if (_rect != rect) {
         _rect = rect;
-        _resizeTimer?.cancel();
-        _resizeTimer = new Timer(new Duration(milliseconds: 300), () {
+//        _resizeTimer?.cancel();
+//        _resizeTimer = new Timer(new Duration(milliseconds: 300), () {
           pdfViwerRef.resize(_rect);
-        });
+//        });
       }
     }
     return new Scaffold(
 
         appBar: widget.appBar,
-        body: const Center(
-            child: const CircularProgressIndicator()));
+        body: Container(
+          height: 500,
+          child: const Center(
+              child: const CircularProgressIndicator()),
+        ));
   }
 
   Rect _buildRect(BuildContext context) {

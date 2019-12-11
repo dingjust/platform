@@ -3,18 +3,20 @@ import 'dart:async';
 import 'package:b2b_commerce/src/my/contract/contract_seal_page.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_widget.dart';
 import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
 
 
 class PdfReaderWidget extends StatefulWidget {
-
+  Route route;
   ContractModel contractModel;
   String pathPDF = '';
 
-  PdfReaderWidget({this.pathPDF,this.contractModel});
+  PdfReaderWidget({this.pathPDF,this.contractModel,this.route,});
   @override
   _PdfReaderWidgetState createState() => new _PdfReaderWidgetState();
 }
@@ -22,6 +24,7 @@ class PdfReaderWidget extends StatefulWidget {
 class _PdfReaderWidgetState extends State<PdfReaderWidget> {
   List<SealModel> sealList;
   double bottomHeight;
+  bool _showPdf = true;
 
   @override
   void initState() {
@@ -36,22 +39,33 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
   @override
   Widget build(BuildContext context) {
     print(widget.contractModel);
-    return Scaffold(
-      backgroundColor: Colors.white,
-        body: Container(
-          height: 500,
-          child: PDFWidget(
-            appBar: AppBar(
-              title: Text("合同详情"),
-              centerTitle: true,
-            ),
-            path: widget.pathPDF,
-            bottomHeight: bottomHeight,
+    return WillPopScope(
+      onWillPop: (){
+        if(widget.route != null){
+          Navigator.pushReplacement(context, widget.route);
+        }else{
+          Navigator.pop(context);
+        }
+
+        return Future.value(false);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+          body: Container(
+            height: 500,
+            child:  _showPdf?PDFWidget(
+              appBar:AppBar(
+                title: Text("合同详情"),
+                centerTitle: true,
+              ),
+              path: widget.pathPDF,
+              bottomHeight: bottomHeight,
+            ):Center(child: CircularProgressIndicator(),),
           ),
-        ),
-        bottomNavigationBar: Container(
-          child: _buildButton(),
-        )
+          bottomNavigationBar: Container(
+            child: _buildButton(),
+          )
+      ),
     );
   }
 
@@ -60,6 +74,7 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
         && widget.contractModel.state != ContractStatus.INVALID
         && !widget.contractModel.isCreator){
         return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Container(
               color: Colors.white10,
@@ -237,27 +252,20 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 onPressed: () {
-                  Navigator.pop(context);
+                  setState(() {
+                    _showPdf = false;
+                  });
+//                  Navigator.pop(context);
+                  print(widget.contractModel.state);
                   Navigator.push(
                     context, MaterialPageRoute(builder: (context) =>
                       ContractSealPage(
                         sealList: sealList, model: widget.contractModel,)),
-                  );
-
-//                  bottomHeight = 250.0;
-//                  SealModel sealModel = SealModel();
-//                  SealSelectWidget(cacel: () {
-//                    Navigator.pop(context);
-//                  }, rightData: sealList, code: widget.contractModel.code)
-//                      .showPicker(
-//                    context,
-//                    selectType: (seal) {
-//                      setState(() {
-//                        sealModel = seal;
-//                      });
-//                      print(sealModel.code);
-//                    },
-//                  );
+                  ).then((v){
+                    setState(() {
+                      _showPdf = true;
+                    });
+                  });
                 },
               ),
             ),
@@ -267,6 +275,7 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
         && widget.contractModel.state != ContractStatus.INVALID
         && widget.contractModel.isCreator){
       return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Container(
             color: Colors.white10,
@@ -443,27 +452,19 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5))),
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: ()async {
+                setState(() {
+                  _showPdf = false;
+                });
                 Navigator.push(
                   context, MaterialPageRoute(builder: (context) =>
                     ContractSealPage(
                       sealList: sealList, model: widget.contractModel,)),
-                );
-
-//                SealModel sealModel = SealModel();
-//                SealSelectWidget(cacel: () {
-//                  Navigator.pop(context);
-//                }, rightData: sealList, code: widget.contractModel.code)
-//                    .showPicker(
-//                  context,
-//                  selectType: (seal) {
-//                    setState(() {
-//                      sealModel = seal;
-//                    });
-//                    print(sealModel.code);
-//                  },
-//                );
+                ).then((val){
+                  setState(() {
+                    _showPdf = true;
+                  });
+                });
               },
             ),
           ),

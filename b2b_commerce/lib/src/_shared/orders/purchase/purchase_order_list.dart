@@ -141,7 +141,7 @@ class _PurchaseOrderListState extends State<PurchaseOrderList>
                 if (snapshot.hasData) {
                   return Column(
                     children: snapshot.data.data.map((order) {
-                      return PurchaseOrderItem(
+                      return PurchaseOrderListItem(
                         order: order,
                       );
                     }).toList(),
