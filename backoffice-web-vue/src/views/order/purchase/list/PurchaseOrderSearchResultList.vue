@@ -70,6 +70,9 @@
           <el-row>
             <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
           </el-row>
+<!--          <el-row v-if="scope.row.cannelStatus == 'APPLYING'">-->
+<!--            <img width="40px" height="15px" :src="getCannelTag(scope.row)" />-->
+<!--          </el-row>-->
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
@@ -78,6 +81,9 @@
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>
             <el-divider direction="vertical"></el-divider>
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">账务</el-button>
+            <el-divider direction="vertical"></el-divider>
+            <el-button type="text" v-if="scope.row.status=='PENDING_CONFIRM'" @click="onUpdate(scope.row)"
+              class="purchase-list-button">修改订单</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -169,6 +175,9 @@
         } else {
           return '';
         }
+      },
+      onUpdate(row) {
+        this.$emit('onUpdate', row);
       }
     },
     data () {

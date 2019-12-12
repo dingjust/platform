@@ -362,6 +362,7 @@ class ContractModel extends ItemModel {
   String code;
   String content;
   bool isCreator;
+  bool isSigned;
 
   ContractModel({
     this.title,
@@ -372,6 +373,7 @@ class ContractModel extends ItemModel {
     this.available,
     this.content,
     this.isCreator,
+    this.isSigned,
   });
 
   factory ContractModel.fromJson(Map<String, dynamic> json) =>

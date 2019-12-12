@@ -31,7 +31,7 @@
         <div class="info-order-body">
           <el-row class="info-title-row">
             <div class="info-title">
-              <h6 class="info-title_text">创建线下订单</h6>
+              <h6 class="info-title_text">{{isUpdate?'修改线下订单':'创建线下订单'}}</h6>
             </div>
           </el-row>
           <el-row class="info-order-row">
@@ -66,7 +66,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="4">
-              <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商</el-button>
+              <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini" :disabled="isUpdate">选择供应商
+              </el-button>
             </el-col>
           </el-row>
           <el-row class="info-order-row">
@@ -154,7 +155,7 @@
               </el-col>
             </el-row>
           </template>
-          <el-row type="flex" justify="center" class="info-order-row" align="middle">
+          <el-row type="flex" justify="center" class="info-order-row" align="middle" v-if="!isUpdate">
             <el-col :span="24">
               <div class="order-purchase-table-btn_add" @click="addRow">
                 +添加另一款产品
@@ -480,7 +481,7 @@
             <images-upload class="order-purchase-upload" :slot-data="form.attachments" />
           </el-row>
           <el-row type="flex" justify="center" class="info-order-row">
-            <el-button class="info-order-submit" @click="onSubmit()">确认创建</el-button>
+            <el-button class="info-order-submit" @click="onSubmit()">{{isUpdate?'确认修改':'确认创建'}}</el-button>
           </el-row>
         </div>
       </el-form>
@@ -638,13 +639,24 @@
         var sizes = [];
         var colorsSet = new Set([]);
         product.variants.forEach(varaint => {
-          var item = {
-            code: varaint.code,
-            baseProduct: varaint.baseProduct,
-            color: varaint.color,
-            size: varaint.size,
-            num: ''
-          };
+          var item;
+          if (this.isUpdate) {
+            item = {
+              code: varaint.code,
+              baseProduct: varaint.baseProduct,
+              color: varaint.color,
+              size: varaint.size,
+              num: this.getPurchaseOrderEntryQuantity(varaint.color, varaint.size)
+            };
+          } else {
+            item = {
+              code: varaint.code,
+              baseProduct: varaint.baseProduct,
+              color: varaint.color,
+              size: varaint.size,
+              num: ''
+            };
+          }
           sizes.push(varaint.size);
           colorsSet.add(varaint.color.name);
           variants.push(item);
@@ -816,6 +828,7 @@
 
               // 组合表单参数
               let form = {
+                id:this.againData!=null?this.againData.id:'',
                 companyOfSeller: this.form.companyOfSeller,
                 contactOfSeller: this.form.contactOfSeller,
                 contactPersonOfSeller: this.form.contactPersonOfSeller,
@@ -841,13 +854,24 @@
                 }
               };
               // 提交数据
-              const url = this.apis().createOfflinePurchaseOrder();
-              const result = await this.$http.post(url, form);
-              if (result['errors']) {
-                this.$message.error(result['errors'][0].message);
-                return;
+              if (this.isUpdate) {
+                //更新
+                const url = this.apis().updateOfflinePurchaseOrder();
+                const result = await this.$http.put(url, form);
+                if (result['errors']) {
+                  this.$message.error(result['errors'][0].message);
+                  return;
+                }
+              } else {
+                //创建
+                const url = this.apis().createOfflinePurchaseOrder();
+                const result = await this.$http.post(url, form);
+                if (result['errors']) {
+                  this.$message.error(result['errors'][0].message);
+                  return;
+                }
               }
-              this.$message.success('创建成功');
+              this.$message.success(this.isUpdate?'修改成功':'创建成功');
             }
             this.$router.push('order/purchase');
           } else {
@@ -1012,6 +1036,16 @@
         m = Math.pow(10, Math.max(r1, r2));
         n = (r1 >= r2) ? r1 : r2;
         return ((arg1 * m - arg2 * m) / m).toFixed(n);
+      },
+      getPurchaseOrderEntryQuantity(color, size) {
+        var result = this.againData.entries.filter(entry => entry.product.color.code == color.code && entry
+          .product.size
+          .code == size.code);
+        if (result.length != 0) {
+          return result[0].quantity;
+        } else {
+          return '';
+        }
       }
     },
     data() {
@@ -1130,6 +1164,7 @@
         },
         isAgain: this.$route.params.isAgain,
         againData: this.$route.params.data,
+        isUpdate: this.$route.params.isUpdate,
         rules: {
           companyOfSeller: [{
             required: true,
@@ -1157,6 +1192,7 @@
       }
     },
     created() {
+      // console.log(JSON.stringify(this.$router.params));
       this.onSearch();
       this.getRegions();
     },
@@ -1218,7 +1254,77 @@
         };
         this.getProductAgain();
       }
-    }
+
+      // console.log(JSON.stringify(this.$router.params));
+
+      // /更新
+      if (this.$route.params.isUpdate != null && this.$route.params.isUpdate) {
+        this.form.companyOfSeller = this.againData.companyOfSeller;
+        this.form.remarks = this.againData.remarks;
+        this.form.machiningTypes = this.againData.machiningType;
+        this.form.freightPayer = this.againData.freightPayer;
+        this.form.invoice = this.againData.invoiceNeeded;
+        this.form.invoicePercent = this.againData.invoiceTaxPoint;
+        this.form.address = this.againData.deliveryAddress;
+        this.form.contactPersonOfSeller = this.againData.contactPersonOfSeller;
+        this.form.contactOfSeller = this.againData.contactOfSeller;
+        this.form.payPlanType = this.againData.payPlan.payPlanType;
+        this.form.attachments = this.againData.attachments;
+        this.form.cooperator = this.againData.cooperator;
+        this.form.isHaveDeposit = this.againData.payPlan.isHaveDeposit;
+        this.form.entries = [{
+          unitPrice: this.againData.unitPrice,
+          expectedDeliveryDate: this.againData.expectedDeliveryDate,
+        }];
+
+        this.againData.payPlan.payPlanItems.forEach((item) => {
+          if (item.moneyType == 'DEPOSIT') {
+            this.form.deposit = {
+              event: item.triggerEvent,
+              time: item.triggerDays,
+              range: item.triggerType,
+              percent: item.payPercent
+            }
+          }
+          if (item.moneyType == 'PHASEONE') {
+            this.form.balance1 = {
+              event: item.triggerEvent,
+              time: item.triggerDays,
+              range: item.triggerType,
+              percent: item.payPercent
+            }
+          }
+          if (item.moneyType == 'PHASETWO') {
+            this.form.balance2 = {
+              event: item.triggerEvent,
+              time: item.triggerDays,
+              range: item.triggerType,
+              percent: item.payPercent
+            }
+          }
+          if (item.moneyType == 'MONTHLY_SETTLEMENT') {
+            this.form.monthBalance = {
+              event: item.triggerEvent,
+              time: item.triggerDays,
+              range: item.triggerType,
+              percent: item.payPercent
+            }
+          }
+        });
+        //地址
+        this.getCities(this.form.address.region);
+        this._onCityChanged(this.form.address.city);
+
+        this.getProductAgain();
+      }
+    },
+    watch: {
+      // isUpdate(newValue, oldValue) {
+      //   if(newValue){
+      //     console.log(JSON.stringify(this.againData));
+      //   }
+      // }
+    },
   }
 
 </script>

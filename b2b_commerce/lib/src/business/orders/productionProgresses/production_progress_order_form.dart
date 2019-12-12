@@ -64,9 +64,9 @@ class _ProductionProgressOrderFormState
         child: ListView(
           children: <Widget>[
             _buildInfoBlock(),
+            _buildColorSizeTabForm(),
             _buildMediasBlock(),
             _buildRemarksBlock(),
-            _buildColorSizeTabForm(),
             _buildBtn()
           ],
         ),
@@ -194,6 +194,7 @@ class _ProductionProgressOrderFormState
   Widget _buildMediasBlock() {
     return Container(
       color: Colors.white,
+      margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

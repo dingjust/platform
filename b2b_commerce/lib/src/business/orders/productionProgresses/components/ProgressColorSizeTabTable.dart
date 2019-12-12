@@ -48,6 +48,7 @@ class _ProgressColorSizeTabTableState extends State<ProgressColorSizeTabTable> {
           length: colors.length,
           child: Scaffold(
               appBar: TabBar(
+                  isScrollable: true,
                   tabs: colors.map((color) => _buildTab(color)).toList()),
               body: TabBarView(
                 children: colors

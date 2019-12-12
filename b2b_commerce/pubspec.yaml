@@ -192,6 +192,15 @@ flutter:
     - packages/assets/temp/contract/my_seal.png
     - packages/assets/temp/contract/my_sign.png
     - packages/assets/temp/contract/other_sign.png
+    - packages/assets/temp/index/contract_manage.png
+    - packages/assets/temp/index/free_capacity.png
+    - packages/assets/temp/index/nearby_factory.png
+    - packages/assets/temp/index/order_coordination.png
+    - packages/assets/temp/index/product_ordering.png
+    - packages/assets/temp/index/production_factory.png
+    - packages/assets/temp/index/quality_factory.png
+    - packages/assets/temp/index/requirement.png
+    - packages/assets/temp/index/unique_import.png
 
   fonts:
     - family: b2bIcons

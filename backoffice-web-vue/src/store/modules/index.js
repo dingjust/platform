@@ -45,6 +45,7 @@ import CapacityModule from './capacity/capacity'
 
 // 报表
 import ReceiptReportModule from './report/receipt'
+import ProductionProgressReportModule from './report/production_progress'
 
 export {
   // shared
@@ -88,5 +89,6 @@ export {
   //产能
   CapacityModule,
   //报表
-  ReceiptReportModule
+  ReceiptReportModule,
+  ProductionProgressReportModule
 }

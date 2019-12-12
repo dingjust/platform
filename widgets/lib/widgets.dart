@@ -57,3 +57,4 @@ export 'src/commons/basic/info_row.dart';
 export 'src/commons/select/single_category_select.dart';
 export 'src/commons/select/single_major_category_select.dart';
 export 'src/commons/select/single_category_select_grid_view.dart';
+export 'src/commons/image_num_button/image_num_button.dart';

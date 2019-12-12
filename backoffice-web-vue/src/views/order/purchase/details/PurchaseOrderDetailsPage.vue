@@ -5,7 +5,8 @@
                                  @onCancel="onCancel"/> -->
     <div class="pt-2"></div>
     <!-- <purchase-order-form :slot-data="slotData" :read-only="!isNewlyCreated"/> -->
-    <purchase-order-info :slot-data="slotData" :contracts="contracts" @onDetails="onDetails"/>
+    <purchase-order-info :slot-data="slotData" :contracts="contracts" @onSearch="onSearch"
+                         @onDetails="onDetails" @closeDialogDetailVisible="closeDialogDetailVisible"/>
     <div class="pt-2"></div>
     <!-- <purchase-order-form-toolbar :slot-data="slotData" :read-only="!isNewlyCreated"
                                  @onSubmit="onSubmit"
@@ -24,7 +25,7 @@
 
   export default {
     name: 'PurchaseOrderDetailsPage',
-    props: ['slotData', 'contracts'],
+    props: ['slotData', 'contracts', 'dialogDetailVisible'],
     components: {PurchaseOrderFormToolbar, PurchaseOrderForm, PurchaseOrderInfo},
     methods: {
       ...mapActions({
@@ -64,6 +65,12 @@
       },
       confirmDelivering () {
 
+      },
+      onSearch () {
+        this.$emit('onSearch')
+      },
+      closeDialogDetailVisible () {
+        this.$emit('closeDialogDetailVisible');
       }
     },
     computed: {

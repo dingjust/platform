@@ -143,6 +143,7 @@ class _MyContractManagePageState extends State<MyContractManagePage> {
                       builder: (context) =>
                           ContractSealPage(
                             sealList: sealList,
+                            isSelect: false,
                           )));
             },
             child: Column(

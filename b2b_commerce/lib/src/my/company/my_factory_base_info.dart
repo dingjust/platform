@@ -224,7 +224,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: PurchaseOrderItem(
+                child: PurchaseOrderListItem(
                   order: snapshot.data,
                 ),
               ),
