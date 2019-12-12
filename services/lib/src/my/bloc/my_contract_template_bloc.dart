@@ -43,14 +43,17 @@ class MyContractTemplateBLoC extends BLoCBase {
 
   Stream<TemplateData> get stream => _controller.stream;
 
-  getData(String type) async {
-
+  getData({String status,String keyword}) async {
+    print(status);
+    print(keyword);
+    print('${_dataMap[status].data}');
     //若没有数据则查询
-    if(_dataMap != null && _dataMap.length > 0) {
+    if(_dataMap[status].data == null || _dataMap[status].data.length == 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-        'type': type == null || type == '' || type == 'ALL' ? '' : type
+        'type': status == null || status == '' || status == 'ALL'  ? '' : status,
+//        'signState': signState,
       };
 
       Response<Map<String, dynamic>> response;
@@ -58,8 +61,8 @@ class MyContractTemplateBLoC extends BLoCBase {
       try {
         response = await http$
             .post(UserApis.tempList, data: data, queryParameters: {
-          'page': _dataMap[type].currentPage,
-          'size': _dataMap[type].size,
+          'page': _dataMap[status].currentPage,
+          'size': _dataMap[status].size,
         });
       } on DioError catch (e) {
         print(e);
@@ -68,86 +71,162 @@ class MyContractTemplateBLoC extends BLoCBase {
       if (response != null && response.statusCode == 200) {
         ContractTempResponse contractTempResponse =
         ContractTempResponse.fromJson(response.data);
-        _dataMap[type].totalPages = contractTempResponse.totalPages;
-        _dataMap[type].totalElements = contractTempResponse.totalElements;
-        _dataMap[type].data.clear();
-        _dataMap[type].data.addAll(contractTempResponse.content);
+        _dataMap[status].totalPages = contractTempResponse.totalPages;
+        _dataMap[status].totalElements = contractTempResponse.totalElements;
+        _dataMap[status].data.clear();
+        _dataMap[status].data.addAll(contractTempResponse.content);
       }
     }
-    _controller.sink.add(TemplateData(status: type, data: _dataMap[type].data));
+    _controller.sink.add(TemplateData(status: status, data: _dataMap[status].data));
 
   }
-
-  getDataByKeyword(String keyword) async {
-
+  getDataByKeywrod({String status,String keyword}) async {
     //若没有数据则查询
-    if(_dataMap != null && _dataMap.length > 0) {
+    if(_dataMap['SEARCH'].data == null || _dataMap['SEARCH'].data.length == 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {
-        'state': 'ALL',
-        'code':keyword
+        'code': keyword
       };
 
       Response<Map<String, dynamic>> response;
 
       try {
         response = await http$
-            .post(UserApis.contractList, data: data, queryParameters: {
-          'page': _dataMap['ALL'].currentPage,
-          'size': _dataMap['ALL'].size,
+            .post(UserApis.tempList, data: data, queryParameters: {
+          'page': _dataMap['SEARCH'].currentPage,
+          'size': _dataMap['SEARCH'].size,
         });
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        ContractResponse contractResponse =
-        ContractResponse.fromJson(response.data);
-        _dataMap['ALL'].totalPages = contractResponse.totalPages;
-        _dataMap['ALL'].totalElements = contractResponse.totalElements;
-        _dataMap['ALL'].data.clear();
-        _dataMap['ALL'].data.addAll(contractResponse.content);
+        ContractTempResponse contractTempResponse =
+        ContractTempResponse.fromJson(response.data);
+        _dataMap['SEARCH'].totalPages = contractTempResponse.totalPages;
+        _dataMap['SEARCH'].totalElements = contractTempResponse.totalElements;
+        _dataMap['SEARCH'].data.clear();
+        _dataMap['SEARCH'].data.addAll(contractTempResponse.content);
       }
     }
-    _controller.sink.add(TemplateData(status: 'ALL', data: _dataMap['ALL'].data));
+    _controller.sink.add(TemplateData(status: 'SEARCH', data: _dataMap['SEARCH'].data));
 
   }
 
-  loadingMoreByStatuses(String status) async {
+  loadingMore({String status,String keyword}) async {
     //数据到底
     if (_dataMap[status].currentPage + 1 == _dataMap[status].totalPages) {
       //通知显示已经到底部
+//      loadingEnd();
       bottomController.sink.add(true);
     } else {
-      getData(status);
+//      String _status = '';
+//      String signState = '';
+//      if(status == 'WAIT_ME_SIGN' || status == 'WAIT_HIM_SIGN'){
+////        _status = 'SIGN';
+//        _status = '';
+//      }else{
+//        _status = status;
+//      }
+//      if(status == 'WAIT_ME_SIGN'){
+//        signState = '1';
+//      }else if(status == 'WAIT_HIM_SIGN'){
+//        signState = '0';
+//      }
+
+      //请求参数
+      Map data = {
+        'type': status == null || status == '' || status == 'ALL' ? '' : status,
+//        'signState': signState,
+      };
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$
+            .post(UserApis.tempList, data: data, queryParameters: {
+          'page': ++_dataMap[status].currentPage,
+          'size': _dataMap[status].size,
+        });
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (response.statusCode == 200) {
+        ContractTempResponse ordersResponse =
+        ContractTempResponse.fromJson(response.data);
+        _dataMap[status].totalPages = ordersResponse.totalPages;
+        _dataMap[status].totalElements = ordersResponse.totalElements;
+        _dataMap[status].data.addAll(ordersResponse.content);
+      }
     }
 
     loadingController.sink.add(false);
-    _controller.sink.add(TemplateData(status: status, data: _dataMap[status].data));
+    _controller.sink
+        .add(TemplateData(status: status, data: _dataMap[status].data));
   }
 
-  loadingMoreByKeyword(String keyword) async {
+  loadingMoreByKeyword({String keyword}) async {
     //数据到底
-    if (_dataMap['ALL'].currentPage + 1 == _dataMap['ALL'].totalPages) {
+    if (_dataMap['SEARCH'].currentPage + 1 == _dataMap['SEARCH'].totalPages) {
       //通知显示已经到底部
+//      loadingEnd();
       bottomController.sink.add(true);
     } else {
-      getDataByKeyword(keyword);
+
+      //请求参数
+      Map data = {
+        'code':keyword
+      };
+      Response<Map<String, dynamic>> response;
+      try {
+        response = await http$
+            .post(UserApis.tempList, data: data, queryParameters: {
+          'page': ++_dataMap['SEARCH'].currentPage,
+          'size': _dataMap['SEARCH'].size,
+        });
+      } on DioError catch (e) {
+        print(e);
+      }
+
+      if (response.statusCode == 200) {
+        ContractTempResponse ordersResponse =
+        ContractTempResponse.fromJson(response.data);
+        _dataMap['SEARCH'].totalPages = ordersResponse.totalPages;
+        _dataMap['SEARCH'].totalElements = ordersResponse.totalElements;
+        _dataMap['SEARCH'].data.addAll(ordersResponse.content);
+      }
     }
 
     loadingController.sink.add(false);
-    _controller.sink.add(TemplateData(status: 'ALL', data: _dataMap['ALL'].data));
+    _controller.sink
+        .add(TemplateData(status: 'SEARCH', data: _dataMap['SEARCH'].data));
   }
 
-  refreshData(String status) async {
+  refreshData(String status,String keyword) async {
     //重置信息
     _dataMap[status].data.clear();
     _dataMap[status].currentPage = 0;
-    await getData(status);
+    await getData(status: status);
+  }
+  refreshDataByKeyword(String keyword) async {
+    //重置信息
+    _dataMap['SEARCH'].data.clear();
+    _dataMap['SEARCH'].currentPage = 0;
+    await getDataByKeywrod(keyword: keyword);
+  }
+  clearByKeyword() {
+    //重置信息
+    _dataMap['SEARCH'].data.clear();
+    _dataMap['SEARCH'].currentPage = 0;
   }
 
-
+  clear() {
+    //重置信息
+    _dataMap.forEach((statu, entry) {
+      entry.data.clear();
+      entry.currentPage = 0;
+    });
+  }
 }
 
 class TemplateData {
