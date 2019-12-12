@@ -143,6 +143,7 @@
       },
       onNew (formData) {
         this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
+      },
       async onUpdate(row) {
         const url = this.apis().getPurchaseOrder(row.code);
         const result = await this.$http.get(url);
@@ -157,9 +158,6 @@
             data: result
           }
         });
-      },
-      onNew(formData) {
-        this.fn.openSlider("创建手工单", PurchaseOrderDetailsPage, formData);
       },
       async getContract () {
         console.log(this.contentData);

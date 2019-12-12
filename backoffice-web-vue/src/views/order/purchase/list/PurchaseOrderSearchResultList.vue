@@ -70,9 +70,9 @@
           <el-row>
             <img width="40px" height="15px" :src="getSignedTag(scope.row)" />
           </el-row>
-          <el-row v-if="scope.row.cannelStatus == 'APPLYING'">
-            <img width="40px" height="15px" :src="getCannelTag(scope.row)" />
-          </el-row>
+<!--          <el-row v-if="scope.row.cannelStatus == 'APPLYING'">-->
+<!--            <img width="40px" height="15px" :src="getCannelTag(scope.row)" />-->
+<!--          </el-row>-->
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
