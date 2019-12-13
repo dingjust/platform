@@ -116,3 +116,75 @@ class NotificationBubble extends StatelessWidget {
     }
   }
 }
+
+class BottomNotificationsIcon extends StatelessWidget {
+  ///消息类型分组 1.订单 2.系统 3.财务
+  final int msgGroup;
+
+  const BottomNotificationsIcon({Key key, this.msgGroup}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 25,
+      height: 25,
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Positioned(
+            child: Icon(
+              Icons.notifications_none,
+              color: Colors.black54,
+              size: 25,
+            ),
+          ),
+          Positioned(
+              right: 0,
+              top: 0,
+              child: NotificationBubble(
+                msgGroup: msgGroup,
+                width: 12,
+                height: 12,
+              ))
+        ],
+      ),
+    );
+  }
+}
+
+class BottomNotificationsActiveIcon extends StatelessWidget {
+  ///消息类型分组 1.订单 2.系统 3.财务
+  final int msgGroup;
+
+  const BottomNotificationsActiveIcon({Key key, this.msgGroup})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 25,
+      height: 25,
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          Positioned(
+            // top: 5,
+            child: Icon(
+              Icons.notifications,
+              color: Colors.black,
+              size: 25,
+            ),
+          ),
+          Positioned(
+              right: 0,
+              top: 0,
+              child: NotificationBubble(
+                msgGroup: msgGroup,
+                width: 12,
+                height: 12,
+              ))
+        ],
+      ),
+    );
+  }
+}

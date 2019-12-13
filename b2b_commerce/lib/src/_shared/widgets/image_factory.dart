@@ -28,7 +28,7 @@ class ImageFactory {
   static Widget buildThumbnailImage(
     MediaModel media, {
         double size = 60,
-        double containerSize = 60,
+        double containerSize = 80,
     BoxFit fit = BoxFit.cover,
   }) {
     if (media == null) {
@@ -42,12 +42,6 @@ class ImageFactory {
         width: containerSize,
         height: containerSize,
         child:
-//      Image.network(
-//        '${media.previewUrl()}',
-//        fit: BoxFit.cover,
-//      )
-//        ,
-//    );
         Container(
           margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
           width: 100,

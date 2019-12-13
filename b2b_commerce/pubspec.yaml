@@ -84,6 +84,7 @@ dependencies:
   common_utils: ^1.1.3
   flustars: ^0.2.6+1
   orientation: ^1.1.0
+  location_permissions: ^2.0.3
 
 
 dev_dependencies:
