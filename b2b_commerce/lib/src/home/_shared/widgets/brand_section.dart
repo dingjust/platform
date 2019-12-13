@@ -302,7 +302,9 @@ class BrandSecondMenuSection extends StatelessWidget {
       width: 55,
       height: 80,
       image: B2BImage.orderCoordination(),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_COORDINATION);
+      },
       title: '订单协同',
     );
   }
@@ -312,7 +314,9 @@ class BrandSecondMenuSection extends StatelessWidget {
       width: 55,
       height: 80,
       image: B2BImage.requirement(),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
+      },
       title: '我的需求',
     );
   }

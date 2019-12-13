@@ -34,6 +34,7 @@ class ImageNumButton extends StatelessWidget {
         width: width,
         height: height,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             _buildImage(),
