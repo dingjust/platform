@@ -25,14 +25,15 @@
             <el-col :span="8">
               <el-form-item prop="factoryBuildingsQuantity">
                 <template slot="label">
-                  <h6 class="titleTextClass">厂房数量</h6>
+                  <h6 class="titleTextClass">厂房面积</h6>
                 </template>
                 <el-row type="flex">
-                  <el-input placeholder="请填写厂房数量"
+                  <el-input style="margin-top: 2px" placeholder="请填写厂房面积" type="text"
                             v-model.number="formData.factoryBuildingsQuantity"
                             size="mini">
+                    <span slot="append">m&sup2</span>
                   </el-input>
-                  <span>m<sup>2</sup></span>
+<!--                  <span>m<sup>2</sup></span>-->
                 </el-row>
               </el-form-item>
             </el-col>
@@ -50,7 +51,7 @@
                       :value="item.code">
                     </el-option>
                   </el-select>
-                  <span>元</span>
+<!--                  <span>元</span>-->
                 </el-row>
               </el-form-item>
             </el-col>
@@ -62,8 +63,7 @@
                   <h6 class="titleTextClass">产线数量</h6>
                 </template>
                 <el-row type="flex">
-                  <el-input placeholder="请填写产线数量" v-model.number="formData.productionLineQuantity" size="mini"></el-input>
-                  <span>条</span>
+                  <el-input placeholder="请填写产线数量" v-model.number="formData.productionLineQuantity" size="mini"><span slot="append">条</span></el-input>
                 </el-row>
               </el-form-item>
             </el-col>
@@ -79,6 +79,17 @@
                     :label="item.name"
                     :value="item.code">
                   </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item>
+                <template slot="label">
+                  <h6 class="titleTextClass">月均产能</h6>
+                </template>
+                <el-select v-model="formData.monthlyCapacityRange" placeholder="请选择" size="mini" style="width: 100%;">
+                  <el-option v-for="item in monthlyCapacityRanges" :key="item.code" :label="item.name"
+                             :value="item.code"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -115,6 +126,8 @@
         populationScales: this.$store.state.EnumsModule.populationScales,
         scaleRanges: this.$store.state.EnumsModule.scaleRanges,
         productionModes: this.$store.state.EnumsModule.ProductionModes,
+        factoryPatterns: this.$store.state.EnumsModule.FactoryPattern,
+        monthlyCapacityRanges: this.$store.state.EnumsModule.monthlyCapacityRanges,
         mapData: {
           '裁剪部': this.$store.state.EnumsModule.CuttingDepartment,
           '生产车间': this.$store.state.EnumsModule.ProductionWorkshop,
@@ -199,8 +212,8 @@
     text-align-last: justify;
     display: inline-block;
     width: 57px;
-    font-size: 10px;
-    font-weight: bold;
+    font-size: 12px;
+    /*font-weight: bold;*/
   }
 
   .factory-scale-form .el-input--mini .el-input__inner{

@@ -55,7 +55,8 @@ const state = {
     businessRegistrationNo: '',
     legalRepresentative: '',
     certificateOfLegal: '',
-    labels:[],
+    qualityLevel: '',
+    duties: ''
   },
   addressFormData: {
     id: null,
@@ -84,7 +85,13 @@ const state = {
     cities:[],
     creationTimeFrom:'',
     creationTimeTo:'',
-  }
+  },
+  cities: [],
+  cityDistricts: [],
+  categories: [],
+  isCitiesChanged: false,
+  isDistrictsChanged: false,
+  brandFormVisible: false
 };
 
 const mutations = {
@@ -92,8 +99,14 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
+  setFormData: (state, formData) => state.formData = formData,
   page: (state, page) => state.page = page,
-  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
+  setIsCitiesChanged: (state,isCitiesChanged) => state.isCitiesChanged = isCitiesChanged,
+  setIsDistrictsChanged: (state,isDistrictsChanged) => state.isDistrictsChanged = isDistrictsChanged,
+  setBrandFormVisible: (state,brandFormVisible) => state.brandFormVisible = brandFormVisible,
+  cities: (state,cities) => state.cities = cities,
+  cityDistricts: (state,cityDistricts) => state.cityDistricts = cityDistricts,
 };
 
 const actions = {
@@ -147,8 +160,13 @@ const getters = {
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  isAdvancedSearch: state => state.isAdvancedSearch
-
+  isAdvancedSearch: state => state.isAdvancedSearch,
+  formData: state => state.formData,
+  cities: state => state.cities,
+  cityDistricts: state => state.cityDistricts,
+  isCitiesChanged: state => state.isCitiesChanged,
+  isDistrictsChanged: state => state.isDistrictsChanged,
+  brandFormVisible: state => state.brandFormVisible
 };
 
 export default {

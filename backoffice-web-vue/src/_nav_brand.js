@@ -101,7 +101,13 @@ export default {
       name: '公司',
       url: '/account',
       icon: 'el-icon-office-building',
-      children: [{
+      children: [
+        {
+          name: '主页',
+          url: '/account/index',
+          icon: 'iconNone'
+        },
+        {
           name: '认证中心',
           url: '/account/Authentication',
           icon: 'iconNone'
