@@ -31,12 +31,7 @@ class EasyGrid extends StatelessWidget {
             crossAxisSpacing: 10,
           ),
           children: List.generate(
-            items.length,
-            (index) => GestureDetector(
-                  child: EasyGridItem(item: items[index]),
-                  onTap: items[index].onPressed,
-                ),
-          ),
+              items.length, (index) => EasyGridItem(item: items[index])),
         ));
   }
 }
@@ -49,42 +44,44 @@ class EasyGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey[200],
-            blurRadius: 5.0,
-            spreadRadius: 2.0,
-            offset: Offset(0, 3.0),
-          ),
-        ],
-      ),
-      child: Container(
-        padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  item.title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color.fromRGBO(32, 32, 32, 1),
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-            )),
-            item.icon,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[300],
+              blurRadius: 5.0,
+              spreadRadius: 2.0,
+              offset: Offset(0, 3.0),
+            ),
           ],
         ),
-      ),
-    );
+        child: FlatButton(
+          onPressed: item.onPressed,
+          child: Container(
+            padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          item.title,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromRGBO(32, 32, 32, 1),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    )),
+                item.icon != null ? item.icon : Container(),
+              ],
+            ),
+          ),
+        ));
   }
 }
 
@@ -100,7 +97,7 @@ class GridItem {
 
   GridItem({
     @required this.title,
-    @required this.icon,
+    this.icon,
     @required this.onPressed,
   });
 }

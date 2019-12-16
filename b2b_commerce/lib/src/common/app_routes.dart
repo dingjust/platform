@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
@@ -74,6 +75,8 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_BILL = '/my/my_bill';
   static const ROUTE_DELIVERY = '/business/delivery';
 
+  static const ROUTE_ORDER_COORDINATION = '/business/order_coordination';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -101,5 +104,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_BILL: (context) => MyBillPage(),
     ROUTE_MY_HELP: (context) => MyHelpPage(),
     ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage(),
+    ROUTE_ORDER_COORDINATION: (context) => OrderCoordinationPage()
   };
 }

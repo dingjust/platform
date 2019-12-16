@@ -2,6 +2,7 @@ import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
+import 'package:b2b_commerce/src/my/messages/index.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +19,7 @@ import 'src/common/app_keys.dart';
 import 'src/common/app_routes.dart';
 import 'src/home/_shared/models/navigation_menu.dart';
 import 'src/home/_shared/widgets/bottom_navigation.dart';
+import 'src/home/_shared/widgets/notifications.dart';
 import 'src/home/account/login.dart';
 import 'src/home/index.dart';
 import 'src/my/index.dart';
@@ -52,6 +54,7 @@ void main() async {
         providers: [
           ChangeNotifierProvider(builder: (_) => MyCapacityState()),
           ChangeNotifierProvider(builder: (_) => ProductionProgressState()),
+          ChangeNotifierProvider(builder: (_) => AmapState()),
           Provider(
             builder: (_) => AddressState(),
           ),
@@ -207,15 +210,12 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 35 : 10),
             child: const Icon(B2BIcons.production),
           ),
           activeIcon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 35 : 10),
             child: const Icon(B2BIcons.production_active),
           ),
           title: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 35 : 0),
             child: const Text('生产'),
           ),
         ),
@@ -223,16 +223,27 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       ),
       NavigationMenu(
         BottomNavigationBarItem(
+          icon: Container(
+            child: BottomNotificationsIcon(),
+          ),
+          activeIcon: Container(
+            child: BottomNotificationsActiveIcon(),
+          ),
+          title: Container(
+            child: const Text('消息'),
+          ),
+        ),
+        MessagePage(),
+      ),
+      NavigationMenu(
+        BottomNavigationBarItem(
             icon: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 35 : 0),
               child: const Icon(B2BIcons.business),
             ),
             activeIcon: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 35 : 0),
               child: const Icon(B2BIcons.business_active),
             ),
             title: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 40 : 0),
               child: const Text('工作'),
             )),
         BusinessHomePage(userType: widget.userType),
@@ -240,19 +251,16 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
             icon: Container(
-              margin: EdgeInsets.only(right: 10),
               child: const Icon(
                 B2BIcons.my,
               ),
             ),
             activeIcon: Container(
-              margin: EdgeInsets.only(right: 10),
               child: const Icon(
                 B2BIcons.my_active,
               ),
             ),
             title: Container(
-              margin: EdgeInsets.only(right: 10),
               child: const Text('我的'),
             )),
         MyHomePage(),
@@ -283,13 +291,13 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
             onChanged: _handleNavigation,
             items: menus.map((menu) => menu.item).toList(),
           ),
-          floatingActionButton: _isBrand()
-              ? PublishRequirementButton(
-            onPublish: () => _onPublish(context),
-          )
-              : null,
-          floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+          // floatingActionButton: _isBrand()
+          //     ? PublishRequirementButton(
+          //   onPublish: () => _onPublish(context),
+          // )
+          //     : null,
+          // floatingActionButtonLocation:
+          // FloatingActionButtonLocation.centerDocked,
         ),
       ),
       routes: AppRoutes.allRoutes,
