@@ -15,6 +15,8 @@ class ImageNumButton extends StatelessWidget {
 
   final double height;
 
+  final EdgeInsetsGeometry imagePadding;
+
   const ImageNumButton(
       {Key key,
       this.image,
@@ -23,30 +25,39 @@ class ImageNumButton extends StatelessWidget {
       this.title,
       this.showNum = false,
       this.width = 55,
-      this.height = 80})
+        this.height = 90,
+        this.imagePadding = const EdgeInsets.all(5)})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: onPressed,
-      child: Container(
-        width: width,
-        height: height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _buildImage(),
-            Container(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 12.0,
-                ),
-              ),
-            ),
-          ],
+    return Container(
+      height: height,
+      child: Material(
+        child: InkWell(
+          onTap: onPressed,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _buildImage(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -54,10 +65,11 @@ class ImageNumButton extends StatelessWidget {
 
   Widget _buildImage() {
     return Container(
+      padding: imagePadding,
+      height: height - 18,
       child: Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(top: 5),
             child: image,
           ),
           Positioned(
@@ -67,7 +79,7 @@ class ImageNumButton extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(5),
                   decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                  BoxDecoration(shape: BoxShape.circle, color: Colors.red),
                   child: Center(
                     child: Text(
                       '$number',

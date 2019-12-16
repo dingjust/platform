@@ -9,6 +9,7 @@ class LocationIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AmapState>(
       builder: (context, state, _) => Container(
+        padding: EdgeInsets.only(left: 5),
         child: Row(
           children: <Widget>[
             _buildLocatingText(context, state),
