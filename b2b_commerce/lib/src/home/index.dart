@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/factory_tab_section.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,10 @@ import '../_shared/widgets/broadcast_factory.dart';
 import '../common/app_keys.dart';
 import '../home/pool/requirement_pool_all.dart';
 import '../home/pool/requirement_pool_recommend.dart';
-import '../home/requirement/fast_publish_requirement.dart';
 import '../production/production_offline_order_from.dart';
 import '../production/production_unique_code.dart';
 import '_shared/widgets/brand_section.dart';
-import '_shared/widgets/notifications.dart';
+import '_shared/widgets/location.dart';
 
 /// 网站主页
 class HomePage extends StatefulWidget {
@@ -28,9 +28,9 @@ class HomePage extends StatefulWidget {
   final Map<UserType, List<Widget>> widgets = <UserType, List<Widget>>{
     UserType.BRAND: <Widget>[
       BrandSecondMenuSection(),
+      BrandReportSection(),
       BrandFirstMenuSection(),
-      FastPublishRequirement(),
-      BroadcastSection(),
+      FactoryTabSection()
     ],
     UserType.FACTORY: <Widget>[
       FactoryRequirementPoolSection(),
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: homePageKey,
       body: Container(
-        color: Colors.white,
+        color: Color.fromRGBO(245, 245, 245, 1),
         child: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[
@@ -145,7 +145,7 @@ class HomeTitle extends StatelessWidget {
             flex: 1,
             child: leading,
           ),
-          NotificationsIcon()
+          LocationIcon()
         ],
       ),
     );
