@@ -5,6 +5,8 @@ import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_fie
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_select_publish_target_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_third_form.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,18 +18,18 @@ import 'package:core/core.dart';
 
 import 'RequirementFormMixins.dart';
 
-class RequirementOrderSecondForm extends StatefulWidget {
-  RequirementOrderSecondForm({
+class RequirementOrderSecondEditForm extends StatefulWidget {
+  RequirementOrderSecondEditForm({
     this.formState,
   });
 
   final RequirementOrderFormState formState;
 
-  _RequirementOrderSecondFormState createState() =>
-      _RequirementOrderSecondFormState();
+  _RequirementOrderSecondEditFormState createState() =>
+      _RequirementOrderSecondEditFormState();
 }
 
-class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
+class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondEditForm>
     with RequirementFormMixin {
   GlobalKey _scaffoldKey = GlobalKey();
   List<String> _factoryUids = [];
@@ -41,12 +43,14 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
 
   @override
   Widget build(BuildContext context) {
+    print('${widget.formState.model.details.productName}----');
+    print('${super.productNameController.text}----');
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0.5,
         centerTitle: true,
-        title: Text('需求发布(2/2)'),
+        title: Text('需求编辑'),
         actions: <Widget>[
         ],
       ),
@@ -57,7 +61,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
         child: RaisedButton(
             color: Color.fromRGBO(255, 214, 12, 1),
             child: Text(
-              '确认发布',
+              '保存',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
@@ -67,7 +71,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50))),
             onPressed: () async {
-              onPublish();
+              _onSave();
             }),
       ),
       body: Container(
@@ -101,6 +105,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                 onChanged: (v) {
                   widget.formState.model.details.productName =
                       super.productNameController.text;
+                  print(widget.formState.model.details.productName);
                 },
               ),
             ),
@@ -416,47 +421,47 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                         ),
                       ],
                     ),
-                    Offstage(
-                      offstage: widget.formState.model.details.publishingMode != 'PRIVATE',
-                      child: GestureDetector(
-                        onTap: ()async{
-                          dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
-                          if(result != null){
-                            _factoryUids = result;
-                          }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text('去选择对象'),
-                            Container(
-                                width: 10,
-                                child: Icon(
-                                  Icons.chevron_right,
-                                  size: 20,
-                                  textDirection: TextDirection.ltr,
-                                )),
-                            Icon(Icons.chevron_right, size: 20),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Offstage(
-                      offstage: widget.formState.model.details.publishingMode != 'PRIVATE',
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          RichText(text: TextSpan(
-                            style:TextStyle(fontSize: 13),
-                            children: [
-                              TextSpan(text: '已选择',style: TextStyle(color: Colors.black),),
-                              TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
-                              TextSpan(text: '家工厂',style: TextStyle(color: Colors.black),),
-                            ]
-                          ),)
-                        ],
-                      ),
-                    )
+//                    Offstage(
+//                      offstage: widget.formState.model.details.publishingMode != 'PRIVATE',
+//                      child: GestureDetector(
+//                        onTap: ()async{
+//                          dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
+//                          if(result != null){
+//                            _factoryUids = result;
+//                          }
+//                        },
+//                        child: Row(
+//                          mainAxisAlignment: MainAxisAlignment.end,
+//                          children: <Widget>[
+//                            Text('去选择对象'),
+//                            Container(
+//                                width: 10,
+//                                child: Icon(
+//                                  Icons.chevron_right,
+//                                  size: 20,
+//                                  textDirection: TextDirection.ltr,
+//                                )),
+//                            Icon(Icons.chevron_right, size: 20),
+//                          ],
+//                        ),
+//                      ),
+//                    ),
+//                    Offstage(
+//                      offstage: widget.formState.model.details.publishingMode != 'PRIVATE',
+//                      child: Row(
+//                        mainAxisAlignment: MainAxisAlignment.end,
+//                        children: <Widget>[
+//                          RichText(text: TextSpan(
+//                            style:TextStyle(fontSize: 13),
+//                            children: [
+//                              TextSpan(text: '已选择',style: TextStyle(color: Colors.black),),
+//                              TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
+//                              TextSpan(text: '家工厂',style: TextStyle(color: Colors.black),),
+//                            ]
+//                          ),)
+//                        ],
+//                      ),
+//                    )
                   ],
                 )),
             Container(
@@ -568,7 +573,9 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
   }
 
   /// 发布
-  void onPublish() async {
+  void _onSave() async {
+    print(widget.formState.model.details.productName);
+    print(productNameController.text);
     if (widget.formState.model.details.productName == null) {
       ShowDialogUtil.showValidateMsg(context, '请填写标题');
       return;
@@ -609,13 +616,13 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
       //后台的'长期有效'值是null
       widget.formState.model.details.effectiveDays = null;
     }
-    ShowDialogUtil.showChoseDiglog(context, '是否确认发布', (){
+    ShowDialogUtil.showChoseDiglog(context, '是否确认保存', (){
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack: RequirementOrderRepository().publishNewRequirement(widget.formState.model,null,false,factories: _factoryUids.join(',')),
+              requestCallBack: RequirementOrderRepository().updateRequirement(widget.formState.model),
               outsideDismiss: false,
               loadingText: '正在保存。。。',
               entrance: '',
@@ -628,11 +635,11 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
               .getRequirementOrderDetail(code);
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => PublishRequirementSuccessDialog(
-                  model: model,
+                builder: (context) => RequirementOrderDetailPage(
+                  model.code,
                 ),
               ),
-              ModalRoute.withName('/'));
+              ModalRoute.withName(AppRoutes.ROUTE_REQUIREMENT_ORDERS));
         }
       });
     });

@@ -5,8 +5,8 @@ import 'package:models/models.dart';
 
 ///品类状态管理
 class RequirementOrderFormState with ChangeNotifier{
-  final String factoryUid;
-  RequirementOrderFormState({this.factoryUid});
+  final bool isCreate;
+  RequirementOrderFormState({this.isCreate = true});
 
   RequirementOrderModel _model;
 

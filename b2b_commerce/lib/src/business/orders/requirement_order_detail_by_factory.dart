@@ -2,8 +2,6 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_edit_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/business/requirement_orders.dart';
@@ -15,31 +13,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
-class RequirementOrderDetailPage extends StatefulWidget {
+class RequirementOrderDetailByFactoryPage extends StatefulWidget {
   String code;
 
   /// 关闭生产订单
   final RequirementOrderCancleCallback onRequirementCancle;
 
-  RequirementOrderDetailPage(this.code, {Key key, this.onRequirementCancle})
+  RequirementOrderDetailByFactoryPage(this.code, {Key key, this.onRequirementCancle})
       : super(key: key);
 
-  _RequirementOrderDetailPageState createState() =>
-      _RequirementOrderDetailPageState();
+  _RequirementOrderDetailByFactoryPageState createState() =>
+      _RequirementOrderDetailByFactoryPageState();
 }
 
-class _RequirementOrderDetailPageState
-    extends State<RequirementOrderDetailPage> {
-  static Map<RequirementOrderStatus, Color> _statusColors = {
-    RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
-    RequirementOrderStatus.COMPLETED: Colors.green,
-    RequirementOrderStatus.CANCELLED: Colors.grey,
-  };
+class _RequirementOrderDetailByFactoryPageState
+    extends State<RequirementOrderDetailByFactoryPage> {
 
   RequirementOrderModel orderModel;
 
@@ -89,10 +81,10 @@ class _RequirementOrderDetailPageState
               child: ListView(
                 children: <Widget>[
                   //发布公司信息
-//                  _buildCompanyInfo(),
-//                  Divider(
-//                    height: 0,
-//                  ),
+                  _buildCompanyInfo(),
+                  Divider(
+                    height: 0,
+                  ),
                   //标题
                   _buildTitle(),
                   Divider(
@@ -100,8 +92,6 @@ class _RequirementOrderDetailPageState
                   ),
                   //需求信息
                   _buildMain(),
-                  //品牌端显示
-                  _buildQuote(),
                 ],
               ),
             );
@@ -136,7 +126,6 @@ class _RequirementOrderDetailPageState
 
   Widget _buildCompanyInfo() {
     /// 工厂端显示
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return Container(
         padding: EdgeInsets.all(15),
 //        margin: EdgeInsets.only(bottom: 10),
@@ -249,64 +238,9 @@ class _RequirementOrderDetailPageState
                 ],
               ),
             ),
-//            Container(
-//              padding: EdgeInsets.all(15),
-//              child: Row(
-//                children: <Widget>[
-//                  Expanded(
-//                    child: Container(
-//                      child: Text('联系人'),
-//                    ),
-//                  ),
-//                  Container(
-//                    child: Text(
-//                      orderModel.details.contactPerson == null
-//                          ? ''
-//                          : '${orderModel.details.contactPerson}',
-//                      style: TextStyle(
-//                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ),
-//            Divider(
-//              height: 2,
-//            ),
-//            GestureDetector(
-//              child: Container(
-//                padding: EdgeInsets.all(15),
-//                child: Row(
-//                  children: <Widget>[
-//                    Expanded(
-//                      child: Container(
-//                        child: Text('联系手机'),
-//                      ),
-//                    ),
-//                    Container(
-//                      child: Text(
-//                        orderModel.details.contactPhone == null
-//                            ? ''
-//                            : '${orderModel.details.contactPhone}',
-//                        style: TextStyle(
-//                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ),
-//              onTap: () {
-//                orderModel.details.contactPhone == null
-//                    ? null
-//                    : _selectActionButton(orderModel.details.contactPhone);
-//              },
-//            ),
           ],
         ),
       );
-    } else {
-      return Container();
-    }
   }
 
   Widget _buildTitle(){
@@ -637,33 +571,6 @@ class _RequirementOrderDetailPageState
                   child: Container(
                     alignment: Alignment.centerLeft,
                     width: _leadingRowWidth,
-                    child: Text('发布方式：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    enumMap(PublishingModesEnum,orderModel.details.publishingMode),
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
                     child: Text('有效期限：'),
                   ),
                 ),
@@ -682,6 +589,7 @@ class _RequirementOrderDetailPageState
           Divider(
             height: 0,
           ),
+
           Container(
             padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
             child: Row(
@@ -692,22 +600,7 @@ class _RequirementOrderDetailPageState
           ),
           Container(
             padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: EditableAttachments(list: orderModel.details.pictures,editable: false,),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: Row(
-              children: <Widget>[
-                Text('备注：'),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: Text(orderModel.remarks ?? ''),
+            child: Attachments(list: orderModel.details.pictures),
           ),
           Divider(
             height: 0,
@@ -1141,63 +1034,20 @@ class _RequirementOrderDetailPageState
   }
 
   List<PopupMenuItem<String>> _buildPopupMenu() {
-    if (orderModel.editable != null &&
-        orderModel.editable &&
-        orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
-      return <PopupMenuItem<String>>[
-        PopupMenuItem<String>(
-          value: 'edit',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.edit),
-              ),
-              Text('编辑')
-            ],
-          ),
+    return <PopupMenuItem<String>>[
+      PopupMenuItem<String>(
+        value: 'share',
+        child: Row(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(right: 20),
+              child: Icon(Icons.share),
+            ),
+            Text('分享')
+          ],
         ),
-        PopupMenuItem<String>(
-          value: 'close',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.close),
-              ),
-              Text('关闭')
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'share',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.share),
-              ),
-              Text('分享')
-            ],
-          ),
-        ),
-      ];
-    } else {
-      return <PopupMenuItem<String>>[
-        PopupMenuItem<String>(
-          value: 'share',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.share),
-              ),
-              Text('分享')
-            ],
-          ),
-        ),
-      ];
-    }
+      ),
+    ];
   }
 
   onMenuSelect(String value) async {
@@ -1237,20 +1087,9 @@ class _RequirementOrderDetailPageState
 
   void onEdit() {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              builder: (_) => RequirementOrderFormState(isCreate: false,),
-            ),
-          ],
-          child: Consumer(
-            builder: (context, RequirementOrderFormState state, _) {
-              state.model = orderModel;
-              print('dddd');
-              return RequirementOrderSecondEditForm(formState: state,);
-            }
-          ),
-        ),));
+        builder: (context) => RequirementOrderFrom(
+          order: orderModel,
+        )));
   }
 
   ///TODO分享
