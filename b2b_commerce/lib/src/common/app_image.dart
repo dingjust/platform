@@ -241,4 +241,10 @@ class B2BImage {
     return getImage('temp/index/requirement_center.png',
         width: width, height: height);
   }
+
+  ///空闲产能2
+  static Image free_capacity2({double width, double height}) {
+    return getImage('temp/index/free_capacity2.png',
+        width: width, height: height);
+  }
 }

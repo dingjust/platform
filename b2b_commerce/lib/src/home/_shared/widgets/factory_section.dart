@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -44,7 +45,9 @@ class FactoryButtonsSection extends StatelessWidget {
         image: B2BImage.requirementCenter(),
         imagePadding: EdgeInsets.all(10),
         onPressed: () async {
-          await ProductRepositoryImpl().majorCategories().then((categories) {
+          Provider.of<MajorCategoryState>(context)
+              .getMajorCategories()
+              .then((categories) {
             if (categories != null) {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -128,7 +131,9 @@ class FactoryEntranceSection extends StatelessWidget {
       GridItem(
         title: '推荐需求',
         onPressed: () async {
-          await ProductRepositoryImpl().majorCategories().then((categories) {
+          Provider.of<MajorCategoryState>(context)
+              .getMajorCategories()
+              .then((categories) {
             if (categories != null) {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>

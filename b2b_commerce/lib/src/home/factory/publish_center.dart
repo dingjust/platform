@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:widgets/widgets.dart';
 
@@ -25,8 +26,8 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Container(
-                  width: 65,
-                  height: 90,
+                  width: 75,
+                  height: 100,
                   child: ImageNumButton(
                     width: 65,
                     height: 90,
@@ -43,19 +44,14 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
                   ),
                 ),
                 Container(
-                  width: 65,
-                  height: 90,
+                  width: 75,
+                  height: 100,
                   child: ImageNumButton(
                     width: 65,
                     height: 90,
-                    image: B2BImage.uniqueImport(),
+                    image: B2BImage.free_capacity2(),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ProductionUniqueCodePage(),
-                      //   ),
-                      // );
+                      Navigator.pushNamed(context, AppRoutes.ROUTE_MY_CAPACITY);
                     },
                     title: '发布空闲产能',
                   ),
