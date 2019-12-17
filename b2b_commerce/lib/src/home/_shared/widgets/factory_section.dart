@@ -1,7 +1,10 @@
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class FactoryButtonsSection extends StatelessWidget {
@@ -40,7 +43,18 @@ class FactoryButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.requirementCenter(),
         imagePadding: EdgeInsets.all(10),
-        onPressed: () async {},
+        onPressed: () async {
+          await ProductRepositoryImpl().majorCategories().then((categories) {
+            if (categories != null) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      RequirementPoolAllPage(categories: categories),
+                ),
+              );
+            }
+          });
+        },
         title: '需求中心',
       ),
     );
@@ -53,7 +67,7 @@ class FactoryButtonsSection extends StatelessWidget {
           image: B2BImage.material(),
           imagePadding: EdgeInsets.all(10),
           onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
+            // Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
           },
           title: '转包/裁片',
         ));
@@ -107,57 +121,22 @@ class FactoryEntranceSection extends StatelessWidget {
     final List<GridItem> items = <GridItem>[
       GridItem(
         title: '发布中心',
-        onPressed: () async {
-          // RequirementOrderModel requirementOrderModel = RequirementOrderModel(
-          //     details: RequirementInfoModel(), attachments: []);
-
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => MultiProvider(
-          //       providers: [
-          //         ChangeNotifierProvider(
-          //           builder: (_) => RequirementOrderFormState(),
-          //         ),
-          //       ],
-          //       child: Consumer(
-          //         builder: (context, RequirementOrderFormState state, _) =>
-          //             RequirementOrderFirstForm(
-          //           formState: state,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // );
+        onPressed: () {
+          Navigator.pushNamed(context, AppRoutes.ROUTE_PUBLISH_CENTER);
         },
       ),
       GridItem(
         title: '推荐需求',
         onPressed: () async {
-          // List<CategoryModel> categories =
-          //     await ProductRepositoryImpl().majorCategories();
-          // List<LabelModel> labels = await UserRepositoryImpl().labels();
-          // labels = labels
-          //     .where((label) =>
-          //         label.group == 'FACTORY' || label.group == 'PLATFORM')
-          //     .toList();
-          // if (categories != null && labels != null) {
-          //   Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => FactoryPage(
-          //         FactoryCondition(
-          //             starLevel: 0,
-          //             adeptAtCategories: [],
-          //             labels: [],
-          //             cooperationModes: []),
-          //         route: '全部工厂',
-          //         categories: categories,
-          //         labels: labels,
-          //       ),
-          //     ),
-          //   );
-          // }
+          await ProductRepositoryImpl().majorCategories().then((categories) {
+            if (categories != null) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      RequirementPoolRecommend(
+                        categories: categories,
+                      )));
+            }
+          });
         },
       ),
     ];
