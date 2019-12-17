@@ -717,6 +717,9 @@ class RequirementOrderModel extends OrderModel {
   @JsonKey(toJson: _labelsToJson)
   List<LabelModel> labels;
 
+  ///需求距离
+  double distance;
+
   RequirementOrderModel(
       {this.status,
       this.belongTo,
@@ -734,6 +737,7 @@ class RequirementOrderModel extends OrderModel {
       PrincipalModel supplier,
       this.editable,
       this.attachments,
+        this.distance,
       this.labels})
       : super(
             code: code,

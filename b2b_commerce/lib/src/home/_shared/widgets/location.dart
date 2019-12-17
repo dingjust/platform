@@ -41,7 +41,8 @@ class LocationIcon extends StatelessWidget {
       },
     );
 
-    AMapLocation aMapLocation = state.getAMapLocation(context, _dialog);
+    AMapLocation aMapLocation =
+    state.getAMapLocation(context: context, openDialog: _dialog);
     if (aMapLocation == null) {
       return Container(
           width: 60,

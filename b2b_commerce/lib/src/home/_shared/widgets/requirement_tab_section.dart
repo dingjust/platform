@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -33,52 +34,80 @@ class _RequirementTabSectionState extends State<RequirementTabSection> {
                   ),
                   body: TabBarView(
                     children: <Widget>[
-                      NewFactoryListView(),
-                      HotFactoryListView()
+                      NewRequirementsListView(),
+                      NearbyRequirementsListView()
                     ],
                   )),
             )));
   }
 }
 
-class NewFactoryListView extends StatelessWidget {
+class NewRequirementsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<RequirementTabSectionState>(
-      builder: (context, RequirementTabSectionState state, _) => Container(
-          child: Container(
-        child: state.newFactories != null
+    return Consumer2<RequirementTabSectionState, AmapState>(
+      builder:
+          (context, RequirementTabSectionState state, AmapState amapState, _) =>
+          Container(
+              child: Container(
+                child: state.getNewRequirements(
+                    amapState.longitude, amapState.latitude) !=
+                    null &&
+                    amapState.getAMapLocation() != null
             ? Column(
-                children: state.newFactories
+                  children: state
+                      .getNewRequirements(
+                      amapState.longitude, amapState.latitude)
                     .map((requirement) => _RequirementItem(
                           model: requirement,
                         ))
                     .toList(),
               )
-            : Center(
-                child: CircularProgressIndicator(),
+                    : Column(
+                  children: <Widget>[
+                    Container(
+                      height: 200,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  ],
               ),
       )),
     );
   }
 }
 
-class HotFactoryListView extends StatelessWidget {
+class NearbyRequirementsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<RequirementTabSectionState>(
-      builder: (context, RequirementTabSectionState state, _) => Container(
-          child: Container(
-        child: state.hotFactories != null
+    return Consumer2<RequirementTabSectionState, AmapState>(
+      builder:
+          (context, RequirementTabSectionState state, AmapState amapState, _) =>
+          Container(
+              child: Container(
+                child: state.getNearbyRequirements(
+                    amapState.longitude, amapState.latitude) !=
+                    null &&
+                    amapState.getAMapLocation() != null
             ? Column(
-                children: state.hotFactories
+                  children: state
+                      .getNearbyRequirements(
+                      amapState.longitude, amapState.latitude)
                     .map((requirement) => _RequirementItem(
                           model: requirement,
                         ))
                     .toList(),
               )
-            : Center(
-                child: CircularProgressIndicator(),
+                    : Column(
+                  children: <Widget>[
+                    Container(
+                      height: 200,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  ],
               ),
       )),
     );
@@ -104,7 +133,10 @@ class _RequirementItem extends StatelessWidget {
         ),
       ),
       child: FlatButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => RequirementOrderDetailPage(model.code)));
+        },
         child: Container(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Column(
@@ -115,7 +147,7 @@ class _RequirementItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '${model.details.productName}',
+                      '${model.details.productName ?? ''}',
                       style: TextStyle(fontSize: 18),
                     ),
                     Row(
@@ -157,18 +189,29 @@ class _RequirementItem extends StatelessWidget {
                         children: <Widget>[
                           ImageFactory.buildThumbnailImage(
                               model.belongTo.profilePicture,
-                              size: 30,
-                              containerSize: 40),
-                          Text('${model.belongTo.name}')
+                              size: 40,
+                              containerSize: 50),
+                          Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: Text('${model.belongTo.name}'),
+                          )
                         ],
                       ),
                     ),
-                    Text('121KM')
+                    Text('${generateDistanceStr(model.distance)}')
                   ],
                 )
               ],
             )),
       ),
     );
+  }
+
+  String generateDistanceStr(double distance) {
+    if (distance < 1000) {
+      return '${distance}KM';
+    } else {
+      return '${(distance / 1000).toStringAsFixed(2)}KN';
+    }
   }
 }

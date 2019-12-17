@@ -7,11 +7,13 @@ class AmapState with ChangeNotifier {
 
   BuildContext context;
 
-  AMapLocation getAMapLocation(BuildContext context, Widget openDialog) {
+  AMapLocation getAMapLocation({BuildContext context, Widget openDialog}) {
     if (_aMapLocation != null) {
       return _aMapLocation;
-    } else {
+    } else if (context != null && openDialog != null) {
       getLocation(context, openDialog);
+    } else {
+      return null;
     }
   }
 
@@ -64,7 +66,6 @@ class AmapState with ChangeNotifier {
   }
 
   Future<bool> loopQueryStatus() async {
-    print('!1111');
     LocationPermissions().checkPermissionStatus().then((status) {
       if (status != PermissionStatus.granted) {
         Future.delayed(Duration(milliseconds: 1000)).then((e) {
@@ -84,5 +85,23 @@ class AmapState with ChangeNotifier {
         });
       }
     });
+  }
+
+  ///获取经度
+  double get longitude {
+    if (_aMapLocation != null) {
+      return _aMapLocation.longitude;
+    } else {
+      return 0;
+    }
+  }
+
+  ///获取纬度
+  double get latitude {
+    if (_aMapLocation != null) {
+      return _aMapLocation.latitude;
+    } else {
+      return 0;
+    }
   }
 }

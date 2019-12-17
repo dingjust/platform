@@ -26,7 +26,7 @@ class ImageNumButton extends StatelessWidget {
       this.showNum = false,
       this.width = 55,
         this.height = 90,
-        this.imagePadding = const EdgeInsets.all(5)})
+        this.imagePadding = const EdgeInsets.all(10)})
       : super(key: key);
 
   @override

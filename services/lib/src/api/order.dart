@@ -5,6 +5,9 @@ class OrderApis {
   /// 根据条件获取需求订单列表 POST
   static get requirementOrders => '/{baseSiteId}/orders/requirement';
 
+  /// 传入经纬度需求订单列表 POST
+  static get requirementOrdersMap => '/{baseSiteId}/orders/requirement/map';
+
   ///关闭需求订单
   static get requirementOrderCancle =>
           (code) {
