@@ -1,4 +1,5 @@
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -8,21 +9,33 @@ class LocationIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AmapState>(
-      builder: (context, state, _) => Container(
-        padding: EdgeInsets.only(left: 5),
-        child: Row(
-          children: <Widget>[
-            _buildLocatingText(context, state),
-            Container(
-              padding: EdgeInsets.only(right: 5),
-              child: Icon(
-                Icons.location_on,
+        builder: (context, state, _) =>
+            GestureDetector(
+              onTap: () async {
+                Tip tip = await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AmapSearchPage(city: state.city)));
+                List<String> locationArray = tip.location.split(',');
+                //设置定位信息
+                state.setAMapLocation(
+                    aOIName: tip.district,
+                    longitude: double.parse(locationArray[0]),
+                    latitude: double.parse(locationArray[1]));
+              },
+              child: Container(
+                padding: EdgeInsets.only(left: 5),
+                child: Row(
+                  children: <Widget>[
+                    _buildLocatingText(context, state),
+                    Container(
+                      padding: EdgeInsets.only(right: 5),
+                      child: Icon(
+                        Icons.location_on,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ));
   }
 
   Widget _buildLocatingText(BuildContext context, AmapState state) {

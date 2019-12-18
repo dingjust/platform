@@ -15,6 +15,7 @@ class AmapResponse {
 
   final String infocode;
 
+  @JsonKey(fromJson: _tipsFromJson)
   final List<Tip> tips;
 
   AmapResponse(this.status, this.count, this.info, this.infocode, this.tips);
@@ -28,10 +29,18 @@ class AmapResponse {
   static int _stringToInt(String str) {
     return int.parse(str);
   }
+
+  static List<Tip> _tipsFromJson(List<dynamic> tipsJson) {
+    return tipsJson
+        .where((map) => map['id'] is String && map['id'] != '')
+        .map((map) => Tip.fromJson(map))
+        .toList();
+  }
 }
 
 @JsonSerializable()
 class Tip {
+  @JsonKey(fromJson: _idFromJson)
   final String id;
 
   final String name;
@@ -47,18 +56,25 @@ class Tip {
 
   final String typecode;
 
-  Tip(
-      {this.id,
-      this.name,
-      this.district,
-      this.adcode,
-      this.location,
-      this.address,
-      this.typecode});
+  Tip({this.id,
+    this.name,
+    this.district,
+    this.adcode,
+    this.location,
+    this.address,
+    this.typecode});
 
   factory Tip.fromJson(Map<String, dynamic> json) => _$TipFromJson(json);
 
   static Map<String, dynamic> toJson(Tip model) => _$TipToJson(model);
+
+  static String _idFromJson(var id) {
+    if (id is List<dynamic>) {
+      return '';
+    } else {
+      return id;
+    }
+  }
 
   static String _address(dynamic value) {
     if (value is List) {
@@ -70,7 +86,6 @@ class Tip {
     }
   }
 }
-
 
 /// 高德输入提示响应
 @JsonSerializable()

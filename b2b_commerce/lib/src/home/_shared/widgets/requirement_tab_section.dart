@@ -211,7 +211,7 @@ class _RequirementItem extends StatelessWidget {
     if (distance < 1000) {
       return '${distance}KM';
     } else {
-      return '${(distance / 1000).toStringAsFixed(2)}KN';
+      return '${(distance / 1000).toStringAsFixed(2)}KM';
     }
   }
 }

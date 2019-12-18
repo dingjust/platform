@@ -4,10 +4,11 @@ import 'package:amap_location/amap_location.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:city_pickers/city_pickers.dart' as city_pickers;
 
 /// 产品搜索页
 class AmapSearchDelegatePage extends SearchDelegate<Tip> {
-  final String city;
+  String city;
 
   AmapSearchDelegatePage({this.city});
 
@@ -99,7 +100,7 @@ class AmapSearchDelegatePage extends SearchDelegate<Tip> {
 }
 
 class AmapSearchPage extends StatefulWidget {
-  final String city;
+  String city;
 
   AmapSearchPage({Key key, this.city}) : super(key: key);
 
@@ -112,6 +113,16 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   AMapLocation gpsLocation;
   bool gpsLock = false;
   AmapAroundResponse amapAroundResponse;
+  String city = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.city != null) {
+      city = widget.city;
+    }
+  }
 
   // var _controller = StreamController<AmapAroundResponse>();
 
@@ -163,7 +174,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
             ),
           ),
           Text(
-            '附件地址',
+            '附近地址',
             style: TextStyle(color: Colors.grey, fontSize: 16),
           )
         ],
@@ -177,13 +188,32 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
         children: <Widget>[
-          Icon(
-            B2BIcons.location,
-            size: 15,
-          ),
-          Text(
-            '${widget.city}',
-            style: TextStyle(fontSize: 15),
+          GestureDetector(
+            onTap: () async {
+              // city_pickers.Result result2 =
+              //     await
+              city_pickers.CityPickers.showCitiesSelector(
+                  context: context,
+                  sideBarStyle:
+                  city_pickers.BaseStyle(activeColor: Colors.orange))
+                  .then((result) {
+                setState(() {
+                  city = result.cityName;
+                });
+              });
+            },
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  B2BIcons.location,
+                  size: 15,
+                ),
+                Text(
+                  '${city}',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
           ),
           Expanded(
             flex: 1,
@@ -202,7 +232,11 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                     child: TextField(
                       autofocus: true,
                       onChanged: (value) {
-                        setState(() {});
+                        setState(() {
+                          AmapService.instance.inputtips(
+                              textEditingController.text,
+                              city: city);
+                        });
                       },
                       scrollPadding: const EdgeInsets.all(1.0),
                       controller: textEditingController,
@@ -251,7 +285,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
       },
       initialData: null,
       future: AmapService.instance
-          .inputtips(textEditingController.text, city: widget.city),
+          .inputtips(textEditingController.text, city: city),
     );
   }
 
