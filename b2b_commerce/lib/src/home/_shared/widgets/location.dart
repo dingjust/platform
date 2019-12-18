@@ -9,6 +9,7 @@ class LocationIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AmapState>(
       builder: (context, state, _) => Container(
+        padding: EdgeInsets.only(left: 5),
         child: Row(
           children: <Widget>[
             _buildLocatingText(context, state),
@@ -40,7 +41,8 @@ class LocationIcon extends StatelessWidget {
       },
     );
 
-    AMapLocation aMapLocation = state.getAMapLocation(context, _dialog);
+    AMapLocation aMapLocation =
+    state.getAMapLocation(context: context, openDialog: _dialog);
     if (aMapLocation == null) {
       return Container(
           width: 60,

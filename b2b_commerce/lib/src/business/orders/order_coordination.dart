@@ -46,34 +46,42 @@ class _OrderCoordinationPageState extends State<OrderCoordinationPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                ImageNumButton(
+                Container(
                   width: 65,
                   height: 90,
-                  image: B2BImage.orderCoordination(),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductionOfflineOrder(),
-                      ),
-                    );
-                  },
-                  title: '创建订单',
+                  child: ImageNumButton(
+                    width: 65,
+                    height: 90,
+                    image: B2BImage.orderCoordination(),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductionOfflineOrder(),
+                        ),
+                      );
+                    },
+                    title: '创建订单',
+                  ),
                 ),
-                ImageNumButton(
+                Container(
                   width: 65,
                   height: 90,
-                  image: B2BImage.uniqueImport(),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductionUniqueCodePage(),
-                      ),
-                    );
-                  },
-                  title: '唯一码导入',
-                ),
+                  child: ImageNumButton(
+                    width: 65,
+                    height: 90,
+                    image: B2BImage.uniqueImport(),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductionUniqueCodePage(),
+                        ),
+                      );
+                    },
+                    title: '唯一码导入',
+                  ),
+                )
               ],
             ),
           ),

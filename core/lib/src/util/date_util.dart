@@ -61,3 +61,22 @@ class DateExpressUtil {
     }
   }
 }
+
+///时间转述工具类2
+class DateExpress2Util {
+  static String express(DateTime date) {
+    DateTime now = DateTime.now();
+    var difference = now.difference(date);
+    if (difference.inDays > 30) {
+      return '${(difference.inDays / 30).floor()}个月之前';
+    } else if (difference.inDays < 31 && difference.inDays > 0) {
+      return '${difference.inDays}天之前';
+    } else if (difference.inDays == 0 && difference.inHours > 0) {
+      return '${difference.inHours}小时之前';
+    } else if (difference.inHours == 0 && difference.inMinutes > 0) {
+      return '${difference.inMinutes}分钟之前';
+    } else {
+      return DateFormatUtil.formatYMDHMS(date);
+    }
+  }
+}

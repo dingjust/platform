@@ -202,6 +202,10 @@ flutter:
     - packages/assets/temp/index/quality_factory.png
     - packages/assets/temp/index/requirement.png
     - packages/assets/temp/index/unique_import.png
+    - packages/assets/temp/index/material.png
+    - packages/assets/temp/index/requirement_center.png
+    - packages/assets/temp/index/free_capacity2.png
+
 
   fonts:
     - family: b2bIcons

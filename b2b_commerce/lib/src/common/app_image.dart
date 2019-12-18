@@ -230,4 +230,21 @@ class B2BImage {
     return getImage('temp/index/unique_import.png',
         width: width, height: height);
   }
+
+  ///面料
+  static Image material({double width, double height}) {
+    return getImage('temp/index/material.png', width: width, height: height);
+  }
+
+  ///需求中心
+  static Image requirementCenter({double width, double height}) {
+    return getImage('temp/index/requirement_center.png',
+        width: width, height: height);
+  }
+
+  ///空闲产能2
+  static Image free_capacity2({double width, double height}) {
+    return getImage('temp/index/free_capacity2.png',
+        width: width, height: height);
+  }
 }

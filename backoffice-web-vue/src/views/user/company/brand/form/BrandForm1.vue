@@ -1,30 +1,20 @@
 <template>
-  <div class="animated fadeIn factory-edit">
-    <el-row class="factory-info-title-row">
-      <div class="factory-info-title">
-        <h6 class="factory-info-title_text">编辑资料</h6>
+  <div class="animated fadeIn brand-edit">
+    <el-row class="brand-info-title-row">
+      <div class="brand-info-title">
+        <h6 class="brand-info-title_text">编辑资料</h6>
       </div>
     </el-row>
     <div class="titleCardClass">
-      <el-form :model="formData" ref="factoryForm" label-position="left" label-width="75px" :rules="rules" hide-required-asterisk>
+      <el-form :model="formData" ref="brandForm" label-position="left" label-width="75px" :rules="rules" hide-required-asterisk>
         <el-row>
-          <factory-basic-form v-if="factoryFormVisible" :form-data="formData" @onSaveProfiles="onSaveProfiles"></factory-basic-form>
-        </el-row>
-<!--        <el-row>-->
-<!--          <factory-contact-form :form-data="formData"></factory-contact-form>-->
-<!--        </el-row>-->
-        <el-row>
-          <factory-scale-form :form-data="formData" @validateField="validateField"></factory-scale-form>
+          <brand-basic-info-form v-if="brandFormVisible" :formData="formData"/>
         </el-row>
         <el-row>
-          <factory-capacity-form v-if="factoryFormVisible" :form-data="formData"></factory-capacity-form>
+          <brand-capacity-form v-if="brandFormVisible" :formData="formData"/>
         </el-row>
-<!--        <el-row>-->
-<!--          <factory-service-form :form-data="formData"></factory-service-form>-->
-<!--        </el-row>-->
       </el-form>
     </div>
-
     <el-row type="flex" justify="center">
       <el-button class="buttonClass" @click="onSave">
         <h6>保存</h6>
@@ -36,33 +26,20 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters} = createNamespacedHelpers('FactoriesModule');
-  import FactoryBasicForm from './FactoryBasicForm';
-  import FactoryCertificateForm from './FactoryCertificateForm';
-  import FactoryContactForm from './FactoryContactForm';
-  import FactoryScaleForm from './FactoryScaleForm';
-  import FactoryCapacityForm from './FactoryCapacityForm';
-  import FactoryServiceForm from './FactoryServiceForm';
+  const {mapGetters} = createNamespacedHelpers('BrandsModule');
 
+  import BrandBasicInfoForm from './BrandBasicInfoForm';
+  import BrandCapacityForm from './BrandCapacityForm';
   export default {
-    name: 'FactoryFrom',
+    name: 'BrandFrom1',
     components: {
-      FactoryServiceForm,
-      FactoryCapacityForm,
-      FactoryScaleForm,
-      FactoryContactForm,
-      FactoryBasicForm,
-      FactoryCertificateForm
+      BrandCapacityForm,
+      BrandBasicInfoForm
     },
-    computed: {
-      ...mapGetters({
-        factoryFormVisible: 'factoryFormVisible'
-      })
-    },
-    props: ['formData'],
+    props: ['formData', 'readOnly'],
     methods: {
       onSave () {
-        this.$refs['factoryForm'].validate((valid) => {
+        this.$refs['brandForm'].validate((valid) => {
           if (valid) {
             this.$confirm('是否确认保存', '提示', {
               confirmButtonText: '确定',
@@ -79,15 +56,12 @@
       },
       validateField (name) {
         this.$refs.factoryForm.validateField(name);
-      },
-      onSaveProfiles () {
-        this.$emit('onSaveProfiles')
       }
     },
-    watch: {
-      'formData.adeptAtCategories': function (n, o) {
-        this.validateField('adeptAtCategories');
-      }
+    computed: {
+      ...mapGetters({
+        brandFormVisible: 'brandFormVisible'
+      })
     },
     data () {
       var cheackEquipment = (rule, value, callback) => {
@@ -128,37 +102,37 @@
           'adeptAtCategories': [
             {required: true, message: '请选择品类', type: 'array', trigger: 'change'}
           ],
-          'categories': [
-            {required: true, message: '请选择大类', type: 'array', trigger: 'change'}
+          'duties': [
+            {required: true, message: '请填写职务', trigger: 'change'}
           ]
         }
       }
     },
     created () {
+      console.log(this.formData);
     }
   }
 </script>
-
-<style>
-  .factory-edit .factory-info-title {
+<style scoped>
+  .brand-edit .brand-info-title {
     width: 100%;
     border-left: 2px solid #FFD60C;
     padding-left: 10px;
     height: 14px;
   }
 
-  .factory-edit .factory-info-title_text {
+  .brand-edit .brand-info-title_text {
     font-size: 12px;
     font-weight: 500;
     color: rgba(0, 0, 0, 1);
     opacity: 0.65;
   }
 
-  .factory-edit .factory-info-title-row {
+  .brand-edit .brand-info-title-row {
     margin-bottom: 20px;
   }
 
-  .factory-edit .buttonClass{
+  .brand-edit .buttonClass{
     padding: 10px 120px 0px 120px;
     margin-top: 40px;
     background-color: #ffd60c;
@@ -166,11 +140,10 @@
     border-radius: 8px;
   }
 
-  .factory-edit .titleCardClass{
+  .brand-edit .titleCardClass{
     border-style: solid;
     border-width: 1px;
     border-top: white;
     border-color: #DCDCDC;
   }
-
 </style>
