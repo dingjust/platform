@@ -12,7 +12,6 @@ class ImageFactory {
     return Container(
       width: containerSize,
       height: containerSize,
-      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Color.fromRGBO(243, 243, 243, 1),
@@ -29,7 +28,7 @@ class ImageFactory {
     MediaModel media, {
         double size = 60,
         double containerSize = 80,
-    BoxFit fit = BoxFit.cover,
+        BoxFit fit = BoxFit.fill,
   }) {
     if (media == null) {
       return buildDefaultThumbnailImage(
@@ -38,21 +37,18 @@ class ImageFactory {
 
     // TODO：拿media format为Thumbnail的converted图片
     return Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
         width: containerSize,
         height: containerSize,
-        child:
-        Container(
-          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-          width: 100,
-          height: 100,
+        child: Container(
+          width: containerSize,
+          height: containerSize,
           child: CachedNetworkImage(
               imageUrl: '${media.previewUrl()}',
-              // fit: BoxFit.cover,
+              fit: fit,
               imageBuilder: (context, imageProvider) =>
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: containerSize,
+                    height: containerSize,
                     decoration: BoxDecoration(
                         image: DecorationImage(
                           image: imageProvider,

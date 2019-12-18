@@ -26,7 +26,6 @@ class MyFactoryAbilityInfoState extends State<MyFactoryAbilityInfo> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,10 +36,9 @@ class MyFactoryAbilityInfoState extends State<MyFactoryAbilityInfo> {
               padding: EdgeInsets.only(bottom: 15),
               child: Row(
                 children: <Widget>[
-                  Text('工厂能力',style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold
-                  ))
+                  Text('工厂能力',
+                      style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
                 ],
               ),
             ),
@@ -100,8 +98,8 @@ class MyFactoryAbilityInfoState extends State<MyFactoryAbilityInfo> {
                   ),
                   Expanded(
                     child: Text(
-                      widget.factory.cooperativeBrand,
-                      style: const TextStyle(
+                      '${widget.factory?.cooperativeBrand ?? ''}',
+                      style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
@@ -147,7 +145,8 @@ class MyFactoryAbilityInfoState extends State<MyFactoryAbilityInfo> {
                   ),
                   Expanded(
                     child: Text(
-                      formatCategoriesSelectText(widget.factory.adeptAtCategories,
+                      formatCategoriesSelectText(
+                          widget.factory.adeptAtCategories,
                           widget.factory.adeptAtCategories.length),
                       style: const TextStyle(
                         fontSize: 16,
@@ -180,7 +179,6 @@ class MyFactoryAbilityInfoState extends State<MyFactoryAbilityInfo> {
                       overflow: TextOverflow.clip,
                     ),
                   )
-
                 ],
               ),
             ),
@@ -251,5 +249,4 @@ class MyFactoryAbilityInfoState extends State<MyFactoryAbilityInfo> {
 
     return text;
   }
-
 }

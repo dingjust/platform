@@ -89,7 +89,7 @@
         this.dialogVisible = false;
       },
       async doChangePassword(oldPassword, newPassword) {
-        const url = this.apis().changePassword(this.currentUser.username);
+        const url = this.apis().changePassword(this.currentUser.uid);
         const result = await this.$http.put(url, null, {
           old: oldPassword,
           new: newPassword

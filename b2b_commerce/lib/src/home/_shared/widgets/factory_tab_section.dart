@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -104,7 +105,18 @@ class _FactoryItem extends StatelessWidget {
         ),
       ),
       child: FlatButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  MyFactoryPage(
+                    factoryUid: model.uid,
+                    isFactoryDetail: true,
+                  ),
+            ),
+          );
+        },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Row(
