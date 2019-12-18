@@ -174,7 +174,7 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
             MultiProvider(
               providers: [
                 ChangeNotifierProvider(
-                  builder: (_) => RequirementOrderFormState(isCreate: true),
+                  builder: (_) => RequirementOrderFormState(),
                 ),
               ],
               child: Consumer(

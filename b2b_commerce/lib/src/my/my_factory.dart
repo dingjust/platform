@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
-as dj;
+    as dj;
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
@@ -299,8 +300,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                       Expanded(
                         flex: 1,
                         child: Container(
-                            height: double.infinity,
-                            child:Container()
+                            height: double.infinity, child: Container()
 //                            Theme(
 //                                data: ThemeData(
 //                                  canvasColor: Colors.transparent,
@@ -322,7 +322,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
 //                                    ),
 //                                  ),
 //                                ))
-                        ),
+                            ),
                       ),
                       Expanded(
                         flex: 1,
@@ -354,7 +354,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     );
   }
 
-  _createPurchaseByFactoryProduct(BuildContext pageContext) async{
+  _createPurchaseByFactoryProduct(BuildContext pageContext) async {
     dynamic result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -363,11 +363,14 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     );
 
     print(result);
-    if(result != null){
+    if (result != null) {
       dj.showModalBottomSheet<void>(
           context: pageContext,
           builder: (BuildContext context) {
-            return BuyPurchaseForm(result,heightScale: 0.9,);
+            return BuyPurchaseForm(
+              result,
+              heightScale: 0.9,
+            );
           });
     }
   }
@@ -376,13 +379,19 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     RequirementOrderModel orderModel =
         RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => RequirementOrderFrom(
-                  order: orderModel,
-                  isCreate: true,
-                  factoryUid: widget.factoryUid,
-                )));
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider(
+          builder: (_) => RequirementOrderFormState(),
+          child: Consumer(
+            builder: (context, RequirementOrderFormState state, _) =>
+                RequirementOrderFirstForm(
+              formState: state,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {

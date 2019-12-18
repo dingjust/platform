@@ -47,63 +47,78 @@ class _RequirementOrderDetailByFactoryPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '需求订单明细',
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: <Widget>[
-          Container(
-            width: 60,
-            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-            child: PopupMenuButton<String>(
-              onSelected: (v) => onMenuSelect(v),
-              icon: Icon(
-                B2BIcons.more,
-                size: 5,
+    return FutureBuilder<RequirementOrderModel>(
+      builder: (BuildContext context,
+          AsyncSnapshot<RequirementOrderModel> snapshot) {
+        if (snapshot.data != null) {
+          return Scaffold(
+            appBar: AppBar(
+              brightness: Brightness.light,
+              centerTitle: true,
+              elevation: 0.5,
+              title: Text(
+                '需求订单明细',
+                style: TextStyle(color: Colors.black),
               ),
-              offset: Offset(0, 50),
-              itemBuilder: (BuildContext context) => _buildPopupMenu(),
+              actions: <Widget>[
+                Container(
+                  width: 60,
+                  margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                  child: PopupMenuButton<String>(
+                    onSelected: (v) => onMenuSelect(v),
+                    icon: Icon(
+                      B2BIcons.more,
+                      size: 5,
+                    ),
+                    offset: Offset(0, 50),
+                    itemBuilder: (BuildContext context) => _buildPopupMenu(),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
-      body: FutureBuilder<RequirementOrderModel>(
-        builder: (BuildContext context,
-            AsyncSnapshot<RequirementOrderModel> snapshot) {
-          if (snapshot.data != null) {
-            return Container(
-              color: Colors.grey[100],
-              child: ListView(
-                children: <Widget>[
-                  //发布公司信息
-                  _buildCompanyInfo(),
-                  Divider(
-                    height: 0,
-                  ),
-                  //标题
-                  _buildTitle(),
-                  Divider(
-                    height: 0,
-                  ),
-                  //需求信息
-                  _buildMain(),
-                ],
-              ),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-        initialData: null,
-        future: _getData(),
-      ),
+            body: FutureBuilder<RequirementOrderModel>(
+              builder: (BuildContext context,
+                  AsyncSnapshot<RequirementOrderModel> snapshot) {
+                if (snapshot.data != null) {
+                  return Container(
+                    color: Colors.grey[100],
+                    child: ListView(
+                      children: <Widget>[
+                        //发布公司信息
+                        _buildCompanyInfo(),
+                        Divider(
+                          height: 0,
+                        ),
+                        //标题
+                        _buildTitle(),
+                        Divider(
+                          height: 0,
+                        ),
+                        //需求信息
+                        _buildMain(),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+              initialData: null,
+              future: _getData(),
+            ),
+            bottomNavigationBar: _buildBottomButtons(orderModel),
+          );
+        } else {
+          print('ddd');
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+      initialData: RequirementOrderModel(details: RequirementInfoModel()),
+      future: _getData(),
     );
   }
 
@@ -600,7 +615,26 @@ class _RequirementOrderDetailByFactoryPageState
           ),
           Container(
             padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: Attachments(list: orderModel.details.pictures),
+            child: EditableAttachments(list: orderModel.details.pictures,editable: false,),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Text('备注：'),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,right: 5),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: Text(orderModel.remarks ?? '')),
+              ],
+            ),
           ),
           Divider(
             height: 0,
@@ -610,291 +644,116 @@ class _RequirementOrderDetailByFactoryPageState
     );
   }
 
-  Widget _buildEntries() {
-    Widget _pictureWidget;
 
-    if (orderModel.details.pictures == null) {
-      _pictureWidget = Container(
-        width: 80,
-        height: 80,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color.fromRGBO(243, 243, 243, 1)),
-        child: Icon(B2BIcons.noPicture,
-            color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-      );
-    } else {
-      if (orderModel.details.pictures.isEmpty) {
-        _pictureWidget = Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Icon(B2BIcons.noPicture,
-              color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-        );
-      } else {
-        _pictureWidget = GestureDetector(
-          child: Stack(
-            alignment: const Alignment(1.0, 1.1),
-            children: <Widget>[
-              Container(
-                width: 80,
-                height: 80,
-                child: CachedNetworkImage(
-                    width: 100,
-                    height: 100,
-                    imageUrl: '${orderModel.details.pictures[0].previewUrl()}',
-                    fit: BoxFit.cover,
-                    imageBuilder: (context, imageProvider) =>
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                    placeholder: (context, url) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        ),
-                    errorWidget: (context, url, error) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        )),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              Container(
-                child: Icon(
-                  Icons.photo_size_select_actual,
-                  color: Colors.black38,
-                  size: 20,
-                ),
-              )
-            ],
-          ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PicturePickPreviewWidget(
-                  medias: orderModel.details.pictures,
-                  isUpload: false,
-                )));
-          },
-        );
-      }
-    }
-
+  Widget _buildBottomButtons(RequirementOrderModel model) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 15),
+      height: 65,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          _pictureWidget,
           Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  orderModel.details.productName != null
-                      ? Text(
-                    orderModel.details.productName,
-                    style: TextStyle(fontSize: 15),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                      : Text(
-                    ' ',
-                    style: TextStyle(fontSize: 15, color: Colors.red),
-                  ),
-                  orderModel.details.productSkuID != null
-                      ? Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      '货号：${orderModel.details.productSkuID}',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  )
-                      : Container(),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      "${orderModel.details.majorCategoryName()}   ${orderModel
-                          .details.category?.name}   ${orderModel.details
-                          .expectedMachiningQuantity}件",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color.fromRGBO(255, 133, 148, 1)),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  String _majorCategory() {
-    return orderModel.details.majorCategory != null
-        ? orderModel.details.majorCategory.name
-        : '';
-  }
-
-  Widget _buildQuote() {
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: quotesList != null && quotesList.length > 0
-          ? Column(
-        children: <Widget>[
-          QuoteItem(
-            model: quotesList[0],
-            onRefresh: () {
-              onRefreshData();
-            },
-            pageContext: context,
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      RequirementQuoteDetailPage(
-                        order: orderModel,
-                      )));
-            },
-            child: Text(
-              '查看全部报价>>',
-              style: TextStyle(color: Colors.red),
-            ),
-          )
-        ],
-      )
-          : Center(
-        child: Text(
-          '暂无报价',
-          style: TextStyle(color: Colors.grey),
-        ),
-      ),
-    );
-  }
-
-  onRefreshData() async {
-    RequirementOrderBLoC().refreshData('ALL');
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => RequirementOrdersPage()),
-        ModalRoute.withName('/'));
-  }
-
-  Widget _buildAttachments() {
-    return orderModel.attachments == null || orderModel.attachments.length <= 0
-        ? Container()
-        : Container(
-      color: Colors.white,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.only(top: 10),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                '附件',
-                style: TextStyle(fontSize: 16),
-              )
-            ],
-          ),
-          Attachments(
-            list: orderModel.attachments,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRemarks() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            flex: 2,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  '备注',
-                  style: TextStyle(fontSize: 16),
-                )
+                FlatButton(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        child: Icon(
+                          Icons.phone,
+                          color: Colors.white,
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(8)),
+                        padding: EdgeInsets.all(2),
+                      ),
+                      Text(model?.details?.contactPerson ?? ''),
+                    ],
+                  ),
+                  onPressed: () {
+                    _selectActionButton(model?.details?.contactPhone);
+                  },
+                ),
               ],
             ),
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Text(
-                  orderModel.remarks ?? '',
-                  overflow: TextOverflow.clip,
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container()
+//                  Container(
+//                      height: double.infinity,
+//                      child:
+//                      Theme(
+//                          data: ThemeData(
+//                            canvasColor: Colors.transparent,
+//                            primaryColor: Colors.white,
+//                            accentColor: Color.fromRGBO(255, 214, 12, 1),
+//                            bottomAppBarColor: Colors.grey,
+//                          ),
+//                          child: Builder(
+//                            builder: (BuildContext buttonContext) =>
+//                                FlatButton(
+//                                  color: Color.fromRGBO(255, 245, 157, 1),
+//                                  onPressed: () {
+//                                  },
+//                                  disabledColor: Colors.grey[300],
+//                                  child: Text(
+//                                    '联系',
+//                                    style: TextStyle(fontSize: 15),
+//                                  ),
+//                                ),
+//                          ))
+//                  ),
                 ),
-              )
-            ],
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      height: double.infinity,
+                      child: Builder(
+                        builder: (BuildContext buttonContext) =>
+                            FlatButton(
+                              color: Color.fromRGBO(255, 214, 12, 1),
+                              onPressed: () async{
+                                QuoteModel newQuote =
+                                    await Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        RequirementQuoteOrderForm(
+                                          model: orderModel,
+                                          quoteModel: QuoteModel(attachments: []),
+                                        )));
+
+                                if (newQuote != null) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          QuoteOrderDetailPage(
+                                            newQuote.code,
+                                          )));
+                                }
+                              },
+                              disabledColor: Colors.grey[300],
+                              child: Text(
+                                '去报价',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                      )),
+                )
+              ],
+            ),
           )
         ],
       ),
     );
-  }
-
-  Widget _buildAddress() {
-    //工厂端显示
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(bottom: 10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    '送货地址',
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                  )
-                ],
-              ),
-            ),
-            Row(
-              children: <Widget>[Text(orderModel.deliveryAddress ?? '')],
-            )
-          ],
-        ),
-      );
-    } else {
-      return Container();
-    }
   }
 
   Widget _buildButtonGroups() {
@@ -1129,6 +988,9 @@ class _RequirementOrderDetailByFactoryPageState
 
   //拨打电话或发短信
   void _selectActionButton(String tel) async {
+    if(tel == null || tel == ''){
+      return;
+    }
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

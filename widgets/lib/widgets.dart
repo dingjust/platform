@@ -21,6 +21,7 @@ export 'src/commons/flutter_amap/flutter_amap.dart';
 export 'src/commons/form/popup_window.dart';
 export 'src/commons/form/show_select_tile.dart';
 export 'src/commons/form/text_field_component.dart';
+export 'src/commons/form/text_field_border_component.dart';
 export 'src/commons/icon/b2b_commerce_icons.dart';
 export 'src/commons/income_comparison/income_comparison.dart';
 export 'src/commons/menu/enum_select.dart';

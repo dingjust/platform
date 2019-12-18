@@ -706,8 +706,12 @@ class _RequirementOrderDetailPageState
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: Text(orderModel.remarks ?? ''),
+            padding: EdgeInsets.only(left: 15,bottom: 15,right: 5),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: Text(orderModel.remarks ?? '')),
+              ],
+            ),
           ),
           Divider(
             height: 0,
@@ -717,156 +721,6 @@ class _RequirementOrderDetailPageState
     );
   }
 
-  Widget _buildEntries() {
-    Widget _pictureWidget;
-
-    if (orderModel.details.pictures == null) {
-      _pictureWidget = Container(
-        width: 80,
-        height: 80,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color.fromRGBO(243, 243, 243, 1)),
-        child: Icon(B2BIcons.noPicture,
-            color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-      );
-    } else {
-      if (orderModel.details.pictures.isEmpty) {
-        _pictureWidget = Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Icon(B2BIcons.noPicture,
-              color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-        );
-      } else {
-        _pictureWidget = GestureDetector(
-          child: Stack(
-            alignment: const Alignment(1.0, 1.1),
-            children: <Widget>[
-              Container(
-                width: 80,
-                height: 80,
-                child: CachedNetworkImage(
-                    width: 100,
-                    height: 100,
-                    imageUrl: '${orderModel.details.pictures[0].previewUrl()}',
-                    fit: BoxFit.cover,
-                    imageBuilder: (context, imageProvider) =>
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                    placeholder: (context, url) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        ),
-                    errorWidget: (context, url, error) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        )),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              Container(
-                child: Icon(
-                  Icons.photo_size_select_actual,
-                  color: Colors.black38,
-                  size: 20,
-                ),
-              )
-            ],
-          ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PicturePickPreviewWidget(
-                  medias: orderModel.details.pictures,
-                  isUpload: false,
-                )));
-          },
-        );
-      }
-    }
-
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 15),
-      child: Row(
-        children: <Widget>[
-          _pictureWidget,
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  orderModel.details.productName != null
-                      ? Text(
-                    orderModel.details.productName,
-                    style: TextStyle(fontSize: 15),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                      : Text(
-                    ' ',
-                    style: TextStyle(fontSize: 15, color: Colors.red),
-                  ),
-                  orderModel.details.productSkuID != null
-                      ? Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      '货号：${orderModel.details.productSkuID}',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  )
-                      : Container(),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      "${orderModel.details.majorCategoryName()}   ${orderModel
-                          .details.category?.name}   ${orderModel.details
-                          .expectedMachiningQuantity}件",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color.fromRGBO(255, 133, 148, 1)),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  String _majorCategory() {
-    return orderModel.details.majorCategory != null
-        ? orderModel.details.majorCategory.name
-        : '';
-  }
 
   Widget _buildQuote() {
     return Container(
@@ -914,95 +768,6 @@ class _RequirementOrderDetailPageState
         ModalRoute.withName('/'));
   }
 
-  Widget _buildAttachments() {
-    return orderModel.attachments == null || orderModel.attachments.length <= 0
-        ? Container()
-        : Container(
-      color: Colors.white,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.only(top: 10),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                '附件',
-                style: TextStyle(fontSize: 16),
-              )
-            ],
-          ),
-          Attachments(
-            list: orderModel.attachments,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRemarks() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  '备注',
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Text(
-                  orderModel.remarks ?? '',
-                  overflow: TextOverflow.clip,
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAddress() {
-    //工厂端显示
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(bottom: 10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    '送货地址',
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                  )
-                ],
-              ),
-            ),
-            Row(
-              children: <Widget>[Text(orderModel.deliveryAddress ?? '')],
-            )
-          ],
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
 
   Widget _buildButtonGroups() {
     //品牌端显示
@@ -1240,16 +1005,23 @@ class _RequirementOrderDetailPageState
         builder: (context) => MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              builder: (_) => RequirementOrderFormState(isCreate: false,),
+              builder: (_) => RequirementOrderEditFormState(detailModel: orderModel),
             ),
           ],
-          child: Consumer(
-            builder: (context, RequirementOrderFormState state, _) {
-              state.model = orderModel;
+          child: Builder(
+            builder: (context) {
+              RequirementOrderEditFormState state = Provider.of<RequirementOrderEditFormState>(context);
               print('dddd');
               return RequirementOrderSecondEditForm(formState: state,);
             }
           ),
+//          child: Consumer(
+//            builder: (context, RequirementOrderFormState state, _) {
+//              state.model = orderModel;
+//              print('dddd');
+//              return RequirementOrderSecondEditForm(formState: state,);
+//            }
+//          ),
         ),));
   }
 

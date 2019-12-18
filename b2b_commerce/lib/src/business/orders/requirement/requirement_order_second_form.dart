@@ -87,118 +87,134 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
             Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: TextFieldComponent(
-                padding: EdgeInsets.all(0),
-                hideDivider: true,
-                isRequired: true,
-                leadingText: Text(
-                  '标题',
-                  style: TextStyle(fontSize: 16),
-                ),
-                hintText: '填写',
-                controller: super.productNameController,
-                focusNode: super.productNameFocusNode,
-                onChanged: (v) {
-                  widget.formState.model.details.productName =
-                      super.productNameController.text;
-                },
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: '标       题',
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ),
+                      TextSpan(
+                        text: ' * ',
+                        style: TextStyle(fontSize: 16, color: Colors.red),
+                      )
+                    ]),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: TextFieldBorderComponent(
+                      padding: EdgeInsets.all(0),
+                      hideDivider: true,
+                      isRequired: true,
+                      textAlign: TextAlign.left,
+                      hintText: '填写',
+                      controller: super.productNameController,
+                      focusNode: super.productNameFocusNode,
+                      onChanged: (v) {
+                        widget.formState.model.details.productName =
+                            super.productNameController.text;
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
             Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: TextFieldComponent(
-                padding: EdgeInsets.all(0),
-                hideDivider: true,
-                isRequired: true,
-                prefix: '￥',
-                leadingText: Text(
-                  '期望价格',
-                  style: TextStyle(fontSize: 16),
-                ),
-                inputFormatters: [
-                  DecimalInputFormat(),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child:  RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: '期望价格',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontSize: 16, color: Colors.red),
+                        )
+                      ]),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: TextFieldBorderComponent(
+                      padding: EdgeInsets.all(0),
+                      hideDivider: true,
+                      isRequired: true,
+                      textAlign: TextAlign.left,
+                      prefix: '￥',
+                      inputFormatters: [
+                        DecimalInputFormat(),
+                      ],
+                      hintText: '填写',
+                      controller: super.maxExpectedPriceController,
+                      focusNode: super.maxExpectedPriceFocusNode,
+                      onChanged: (v) {
+                        widget.formState.model.details.maxExpectedPrice =
+                            ClassHandleUtil.removeSymbolRMBToDouble(
+                                super.maxExpectedPriceController.text);
+                      },
+                    ),
+                  ),
                 ],
-                hintText: '填写',
-                controller: super.maxExpectedPriceController,
-                focusNode: super.maxExpectedPriceFocusNode,
-                onChanged: (v) {
-                  widget.formState.model.details.maxExpectedPrice =
-                      ClassHandleUtil.removeSymbolRMBToDouble(
-                          super.maxExpectedPriceController.text);
-                },
               ),
             ),
             Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: TextFieldComponent(
-                padding: EdgeInsets.all(0),
-                hideDivider: true,
-                isRequired: true,
-                leadingText: Text(
-                  '加工数量',
-                  style: TextStyle(fontSize: 16),
-                ),
-                inputFormatters: [
-                  WhitelistingTextInputFormatter.digitsOnly,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child:  RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: '加工数量',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontSize: 16, color: Colors.red),
+                        )
+                      ]),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: TextFieldBorderComponent(
+                      padding: EdgeInsets.all(0),
+                      hideDivider: true,
+                      isRequired: true,
+                      textAlign: TextAlign.left,
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
+                      hintText: '填写',
+                      controller: super.expectedMachiningQuantityController,
+                      focusNode: super.expectedMachiningQuantityNode,
+                      onChanged: (v) {
+                        widget.formState.model.details.expectedMachiningQuantity =
+                            ClassHandleUtil.transInt(
+                                super.expectedMachiningQuantityController.text);
+                      },
+                    ),
+                  ),
                 ],
-                hintText: '填写',
-                controller: super.expectedMachiningQuantityController,
-                focusNode: super.expectedMachiningQuantityNode,
-                onChanged: (v) {
-                  widget.formState.model.details.expectedMachiningQuantity =
-                      ClassHandleUtil.transInt(
-                          super.expectedMachiningQuantityController.text);
-                },
               ),
             ),
             Container(
               color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: ExpectedDeliveryDateField(widget.formState.model),
             ),
             Container(
               color: Colors.white,
               child: ContactWayField(widget.formState.model),
-            ),
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '加工类型',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                      TextSpan(
-                        text: ' *',
-                        style: TextStyle(fontSize: 16, color: Colors.red),
-                      )
-                    ]),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: MachiningType.values
-                        .map((type) => ChoiceChip(
-                            label: Text(MachiningTypeLocalizedMap[type]),
-                            backgroundColor: Colors.grey[100],
-                            selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                            selected:
-                                widget.formState.model.details.machiningType ==
-                                    type,
-                            onSelected: (bool selected) {
-                              setState(() {
-                                widget.formState.model.details.machiningType =
-                                    type;
-                              });
-                            }))
-                        .toList(),
-                  ),
-                ],
-              ),
             ),
             Container(
               color: Colors.white,
@@ -237,14 +253,14 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                         },
                         itemBuilder: (BuildContext context) =>
                             SalesMarketsEnum.map(
-                                (saleMarket) => PopupMenuItem<EnumModel>(
-                                      enabled: false,
-                                      value: saleMarket,
-                                      child: StatefulBuilder(
-                                          builder: (context, state) {
+                                    (saleMarket) => PopupMenuItem<EnumModel>(
+                                  enabled: false,
+                                  value: saleMarket,
+                                  child: StatefulBuilder(
+                                      builder: (context, state) {
                                         return CheckboxListTile(
                                           controlAffinity:
-                                              ListTileControlAffinity.leading,
+                                          ListTileControlAffinity.leading,
                                           title: Text(saleMarket.name),
                                           onChanged: (v) {
                                             setState(() {
@@ -267,7 +283,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                                               .contains(saleMarket.code),
                                         );
                                       }),
-                                    )).toList(),
+                                )).toList(),
                         child: Text(
 //                            '选择销售市场',
                           formatEnumSelectsText(
@@ -285,77 +301,199 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
               ),
             ),
             Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        '是否需要打样',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                            widget.formState.model.details.proofingNeeded
-                                ? '需要'
-                                : '不需要',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                            )),
-                        Switch(
-                          value: widget.formState.model.details.proofingNeeded,
-                          onChanged: (val) {
-                            setState(() {
-                              widget.formState.model.details.proofingNeeded =
-                                  val;
-                            });
-                          },
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: '加工类型',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
                         ),
-                      ],
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontSize: 16, color: Colors.red),
+                        )
+                      ]),
                     ),
-                  ],
-                )),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: MachiningType.values
+                          .map((type) => ChoiceChip(
+                              label: Container(
+                                height: 20,
+                                width: 60,
+                                child: Center(child: Text(MachiningTypeLocalizedMap[type])),
+                              ),
+                              backgroundColor: Colors.grey[100],
+                              selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                              selected:
+                                  widget.formState.model.details.machiningType ==
+                                      type,
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  widget.formState.model.details.machiningType =
+                                      type;
+                                });
+                              }))
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        '是否开具发票',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                            widget.formState.model.details.invoiceNeeded
-                                ? '开'
-                                : '不开',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                            )),
-                        Switch(
-                          value: widget.formState.model.details.invoiceNeeded,
-                          onChanged: (val) {
-                            setState(() {
-                              widget.formState.model.details.invoiceNeeded =
-                                  val;
-                            });
-                          },
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: '是否打样',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
                         ),
-                      ],
+                      ]),
                     ),
-                  ],
-                )),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ChoiceChip(
+                            label: Container(
+                              height: 20,
+                              width: 60,
+                              child: Center(child: Text('是')),
+                            ),
+                            backgroundColor: Colors.grey[100],
+                            selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                            selected: widget.formState.model.details.proofingNeeded,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                widget.formState.model.details.proofingNeeded = true;
+                              });
+                            },
+                          ),
+//                          GestureDetector(
+//                            onTap: (){
+//                              setState(() {
+//                                widget.formState?.model?.details?.proofingNeeded = true;
+//                              });
+//                            },
+//                            child: Container(
+//                              width: 80,
+//                              height: 30,
+//                              decoration: ShapeDecoration(
+//                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50),),
+//                                color: widget.formState?.model?.details?.proofingNeeded ?? false ? Color.fromRGBO(255, 214, 12, 1) : Colors.grey[100],
+//                              ),
+//                              child: Center(child: Text('是')),
+//                            ),
+//                          ),
+//                          GestureDetector(
+//                            onTap: (){
+//                              setState(() {
+//                                widget.formState?.model?.details?.proofingNeeded = false;
+//                              });
+//                            },
+//                            child: Container(
+//                              width: 80,
+//                              height: 30,
+//                              decoration: ShapeDecoration(
+//                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50),),
+//                                color: widget.formState?.model?.details?.proofingNeeded == null ? true : !widget.formState.model.details.proofingNeeded ? Color.fromRGBO(255, 214, 12, 1) : Colors.grey[100],
+//                              ),
+//                              child: Center(child: Text('否')),
+//                            ),
+//                          ),
+                          ChoiceChip(
+                            label: Container(
+                              height: 20,
+                              width: 60,
+                              child: Center(child: Text('否')),
+                            ),
+                            backgroundColor: Colors.grey[100],
+                            selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                            selected: !widget.formState.model.details.proofingNeeded,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                widget.formState.model.details.proofingNeeded = false;
+                              });
+                            },
+                          ),
+                        ]
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: '是否开票',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ]),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ChoiceChip(
+                            label: Container(
+                              height: 20,
+                              width: 60,
+                              child: Center(child: Text('是')),
+                            ),
+                            backgroundColor: Colors.grey[100],
+                            selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                            selected: widget.formState.model.details.invoiceNeeded,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                widget.formState.model.details.invoiceNeeded = true;
+                              });
+                            },
+                          ),
+                          ChoiceChip(
+                            label: Container(
+                              height: 20,
+                              width: 60,
+                              child: Center(child: Text('否')),
+                            ),
+                            backgroundColor: Colors.grey[100],
+                            selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                            selected: !widget.formState.model.details.invoiceNeeded,
+                            onSelected: (bool selected) {
+                              setState(() {
+                                widget.formState.model.details.invoiceNeeded = false;
+                              });
+                            },
+                          ),
+                        ]
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),

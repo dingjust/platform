@@ -5,10 +5,11 @@ import 'package:models/models.dart';
 
 ///品类状态管理
 class RequirementOrderFormState with ChangeNotifier{
-  final bool isCreate;
-  RequirementOrderFormState({this.isCreate = true});
+  final RequirementOrderModel detailModel;
+  RequirementOrderFormState({this.detailModel});
 
   RequirementOrderModel _model;
+  RequirementOrderModel _editModel;
 
   RequirementOrderModel get model {
     if(_model == null){
@@ -30,6 +31,18 @@ class RequirementOrderFormState with ChangeNotifier{
 
   set model(RequirementOrderModel value) {
     _model = value;
+    print('==============');
+  }
+
+  RequirementOrderModel get editModel {
+    if(_editModel == null){
+      _editModel = this.detailModel;
+    }
+    return _editModel;
+  }
+
+  set editModel(RequirementOrderModel value) {
+    _editModel = value;
   }
 
   List<CooperatorModel> _cooperatorModels;
@@ -58,6 +71,9 @@ class RequirementOrderFormState with ChangeNotifier{
     _factoryModels = value;
   }
 
+  _getData(){
+
+  }
 
   //刷新model
   refresh(){
