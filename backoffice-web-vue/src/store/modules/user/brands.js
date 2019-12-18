@@ -55,7 +55,7 @@ const state = {
     businessRegistrationNo: '',
     legalRepresentative: '',
     certificateOfLegal: '',
-    qualityLevel: '',
+    salesMarket: [],
     duties: ''
   },
   addressFormData: {
@@ -91,7 +91,8 @@ const state = {
   categories: [],
   isCitiesChanged: false,
   isDistrictsChanged: false,
-  brandFormVisible: false
+  brandFormVisible: false,
+  approvalStatus: ''
 };
 
 const mutations = {

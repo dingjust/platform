@@ -12,12 +12,14 @@
                 上传企业
               </h6>
               <h6 style="font-size: 12px">
-                &nbsp;&nbsp;LOGO
+                &nbsp;&nbsp;LOGO<span style="color: red">*</span>
               </h6>
             </el-col>
             <el-col :span="18">
-              <images-upload :limit="1" :slot-data="this.profilePictures"/>
-              <h6 style="margin-left: 9px;font-size: 10px;color: grey">只支持.jpg格式</h6>
+              <el-form-item prop="profilePicture">
+                <images-upload :limit="1" :slot-data="this.profilePictures"/>
+                <h6 style="margin-left: 9px;font-size: 10px;color: grey">只支持.jpg格式</h6>
+              </el-form-item>
             </el-col>
 <!--            <el-col :span="4">-->
 <!--              <el-button size="medium" type="primary" class="toolbar-search_input"-->
@@ -31,8 +33,11 @@
                 <h6 class="titleTextClass">公司名称<span style="color: red">*</span></h6>
               </template>
               <el-row type="flex">
-                <el-input placeholder="请填写公司名称" v-model="formData.name" size="mini" :disabled="formData.approvalStatus === 'approved'"></el-input>
-<!--                <span style="width: 100px; color: #F56C6C">{{formData.approvalStatus == 'approved' ? '已认证' : '未认证'}}</span>-->
+                <el-input placeholder="请填写公司名称" v-model="formData.name" size="mini"
+                          :disabled="formData.approvalStatus === 'approved'"></el-input>
+                <el-button type="text" class="authentication-button" @click="$router.push('/Authentication')">
+                  {{formData.approvalStatus == 'approved' ? '已认证' : '未认证'}}
+                </el-button>
               </el-row>
             </el-form-item>
           </el-col>
@@ -248,8 +253,10 @@
       if (this.formData.profilePicture != null) {
         this.profilePictures = [this.formData.profilePicture];
       }
-      console.log(this.formData.profilePicture);
       this.getRegions();
+      if (this.formData.duties == null || this.formData.duties == undefined) {
+        this.formData.duties = '经理';
+      }
     }
   };
 </script>
@@ -308,3 +315,4 @@
     height: 100px;
   }
 </style>
+

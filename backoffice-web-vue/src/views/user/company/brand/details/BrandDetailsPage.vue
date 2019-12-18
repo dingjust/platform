@@ -1,9 +1,7 @@
 <template>
   <div class="animated fadeIn">
     <el-card>
-      <div class="pt-2"></div>
         <brand-from1 :formData = "formData" @onSave="onSave"></brand-from1>
-      <div class="pt-2"></div>
     </el-card>
   </div>
 </template>
@@ -74,6 +72,7 @@
         }
 
         this.getBrand();
+        this.setBrandFormVisible(false);
         this.$message.success('编辑品牌信息成功');
       },
       async getRegions () {
