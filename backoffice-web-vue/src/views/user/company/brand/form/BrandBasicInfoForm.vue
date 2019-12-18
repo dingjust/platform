@@ -254,7 +254,7 @@
         this.profilePictures = [this.formData.profilePicture];
       }
       this.getRegions();
-      if (this.formData.duties == null || this.formData.duties == undefined) {
+      if (this.formData.duties == '') {
         this.formData.duties = '经理';
       }
     }

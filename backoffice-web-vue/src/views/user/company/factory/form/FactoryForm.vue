@@ -90,6 +90,9 @@
       },
       'formData.profilePicture': function (n, o) {
         this.validateField('profilePicture');
+      },
+      'formData.categories': function (n, o) {
+        this.validateField('categories');
       }
     },
     data () {
@@ -116,6 +119,13 @@
       var checkProfilePicture = (rule, value, callback) => {
         if (this.formData.profilePicture == null) {
           return callback(new Error('请上传公司LOGO'));
+        } else {
+          callback();
+        }
+      };
+      var checkCategories = (rule, value, callback) => {
+        if (this.formData.categories.length <= 0) {
+          return callback(new Error('请选择大类'));
         } else {
           callback();
         }
@@ -150,7 +160,7 @@
             {required: true, message: '请选择品类', type: 'array', trigger: 'change'}
           ],
           'categories': [
-            {required: true, message: '请选择大类', type: 'array', trigger: 'change'}
+            {validator: checkCategories, type: 'object', trigger: 'change'}
           ],
           'profilePicture': [
             {validator: checkProfilePicture, type: 'object', trigger: 'change'}

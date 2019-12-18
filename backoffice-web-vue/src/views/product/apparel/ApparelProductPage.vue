@@ -3,7 +3,7 @@
     <el-card>
       <apparel-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
       <apparel-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-        @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf" @onOffShelf="onOffShelf" />
+        @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf" @onOffShelf="onOffShelf" @onDelete="onDelete"/>
     </el-card>
   </div>
 </template>
@@ -19,7 +19,7 @@
     mapActions
   } = createNamespacedHelpers('ApparelProductsModule');
 
-  import ApparelProductToolbar from "./toolbar/ApparelProductToolbar";
+  import ApparelProductToolbar from './toolbar/ApparelProductToolbar';
   import ApparelProductList from './list/ApparelProductList';
   import ApparelProductDetailsPage from './details/ApparelProductDetailsPage';
 
@@ -45,7 +45,7 @@
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
       }),
-      onSearch(page, size) {
+      onSearch (page, size) {
         this.setAdvancedSearch(false);
         const keyword = this.keyword;
         const url = this.apis().getApparelProducts();
@@ -56,7 +56,7 @@
           size
         });
       },
-      onAdvancedSearch(page, size) {
+      onAdvancedSearch (page, size) {
         this.setAdvancedSearch(true);
 
         const query = this.queryFormData;
@@ -68,7 +68,7 @@
           size
         });
       },
-      async onDetails(item) {
+      async onDetails (item) {
         const url = this.apis().getApparelProduct(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -83,7 +83,7 @@
         });
         // this.fn.openSlider('产品：' + item.code, ApparelProductDetailsPage, result);
       },
-      async onShelf(item) {
+      async onShelf (item) {
         const url = this.apis().onShelfProduct(item.code);
         const result = await this.$http.put(url);
         if (result['errors']) {
@@ -93,7 +93,7 @@
 
         this.refresh();
       },
-      async onOffShelf(item) {
+      async onOffShelf (item) {
         const url = this.apis().offShelfProduct(item.code);
         const result = await this.$http.put(url);
         if (result['errors']) {
@@ -103,7 +103,17 @@
 
         this.refresh();
       },
-      onNew(formData) {
+      async onDelete (item) {
+        const url = this.apis().deleteProduct(item.code);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('产品删除成功');
+        this.refresh();
+      },
+      onNew (formData) {
         this.$router.push({
           name: '产品详情',
           params: {
@@ -111,14 +121,13 @@
           }
         });
         // this.fn.openSlider('创建产品', ApparelProductDetailsPage, formData);
-      },
+      }
     },
-    data() {
+    data () {
       return {};
     },
-    created() {
+    created () {
       this.onSearch();
     }
   };
-
 </script>

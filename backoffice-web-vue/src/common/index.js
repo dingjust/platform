@@ -286,6 +286,9 @@ const COMMON_APIS = {
   offShelfProduct(code) {
     return '/b2b/products/apparel/' + code + '/off';
   },
+  deleteProduct(code) {
+    return '/b2b/products/apparel/' + code + '/deleted';
+  },
   createApparelProduct() {
     return '/b2b/products/apparel/create';
   },
@@ -566,7 +569,7 @@ const COMMON_APIS = {
   },
   ///上线倒计时/交货倒计时统计
   reportsProgress(){
-    return  'b2b/company/reports/progress'; 
+    return  'b2b/company/reports/progress';
   }
 };
 
