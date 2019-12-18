@@ -50,7 +50,7 @@
             <el-col :span="8">
               <el-form-item prop="cooperationModes">
                 <template slot="label">
-                  <h6 class="titleTextClass">合作方式</h6>
+                  <h6 class="titleTextClass">合作方式<span style="color: red">*</span></h6>
                 </template>
                 <el-select v-model="formData.cooperationModes" multiple placeholder="请选择" size="mini" style="width: 100%;">
                   <el-option
@@ -63,16 +63,40 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item prop="qualityLevel">
+<!--              <el-form-item prop="qualityLevel">-->
+<!--                <template slot="label">-->
+<!--                  <h6 class="titleTextClass">质量等级<span style="color: red">*</span></h6>-->
+<!--                </template>-->
+<!--                <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini" style="width: 100%;">-->
+<!--                  <el-option-->
+<!--                    v-for="item in factoryQualityLevels"-->
+<!--                    :key="item.code"-->
+<!--                    :label="item.name"-->
+<!--                    :value="item.code">-->
+<!--                  </el-option>-->
+<!--                </el-select>-->
+<!--              </el-form-item>-->
+              <el-form-item prop="qualityLevels">
                 <template slot="label">
-                  <h6 class="titleTextClass">质量等级</h6>
+                  <h6 class="titleTextClass">质量等级<span style="color: red">*</span></h6>
                 </template>
-                <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini" style="width: 100%;">
+                <el-select v-model="formData.qualityLevels" multiple placeholder="请选择" style="width: 100%">
+                  <el-option v-for="item in FactoryQualityLevel" :key="item.code" :label="item.name" :value="item.code">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item prop="labels">
+                <template slot="label">
+                  <h6 class="titleTextClass">工厂标签</h6>
+                </template>
+                <el-select v-model="formData.labels" multiple value-key="id" size="mini" placeholder="请选择" style="width: 100%;">
                   <el-option
-                    v-for="item in factoryQualityLevels"
-                    :key="item.code"
+                    v-for="item in labels"
+                    :key="item.id"
                     :label="item.name"
-                    :value="item.code">
+                    :value="item">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -127,7 +151,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters} = createNamespacedHelpers('FactoriesModule');
+  const {mapGetters, mapMutations} = createNamespacedHelpers('FactoriesModule');
 
   import CategorySelect from '../../../../../components/custom/CategorySelect';
   import TagsOfText from '../../../../../components/custom/TagsOfText';
@@ -138,10 +162,24 @@
     components: {ImagesUpload, TagsOfText, CategorySelect},
     computed: {
       ...mapGetters({
-        factoryFormVisible: 'factoryFormVisible'
+        factoryFormVisible: 'factoryFormVisible',
+        labels: 'labels'
       })
     },
     methods: {
+      ...mapMutations({
+        setLabels: 'setLabels'
+      }),
+      async getLabels () {
+        const url = this.apis().getGroupLabels('FACTORY');
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.setLabels(result);
+      },
       async getCategories () {
         const url = this.apis().getMinorCategories();
         const result = await this.$http.get(url);
@@ -287,7 +325,7 @@
         selectCodes: [],
         factoryDesigns: this.$store.state.EnumsModule.FactoryDesign,
         factoryPatterns: this.$store.state.EnumsModule.FactoryPattern,
-        factoryQualityLevels: this.$store.state.EnumsModule.FactoryQualityLevel,
+        FactoryQualityLevel: this.$store.state.EnumsModule.FactoryQualityLevel,
         cooperationModes: this.$store.state.EnumsModule.cooperationModes
       };
     },

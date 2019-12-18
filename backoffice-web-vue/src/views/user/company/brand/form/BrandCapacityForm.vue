@@ -31,16 +31,25 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item prop="qualityLevel">
+<!--          <el-form-item prop="salesMarket">-->
+<!--            <template slot="label">-->
+<!--              <h6 class="titleTextClass">主营市场</h6>-->
+<!--            </template>-->
+<!--            <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini" style="width: 100%;">-->
+<!--              <el-option-->
+<!--                v-for="item in factoryQualityLevels"-->
+<!--                :key="item.code"-->
+<!--                :label="item.name"-->
+<!--                :value="item.code">-->
+<!--              </el-option>-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
+          <el-form-item prop="salesMarket">
             <template slot="label">
               <h6 class="titleTextClass">主营市场</h6>
             </template>
-            <el-select v-model="formData.qualityLevel" placeholder="请选择" size="mini" style="width: 100%;">
-              <el-option
-                v-for="item in factoryQualityLevels"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code">
+            <el-select v-model="formData.salesMarket" multiple placeholder="请选择" style="width: 100%">
+              <el-option v-for="item in SalesMarkets" :key="item.code" :label="item.name" :value="item.code">
               </el-option>
             </el-select>
           </el-form-item>
@@ -79,7 +88,7 @@
           styles: this.$store.state.EnumsModule.productStyles,
           categories: [],
           scaleRanges: this.$store.state.EnumsModule.scaleRanges,
-          factoryQualityLevels: this.$store.state.EnumsModule.FactoryQualityLevel,
+          SalesMarkets: this.$store.state.EnumsModule.SalesMarkets,
           selectCodes: []
         }
       },

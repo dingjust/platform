@@ -10,7 +10,7 @@
             <el-col :span="8">
               <el-form-item prop="populationScale">
                 <template slot="label">
-                  <h6 class="titleTextClass">工厂人数</h6>
+                  <h6 class="titleTextClass">工厂人数<span style="color: red">*</span></h6>
                 </template>
                 <el-select v-model="formData.populationScale" placeholder="请选择" size="mini" style="width: 100%;">
                   <el-option
@@ -44,6 +44,9 @@
                 </template>
                 <el-row type="flex">
                   <el-select v-model="formData.scaleRange" placeholder="请选择" size="mini" style="width: 100%;">
+<!--                    <template slot = "prefix">-->
+<!--                      <span style="margin-left: 100%">元</span>-->
+<!--                    </template>-->
                     <el-option
                       v-for="item in scaleRanges"
                       :key="item.code"

@@ -55,7 +55,7 @@
         });
       },
       validateField (name) {
-        this.$refs.factoryForm.validateField(name);
+        this.$refs.brandForm.validateField(name);
       }
     },
     computed: {
@@ -63,12 +63,38 @@
         brandFormVisible: 'brandFormVisible'
       })
     },
+    watch: {
+      'formData.adeptAtCategories': function (n, o) {
+        this.validateField('adeptAtCategories');
+      },
+      'formData.profilePicture': function (n, o) {
+        this.validateField('profilePicture');
+      }
+    },
     data () {
       var cheackEquipment = (rule, value, callback) => {
         if (this.formData.cuttingDepartment.length <= 0 &&
           this.formData.productionWorkshop.length <= 0 &&
           this.formData.lastDepartment.length <= 0) {
           return callback(new Error('请选择设备'));
+        } else {
+          callback();
+        }
+      };
+      var checkContactPhone = (rule, value, callback) => {
+        let patrn = /^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!value) {
+          return callback(new Error('请输入手机号码'));
+        }
+        if (!patrn.test(this.formData.contactPhone)) {
+          return callback(new Error('请输入正确的手机号码'));
+        } else {
+          callback();
+        }
+      };
+      var checkProfilePicture = (rule, value, callback) => {
+        if (this.formData.profilePicture == null) {
+          return callback(new Error('请上传公司LOGO'));
         } else {
           callback();
         }
@@ -94,7 +120,7 @@
             {required: true, message: '请填写联系人', trigger: 'blur'}
           ],
           'contactPhone': [
-            {required: true, message: '请填写联系方式', trigger: 'blur'}
+            {validator: checkContactPhone, type: 'object', trigger: 'blur'}
           ],
           'equipment': [
             {validator: cheackEquipment, type: 'object', trigger: 'change'}
@@ -104,6 +130,9 @@
           ],
           'duties': [
             {required: true, message: '请填写职务', trigger: 'change'}
+          ],
+          'profilePicture': [
+            {validator: checkProfilePicture, type: 'object', trigger: 'change'}
           ]
         }
       }
