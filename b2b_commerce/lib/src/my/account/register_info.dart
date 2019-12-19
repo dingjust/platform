@@ -278,12 +278,8 @@ class _RegisterInfoPageState extends State<RegisterInfoPage> {
   }
 
   void onLocation() async {
-    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            AmapSearchPage(
-                city: districtModel?.city != null
-                    ? districtModel.city.name
-                    : '')));
+    Tip tip = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
     setState(() {
       List<String> locationArray = tip.location.split(',');
       longitude = double.parse(locationArray[0]);

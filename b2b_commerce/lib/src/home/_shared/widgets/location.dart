@@ -12,8 +12,8 @@ class LocationIcon extends StatelessWidget {
         builder: (context, state, _) =>
             GestureDetector(
               onTap: () async {
-                Tip tip = await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AmapSearchPage(city: state.city)));
+                Tip tip = await Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AmapSearchPage()));
                 List<String> locationArray = tip.location.split(',');
                 //设置定位信息
                 state.setAMapLocation(
@@ -70,7 +70,7 @@ class LocationIcon extends StatelessWidget {
           width: 60,
           child: Center(
               child: Text(
-            '${aMapLocation.AOIName != null ? aMapLocation.AOIName : ''}',
+                '${state.city}',
             style: TextStyle(fontSize: 12, color: Colors.black54),
             overflow: TextOverflow.ellipsis,
           )));

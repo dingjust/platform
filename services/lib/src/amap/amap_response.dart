@@ -115,3 +115,95 @@ class AmapAroundResponse {
     return int.parse(str);
   }
 }
+
+/// 高德地理编码
+@JsonSerializable()
+class Geocode {
+  @JsonKey(fromJson: _stringFromJson)
+  final String formatted_address;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String country;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String province;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String citycode;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String city;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String adcode;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String location;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String level;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String district;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String street;
+
+  @JsonKey(fromJson: _stringFromJson)
+  final String number;
+
+  Geocode(this.formatted_address,
+      this.country,
+      this.province,
+      this.citycode,
+      this.city,
+      this.location,
+      this.level,
+      this.district,
+      this.street,
+      this.number, {
+        this.adcode,
+      });
+
+  factory Geocode.fromJson(Map<String, dynamic> json) =>
+      _$GeocodeFromJson(json);
+
+  static Map<String, dynamic> toJson(Geocode model) => _$GeocodeToJson(model);
+
+  static String _stringFromJson(var val) {
+    if (val is List<dynamic>) {
+      return '';
+    } else {
+      return val;
+    }
+  }
+}
+
+/// 高德地理编码响应
+@JsonSerializable()
+class AmapGeocodeResponse {
+  @JsonKey(fromJson: _stringToInt)
+  final int status;
+
+  @JsonKey(fromJson: _stringToInt)
+  final int count;
+
+  final String info;
+
+  final String infocode;
+
+  final List<Geocode> geocodes;
+
+  AmapGeocodeResponse(this.status, this.count, this.info, this.infocode,
+      this.geocodes);
+
+  factory AmapGeocodeResponse.fromJson(Map<String, dynamic> json) =>
+      _$AmapGeocodeResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(AmapGeocodeResponse model) =>
+      _$AmapGeocodeResponseToJson(model);
+
+  static int _stringToInt(String str) {
+    return int.parse(str);
+  }
+}

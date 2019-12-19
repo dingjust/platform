@@ -92,6 +92,8 @@ class AmapState with ChangeNotifier {
   ///获取经度
   double get longitude {
     if (_aMapLocation != null) {
+      print('=====================');
+      print(_aMapLocation.AOIName);
       return _aMapLocation.longitude;
     } else {
       return 0;

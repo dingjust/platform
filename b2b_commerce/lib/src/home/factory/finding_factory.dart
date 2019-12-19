@@ -9,6 +9,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -448,8 +449,10 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
 
   void onLocation() async {
     // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
-    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => AmapSearchPage(city: aMapLocation.city)));
+    AmapState amapState = Provider.of<AmapState>(context);
+
+    Tip tip = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
     print(tip.name);
     setState(() {
       List<String> locationArray = tip.location.split(',');

@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:amap_location/amap_location.dart';
+import 'package:city_pickers/city_pickers.dart' as city_pickers;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:city_pickers/city_pickers.dart' as city_pickers;
 
 /// 产品搜索页
 class AmapSearchDelegatePage extends SearchDelegate<Tip> {
@@ -100,9 +101,7 @@ class AmapSearchDelegatePage extends SearchDelegate<Tip> {
 }
 
 class AmapSearchPage extends StatefulWidget {
-  String city;
-
-  AmapSearchPage({Key key, this.city}) : super(key: key);
+  AmapSearchPage({Key key}) : super(key: key);
 
   @override
   _AmapSearchPageState createState() => _AmapSearchPageState();
@@ -113,15 +112,11 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   AMapLocation gpsLocation;
   bool gpsLock = false;
   AmapAroundResponse amapAroundResponse;
-  String city = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (widget.city != null) {
-      city = widget.city;
-    }
   }
 
   // var _controller = StreamController<AmapAroundResponse>();
@@ -136,25 +131,28 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
           centerTitle: true,
           elevation: 0,
         ),
-        body: Container(
-          color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              _buildSearchRow(),
-              Divider(),
-              _buildLocationRow(),
-              Divider(),
-              _buildAroundLabelRow(),
-              textEditingController.text != ''
-                  ? Expanded(
-                flex: 1,
-                child: _buildSuggestionsListView(context),
-              )
-                  : Expanded(
-                flex: 1,
-                child: _buildAroundListView(context),
-              )
-            ],
+        body: Consumer<AmapState>(
+          builder: (context, state, _) =>
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    _buildSearchRow(state),
+                    Divider(),
+                    _buildLocationRow(),
+                    Divider(),
+                    _buildAroundLabelRow(),
+                    textEditingController.text != ''
+                        ? Expanded(
+                      flex: 1,
+                      child: _buildSuggestionsListView(context),
+                    )
+                        : Expanded(
+                      flex: 1,
+                      child: _buildAroundListView(context),
+                    )
+                  ],
+                ),
           ),
         ));
   }
@@ -183,7 +181,9 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
         : Container();
   }
 
-  Widget _buildSearchRow() {
+  Widget _buildSearchRow(AmapState state) {
+    AmapState amapState = Provider.of<AmapState>(context);
+
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
@@ -197,9 +197,24 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                   sideBarStyle:
                   city_pickers.BaseStyle(activeColor: Colors.orange))
                   .then((result) {
-                setState(() {
-                  city = result.cityName;
-                });
+                state.setCity(result.cityName);
+                try {
+                  AmapService.instance
+                      .AmapGeoCode(result.cityName)
+                      .then((response) {
+                    if (response.geocodes.isNotEmpty) {
+                      List<String> locationArray =
+                      response.geocodes.first.location.split(',');
+                      state.setAMapLocation(
+                          aOIName: response.geocodes.first.city,
+                          longitude: double.parse(locationArray[0]),
+                          latitude: double.parse(locationArray[1]));
+                      state.setCity(response.geocodes.first.city);
+                    }
+                  });
+                } catch (e) {
+                  print(e);
+                }
               });
             },
             child: Row(
@@ -209,7 +224,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                   size: 15,
                 ),
                 Text(
-                  '${city}',
+                  '${state.city}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -235,7 +250,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                         setState(() {
                           AmapService.instance.inputtips(
                               textEditingController.text,
-                              city: city);
+                              city: state.city);
                         });
                       },
                       scrollPadding: const EdgeInsets.all(1.0),
@@ -259,6 +274,8 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   }
 
   Widget _buildSuggestionsListView(BuildContext context) {
+    AmapState amapState = Provider.of<AmapState>(context);
+
     return FutureBuilder<AmapResponse>(
       builder: (BuildContext context, AsyncSnapshot<AmapResponse> snapshot) {
         if (snapshot.data != null) {
@@ -285,7 +302,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
       },
       initialData: null,
       future: AmapService.instance
-          .inputtips(textEditingController.text, city: city),
+          .inputtips(textEditingController.text, city: amapState.city),
     );
   }
 
