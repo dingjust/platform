@@ -64,7 +64,8 @@ const state = {
     productionWorkshop: [],
     lastDepartment: [],
     keyword: '',
-    qualityLevels: []
+    qualityLevels: [],
+    duties: ''
   },
   queryFormData: {
     labels: [],

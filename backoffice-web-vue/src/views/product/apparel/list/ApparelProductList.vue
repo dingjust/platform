@@ -31,6 +31,7 @@
             @click="onOffShelf(scope.row)">
             下架
           </el-button>
+          <el-button v-if="scope.row.approvalStatus==='unapproved'" type="text" icon="el-icon-edit" @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -43,56 +44,64 @@
 
 <script>
   export default {
-    name: "ApparelProductList",
-    props: ["page"],
+    name: 'ApparelProductList',
+    props: ['page'],
     computed: {},
     methods: {
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
-          this.$emit("onAdvancedSearch", val);
+          this.$emit('onAdvancedSearch', val);
           return;
         }
 
-        this.$emit("onSearch", 0, val);
+        this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
-          this.$emit("onAdvancedSearch", val - 1);
+          this.$emit('onAdvancedSearch', val - 1);
           return;
         }
 
-        this.$emit("onSearch", val - 1);
+        this.$emit('onSearch', val - 1);
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
-        this.$emit("onDetails", row);
+      onDetails (row) {
+        this.$emit('onDetails', row);
       },
-      onShelf(row) {
-        this.$emit("onShelf", row);
+      onShelf (row) {
+        this.$emit('onShelf', row);
       },
-      onOffShelf(row) {
-        this.$emit("onOffShelf", row);
+      onOffShelf (row) {
+        this.$emit('onOffShelf', row);
       },
-      numberFormatter(val) {
-        if (val.price !== null && val.price !== "" && val.price !== "undefined") {
+      onDelete (row) {
+        this.$confirm('您确定要删除该商品吗？删除以后不能恢复！', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$emit('onDelete', row);
+        })
+      },
+      numberFormatter (val) {
+        if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
           return parseFloat(val.price).toFixed(2);
         }
       },
-      handleSelectionChange(val) {
+      handleSelectionChange (val) {
         this.multipleSelection = val;
       }
     },
-    data() {
+    data () {
       return {
         multipleSelection: []
       };
     }
   };
-
 </script>

@@ -17,6 +17,7 @@ const state = {
     uid: '',
     name: '',
     registrationDate: null,
+    profilePicture: null,
     scaleRange: '',
     contactAddress: {
       id: null,
