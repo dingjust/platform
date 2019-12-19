@@ -12,6 +12,7 @@ import '../_shared/widgets/image_factory.dart';
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
 import '../common/app_routes.dart';
+import 'account/profile.dart';
 import 'my_authentication.dart';
 
 var menuSeparator = Container(
@@ -20,11 +21,16 @@ var menuSeparator = Container(
 );
 
 /// 我的
-class MyHomePage extends StatelessWidget {
-  static final GlobalKey<ScaffoldState> _scaffoldKey =
-  GlobalKey<ScaffoldState>();
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
 
   MyHomePage() : super(key: AppKeys.myHomePage);
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  static final GlobalKey<ScaffoldState> _scaffoldKey =
+  GlobalKey<ScaffoldState>();
 
   final double _appBarHeight = 160.0;
 
@@ -127,6 +133,13 @@ class MyHomePage extends StatelessWidget {
         if (user.status != UserStatus.ONLINE) {
           Navigator.of(context)
               .push((MaterialPageRoute(builder: (context) => B2BLoginPage())));
+        } else {
+          Navigator.of(context)
+              .push((MaterialPageRoute(builder: (context) => ProfilePage())))
+              .then((val) {
+            //修改资料后刷新
+            setState(() {});
+          });
         }
       },
       child: Container(
@@ -152,7 +165,7 @@ class MyHomePage extends StatelessWidget {
       height: 80,
       margin: const EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
-        child: ImageFactory.buildDefaultAvatar(user.b2bUnit?.profilePicture),
+        child: ImageFactory.buildDefaultAvatar(user.profilePicture),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white, width: 0.5),
           color: Colors.white,

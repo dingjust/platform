@@ -85,6 +85,8 @@ dependencies:
   orientation: ^1.1.0
   location_permissions: ^2.0.3
   city_pickers: ^0.1.29
+  bot_toast: ^2.2.0
+
 
 
 dev_dependencies:
