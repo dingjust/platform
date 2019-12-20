@@ -81,6 +81,12 @@ abstract class UserApis {
         return '/{baseSiteId}/users/anonymous/resetPasswordByCaptcha/$id';
       };
 
+  ///重置密码
+  static get resetPasswordByPassword =>
+          (id) {
+        return '/{baseSiteId}/users/$id/password';
+      };
+
   ///获取钱包
   static get getCompanyWallet => '/{baseSiteId}/companyWallet';
 
