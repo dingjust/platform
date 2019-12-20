@@ -288,4 +288,28 @@ class UserRepositoryImpl implements UserRepository {
 
     return result;
   }
+
+  @override
+
+  /// 更新用户资料
+  Future<bool> updateUserInfo(String uid, String name, String phone,
+      MediaModel media) async {
+    Response response;
+    bool result;
+    try {
+      response = await http$.put(UserApis.updateUserInfo(uid), data: {
+        'name': name,
+        'contactPhone': phone,
+        'profilePicture': MediaModel.toJson(media)
+      });
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = true;
+    } else {
+      result = false;
+    }
+    return result;
+  }
 }

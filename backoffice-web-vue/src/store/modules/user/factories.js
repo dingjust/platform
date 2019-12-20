@@ -63,7 +63,9 @@ const state = {
     cuttingDepartment: [],
     productionWorkshop: [],
     lastDepartment: [],
-    keyword: ''
+    keyword: '',
+    qualityLevels: [],
+    duties: ''
   },
   queryFormData: {
     labels: [],

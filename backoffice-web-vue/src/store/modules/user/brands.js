@@ -17,6 +17,7 @@ const state = {
     uid: '',
     name: '',
     registrationDate: null,
+    profilePicture: null,
     scaleRange: '',
     contactAddress: {
       id: null,
@@ -55,7 +56,7 @@ const state = {
     businessRegistrationNo: '',
     legalRepresentative: '',
     certificateOfLegal: '',
-    qualityLevel: '',
+    salesMarket: [],
     duties: ''
   },
   addressFormData: {
@@ -91,7 +92,8 @@ const state = {
   categories: [],
   isCitiesChanged: false,
   isDistrictsChanged: false,
-  brandFormVisible: false
+  brandFormVisible: false,
+  approvalStatus: ''
 };
 
 const mutations = {

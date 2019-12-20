@@ -99,23 +99,23 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
         ),
       ),
       Divider(),
-       TextFieldComponent(
-         isRequired: true,
-         focusNode: _line1FocusNode,
-         controller: _line1Controller,
-         leadingText: Text('详细地址',
-             style: TextStyle(
-               fontSize: 16,
-             )),
-         hintText: '道路、门牌号、小区、楼栋号、单元室等',
-         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-         dividerPadding: EdgeInsets.symmetric(),
-         maxLines: 1,
-         onChanged: (v){
-           widget.address.line1=
-           _line1Controller.text == '' ? null : _line1Controller.text;
-         },
-       ),
+      TextFieldComponent(
+        isRequired: true,
+        focusNode: _line1FocusNode,
+        controller: _line1Controller,
+        leadingText: Text('详细地址',
+            style: TextStyle(
+              fontSize: 16,
+            )),
+        hintText: '道路、门牌号、小区、楼栋号、单元室等',
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+        dividerPadding: EdgeInsets.symmetric(),
+        maxLines: 1,
+        onChanged: (v) {
+          widget.address.line1 =
+          _line1Controller.text == '' ? null : _line1Controller.text;
+        },
+      ),
 //      InputRow(
 //          label: '详细地址',
 //          isRequired: true,
@@ -156,11 +156,11 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
                 style: TextStyle(),
               ),
               onPressed: () async {
-                if(widget.address.region == null){
+                if (widget.address.region == null) {
                   _showValidateMsg(context, '请选择省市区');
                   return;
                 }
-                if(_line1Controller.text == ''){
+                if (_line1Controller.text == '') {
                   _showValidateMsg(context, '请填写详细地址');
                   return;
                 }
@@ -182,8 +182,8 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
     // Tip tip = await showSearch(
     //     context: context,
     //     delegate: AmapSearchDelegatePage(city: widget.address.city.name));
-    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => AmapSearchPage(city: widget.address.city.name)));
+    Tip tip = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
 
     setState(() {
       List<String> locationArray = tip.location.split(',');
@@ -224,6 +224,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           });
     }
   }
+
   //非空提示
   bool _showValidateMsg(BuildContext context, String message) {
     _validateMessage(context, '${message}');
@@ -296,5 +297,4 @@ class TipRow extends StatelessWidget {
           )),
     );
   }
-
 }
