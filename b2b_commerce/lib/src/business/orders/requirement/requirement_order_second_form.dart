@@ -4,12 +4,10 @@ import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_select_publish_target_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_third_form.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 import 'package:core/core.dart';
@@ -34,6 +32,9 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
 
   @override
   void initState() {
+    if(widget.formState.factoryUid != null){
+      _factoryUids.add(widget.formState.factoryUid);
+    }
     super.initForm();
     super.initCreate(widget.formState.model);
     super.initState();
@@ -502,14 +503,18 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          width: 100,
-                          child: Text(
-                            '发布方式',
-                            style: TextStyle(fontSize: 16),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            width: 100,
+                            child: Text(
+                              '发布方式',
+                              style: TextStyle(fontSize: 16),
+                            ),
                           ),
                         ),
                         Expanded(
+                          flex: 3,
                           child: GridView.count(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -517,84 +522,163 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                             childAspectRatio: 5,
                             padding: EdgeInsets.zero,
                             children: List.generate(PublishingModesEnum.length,
-                                (index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    widget.formState.model.details
+                                    (index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        widget.formState.model.details
                                             .publishingMode =
-                                        PublishingModesEnum[index].code;
-                                  });
-                                },
-                                child: Row(
-                                  children: <Widget>[
-                                    Radio(
-                                        value: PublishingModesEnum[index].code,
-                                        groupValue: widget.formState.model
-                                            .details.publishingMode,
-                                        onChanged: (v) {
-                                          setState(() {
-                                            widget.formState.model.details
+                                            PublishingModesEnum[index].code;
+                                      });
+                                    },
+                                    child: Row(
+                                      children: <Widget>[
+                                        Radio(
+                                            value: PublishingModesEnum[index].code,
+                                            groupValue: widget.formState.model
+                                                .details.publishingMode,
+                                            onChanged: (v) {
+                                              setState(() {
+                                                widget.formState.model.details
                                                     .publishingMode =
-                                                PublishingModesEnum[index].code;
-                                          });
-                                        }),
-                                    Expanded(
-                                      child: Text(
-                                        PublishingModesEnum[index].name,
-                                        softWrap: false,
-                                        overflow: TextOverflow.visible,
-                                      ),
+                                                    PublishingModesEnum[index].code;
+                                              });
+                                            }),
+                                        Expanded(
+                                          child: Text(
+                                            PublishingModesEnum[index].name,
+                                            softWrap: false,
+                                            overflow: TextOverflow.visible,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            }),
+                                  );
+                                }),
                           ),
                         ),
                       ],
                     ),
-                    Offstage(
-                      offstage: widget.formState.model.details.publishingMode != 'PRIVATE',
-                      child: GestureDetector(
-                        onTap: ()async{
-                          dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
-                          if(result != null){
-                            _factoryUids = result;
-                          }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text('去选择对象'),
-                            Container(
-                                width: 10,
-                                child: Icon(
-                                  Icons.chevron_right,
-                                  size: 20,
-                                  textDirection: TextDirection.ltr,
-                                )),
-                            Icon(Icons.chevron_right, size: 20),
-                          ],
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: 70,
+                          margin: EdgeInsets.only(right: 40,),
+                          child: GestureDetector(
+                            onTap: (){
+                              showDialog(context: (context),builder: (context){
+                                return MessageDialog(
+                                  title: Text('如何选择发布方式',style: TextStyle(fontSize: 18),),
+                                  message: RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        text: '公开发布：',
+                                        style: TextStyle(fontSize: 16, color: Colors.red),
+                                      ),
+                                      TextSpan(
+                                        text: '可邀请工厂进行报价，需求发布后所有工厂都能看见，也可以对需求进行报价。',
+                                        style: TextStyle(fontSize: 16,color: Colors.black)
+                                      ),
+                                      TextSpan(
+                                        text: '\n\n'
+                                      ),
+                                      TextSpan(
+                                        text: '私密发布：',
+                                        style: TextStyle(fontSize: 16, color: Colors.red),
+                                      ),
+                                      TextSpan(
+                                          text: '需求发布后只能被已选择的工厂看见，且只有被选择的工厂才能进行报价。',
+                                          style: TextStyle(fontSize: 16,color: Colors.black)
+                                      ),
+                                    ]),
+                                  ),
+                                  onCloseEvent: (){
+                                    Navigator.pop(context);
+                                  },
+                                  negativeText: '我知道了',
+                                );
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(left: 0),
+                              child: Icon(Icons.help,color: Colors.red,size: 20,),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Offstage(
-                      offstage: widget.formState.model.details.publishingMode != 'PRIVATE',
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          RichText(text: TextSpan(
-                            style:TextStyle(fontSize: 13),
+                        Expanded(
+                          flex: 3,
+                          child: GridView.count(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            crossAxisCount: 2,
+                            childAspectRatio: 5,
+                            padding: EdgeInsets.zero,
                             children: [
-                              TextSpan(text: '已选择',style: TextStyle(color: Colors.black),),
-                              TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
-                              TextSpan(text: '家工厂',style: TextStyle(color: Colors.black),),
+                              Opacity(
+                                opacity: widget.formState.model.details.publishingMode == 'PUBLIC' ? 1 : 0,
+                                child: GestureDetector(
+                                  onTap: ()async{
+                                    dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
+                                    if(result != null){
+                                      _factoryUids = result;
+                                    }
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      RichText(text: TextSpan(
+                                          style:TextStyle(fontSize: 13),
+                                          children: [
+                                            TextSpan(text: '已邀请报价',style: TextStyle(color: Colors.black),),
+                                            TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
+                                          ]
+                                      ),),
+                                      Container(
+                                          width: 10,
+                                          child: Icon(
+                                            Icons.chevron_right,
+                                            size: 20,
+                                            textDirection: TextDirection.ltr,
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Opacity(
+                                opacity: widget.formState.model.details.publishingMode == 'PRIVATE' ? 1 : 0,
+                                child: GestureDetector(
+                                  onTap: ()async{
+                                    dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
+                                    if(result != null){
+                                      _factoryUids = result;
+                                    }
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      RichText(text: TextSpan(
+                                          style:TextStyle(fontSize: 13),
+                                          children: [
+                                            TextSpan(text: '已指定工厂',style: TextStyle(color: Colors.black),),
+                                            TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
+                                          ]
+                                      ),),
+                                      Container(
+                                          width: 10,
+                                          child: Icon(
+                                            Icons.chevron_right,
+                                            size: 20,
+                                            textDirection: TextDirection.ltr,
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ]
-                          ),)
-                        ],
-                      ),
-                    )
+                          ),
+                        ),
+                      ],
+                    ),
+
                   ],
                 )),
             Container(
@@ -603,14 +687,15 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Container(
-                      width: 100,
+                    Expanded(
+                      flex: 1,
                       child: Text(
                         '有效期限',
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
                     Expanded(
+                      flex: 3,
                       child: GridView.count(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,

@@ -653,103 +653,62 @@ class _RequirementOrderDetailByFactoryPageState
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            flex: 2,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                FlatButton(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        child: Icon(
-                          Icons.phone,
-                          color: Colors.white,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(8)),
-                        padding: EdgeInsets.all(2),
-                      ),
-                      Text(model?.details?.contactPerson ?? ''),
-                    ],
+            flex: 1,
+            child: FlatButton(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Icon(
+                      Icons.phone,
+                      color: Colors.white,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(8)),
+                    padding: EdgeInsets.all(2),
                   ),
-                  onPressed: () {
-                    _selectActionButton(model?.details?.contactPhone);
-                  },
-                ),
-              ],
+                  Text(model?.details?.contactPerson ?? ''),
+                ],
+              ),
+              onPressed: () {
+                _selectActionButton(model?.details?.contactPhone);
+              },
             ),
           ),
           Expanded(
-            flex: 3,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container()
-//                  Container(
-//                      height: double.infinity,
-//                      child:
-//                      Theme(
-//                          data: ThemeData(
-//                            canvasColor: Colors.transparent,
-//                            primaryColor: Colors.white,
-//                            accentColor: Color.fromRGBO(255, 214, 12, 1),
-//                            bottomAppBarColor: Colors.grey,
-//                          ),
-//                          child: Builder(
-//                            builder: (BuildContext buttonContext) =>
-//                                FlatButton(
-//                                  color: Color.fromRGBO(255, 245, 157, 1),
-//                                  onPressed: () {
-//                                  },
-//                                  disabledColor: Colors.grey[300],
-//                                  child: Text(
-//                                    '联系',
-//                                    style: TextStyle(fontSize: 15),
-//                                  ),
-//                                ),
-//                          ))
-//                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                      height: double.infinity,
-                      child: Builder(
-                        builder: (BuildContext buttonContext) =>
-                            FlatButton(
-                              color: Color.fromRGBO(255, 214, 12, 1),
-                              onPressed: () async{
-                                QuoteModel newQuote =
-                                    await Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        RequirementQuoteOrderForm(
-                                          model: orderModel,
-                                          quoteModel: QuoteModel(attachments: []),
-                                        )));
+            flex: 1,
+            child: Container(
+                height: double.infinity,
+                child: Builder(
+                  builder: (BuildContext buttonContext) =>
+                      FlatButton(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        onPressed: () async{
+                          QuoteModel newQuote =
+                              await Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  RequirementQuoteOrderForm(
+                                    model: orderModel,
+                                    quoteModel: QuoteModel(attachments: []),
+                                  )));
 
-                                if (newQuote != null) {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          QuoteOrderDetailPage(
-                                            newQuote.code,
-                                          )));
-                                }
-                              },
-                              disabledColor: Colors.grey[300],
-                              child: Text(
-                                '去报价',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ),
-                      )),
-                )
-              ],
-            ),
+                          if (newQuote != null) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    QuoteOrderDetailPage(
+                                      newQuote.code,
+                                    )));
+                          }
+                        },
+                        disabledColor: Colors.grey[300],
+                        child: Text(
+                          '去报价',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                )),
           )
         ],
       ),

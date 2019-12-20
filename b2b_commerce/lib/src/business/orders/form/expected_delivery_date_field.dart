@@ -41,7 +41,7 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
                   height: 43,
                   decoration: BoxDecoration(
                     color: Colors.grey[50],
-                    border: Border.all(color: Colors.black45),
+//                    border: Border.all(color: Colors.black45),
                     borderRadius: BorderRadius.circular(4),
 
                   ),

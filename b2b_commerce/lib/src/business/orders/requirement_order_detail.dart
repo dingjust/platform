@@ -965,6 +965,18 @@ class _RequirementOrderDetailPageState
     }
   }
 
+  Future<bool> _onCancle(){
+    bool result = false;
+    try{
+      widget.onRequirementCancle();
+      result = true;
+    }catch(e){
+      result = false;
+    }
+
+    return Future.value(result);
+  }
+
   onMenuSelect(String value) async {
     switch (value) {
       case 'edit':
@@ -984,11 +996,34 @@ class _RequirementOrderDetailPageState
                 cancelButtonText: '取消',
                 dialogHeight: 180,
                 confirmAction: () async {
-                  await widget.onRequirementCancle();
-                  setState(() {
-                    orderModel.status = RequirementOrderStatus.CANCELLED;
+                  Navigator.pop(context);
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoading(
+                          requestCallBack: _onCancle(),
+                          outsideDismiss: false,
+                          loadingText: '正在关闭。。。',
+                          entrance: '',
+                        );
+                      }).then((value) {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            successTips: '关闭成功',
+                            failTips: '关闭失败',
+                            callbackResult: value,
+                            confirmAction: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          );
+                        });
                   });
-                  Navigator.of(context).pop();
                 },
               );
             });
@@ -1005,12 +1040,12 @@ class _RequirementOrderDetailPageState
         builder: (context) => MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              builder: (_) => RequirementOrderEditFormState(detailModel: orderModel),
+              builder: (_) => RequirementOrderFormState(detailModel: orderModel),
             ),
           ],
           child: Builder(
             builder: (context) {
-              RequirementOrderEditFormState state = Provider.of<RequirementOrderEditFormState>(context);
+              RequirementOrderFormState state = Provider.of<RequirementOrderFormState>(context);
               print('dddd');
               return RequirementOrderSecondEditForm(formState: state,);
             }

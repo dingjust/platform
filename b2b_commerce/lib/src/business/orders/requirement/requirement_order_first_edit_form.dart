@@ -16,7 +16,7 @@ class RequirementOrderFirstEditForm extends StatefulWidget {
     this.formState,
   });
 
-  final RequirementOrderEditFormState formState;
+  final RequirementOrderFormState formState;
 
   _RequirementOrderFirstEditFormState createState() =>
       _RequirementOrderFirstEditFormState();
@@ -35,17 +35,17 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        if (widget.formState.model.details.majorCategory == null) {
+        if (widget.formState.editModel.details.majorCategory == null) {
           ShowDialogUtil.showValidateMsg(context, '请选择面料类别');
           return Future.value(false);
         }
-        if (widget.formState.model.details.category == null) {
+        if (widget.formState.editModel.details.category == null) {
           ShowDialogUtil.showValidateMsg(context, '请选择品类');
           return Future.value(false);
         }
-        if (widget.formState.model.details.productiveOrientations ==
+        if (widget.formState.editModel.details.productiveOrientations ==
             null ||
-            widget.formState.model.details.productiveOrientations
+            widget.formState.editModel.details.productiveOrientations
                 .length ==
                 0) {
           ShowDialogUtil.showValidateMsg(context, '请选择工厂区域');
@@ -79,17 +79,17 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
               onPressed: () async {
-                if (widget.formState.model.details.majorCategory == null) {
+                if (widget.formState.editModel.details.majorCategory == null) {
                   ShowDialogUtil.showValidateMsg(context, '请选择面料类别');
                   return;
                 }
-                if (widget.formState.model.details.category == null) {
+                if (widget.formState.editModel.details.category == null) {
                   ShowDialogUtil.showValidateMsg(context, '请选择品类');
                   return;
                 }
-                if (widget.formState.model.details.productiveOrientations ==
+                if (widget.formState.editModel.details.productiveOrientations ==
                         null ||
-                    widget.formState.model.details.productiveOrientations
+                    widget.formState.editModel.details.productiveOrientations
                             .length ==
                         0) {
                   ShowDialogUtil.showValidateMsg(context, '请选择工厂区域');
@@ -141,8 +141,8 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                           SingleMajorCategorySelect(
                             categories: snapshot.data,
                             categorySelect:
-                                widget.formState.model.details.majorCategory,
-                            onItemTap: (categoryModel) => widget.formState.model
+                                widget.formState.editModel.details.majorCategory,
+                            onItemTap: (categoryModel) => widget.formState.editModel
                                 .details.majorCategory = categoryModel,
                           ),
                         ],
@@ -206,8 +206,8 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                                     ),
                                     TextSpan(
                                       text:
-                                          '${widget.formState.model.details.category?.parent != null ? widget.formState.model.details.category.parent.name + '-' : ''}'
-                                          '${widget.formState.model.details.category?.name ?? ''}',
+                                          '${widget.formState.editModel.details.category?.parent != null ? widget.formState.editModel.details.category.parent.name + '-' : ''}'
+                                          '${widget.formState.editModel.details.category?.name ?? ''}',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16.0,
@@ -219,7 +219,7 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                           SingleMajorCategorySelectGridView(
                             categories: snapshot.data,
                             categorySelect:
-                                widget.formState.model.details.category?.parent,
+                                widget.formState.editModel.details.category?.parent,
                             onItemTap: (categoryModel) {
                               showModalBottomSheet(
                                   context: context,
@@ -245,7 +245,7 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                                                   .model.details.category,
                                               onItemTap: (categoryModel) {
                                                 setState(() {
-                                                  widget.formState.model.details
+                                                  widget.formState.editModel.details
                                                       .category = categoryModel;
                                                   Navigator.of(context).pop();
                                                 });
@@ -308,7 +308,7 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                           ),
                           TextSpan(
                             text: formatAreaSelectsText(
-                                widget.formState.model.details
+                                widget.formState.editModel.details
                                     .productiveOrientations,
                                 2),
                             style: TextStyle(
@@ -345,7 +345,7 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                                       .model
                                       .details
                                       .productiveOrientations) &&
-                                  widget.formState.model.details
+                                  widget.formState.editModel.details
                                           .productiveOrientations
                                           .indexWhere(
                                         (region) => region.isocode == 'CN-10',
@@ -377,14 +377,14 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                                         .map<RegionModel>((region) =>
                                             RegionModel.fromJson(region))
                                         .toList(),
-                                    regionSelects: widget.formState.model
+                                    regionSelects: widget.formState.editModel
                                         .details.productiveOrientations,
                                     multiple: true,
                                   );
                                 },
                               ).then((v) {
                                 setState(() {
-                                  widget.formState.model.details
+                                  widget.formState.editModel.details
                                       .productiveOrientations
                                       .removeWhere((region) =>
                                           region.isocode == 'CN-10');
@@ -401,7 +401,7 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                                       .model
                                       .details
                                       .productiveOrientations) &&
-                                  widget.formState.model.details
+                                  widget.formState.editModel.details
                                           .productiveOrientations
                                           .indexWhere(
                                         (region) => region.isocode == 'CN-10',
@@ -431,7 +431,7 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
   String formatAreaSelectsText(List<RegionModel> selects, int count) {
     String text = '';
 
-    if (widget.formState.model.details.productiveOrientations.indexWhere(
+    if (widget.formState.editModel.details.productiveOrientations.indexWhere(
           (region) => region.isocode == 'CN-10',
         ) >
         -1) {
