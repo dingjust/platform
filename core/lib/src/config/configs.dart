@@ -56,6 +56,8 @@ class GlobalConfigs {
 
   //合作商选择页搜索
   static const COOPERATOR_SELECT_HISTORY_KEYWORD_KEY = 'cooperator_select_history_keyword_key';
+  //需求选择页搜索
+  static const REQURIEMEN_ORDER_SELECT_HISTORY_KEYWORD_KEY = 'requriemen_order_select_history_keyword_key';
 
   //生产订单选择页搜索
   static const PURCHASE_ORDER_SELECT_HISTORY_KEYWORD_KEY = 'purchase_order_select_history_keyword_key';
