@@ -587,7 +587,7 @@ class _RequirementOrderDetailPageState
                   child: Text(
                     orderModel.details.invoiceNeeded == null
                         ? ''
-                        : orderModel.details.invoiceNeeded ? '开票' : '不开票',
+                        : orderModel.details.invoiceNeeded ? '是' : '否',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -1167,28 +1167,3 @@ class _RequirementOrderDetailPageState
   }
 }
 
-class InfoRow extends StatelessWidget {
-  const InfoRow({Key key, this.label, this.value, this.hasBottomBorder = true})
-      : super(key: key);
-
-  final String label;
-  final Widget value;
-  final bool hasBottomBorder;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            label,
-            style: TextStyle(fontSize: 16),
-          ),
-          value
-        ],
-      ),
-    );
-  }
-}
