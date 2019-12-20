@@ -4,8 +4,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class FactorySelectedListItem extends StatelessWidget {
-  const FactorySelectedListItem({
+class FactoryNoSelectedListItem extends StatelessWidget {
+  const FactoryNoSelectedListItem({
     Key key,
     @required this.model,
   }) : super(key: key);
@@ -19,13 +19,12 @@ class FactorySelectedListItem extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(right: 15),
-          child:  Container(
+          child: Container(
             width: 20,
+            height: 20,
             decoration: ShapeDecoration(
-              color: Colors.blue,
-              shape: CircleBorder(side: BorderSide(color: Colors.grey,style: BorderStyle.none)),
+              shape: CircleBorder(side: BorderSide(color: Colors.grey,)),
             ),
-            child: Icon(Icons.check,size: 15,color: Colors.white,),
           ),
         ),
         Expanded(

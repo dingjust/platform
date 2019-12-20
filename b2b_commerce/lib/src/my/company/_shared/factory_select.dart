@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:b2b_commerce/src/my/company/_shared/factory_list_item.dart';
+import 'package:b2b_commerce/src/my/company/_shared/factory_no_selected_list_item.dart';
 import 'package:b2b_commerce/src/my/company/_shared/factory_selected_list_item.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -373,7 +374,7 @@ class _FactorySelectPageState extends State<FactorySelectPage> {
                         ),
                       ),
                       Expanded(
-                          child: FactoryListView(
+                          child: FactorySelectListView(
                             factoryCondition: factoryCondition,
                             currentCondition: currentCondition,
                             currentLocalCondition: currentLocalCondition,
@@ -469,8 +470,8 @@ class ConditionPageButton extends StatelessWidget {
   }
 }
 
-class FactoryListView extends StatefulWidget {
-  FactoryListView({
+class FactorySelectListView extends StatefulWidget {
+  FactorySelectListView({
         this.factoryCondition,
         this.factoryModels,
         this.currentLocalCondition,
@@ -487,10 +488,10 @@ class FactoryListView extends StatefulWidget {
   FilterConditionEntry currentLocalCondition;
 
   @override
-  State<StatefulWidget> createState() => _FactoryListViewState();
+  State<StatefulWidget> createState() => _FactorySelectListViewState();
 }
 
-class _FactoryListViewState extends State<FactoryListView> {
+class _FactorySelectListViewState extends State<FactorySelectListView> {
   final ScrollController _scrollController = ScrollController();
 
   List<String> _factoryUids = [];
@@ -615,7 +616,7 @@ class _FactoryListViewState extends State<FactoryListView> {
                             decoration: ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),color: Colors.white,),
                             child: _factoryUids .contains(item.uid) ? FactorySelectedListItem(
                               model: item,
-                            ) : FactoryListItem(
+                            ) : FactoryNoSelectedListItem(
                               model: item,
                             ),
                           ),

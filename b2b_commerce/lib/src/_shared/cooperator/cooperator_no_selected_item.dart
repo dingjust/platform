@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
-class CooperatorSelectedItem extends StatelessWidget {
-  const CooperatorSelectedItem({
+class CooperatorNoSelectedItem extends StatelessWidget {
+  const CooperatorNoSelectedItem({
     Key key,
     @required this.model,
   }) : super(key: key);
@@ -15,8 +15,8 @@ class CooperatorSelectedItem extends StatelessWidget {
     return Container(
       height: 60,
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
 //            border: Border.all(color: Colors.grey),
       ),
       child: Row(
@@ -24,13 +24,12 @@ class CooperatorSelectedItem extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child:  Container(
+            child: Container(
               width: 20,
+              height: 20,
               decoration: ShapeDecoration(
-                color: Colors.blue,
-                shape: CircleBorder(side: BorderSide(color: Colors.grey,style: BorderStyle.none)),
+                shape: CircleBorder(side: BorderSide(color: Colors.grey,)),
               ),
-              child: Icon(Icons.check,size: 15,color: Colors.white,),
             ),
           ),
           Expanded(child: Text('${model?.partner?.name}',style: TextStyle(color: Colors.black,fontSize: 18),)),

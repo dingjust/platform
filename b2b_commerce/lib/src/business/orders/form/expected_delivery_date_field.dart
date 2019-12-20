@@ -17,37 +17,51 @@ class ExpectedDeliveryDateFieldState extends State<ExpectedDeliveryDateField> {
     now = now.add(Duration(days: 1));
 
     return GestureDetector(
-        child: ListTile(
-            leading: Wrap(
-              children: <Widget>[
-                Text(
-                  '交货日期',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: '交货日期',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
-                ),
-                Text(
-                    ' *',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.red)
-                ),
-              ],
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(fontSize: 16, color: Colors.red),
+                  )
+                ]),
+              ),
             ),
-            trailing: Container(
-                width: 150,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                      widget.item.details?.expectedDeliveryDate == null ? '选取' :
+            Expanded(
+              flex: 2,
+              child: Container(
+//                  width: 152,
+                  height: 43,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+//                    border: Border.all(color: Colors.black45),
+                    borderRadius: BorderRadius.circular(4),
+
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                          widget.item.details?.expectedDeliveryDate == null ? '选取' :
                           DateFormatUtil.formatYMD(widget.item.details?.expectedDeliveryDate),
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey),
-                      overflow: TextOverflow.ellipsis),
-                ))),
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey),
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                  )),
+            )
+          ],
+        ),
         onTap: () {
           showDatePicker(
             context: context,

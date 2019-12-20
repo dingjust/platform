@@ -45,9 +45,9 @@ class _RequirementOrderSelectPublishTargetFormState
   void initState() {
     print(widget.formState.cooperatorModels);
     print(widget.formState.factoryModels);
+    print(widget.formState.factoryModel);
     _cooperatorModels = List.from(widget.formState.cooperatorModels);
     _factoryModels = List.from(widget.formState.factoryModels);
-
     super.initState();
   }
 
@@ -68,7 +68,7 @@ class _RequirementOrderSelectPublishTargetFormState
         child: RaisedButton(
             color: Color.fromRGBO(255, 214, 12, 1),
             child: Text(
-              '确定',
+              '确       定',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
@@ -94,139 +94,210 @@ class _RequirementOrderSelectPublishTargetFormState
           color: Colors.white,
           child: Column(
             children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(top: 10, right: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    RaisedButton(
-                      color: Color(0xffffd60c),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      onPressed: () async {
-                        dynamic result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CooperatorSelectPage(models: this._cooperatorModels,)));
+              InkWell(
+                onTap: ()async{
+                  dynamic result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CooperatorSelectPage(models: this._cooperatorModels,)));
 
-                        if(result != null){
-                          this._cooperatorModels = result;
-                        }
-                      },
-                      child: Text('选择我的线上合作商'),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 10, right: 15,bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text: '已选择',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        TextSpan(
-                          text: this._cooperatorModels.length.toString(),
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        TextSpan(
-                          text: '家',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ]),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
+                  if(result != null){
+                    this._cooperatorModels = result;
+                  }
+                },
                 child: Container(
-                  margin: EdgeInsets.all(10),
-                  decoration: ShapeDecoration(
-                    shape: Border.all(color: Colors.grey),
-                  ),
-                  child: ListView(
-                    children: this._cooperatorModels != null
-                        ? this._cooperatorModels.map((cooperator) {
-                      return _buildRow(cooperator);
-                    }).toList()
-                        : Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('从我的供应商中选择'),
+                      Row(
+                        children: <Widget>[
+                          RichText(text: TextSpan(
+                              children: [
+                                TextSpan(text: '已选择',style: TextStyle(color: Colors.black,)),
+                                TextSpan(text: this._cooperatorModels.length.toString(),style: TextStyle(color: Colors.red,)),
+                                TextSpan(text: '家',style: TextStyle(color: Colors.black,)),
+                              ]
+                          ),),
+                          Icon(Icons.chevron_right),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(top: 10, right: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    RaisedButton(
-                      color: Color(0xffffd60c),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      onPressed: () async {
-                        dynamic result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    FactorySelectPage(factoryModels: this._factoryModels,)));
+              Divider(height: 0,),
+              InkWell(
+                onTap: ()async{
+                  dynamic result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              FactorySelectPage(factoryModels: this._factoryModels,)));
 
-                        print(result);
-                        if(result != null){
-                          this._factoryModels = result;
-                        }
-                      },
-                      child: Text('选择全部工厂'),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 10, right: 15,bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text: '已选择',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        TextSpan(
-                          text: this._factoryModels.length.toString(),
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        TextSpan(
-                          text: '家',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ]),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
+                  print(result);
+                  if(result != null){
+                    this._factoryModels = result;
+                  }
+                },
                 child: Container(
-                  margin: EdgeInsets.all(10),
-                  decoration: ShapeDecoration(
-                    shape: Border.all(color: Colors.grey),
-                  ),
-                  child: ListView(
-                    children: this._factoryModels != null
-                        ? this._factoryModels.map((factory) {
-                      return _buildFactoryItemRow(factory);
-                    }).toList()
-                        : Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('从全部工厂中选择'),
+                      Row(
+                        children: <Widget>[
+                          RichText(text: TextSpan(
+                            children: [
+                              TextSpan(text: '已选择',style: TextStyle(color: Colors.black,)),
+                              TextSpan(text: this._factoryModels.length.toString(),style: TextStyle(color: Colors.red,)),
+                              TextSpan(text: '家',style: TextStyle(color: Colors.black,)),
+                            ]
+                          ),),
+                          Icon(Icons.chevron_right),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
+              Divider(height: 0,),
+//              Container(
+//                padding: const EdgeInsets.only(top: 10, right: 15),
+//                child: Row(
+//                  mainAxisAlignment: MainAxisAlignment.end,
+//                  children: <Widget>[
+//                    RaisedButton(
+//                      color: Color(0xffffd60c),
+//                      shape: RoundedRectangleBorder(
+//                          borderRadius: BorderRadius.circular(8)),
+//                      onPressed: () async {
+//                        dynamic result = await Navigator.push(
+//                            context,
+//                            MaterialPageRoute(
+//                                builder: (context) =>
+//                                    CooperatorSelectPage(models: this._cooperatorModels,)));
+//
+//                        if(result != null){
+//                          this._cooperatorModels = result;
+//                        }
+//                      },
+//                      child: Text('选择我的线上合作商'),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//              Container(
+//                padding: const EdgeInsets.only(top: 10, right: 15,bottom: 10),
+//                child: Row(
+//                  mainAxisAlignment: MainAxisAlignment.end,
+//                  children: <Widget>[
+//                    RichText(
+//                      text: TextSpan(children: [
+//                        TextSpan(
+//                          text: '已选择',
+//                          style: TextStyle(color: Colors.black),
+//                        ),
+//                        TextSpan(
+//                          text: this._cooperatorModels.length.toString(),
+//                          style: TextStyle(color: Colors.red),
+//                        ),
+//                        TextSpan(
+//                          text: '家',
+//                          style: TextStyle(color: Colors.black),
+//                        ),
+//                      ]),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//              Expanded(
+//                child: Container(
+//                  margin: EdgeInsets.all(10),
+//                  decoration: ShapeDecoration(
+//                    shape: Border.all(color: Colors.grey),
+//                  ),
+//                  child: ListView(
+//                    children: this._cooperatorModels != null
+//                        ? this._cooperatorModels.map((cooperator) {
+//                      return _buildRow(cooperator);
+//                    }).toList()
+//                        : Center(
+//                      child: CircularProgressIndicator(),
+//                    ),
+//                  ),
+//                ),
+//              ),
+//              Container(
+//                padding: const EdgeInsets.only(top: 10, right: 15),
+//                child: Row(
+//                  mainAxisAlignment: MainAxisAlignment.end,
+//                  children: <Widget>[
+//                    RaisedButton(
+//                      color: Color(0xffffd60c),
+//                      shape: RoundedRectangleBorder(
+//                          borderRadius: BorderRadius.circular(8)),
+//                      onPressed: () async {
+//                        dynamic result = await Navigator.push(
+//                            context,
+//                            MaterialPageRoute(
+//                                builder: (context) =>
+//                                    FactorySelectPage(factoryModels: this._factoryModels,)));
+//
+//                        print(result);
+//                        if(result != null){
+//                          this._factoryModels = result;
+//                        }
+//                      },
+//                      child: Text('选择全部工厂'),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//              Container(
+//                padding: const EdgeInsets.only(top: 10, right: 15,bottom: 10),
+//                child: Row(
+//                  mainAxisAlignment: MainAxisAlignment.end,
+//                  children: <Widget>[
+//                    RichText(
+//                      text: TextSpan(children: [
+//                        TextSpan(
+//                          text: '已选择',
+//                          style: TextStyle(color: Colors.black),
+//                        ),
+//                        TextSpan(
+//                          text: this._factoryModels.length.toString(),
+//                          style: TextStyle(color: Colors.red),
+//                        ),
+//                        TextSpan(
+//                          text: '家',
+//                          style: TextStyle(color: Colors.black),
+//                        ),
+//                      ]),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//              Expanded(
+//                child: Container(
+//                  margin: EdgeInsets.all(10),
+//                  decoration: ShapeDecoration(
+//                    shape: Border.all(color: Colors.grey),
+//                  ),
+//                  child: ListView(
+//                    children: this._factoryModels != null
+//                        ? this._factoryModels.map((factory) {
+//                      return _buildFactoryItemRow(factory);
+//                    }).toList()
+//                        : Center(
+//                      child: CircularProgressIndicator(),
+//                    ),
+//                  ),
+//                ),
+//              ),
             ],
           ),
         ),

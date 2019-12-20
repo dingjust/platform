@@ -11,34 +11,47 @@ class FactoryTabSection extends StatefulWidget {
   _FactoryTabSectionState createState() => _FactoryTabSectionState();
 }
 
-class _FactoryTabSectionState extends State<FactoryTabSection> {
+class _FactoryTabSectionState extends State<FactoryTabSection> with TickerProviderStateMixin {
+  TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(vsync: this, length: 2);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 700,
-        child: DefaultTabController(
-            length: 2,
-            child: ChangeNotifierProvider<FactoryTabSectionState>(
-              builder: (context) => FactoryTabSectionState(),
-              child: Scaffold(
-                  appBar: TabBar(
-                    tabs: [
-                      Tab(
-                        child: Text('最新工厂'),
-                      ),
-                      Tab(
-                        child: Text('热门工厂'),
-                      )
-                    ],
-                    indicatorSize: TabBarIndicatorSize.label,
+        child: ChangeNotifierProvider<FactoryTabSectionState>(
+          builder: (context) => FactoryTabSectionState(),
+          child: Scaffold(
+              appBar: TabBar(
+                onTap: (v){
+                  print(v);
+                },
+                controller: _tabController,
+                tabs: [
+                  Tab(
+                    child: Text('最新工厂'),
                   ),
-                  body: TabBarView(
-                    children: <Widget>[
-                      NewFactoryListView(),
-                      HotFactoryListView()
-                    ],
-                  )),
-            )));
+                  Tab(
+                    child: Text('热门工厂'),
+                  )
+                ],
+                indicatorSize: TabBarIndicatorSize.label,
+              ),
+              body: TabBarView(
+                physics: AlwaysScrollableScrollPhysics(),
+                controller: _tabController,
+                children: <Widget>[
+                  NewFactoryListView(),
+                  HotFactoryListView()
+                ],
+              )),
+        ));
   }
 }
 
