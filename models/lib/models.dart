@@ -462,7 +462,7 @@ const SalesMarketsEnum = [
 //发布方式
 const PublishingModesEnum = [
   EnumModel('PUBLIC', '公开发布'),
-  EnumModel('PRIVATE', '私有发布'),
+  EnumModel('PRIVATE', '私密发布'),
 ];
 
 //发布方式

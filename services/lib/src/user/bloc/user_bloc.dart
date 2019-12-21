@@ -314,6 +314,23 @@ class UserBLoC extends BLoCBase {
     }
   }
 
+  ///刷新用户信息
+  Future<void> refreshUser() async {
+    // 获取用户信息
+    Response infoResponse;
+    try {
+      infoResponse = await http$.get(UserApis.userInfo(currentUser.uid));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (infoResponse != null && infoResponse.statusCode == 200) {
+      _user = UserModel.fromJson(infoResponse.data);
+      _user
+        ..name = infoResponse.data['username']
+        ..status = UserStatus.ONLINE;
+    }
+  }
+
   @override
   dispose() {
     _controller.close();

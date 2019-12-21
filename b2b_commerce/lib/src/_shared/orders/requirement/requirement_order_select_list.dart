@@ -1,21 +1,20 @@
-import 'package:b2b_commerce/src/_shared/cooperator/cooperator_item.dart';
-import 'package:b2b_commerce/src/_shared/cooperator/cooperator_no_selected_item.dart';
-import 'package:b2b_commerce/src/_shared/cooperator/cooperator_selected_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_no_selected_list_item.dart';
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class CooperatorSelectList extends StatefulWidget {
-  final CooperatorState cooperatorState;
-  List<CooperatorModel> models;
+class RequirementOrderSelectList extends StatefulWidget {
+  final RequirementOrderSelectState requirementSelectState;
+  List<RequirementOrderModel> models;
 
-  CooperatorSelectList({Key key, this.cooperatorState,this.models}) : super(key: key);
+  RequirementOrderSelectList({Key key, this.requirementSelectState,this.models}) : super(key: key);
 
-  _CooperatorSelectListState createState() => _CooperatorSelectListState();
+  _RequirementOrderSelectListState createState() => _RequirementOrderSelectListState();
 }
 
-class _CooperatorSelectListState extends State<CooperatorSelectList> {
+class _RequirementOrderSelectListState extends State<RequirementOrderSelectList> {
   ScrollController _scrollController = ScrollController();
   List<int> _selectIds = List();
 
@@ -34,9 +33,9 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
     //监听滚动事件，打印滚动位置
     _scrollController.addListener(() {
       if (_scrollController.offset < 500) {
-        widget.cooperatorState.showTopBtn = false;
+        widget.requirementSelectState.showTopBtn = false;
       } else if (_scrollController.offset >= 500) {
-        widget.cooperatorState.showTopBtn = true;
+        widget.requirementSelectState.showTopBtn = true;
       }
     });
 
@@ -44,7 +43,7 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        widget.cooperatorState.loadMore();
+        widget.requirementSelectState.loadMore();
       }
     });
 
@@ -58,18 +57,18 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
             children: <Widget>[
               _buildItems(),
               ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-                opacity: widget.cooperatorState.loadingMore ? 1.0 : 0,
+                opacity: widget.requirementSelectState.loadingMore ? 1.0 : 0,
               ),
               _buildEnd(),
             ],
           ),
         ),
         onRefresh: () async {
-          widget.cooperatorState.clear();
+          widget.requirementSelectState.clear();
         },
       ),
       floatingActionButton: Opacity(
-        opacity: widget.cooperatorState.showTopBtn ? 1 : 0,
+        opacity: widget.requirementSelectState.showTopBtn ? 1 : 0,
         child: FloatingActionButton(
           child: Icon(
             Icons.arrow_upward,
@@ -87,8 +86,8 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
 
   Widget _buildItems() {
     return Column(
-        children: widget.cooperatorState.cooperatorModels != null
-            ? widget.cooperatorState.cooperatorModels.map((cooperator) {
+        children: widget.requirementSelectState.requiremenOrderModels != null
+            ? widget.requirementSelectState.requiremenOrderModels.map((cooperator) {
                 return _selectIds.contains(cooperator.id) ? _buildSelectedRow(cooperator) : _buildRow(cooperator);
               }).toList()
             : Center(
@@ -96,7 +95,7 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
               ));
   }
 
-  Row _buildSelectedRow(CooperatorModel cooperator) {
+  Row _buildSelectedRow(RequirementOrderModel requirementModel) {
     return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -106,17 +105,17 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
                       child: GestureDetector(
                         onTap: (){
                           setState(() {
-                            if(_selectIds.contains(cooperator.id)){
-                              widget.models.removeWhere((model) => model.id == cooperator.id);
-                              _selectIds.remove(cooperator.id);
+                            if(_selectIds.contains(requirementModel.id)){
+                              widget.models.removeWhere((model) => model.id == requirementModel.id);
+                              _selectIds.remove(requirementModel.id);
                             }else{
-                              widget.models.add(cooperator);
-                              _selectIds.add(cooperator.id);
+                              widget.models.add(requirementModel);
+                              _selectIds.add(requirementModel.id);
                             }
                           });
                         },
-                        child: CooperatorSelectedItem(
-                          model: cooperator,
+                        child: RequirementOrderSelectedListItem(
+                          model: requirementModel,
                         ),
                       ),
                     ),
@@ -125,30 +124,30 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
                 ],
               );
   }
-  Widget _buildRow(CooperatorModel cooperator) {
+  Widget _buildRow(RequirementOrderModel requirementModel) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: GestureDetector(
         onTap: (){
           setState(() {
-            if(_selectIds.contains(cooperator.id)){
-              widget.models.removeWhere((model) => model.id == cooperator.id);
-              _selectIds.remove(cooperator.id);
+            if(_selectIds.contains(requirementModel.id)){
+              widget.models.removeWhere((model) => model.id == requirementModel.id);
+              _selectIds.remove(requirementModel.id);
             }else{
-              widget.models.add(cooperator);
-              _selectIds.add(cooperator.id);
+              widget.models.add(requirementModel);
+              _selectIds.add(requirementModel.id);
             }
           });
         },
-        child: CooperatorNoSelectedItem(
-          model: cooperator,
+        child: RequirementOrderNoSelectedListItem(
+          model: requirementModel,
         ),
       ),
     );
   }
 
   Widget _buildEnd() {
-    return widget.cooperatorState.isDownEnd
+    return widget.requirementSelectState.isDownEnd
         ? Container(
             padding: EdgeInsets.only(bottom: 10),
             child: Row(

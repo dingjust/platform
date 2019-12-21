@@ -1,27 +1,27 @@
-import 'package:b2b_commerce/src/_shared/cooperator/cooperator_select_list.dart';
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_select_list.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
-class CooperatorSelectPage extends StatefulWidget{
-  CooperatorSelectPage({
+class RequirementOrderSelectPage extends StatefulWidget{
+  RequirementOrderSelectPage({
     Key key,
     this.models,
+    this.onConfirm,
   }) : super(key: key);
-  List<CooperatorModel> models;
+  List<RequirementOrderModel> models;
+  Function onConfirm;
 
-  _CooperatorSelectPageState createState() => _CooperatorSelectPageState();
+  _RequirementOrderSelectPageState createState() => _RequirementOrderSelectPageState();
 }
 
-class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
-  final GlobalKey _globalKey = GlobalKey<_CooperatorSelectPageState>();
+class _RequirementOrderSelectPageState extends State<RequirementOrderSelectPage> {
+  final GlobalKey _globalKey = GlobalKey<_RequirementOrderSelectPageState>();
   String _keyword = '';
-  List<CooperatorModel> _models = [];
-  CooperatorState cooperatorState;
+  List<RequirementOrderModel> _models = [];
 
   @override
   void initState() {
@@ -38,11 +38,11 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-            builder: (_) => CooperatorState()),
+            builder: (_) => RequirementOrderSelectState()),
       ],
-      child: Consumer<CooperatorState>(
-          builder: (context, CooperatorState cooperatorState, _) {
-        cooperatorState.queryFormData['type'] = 'ONLINE';
+      child: Consumer<RequirementOrderSelectState>(
+          builder: (context, RequirementOrderSelectState state, _) {
+        state.queryFormData['status'] = 'PENDING_QUOTE';
         return Scaffold(
           appBar: AppBar(
             elevation: 0.5,
@@ -55,17 +55,17 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => HistorySearch(
-                            historyKey: GlobalConfigs.COOPERATOR_SELECT_HISTORY_KEYWORD_KEY,
-                            hintText: '请输入合作商名称，联系人，联系方式搜索',
+                            historyKey: GlobalConfigs.REQURIEMEN_ORDER_SELECT_HISTORY_KEYWORD_KEY,
+                            hintText: '请输入订单号，标题，分类搜索',
                             keyword: _keyword,
                           ),
                         ),
                       );
 
                       if(result != null){
-                        cooperatorState.queryFormData['keyword'] = result;
+                        state.queryFormData['keyword'] = result;
                         _keyword = result;
-                        cooperatorState.clear();
+                        state.clear();
                       }
                     },
                     child: Container(
@@ -79,7 +79,7 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
                       child: Container(
                         padding: EdgeInsets.only(left: 10),
                         child: Text(
-                          _keyword == '' ? '请输入合作商名称，联系人，联系方式搜索':_keyword,
+                          _keyword == '' ? '请输入订单号，标题，分类搜索':_keyword,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 14,
@@ -93,9 +93,9 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
             ),
           ),
           body: Container(
-                child: cooperatorState.cooperatorModels != null
-                    ? CooperatorSelectList(
-                  cooperatorState: cooperatorState,
+                child: state.requiremenOrderModels != null
+                    ? RequirementOrderSelectList(
+                  requirementSelectState: state,
                   models: _models,
                 )
                     : Center(
@@ -118,7 +118,7 @@ class _CooperatorSelectPageState extends State<CooperatorSelectPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
               onPressed: (){
-                Navigator.pop(context,_models);
+                widget.onConfirm(_models);
               },
             ),
           ),

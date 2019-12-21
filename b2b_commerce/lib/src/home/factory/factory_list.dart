@@ -10,6 +10,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -83,8 +84,6 @@ class _FactoryPageState extends State<FactoryPage> {
   bool inited = false;
 
   AMapLocation aMapLocation;
-
-  String addressLine;
 
   List<String> historyKeywords;
 
@@ -164,28 +163,31 @@ class _FactoryPageState extends State<FactoryPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
-                      String jsonStr = await LocalStorage.get(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
-                        if (jsonStr != null && jsonStr != '') {
-                          List<dynamic> list = json.decode(jsonStr);
-                          historyKeywords = list.map((item) => item as String).toList();
-                        } else {
-                          historyKeywords = [];
-                        }
-                        String result=await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                SearchModelPage(
-                                  searchModel: SearchModel(
-                                    historyKeywords: historyKeywords,
-                                    keyword: factoryCondition.keyword,
-                                    searchModelType: SearchModelType.FACTORY,
-                                    factoryCondition: factoryCondition,
-                                    route: GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-                                  ),
+                      String jsonStr = await LocalStorage.get(
+                          GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
+                      if (jsonStr != null && jsonStr != '') {
+                        List<dynamic> list = json.decode(jsonStr);
+                        historyKeywords =
+                            list.map((item) => item as String).toList();
+                      } else {
+                        historyKeywords = [];
+                      }
+                      String result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SearchModelPage(
+                                searchModel: SearchModel(
+                                  historyKeywords: historyKeywords,
+                                  keyword: factoryCondition.keyword,
+                                  searchModelType: SearchModelType.FACTORY,
+                                  factoryCondition: factoryCondition,
+                                  route: GlobalConfigs
+                                      .FACTORY_HISTORY_KEYWORD_KEY,
                                 ),
-                          ),
-                        );
+                              ),
+                        ),
+                      );
 //                      String keyword = await showSearch(
 //                        context: context,
 //                        delegate: FactorySearchDelegate(),
@@ -220,17 +222,20 @@ class _FactoryPageState extends State<FactoryPage> {
             actions: <Widget>[
               GestureDetector(
                 child: widget.route == '就近找厂'
-                    ? Container(
-                    width: addressLine != null &&
-                        addressLine != '' &&
-                        addressLine.length < 5
-                        ? (15 * addressLine.length + 5).toDouble()
-                        : 80,
-                    child: Center(
-                        child: Text(
-                          '${addressLine != null ? addressLine : ''}',
-                          overflow: TextOverflow.ellipsis,
-                        )))
+                    ? Consumer<AmapState>(
+                  builder: (context, state, _) =>
+                      Container(
+                          width: state.city != null &&
+                              state.city != '' &&
+                              state.city.length < 5
+                              ? (15 * state.city.length + 5).toDouble()
+                              : 80,
+                          child: Center(
+                              child: Text(
+                                '${state.city != null ? state.city : ''}',
+                                overflow: TextOverflow.ellipsis,
+                              ))),
+                )
                     : Container(),
                 onTap: () {
                   if (widget.route == '就近找厂') {
@@ -455,13 +460,13 @@ class _FactoryPageState extends State<FactoryPage> {
 
   void onLocation() async {
     // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
-    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => AmapSearchPage(city: aMapLocation.city)));
+    AmapState amapState = Provider.of<AmapState>(context);
+
+    Tip tip = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
     print(tip.name);
     setState(() {
       List<String> locationArray = tip.location.split(',');
-      addressLine = tip.name;
-
       factoryCondition.longitude = double.parse(locationArray[0]);
       factoryCondition.latitude = double.parse(locationArray[1]);
 
@@ -473,6 +478,7 @@ class _FactoryPageState extends State<FactoryPage> {
   }
 
   Future<bool> _initData() async {
+    AmapState amapState = Provider.of<AmapState>(context);
     if (!inited && !lock) {
       lock = true;
       print('----------------------');
@@ -491,7 +497,6 @@ class _FactoryPageState extends State<FactoryPage> {
               longitude: aMapLocation.longitude,
               latitude: aMapLocation.latitude,
               distance: 50000);
-          addressLine = aMapLocation.AOIName;
         } else {
           factoryCondition = widget.factoryCondition;
         }
@@ -507,7 +512,6 @@ class _FactoryPageState extends State<FactoryPage> {
               longitude: aMapLocation.longitude,
               latitude: aMapLocation.latitude,
               distance: 50000);
-          addressLine = aMapLocation.AOIName;
         } else {
           factoryCondition = FactoryCondition(
               starLevel: 0,
@@ -723,7 +727,10 @@ class _FactoryListViewState extends State<FactoryListView> {
 //                  );
 //                }
 
-                return ScrolledToEndTips(hasContent: snapshot.data,scrollController: _scrollController,);
+                return ScrolledToEndTips(
+                  hasContent: snapshot.data,
+                  scrollController: _scrollController,
+                );
               },
             ),
             StreamBuilder<bool>(

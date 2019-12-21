@@ -2,8 +2,6 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_edit_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/business/requirement_orders.dart';
@@ -15,31 +13,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
-class RequirementOrderDetailPage extends StatefulWidget {
+class RequirementOrderDetailByFactoryPage extends StatefulWidget {
   String code;
 
   /// 关闭生产订单
   final RequirementOrderCancleCallback onRequirementCancle;
 
-  RequirementOrderDetailPage(this.code, {Key key, this.onRequirementCancle})
+  RequirementOrderDetailByFactoryPage(this.code, {Key key, this.onRequirementCancle})
       : super(key: key);
 
-  _RequirementOrderDetailPageState createState() =>
-      _RequirementOrderDetailPageState();
+  _RequirementOrderDetailByFactoryPageState createState() =>
+      _RequirementOrderDetailByFactoryPageState();
 }
 
-class _RequirementOrderDetailPageState
-    extends State<RequirementOrderDetailPage> {
-  static Map<RequirementOrderStatus, Color> _statusColors = {
-    RequirementOrderStatus.PENDING_QUOTE: Color(0xFFFFD600),
-    RequirementOrderStatus.COMPLETED: Colors.green,
-    RequirementOrderStatus.CANCELLED: Colors.grey,
-  };
+class _RequirementOrderDetailByFactoryPageState
+    extends State<RequirementOrderDetailByFactoryPage> {
 
   RequirementOrderModel orderModel;
 
@@ -55,65 +47,78 @@ class _RequirementOrderDetailPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '需求订单明细',
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: <Widget>[
-          Container(
-            width: 60,
-            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-            child: PopupMenuButton<String>(
-              onSelected: (v) => onMenuSelect(v),
-              icon: Icon(
-                B2BIcons.more,
-                size: 5,
+    return FutureBuilder<RequirementOrderModel>(
+      builder: (BuildContext context,
+          AsyncSnapshot<RequirementOrderModel> snapshot) {
+        if (snapshot.data != null) {
+          return Scaffold(
+            appBar: AppBar(
+              brightness: Brightness.light,
+              centerTitle: true,
+              elevation: 0.5,
+              title: Text(
+                '需求订单明细',
+                style: TextStyle(color: Colors.black),
               ),
-              offset: Offset(0, 50),
-              itemBuilder: (BuildContext context) => _buildPopupMenu(),
-            ),
-          )
-        ],
-      ),
-      body: FutureBuilder<RequirementOrderModel>(
-        builder: (BuildContext context,
-            AsyncSnapshot<RequirementOrderModel> snapshot) {
-          if (snapshot.data != null) {
-            return Container(
-              color: Colors.grey[100],
-              child: ListView(
-                children: <Widget>[
-                  //发布公司信息
-//                  _buildCompanyInfo(),
-//                  Divider(
-//                    height: 0,
-//                  ),
-                  //标题
-                  _buildTitle(),
-                  Divider(
-                    height: 0,
+              actions: <Widget>[
+                Container(
+                  width: 60,
+                  margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                  child: PopupMenuButton<String>(
+                    onSelected: (v) => onMenuSelect(v),
+                    icon: Icon(
+                      B2BIcons.more,
+                      size: 5,
+                    ),
+                    offset: Offset(0, 50),
+                    itemBuilder: (BuildContext context) => _buildPopupMenu(),
                   ),
-                  //需求信息
-                  _buildMain(),
-                  //品牌端显示
-                  _buildQuote(),
-                ],
-              ),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-        initialData: null,
-        future: _getData(),
-      ),
+                )
+              ],
+            ),
+            body: FutureBuilder<RequirementOrderModel>(
+              builder: (BuildContext context,
+                  AsyncSnapshot<RequirementOrderModel> snapshot) {
+                if (snapshot.data != null) {
+                  return Container(
+                    color: Colors.grey[100],
+                    child: ListView(
+                      children: <Widget>[
+                        //发布公司信息
+                        _buildCompanyInfo(),
+                        Divider(
+                          height: 0,
+                        ),
+                        //标题
+                        _buildTitle(),
+                        Divider(
+                          height: 0,
+                        ),
+                        //需求信息
+                        _buildMain(),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+              initialData: null,
+              future: _getData(),
+            ),
+            bottomNavigationBar: _buildBottomButtons(orderModel),
+          );
+        } else {
+          print('ddd');
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+      initialData: RequirementOrderModel(details: RequirementInfoModel()),
+      future: _getData(),
     );
   }
 
@@ -136,7 +141,6 @@ class _RequirementOrderDetailPageState
 
   Widget _buildCompanyInfo() {
     /// 工厂端显示
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return Container(
         padding: EdgeInsets.all(15),
 //        margin: EdgeInsets.only(bottom: 10),
@@ -249,64 +253,9 @@ class _RequirementOrderDetailPageState
                 ],
               ),
             ),
-//            Container(
-//              padding: EdgeInsets.all(15),
-//              child: Row(
-//                children: <Widget>[
-//                  Expanded(
-//                    child: Container(
-//                      child: Text('联系人'),
-//                    ),
-//                  ),
-//                  Container(
-//                    child: Text(
-//                      orderModel.details.contactPerson == null
-//                          ? ''
-//                          : '${orderModel.details.contactPerson}',
-//                      style: TextStyle(
-//                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ),
-//            Divider(
-//              height: 2,
-//            ),
-//            GestureDetector(
-//              child: Container(
-//                padding: EdgeInsets.all(15),
-//                child: Row(
-//                  children: <Widget>[
-//                    Expanded(
-//                      child: Container(
-//                        child: Text('联系手机'),
-//                      ),
-//                    ),
-//                    Container(
-//                      child: Text(
-//                        orderModel.details.contactPhone == null
-//                            ? ''
-//                            : '${orderModel.details.contactPhone}',
-//                        style: TextStyle(
-//                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ),
-//              onTap: () {
-//                orderModel.details.contactPhone == null
-//                    ? null
-//                    : _selectActionButton(orderModel.details.contactPhone);
-//              },
-//            ),
           ],
         ),
       );
-    } else {
-      return Container();
-    }
   }
 
   Widget _buildTitle(){
@@ -637,33 +586,6 @@ class _RequirementOrderDetailPageState
                   child: Container(
                     alignment: Alignment.centerLeft,
                     width: _leadingRowWidth,
-                    child: Text('发布方式：'),
-                  ),
-                ),
-                Expanded(
-                  flex: _flexR,
-                  child: Text(
-                    enumMap(PublishingModesEnum,orderModel.details.publishingMode),
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: _flexL,
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    width: _leadingRowWidth,
                     child: Text('有效期限：'),
                   ),
                 ),
@@ -682,6 +604,7 @@ class _RequirementOrderDetailPageState
           Divider(
             height: 0,
           ),
+
           Container(
             padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
             child: Row(
@@ -722,52 +645,75 @@ class _RequirementOrderDetailPageState
   }
 
 
-  Widget _buildQuote() {
+  Widget _buildBottomButtons(RequirementOrderModel model) {
     return Container(
-      color: Colors.white,
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: quotesList != null && quotesList.length > 0
-          ? Column(
+      height: 65,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          QuoteItem(
-            model: quotesList[0],
-            onRefresh: () {
-              onRefreshData();
-            },
-            pageContext: context,
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      RequirementQuoteDetailPage(
-                        order: orderModel,
-                      )));
-            },
-            child: Text(
-              '查看全部报价>>',
-              style: TextStyle(color: Colors.red),
+          Expanded(
+            flex: 1,
+            child: FlatButton(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Icon(
+                      Icons.phone,
+                      color: Colors.white,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(8)),
+                    padding: EdgeInsets.all(2),
+                  ),
+                  Text(model?.details?.contactPerson ?? ''),
+                ],
+              ),
+              onPressed: () {
+                _selectActionButton(model?.details?.contactPhone);
+              },
             ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+                height: double.infinity,
+                child: Builder(
+                  builder: (BuildContext buttonContext) =>
+                      FlatButton(
+                        color: Color.fromRGBO(255, 214, 12, 1),
+                        onPressed: () async{
+                          QuoteModel newQuote =
+                              await Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  RequirementQuoteOrderForm(
+                                    model: orderModel,
+                                    quoteModel: QuoteModel(attachments: []),
+                                  )));
+
+                          if (newQuote != null) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    QuoteOrderDetailPage(
+                                      newQuote.code,
+                                    )));
+                          }
+                        },
+                        disabledColor: Colors.grey[300],
+                        child: Text(
+                          '去报价',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                )),
           )
         ],
-      )
-          : Center(
-        child: Text(
-          '暂无报价',
-          style: TextStyle(color: Colors.grey),
-        ),
       ),
     );
   }
-
-  onRefreshData() async {
-    RequirementOrderBLoC().refreshData('ALL');
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => RequirementOrdersPage()),
-        ModalRoute.withName('/'));
-  }
-
 
   Widget _buildButtonGroups() {
     //品牌端显示
@@ -906,75 +852,20 @@ class _RequirementOrderDetailPageState
   }
 
   List<PopupMenuItem<String>> _buildPopupMenu() {
-    if (orderModel.editable != null &&
-        orderModel.editable &&
-        orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
-      return <PopupMenuItem<String>>[
-        PopupMenuItem<String>(
-          value: 'edit',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.edit),
-              ),
-              Text('编辑')
-            ],
-          ),
+    return <PopupMenuItem<String>>[
+      PopupMenuItem<String>(
+        value: 'share',
+        child: Row(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(right: 20),
+              child: Icon(Icons.share),
+            ),
+            Text('分享')
+          ],
         ),
-        PopupMenuItem<String>(
-          value: 'close',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.close),
-              ),
-              Text('关闭')
-            ],
-          ),
-        ),
-        PopupMenuItem<String>(
-          value: 'share',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.share),
-              ),
-              Text('分享')
-            ],
-          ),
-        ),
-      ];
-    } else {
-      return <PopupMenuItem<String>>[
-        PopupMenuItem<String>(
-          value: 'share',
-          child: Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: Icon(Icons.share),
-              ),
-              Text('分享')
-            ],
-          ),
-        ),
-      ];
-    }
-  }
-
-  Future<bool> _onCancle(){
-    bool result = false;
-    try{
-      widget.onRequirementCancle();
-      result = true;
-    }catch(e){
-      result = false;
-    }
-
-    return Future.value(result);
+      ),
+    ];
   }
 
   onMenuSelect(String value) async {
@@ -996,34 +887,11 @@ class _RequirementOrderDetailPageState
                 cancelButtonText: '取消',
                 dialogHeight: 180,
                 confirmAction: () async {
-                  Navigator.pop(context);
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) {
-                        return RequestDataLoading(
-                          requestCallBack: _onCancle(),
-                          outsideDismiss: false,
-                          loadingText: '正在关闭。。。',
-                          entrance: '',
-                        );
-                      }).then((value) {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return CustomizeDialog(
-                            dialogType: DialogType.RESULT_DIALOG,
-                            successTips: '关闭成功',
-                            failTips: '关闭失败',
-                            callbackResult: value,
-                            confirmAction: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          );
-                        });
+                  await widget.onRequirementCancle();
+                  setState(() {
+                    orderModel.status = RequirementOrderStatus.CANCELLED;
                   });
+                  Navigator.of(context).pop();
                 },
               );
             });
@@ -1037,27 +905,9 @@ class _RequirementOrderDetailPageState
 
   void onEdit() {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              builder: (_) => RequirementOrderFormState(detailModel: orderModel),
-            ),
-          ],
-          child: Builder(
-            builder: (context) {
-              RequirementOrderFormState state = Provider.of<RequirementOrderFormState>(context);
-              print('dddd');
-              return RequirementOrderSecondEditForm(formState: state,);
-            }
-          ),
-//          child: Consumer(
-//            builder: (context, RequirementOrderFormState state, _) {
-//              state.model = orderModel;
-//              print('dddd');
-//              return RequirementOrderSecondEditForm(formState: state,);
-//            }
-//          ),
-        ),));
+        builder: (context) => RequirementOrderFrom(
+          order: orderModel,
+        )));
   }
 
   ///TODO分享
@@ -1097,6 +947,9 @@ class _RequirementOrderDetailPageState
 
   //拨打电话或发短信
   void _selectActionButton(String tel) async {
+    if(tel == null || tel == ''){
+      return;
+    }
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -1166,4 +1019,3 @@ class _RequirementOrderDetailPageState
     return text;
   }
 }
-

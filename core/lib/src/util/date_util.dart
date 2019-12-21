@@ -17,6 +17,14 @@ class DateFormatUtil {
     }
   }
 
+  static String formatYMDHM(DateTime date) {
+    if (date != null) {
+      return DateFormat('yyyy-MM-dd HH:mm').format(date);
+    } else {
+      return '';
+    }
+  }
+
   static String formatYMD(DateTime date) {
     String text;
     if (date != null) {

@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_HOME: (context) => MyHomePage(),
     ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
 //    ROUTE_MY_BRAND: (context) => MyBrandPage(),
-//    ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
+    ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
     ROUTE_MY_CONTRACT: (context) => MyContractManagePage(),

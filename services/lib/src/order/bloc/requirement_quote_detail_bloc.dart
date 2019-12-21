@@ -84,9 +84,9 @@ class RequirementQuoteDetailBLoC extends BLoCBase {
         QuoteOrdersResponse.fromJson(response.data);
         quotes.addAll(ordersResponse.content);
       }
-      loadingController.sink.add(false);
       _controller.sink.add(this.quotesList);
     }
+    loadingController.sink.add(false);
   }
 
   //下拉刷新

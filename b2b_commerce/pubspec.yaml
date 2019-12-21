@@ -53,7 +53,6 @@ dependencies:
   flutter_map: ^0.1.4
   month_picker_dialog: ^0.0.8
   #  flutter_location_picker: 0.0.6
-  city_pickers: ^0.1.12
   autocomplete_textfield: ^1.6.4
   pulltorefresh_flutter: "^0.1.9"
   # cached_network_image: ^0.7.0
@@ -85,6 +84,9 @@ dependencies:
   flustars: ^0.2.6+1
   orientation: ^1.1.0
   location_permissions: ^2.0.3
+  city_pickers: ^0.1.29
+  bot_toast: ^2.2.0
+
 
 
 dev_dependencies:

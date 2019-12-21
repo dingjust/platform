@@ -7,6 +7,8 @@ class AmapState with ChangeNotifier {
 
   BuildContext context;
 
+  String _city;
+
   AMapLocation getAMapLocation({BuildContext context, Widget openDialog}) {
     if (_aMapLocation != null) {
       return _aMapLocation;
@@ -90,6 +92,8 @@ class AmapState with ChangeNotifier {
   ///获取经度
   double get longitude {
     if (_aMapLocation != null) {
+      print('=====================');
+      print(_aMapLocation.AOIName);
       return _aMapLocation.longitude;
     } else {
       return 0;
@@ -103,5 +107,25 @@ class AmapState with ChangeNotifier {
     } else {
       return 0;
     }
+  }
+
+  String get city {
+    if (_city != null) {
+      return _city;
+    } else if (_aMapLocation != null) {
+      return _aMapLocation.city;
+    } else {
+      return '';
+    }
+  }
+
+  void setCity(String city) {
+    _city = city;
+  }
+
+  ///覆盖定位信息
+  void setAMapLocation({String aOIName, double longitude, double latitude}) {
+    _aMapLocation = AMapLocation(
+        AOIName: aOIName, longitude: longitude, latitude: latitude);
   }
 }

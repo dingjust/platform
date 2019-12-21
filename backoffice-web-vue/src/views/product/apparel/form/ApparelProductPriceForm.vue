@@ -51,7 +51,7 @@
               <div style="width:60px">
                 <h6 class="info-input-prepend">价格：</h6>
               </div>
-              <el-input placeholder="输入价格" v-model.number="row.price" size="mini">
+              <el-input placeholder="输入价格" v-model="row.price" size="mini" type="number">
               </el-input>
             </el-row>
           </el-form-item>

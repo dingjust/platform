@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:b2b_commerce/src/my/messages/index.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -117,7 +118,6 @@ class MyAppHomeDelegate extends StatefulWidget {
 class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   int _currentIndex = 0;
-  RequirementOrderModel requirementOrderModel;
 
   /// 处理底部导航
   void _handleNavigation(int index) {
@@ -168,9 +168,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   /// 发布需求
   void _onPublish(BuildContext context) async {
-    requirementOrderModel =
-        RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
-
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -278,46 +275,75 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   Widget build(BuildContext context) {
     final List<NavigationMenu> menus = _getNavigationMenus();
 
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      title: AppConstants.appTitle,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        accentColor: Color.fromRGBO(255, 214, 12, 1),
-        bottomAppBarColor: Colors.grey,
-      ),
-      home: Builder(
-        builder: (context) => Scaffold(
-          key: AppKeys.appPage,
-          body: menus[_currentIndex].page,
-          bottomNavigationBar: BottomNavigation(
-            currentIndex: _currentIndex,
-            onChanged: _handleNavigation,
-            items: menus.map((menu) => menu.item).toList(),
+    return //1.使用BotToastInit直接包裹MaterialApp
+      BotToastInit(
+        child: MaterialApp(
+          navigatorKey: _navigatorKey,
+          title: AppConstants.appTitle,
+          navigatorObservers: [BotToastNavigatorObserver()],
+          //2.注册路由观察者
+          theme: ThemeData(
+            primaryColor: Colors.white,
+            accentColor: Color.fromRGBO(255, 214, 12, 1),
+            bottomAppBarColor: Colors.grey,
           ),
-          // floatingActionButton: _isBrand()
-          //     ? PublishRequirementButton(
-          //   onPublish: () => _onPublish(context),
-          // )
-          //     : null,
-          // floatingActionButtonLocation:
-          // FloatingActionButtonLocation.centerDocked,
+          home: Builder(
+            builder: (context) =>
+                Scaffold(
+                  key: AppKeys.appPage,
+                  body: menus[_currentIndex].page,
+                  bottomNavigationBar: BottomNavigation(
+                    currentIndex: _currentIndex,
+                    onChanged: _handleNavigation,
+                    items: menus.map((menu) => menu.item).toList(),
+                  ),
+                  // floatingActionButton: _isBrand()
+                  //     ? PublishRequirementButton(
+                  //   onPublish: () => _onPublish(context),
+                  // )
+                  //     : null,
+                  // floatingActionButtonLocation:
+                  // FloatingActionButtonLocation.centerDocked,
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () {
+                      // showAlertDialog(blockPopup, cancel: () {
+                      //   BotToast.showText(text: 'Click cancel');
+                      // }, confirm: () {
+                      //   BotToast.showText(text: 'Click confirm');
+                      // }, backgroundReturn: () {
+                      //   BotToast.showText(text: 'Click background');
+                      // }, physicalBackButton: () {
+                      //   BotToast.showText(text: 'Click the physical back button');
+                      // });
+                      showAlertDialog(true, cancel: () {
+                        BotToast.showText(text: 'Click cancel');
+                      }, confirm: () {
+                        BotToast.showText(text: 'Click confirm');
+                      }, backgroundReturn: () {
+                        BotToast.showText(text: 'Click background');
+                      }, physicalBackButton: () {
+                        BotToast.showText(
+                            text: 'Click the physical back button');
+                      });
+                    },
+                  ),
+                ),
+          ),
+          routes: AppRoutes.allRoutes,
+          localizationsDelegates: [
+            //此处
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            ChineseCupertinoLocalizations.delegate
+          ],
+          builder: (ctx, w) {
+            return MaxScaleTextWidget(
+              max: 1.0,
+              child: w,
+            );
+          },
+          supportedLocales: AppConstants.supportedLocales(),
         ),
-      ),
-      routes: AppRoutes.allRoutes,
-      localizationsDelegates: [
-        //此处
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        ChineseCupertinoLocalizations.delegate
-      ],
-      builder: (ctx, w) {
-        return MaxScaleTextWidget(
-          max: 1.0,
-          child: w,
-        );
-      },
-      supportedLocales: AppConstants.supportedLocales(),
     );
   }
 }

@@ -137,11 +137,21 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     color: Colors.grey[100] ,
                   ),
                 ),
-                 Container(
+                widget.factory?.capacities != null && widget.factory.capacities.length > 0 ? Container(
                   color: Colors.white,
                   height: 202,
                   padding: EdgeInsets.only(top: 15,right: 10,bottom: 10),
                   child: MyCompanyCapacityInfo(widget.factory,isSupplier: widget.isSupplier),
+                ) :
+                Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.only(top: 15,right: 10,bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('该工厂尚未发布空闲产能',style: TextStyle(fontSize: 16,),),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 10,

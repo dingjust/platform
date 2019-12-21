@@ -1041,3 +1041,217 @@ class _EditableAttachmentsState extends State<EditableAttachments>
     });
   }
 }
+
+class SingleAttachment extends StatefulWidget {
+  final ValueChanged<MediaModel> onChanged;
+
+  MediaModel media;
+
+  final double width;
+  final double height;
+
+  ///图片宽度
+  final double imageWidth;
+
+  ///图片高度
+  final double imageHeight;
+
+  ///上传URL
+  final String uploadURL;
+
+  ///删除URL
+  final String deleteURL;
+
+  ///是否需要截图
+  final bool isCut;
+
+  ///是否需要圆形框
+  final bool circleShape;
+
+  ///截图的宽高比例
+  final double ratioX;
+  final double ratioY;
+
+  SingleAttachment({
+    Key key,
+    @required this.media,
+    this.width = 80,
+    this.height = 80,
+    this.imageWidth = 60,
+    this.imageHeight = 60,
+    this.uploadURL,
+    this.deleteURL,
+    this.isCut = false,
+    this.ratioX,
+    this.ratioY,
+    this.circleShape = false,
+    this.onChanged,
+  }) : super(key: key);
+
+  @override
+  _SingleAttachmentState createState() => _SingleAttachmentState();
+}
+
+class _SingleAttachmentState extends State<SingleAttachment>
+    with TickerProviderStateMixin, ImagePickerListener {
+  final StreamController _streamController =
+  StreamController<double>.broadcast();
+
+  final StreamController _compressStreamController =
+  StreamController<double>.broadcast();
+
+  AnimationController _controller;
+  ImagePickerHandler imagePicker;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = new AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    imagePicker = new ImagePickerHandler(this, _controller);
+    imagePicker.build(
+        0xFFFFFFFF, 0xFF6495ED, widget.isCut, widget.ratioX, widget.ratioY);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: widget.width,
+        height: widget.height,
+        child: GestureDetector(
+          child: widget.media != null
+              ? Container(
+            width: widget.imageWidth,
+            height: widget.imageHeight,
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            child: CachedNetworkImage(
+              imageUrl: '${widget.media.previewUrl()}',
+              fit: BoxFit.cover,
+              imageBuilder: (context, imageProvider) =>
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey,
+                    ),
+                  ),
+              placeholder: (context, url) =>
+                  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
+              errorWidget: (context, url, error) =>
+                  SpinKitRing(
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 30,
+                  ),
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.grey,
+            ),
+          )
+              : Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            width: widget.imageWidth,
+            height: widget.imageHeight,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey[300], width: 1.0)),
+            child: Center(
+              child: Icon(
+                Icons.add,
+                size: widget.imageWidth,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          onTap: () {
+            imagePicker.showDialog(context);
+          },
+        ));
+  }
+
+  //图片预览
+  void onPreview(BuildContext context, String url, String name) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                PhotoView(
+                  imageProvider: NetworkImage(url),
+                  onTapUp: (context, detail, val) {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            ));
+      },
+    );
+  }
+
+  Future _uploadFile(File file) async {
+    // TODO： 引入StreamBuilder实时更新进度条
+    try {
+      FormData formData = FormData.from({
+        "file": UploadFileInfo(file, "file",
+            contentType: ContentType.parse('image/jpeg')),
+        "conversionGroup": "DefaultProductConversionGroup",
+        "imageFormat": "DefaultImageFormat"
+      });
+      Response<Map<String, dynamic>> response = await http$.post(
+        Apis.upload(),
+        data: formData,
+        options: Options(
+          headers: {'Content-Type': 'application/json;charset=UTF-8'},
+        ),
+        onSendProgress: (int sent, int total) {
+          _streamController.sink.add(sent / total);
+        },
+      );
+      widget.onChanged(MediaModel.fromJson(response.data));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  userImage(File _image) async {
+    if (_image != null) {
+      await _uploadFile(_image);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _streamController.close();
+    _compressStreamController.close();
+    super.dispose();
+  }
+}

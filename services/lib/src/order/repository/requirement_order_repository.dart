@@ -102,6 +102,29 @@ class RequirementOrderRepository {
     }
   }
 
+  //邀请报价（推荐需求）
+  Future<bool> doRecommendations(List<String> codes, List<String> factoryUids) async {
+    print(codes);
+    print(factoryUids.join(','));
+    Response response;
+    try {
+      response = await http$.put(OrderApis.doRecommendations(),
+          options: Options(responseType: ResponseType.plain),
+        queryParameters: {
+          'codes':codes.join(','),
+          'factoryUids':factoryUids.join(','),
+        }
+      );
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /// 订单关闭
   Future<String> requirementOrderCancle(String code) async {
     Response response;

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail_by_factory.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
@@ -443,7 +444,7 @@ class RequirementPoolOrderItem extends StatelessWidget {
       onTap: () async {
         if (order.code != null) {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RequirementOrderDetailPage(order.code)));
+              builder: (context) => RequirementOrderDetailByFactoryPage(order.code)));
         }
       },
       child: Container(
