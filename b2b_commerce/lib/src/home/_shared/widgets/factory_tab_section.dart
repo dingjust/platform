@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ class FactoryTabSection extends StatefulWidget {
   _FactoryTabSectionState createState() => _FactoryTabSectionState();
 }
 
-class _FactoryTabSectionState extends State<FactoryTabSection> with TickerProviderStateMixin {
+class _FactoryTabSectionState extends State<FactoryTabSection>
+    with TickerProviderStateMixin {
   TabController _tabController;
 
   @override
@@ -29,7 +31,7 @@ class _FactoryTabSectionState extends State<FactoryTabSection> with TickerProvid
           builder: (context) => FactoryTabSectionState(),
           child: Scaffold(
               appBar: TabBar(
-                onTap: (v){
+                onTap: (v) {
                   print(v);
                 },
                 controller: _tabController,
@@ -46,10 +48,7 @@ class _FactoryTabSectionState extends State<FactoryTabSection> with TickerProvid
               body: TabBarView(
                 physics: AlwaysScrollableScrollPhysics(),
                 controller: _tabController,
-                children: <Widget>[
-                  NewFactoryListView(),
-                  HotFactoryListView()
-                ],
+                children: <Widget>[NewFactoryListView(), HotFactoryListView()],
               )),
         ));
   }
@@ -119,16 +118,8 @@ class _FactoryItem extends StatelessWidget {
       ),
       child: FlatButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  MyFactoryPage(
-                    factoryUid: model.uid,
-                    isFactoryDetail: true,
-                  ),
-            ),
-          );
+          Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+              context: context, onJump: () => jumpToDetailPage(context));
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10),
@@ -217,6 +208,19 @@ class _FactoryItem extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void jumpToDetailPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            MyFactoryPage(
+              factoryUid: model.uid,
+              isFactoryDetail: true,
+            ),
       ),
     );
   }

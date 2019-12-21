@@ -1,5 +1,7 @@
+import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -33,15 +35,21 @@ class FactoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyFactoryPage(
-              factoryUid:model.uid,
-                  isFactoryDetail: true,
+        Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+            context: context,
+            onJump: () =>
+                () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      MyFactoryPage(
+                        factoryUid: model.uid,
+                        isFactoryDetail: true,
+                      ),
                 ),
-          ),
-        );
+              );
+            });
       },
       child: Container(
         color: Colors.white,
@@ -52,12 +60,15 @@ class FactoryItem extends StatelessWidget {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  FactoryNameText(model: model,isLocalFind: isLocalFind,),
+                  FactoryNameText(
+                    model: model,
+                    isLocalFind: isLocalFind,
+                  ),
                   showButton
                       ? InviteFactoryButton(
-                          factoryModel: model,
-                          requirementCode: requirementCode,
-                        )
+                    factoryModel: model,
+                    requirementCode: requirementCode,
+                  )
                       : Container(),
                 ],
               ),
@@ -110,7 +121,8 @@ class FactoryItem extends StatelessWidget {
 }
 
 class FactoryNameText extends StatelessWidget {
-  FactoryNameText({Key key, @required this.model,this.isLocalFind = false}) : super(key: key);
+  FactoryNameText({Key key, @required this.model, this.isLocalFind = false})
+      : super(key: key);
 
   final FactoryModel model;
 
@@ -119,33 +131,26 @@ class FactoryNameText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(model.distance);
-    if(isLocalFind){
+    if (isLocalFind) {
       return Expanded(
         flex: 1,
         child: Row(
           children: <Widget>[
-        Expanded(
-            child:
-            Text(
-                '${model.name}', style: TextStyle(fontSize: 18))
-        ),
-        model.distance == null ?
-        Container():
-        Text(
-            '${(model.distance.toInt() / 1000).toStringAsFixed(1)}' + 'km',
-            style: TextStyle(
-                fontSize: 18,
-                color: Colors.red
-            )
-        ),
+            Expanded(
+                child: Text('${model.name}', style: TextStyle(fontSize: 18))),
+            model.distance == null
+                ? Container()
+                : Text(
+                '${(model.distance.toInt() / 1000).toStringAsFixed(1)}' +
+                    'km',
+                style: TextStyle(fontSize: 18, color: Colors.red)),
           ],
         ),
       );
-    }else {
+    } else {
       return Expanded(
         flex: 1,
-        child: Text(
-            '${model.name}', style: TextStyle(fontSize: 18)),
+        child: Text('${model.name}', style: TextStyle(fontSize: 18)),
       );
     }
   }
@@ -180,15 +185,15 @@ class CertifiedTagsAndLabelsText extends StatelessWidget {
     List<Widget> tags = [
       _isApproved()
           ? Tag(
-              label: '  已认证  ',
-              color: Colors.black,
-              backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-            )
+        label: '  已认证  ',
+        color: Colors.black,
+        backgroundColor: Color.fromRGBO(255, 214, 12, 1),
+      )
           : Tag(
-              label: '  未认证  ',
-              color: Colors.black,
-              backgroundColor: Colors.grey[300],
-            )
+        label: '  未认证  ',
+        color: Colors.black,
+        backgroundColor: Colors.grey[300],
+      )
     ];
     model.labels.forEach((label) {
       tags.add(Tag(
@@ -288,18 +293,18 @@ class CategoriesText extends StatelessWidget {
     }
 
     return
-        // Expanded(
-        //   flex: 1,
-        //   child: ListView(
-        //     scrollDirection: Axis.horizontal,
-        //     children: tags,
-        //   ),
-        // );
+      // Expanded(
+      //   flex: 1,
+      //   child: ListView(
+      //     scrollDirection: Axis.horizontal,
+      //     children: tags,
+      //   ),
+      // );
 
-        Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: tags,
-    );
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: tags,
+      );
 
     //     Container(
     //   width: 300,
@@ -354,8 +359,7 @@ class InviteFactoryButton extends StatelessWidget {
                     loadingText: '邀请中。。。',
                     entrance: '0',
                   );
-                }
-            ).then((value){
+                }).then((value) {
               FactoryBLoC().clear();
               FactoryBLoC().refreshData();
             });

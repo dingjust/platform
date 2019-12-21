@@ -1,7 +1,6 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
-import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:b2b_commerce/src/my/messages/index.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -119,8 +118,9 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   ///全局初始化
   void globalInit() {
-    //初始化helpers
-    Provider.of<CertificationStatusHelper>(context).checkCertificationStatus();
+    // //初始化helpers
+    // Provider.of<CertificationStatusHelper>(context)
+    //     .checkCertificationStatus(context);
 
     //初始化监听
     initListener();

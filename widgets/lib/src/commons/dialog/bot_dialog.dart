@@ -67,6 +67,10 @@ void showUncertifiedDialog(bool blockPopup,
             FlatButton(
               onPressed: () {
                 cancelFunc();
+                BotToast.showLoading(
+                  crossPage: false,
+                  clickClose: true,
+                ); //弹出一个加载动画
                 confirm?.call();
               },
               child: const Text(
@@ -134,6 +138,10 @@ void showProfileCompleteDialog(bool blockPopup, {
             FlatButton(
               onPressed: () {
                 cancelFunc();
+                BotToast.showLoading(
+                  crossPage: false,
+                  clickClose: true,
+                ); //弹出一个加载动画
                 confirm?.call();
               },
               child: const Text(

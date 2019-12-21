@@ -42,9 +42,9 @@ enum AuthenticationStatus {
 // TODO: i18n处理
 const AuthenticationStatusLocalizedMap = {
   AuthenticationStatus.CHECK: '认证中',
-  AuthenticationStatus.UNCERTIFIED : '未认证',
-  AuthenticationStatus.SUCCESS : '认证成功',
-  AuthenticationStatus.FAILED : '认证失败',
+  AuthenticationStatus.UNCERTIFIED: '未认证',
+  AuthenticationStatus.SUCCESS: '认证成功',
+  AuthenticationStatus.FAILED: '认证失败',
 };
 
 /// 公司
@@ -247,6 +247,8 @@ class B2BUnitModel extends OrgUnitModel {
 
   String locationAddress;
 
+  bool profileCompleted;
+
   B2BUnitModel(
       {MediaModel profilePicture,
       String uid,
@@ -276,6 +278,7 @@ class B2BUnitModel extends OrgUnitModel {
       this.active,
       this.email,
       this.phone,
+        this.profileCompleted,
         this.locationAddress,
       this.longitude,
       this.latitude})
@@ -572,7 +575,7 @@ class FactoryModel extends B2BUnitModel {
         this.coverageArea,
         this.proprietaryProducts,
         this.capacities,
-       this.populationScale})
+        this.populationScale})
       : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -614,7 +617,9 @@ class FactoryModel extends B2BUnitModel {
 
   static List<Map<String, dynamic>> _capacitiesToJson(
           List<FactoryCapacityModel> capacities) =>
-      capacities.map((capacity) => FactoryCapacityModel.toJson(capacity)).toList();
+      capacities
+          .map((capacity) => FactoryCapacityModel.toJson(capacity))
+          .toList();
 
   static List<Map<String, dynamic>> _productToJson(
           List<ProductModel> products) =>
@@ -623,7 +628,6 @@ class FactoryModel extends B2BUnitModel {
   static Map<String, dynamic> _industrialClusterToJson(
           IndustrialClusterModel model) =>
       IndustrialClusterModel.toJson(model);
-
 }
 
 @JsonSerializable()
@@ -938,20 +942,14 @@ const LastDepartmentLocalizedMap = {
 };
 
 //设计
-enum FactoryDesign {
-  SUPPORTED,
-  NOT_SUPPORTED
-}
+enum FactoryDesign { SUPPORTED, NOT_SUPPORTED }
 
 const FactoryDesignLocalizedMap = {
   FactoryDesign.SUPPORTED: '支持',
   FactoryDesign.NOT_SUPPORTED: '不支持'
 };
 //打板
-enum FactoryPattern {
-  SUPPORTED,
-  NOT_SUPPORTED
-}
+enum FactoryPattern { SUPPORTED, NOT_SUPPORTED }
 
 const FactoryPatternLocalizedMap = {
   FactoryPattern.SUPPORTED: '支持',
@@ -959,10 +957,7 @@ const FactoryPatternLocalizedMap = {
 };
 
 //免费打样
-enum FactoryFreeProofing {
-  SUPPORTED,
-  NOT_SUPPORTED
-}
+enum FactoryFreeProofing { SUPPORTED, NOT_SUPPORTED }
 
 const FactoryFreeProofingLocalizedMap = {
   FactoryFreeProofing.SUPPORTED: '支持',
@@ -1049,7 +1044,6 @@ const CompanyTypeStateLocalizedMap = {
   CompanyTypeState.INDIVIDUAL: '个体户',
 };
 
-
 //认证状态model
 @JsonSerializable()
 class AuthenticationModel extends ItemModel {
@@ -1057,11 +1051,8 @@ class AuthenticationModel extends ItemModel {
   AuthenticationState companyState;
   CompanyTypeState companyType;
 
-  AuthenticationModel({
-    this.personalState,
-    this.companyState,
-    this.companyType
-  });
+  AuthenticationModel(
+      {this.personalState, this.companyState, this.companyType});
 
   factory AuthenticationModel.fromJson(Map<String, dynamic> json) =>
       _$AuthenticationModelFromJson(json);
@@ -1150,7 +1141,6 @@ class CertificationInfo {
 
   static Map<String, dynamic> toJson(CertificationInfo model) =>
       _$CertificationInfoToJson(model);
-
 }
 
 enum VerifyWay {
@@ -1163,7 +1153,7 @@ const VerifyWayLocalizedMap = {
   VerifyWay.WAY2: '纸质材料',
 };
 
-enum AuthenticationRole{
+enum AuthenticationRole {
   AGENT,
   LEGAL,
 }
@@ -1174,14 +1164,14 @@ const AuthenticationRoleLocalizedMap = {
 };
 
 @JsonSerializable()
-class AuthenUserInfo{
+class AuthenUserInfo {
   String mobile;
   String idCardNum;
   String name;
 
-  AuthenUserInfo(this.mobile,this.idCardNum,this.name);
+  AuthenUserInfo(this.mobile, this.idCardNum, this.name);
 
- factory AuthenUserInfo.fromJson(Map<String, dynamic> json) =>
+  factory AuthenUserInfo.fromJson(Map<String, dynamic> json) =>
       _$AuthenUserInfoFromJson(json);
 
   static Map<String, dynamic> toJson(AuthenUserInfo model) =>
