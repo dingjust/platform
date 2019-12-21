@@ -1,6 +1,7 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="cooperatorDetailsDialogVisible" @close="onDialogClose" width="80%"  class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="cooperatorDetailsDialogVisible" @close="onDialogClose" width="80%"
+               class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <cooperator-details-page :itemData="itemData"
                                @onSearch="onSearch"
                                @onDetails="onDetails"

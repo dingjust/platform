@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <address-select v-if="addressSelectVisible" @onSelect="onAddressSelect" />
     </el-dialog>
     <el-form :model="form" ref="form">

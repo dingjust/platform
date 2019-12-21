@@ -1,12 +1,12 @@
 <template>
   <div class="animated fadeIn content">
     <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%"
-      class="purchase-dialog">
+      class="purchase-dialog" :close-on-click-modal="false">
       <purchase-order-details-page :contracts="contracts" :slotData="contentData" @onDetails="onDetails"
                                    :dialogDetailVisible="dialogDetailVisible" @onSearch="onSearch"
                                    @closeDialogDetailVisible="closeDialogDetailVisible"/>
     </el-dialog>
-    <el-dialog :visible.sync="cannelMsgVisible" width="50%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="cannelMsgVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-cannel-msg-dialog :contracts="contracts" :slotData="contentData"
                                         @closeCannelMsgVisible="closeCannelMsgVisible" @onSearch="onSearch"/>
     </el-dialog>

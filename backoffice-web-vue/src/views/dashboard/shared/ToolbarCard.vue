@@ -1,18 +1,18 @@
 <template>
   <div class="animated fadeIn dashboard-card">
-    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
+    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
       <uniquecode-import-form />
     </el-dialog>
-    <el-dialog :visible.sync="enterpriseFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
+    <el-dialog :visible.sync="enterpriseFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
       <authentication-enterprise-from />
     </el-dialog>
-    <el-dialog :visible.sync="personalFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
+    <el-dialog :visible.sync="personalFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
       <authentication-personal-from />
     </el-dialog>
-    <el-dialog :visible.sync="businessFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
+    <el-dialog :visible.sync="businessFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
       <authentication-business-from />
     </el-dialog>
-    <el-dialog :visible.sync="personalResultFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
+    <el-dialog :visible.sync="personalResultFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
       <authentication-personal-result />
     </el-dialog>
 

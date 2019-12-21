@@ -1,13 +1,14 @@
 <template>
 
   <div>
-    <el-dialog v-if="dialogOrderVisible" :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog v-if="dialogOrderVisible" :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog"
+               append-to-body :close-on-click-modal="false">
       <purchase-contract-supplement-form :slotData="slotData"
                                          @onSaveContractSupplementForm="onSaveContractSupplementForm"
                                          @onSaveContractSupplementFormPdf="onSaveContractSupplementFormPdf"
                                          @closeDialogOrderVisible="closeDialogOrderVisible"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogSealVisible" :show-close="true">
+    <el-dialog :visible.sync="dialogSealVisible" :show-close="true" :close-on-click-modal="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
     <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">

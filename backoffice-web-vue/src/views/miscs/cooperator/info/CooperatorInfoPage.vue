@@ -70,10 +70,10 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="factoryDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="factoryDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <factory-details-page :slotData="factoryDetailsData"></factory-details-page>
     </el-dialog>
-    <el-dialog :visible.sync="brandDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="brandDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <brand-details-page :slotData="brandDetailsData"></brand-details-page>
     </el-dialog>
   </div>

@@ -108,7 +108,7 @@
                    :total="page.totalElements">
     </el-pagination>
 
-    <el-dialog  :visible.sync="reasonDialogVisible" width="60%" class="purchase-dialog" append-to-body>
+    <el-dialog  :visible.sync="reasonDialogVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <el-row type="flex" justify="center">
         <h6 style="font-size: 18px;font-weight: bold">填写拒绝原因</h6>
       </el-row>

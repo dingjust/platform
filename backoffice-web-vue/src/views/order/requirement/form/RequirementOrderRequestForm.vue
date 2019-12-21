@@ -16,7 +16,7 @@
           :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
-        <el-dialog :visible.sync="dialogVisible" :modal="false">
+        <el-dialog :visible.sync="dialogVisible" :modal="false" :close-on-click-modal="false">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-col>

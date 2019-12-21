@@ -9,7 +9,8 @@
         </template>
       </factory-list>
     </el-card>
-    <el-dialog title="标签" width="30%" :visible.sync="dialogFormVisible" :before-close="handleClose" append-to-body>
+    <el-dialog title="标签" width="30%" :visible.sync="dialogFormVisible" :before-close="handleClose"
+               append-to-body :close-on-click-modal="false">
       <factory-labels-form :slotData="item"></factory-labels-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
@@ -17,7 +18,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <factory-details-page :slotData="detailsData"></factory-details-page>
     </el-dialog>
   </div>

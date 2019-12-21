@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="sizeDetailsPageVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="sizeDetailsPageVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <size-details-page v-if="sizeDetailsPageVisible" :slot-data="itemData"
                          @sizeDetailsPageVisibleTurn="sizeDetailsPageVisibleTurn"
                           @onSearch="onSearch"/>

@@ -1,6 +1,6 @@
 <template>
   <div>
-  <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
+  <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
     <template-form v-if="tempFormVisible" @onSearch="onSearch" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"></template-form>
   </el-dialog>
   <el-form :inline="true">

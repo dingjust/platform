@@ -11,7 +11,8 @@
     <el-dialog title="请选择产品"
                :visible.sync="dialogVisible"
                :modal="false"
-               :show-close="false">
+               :show-close="false"
+               :close-on-click-modal="false">
       <product-select-list :multiple-selection="false" :page="page"
                            @onSelected="onSelected"
                            @onPageSizeChanged="onPageSizeChanged"

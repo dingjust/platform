@@ -24,7 +24,7 @@
       <proofing-delivery-address-form :slot-data="slotData" :read-only="readOnly"/>
     </el-card>
     <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
-               :show-close="false" append-to-body width="50%">
+               :show-close="false" append-to-body width="50%" :close-on-click-modal="false">
       <address-form ref="addressForm" :slot-data="addressFormData"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="onAddressInputCanceled">取 消</el-button>
