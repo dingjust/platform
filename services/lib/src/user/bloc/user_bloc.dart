@@ -111,13 +111,17 @@ class UserBLoC extends BLoCBase {
 
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
-        UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+        BrandModel brand =
+        await UserRepositoryImpl().getBrand(_user.companyCode);
+        if (brand != null) {
           _user.b2bUnit = brand;
-        });
+        }
       } else if (_user.type == UserType.FACTORY) {
-        UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
-          _user.b2bUnit = factory;
-        });
+        FactoryModel factoryModel =
+        await UserRepositoryImpl().getFactory(_user.companyCode);
+        if (factoryModel != null) {
+          _user.b2bUnit = factoryModel;
+        }
       }
 
       //  记录登录用户信息
@@ -193,13 +197,17 @@ class UserBLoC extends BLoCBase {
 
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
-        UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+        BrandModel brand =
+        await UserRepositoryImpl().getBrand(_user.companyCode);
+        if (brand != null) {
           _user.b2bUnit = brand;
-        });
+        }
       } else if (_user.type == UserType.FACTORY) {
-        UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
-          _user.b2bUnit = factory;
-        });
+        FactoryModel factoryModel =
+        await UserRepositoryImpl().getFactory(_user.companyCode);
+        if (factoryModel != null) {
+          _user.b2bUnit = factoryModel;
+        }
       }
 
       //  记录登陆用户信息
@@ -284,13 +292,17 @@ class UserBLoC extends BLoCBase {
 
         // 获取公司信息
         if (_user.type == UserType.BRAND) {
-          UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+          BrandModel brand =
+          await UserRepositoryImpl().getBrand(_user.companyCode);
+          if (brand != null) {
             _user.b2bUnit = brand;
-          });
+          }
         } else if (_user.type == UserType.FACTORY) {
-          UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
-            _user.b2bUnit = factory;
-          });
+          FactoryModel factoryModel =
+          await UserRepositoryImpl().getFactory(_user.companyCode);
+          if (factoryModel != null) {
+            _user.b2bUnit = factoryModel;
+          }
         }
 
         jpush$.setAlias(currentUser.mobileNumber);

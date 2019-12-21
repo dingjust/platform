@@ -2,131 +2,148 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-void showAlertDialog(bool blockPopup,
+///未认证弹窗
+void showUncertifiedDialog(bool blockPopup,
     {VoidCallback cancel,
     VoidCallback confirm,
     VoidCallback backgroundReturn,
     VoidCallback physicalBackButton}) {
-  BotToast.showAnimationWidget(
-      clickClose: false,
-      allowClick: false,
-      onlyOne: true,
-      crossPage: true,
-      wrapAnimation: (controller, cancel, child) => BackgroundRoute(
-            child: child,
-            blockPopup: blockPopup,
-            cancelFunc: cancel,
-            physicalButtonPopCallback: () {
-              physicalBackButton?.call();
-            },
-          ),
-      wrapToastAnimation: (controller, cancel, child) => Stack(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  cancel();
-                  backgroundReturn?.call();
-                },
-                //The DecoratedBox here is very important,he will fill the entire parent component
-                child: AnimatedBuilder(
-                  builder: (_, child) => Opacity(
-                    opacity: controller.value,
-                    child: child,
-                  ),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(color: Colors.black26),
-                    child: SizedBox.expand(),
-                  ),
-                  animation: controller,
+  BotToast.showCustomText(
+    clickClose: false,
+    onlyOne: true,
+    duration: null,
+    // wrapAnimation: (controller, cancel, child) => BackgroundRoute(
+    //   child: child,
+    //   blockPopup: blockPopup,
+    //   cancelFunc: cancel,
+    //   physicalButtonPopCallback: () {
+    //     physicalBackButton?.call();
+    //   },
+    // ),
+    wrapToastAnimation: (controller, cancel, child) =>
+        Stack(
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                cancel();
+                backgroundReturn?.call();
+              },
+              //The DecoratedBox here is very important,he will fill the entire parent component
+              child: AnimatedBuilder(
+                builder: (_, child) =>
+                    Opacity(
+                      opacity: controller.value,
+                      child: child,
+                    ),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Colors.black26),
+                  child: SizedBox.expand(),
                 ),
+                animation: controller,
               ),
-              CustomOffsetAnimation(
-                controller: controller,
-                child: child,
-              )
-            ],
-          ),
-      toastBuilder: (cancelFunc) => AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            title: const Text('温馨提示'),
-            content: const Text('您的账号尚未完成认证，为增加您账号的可信度，请您先完成认证'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  cancelFunc();
-                  cancel?.call();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  cancelFunc();
-                  confirm?.call();
-                },
-                child: const Text(
-                  '立即认证',
-                  style: TextStyle(color: Colors.lightBlue),
-                ),
-              ),
-            ],
-          ),
-      animationDuration: Duration(milliseconds: 300));
-}
-
-class CustomWidget extends StatefulWidget {
-  @override
-  _CustomWidgetState createState() => _CustomWidgetState();
-}
-
-class _CustomWidgetState extends State<CustomWidget> {
-  bool blockPopup = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('CustomWidget'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.only(top: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () {
-                  showAlertDialog(blockPopup, cancel: () {
-                    BotToast.showText(text: 'Click cancel');
-                  }, confirm: () {
-                    BotToast.showText(text: 'Click confirm');
-                  }, backgroundReturn: () {
-                    BotToast.showText(text: 'Click background');
-                  }, physicalBackButton: () {
-                    BotToast.showText(text: 'Click the physical back button');
-                  });
-                },
-                child: const Text('customWidget'),
-              ),
-              SwitchListTile(
-                value: blockPopup,
-                onChanged: (value) {
-                  setState(() {
-                    blockPopup = value;
-                  });
-                },
-                title: const Text('DisablePhysicalButton: '),
-              ),
-              const Divider(),
-            ],
-          ),
+            ),
+            CustomOffsetAnimation(
+              controller: controller,
+              child: child,
+            )
+          ],
         ),
-      ),
-    );
-  }
+    toastBuilder: (cancelFunc) =>
+        AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          title: const Text('温馨提示'),
+          content: const Text('您的账号尚未完成认证，为增加您账号的可信度，请您先完成认证'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                cancelFunc();
+                cancel?.call();
+              },
+              child: const Text(
+                '取消',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            FlatButton(
+              onPressed: () {
+                cancelFunc();
+                confirm?.call();
+              },
+              child: const Text(
+                '立即认证',
+                style: TextStyle(color: Colors.lightBlue),
+              ),
+            ),
+          ],
+        ),
+    // animationDuration: Duration(milliseconds: 00)
+  );
+}
+
+///资料未完善弹窗
+void showProfileCompleteDialog(bool blockPopup, {
+  VoidCallback cancel,
+  VoidCallback confirm,
+}) {
+  BotToast.showCustomText(
+    onlyOne: true,
+    duration: null,
+    wrapToastAnimation: (controller, cancel, child) =>
+        Stack(
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                cancel();
+              },
+              //The DecoratedBox here is very important,he will fill the entire parent component
+              child: AnimatedBuilder(
+                builder: (_, child) =>
+                    Opacity(
+                      opacity: controller.value,
+                      child: child,
+                    ),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Colors.black26),
+                  child: SizedBox.expand(),
+                ),
+                animation: controller,
+              ),
+            ),
+            CustomOffsetAnimation(
+              controller: controller,
+              child: child,
+            )
+          ],
+        ),
+    toastBuilder: (cancelFunc) =>
+        AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          title: const Text('温馨提示'),
+          content: const Text('您的资料尚未完善，请您补全信息后再查看'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                cancelFunc();
+                cancel?.call();
+              },
+              child: const Text(
+                '下次再说',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            FlatButton(
+              onPressed: () {
+                cancelFunc();
+                confirm?.call();
+              },
+              child: const Text(
+                '去完善资料',
+                style: TextStyle(color: Colors.lightBlue),
+              ),
+            ),
+          ],
+        ),
+  );
 }
 
 class BackgroundRoute extends StatefulWidget {

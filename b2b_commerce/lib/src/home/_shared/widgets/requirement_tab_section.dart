@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -134,8 +135,9 @@ class _RequirementItem extends StatelessWidget {
       ),
       child: FlatButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RequirementOrderDetailPage(model.code)));
+          // jumpToDetailPage(context);
+          Provider.of<CertificationStatusHelper>(context)
+              .checkProfile(() => jumpToDetailPage(context));
         },
         child: Container(
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -205,6 +207,11 @@ class _RequirementItem extends StatelessWidget {
             )),
       ),
     );
+  }
+
+  void jumpToDetailPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RequirementOrderDetailPage(model.code)));
   }
 
   String generateDistanceStr(double distance) {
