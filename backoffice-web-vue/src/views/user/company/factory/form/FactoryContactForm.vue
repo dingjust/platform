@@ -87,7 +87,7 @@
             </el-row>
           </el-form-item>
         </div>
-      <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
+      <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
         <address-select @onSelect="onAddressSelect" />
       </el-dialog>
   </div>

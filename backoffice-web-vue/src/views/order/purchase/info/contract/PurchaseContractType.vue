@@ -77,19 +77,19 @@
       <!--</div>-->
       <!--</el-col>-->
     </el-row>
-    <el-dialog :visible.sync="contractFormDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-contract-form v-if="contractFormDialogVisible" :slotData="slotData"
                               @onSaveContractForm="onSaveContractForm"
                               @onSaveContractFormPdf="onSaveContractFormPdf"
                               @closeContractFormDialog="closeContractFormDialog"/>
     </el-dialog>
-    <el-dialog :visible.sync="contractFormPurchaseDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormPurchaseDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-contract-purchase-form v-if="contractFormPurchaseDialogVisible" :slotData="slotData"
                               @closeContractPurchaseFormDialog="closeContractPurchaseFormDialog"
                               @onSaveContractPurchaseForm="onSaveContractPurchaseForm"
                               @onSaveContractPurchaseFormPdf="onSaveContractPurchaseFormPdf"/>
     </el-dialog>
-    <el-dialog :visible.sync="contractFormFrameDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormFrameDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-contract-frame-form v-if="contractFormFrameDialogVisible" :slotData="slotData"
                               @closeContractFrameFormDialog="closeContractFrameFormDialog"
                               @onSaveContractFrameForm="onSaveContractFrameForm"

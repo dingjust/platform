@@ -56,12 +56,12 @@
       <el-button v-if="isBrand() && slotData.status == 'SHIPPED'" class="btn-class" @click="onConfirmReceive">确认收货</el-button>
     </el-row>
 
-    <el-dialog :visible.sync="paymentDialogVisible" width="80%"  class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="paymentDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <proofing-payment-page :slotData="slotData" :readOnly="false">
 
       </proofing-payment-page>
     </el-dialog>
-    <el-dialog :visible.sync="deliveryDialogVisible" width="50%"  class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="deliveryDialogVisible" width="50%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <consignment-form @onSubmit="onConfirmDelivery" v-if="deliveryDialogVisible">
 
       </consignment-form>

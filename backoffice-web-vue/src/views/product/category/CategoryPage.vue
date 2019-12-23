@@ -9,7 +9,7 @@
 </style>
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="CategoryDetailsPageVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="CategoryDetailsPageVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <category-details-page v-if="CategoryDetailsPageVisible" :slot-data="itemData" :operationType="operationType" @operationTypeTurn="operationTypeTurn"></category-details-page>
     </el-dialog>
     <el-card>

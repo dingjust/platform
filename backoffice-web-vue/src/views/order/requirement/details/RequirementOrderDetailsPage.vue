@@ -100,13 +100,13 @@
       <el-button class="btn-class" @click="onCancel" v-if="slotData.status == 'PENDING_QUOTE'">关闭</el-button>
     </el-row>
 
-    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :append-to-body="true">
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :append-to-body="true" :close-on-click-modal="false">
       <quote-details-page :slotData="quoteData" :readOnly="true">
 
       </quote-details-page>
     </el-dialog>
 
-    <el-dialog :visible.sync="factoryListDialogVisible" width="80%"  class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="factoryListDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <factory-cooperator-transfer v-if="factoryListDialogVisible"
                                    @onSubmit="onInvitationFactories"
                                    :selectedTip="tip"
@@ -115,7 +115,7 @@
       </factory-cooperator-transfer>
     </el-dialog>
 
-    <el-dialog :visible.sync="formDialogVisible" width="80%"  class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="formDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <requirement-order-form v-if="formDialogVisible" :formData="formData" @onSave="onSave">
 
       </requirement-order-form>

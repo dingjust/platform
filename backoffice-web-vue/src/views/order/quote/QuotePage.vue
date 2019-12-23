@@ -32,7 +32,7 @@
 
     </el-card>
 
-    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <quote-details-page :slotData="slotData" :readOnly="false">
 
       </quote-details-page>

@@ -64,7 +64,8 @@
                :visible="factoryFormVisible"
                class="purchase-dialog"
                append-to-body
-               @close="onClose">
+               @close="onClose"
+               :close-on-click-modal="false">
       <factory-from :formData = "formData" @onSave="onSave" ></factory-from>
     </el-dialog>
 
@@ -72,7 +73,8 @@
                v-if="factoryProfilesFormVisible"
                :visible.sync="factoryProfilesFormVisible"
                class="purchase-dialog"
-               append-to-body>
+               append-to-body
+               :close-on-click-modal="false">
       <factory-profiles-from :profiles = "formData.profiles" @onSave="onSaveProfiles" ></factory-profiles-from>
     </el-dialog>
   </div>

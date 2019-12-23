@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body>
+    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="uniquecode-dialog" append-to-body :close-on-click-modal="false">
       <uniquecode-import-form />
     </el-dialog>
     <el-form :inline="true">

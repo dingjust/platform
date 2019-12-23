@@ -84,7 +84,7 @@
     </template>
 
     <el-dialog title="生产订单同步" width="600px" :visible.sync="this.synchronizeVisible" :before-close="handleClose"
-               append-to-body>
+               append-to-body :close-on-click-modal="false">
       <el-form>
         <el-form-item label="目标生产单号：">
           <el-input v-model="slotData.targetPurchaseOrderCode" placeholder="请输入目标生产单号" clearable autosize></el-input>

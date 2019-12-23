@@ -1,9 +1,9 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="dialogTableVisible" width="80%">
+    <el-dialog :visible.sync="dialogTableVisible" width="80%" :close-on-click-modal="false">
       <contract-details  :slotData="contractData" />
     </el-dialog>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @closePdfVisible="pdfVisible=false" @onSearch="onSearch"/>
     </el-dialog>
     <!--<div class="report">-->

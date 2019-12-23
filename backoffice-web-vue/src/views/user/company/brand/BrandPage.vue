@@ -10,7 +10,7 @@
       </brand-list>
     </el-card>
     <el-dialog title="修改标签和评分" width="450px" :visible.sync="this.dialogFormVisible" :before-close="handleClose"
-               append-to-body>
+               append-to-body :close-on-click-modal="false">
       <brand-labels-form :slotData = "this.item"></brand-labels-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>

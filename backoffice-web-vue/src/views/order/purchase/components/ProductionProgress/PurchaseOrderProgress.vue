@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <order-progress-update-form :slotData="selectProgressModel" :order="slotData" @callback="onCallback"
         :readonly="readonly" v-if="hackSet" @editSubmit="onEditSubmit" />
     </el-dialog>
@@ -199,9 +199,9 @@
         });
       },
       judgeReadonly(item) {
-        if (item.sequence >= this.currentSequence && this.slotData.status == 'IN_PRODUCTION' && this.isFactory()) {          
+        if (item.sequence >= this.currentSequence && this.slotData.status == 'IN_PRODUCTION' && this.isFactory()) {
           return false;
-        } else {          
+        } else {
           return true;
         }
       }

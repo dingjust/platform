@@ -12,7 +12,7 @@
     </el-card>
     <div class="pt-2"></div>
     <el-dialog title="修改标签名称" width="650px" :visible.sync="this.updateVisible" :before-close="handleClose"
-               append-to-body>
+               append-to-body :close-on-click-modal="false">
       <el-input v-model="slotData.name"></el-input>
       <div slot="footer" class="dialog-footer">
         <el-button @click="this.updateVisible = false">取 消</el-button>

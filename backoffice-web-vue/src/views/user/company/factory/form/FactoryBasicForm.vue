@@ -4,7 +4,8 @@
                v-if="factoryProfilesFormVisible"
                :visible.sync="factoryProfilesFormVisible"
                class="purchase-dialog"
-               append-to-body>
+               append-to-body
+               :close-on-click-modal="false">
       <factory-profiles-from :profiles="formData.profiles" @onSaveProfiles="onSaveProfiles"></factory-profiles-from>
     </el-dialog>
     <el-row>

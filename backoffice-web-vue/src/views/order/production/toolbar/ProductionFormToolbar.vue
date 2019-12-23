@@ -23,7 +23,7 @@
     </el-button-group>
 
     <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
-               :show-close="false" append-to-body width="50%">
+               :show-close="false" append-to-body width="50%" :close-on-click-modal="false">
       <address-form ref="addressForm" :slot-data="addressFormData"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addressDialogVisible = false">取 消</el-button>
@@ -31,7 +31,7 @@
       </span>
     </el-dialog>
     <el-dialog title="确认发货" :modal="false" :visible.sync="confirmDeliveryDialogVisible"
-               :show-close="false" append-to-body>
+               :show-close="false" append-to-body :close-on-click-modal="false">
       <consignment-form ref="consignmentForm" :slot-data="consignmentFormData" :read-only="false"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="confirmDeliveryDialogVisible = false">取 消</el-button>

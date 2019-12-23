@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="pt-2"></div>
     <el-row type="flex" justify="space-around" :gutter="50">
       <el-col :span="8">
         <div :class="contractType=='1'?'create-contract-type_select':'create-contract-type_not_select'"
@@ -77,19 +78,19 @@
       <!--</div>-->
       <!--</el-col>-->
     </el-row>
-    <el-dialog :visible.sync="contractFormDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-form v-if="contractFormDialogVisible" @onSearch="onSearch"
                      @openPreviewPdf="openPreviewPdf"
                      @closeContractFormDialog="closeContractFormDialog"
                      @closeContractTypeDialog="closeContractTypeDialog"/>
     </el-dialog>
-    <el-dialog :visible.sync="contractFormPurchaseDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormPurchaseDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-purchase-form v-if="contractFormPurchaseDialogVisible" @onSearch="onSearch"
                               @openPreviewPdf="openPreviewPdf"
                               @closeContractPurchaseFormDialog="closeContractPurchaseFormDialog"
                               @closeContractTypeDialog="closeContractTypeDialog"/>
     </el-dialog>
-    <el-dialog :visible.sync="contractFormFrameDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormFrameDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-frame-form v-if="contractFormFrameDialogVisible" @onSearch="onSearch"
                            @openPreviewPdf="openPreviewPdf"
                            @closeContractFrameFormDialog="closeContractFrameFormDialog"

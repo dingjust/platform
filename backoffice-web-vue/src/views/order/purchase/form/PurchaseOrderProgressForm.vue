@@ -71,7 +71,7 @@
     </el-form>
 
     <el-dialog title="修改" width="600px" :visible.sync="this.updateVisible" :before-close="handleClose"
-               append-to-body>
+               append-to-body :close-on-click-modal="false">
       <purchase-order-update-form :slotData = "slotData"></purchase-order-update-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>

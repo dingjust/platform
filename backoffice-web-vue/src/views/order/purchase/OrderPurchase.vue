@@ -1,18 +1,18 @@
 <template>
   <div class="animated fadeIn content order-purchase-form">
-    <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
-    <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="suppliersSelectVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
-    <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="addressSelectVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <address-select @onSelect="onAddressSelect" />
     </el-dialog>
-    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <pay-plan-select @onSelect="onPayPlanSelect" />
     </el-dialog>
-    <el-dialog title="保存账务方案" :visible.sync="dialogPayPlanFormVisible">
+    <el-dialog title="保存账务方案" :visible.sync="dialogPayPlanFormVisible" :close-on-click-modal="false">
       <el-form :model="payPlanForm">
         <el-form-item label="方案名称">
           <el-input v-model="payPlanForm.name"></el-input>
@@ -464,7 +464,7 @@
             <el-col :span="24">
               <el-row type="flex" align="middle">
                 <h6 class="info-input-prepend" style="width:45px">结果预览</h6>
-                <el-input type="textarea" autosize v-model="resultPreview" />
+                <el-input type="textarea" autosize v-model="resultPreview">
                 </el-input>
               </el-row>
             </el-col>

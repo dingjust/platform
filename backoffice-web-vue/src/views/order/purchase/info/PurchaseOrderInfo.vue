@@ -1,26 +1,26 @@
 <template>
   <div>
-    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="uniquecodeFormVisible" width="30%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <uniquecode-generate-form :slotData="slotData" />
     </el-dialog>
-    <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-receive :slotData="slotData" @afterCreate="onAfterCreate" />
     </el-dialog>
-    <el-dialog :visible.sync="deliverViewsVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="deliverViewsVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-deliver-views :slotData="slotData" @createNewDeliver="onCreateNewDeliver" />
     </el-dialog>
-    <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-deliver :slotData="slotData" @afterCreate="onAfterCreate" />
     </el-dialog>
-    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-reconciliation :slotData="slotData" />
     </el-dialog>
-    <el-dialog :visible.sync="addressModifyFormVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="addressModifyFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-address-modify v-if="addressModifyFormVisible" :slotData="slotData"
         @closeAddressModifyFormVisible="closeAddressModifyFormVisible"
         @_updateDeliveryAddress="_updateDeliveryAddress" />
     </el-dialog>
-    <el-dialog :visible.sync="purchaseOrderCancelVisible" width="50%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="purchaseOrderCancelVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-cancel-dialog v-if="purchaseOrderCancelVisible"
         @closePurchaseOrderCancelVisible="closePurchaseOrderCancelVisible" @_cancel="_cancel" />
     </el-dialog>

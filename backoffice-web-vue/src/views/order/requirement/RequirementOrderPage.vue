@@ -35,7 +35,7 @@
 
     </el-card>
 
-    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <requirement-order-details-page v-if="detailsDialogVisible"
                                     :slotData="slotData"
                                     @onSearchQuotes="onSearchQuotes"
@@ -46,12 +46,12 @@
 
       </requirement-order-details-page>
     </el-dialog>
-    <el-dialog :visible.sync="formDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="formDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <requirement-order-form v-if="formDialogVisible" :formData="formData" @onSave="onSave" :isCreated="true">
 
       </requirement-order-form>
     </el-dialog>
-    <el-dialog :visible.sync="editFormDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="editFormDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <requirement-order-form v-if="editFormDialogVisible" :formData="formData" @onSave="onEditSave">
 
       </requirement-order-form>
@@ -119,6 +119,7 @@
 
         const query = this.queryFormData;
         const url = this.apis().getRequirementOrders();
+        console.log(page);
         this.searchAdvanced({url, query, page, size});
 
         if (this.categories <= 0) {
@@ -156,7 +157,7 @@
           return;
         }
 
-        this.slotData = Object.assign({},result);
+        this.slotData = Object.assign({}, result);
         this.onAdvancedSearch();
       },
       async onCancelled (item) {
@@ -187,7 +188,7 @@
         }
 
         result.details.effectiveDays = result.details.effectiveDays == null ? 'null' : result.details.effectiveDays.toString();
-        this.setFormData(Object.assign({},this.formData,result));
+        this.setFormData(Object.assign({}, this.formData, result));
 
         this.editFormDialogVisible = !this.editFormDialogVisible;
       },
@@ -304,7 +305,7 @@
     created () {
       this.onAdvancedSearch();
     },
-    destroyed() {
+    destroyed () {
       this.clearQueryFormData();
     }
   };

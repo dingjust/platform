@@ -192,7 +192,7 @@
       </el-button>
     </el-row>
 
-    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <factory-cooperator-transfer-form v-if="dialogVisible" :selectFactories="selectFactories"
         :selectCooperators="selectCooperators" :selectUids="selectUids" :selectCooperatorIds="selectCooperatorIds"
         :selectFactoryUids="selectFactoryUids" :selectPhoneNumbers="selectPhoneNumbers">

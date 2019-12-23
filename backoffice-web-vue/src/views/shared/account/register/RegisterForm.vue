@@ -1,9 +1,9 @@
 <template>
   <div class="register-form-container">
-    <el-dialog :visible.sync="serviceProtocolVisible">
+    <el-dialog :visible.sync="serviceProtocolVisible" :close-on-click-modal="false">
       <service-protocol />
     </el-dialog>
-    <el-dialog :visible.sync="paymentProtocolVisible">
+    <el-dialog :visible.sync="paymentProtocolVisible" :close-on-click-modal="false">
       <payment-protocol />
     </el-dialog>
     <el-row type="flex" justify="center">

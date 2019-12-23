@@ -31,19 +31,19 @@
 
     </el-card>
 
-    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <proofing-details-page :slotData="slotData" @onRefresh="getProofing" @onAdvancedSearch="onAdvancedSearch">
 
       </proofing-details-page>
     </el-dialog>
 
-    <el-dialog :visible.sync="quoteDetailsDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="quoteDetailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <quote-details-page :slotData="quoteData">
 
       </quote-details-page>
     </el-dialog>
 
-    <el-dialog :visible.sync="requirementDetailsDialogVisible" width="80%"  class="purchase-dialog">
+    <el-dialog :visible.sync="requirementDetailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <requirement-order-details-page :slotData="requirementData">
 
       </requirement-order-details-page>

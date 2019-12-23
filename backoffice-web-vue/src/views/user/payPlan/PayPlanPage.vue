@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <el-dialog :visible.sync="payPlanDetailsDialogVisible" width="60%" height="100%" class="purchase-dialog"
-      append-to-body>
+      append-to-body :close-on-click-modal="false">
       <pay-plan-details-page :itemData="itemData" />
     </el-dialog>
     <el-card>

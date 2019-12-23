@@ -53,13 +53,13 @@
       </el-timeline>
     </el-row>
 
-    <el-dialog :visible.sync="financePaymentFormVisible" width="60%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="financePaymentFormVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-finance-payment-form :payPlanItem="itemData" :slotData="slotData" :form="formData"
         @close="onClose" @refreshItem="refreshItem" :paymentOrders="paymentOrders" @refreshData="refreshData"
         @clearFormData="clearFormData" />
     </el-dialog>
 
-    <el-dialog :visible.sync="financePaymentVisible" width="60%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="financePaymentVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-payment :paymentOrders="paymentOrders" @refreshItem="refreshItem"
         @refreshData="refreshData" />
     </el-dialog>

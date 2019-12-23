@@ -62,13 +62,13 @@
 
   export default {
     name: 'ProofingSearchResultList',
-    props: ["page"],
+    props: ['page'],
     computed: {},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.advancedSearch) {
@@ -78,35 +78,41 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.advancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
+          this.$nextTick(() => {
+            this.$refs.resultTable.bodyWrapper.scrollTop = 0
+          });
           return;
         }
 
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
+      onDetails (row) {
         this.$emit('onDetails', row);
       },
-      onShowQuote(row) {
+      onShowQuote (row) {
         this.$emit('onShowQuote', row);
       },
-      onShowRequirement(row) {
+      onShowRequirement (row) {
         this.$emit('onShowRequirement', row);
-      },
+      }
     },
-    data() {
+    data () {
       return {
 
       }
     },
-    created() {
+    created () {
     }
   }
 </script>

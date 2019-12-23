@@ -176,7 +176,7 @@
       </div>
     </el-card>
 
-    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
         <pay-plan-select :page="payPlanPage" @onSearch="onSearchPayPlan" @onSelect="onSelect"/>
     </el-dialog>
   </div>

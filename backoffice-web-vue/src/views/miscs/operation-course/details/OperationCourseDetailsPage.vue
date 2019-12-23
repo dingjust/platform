@@ -7,7 +7,7 @@
     <operation-course-form-toolbar :read-only="isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" @onUpdate="onUpdate"/>
     <el-dialog v-if="isTenant()" title="修改" :modal="false"
                :visible.sync="updateDialogVisible"
-               :show-close="false" append-to-body width="50%">
+               :show-close="false" append-to-body width="50%" :close-on-click-modal="false">
       <operation-course-form ref="form2" :slot-data="slotData" :read-only="true"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="updateDialogVisible = false">取 消</el-button>

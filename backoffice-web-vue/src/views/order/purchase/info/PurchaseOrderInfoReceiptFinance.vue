@@ -44,13 +44,13 @@
       </el-timeline>
     </el-row>
 
-    <el-dialog :visible.sync="financeReceiptFormVisible" width="60%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="financeReceiptFormVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-finance-receipt-form :payPlanItem="itemData" :slotData="slotData" :form="formData"
                                            @close="onClose" @refreshItem="refreshItem" :receiptOrders="receiptOrders"
                                             @refreshData="refreshData" @clearFormData="clearFormData"/>
     </el-dialog>
 
-    <el-dialog :visible.sync="financeReceiptVisible" width="60%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="financeReceiptVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-receipt :receiptOrders="receiptOrders" @refreshItem="refreshItem"
                                    @refreshData="refreshData"/>
     </el-dialog>
