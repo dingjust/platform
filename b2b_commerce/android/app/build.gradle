@@ -32,6 +32,12 @@ android {
             storeFile file('tools/cplusc2.jks')
             storePassword 'yijiayi'
         }
+        debug {
+            keyAlias 'key02'
+            keyPassword 'yijiayi'
+            storeFile file('tools/cplusc2.jks')
+            storePassword 'yijiayi'
+        }
     }
 
     compileSdkVersion 28

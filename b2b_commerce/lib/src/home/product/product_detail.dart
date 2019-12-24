@@ -486,7 +486,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     dj.showModalBottomSheet<void>(
         context: buildContext,
         builder: (BuildContext context) {
-          return BuyProofingForm(widget.product);
+          return BuyProofingForm(
+            widget.product,
+            onRefresh: () {
+              setState(() {});
+            },
+          );
         });
   }
 

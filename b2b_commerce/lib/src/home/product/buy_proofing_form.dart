@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/home/product/order_confirm_form.dart';
+import 'package:b2b_commerce/src/home/product/two_decimal_input_format.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,10 @@ class BuyProofingForm extends StatefulWidget {
 
   final double heightScale;
 
-  const BuyProofingForm(this.product, {Key key, this.heightScale = 0.75})
+  final VoidCallback onRefresh;
+
+  const BuyProofingForm(this.product,
+      {Key key, this.heightScale = 0.75, this.onRefresh})
       : super(key: key);
 
   @override
@@ -47,14 +51,23 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   //总数
   int totalNum = 0;
 
+  //输入即时刷新
+  Function textEditControllerListener;
+
   @override
   void initState() {
     remarksEditingController = TextEditingController();
+    textEditControllerListener = () {
+      setState(() {});
+    };
 
-    productEntries = widget.product.variants
-        .map((variant) => EditApparelSizeVariantProductEntry(
-            controller: TextEditingController(), model: variant))
-        .toList();
+    productEntries = widget.product.variants.map((variant) {
+      TextEditingController controller = TextEditingController();
+      //赋值监听器，即时监听用户输入
+      controller.addListener(textEditControllerListener);
+      return EditApparelSizeVariantProductEntry(
+          controller: controller, model: variant);
+    }).toList();
     if (productEntries != null) {
       productEntries.forEach((entry) {
         if (colorRowList[entry.model.color.code] == null) {
@@ -281,7 +294,9 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                           //只能输入数字
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly,
+                            TwoDecimalInputFormat(() => widget.onRefresh())
                           ],
+
                           onChanged: (val) {
                             if (val == '0') {
                               setState(() {
@@ -670,6 +685,10 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   void dispose() {
     // TODO: implement dispose
     _streamController.close();
+    //删除监听器
+    productEntries.forEach((entry) {
+      entry.controller.removeListener(textEditControllerListener);
+    });
     super.dispose();
   }
 }
