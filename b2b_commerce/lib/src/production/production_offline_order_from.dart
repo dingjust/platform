@@ -655,12 +655,20 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       hintText: '请输入订单报价（数字）',
       prefix: '￥',
       inputFormatters: [
-        DecimalInputFormat(),
+        DecimalInputFormat(),        
       ],
       dividerPadding: EdgeInsets.symmetric(
         horizontal: 0,
       ),
       onChanged: (value) {
+        if (value.contains('.')) {
+          int index = value.indexOf('.');
+          if (value.length > index + 3) {
+            setState(() {
+              _priceController.text = value.substring(0, index + 3);
+            });
+          }
+        }
         price = value;
       },
     );
@@ -1279,8 +1287,8 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:
-            PurchaseOrderRepository().createOfflinePurchaseOrder(purchaseOrder),
+            requestCallBack: PurchaseOrderRepository()
+                .createOfflinePurchaseOrder(purchaseOrder),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: 'createPurchaseOrder',

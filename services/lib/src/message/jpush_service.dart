@@ -65,13 +65,12 @@ class JPushService {
     return _instance;
   }
 
-  void onOpenMessage(NotifyModel message) async {
+  void onOpenMessage(NotifyModel message, BuildContext context) async {
     if (message != null) {
       Widget page = pageRouteForMessageModel(message);
       if (page != null) {
-        Navigator.push(
-          _context,
-          new MaterialPageRoute(builder: (context) => page),
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => page),
         );
       }
     }

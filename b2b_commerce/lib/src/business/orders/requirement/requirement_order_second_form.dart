@@ -149,11 +149,20 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                       inputFormatters: [
                         DecimalInputFormat(),
                       ],
-                      inputType: TextInputType.number,
+                      // inputType: TextInputType.number,
                       hintText: '填写',
                       controller: super.maxExpectedPriceController,
                       focusNode: super.maxExpectedPriceFocusNode,
-                      onChanged: (v) {
+                      onChanged: (value) {
+                        if (value.contains('.')) {
+                          int index = value.indexOf('.');
+                          if (value.length > index + 3) {
+                            setState(() {
+                              super.maxExpectedPriceController.text =
+                                  value.substring(0, index + 3);
+                            });
+                          }
+                        }
                         widget.formState.model.details.maxExpectedPrice =
                             ClassHandleUtil.removeSymbolRMBToDouble(
                                 super.maxExpectedPriceController.text);
