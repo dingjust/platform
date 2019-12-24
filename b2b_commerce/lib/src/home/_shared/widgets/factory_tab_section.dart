@@ -150,7 +150,7 @@ class _FactoryItem extends StatelessWidget {
                       ),
                       Row(
                         children: <Widget>[
-                          PopulationScaleText(model: model),
+                          // PopulationScaleText(model: model),
                           Expanded(
                             flex: 1,
                             child: CertifiedTagsAndLabelsText(model: model),
@@ -158,24 +158,8 @@ class _FactoryItem extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Opacity(
-                            opacity: model.populationScale != null ? 1.0 : 0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                      width: 0.5, color: Colors.grey[500])),
-                              padding: EdgeInsets.symmetric(horizontal: 6),
-                              child: Center(
-                                  child: Text(
-                                '${PopulationScaleLocalizedMap[model.populationScale]}',
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.black54),
-                              )),
-                            ),
-                          ),
                           Opacity(
                             opacity: model.contactAddress.region.name != null
                                 ? 1.0

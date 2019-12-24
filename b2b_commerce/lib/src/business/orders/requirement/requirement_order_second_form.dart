@@ -1,16 +1,14 @@
-import 'dart:async';
-
 import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_select_publish_target_form.dart';
 import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 import 'RequirementFormMixins.dart';
 
@@ -32,7 +30,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
 
   @override
   void initState() {
-    if(widget.formState.factoryUid != null){
+    if (widget.formState.factoryUid != null) {
       _factoryUids.add(widget.formState.factoryUid);
     }
     super.initForm();
@@ -48,8 +46,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
         elevation: 0.5,
         centerTitle: true,
         title: Text('需求发布(2/2)'),
-        actions: <Widget>[
-        ],
+        actions: <Widget>[],
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.all(10),
@@ -128,7 +125,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                 children: <Widget>[
                   Expanded(
                     flex: 3,
-                    child:  RichText(
+                    child: RichText(
                       text: TextSpan(children: [
                         TextSpan(
                           text: '期望价格',
@@ -152,6 +149,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                       inputFormatters: [
                         DecimalInputFormat(),
                       ],
+                      inputType: TextInputType.number,
                       hintText: '填写',
                       controller: super.maxExpectedPriceController,
                       focusNode: super.maxExpectedPriceFocusNode,
@@ -172,7 +170,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                 children: <Widget>[
                   Expanded(
                     flex: 3,
-                    child:  RichText(
+                    child: RichText(
                       text: TextSpan(children: [
                         TextSpan(
                           text: '加工数量',
@@ -195,11 +193,13 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                       inputFormatters: [
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
+                      inputType: TextInputType.number,
                       hintText: '填写',
                       controller: super.expectedMachiningQuantityController,
                       focusNode: super.expectedMachiningQuantityNode,
                       onChanged: (v) {
-                        widget.formState.model.details.expectedMachiningQuantity =
+                        widget.formState.model.details
+                            .expectedMachiningQuantity =
                             ClassHandleUtil.transInt(
                                 super.expectedMachiningQuantityController.text);
                       },
@@ -254,11 +254,12 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                         },
                         itemBuilder: (BuildContext context) =>
                             SalesMarketsEnum.map(
-                                    (saleMarket) => PopupMenuItem<EnumModel>(
-                                  enabled: false,
-                                  value: saleMarket,
-                                  child: StatefulBuilder(
-                                      builder: (context, state) {
+                                    (saleMarket) =>
+                                    PopupMenuItem<EnumModel>(
+                                      enabled: false,
+                                      value: saleMarket,
+                                      child: StatefulBuilder(
+                                          builder: (context, state) {
                                         return CheckboxListTile(
                                           controlAffinity:
                                           ListTileControlAffinity.leading,
@@ -284,7 +285,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                                               .contains(saleMarket.code),
                                         );
                                       }),
-                                )).toList(),
+                                    )).toList(),
                         child: Text(
 //                            '选择销售市场',
                           formatEnumSelectsText(
@@ -330,13 +331,15 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                               label: Container(
                                 height: 20,
                                 width: 60,
-                                child: Center(child: Text(MachiningTypeLocalizedMap[type])),
+                                child: Center(
+                                    child:
+                                    Text(MachiningTypeLocalizedMap[type])),
                               ),
                               backgroundColor: Colors.grey[100],
                               selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                              selected:
-                                  widget.formState.model.details.machiningType ==
-                                      type,
+                          selected: widget
+                              .formState.model.details.machiningType ==
+                              type,
                               onSelected: (bool selected) {
                                 setState(() {
                                   widget.formState.model.details.machiningType =
@@ -378,10 +381,12 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                             ),
                             backgroundColor: Colors.grey[100],
                             selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                            selected: widget.formState.model.details.proofingNeeded,
+                            selected:
+                            widget.formState.model.details.proofingNeeded,
                             onSelected: (bool selected) {
                               setState(() {
-                                widget.formState.model.details.proofingNeeded = true;
+                                widget.formState.model.details.proofingNeeded =
+                                true;
                               });
                             },
                           ),
@@ -425,15 +430,16 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                             ),
                             backgroundColor: Colors.grey[100],
                             selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                            selected: !widget.formState.model.details.proofingNeeded,
+                            selected:
+                            !widget.formState.model.details.proofingNeeded,
                             onSelected: (bool selected) {
                               setState(() {
-                                widget.formState.model.details.proofingNeeded = false;
+                                widget.formState.model.details.proofingNeeded =
+                                false;
                               });
                             },
                           ),
-                        ]
-                    ),
+                        ]),
                   ),
                 ],
               ),
@@ -467,10 +473,12 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                             ),
                             backgroundColor: Colors.grey[100],
                             selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                            selected: widget.formState.model.details.invoiceNeeded,
+                            selected:
+                            widget.formState.model.details.invoiceNeeded,
                             onSelected: (bool selected) {
                               setState(() {
-                                widget.formState.model.details.invoiceNeeded = true;
+                                widget.formState.model.details.invoiceNeeded =
+                                true;
                               });
                             },
                           ),
@@ -482,15 +490,16 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                             ),
                             backgroundColor: Colors.grey[100],
                             selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                            selected: !widget.formState.model.details.invoiceNeeded,
+                            selected:
+                            !widget.formState.model.details.invoiceNeeded,
                             onSelected: (bool selected) {
                               setState(() {
-                                widget.formState.model.details.invoiceNeeded = false;
+                                widget.formState.model.details.invoiceNeeded =
+                                false;
                               });
                             },
                           ),
-                        ]
-                    ),
+                        ]),
                   ),
                 ],
               ),
@@ -534,14 +543,16 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                                     child: Row(
                                       children: <Widget>[
                                         Radio(
-                                            value: PublishingModesEnum[index].code,
+                                            value: PublishingModesEnum[index]
+                                                .code,
                                             groupValue: widget.formState.model
                                                 .details.publishingMode,
                                             onChanged: (v) {
                                               setState(() {
                                                 widget.formState.model.details
                                                     .publishingMode =
-                                                    PublishingModesEnum[index].code;
+                                                    PublishingModesEnum[index]
+                                                        .code;
                                               });
                                             }),
                                         Expanded(
@@ -564,121 +575,178 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                       children: <Widget>[
                         Container(
                           width: 70,
-                          margin: EdgeInsets.only(right: 40,),
+                          margin: EdgeInsets.only(
+                            right: 40,
+                          ),
                           child: GestureDetector(
-                            onTap: (){
-                              showDialog(context: (context),builder: (context){
-                                return MessageDialog(
-                                  title: Text('如何选择发布方式',style: TextStyle(fontSize: 18),),
-                                  message: RichText(
-                                    text: TextSpan(children: [
-                                      TextSpan(
-                                        text: '公开发布：',
-                                        style: TextStyle(fontSize: 16, color: Colors.red),
+                            onTap: () {
+                              showDialog(
+                                  context: (context),
+                                  builder: (context) {
+                                    return MessageDialog(
+                                      title: Text(
+                                        '如何选择发布方式',
+                                        style: TextStyle(fontSize: 18),
                                       ),
-                                      TextSpan(
-                                        text: '可邀请工厂进行报价，需求发布后所有工厂都能看见，也可以对需求进行报价。',
-                                        style: TextStyle(fontSize: 16,color: Colors.black)
+                                      message: RichText(
+                                        text: TextSpan(children: [
+                                          TextSpan(
+                                            text: '公开发布：',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.red),
+                                          ),
+                                          TextSpan(
+                                              text:
+                                              '可邀请工厂进行报价，需求发布后所有工厂都能看见，也可以对需求进行报价。',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black)),
+                                          TextSpan(text: '\n\n'),
+                                          TextSpan(
+                                            text: '私密发布：',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.red),
+                                          ),
+                                          TextSpan(
+                                              text:
+                                              '需求发布后只能被已选择的工厂看见，且只有被选择的工厂才能进行报价。',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black)),
+                                        ]),
                                       ),
-                                      TextSpan(
-                                        text: '\n\n'
-                                      ),
-                                      TextSpan(
-                                        text: '私密发布：',
-                                        style: TextStyle(fontSize: 16, color: Colors.red),
-                                      ),
-                                      TextSpan(
-                                          text: '需求发布后只能被已选择的工厂看见，且只有被选择的工厂才能进行报价。',
-                                          style: TextStyle(fontSize: 16,color: Colors.black)
-                                      ),
-                                    ]),
-                                  ),
-                                  onCloseEvent: (){
-                                    Navigator.pop(context);
-                                  },
-                                  negativeText: '我知道了',
-                                );
-                              });
+                                      onCloseEvent: () {
+                                        Navigator.pop(context);
+                                      },
+                                      negativeText: '我知道了',
+                                    );
+                                  });
                             },
                             child: Container(
                               padding: EdgeInsets.only(left: 0),
-                              child: Icon(Icons.help,color: Colors.red,size: 20,),
+                              child: Icon(
+                                Icons.help,
+                                color: Colors.red,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ),
                         Expanded(
                           flex: 3,
                           child: GridView.count(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            crossAxisCount: 2,
-                            childAspectRatio: 5,
-                            padding: EdgeInsets.zero,
-                            children: [
-                              Opacity(
-                                opacity: widget.formState.model.details.publishingMode == 'PUBLIC' ? 1 : 0,
-                                child: GestureDetector(
-                                  onTap: ()async{
-                                    dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
-                                    if(result != null){
-                                      _factoryUids = result;
-                                    }
-                                  },
-                                  child: Row(
-                                    children: <Widget>[
-                                      RichText(text: TextSpan(
-                                          style:TextStyle(fontSize: 13),
-                                          children: [
-                                            TextSpan(text: '已邀请报价',style: TextStyle(color: Colors.black),),
-                                            TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
-                                          ]
-                                      ),),
-                                      Container(
-                                          width: 10,
-                                          child: Icon(
-                                            Icons.chevron_right,
-                                            size: 20,
-                                            textDirection: TextDirection.ltr,
-                                          )),
-                                    ],
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              crossAxisCount: 2,
+                              childAspectRatio: 5,
+                              padding: EdgeInsets.zero,
+                              children: [
+                                Opacity(
+                                  opacity: widget.formState.model.details
+                                      .publishingMode ==
+                                      'PUBLIC'
+                                      ? 1
+                                      : 0,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      dynamic result = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RequirementOrderSelectPublishTargetForm(
+                                                    formState: widget.formState,
+                                                  )));
+                                      if (result != null) {
+                                        _factoryUids = result;
+                                      }
+                                    },
+                                    child: Row(
+                                      children: <Widget>[
+                                        RichText(
+                                          text: TextSpan(
+                                              style: TextStyle(fontSize: 13),
+                                              children: [
+                                                TextSpan(
+                                                  text: '已邀请报价',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                  '${_factoryUids?.length
+                                                      ?.toString() ?? 0}',
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                              ]),
+                                        ),
+                                        Container(
+                                            width: 10,
+                                            child: Icon(
+                                              Icons.chevron_right,
+                                              size: 20,
+                                              textDirection: TextDirection.ltr,
+                                            )),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Opacity(
-                                opacity: widget.formState.model.details.publishingMode == 'PRIVATE' ? 1 : 0,
-                                child: GestureDetector(
-                                  onTap: ()async{
-                                    dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RequirementOrderSelectPublishTargetForm(formState: widget.formState,)));
-                                    if(result != null){
-                                      _factoryUids = result;
-                                    }
-                                  },
-                                  child: Row(
-                                    children: <Widget>[
-                                      RichText(text: TextSpan(
-                                          style:TextStyle(fontSize: 13),
-                                          children: [
-                                            TextSpan(text: '已指定工厂',style: TextStyle(color: Colors.black),),
-                                            TextSpan(text: '${_factoryUids?.length?.toString() ?? 0}',style: TextStyle(color: Colors.red),),
-                                          ]
-                                      ),),
-                                      Container(
-                                          width: 10,
-                                          child: Icon(
-                                            Icons.chevron_right,
-                                            size: 20,
-                                            textDirection: TextDirection.ltr,
-                                          )),
-                                    ],
+                                Opacity(
+                                  opacity: widget.formState.model.details
+                                      .publishingMode ==
+                                      'PRIVATE'
+                                      ? 1
+                                      : 0,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      dynamic result = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RequirementOrderSelectPublishTargetForm(
+                                                    formState: widget.formState,
+                                                  )));
+                                      if (result != null) {
+                                        _factoryUids = result;
+                                      }
+                                    },
+                                    child: Row(
+                                      children: <Widget>[
+                                        RichText(
+                                          text: TextSpan(
+                                              style: TextStyle(fontSize: 13),
+                                              children: [
+                                                TextSpan(
+                                                  text: '已指定工厂',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                  '${_factoryUids?.length
+                                                      ?.toString() ?? 0}',
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                              ]),
+                                        ),
+                                        Container(
+                                            width: 10,
+                                            child: Icon(
+                                              Icons.chevron_right,
+                                              size: 20,
+                                              textDirection: TextDirection.ltr,
+                                            )),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ]
-                          ),
+                              ]),
                         ),
                       ],
                     ),
-
                   ],
                 )),
             Container(
@@ -707,12 +775,10 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                         children:
                             List.generate(EffectiveDaysEnum.length, (index) {
                           return GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               setState(() {
-                                  widget.formState.model.details
-                                      .effectiveDays =
-                                      int.parse(
-                                          EffectiveDaysEnum[index].code);
+                                widget.formState.model.details.effectiveDays =
+                                    int.parse(EffectiveDaysEnum[index].code);
                               });
                             },
                             child: Row(
@@ -724,10 +790,10 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                                         .toString(),
                                     onChanged: (v) {
                                       setState(() {
-                                          widget.formState.model.details
-                                                  .effectiveDays =
-                                              int.parse(
-                                                  EffectiveDaysEnum[index].code);
+                                        widget.formState.model.details
+                                            .effectiveDays =
+                                            int.parse(
+                                                EffectiveDaysEnum[index].code);
                                       });
                                     }),
                                 Expanded(
@@ -800,8 +866,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
       ShowDialogUtil.showValidateMsg(context, '请填写期望价格');
       return;
     }
-    if (widget.formState.model.details.expectedMachiningQuantity ==
-        null) {
+    if (widget.formState.model.details.expectedMachiningQuantity == null) {
       ShowDialogUtil.showValidateMsg(context, '请填写加工数量');
       return;
     }
@@ -820,30 +885,33 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
       ShowDialogUtil.showValidateMsg(context, '请完善联系方式');
       return;
     }
-    if(widget.formState.model.details.machiningType == null){
+    if (widget.formState.model.details.machiningType == null) {
       ShowDialogUtil.showValidateMsg(context, '请选择加工类型');
       return;
     }
-    if(widget.formState.model.details.salesMarket == null || widget.formState.model.details.salesMarket.length == 0){
+    if (widget.formState.model.details.salesMarket == null ||
+        widget.formState.model.details.salesMarket.length == 0) {
       ShowDialogUtil.showValidateMsg(context, '请选择销售市场');
       return;
     }
-    if(widget.formState.model.details.effectiveDays == -1){
+    if (widget.formState.model.details.effectiveDays == -1) {
       //后台的'长期有效'值是null
       widget.formState.model.details.effectiveDays = null;
     }
-    ShowDialogUtil.showChoseDiglog(context, '是否确认发布', (){
+    ShowDialogUtil.showChoseDiglog(context, '是否确认发布', () {
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) {
             return RequestDataLoading(
-              requestCallBack: RequirementOrderRepository().publishNewRequirement(widget.formState.model,null,false,factories: _factoryUids.join(',')),
+              requestCallBack: RequirementOrderRepository()
+                  .publishNewRequirement(widget.formState.model, null, false,
+                  factories: _factoryUids.join(',')),
               outsideDismiss: false,
               loadingText: '正在保存。。。',
               entrance: '',
             );
-          }).then((code)async {
+          }).then((code) async {
         if (code != null && code != '') {
           widget.formState.model.code = code;
           //根据code查询明
@@ -859,7 +927,6 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
         }
       });
     });
-
 
 //      String code = await RequirementOrderRepository().publishNewRequirement(widget.formState.model,null,false);
 //      if (code != null && code != '') {

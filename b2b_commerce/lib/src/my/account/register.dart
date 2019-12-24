@@ -37,6 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _hasReadFactory = false;
 
   String phoneValidateStr = "";
+  String passwordValidateStr = "";
 
   @override
   void initState() {
@@ -111,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     margin: EdgeInsets.only(bottom: 20),
                     child: RaisedButton(
-                      onPressed: validate ? () => onNext(context) : null,
+                      onPressed: () => onNext(context),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       color: Color.fromRGBO(255, 214, 12, 1),
@@ -238,7 +239,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 WhitelistingTextInputFormatter.digitsOnly,
               ],
               controller: _phoneController,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: '请输入手机号码'),
             ),
             surfix: Container(
               child: Text(
@@ -259,9 +261,11 @@ class _RegisterPageState extends State<RegisterPage> {
               //只能输入数字
               inputFormatters: <TextInputFormatter>[
                 WhitelistingTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(4)
               ],
               controller: _captchaController,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration:
+              InputDecoration(border: InputBorder.none, hintText: '请输入验证码'),
             ),
             surfix: FlatButton(
               shape: RoundedRectangleBorder(
@@ -293,9 +297,11 @@ class _RegisterPageState extends State<RegisterPage> {
               obscureText: _isPasswordHide,
               onChanged: (value) {
                 formValidate();
+                passwordValidate();
               },
               controller: _passwordController,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: '首位为字母，长度6-20'),
             ),
             surfix: GestureDetector(
                 onTap: () {
@@ -320,7 +326,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   child: Text(
-                    '6~20位字母与数字组合，首位为字母',
+                    '$passwordValidateStr',
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -339,7 +345,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   formValidate();
                 },
                 controller: _againPasswordController,
-                decoration: InputDecoration(border: InputBorder.none),
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: '请在此输入密码'),
               ),
               surfix:
               _passwordController.text == _againPasswordController.text &&
@@ -361,7 +368,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   formValidate();
                 },
                 controller: _contactPersonController,
-                decoration: InputDecoration(border: InputBorder.none),
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: '请输入联系人名字'),
               )),
           InputRow(
             label: '公司名称',
@@ -372,7 +380,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 formValidate();
               },
               controller: _nameController,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: '请输入公司名称'),
             ),
           ),
         ],
@@ -502,31 +511,42 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  void passwordValidate() {
+    if (!RegexUtil.password(_passwordController.text)) {
+      setState(() {
+        passwordValidateStr = '6~20位字母与数字组合，首位为字母';
+      });
+    } else {
+      setState(() {
+        passwordValidateStr = '';
+      });
+    }
+  }
+
   void onNext(BuildContext context) async {
     bool result = await UserRepositoryImpl()
         .validateCaptcha(_phoneController.text, _captchaController.text);
     if (result) {
       //验证密码
       if (!RegexUtil.password(_passwordController.text)) {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.RESULT_DIALOG,
-                failTips: '首字符为字母，长度6-20位的数字加字母',
-                callbackResult: false,
-                confirmAction: () {
-                  Navigator.of(context).pop();
-                },
-              );
-            });
+        showValidateDialog(context, '首字符为字母，长度6-20位的数字加字母');
+      } else if (!RegexUtil.isMobile(_phoneController.text)) {
+        //验证账号
+        showValidateDialog(context, '请输入正确手机号码');
+      } else if (_passwordController.text != _againPasswordController.text) {
+        //验证确认密码
+        showValidateDialog(context, '请再次输入正确的密码');
+      } else if (_contactPersonController.text.length < 1) {
+        //验证联系人
+        showValidateDialog(context, '请输入联系人名字');
+      } else if (_nameController.text.length < 1) {
+        //验证公司名字
+        showValidateDialog(context, '请输入公司名称');
+      } else if (!_isAgree) {
+        showValidateDialog(context, '请先同意《钉单平台服务协议》和《钉单平台带块代收代付服务协议》');
+      } else if (userType != UserType.BRAND && userType != UserType.FACTORY) {
+        showValidateDialog(context, '请选择注册类型');
       } else {
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => RegisterInfoPage(
-        //           phone: _phoneController.text,
-        //           password: _passwordController.text,
-        //         )));
         onSubmit();
       }
     } else {
@@ -777,5 +797,21 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       },
     );
+  }
+
+  void showValidateDialog(BuildContext context, String message) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '$message',
+            callbackResult: false,
+            confirmAction: () {
+              Navigator.of(context).pop();
+            },
+          );
+        });
   }
 }
