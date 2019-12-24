@@ -2,22 +2,22 @@
   <div class="animated fadeIn factory-edit">
     <el-row class="factory-info-title-row">
       <div class="factory-info-title">
-        <h6 class="factory-info-title_text">编辑资料</h6>
+        <h6 class="factory-info-title_text">{{readOnly? '公司详情' : '编辑资料'}}</h6>
       </div>
     </el-row>
     <div class="titleCardClass">
-      <el-form :model="formData" ref="factoryForm" label-position="left" label-width="75px" :rules="rules" hide-required-asterisk>
+      <el-form :model="tranData" ref="factoryForm" label-position="left" label-width="75px" :rules="rules" hide-required-asterisk :disabled="readOnly">
         <el-row>
-          <factory-basic-form v-if="factoryFormVisible" :form-data="formData" @onSaveProfiles="onSaveProfiles"></factory-basic-form>
+          <factory-basic-form v-if="factoryFormVisible" :form-data="tranData" @onSaveProfiles="onSaveProfiles" :readOnly="readOnly"></factory-basic-form>
         </el-row>
 <!--        <el-row>-->
 <!--          <factory-contact-form :form-data="formData"></factory-contact-form>-->
 <!--        </el-row>-->
         <el-row>
-          <factory-scale-form :form-data="formData" @validateField="validateField"></factory-scale-form>
+          <factory-scale-form :form-data="tranData" @validateField="validateField" :readOnly="readOnly"></factory-scale-form>
         </el-row>
         <el-row>
-          <factory-capacity-form v-if="factoryFormVisible" :form-data="formData"></factory-capacity-form>
+          <factory-capacity-form v-if="factoryFormVisible" :form-data="tranData" :readOnly="readOnly"></factory-capacity-form>
         </el-row>
 <!--        <el-row>-->
 <!--          <factory-service-form :form-data="formData"></factory-service-form>-->
@@ -25,7 +25,7 @@
       </el-form>
     </div>
 
-    <el-row type="flex" justify="center">
+    <el-row type="flex" justify="center" v-if="!readOnly">
       <el-button class="buttonClass" @click="onSave">
         <h6>保存</h6>
       </el-button>
@@ -36,7 +36,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters} = createNamespacedHelpers('FactoriesModule');
+  const {mapGetters, mapMutations} = createNamespacedHelpers('FactoriesModule');
   import FactoryBasicForm from './FactoryBasicForm';
   import FactoryCertificateForm from './FactoryCertificateForm';
   import FactoryContactForm from './FactoryContactForm';
@@ -46,6 +46,7 @@
 
   export default {
     name: 'FactoryFrom',
+    props: ['formData', 'slotData', 'readOnly'],
     components: {
       FactoryServiceForm,
       FactoryCapacityForm,
@@ -57,10 +58,20 @@
     computed: {
       ...mapGetters({
         factoryFormVisible: 'factoryFormVisible'
-      })
+      }),
+      tranData: function () {
+        if (this.readOnly) {
+          this.setFactoryFormVisible(true);
+          return this.slotData;
+        } else {
+          return this.formData;
+        }
+      }
     },
-    props: ['formData'],
     methods: {
+      ...mapMutations({
+        setFactoryFormVisible: 'setFactoryFormVisible',
+      }),
       onSave () {
         this.$refs['factoryForm'].validate((valid) => {
           if (valid) {

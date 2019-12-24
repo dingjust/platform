@@ -70,26 +70,27 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="factoryDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <factory-details-page :slotData="factoryDetailsData"></factory-details-page>
+    <el-dialog :visible.sync="factoryDetailsDialogVisible" v-if="factoryDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <div class="pt-3"></div>
+      <factory-from :slotData="factoryDetailsData" :readOnly="readOnly"></factory-from>
     </el-dialog>
-    <el-dialog :visible.sync="brandDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <brand-details-page :slotData="brandDetailsData"></brand-details-page>
+    <el-dialog :visible.sync="brandDetailsDialogVisible" v-if="brandDetailsDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <brand-from1 :slotData="brandDetailsData" :read-only="readOnly"></brand-from1>
     </el-dialog>
   </div>
 </template>
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  import FactoryDetailsPage from '../../../user/company/factory/details/FactoryDetailsPage';
-  import BrandDetailsPage from '../../../user/company/brand/details/BrandDetailsPage';
+  import FactoryFrom from '../../../user/company/factory/form/FactoryForm';
+  import BrandFrom1 from '../../../user/company/brand/form/BrandForm1';
 
   const {mapGetters, mapActions} = createNamespacedHelpers('CooperatorModule');
 
   export default {
     name: 'CooperatorInfoPage',
     props: ['itemData'],
-    components: {BrandDetailsPage, FactoryDetailsPage},
+    components: {BrandFrom1, FactoryFrom},
     computed: {
       ...mapGetters({
       })
@@ -115,7 +116,12 @@
           return;
         }
 
+        if (result.duties == null || result.duties == undefined) {
+          result.duties = '经理';
+        }
+
         this.factoryDetailsData = result;
+        this.readOnly = true;
         this.factoryDetailsDialogVisible = !this.factoryDetailsDialogVisible;
       },
       async onBrandDetail () {
@@ -128,17 +134,22 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
+        if (result.duties == null || result.duties == undefined) {
+          result.duties = '经理';
+        }
 
         this.brandDetailsData = result;
+        this.readOnly = true;
         this.brandDetailsDialogVisible = !this.brandDetailsDialogVisible;
-      }
+      },
     },
     data () {
       return {
         factoryDetailsDialogVisible: false,
         factoryDetailsData: '',
         brandDetailsDialogVisible: false,
-        brandDetailsData: ''
+        brandDetailsData: '',
+        readOnly: false
       };
     },
     created () {

@@ -18,7 +18,7 @@
             <el-col :span="18">
               <el-form-item prop="profilePicture">
                 <images-upload :limit="1" :slot-data="this.profilePictures"/>
-                <h6 style="margin-left: 9px;font-size: 10px;color: grey">只支持.jpg格式</h6>
+                <h6 style="margin-left: 9px;font-size: 10px;color: grey" v-if="!readOnly">只支持.jpg格式</h6>
               </el-form-item>
             </el-col>
 <!--            <el-col :span="4">-->
@@ -94,7 +94,7 @@
             <el-form-item prop="contactAddress.city">
               <el-select class="w-100" size="mini" v-model="formData.contactAddress.city"
                          @change="onCityChanged" value-key="code">
-                <el-option v-for="item in cities" :key="item.code" :label="item.name" :value="item">
+                <el-option v-for="item in (readOnly? readOnlyCities : cities )" :key="item.code" :label="item.name" :value="item">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -103,7 +103,7 @@
             <el-form-item prop="contactAddress.cityDistrict">
               <el-select class="w-100" size="mini" v-model="formData.contactAddress.cityDistrict"
                          value-key="code" @change="onCityDistrictChanged">
-                <el-option v-for="item in cityDistricts" :key="item.code" :label="item.name"
+                <el-option v-for="item in (readOnly? readOnlyCityDistricts : cityDistricts )" :key="item.code" :label="item.name"
                            :value="item">
                 </el-option>
               </el-select>
@@ -133,7 +133,7 @@
 
   export default {
     name: 'BrandBasicInfoForm',
-    props: ['formData'],
+    props: ['formData', 'readOnly'],
     components: {ImagesUpload},
     computed: {
       ...mapGetters({
@@ -195,7 +195,7 @@
           return;
         }
 
-        this.cities = result;
+        this.readOnlyCities = result;
       },
       onCityChanged (current) {
         if (!current) {
@@ -214,7 +214,7 @@
           return;
         }
 
-        this.cityDistricts = result;
+        this.readOnlyCityDistricts = result;
       },
       onCityDistrictChanged () {
         this.formData.contactAddress.id = null;
@@ -225,6 +225,8 @@
         profilePictures: [],
         region: '',
         city: '',
+        readOnlyCities: [],
+        readOnlyCityDistricts: [],
         regions: []
       };
     },
@@ -250,10 +252,15 @@
       }
     },
     created () {
+      console.log(this.formData);
       if (this.formData.profilePicture != null) {
         this.profilePictures = [this.formData.profilePicture];
       }
       this.getRegions();
+      if (this.readOnly) {
+        this.getCities(this.formData.contactAddress.region);
+        this.getCityDistricts(this.formData.contactAddress.city);
+      }
       if (this.formData.duties == '') {
         this.formData.duties = '经理';
       }
