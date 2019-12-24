@@ -45,8 +45,8 @@ var CDS = {
         var canvas = document.createElement("canvas");
 
         var context = canvas.getContext('2d');
-        canvas.width = 150;
-        canvas.height = 150;
+        canvas.width = 171.5;
+        canvas.height = 171.5;
         // canvas.width = 100;
         // canvas.height = 100;
 
@@ -134,7 +134,7 @@ var CDS = {
             context.textAlign = 'center'; //设置文本的水平对对齐方式
             context.lineWidth = 1;
             context.fillStyle = CDS.baseConf.color;
-            context.fillText(title, width, height + 35);
+            context.fillText(title, width, height + 45);
         }
 
         /**
@@ -154,7 +154,7 @@ var CDS = {
                 else
                     context.rotate(angle);
                 context.save();
-                context.translate(62, 0); // 平移到此位置,此时字和x轴垂直，第一个参数是与圆外边的距离，越大距离越近
+                context.translate(72, 0); // 平移到此位置,此时字和x轴垂直，第一个参数是与圆外边的距离，越大距离越近
                 context.rotate(Math.PI / 2); // 旋转90度,让字平行于x轴
                 context.fillText(c, 0, 5); // 此点为字的中心点
                 context.restore();
@@ -180,7 +180,7 @@ var CDS = {
                 else
                     context.rotate(angle);
                 context.save();
-                context.translate(-55, 5); // 平移到此位置,此时字和x轴垂直，第一个参数是与圆外边的距离，越大距离越近
+                context.translate(-65, 5); // 平移到此位置,此时字和x轴垂直，第一个参数是与圆外边的距离，越大距离越近
                 context.rotate(Math.PI / 2); // 旋转90度,让字平行于x轴
                 context.fillStyle = CDS.baseConf.color;
                 context.fillText(c, 0, 5); // 此点为字的中心点
