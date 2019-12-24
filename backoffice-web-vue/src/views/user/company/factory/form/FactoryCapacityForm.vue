@@ -121,14 +121,14 @@
             <template slot="label">
               <h6 class="titleTextClass">优势品类<span style="color: red">*</span></h6>
             </template>
-            <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"></category-select>
+            <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories" :readOnly="readOnly"></category-select>
           </el-form-item>
           <el-form-item prop="keyword">
             <template slot="label">
               <h6 class="titleTextClass">关键词</h6>
             </template>
             <tags-of-text :label="'关键词'" @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword" :symbol="'，'"></tags-of-text>
-            <span style="font-size: 10px;color: #F56C6C">品牌用户可以通过关键词搜索到您</span>
+            <span style="font-size: 10px;color: #F56C6C">{{readOnly? '您可以通过关键词搜索到此公司' : '品牌用户可以通过关键词搜索到您'}}</span>
           </el-form-item>
           <el-row type="flex" justify="start" align="middle">
             <el-col :span="4" style="margin-left: 20px">
@@ -140,8 +140,8 @@
               </h6>
             </el-col>
             <el-col :span="22">
-              <images-upload :limit="5" :slot-data="formData.certificates" />
-              <h6 style="margin-left: 30px;font-size: 10px;color: grey">只支持.jpg格式</h6>
+              <images-upload :limit="5" :slot-data="formData.certificates" :read-only="readOnly"/>
+              <h6 style="margin-left: 30px;font-size: 10px;color: grey" v-if="!readOnly">只支持.jpg格式</h6>
             </el-col>
           </el-row>
         </div>
@@ -158,7 +158,7 @@
   import ImagesUpload from '../../../../../components/custom/ImagesUpload';
   export default {
     name: 'FactoryCapacityForm',
-    props: ['formData'],
+    props: ['formData', 'readOnly'],
     components: {ImagesUpload, TagsOfText, CategorySelect},
     computed: {
       ...mapGetters({
@@ -191,6 +191,9 @@
         this.categories = result;
       },
       onRemoveKeyword (word) {
+        if (this.readOnly) {
+          return;
+        }
         var keywords = this.formData.keyword.split('，');
         var index = keywords.indexOf(word);
         keywords.splice(index, 1);
@@ -234,6 +237,9 @@
         this.$forceUpdate();
       },
       onRemoveCooperativeBrand (word) {
+        if (this.readOnly) {
+          return;
+        }
         var keywords = this.formData.cooperativeBrand.split('，');
         var index = keywords.indexOf(word);
         keywords.splice(index, 1);
@@ -292,6 +298,9 @@
         }
       },
       handleTagClick (val) {
+        if (this.readOnly) {
+          return;
+        }
         var mapIndex = -1;
         for (let i = 0; i < this.formData.categories.length; i++) {
           if (this.formData.categories[i].code == val.code) {

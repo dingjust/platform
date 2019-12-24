@@ -2,21 +2,21 @@
   <div class="animated fadeIn brand-edit">
     <el-row class="brand-info-title-row">
       <div class="brand-info-title">
-        <h6 class="brand-info-title_text">编辑资料</h6>
+        <h6 class="brand-info-title_text">{{readOnly? '公司详情' : '编辑资料'}}</h6>
       </div>
     </el-row>
     <div class="titleCardClass">
-      <el-form :model="formData" ref="brandForm" label-position="left" label-width="75px" :rules="rules" hide-required-asterisk>
+      <el-form :model="tranData" ref="brandForm" label-position="left" label-width="75px" :rules="rules" :disabled="readOnly" hide-required-asterisk >
         <el-row>
-          <brand-basic-info-form v-if="brandFormVisible" :formData="formData"/>
+          <brand-basic-info-form v-if="brandFormVisible" :formData="tranData" :readOnly="readOnly"/>
         </el-row>
         <el-row>
-          <brand-capacity-form v-if="brandFormVisible" :formData="formData"/>
+          <brand-capacity-form v-if="brandFormVisible" :formData="tranData" :readOnly="readOnly"/>
         </el-row>
       </el-form>
     </div>
     <el-row type="flex" justify="center">
-      <el-button class="buttonClass" @click="onSave">
+      <el-button v-if="!readOnly" class="buttonClass" @click="onSave">
         <h6>保存</h6>
       </el-button>
     </el-row>
@@ -26,7 +26,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters} = createNamespacedHelpers('BrandsModule');
+  const {mapGetters, mapMutations} = createNamespacedHelpers('BrandsModule');
 
   import BrandBasicInfoForm from './BrandBasicInfoForm';
   import BrandCapacityForm from './BrandCapacityForm';
@@ -36,8 +36,11 @@
       BrandCapacityForm,
       BrandBasicInfoForm
     },
-    props: ['formData', 'readOnly'],
+    props: ['formData', 'readOnly', 'slotData'],
     methods: {
+      ...mapMutations({
+        setBrandFormVisible: 'setBrandFormVisible'
+      }),
       onSave () {
         this.$refs['brandForm'].validate((valid) => {
           if (valid) {
@@ -61,7 +64,16 @@
     computed: {
       ...mapGetters({
         brandFormVisible: 'brandFormVisible'
-      })
+      }),
+      tranData: function () {
+        if (this.readOnly) {
+          this.setBrandFormVisible(true);
+          console.log(this.slotData);
+          return this.slotData;
+        } else {
+          return this.formData;
+        }
+      }
     },
     watch: {
       'formData.adeptAtCategories': function (n, o) {

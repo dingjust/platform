@@ -37,6 +37,10 @@
       multiple: {
         type: Boolean,
         default: true
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -46,6 +50,9 @@
         console.log(tab, event);
       },
       handleTagClick (val) {
+        if (this.readOnly) {
+          return;
+        }
         var index = this.selectCodes.indexOf(val.code);
         if (index > -1) {
           this.selectDatas.splice(index, 1);

@@ -43,7 +43,7 @@
   padding-left: 30px;
   padding-top: 20px;
 }
- 
+
 .content {
   position: absolute;
   top: 20px;
@@ -68,6 +68,9 @@
 .purchase-dialog .el-dialog__header {
   padding: 0px !important;
 }
+.el-dialog__body {
+  padding-top: 40px !important;
+ }
 
 .list-button{
   color: #FFA403;

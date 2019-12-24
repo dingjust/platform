@@ -101,7 +101,7 @@
             <template slot="label">
               <h6 class="titleTextClass">拥有设备<span style="color: red">*</span></h6>
             </template>
-            <enum-select  v-if="factoryFormVisible" :mapData="mapData" :mapSelectData="mapSelectData"></enum-select>
+            <enum-select v-if="factoryFormVisible" :mapData="mapData" :mapSelectData="mapSelectData" :readOnly="readOnly"></enum-select>
           </el-form-item>
         </div>
   </div>
@@ -115,7 +115,7 @@
   import EnumSelect from '../../../../../components/custom/EnumSelect';
   export default {
     name: 'FactoryScaleForm',
-    props: ['formData'],
+    props: ['formData', 'readOnly'],
     components: {EnumSelect},
     computed: {
       ...mapGetters({

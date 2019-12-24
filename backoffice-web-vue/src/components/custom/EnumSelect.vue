@@ -25,14 +25,30 @@
 <script>
   export default {
     name: 'EnumSelect',
-    props: ['mapData', 'mapSelectData'],
+    props: {
+      mapData: {
+        type: Object,
+        default: []
+      },
+      mapSelectData: {
+        type: Object,
+        default: []
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
+      }
+    },
     computed: {
     },
     methods: {
       handleClick (tab, event) {
         console.log(tab, event);
       },
-      handleTagClick (key,val) {
+      handleTagClick (key, val) {
+        if (this.readOnly) {
+          return;
+        }
         console.log(key);
         var mapIndex = this.mapSelectData[key].indexOf(val.code);
         if (mapIndex > -1) {
@@ -55,7 +71,7 @@
         } else {
           return false;
         }
-      },
+      }
     },
     data () {
       return {
@@ -76,7 +92,6 @@
           this.selectCodes.push(value);
         }
       }
-
     }
   }
 </script>
