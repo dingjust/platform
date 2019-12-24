@@ -53,6 +53,9 @@ abstract class UserRepository {
   ///短信验证重置密码
   Future<bool> resetPassword(String phone, String newPassword, String captcha);
 
+  ///重置密码
+  Future<bool> resetPasswordByPassword(String old, String password, String uid);
+
   //获取所有角色
   Future<List<RoleModel>> roles();
 

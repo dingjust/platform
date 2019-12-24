@@ -61,7 +61,7 @@ class LocationIcon extends StatelessWidget {
           width: 60,
           child: Center(
               child: Text(
-            '无法定位',
+                '选择城市',
             style: TextStyle(fontSize: 12, color: Colors.black54),
             overflow: TextOverflow.ellipsis,
           )));

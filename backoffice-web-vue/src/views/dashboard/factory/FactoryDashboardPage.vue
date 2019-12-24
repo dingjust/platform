@@ -1,5 +1,11 @@
 <template>
   <div class="animated fadeIn">
+    <el-dialog title="温馨提示" :visible.sync="profileDialogVisible" width="30%" :close-on-click-modal="false">
+      <profile-complete-dialog @onCancel="onCancel" />
+    </el-dialog>
+    <el-dialog title="温馨提示" :visible.sync="authenticationDialogVisible" width="30%" :close-on-click-modal="false">
+      <authentication-dialog @onCancel="onCancel" />
+    </el-dialog>
     <el-row :gutter="20">
       <el-col :span="14">
         <el-row>
@@ -36,31 +42,62 @@
 </template>
 
 <script>
-  import BusinessCard from '../shared/BusinessCard';
-  import ToolbarCard from '../shared/ToolbarCard';
-  import ChartCard from '../shared/ChartCard';
-  import MonthIncomeCard from '../shared/MonthIncomeCard';
-  import AccountEntryCard from '../shared/AccountEntryCard';
-  import ProgressCard from '../shared/ProgressCard';
+  import BusinessCard from "../shared/BusinessCard";
+  import ToolbarCard from "../shared/ToolbarCard";
+  import ChartCard from "../shared/ChartCard";
+  import MonthIncomeCard from "../shared/MonthIncomeCard";
+  import AccountEntryCard from "../shared/AccountEntryCard";
+  import ProgressCard from "../shared/ProgressCard";
+  import ProfileCompleteDialog from "@/views/shared/dialog/ProfileCompleteDialog";
+  import AuthenticationDialog from "@/views/shared/dialog/AuthenticationDialog";
 
   export default {
-    name: 'FactoryDashboardPage',
+    name: "FactoryDashboardPage",
     components: {
       BusinessCard,
       ToolbarCard,
       ChartCard,
       MonthIncomeCard,
       AccountEntryCard,
-      ProgressCard
+      ProgressCard,
+      ProfileCompleteDialog,
+      AuthenticationDialog
     },
-    computed: {
+    computed: {},
+    methods: {
+      onCancel() {
+        this.profileDialogVisible = false;
+        this.authenticationDialogVisible = false;
+      },
+      async getProfile() {
+
+        var uid = this.$store.getters.currentUser.companyCode;
+        var url;
+        if (this.isBrand()) {
+          url = this.apis().getBrand(uid);
+        } else {
+          url = this.apis().getFactory(uid);
+        }
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        return result;
+      },
+      async getAuthenticationState() {
+        const url = this.apis().getAuthenticationState();
+        const result = await this.$http.get(url);
+        return result;
+      },
 
     },
-    methods: {},
     data() {
       return {
+        profileDialogVisible: false,
+        authenticationDialogVisible: false,
         thisMonthIncome: {
-          title: '本月营收',
+          title: "本月营收",
           income: 1231.12,
           proofingOrders: 8,
           purchaseOrders: 10,
@@ -68,7 +105,7 @@
           comparison: 0.264
         },
         lastMonthIncome: {
-          title: '上月营收',
+          title: "上月营收",
           income: 3134.12,
           proofingOrders: 23,
           purchaseOrders: 13,
@@ -77,7 +114,16 @@
         }
       };
     },
-    created() {}
+    async created() {
+      var profile = await this.getProfile();
+      var authenticationState = await this.getAuthenticationState();
+      if (!profile.profileCompleted) {
+        this.profileDialogVisible = true;
+      } else if (!(authenticationState.data.personalState == 'SUCCESS' || authenticationState.data.companyState ==
+          'SUCCESS')) {
+        this.authenticationDialogVisible = true;
+      }
+    }
   };
 
 </script>

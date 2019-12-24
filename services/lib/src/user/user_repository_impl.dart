@@ -312,4 +312,22 @@ class UserRepositoryImpl implements UserRepository {
     }
     return result;
   }
+
+  @override
+  Future<bool> resetPasswordByPassword(String old, String password,
+      String uid) async {
+    Response response;
+    try {
+      response = await http$.put(UserApis.resetPasswordByPassword(uid),
+          queryParameters: {"old": old, "new": password});
+    } on DioError catch (e) {
+      print(e);
+      return false;
+    }
+    if (response != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

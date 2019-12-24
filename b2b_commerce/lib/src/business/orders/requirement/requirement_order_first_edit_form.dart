@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_form.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 /// 产品分类选择页
 class RequirementOrderFirstEditForm extends StatefulWidget {
@@ -22,7 +21,8 @@ class RequirementOrderFirstEditForm extends StatefulWidget {
       _RequirementOrderFirstEditFormState();
 }
 
-class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEditForm> {
+class _RequirementOrderFirstEditFormState
+    extends State<RequirementOrderFirstEditForm> {
   GlobalKey _scaffoldKey = GlobalKey();
   CategoryModel _categorySelect;
 
@@ -34,7 +34,7 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         if (widget.formState.editModel.details.majorCategory == null) {
           ShowDialogUtil.showValidateMsg(context, '请选择面料类别');
           return Future.value(false);
@@ -43,10 +43,8 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
           ShowDialogUtil.showValidateMsg(context, '请选择品类');
           return Future.value(false);
         }
-        if (widget.formState.editModel.details.productiveOrientations ==
-            null ||
-            widget.formState.editModel.details.productiveOrientations
-                .length ==
+        if (widget.formState.editModel.details.productiveOrientations == null ||
+            widget.formState.editModel.details.productiveOrientations.length ==
                 0) {
           ShowDialogUtil.showValidateMsg(context, '请选择工厂区域');
           return Future.value(false);
@@ -107,7 +105,13 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                 builder: (BuildContext context,
                     AsyncSnapshot<List<CategoryModel>> snapshot) {
                   if (!snapshot.hasData) {
-                    return Container(child: SizedBox(height: 100,child: Center(child: CircularProgressIndicator()),),color: Colors.white,);
+                    return Container(
+                      child: SizedBox(
+                        height: 100,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      color: Colors.white,
+                    );
                   } else {
                     return Container(
                       padding: EdgeInsets.symmetric(
@@ -118,32 +122,46 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 15,
-                              right: 15,
-                            ),
-                            child: RichText(
-                              text: TextSpan(children: [
-                                TextSpan(
-                                  text: '选择面料类型',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.black),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
                                 ),
-                                TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.red),
-                                )
-                              ]),
-                            ),
+                                child: RichText(
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: '选择面料类型',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black),
+                                    ),
+                                    TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.red),
+                                    )
+                                  ]),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 15),
+                                child: Text(
+                                    '已选：${widget.formState.editModel?.details
+                                        ?.majorCategory?.name ?? ''}'),
+                              )
+                            ],
                           ),
                           SingleMajorCategorySelect(
                             categories: snapshot.data,
-                            categorySelect:
-                                widget.formState.editModel.details.majorCategory,
-                            onItemTap: (categoryModel) => widget.formState.editModel
-                                .details.majorCategory = categoryModel,
+                            categorySelect: widget
+                                .formState.editModel.details.majorCategory,
+                            onItemTap: (categoryModel) {
+                              setState(() {
+                                widget.formState.editModel.details
+                                    .majorCategory = categoryModel;
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -164,7 +182,13 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                 builder: (BuildContext context,
                     AsyncSnapshot<List<CategoryModel>> snapshot) {
                   if (!snapshot.hasData) {
-                    return Container(child: SizedBox(height: 100,child: Center(child: CircularProgressIndicator()),),color: Colors.white,);
+                    return Container(
+                      child: SizedBox(
+                        height: 100,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      color: Colors.white,
+                    );
                   } else {
                     return Container(
                       padding: EdgeInsets.symmetric(
@@ -218,8 +242,8 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                               )),
                           SingleMajorCategorySelectGridView(
                             categories: snapshot.data,
-                            categorySelect:
-                                widget.formState.editModel.details.category?.parent,
+                            categorySelect: widget
+                                .formState.editModel.details.category?.parent,
                             onItemTap: (categoryModel) {
                               showModalBottomSheet(
                                   context: context,
@@ -245,7 +269,10 @@ class _RequirementOrderFirstEditFormState extends State<RequirementOrderFirstEdi
                                                   .model.details.category,
                                               onItemTap: (categoryModel) {
                                                 setState(() {
-                                                  widget.formState.editModel.details
+                                                  widget
+                                                      .formState
+                                                      .editModel
+                                                      .details
                                                       .category = categoryModel;
                                                   Navigator.of(context).pop();
                                                 });

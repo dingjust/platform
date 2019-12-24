@@ -1,9 +1,11 @@
 import 'package:b2b_commerce/src/_shared/users/brand_index_search_delegate_page.dart';
+import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/factory_tab_section.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -75,13 +77,20 @@ class _HomePageState extends State<HomePage> {
     // 安卓端自动更新
     // TargetPlatform platform = defaultTargetPlatform;
     // if (platform != TargetPlatform.iOS) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => AppVersion(
-        homePageKey.currentContext,
-        ignoreVersionNotification:
-        UserBLoC.instance.ignoreVersionNotification)
-        .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy'));
+    WidgetsBinding.instance.addPostFrameCallback((_) => homeInit());
     // }
     super.initState();
+  }
+
+  void homeInit() {
+    //版本检查
+    AppVersion(homePageKey.currentContext,
+        ignoreVersionNotification:
+        UserBLoC.instance.ignoreVersionNotification)
+        .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
+    //认证校验
+    Provider.of<CertificationStatusHelper>(context)
+        .checkCertificationStatus(context);
   }
 
   @override

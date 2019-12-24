@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail_by_factory.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
+import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -443,8 +444,14 @@ class RequirementPoolOrderItem extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (order.code != null) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RequirementOrderDetailByFactoryPage(order.code)));
+          ///资料完善度校验
+          Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+              context: context,
+              onJump: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        RequirementOrderDetailByFactoryPage(order.code)));
+              });
         }
       },
       child: Container(

@@ -143,8 +143,8 @@
             </tr>
           </table>
           <el-row type="flex" justify="end" class="info-receive-row">
-            <h6 class="order-table-info">品牌跟单员： 杨建</h6>
-            <h6 class="order-table-info">工厂跟单员： 刘少立</h6>
+            <h6 class="order-table-info">品牌跟单员： ***</h6>
+            <h6 class="order-table-info">工厂跟单员： ***</h6>
             <h6 class="order-table-info">发货日期： 2019-7-19</h6>
           </el-row>
           <el-row type="flex" justify="center" class="info-receive-row">
