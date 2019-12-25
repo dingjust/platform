@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
+import 'package:b2b_commerce/src/business/subcontract/form/subcontract_first_form.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
                       //     builder: (context) => ProductionOfflineOrder(),
                       //   ),
                       // );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => SubContractFirstForm()));
                     },
                     title: '发包/转片',
                   ),

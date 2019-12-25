@@ -70,7 +70,7 @@ class FactoryButtonsSection extends StatelessWidget {
           image: B2BImage.material(),
           imagePadding: EdgeInsets.all(10),
           onPressed: () {
-            // Navigator.pushNamed(context, AppRoutes.ROUTE_CAPACITY_MATCHING);
+             Navigator.pushNamed(context, AppRoutes.ROUTE_SUBCONTRACTS_POOL);
           },
           title: '转包/裁片',
         ));
@@ -111,7 +111,7 @@ class FactoryButtonsSection extends StatelessWidget {
           image: B2BImage.requirement(),
           imagePadding: EdgeInsets.all(10),
           onPressed: () {
-            Navigator.pushNamed(context, AppRoutes.ROUTE_REQUIREMENT_ORDERS);
+            Navigator.pushNamed(context, AppRoutes.ROUTE_SUBCONTRACTS_MINE);
           },
           title: '我的发布',
         ));

@@ -53,6 +53,10 @@ class GlobalConfigs {
       'capacity_history_keyword_key';
 
   static const CONTRACT_HISTORY_KEYWORD_KEY = 'contract_history_keyword_key';
+  //转包池搜索
+  static const SUBCONTRACT_POOL_HISTORY_KEYWORD_KEY = 'subcontract_pool_history_keyword_key';
+  //我的转包搜索
+  static const SUBCONTRACT_MINE_HISTORY_KEYWORD_KEY = 'subcontract_mine_history_keyword_key';
 
   //合作商选择页搜索
   static const COOPERATOR_SELECT_HISTORY_KEYWORD_KEY = 'cooperator_select_history_keyword_key';

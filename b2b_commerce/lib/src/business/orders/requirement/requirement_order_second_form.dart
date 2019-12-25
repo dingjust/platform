@@ -242,15 +242,6 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                         onSelected: (val) {
                           print(val);
                           setState(() {});
-//                            setState(() {
-//                              if (consignment?.carrierDetails !=
-//                                  null) {
-//                                consignment.carrierDetails = val;
-//                              } else {
-//                                consignment = ConsignmentModel();
-//                                consignment.carrierDetails = val;
-//                              }
-//                            });
                         },
                         itemBuilder: (BuildContext context) =>
                             SalesMarketsEnum.map(
