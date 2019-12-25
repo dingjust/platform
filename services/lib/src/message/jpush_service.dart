@@ -155,7 +155,7 @@ class JPushService {
     _context = context;
   }
 
-  ///这是别名，再用户登陆后设置
+  ///这是别名，再用户登录后设置
   void setAlias(String alias) {
     _jpush.setAlias(alias).then((value) {
       print('JPUSH==>setAlias:$value');

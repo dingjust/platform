@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/home/product/order_confirm_form.dart';
-import 'package:b2b_commerce/src/home/product/two_decimal_input_format.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -51,12 +50,14 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   //总数
   int totalNum = 0;
 
-  //输入即时刷新
+  //输入即时刷新监听
   Function textEditControllerListener;
 
   @override
   void initState() {
     remarksEditingController = TextEditingController();
+
+    //初始化监听器
     textEditControllerListener = () {
       setState(() {});
     };
@@ -294,7 +295,6 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                           //只能输入数字
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly,
-                            TwoDecimalInputFormat(() => widget.onRefresh())
                           ],
 
                           onChanged: (val) {

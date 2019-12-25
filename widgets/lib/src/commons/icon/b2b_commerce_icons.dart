@@ -95,6 +95,18 @@ class B2BIcons {
   const IconData(0xe723, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData close =
   const IconData(0xe641, fontFamily: 'b2bIcons2', matchTextDirection: true);
+
+  ///展开
+  static const IconData arrowOpen = const IconData(0xe714,
+      fontFamily: 'b2bIcons_web', matchTextDirection: true);
+
+  ///关闭
+  static const IconData arrowClose = const IconData(0xe713,
+      fontFamily: 'b2bIcons_web', matchTextDirection: true);
+
+  ///无网络
+  static const IconData noNet = const IconData(0xe766,
+      fontFamily: 'b2bIcons_web', matchTextDirection: true);
 }
 
 class CommonImage {

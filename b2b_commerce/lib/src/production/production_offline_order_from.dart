@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/_shared/payplan/payplan_select_page.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
@@ -38,8 +39,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   );
   PurchaseOrderEntryModel entryModel = new PurchaseOrderEntryModel();
   String address;
-  MachiningType machiningType;
+  MachiningType machiningType = MachiningType.LABOR_AND_MATERIAL;
+  AgreementRoleType freightPayer = AgreementRoleType.PARTYB;
   bool isInvoice = false;
+  double invoicePoint = 0.03;
   String remarks;
   CompanyModel company = new CompanyModel();
   String price;
@@ -189,7 +192,15 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
           Divider(
             height: 0,
           ),
+          _buildPayer(context),
+          Divider(
+            height: 0,
+          ),
           _buildInvoice(context),
+          Divider(
+            height: 0,
+          ),
+          _buildTaxPoint(context),
           Divider(
             height: 0,
           ),
@@ -655,7 +666,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       hintText: '请输入订单报价（数字）',
       prefix: '￥',
       inputFormatters: [
-        DecimalInputFormat(),        
+        DecimalInputFormat(),
       ],
       dividerPadding: EdgeInsets.symmetric(
         horizontal: 0,
@@ -860,16 +871,60 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: MachiningType.values
                     .map((type) =>
-                    ChoiceChip(
-                        label: Text(MachiningTypeLocalizedMap[type]),
-                        backgroundColor: Colors.grey[100],
-                        selectedColor: Color.fromRGBO(255, 214, 12, 1),
-                        selected: machiningType == type,
-                        onSelected: (bool selected) {
-                          setState(() {
-                            machiningType = type;
-                          });
-                        }))
+                    Container(
+                      margin: EdgeInsets.only(left: 5),
+                      child: ChoiceChip(
+                          label: Text(MachiningTypeLocalizedMap[type]),
+                          backgroundColor: Colors.grey[100],
+                          selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                          selected: machiningType == type,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              machiningType = type;
+                            });
+                          }),
+                    ))
+                    .toList(),
+              ))),
+    );
+  }
+
+  ///
+  Widget _buildPayer(BuildContext context) {
+    return Container(
+      child: ListTile(
+          leading: Wrap(
+            children: <Widget>[
+              Text('运费承担',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
+              Text(' *',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                  )),
+            ],
+          ),
+          trailing: Container(
+              width: 200,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: AgreementRoleType.values
+                    .map((type) =>
+                    Container(
+                      margin: EdgeInsets.only(left: 5),
+                      child: ChoiceChip(
+                          label: Text(AgreementRoleTypeLocalizedMap[type]),
+                          backgroundColor: Colors.grey[100],
+                          selectedColor: Color.fromRGBO(255, 214, 12, 1),
+                          selected: freightPayer == type,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              freightPayer = type;
+                            });
+                          }),
+                    ))
                     .toList(),
               ))),
     );
@@ -915,6 +970,66 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     );
   }
 
+  //选择税点
+  Widget _buildTaxPoint(BuildContext context) {
+    return isInvoice
+        ? Container(
+      child: ListTile(
+          leading: Wrap(
+            children: <Widget>[
+              Text('选择税率',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
+              Text(' *',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                  )),
+            ],
+          ),
+          trailing: Container(
+            width: 250,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Radio(
+                  value: 0.03,
+                  groupValue: invoicePoint,
+                  onChanged: (v) {
+                    setState(() {
+                      invoicePoint = v;
+                    });
+                  },
+                ),
+                Text('3%'),
+                Radio(
+                  value: 0.06,
+                  groupValue: invoicePoint,
+                  onChanged: (v) {
+                    setState(() {
+                      invoicePoint = v;
+                    });
+                  },
+                ),
+                Text('6%'),
+                Radio(
+                  value: 0.11,
+                  groupValue: invoicePoint,
+                  onChanged: (v) {
+                    setState(() {
+                      invoicePoint = v;
+                    });
+                  },
+                ),
+                Text('11%'),
+              ],
+            ),
+          )),
+    )
+        : Container();
+  }
+
   //账务方案
   Widget _buildFinance(BuildContext context) {
     return GestureDetector(
@@ -954,9 +1069,13 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text(
-                      getFinanceString(),
-                      style: TextStyle(color: Colors.red),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        getFinanceString(),
+                        textAlign: TextAlign.right,
+                        style: TextStyle(color: Colors.red),
+                      ),
                     )
                   ],
                 ),
@@ -1068,48 +1187,15 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   ///账务方案选择
   void onFinanceSelect() async {
-    CompanyPayPlanResponse response = await PayPlanRepositoryImpl().all();
-
+    CompanyPayPlanModel returnResult =
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PayPlanSelectPage(
+              selectedModel: selectCompanyPayPlanModel,
+            )));
     setState(() {
-      selectCompanyPayPlanModel = response.content[0];
+      selectCompanyPayPlanModel = returnResult;
     });
-
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 300,
-          padding: const EdgeInsets.only(top: 6.0),
-          color: CupertinoColors.white,
-          child: DefaultTextStyle(
-            style: const TextStyle(
-              color: CupertinoColors.black,
-              fontSize: 22.0,
-            ),
-            child: GestureDetector(
-              // Blocks taps from propagating to the modal sheet and popping.
-              onTap: () {},
-              child: SafeArea(
-                top: false,
-                child: CupertinoPicker(
-                  backgroundColor: Colors.white, //选择器背景色
-                  itemExtent: 30, //item的高度
-                  onSelectedItemChanged: (index) {
-                    setState(() {
-                      selectCompanyPayPlanModel = response.content[index];
-                    });
-                  },
-
-                  children: response.content
-                      .map((payplan) => Text('${payplan.name}'))
-                      .toList(),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   void onSubmit() async {
@@ -1143,6 +1229,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
     purchaseOrder.machiningType = machiningType;
     //是否需要发票
     purchaseOrder.invoiceNeeded = isInvoice;
+    if (isInvoice) {
+      purchaseOrder.invoiceTaxPoint = invoicePoint;
+    }
 
     //生产总数
     if (_totalQuantity != null) {
@@ -1239,6 +1328,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       purchaseOrder.balancePaidDate = earnest.tailPaymentDate;
     }
     purchaseOrder.salesApplication = SalesApplication.BELOW_THE_LINE;
+    purchaseOrder.freightPayer = freightPayer;
 
     bool isSubmit = false;
     try {
@@ -1437,11 +1527,10 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
   String getFinanceString() {
     if (selectCompanyPayPlanModel != null) {
-      return selectCompanyPayPlanModel.isHaveDeposit
-          ? ''
-          : '无' +
-          '定金+' +
-          PayPlanTypeLocalizedMap[selectCompanyPayPlanModel.payPlanType];
+      return '${selectCompanyPayPlanModel.isHaveDeposit
+          ? '有'
+          : '无'}定金 ${PayPlanTypeLocalizedMap[selectCompanyPayPlanModel
+          .payPlanType]}';
     } else {
       return '';
     }

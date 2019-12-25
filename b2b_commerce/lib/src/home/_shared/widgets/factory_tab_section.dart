@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
@@ -68,8 +69,8 @@ class NewFactoryListView extends StatelessWidget {
                         ))
                     .toList(),
               )
-            : Center(
-                child: CircularProgressIndicator(),
+            : Column(
+          children: <Widget>[NoDataShow()],
               ),
       )),
     );
@@ -90,8 +91,8 @@ class HotFactoryListView extends StatelessWidget {
                         ))
                     .toList(),
               )
-            : Center(
-                child: CircularProgressIndicator(),
+            : Column(
+          children: <Widget>[NoDataShow()],
               ),
       )),
     );
