@@ -6,6 +6,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:services/src/message/message_bloc.dart';
+import 'package:services/src/net/net_state.dart';
 import 'package:services/src/system/bloc/app_bloc.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 
@@ -77,6 +78,9 @@ class HttpManager {
         }
       }
       //更改网络状态
+      if (NetState.instance != null) {
+        NetState.instance.setConnectivityResult(ConnectivityResult.mobile);
+      }
       AppBLoC.instance.setConnectivityResult(ConnectivityResult.mobile);
       _clearContext();
       return response; // continue
@@ -96,8 +100,13 @@ class HttpManager {
         UserBLoC.instance.loginJumpController.add(true);
         return e;
       } else if (e.type == DioErrorType.DEFAULT) {
+        print('set none');
+        //更改网络状态
+        if (NetState.instance != null) {
+          NetState.instance.setConnectivityResult(ConnectivityResult.none);
+        }
         AppBLoC.instance.setConnectivityResult(ConnectivityResult.none);
-        MessageBLoC.instance.snackMessageController.add('网络链接不可用');
+        // MessageBLoC.instance.snackMessageController.add('网络链接不可用');
         throw -1; // network error
       } else {
         // 消息流推送
@@ -107,7 +116,10 @@ class HttpManager {
         //       .add('${errorResponse.errors[0].message}');
         // }
         if (e.request.headers['ignoreAlert'] != 1) {
-          MessageBLoC.instance.errorMessageController.add('网络异常');
+          StreamController streamController =
+              MessageBLoC.instance.errorMessageController;
+          streamController.onResume;
+          streamController.sink.add('网络异常');
         }
         if (GlobalConfigs.DEBUG) {
           print(e.toString());

@@ -65,13 +65,12 @@ class JPushService {
     return _instance;
   }
 
-  void onOpenMessage(NotifyModel message) async {
+  void onOpenMessage(NotifyModel message, BuildContext context) async {
     if (message != null) {
       Widget page = pageRouteForMessageModel(message);
       if (page != null) {
-        Navigator.push(
-          _context,
-          new MaterialPageRoute(builder: (context) => page),
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => page),
         );
       }
     }
@@ -156,7 +155,7 @@ class JPushService {
     _context = context;
   }
 
-  ///这是别名，再用户登陆后设置
+  ///这是别名，再用户登录后设置
   void setAlias(String alias) {
     _jpush.setAlias(alias).then((value) {
       print('JPUSH==>setAlias:$value');

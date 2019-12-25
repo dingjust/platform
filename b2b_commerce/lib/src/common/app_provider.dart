@@ -9,6 +9,7 @@ class AppProvider {
     ChangeNotifierProvider(builder: (_) => MyCapacityState()),
     ChangeNotifierProvider(builder: (_) => ProductionProgressState()),
     ChangeNotifierProvider(builder: (_) => AmapState()),
+        ChangeNotifierProvider(builder: (_) => NetState.instance),
     Provider(
       builder: (_) => AddressState(),
     ),

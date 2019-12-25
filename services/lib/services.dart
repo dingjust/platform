@@ -47,6 +47,7 @@ export 'src/my/state/my_contract_state.dart';
 export 'src/my/state/my_factory_capacity_state.dart';
 export 'src/my/state/my_factory_state.dart';
 export 'src/net/http_manager.dart';
+export 'src/net/net_state.dart';
 export 'src/order/bloc/proofing_orders_bloc.dart';
 export 'src/order/bloc/purchase_order_bloc.dart';
 export 'src/order/bloc/quote_orders_bloc.dart';

@@ -13,7 +13,6 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import '../../home/requirement/requirement_publish_success.dart';
-import '../apparel_products.dart';
 import 'form/category_field.dart';
 import 'form/major_category_field.dart';
 import 'form/pictures_field.dart';
@@ -79,7 +78,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
       }
     }
 
-    //联系方式取当前登陆人信息（只在新建的时候取）
+    //联系方式取当前登录人信息（只在新建的时候取）
     if (widget.isCreate && !widget.isReview) {
       widget.order.details.contactPerson = UserBLoC.instance.currentUser.name;
       widget.order.details.contactPhone =

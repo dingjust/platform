@@ -133,19 +133,19 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   }
 
   //监听异常消息,dialog
-  void listenMessage() {
-    MessageBLoC.instance.errorMessageStream.listen((value) {
-      final appContext = _navigatorKey.currentState.overlay.context;
-      final dialog = AlertDialog(
-        content: Text('$value'),
-      );
-      try {
-        showDialog(context: appContext, builder: (x) => dialog);
-      } catch (e) {
-        print(e);
-      }
-    });
-  }
+  // void listenMessage() {
+  //   MessageBLoC.instance.errorMessageStream.listen((value) {
+  //     final appContext = _navigatorKey.currentState.overlay.context;
+  //     final dialog = AlertDialog(
+  //       content: Text('$value'),
+  //     );
+  //     try {
+  //       showDialog(context: appContext, builder: (x) => dialog);
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   });
+  // }
 
   //监听未登录接口调用跳转登录页
   void listenLogin() {
