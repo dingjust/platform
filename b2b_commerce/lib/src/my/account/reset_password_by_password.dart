@@ -1,31 +1,29 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/home/account/login.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:services/services.dart' show UserBLoC, UserRepositoryImpl;
 import 'package:widgets/widgets.dart';
 
-class ResetPasswordPage extends StatefulWidget {
-  const ResetPasswordPage({
+class ResetPasswordByPasswordPage extends StatefulWidget {
+  const ResetPasswordByPasswordPage({
     Key key,
   }) : super(key: key);
 
-  _ResetPasswordPageState createState() => _ResetPasswordPageState();
+  _ResetPasswordByPasswordPageState createState() =>
+      _ResetPasswordByPasswordPageState();
 }
 
-class _ResetPasswordPageState extends State<ResetPasswordPage> {
+class _ResetPasswordByPasswordPageState
+    extends State<ResetPasswordByPasswordPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
-
-  String _verifyStr = '获取验证码';
-  int _seconds = 0;
-  Timer _timer;
   bool validate = false;
   String phoneValidateStr = "";
 
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _oldPasswordController = TextEditingController();
   TextEditingController _againPasswordController = TextEditingController();
   TextEditingController _smsCaptchaController = TextEditingController();
 
@@ -35,13 +33,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       child: Scaffold(
           appBar: AppBar(
             elevation: 0.5,
-            iconTheme: IconThemeData(color: Color.fromRGBO(36, 38, 41, 1)),
-            backgroundColor: Colors.white,
+            title: Text('修改密码'),
             centerTitle: true,
-            title: const Text(
-              '重置密码',
-              style: TextStyle(color: Color.fromRGBO(36, 38, 41, 1)),
-            ),
+            backgroundColor: Color.fromRGBO(255, 219, 0, 1),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('保存'),
+                onPressed: onSubmit,
+              )
+            ],
           ),
           body: Form(
             key: _formKey,
@@ -51,50 +51,20 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
-  _startTimer() {
-    _seconds = 60;
-
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_seconds == 0) {
-        _cancelTimer();
-        return;
-      }
-
-      _seconds--;
-      _verifyStr = '$_seconds(s)';
-      setState(() {});
-      if (_seconds == 0) {
-        _verifyStr = '重新发送';
-      }
-    });
-  }
-
-  _cancelTimer() {
-    _timer?.cancel();
-  }
-
   Widget _buildInputArea() {
-    TextField _phoneField = TextField(
-      autofocus: false,
-      keyboardType: TextInputType.phone,
-      controller: _phoneController,
-      onChanged: (value) {
-        formValidate();
-      }, //只能输入数字
-      inputFormatters: <TextInputFormatter>[
-        WhitelistingTextInputFormatter.digitsOnly,
-      ],
-      decoration:
-      InputDecoration(hintText: '请输入手机号码等', border: InputBorder.none),
-    );
+    TextFormField _olPasswordField = TextFormField(
+        autofocus: false,
+        controller: _oldPasswordController,
+        obscureText: true,
+        decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
+        validator: (v) {
+          return v.trim().length > 0 ? null : "原密码不能为空";
+        });
 
     TextFormField _passwordField = TextFormField(
       autofocus: false,
       controller: _passwordController,
       obscureText: true,
-      // onChanged: (value) {
-      //   formValidate();
-      // },
       decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
       validator: (value) {
         if (!RegexUtil.password(value)) {
@@ -117,19 +87,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       },
     );
 
-    TextField _smsCaptchaField = TextField(
-      autofocus: false,
-      controller: _smsCaptchaController,
-      onChanged: (value) {
-        formValidate();
-      },
-      decoration: InputDecoration(
-        hintText: '请输入',
-        border: InputBorder.none,
-      ),
-      // 校验用户名
-    );
-
     _againPasswordController.addListener(() {
       formValidate();
     });
@@ -138,45 +95,31 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
       child: Column(
         children: <Widget>[
-          InputRow(
-            label: '账号',
-            field: _phoneField,
-            surfix: Container(
-              child: Text(
-                phoneValidateStr,
-                style: TextStyle(color: Colors.red),
-              ),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 0.5, color: Color.fromRGBO(200, 200, 200, 1)))),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 85,
+                  margin: EdgeInsets.only(right: 20),
+                  child: Text(
+                    '原密码',
+                    style: TextStyle(
+                        color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: _olPasswordField,
+                ),
+              ],
             ),
           ),
-          InputRow(
-            label: '验证码',
-            field: _smsCaptchaField,
-            surfix: FlatButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-              onPressed: (_seconds == 0)
-                  ? () async {
-                      bool isExist = await validatePhone();
-                      if (isExist) {
-                        UserRepositoryImpl()
-                            .sendCaptcha(_phoneController.text)
-                            .then((a) {
-                          _startTimer();
-                        });
-                      }
-                    }
-                  : null,
-              color: Color.fromRGBO(255, 214, 12, 1),
-              child: Text(
-                '$_verifyStr',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ),
-          // InputRow(
-          //   label: '新密码',
-          //   field: _passwordField,
-          // ),
           Container(
             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
             decoration: BoxDecoration(
@@ -215,7 +158,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   width: 85,
                   margin: EdgeInsets.only(right: 20),
                   child: Text(
-                    '确认密码',
+                    '再次输入',
                     style: TextStyle(
                         color: Color.fromRGBO(36, 38, 41, 1), fontSize: 18),
                   ),
@@ -263,21 +206,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
         children: <Widget>[
           _buildInputArea(),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: RaisedButton(
-              onPressed: validate ? onSubmit : null,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50)),
-              color: Color.fromRGBO(255, 214, 12, 1),
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                '提交',
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -323,6 +251,41 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   void onSubmit() async {
+    if (_againPasswordController.text != _passwordController.text ||
+        _passwordController.text == '' ||
+        _oldPasswordController.text == '') {
+      print('!');
+      return;
+    }
+
+    if (!(_formKey.currentState as FormState).validate()) {
+      print('!!!!!');
+      return;
+    }
+
+    // showDialog(
+    //     context: context,
+    //     barrierDismissible: false,
+    //     builder: (_) {
+    //       return RequestDataLoading(
+    //         requestCallBack: UserRepositoryImpl().resetPasswordByPassword(
+    //           _oldPasswordController.text,
+    //           _passwordController.text,
+    //           UserBLoC.instance.currentUser.uid,
+    //         ),
+    //         outsideDismiss: false,
+    //         loadingText: '保存中。。。',
+    //         entrance: '',
+    //       );
+    //     }).then((value) {
+    //   bool result = value as bool;
+    //   if (result) {
+    //     Navigator.of(context).pop();
+    //   } else {
+    //     BotToast.showText(text: "密码错误"); //弹出一个文本框;
+    //   }
+    // });
+
     // 加载条
     showDialog(
       context: context,
@@ -331,32 +294,17 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ProgressIndicatorFactory.buildDefaultProgressIndicator(),
     );
 
-    UserRepositoryImpl()
-        .resetPassword(_phoneController.text, _passwordController.text,
-            _smsCaptchaController.text)
-        .then((value) {
-      if (value) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) => B2BLoginPage(
-                      snackBarMessage: '重置密码成功',
-                    )),
-            ModalRoute.withName('/'));
-      } else {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.RESULT_DIALOG,
-                failTips: '重置密码失败',
-                callbackResult: false,
-              );
-            });
-      }
-    });
+    bool response = await UserRepositoryImpl().resetPasswordByPassword(
+      _oldPasswordController.text,
+      _passwordController.text,
+      UserBLoC.instance.currentUser.uid,
+    );
+    Navigator.of(context).pop();
+    if (response) {
+      Navigator.of(context).pop();
+    } else {
+      BotToast.showText(text: "密码错误"); //弹出一个文本框;
+    }
   }
 }
 

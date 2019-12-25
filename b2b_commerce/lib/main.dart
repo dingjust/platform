@@ -1,11 +1,10 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
+import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:b2b_commerce/src/my/messages/index.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,23 +51,7 @@ void main() async {
       bloc: AppBLoC.instance,
       // child: MyApp(),
       child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(builder: (_) => MyCapacityState()),
-          ChangeNotifierProvider(builder: (_) => ProductionProgressState()),
-          ChangeNotifierProvider(builder: (_) => AmapState()),
-          Provider(
-            builder: (_) => AddressState(),
-          ),
-          Provider(
-            builder: (_) => CategoryState(),
-          ),
-          Provider(
-            builder: (_) => MajorCategoryState(),
-          ),
-          Provider(
-            builder: (_) => CarrierState(),
-          ),
-        ],
+        providers: AppProvider.providers,
         child: MyApp(),
       ),
     ));
@@ -129,8 +112,18 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_) => initListener());
+    WidgetsBinding.instance.addPostFrameCallback((_) => globalInit());
     super.initState();
+  }
+
+  ///全局初始化
+  void globalInit() {
+    // //初始化helpers
+    // Provider.of<CertificationStatusHelper>(context)
+    //     .checkCertificationStatus(context);
+
+    //初始化监听
+    initListener();
   }
 
   //初始化监听
@@ -164,33 +157,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                 ModalRoute.withName('/'));
       }
     });
-  }
-
-  /// 发布需求
-  void _onPublish(BuildContext context) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            MultiProvider(
-              providers: [
-                ChangeNotifierProvider(
-                  builder: (_) => RequirementOrderFormState(),
-                ),
-              ],
-              child: Consumer(
-                builder: (context, RequirementOrderFormState state, _) =>
-                    RequirementOrderFirstForm(
-                      formState: state,
-                    ),
-              ),
-            ),
-      ),
-    );
-  }
-
-  bool _isBrand() {
-    return UserBLoC.instance.currentUser.type == UserType.BRAND;
   }
 
   /// 获取导航菜单
@@ -267,7 +233,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         MyHomePage(),
       ),
     ];
-
     return menus;
   }
 
@@ -297,36 +262,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                     onChanged: _handleNavigation,
                     items: menus.map((menu) => menu.item).toList(),
                   ),
-                  // floatingActionButton: _isBrand()
-                  //     ? PublishRequirementButton(
-                  //   onPublish: () => _onPublish(context),
-                  // )
-                  //     : null,
-                  // floatingActionButtonLocation:
-                  // FloatingActionButtonLocation.centerDocked,
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () {
-                      // showAlertDialog(blockPopup, cancel: () {
-                      //   BotToast.showText(text: 'Click cancel');
-                      // }, confirm: () {
-                      //   BotToast.showText(text: 'Click confirm');
-                      // }, backgroundReturn: () {
-                      //   BotToast.showText(text: 'Click background');
-                      // }, physicalBackButton: () {
-                      //   BotToast.showText(text: 'Click the physical back button');
-                      // });
-                      showAlertDialog(true, cancel: () {
-                        BotToast.showText(text: 'Click cancel');
-                      }, confirm: () {
-                        BotToast.showText(text: 'Click confirm');
-                      }, backgroundReturn: () {
-                        BotToast.showText(text: 'Click background');
-                      }, physicalBackButton: () {
-                        BotToast.showText(
-                            text: 'Click the physical back button');
-                      });
-                    },
-                  ),
                 ),
           ),
           routes: AppRoutes.allRoutes,
@@ -344,30 +279,6 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
           },
           supportedLocales: AppConstants.supportedLocales(),
         ),
-    );
-  }
-}
-
-/// 发布需求按钮·
-class PublishRequirementButton extends StatelessWidget {
-  const PublishRequirementButton({
-    Key key,
-    @required this.onPublish,
-  }) : super(key: key);
-
-  final VoidCallback onPublish;
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      elevation: 0,
-      tooltip: '发布需求',
-      child: Icon(
-        Icons.add,
-        color: Colors.black,
-        size: 45,
-      ),
-      onPressed: onPublish,
     );
   }
 }

@@ -86,8 +86,8 @@ class FactoryButtonsSection extends StatelessWidget {
             Navigator.pushNamed(context, AppRoutes.ROUTE_MY_CONTRACT);
           },
           title: '合同管理',
-          number: 2,
-          showNum: true,
+          // number: 2,
+          // showNum: true,
         ));
   }
 

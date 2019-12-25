@@ -3,6 +3,8 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'reset_password_by_password.dart';
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -85,7 +87,10 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push((MaterialPageRoute(
+                    builder: (context) => ResetPasswordByPasswordPage())));
+              },
               child: _InputRow(
                 label: '修改密码',
                 padding: EdgeInsets.symmetric(vertical: 10),

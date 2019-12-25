@@ -1,26 +1,31 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-
-class RequirmentOrderContactInput extends StatefulWidget{
+class RequirmentOrderContactInput extends StatefulWidget {
   RequirementOrderModel item;
 
   RequirmentOrderContactInput(this.item);
-  _RequirmentOrderContactInputState createState() => _RequirmentOrderContactInputState();
+
+  _RequirmentOrderContactInputState createState() =>
+      _RequirmentOrderContactInputState();
 }
 
-class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInput>{
+class _RequirmentOrderContactInputState
+    extends State<RequirmentOrderContactInput> {
   FocusNode _nameFocusNode = FocusNode();
   FocusNode _phoneFocusNode = FocusNode();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  Map<String,Object> map;
+  Map<String, Object> map;
+  String phoneValidateStr = '';
 
-  void initState(){
+  void initState() {
     _nameController.text = widget.item.details.contactPerson;
     _phoneController.text = widget.item.details.contactPhone;
-    
+
     super.initState();
   }
 
@@ -39,30 +44,37 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
                     child: Center(
                       child: Text(
                         '确定',
-                        style: TextStyle(
-                            color: Colors.black),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ),
                   onTap: () async {
-                    widget.item.details.contactPerson = _nameController.text == '' ? null : _nameController.text;
-                    widget.item.details.contactPhone = _phoneController.text == '' ? null : _phoneController.text;
-                    Navigator.pop(context);
-                  }
-              )
-            ]
-        ),
+                    //校验手机号
+                    if (!RegexUtil.isMobile(_phoneController.text)) {
+                      BotToast.showText(text: '请填写正确的手机号');
+                    } else {
+                      widget.item.details.contactPerson =
+                      _nameController.text == ''
+                          ? null
+                          : _nameController.text;
+                      widget.item.details.contactPhone =
+                      _phoneController.text == ''
+                          ? null
+                          : _phoneController.text;
+                      Navigator.pop(context);
+                    }
+                  })
+            ]),
         body: Container(
             color: Colors.white,
             child: ListView(
               children: <Widget>[
                 _buildFactoryInfo(context),
               ],
-            ))
-    );
+            )));
   }
 
-  Widget _buildFactoryInfo(BuildContext context){
+  Widget _buildFactoryInfo(BuildContext context) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -73,8 +85,11 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
               focusNode: _nameFocusNode,
               controller: _nameController,
               autofocus: true,
-              leadingText: Text('联系人名',style: TextStyle(fontSize: 16,)),
-              hintText: '请输入联系人名',
+              leadingText: Text('联系人',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
+              hintText: '请输入联系人',
             ),
           ),
           Container(
@@ -83,14 +98,46 @@ class _RequirmentOrderContactInputState extends State<RequirmentOrderContactInpu
             child: TextFieldComponent(
               focusNode: _phoneFocusNode,
               controller: _phoneController,
-              leadingText: Text('联系电话',style: TextStyle(fontSize: 16,)),
+              leadingText: Text('联系电话',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
               hintText: '请输入联系电话',
               inputType: TextInputType.phone,
+              onChanged: (val) => phoneValidate(),
             ),
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  child: Text(
+                    '$phoneValidateStr',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              )
+            ],
           ),
         ],
       ),
     );
   }
 
+  void phoneValidate() {
+    if (!RegexUtil.isMobile(_phoneController.text)) {
+      setState(() {
+        phoneValidateStr = '输入正确手机号';
+      });
+    } else {
+      setState(() {
+        phoneValidateStr = '';
+      });
+    }
+  }
 }

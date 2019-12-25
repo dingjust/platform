@@ -57,9 +57,9 @@
       </el-row>
       <el-form-item prop="adeptAtCategories">
         <template slot="label">
-          <h6 class="titleTextClass">优势品类</h6>
+          <h6 class="titleTextClass">优势品类<span style="color: red">*</span></h6>
         </template>
-        <category-select :listData="categories" :selectDatas="formData.adeptAtCategories"></category-select>
+        <category-select :listData="categories" :selectDatas="formData.adeptAtCategories" :readOnly="readOnly"></category-select>
       </el-form-item>
       <el-form-item prop="style">
         <template slot="label">
@@ -82,7 +82,7 @@
     export default {
       name: 'BrandCapacityForm',
       components: {EnumSelect, CategorySelect, TagsOfText},
-      props: ['formData'],
+      props: ['formData', 'readOnly'],
       data () {
         return {
           styles: this.$store.state.EnumsModule.productStyles,
@@ -94,6 +94,9 @@
       },
       methods: {
         onRemoveCooperativeBrand (word) {
+          if (this.readOnly) {
+            return;
+          }
           var keywords = this.formData.cooperativeBrand.split('，');
           var index = keywords.indexOf(word);
           keywords.splice(index, 1);
@@ -152,6 +155,9 @@
           }
         },
         handleTagClick (val) {
+          if (this.readOnly) {
+              return;
+          }
           var mapIndex = this.formData.styles.indexOf(val.code);
           if (mapIndex > -1) {
             this.formData.styles.splice(mapIndex, 1);

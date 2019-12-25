@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
               controller: _phoneController,
 
               decoration:
-                  InputDecoration(hintText: '请输入', border: InputBorder.none),
+              InputDecoration(hintText: '请输入手机号', border: InputBorder.none),
             ),
             surfix: Container(
                 child: Row(
@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     controller: _passwordController,
                     decoration: InputDecoration(
-                        hintText: '请输入', border: InputBorder.none),
+                        hintText: '请输入密码', border: InputBorder.none),
                   ),
                   surfix: GestureDetector(
                       onTap: () {

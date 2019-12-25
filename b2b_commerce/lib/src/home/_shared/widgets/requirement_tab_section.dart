@@ -1,5 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
+import 'package:b2b_commerce/src/my/company/form/my_factory_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -134,8 +137,8 @@ class _RequirementItem extends StatelessWidget {
       ),
       child: FlatButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => RequirementOrderDetailPage(model.code)));
+          Provider.of<CertificationStatusHelper>(context).oncheckProfile(
+              context: context, onJump: () => jumpToDetailPage(context));
         },
         child: Container(
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -205,6 +208,40 @@ class _RequirementItem extends StatelessWidget {
             )),
       ),
     );
+  }
+
+  void jumpToDetailPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RequirementOrderDetailPage(model.code)));
+  }
+
+  void jumpToCompanyIntroduction(BuildContext context) {
+    UserBLoC bloc = UserBLoC.instance;
+    // 品牌详情
+    if (bloc.currentUser.type == UserType.BRAND) {
+      UserRepositoryImpl().getBrand(bloc.currentUser.companyCode).then((brand) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MyBrandBaseFormPage(brand)));
+      });
+    }
+    // 工厂详情
+    if (bloc.currentUser.type == UserType.FACTORY) {
+      UserRepositoryImpl()
+          .getFactory(bloc.currentUser.companyCode)
+          .then((factory) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                MyFactoryFormPage(
+                  factory: factory,
+                ),
+          ),
+        );
+      });
+    }
   }
 
   String generateDistanceStr(double distance) {

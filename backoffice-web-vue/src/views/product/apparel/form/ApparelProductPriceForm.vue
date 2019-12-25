@@ -45,7 +45,7 @@
         </el-col>
         <el-col :span="5" class="product-form-row">
           <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入价格', trigger: 'blur' ,type: 'number'}]" :key="row.key"
+                { required: true, message: '请输入价格', trigger: 'blur'}]" :key="row.key"
             :prop="'steppedPrices.' + index+'.price'">
             <el-row type="flex" align="middle">
               <div style="width:60px">
