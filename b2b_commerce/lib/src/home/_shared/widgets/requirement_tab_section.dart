@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
@@ -49,34 +50,27 @@ class NewRequirementsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer2<RequirementTabSectionState, AmapState>(
-      builder:
-          (context, RequirementTabSectionState state, AmapState amapState, _) =>
+      builder: (context, RequirementTabSectionState state, AmapState amapState,
+          _) =>
           Container(
               child: Container(
-                child: state.getNewRequirements(
-                    amapState.longitude, amapState.latitude) !=
-                    null &&
-                    amapState.getAMapLocation() != null
-            ? Column(
-                  children: state
-                      .getNewRequirements(
-                      amapState.longitude, amapState.latitude)
-                    .map((requirement) => _RequirementItem(
+                  child: state.getNewRequirements(
+                      amapState.longitude, amapState.latitude) !=
+                      null &&
+                      amapState.getAMapLocation() != null
+                      ? Column(
+                    children: state
+                        .getNewRequirements(
+                        amapState.longitude, amapState.latitude)
+                        .map((requirement) =>
+                        _RequirementItem(
                           model: requirement,
                         ))
-                    .toList(),
-              )
-                    : Column(
-                  children: <Widget>[
-                    Container(
-                      height: 200,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  ],
-              ),
-      )),
+                        .toList(),
+                  )
+                      : Column(
+                    children: <Widget>[NoDataShow()],
+                  ))),
     );
   }
 }
@@ -103,14 +97,7 @@ class NearbyRequirementsListView extends StatelessWidget {
                     .toList(),
               )
                     : Column(
-                  children: <Widget>[
-                    Container(
-                      height: 200,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  ],
+                  children: <Widget>[NoDataShow()],
               ),
       )),
     );
@@ -149,9 +136,13 @@ class _RequirementItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      '${model.details.productName ?? ''}',
-                      style: TextStyle(fontSize: 18),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        '${model.details.productName ?? ''}',
+                        style: TextStyle(fontSize: 18),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     Row(
                       children: <Widget>[

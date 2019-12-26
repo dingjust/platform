@@ -114,6 +114,7 @@ class _HomePageState extends State<HomePage> {
               title: HomeTitle(
                 leading: widget.searchInputWidgetsByUserType,
               ),
+              backgroundColor: Constants.THEME_COLOR_MAIN,
               brightness: Brightness.dark,
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(

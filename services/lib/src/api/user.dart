@@ -213,4 +213,5 @@ abstract class UserApis {
   ///合同订单验证
   static get contractOrdersValidate =>
       '/{baseSiteId}/user/agreement/order/validate';
+
 }

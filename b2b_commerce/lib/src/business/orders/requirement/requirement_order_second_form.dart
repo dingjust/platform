@@ -149,11 +149,20 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                       inputFormatters: [
                         DecimalInputFormat(),
                       ],
-                      inputType: TextInputType.number,
+                      // inputType: TextInputType.number,
                       hintText: '填写',
                       controller: super.maxExpectedPriceController,
                       focusNode: super.maxExpectedPriceFocusNode,
-                      onChanged: (v) {
+                      onChanged: (value) {
+                        if (value.contains('.')) {
+                          int index = value.indexOf('.');
+                          if (value.length > index + 3) {
+                            setState(() {
+                              super.maxExpectedPriceController.text =
+                                  value.substring(0, index + 3);
+                            });
+                          }
+                        }
                         widget.formState.model.details.maxExpectedPrice =
                             ClassHandleUtil.removeSymbolRMBToDouble(
                                 super.maxExpectedPriceController.text);
@@ -242,15 +251,6 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                         onSelected: (val) {
                           print(val);
                           setState(() {});
-//                            setState(() {
-//                              if (consignment?.carrierDetails !=
-//                                  null) {
-//                                consignment.carrierDetails = val;
-//                              } else {
-//                                consignment = ConsignmentModel();
-//                                consignment.carrierDetails = val;
-//                              }
-//                            });
                         },
                         itemBuilder: (BuildContext context) =>
                             SalesMarketsEnum.map(
@@ -293,7 +293,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                               SalesMarketsEnum,
                               2,
                               customText: '选择销售市场'),
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.grey,fontSize: 16,),
                         ),
                       ),
                       Icon(Icons.chevron_right),
@@ -516,9 +516,13 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                           flex: 1,
                           child: Container(
                             width: 100,
-                            child: Text(
-                              '发布方式',
-                              style: TextStyle(fontSize: 16),
+                            child: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: '发布方式',
+                                  style: TextStyle(fontSize: 16, color: Colors.black),
+                                ),
+                              ]),
                             ),
                           ),
                         ),
@@ -757,9 +761,13 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                   children: <Widget>[
                     Expanded(
                       flex: 1,
-                      child: Text(
-                        '有效期限',
-                        style: TextStyle(fontSize: 16),
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: '有效期限',
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                          ),
+                        ]),
                       ),
                     ),
                     Expanded(

@@ -85,7 +85,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         WhitelistingTextInputFormatter.digitsOnly,
       ],
       decoration:
-      InputDecoration(hintText: '请输入手机号码等', border: InputBorder.none),
+      InputDecoration(hintText: '请输入手机号码', border: InputBorder.none),
     );
 
     TextFormField _passwordField = TextFormField(
@@ -95,7 +95,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       // onChanged: (value) {
       //   formValidate();
       // },
-      decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
+      decoration: InputDecoration(hintText: '请输入密码', border: InputBorder.none),
       validator: (value) {
         if (!RegexUtil.password(value)) {
           return '6~20位字母与数字组合，首位为字母';
@@ -109,7 +109,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       autofocus: false,
       controller: _againPasswordController,
       obscureText: true,
-      decoration: InputDecoration(hintText: '请输入', border: InputBorder.none),
+      decoration:
+      InputDecoration(hintText: '请输入确认密码', border: InputBorder.none),
       validator: (value) {
         return _againPasswordController.text == _passwordController.text
             ? null
@@ -124,7 +125,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         formValidate();
       },
       decoration: InputDecoration(
-        hintText: '请输入',
+        hintText: '请输入验证码',
         border: InputBorder.none,
       ),
       // 校验用户名

@@ -1,5 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
+import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
+import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
@@ -54,6 +56,9 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
+  static const ROUTE_SUBCONTRACTS_POOL = '/business/subcontract/subcontract_pool';
+  static const ROUTE_SUBCONTRACTS_MINE = '/business/subcontract/subcontract_mine';
+
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
   static const ROUTE_MY_FACTORY = '/my/my_factory';
@@ -89,6 +94,8 @@ class AppRoutes with GlobalRoutes {
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),
     ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
+    ROUTE_SUBCONTRACTS_POOL: (context) => SubContractPoolPage(),
+    ROUTE_SUBCONTRACTS_MINE: (context) => SubContractMinePage(),
     ROUTE_MY_HOME: (context) => MyHomePage(),
     ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
 //    ROUTE_MY_BRAND: (context) => MyBrandPage(),

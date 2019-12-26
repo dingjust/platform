@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
 //      showDialog(
 //          context: context,
 //          child: SimpleDialog(
-//            title: Text('登陆失败'),
+//            title: Text('登录失败'),
 //            children: <Widget>[
 //              Container(
 //                padding: EdgeInsets.all(10),
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
               });
             },
             child: Text(
-              _isPasswordLogin ? '验证码登陆' : '密码登陆',
+              _isPasswordLogin ? '验证码登录' : '密码登录',
               style: TextStyle(fontSize: 15),
             ),
           ),
@@ -474,7 +474,7 @@ class _LoginPageState extends State<LoginPage> {
     );
     bloc.checkUserExist(_phoneController.text).then((value) {
       if (value == UserType.DEFAULT) {
-        bloc.loginStreamController.sink.add('账号不存在请注册后登陆');
+        bloc.loginStreamController.sink.add('账号不存在请注册后登录');
       } else {
         if (bloc.currentUser.type != value) {
           Navigator.of(context).pop();
@@ -526,7 +526,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///记录账户
   void checkLocalUserName() async {
-    // 检测本地登陆过的账户
+    // 检测本地登录过的账户
     String oldUserName = await LocalStorage.get(GlobalConfigs.USER_KEY);
 
     if (oldUserName != null && oldUserName.isNotEmpty) {
