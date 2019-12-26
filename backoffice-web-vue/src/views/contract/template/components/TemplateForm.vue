@@ -1,6 +1,10 @@
 <template>
   <div class="animated fadeIn">
 <!--    <el-card>-->
+    <el-row type="flex" justify="center">
+      <span style="font-size: 14px;color: #9da0a8">{{this.titleName}}(模板)</span>
+    </el-row>
+    <div class="pt-2"></div>
       <el-container>
         <el-aside width="150px" class="template-aside">
           <el-row justify="center" type="flex">
@@ -39,8 +43,9 @@
               </el-col>
             </el-row>
             <el-row class="contract_custom-row">
-              <el-input placeholder="请输入内容" size="mini" v-model="tempName"><template slot="prepend">合同模板名称</template>
+              <el-input placeholder="请输入内容" size="mini" v-model="tempName" @blur="checkTempName()"><template slot="prepend">合同模板名称</template>
               </el-input>
+              <h6 style="color: #F56C6C;margin-left: 120px">{{this.passCheck?'': this.validateText}}</h6>
             </el-row>
             <el-row class="contract_custom-row">
               <el-input placeholder="请输入内容" size="mini" v-model="remarks"><template slot="prepend">备注</template>
@@ -84,7 +89,7 @@
 
   export default {
     name: 'TemplateForm',
-    props: ['propdata', 'tempFormVisible'],
+    props: ['propdata', 'tempFormVisible', 'slotData'],
     methods: {
       ...mapActions({
         refresh: 'refresh',
@@ -96,6 +101,7 @@
         this.editorText = item.content;
         this.tempCode = item.code;
         this.tempType = item.type;
+        this.titleName = item.title;
       },
       async getTemplate (code) {
         const url = this.apis().getTemplates(code);
@@ -106,7 +112,14 @@
       },
       async onSave () {
         if (this.tempName == null || this.tempName == '') {
-          this.$message.error('请输入模板名字');
+          this.validateText = '请输入模板名称';
+          // this.$message.error('请完善模板信息');
+          return;
+        }
+        // this.checkTempName();
+        if (!this.passCheck) {
+          this.validateText = '模板名称重复，请重新输入';
+          // this.$message.error('请完善模板信息');
           return;
         }
         const url = this.apis().saveTemplate();
@@ -131,16 +144,57 @@
         this.$emit('contractTemplateSelect');
         this.fn.closeSlider(true);
       },
-      async getTemplateListPt () {
-        const url = this.apis().getTemplatesListPt();
-        const result = await http.post(url, {
-          keyword: ''
-        }, {
-          page: 0,
-          size: 10
-        });
-        console.log(result);
-        this.mockData = result.content;
+      // async getTemplateListPt () {
+      //   const url = this.apis().getTemplatesListPt();
+      //   const result = await http.post(url, {
+      //     keyword: ''
+      //   }, {
+      //     page: 0,
+      //     size: 10
+      //   });
+      //   console.log(result);
+      //   this.mockData = result.content;
+      //   this.sortData();
+      // },
+      // sortData () {
+      //   let arr = [];
+      //   this.mockData.map(value => {
+      //     if (value.title === '委托生产合同') {
+      //       arr[0] = value;
+      //     }
+      //     if (value.title === '采购订单') {
+      //       arr[1] = value;
+      //     }
+      //     if (value.title === '框架协议') {
+      //       arr[2] = value;
+      //     }
+      //     if (value.title === '补充协议') {
+      //       arr[3] = value;
+      //     }
+      //   });
+      //   this.mockData = arr;
+      //   // this.onSelect(this.mockData[0]);
+      // },
+      async checkTempName () {
+        if (this.tempName == null || this.tempName == '') {
+          this.validateText = '请输入模板名称';
+          return;
+        }
+        let formData = {
+          name: this.tempName
+        };
+        const url = this.apis().checkTempName();
+        const result = await http.post(url, formData);
+        if (result.code == 1) {
+          this.passCheck = true;
+        } else if (result.code == 0) {
+          this.passCheck = false;
+          this.validateText = '模板名称重复，请重新输入';
+        }
+        // this.passCheck = result;
+        // if (!this.passCheck) {
+        //   this.validateText = '模板名称重复，请重新输入';
+        // }
       }
     },
     data () {
@@ -160,7 +214,7 @@
           hideModeSwitch: true
         },
         tempContent: '',
-        selectedCode: '1',
+        selectedCode: '',
         editorVisible: true,
         mockData: [],
         tempName: '',
@@ -176,7 +230,10 @@
           originalTmplCode: '',
           remark: '',
           header: ''
-        }
+        },
+        titleName: '',
+        passCheck: false,
+        validateText: ''
       };
     },
 
@@ -197,7 +254,14 @@
       }
     },
     created () {
-      this.getTemplateListPt();
+      // this.getTemplateListPt();
+      this.mockData = this.slotData;
+      this.viewerText = this.slotData[0].header;
+      this.editorText = this.slotData[0].content;
+      this.selectedCode = this.slotData[0].code;
+      this.tempCode = this.slotData[0].code;
+      this.tempType = this.slotData[0].type;
+      this.titleName = this.slotData[0].title;
     }
   };
 </script>

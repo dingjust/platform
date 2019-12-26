@@ -50,14 +50,14 @@
   import ContractReport from './components/ContractReport';
   import ContractDetails from './components/ContractDetails';
   import TabLabelBubble from './components/TabLabelBubble';
-  import ContractPreviewPdf from "./components/ContractPreviewPdf";
+  import ContractPreviewPdf from './components/ContractPreviewPdf';
 
   // import PurchaseOrderDetailsPage from "./details/PurchaseOrderDetailsPage";
 
   export default {
     name: 'ContractPage',
     components: {
-        ContractPreviewPdf,
+      ContractPreviewPdf,
       ContractToolbar,
       ContractSearchResultList,
       ContractReport,
