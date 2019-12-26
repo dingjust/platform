@@ -312,16 +312,41 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Text(
-              '订单号：${widget.order.code}',
-              style: TextStyle(color: Colors.grey, fontSize: 16),
-            ),
+              margin: EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      '订单号：${widget.order.code}',
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
+              )),
+          _buildInfoRow(
+            '单价x数量',
+            '￥${widget.order.totalQuantity}x${widget.order.unitPrice}',
           ),
-          // Text(
-          //   '订单创建时间：${DateFormatUtil.format(widget.order.creationTime)}',
-          //   style: TextStyle(color: Colors.grey, fontSize: 16),
-          // )
+          _buildInfoRow(
+            '合计总价',
+            '￥${widget.order.totalPrice}',
+          ),
+          _buildDeposit(),
+          _buildActualPay(),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  '买大货需要支付30%的订金',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -329,7 +354,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   Widget _buildPaymentWay() {
     return Container(
-        margin: EdgeInsets.only(top: 100),
+        margin: EdgeInsets.only(top: 20),
         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
         color: Colors.white,
         child: Column(
@@ -421,6 +446,68 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 style: TextStyle(fontSize: 18),
               ),
             ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String val) {
+    return Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              '$label',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text(
+                '$val',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.right,
+              ),
+            )
+          ],
+        ));
+  }
+
+  Widget _buildDeposit() {
+    if (widget.order is PurchaseOrderModel) {
+      PurchaseOrderModel model = widget.order as PurchaseOrderModel;
+      return _buildInfoRow('订金(总额x30%)', '￥${model.deposit}');
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _buildActualPay() {
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                '实付金额',
+                style: TextStyle(fontSize: 16),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  '￥${getPayAmount()}',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.right,
+                ),
+              )
+            ],
           )
         ],
       ),
