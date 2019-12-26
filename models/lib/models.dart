@@ -23,6 +23,7 @@ export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
 export 'src/capacity/capacity.dart';
 export 'src/msg/msg.dart';
+export 'src/subcontract/subcontract.dart';
 
 
 part 'models.g.dart';
@@ -465,7 +466,7 @@ const PublishingModesEnum = [
   EnumModel('PRIVATE', '私密发布'),
 ];
 
-//发布方式
+//有效期限
 const EffectiveDaysEnum = [
   EnumModel('7', '7天'),
   EnumModel('15', '15天'),
@@ -481,6 +482,12 @@ const FactoryQualityLevelsEnum = [
   EnumModel('STALL_WHOLESALE', '档口批发'),
   EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
   EnumModel('WHOLESALE_TRADE', '外贸批发'),
+];
+
+//转包类型
+const SubContractTypeEnum = [
+  EnumModel('SUBCONTRACT', '转包'),
+  EnumModel('CUTTING_PIECE', '裁片'),
 ];
 
 /// 分页数据

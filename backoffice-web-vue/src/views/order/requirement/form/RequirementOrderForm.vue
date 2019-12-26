@@ -140,23 +140,23 @@
           </el-col>
         </el-row>
         <el-row type="flex">
-<!--          <el-col :span="12">-->
-<!--            <el-form-item prop="details.publishingMode">-->
-<!--              <template slot="label">-->
-<!--                <h6 class="titleTextClass">发布方式</h6>-->
-<!--              </template>-->
-<!--              <el-radio-group v-model="formData.details.publishingMode" style="margin-top: 7px;margin-right: 10px">-->
-<!--                <el-radio label="PUBLIC">公开发布</el-radio>-->
-<!--                <el-radio label="PRIVATE">私密发布</el-radio>-->
-<!--              </el-radio-group>-->
-<!--              <el-button v-if="formData.details.publishingMode == 'PRIVATE'" :disabled="!isCreated"-->
-<!--                @click="publishingModeChanged">选择发布对象-->
-<!--              </el-button>-->
-<!--              <h6 v-if="formData.details.publishingMode == 'PRIVATE'" style="margin-left: 210px">-->
-<!--                {{isCreated ? '已选择' : '已邀请'}}<span style="color: red">{{selectUids.length}}</span>个工厂-->
-<!--              </h6>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
+          <el-col :span="12" v-if="this.isCreated">
+            <el-form-item prop="details.publishingMode">
+              <template slot="label">
+                <h6 class="titleTextClass">发布方式</h6>
+              </template>
+              <el-radio-group v-model="formData.details.publishingMode" style="margin-top: 7px;margin-right: 10px">
+                <el-radio label="PUBLIC">公开发布</el-radio>
+                <el-radio label="PRIVATE">私密发布</el-radio>
+              </el-radio-group>
+              <el-button v-if="formData.details.publishingMode == 'PRIVATE'" :disabled="!isCreated"
+                @click="publishingModeChanged">选择发布对象
+              </el-button>
+              <h6 v-if="formData.details.publishingMode == 'PRIVATE'" style="margin-left: 210px">
+                {{isCreated ? '已选择' : '已邀请'}}<span style="color: red">{{selectUids.length}}</span>个工厂
+              </h6>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item prop="details.effectiveDays">
               <template slot="label">

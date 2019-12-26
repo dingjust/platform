@@ -12,6 +12,7 @@ export 'src/api/capacity.dart';
 export 'src/api/order.dart';
 export 'src/api/product.dart';
 export 'src/api/user.dart';
+export 'src/api/subcontract.dart';
 export 'src/bank/bank_response.dart';
 export 'src/bank/bank_service.dart';
 export 'src/capacity/repository/capacity_repository.dart';
@@ -118,6 +119,12 @@ export 'src/user/user_repository.dart';
 export 'src/user/user_repository_impl.dart';
 export 'src/websocket/websocket_response.dart';
 export 'src/websocket/websocket_service.dart';
+export 'src/subcontract/response/subcontract_response.dart';
+export 'src/subcontract/state/subcontract_mine_state.dart';
+export 'src/subcontract/state/subcontract_pool_state.dart';
+export 'src/subcontract/state/subcontract_form_state.dart';
+export 'src/subcontract/repository/subcontract_repository.dart';
+export 'src/subcontract/repository/subcontract_repository_impl.dart';
 
 
 abstract class BLoCBase {

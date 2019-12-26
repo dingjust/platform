@@ -1,7 +1,9 @@
 <template>
-  <div>
-  <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
-    <template-form v-if="tempFormVisible" @onSearch="onSearch" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"></template-form>
+  <div id="content">
+  <el-dialog :ref="dialog" :visible.sync="tempFormVisible" class="purchase-dialog"
+             width="80%" append-to-body :close-on-click-modal="false">
+    <template-form v-if="tempFormVisible" @onSearch="onSearch" :tempFormVisible="tempFormVisible" :slotData="mockData"
+                   v-on:turnTempFormVisible="turnTempFormVisible" @getTemplateListPt="getTemplateListPt"></template-form>
   </el-dialog>
   <el-form :inline="true">
     <el-form-item>
@@ -39,6 +41,7 @@
 </template>
 
 <script>
+  import http from '@/common/js/http';
   import {
     createNamespacedHelpers
   } from 'vuex';
@@ -80,6 +83,36 @@
       },
       turnTempFormVisible () {
         this.tempFormVisible = !this.tempFormVisible;
+      },
+      async getTemplateListPt () {
+        const url = this.apis().getTemplatesListPt();
+        const result = await http.post(url, {
+          keyword: ''
+        }, {
+          page: 0,
+          size: 10
+        });
+        console.log(result);
+        this.mockData = result.content;
+        this.sortData();
+      },
+      sortData () {
+        let arr = [];
+        this.mockData.map(value => {
+          if (value.title === '委托生产合同') {
+            arr[0] = value;
+          }
+          if (value.title === '采购订单') {
+            arr[1] = value;
+          }
+          if (value.title === '框架协议') {
+            arr[2] = value;
+          }
+          if (value.title === '补充协议') {
+            arr[3] = value;
+          }
+        });
+        this.mockData = arr;
       }
     },
     data () {
@@ -89,6 +122,7 @@
         formData: this.$store.state.ContractTemplateModule.formData,
         queryFormData: this.$store.state.ContractTemplateModule.queryFormData,
         type: this.$store.state.ContractTemplateModule.type,
+        mockData: [],
         TemplateType: [{
           code: 'BCXY',
           name: '补充协议'
@@ -108,7 +142,9 @@
         ]
       };
     },
-    created () {}
+    created () {
+      this.getTemplateListPt();
+    }
   };
 </script>
 <style>

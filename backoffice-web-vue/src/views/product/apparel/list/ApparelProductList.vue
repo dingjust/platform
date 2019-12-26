@@ -10,10 +10,15 @@
         </template>
       </el-table-column>
       <el-table-column label="产品名" prop="name" min-width="200"></el-table-column>
-      <el-table-column label="产品货号" prop="skuID" min-width="120"></el-table-column>
+      <el-table-column label="款号" prop="skuID" min-width="120"></el-table-column>
       <el-table-column label="品类" min-width="120">
         <template slot-scope="scope">
           <span>{{scope.row.category.name}}</span> </template>
+      </el-table-column>
+      <el-table-column v-if="isTenant()" label="所属" prop="belongTo" min-width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.belongTo != undefined ? scope.row.belongTo.name:''}}</span>
+        </template>
       </el-table-column>
       <el-table-column label="状态" prop="approvalStatus">
         <template slot-scope="scope">
@@ -22,12 +27,12 @@
       </el-table-column>
       <el-table-column label="操作" min-width="240">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">详情</el-button>
           <el-button v-if="isFactory() && scope.row.approvalStatus==='unapproved'" type="text" icon="el-icon-edit"
             @click="onShelf(scope.row)">
             上架
           </el-button>
-          <el-button v-if="isFactory() && scope.row.approvalStatus==='approved'" type="text" icon="el-icon-edit"
+          <el-button v-if="(isFactory() || isTenant()) && scope.row.approvalStatus==='approved'" type="text" icon="el-icon-edit"
             @click="onOffShelf(scope.row)">
             下架
           </el-button>
@@ -46,7 +51,8 @@
   export default {
     name: 'ApparelProductList',
     props: ['page'],
-    computed: {},
+    computed: {
+    },
     methods: {
       onPageSizeChanged (val) {
         this._reset();
@@ -78,6 +84,16 @@
         this.$emit('onShelf', row);
       },
       onOffShelf (row) {
+        if (this.isTenant()) {
+          this.$confirm('您确定要下架该商品吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$emit('platformOff', row);
+          })
+          return;
+        }
         this.$emit('onOffShelf', row);
       },
       onDelete (row) {
@@ -86,6 +102,10 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          if (this.isTenant()) {
+            this.$emit('platformDeleted', row);
+            return;
+          }
           this.$emit('onDelete', row);
         })
       },

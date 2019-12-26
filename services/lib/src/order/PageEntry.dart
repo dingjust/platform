@@ -7,7 +7,7 @@ class PageEntry {
   int size;
 
   /// 装载数据列表
-  final List<dynamic> data;
+  List<dynamic> data;
 
   /// 总页数
   int totalPages;
