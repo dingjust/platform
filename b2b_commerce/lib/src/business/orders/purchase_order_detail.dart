@@ -114,7 +114,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 controller: _scrollController,
                 slivers: <Widget>[
                   SliverAppBar(
-                    expandedHeight: 230.0,
+                    expandedHeight: 240.0,
                     pinned: true,
                     elevation: 0.5,
                     centerTitle: true,

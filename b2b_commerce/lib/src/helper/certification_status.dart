@@ -9,11 +9,14 @@ import 'package:widgets/widgets.dart';
 
 ///认证状态
 class CertificationStatusHelper {
-  bool ignore;
+  bool certificationIgnore;
+
+  bool profileIgnore;
 
   CertificationState certificationState;
 
-  CertificationStatusHelper({this.ignore = false});
+  CertificationStatusHelper(
+      {this.certificationIgnore = false, this.profileIgnore = false});
 
   ///校验认证状态
   void checkCertificationStatus(BuildContext context) async {
@@ -27,10 +30,10 @@ class CertificationStatusHelper {
       certificationState = await ContractRepository().getAuthenticationState();
     }
 
-    if (!_authenticated(certificationState.data) && !ignore) {
+    if (!_authenticated(certificationState.data) && !certificationIgnore) {
       showUncertifiedDialog(true,
           cancel: () {
-            ignore = true;
+            certificationIgnore = true;
           },
           confirm: () => jumpToAuthentication(context),
           backgroundReturn: () {},
@@ -48,8 +51,10 @@ class CertificationStatusHelper {
         UserBLoC.instance.currentUser.b2bUnit.profileCompleted;
     if (profileCompleted != null && profileCompleted) {
       onJump();
-    } else {
-      showProfileCompleteDialog(true, cancel: () {}, confirm: onProfile);
+    } else if (!profileIgnore) {
+      showProfileCompleteDialog(true, cancel: () {
+        profileIgnore = true;
+      }, confirm: onProfile);
     }
   }
 

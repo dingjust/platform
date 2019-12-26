@@ -1,7 +1,10 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:b2b_commerce/src/home/account/login.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class PublishCenterPage extends StatefulWidget {
@@ -10,6 +13,13 @@ class PublishCenterPage extends StatefulWidget {
 }
 
 class _PublishCenterPageState extends State<PublishCenterPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkLoginStatus());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,5 +88,14 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
         ],
       ),
     );
+  }
+
+  ///检测用户登录状态
+  void checkLoginStatus() {
+    if (UserBLoC.instance.currentUser.status == UserStatus.OFFLINE) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => B2BLoginPage()),
+          ModalRoute.withName('/'));
+    }
   }
 }

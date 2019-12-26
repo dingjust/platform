@@ -4,8 +4,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class LogisticsInputPage extends StatefulWidget{
-
+class LogisticsInputPage extends StatefulWidget {
   final bool isProductionOrder;
 
   final PurchaseOrderModel purchaseOrderModel;
@@ -13,7 +12,7 @@ class LogisticsInputPage extends StatefulWidget{
   final ProofingModel proofingModel;
 
   LogisticsInputPage({
-    this.isProductionOrder:false,
+    this.isProductionOrder: false,
     this.purchaseOrderModel,
     this.proofingModel,
   });
@@ -21,7 +20,7 @@ class LogisticsInputPage extends StatefulWidget{
   _LogisicsInputPageState createState() => _LogisicsInputPageState();
 }
 
-class _LogisicsInputPageState extends State<LogisticsInputPage>{
+class _LogisicsInputPageState extends State<LogisticsInputPage> {
   List<CarrierModel> list = new List();
   FocusNode _orderNumberFocusNode = FocusNode();
   final TextEditingController _orderNumberController = TextEditingController();
@@ -34,7 +33,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
     super.initState();
   }
 
-  void loadData() async{
+  void loadData() async {
     Response response;
     try {
       response = await http$.get(OrderApis.getCarriersAll);
@@ -62,8 +61,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 _buildHead(context),
                 _buildButton(context),
               ],
-            ))
-    );
+            )));
   }
 
   Widget _buildHead(BuildContext) {
@@ -76,15 +74,13 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child:  Container(
-                      padding:EdgeInsets.only(left: 30),
+                    child: Container(
+                      padding: EdgeInsets.only(left: 30),
                       child: Text(
                         '${carrierName == null || carrierName == ''
                             ? '选择快递/物流公司'
                             : carrierName}',
-                        style: TextStyle(
-                            fontSize: 16
-                        ),
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
@@ -95,10 +91,10 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 ],
               ),
             ),
-            onTap: () async{
+            onTap: () async {
               if (list != null && list.isNotEmpty) {
                 _showLogisticsSelect(list);
-              }else{
+              } else {
                 showDialog(
                     context: context,
                     barrierDismissible: false,
@@ -107,12 +103,11 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                         dialogType: DialogType.RESULT_DIALOG,
                         failTips: '获取物流公司失败',
                         callbackResult: false,
-                        confirmAction: (){
+                        confirmAction: () {
                           Navigator.of(context).pop();
                         },
                       );
-                    }
-                );
+                    });
               }
             },
           ),
@@ -132,7 +127,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
     );
   }
 
-  Widget _buildButton(BuildContext context){
+  Widget _buildButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 50),
       child: Column(
@@ -150,8 +145,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                   ),
                 ),
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(5))),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
                 onPressed: () {
                   //把选中的物流公司放到Model
                   CarrierModel carrier = new CarrierModel();
@@ -162,8 +156,9 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                   consignment.trackingID = _orderNumberController.text;
                   consignment.carrierDetails = carrier;
                   if (_orderNumberController.text != null &&
-                      _orderNumberController.text != ''
-                      && carrierCode != null && carrierCode != '') {
+                      _orderNumberController.text != '' &&
+                      carrierCode != null &&
+                      carrierCode != '') {
                     //生产单的确认发货
                     if (widget.isProductionOrder &&
                         widget.purchaseOrderModel != null) {
@@ -186,12 +181,10 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                                 Navigator.of(context).pop();
                               },
                             );
-                          }
-                      );
+                          });
                     }
                   }
-                }
-            ),
+                }),
           ),
           Container(
             margin: EdgeInsets.only(top: 20),
@@ -207,17 +200,15 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                   ),
                 ),
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(5))),
-                onPressed: () async{
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                onPressed: () async {
                   bool result = false;
-                  if(widget.isProductionOrder){
+                  if (widget.isProductionOrder) {
                     saveOfflinePurchaseOrder();
                   } else {
                     saveOfflineProofingOrder();
                   }
-                }
-            ),
+                }),
           ),
         ],
       ),
@@ -225,21 +216,19 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
   }
 
   void saveOfflineProofingOrder() {
+    widget.proofingModel.isOfflineConsignment = true;
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: ProofingOrderRepository()
-                .proofingDelivering(
-                widget.proofingModel.code,
-                widget.proofingModel),
+            requestCallBack: ProofingOrderRepository().proofingDelivering(
+                widget.proofingModel.code, widget.proofingModel),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: '',
           );
-        }
-    ).then((value) {
+        }).then((value) {
       bool result = false;
       if (value != null) {
         result = value;
@@ -254,28 +243,27 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
               failTips: '确认发货失败',
               callbackResult: result,
             );
-          }
-      );
+          }).then((val) {
+        Navigator.pop(context);
+      });
       ProofingOrdersBLoC.instance.refreshData('ALL');
     });
   }
 
   void saveOfflinePurchaseOrder() {
+    widget.purchaseOrderModel.isOfflineConsignment = true;
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: PurchaseOrderRepository()
-                .purchaseOrderDelivering(
-                widget.purchaseOrderModel.code,
-                widget.purchaseOrderModel),
+            requestCallBack: PurchaseOrderRepository().purchaseOrderDelivering(
+                widget.purchaseOrderModel.code, widget.purchaseOrderModel),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: '',
           );
-        }
-    ).then((value) {
+        }).then((value) {
       bool result = false;
       if (value != null) {
         result = value;
@@ -288,10 +276,8 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
                 dialogType: DialogType.RESULT_DIALOG,
                 successTips: '确认发货成功',
                 failTips: '确认发货失败',
-                callbackResult: result
-            );
-          }
-      );
+                callbackResult: result);
+          });
       PurchaseOrderBLoC.instance.refreshData('ALL');
     });
   }
@@ -304,16 +290,13 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: PurchaseOrderRepository()
-                .purchaseOrderDelivering(
-                widget.purchaseOrderModel.code,
-                widget.purchaseOrderModel),
+            requestCallBack: PurchaseOrderRepository().purchaseOrderDelivering(
+                widget.purchaseOrderModel.code, widget.purchaseOrderModel),
             outsideDismiss: false,
             loadingText: '加载中。。。',
             entrance: '',
           );
-        }
-    ).then((value) {
+        }).then((value) {
       PurchaseOrderBLoC.instance.refreshData('ALL');
       Navigator.of(context).pop();
       bool result = false;
@@ -330,8 +313,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
               failTips: '确认发货失败',
               callbackResult: result,
             );
-          }
-      );
+          });
     });
   }
 
@@ -342,16 +324,13 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack: ProofingOrderRepository()
-                .proofingDelivering(
-                widget.proofingModel.code,
-                widget.proofingModel),
+            requestCallBack: ProofingOrderRepository().proofingDelivering(
+                widget.proofingModel.code, widget.proofingModel),
             outsideDismiss: false,
             loadingText: '保存中。。。',
             entrance: '',
           );
-        }
-    ).then((value) {
+        }).then((value) {
       ProofingOrdersBLoC.instance.refreshData('ALL');
       Navigator.of(context).pop();
       bool result = false;
@@ -368,8 +347,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
               failTips: '确认发货失败',
               callbackResult: result,
             );
-          }
-      );
+          });
     });
   }
 
@@ -377,32 +355,25 @@ class _LogisicsInputPageState extends State<LogisticsInputPage>{
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-            child: ListView(
-                children: _builItems(context,list)
-            )
-        );
+        return Container(child: ListView(children: _builItems(context, list)));
       },
     );
   }
 
-  List<Widget> _builItems(BuildContext context,List<CarrierModel> list){
+  List<Widget> _builItems(BuildContext context, List<CarrierModel> list) {
     List<Widget> widgets = new List();
-    for(int i=0;i<list.length;i++){
-      widgets.add(
-          ListTile(
-            title: Text('${list[i].name}'),
-            onTap: () async {
-              setState(() {
-                carrierName = list[i].name;
-                carrierCode = list[i].code;
-              });
-              Navigator.pop(context);
-            },
-          )
-      );
+    for (int i = 0; i < list.length; i++) {
+      widgets.add(ListTile(
+        title: Text('${list[i].name}'),
+        onTap: () async {
+          setState(() {
+            carrierName = list[i].name;
+            carrierCode = list[i].code;
+          });
+          Navigator.pop(context);
+        },
+      ));
     }
     return widgets;
   }
-
 }

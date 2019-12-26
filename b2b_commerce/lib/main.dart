@@ -49,7 +49,6 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(BLoCProvider<AppBLoC>(
       bloc: AppBLoC.instance,
-      // child: MyApp(),
       child: MultiProvider(
         providers: AppProvider.providers,
         child: MyApp(),
