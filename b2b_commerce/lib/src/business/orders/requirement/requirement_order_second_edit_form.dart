@@ -31,6 +31,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
     with RequirementFormMixin {
   GlobalKey _scaffoldKey = GlobalKey();
   List<String> _factoryUids = [];
+  double _fontSize = 16;
 
   @override
   void initState() {
@@ -223,6 +224,11 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
               ),
               Container(
                 color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: ExpectedDeliveryDateField(widget.formState.editModel),
+              ),
+              Container(
+                color: Colors.white,
                 child: ContactWayField(widget.formState.editModel),
               ),
               Container(
@@ -300,7 +306,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                                 SalesMarketsEnum,
                                 2,
                                 customText: '选择销售市场'),
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(color: Colors.grey,fontSize: 16),
                           ),
                         ),
                         Icon(Icons.chevron_right),
@@ -513,12 +519,13 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                         children: <Widget>[
                           Expanded(
                             flex: 1,
-                            child: Container(
-                              width: 100,
-                              child: Text(
-                                '发布方式',
-                                style: TextStyle(fontSize: 16),
-                              ),
+                            child: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: '发布方式',
+                                  style: TextStyle(fontSize: 16, color: Colors.black),
+                                ),
+                              ]),
                             ),
                           ),
                           Expanded(
@@ -693,9 +700,13 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                     children: <Widget>[
                       Expanded(
                         flex: 1,
-                        child: Text(
-                          '有效期限',
-                          style: TextStyle(fontSize: 16),
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                              text: '有效期限',
+                              style: TextStyle(fontSize: 16, color: Colors.black),
+                            ),
+                          ]),
                         ),
                       ),
                       Expanded(

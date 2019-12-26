@@ -31,14 +31,6 @@ class MyBrandPage extends StatefulWidget {
 }
 
 class _MyBrandPageState extends State<MyBrandPage> {
-  final Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
-    PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
-    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
-    PurchaseOrderStatus.OUT_OF_STORE: Colors.yellow,
-    PurchaseOrderStatus.IN_PRODUCTION: Colors.yellow,
-    PurchaseOrderStatus.COMPLETED: Colors.green,
-    PurchaseOrderStatus.CANCELLED: Colors.grey,
-  };
 
   Widget _buildContact(BuildContext context) {
     return Container(
@@ -149,7 +141,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
         title: const Text('公司介绍'),
         elevation: 0.5,
         actions: <Widget>[
-          _buildContact(context),
+//          _buildContact(context),
         ],
       ),
       body: ListView(
@@ -468,6 +460,91 @@ class _MyBrandPageState extends State<MyBrandPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
+                  '联系人',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${widget.brand.contactPerson ?? ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '联系方式',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${widget.brand.contactPhone ?? ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    '经营地址',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    '${widget.brand.contactAddress != null && widget.brand.contactAddress.region != null
+                  ? widget.brand.contactAddress.details
+                      : ''}',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '座机号码',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${widget.brand.phone ?? ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
                   '合作品牌',
                   style: TextStyle(
                     fontSize: 16,
@@ -565,63 +642,6 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 ),
                 Text(
                   formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '年龄段',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  formatAgeRangesText(widget.brand.ageRanges),
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '春夏款价格端',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  formatPriceRangesText(widget.brand.priceRange1s),
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '秋冬款价格端',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  formatPriceRangesText(widget.brand.priceRange2s),
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],

@@ -31,14 +31,18 @@ class PicturesFieldState extends State<PicturesField> {
           margin: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
           child: Row(
             children: <Widget>[
-              Text(
-                '参考图片',
-                style: TextStyle(fontSize: 16),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: '参考图片',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                  TextSpan(
+                    text: '（若无图片可不上传）',
+                    style: TextStyle(fontSize: 16, color: Colors.red),
+                  ),
+                ]),
               ),
-              Text(
-                '（若无图片可不上传）',
-                style: TextStyle(color: Colors.red, fontSize: 14),
-              )
             ],
           ),
         ),
