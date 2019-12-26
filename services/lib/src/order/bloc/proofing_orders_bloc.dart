@@ -35,13 +35,12 @@ class ProofingOrdersBLoC extends BLoCBase {
         PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
     'CANCELLED':
         PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
-    'SEARCH':
-    PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
+    'SEARCH': PageEntry(currentPage: 0, size: 10, data: List<ProofingModel>()),
   };
 
   List<ProofingModel> quotes(String status) => _quotesMap[status].data;
 
-  var _controller = StreamController < ProofingData>.broadcast();
+  var _controller = StreamController<ProofingData>.broadcast();
 
   Stream<ProofingData> get stream => _controller.stream;
 
@@ -164,8 +163,8 @@ class ProofingOrdersBLoC extends BLoCBase {
         }
       }
       loadingController.sink.add(false);
-      _controller.sink.add(
-          ProofingData(status: status, data: _quotesMap[status].data));
+      _controller.sink
+          .add(ProofingData(status: status, data: _quotesMap[status].data));
       lock = false;
     }
   }

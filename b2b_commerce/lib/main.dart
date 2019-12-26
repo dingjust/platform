@@ -3,6 +3,7 @@ import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
 import 'package:b2b_commerce/src/my/messages/index.dart';
+import 'package:b2b_commerce/src/observer/b2b_navigator_observer.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +21,6 @@ import 'src/common/app_routes.dart';
 import 'src/home/_shared/models/navigation_menu.dart';
 import 'src/home/_shared/widgets/bottom_navigation.dart';
 import 'src/home/_shared/widgets/notifications.dart';
-import 'src/home/account/login.dart';
 import 'src/home/index.dart';
 import 'src/my/index.dart';
 import 'src/production/index.dart';
@@ -150,10 +150,13 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   void listenLogin() {
     UserBLoC.instance.loginJumpStream.listen((value) {
       if (true) {
-        Navigator.of(_navigatorKey.currentState.overlay.context)
-            .pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => B2BLoginPage()),
-                ModalRoute.withName('/'));
+        if (NavigatorStack.instance.currentRouteName == AppRoutes.ROUTE_LOGIN) {
+          return;
+        } else {
+          Navigator.of(_navigatorKey.currentState.overlay.context)
+              .pushNamedAndRemoveUntil(
+              AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'));
+        }
       }
     });
   }
@@ -244,7 +247,10 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         child: MaterialApp(
           navigatorKey: _navigatorKey,
           title: AppConstants.appTitle,
-          navigatorObservers: [BotToastNavigatorObserver()],
+          navigatorObservers: [
+            BotToastNavigatorObserver(),
+            B2BNavigatorObserver()
+          ],
           //2.注册路由观察者
           theme: ThemeData(
             primaryColor: Colors.white,

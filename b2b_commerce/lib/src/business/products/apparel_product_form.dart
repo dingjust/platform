@@ -78,7 +78,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
-    _priceController.text = widget.item?.price?.toString();
+    // _priceController.text = widget.item?.price?.toString();
     _gramWeightController.text = widget.item?.gramWeight?.toString();
     // TODO: implement initState
     super.initState();
@@ -262,36 +262,36 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               },
               enabled: _enabled,
             ),
-            Offstage(
-              offstage: UserBLoC.instance.currentUser.type != UserType.BRAND,
-              child: TextFieldComponent(
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-                isRequired: true,
-                focusNode: _priceFocusNode,
-                controller: _priceController,
-                leadingText: Text('供货价',
-                    style: TextStyle(
-                      fontSize: 16,
-                    )),
-                hintText: !_enabled ? '' : '请填写供货价（数字）',
-                textInputAction: TextInputAction.next,
-                prefix: '￥',
-                inputFormatters: [
-                  DecimalInputFormat(),
-                ],
-                onChanged: (value) {
-                  _product.price =
-                      ClassHandleUtil.removeSymbolRMBToDouble(value);
-                },
-                onEditingComplete: () {
-                  FocusScope.of(context).requestFocus(_gramWeightFocusNode);
-                },
-                enabled: _enabled,
-              ),
-            ),
+            // Offstage(
+            //   offstage: UserBLoC.instance.currentUser.type != UserType.BRAND,
+            //   child: TextFieldComponent(
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //       color: Colors.grey,
+            //     ),
+            //     isRequired: true,
+            //     focusNode: _priceFocusNode,
+            //     controller: _priceController,
+            //     leadingText: Text('供货价',
+            //         style: TextStyle(
+            //           fontSize: 16,
+            //         )),
+            //     hintText: !_enabled ? '' : '请填写供货价（数字）',
+            //     textInputAction: TextInputAction.next,
+            //     prefix: '￥',
+            //     inputFormatters: [
+            //       DecimalInputFormat(),
+            //     ],
+            //     onChanged: (value) {
+            //       _product.price =
+            //           ClassHandleUtil.removeSymbolRMBToDouble(value);
+            //     },
+            //     onEditingComplete: () {
+            //       FocusScope.of(context).requestFocus(_gramWeightFocusNode);
+            //     },
+            //     enabled: _enabled,
+            //   ),
+            // ),
             Offstage(
               offstage: UserBLoC.instance.currentUser.type != UserType.FACTORY,
               child: PricesField(

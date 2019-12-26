@@ -47,6 +47,10 @@ class CertificationStatusHelper {
   ///校验资料弹窗
   void checkProfile(VoidCallback onJump, VoidCallback onProfile) {
     //校验资料
+    if (UserBLoC.instance.currentUser.b2bUnit == null) {
+      onJump();
+      return;
+    }
     bool profileCompleted =
         UserBLoC.instance.currentUser.b2bUnit.profileCompleted;
     if (profileCompleted != null && profileCompleted) {

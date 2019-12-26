@@ -248,7 +248,7 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
           ),
           Container(
               child: Text(
-                '${model.capacityRange}/天',
+                '${model.capacityRange}件/天',
                 style: TextStyle(
                   color: Colors.red,
                 ),
