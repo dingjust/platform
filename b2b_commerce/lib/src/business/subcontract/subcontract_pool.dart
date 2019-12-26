@@ -2,10 +2,8 @@ import 'package:b2b_commerce/src/_shared/subcontract/subcontract_pool_list.dart'
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 class SubContractPoolPage extends StatefulWidget{
   SubContractPoolPage({
@@ -35,7 +33,7 @@ class _SubContractPoolPageState extends State<SubContractPoolPage> {
         builder: (context, SubContractPoolState subContractPoolState,_) => Scaffold(
           appBar: AppBar(
             elevation: 0.5,
-            title:  Text(subContractPoolState.keyword ?? '转包/裁片'),
+            title:   Text(subContractPoolState.keyword == null || subContractPoolState.keyword == '' ? '转包/裁片' : subContractPoolState.keyword),
             actions: <Widget>[
               Builder(
                 builder: (context) {
@@ -68,7 +66,7 @@ class _SubContractPoolPageState extends State<SubContractPoolPage> {
               ),
             ],
           ),
-          body: SubContractPoolList(),
+          body:  SubContractPoolList(),
         ),
       ),
     );

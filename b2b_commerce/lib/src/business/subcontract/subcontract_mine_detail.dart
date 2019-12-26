@@ -24,9 +24,9 @@ class SubContractMineDetailPage extends StatefulWidget {
   String code;
 
   /// 关闭生产订单
-  final RequirementOrderCancleCallback onRequirementCancle;
+  final RequirementOrderCancleCallback onCancle;
 
-  SubContractMineDetailPage(this.code, {Key key, this.onRequirementCancle})
+  SubContractMineDetailPage(this.code, {Key key, this.onCancle})
       : super(key: key);
 
   _SubContractMineDetailPageState createState() =>
@@ -63,6 +63,33 @@ class _SubContractMineDetailPageState
                   style: TextStyle(color: Colors.black),
                 ),
                 actions: <Widget>[
+                  Offstage(
+                    offstage: snapshot.data?.canneled ?? true,
+                    child: Container(
+                      width: 60,
+                      margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                      child: PopupMenuButton<String>(
+                        onSelected: (v) => onMenuSelect(v),
+                        icon: Icon(
+                          B2BIcons.more,
+                          size: 5,
+                        ),
+                        offset: Offset(0, 50),
+                        itemBuilder: (BuildContext context) => [PopupMenuItem<String>(
+                          value: 'close',
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(right: 20),
+                                child: Icon(Icons.close),
+                              ),
+                              Text('关闭')
+                            ],
+                          ),
+                        ),],
+                      ),
+                    ),
+                  )
                 ],
               ),
               body: snapshot.data != null ? Container(
@@ -297,6 +324,35 @@ class _SubContractMineDetailPageState
 //          Divider(
 //            height: 0,
 //          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('类       型：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    subContractModel.details.type == null
+                        ? ''
+                        : enumMap(SubContractTypeEnum, subContractModel.details.type),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
           Container(
             padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
             child: Row(
@@ -582,18 +638,10 @@ class _SubContractMineDetailPageState
   }
 
 
-  List<PopupMenuItem<String>> _buildPopupMenu() {
-    if (subContractModel.belongTo.uid == UserBLoC.instance.currentUser.companyCode) {
-      return <PopupMenuItem<String>>[
-
-      ];
-    }
-  }
-
   Future<bool> _onCancle(){
     bool result = false;
     try{
-      widget.onRequirementCancle();
+      widget.onCancle();
       result = true;
     }catch(e){
       result = false;
@@ -609,7 +657,7 @@ class _SubContractMineDetailPageState
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            contentText2: '确定关闭订单？',
+            contentText2: '确定关闭转包？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
             confirmButtonText: '确定',

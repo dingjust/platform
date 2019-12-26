@@ -1,6 +1,6 @@
-import 'package:b2b_commerce/src/_shared/subcontract/subcontract_list_item.dart';
+import 'package:b2b_commerce/src/_shared/subcontract/subcontract_mine_list_item.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine_detail.dart';
-import 'package:b2b_commerce/src/business/subcontract/subcontract_pool_detail.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -15,7 +15,6 @@ class SubContractMineList extends StatefulWidget {
 
 class _SubContractMineListState extends State<SubContractMineList> {
   ScrollController _scrollController = ScrollController();
-  List<int> _selectIds = List();
 
   @override
   void initState() {
@@ -34,7 +33,7 @@ class _SubContractMineListState extends State<SubContractMineList> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        widget.subcontractMineState.loadMore();
+        widget.subcontractMineState.loadMoreMapData();
       }
     });
   }
@@ -42,17 +41,13 @@ class _SubContractMineListState extends State<SubContractMineList> {
   @override
   Widget build(BuildContext context) {
 
-    return RefreshIndicator(
+    return widget.subcontractMineState.subcontractModelsByMap != null ? RefreshIndicator(
       child: Container(
-        color: Colors.grey[100],
         child: ListView(
           physics: AlwaysScrollableScrollPhysics(),
           controller: _scrollController,
           children: <Widget>[
-            Container(
-              color: Colors.white,
-              child: _buildItems(),
-            ),
+            _buildItems(),
             ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
               opacity: widget.subcontractMineState.loadingMore ? 1.0 : 0,
             ),
@@ -61,20 +56,44 @@ class _SubContractMineListState extends State<SubContractMineList> {
         ),
       ),
       onRefresh: () async {
-        widget.subcontractMineState.clear();
+        widget.subcontractMineState.clearMapData();
       },
+    ):Center(
+      child: CircularProgressIndicator(),
     );
   }
 
   Widget _buildItems() {
-    return Column(
-        children: widget.subcontractMineState.subcontractModels != null
-            ? widget.subcontractMineState.subcontractModels.map((model) {
-                return _buildRow(model);
-              }).toList()
-            : Center(
-                child: CircularProgressIndicator(),
-              ));
+    if(widget.subcontractMineState.subcontractModelsByMap.isEmpty){
+      return Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 200),
+            child: Image.asset(
+              'temp/logo2.png',
+              package: 'assets',
+              width: 80,
+              height: 80,
+            ),
+          ),
+          Container(
+              child: Text(
+                AppBLoC.instance.getConnectivityResult ==
+                    ConnectivityResult.none
+                    ? '网络链接不可用请重试'
+                    : '没有相关转包数据',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              )),
+        ],
+      );
+    }else{
+      return Column(
+          children: widget.subcontractMineState.subcontractModelsByMap.map((model) {
+            return _buildRow(model);
+          }).toList());
+    }
   }
 
   Widget _buildRow(dynamic model) {
@@ -83,11 +102,12 @@ class _SubContractMineListState extends State<SubContractMineList> {
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context) => SubContractMineDetailPage(model.code)));
+            Navigator.push(context,MaterialPageRoute(builder: (context) => SubContractMineDetailPage(model.code,onCancle: () => onCancle(model.code),)));
           },
-          child: Padding(
+          child: Container(
+            color: Colors.white,
             padding: const EdgeInsets.all(15.0),
-            child: SubContractListItem(
+            child: SubContractMineListItem(
               model: model,
             ),
           ),
@@ -97,6 +117,15 @@ class _SubContractMineListState extends State<SubContractMineList> {
         ),
       ],
     );
+  }
+
+  void onCancle(String code) async {
+    String result =
+    await SubContractRepositoryImpl().cancleSubContract(code);
+//    if (result != null && result == 'success') {
+//      //触发刷新
+//      widget.subcontractMineState.clearMapData();
+//    }
   }
 
   Widget _buildEnd() {
@@ -111,5 +140,7 @@ class _SubContractMineListState extends State<SubContractMineList> {
         : Container();
   }
 }
+
+
 
 

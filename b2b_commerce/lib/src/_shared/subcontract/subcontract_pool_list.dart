@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/subcontract/subcontract_list_item.dart';
+import 'package:b2b_commerce/src/_shared/subcontract/subcontract_pool_list_item.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool_detail.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool_filter.dart';
 import 'package:common_utils/common_utils.dart';
@@ -49,7 +49,6 @@ class _SubContractPoolListState extends State<SubContractPoolList> {
     return Consumer(
       builder: (context, SubContractPoolState subContractPoolState,_) => Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0.5,
           leading: Container(),
@@ -262,7 +261,9 @@ class _SubContractPoolListState extends State<SubContractPoolList> {
               )),
             Divider(height: 0,),
             Expanded(
-              child: SubContractListView(subContractPoolState:subContractPoolState),
+              child: subContractPoolState.subcontractModels != null ? SubContractListView(subContractPoolState:subContractPoolState):Center(
+                child: CircularProgressIndicator(),
+              ),
             )
           ],
         ),
@@ -309,7 +310,7 @@ class _SubCOntractListViewState extends State<SubContractListView>{
 
   @override
   Widget build(BuildContext context) {
-    return Center(child:RefreshIndicator(
+    return RefreshIndicator(
         onRefresh: () async {
           widget.subContractPoolState.clear();
         },
@@ -317,30 +318,22 @@ class _SubCOntractListViewState extends State<SubContractListView>{
           physics: AlwaysScrollableScrollPhysics(),
           controller: _scrollController,
           children: <Widget>[
-            Container(
-              color: Colors.white,
-              child: _buildItems(),
-            ),
+            _buildItems(),
             ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
               opacity: widget.subContractPoolState.loadingMore ? 1.0 : 0,
             ),
             _buildEnd(),
           ],
         ),
-      ),
-    );
+      );
 
   }
 
   Widget _buildItems() {
     return Column(
-        children: widget.subContractPoolState.subcontractModels != null
-            ? widget.subContractPoolState.subcontractModels.map((model) {
+        children: widget.subContractPoolState.subcontractModels.map((model) {
           return _buildRow(model);
-        }).toList()
-            : [Center(
-          child: CircularProgressIndicator(),
-        )]);
+        }).toList());
   }
 
   Widget _buildRow(SubContractModel model) {
@@ -352,9 +345,10 @@ class _SubCOntractListViewState extends State<SubContractListView>{
             Navigator.push(context,MaterialPageRoute(builder: (context) => SubContractPoolDetailPage(model.code)));
 
           },
-          child: Padding(
+          child: Container(
+            color: Colors.white,
             padding: const EdgeInsets.all(15.0),
-            child: SubContractListItem(
+            child: SubContractPoolListItem(
               model: model,
             ),
           ),
@@ -370,7 +364,7 @@ class _SubCOntractListViewState extends State<SubContractListView>{
       padding: EdgeInsets.only(bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[Text('已经到底了')],
+        children: <Widget>[Text('(￢_￢)已经到底了',style: TextStyle(color: Colors.grey),)],
       ),
     )
         : Container();

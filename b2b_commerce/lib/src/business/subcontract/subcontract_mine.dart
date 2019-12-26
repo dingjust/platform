@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 
 class SubContractMinePage extends StatefulWidget {
   SubContractMinePage({
@@ -17,6 +16,11 @@ class SubContractMinePage extends StatefulWidget {
 
 class _SubContractMinePageState extends State<SubContractMinePage> {
   final GlobalKey _globalKey = GlobalKey<_SubContractMinePageState>();
+  List<EnumModel> tabs = <EnumModel>[
+    EnumModel('ALL','全部'),
+    EnumModel('PUBLISHED','已发布'),
+    EnumModel('CANCELLED','已关闭'),
+  ];
 
   @override
   void initState() {
@@ -32,48 +36,42 @@ class _SubContractMinePageState extends State<SubContractMinePage> {
       ],
       child: Consumer<SubContractMineState>(
           builder: (context, SubContractMineState subContractMineState, _) {
-        return Scaffold(
-          appBar: AppBar(
-            elevation: 0.5,
-            title: Text(subContractMineState.keyword ?? '我的发布'),
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () async{
-                  dynamic result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HistorySearch(
-                        historyKey: GlobalConfigs.SUBCONTRACT_MINE_HISTORY_KEYWORD_KEY,
-                        hintText: '请输入转包标题，分类搜索',
-                        keyword: subContractMineState.keyword,
-                      ),
-                    ),
-                  );
-
-                  if(result != null){
-                    subContractMineState.keyword = result;
-                    subContractMineState.clear();
-                  }
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right:10.0),
-                  child: Icon(
-                    Icons.search,
-                  ),
+        return DefaultTabController(
+            length: tabs.length,
+            child: Scaffold(
+              appBar: AppBar(
+                elevation: 0.5,
+                brightness: Brightness.light,
+                iconTheme: IconThemeData(color: Colors.black),
+                centerTitle: true,
+                title: Text(
+                  '我的发布',
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
-            ],
-          ),
-          body: Container(
-            child: subContractMineState.subcontractModels != null
-                ? SubContractMineList(
-                    subcontractMineState: subContractMineState,
-                  )
-                : Center(
+              body: Scaffold(
+                appBar: TabBar(
+                  onTap: (v){
+                    subContractMineState.key = v.toString();
+                  },
+                  unselectedLabelColor: Colors.black26,
+                  labelColor: Colors.black,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  tabs: tabs.map((tab) => Tab(text: tab.name,)).toList(),
+                  labelStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black),
+                ),
+                body: TabBarView(
+                  children: tabs.map((tab) => subContractMineState.subcontractModelsByMap != null?
+                  SubContractMineList(subcontractMineState: subContractMineState,):
+                  Center(
                     child: CircularProgressIndicator(),
-                  ),
-          ),
-        );
+                  )).toList(),
+                ),
+              ),
+            ));
       }),
     );
   }

@@ -48,8 +48,6 @@ class _SubContractPoolDetailPageState
 
   @override
   Widget build(BuildContext context) {
-    print('${UserBLoC.instance.currentUser.companyCode}------------');
-    print('${subContractModel?.belongTo?.uid}================');
     return FutureBuilder<SubContractModel>(
         initialData: null,
         future: _getData(),
@@ -297,9 +295,35 @@ class _SubContractPoolDetailPageState
 //          Column(children: [
 //            _buildEntries(),
 //          ]),
-//          Divider(
-//            height: 0,
-//          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('类       型：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    subContractModel.details.type == null
+                        ? ''
+                        : enumMap(SubContractTypeEnum, subContractModel.details.type),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
           Container(
             padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
             child: Row(

@@ -49,6 +49,7 @@ class SubContractPoolState extends PageState {
 
   @override
   void getData() async {
+    // 延时1s执行返回
     print(_queryFormData);
     isDownEnd = false;
     var response = await SubContractRepositoryImpl().getSubcontractsByAllFactory(data:_queryFormData, params:{

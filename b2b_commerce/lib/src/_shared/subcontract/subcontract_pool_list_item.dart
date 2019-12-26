@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:widgets/widgets.dart';
 
-class SubContractListItem extends StatelessWidget {
-  const SubContractListItem({
+class SubContractPoolListItem extends StatelessWidget {
+  const SubContractPoolListItem({
     Key key,
     @required this.model,
   }) : super(key: key);
