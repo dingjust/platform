@@ -16,8 +16,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'offline_order/offline_order_cooperator_input.dart';
-
 class ProductionOfflineOrder extends StatefulWidget {
   final ApparelProductModel product;
 
@@ -593,17 +591,15 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         ),
         onTap: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    OfflineOrderCooperatorInput(
-                      model: cooperatorModel,
-                    )),
-            //接收返回数据并处理
-          ).then((value) {
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      CooperatorSelectOnPage(
+                        model: cooperatorModel,
+                      ))).then((val) {
             setState(() {
-              if (value != null) {
-                cooperatorModel = value;
+              if (val != null) {
+                cooperatorModel = val;
               }
             });
           });
