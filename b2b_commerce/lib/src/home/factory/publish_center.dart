@@ -37,7 +37,7 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Container(
-                  width: 75,
+                  width: 85,
                   height: 100,
                   child: ImageNumButton(
                     width: 65,
@@ -50,9 +50,12 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
                       //     builder: (context) => ProductionOfflineOrder(),
                       //   ),
                       // );
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SubContractFirstForm()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SubContractFirstForm()));
                     },
-                    title: '发包/转片',
+                    title: '发布转包/转片',
                   ),
                 ),
                 Container(

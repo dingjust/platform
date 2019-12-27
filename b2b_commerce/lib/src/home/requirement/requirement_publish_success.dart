@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
-import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:b2b_commerce/src/business/suppliers.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
+import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:widgets/widgets.dart';
 
 class PublishRequirementSuccessDialog extends StatefulWidget {
@@ -34,13 +34,12 @@ class _PublishRequirementSuccessDialogState
     super.initState();
   }
 
-  Future<List<FactoryModel>> _getData()async{
+  Future<List<FactoryModel>> _getData() async {
     try {
-      var response = await http$.post(Apis.factories, data: {}, queryParameters: {
-        'page': 0,
-        'size': 3,
-        'sort': 'creationtime,desc'
-      });
+      var response = await http$.post(
+          Apis.requestQuoteFactories(widget.model.code),
+          data: {},
+          queryParameters: {'page': 0, 'size': 3});
       if (response != null && response.statusCode == 200) {
         FactoriesResponse factoriesResponse =
         FactoriesResponse.fromJson(response.data);
@@ -59,33 +58,57 @@ class _PublishRequirementSuccessDialogState
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.5,
+          title: Text('发布成功'),
+          centerTitle: true,
         ),
         body: CustomScrollView(
           slivers: <Widget>[
             SliverToBoxAdapter(child: _buildTitle()),
             SliverToBoxAdapter(
               child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      '为你推荐',
+                      style: TextStyle(fontSize: 20),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
+                  decoration:
+                  BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
                   child: FutureBuilder<List<FactoryModel>>(
-                      builder: (BuildContext context, AsyncSnapshot<List<FactoryModel>> snapshot) {
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<FactoryModel>> snapshot) {
                         print('${snapshot.data}------=====');
                         if (snapshot.data != null) {
                           return Column(
-                              children: snapshot.data
-                                  .map(
-                                      (tip) =>
-                                      FactoryItem(model: tip)
-                              )
+                              children: _factoryModels
+                                  .map((tip) =>
+                                  FactoryItem(
+                                    model: tip,
+                                    showButton: true,
+                                    requirementCode: widget.model.code,
+                                    hasInvited: tip.invited,
+                                    callback: () {
+                                      setState(() {
+                                        _getData();
+                                      });
+                                    },
+                                  ))
                                   .toList());
                         } else {
                           return Container();
                         }
                       },
                       initialData: null,
-                      future: _getData()
-                  )
-              ),
+                      future: _getData())),
             )
           ],
         ),

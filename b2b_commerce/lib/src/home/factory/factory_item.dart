@@ -16,6 +16,7 @@ class FactoryItem extends StatelessWidget {
     this.showButton = false,
     this.hasInvited = false,
     this.isLocalFind = false,
+    this.callback,
   }) : super(key: key);
 
   final FactoryModel model;
@@ -30,6 +31,8 @@ class FactoryItem extends StatelessWidget {
 
   //是否就近找厂路由过来的页面
   final bool isLocalFind;
+
+  final VoidCallback callback;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +71,7 @@ class FactoryItem extends StatelessWidget {
                       ? InviteFactoryButton(
                     factoryModel: model,
                     requirementCode: requirementCode,
+                    callback: callback,
                   )
                       : Container(),
                 ],
@@ -322,14 +326,17 @@ class CategoriesText extends StatelessWidget {
 }
 
 class InviteFactoryButton extends StatelessWidget {
-  InviteFactoryButton({Key key, this.factoryModel, this.requirementCode})
+  InviteFactoryButton(
+      {Key key, this.factoryModel, this.requirementCode, this.callback})
       : super(key: key);
   FactoryModel factoryModel;
   String requirementCode;
 
+  VoidCallback callback;
+
   @override
   Widget build(BuildContext context) {
-    if (factoryModel.invited) {
+    if (factoryModel.invited != null && factoryModel.invited) {
       return Container(
         height: 30,
         width: 100,
@@ -360,6 +367,9 @@ class InviteFactoryButton extends StatelessWidget {
                     entrance: '0',
                   );
                 }).then((value) {
+              if (callback != null) {
+                callback();
+              }
               FactoryBLoC().clear();
               FactoryBLoC().refreshData();
             });

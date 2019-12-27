@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -348,8 +350,13 @@ class _MessagePageListState extends State<MessagePageList>
                   (BuildContext context, AsyncSnapshot<MessageData> snapshot) {
                 if (snapshot.data == null) {
                   bloc.getData(widget.status.code);
-                  return ProgressIndicatorFactory
-                      .buildPaddedProgressIndicator();
+                  if (UserBLoC.instance.currentUser.status ==
+                      UserStatus.ONLINE) {
+                    return ProgressIndicatorFactory
+                        .buildPaddedProgressIndicator();
+                  } else {
+                    return _LoginRemind();
+                  }
                 }
                 if (snapshot.data.data.length <= 0) {
                   return Column(
@@ -420,4 +427,33 @@ class _MessagePageListState extends State<MessagePageList>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class _LoginRemind extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(40, 200, 40, 0),
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+      decoration: BoxDecoration(color: Colors.white),
+      child: Column(
+        children: <Widget>[
+          Text('登录后，您将能随时查看消息。'),
+          Container(
+            width: 200,
+            child: FlatButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              onPressed: () {
+                Navigator.of(context).push(
+                    (MaterialPageRoute(builder: (context) => B2BLoginPage())));
+              },
+              child: Text('登录'),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

@@ -149,8 +149,12 @@ class _RequirementItem extends StatelessWidget {
                         Icon(
                           Icons.access_time,
                           color: Colors.grey,
+                          size: 20,
                         ),
-                        Text('${DateExpress2Util.express(model.creationTime)}')
+                        Text(
+                          '${DateExpress2Util.express(model.creationTime)}',
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                        )
                       ],
                     )
                   ],
@@ -170,9 +174,13 @@ class _RequirementItem extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Text(model.belongTo.contactAddress.city != null
-                        ? '${model.belongTo.contactAddress.city.name}${model.belongTo.contactAddress.cityDistrict.name}'
-                        : '')
+                    Text(
+                      model.belongTo.contactAddress.city != null
+                          ? '${model.belongTo.contactAddress.city.name}${model
+                          .belongTo.contactAddress.cityDistrict.name}'
+                          : '',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    )
                   ],
                 ),
                 Row(
@@ -183,8 +191,8 @@ class _RequirementItem extends StatelessWidget {
                         children: <Widget>[
                           ImageFactory.buildThumbnailImage(
                               model.belongTo.profilePicture,
-                              size: 40,
-                              containerSize: 50),
+                              size: 15,
+                              containerSize: 25),
                           Container(
                             margin: EdgeInsets.only(left: 10),
                             child: Text('${model.belongTo.name}'),
@@ -192,7 +200,10 @@ class _RequirementItem extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Text('${generateDistanceStr(model.distance)}')
+                    Text(
+                      '${generateDistanceStr(model.distance)}',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    )
                   ],
                 )
               ],
