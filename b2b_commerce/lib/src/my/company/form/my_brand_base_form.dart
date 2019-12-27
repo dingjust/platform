@@ -27,9 +27,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
   FocusNode _cooperativeBrandFocusNode = FocusNode();
 
   List<String> _scaleRange = [];
-  List<String> _scaleSaleMarkets = [];
-  List<String> _styleCodes = [];
-  double _fontSize = 14;
+  double _fontSize = 16;
 
   @override
   void initState() {
@@ -42,9 +40,12 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
       print(widget.brand.scaleRange.toString().split('.')[1]);
     }
 
-    _styleCodes.addAll(widget.brand.styles ?? []);
-    _scaleSaleMarkets.addAll(widget.brand.salesMarket ?? []);
-
+    if(widget.brand.salesMarket == null){
+      widget.brand.salesMarket = [];
+    }
+    if(widget.brand.styles == null){
+      widget.brand.styles = [];
+    }
     // TODO: implement initState
     super.initState();
   }
@@ -73,7 +74,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   return;
                 }
                 if(widget.brand.contactAddress == null){
-                  ShowDialogUtil.showValidateMsg(context, '请选择企业地址');
+                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
                   return;
                 }
                 if(ObjectUtil.isEmptyList(widget.brand.adeptAtCategories)){
@@ -104,8 +105,8 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '上传图片',
-                      style: TextStyle(color: Colors.black)
+                      text: '上传企业logo',
+                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                     )
                   ]
                 ),
@@ -125,7 +126,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         children: [
                           TextSpan(
                               text: '公司名称',
-                              style: TextStyle(color: Colors.black)
+                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                           ),
                           TextSpan(
                               text: '*',
@@ -157,7 +158,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         children: [
                           TextSpan(
                               text: '品牌名称',
-                              style: TextStyle(color: Colors.black)
+                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                           ),
                           TextSpan(
                               text: '*',
@@ -219,6 +220,8 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                     MaterialPageRoute(builder: (context) =>
                         MyBrandAddressFormPage(
                           addressModel: widget.brand.contactAddress,)));
+                print(result.region);
+                print(result.city);
                 if (result != null) {
                   widget.brand.contactAddress = result;
                 }
@@ -243,7 +246,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                           ]
                       ),
                     ),
-                    Expanded(child: Text('${widget.brand?.contactAddress?.region?.name}${widget.brand?.contactAddress?.city?.name}${widget.brand?.contactAddress?.cityDistrict?.name}',textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
+                    Expanded(child: Text('${widget.brand?.contactAddress?.details}',textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
                     Icon((Icons.chevron_right),color: Colors.grey,),
                   ],
                 ),
@@ -394,7 +397,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         ),
                       ),
                     ),
-                    Text(enumMap(SalesMarketsEnum, widget.brand.salesMarket),style: TextStyle(color: Colors.grey),),
+                    Text(formatEnumSelectsText(widget.brand.salesMarket,SalesMarketsEnum,2),style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color: Colors.grey,),
                   ],
                 ),
@@ -406,20 +409,17 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       builder: (context) => EnumSelectPage(
                         items: FactoryQualityLevelsEnum,
                         title: '质量等级',
-                        codes: _scaleRange,
+                        codes: widget.brand.salesMarket,
                         count: 3,
+                        multiple: true,
                       ),
                     ));
 
-                if (result != null) _scaleRange = result;
-
-                if (_scaleRange.length > 0) {
-                  ScaleRanges scaleRange = ScaleRanges.values.singleWhere(
-                          (scaleRange) => scaleRange.toString().split('.')[1] == _scaleRange[0],
-                      orElse: () => null);
-
-                  widget.brand.scaleRange = scaleRange;
+                if (result != null){
+                  widget.brand.salesMarket = result;
                 }
+                print('${widget.brand.salesMarket}[]]]]]]]]]');
+                print('${result}[]]]]]]]]]');
               },
             ),
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
@@ -430,13 +430,16 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child: Text(
-                      '风格',
-                      style: TextStyle(
-
-                        fontSize: 16,
-                      ),
-                    )),
+                        child: RichText(
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: '风格',
+                                    style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                                ),
+                              ]
+                          ),
+                        ),),
                     Text(
                       formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),style: TextStyle(color: Colors.grey)
                     ),

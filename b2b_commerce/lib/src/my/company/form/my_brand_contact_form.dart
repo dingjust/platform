@@ -33,6 +33,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
   FocusNode _contactPhoneFocusNode = FocusNode();
   FocusNode _phoneFocusNode = FocusNode();
   FocusNode _dutiesFocusNode = FocusNode();
+  double _fontSize = 16;
 
   @override
   void initState() {
@@ -118,7 +119,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
                 children: [
                   TextSpan(
                       text: '姓名',
-                      style: TextStyle(color: Colors.black)
+                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                   ),
                   TextSpan(
                       text: '*',
@@ -155,7 +156,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
                 children: [
                   TextSpan(
                       text: '手机',
-                      style: TextStyle(color: Colors.black)
+                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                   ),
                   TextSpan(
                       text: '*',
@@ -192,7 +193,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
                 children: [
                   TextSpan(
                       text: '座机号码',
-                      style: TextStyle(color: Colors.black)
+                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                   ),
                   TextSpan(
                       text: '*',
@@ -229,7 +230,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
                 children: [
                   TextSpan(
                       text: '职务',
-                      style: TextStyle(color: Colors.black)
+                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                   ),
                   TextSpan(
                       text: '*',
