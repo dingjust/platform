@@ -245,7 +245,8 @@ class _ProductionProgressDetailPageState
                     },
                   ),
                 )),
-            Expanded(
+            state.order.status == PurchaseOrderStatus.IN_PRODUCTION
+                ? Expanded(
                 flex: 1,
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 25),
@@ -267,6 +268,7 @@ class _ProductionProgressDetailPageState
                     },
                   ),
                 ))
+                : Container()
           ],
         ));
   }
