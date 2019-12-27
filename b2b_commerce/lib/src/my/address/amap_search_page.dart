@@ -114,6 +114,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   @override
   void initState() {
     // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((_) => getAroundResponse());
     super.initState();
   }
 
@@ -405,6 +406,15 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   //   gpsLock = false;
   //   return gpsLocation;
   // }
+
+  void getAroundResponse() async {
+    AmapState amapState = Provider.of<AmapState>(context);
+    AmapAroundResponse result = await AmapService.instance
+        .aroundTips('${amapState.longitude},${amapState.latitude}');
+    setState(() {
+      amapAroundResponse = result;
+    });
+  }
 
   ///重新定位
   void getGpsLocation(AmapState state) async {
