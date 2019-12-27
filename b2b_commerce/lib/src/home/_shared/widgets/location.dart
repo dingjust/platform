@@ -45,12 +45,23 @@ class LocationIcon extends StatelessWidget {
       isNeedConfirmButton: true,
       isNeedCancelButton: true,
       confirmButtonText: '去设置',
-      cancelButtonText: '忽略',
+      cancelButtonText: '选择城市',
       dialogHeight: 180,
       confirmAction: () {
         state.openAppSetting().then((val) {
           Navigator.of(context).pop(val);
         });
+      },
+      cancelAction: () async {
+        Navigator.of(context).pop();
+        Tip tip = await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
+        List<String> locationArray = tip.location.split(',');
+        //设置定位信息
+        state.setAMapLocation(
+            aOIName: tip.district,
+            longitude: double.parse(locationArray[0]),
+            latitude: double.parse(locationArray[1]));
       },
     );
 

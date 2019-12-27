@@ -490,7 +490,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
               longitude: aMapLocation.longitude,
               latitude: aMapLocation.latitude,
               distance: 50000);
-          addressLine = aMapLocation.AOIName;
+          addressLine = aMapLocation.AOIName ?? '广州';
         } else {
           factoryCondition = widget.factoryCondition;
         }
@@ -505,7 +505,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
               longitude: aMapLocation.longitude,
               latitude: aMapLocation.latitude,
               distance: 50000);
-          addressLine = aMapLocation.AOIName;
+          addressLine = aMapLocation.AOIName ?? '广州';
         } else {
           factoryCondition = FactoryCondition(
               starLevel: 0,

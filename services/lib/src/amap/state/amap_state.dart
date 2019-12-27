@@ -14,8 +14,11 @@ class AmapState with ChangeNotifier {
       return _aMapLocation;
     } else if (context != null && openDialog != null) {
       getLocation(context, openDialog);
-    } else {
-      return null;
+      return AMapLocation(
+          city: '广州',
+          AOIName: '广州',
+          longitude: 113.264434,
+          latitude: 23.129162);
     }
   }
 
@@ -52,6 +55,13 @@ class AmapState with ChangeNotifier {
           desiredAccuracy:
               CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
       _aMapLocation = await AMapLocationClient.getLocation(true);
+      if (_aMapLocation == null) {
+        _aMapLocation = AMapLocation(
+            city: '广州',
+            AOIName: '广州',
+            longitude: 113.264434,
+            latitude: 23.129162);
+      }
       AMapLocationClient.stopLocation();
     } catch (e) {
       print(e);
@@ -94,18 +104,18 @@ class AmapState with ChangeNotifier {
     if (_aMapLocation != null) {
       print('=====================');
       print(_aMapLocation.AOIName);
-      return _aMapLocation.longitude;
+      return _aMapLocation.longitude ?? 113.264434;
     } else {
-      return 0;
+      return 113.264434;
     }
   }
 
   ///获取纬度
   double get latitude {
     if (_aMapLocation != null) {
-      return _aMapLocation.latitude;
+      return _aMapLocation.latitude ?? 23.129162;
     } else {
-      return 0;
+      return 23.129162;
     }
   }
 
@@ -113,9 +123,9 @@ class AmapState with ChangeNotifier {
     if (_city != null) {
       return _city;
     } else if (_aMapLocation != null) {
-      return _aMapLocation.city;
+      return _aMapLocation.city ?? '广州';
     } else {
-      return '';
+      return '广州';
     }
   }
 
@@ -124,8 +134,9 @@ class AmapState with ChangeNotifier {
   }
 
   ///覆盖定位信息
-  void setAMapLocation({String aOIName, double longitude, double latitude}) {
+  void setAMapLocation(
+      {String aOIName, double longitude, double latitude, String city}) {
     _aMapLocation = AMapLocation(
-        AOIName: aOIName, longitude: longitude, latitude: latitude);
+        city: city, AOIName: aOIName, longitude: longitude, latitude: latitude);
   }
 }
