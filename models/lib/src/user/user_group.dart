@@ -114,6 +114,9 @@ class CompanyModel extends UserGroupModel {
   @JsonKey(toJson: _labelsToJson)
   List<LabelModel> labels;
 
+  //职务
+  String duties;
+
   CompanyModel({
     MediaModel profilePicture,
     String uid,
@@ -139,6 +142,7 @@ class CompanyModel extends UserGroupModel {
     this.approvalStatus,
     this.profiles,
     this.labels,
+    this.duties,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,

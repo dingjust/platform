@@ -1,4 +1,6 @@
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/common/address_picker.dart';
+import 'package:b2b_commerce/src/common/screen_conditions.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -28,6 +30,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
   List<String> _ageRanges = [];
   List<String> _priceRange1s = [];
   List<String> _priceRange2s = [];
+  double _fontSize = 14;
 
   @override
   void initState() {
@@ -62,7 +65,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
         elevation: 0.5,
         actions: <Widget>[
           IconButton(
-              icon: Text('确定', style: TextStyle()),
+              icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
                 if (medias.length > 0) {
                   widget.brand.profilePicture = medias[0];
@@ -84,49 +87,202 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Text(
-                '上传图片',
-                style: TextStyle(
-                  fontSize: 17,
-                  color: Colors.grey,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '上传图片',
+                      style: TextStyle(color: Colors.black)
+                    )
+                  ]
                 ),
-              ),
+              )
             ),
             EditableAttachments(
               list: medias,
               maxNum: 1,
             ),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
               color: Colors.white,
-              child: TextFieldComponent(
-                focusNode: _nameFocusNode,
-                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,)),
-                controller: _nameController,
-                hintText: '请输入公司名称',
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: '公司名称',
+                              style: TextStyle(color: Colors.black)
+                          ),
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(color: Colors.red)
+                          ),
+                        ]
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFieldComponent(
+                      padding: EdgeInsets.all(0),
+                      focusNode: _nameFocusNode,
+                      controller: _nameController,
+                      hintText: '请输入公司名称',
+                      hideDivider: true,
+                    ),
+                  ),
+                ],
               ),
             ),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
               color: Colors.white,
-              child: TextFieldComponent(
-                focusNode: _brandFocusNode,
-                leadingText: Text('品牌名称',style: TextStyle(fontSize: 16,)),
-                controller: _brandController,
-                hintText: '请输入品牌名称',
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: '品牌名称',
+                              style: TextStyle(color: Colors.black)
+                          ),
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(color: Colors.red)
+                          ),
+                        ]
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      child: TextFieldComponent(
+                        padding: EdgeInsets.all(0),
+                        focusNode: _brandFocusNode,
+                        controller: _brandController,
+                        hintText: '请输入品牌名称',
+                        hideDivider: true,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            GestureDetector(
+              onTap: (){
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: '联系信息',
+                                style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                            ),
+                            TextSpan(
+                                text: '*',
+                                style: TextStyle(color: Colors.red,fontSize: _fontSize)
+                            ),
+                          ]
+                      ),
+                    ),
+                    Expanded(child: Text('已填写',textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
+                  ],
+                ),
+              ),
             ),
+            GestureDetector(
+              onTap: (){
+                String text = '';
+                AddressPicker(cacel: () {
+                  Navigator.pop(context);
+                }).showAddressPicker(
+                  context,
+                  selectProvince: (province) {
+                    text += province['name'];
+                  },
+                  selectCity: (city) {
+                    if(city != null){
+                      text += city['name'];
+                    }
+                  },
+                  selectArea: (area) {
+                    if(area != null){
+                      text += area['name'];
+                    }
+//                    setState(() {
+//                      address = text;
+//                    });
+                  },
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: '企业地址',
+                                style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                            ),
+                            TextSpan(
+                                text: '*',
+                                style: TextStyle(color: Colors.red,fontSize: _fontSize)
+                            ),
+                          ]
+                      ),
+                    ),
+                    Expanded(child: Text('已填写',textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
+                  ],
+                ),
+              ),
+            ),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
               color: Colors.white,
-              child: TextFieldComponent(
-                focusNode: _cooperativeBrandFocusNode,
-                leadingText: Text('合作品牌',style: TextStyle(fontSize: 16,)),
-                controller: _cooperativeBrandController,
-                hintText: '请输入合作品牌',
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: '合作品牌',
+                              style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                          ),
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(color: Colors.red,fontSize: _fontSize)
+                          ),
+                        ]
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      child: TextFieldComponent(
+                        padding: EdgeInsets.all(0),
+                        focusNode: _cooperativeBrandFocusNode,
+                        controller: _cooperativeBrandController,
+                        hintText: '请输入合作品牌',
+                        hideDivider: true,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             InkWell(
               child: Container(
                 color: Colors.white,
