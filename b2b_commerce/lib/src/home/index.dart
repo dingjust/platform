@@ -63,6 +63,9 @@ class _HomePageState extends State<HomePage> {
 
   _HomePageState();
 
+  B2BFloatingActionButtonLocation fabLocation =
+  B2BFloatingActionButtonLocation(0.5);
+
   @override
   void initState() {
     MessageBLoC.instance.snackMessageStream.listen((value) {
@@ -102,6 +105,13 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       key: homePageKey,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: RaisedButton(
+        child: Text('data'),
+        onPressed: () {
+
+        },
+      ),
       body: Container(
         color: Color.fromRGBO(245, 245, 245, 1),
         child: CustomScrollView(
