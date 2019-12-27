@@ -1,6 +1,5 @@
 import 'package:b2b_commerce/src/business/products/product_category.dart';
-import 'package:b2b_commerce/src/common/address_picker.dart';
-import 'package:b2b_commerce/src/common/screen_conditions.dart';
+import 'package:b2b_commerce/src/my/company/form/my_brand_address_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_contact_form.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:core/core.dart';
@@ -61,7 +60,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
           IconButton(
               icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
-
+                if (ObjectUtil.isEmptyString(widget.brand.name)) {
+                  ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
+                  return;
+                }
+                if (ObjectUtil.isEmptyString(widget.brand.brand)) {
+                  ShowDialogUtil.showValidateMsg(context, '请填写品牌名称');
+                  return;
+                }
                 if(ObjectUtil.isEmptyString(widget.brand.duties)|| ObjectUtil.isEmptyString(widget.brand.contactPerson) || ObjectUtil.isEmptyString(widget.brand.contactPhone)){
                   ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
                   return;
@@ -110,7 +116,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               maxNum: 1,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
               color: Colors.white,
               child: Row(
                 children: <Widget>[
@@ -142,7 +148,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             ),
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
               color: Colors.white,
               child: Row(
                 children: <Widget>[
@@ -208,23 +214,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             ),
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             GestureDetector(
-              onTap: (){
-                AddressPicker(cacel: () {
-                  Navigator.pop(context);
-                }).showAddressPicker(
-                  context,
-                  selectProvince: (province) {
-                    widget.brand.contactAddress.region = RegionModel(isocode: province['code'],name: province['name']);
-                  },
-                  selectCity: (city) {
-                    widget.brand.contactAddress.city = CityModel(code: city['code'],name: city['name']);
-                  },
-                  selectArea: (area) {
-                    widget.brand.contactAddress.cityDistrict = DistrictModel(code: area['code'],name: area['name']);
-                    print(widget.brand.contactAddress.cityDistrict?.name);
-                    setState(() {});
-                  },
-                );
+              onTap: () async {
+                dynamic result = await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) =>
+                        MyBrandAddressFormPage(
+                          addressModel: widget.brand.contactAddress,)));
+                if (result != null) {
+                  widget.brand.contactAddress = result;
+                }
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
@@ -302,7 +299,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             ),
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
               color: Colors.white,
               child: Row(
                 children: <Widget>[
@@ -312,10 +309,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                           TextSpan(
                               text: '合作品牌',
                               style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                          ),
-                          TextSpan(
-                              text: '*',
-                              style: TextStyle(color: Colors.red,fontSize: _fontSize)
                           ),
                         ]
                     ),
@@ -349,10 +342,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                               TextSpan(
                                   text: '产值规模',
                                   style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                              ),
-                              TextSpan(
-                                  text: '*',
-                                  style: TextStyle(color: Colors.red,fontSize: _fontSize)
                               ),
                             ]
                         ),
@@ -400,10 +389,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                               TextSpan(
                                   text: '质量等级',
                                   style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                              ),
-                              TextSpan(
-                                  text: '*',
-                                  style: TextStyle(color: Colors.red,fontSize: _fontSize)
                               ),
                             ]
                         ),
