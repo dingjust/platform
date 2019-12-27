@@ -11,6 +11,12 @@ enum CooperatorType {
   OFFLINE
 }
 
+// TODO: i18n处理
+const CooperatorTypeLocalizedMap = {
+  CooperatorType.ONLINE: "线上合作商",
+  CooperatorType.OFFLINE: "自定义",
+};
+
 enum CooperatorCategory {
   ///供应商
   SUPPLIER,

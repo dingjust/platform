@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/my/capacity/my_capacity_form.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,13 @@ class MyCapacityPage extends StatefulWidget {
 }
 
 class _MyCapacityPageState extends State<MyCapacityPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkLoginStatus());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +74,15 @@ class _MyCapacityPageState extends State<MyCapacityPage> {
     } else {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => MyCapacityFormPage()));
+    }
+  }
+
+  ///检测用户登录状态
+  void checkLoginStatus() {
+    if (UserBLoC.instance.currentUser.status == UserStatus.OFFLINE) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => B2BLoginPage()),
+          ModalRoute.withName('/'));
     }
   }
 }
