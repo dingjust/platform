@@ -113,7 +113,7 @@ class _MyBrandAddressFormPageState extends State<MyBrandAddressFormPage> {
           context,
           selectProvince: (province) {
             _addressModel.region =
-                RegionModel(isocode: province['code'], name: province['name']);
+                RegionModel(isocode: province['isocode'], name: province['name']);
           },
           selectCity: (city) {
             _addressModel.city =
