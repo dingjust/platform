@@ -83,7 +83,7 @@
           <el-row  type="flex" align="middle" :gutter="10">
             <el-col :span="3">
               <el-form-item prop="contactAddress.region">
-                <el-select class="w-100" v-model="formData.contactAddress.region" size="mini" value-key="isocode"
+                <el-select class="w-100" v-model="formData.contactAddress == undefined ? '' : formData.contactAddress.region" size="mini" value-key="isocode"
                            @change="onRegionChanged">
                   <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
                   </el-option>
@@ -92,7 +92,7 @@
             </el-col>
             <el-col :span="3">
             <el-form-item prop="contactAddress.city">
-              <el-select class="w-100" size="mini" v-model="formData.contactAddress.city"
+              <el-select class="w-100" size="mini" v-model="formData.contactAddress == undefined ? '' : formData.contactAddress.city"
                          @change="onCityChanged" value-key="code">
                 <el-option v-for="item in (readOnly? readOnlyCities : cities )" :key="item.code" :label="item.name" :value="item">
                 </el-option>
@@ -101,7 +101,7 @@
             </el-col>
             <el-col :span="3">
             <el-form-item prop="contactAddress.cityDistrict">
-              <el-select class="w-100" size="mini" v-model="formData.contactAddress.cityDistrict"
+              <el-select class="w-100" size="mini" v-model="formData.contactAddress == undefined ? '' : formData.contactAddress.cityDistrict"
                          value-key="code" @change="onCityDistrictChanged">
                 <el-option v-for="item in (readOnly? readOnlyCityDistricts : cityDistricts )" :key="item.code" :label="item.name"
                            :value="item">
@@ -111,7 +111,7 @@
             </el-col>
             <el-col :span="6">
             <el-form-item prop="contactAddress.line1">
-              <el-input placeholder="填写详细门牌号" v-model="formData.contactAddress.line1" @change="onCityDistrictChanged" size="mini">
+              <el-input placeholder="填写详细门牌号" v-model="formData.contactAddress == undefined ? '' : formData.contactAddress.line1" @change="onCityDistrictChanged" size="mini">
               </el-input>
             </el-form-item>
             </el-col>
@@ -195,6 +195,7 @@
           return;
         }
 
+        this.$store.state.BrandsModule.cities = result
         this.readOnlyCities = result;
       },
       onCityChanged (current) {
@@ -214,6 +215,7 @@
           return;
         }
 
+        this.$store.state.BrandsModule.cityDistricts = result;
         this.readOnlyCityDistricts = result;
       },
       onCityDistrictChanged () {
@@ -257,7 +259,7 @@
         this.profilePictures = [this.formData.profilePicture];
       }
       this.getRegions();
-      if (this.readOnly) {
+      if (this.readOnly && this.formData.contactAddress != undefined) {
         this.getCities(this.formData.contactAddress.region);
         this.getCityDistricts(this.formData.contactAddress.city);
       }
