@@ -18,7 +18,7 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品牌" prop="supplier.name" header-align="center" width="180"></el-table-column>
+      <el-table-column label="发布公司" prop="supplier.name" header-align="center" width="180"></el-table-column>
       <el-table-column label="报价" prop="user">
         <template slot-scope="scope">
           <span style="color: red">￥{{scope.row.unitPrice}}</span>

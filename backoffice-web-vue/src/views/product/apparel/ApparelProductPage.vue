@@ -1,9 +1,18 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
+      <el-row>
+        <el-col :span="2">
+          <div class="orders-list-title">
+            <h6>产品列表</h6>
+          </div>
+        </el-col>
+      </el-row>
+      <div class="pt-2"></div>
       <apparel-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
       <apparel-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-        @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf" @onOffShelf="onOffShelf" @onDelete="onDelete"/>
+        @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf" @onOffShelf="onOffShelf" @onDelete="onDelete"
+        @platformOff="platformOff" @platformDeleted="platformDeleted"/>
     </el-card>
   </div>
 </template>
@@ -113,6 +122,26 @@
         this.$message.success('产品删除成功');
         this.refresh();
       },
+      async platformOff (item) {
+        const url = this.apis().platformOffShelfProduct(item.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.refresh();
+      },
+      async platformDeleted (item) {
+        const url = this.apis().platformDeletedShelfProduct(item.code);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('产品删除成功');
+        this.refresh();
+      },
       onNew (formData) {
         this.$router.push({
           name: '产品详情',
@@ -131,3 +160,9 @@
     }
   };
 </script>
+<style scoped>
+  .orders-list-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
+</style>

@@ -98,8 +98,9 @@ const state = {
   queryFormData: {
     skuID: '',
     name: '',
-    approvalStatuses: [],
-    categories: []
+    approvalStatuses: '',
+    categories: [],
+    belongToName: ''
   }
 };
 

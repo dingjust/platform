@@ -4,7 +4,7 @@
       <!--<template-report />-->
     <!--</div>-->
     <el-card>
-      <template-toolbar ref="tempTool" @onNew="onNew" @onSearch="onSearch" class="template-toolbar" />
+      <template-toolbar ref="tempTool" @onNew="onNew" @onSearch="onSearch" class="template-toolbar"/>
       <template-list ref="tempList" :page="page" @onDetails="onDetails" @onSearch="onSearch" />
     </el-card>
   </div>

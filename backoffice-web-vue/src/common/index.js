@@ -570,6 +570,9 @@ const COMMON_APIS = {
   ///上线倒计时/交货倒计时统计
   reportsProgress(){
     return  'b2b/company/reports/progress';
+  },
+  checkTempName() {
+    return 'b2b/user/agreement/temp/check';
   }
 };
 
