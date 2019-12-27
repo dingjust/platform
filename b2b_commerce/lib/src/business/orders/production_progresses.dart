@@ -229,7 +229,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         },
         child: Card(
           margin: EdgeInsets.fromLTRB(10, 5, 10, 8),
-          color: order.progresses[i].sequence == _index
+          color: order.progresses[i].sequence == _index &&
+              order.status == PurchaseOrderStatus.IN_PRODUCTION
               ? Color.fromARGB(255, 255, 214, 12)
               : Colors.white,
           elevation: 1.5,
@@ -484,14 +485,35 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   Future<void> refreshData() async {
-    order = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
-    setState(() {
-      phase = ProductionProgressPhaseLocalizedMap[order.currentPhase];
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack:
+            PurchaseOrderRepository().getPurchaseOrderDetail(order.code),
+            outsideDismiss: false,
+            loadingText: '正在刷新。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      if (value != null) {
+        order = value;
+        widget.order = order;
+        setState(() {
+          phase = ProductionProgressPhaseLocalizedMap[order.currentPhase];
+        });
+      }
     });
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => ProductionProgressesPage(order: order)),
-        ModalRoute.withName('/'));
+    // order = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+    // widget.order = order;
+    // setState(() {
+    //   phase = ProductionProgressPhaseLocalizedMap[order.currentPhase];
+    // });
+    // Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //         builder: (context) => ProductionProgressesPage(order: order)),
+    //     ModalRoute.withName('/'));
   }
 
 //生成Dialog控件 输入数量

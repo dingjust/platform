@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:amap_location/amap_location.dart';
 import 'package:city_pickers/city_pickers.dart' as city_pickers;
 import 'package:flutter/material.dart';
@@ -224,7 +222,9 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                   size: 15,
                 ),
                 Text(
-                  '${state.city}',
+                  '${state
+                      .getAMapLocation()
+                      .AOIName ?? state.city}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -307,7 +307,9 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   }
 
   Widget _buildAroundListView(BuildContext context) {
-    if (amapAroundResponse != null && textEditingController.text == '') {
+    if (amapAroundResponse != null &&
+        amapAroundResponse.pois != null &&
+        textEditingController.text == '') {
       return ListView(
           children: amapAroundResponse.pois
               .map(
@@ -332,77 +334,104 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
 
   Widget _buildLocationRow() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          FutureBuilder<AMapLocation>(
-            builder:
-                (BuildContext context, AsyncSnapshot<AMapLocation> snapshot) {
-              if (snapshot.data != null) {
-                return Text(
-                  '${snapshot.data.POIName}',
-                  style: TextStyle(fontSize: 16),
-                );
-              } else {
-                return Text(
-                  '定位中',
-                  style: TextStyle(fontSize: 16),
-                );
-              }
-            },
-            initialData: null,
-            future: getGpsLocation(),
-          ),
-          GestureDetector(
-            onTap: getGpsLocation,
-            child: Container(
-              child: Row(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Consumer<AmapState>(
+          builder: (context, state, _) =>
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Icon(
-                    B2BIcons.aim,
-                    color: Color.fromRGBO(255, 214, 12, 1),
+                  state.getAMapLocation() != null
+                      ? Text(
+                    '${state
+                        .getAMapLocation()
+                        .AOIName ?? state.city}',
+                    style: TextStyle(fontSize: 16),
+                  )
+                      : Text(
+                    '定位中',
+                    style: TextStyle(fontSize: 16),
                   ),
-                  Text(
-                    '重新定位',
-                    style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                  GestureDetector(
+                    onTap: () {
+                      getGpsLocation(state);
+                    },
+                    child: Container(
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            B2BIcons.aim,
+                            color: Color.fromRGBO(255, 214, 12, 1),
+                          ),
+                          Text(
+                            '重新定位',
+                            style:
+                            TextStyle(color: Color.fromRGBO(255, 214, 12, 1)),
+                          )
+                        ],
+                      ),
+                    ),
                   )
                 ],
               ),
-            ),
-          )
-        ],
-      ),
-    );
+        ));
   }
 
-  ///获取定位
-  Future<AMapLocation> getGpsLocation() async {
-    if (gpsLocation == null && !gpsLock) {
-      gpsLock = true;
-      AMapLocation location = await AmapService.instance.location();
-      if (location == null) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.CONFIRM_DIALOG,
-                contentText1: '获取位置授权失败，请设置应用位置服务',
-                callbackResult: false,
-                confirmAction: () {
-                  Navigator.of(context).pop();
-                },
-              );
-            });
-      } else {
-        amapAroundResponse = await AmapService.instance
-            .aroundTips('${location.longitude},${location.latitude}');
-        setState(() {
-          gpsLocation = location;
+  // ///获取定位
+  // Future<AMapLocation> getGpsLocation() async {
+  //   if (gpsLocation == null && !gpsLock) {
+  //     gpsLock = true;
+  //     AMapLocation location = await AmapService.instance.location();
+  //     if (location == null) {
+  //       showDialog(
+  //           context: context,
+  //           builder: (_) {
+  //             return CustomizeDialog(
+  //               dialogType: DialogType.CONFIRM_DIALOG,
+  //               contentText1: '获取位置授权失败，请设置应用位置服务',
+  //               callbackResult: false,
+  //               confirmAction: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //             );
+  //           });
+  //     } else {
+  //       amapAroundResponse = await AmapService.instance
+  //           .aroundTips('${location.longitude},${location.latitude}');
+  //       setState(() {
+  //         gpsLocation = location;
+  //       });
+  //     }
+  //   }
+  //   gpsLock = false;
+  //   return gpsLocation;
+  // }
+
+  ///重新定位
+  void getGpsLocation(AmapState state) async {
+    Widget _dialog = CustomizeDialog(
+      dialogType: DialogType.CONFIRM_DIALOG,
+      contentText2: '钉单正在请求定位权限,请设置',
+      isNeedConfirmButton: true,
+      isNeedCancelButton: true,
+      confirmButtonText: '去设置',
+      cancelButtonText: '选择城市',
+      dialogHeight: 180,
+      confirmAction: () {
+        state.openAppSetting().then((val) {
+          Navigator.of(context).pop(val);
         });
-      }
-    }
-    gpsLock = false;
-    return gpsLocation;
+      },
+      cancelAction: () async {
+        Tip tip = await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
+        List<String> locationArray = tip.location.split(',');
+        //设置定位信息
+        state.setAMapLocation(
+            aOIName: tip.district,
+            longitude: double.parse(locationArray[0]),
+            latitude: double.parse(locationArray[1]));
+      },
+    );
+    state.getLocation(context, _dialog);
   }
 }

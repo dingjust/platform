@@ -1646,8 +1646,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //线下单显示按钮
   Widget _buildOfflineButton(BuildContext context) {
+    if (order.cooperator == null ||
+        order.cooperator.type == CooperatorType.ONLINE) {
+      return Container(
+        margin: EdgeInsets.only(bottom: 50),
+      );
+    }
+
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 20, 0, 70),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
