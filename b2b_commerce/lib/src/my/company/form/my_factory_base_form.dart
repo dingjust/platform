@@ -95,6 +95,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
                   return;
                 }
+                widget.factory.contactAddress.id = null;
                 if(ObjectUtil.isEmptyList(widget.factory.adeptAtCategories)){
                   ShowDialogUtil.showValidateMsg(context, '请选择优势品类');
                   return;
