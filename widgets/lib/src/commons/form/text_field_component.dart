@@ -153,7 +153,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   decoration: InputDecoration(
                     border: widget.isInputBorder?UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey,width: 0.5)):InputBorder.none,
                     hintText: widget.hintText,
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.grey,),
                   ),
                   autofocus: widget.autofocus,
                   focusNode: widget.focusNode,

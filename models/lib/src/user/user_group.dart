@@ -114,6 +114,9 @@ class CompanyModel extends UserGroupModel {
   @JsonKey(toJson: _labelsToJson)
   List<LabelModel> labels;
 
+  //职务
+  String duties;
+
   CompanyModel({
     MediaModel profilePicture,
     String uid,
@@ -139,6 +142,7 @@ class CompanyModel extends UserGroupModel {
     this.approvalStatus,
     this.profiles,
     this.labels,
+    this.duties,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -345,6 +349,9 @@ class BrandModel extends B2BUnitModel {
   //价位段（秋冬）
   List<PriceRanges> priceRange2s;
 
+  //价位段（秋冬）
+  List<String> salesMarket;
+
   BrandModel({
     MediaModel profilePicture,
     String uid,
@@ -381,6 +388,7 @@ class BrandModel extends B2BUnitModel {
     this.priceRange2s,
     this.styles,
     this.adeptAtCategories,
+    this.salesMarket,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
