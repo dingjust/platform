@@ -27,7 +27,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
   FocusNode _cooperativeBrandFocusNode = FocusNode();
 
   List<String> _scaleRange = [];
-  double _fontSize = 14;
+  double _fontSize = 16;
 
   @override
   void initState() {
@@ -105,8 +105,8 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '上传图片',
-                      style: TextStyle(color: Colors.black)
+                      text: '上传企业logo',
+                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                     )
                   ]
                 ),
@@ -126,7 +126,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         children: [
                           TextSpan(
                               text: '公司名称',
-                              style: TextStyle(color: Colors.black)
+                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                           ),
                           TextSpan(
                               text: '*',
@@ -158,7 +158,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         children: [
                           TextSpan(
                               text: '品牌名称',
-                              style: TextStyle(color: Colors.black)
+                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                           ),
                           TextSpan(
                               text: '*',
@@ -430,13 +430,16 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child: Text(
-                      '风格',
-                      style: TextStyle(
-
-                        fontSize: 16,
-                      ),
-                    )),
+                        child: RichText(
+                          text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: '风格',
+                                    style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                                ),
+                              ]
+                          ),
+                        ),),
                     Text(
                       formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),style: TextStyle(color: Colors.grey)
                     ),
