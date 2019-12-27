@@ -107,10 +107,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                     TextSpan(
                       text: '上传企业logo',
                       style: TextStyle(color: Colors.black,fontSize: _fontSize,)
-                    )
+                    ),
+                    TextSpan(
+                      text: '(长按编辑)',
+                      style: TextStyle(color: Colors.grey,fontSize: 14,)
+                    ),
                   ]
                 ),
-              )
+              ),
             ),
             EditableAttachments(
               list: medias,

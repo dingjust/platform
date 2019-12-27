@@ -126,6 +126,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                           text: '上传企业logo',
                           style: TextStyle(color: Colors.black,fontSize: _fontSize)
                       ),
+                      TextSpan(
+                          text: '(长按编辑)',
+                          style: TextStyle(color: Colors.grey,fontSize: 14,)
+                      ),
                     ]
                 ),
               ),
@@ -491,6 +495,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                                   text: '工厂规模',
                                   style: TextStyle(color: Colors.black,fontSize: _fontSize)
                               ),
+                              TextSpan(
+                                  text: '*',
+                                  style: TextStyle(color: Colors.red,fontSize: _fontSize,)
+                              ),
                             ]
                         ),
                       ),),
@@ -550,6 +558,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                               TextSpan(
                                   text: '合作方式',
                                   style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                              TextSpan(
+                                  text: '*',
+                                  style: TextStyle(color: Colors.red,fontSize: _fontSize,)
                               ),
                             ]
                         ),
@@ -611,6 +623,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                                   text: '生产大类',
                                   style: TextStyle(color: Colors.black,fontSize: _fontSize)
                               ),
+                              TextSpan(
+                                  text: '*',
+                                  style: TextStyle(color: Colors.red,fontSize: _fontSize,)
+                              ),
                             ]
                         ),
                       ),),
@@ -663,6 +679,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                                   text: '优势类目',
                                   style: TextStyle(color: Colors.black,fontSize: _fontSize)
                               ),
+                              TextSpan(
+                                  text: '*',
+                                  style: TextStyle(color: Colors.red,fontSize: _fontSize,)
+                              ),
                             ]
                         ),
                       ),),
@@ -711,10 +731,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   TextSpan(
                       text: '合作品牌',
                       style: TextStyle(color: Colors.black,fontSize: _fontSize,)
-                  ),
-                  TextSpan(
-                      text: '*',
-                      style: TextStyle(color: Colors.red)
                   ),
                 ]
             ),
@@ -1058,6 +1074,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                                   text: '质量等级',
                                   style: TextStyle(color: Colors.black,fontSize: _fontSize)
                               ),
+                              TextSpan(
+                                  text: '*',
+                                  style: TextStyle(color: Colors.red,fontSize: _fontSize,)
+                              ),
                             ]
                         ),
                       ),),
@@ -1266,6 +1286,10 @@ class _EquipmentPageState extends State<EquipmentPage> {
                         TextSpan(
                             text: '设备',
                             style: TextStyle(color: Colors.black,fontSize: 16)
+                        ),
+                        TextSpan(
+                            text: '*',
+                            style: TextStyle(color: Colors.red,fontSize: 16,)
                         ),
                       ]
                   ),
