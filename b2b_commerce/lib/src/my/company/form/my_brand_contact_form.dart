@@ -54,61 +54,27 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('联系方式'),
+        title: Text('联系信息'),
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
-          Container(
-              width: 80,
-              child: ActionChip(
-                shape: RoundedRectangleBorder(
-                    side: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                label: Text('保存',style: TextStyle(color: Color(0xffffd60c)),),
-                onPressed: () async {
-                  widget.company.contactAddress = addressModel;
-                  widget.company.contactPerson = _contactPersonController.text == ''
-                      ? null
-                      : _contactPersonController.text;
-                  widget.company.contactPhone = _contactPhoneController.text == ''
-                      ? null
-                      : _contactPhoneController.text;
-                  widget.company.duties = _dutiesController.text == ''
-                      ? null
-                      : _dutiesController.text;
-                  widget.company.phone =
-                  _phoneController.text == '' ? null : _phoneController.text;
-                  if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoading(
-                            requestCallBack: UserRepositoryImpl()
-                                .brandUpdateContact(widget.company)
-                                .then((a) {}), //
-                            outsideDismiss: false,
-                            loadingText: '保存中。。。',
-                            entrance: '00',
-                          );
-                        });
-                  } else if (UserBLoC.instance.currentUser.type ==
-                      UserType.FACTORY) {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return RequestDataLoading(
-                            requestCallBack: UserRepositoryImpl()
-                                .factoryUpdateContact(widget.company),
-                            loadingText: '保存中。。。',
-                            entrance: '00',
-                          );
-                        });
-                  }
-                },
-                backgroundColor: Color.fromRGBO(255, 214, 12, 1),
-              ))
+          IconButton(
+              icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
+              onPressed: () {
+                widget.company.contactAddress = addressModel;
+                widget.company.contactPerson = _contactPersonController.text == ''
+                    ? null
+                    : _contactPersonController.text;
+                widget.company.contactPhone = _contactPhoneController.text == ''
+                    ? null
+                    : _contactPhoneController.text;
+                widget.company.duties = _dutiesController.text == ''
+                    ? null
+                    : _dutiesController.text;
+                widget.company.phone =
+                _phoneController.text == '' ? null : _phoneController.text;
+                Navigator.pop(context);
+              }),
         ],
       ),
       body: Container(
