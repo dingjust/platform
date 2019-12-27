@@ -244,7 +244,10 @@ class _LogisicsInputPageState extends State<LogisticsInputPage> {
               callbackResult: result,
             );
           }).then((val) {
-        Navigator.pop(context);
+            ProofingOrdersBLoC.instance.refreshData('PENDING_DELIVERY');
+            ProofingOrdersBLoC.instance.refreshData('SHIPPED');
+            Navigator.pop(context);
+
       });
       ProofingOrdersBLoC.instance.refreshData('ALL');
     });
@@ -279,6 +282,9 @@ class _LogisicsInputPageState extends State<LogisticsInputPage> {
                 callbackResult: result);
           });
       PurchaseOrderBLoC.instance.refreshData('ALL');
+      PurchaseOrderBLoC.instance.refreshData('WAIT_FOR_OUT_OF_STORE');
+      PurchaseOrderBLoC.instance.refreshData('OUT_OF_STORE');
+      Navigator.pop(context);
     });
   }
 

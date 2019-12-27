@@ -106,12 +106,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: homePageKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: RaisedButton(
-        child: Text('data'),
-        onPressed: () {
-
-        },
-      ),
+//      floatingActionButton: RaisedButton(
+//        child: Text('data'),
+//        onPressed: () {
+//
+//        },
+//      ),
       body: Container(
         color: Color.fromRGBO(245, 245, 245, 1),
         child: CustomScrollView(
