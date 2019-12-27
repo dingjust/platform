@@ -1,4 +1,5 @@
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,28 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
       B2BListTitle(
         isRequired: true,
         onTap: () {
-          _selectRegionCityAndDistrict(context);
+          AddressPicker(cacel: () {
+            Navigator.pop(context);
+          }).showAddressPicker(
+            context,
+            selectProvince: (province) {
+              widget.address.region =
+                  RegionModel(isocode: province['isocode'], name: province['name']);
+            },
+            selectCity: (city) {
+              widget.address.city =
+                  CityModel(code: city['code'], name: city['name']);
+            },
+            selectArea: (area) {
+              widget.address.cityDistrict =
+                  DistrictModel(code: area['code'], name: area['name']);
+              setState(() {
+                regionCityAndDistrict = widget.address.region.name +
+                    widget.address.city.name +
+                    widget.address.cityDistrict.name;
+              });
+            },
+          );
         },
         prefix: Text(
           '选择省市区',
