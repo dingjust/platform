@@ -58,15 +58,34 @@ class _PayPlanSelectPageState extends State<PayPlanSelectPage> {
 
   Widget _buildBody(List<CompanyPayPlanModel> plans) {
     return Container(
-      child: ListView(
-          children: plans
-              .map((plan) => PayPlanItem(
-                    model: plan,
-                    selectModel: selectedModel,
-                    onChanged: _handleModelChanged,
-                  ))
-              .toList()),
-    );
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '财务方案尚不支持手机端创建，请前往钉单平台设置',
+                    style: TextStyle(color: Colors.red),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: ListView(
+                  children: plans
+                      .map((plan) =>
+                      PayPlanItem(
+                        model: plan,
+                        selectModel: selectedModel,
+                        onChanged: _handleModelChanged,
+                      ))
+                      .toList()),
+            )
+          ],
+        ));
   }
 
   void _handleModelChanged(CompanyPayPlanModel model) {
