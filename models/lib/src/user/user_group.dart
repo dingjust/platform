@@ -204,6 +204,7 @@ class OrgUnitModel extends CompanyModel {
     ArticleApprovalStatus approvalStatus,
     List<CompanyProfileModel> companyProfiles,
     List<LabelModel> labels,
+    String duties,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -230,6 +231,7 @@ class OrgUnitModel extends CompanyModel {
           approvalStatus: approvalStatus,
           profiles: companyProfiles,
           labels: labels,
+    duties: duties,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -279,6 +281,7 @@ class B2BUnitModel extends OrgUnitModel {
       ArticleApprovalStatus approvalStatus,
       List<CompanyProfileModel> companyProfiles,
       List<LabelModel> labels,
+        String duties,
       this.active,
       this.email,
       this.phone,
@@ -312,6 +315,7 @@ class B2BUnitModel extends OrgUnitModel {
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
           labels: labels,
+    duties: duties,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -380,6 +384,7 @@ class BrandModel extends B2BUnitModel {
     ArticleApprovalStatus approvalStatus,
     List<CompanyProfileModel> companyProfiles,
     List<LabelModel> labels,
+    String duties,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -417,6 +422,7 @@ class BrandModel extends B2BUnitModel {
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
           labels: labels,
+    duties: duties,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -554,6 +560,7 @@ class FactoryModel extends B2BUnitModel {
         ArticleApprovalStatus approvalStatus,
         List<CompanyProfileModel> companyProfiles,
         List<LabelModel> labels,
+        String duties,
         this.historyOrdersCount,
         this.orderedSuccessRate,
         this.monthlyCapacityRange,
@@ -611,6 +618,7 @@ class FactoryModel extends B2BUnitModel {
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
           labels: labels,
+    duties: duties,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>

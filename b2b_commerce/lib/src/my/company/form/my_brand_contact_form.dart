@@ -1,11 +1,9 @@
 import 'dart:ui';
 
-import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
@@ -26,8 +24,6 @@ class MyBrandContactFormPage extends StatefulWidget {
 }
 
 class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
-  AddressModel addressModel;
-
   TextEditingController _contactPersonController = TextEditingController();
   TextEditingController _contactPhoneController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
@@ -45,9 +41,6 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
     _contactPhoneController.text = widget.company.contactPhone;
     _phoneController.text = widget.company.phone;
     _dutiesController.text = widget.company.duties;
-    if (widget.company.contactAddress != null) {
-      addressModel = widget.company.contactAddress;
-    }
   }
 
   @override
@@ -61,7 +54,6 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
           IconButton(
               icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
-                widget.company.contactAddress = addressModel;
                 widget.company.contactPerson = _contactPersonController.text == ''
                     ? null
                     : _contactPersonController.text;
@@ -117,7 +109,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
 
   Widget _buildContactPerson(BuildContext context) {
     return  Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -154,7 +146,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
 
   Widget _buildContactPhone(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -189,57 +181,9 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
     );
   }
 
-  Widget _buildContactAddress(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
-      child: GestureDetector(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              width: 100,
-              child: Text(
-                '经营地址',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Container(
-              width: MediaQueryData.fromWindow(window).size.width - 130,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '${widget.company.contactAddress != null && widget.company.contactAddress.details != null ? widget.company.contactAddress.details : ''}',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ),
-            ),
-          ],
-        ),
-        onTap: () {
-          if (widget.isDetail) {
-            copyToClipboard(widget.company.contactAddress.details, context);
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ContactAddressFormPage(
-                    address: widget.company.contactAddress,
-                    company: widget.company),
-              ),
-            ).then((value) {
-              addressModel = value;
-            });
-          }
-        },
-      ),
-    );
-  }
-
   Widget _buildCellPhone(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -276,7 +220,7 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
 
   Widget _buildEmail(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
       color: Colors.white,
       child: Row(
         children: <Widget>[
