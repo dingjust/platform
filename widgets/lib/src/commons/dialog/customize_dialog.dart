@@ -306,11 +306,10 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                             : MainAxisAlignment.start,
                         children: <Widget>[
                           widget.isNeedCancelButton
-                              ? Center(
+                              ? Expanded(
+                            flex: 1,
                             child: Container(
                                 child: FlatButton(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 55),
                                     child: Text(
                                       '${widget.cancelButtonText == null ||
                                           widget.cancelButtonText == ''
@@ -319,6 +318,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
+                                      textAlign: TextAlign.center,
                                     ),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
@@ -327,12 +327,11 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 )
                               : Container(),
                           widget.isNeedConfirmButton
-                              ? Center(
+                              ? Expanded(
+                            flex: 1,
                             child: Container(
                               child: widget.isNeedCancelButton
                                   ? FlatButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 55),
                                   child: Text(
                                     '${widget.confirmButtonText == null ||
                                         widget.confirmButtonText == ''
@@ -341,6 +340,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     style: TextStyle(
                                       color: Colors.black,
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
@@ -1020,7 +1020,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 prefix: '￥',
                                 inputFormatters: [
                                   DecimalInputFormat(),
-                              ],
+                                ],
                               ),
                             ),
                           ],

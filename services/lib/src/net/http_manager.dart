@@ -118,7 +118,7 @@ class HttpManager {
         if (e.request.headers['ignoreAlert'] != 1) {
           StreamController streamController =
               MessageBLoC.instance.errorMessageController;
-          streamController.onResume;
+          // streamController.onResume;
           streamController.sink.add('网络异常');
         }
         if (GlobalConfigs.DEBUG) {

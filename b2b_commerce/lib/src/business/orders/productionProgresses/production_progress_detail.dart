@@ -81,7 +81,9 @@ class _ProductionProgressDetailPageState
             margin: EdgeInsets.symmetric(vertical: 10),
             child: Text('款号：${state.order.product.skuID ?? ''}'),
           ),
-          Text('合作商：${state.order.cooperator.getName()}')
+          Text(
+              '合作商：${state.order.getCooperatorName(
+                  UserBLoC.instance.currentUser.type)}')
         ],
       ),
     );
@@ -243,7 +245,8 @@ class _ProductionProgressDetailPageState
                     },
                   ),
                 )),
-            Expanded(
+            state.order.status == PurchaseOrderStatus.IN_PRODUCTION
+                ? Expanded(
                 flex: 1,
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 25),
@@ -265,6 +268,7 @@ class _ProductionProgressDetailPageState
                     },
                   ),
                 ))
+                : Container()
           ],
         ));
   }

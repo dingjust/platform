@@ -1,8 +1,11 @@
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
+import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:b2b_commerce/src/production/production_offline_order_from.dart';
 import 'package:b2b_commerce/src/production/production_unique_code.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class OrderCoordinationPage extends StatefulWidget {
@@ -11,6 +14,13 @@ class OrderCoordinationPage extends StatefulWidget {
 }
 
 class _OrderCoordinationPageState extends State<OrderCoordinationPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => checkLoginStatus());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,5 +114,14 @@ class _OrderCoordinationPageState extends State<OrderCoordinationPage> {
         ],
       ),
     );
+  }
+
+  ///检测用户登录状态
+  void checkLoginStatus() {
+    if (UserBLoC.instance.currentUser.status == UserStatus.OFFLINE) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => B2BLoginPage()),
+          ModalRoute.withName('/'));
+    }
   }
 }

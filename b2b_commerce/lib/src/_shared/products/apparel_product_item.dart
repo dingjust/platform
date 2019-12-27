@@ -147,10 +147,10 @@ class ApparelProductItem extends StatelessWidget {
               ),
             ),
           ),
-          Offstage(
-            offstage: isSelectOption,
-            child: _buildButtons(context),
-          ),
+          // Offstage(
+          //   offstage: isSelectOption,
+          //   child: _buildButtons(context),
+          // ),
         ],
       ),
     );

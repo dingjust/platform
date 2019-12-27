@@ -114,7 +114,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 controller: _scrollController,
                 slivers: <Widget>[
                   SliverAppBar(
-                    expandedHeight: 230.0,
+                    expandedHeight: 250.0,
                     pinned: true,
                     elevation: 0.5,
                     centerTitle: true,
@@ -317,7 +317,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   child: Container(
                     padding:
                     EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    height: 95,
+                    height: 100,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1646,8 +1646,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //线下单显示按钮
   Widget _buildOfflineButton(BuildContext context) {
+    if (order.cooperator == null ||
+        order.cooperator.type == CooperatorType.ONLINE) {
+      return Container(
+        margin: EdgeInsets.only(bottom: 50),
+      );
+    }
+
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, 20, 0, 70),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[

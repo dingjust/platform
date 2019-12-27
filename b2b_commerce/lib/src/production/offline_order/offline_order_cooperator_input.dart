@@ -103,15 +103,17 @@ class _OfflineOrderCooperatorInputState
   }
 
   void onCooperatorSelect() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return CooperatorSelect(
-          model: currentModel,
-          onChanged: _handlecurrentModelChanged,
-        );
-      },
-    ).then((a) {});
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                CooperatorSelectOnPage(
+                  model: currentModel,
+                ))).then((val) {
+      setState(() {
+        currentModel = val;
+      });
+    });
   }
 
   void _handlecurrentModelChanged(CooperatorModel newValue) {

@@ -47,6 +47,8 @@ class MenuItemImage {
       getImage('temp/business/production_order_factory.png');
   static Image quoteFactory =
       getImage('temp/business/quote_manage_factory.png');
+  static Image freeCapacity2 =
+  getImage('temp/index/free_capacity2.png');
 }
 
 class B2BImage {

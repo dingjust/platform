@@ -485,8 +485,8 @@ class _LoginPageState extends State<LoginPage> {
                 return CustomizeDialog(
                   dialogType: DialogType.LOGIN_MESSAGE_DIALOG,
                   failTips:
-                  '您当前登录账户为${UserTypeLocalizedMap[bloc.currentUser
-                      .type]}账户,与您选择的身份不匹配。',
+                  '您当前选择的是${UserTypeLocalizedMap[bloc.currentUser
+                      .type]},但您登录的账号为工厂账号，请问是否继续登录。',
                   callbackResult: false,
                   cancelButtonText: '换个账户',
                   confirmButtonText: '继续登录',

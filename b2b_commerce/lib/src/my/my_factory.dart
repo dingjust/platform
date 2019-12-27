@@ -8,6 +8,7 @@ import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
     as dj;
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
+import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     EnumModel('a', '资料介绍'),
     EnumModel('b', '公司认证'),
     EnumModel('c', '上架产品'),
-    EnumModel('d', '联系方式'),
+//    EnumModel('d', '联系方式'),
   ];
 
   FactoryModel _factory;
@@ -108,9 +109,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
       case 'c':
         return _buildCashProducts(factory);
         break;
-      case 'd':
-        return _buildContactWay(factory);
-        break;
+//      case 'd':
+//        return _buildContactWay(factory);
+//        break;
       default:
         return _buildBaseInfo(factory);
         break;
@@ -647,9 +648,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MyFactoryFormPage(
-                  factory: state.model,
-                ))).then((v) {
+            builder: (context) => MyFactoryBaseFormPage(state.model,))).then((v) {
       state.refresh();
     });
   }

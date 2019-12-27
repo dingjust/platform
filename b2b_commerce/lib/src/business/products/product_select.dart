@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:b2b_commerce/src/_shared/products/apparel_product_search_list.dart';
+import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class ProductSelectPage extends StatefulWidget{
+class ProductSelectPage extends StatefulWidget {
   ProductSelectPage({
     Key key,
   }) : super(key: key);
@@ -35,7 +34,7 @@ class _ProductSelectPageState extends State<ProductSelectPage> {
             children: <Widget>[
               Expanded(
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     onClick();
                   },
                   child: Container(
@@ -65,16 +64,31 @@ class _ProductSelectPageState extends State<ProductSelectPage> {
         body: Padding(
           padding: const EdgeInsets.only(top: 10),
           child: ApparelProductSearchList(
-            isSelection:true,
+            isSelection: true,
 //            status: _status,
             keyword: _keyword,
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ApparelProductFormPage(
+                        item: ApparelProductBLoC.instance.newProduct,
+                        isCreate: true,
+                        enabled: true,
+                      )),
+            );
+          },
         ),
       ),
     );
   }
 
-  void onClick() async{
+  void onClick() async {
     dynamic result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -86,14 +100,13 @@ class _ProductSelectPageState extends State<ProductSelectPage> {
       ),
     );
 
-    if(result != null){
+    if (result != null) {
       setState(() {
         _keyword = result;
         //清空搜索结果数据
         ApparelProductBLoC.instance.clearSelectSearchProducts();
       });
     }
-
   }
 
   @override
@@ -102,5 +115,3 @@ class _ProductSelectPageState extends State<ProductSelectPage> {
     super.dispose();
   }
 }
-
-

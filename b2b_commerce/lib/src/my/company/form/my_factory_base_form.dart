@@ -1,6 +1,9 @@
 import 'dart:ui';
 
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/my/address/contact_address_form.dart';
+import 'package:b2b_commerce/src/my/company/form/my_brand_contact_form.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,6 +38,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   List<String> _monthlyCapacityRanges = [];
   List<String> _populationScale = [];
   List<String> _cooperationModes = [];
+  double _fontSize = 16;
 
   @override
   void initState() {
@@ -70,27 +74,67 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.5,
+        title: Text('基本资料'),
+        actions: <Widget>[
+          IconButton(
+              icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
+              onPressed: () {
+                if (ObjectUtil.isEmptyString(widget.factory.name)) {
+                  ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
+                  return;
+                }
+                if(ObjectUtil.isEmptyString(widget.factory.duties)||
+                    ObjectUtil.isEmptyString(widget.factory.contactPerson) ||
+                    ObjectUtil.isEmptyString(widget.factory.contactPhone)){
+                  ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
+                  return;
+                }
+                if(widget.factory.contactAddress == null){
+                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
+                  return;
+                }
+                if(ObjectUtil.isEmptyList(widget.factory.adeptAtCategories)){
+                  ShowDialogUtil.showValidateMsg(context, '请选择优势品类');
+                  return;
+                }
+                if (_medias.length > 0) {
+                  widget.factory.profilePicture = _medias[0];
+                } else {
+                  widget.factory.profilePicture = null;
+                }
+                widget.factory.name = _nameController.text == '' ? null : _nameController.text;
+                widget.factory.cooperativeBrand =
+                _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
+
+                UserRepositoryImpl().factoryUpdate(widget.factory).then((a) => Navigator.pop(context));
+              })
+        ],
+      ),
       body: Container(
         color: Colors.grey[200],
         child: ListView(
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Text(
-                '上传图片',
-                style: TextStyle(
-                  fontSize: 17,
+              child:RichText(
+                text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: '上传企业logo',
+                          style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                      ),
+                    ]
                 ),
               ),
             ),
             _buildProfilePicture(),
             _buildName(),
-            _buildMonthlyCapacityRange(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
-            _buildScaleRange(context),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            _buildContactInfo(context),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            _buildContactAddress(context),
             Divider(
               height: 0,
               color: Color(Constants.DIVIDER_COLOR),
@@ -115,12 +159,27 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               height: 0,
               color: Color(Constants.DIVIDER_COLOR),
             ),
+            _buildEquipment(),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
+            _buildInkFactoryQuantityLevel(context),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             _buildCooperativeBrand(),
             Divider(
               height: 0,
               color: Color(Constants.DIVIDER_COLOR),
             ),
-            _buildLabels(context),
+            _buildMonthlyCapacityRange(context),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
+            _buildScaleRange(context),
             Divider(
               height: 0,
               color: Color(Constants.DIVIDER_COLOR),
@@ -136,11 +195,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               color: Color(Constants.DIVIDER_COLOR),
             ),
             _buildFactoryBuildingsQuantity(),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
-            _buildEquipment(),
             Divider(
               height: 0,
               color: Color(Constants.DIVIDER_COLOR),
@@ -165,16 +219,99 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               height: 0,
               color: Color(Constants.DIVIDER_COLOR),
             ),
-            _buildInkFactoryQuantityLevel(context),
+            _buildLabels(context),
           ],
         ),
       ),
     );
   }
 
+  GestureDetector _buildContactInfo(BuildContext context) {
+    return GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandContactFormPage(company: widget.factory,)));
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: '联系信息',
+                              style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                          ),
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(color: Colors.red,fontSize: _fontSize)
+                          ),
+                        ]
+                    ),
+                  ),
+                  Expanded(child: Text(_buildContactText(),textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
+                  Icon((Icons.chevron_right),color: Colors.grey,),
+                ],
+              ),
+            ),
+          );
+  }
+
+  Widget _buildContactAddress(BuildContext context) {
+    return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.all(15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              RichText(
+                text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: '企业地址',
+                          style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                      ),
+                      TextSpan(
+                          text: '*',
+                          style: TextStyle(color: Colors.red,fontSize: _fontSize)
+                      ),
+                    ]
+                ),
+              ),
+              Container(
+                width: MediaQueryData.fromWindow(window).size.width - 130,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    '${widget.factory.contactAddress != null && widget.factory.contactAddress.details != null ? widget.factory.contactAddress.details : ''}',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ),
+              ),
+              Icon((Icons.chevron_right),color: Colors.grey,),
+            ],
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ContactAddressFormPage(
+                  address: widget.factory.contactAddress,
+                  company: widget.factory),
+            ),
+          );
+        }
+    );
+  }
+
   EditableAttachments _buildProfilePicture() {
     return EditableAttachments(
-            list: widget.medias,
+            list: _medias,
             maxNum: 1,
             ratioX: 1,
             ratioY: 1,
@@ -185,23 +322,40 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   Container _buildName() {
     return Container(
-            color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: '公司名称',
+                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
+                  ),
+                  TextSpan(
+                      text: '*',
+                      style: TextStyle(color: Colors.red,fontSize: _fontSize,)
+                  ),
+                ]
+            ),
+          ),
+          Expanded(
             child: TextFieldComponent(
+              padding: EdgeInsets.all(0),
               focusNode: _nameFocusNode,
-              leadingText: Text('公司名称',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              isRequired: true,
               controller: _nameController,
               hintText: '请输入公司名称',
-              dividerPadding: EdgeInsets.all(0),
+              hideDivider: true,
               onChanged: (v) {
                 widget.factory.name =
-                    _nameController.text == '' ? null : _nameController.text;
+                _nameController.text == '' ? null : _nameController.text;
               },
             ),
-          );
+          ),
+        ],
+      ),
+    );
   }
 
   InkWell _buildMonthlyCapacityRange(BuildContext context) {
@@ -212,12 +366,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    '月均产能',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )),
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '月均产能',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
+                        ),
+                      ),),
                   Text(
                     widget.factory.monthlyCapacityRange == null
                         ? ''
@@ -268,12 +426,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    '产值规模',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )),
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '产值规模',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
+                        ),
+                      ),),
                   Text(
                     widget.factory.scaleRange == null
                         ? ''
@@ -321,12 +483,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    '工厂规模',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )),
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '工厂规模',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
+                        ),
+                      ),),
                   Text(
                     widget.factory.populationScale == null
                         ? ''
@@ -377,12 +543,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    '合作方式',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )),
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '合作方式',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
+                        ),
+                      ),),
                   Text(
                     formatCooperationModesSelectText(
                         widget.factory.cooperationModes),
@@ -433,12 +603,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    '生产大类',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )),
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '生产大类',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
+                        ),
+                      ),),
                   Text(
                     formatCategorySelectText(widget.factory.categories, 5),
                     style: TextStyle(color: Colors.grey),
@@ -481,12 +655,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    '优势类目',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )),
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '优势类目',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
+                        ),
+                      ),),
                   Text(
                     formatCategorySelectText(
                         widget.factory.adeptAtCategories, 2),
@@ -522,23 +700,42 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   Container _buildCooperativeBrand() {
     return Container(
-            color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: '合作品牌',
+                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
+                  ),
+                  TextSpan(
+                      text: '*',
+                      style: TextStyle(color: Colors.red)
+                  ),
+                ]
+            ),
+          ),
+          Expanded(
             child: TextFieldComponent(
+              padding: EdgeInsets.all(0),
               focusNode: _cooperativeBrandFocusNode,
-              leadingText: Text('合作品牌商',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
               controller: _cooperativeBrandController,
-              dividerPadding: EdgeInsets.all(0),
+              hintText: '请输入合作品牌',
+              hideDivider: true,
               onChanged: (v) {
                 widget.factory.cooperativeBrand =
-                    _cooperativeBrandController.text == ''
-                        ? null
-                        : _cooperativeBrandController.text;
+                _cooperativeBrandController.text == ''
+                    ? null
+                    : _cooperativeBrandController.text;
               },
             ),
-          );
+          ),
+        ],
+      ),
+    );
   }
 
   InkWell _buildLabels(BuildContext context) {
@@ -549,12 +746,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                    '我的标签',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )),
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '我的标签',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
+                        ),
+                      ),),
                   Text(
                     formatLabelsSelectText(widget.factory.labels),
                     style: TextStyle(color: Colors.grey),
@@ -597,12 +798,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                        '生产模式',
-                        style: TextStyle(
-                          fontSize: 16,
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '生产模式',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
                         ),
-                      )),
+                      ),),
                   Text(
                     enumMap(ProductionModesEnum, widget.factory.productionMode),
                     style: TextStyle(color: Colors.grey),
@@ -642,10 +847,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             child: ListTile(
                 leading: Wrap(
                   children: <Widget>[
-                    Text('设计',
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: '设计',
+                                style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                            ),
+                          ]
+                      ),
+                    ),
                   ],
                 ),
                 trailing: Container(
@@ -682,10 +893,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             child: ListTile(
                 leading: Wrap(
                   children: <Widget>[
-                    Text('打板',
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: '打板',
+                                style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                            ),
+                          ]
+                      ),
+                    ),
                   ],
                 ),
                 trailing: Container(
@@ -722,10 +939,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             child: ListTile(
                 leading: Wrap(
                   children: <Widget>[
-                    Text('免费打样',
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
+                    RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: '免费打样',
+                                style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                            ),
+                          ]
+                      ),
+                    ),
                   ],
                 ),
                 trailing: Container(
@@ -763,7 +986,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               focusNode: _coverageAreaFocusNode,
               leadingText: Text('覆盖范围',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: _fontSize,
                   )),
               controller: _coverageAreaController,
               dividerPadding: EdgeInsets.all(0),
@@ -784,7 +1007,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         focusNode: _productionLineQuantityFocusNode,
         leadingText: Text('产线',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: _fontSize,
             )),
         controller: _productionLineQuantityController,
         dividerPadding: EdgeInsets.all(0),
@@ -803,9 +1026,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       color: Colors.white,
       child: TextFieldComponent(
         focusNode: _factoryBuildingsQuantityFocusNode,
-        leadingText: Text('产房',
+        leadingText: Text('产房面积',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: _fontSize,
             )),
         controller: _factoryBuildingsQuantityController,
         dividerPadding: EdgeInsets.all(0),
@@ -827,12 +1050,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: Text(
-                        '质量等级',
-                        style: TextStyle(
-                          fontSize: 16,
+                      child: RichText(
+                        text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: '质量等级',
+                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                              ),
+                            ]
                         ),
-                      )),
+                      ),),
                   Text(
                     enumMap(FactoryQualityLevelsEnum, widget.factory.qualityLevel),
                     style: TextStyle(color: Colors.grey),
@@ -935,6 +1162,16 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
     return text;
   }
 
+  String _buildContactText(){
+    String text = '未填写';
+    if(!ObjectUtil.isEmptyString(widget.factory.duties) &&
+        !ObjectUtil.isEmptyString(widget.factory.contactPerson) &&
+        !ObjectUtil.isEmptyString(widget.factory.contactPhone)){
+      text = '已填写';
+    }
+    return text;
+  }
+
 }
 
 
@@ -1022,9 +1259,15 @@ class _EquipmentPageState extends State<EquipmentPage> {
             children: <Widget>[
               Container(
                 width: 80,
-                child: Text(
-                  '设备',
-                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                child: RichText(
+                  text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: '设备',
+                            style: TextStyle(color: Colors.black,fontSize: 16)
+                        ),
+                      ]
+                  ),
                 ),
               ),
               Expanded(
@@ -1092,4 +1335,5 @@ class _EquipmentPageState extends State<EquipmentPage> {
 
     return text;
   }
+
 }

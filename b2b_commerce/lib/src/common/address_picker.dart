@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:models/models.dart';
 
 typedef void ChangeData(Map<String, dynamic> map);
 typedef List<Widget> CreateWidgetList();
@@ -202,18 +203,26 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                           "isocode": province[provinceIndex]['isocode'],
                           "name": province[provinceIndex]['name']
                         };
-                        Map<String, dynamic> cityMap = {
-                          "code": province[provinceIndex]['cities'][cityIndex]
-                          ['code'],
-                          "name": province[provinceIndex]['cities'][cityIndex]
-                          ['name']
-                        };
-                        Map<String, dynamic> areaMap = {
-                          "code": province[provinceIndex]['cities'][cityIndex]['districts']
-                          [areaIndex]['code'],
-                          "name": province[provinceIndex]['cities'][cityIndex]['districts']
-                          [areaIndex]['name']
-                        };
+                        Map<String, dynamic> cityMap;
+                        if(city != null && city.isNotEmpty){
+                          cityMap = {
+                            "code": province[provinceIndex]['cities'][cityIndex]
+                            ['code'],
+                            "name": province[provinceIndex]['cities'][cityIndex]
+                            ['name']
+                          };
+                        }
+
+                        Map<String, dynamic> areaMap;
+                        if(area != null && area.isNotEmpty){
+                          areaMap = {
+                            "code": province[provinceIndex]['cities'][cityIndex]['districts']
+                            [areaIndex]['code'],
+                            "name": province[provinceIndex]['cities'][cityIndex]['districts']
+                            [areaIndex]['name']
+                          };
+                        }
+
                         if (widget.selectProvince != null) {
                           widget.selectProvince(provinceMap);
                         }
@@ -248,7 +257,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         return new Align(
                           child: new Text(
                             v['name'],
-                            textScaleFactor: 1.2,
+                            textScaleFactor: 0.8,
                           ),
                           alignment: Alignment.centerLeft,
                         );
@@ -262,8 +271,12 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         cityController.jumpToItem(0);
                         areaController.jumpToItem(0);
                         city = widget.data[provinceIndex]['cities'];
-                        area =
-                        widget.data[provinceIndex]['cities'][cityIndex]['districts'];
+                        if(city.isEmpty){
+                          area = [];
+                        }else{
+                          area =
+                          widget.data[provinceIndex]['cities'][cityIndex]['districts'];
+                        }
                       });
                     },
                   ),
@@ -275,7 +288,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         return new Align(
                           child: new Text(
                             v['name'],
-                            textScaleFactor: 1.2,
+                            textScaleFactor: 0.8,
                           ),
                           alignment: Alignment.centerLeft,
                         );
@@ -299,7 +312,7 @@ class _AddressPickerState extends State<_AddressPickerWidget> {
                         return new Align(
                           child: new Text(
                             v['name'],
-                            textScaleFactor: 1.2,
+                            textScaleFactor: 0.8,
                           ),
                           alignment: Alignment.centerLeft,
                         );

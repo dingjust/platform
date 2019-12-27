@@ -752,20 +752,23 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
       if (value != null) {
         result = true;
       }
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '下单失败',
-              successTips: '下单成功',
-              callbackResult: result,
-              confirmAction: () {
-                getOrderDetail(value);
-              },
-            );
-          });
+      if (result) {
+        getOrderDetail(value);
+      }
+      // showDialog(
+      //     context: context,
+      //     barrierDismissible: false,
+      //     builder: (_) {
+      //       return CustomizeDialog(
+      //         dialogType: DialogType.RESULT_DIALOG,
+      //         failTips: '下单失败',
+      //         successTips: '下单成功',
+      //         callbackResult: result,
+      //         confirmAction: () {
+      //           getOrderDetail(value);
+      //         },
+      //       );
+      //     });
     });
   }
 
