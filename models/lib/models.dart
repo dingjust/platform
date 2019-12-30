@@ -452,13 +452,13 @@ const FactoryFreeProofingsEnum = [
   EnumModel('NOT_SUPPORTED', '不支持')
 ];
 //销售市场
-const SalesMarketsEnum = [
-  EnumModel('A_CHAIN', '一线连锁'),
-  EnumModel('REGIONAL_CHAIN', '区域连锁'),
-  EnumModel('STALL_WHOLESALE', '档口批发'),
-  EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
-  EnumModel('WHOLESALE_TRADE', '外贸批发'),
-];
+//const SalesMarketsEnum = [
+//  EnumModel('A_CHAIN', '一线连锁'),
+//  EnumModel('REGIONAL_CHAIN', '区域连锁'),
+//  EnumModel('STALL_WHOLESALE', '档口批发'),
+//  EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
+//  EnumModel('WHOLESALE_TRADE', '外贸批发'),
+//];
 
 //发布方式
 const PublishingModesEnum = [
@@ -477,11 +477,11 @@ const EffectiveDaysEnum = [
 
 //质量等级
 const FactoryQualityLevelsEnum = [
-  EnumModel('A_CHAIN', '一线连锁'),
-  EnumModel('REGIONAL_CHAIN', '区域连锁'),
-  EnumModel('STALL_WHOLESALE', '档口批发'),
+  EnumModel('A_CHAIN', '一线大牌'),
+  EnumModel('REGIONAL_CHAIN', '区域品牌'),
+  EnumModel('STALL_WHOLESALE', '档口精品'),
   EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
-  EnumModel('WHOLESALE_TRADE', '外贸批发'),
+  EnumModel('WHOLESALE_TRADE', '外贸跑量'),
 ];
 
 //转包类型

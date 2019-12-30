@@ -289,7 +289,7 @@ class _SubContractSecondFormState extends State<SubContractSecondForm> {
                     children: <Widget>[
                       PopupMenuButton<EnumModel>(
                         itemBuilder: (BuildContext context) =>
-                            SalesMarketsEnum.map(
+                            FactoryQualityLevelsEnum.map(
                                     (saleMarket) =>
                                     PopupMenuItem<EnumModel>(
                                       enabled: false,
@@ -330,7 +330,7 @@ class _SubContractSecondFormState extends State<SubContractSecondForm> {
 //                            '选择质量等级',
                           formatEnumSelectsText(
                               widget.formState.model.details.salesMarket,
-                              SalesMarketsEnum,
+                              FactoryQualityLevelsEnum,
                               2,
                               customText: '选择质量等级'),
                           style: TextStyle(color: Colors.grey),

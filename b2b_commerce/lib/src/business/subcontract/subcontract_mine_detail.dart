@@ -501,7 +501,7 @@ class _SubContractMineDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    formatEnumSelectsText(subContractModel.details.salesMarket, SalesMarketsEnum, SalesMarketsEnum.length),
+                    formatEnumSelectsText(subContractModel.details.salesMarket, FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length),
                     style: TextStyle(
                       fontSize: 14,
                     ),

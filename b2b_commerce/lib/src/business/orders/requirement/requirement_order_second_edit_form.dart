@@ -267,7 +267,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
 //                            });
                           },
                           itemBuilder: (BuildContext context) =>
-                              SalesMarketsEnum.map(
+                              FactoryQualityLevelsEnum.map(
                                   (saleMarket) => PopupMenuItem<EnumModel>(
                                         enabled: false,
                                         value: saleMarket,
@@ -303,7 +303,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
 //                            '选择质量等级',
                             formatEnumSelectsText(
                                 widget.formState.editModel.details.salesMarket,
-                                SalesMarketsEnum,
+                                FactoryQualityLevelsEnum,
                                 2,
                                 customText: '选择质量等级'),
                             style: TextStyle(color: Colors.grey,fontSize: 16),
