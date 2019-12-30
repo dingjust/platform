@@ -247,6 +247,9 @@ class _RequirementItem extends StatelessWidget {
   }
 
   String generateDistanceStr(double distance) {
+    if (distance == null) {
+      return '';
+    }
     if (distance < 1000) {
       return '${distance}KM';
     } else {
