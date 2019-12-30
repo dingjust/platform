@@ -82,7 +82,7 @@ class HttpManager {
         if (response != null) {
           print(
               "RESPONSE[${response?.statusCode}] => PATH: ${response?.request
-                  ?.path}");
+                  ?.path}>>>返回结果:${response?.data.toString()}");
           print('返回结果:${response?.data.toString()}');
         }
       }
@@ -124,7 +124,9 @@ class HttpManager {
         _clearContext();
       }
       if (GlobalConfigs.DEBUG) {
-        print("ERROR[${e?.response?.statusCode}] => PATH: ${e?.request?.path}");
+        print(
+            "ERROR[${e?.response?.statusCode}] => PATH: ${e?.request
+                ?.path}>>>${e?.response?.data.toString()}");
       }
       return e; //continue
     }));
