@@ -277,7 +277,8 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                "${widget.order.product.category.name}  $sum件",
+                                "${widget.order?.product?.category?.name ??
+                                    ''}  $sum件",
                                 style: const TextStyle(
                                   fontSize: 15,
                                   color: const Color.fromRGBO(255, 133, 148, 1),

@@ -7,7 +7,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../../../business/orders/purchase_order_detail.dart';
 import '../../../common/logistics_input_page.dart';
 import '../../../common/order_payment.dart';
 
@@ -257,7 +256,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         ),
                       ),
                       widget.order.product == null ||
-                              widget.order.product.category == null
+                          widget.order.product?.category == null
                           ? Container()
                           : Container(
                               padding: const EdgeInsets.all(3),
@@ -266,7 +265,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                "${widget.order.product.category.name}  $sum件",
+                                "${widget.order?.product?.category?.name ??
+                                    ''}  $sum件",
                                 style: const TextStyle(
                                   fontSize: 15,
                                   color: const Color.fromRGBO(255, 133, 148, 1),
