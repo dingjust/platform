@@ -162,11 +162,13 @@ class _FactoryItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           Opacity(
-                            opacity: model.contactAddress.region.name != null
+                            opacity: model?.contactAddress?.region?.name != null
                                 ? 1.0
                                 : 0,
                             child: Text(
-                              '${model.contactAddress.region.name ?? ''}${model.contactAddress.city.name ?? ''}',
+                              '${model?.contactAddress?.region?.name ??
+                                  ''}${model?.contactAddress?.city?.name ??
+                                  ''}',
                               style: TextStyle(color: Colors.grey),
                             ),
                           )
