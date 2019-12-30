@@ -81,7 +81,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
   @override
   void initState() {
     //获取所有省份
-    rootBundle.loadString('data/province.json').then((v) {
+    rootBundle.loadString('data/province_only.json').then((v) {
       List data = json.decode(v);
       _regions = data
           .map<RegionModel>((region) => RegionModel.fromJson(region))
@@ -200,7 +200,7 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                       showCategoriesFilterMenu = false;
                     });
                     //获取所有省份
-                    rootBundle.loadString('data/province.json').then((v) {
+                    rootBundle.loadString('data/province_only.json').then((v) {
                       List data = json.decode(v);
                       _regions = data
                           .map<RegionModel>(

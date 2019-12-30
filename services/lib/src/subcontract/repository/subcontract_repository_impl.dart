@@ -76,6 +76,7 @@ class SubContractRepositoryImpl implements SubContractRepository {
   ///创建转包
   @override
   Future<String> createSubContract(SubContractModel form)async {
+    print(SubContractModel.toJson(form));
     Response response;
     try {
       response = await http$.post(SubContractApis.subcontractsCreate, data: SubContractModel.toJson(form),);

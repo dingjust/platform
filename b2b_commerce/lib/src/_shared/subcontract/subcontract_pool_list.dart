@@ -102,7 +102,7 @@ class _SubContractPoolListState extends State<SubContractPoolList> {
                           onTap: (){
                             subContractPoolState.showDateFilterMenu = false;
                             //获取所有省份
-                            rootBundle.loadString('data/province.json').then((v) {
+                            rootBundle.loadString('data/province_only.json').then((v) {
                               List data = json.decode(v);
                               _regions = data
                                   .map<RegionModel>(
