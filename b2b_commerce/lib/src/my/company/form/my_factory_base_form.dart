@@ -97,9 +97,35 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
                   return;
                 }
+                if(_factory.populationScale == null){
+                  ShowDialogUtil.showValidateMsg(context, '请选择工厂规模');
+                  return;
+                }
+                if(_factory.cooperationModes == null){
+                  ShowDialogUtil.showValidateMsg(context, '请选择合作方式');
+                  return;
+                }
+                if(_factory.contactAddress == null){
+                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
+                  return;
+                }
                 _factory.contactAddress.id = null;
+                if(ObjectUtil.isEmptyList(_factory.categories)){
+                  ShowDialogUtil.showValidateMsg(context, '请选择生产大类');
+                  return;
+                }
                 if(ObjectUtil.isEmptyList(_factory.adeptAtCategories)){
-                  ShowDialogUtil.showValidateMsg(context, '请选择优势品类');
+                  ShowDialogUtil.showValidateMsg(context, '请选择优势类目');
+                  return;
+                }
+                if(ObjectUtil.isEmptyList(_factory.cuttingDepartment) &&
+                    ObjectUtil.isEmptyList(_factory.productionWorkshop) &&
+                    ObjectUtil.isEmptyList(_factory.lastDepartment)){
+                  ShowDialogUtil.showValidateMsg(context, '请选择设备');
+                  return;
+                }
+                if(_factory.qualityLevel == null){
+                  ShowDialogUtil.showValidateMsg(context, '请选择质量等级');
                   return;
                 }
                 if (_medias.length > 0) {
@@ -260,7 +286,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         ]
                     ),
                   ),
-                  Expanded(child: Text(_buildContactText(),textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
+                  Expanded(child: Text(_buildContactText(),textAlign: TextAlign.end,style: TextStyle(color: Colors.grey,fontSize: _fontSize),)),
                   Icon((Icons.chevron_right),color: Colors.grey,),
                 ],
               ),

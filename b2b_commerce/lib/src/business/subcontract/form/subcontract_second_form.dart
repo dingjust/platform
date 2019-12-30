@@ -276,7 +276,7 @@ class _SubContractSecondFormState extends State<SubContractSecondForm> {
                   RichText(
                     text: TextSpan(children: [
                       TextSpan(
-                        text: '销售市场',
+                        text: '质量等级',
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                       TextSpan(
@@ -327,12 +327,12 @@ class _SubContractSecondFormState extends State<SubContractSecondForm> {
                                           }),
                                     )).toList(),
                         child: Text(
-//                            '选择销售市场',
+//                            '选择质量等级',
                           formatEnumSelectsText(
                               widget.formState.model.details.salesMarket,
                               SalesMarketsEnum,
                               2,
-                              customText: '选择销售市场'),
+                              customText: '选择质量等级'),
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
