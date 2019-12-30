@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/helper/login_check.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -15,7 +16,16 @@ class CapacityMatchingPage extends StatefulWidget
   Size get preferredSize => null;
 }
 
-class _CapacityMatchingPageState extends State<CapacityMatchingPage> {
+class _CapacityMatchingPageState extends State<CapacityMatchingPage>
+    with LoginCheck {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => checkLoginStatus(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CapacityMatchingState>(
@@ -48,14 +58,14 @@ class CapacityMatchingListPage extends StatelessWidget {
     return Consumer<CapacityMatchingState>(
       builder: (context, CapacityMatchingState capacityMatchingState, _) =>
           Container(
-        child: capacityMatchingState.factoryCapacityModels != null
-            ? CapacityMatchingListView(
-                capacityMatchingState: capacityMatchingState,
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ),
-      ),
+            child: capacityMatchingState.factoryCapacityModels != null
+                ? CapacityMatchingListView(
+              capacityMatchingState: capacityMatchingState,
+            )
+                : Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
     );
   }
 }
@@ -86,8 +96,8 @@ class CapacityMatchingListView extends StatelessWidget {
               Column(
                 children: capacityMatchingState.factoryCapacityModels
                     .map((model) => CapacityMatchingItem(
-                          model: model,
-                        ))
+                  model: model,
+                ))
                     .toList(),
               ),
               ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
@@ -105,12 +115,12 @@ class CapacityMatchingListView extends StatelessWidget {
   Widget _buildEnd() {
     return capacityMatchingState.isEnd()
         ? Container(
-            padding: EdgeInsets.only(bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[Text('已经到底了')],
-            ),
-          )
+      padding: EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[Text('已经到底了')],
+      ),
+    )
         : Container();
   }
 }

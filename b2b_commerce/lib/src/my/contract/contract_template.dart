@@ -7,8 +7,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../my_contract.dart';
-
 const statuses = <EnumModel>[
   EnumModel('CGDD', '采购订单'),
   EnumModel('KJXY', '框架协议'),
@@ -166,7 +164,7 @@ class _MyContractTemplatePageState extends State<MyContractTemplatePage>  with S
                               //横轴间距
                               crossAxisSpacing: 0.0,
                               //子组件宽高长度比例
-                              childAspectRatio: 0.95),
+                              childAspectRatio: 0.9),
 
                           itemBuilder: (BuildContext context, int index) =>
                               Container(
@@ -185,7 +183,8 @@ class _MyContractTemplatePageState extends State<MyContractTemplatePage>  with S
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.symmetric(vertical: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10),
                                         child: Text(
                                           '${snapshot.data.data[index].title}',
                                         ),
