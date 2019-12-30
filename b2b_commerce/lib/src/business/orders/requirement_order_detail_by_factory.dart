@@ -478,7 +478,7 @@ class _RequirementOrderDetailByFactoryPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    formatEnumSelectsText(orderModel.details.salesMarket, SalesMarketsEnum, SalesMarketsEnum.length),
+                    formatEnumSelectsText(orderModel.details.salesMarket, FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length),
                     style: TextStyle(
                       fontSize: 14,
                     ),

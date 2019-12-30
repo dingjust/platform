@@ -403,7 +403,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         ),
                       ),
                     ),
-                    Text(formatEnumSelectsText(_brand.salesMarket,SalesMarketsEnum,2),style: TextStyle(color: Colors.grey),),
+                    Text(formatEnumSelectsText(_brand.salesMarket,FactoryQualityLevelsEnum,2),style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color: Colors.grey,),
                   ],
                 ),
