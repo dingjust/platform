@@ -1,17 +1,19 @@
 class GlobalConfigs {
   static const PAGE_SIZE = 20;
-  static const DEBUG = true;
+
+  // static const DEBUG = true;
+  static const DEBUG = false;
   //测试
-  static const CONTEXT_PATH = 'https://sc.nbyjy.net';
-  static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
+  // static const CONTEXT_PATH = 'https://sc.nbyjy.net';
+  // static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
 
   // static const CONTEXT_PATH = 'https://192.168.31.218:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH =
   //     'https://192.168.31.218:9002/djwebservices/v2';
 
   // 生产
-//   static const CONTEXT_PATH = 'https://ht.nbyjy.net';
-//   static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+  static const CONTEXT_PATH = 'https://ht.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
@@ -49,22 +51,26 @@ class GlobalConfigs {
       'brand_index_history_keyword_key';
   static const Requirement_HISTORY_KEYWORD_KEY =
       'requirement_history_keyword_key';
-  static const CAPACITY_HISTORY_KEYWORD_KEY =
-      'capacity_history_keyword_key';
+  static const CAPACITY_HISTORY_KEYWORD_KEY = 'capacity_history_keyword_key';
 
   static const CONTRACT_HISTORY_KEYWORD_KEY = 'contract_history_keyword_key';
   //转包池搜索
-  static const SUBCONTRACT_POOL_HISTORY_KEYWORD_KEY = 'subcontract_pool_history_keyword_key';
+  static const SUBCONTRACT_POOL_HISTORY_KEYWORD_KEY =
+      'subcontract_pool_history_keyword_key';
   //我的转包搜索
-  static const SUBCONTRACT_MINE_HISTORY_KEYWORD_KEY = 'subcontract_mine_history_keyword_key';
+  static const SUBCONTRACT_MINE_HISTORY_KEYWORD_KEY =
+      'subcontract_mine_history_keyword_key';
 
   //合作商选择页搜索
-  static const COOPERATOR_SELECT_HISTORY_KEYWORD_KEY = 'cooperator_select_history_keyword_key';
+  static const COOPERATOR_SELECT_HISTORY_KEYWORD_KEY =
+      'cooperator_select_history_keyword_key';
   //需求选择页搜索
-  static const REQURIEMEN_ORDER_SELECT_HISTORY_KEYWORD_KEY = 'requriemen_order_select_history_keyword_key';
+  static const REQURIEMEN_ORDER_SELECT_HISTORY_KEYWORD_KEY =
+      'requriemen_order_select_history_keyword_key';
 
   //生产订单选择页搜索
-  static const PURCHASE_ORDER_SELECT_HISTORY_KEYWORD_KEY = 'purchase_order_select_history_keyword_key';
+  static const PURCHASE_ORDER_SELECT_HISTORY_KEYWORD_KEY =
+      'purchase_order_select_history_keyword_key';
 
   /// grant types
   static const GRANT_TYPE_PASSWORD = 'password';
