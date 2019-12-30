@@ -215,46 +215,46 @@ class _MyContractListPageState extends State<MyContractListPage>
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
                 }
-                if (snapshot.hasData) {
-                  if (snapshot.data.data.isNotEmpty) {
-                    return Column(
-                      children: snapshot.data.data.map((model) {
-                        return ContractItemPage(
-                          model: model,
-                        );
-                      }).toList(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                } else {
+                // if (snapshot.hasData) {
+                if (snapshot.data.data.isNotEmpty) {
                   return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(top: 200),
-                        child: Image.asset(
-                          'temp/logo2.png',
-                          package: 'assets',
-                          width: 80,
-                          height: 80,
-                        ),
-                      ),
-                      Container(
-                          child: Text(
-                            AppBLoC.instance.getConnectivityResult ==
-                                ConnectivityResult.none
-                                ? '网络链接不可用请重试'
-                                : '没有相关数据',
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          )),
-                    ],
+                    children: snapshot.data.data.map((model) {
+                      return ContractItemPage(
+                        model: model,
+                      );
+                    }).toList(),
                   );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
                 }
+                // } else {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 200),
+                      child: Image.asset(
+                        'temp/logo2.png',
+                        package: 'assets',
+                        width: 80,
+                        height: 80,
+                      ),
+                    ),
+                    Container(
+                        child: Text(
+                          AppBLoC.instance.getConnectivityResult ==
+                              ConnectivityResult.none
+                              ? '网络链接不可用请重试'
+                              : '没有相关数据',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        )),
+                  ],
+                );
+                // }
               },
             ),
             StreamBuilder<bool>(

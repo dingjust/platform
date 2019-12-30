@@ -143,7 +143,9 @@ class CapacityMatchingItem extends StatelessWidget {
       dateStr = '长期有效';
     } else {
       dateStr =
-          '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~${model?.dateEndPoint?.month}.${model?.dateEndPoint?.day}';
+      '${model?.dateStartPoint?.month ?? ''}.${model?.dateStartPoint?.day ??
+          ''}~${model?.dateEndPoint?.month ?? ''}.${model?.dateEndPoint?.day ??
+          ''}';
     }
 
     return Column(
