@@ -76,6 +76,12 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           }).showAddressPicker(
             context,
             selectProvince: (province) {
+              if((province['name'] as String).contains('澳门')){
+                return;
+              }
+              if((province['name'] as String).contains('香港')){
+                return;
+              }
               widget.address.region =
                   RegionModel(isocode: province['isocode'], name: province['name']);
             },

@@ -240,7 +240,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                     RichText(
                       text: TextSpan(children: [
                         TextSpan(
-                          text: '销售市场',
+                          text: '质量等级',
                           style: TextStyle(fontSize: 16, color: Colors.black),
                         ),
                         TextSpan(
@@ -300,12 +300,12 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                                         }),
                                       )).toList(),
                           child: Text(
-//                            '选择销售市场',
+//                            '选择质量等级',
                             formatEnumSelectsText(
                                 widget.formState.editModel.details.salesMarket,
                                 SalesMarketsEnum,
                                 2,
-                                customText: '选择销售市场'),
+                                customText: '选择质量等级'),
                             style: TextStyle(color: Colors.grey,fontSize: 16),
                           ),
                         ),

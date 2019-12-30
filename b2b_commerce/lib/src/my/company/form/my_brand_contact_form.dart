@@ -195,10 +195,6 @@ class _MyBrandContactFormPageState extends State<MyBrandContactFormPage> {
                       text: '座机号码',
                       style: TextStyle(color: Colors.black,fontSize: _fontSize,)
                   ),
-                  TextSpan(
-                      text: '*',
-                      style: TextStyle(color: Colors.red)
-                  ),
                 ]
             ),
           ),
