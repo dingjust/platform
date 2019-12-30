@@ -235,7 +235,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                   RichText(
                     text: TextSpan(children: [
                       TextSpan(
-                        text: '销售市场',
+                        text: '质量等级',
                         style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                       TextSpan(
@@ -253,7 +253,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                           setState(() {});
                         },
                         itemBuilder: (BuildContext context) =>
-                            SalesMarketsEnum.map(
+                            FactoryQualityLevelsEnum.map(
                                     (saleMarket) =>
                                     PopupMenuItem<EnumModel>(
                                       enabled: false,
@@ -287,12 +287,12 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                                       }),
                                     )).toList(),
                         child: Text(
-//                            '选择销售市场',
+//                            '选择质量等级',
                           formatEnumSelectsText(
                               widget.formState.model.details.salesMarket,
-                              SalesMarketsEnum,
+                              FactoryQualityLevelsEnum,
                               2,
-                              customText: '选择销售市场'),
+                              customText: '选择质量等级'),
                           style: TextStyle(color: Colors.grey,fontSize: 16,),
                         ),
                       ),

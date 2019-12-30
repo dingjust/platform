@@ -34,12 +34,12 @@ class CashProductsState extends PageState {
   void getData() async {
     var response;
     if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-      response = await ProductRepositoryImpl().getProductsOfFactory({}, {
+      response = await ProductRepositoryImpl().getProductsOfFactory({'approvalStatuses':'approved'}, {
         'page': currentPage,
         'size': pageSize,
       },factoryUid);
     }else{
-      response = await ProductRepositoryImpl().list({}, {
+      response = await ProductRepositoryImpl().list({'approvalStatuses':'approved'}, {
         'page': currentPage,
         'size': pageSize,
       });
@@ -67,13 +67,13 @@ class CashProductsState extends PageState {
       if (currentPage + 1 != totalPages) {
         var response;
         if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-          response = await ProductRepositoryImpl().getProductsOfFactory({}, {
-            'page': currentPage,
+          response = await ProductRepositoryImpl().getProductsOfFactory({'approvalStatuses':'approved'}, {
+            'page': currentPage + 1,
             'size': pageSize,
           },factoryUid);
         }else{
-          response = await ProductRepositoryImpl().list({}, {
-            'page': currentPage,
+          response = await ProductRepositoryImpl().list({'approvalStatuses':'approved'}, {
+            'page': currentPage + 1,
             'size': pageSize,
           });
         }

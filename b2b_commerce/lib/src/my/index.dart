@@ -315,12 +315,7 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
       onTap: () {
         // 品牌详情
         if (bloc.currentUser.type == UserType.BRAND) {
-          UserRepositoryImpl()
-              .getBrand(bloc.currentUser.companyCode)
-              .then((brand) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MyBrandPage(brand)));
-          });
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandPage(bloc.currentUser.companyCode)));
         }
         // 工厂详情
         if (bloc.currentUser.type == UserType.FACTORY) {

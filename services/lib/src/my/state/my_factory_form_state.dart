@@ -4,10 +4,10 @@ import 'package:models/models.dart';
 
 import '../../../services.dart';
 
-///品类状态管理
-class MyFactoryState with ChangeNotifier{
+///工厂状态管理
+class MyFactoryFormState with ChangeNotifier{
   final String factoryUid;
-  MyFactoryState({this.factoryUid});
+  MyFactoryFormState({this.factoryUid});
 
   FactoryModel _model;
 
