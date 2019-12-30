@@ -147,6 +147,7 @@ flutter:
     - packages/assets/temp/common/idle_capacity.png
     - packages/assets/temp/common/order.png
     - data/province.json
+    - data/province_only.json
     - packages/assets/temp/login_background.png
     - packages/assets/temp/production/fab_add.png
     - packages/assets/temp/production/fab_create.png
