@@ -489,7 +489,7 @@ class BrandSuppliersItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => MyBrandPage(
-                  supplierModel,
+                  supplierModel.uid,
                   isDetail: true,
                   isSupplier: true,
                 ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_select.dart';
+import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
@@ -192,9 +193,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             ),
             body: factoryState.model != null
                 ? _buildBody(factoryState.model)
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                : Column(children: <Widget>[NoDataShow()],crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,),
 //          FutureBuilder<FactoryModel>(
 //              future: _getFactoryFuture,
 //              builder: (context, snapshot) {
@@ -353,6 +352,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                         children: <Widget>[
                           GestureDetector(
                             onTap: (){
+                              if(_factory == null){
+                                return;
+                              }
                               Navigator.push(context,MaterialPageRoute(builder: (context) => MultiProvider(
                                 providers: [
                                   ChangeNotifierProvider(
@@ -397,6 +399,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                           ),
                           GestureDetector(
                             onTap: (){
+                              if(_factory == null){
+                                return;
+                              }
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -649,7 +654,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
         context,
         MaterialPageRoute(
             builder: (context) => MyFactoryBaseFormPage(state.model,))).then((v) {
-      state.refresh();
+              if(v == true){
+                state.refresh();
+              }
     });
   }
 

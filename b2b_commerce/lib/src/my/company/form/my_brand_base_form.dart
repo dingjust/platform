@@ -18,6 +18,7 @@ class MyBrandBaseFormPage extends StatefulWidget {
 }
 
 class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
+  BrandModel _brand;
   List<MediaModel> medias = [];
   TextEditingController _nameController = TextEditingController();
   TextEditingController _brandController = TextEditingController();
@@ -31,20 +32,21 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
 
   @override
   void initState() {
-    if (widget.brand.profilePicture != null) medias = [widget.brand.profilePicture];
-    _nameController.text = widget.brand.name ?? '';
-    _brandController.text = widget.brand.brand ?? '';
-    _cooperativeBrandController.text = widget.brand.cooperativeBrand ?? '';
-    if (widget.brand.scaleRange != null) {
-      _scaleRange.add(widget.brand.scaleRange.toString().split('.')[1]);
-      print(widget.brand.scaleRange.toString().split('.')[1]);
+    _brand = BrandModel.fromJson(BrandModel.toJson(widget.brand));
+    if (_brand.profilePicture != null) medias = [_brand.profilePicture];
+    _nameController.text = _brand.name ?? '';
+    _brandController.text = _brand.brand ?? '';
+    _cooperativeBrandController.text = _brand.cooperativeBrand ?? '';
+    if (_brand.scaleRange != null) {
+      _scaleRange.add(_brand.scaleRange.toString().split('.')[1]);
+      print(_brand.scaleRange.toString().split('.')[1]);
     }
 
-    if(widget.brand.salesMarket == null){
-      widget.brand.salesMarket = [];
+    if(_brand.salesMarket == null){
+      _brand.salesMarket = [];
     }
-    if(widget.brand.styles == null){
-      widget.brand.styles = [];
+    if(_brand.styles == null){
+      _brand.styles = [];
     }
     // TODO: implement initState
     super.initState();
@@ -61,37 +63,37 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
           IconButton(
               icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
-                if (ObjectUtil.isEmptyString(widget.brand.name)) {
+                if (ObjectUtil.isEmptyString(_brand.name)) {
                   ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
                   return;
                 }
-                if (ObjectUtil.isEmptyString(widget.brand.brand)) {
+                if (ObjectUtil.isEmptyString(_brand.brand)) {
                   ShowDialogUtil.showValidateMsg(context, '请填写品牌名称');
                   return;
                 }
-                if(ObjectUtil.isEmptyString(widget.brand.duties)|| ObjectUtil.isEmptyString(widget.brand.contactPerson) || ObjectUtil.isEmptyString(widget.brand.contactPhone)){
+                if(ObjectUtil.isEmptyString(_brand.duties)|| ObjectUtil.isEmptyString(_brand.contactPerson) || ObjectUtil.isEmptyString(_brand.contactPhone)){
                   ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
                   return;
                 }
-                if(widget.brand.contactAddress == null){
+                if(_brand.contactAddress == null){
                   ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
                   return;
                 }
-                if(ObjectUtil.isEmptyList(widget.brand.adeptAtCategories)){
+                if(ObjectUtil.isEmptyList(_brand.adeptAtCategories)){
                   ShowDialogUtil.showValidateMsg(context, '请选择优势品类');
                   return;
                 }
                 if (medias.length > 0) {
-                  widget.brand.profilePicture = medias[0];
+                  _brand.profilePicture = medias[0];
                 } else {
-                  widget.brand.profilePicture = null;
+                  _brand.profilePicture = null;
                 }
-                widget.brand.name = _nameController.text == '' ? null : _nameController.text;
-                widget.brand.brand = _brandController.text == '' ? null : _brandController.text;
-                widget.brand.cooperativeBrand =
+                _brand.name = _nameController.text == '' ? null : _nameController.text;
+                _brand.brand = _brandController.text == '' ? null : _brandController.text;
+                _brand.cooperativeBrand =
                     _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
 
-                UserRepositoryImpl().brandUpdate(widget.brand).then((a) => Navigator.pop(context));
+                UserRepositoryImpl().brandUpdate(_brand).then((a) => Navigator.pop(context,true));
               })
         ],
       ),
@@ -189,7 +191,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandContactFormPage(company: widget.brand,)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandContactFormPage(company: _brand,)));
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
@@ -223,11 +225,11 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 dynamic result = await Navigator.push(context,
                     MaterialPageRoute(builder: (context) =>
                         MyBrandAddressFormPage(
-                          addressModel: widget.brand.contactAddress,)));
+                          addressModel: _brand.contactAddress,)));
                 print(result.region);
                 print(result.city);
                 if (result != null) {
-                  widget.brand.contactAddress = result;
+                  _brand.contactAddress = result;
                 }
               },
               child: Container(
@@ -250,7 +252,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                           ]
                       ),
                     ),
-                    Expanded(child: Text('${widget.brand?.contactAddress?.details}',textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
+                    Expanded(child: Text('${_brand?.contactAddress?.details}',textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
                     Icon((Icons.chevron_right),color: Colors.grey,),
                   ],
                 ),
@@ -280,7 +282,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ),
                     ),
                     Text(
-                      formatCategorySelectText(widget.brand.adeptAtCategories),style: TextStyle(color: Colors.grey)
+                      formatCategorySelectText(_brand.adeptAtCategories),style: TextStyle(color: Colors.grey)
                     ),
                     Icon(Icons.chevron_right,color: Colors.grey),
                   ],
@@ -293,14 +295,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
                           categories: categories,
-                          minCategorySelect: widget.brand.adeptAtCategories,
+                          minCategorySelect: _brand.adeptAtCategories,
                           multiple: true,
                         ),
                   ),
                 );
 
                 if (result != null) {
-                  widget.brand.adeptAtCategories = result;
+                  _brand.adeptAtCategories = result;
                 }
               },
             ),
@@ -354,7 +356,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         ),
                       ),
                     ),
-                    Text(widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange],style: TextStyle(color: Colors.grey),),
+                    Text(_brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[_brand.scaleRange],style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color: Colors.grey,),
                   ],
                 ),
@@ -378,7 +380,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                           (scaleRange) => scaleRange.toString().split('.')[1] == _scaleRange[0],
                       orElse: () => null);
 
-                  widget.brand.scaleRange = scaleRange;
+                  _brand.scaleRange = scaleRange;
                 }
               },
             ),
@@ -401,7 +403,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         ),
                       ),
                     ),
-                    Text(formatEnumSelectsText(widget.brand.salesMarket,SalesMarketsEnum,2),style: TextStyle(color: Colors.grey),),
+                    Text(formatEnumSelectsText(_brand.salesMarket,SalesMarketsEnum,2),style: TextStyle(color: Colors.grey),),
                     Icon(Icons.chevron_right,color: Colors.grey,),
                   ],
                 ),
@@ -413,16 +415,16 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       builder: (context) => EnumSelectPage(
                         items: FactoryQualityLevelsEnum,
                         title: '质量等级',
-                        codes: widget.brand.salesMarket,
+                        codes: _brand.salesMarket,
                         count: 3,
                         multiple: true,
                       ),
                     ));
 
                 if (result != null){
-                  widget.brand.salesMarket = result;
+                  _brand.salesMarket = result;
                 }
-                print('${widget.brand.salesMarket}[]]]]]]]]]');
+                print('${_brand.salesMarket}[]]]]]]]]]');
                 print('${result}[]]]]]]]]]');
               },
             ),
@@ -445,7 +447,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                           ),
                         ),),
                     Text(
-                      formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),style: TextStyle(color: Colors.grey)
+                      formatEnumSelectsText(_brand.styles, StyleEnum, 4),style: TextStyle(color: Colors.grey)
                     ),
                     Icon(Icons.chevron_right,color: Colors.grey),
                   ],
@@ -458,14 +460,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                     builder: (context) => EnumSelectPage(
                           title: '选择风格',
                           items: StyleEnum,
-                          codes: widget.brand.styles,
+                          codes: _brand.styles,
                           multiple: true,
                         ),
                   ),
                 );
 
                 if (result != null) {
-                  widget.brand.styles = result;
+                  _brand.styles = result;
                 }
               },
             ),
@@ -478,9 +480,9 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
 
   String _buildContactText(){
     String text = '未填写';
-    if(!ObjectUtil.isEmptyString(widget.brand.duties) &&
-        !ObjectUtil.isEmptyString(widget.brand.contactPerson) &&
-        !ObjectUtil.isEmptyString(widget.brand.contactPhone)){
+    if(!ObjectUtil.isEmptyString(_brand.duties) &&
+        !ObjectUtil.isEmptyString(_brand.contactPerson) &&
+        !ObjectUtil.isEmptyString(_brand.contactPhone)){
       text = '已填写';
     }
     return text;

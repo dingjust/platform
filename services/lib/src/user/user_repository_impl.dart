@@ -40,8 +40,18 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   Future<BrandModel> getBrand(String uid) async {
-    Response response = await http$.get(Apis.brand(uid));
-    return BrandModel.fromJson(response.data);
+    Response response;
+    try {
+      response = await  http$.get(Apis.brand(uid));
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if(response != null && response.statusCode == 200){
+      return BrandModel.fromJson(response.data);
+    }else{
+      return null;
+    }
   }
 
   Future<FactoryModel> getFactory(String uid) async {
@@ -330,4 +340,9 @@ class UserRepositoryImpl implements UserRepository {
       return false;
     }
   }
+}
+
+class ModelData<T>{
+  bool isTimeOut;
+  T t;
 }

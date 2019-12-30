@@ -4,27 +4,27 @@ import 'package:models/models.dart';
 
 import '../../../services.dart';
 
-///品类状态管理
-class MyFactoryState with ChangeNotifier{
-  final String factoryUid;
-  MyFactoryState({this.factoryUid});
+///品牌状态管理
+class MyBrandState with ChangeNotifier{
+  final String brandUid;
+  MyBrandState({this.brandUid});
 
-  FactoryModel _model;
+  BrandModel _model;
 
-  FactoryModel get model {
+  BrandModel get model {
     if(_model == null){
-      this._getFactoryData();
+      this._getBrandData();
     }
     return _model;
   }
 
-  //获取工厂数据
-  _getFactoryData() async {
-    _model =  await UserRepositoryImpl().getFactory(factoryUid);
+  //获取品牌数据
+  _getBrandData() async {
+    _model =  await UserRepositoryImpl().getBrand(brandUid);
     notifyListeners();
   }
 
-  set model(FactoryModel value) {
+  set model(BrandModel value) {
     _model = value;
   }
 
