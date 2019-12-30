@@ -684,6 +684,12 @@ let TENANT_APIS = {
   },
   orderContractClick() {
     return '/b2b/user/agreement/order/validate';
+  },
+  platformOffShelfProduct(code) {
+    return '/b2b/products/apparel/' + code + '/platformOff';
+  },
+  platformDeletedShelfProduct(code) {
+    return '/b2b/products/apparel/' + code + '/platformDeleted';
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);

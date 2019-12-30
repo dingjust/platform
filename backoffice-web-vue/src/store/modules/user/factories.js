@@ -68,6 +68,7 @@ const state = {
     duties: ''
   },
   queryFormData: {
+    keyword: '',
     labels: [],
     populationScales: [],
     productiveOrientations: [],

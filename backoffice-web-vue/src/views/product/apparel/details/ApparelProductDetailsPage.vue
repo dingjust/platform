@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <apparel-product-form-toolbar :read-only="!isNewlyCreated" @onSubmit="onSubmit" @onCancel="onCancel" />
     <div class="pt-2"></div>
-    <apparel-product-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated" />
+    <apparel-product-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated" :isRead="isRead"/>
     <div class="pt-2"></div>
   </div>
 </template>
@@ -21,6 +21,7 @@
 
   export default {
     name: 'ApparelProductDetailsPage',
+    props: ['formData', 'readOnly'],
     components: {
       ApparelProductFormToolbar,
       ApparelProductForm
@@ -29,15 +30,15 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      onSubmit() {
+      onSubmit () {
         if (this.$refs['form'].validate()) {
           this._onSubmit();
         }
       },
-      onCancel() {
+      onCancel () {
         this.fn.closeSlider();
       },
-      async _onSubmit() {
+      async _onSubmit () {
         let formData = this.slotData;
 
         const url = this.apis().createApparelProduct();
@@ -57,20 +58,25 @@
     computed: {
       isNewlyCreated: function () {
         return this.slotData.id === null;
-      },
-    },
-    data() {
-      return {
-        slotData: {}
       }
     },
-    created() {
+    data () {
+      return {
+        slotData: {},
+        isRead: false
+      }
+    },
+    created () {
+      if (this.isTenant()) {
+        this.slotData = this.formData;
+        this.isRead = this.readOnly;
+        return;
+      }
       if (this.$route.params.slotData != null) {
         this.slotData = this.$route.params.slotData;
-      }else{
-        this.slotData=this.$store.state.ApparelProductsModule.formData;
+      } else {
+        this.slotData = this.$store.state.ApparelProductsModule.formData;
       }
     }
   }
-
 </script>

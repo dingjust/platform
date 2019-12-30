@@ -146,7 +146,8 @@
       border: Boolean,
       size: String,
       colorCode: String,
-      width:Number
+      width:Number,
+      isRead: Boolean
     },
     methods: {
       addToStore() {
