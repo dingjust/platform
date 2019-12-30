@@ -59,7 +59,7 @@ class _MyCapacityPageState extends State<MyCapacityPage> {
               contentText1: '普通用户最多智能开启3条产能，成为会员可以同时发布多条产能，并且每条产能可以发布更多品类',
               isNeedConfirmButton: true,
               isNeedCancelButton: true,
-              dialogHeight: 200,
+              dialogHeight: 210,
               dialogWidth: 350,
               confirmButtonText: '成为会员',
               cancelButtonText: '以后再说',

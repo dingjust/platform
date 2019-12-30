@@ -218,7 +218,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                 ? 300.0
                 : widget.dialogWidth,
             height: widget.dialogHeight == null || widget.dialogHeight < 150
-                ? 150.0
+                ? 180.0
                 : widget.dialogHeight,
             child: Container(
               decoration: ShapeDecoration(

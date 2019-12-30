@@ -287,7 +287,7 @@ class _ProductionProgressDetailPageState
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '确定完成当前生产进度吗？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

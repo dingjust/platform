@@ -386,7 +386,7 @@ class QuoteListItem extends StatelessWidget {
                             builder: (_) {
                               return CustomizeDialog(
                                 dialogType: DialogType.CONFIRM_DIALOG,
-                                dialogHeight: 200,
+                                dialogHeight: 210,
                                 contentText2: '该订单已被取消',
                                 isNeedConfirmButton: true,
                                 isNeedCancelButton: true,
@@ -441,7 +441,7 @@ class QuoteListItem extends StatelessWidget {
                             builder: (_) {
                               return CustomizeDialog(
                                 dialogType: DialogType.CONFIRM_DIALOG,
-                                dialogHeight: 200,
+                                dialogHeight: 210,
                                 contentText2: '该订单已被取消',
                                 isNeedConfirmButton: true,
                                 isNeedCancelButton: true,

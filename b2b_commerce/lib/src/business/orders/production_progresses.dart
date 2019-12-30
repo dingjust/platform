@@ -454,7 +454,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '确定完成当前生产进度吗？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
@@ -955,7 +955,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否无需付款直接跳过？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

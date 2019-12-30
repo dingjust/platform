@@ -2768,7 +2768,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否无需付款直接跳过？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

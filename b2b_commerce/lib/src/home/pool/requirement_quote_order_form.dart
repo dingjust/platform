@@ -655,7 +655,7 @@ class _RequirementQuoteOrderFormState extends State<RequirementQuoteOrderForm> {
               contentText2: '是否提交报价？',
               isNeedConfirmButton: true,
               isNeedCancelButton: true,
-              dialogHeight: 200,
+              dialogHeight: 210,
               confirmAction: (){
                 onSure();
               },

@@ -13,6 +13,8 @@ class CertificationStatusHelper {
 
   CertificationState certificationState;
 
+  bool hasInfoValidate = false;
+
   CertificationStatusHelper({this.certificationIgnore = false});
 
   ///校验认证状态

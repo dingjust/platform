@@ -314,10 +314,11 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           onPressed: () async {
                             showDialog(
                                 context: context,
-                                barrierDismissible: false,
+                                barrierDismissible: false,                                
                                 builder: (_) {
                                   return CustomizeDialog(
                                     dialogType: DialogType.CONFIRM_DIALOG,
+                                    dialogHeight: 210,
                                     contentText2: '是否取消订单？',
                                     contentTextStyle2:
                                     TextStyle(color: Colors.black),
@@ -1176,7 +1177,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否无需付款直接跳过？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

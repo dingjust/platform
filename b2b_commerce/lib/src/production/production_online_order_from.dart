@@ -963,7 +963,7 @@ class _ProductionOnlineOrderFromState extends State<ProductionOnlineOrderFrom> {
                 contentText2: '是否提交？',
                 isNeedConfirmButton: true,
                 isNeedCancelButton: true,
-                dialogHeight: 200,
+                dialogHeight: 210,
                 confirmAction: () {
                   Navigator.of(context).pop();
                   onSubmit(purchaseOrder);

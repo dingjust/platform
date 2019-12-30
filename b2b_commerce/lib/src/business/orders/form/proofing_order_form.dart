@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/business/apparel_products.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
@@ -570,7 +569,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               contentText2: '是否保存该订单？',
               isNeedCancelButton: true,
               isNeedConfirmButton: true,
-              dialogHeight: 200,
+              dialogHeight: 210,
               outsideDismiss: false,
               confirmAction: () {
                 Navigator.of(context).pop();
@@ -592,7 +591,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
             contentText2: '确定修改该订单吗？',
-            dialogHeight: 200,
+            dialogHeight: 210,
             outsideDismiss: false,
             isNeedCancelButton: true,
             isNeedConfirmButton: true,
