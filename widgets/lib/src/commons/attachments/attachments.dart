@@ -15,6 +15,8 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:services/services.dart';
+import 'package:widgets/src/commons/gallery/gallery_item.dart';
+import 'package:widgets/src/commons/gallery/gallery_photo_view_wrapper.dart';
 import 'package:widgets/src/commons/icon/b2b_commerce_icons.dart';
 import 'package:widgets/src/commons/photo_picker/image_picker_handler.dart';
 
@@ -188,7 +190,8 @@ class _AttachmentsState extends State<Attachments> {
                     ),
                   ),
                   onTap: () {
-                    onPreview(context, '${model.detailUrl()}', '${model.name}');
+                    // onPreview(context, '${model.detailUrl()}', '${model.name}');
+                    onPreview(context, model);
                   },
                 );
             }
@@ -198,38 +201,56 @@ class _AttachmentsState extends State<Attachments> {
     );
   }
 
+  // //图片预览
+  // void onPreview(BuildContext context, String url, String name) {
+  //   showDialog(
+  //     barrierDismissible: false,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Scaffold(
+  //           body: Stack(
+  //         fit: StackFit.expand,
+  //         children: <Widget>[
+  //           PhotoView(
+  //             imageProvider: NetworkImage(url),
+  //             onTapUp: (context, detail, val) {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           Positioned(
+  //             left: 10,
+  //             top: 10,
+  //             child: IconButton(
+  //               icon: Icon(
+  //                 Icons.backspace,
+  //                 color: Colors.white,
+  //               ),
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //           )
+  //         ],
+  //       ));
+  //     },
+  //   );
+  // }
   //图片预览
-  void onPreview(BuildContext context, String url, String name) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return Scaffold(
-            body: Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                PhotoView(
-                  imageProvider: NetworkImage(url),
-                  onTapUp: (context, detail, val) {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.backspace,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                )
-              ],
-            ));
-      },
+  void onPreview(BuildContext context, MediaModel model) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            GalleryPhotoViewWrapper(
+              galleryItems:
+              widget.list.map((model) => GalleryItem(model: model)).toList(),
+              backgroundDecoration: const BoxDecoration(
+                color: Colors.black,
+              ),
+              initialIndex: widget.list.indexOf(model),
+              scrollDirection: Axis.horizontal,
+            ),
+      ),
     );
   }
 
@@ -606,7 +627,8 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                 ),
               ),
               onTap: () {
-                onPreview(context, '${model.detailUrl()}', '${model.name}');
+                // onPreview(context, '${model.detailUrl()}', '${model.name}');
+                onPreview(context, model);
                 print('onp');
               },
               onLongPress: () {
@@ -630,37 +652,56 @@ class _EditableAttachmentsState extends State<EditableAttachments>
   }
 
   //图片预览
-  void onPreview(BuildContext context, String url, String name) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Scaffold(
-            body: Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                PhotoView(
-                  imageProvider: NetworkImage(url),
-                  onTapUp: (context, detail, val) {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.backspace,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                )
-              ],
-            ));
-      },
+  // void onPreview(BuildContext context, String url, String name) {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return Scaffold(
+  //           body: Stack(
+  //             fit: StackFit.expand,
+  //             children: <Widget>[
+  //               PhotoView(
+  //                 imageProvider: NetworkImage(url),
+  //                 onTapUp: (context, detail, val) {
+  //                   Navigator.of(context).pop();
+  //                 },
+  //               ),
+  //               Positioned(
+  //                 left: 10,
+  //                 top: 10,
+  //                 child: IconButton(
+  //                   icon: Icon(
+  //                     Icons.backspace,
+  //                     color: Colors.white,
+  //                   ),
+  //                   onPressed: () {
+  //                     Navigator.of(context).pop();
+  //                   },
+  //                 ),
+  //               )
+  //             ],
+  //           ));
+  //     },
+  //   );
+  // }
+
+  //图片预览
+  void onPreview(BuildContext context, MediaModel model) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            GalleryPhotoViewWrapper(
+              galleryItems:
+              widget.list.map((model) => GalleryItem(model: model)).toList(),
+              backgroundDecoration: const BoxDecoration(
+                color: Colors.black,
+              ),
+              initialIndex: widget.list.indexOf(model),
+              scrollDirection: Axis.horizontal,
+            ),
+      ),
     );
   }
 
