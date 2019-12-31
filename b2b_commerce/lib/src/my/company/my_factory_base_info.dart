@@ -569,8 +569,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                 ),
               ),
               Expanded(
-                child: Text(
-                  widget.factory.contactAddress.details ?? '',
+                child: Text('${widget.factory.contactAddress?.details ?? ''}',
                   style: const TextStyle(
                     fontSize: 16,
                   ),

@@ -138,6 +138,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
 
                 UserRepositoryImpl().factoryUpdate(_factory).then((a) {
+                  UserBLoC.instance.refreshUser().then((v){
+                    print('+++++++++++++++++++++');
+                  });
                   Navigator.pop(context,true);
                 });
               })
@@ -1112,7 +1115,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         ),
                       ),),
                   Text(
-                    formatEnumSelectsText(widget.factory.qualityLevels,FactoryQualityLevelsEnum, 2),
+                    formatEnumSelectsText(_factory.qualityLevels,FactoryQualityLevelsEnum, 2),
                     style: TextStyle(color: Colors.grey),
                   ),
                   Icon(
@@ -1135,9 +1138,14 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                     ),
                   ));
 
+
+              print('${result}----------');
               if(result != null){
-                _factory.qualityLevels = result;
+                setState(() {
+                  _factory.qualityLevels = result;
+                });
               }
+              print('${_factory.qualityLevels}===========');
 
             },
           );
