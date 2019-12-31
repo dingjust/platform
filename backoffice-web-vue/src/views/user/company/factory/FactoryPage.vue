@@ -10,13 +10,17 @@
       </el-row>
       <div class="pt-2"></div>
       <factory-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
-      <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
-        <template slot="operations" slot-scope="props">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">标签</el-button>
-<!--          <el-button type="text" icon="el-icon-edit" @click="onDelete(props.item)">禁用</el-button>-->
-        </template>
-      </factory-list>
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+          <factory-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
+            <template slot="operations" slot-scope="props">
+              <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
+              <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">标签</el-button>
+              <!--          <el-button type="text" icon="el-icon-edit" @click="onDelete(props.item)">禁用</el-button>-->
+            </template>
+          </factory-list>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
     <el-dialog title="标签" width="30%" :visible.sync="dialogFormVisible" :before-close="handleClose"
                append-to-body :close-on-click-modal="false">
@@ -145,6 +149,18 @@
         // TODO 禁用
         this.onAdvancedSearch();
         this.forbiddenDialogVisible = false;
+      },
+      handleTabClick (tab) {
+        if (tab.name !== '') {
+          if (tab.name === 'unapproved') {
+            this.queryFormData.approvalStatuses = ['unapproved', 'check'];
+          } else {
+            this.queryFormData.approvalStatuses = tab.name;
+          }
+        } else {
+          this.queryFormData.approvalStatuses = [];
+        }
+        this.onAdvancedSearch();
       }
     },
     data () {
@@ -154,7 +170,20 @@
         item: {},
         detailsData: '',
         forbiddenDialogVisible: false,
-        forbiddenItem: ''
+        forbiddenItem: '',
+        statuses: [{
+          code: '',
+          name: '全部'
+        },
+        {
+          code: 'approved',
+          name: '已认证'
+        },
+        {
+          code: 'unapproved',
+          name: '未认证'
+        }],
+        activeName: ''
       };
     },
     created () {

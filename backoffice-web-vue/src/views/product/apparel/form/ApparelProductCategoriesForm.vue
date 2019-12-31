@@ -5,7 +5,7 @@
         <el-tab-pane :label="item.name" :name="''+index">
           <el-radio-group v-model="slotData.category.code" text-color="#000000" fill="#ffd60c">
             <template v-for="category in categories[selectIndex].children">
-              <el-radio-button :label="category.code" :disabled="isRead">{{category.name}}</el-radio-button>
+              <el-radio-button :label="category.code">{{category.name}}</el-radio-button>
             </template>
           </el-radio-group>
         </el-tab-pane>
@@ -16,29 +16,30 @@
 
 <script>
   export default {
-    name: 'ApparelProductCategoriesForm',
-    props: ['slotData', 'readOnly', 'isRead'],
+    name: "ApparelProductCategoriesForm",
+    props: ["slotData", "readOnly"],
     methods: {
-      async getCategories () {
+      async getCategories() {
         const url = this.apis().getMinorCategories();
         const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result["errors"]) {
+          this.$message.error(result["errors"][0].message);
           return;
         }
         this.categories = result;
       }
     },
-    data () {
+    data() {
       return {
         categories: [],
-        selectIndex: '0'
+        selectIndex: "0",
       };
     },
-    created () {
+    created() {
       this.getCategories();
     }
   };
+
 </script>
 <style>
   .product-form-item small.el-form-item {

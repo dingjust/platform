@@ -79,15 +79,16 @@ const state = {
     line1: ''
   },
   queryFormData: {
-    keyword:'',
-    contactPhone:'',
-    cooperativeBrand:'',
-    adeptAtCategories:[],
-    regions:[],
-    cities:[],
+    keyword: '',
+    contactPhone: '',
+    cooperativeBrand: '',
+    adeptAtCategories: [],
+    regions: [],
+    cities: [],
     labels: [],
-    creationTimeFrom:'',
-    creationTimeTo:'',
+    creationTimeFrom: '',
+    creationTimeTo: '',
+    approvalStatuses: []
   },
   cities: [],
   cityDistricts: [],
@@ -107,16 +108,16 @@ const mutations = {
   setFormData: (state, formData) => state.formData = formData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
-  setLabels: (state,labels) => state.labels = labels,
-  setIsCitiesChanged: (state,isCitiesChanged) => state.isCitiesChanged = isCitiesChanged,
-  setIsDistrictsChanged: (state,isDistrictsChanged) => state.isDistrictsChanged = isDistrictsChanged,
-  setBrandFormVisible: (state,brandFormVisible) => state.brandFormVisible = brandFormVisible,
-  cities: (state,cities) => state.cities = cities,
-  cityDistricts: (state,cityDistricts) => state.cityDistricts = cityDistricts,
+  setLabels: (state, labels) => state.labels = labels,
+  setIsCitiesChanged: (state, isCitiesChanged) => state.isCitiesChanged = isCitiesChanged,
+  setIsDistrictsChanged: (state, isDistrictsChanged) => state.isDistrictsChanged = isDistrictsChanged,
+  setBrandFormVisible: (state, brandFormVisible) => state.brandFormVisible = brandFormVisible,
+  cities: (state, cities) => state.cities = cities,
+  cityDistricts: (state, cityDistricts) => state.cityDistricts = cityDistricts
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
@@ -135,7 +136,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async advancedSearch({dispatch, commit, state}, {url, queryFormData, page, size}) {
+  async advancedSearch ({dispatch, commit, state}, {url, queryFormData, page, size}) {
     commit('queryFormData', queryFormData);
     commit('currentPageNumber', page);
     if (size) {
@@ -151,7 +152,7 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state}) {
+  refresh ({dispatch, commit, state}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;

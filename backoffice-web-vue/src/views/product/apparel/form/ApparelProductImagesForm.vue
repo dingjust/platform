@@ -6,10 +6,10 @@
     </el-row>
     <el-tabs v-model="activeName" class="product-images-form-tab">
       <el-tab-pane label="上传图片" name="images">
-        <images-upload class="product-images-form-upload" :slot-data="slotData.images" :read-only="isRead" :disabled="isRead"/>
+        <images-upload class="product-images-form-upload" :slot-data="slotData.images" />
       </el-tab-pane>
       <el-tab-pane label="上传图片详情" name="detailImages">
-        <images-upload class="product-images-form-upload" :slot-data="slotData.details" :read-only="isRead" :disabled="isRead"/>
+        <images-upload class="product-images-form-upload" :slot-data="slotData.details" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -19,10 +19,10 @@
   import ImagesUpload from '@/components/custom/ImagesUpload';
 
   export default {
-    name: 'ApparelProductImagesForm',
-    props: ['slotData', 'readOnly', 'isRead'],
+    name: "ApparelProductImagesForm",
+    props: ["slotData", "readOnly"],
     components: {
-      ImagesUpload
+      ImagesUpload,
     },
     computed: {
 
@@ -30,13 +30,14 @@
     methods: {
 
     },
-    data () {
+    data() {
       return {
         activeName: 'images'
       };
     },
-    created () {}
+    created() {}
   };
+
 </script>
 <style>
   .product-images-form-tab .el-tabs__active-bar {
@@ -78,5 +79,5 @@
     width: 100px;
     height: 100px;
   }
-
+  
 </style>

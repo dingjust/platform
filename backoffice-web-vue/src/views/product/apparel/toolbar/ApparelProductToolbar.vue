@@ -33,24 +33,20 @@
       </el-form-item>
 <!--      </el-col>-->
 <!--      <el-col :span="4">-->
-<!--        <el-button-group>-->
-<!--          <el-button style="background-color: #FFD60C" @click="onAdvancedSearch">搜索</el-button>-->
-<!--          <el-button @click="onReset">重置</el-button>-->
-<!--        </el-button-group>-->
         <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
         <el-button native-type="reset" @click="onReset">重置</el-button>
         <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
 <!--      </el-col>-->
 <!--    </el-row>-->
-<!--    <el-row>-->
-<!--      <div class="pt-2"></div>-->
-<!--      <el-form-item label="状态">-->
-<!--        <el-tag v-for="val of approvalStatuses" class="elTagClass" :color="showStatus(val) ? '#FFD60C' : '#ffffff'"-->
-<!--                @click="handleTagClick(val)" size="medium">-->
-<!--          {{val.name}}-->
-<!--        </el-tag>-->
-<!--      </el-form-item>-->
-<!--    </el-row>-->
+    <el-row>
+      <div class="pt-2"></div>
+      <el-form-item label="状态">
+        <el-tag v-for="val of approvalStatuses" class="elTagClass" :color="showStatus(val) ? '#FFD60C' : '#ffffff'"
+                @click="handleTagClick(val)" size="medium">
+          {{val.name}}
+        </el-tag>
+      </el-form-item>
+    </el-row>
     <!--    <el-button-group>-->
     <!--      <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>-->
     <!--      <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>-->
