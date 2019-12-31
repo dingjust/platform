@@ -8,7 +8,9 @@
         <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
-      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect"
+                     :slotData="templateData" :templateId="templateId"
+                     :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="suppliersSelectVisible" width="40%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <supplier-select @onSelect="onSuppliersSelect" />
@@ -133,7 +135,7 @@
 
   export default {
     name: 'ContractFrameForm',
-    props: ['slotData'],
+    props: ['slotData', 'templateData', 'templateId'],
     components: {
       ContractTypeSelect,
       ContractTemplateSelect,

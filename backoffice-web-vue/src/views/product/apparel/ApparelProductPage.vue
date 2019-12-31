@@ -10,10 +10,17 @@
       </el-row>
       <div class="pt-2"></div>
       <apparel-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
-      <apparel-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-        @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf" @onOffShelf="onOffShelf" @onDelete="onDelete"
-        @platformOff="platformOff" @platformDeleted="platformDeleted"/>
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+          <apparel-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
+                                @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf" @onOffShelf="onOffShelf" @onDelete="onDelete"
+                                @platformOff="platformOff" @platformDeleted="platformDeleted"/>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
+    <el-dialog :visible.sync="apparelProductDetailsPageVisible" width="80%" :close-on-click-modal="false">
+      <apparel-product-details-page v-if="apparelProductDetailsPageVisible" :formData="productData" :read-only="true"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -35,6 +42,7 @@
   export default {
     name: 'ApparelProductPage',
     components: {
+      ApparelProductDetailsPage,
       ApparelProductToolbar,
       ApparelProductList
     },
@@ -82,6 +90,11 @@
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (this.isTenant()) {
+          this.productData = result;
+          this.apparelProductDetailsPageVisible = true;
           return;
         }
         this.$router.push({
@@ -150,10 +163,34 @@
           }
         });
         // this.fn.openSlider('创建产品', ApparelProductDetailsPage, formData);
+      },
+      handleTabClick (tab) {
+        if (tab.name !== '') {
+          this.queryFormData.approvalStatuses = tab.name;
+        } else {
+          this.queryFormData.approvalStatuses = [];
+        }
+        this.onAdvancedSearch();
       }
     },
     data () {
-      return {};
+      return {
+        statuses: [{
+          code: '',
+          name: '全部'
+        },
+        {
+          code: 'approved',
+          name: '已上架'
+        },
+        {
+          code: 'unapproved',
+          name: '已下架'
+        }],
+        activeName: '',
+        apparelProductDetailsPageVisible: false,
+        productData: {}
+      }
     },
     created () {
       this.onSearch();

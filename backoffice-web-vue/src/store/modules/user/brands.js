@@ -39,6 +39,7 @@ const state = {
     },
     styles: [],
     brand: '',
+    labels: [],
     ageRanges: [],
     priceRange1s: [],
     priceRange2s: [],
@@ -84,12 +85,14 @@ const state = {
     adeptAtCategories:[],
     regions:[],
     cities:[],
+    labels: [],
     creationTimeFrom:'',
     creationTimeTo:'',
   },
   cities: [],
   cityDistricts: [],
   categories: [],
+  labels: [],
   isCitiesChanged: false,
   isDistrictsChanged: false,
   brandFormVisible: false,
@@ -104,6 +107,7 @@ const mutations = {
   setFormData: (state, formData) => state.formData = formData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
+  setLabels: (state,labels) => state.labels = labels,
   setIsCitiesChanged: (state,isCitiesChanged) => state.isCitiesChanged = isCitiesChanged,
   setIsDistrictsChanged: (state,isDistrictsChanged) => state.isDistrictsChanged = isDistrictsChanged,
   setBrandFormVisible: (state,brandFormVisible) => state.brandFormVisible = brandFormVisible,
@@ -168,7 +172,8 @@ const getters = {
   cityDistricts: state => state.cityDistricts,
   isCitiesChanged: state => state.isCitiesChanged,
   isDistrictsChanged: state => state.isDistrictsChanged,
-  brandFormVisible: state => state.brandFormVisible
+  brandFormVisible: state => state.brandFormVisible,
+  labels: state => state.labels
 };
 
 export default {

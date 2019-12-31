@@ -3,7 +3,7 @@
     <el-row class="info-title-row" type="flex" align="center">
       <h6 class="info-title_text">选择尺码：</h6>
     </el-row>
-    <el-checkbox-group v-model="slotData.sizes">
+    <el-checkbox-group v-model="slotData.sizes" :disabled="isRead">
       <template v-for="size in sizes">
         <!-- <div class="size-tag"> -->
           <el-checkbox class="size-tag" :label="size.code" border>{{size.name}}</el-checkbox>
@@ -16,7 +16,7 @@
 <script>
   export default {
     name: "ApparelProductSizesForm",
-    props: ["slotData", "readOnly"],
+    props: ["slotData", "readOnly", 'isRead'],
     components: {},
     computed: {},
     methods: {
