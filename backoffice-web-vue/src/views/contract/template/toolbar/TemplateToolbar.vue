@@ -1,6 +1,6 @@
 <template>
   <div id="content">
-  <el-dialog :ref="dialog" :visible.sync="tempFormVisible" class="purchase-dialog"
+  <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog"
              width="80%" append-to-body :close-on-click-modal="false">
     <template-form v-if="tempFormVisible" @onSearch="onSearch" :tempFormVisible="tempFormVisible" :slotData="mockData"
                    v-on:turnTempFormVisible="turnTempFormVisible" @getTemplateListPt="getTemplateListPt"></template-form>

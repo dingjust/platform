@@ -89,7 +89,7 @@
 
   export default {
     name: 'TemplateForm',
-    props: ['propdata', 'tempFormVisible', 'slotData'],
+    props: ['propdata', 'tempFormVisible', 'slotData', 'templateId'],
     methods: {
       ...mapActions({
         refresh: 'refresh',
@@ -221,16 +221,16 @@
         remarks: '',
         tempType: '',
         tempCode: '',
-        slotData: {
-          title: '',
-          content: '',
-          customizeContent: '',
-          type: '',
-          available: '',
-          originalTmplCode: '',
-          remark: '',
-          header: ''
-        },
+        // slotData: {
+        //   title: '',
+        //   content: '',
+        //   customizeContent: '',
+        //   type: '',
+        //   available: '',
+        //   originalTmplCode: '',
+        //   remark: '',
+        //   header: ''
+        // },
         titleName: '',
         passCheck: false,
         validateText: ''
@@ -254,14 +254,18 @@
       }
     },
     created () {
+      let i = 0;
+      if (this.templateId) {
+        i = this.templateId;
+      }
       // this.getTemplateListPt();
       this.mockData = this.slotData;
-      this.viewerText = this.slotData[0].header;
-      this.editorText = this.slotData[0].content;
-      this.selectedCode = this.slotData[0].code;
-      this.tempCode = this.slotData[0].code;
-      this.tempType = this.slotData[0].type;
-      this.titleName = this.slotData[0].title;
+      this.viewerText = this.slotData[i].header;
+      this.editorText = this.slotData[i].content;
+      this.selectedCode = this.slotData[i].code;
+      this.tempCode = this.slotData[i].code;
+      this.tempType = this.slotData[i].type;
+      this.titleName = this.slotData[i].title;
     }
   };
 </script>

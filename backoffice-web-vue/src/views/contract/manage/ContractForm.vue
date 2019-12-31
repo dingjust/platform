@@ -9,7 +9,7 @@
     </el-dialog>
     <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
       <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect"
-                     :tempFormVisible="tempFormVisible"
+                     :tempFormVisible="tempFormVisible" :slotData="templateData" :templateId="templateId"
                      v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
     <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
@@ -143,7 +143,7 @@
 
   export default {
     name: 'ContractForm',
-    props: ['slotData'],
+    props: ['slotData', 'templateData', 'templateId'],
     components: {
       ContractTypeSelect,
       ContractTemplateSelect,
