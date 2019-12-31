@@ -42,14 +42,14 @@ class UserRepositoryImpl implements UserRepository {
   Future<BrandModel> getBrand(String uid) async {
     Response response;
     try {
-      response = await  http$.get(Apis.brand(uid));
+      response = await http$.get(Apis.brand(uid));
     } on DioError catch (e) {
       print(e);
     }
 
-    if(response != null && response.statusCode == 200){
+    if (response != null && response.statusCode == 200) {
       return BrandModel.fromJson(response.data);
-    }else{
+    } else {
       return null;
     }
   }
@@ -306,12 +306,16 @@ class UserRepositoryImpl implements UserRepository {
       MediaModel media) async {
     Response response;
     bool result;
+    Map data = {
+      'name': name,
+      'contactPhone': phone,
+    };
+    if (media != null) {
+      data['profilePicture'] = MediaModel.toJson(media);
+    }
+
     try {
-      response = await http$.put(UserApis.updateUserInfo(uid), data: {
-        'name': name,
-        'contactPhone': phone,
-        'profilePicture': MediaModel.toJson(media)
-      });
+      response = await http$.put(UserApis.updateUserInfo(uid), data: data);
     } on DioError catch (e) {
       print(e);
     }
@@ -342,7 +346,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 }
 
-class ModelData<T>{
+class ModelData<T> {
   bool isTimeOut;
   T t;
 }
