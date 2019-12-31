@@ -384,7 +384,7 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                           setState(() {
                             //获取所有省份
                             rootBundle
-                                .loadString('data/province.json')
+                                .loadString('data/province_only.json')
                                 .then((v) {
                               List data = json.decode(v);
                               showModalBottomSheet(

@@ -11,12 +11,11 @@ import 'package:widgets/widgets.dart';
 class CertificationStatusHelper {
   bool certificationIgnore;
 
-  bool profileIgnore;
-
   CertificationState certificationState;
 
-  CertificationStatusHelper(
-      {this.certificationIgnore = false, this.profileIgnore = false});
+  bool hasInfoValidate = false;
+
+  CertificationStatusHelper({this.certificationIgnore = false});
 
   ///校验认证状态
   void checkCertificationStatus(BuildContext context) async {
@@ -55,10 +54,8 @@ class CertificationStatusHelper {
         UserBLoC.instance.currentUser.b2bUnit.profileCompleted;
     if (profileCompleted != null && profileCompleted) {
       onJump();
-    } else if (!profileIgnore) {
-      showProfileCompleteDialog(true, cancel: () {
-        profileIgnore = true;
-      }, confirm: onProfile);
+    } else {
+      showProfileCompleteDialog(true, cancel: () {}, confirm: onProfile);
     }
   }
 

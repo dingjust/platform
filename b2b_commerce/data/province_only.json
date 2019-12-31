@@ -1,0 +1,266 @@
+[
+  {
+    "isocode": "CN-31",
+    "isocodeShort": "31",
+    "countryIso": "CN",
+    "name": "上海市",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-53",
+    "isocodeShort": "53",
+    "countryIso": "CN",
+    "name": "云南省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-15",
+    "isocodeShort": "15",
+    "countryIso": "CN",
+    "name": "内蒙古自治区",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-11",
+    "isocodeShort": "11",
+    "countryIso": "CN",
+    "name": "北京市",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-22",
+    "isocodeShort": "22",
+    "countryIso": "CN",
+    "name": "吉林省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-51",
+    "isocodeShort": "51",
+    "countryIso": "CN",
+    "name": "四川省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-12",
+    "isocodeShort": "12",
+    "countryIso": "CN",
+    "name": "天津市",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-64",
+    "isocodeShort": "64",
+    "countryIso": "CN",
+    "name": "宁夏回族自治区",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-34",
+    "isocodeShort": "34",
+    "countryIso": "CN",
+    "name": "安徽省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-37",
+    "isocodeShort": "37",
+    "countryIso": "CN",
+    "name": "山东省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-14",
+    "isocodeShort": "14",
+    "countryIso": "CN",
+    "name": "山西省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-44",
+    "isocodeShort": "44",
+    "countryIso": "CN",
+    "name": "广东省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-45",
+    "isocodeShort": "45",
+    "countryIso": "CN",
+    "name": "广西壮族自治区",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-65",
+    "isocodeShort": "65",
+    "countryIso": "CN",
+    "name": "新疆维吾尔自治区",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-32",
+    "isocodeShort": "32",
+    "countryIso": "CN",
+    "name": "江苏省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-36",
+    "isocodeShort": "36",
+    "countryIso": "CN",
+    "name": "江西省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-13",
+    "isocodeShort": "13",
+    "countryIso": "CN",
+    "name": "河北省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-41",
+    "isocodeShort": "41",
+    "countryIso": "CN",
+    "name": "河南省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-33",
+    "isocodeShort": "33",
+    "countryIso": "CN",
+    "name": "浙江省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-46",
+    "isocodeShort": "46",
+    "countryIso": "CN",
+    "name": "海南省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-42",
+    "isocodeShort": "42",
+    "countryIso": "CN",
+    "name": "湖北省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-43",
+    "isocodeShort": "43",
+    "countryIso": "CN",
+    "name": "湖南省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-92",
+    "isocodeShort": "92",
+    "countryIso": "CN",
+    "name": "澳门特别行政区",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-62",
+    "isocodeShort": "62",
+    "countryIso": "CN",
+    "name": "甘肃省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-35",
+    "isocodeShort": "35",
+    "countryIso": "CN",
+    "name": "福建省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-54",
+    "isocodeShort": "54",
+    "countryIso": "CN",
+    "name": "西藏自治区",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-52",
+    "isocodeShort": "52",
+    "countryIso": "CN",
+    "name": "贵州省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-21",
+    "isocodeShort": "21",
+    "countryIso": "CN",
+    "name": "辽宁省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-50",
+    "isocodeShort": "50",
+    "countryIso": "CN",
+    "name": "重庆市",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-61",
+    "isocodeShort": "61",
+    "countryIso": "CN",
+    "name": "陕西省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-63",
+    "isocodeShort": "63",
+    "countryIso": "CN",
+    "name": "青海省",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-91",
+    "isocodeShort": "91",
+    "countryIso": "CN",
+    "name": "香港特别行政区",
+    "cities": [],
+    "index": null
+  },
+  {
+    "isocode": "CN-23",
+    "isocodeShort": "23",
+    "countryIso": "CN",
+    "name": "黑龙江省",
+    "cities": [],
+    "index": null
+  }
+]

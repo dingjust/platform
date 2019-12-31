@@ -110,7 +110,7 @@ class MyFactoryServiceInfoState extends State<MyFactoryServiceInfo> {
                     ),
                   ),
                   Text(
-                    '${enumMap(FactoryQualityLevelsEnum, widget.factory.qualityLevel) ?? ''}',
+                    '${formatEnumSelectsText(widget.factory.qualityLevels,FactoryQualityLevelsEnum, 2) ?? ''}',
                     style: const TextStyle(
                       fontSize: 16,
                     ),

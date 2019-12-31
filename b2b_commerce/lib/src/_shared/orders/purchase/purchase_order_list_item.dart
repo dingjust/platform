@@ -277,7 +277,8 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                "${widget.order.product.category.name}  $sum件",
+                                "${widget.order?.product?.category?.name ??
+                                    ''}  $sum件",
                                 style: const TextStyle(
                                   fontSize: 15,
                                   color: const Color.fromRGBO(255, 133, 148, 1),
@@ -1187,7 +1188,7 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否无需付款直接跳过？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

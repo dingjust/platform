@@ -148,7 +148,7 @@ class ShowDialogUtil{
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: tips,
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

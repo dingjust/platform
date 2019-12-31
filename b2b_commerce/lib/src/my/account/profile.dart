@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -18,6 +19,8 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _phoneTextEditingController = TextEditingController();
 
   MediaModel media;
+
+  String phoneValidateStr = '';
 
   @override
   void initState() {
@@ -64,6 +67,14 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TextField(
                 controller: _nameTextEditingController,
                 focusNode: _nameFocusNode,
+                onChanged: (val) {
+                  if (val.length > 10) {
+                    setState(() {
+                      _nameTextEditingController.text = val.substring(0, 10);
+                      _nameFocusNode.unfocus();
+                    });
+                  }
+                },
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '输入昵称',
@@ -79,12 +90,30 @@ class _ProfilePageState extends State<ProfilePage> {
                 inputFormatters: [
                   DecimalInputFormat(),
                 ],
+                onChanged: (val) => phoneValidate(),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: '输入联系方式',
                   hintStyle: TextStyle(color: Colors.grey),
                 ),
               ),
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: Text(
+                      '$phoneValidateStr',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                )
+              ],
             ),
             FlatButton(
               onPressed: () {
@@ -122,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (value != null && value) {
         //刷新用户信息
         UserBLoC.instance.refreshUser().then((val) {
-          Navigator.of(context).pop();
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
         });
       }
     });
@@ -132,6 +161,18 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       media = newValue;
     });
+  }
+
+  void phoneValidate() {
+    if (!RegexUtil.isMobile(_phoneTextEditingController.text)) {
+      setState(() {
+        phoneValidateStr = '输入正确手机号';
+      });
+    } else {
+      setState(() {
+        phoneValidateStr = '';
+      });
+    }
   }
 }
 
@@ -148,14 +189,13 @@ class _InputRow extends StatelessWidget {
 
   final EdgeInsetsGeometry padding;
 
-  const _InputRow(
-      {Key key,
-      this.label,
-      this.child,
-      this.suffix,
-      this.labelWidth = 100,
-      this.height = 70,
-      this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 10)})
+  const _InputRow({Key key,
+    this.label,
+    this.child,
+    this.suffix,
+    this.labelWidth = 100,
+    this.height = 70,
+    this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 10)})
       : super(key: key);
 
   @override

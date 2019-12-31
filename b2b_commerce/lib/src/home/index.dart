@@ -91,9 +91,15 @@ class _HomePageState extends State<HomePage> {
         ignoreVersionNotification:
         UserBLoC.instance.ignoreVersionNotification)
         .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
-    //认证校验
-    Provider.of<CertificationStatusHelper>(context)
-        .checkCertificationStatus(context);
+
+    CertificationStatusHelper helper =
+    Provider.of<CertificationStatusHelper>(context);
+
+    if (!helper.hasInfoValidate) {
+      //认证校验
+      helper.checkCertificationStatus(context);
+      helper.hasInfoValidate = true;
+    }
   }
 
   @override

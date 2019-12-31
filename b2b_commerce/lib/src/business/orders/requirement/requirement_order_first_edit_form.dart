@@ -355,11 +355,11 @@ class _RequirementOrderFirstEditFormState
                           //TODO:CN-10代表全国
                           setState(() {
                             widget
-                                .formState.model.details.productiveOrientations
+                                .formState.editModel.details.productiveOrientations
                                 .add(RegionModel(isocode: 'CN-10'));
                           });
                           dynamic m = widget
-                              .formState.model.details.productiveOrientations
+                              .formState.editModel.details.productiveOrientations
                               .firstWhere((region) => region.isocode == 'CN-10',
                                   orElse: null);
                           print(m);
@@ -369,7 +369,7 @@ class _RequirementOrderFirstEditFormState
                           width: 100,
                           decoration: ClassHandleUtil.isNotEmpty(widget
                                       .formState
-                                      .model
+                                      .editModel
                                       .details
                                       .productiveOrientations) &&
                                   widget.formState.editModel.details
@@ -393,7 +393,7 @@ class _RequirementOrderFirstEditFormState
                           setState(() {
                             //获取所有省份
                             rootBundle
-                                .loadString('data/province.json')
+                                .loadString('data/province_only.json')
                                 .then((v) {
                               List data = json.decode(v);
                               showModalBottomSheet(
@@ -425,7 +425,7 @@ class _RequirementOrderFirstEditFormState
                           width: 150,
                           decoration: ClassHandleUtil.isNotEmpty(widget
                                       .formState
-                                      .model
+                                      .editModel
                                       .details
                                       .productiveOrientations) &&
                                   widget.formState.editModel.details

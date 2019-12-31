@@ -917,7 +917,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否取消订单？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

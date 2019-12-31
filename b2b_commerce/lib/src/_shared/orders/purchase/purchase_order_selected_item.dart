@@ -7,7 +7,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../../../business/orders/purchase_order_detail.dart';
 import '../../../common/logistics_input_page.dart';
 import '../../../common/order_payment.dart';
 
@@ -1180,7 +1179,7 @@ class _PurchaseOrderSelectedItemState extends State<PurchaseOrderSelectedItem>
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否无需付款直接跳过？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

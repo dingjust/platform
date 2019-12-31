@@ -57,7 +57,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
 
     return FutureBuilder<BrandModel>(
       future: _getData(),
-      initialData: null,
+      initialData: BrandModel(),
       builder: (context, snapshot) {
           _brand = snapshot.data;
           return Scaffold(
@@ -67,11 +67,37 @@ class _MyBrandPageState extends State<MyBrandPage> {
               title: const Text('公司介绍'),
               elevation: 0.5,
               actions: <Widget>[
+                Offstage(
+                  offstage:
+                  UserBLoC.instance.currentUser.b2bUnit.uid != _brand.uid,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        IconButton(icon: Text('编辑',style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1),),), onPressed: ()async{
+                          dynamic result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MyBrandBaseFormPage(_brand)));
+                          if(result == true){
+                            dynamic brand = await UserRepositoryImpl().getBrand(_brand.uid);
+                            print(brand.name);
+                            if(brand != null){
+                              _brand = brand;
+                            }
+                          }
+                        })
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
             body:
 
-            snapshot.data != null ? snapshot.data.uid == null ? Center(child: Text('请求超时！'),) : ListView(
+            snapshot.data != null ? ListView(
               children: _buildWidgets(),
             ):Column(children: <Widget>[NoDataShow()],crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,),
           );
@@ -310,43 +336,6 @@ class _MyBrandPageState extends State<MyBrandPage> {
       padding: EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         children: <Widget>[
-          Offstage(
-            offstage:
-            UserBLoC.instance.currentUser.b2bUnit.uid != _brand.uid,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () async{
-                      dynamic result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyBrandBaseFormPage(_brand)));
-                      if(result == true){
-                        dynamic brand = await UserRepositoryImpl().getBrand(_brand.uid);
-                        print(brand.name);
-                        if(brand != null){
-                          _brand = brand;
-                        }
-                      }
-                    },
-                    child: Container(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 214, 12, 1),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text('编辑'),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(

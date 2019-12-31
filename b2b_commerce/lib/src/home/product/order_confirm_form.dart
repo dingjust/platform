@@ -655,7 +655,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
               contentText2: '是否提交订单？',
               isNeedConfirmButton: true,
               isNeedCancelButton: true,
-              dialogHeight: 200,
+              dialogHeight: 210,
               confirmAction: () {
                 Navigator.of(context).pop();
                 onSubmit();

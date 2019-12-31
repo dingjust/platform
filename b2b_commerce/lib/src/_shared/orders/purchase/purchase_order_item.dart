@@ -7,7 +7,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import '../../../business/orders/purchase_order_detail.dart';
 import '../../../common/logistics_input_page.dart';
 import '../../../common/order_payment.dart';
 
@@ -257,7 +256,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                         ),
                       ),
                       widget.order.product == null ||
-                              widget.order.product.category == null
+                          widget.order.product?.category == null
                           ? Container()
                           : Container(
                               padding: const EdgeInsets.all(3),
@@ -266,7 +265,8 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                "${widget.order.product.category.name}  $sum件",
+                                "${widget.order?.product?.category?.name ??
+                                    ''}  $sum件",
                                 style: const TextStyle(
                                   fontSize: 15,
                                   color: const Color.fromRGBO(255, 133, 148, 1),
@@ -314,10 +314,11 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
                           onPressed: () async {
                             showDialog(
                                 context: context,
-                                barrierDismissible: false,
+                                barrierDismissible: false,                                
                                 builder: (_) {
                                   return CustomizeDialog(
                                     dialogType: DialogType.CONFIRM_DIALOG,
+                                    dialogHeight: 210,
                                     contentText2: '是否取消订单？',
                                     contentTextStyle2:
                                     TextStyle(color: Colors.black),
@@ -1176,7 +1177,7 @@ class _PurchaseOrderItemState extends State<PurchaseOrderItem>
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否无需付款直接跳过？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
