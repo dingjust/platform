@@ -341,6 +341,20 @@ class UserBLoC extends BLoCBase {
         ..name = infoResponse.data['username']
         ..status = UserStatus.ONLINE;
     }
+
+    // 获取公司信息
+    if (_user.type == UserType.BRAND) {
+      BrandModel brand = await UserRepositoryImpl().getBrand(_user.companyCode);
+      if (brand != null) {
+        _user.b2bUnit = brand;
+      }
+    } else if (_user.type == UserType.FACTORY) {
+      FactoryModel factoryModel =
+      await UserRepositoryImpl().getFactory(_user.companyCode);
+      if (factoryModel != null) {
+        _user.b2bUnit = factoryModel;
+      }
+    }
   }
 
   @override
