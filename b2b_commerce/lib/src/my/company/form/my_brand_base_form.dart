@@ -150,37 +150,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               ),
             ),
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: '品牌名称',
-                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
-                          ),
-                        ]
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      color: Colors.white,
-                      child: TextFieldComponent(
-                        padding: EdgeInsets.all(0),
-                        focusNode: _brandFocusNode,
-                        controller: _brandController,
-                        hintText: '请输入品牌名称',
-                        hideDivider: true,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             GestureDetector(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandContactFormPage(company: _brand,)));
@@ -297,6 +266,37 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   _brand.adeptAtCategories = result;
                 }
               },
+            ),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: '品牌名称',
+                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
+                          ),
+                        ]
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      child: TextFieldComponent(
+                        padding: EdgeInsets.all(0),
+                        focusNode: _brandFocusNode,
+                        controller: _brandController,
+                        hintText: '请输入品牌名称',
+                        hideDivider: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             Container(
