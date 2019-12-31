@@ -2,6 +2,70 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+///确认弹窗
+void showConfirmDialog(bool blockPopup,
+    {VoidCallback cancel, VoidCallback confirm, String title, String message}) {
+  BotToast.showCustomText(
+    onlyOne: true,
+    duration: null,
+    wrapToastAnimation: (controller, cancel, child) =>
+        Stack(
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                cancel();
+              },
+              //The DecoratedBox here is very important,he will fill the entire parent component
+              child: AnimatedBuilder(
+                builder: (_, child) =>
+                    Opacity(
+                      opacity: controller.value,
+                      child: child,
+                    ),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Colors.black26),
+                  child: SizedBox.expand(),
+                ),
+                animation: controller,
+              ),
+            ),
+            CustomOffsetAnimation(
+              controller: controller,
+              child: child,
+            )
+          ],
+        ),
+    toastBuilder: (cancelFunc) =>
+        AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          title: Text('${title ?? ''}'),
+          content: Text('${message ?? ''}'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                cancelFunc();
+                cancel?.call();
+              },
+              child: const Text(
+                '取消',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            FlatButton(
+              onPressed: () {
+                cancelFunc();
+                confirm?.call();
+              },
+              child: const Text(
+                '确认',
+                style: TextStyle(color: Colors.lightBlue),
+              ),
+            ),
+          ],
+        ),
+  );
+}
+
 ///未认证弹窗
 void showUncertifiedDialog(bool blockPopup,
     {VoidCallback cancel,

@@ -446,7 +446,7 @@ class _LoginPageState extends State<LoginPage> {
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
         }
       });
     } else {

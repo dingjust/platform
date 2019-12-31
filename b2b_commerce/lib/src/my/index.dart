@@ -22,10 +22,12 @@ var menuSeparator = Container(
 
 /// 我的
 class MyHomePage extends StatefulWidget {
+  final VoidCallback turnToHome;
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 
-  MyHomePage() : super(key: AppKeys.myHomePage);
+  MyHomePage({this.turnToHome}) : super(key: AppKeys.myHomePage);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -116,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   fit: StackFit.expand,
                   children: <Widget>[
                     _buildTopBackground(context, bloc.currentUser),
+                    _buildSwitchBtn(context)
                   ],
                 ),
               ),
@@ -221,6 +224,50 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     }
+  }
+
+  Widget _buildSwitchBtn(BuildContext context) {
+    return Positioned(
+      bottom: 10,
+      right: 0,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20), topLeft: Radius.circular(20)),
+        ),
+        color: Colors.yellow,
+        child: Container(
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.swap_horiz),
+              Text(
+                  '切换至${UserBLoC.instance.currentUser.type == UserType.BRAND
+                      ? '工厂'
+                      : '品牌'}')
+            ],
+          ),
+        ),
+        onPressed: () {
+          if (UserBLoC.instance.currentUser.status == UserStatus.OFFLINE) {
+            UserBLoC.instance.changeUserType(
+                UserBLoC.instance.currentUser.type == UserType.BRAND
+                    ? UserType.FACTORY
+                    : UserType.BRAND);
+            widget.turnToHome?.call();
+            return;
+          }
+          showConfirmDialog(true, message: '切换身份将会退出登录状态，是否确认？', confirm: () {
+            UserBLoC.instance.logout().then((val) {
+              UserBLoC.instance.changeUserType(
+                  UserBLoC.instance.currentUser.type == UserType.BRAND
+                      ? UserType.FACTORY
+                      : UserType.BRAND);
+              widget.turnToHome?.call();
+            });
+          });
+        },
+      ),
+    );
   }
 }
 

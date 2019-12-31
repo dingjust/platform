@@ -232,7 +232,9 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
             title: Container(
               child: const Text('我的'),
             )),
-        MyHomePage(),
+        MyHomePage(turnToHome: () {
+          _handleNavigation(0);
+        }),
       ),
     ];
     return menus;
