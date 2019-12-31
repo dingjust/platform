@@ -67,10 +67,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
                   return;
                 }
-                if (ObjectUtil.isEmptyString(_brand.brand)) {
-                  ShowDialogUtil.showValidateMsg(context, '请填写品牌名称');
-                  return;
-                }
                 if(ObjectUtil.isEmptyString(_brand.duties)|| ObjectUtil.isEmptyString(_brand.contactPerson) || ObjectUtil.isEmptyString(_brand.contactPhone)){
                   ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
                   return;
@@ -165,10 +161,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                           TextSpan(
                               text: '品牌名称',
                               style: TextStyle(color: Colors.black,fontSize: _fontSize,)
-                          ),
-                          TextSpan(
-                              text: '*',
-                              style: TextStyle(color: Colors.red)
                           ),
                         ]
                     ),
