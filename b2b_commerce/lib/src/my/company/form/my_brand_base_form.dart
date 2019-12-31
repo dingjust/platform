@@ -67,10 +67,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
                   return;
                 }
-                if (ObjectUtil.isEmptyString(_brand.brand)) {
-                  ShowDialogUtil.showValidateMsg(context, '请填写品牌名称');
-                  return;
-                }
                 if(ObjectUtil.isEmptyString(_brand.duties)|| ObjectUtil.isEmptyString(_brand.contactPerson) || ObjectUtil.isEmptyString(_brand.contactPhone)){
                   ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
                   return;
@@ -148,41 +144,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       controller: _nameController,
                       hintText: '请输入公司名称',
                       hideDivider: true,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: '品牌名称',
-                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
-                          ),
-                          TextSpan(
-                              text: '*',
-                              style: TextStyle(color: Colors.red)
-                          ),
-                        ]
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      color: Colors.white,
-                      child: TextFieldComponent(
-                        padding: EdgeInsets.all(0),
-                        focusNode: _brandFocusNode,
-                        controller: _brandController,
-                        hintText: '请输入品牌名称',
-                        hideDivider: true,
-                      ),
                     ),
                   ),
                 ],
@@ -305,6 +266,37 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   _brand.adeptAtCategories = result;
                 }
               },
+            ),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: '品牌名称',
+                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
+                          ),
+                        ]
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      child: TextFieldComponent(
+                        padding: EdgeInsets.all(0),
+                        focusNode: _brandFocusNode,
+                        controller: _brandController,
+                        hintText: '请输入品牌名称',
+                        hideDivider: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             Container(
