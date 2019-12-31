@@ -124,7 +124,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请选择设备');
                   return;
                 }
-                if(_factory.qualityLevel == null){
+                if(ObjectUtil.isEmptyList(_factory.qualityLevels)){
                   ShowDialogUtil.showValidateMsg(context, '请选择质量等级');
                   return;
                 }
@@ -1112,7 +1112,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         ),
                       ),),
                   Text(
-                    enumMap(FactoryQualityLevelsEnum, _factory.qualityLevel),
+                    formatEnumSelectsText(widget.factory.qualityLevels,FactoryQualityLevelsEnum, 2),
                     style: TextStyle(color: Colors.grey),
                   ),
                   Icon(
@@ -1126,16 +1126,17 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SingleEnumSelectPage(
-                      items: FactoryQualityLevelsEnum,
+                    builder: (context) => EnumSelectPage(
                       title: '质量等级',
-                      code:  _factory.qualityLevel,
+                      items: FactoryQualityLevelsEnum,
+                      codes:  _factory.qualityLevels,
                       count: 3,
+                      multiple: true,
                     ),
                   ));
 
               if(result != null){
-                _factory.qualityLevel = result;
+                _factory.qualityLevels = result;
               }
 
             },
