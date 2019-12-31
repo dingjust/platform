@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   fit: StackFit.expand,
                   children: <Widget>[
                     _buildTopBackground(context, bloc.currentUser),
-                    _buildSwitchBtn(context)
+                    _buildSwitchBtn(context),
                   ],
                 ),
               ),

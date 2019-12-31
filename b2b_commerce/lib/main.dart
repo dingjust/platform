@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'src/_shared/error/b2b_error.dart';
 import 'src/common/app_constants.dart';
 import 'src/common/app_keys.dart';
 import 'src/common/app_routes.dart';
@@ -44,6 +45,13 @@ void main() async {
     //IOS高德定位注册KEY
     AMapLocationClient.setApiKey(GlobalConfigs.AMAP_LOCATION_KEY_IOS);
   }
+
+  //错误页面
+  if (!GlobalConfigs.DEBUG) {
+    ErrorWidget.builder =
+        (FlutterErrorDetails flutterErrorDetails) => B2BErrorPage();
+  }
+
   //强制竖屏
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
