@@ -117,7 +117,7 @@ class EnumSelectPageState extends State<EnumSelectPage> {
         appBar: AppBar(
           elevation: 0.5,
           centerTitle: true,
-          title: Text(widget.title),
+          title: Text(widget.title ?? ''),
           leading: IconButton(icon: Text('取消',style: TextStyle(color: Colors.grey,),), onPressed: () {
             if(widget.models != null){
               Navigator.pop(context,_beforModifyModels);

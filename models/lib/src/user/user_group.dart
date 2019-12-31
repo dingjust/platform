@@ -527,7 +527,7 @@ class FactoryModel extends B2BUnitModel {
   String freeProofing;
 
   //质量等级
-  String qualityLevel;
+  List<String> qualityLevels;
 
   //产能
   @JsonKey(toJson: _capacitiesToJson)
@@ -581,7 +581,7 @@ class FactoryModel extends B2BUnitModel {
         this.cuttingDepartment,
         this.productionWorkshop,
         this.lastDepartment,
-        this.qualityLevel,
+        this.qualityLevels,
         this.design,
         this.pattern,
         this.freeProofing,
