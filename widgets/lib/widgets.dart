@@ -18,6 +18,7 @@ export 'src/commons/dialog/request_data_loading.dart';
 export 'src/commons/divider/divider.dart';
 export 'src/commons/easy_grid/easy_grid.dart';
 export 'src/commons/fab/floating_action_button.dart';
+export 'src/commons/fab/floating_action_button_top.dart';
 export 'src/commons/filterTabBar/date_bar.dart';
 export 'src/commons/filterTabBar/filter_bar.dart';
 export 'src/commons/filterTabBar/filter_bar.dart';

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_select.dart';
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
-import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
     as dj;
-import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
@@ -20,13 +20,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 import './company/form/my_company_profile_form.dart';
-import '../business/orders/requirement_order_from.dart';
 import 'company/_shared/cash_products.dart';
 import 'company/form/my_factory_contact_form.dart';
-import 'company/form/my_factory_form.dart';
 import 'company/info/my_company_certificate_info.dart';
 import 'company/info/my_company_contact_info.dart';
-import 'company/my_company_cash_products_widget.dart';
 
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {
@@ -193,7 +190,11 @@ class _MyFactoryPageState extends State<MyFactoryPage>
             ),
             body: factoryState.model != null
                 ? _buildBody(factoryState.model)
-                : Column(children: <Widget>[NoDataShow()],crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,),
+                : Column(
+              children: <Widget>[NoDataShow()],
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
 //          FutureBuilder<FactoryModel>(
 //              future: _getFactoryFuture,
 //              builder: (context, snapshot) {
@@ -336,89 +337,102 @@ class _MyFactoryPageState extends State<MyFactoryPage>
   }
 
   _publishRequirement() {
-      showModalBottomSheet(
-          context: context,
-          builder: (context){
-            return Opacity(
-              opacity: 1,
-              child: Container(
-                height: 300,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 15,vertical: 40),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: (){
-                              if(_factory == null){
-                                return;
-                              }
-                              Navigator.push(context,MaterialPageRoute(builder: (context) => MultiProvider(
-                                providers: [
-                                  ChangeNotifierProvider(
-                                    builder: (_) => RequirementOrderFormState(
-                                      uid: _factory.uid,
-                                      factoryDetailModel: _factory,
-                                    ),
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Opacity(
+            opacity: 1,
+            child: Container(
+              height: 300,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            if (_factory == null) {
+                              return;
+                            }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MultiProvider(
+                                          providers: [
+                                            ChangeNotifierProvider(
+                                              builder: (_) =>
+                                                  RequirementOrderFormState(
+                                                    uid: _factory.uid,
+                                                    factoryDetailModel: _factory,
+                                                  ),
+                                            ),
+                                          ],
+                                          child: Consumer(builder: (context,
+                                              RequirementOrderFormState state,
+                                              _) {
+                                            return RequirementOrderFirstForm(
+                                              formState: state,
+                                            );
+                                          }),
+                                        ))).then((v) {
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Center(
+                                child: Container(
+                                  child: Image.asset(
+                                    'temp/wtsc.png',
+                                    package: 'assets',
+                                    width: 80,
+                                    height: 80,
                                   ),
-                                ],
-                                child: Consumer(
-                                  builder: (context, RequirementOrderFormState state, _) {
-                                      return RequirementOrderFirstForm(
-                                        formState: state,
-                                      );
-                                  }
                                 ),
-                              ))).then((v){
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: Column(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    child: Image.asset(
-                                      'temp/wtsc.png',
-                                      package: 'assets',
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
+                              ),
+                              Center(
+                                child: Container(
+                                  child: Text('发布新需求'),
                                 ),
-                                Center(
-                                  child: Container(
-                                    child: Text(
-                                        '发布新需求'
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ),
-                          GestureDetector(
-                            onTap: (){
-                              if(_factory == null){
-                                return;
-                              }
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          RequirementOrderSelectPage(onConfirm:(models)async{
-                                            List<RequirementOrderModel> requirements = models as List<RequirementOrderModel>;
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (_factory == null) {
+                              return;
+                            }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        RequirementOrderSelectPage(
+                                          onConfirm: (models) async {
+                                            List<RequirementOrderModel>
+                                            requirements = models as List<
+                                                RequirementOrderModel>;
                                             List<String> codes = [];
-                                            if(requirements != null){
-                                              codes = requirements.map((model) => model.code).toList();
+                                            if (requirements != null) {
+                                              codes = requirements
+                                                  .map((model) => model.code)
+                                                  .toList();
                                             }
-                                            if(widget.factoryUid != null){
+                                            if (widget.factoryUid != null) {
                                               showDialog(
                                                   context: context,
                                                   barrierDismissible: false,
                                                   builder: (_) {
                                                     return RequestDataLoading(
-                                                      requestCallBack: RequirementOrderRepository().doRecommendations(codes, [widget.factoryUid]),
+                                                      requestCallBack:
+                                                      RequirementOrderRepository()
+                                                          .doRecommendations(
+                                                          codes, [
+                                                        widget.factoryUid
+                                                      ]),
                                                       outsideDismiss: false,
                                                       loadingText: '正在邀请。。。',
                                                       entrance: '',
@@ -429,66 +443,67 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                                                     barrierDismissible: false,
                                                     builder: (_) {
                                                       return CustomizeDialog(
-                                                        dialogType: DialogType.RESULT_DIALOG,
+                                                        dialogType: DialogType
+                                                            .RESULT_DIALOG,
                                                         successTips: '邀请成功',
                                                         failTips: '邀请失败',
                                                         callbackResult: value,
                                                         confirmAction: () {
-                                                          Navigator.pop(context);
-                                                          Navigator.pop(context);
-                                                          Navigator.pop(context);
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
 //                                                          Navigator.popUntil(context, ModalRoute.withName('/my/my_factory'));
                                                         },
                                                       );
                                                     });
                                               });
                                             }
-                                          },)));
-                            },
-                            child: Column(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    child: Image.asset(
-                                      'temp/cgdd.png',
-                                      package: 'assets',
-                                      width: 80,
-                                      height: 80,
-                                    ),
+                                          },
+                                        )));
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Center(
+                                child: Container(
+                                  child: Image.asset(
+                                    'temp/cgdd.png',
+                                    package: 'assets',
+                                    width: 80,
+                                    height: 80,
                                   ),
                                 ),
-                                Center(
-                                  child: Container(
-                                    child: Text(
-                                        '选择已有需求'
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                              ),
+                              Center(
+                                child: Container(
+                                  child: Text('选择已有需求'),
+                                ),
+                              )
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      child: Center(
-                        child: Container(
-                            child: Icon(
-                              Icons.close,
-                              size: 30,
-                            )
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Center(
+                      child: Container(
+                          child: Icon(
+                            Icons.close,
+                            size: 30,
+                          )),
+                    ),
+                  ),
+                ],
               ),
-            );
-          }
-      );
+            ),
+          );
+        });
 //    Navigator.push(
 //      context,
 //      MaterialPageRoute(
@@ -653,10 +668,13 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MyFactoryBaseFormPage(state.model,))).then((v) {
-              if(v == true){
-                state.refresh();
-              }
+            builder: (context) =>
+                MyFactoryBaseFormPage(
+                  state.model,
+                ))).then((v) {
+      if (v == true) {
+        state.refresh();
+      }
     });
   }
 

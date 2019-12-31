@@ -1,9 +1,9 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/requirement_order_detail_by_factory.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
-import 'package:b2b_commerce/src/my/company/form/my_factory_form.dart';
+import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -214,7 +214,7 @@ class _RequirementItem extends StatelessWidget {
 
   void jumpToDetailPage(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RequirementOrderDetailPage(model.code)));
+        builder: (context) => RequirementOrderDetailByFactoryPage(model.code)));
   }
 
   void jumpToCompanyIntroduction(BuildContext context) {
@@ -237,8 +237,8 @@ class _RequirementItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                MyFactoryFormPage(
-                  factory: factory,
+                MyFactoryBaseFormPage(
+                  factory,
                 ),
           ),
         );

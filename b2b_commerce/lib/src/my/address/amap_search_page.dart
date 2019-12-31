@@ -223,9 +223,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                   size: 15,
                 ),
                 Text(
-                  '${state
-                      .getAMapLocation()
-                      .AOIName ?? state.city}',
+                  '${state.city}',
                   style: TextStyle(fontSize: 15),
                 ),
               ],
@@ -437,7 +435,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
         List<String> locationArray = tip.location.split(',');
         //设置定位信息
         state.setAMapLocation(
-            aOIName: tip.district,
+          // aOIName: tip.district,
             longitude: double.parse(locationArray[0]),
             latitude: double.parse(locationArray[1]));
       },

@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/my/company/form/my_brand_base_form.dart';
-import 'package:b2b_commerce/src/my/company/form/my_factory_form.dart';
+import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/my_authentication.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -85,8 +85,8 @@ class CertificationStatusHelper {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                MyFactoryFormPage(
-                  factory: factory,
+                MyFactoryBaseFormPage(
+                  factory,
                 ),
           ),
         );
