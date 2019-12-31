@@ -419,10 +419,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                     ));
 
                 if (result != null){
-                  _brand.salesMarket = result;
+                  setState(() {
+                    _brand.salesMarket = result;
+                  });
                 }
-                print('${_brand.salesMarket}[]]]]]]]]]');
-                print('${result}[]]]]]]]]]');
               },
             ),
             Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
