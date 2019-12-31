@@ -137,6 +137,10 @@ class AmapState with ChangeNotifier {
   void setAMapLocation(
       {String aOIName, double longitude, double latitude, String city}) {
     _aMapLocation = AMapLocation(
-        city: city, AOIName: aOIName, longitude: longitude, latitude: latitude);
+        city: city ?? this.city,
+        AOIName: aOIName ?? _aMapLocation.AOIName,
+        longitude: longitude,
+        latitude: latitude);
+    notifyListeners();
   }
 }

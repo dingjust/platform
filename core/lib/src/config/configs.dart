@@ -1,9 +1,9 @@
 class GlobalConfigs {
   static const PAGE_SIZE = 20;
 
-  static const DEBUG = true;
+  // static const DEBUG = true;
 
-  // static const DEBUG = false;
+  static const DEBUG = false;
   //测试
   static const CONTEXT_PATH = 'https://sc.nbyjy.net';
   static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';

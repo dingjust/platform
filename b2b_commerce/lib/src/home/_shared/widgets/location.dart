@@ -17,7 +17,6 @@ class LocationIcon extends StatelessWidget {
                 List<String> locationArray = tip.location.split(',');
                 //设置定位信息
                 state.setAMapLocation(
-                    aOIName: tip.district,
                     longitude: double.parse(locationArray[0]),
                     latitude: double.parse(locationArray[1]));
               },
@@ -59,7 +58,7 @@ class LocationIcon extends StatelessWidget {
         List<String> locationArray = tip.location.split(',');
         //设置定位信息
         state.setAMapLocation(
-            aOIName: tip.district,
+          // aOIName: tip.district.,
             longitude: double.parse(locationArray[0]),
             latitude: double.parse(locationArray[1]));
       },
