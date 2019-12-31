@@ -95,6 +95,8 @@ class B2BIcons {
   const IconData(0xe723, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData close =
   const IconData(0xe641, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData switch_identity =
+  const IconData(0xe664, fontFamily: 'b2bIcons', matchTextDirection: true);
 
   ///展开
   static const IconData arrowOpen = const IconData(0xe714,

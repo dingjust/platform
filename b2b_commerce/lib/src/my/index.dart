@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -82,10 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
               expandedHeight: _appBarHeight,
               pinned: true,
               actions: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: NotificationsIcon(),
-                ),
+                // Container(
+                //   margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                //   child: NotificationsIcon(),
+                // ),
               ],
               flexibleSpace: FlexibleSpaceBar(
                 key: AppKeys.myHomeSpaceBar,
@@ -228,18 +227,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildSwitchBtn(BuildContext context) {
     return Positioned(
-      bottom: 10,
+      top: 25,
       right: 0,
       child: FlatButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20), topLeft: Radius.circular(20)),
         ),
-        color: Colors.yellow,
+        color: Color.fromRGBO(253, 246, 67, 0.5),
         child: Container(
           child: Row(
             children: <Widget>[
-              Icon(Icons.swap_horiz),
+              Icon(B2BIcons.switch_identity),
               Text(
                   '切换至${UserBLoC.instance.currentUser.type == UserType.BRAND
                       ? '工厂'
