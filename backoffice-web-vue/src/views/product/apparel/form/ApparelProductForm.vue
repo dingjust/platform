@@ -7,38 +7,38 @@
             <h6 class="info-title_text">基本信息</h6>
           </div>
         </el-row>
-        <apparel-product-basic-form :slot-data="slotData" :read-only="false" :isRead="isRead">
+        <apparel-product-basic-form :slot-data="slotData" :read-only="false">
         </apparel-product-basic-form>
         <el-divider></el-divider>
         <el-row class="info-title-row">
           <h6 class="info-title_text">选择品类：</h6>
         </el-row>
-        <apparel-product-categories-form :slot-data="slotData" :isRead="isRead"></apparel-product-categories-form>
+        <apparel-product-categories-form :slot-data="slotData"></apparel-product-categories-form>
         <el-divider></el-divider>
-        <apparel-product-colors-form :slot-data="slotData" :isRead="isRead">
+        <apparel-product-colors-form :slot-data="slotData">
         </apparel-product-colors-form>
         <el-divider></el-divider>
-        <apparel-product-sizes-form :slot-data="slotData" :isRead="isRead">
+        <apparel-product-sizes-form :slot-data="slotData">
         </apparel-product-sizes-form>
         <el-divider></el-divider>
-        <apparel-product-images-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
+        <apparel-product-images-form :slot-data="slotData" :read-only="readOnly">
         </apparel-product-images-form>
       </el-card>
       <div class="pt-2"></div>
       <div class="pt-2"></div>
       <el-card class="box-card">
-        <apparel-product-price-form :slot-data="slotData" :isRead="isRead">
+        <apparel-product-price-form :slot-data="slotData">
         </apparel-product-price-form>
       </el-card>
       <div class="pt-2"></div>
       <el-card class="box-card">
-        <apparel-product-attributes-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
+        <apparel-product-attributes-form :slot-data="slotData" :read-only="readOnly">
         </apparel-product-attributes-form>
       </el-card>
       <el-row type="flex" justify="center" class="product-form-row">
-        <el-button class="product-form-btn" @click="onUpdate()" v-if="this.slotData.code!=null&&this.slotData.code!=''&&!isRead">
+        <el-button class="product-form-btn" @click="onUpdate()" v-if="this.slotData.code!=null&&this.slotData.code!=''">
           更新产品信息</el-button>
-        <el-button class="product-form-btn" @click="onCreate()" v-if="(this.slotData.code==null||this.slotData.code=='')&&!isRead">
+        <el-button class="product-form-btn" @click="onCreate()" v-if="this.slotData.code==null||this.slotData.code==''">
           确认创建产品</el-button>
       </el-row>
     </el-form>
@@ -67,7 +67,7 @@
       ApparelProductSizesForm,
       ApparelProductPriceForm
     },
-    props: ['slotData', 'readOnly', 'isRead'],
+    props: ['slotData', 'readOnly'],
     methods: {
       onUpdate() {
         if (this.slotData.images == null || this.slotData.images.length == 0) {

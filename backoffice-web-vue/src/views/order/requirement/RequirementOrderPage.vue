@@ -5,7 +5,7 @@
         <div class="info-title">
           <h6 class="info-title_text">需求订单列表</h6>
         </div>
-        <el-button class="btn-class" @click="onNew" v-if="!isTenant()"><span style="font-size: 14px">+</span>发布需求</el-button>
+        <el-button class="btn-class" @click="onNew"><span style="font-size: 14px">+</span>发布需求</el-button>
       </el-row>
 
       <requirement-order-toolbar
