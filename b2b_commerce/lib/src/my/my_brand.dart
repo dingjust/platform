@@ -69,7 +69,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
               actions: <Widget>[
                 Offstage(
                   offstage:
-                  UserBLoC.instance.currentUser.b2bUnit.uid != _brand.uid,
+                  UserBLoC.instance.currentUser.companyCode != _brand.uid,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Row(

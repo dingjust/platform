@@ -194,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       margin: EdgeInsets.only(top: 20),
                       child: Text(
                         "${user.name}",
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -204,14 +204,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     ))
               ],
             ),
-            Container(
-              child: Text(
-                '${UserBLoC.instance.currentUser.companyName}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: const Color.fromRGBO(132, 114, 1, 1),
-                ),
-              ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '${UserBLoC.instance.currentUser.companyName}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: const Color.fromRGBO(132, 114, 1, 1),
+
+                    ),
+                  ),
+                )
+              ],
             )
           ],
         ),

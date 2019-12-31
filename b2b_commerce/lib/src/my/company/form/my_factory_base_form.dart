@@ -138,6 +138,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                 _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
 
                 UserRepositoryImpl().factoryUpdate(_factory).then((a) {
+                  UserBLoC.instance.refreshUser().then((v){
+                    print('+++++++++++++++++++++');
+                  });
                   Navigator.pop(context,true);
                 });
               })

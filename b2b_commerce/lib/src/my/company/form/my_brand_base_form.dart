@@ -89,7 +89,12 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 _brand.cooperativeBrand =
                     _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
 
-                UserRepositoryImpl().brandUpdate(_brand).then((a) => Navigator.pop(context,true));
+                UserRepositoryImpl().brandUpdate(_brand).then((a) {
+                  UserBLoC.instance.refreshUser().then((v){
+                    print('+++++++++++++++++++++');
+                  });
+                  Navigator.pop(context,true);
+                });
               })
         ],
       ),
