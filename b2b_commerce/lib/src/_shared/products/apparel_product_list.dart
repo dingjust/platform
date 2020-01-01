@@ -268,14 +268,26 @@ class _ApparelProductListState extends State<ApparelProductList> {
             _showValidateMsg(context, '价格设置资料未完善，不可上架');
             return;
           }else{
-            for (var stepped in product.steppedPrices) {
-              if(stepped.minimumQuantity == null || stepped.price == null){
-                _showValidateMsg(context, '价格设置资料未完善，不可上架');
-                return;
+            bool b = false;
+            if(product.steppedPrices == null || product.steppedPrices.isEmpty){
+              print('${product.steppedPrices}-------');
+              b = true;
+            }else{
+              print('${product.steppedPrices}======');
+              for (var stepped in product.steppedPrices) {
+                if(stepped.minimumQuantity == null || stepped.price == null){
+                  b = true;
+                  return;
+                }
               }
             }
-          }
 
+            if(b){
+              _showValidateMsg(context, '价格设置资料未完善，不可上架');
+              return;
+            }
+
+          }
       }
 
 
