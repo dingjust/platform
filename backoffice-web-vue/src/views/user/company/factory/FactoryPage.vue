@@ -35,9 +35,9 @@
 <!--      <factory-details-page :slotData="detailsData"></factory-details-page>-->
       <factory-from v-if="detailsDialogVisible" :slotData="detailsData" :readOnly="true"></factory-from>
     </el-dialog>
-    <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
+    <!-- <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
       <factory-forbidden-dialog  @onCancel="onCancel" @onConfirm="onConfirm"/>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -51,13 +51,13 @@
   import FactoryDetailsPage from './details/FactoryDetailsPage';
   import FactoryLabelsForm from './form/FactoryLabelsForm';
   import FactoryFrom from './form/FactoryForm';
-  import FactoryForbiddenDialog from './form/FactoryForbiddenDialog';
+  // import FactoryForbiddenDialog from './form/FactoryForbiddenDialog';
 
   export default {
     name: 'FactoryPage',
     props: ['slotData'],
     components: {
-      FactoryForbiddenDialog,
+      // FactoryForbiddenDialog,
       FactoryFrom,
       FactoryDetailsPage,
       FactoryToolbar,
