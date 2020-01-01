@@ -256,6 +256,11 @@
     },
     created () {
       this.onSearch();
+      if (this.isTenant()) {
+        this.statuses.push({
+          code: 'deleted',
+          name: '已删除'})
+      }
     }
   };
 </script>

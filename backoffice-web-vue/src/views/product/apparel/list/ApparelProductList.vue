@@ -84,30 +84,10 @@
         this.$emit('onShelf', row);
       },
       onOffShelf (row) {
-        if (this.isTenant()) {
-          this.$confirm('您确定要下架该商品吗？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.$emit('platformOff', row);
-          })
-          return;
-        }
         this.$emit('onOffShelf', row);
       },
       onDelete (row) {
-        this.$confirm('您确定要删除该商品吗？删除以后不能恢复！', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if (this.isTenant()) {
-            this.$emit('platformDeleted', row);
-            return;
-          }
-          this.$emit('onDelete', row);
-        })
+        this.$emit('onDelete', row);
       },
       numberFormatter (val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {

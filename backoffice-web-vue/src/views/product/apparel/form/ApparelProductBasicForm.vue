@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <!-- <el-form ref="form" label-position="top" :model="slotData" :disabled="readOnly" :rules="rules"> -->
       <el-row :gutter="10">
-        <!-- <el-col :span="8"> 
+        <!-- <el-col :span="8">
           <el-form-item label="标题" prop="name">
             <el-input v-model="slotData.name" placeholder="输入产品标题"></el-input>
           </el-form-item>
@@ -14,7 +14,7 @@
               <div style="width:50px">
                 <h6 class="info-input-prepend">标题</h6>
               </div>
-              <el-input placeholder="输入产品标题" v-model="slotData.name" size="mini">
+              <el-input placeholder="输入产品标题" v-model="slotData.name" size="mini" :disabled="isRead">
               </el-input>
             </el-row>
           </el-form-item>
@@ -28,7 +28,7 @@
               <div style="width:50px">
                 <h6 class="info-input-prepend">货号：</h6>
               </div>
-              <el-input placeholder="请输入货号" v-model="slotData.skuID" size="mini">
+              <el-input placeholder="请输入货号" v-model="slotData.skuID" size="mini" :disabled="isRead">
               </el-input>
             </el-row>
           </el-form-item>
@@ -39,7 +39,7 @@
               <div style="width:50px">
                 <h6 class="info-input-prepend">品牌：</h6>
               </div>
-              <el-input placeholder="请输入品牌" v-model="slotData.brand" size="mini">
+              <el-input placeholder="请输入品牌" v-model="slotData.brand" size="mini" :disabled="isRead">
               </el-input>
             </el-row>
           </el-form-item>
@@ -51,7 +51,7 @@
               <div style="width:80px">
                 <h6 class="info-input-prepend" style="width:80px">重量（KG）：</h6>
               </div>
-              <el-input-number v-model="slotData.gramWeight" :precision="3" :min="0" size="mini">
+              <el-input-number v-model="slotData.gramWeight" :precision="3" :min="0" size="mini" :disabled="isRead">
               </el-input-number>
             </el-row>
           </el-form-item>
@@ -118,7 +118,7 @@
 <script>
   export default {
     name: 'ApparelProductBaseForm',
-    props: ['slotData', 'readOnly'],
+    props: ['slotData', 'readOnly', 'isRead'],
     methods: {
       validate(callback) {
         this.$refs.form.validate(callback);
