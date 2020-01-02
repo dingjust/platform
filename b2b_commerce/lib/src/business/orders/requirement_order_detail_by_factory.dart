@@ -1,10 +1,7 @@
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
-import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
-import 'package:b2b_commerce/src/business/requirement_orders.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,7 +20,8 @@ class RequirementOrderDetailByFactoryPage extends StatefulWidget {
   /// 关闭生产订单
   final RequirementOrderCancleCallback onRequirementCancle;
 
-  RequirementOrderDetailByFactoryPage(this.code, {Key key, this.onRequirementCancle})
+  RequirementOrderDetailByFactoryPage(this.code,
+      {Key key, this.onRequirementCancle})
       : super(key: key);
 
   _RequirementOrderDetailByFactoryPageState createState() =>
@@ -32,7 +30,6 @@ class RequirementOrderDetailByFactoryPage extends StatefulWidget {
 
 class _RequirementOrderDetailByFactoryPageState
     extends State<RequirementOrderDetailByFactoryPage> {
-
   RequirementOrderModel orderModel;
 
   List<QuoteModel> quotesList;
@@ -61,19 +58,19 @@ class _RequirementOrderDetailByFactoryPageState
                 style: TextStyle(color: Colors.black),
               ),
               actions: <Widget>[
-                Container(
-                  width: 60,
-                  margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-                  child: PopupMenuButton<String>(
-                    onSelected: (v) => onMenuSelect(v),
-                    icon: Icon(
-                      B2BIcons.more,
-                      size: 5,
-                    ),
-                    offset: Offset(0, 50),
-                    itemBuilder: (BuildContext context) => _buildPopupMenu(),
-                  ),
-                )
+                InkWell(
+                    onTap: () => onShare(),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            B2BIcons.share,
+                          ),
+                          Text('分享')
+                        ],
+                      ),
+                    )),
               ],
             ),
             body: FutureBuilder<RequirementOrderModel>(
@@ -141,128 +138,136 @@ class _RequirementOrderDetailByFactoryPageState
 
   Widget _buildCompanyInfo() {
     /// 工厂端显示
-      return Container(
-        padding: EdgeInsets.all(15),
+    return Container(
+      padding: EdgeInsets.all(15),
 //        margin: EdgeInsets.only(bottom: 10),
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                orderModel.belongTo.profilePicture == null
-                    ? Container(
-                  margin: EdgeInsets.only(right: 10),
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ),
-                        fit: BoxFit.cover,
-                      )),
-                )
-                    : Container(
-                  margin: EdgeInsets.only(right: 10),
-                  width: 60,
-                  height: 60,
-                  child: CachedNetworkImage(
-                      width: 80,
-                      height: 80,
-                      imageUrl:
-                      '${orderModel.belongTo.profilePicture.previewUrl()}',
-                      fit: BoxFit.cover,
-                      imageBuilder: (context, imageProvider) =>
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                      placeholder: (context, url) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          ),
-                      errorWidget: (context, url, error) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          )),
-                  decoration: BoxDecoration(
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              orderModel.belongTo.profilePicture == null
+                  ? Container(
+                margin: EdgeInsets.only(right: 10),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'temp/picture.png',
+                        package: "assets",
+                      ),
+                      fit: BoxFit.cover,
+                    )),
+              )
+                  : Container(
+                margin: EdgeInsets.only(right: 10),
+                width: 60,
+                height: 60,
+                child: CachedNetworkImage(
+                    width: 80,
+                    height: 80,
+                    imageUrl:
+                    '${orderModel.belongTo.profilePicture.previewUrl()}',
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) =>
                         Container(
-                          margin: EdgeInsets.only(bottom: 5),
-                          child: Text(
-                            orderModel.belongTo == null ||
-                                orderModel.belongTo == null
-                                ? ''
-                                : '${orderModel.belongTo.name}',
-                            textScaleFactor: 1.3,
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        orderModel.belongTo == null ||
-                            orderModel.belongTo.approvalStatus == null
-                            ? Container()
-                            : Container(
-                            margin: EdgeInsets.only(top: 5),
-                            color: Color.fromRGBO(254, 252, 235, 1),
-                            child: orderModel.belongTo.approvalStatus !=
-                                ArticleApprovalStatus.approved
-                                ? Text('  未认证  ',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(255, 133, 148, 1),
-                                ))
-                                : Text(
-                              '  已认证  ',
+                    placeholder: (context, url) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        ),
+                    errorWidget: (context, url, error) =>
+                        SpinKitRing(
+                          color: Colors.black12,
+                          lineWidth: 2,
+                          size: 30,
+                        )),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          orderModel.belongTo == null ||
+                              orderModel.belongTo == null
+                              ? ''
+                              : '${orderModel.belongTo.name}',
+                          textScaleFactor: 1.3,
+                        ),
+                      ),
+                      orderModel.belongTo == null ||
+                          orderModel.belongTo.approvalStatus == null
+                          ? Container()
+                          : Container(
+                          margin: EdgeInsets.only(top: 5),
+                          color: Color.fromRGBO(254, 252, 235, 1),
+                          child: orderModel.belongTo.approvalStatus !=
+                              ArticleApprovalStatus.approved
+                              ? Text('  未认证  ',
                               style: TextStyle(
                                 color: Color.fromRGBO(255, 133, 148, 1),
-                              ),
-                            ))
-                      ],
-                    ))
+                              ))
+                              : Text(
+                            '  已认证  ',
+                            style: TextStyle(
+                              color: Color.fromRGBO(255, 133, 148, 1),
+                            ),
+                          ))
+                    ],
+                  ))
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 10),
+            child: Row(
+              children: <Widget>[
+                RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: '发布于：',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    TextSpan(
+                      text:
+                      '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ]),
+                ),
               ],
             ),
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              child: Row(
-                children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(text: '发布于：',style: TextStyle(color: Colors.black),),
-                        TextSpan(text: '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',style: TextStyle(color: Colors.black),),
-                      ]
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 
-  Widget _buildTitle(){
+  Widget _buildTitle() {
     return Container(
       padding: EdgeInsets.all(15),
       color: Colors.white,
-      child: Text(orderModel.details?.productName ?? '无标题',style: TextStyle(fontSize: 20),),
+      child: Text(
+        orderModel.details?.productName ?? '无标题',
+        style: TextStyle(fontSize: 20),
+      ),
     );
   }
 
@@ -331,7 +336,11 @@ class _RequirementOrderDetailByFactoryPageState
 //            height: 0,
 //          ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -345,8 +354,10 @@ class _RequirementOrderDetailByFactoryPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                          '${orderModel.details?.majorCategory?.name}-'
-                          '${orderModel.details?.category?.parent != null ? orderModel.details.category.parent.name + '-' : ''}'
+                      '${orderModel.details?.majorCategory?.name}-'
+                          '${orderModel.details?.category?.parent != null
+                          ? orderModel.details.category.parent.name + '-'
+                          : ''}'
                           '${orderModel.details?.category?.name}',
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
@@ -357,7 +368,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -371,7 +386,7 @@ class _RequirementOrderDetailByFactoryPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                          '${orderModel.details.expectedMachiningQuantity ?? 0}件',
+                      '${orderModel.details.expectedMachiningQuantity ?? 0}件',
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
               ],
@@ -381,7 +396,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -397,7 +416,6 @@ class _RequirementOrderDetailByFactoryPageState
                   child: Text(
                     '￥${orderModel.details.maxExpectedPrice ?? 0}',
                     style: TextStyle(color: Colors.red, fontSize: 14),
-
                   ),
                 ),
               ],
@@ -407,7 +425,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -435,7 +457,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -451,7 +477,8 @@ class _RequirementOrderDetailByFactoryPageState
                   child: Text(
                     orderModel.details.machiningType == null
                         ? ''
-                        : MachiningTypeLocalizedMap[orderModel.details.machiningType],
+                        : MachiningTypeLocalizedMap[
+                    orderModel.details.machiningType],
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -464,7 +491,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -478,7 +509,10 @@ class _RequirementOrderDetailByFactoryPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    formatEnumSelectsText(orderModel.details.salesMarket, FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length),
+                    formatEnumSelectsText(
+                        orderModel.details.salesMarket,
+                        FactoryQualityLevelsEnum,
+                        FactoryQualityLevelsEnum.length),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -491,7 +525,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -506,7 +544,8 @@ class _RequirementOrderDetailByFactoryPageState
                   flex: _flexR,
                   child: Text(
                     formatAreaSelectsText(
-                        orderModel.details.productiveOrientations, orderModel.details.productiveOrientations.length),
+                        orderModel.details.productiveOrientations,
+                        orderModel.details.productiveOrientations.length),
 //                  overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 14,
@@ -520,7 +559,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -549,7 +592,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -578,7 +625,11 @@ class _RequirementOrderDetailByFactoryPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -592,7 +643,11 @@ class _RequirementOrderDetailByFactoryPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    enumMap(EffectiveDaysEnum, orderModel.details.effectiveDays == null ? '-1' : orderModel.details.effectiveDays.toString()),
+                    enumMap(
+                        EffectiveDaysEnum,
+                        orderModel.details.effectiveDays == null
+                            ? '-1'
+                            : orderModel.details.effectiveDays.toString()),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -606,7 +661,11 @@ class _RequirementOrderDetailByFactoryPageState
           ),
 
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Text('参考图片：'),
@@ -614,14 +673,25 @@ class _RequirementOrderDetailByFactoryPageState
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: EditableAttachments(list: orderModel.details.pictures,editable: false,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
+            child: EditableAttachments(
+              list: orderModel.details.pictures,
+              editable: false,
+            ),
           ),
           Divider(
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Text('备注：'),
@@ -629,7 +699,7 @@ class _RequirementOrderDetailByFactoryPageState
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,right: 5),
+            padding: EdgeInsets.only(left: 15, bottom: 15, right: 5),
             child: Row(
               children: <Widget>[
                 Expanded(child: Text(orderModel.remarks ?? '')),
@@ -643,7 +713,6 @@ class _RequirementOrderDetailByFactoryPageState
       ),
     );
   }
-
 
   Widget _buildBottomButtons(RequirementOrderModel model) {
     return Container(
@@ -685,9 +754,9 @@ class _RequirementOrderDetailByFactoryPageState
                   builder: (BuildContext buttonContext) =>
                       FlatButton(
                         color: Color.fromRGBO(255, 214, 12, 1),
-                        onPressed: () async{
+                        onPressed: () async {
                           QuoteModel newQuote =
-                              await Navigator.of(context).push(MaterialPageRoute(
+                          await Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
                                   RequirementQuoteOrderForm(
                                     model: orderModel,
@@ -851,65 +920,6 @@ class _RequirementOrderDetailByFactoryPageState
     }
   }
 
-  List<PopupMenuItem<String>> _buildPopupMenu() {
-    return <PopupMenuItem<String>>[
-      PopupMenuItem<String>(
-        value: 'share',
-        child: Row(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(right: 20),
-              child: Icon(Icons.share),
-            ),
-            Text('分享')
-          ],
-        ),
-      ),
-    ];
-  }
-
-  onMenuSelect(String value) async {
-    switch (value) {
-      case 'edit':
-        onEdit();
-        break;
-      case 'close':
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return CustomizeDialog(
-                dialogType: DialogType.CONFIRM_DIALOG,
-                contentText2: '确定关闭订单？',
-                isNeedConfirmButton: true,
-                isNeedCancelButton: true,
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                dialogHeight: 180,
-                confirmAction: () async {
-                  await widget.onRequirementCancle();
-                  setState(() {
-                    orderModel.status = RequirementOrderStatus.CANCELLED;
-                  });
-                  Navigator.of(context).pop();
-                },
-              );
-            });
-        break;
-      case 'share':
-        onShare();
-        break;
-      default:
-    }
-  }
-
-  void onEdit() {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RequirementOrderFrom(
-          order: orderModel,
-        )));
-  }
-
   ///TODO分享
   void onShare() {
     String title = '';
@@ -947,7 +957,7 @@ class _RequirementOrderDetailByFactoryPageState
 
   //拨打电话或发短信
   void _selectActionButton(String tel) async {
-    if(tel == null || tel == ''){
+    if (tel == null || tel == '') {
       return;
     }
     showModalBottomSheet(

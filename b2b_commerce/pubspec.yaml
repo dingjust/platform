@@ -217,9 +217,9 @@ flutter:
     - family: b2bIcons2
       fonts:
         - asset: lib/fonts/iconfont2.ttf
-    - family: b2bIcons_web
+    - family: b2bIcons21
       fonts:
-        - asset: lib/fonts/iconfont_web.ttf
+        - asset: lib/fonts/iconfont21.ttf
   # fonts:
   #   - family: b2bIcons
   #     fonts:

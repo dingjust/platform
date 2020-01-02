@@ -100,15 +100,23 @@ class B2BIcons {
 
   ///展开
   static const IconData arrowOpen = const IconData(0xe714,
-      fontFamily: 'b2bIcons_web', matchTextDirection: true);
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
 
   ///关闭
   static const IconData arrowClose = const IconData(0xe713,
-      fontFamily: 'b2bIcons_web', matchTextDirection: true);
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
 
   ///无网络
   static const IconData noNet = const IconData(0xe766,
-      fontFamily: 'b2bIcons_web', matchTextDirection: true);
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///分享
+  static const IconData share = const IconData(0xe60d,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///分享
+  static const IconData edit = const IconData(0xe6f5,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
 }
 
 class CommonImage {
