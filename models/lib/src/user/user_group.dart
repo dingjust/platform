@@ -810,6 +810,10 @@ const ScaleRangesLocalizedMap = {
   ScaleRanges.SR005: "5000万以上",
 };
 
+ScaleRanges scaleRangeFromString(String val) {
+  return _$enumDecodeNullable(_$ScaleRangesEnumMap, val);
+}
+
 enum PopulationScale {
   /// 50人以下
   N01,

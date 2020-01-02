@@ -50,6 +50,7 @@ export 'src/commons/select/cooperator_select.dart';
 export 'src/commons/select/cooperator_select_page.dart';
 export 'src/commons/select/enum_selection.dart';
 export 'src/commons/select/positioning_roll_select.dart';
+export 'src/commons/select/enum_select.dart';
 export 'src/commons/select/region_city_selector.dart';
 export 'src/commons/select/region_selector.dart';
 export 'src/commons/select/single_category_select.dart';

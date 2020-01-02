@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_address_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_contact_form.dart';
@@ -27,7 +29,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
   FocusNode _brandFocusNode = FocusNode();
   FocusNode _cooperativeBrandFocusNode = FocusNode();
 
-  List<String> _scaleRange = [];
+  String _scaleRange;
   double _fontSize = 16;
 
   @override
@@ -38,14 +40,14 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
     _brandController.text = _brand.brand ?? '';
     _cooperativeBrandController.text = _brand.cooperativeBrand ?? '';
     if (_brand.scaleRange != null) {
-      _scaleRange.add(_brand.scaleRange.toString().split('.')[1]);
+      _scaleRange = _brand.scaleRange.toString().split('.')[1];
       print(_brand.scaleRange.toString().split('.')[1]);
     }
 
-    if(_brand.salesMarket == null){
+    if (_brand.salesMarket == null) {
       _brand.salesMarket = [];
     }
-    if(_brand.styles == null){
+    if (_brand.styles == null) {
       _brand.styles = [];
     }
     // TODO: implement initState
@@ -67,15 +69,17 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
                   return;
                 }
-                if(ObjectUtil.isEmptyString(_brand.duties)|| ObjectUtil.isEmptyString(_brand.contactPerson) || ObjectUtil.isEmptyString(_brand.contactPhone)){
+                if (ObjectUtil.isEmptyString(_brand.duties) ||
+                    ObjectUtil.isEmptyString(_brand.contactPerson) ||
+                    ObjectUtil.isEmptyString(_brand.contactPhone)) {
                   ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
                   return;
                 }
-                if(_brand.contactAddress == null){
+                if (_brand.contactAddress == null) {
                   ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
                   return;
                 }
-                if(ObjectUtil.isEmptyList(_brand.adeptAtCategories)){
+                if (ObjectUtil.isEmptyList(_brand.adeptAtCategories)) {
                   ShowDialogUtil.showValidateMsg(context, '请选择优势品类');
                   return;
                 }
@@ -84,16 +88,19 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 } else {
                   _brand.profilePicture = null;
                 }
-                _brand.name = _nameController.text == '' ? null : _nameController.text;
-                _brand.brand = _brandController.text == '' ? null : _brandController.text;
-                _brand.cooperativeBrand =
-                    _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
+                _brand.name =
+                _nameController.text == '' ? null : _nameController.text;
+                _brand.brand =
+                _brandController.text == '' ? null : _brandController.text;
+                _brand.cooperativeBrand = _cooperativeBrandController.text == ''
+                    ? null
+                    : _cooperativeBrandController.text;
 
                 UserRepositoryImpl().brandUpdate(_brand).then((a) {
-                  UserBLoC.instance.refreshUser().then((v){
+                  UserBLoC.instance.refreshUser().then((v) {
                     print('+++++++++++++++++++++');
                   });
-                  Navigator.pop(context,true);
+                  Navigator.pop(context, true);
                 });
               })
         ],
@@ -105,18 +112,20 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
+                text: TextSpan(children: [
+                  TextSpan(
                       text: '上传企业logo',
-                      style: TextStyle(color: Colors.black,fontSize: _fontSize,)
-                    ),
-                    TextSpan(
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: _fontSize,
+                      )),
+                  TextSpan(
                       text: '(长按编辑)',
-                      style: TextStyle(color: Colors.grey,fontSize: 14,)
-                    ),
-                  ]
-                ),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      )),
+                ]),
               ),
             ),
             EditableAttachments(
@@ -124,23 +133,23 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               maxNum: 1,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
+              padding: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 5,
+              ),
               color: Colors.white,
               child: Row(
                 children: <Widget>[
                   RichText(
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: '公司名称',
-                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
-                          ),
-                          TextSpan(
-                              text: '*',
-                              style: TextStyle(color: Colors.red)
-                          ),
-                        ]
-                    ),
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: '公司名称',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: _fontSize,
+                          )),
+                      TextSpan(text: '*', style: TextStyle(color: Colors.red)),
+                    ]),
                   ),
                   Expanded(
                     child: TextFieldComponent(
@@ -154,44 +163,65 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 ],
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyBrandContactFormPage(company: _brand,)));
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MyBrandContactFormPage(
+                              company: _brand,
+                            )));
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: '联系信息',
-                                style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                            ),
-                            TextSpan(
-                                text: '*',
-                                style: TextStyle(color: Colors.red,fontSize: _fontSize)
-                            ),
-                          ]
-                      ),
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: '联系信息',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: _fontSize)),
+                        TextSpan(
+                            text: '*',
+                            style: TextStyle(
+                                color: Colors.red, fontSize: _fontSize)),
+                      ]),
                     ),
-                    Expanded(child: Text(_buildContactText(),textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
-                    Icon((Icons.chevron_right),color: Colors.grey,),
+                    Expanded(
+                        child: Text(
+                          _buildContactText(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.grey),
+                        )),
+                    Icon(
+                      (Icons.chevron_right),
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             GestureDetector(
               onTap: () async {
-                dynamic result = await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>
-                        MyBrandAddressFormPage(
-                          addressModel: _brand.contactAddress,)));
+                dynamic result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MyBrandAddressFormPage(
+                              addressModel: _brand.contactAddress,
+                            )));
                 print(result.region);
                 print(result.city);
                 if (result != null) {
@@ -199,32 +229,41 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 }
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     RichText(
-                      text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: '企业地址',
-                                style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                            ),
-                            TextSpan(
-                                text: '*',
-                                style: TextStyle(color: Colors.red,fontSize: _fontSize)
-                            ),
-                          ]
-                      ),
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: '企业地址',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: _fontSize)),
+                        TextSpan(
+                            text: '*',
+                            style: TextStyle(
+                                color: Colors.red, fontSize: _fontSize)),
+                      ]),
                     ),
-                    Expanded(child: Text('${_brand?.contactAddress?.details}',textAlign: TextAlign.end,style: TextStyle(color: Colors.grey),)),
-                    Icon((Icons.chevron_right),color: Colors.grey,),
+                    Expanded(
+                        child: Text(
+                          '${_brand?.contactAddress?.details}',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.grey),
+                        )),
+                    Icon(
+                      (Icons.chevron_right),
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             GestureDetector(
               child: Container(
                 color: Colors.white,
@@ -233,37 +272,35 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                       child: RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: '优势类目',
-                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                              ),
-                              TextSpan(
-                                  text: '*',
-                                  style: TextStyle(color: Colors.red,fontSize: _fontSize)
-                              ),
-                            ]
-                        ),
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '优势类目',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: _fontSize)),
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                  color: Colors.red, fontSize: _fontSize)),
+                        ]),
                       ),
                     ),
-                    Text(
-                      formatCategorySelectText(_brand.adeptAtCategories),style: TextStyle(color: Colors.grey)
-                    ),
-                    Icon(Icons.chevron_right,color: Colors.grey),
+                    Text(formatCategorySelectText(_brand.adeptAtCategories),
+                        style: TextStyle(color: Colors.grey)),
+                    Icon(Icons.chevron_right, color: Colors.grey),
                   ],
                 ),
               ),
               onTap: () async {
-                List<CategoryModel> categories = await ProductRepositoryImpl().cascadedCategories();
+                List<CategoryModel> categories =
+                await ProductRepositoryImpl().cascadedCategories();
                 dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
-                          categories: categories,
-                          minCategorySelect: _brand.adeptAtCategories,
-                          multiple: true,
-                        ),
+                      categories: categories,
+                      minCategorySelect: _brand.adeptAtCategories,
+                      multiple: true,
+                    ),
                   ),
                 );
 
@@ -272,21 +309,27 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 }
               },
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
+              padding: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 5,
+              ),
               color: Colors.white,
               child: Row(
                 children: <Widget>[
                   RichText(
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: '品牌名称',
-                              style: TextStyle(color: Colors.black,fontSize: _fontSize,)
-                          ),
-                        ]
-                    ),
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: '品牌名称',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: _fontSize,
+                          )),
+                    ]),
                   ),
                   Expanded(
                     child: Container(
@@ -303,21 +346,25 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 ],
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5,),
+              padding: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 5,
+              ),
               color: Colors.white,
               child: Row(
                 children: <Widget>[
                   RichText(
-                    text: TextSpan(
-                        children: [
-                          TextSpan(
-                              text: '合作品牌',
-                              style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                          ),
-                        ]
-                    ),
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: '合作品牌',
+                          style: TextStyle(
+                              color: Colors.black, fontSize: _fontSize)),
+                    ]),
                   ),
                   Expanded(
                     child: Container(
@@ -334,7 +381,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 ],
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             GestureDetector(
               child: Container(
                 color: Colors.white,
@@ -343,110 +393,86 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   children: <Widget>[
                     Expanded(
                       child: RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: '产值规模',
-                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                              ),
-                            ]
-                        ),
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '产值规模',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: _fontSize)),
+                        ]),
                       ),
                     ),
-                    Text(_brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[_brand.scaleRange],style: TextStyle(color: Colors.grey),),
-                    Icon(Icons.chevron_right,color: Colors.grey,),
-                  ],
-                ),
-              ),
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EnumSelectPage(
-                        items: ScaleRangesEnum,
-                        title: '产值规模',
-                        codes: _scaleRange,
-                        count: 3,
-                      ),
-                    ));
-
-                if (result != null) _scaleRange = result;
-
-                if (_scaleRange.length > 0) {
-                  ScaleRanges scaleRange = ScaleRanges.values.singleWhere(
-                          (scaleRange) => scaleRange.toString().split('.')[1] == _scaleRange[0],
-                      orElse: () => null);
-
-                  _brand.scaleRange = scaleRange;
-                }
-              },
-            ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
-            GestureDetector(
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: '质量等级',
-                                  style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                              ),
-                            ]
-                        ),
-                      ),
-                    ),
-                    Text(formatEnumSelectsText(_brand.salesMarket,FactoryQualityLevelsEnum,2),style: TextStyle(color: Colors.grey),),
-                    Icon(Icons.chevron_right,color: Colors.grey,),
-                  ],
-                ),
-              ),
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EnumSelectPage(
-                        items: FactoryQualityLevelsEnum,
-                        title: '质量等级',
-                        codes: _brand.salesMarket,
-                        count: 3,
-                        multiple: true,
-                      ),
-                    ));
-
-                if (result != null){
-                  setState(() {
-                    _brand.salesMarket = result;
-                  });
-                }
-              },
-            ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
-            GestureDetector(
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: '风格',
-                                    style: TextStyle(color: Colors.black,fontSize: _fontSize)
-                                ),
-                              ]
-                          ),
-                        ),),
                     Text(
-                      formatEnumSelectsText(_brand.styles, StyleEnum, 4),style: TextStyle(color: Colors.grey)
+                      _brand.scaleRange == null
+                          ? ''
+                          : ScaleRangesLocalizedMap[_brand.scaleRange],
+                      style: TextStyle(color: Colors.grey),
                     ),
-                    Icon(Icons.chevron_right,color: Colors.grey),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+              onTap: _onScaleSelect,
+            ),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
+            GestureDetector(
+              child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '质量等级',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: _fontSize)),
+                        ]),
+                      ),
+                    ),
+                    Text(
+                      formatEnumSelectsText(
+                          _brand.salesMarket, FactoryQualityLevelsEnum, 2),
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+              onTap: _onQualitySelect,
+            ),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
+            GestureDetector(
+              child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '风格',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: _fontSize)),
+                        ]),
+                      ),
+                    ),
+                    Text(formatEnumSelectsText(_brand.styles, StyleEnum, 4),
+                        style: TextStyle(color: Colors.grey)),
+                    Icon(Icons.chevron_right, color: Colors.grey),
                   ],
                 ),
               ),
@@ -455,11 +481,11 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EnumSelectPage(
-                          title: '选择风格',
-                          items: StyleEnum,
-                          codes: _brand.styles,
-                          multiple: true,
-                        ),
+                      title: '选择风格',
+                      items: StyleEnum,
+                      codes: _brand.styles,
+                      multiple: true,
+                    ),
                   ),
                 );
 
@@ -468,18 +494,21 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                 }
               },
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
           ],
         ),
       ),
     );
   }
 
-  String _buildContactText(){
+  String _buildContactText() {
     String text = '未填写';
-    if(!ObjectUtil.isEmptyString(_brand.duties) &&
+    if (!ObjectUtil.isEmptyString(_brand.duties) &&
         !ObjectUtil.isEmptyString(_brand.contactPerson) &&
-        !ObjectUtil.isEmptyString(_brand.contactPhone)){
+        !ObjectUtil.isEmptyString(_brand.contactPhone)) {
       text = '已填写';
     }
     return text;
@@ -505,5 +534,53 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
     }
 
     return text;
+  }
+
+  void _onScaleSelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SingleEnumSelectPage(
+          items: ScaleRangesEnum,
+          title: '产值规模',
+          code: _scaleRange,
+          count: 3,
+        );
+      },
+    ).then((result) {
+      if (result != null) _scaleRange = result;
+
+      ScaleRanges scaleRange = scaleRangeFromString(_scaleRange);
+
+      setState(() {
+        _brand.scaleRange = scaleRange;
+      });
+    });
+  }
+
+  void _onQualitySelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return EnumSelectPage(
+          items: FactoryQualityLevelsEnum,
+          title: '质量等级',
+          codes: _brand.salesMarket,
+          count: 3,
+          multiple: true,
+        );
+        // return MultiEnumSelect<ScaleRanges>(
+        //   title: '质量等级',
+        //   localizedMap: ScaleRangesLocalizedMap,
+        //   values: [ScaleRanges.SR001],
+        // );
+      },
+    ).then((result) {
+      setState(() {
+        if (result != null) {
+          _brand.salesMarket = result;
+        }
+      });
+    });
   }
 }
