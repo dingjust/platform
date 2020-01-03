@@ -1,4 +1,5 @@
 import 'package:amap_location/amap_location.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location_permissions/location_permissions.dart';
 
@@ -32,29 +33,39 @@ class AmapState with ChangeNotifier {
 
       //申请定位
       if (permission != PermissionStatus.granted) {
-        permission = await LocationPermissions().requestPermissions();
-        print('当前定位状态$permission');
+        if (defaultTargetPlatform == TargetPlatform.iOS) {
+          AMapLocationClient.startup(AMapLocationOption(
+              desiredAccuracy:
+              CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
+          _aMapLocation = await AMapLocationClient.getLocation(true);
+          AMapLocationClient.stopLocation();
+        } else {
+          permission = await LocationPermissions().requestPermissions();
+        }
+        print('当前定位状态--2$permission');
       }
+
       //禁用或者询问状态去设置
       if (permission != PermissionStatus.granted) {
-        showDialog(
+        bool result = await showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (_) => openDialog).then((val) {
-          //打开设置失败
-          if (!val) {
-            return;
-          } else {
-            loopQueryStatus();
-            return;
-          }
-        });
+            builder: (_) => openDialog);
+
+        //打开设置失败
+        if (!result) {
+          return;
+        } else {
+          bool queryResult = await loopQueryStatus();
+          return;
+        }
       }
 
       AMapLocationClient.startup(AMapLocationOption(
           desiredAccuracy:
               CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
       _aMapLocation = await AMapLocationClient.getLocation(true);
+
       if (_aMapLocation == null) {
         _aMapLocation = AMapLocation(
             city: '广州',
