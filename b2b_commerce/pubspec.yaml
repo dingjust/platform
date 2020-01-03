@@ -86,7 +86,7 @@ dependencies:
   location_permissions: ^2.0.3
   city_pickers: ^0.1.29
   bot_toast: ^2.2.0
-
+  gzx_dropdown_menu: ^1.0.3
 
 
 dev_dependencies:
