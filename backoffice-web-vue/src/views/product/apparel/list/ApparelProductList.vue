@@ -36,7 +36,8 @@
             @click="onOffShelf(scope.row)">
             下架
           </el-button>
-          <el-button v-if="scope.row.approvalStatus==='unapproved'" type="text" icon="el-icon-edit" @click="onDelete(scope.row)">删除</el-button>
+          <el-button v-if="scope.row.approvalStatus==='unapproved'" type="text" icon="el-icon-edit"
+                     @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

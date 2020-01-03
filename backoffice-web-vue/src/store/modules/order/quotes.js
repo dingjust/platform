@@ -55,7 +55,7 @@ const actions = {
   async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
-    if (page) {
+    if (page || page === 0) {
       commit('currentPageNumber', page);
     }
     if (size) {

@@ -124,10 +124,11 @@
           return;
         }
 
-        this.refresh();
+        this.onAdvancedSearch();
+        // this.refresh();
       },
       onOffShelf (item) {
-        this.$confirm('是否确认下架产品', '提示', {
+        this.$confirm('是否确认下架该产品', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -147,7 +148,8 @@
           return;
         }
 
-        this.refresh();
+        this.onAdvancedSearch();
+        // this.refresh();
       },
       async platformOff (item) {
         this.offShelfItem = Object.assign({}, item);
@@ -164,7 +166,8 @@
         this.offShelfItem = {};
         this.apparelProductOffShelfPageVisible = false;
         this.$message.success('产品下架成功');
-        this.refresh();
+        // this.refresh();
+        this.onAdvancedSearch();
       },
       onDelete (item) {
         this.$confirm('是否确认删除产品', '提示', {
@@ -187,7 +190,8 @@
           return;
         }
         this.$message.success('产品删除成功');
-        this.refresh();
+        // this.refresh();
+        this.onAdvancedSearch();
       },
       platformDeleted (item) {
         this.forbiddenItem = Object.assign({}, item);
@@ -205,7 +209,8 @@
         this.forbiddenItem = {};
         this.$message.success('产品删除成功');
         this.apparelProductForbiddenPageVisible = false;
-        this.refresh();
+        this.onAdvancedSearch();
+        // this.refresh();
       },
       onNew (formData) {
         this.$router.push({

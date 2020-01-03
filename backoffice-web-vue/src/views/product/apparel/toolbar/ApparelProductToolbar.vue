@@ -38,15 +38,6 @@
         <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
 <!--      </el-col>-->
 <!--    </el-row>-->
-<!--    <el-row>-->
-<!--      <div class="pt-2"></div>-->
-<!--      <el-form-item label="状态">-->
-<!--        <el-tag v-for="val of approvalStatuses" class="elTagClass" :color="showStatus(val) ? '#FFD60C' : '#ffffff'"-->
-<!--                @click="handleTagClick(val)" size="medium">-->
-<!--          {{val.name}}-->
-<!--        </el-tag>-->
-<!--      </el-form-item>-->
-<!--    </el-row>-->
     <!--    <el-button-group>-->
     <!--      <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>-->
     <!--      <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>-->

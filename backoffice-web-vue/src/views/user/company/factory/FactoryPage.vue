@@ -16,7 +16,12 @@
             <template slot="operations" slot-scope="props">
               <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
               <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">标签</el-button>
-              <!--          <el-button type="text" icon="el-icon-edit" @click="onDelete(props.item)">禁用</el-button>-->
+              <el-button v-if="!props.item.loginDisabled" type="text" icon="el-icon-edit" @click="onDelete(props.item)">
+                禁用
+              </el-button>
+              <el-button v-if="props.item.loginDisabled" type="text" icon="el-icon-edit" @click="onCannelDelete(props.item)">
+                解禁
+              </el-button>
             </template>
           </factory-list>
         </el-tab-pane>
@@ -139,16 +144,47 @@
         this.fn.openSlider('创建工厂', FactoryDetailsPage, formData);
       },
       onDelete (item) {
-        this.forbiddenItem = item;
-        this.forbiddenDialogVisible = true;
+        this.$confirm('你确定要禁用该账号吗', '禁用', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.forbiddenItem = item;
+          this.forbiddenDialogVisible = true;
+        });
       },
       onCancel () {
         this.forbiddenDialogVisible = false;
       },
-      onConfirm () {
-        // TODO 禁用
+      async onConfirm (msg) {
+        const url = this.apis().forbiddenCompany(this.forbiddenItem.uid);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('工厂禁用成功');
         this.onAdvancedSearch();
         this.forbiddenDialogVisible = false;
+      },
+      onCannelDelete (item) {
+        this.$confirm('你确定要解禁该账号吗', '禁用', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.onCannelDeleteConfirm(item);
+        });
+      },
+      async onCannelDeleteConfirm (item) {
+        const url = this.apis().cannelForbiddenCompany(item.uid);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('工厂解禁成功');
+        this.onAdvancedSearch();
       },
       handleTabClick (tab) {
         if (tab.name !== '') {

@@ -65,9 +65,11 @@ const state = {
     lastDepartment: [],
     keyword: '',
     qualityLevels: [],
-    duties: ''
+    duties: '',
+    loginDisabled: false
   },
   queryFormData: {
+    keyword: '',
     labels: [],
     populationScales: [],
     productiveOrientations: [],

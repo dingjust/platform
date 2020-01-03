@@ -33,7 +33,7 @@ const mutations = {
 const actions = {
   async search({dispatch, commit, state}, {url,keyword, page, size}) {
     commit('keyword', keyword);
-    if (page) {
+    if (page || page === 0) {
       commit('currentPageNumber', page);
     }
 

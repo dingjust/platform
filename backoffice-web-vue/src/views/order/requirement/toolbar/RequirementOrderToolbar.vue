@@ -83,7 +83,7 @@
       },
       onReset() {
         this.$emit('clearQueryFormData');
-      },
+      }
     },
     data() {
       return {

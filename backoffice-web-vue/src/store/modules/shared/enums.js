@@ -962,15 +962,15 @@ const state = {
   //质量等级
   FactoryQualityLevel: [{
       code: 'A_CHAIN',
-      name: '一线连锁'
+      name: '一线大牌'
     },
     {
       code: 'REGIONAL_CHAIN',
-      name: '区域连锁'
+      name: '区域品牌'
     },
     {
       code: 'STALL_WHOLESALE',
-      name: '档口批发'
+      name: '档口精品'
     },
     {
       code: 'ELECTRONIC_COMMERCE_QUALITY',
@@ -978,7 +978,7 @@ const state = {
     },
     {
       code: 'WHOLESALE_TRADE',
-      name: '外贸批发'
+      name: '外贸跑量'
     }
   ],
   //裁剪部
@@ -1310,15 +1310,15 @@ const state = {
   //质量等级
   SalesMarkets: [{
       code: 'A_CHAIN',
-      name: '一线连锁'
+      name: '一线大牌'
     },
     {
       code: 'REGIONAL_CHAIN',
-      name: '区域连锁'
+      name: '区域品牌'
     },
     {
       code: 'STALL_WHOLESALE',
-      name: '档口批发'
+      name: '档口精品'
     },
     {
       code: 'ELECTRONIC_COMMERCE_QUALITY',
@@ -1326,7 +1326,7 @@ const state = {
     },
     {
       code: 'WHOLESALE_TRADE',
-      name: '外贸批发'
+      name: '外贸跑量'
     }
   ],
   //有效期限

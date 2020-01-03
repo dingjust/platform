@@ -5,7 +5,7 @@
         <div class="info-title">
           <h6 class="info-title_text">需求订单列表</h6>
         </div>
-        <el-button class="btn-class" @click="onNew"><span style="font-size: 14px">+</span>发布需求</el-button>
+        <el-button class="btn-class" @click="onNew" v-if="!isTenant()"><span style="font-size: 14px">+</span>发布需求</el-button>
       </el-row>
 
       <requirement-order-toolbar
@@ -21,8 +21,8 @@
               <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button class="list-button" type="text" @click="onEdit(props.item)">修改</el-button>
-                <el-divider direction="vertical"></el-divider>
+                <el-button class="list-button" type="text" @click="onEdit(props.item)" v-if="!isTenant()">修改</el-button>
+                <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
                 <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
@@ -56,6 +56,10 @@
 
       </requirement-order-form>
     </el-dialog>
+    <el-dialog title="关闭" :visible.sync="requirementOrderCloseVisible" width="30%" :close-on-click-modal="false">
+      <requirement-order-close-dialog v-if="requirementOrderCloseVisible"
+                                        @onCancel="onCloseCancel" @onConfirm="onCloseConfirm"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -69,10 +73,12 @@
   import RequirementOrderDetailsPage from './details/RequirementOrderDetailsPage';
   import RequirementOrderSimpleForm from './form/RequirementOrderSimpleForm';
   import RequirementOrderForm from './form/RequirementOrderForm';
+  import RequirementOrderCloseDialog from './form/RequirementOrderCloseDialog';
 
   export default {
     name: 'RequirementOrderPage',
     components: {
+      RequirementOrderCloseDialog,
       RequirementOrderForm,
       RequirementOrderDetailsPage,
       RequirementOrderToolbar,
@@ -160,21 +166,46 @@
         this.slotData = Object.assign({}, result);
         this.onAdvancedSearch();
       },
-      async onCancelled (item) {
-        this.$confirm('是否确认关闭该订单', '提示', {
+      onCancelled (item) {
+        this.$confirm('是否确认关闭该需求订单', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(async () => {
-          const url = this.apis().cancelledRequirementOrder(item.code);
-          const result = await this.$http.delete(url);
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
-            return;
+        }).then(() => {
+          if (this.isTenant()) {
+            this.onCloseDialog(item);
+          } else {
+            this._onCancelled(item);
           }
-          this.$message.success('需求关闭成功');
-          this.onAdvancedSearch();
         });
+      },
+      onCloseDialog (item) {
+        this.closeItem = Object.assign({}, item);
+        this.requirementOrderCloseVisible = true;
+      },
+      // 平台关闭需求订单
+      async onCloseConfirm () {
+        const url = this.apis().platformCancelledRequirementOrder(this.closeItem.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.closeItem = {};
+        this.$message.success('需求关闭成功');
+        this.requirementOrderCloseVisible = false;
+
+        this.onAdvancedSearch();
+      },
+      async _onCancelled (item) {
+        const url = this.apis().cancelledRequirementOrder(item.code);
+        const result = await this.$http.delete(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('需求关闭成功');
+        this.onAdvancedSearch();
       },
       onNew (formData) {
         this.formDialogVisible = !this.formDialogVisible;
@@ -265,6 +296,9 @@
         }
 
         this.onAdvancedSearch();
+      },
+      onCloseCancel () {
+        this.requirementOrderCloseVisible = false;
       }
     },
     data () {
@@ -274,6 +308,8 @@
         detailsDialogVisible: false,
         formDialogVisible: false,
         editFormDialogVisible: false,
+        requirementOrderCloseVisible: false,
+        closeItem: {},
         statuses: [
           {
             code: 'ALL',
