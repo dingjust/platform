@@ -29,9 +29,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   GlobalKey _scaffoldKey = GlobalKey();
 
-  double totalPrice = 0.0;
   double sample = 0.0;
-  int totalQuantity = 0;
 
   ApparelProductModel product;
 
@@ -54,7 +52,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
       remarks = widget.model.remarks;
       _remarksController.text = widget.model.remarks;
       _unitPriceController.text = widget.model.unitPrice.toString();
-//      _countTotalNum();
     } else {
       if (widget.quoteModel.unitPrice != null &&
           widget.quoteModel.unitPrice >= 0) {
@@ -66,8 +63,6 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   @override
   Widget build(BuildContext context) {
-    _countTotalNum();
-
     return WillPopScope(
       child: Scaffold(
           key: _scaffoldKey,
@@ -75,7 +70,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             brightness: Brightness.light,
             centerTitle: true,
             elevation: 0.5,
-            title: Text(widget.update ? '编辑打样订单':'创建打样订单'),
+            title: Text(widget.update ? '编辑打样订单' : '创建打样订单'),
           ),
           body: Container(
               margin: EdgeInsets.only(bottom: 70),
@@ -270,9 +265,11 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
             hideDivider: true,
             onChanged: (value) {
               setState(() {
-                widget.model.unitPrice = _unitPriceController.text == '' ? 0 : ClassHandleUtil.removeSymbolRMBToDouble(_unitPriceController.text);
+                widget.model.unitPrice = _unitPriceController.text == ''
+                    ? 0
+                    : ClassHandleUtil.removeSymbolRMBToDouble(
+                    _unitPriceController.text);
               });
-//              _countTotalPrice(value);
             },
           ),
         ),
@@ -442,18 +439,17 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           ),
         ),
         onTap: () async {
-          if(!widget.update){
+          if (!widget.update) {
             _onProductSelect();
           }
         });
   }
 
   void _onProductSelect() async {
-    ApparelProductModel selectProduct =
-        await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProductSelectPage()));
+    ApparelProductModel selectProduct = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => ProductSelectPage()));
 
-    if(selectProduct != null){
+    if (selectProduct != null) {
       setState(() {
         product = selectProduct;
         productEntries = product.variants
@@ -491,7 +487,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               ),
             ),
             Text(
-              '${totalQuantity}件',
+              '$totalQuantity件',
               style: TextStyle(color: Colors.grey),
             ),
             Icon(
@@ -504,34 +500,23 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
     );
   }
 
-  void _countTotalPrice(String value) {
+  double get totalPrice {
+    if (_unitPriceController.text != '') {
+      return totalQuantity *
+          ClassHandleUtil.removeSymbolRMBToDouble(_unitPriceController.text);
+    }
+  }
+
+  int get totalQuantity {
     int sum = 0;
-    if (widget.update) {
-      sum = totalQuantity;
-    } else {
+    if (productEntries != null && productEntries.length > 0) {
       productEntries.forEach((entry) {
-        print(entry.controller.text);
         if (entry.controller.text != '') {
           sum = sum + int.parse(entry.controller.text);
         }
       });
     }
-
-    setState(() {
-      totalQuantity = sum;
-      totalPrice = sum * double.parse(value);
-    });
-  }
-
-  void _countTotalNum() {
-    int sum = 0;
-    if (widget.model.entries != null) {
-      widget.model.entries.forEach((entry) {
-        sum = sum + entry.quantity;
-      });
-    }
-    totalQuantity = sum;
-    totalPrice = sum * widget.model.unitPrice;
+    return sum;
   }
 
   void onCreate() {
@@ -547,7 +532,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
               outsideDismiss: true,
             );
           });
-    } else if (totalQuantity == 0 || _unitPriceController.text == "") {
+    } else if (_unitPriceController.text == "") {
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -724,6 +709,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
   }
 
   void onSampleNumTap() async {
+    print('.......................');
     if (widget.update) {
       // if (productEntries != null) {
       //   List<EditApparelSizeVariantProductEntry> returnEntries =
@@ -735,23 +721,34 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
       //     productEntries = returnEntries;
       //   }
       // }
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ProductSizeColorNum(
+      List<EditApparelSizeVariantProductEntry> returnEntries =
+      await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              ProductSizeColorNum(
                 update: true,
                 data: widget.model.entries
-                    .map((entry) => ApparelSizeVariantProductEntry(
+                    .map((entry) =>
+                    ApparelSizeVariantProductEntry(
                         model: entry.product, quantity: entry.quantity))
                     .toList(),
               )));
+
+      if (returnEntries != null) {
+        setState(() {
+          productEntries = returnEntries;
+        });
+      }
     } else {
       if (productEntries != null) {
         List<EditApparelSizeVariantProductEntry> returnEntries =
-            await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductSizeColorNum(
-                      editData: productEntries,
-                    )));
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ProductSizeColorNum(
+              editData: productEntries,
+            )));
         if (returnEntries != null) {
-          productEntries = returnEntries;
+          setState(() {
+            productEntries = returnEntries;
+          });
         }
       } else {
         showDialog(
@@ -764,22 +761,5 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
         return;
       }
     }
-
-    int sum = 0;
-    if (productEntries != null && productEntries.length > 0) {
-      productEntries.forEach((entry) {
-        if (entry.controller.text != '') {
-          sum = sum + int.parse(entry.controller.text);
-        }
-      });
-    }
-
-    setState(() {
-      totalQuantity = sum;
-      if (_unitPriceController.text != '') {
-        totalPrice = sum *
-            ClassHandleUtil.removeSymbolRMBToDouble(_unitPriceController.text);
-      }
-    });
   }
 }
