@@ -778,7 +778,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               child: Container(
                 child: ListTile(
                   leading: Icon(
-                    B2BIcons.location,
+                    Icons.location_on,
                     color: Colors.black,
                   ),
                   title: Row(

@@ -163,7 +163,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: Icon(
-              B2BIcons.location,
+              Icons.location_on,
               color: Colors.grey,
               size: 16,
             ),
@@ -217,7 +217,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
             child: Row(
               children: <Widget>[
                 Icon(
-                  B2BIcons.location,
+                  Icons.location_on,
                   size: 15,
                 ),
                 Text(
