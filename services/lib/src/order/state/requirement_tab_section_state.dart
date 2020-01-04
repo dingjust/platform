@@ -49,8 +49,8 @@ class RequirementTabSectionState with ChangeNotifier {
     a_latitude = latitude;
     try {
       http$.post(OrderApis.requirementOrdersMap, data: {
-        'longitude': longitude,
-        'latitude': latitude,
+        'longitude': longitude ?? 113.264434,
+        'latitude': latitude ?? 23.129162,
       }, queryParameters: {
         'page': 0,
         'size': 5,
@@ -71,7 +71,6 @@ class RequirementTabSectionState with ChangeNotifier {
   }
 
   void queryNearbyRequirements(double longitude, double latitude) {
-    print('==========$b_longitude===$longitude=======$b_latitude==$latitude');
     //经纬度为0时不查询
     if (longitude == 0 && latitude == 0) {
       return;
@@ -80,8 +79,8 @@ class RequirementTabSectionState with ChangeNotifier {
     b_latitude = latitude;
     try {
       http$.post(OrderApis.requirementOrdersMap, data: {
-        'longitude': longitude,
-        'latitude': latitude
+        'longitude': longitude ?? 113.264434,
+        'latitude': latitude ?? 23.129162
       }, queryParameters: {
         'page': 0,
         'size': 5,
@@ -101,7 +100,6 @@ class RequirementTabSectionState with ChangeNotifier {
   }
 
   void refresh() {
-    print('=============Refresh!');
     _newRequirements = null;
     _newRequirements = null;
     notifyListeners();
