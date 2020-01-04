@@ -68,7 +68,6 @@
 
         if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
           if (this.formData.contactAddress.region.isocode!='') {
-            console.log('==============');
             this.getCities(this.formData.contactAddress.region);
             this.setIsCitiesChanged(false);
           }
@@ -76,7 +75,6 @@
         }
         if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
           if (this.formData.contactAddress.city != null&&this.formData.contactAddress.city.code != '') {
-            console.log('==============');
             this.getCityDistricts(this.formData.contactAddress.city);
             this.setIsDistrictsChanged(false);
           }
@@ -86,9 +84,11 @@
         this.setFactoryFormVisible(true);
       },
       async onSave() {
+        let data = Object.assign({}, this.formData);
+        this.$delete(data, 'productionMode');
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().updateFactory(uid);
-        const result = await this.$http.put(url, this.formData);
+        const result = await this.$http.put(url, data);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;

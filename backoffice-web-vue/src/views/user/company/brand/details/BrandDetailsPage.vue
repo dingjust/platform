@@ -53,19 +53,27 @@
         this.setFormData(Object.assign({}, Object.assign(this.formData, result)));
 
         if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
-          this.getCities(this.formData.contactAddress.region);
-          this.setIsCitiesChanged(false);
+          if (this.formData.contactAddress.region.isocode!='') {
+            this.getCities(this.formData.contactAddress.region);
+            this.setIsCitiesChanged(false);
+          }
         }
         if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
-          this.getCityDistricts(this.formData.contactAddress.city);
-          this.setIsDistrictsChanged(false);
+          if (this.formData.contactAddress.city != null&&this.formData.contactAddress.city.code != '') {
+            this.getCityDistricts(this.formData.contactAddress.city);
+            this.setIsDistrictsChanged(false);
+          }
         }
+
         this.setBrandFormVisible(true);
       },
       async onSave () {
+        let data = Object.assign({}, this.formData);
+        this.$delete(data, 'productionMode');
+
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().updateBrand(uid);
-        const result = await this.$http.put(url, this.formData);
+        const result = await this.$http.put(url, data);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
