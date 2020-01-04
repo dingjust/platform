@@ -78,7 +78,6 @@
             this.getCityDistricts(this.formData.contactAddress.city);
             this.setIsDistrictsChanged(false);
           }
-
         }
 
         this.setFactoryFormVisible(true);

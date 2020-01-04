@@ -20,14 +20,14 @@
     <el-dialog :visible.sync="apparelProductDetailsPageVisible" width="80%" :close-on-click-modal="false">
       <apparel-product-details-page v-if="apparelProductDetailsPageVisible" :formData="productData" :read-only="true"/>
     </el-dialog>
-    <!-- <el-dialog title="禁用" :visible.sync="apparelProductForbiddenPageVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog title="禁用" :visible.sync="apparelProductForbiddenPageVisible" width="30%" :close-on-click-modal="false">
       <apparel-product-forbidden-dialog v-if="apparelProductForbiddenPageVisible"
                                         @onCancel="onDeleteCancel" @onConfirm="onDeleteConfirm"/>
-    </el-dialog> -->
-    <!-- <el-dialog title="下架" :visible.sync="apparelProductOffShelfPageVisible" width="30%" :close-on-click-modal="false">
+    </el-dialog>
+    <el-dialog title="下架" :visible.sync="apparelProductOffShelfPageVisible" width="30%" :close-on-click-modal="false">
       <apparel-product-off-shelf-dialog v-if="apparelProductOffShelfPageVisible"
                                         @onCancel="onOffShelfCancel" @onConfirm="onOffShelfConfirm"/>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -45,14 +45,14 @@
   import ApparelProductToolbar from './toolbar/ApparelProductToolbar';
   import ApparelProductList from './list/ApparelProductList';
   import ApparelProductDetailsPage from './details/ApparelProductDetailsPage';
-  // import ApparelProductForbiddenDialog from './form/ApparelProductForbiddenDialog';
-  // import ApparelProductOffShelfDialog from './form/ApparelProductOffShelfDialog';
+  import ApparelProductForbiddenDialog from './form/ApparelProductForbiddenDialog';
+  import ApparelProductOffShelfDialog from './form/ApparelProductOffShelfDialog';
 
   export default {
     name: 'ApparelProductPage',
     components: {
-      // ApparelProductOffShelfDialog,
-      // ApparelProductForbiddenDialog,
+      ApparelProductOffShelfDialog,
+      ApparelProductForbiddenDialog,
       ApparelProductDetailsPage,
       ApparelProductToolbar,
       ApparelProductList
