@@ -70,6 +70,7 @@ class AmapState with ChangeNotifier {
               desiredAccuracy:
               CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
           _aMapLocation = await AMapLocationClient.getLocation(true);
+          _city = _aMapLocation.city;
           _latitude = _aMapLocation.latitude;
           _longitude = _aMapLocation.longitude;
           AMapLocationClient.stopLocation();
@@ -107,6 +108,7 @@ class AmapState with ChangeNotifier {
             longitude: DEFAULT_LONGITUDE,
             latitude: DEFAULT_LATITUDE);
       } else {
+        _city = _aMapLocation.city;
         _latitude = _aMapLocation.latitude;
         _longitude = _aMapLocation.longitude;
       }

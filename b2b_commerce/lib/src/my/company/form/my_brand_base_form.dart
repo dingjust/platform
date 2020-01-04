@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:b2b_commerce/src/business/products/product_category.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_address_form.dart';
 import 'package:b2b_commerce/src/my/company/form/my_brand_contact_form.dart';
@@ -79,7 +77,8 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
                   return;
                 }
-                if (_brand.contactAddress?.region?.isocode == null || ObjectUtil.isEmptyString(_brand.contactAddress.line1)) {
+                if (_brand.contactAddress?.region?.isocode == null ||
+                    ObjectUtil.isEmptyString(_brand.contactAddress.line1)) {
                   ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
                   return;
                 }
@@ -125,8 +124,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       )),
                   TextSpan(
                       text: '*',
-                      style: TextStyle(
-                          color: Colors.red, fontSize: _fontSize)),
+                      style: TextStyle(color: Colors.red, fontSize: _fontSize)),
                   TextSpan(
                       text: '(长按编辑)',
                       style: TextStyle(
@@ -461,45 +459,28 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               color: Color(Constants.DIVIDER_COLOR),
             ),
             GestureDetector(
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text: '风格',
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: _fontSize)),
-                        ]),
+                child: Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: '风格',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: _fontSize)),
+                          ]),
+                        ),
                       ),
-                    ),
-                    Text(formatEnumSelectsText(_brand.styles, StyleEnum, 4),
-                        style: TextStyle(color: Colors.grey)),
-                    Icon(Icons.chevron_right, color: Colors.grey),
-                  ],
-                ),
-              ),
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EnumSelectPage(
-                      title: '选择风格',
-                      items: StyleEnum,
-                      codes: _brand.styles,
-                      multiple: true,
-                    ),
+                      Text(formatEnumSelectsText(_brand.styles, StyleEnum, 4),
+                          style: TextStyle(color: Colors.grey)),
+                      Icon(Icons.chevron_right, color: Colors.grey),
+                    ],
                   ),
-                );
-
-                if (result != null) {
-                  _brand.styles = result;
-                }
-              },
-            ),
+                ),
+                onTap: _onStyleSelect),
             Divider(
               height: 0,
               color: Color(Constants.DIVIDER_COLOR),
@@ -585,6 +566,31 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
       setState(() {
         if (result != null) {
           _brand.salesMarket = result;
+        }
+      });
+    });
+  }
+
+  void _onStyleSelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return EnumSelectPage(
+          title: '选择风格',
+          items: StyleEnum,
+          codes: _brand.styles,
+          multiple: true,
+        );
+        // return MultiEnumSelect<ScaleRanges>(
+        //   title: '质量等级',
+        //   localizedMap: ScaleRangesLocalizedMap,
+        //   values: [ScaleRanges.SR001],
+        // );
+      },
+    ).then((result) {
+      setState(() {
+        if (result != null) {
+          _brand.styles = result;
         }
       });
     });
