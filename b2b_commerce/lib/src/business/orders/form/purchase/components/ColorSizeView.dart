@@ -35,7 +35,10 @@ class ColorSizeView extends StatelessWidget {
         child: DefaultTabController(
           length: tabEntries.length,
           child: Scaffold(
-              appBar: TabBar(tabs: tabs),
+              appBar: TabBar(
+                tabs: tabs,
+                isScrollable: true,
+              ),
               body: TabBarView(
                 children: tabEntries
                     .map((entries) => Container(

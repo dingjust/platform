@@ -28,28 +28,36 @@ class SingleEnumSelectPageState extends State<SingleEnumSelectPage> {
   @override
   void initState() {
     _code = widget.code;
-      // TODO: implement initState
-      super.initState();
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final List<dynamic> _items = widget.items.map((item) {
       return Container(
-        width: MediaQuery.of(context).size.width / widget.count,
-        child: ChoiceChip(
-          selectedColor: Color.fromRGBO(255,214,12, 1),
-          label: Text(item.name,style: TextStyle(color: Colors.black),),
-          selected: _code == item.code,
-          onSelected: (value) {
-            setState(() {
-              if(value){
-                _code = item.code;
-              }
-            });
-          },
-        ),
-      );
+          decoration: BoxDecoration(
+              color: _code == item.code
+                  ? Color.fromRGBO(255, 214, 12, 1)
+                  : Colors.grey[300],
+              borderRadius: BorderRadius.circular(20)),
+          child: InkWell(
+            child: Center(
+              child: Text(
+                '${item.name}',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                if (_code == item.code) {
+                  _code = null;
+                } else {
+                  _code = item.code;
+                }
+              });
+            },
+          ));
     }).toList();
 
     return Scaffold(
@@ -57,29 +65,38 @@ class SingleEnumSelectPageState extends State<SingleEnumSelectPage> {
         elevation: 0.5,
         centerTitle: true,
         title: Text(widget.title),
-        leading: IconButton(icon: Text('取消',style: TextStyle(color: Colors.grey,),), onPressed: () {
-           Navigator.pop(context);
-        }),
+        leading: IconButton(
+            icon: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
         actions: <Widget>[
           IconButton(
-            icon: Text('确定',style: TextStyle(),),
+            icon: Text(
+              '确定',
+              style: TextStyle(),
+            ),
             onPressed: () {
-              Navigator.pop(context,_code);
+              Navigator.pop(context, _code);
             },
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          Container(
-            child: Wrap(
-              spacing: 0,
-              children: _items,
-            ),
-          ),
-        ],
-      )
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: GridView(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, //横轴三个子widget
+                childAspectRatio: 3.0, //宽高比为1时，子widget
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 15),
+            children: _items),
+      ),
     );
   }
-
 }

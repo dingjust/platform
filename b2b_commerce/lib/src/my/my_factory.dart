@@ -136,56 +136,34 @@ class _MyFactoryPageState extends State<MyFactoryPage>
               centerTitle: true,
               elevation: 0.5,
               actions: <Widget>[
-                PopupMenuButton<String>(
-                  onSelected: (v) => onMenuSelect(v, factoryState),
-                  padding: EdgeInsets.only(right: 10),
-                  icon: Icon(
-                    B2BIcons.more,
-                    size: 5,
-                  ),
-                  offset: Offset(0, 50),
-                  itemBuilder: (BuildContext context) => widget.isFactoryDetail
-                      ? <PopupMenuItem<String>>[
-                          PopupMenuItem<String>(
-                            value: 'share',
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Icon(Icons.share),
-                                ),
-                                Text('分享')
-                              ],
-                            ),
+                InkWell(
+                    onTap: () => onShare(factoryState),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            B2BIcons.share,
                           ),
-                        ]
-                      : <PopupMenuItem<String>>[
-                          PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Icon(Icons.edit),
-                                ),
-                                Text('编辑')
-                              ],
-                            ),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'share',
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Icon(Icons.share),
-                                ),
-                                Text('分享')
-                              ],
-                            ),
-                          ),
+                          Text('分享')
                         ],
-                ),
+                      ),
+                    )),
+                widget.isFactoryDetail
+                    ? Container()
+                    : InkWell(
+                    onTap: () => onEdit(factoryState),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            B2BIcons.edit,
+                          ),
+                          Text('编辑')
+                        ],
+                      ),
+                    ))
               ],
             ),
             body: factoryState.model != null

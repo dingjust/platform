@@ -44,6 +44,7 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
           length: colors.length,
           child: Scaffold(
               appBar: TabBar(
+                  isScrollable: true,
                   tabs: colors.map((color) => _buildTab(color)).toList()),
               body: TabBarView(
                 children: colors
@@ -62,7 +63,7 @@ class _ColorSizeTableState extends State<ColorSizeTable> {
 
   Widget _buildTab(ColorModel color) {
     String colorCode = 'FFFFFF';
-    if(color?.colorCode != null){
+    if (color?.colorCode != null) {
       colorCode = color.colorCode.replaceAll(RegExp('#'), '');
     }
 

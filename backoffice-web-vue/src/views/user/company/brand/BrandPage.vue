@@ -38,9 +38,9 @@
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <brand-from1 v-if="detailsDialogVisible" :slotData="detailsData" :readOnly="true"></brand-from1>
     </el-dialog>
-    <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
+    <!-- <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
       <brand-forbidden-dialog  @onCancel="onCancel" @onConfirm="onConfirm"/>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -55,12 +55,12 @@
   import AddressForm from '../../../shared/user/address/AddressForm';
   import BrandLabelsForm from './form/BrandLabelsForm';
   import BrandFrom1 from './form/BrandForm1';
-  import BrandForbiddenDialog from './form/BrandForbiddenDialog';
+  // import BrandForbiddenDialog from './form/BrandForbiddenDialog';
 
   export default {
     name: 'BrandPage',
     components: {
-      BrandForbiddenDialog,
+      // BrandForbiddenDialog,
       BrandFrom1,
       AddressForm,
       BrandToolbar,

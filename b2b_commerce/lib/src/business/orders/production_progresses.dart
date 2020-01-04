@@ -123,33 +123,19 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         elevation: 0.5,
         title: Text('生产进度明细'),
         actions: <Widget>[
-          Container(
-            width: 60,
-            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-            child: PopupMenuButton<String>(
-              onSelected: (v) => onMenuSelect(v),
-              icon: Icon(
-                B2BIcons.more,
-                size: 5,
-              ),
-              offset: Offset(0, 50),
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuItem<String>>[
-                PopupMenuItem<String>(
-                  value: 'share',
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.share),
-                      ),
-                      Text('分享')
-                    ],
-                  ),
+          InkWell(
+              onTap: () => onShare(),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: <Widget>[
+                    Icon(
+                      B2BIcons.share,
+                    ),
+                    Text('分享')
+                  ],
                 ),
-              ],
-            ),
-          )
+              )),
         ],
       ),
       body: Container(

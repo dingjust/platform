@@ -86,7 +86,7 @@ dependencies:
   location_permissions: ^2.0.3
   city_pickers: ^0.1.29
   bot_toast: ^2.2.0
-
+  gzx_dropdown_menu: ^1.0.3
 
 
 dev_dependencies:
@@ -217,9 +217,9 @@ flutter:
     - family: b2bIcons2
       fonts:
         - asset: lib/fonts/iconfont2.ttf
-    - family: b2bIcons_web
+    - family: b2bIcons21
       fonts:
-        - asset: lib/fonts/iconfont_web.ttf
+        - asset: lib/fonts/iconfont21.ttf
   # fonts:
   #   - family: b2bIcons
   #     fonts:
