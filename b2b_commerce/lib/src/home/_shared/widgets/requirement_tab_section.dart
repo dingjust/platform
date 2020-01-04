@@ -50,14 +50,13 @@ class NewRequirementsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer2<RequirementTabSectionState, AmapState>(
-      builder: (context, RequirementTabSectionState state, AmapState amapState,
-          _) =>
+      builder:
+          (context, RequirementTabSectionState state, AmapState amapState, _) =>
           Container(
               child: Container(
                   child: state.getNewRequirements(
                       amapState.longitude, amapState.latitude) !=
-                      null &&
-                      amapState.getAMapLocation() != null
+                      null
                       ? Column(
                     children: state
                         .getNewRequirements(
@@ -85,8 +84,7 @@ class NearbyRequirementsListView extends StatelessWidget {
               child: Container(
                 child: state.getNearbyRequirements(
                     amapState.longitude, amapState.latitude) !=
-                    null &&
-                    amapState.getAMapLocation() != null
+                    null
             ? Column(
                   children: state
                       .getNearbyRequirements(
