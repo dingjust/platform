@@ -1,4 +1,5 @@
 
+import 'package:b2b_commerce/src/my/contract/webview_contract_page.dart';
 import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +146,7 @@ class _ContractSealPageState extends State<ContractSealPage>{
       if (certification != null) {
         if(certification.data !=  null){
           Navigator.push(
-            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString:certification.data)),
+            context,MaterialPageRoute(builder: (context) => WebViewContractPage(urlString:certification.data)),
           );
         }else{
           showDialog(
