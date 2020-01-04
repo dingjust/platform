@@ -17,9 +17,9 @@
               <el-row v-if="props.item.state == 'SELLER_SUBMITTED'">
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button type="text" class="list-button" @click="onDetails(props.item)">修改</el-button>
-                <el-divider direction="vertical"></el-divider>
-                <el-button type="text" class="list-button" @click="onCancell(props.item)">关闭</el-button>
+                <el-button type="text" class="list-button" @click="onDetails(props.item)" v-if="!isTenant()">修改</el-button>
+                <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
+                <el-button type="text" class="list-button" @click="onCannel(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
@@ -37,6 +37,10 @@
 
       </quote-details-page>
     </el-dialog>
+    <el-dialog title="关闭" :visible.sync="quoteCannelVisible" width="30%" :close-on-click-modal="false">
+      <quote-cannel-visible v-if="quoteCannelVisible"
+                                      @onCancel="onCloseCancel" @onConfirm="onCloseConfirm"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -50,10 +54,12 @@
   import QuoteDetailsPage from './details/QuoteDetailsPage';
   import PurchaseOrderDetailsPage from '../purchase/details/PurchaseOrderDetailsPage';
   import ProofingDetailsPage from '../proofing/details/ProofingDetailsPage';
+  import QuoteCannelVisible from './form/QuoteCancelVisible';
 
   export default {
     name: 'QuotePage',
     components: {
+      QuoteCannelVisible,
       QuoteDetailsPage,
       QuoteToolbar,
       QuoteSearchResultList
@@ -127,7 +133,38 @@
 
         this.onAdvancedSearch();
       },
-      async onCancell (item) {
+      onCannel (item) {
+        this.$confirm('是否确认关闭该报价订单', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (this.isTenant()) {
+            this.onCloseDialog(item);
+          } else {
+            this._onCancell(item);
+          }
+        });
+      },
+      onCloseDialog (item) {
+        this.closeItem = Object.assign({}, item);
+        this.quoteCannelVisible = true;
+      },
+      // 平台关闭报价订单
+      async onCloseConfirm () {
+        const url = this.apis().platformCancelQuote(this.closeItem.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.closeItem = {};
+        this.quoteCannelVisible = false;
+
+        this.$message.success('取消报价订单成功');
+        this.onAdvancedSearch(this.page.number);
+      },
+      async _onCancell (item) {
         const url = this.apis().cancelQuote(item.code);
         const result = await this.$http.put(url);
         console.log(result);
@@ -137,8 +174,11 @@
           return;
         }
 
-        this.$message.success('取消报价成功');
+        this.$message.success('取消报价订单成功');
         this.onAdvancedSearch(this.page.number);
+      },
+      onCloseCancel () {
+        this.quoteCannelVisible = false;
       }
     },
     data () {
@@ -148,6 +188,8 @@
         proofingFormData: this.$store.state.ProofingsModule.formData,
         isAdvancedSearch: this.$store.state.QuotesModule.isAdvancedSearch,
         detailsDialogVisible: false,
+        quoteCannelVisible: false,
+        closeItem: {},
         slotData: '',
         statuses: [
           {

@@ -20,14 +20,14 @@
     <el-dialog :visible.sync="apparelProductDetailsPageVisible" width="80%" :close-on-click-modal="false">
       <apparel-product-details-page v-if="apparelProductDetailsPageVisible" :formData="productData" :read-only="true"/>
     </el-dialog>
-    <!-- <el-dialog title="禁用" :visible.sync="apparelProductForbiddenPageVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog title="禁用" :visible.sync="apparelProductForbiddenPageVisible" width="30%" :close-on-click-modal="false">
       <apparel-product-forbidden-dialog v-if="apparelProductForbiddenPageVisible"
                                         @onCancel="onDeleteCancel" @onConfirm="onDeleteConfirm"/>
-    </el-dialog> -->
-    <!-- <el-dialog title="下架" :visible.sync="apparelProductOffShelfPageVisible" width="30%" :close-on-click-modal="false">
+    </el-dialog>
+    <el-dialog title="下架" :visible.sync="apparelProductOffShelfPageVisible" width="30%" :close-on-click-modal="false">
       <apparel-product-off-shelf-dialog v-if="apparelProductOffShelfPageVisible"
                                         @onCancel="onOffShelfCancel" @onConfirm="onOffShelfConfirm"/>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -45,14 +45,14 @@
   import ApparelProductToolbar from './toolbar/ApparelProductToolbar';
   import ApparelProductList from './list/ApparelProductList';
   import ApparelProductDetailsPage from './details/ApparelProductDetailsPage';
-  // import ApparelProductForbiddenDialog from './form/ApparelProductForbiddenDialog';
-  // import ApparelProductOffShelfDialog from './form/ApparelProductOffShelfDialog';
+  import ApparelProductForbiddenDialog from './form/ApparelProductForbiddenDialog';
+  import ApparelProductOffShelfDialog from './form/ApparelProductOffShelfDialog';
 
   export default {
     name: 'ApparelProductPage',
     components: {
-      // ApparelProductOffShelfDialog,
-      // ApparelProductForbiddenDialog,
+      ApparelProductOffShelfDialog,
+      ApparelProductForbiddenDialog,
       ApparelProductDetailsPage,
       ApparelProductToolbar,
       ApparelProductList
@@ -124,10 +124,11 @@
           return;
         }
 
-        this.refresh();
+        this.onAdvancedSearch();
+        // this.refresh();
       },
       onOffShelf (item) {
-        this.$confirm('是否确认下架产品', '提示', {
+        this.$confirm('是否确认下架该产品', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -147,7 +148,8 @@
           return;
         }
 
-        this.refresh();
+        this.onAdvancedSearch();
+        // this.refresh();
       },
       async platformOff (item) {
         this.offShelfItem = Object.assign({}, item);
@@ -164,7 +166,8 @@
         this.offShelfItem = {};
         this.apparelProductOffShelfPageVisible = false;
         this.$message.success('产品下架成功');
-        this.refresh();
+        // this.refresh();
+        this.onAdvancedSearch();
       },
       onDelete (item) {
         this.$confirm('是否确认删除产品', '提示', {
@@ -187,7 +190,8 @@
           return;
         }
         this.$message.success('产品删除成功');
-        this.refresh();
+        // this.refresh();
+        this.onAdvancedSearch();
       },
       platformDeleted (item) {
         this.forbiddenItem = Object.assign({}, item);
@@ -205,7 +209,8 @@
         this.forbiddenItem = {};
         this.$message.success('产品删除成功');
         this.apparelProductForbiddenPageVisible = false;
-        this.refresh();
+        this.onAdvancedSearch();
+        // this.refresh();
       },
       onNew (formData) {
         this.$router.push({
@@ -256,6 +261,11 @@
     },
     created () {
       this.onSearch();
+      if (this.isTenant()) {
+        this.statuses.push({
+          code: 'deleted',
+          name: '已删除'})
+      }
     }
   };
 </script>

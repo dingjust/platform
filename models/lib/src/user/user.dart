@@ -196,8 +196,8 @@ class AddressModel extends ItemModel {
 
   String get details =>
       ('${region?.name ?? ''}' +
-          '${city?.name}' +
-          '${cityDistrict?.name}' +
+          '${city?.name ?? ''}' +
+          '${cityDistrict?.name ?? ''}' +
           '${line1 ?? ''}');
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>

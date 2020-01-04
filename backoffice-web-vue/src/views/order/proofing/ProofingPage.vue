@@ -11,15 +11,15 @@
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <proofing-search-result-list :page="page"
-                                       @onSearch="onSearch"
+                                       @onSearch="onAdvancedSearch"
                                        @onDetails="onDetails"
                                        @onShowQuote="onShowQuote"
                                        @onShowRequirement="onShowRequirement">
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.status == 'PENDING_PAYMENT'">
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
-                <el-divider v-if="isFactory()" direction="vertical"></el-divider>
-                <el-button v-if="isFactory()" type="text" class="list-button" @click="onCancel(props.item)">关闭</el-button>
+                <el-divider v-if="isFactory()||isTenant()" direction="vertical"></el-divider>
+                <el-button v-if="isFactory()||isTenant()" type="text" class="list-button" @click="onCancel(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
@@ -48,6 +48,10 @@
 
       </requirement-order-details-page>
     </el-dialog>
+    <el-dialog title="关闭" :visible.sync="proofingCloseVisible" width="30%" :close-on-click-modal="false">
+      <proofing-close-dialog v-if="proofingCloseVisible"
+                                      @onCancel="onCloseCancel" @onConfirm="onCloseConfirm"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -62,10 +66,12 @@
   import QuoteDetailsPage from '../quote/details/QuoteDetailsPage';
   import RequirementOrderDetailsPage from '../requirement/details/RequirementOrderDetailsPage';
   import ProofingDetailsPage from './details/ProofingDetailsPage';
+  import ProofingCloseDialog from './form/ProofingCloseDialog';
 
   export default {
     name: 'ProofingPage',
     components: {
+      ProofingCloseDialog,
       ProofingDetailsPage,
       RequirementOrderDetailsPage,
       QuoteDetailsPage,
@@ -81,7 +87,8 @@
     },
     methods: {
       ...mapMutations({
-        setCategories: 'categories'
+        setCategories: 'categories',
+        setIsAdvancedSearch: 'isAdvancedSearch'
       }),
       ...mapActions({
         search: 'search',
@@ -89,14 +96,14 @@
         clearQueryFormData: 'clearQueryFormData'
       }),
       onSearch (page, size) {
+        // this.setIsAdvancedSearch(false);
         const keyword = this.keyword;
-
         const url = this.apis().getProofings();
         this.search({url, keyword, page, size});
       },
       onAdvancedSearch (page, size) {
+        // this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
-
         const url = this.apis().getProofings();
         this.searchAdvanced({url, query, page, size});
 
@@ -104,7 +111,7 @@
           this.getMinorCategories();
         }
       },
-      async getProofing(code){
+      async getProofing (code) {
         const url = this.apis().getProofing(code);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -119,21 +126,49 @@
         this.getProofing(row.code);
         this.detailsDialogVisible = !this.detailsDialogVisible;
       },
-      async onCancel(row) {
+      async onCancel (item) {
         this.$confirm('是否关闭订单', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(async () => {
-          const url = this.apis().cancellingOfProofing(row.code);
-          const result = await this.$http.put(url);
-          if (result['errors']) {
-            this.$message.error(result['errors'][0].message);
-            return;
+        }).then(() => {
+          if (this.isTenant()) {
+            this.onCloseDialog(item);
+          } else {
+            this._onCancel(item);
           }
-          this.$message.success('关闭订单成功');
-          this.onAdvancedSearch();
         });
+      },
+      onCloseDialog (item) {
+        this.closeItem = Object.assign({}, item);
+        this.proofingCloseVisible = true;
+      },
+      // 平台关闭打样订单
+      async onCloseConfirm (msg) {
+        let formData = {
+          'msg': msg
+        }
+        const url = this.apis().platformCancellingOfProofing(this.closeItem.code);
+        const result = await this.$http.put(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.closeItem = {};
+        this.$message.success('打样订单关闭成功');
+        this.proofingCloseVisible = false;
+
+        this.onAdvancedSearch();
+      },
+      async _onCancel (item) {
+        const url = this.apis().cancellingOfProofing(item.code);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('关闭订单成功');
+        this.onAdvancedSearch();
       },
       async onShowQuote (row) {
         const url = this.apis().getQuote(row.quoteRef);
@@ -176,6 +211,9 @@
 
         this.setCategories(result);
       },
+      onCloseCancel () {
+        this.proofingCloseVisible = false;
+      }
     },
     data () {
       return {
@@ -186,6 +224,8 @@
         requirementData: '',
         slotData: '',
         activeName: 'ALL',
+        closeItem: '',
+        proofingCloseVisible: false,
         statuses: [
           {
             code: 'ALL',
@@ -217,7 +257,7 @@
     created () {
       this.onAdvancedSearch();
     },
-    destroyed() {
+    destroyed () {
       this.clearQueryFormData();
     }
   }

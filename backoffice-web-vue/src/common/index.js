@@ -586,7 +586,7 @@ let TENANT_APIS = {
   getAllRequirementOrders() {
     return this.getRequirementOrders();
   },
-  getAllQuotes() {
+  getQuotes() {
     return '/b2b/orders/quote/all';
   },
   getPurchaseOrders() {
@@ -690,6 +690,21 @@ let TENANT_APIS = {
   },
   platformDeletedShelfProduct(code) {
     return '/b2b/products/apparel/' + code + '/platformDeleted';
+  },
+  platformCancelledRequirementOrder(code) {
+    return '/b2b/orders/requirement/platformCancelled/' + code;
+  },
+  platformCancelQuote(code) {
+    return '/b2b/orders/quote/' + code + '/platformCancel';
+  },
+  platformCancellingOfProofing(code) {
+    return '/b2b/orders/proofing/' + code + '/platformCancelling';
+  },
+  forbiddenCompany(uid) {
+    return '/b2b/companies/forbidden/' + uid;
+  },
+  cannelForbiddenCompany(uid) {
+    return '/b2b/companies/cannelForbidden/' + uid;
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);

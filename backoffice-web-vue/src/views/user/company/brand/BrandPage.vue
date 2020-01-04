@@ -10,13 +10,22 @@
       </el-row>
       <div class="pt-2"></div>
       <brand-toolbar @onNew="onNew" @onSearch="onSearch"  @onAdvancedSearch="onAdvancedSearch"/>
-      <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
-        <template slot="operations" slot-scope="props">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
-          <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">打标</el-button>
-<!--          <el-button type="text" icon="el-icon-edit" @click="onForbidden(props.item)">禁用</el-button>-->
-        </template>
-      </brand-list>
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+          <brand-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch">
+            <template slot="operations" slot-scope="props">
+              <el-button type="text" icon="el-icon-edit" @click="onDetails(props.item)">明细</el-button>
+              <el-button type="text" icon="el-icon-edit" @click="onEdit(props.item)">打标</el-button>
+              <el-button v-if="!props.item.loginDisabled" type="text" icon="el-icon-edit" @click="onForbidden(props.item)">
+                禁用
+              </el-button>
+              <el-button v-if="props.item.loginDisabled" type="text" icon="el-icon-edit" @click="onCannelDelete(props.item)">
+                解禁
+              </el-button>
+            </template>
+          </brand-list>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
     <el-dialog title="修改标签和评分" width="450px" :visible.sync="this.dialogFormVisible" :before-close="handleClose"
                append-to-body :close-on-click-modal="false">
@@ -29,9 +38,9 @@
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :close-on-click-modal="false">
       <brand-from1 v-if="detailsDialogVisible" :slotData="detailsData" :readOnly="true"></brand-from1>
     </el-dialog>
-    <!-- <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
+    <el-dialog title="禁用" :visible.sync="forbiddenDialogVisible" width="30%" :close-on-click-modal="false">
       <brand-forbidden-dialog  @onCancel="onCancel" @onConfirm="onConfirm"/>
-    </el-dialog> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -46,12 +55,12 @@
   import AddressForm from '../../../shared/user/address/AddressForm';
   import BrandLabelsForm from './form/BrandLabelsForm';
   import BrandFrom1 from './form/BrandForm1';
-  // import BrandForbiddenDialog from './form/BrandForbiddenDialog';
+  import BrandForbiddenDialog from './form/BrandForbiddenDialog';
 
   export default {
     name: 'BrandPage',
     components: {
-      // BrandForbiddenDialog,
+      BrandForbiddenDialog,
       BrandFrom1,
       AddressForm,
       BrandToolbar,
@@ -139,16 +148,62 @@
         this.fn.openSlider('创建品牌', BrandDetailsPage, formData);
       },
       onForbidden (item) {
-        this.forbiddenItem = item;
-        this.forbiddenDialogVisible = true;
+        this.$confirm('你确定要禁用该账号吗', '禁用', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.forbiddenItem = item;
+          this.forbiddenDialogVisible = true;
+        });
       },
       onCancel () {
         this.forbiddenDialogVisible = false;
       },
-      onConfirm () {
-        // TODO 禁用
+      async onConfirm (msg) {
+        let formData = {
+          'msg' : msg
+        }
+        const url = this.apis().forbiddenCompany(this.forbiddenItem.uid);
+        const result = await this.$http.put(url, formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('工厂禁用成功');
         this.onAdvancedSearch();
         this.forbiddenDialogVisible = false;
+      },
+      onCannelDelete (item) {
+        this.$confirm('你确定要解禁该账号吗', '禁用', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.onCannelDeleteConfirm(item);
+        });
+      },
+      async onCannelDeleteConfirm (item) {
+        const url = this.apis().cannelForbiddenCompany(item.uid);
+        const result = await this.$http.put(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('工厂解禁成功');
+        this.onAdvancedSearch();
+      },
+      handleTabClick (tab) {
+        if (tab.name !== '') {
+          if (tab.name === 'unapproved') {
+            this.queryFormData.approvalStatuses = ['unapproved', 'check'];
+          } else {
+            this.queryFormData.approvalStatuses = tab.name;
+          }
+        } else {
+          this.queryFormData.approvalStatuses = [];
+        }
+        this.onAdvancedSearch();
       }
     },
     data () {
@@ -158,7 +213,20 @@
         detailsDialogVisible: false,
         detailsData: '',
         forbiddenDialogVisible: false,
-        forbiddenItem: ''
+        forbiddenItem: '',
+        statuses: [{
+          code: '',
+          name: '全部'
+        },
+        {
+          code: 'approved',
+          name: '已认证'
+        },
+        {
+          code: 'unapproved',
+          name: '未认证'
+        }],
+        activeName: ''
       };
     },
     created () {

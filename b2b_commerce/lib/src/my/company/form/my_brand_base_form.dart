@@ -65,6 +65,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
           IconButton(
               icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
+                if (ObjectUtil.isEmptyList(medias)) {
+                  ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
+                  return;
+                }
                 if (ObjectUtil.isEmptyString(_brand.name)) {
                   ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
                   return;
@@ -75,7 +79,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
                   return;
                 }
-                if (_brand.contactAddress == null) {
+                if (_brand.contactAddress?.region?.isocode == null || ObjectUtil.isEmptyString(_brand.contactAddress.line1)) {
                   ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
                   return;
                 }
@@ -119,6 +123,10 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                         color: Colors.black,
                         fontSize: _fontSize,
                       )),
+                  TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                          color: Colors.red, fontSize: _fontSize)),
                   TextSpan(
                       text: '(长按编辑)',
                       style: TextStyle(
@@ -222,8 +230,6 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                             MyBrandAddressFormPage(
                               addressModel: _brand.contactAddress,
                             )));
-                print(result.region);
-                print(result.city);
                 if (result != null) {
                   _brand.contactAddress = result;
                 }
@@ -248,7 +254,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                     ),
                     Expanded(
                         child: Text(
-                          '${_brand?.contactAddress?.details}',
+                          '${_brand?.contactAddress?.details ?? ''}',
                           textAlign: TextAlign.end,
                           style: TextStyle(color: Colors.grey),
                         )),

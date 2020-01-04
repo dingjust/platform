@@ -70,6 +70,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
       _medias = [_factory.profilePicture];
     }
 
+    if (_factory.qualityLevels == null) {
+      _factory.qualityLevels = [];
+    }
     super.initState();
   }
 
@@ -83,6 +86,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
           IconButton(
               icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
+                if (ObjectUtil.isEmptyList(_medias)) {
+                  ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
+                  return;
+                }
                 if (ObjectUtil.isEmptyString(_factory.name)) {
                   ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
                   return;
@@ -93,7 +100,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
                   return;
                 }
-                if(_factory.contactAddress == null){
+                if(_factory.contactAddress == null || _factory.contactAddress.region?.isocode == null){
                   ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
                   return;
                 }
@@ -105,10 +112,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                   ShowDialogUtil.showValidateMsg(context, '请选择合作方式');
                   return;
                 }
-                if(_factory.contactAddress == null){
-                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
-                  return;
-                }
+//                if(_factory.contactAddress == null){
+//                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
+//                  return;
+//                }
                 _factory.contactAddress.id = null;
                 if(ObjectUtil.isEmptyList(_factory.categories)){
                   ShowDialogUtil.showValidateMsg(context, '请选择生产大类');
@@ -158,6 +165,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                       TextSpan(
                           text: '上传企业logo',
                           style: TextStyle(color: Colors.black,fontSize: _fontSize)
+                      ),
+                      TextSpan(
+                          text: '*',
+                          style: TextStyle(color: Colors.red,fontSize: _fontSize)
                       ),
                       TextSpan(
                           text: '(长按编辑)',
@@ -339,7 +350,6 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
             context,
             MaterialPageRoute(
               builder: (context) => ContactAddressFormPage(
-                  address: _factory.contactAddress,
                   company: _factory),
             ),
           );
@@ -561,9 +571,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                         ),
                   ));
 
-              if (result != null) _scaleRange = result;
+              if (result != null) _populationScale = result;
 
-              if (_scaleRange.length > 0) {
+              if (_populationScale.length > 0) {
                 PopulationScale populationScale = PopulationScale.values
                     .singleWhere(
                         (populationScale) =>
@@ -571,7 +581,9 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
                             _populationScale[0],
                         orElse: () => null);
 
-                _factory.populationScale = populationScale;
+                setState(() {
+                  _factory.populationScale = populationScale;
+                });
               }
             },
           );
@@ -1140,11 +1152,11 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
 
               print('${result}----------');
+              setState(() {
               if(result != null){
-                setState(() {
                   _factory.qualityLevels = result;
-                });
               }
+              });
               print('${_factory.qualityLevels}===========');
 
             },

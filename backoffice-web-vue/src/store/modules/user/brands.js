@@ -58,7 +58,8 @@ const state = {
     legalRepresentative: '',
     certificateOfLegal: '',
     salesMarket: [],
-    duties: ''
+    duties: '',
+    loginDisabled: false
   },
   addressFormData: {
     id: null,
