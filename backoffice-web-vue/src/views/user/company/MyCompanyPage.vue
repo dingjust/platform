@@ -84,7 +84,9 @@
       },
       async onSave() {
         let data = Object.assign({}, this.formData);
-        this.$delete(data, 'productionMode');
+        if (data.productionMode === '' || data.productionMode == null) {
+          this.$delete(data, 'productionMode');
+        }
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().updateFactory(uid);
         const result = await this.$http.put(url, data);
