@@ -7,7 +7,10 @@ import 'package:services/services.dart';
 class RegionCitySelector extends StatefulWidget {
   final Function(RegionModel, List<CityModel>) callBack;
 
-  const RegionCitySelector({Key key, this.callBack}) : super(key: key);
+  final VoidCallback cancell;
+
+  const RegionCitySelector({Key key, this.callBack, this.cancell})
+      : super(key: key);
 
   @override
   _RegionCitySelectorState createState() => _RegionCitySelectorState();
@@ -134,7 +137,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                     children: <Widget>[
                       FlatButton(
                         onPressed: () {
-                          widget.callBack(null, null);
+                          widget.cancell();
                         },
                         child: Icon(
                           Icons.close,
@@ -147,10 +150,11 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                               _regionSelect = null;
                               _citySelects = [];
                             });
+                            widget.callBack(_regionSelect, _citySelects);
                           },
-                          child: Icon(
-                            Icons.refresh,
-                            color: Colors.grey,
+                          child: Text(
+                            '重置',
+                            style: TextStyle(color: Colors.grey),
                           )),
                       FlatButton(
                         onPressed: () {
