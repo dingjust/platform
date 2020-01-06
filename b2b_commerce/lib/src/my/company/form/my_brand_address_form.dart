@@ -112,12 +112,6 @@ class _MyBrandAddressFormPageState extends State<MyBrandAddressFormPage> {
         }).showAddressPicker(
           context,
           selectProvince: (province) {
-            if((province['name'] as String).contains('澳门')){
-              return;
-            }
-            if((province['name'] as String).contains('香港')){
-              return;
-            }
             _addressModel.region =
                 RegionModel(isocode: province['isocode'], name: province['name']);
           },
@@ -150,7 +144,7 @@ class _MyBrandAddressFormPageState extends State<MyBrandAddressFormPage> {
             ),
             Expanded(
                 child: Text(
-              '${_addressModel?.region?.name}${_addressModel?.city?.name}${_addressModel?.cityDistrict?.name}',
+              '${_addressModel?.region?.name ?? ''}${_addressModel?.city?.name ?? ''}${_addressModel?.cityDistrict?.name ?? ''}',
               textAlign: TextAlign.end,
               style: TextStyle(color: Colors.grey),
             )),

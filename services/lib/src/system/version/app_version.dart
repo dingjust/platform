@@ -163,9 +163,9 @@ class AppVersion {
         return AlertDialog(
           // title: Text('确认取消？'),
           content: Container(
-            height: 250,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            height: 350,
+            width: double.maxFinite,
+            child: ListView(
               children: <Widget>[
                 Image.asset(
                   'temp/login_logo.png',
@@ -175,7 +175,8 @@ class AppVersion {
                 ),
                 Text('版本更新'),
                 Text('新版本：${releaseVersion}'),
-                Text('版本说明：${description}'),
+                Text('版本说明：'),
+                Column(children: getDecriptionRows(description)),
                 Text('钉单最新版本来啦，马上更新吧！'),
               ],
             ),
@@ -199,6 +200,13 @@ class AppVersion {
         );
       },
     );
+  }
+
+  List<Widget> getDecriptionRows(String description) {
+    List<Widget> result =
+    description.split('\\n').where((str) => str != '').map((str) =>
+        Text('$str')).toList();
+    return result;
   }
 
   // //文件下载打开

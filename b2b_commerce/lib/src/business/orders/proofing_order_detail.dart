@@ -323,7 +323,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           children: <Widget>[
             ListTile(
               leading: Icon(
-                B2BIcons.location,
+                Icons.location_on,
                 color: Colors.black,
               ),
               title: Row(

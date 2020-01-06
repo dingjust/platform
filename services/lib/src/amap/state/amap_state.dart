@@ -10,6 +10,38 @@ class AmapState with ChangeNotifier {
 
   String _city;
 
+  double _longitude;
+
+  double _latitude;
+
+  ///默认广州经纬度
+  double DEFAULT_LONGITUDE = 113.264434;
+
+  double DEFAULT_LATITUDE = 23.129162;
+
+  ///获取经度
+  double get longitude {
+    if (_longitude != null && _longitude != 0) {
+      return _longitude;
+    }
+    return DEFAULT_LONGITUDE;
+  }
+
+  ///获取纬度
+  double get latitude {
+    if (_latitude != null && _latitude != 0) {
+      return _latitude;
+    }
+    return DEFAULT_LATITUDE;
+  }
+
+  String get city {
+    if (_city != null) {
+      return _city;
+    }
+    return '广州';
+  }
+
   AMapLocation getAMapLocation({BuildContext context, Widget openDialog}) {
     if (_aMapLocation != null) {
       return _aMapLocation;
@@ -18,8 +50,8 @@ class AmapState with ChangeNotifier {
       return AMapLocation(
           city: '广州',
           AOIName: '广州',
-          longitude: 113.264434,
-          latitude: 23.129162);
+          longitude: DEFAULT_LONGITUDE,
+          latitude: DEFAULT_LATITUDE);
     }
   }
 
@@ -38,6 +70,9 @@ class AmapState with ChangeNotifier {
               desiredAccuracy:
               CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
           _aMapLocation = await AMapLocationClient.getLocation(true);
+          _city = _aMapLocation.city;
+          _latitude = _aMapLocation.latitude;
+          _longitude = _aMapLocation.longitude;
           AMapLocationClient.stopLocation();
         } else {
           permission = await LocationPermissions().requestPermissions();
@@ -70,16 +105,20 @@ class AmapState with ChangeNotifier {
         _aMapLocation = AMapLocation(
             city: '广州',
             AOIName: '广州',
-            longitude: 113.264434,
-            latitude: 23.129162);
+            longitude: DEFAULT_LONGITUDE,
+            latitude: DEFAULT_LATITUDE);
+      } else {
+        _city = _aMapLocation.city;
+        _latitude = _aMapLocation.latitude;
+        _longitude = _aMapLocation.longitude;
       }
       AMapLocationClient.stopLocation();
     } catch (e) {
       print(e);
+    } finally {
+      ///通知刷新
+      notifyListeners();
     }
-
-    ///通知刷新
-    notifyListeners();
   }
 
   ///打开应用设置
@@ -110,36 +149,6 @@ class AmapState with ChangeNotifier {
     });
   }
 
-  ///获取经度
-  double get longitude {
-    if (_aMapLocation != null) {
-      print('=====================');
-      print(_aMapLocation.AOIName);
-      return _aMapLocation.longitude ?? 113.264434;
-    } else {
-      return 113.264434;
-    }
-  }
-
-  ///获取纬度
-  double get latitude {
-    if (_aMapLocation != null) {
-      return _aMapLocation.latitude ?? 23.129162;
-    } else {
-      return 23.129162;
-    }
-  }
-
-  String get city {
-    if (_city != null) {
-      return _city;
-    } else if (_aMapLocation != null) {
-      return _aMapLocation.city ?? '广州';
-    } else {
-      return '广州';
-    }
-  }
-
   void setCity(String city) {
     _city = city;
   }
@@ -152,6 +161,11 @@ class AmapState with ChangeNotifier {
         AOIName: aOIName ?? _aMapLocation.AOIName,
         longitude: longitude,
         latitude: latitude);
+    _longitude = longitude;
+    _latitude = latitude;
+    if (city != null) {
+      _city = city;
+    }
     notifyListeners();
   }
 }

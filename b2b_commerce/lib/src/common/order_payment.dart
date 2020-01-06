@@ -100,7 +100,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             widget.order.deliveryAddress != null
                 ? ListTile(
               leading: Icon(
-                B2BIcons.location,
+                Icons.location_on,
                 color: Colors.black,
               ),
               title: Row(

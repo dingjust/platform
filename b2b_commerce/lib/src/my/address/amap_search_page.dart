@@ -109,12 +109,10 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   TextEditingController textEditingController = TextEditingController();
   AMapLocation gpsLocation;
   bool gpsLock = false;
-  AmapAroundResponse amapAroundResponse;
 
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_) => getAroundResponse());
     super.initState();
   }
 
@@ -148,7 +146,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                     )
                         : Expanded(
                       flex: 1,
-                      child: _buildAroundListView(context),
+                      child: _buildAroundListView(context, state),
                     )
                   ],
                 ),
@@ -165,7 +163,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
           Padding(
             padding: EdgeInsets.only(right: 10),
             child: Icon(
-              B2BIcons.location,
+              Icons.location_on,
               color: Colors.grey,
               size: 16,
             ),
@@ -205,10 +203,10 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                       List<String> locationArray =
                       response.geocodes.first.location.split(',');
                       state.setAMapLocation(
+                          city: response.geocodes.first.city,
                           aOIName: response.geocodes.first.city,
                           longitude: double.parse(locationArray[0]),
                           latitude: double.parse(locationArray[1]));
-                      state.setCity(response.geocodes.first.city);
                     }
                   });
                 } catch (e) {
@@ -219,7 +217,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
             child: Row(
               children: <Widget>[
                 Icon(
-                  B2BIcons.location,
+                  Icons.location_on,
                   size: 15,
                 ),
                 Text(
@@ -305,30 +303,57 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
     );
   }
 
-  Widget _buildAroundListView(BuildContext context) {
-    if (amapAroundResponse != null &&
-        amapAroundResponse.pois != null &&
-        textEditingController.text == '') {
-      return ListView(
-          children: amapAroundResponse.pois
-              .map(
-                (pois) =>
-                SuggestionsRow(
-                  value: pois.name,
-                  address: pois.address,
-                  location: pois.location,
-                  onIconPressed: () {
-                    textEditingController.text = pois.name;
-                  },
-                  onTap: () {
-                    Navigator.of(context).pop(pois);
-                  },
-                ),
-          )
-              .toList());
-    } else {
-      return Container();
-    }
+  Widget _buildAroundListView(BuildContext context, AmapState amapState) {
+    return FutureBuilder<AmapAroundResponse>(
+      builder:
+          (BuildContext context, AsyncSnapshot<AmapAroundResponse> snapshot) {
+        if (snapshot.data != null && snapshot.data.pois != null) {
+          return ListView(
+              children: snapshot.data.pois
+                  .map(
+                    (pois) =>
+                    SuggestionsRow(
+                      value: pois.name,
+                      address: pois.address,
+                      location: pois.location,
+                      onIconPressed: () {
+                        textEditingController.text = pois.name;
+                      },
+                      onTap: () {
+                        Navigator.of(context).pop(pois);
+                      },
+                    ),
+              )
+                  .toList());
+        } else {
+          return Container();
+        }
+      },
+      future: getAroundResponse(amapState),
+    );
+
+    // if (amapAroundResponse != null &&
+    //     amapAroundResponse.pois != null &&
+    //     textEditingController.text == '') {
+    //   return ListView(
+    //       children: amapAroundResponse.pois
+    //           .map(
+    //             (pois) => SuggestionsRow(
+    //               value: pois.name,
+    //               address: pois.address,
+    //               location: pois.location,
+    //               onIconPressed: () {
+    //                 textEditingController.text = pois.name;
+    //               },
+    //               onTap: () {
+    //                 Navigator.of(context).pop(pois);
+    //               },
+    //             ),
+    //           )
+    //           .toList());
+    // } else {
+    //   return Container();
+    // }
   }
 
   Widget _buildLocationRow() {
@@ -405,13 +430,10 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   //   return gpsLocation;
   // }
 
-  void getAroundResponse() async {
-    AmapState amapState = Provider.of<AmapState>(context);
+  Future<AmapAroundResponse> getAroundResponse(AmapState amapState) async {
     AmapAroundResponse result = await AmapService.instance
         .aroundTips('${amapState.longitude},${amapState.latitude}');
-    setState(() {
-      amapAroundResponse = result;
-    });
+    return result;
   }
 
   ///重新定位
@@ -441,5 +463,12 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
       },
     );
     state.getLocation(context, _dialog);
+  }
+}
+
+class AroundListView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

@@ -44,8 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
-        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
-            AppRoutes.ROUTE_MY_ACCOUNT),
+        // MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
+        //     AppRoutes.ROUTE_MY_ACCOUNT),
         menuSeparator,
         CompanyIntroductionMenuItem(),
         menuSeparator,
@@ -212,7 +212,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: const TextStyle(
                       fontSize: 16,
                       color: const Color.fromRGBO(132, 114, 1, 1),
-
                     ),
                   ),
                 )
