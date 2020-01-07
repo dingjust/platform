@@ -27,6 +27,8 @@ import 'src/my/index.dart';
 import 'src/production/index.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   Provider.debugCheckInvalidValueType = null;
 
   debugInstrumentationEnabled = true;
