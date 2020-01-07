@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/helper/login_check.dart';
+import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:flutter/material.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
@@ -22,10 +23,8 @@ class CapacityMatchingPage extends StatefulWidget
 
 class _CapacityMatchingPageState extends State<CapacityMatchingPage>
     with LoginCheck {
-  List<String> _dropDownHeaderItemStrings = ['全国', '品类', '距离近', '筛选'];
-  List<SortCondition> _brandSortConditions = [];
+  List<String> _dropDownHeaderItemStrings = ['全国', '品类', '时间', '筛选'];
   List<SortCondition> _distanceSortConditions = [];
-  SortCondition _selectBrandSortCondition;
   SortCondition _selectDistanceSortCondition;
   GZXDropdownMenuController _dropdownMenuController =
   GZXDropdownMenuController();
@@ -55,7 +54,11 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
           // bottom: PreferredSize(
           //     preferredSize: Size(75, 20), child: CapacityCondition()),
         ),
-        endDrawer: Drawer(child: Container()),
+        // endDrawer: Drawer(child: Container()),
+        drawer: Drawer(
+          child: Container(),
+        ),
+
         body: Stack(
           key: _stackKey,
           fit: StackFit.expand,
@@ -65,47 +68,54 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
               children: <Widget>[
 //              SizedBox(height: 20,),
                 // 下拉菜单头部
-                GZXDropDownHeader(
-                  // 下拉的头部项，目前每一项，只能自定义显示的文字、图标、图标大小修改
-                  items: [
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
-                    GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
-                        iconData: Icons.filter_frames, iconSize: 18),
-                  ],
-                  // GZXDropDownHeader对应第一父级Stack的key
-                  stackKey: _stackKey,
-                  // controller用于控制menu的显示或隐藏
-                  controller: _dropdownMenuController,
-                  // 当点击头部项的事件，在这里可以进行页面跳转或openEndDrawer
-                  onItemTap: (index) {
-                    if (index == 3) {
-                      _scaffoldKey.currentState.openEndDrawer();
-                    }
-                  },
+                Builder(
+                  builder: (headerContext) =>
+                      GZXDropDownHeader(
+                        // 下拉的头部项，目前每一项，只能自定义显示的文字、图标、图标大小修改
+                        items: [
+                          GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
+                          GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
+                          GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
+                          GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                              iconData: Icons.menu, iconSize: 18),
+                        ],
+                        // GZXDropDownHeader对应第一父级Stack的key
+                        stackKey: _stackKey,
+                        // controller用于控制menu的显示或隐藏
+                        controller: _dropdownMenuController,
+                        // 当点击头部项的事件，在这里可以进行页面跳转或openEndDrawer
+                        onItemTap: (index) {
+                          if (index == 2) {
+                            _onDateRangeSelect(headerContext);
+                          }
+                          if (index == 3) {
+                            _scaffoldKey.currentState.openEndDrawer();
+                          }
+                        },
 //                // 头部的高度
 //                height: 40,
 //                // 头部背景颜色
 //                color: Colors.red,
 //                // 头部边框宽度
-                  borderWidth: 0,
+                        borderWidth: 0,
 //                // 头部边框颜色
-                  borderColor: Colors.white,
+                        borderColor: Colors.white,
 //                // 分割线高度
-                  dividerHeight: 0,
+                        dividerHeight: 0,
 //                // 分割线颜色
 //                dividerColor: Color(0xFFeeede6),
 //                // 文字样式
-                  // style: TextStyle(color: Colors.ye, fontSize: 13),
+                        // style: TextStyle(color: Colors.ye, fontSize: 13),
 //                // 下拉时文字样式
-                  dropDownStyle: TextStyle(fontSize: 13, color: Colors.orange),
+                        dropDownStyle:
+                        TextStyle(fontSize: 13, color: Colors.orange),
 //                // 图标大小
 //                iconSize: 20,
 //                // 图标颜色
 //                iconColor: Color(0xFFafada7),
 //                // 下拉时图标颜色
-                  iconDropDownColor: Colors.orange,
+                        iconDropDownColor: Colors.orange,
+                      ),
                 ),
                 Expanded(
                   flex: 1,
@@ -140,16 +150,6 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
                                           category, dropMenuContext),
                                 ),
                           )),
-                      GZXDropdownMenuBuilder(
-                          dropDownHeight: 40.0 * _distanceSortConditions.length,
-                          dropDownWidget: _buildConditionListWidget(
-                              _distanceSortConditions, (value) {
-                            _selectDistanceSortCondition = value;
-                            _dropDownHeaderItemStrings[2] =
-                                _selectDistanceSortCondition.name;
-                            _dropdownMenuController.hide();
-                            setState(() {});
-                          })),
                     ],
                   ),
             )
@@ -202,61 +202,46 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
     setState(() {});
   }
 
-  _buildConditionListWidget(items,
-      void itemOnTap(SortCondition sortCondition)) {
-    return ListView.separated(
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      itemCount: items.length,
-      // item 的个数
-      separatorBuilder: (BuildContext context, int index) =>
-          Divider(height: 1.0),
-      // 添加分割线
-      itemBuilder: (BuildContext context, int index) {
-        SortCondition goodsSortCondition = items[index];
-        return GestureDetector(
-          onTap: () {
-            for (var value in items) {
-              value.isSelected = false;
-            }
-            goodsSortCondition.isSelected = true;
+  void _onDateRangeSelect(BuildContext selectContext) async {
+    DateTime firstDate;
+    DateTime lastDate;
+    CapacityMatchingState state =
+    Provider.of<CapacityMatchingState>(selectContext);
 
-            itemOnTap(goodsSortCondition);
-          },
-          child: Container(
-//            color: Colors.blue,
-            height: 40,
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  child: Text(
-                    goodsSortCondition.name,
-                    style: TextStyle(
-                      color: goodsSortCondition.isSelected
-                          ? Colors.orange
-                          : Colors.black,
-                    ),
-                  ),
-                ),
-                goodsSortCondition.isSelected
-                    ? Icon(
-                  Icons.check,
-                  color: Colors.orange,
-                  size: 16,
-                )
-                    : SizedBox(),
-                SizedBox(
-                  width: 16,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    if (state.dateStartPoint == null) {
+      firstDate = DateTime.now();
+      lastDate = firstDate.add(Duration(days: 7));
+    } else {
+      firstDate = state.dateStartPoint;
+      if (state.dateEndPoint == null) {
+        lastDate = firstDate.add(Duration(days: 7));
+      } else {
+        lastDate = state.dateEndPoint;
+      }
+    }
+
+    final List<DateTime> picked = await DateRagePicker.showDatePicker(
+        context: context,
+        initialFirstDate: firstDate,
+        initialLastDate: lastDate,
+        firstDate: DateTime(2019),
+        lastDate: DateTime(2099));
+    if (picked != null && picked.length == 1) {
+      _dropDownHeaderItemStrings[2] = '${picked[0]}';
+      state.setDateStartPoint(picked[0]);
+      state.setDateEndPoint(null);
+      state.clear();
+      setState(() {});
+    }
+
+    if (picked != null && picked.length == 2) {
+      _dropDownHeaderItemStrings[2] =
+      '${picked[0].month}.${picked[0].day}-${picked[1].month}.${picked[1].day}';
+      state.setDateStartPoint(picked[0]);
+      state.setDateEndPoint(picked[1]);
+      state.clear();
+      setState(() {});
+    }
   }
 
   @override
