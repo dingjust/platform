@@ -136,15 +136,6 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       FlatButton(
-                        onPressed: () {
-                          widget.cancell();
-                        },
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      ),
-                      FlatButton(
                           onPressed: () {
                             setState(() {
                               _regionSelect = null;
@@ -157,14 +148,12 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                             style: TextStyle(color: Colors.grey),
                           )),
                       FlatButton(
-                        onPressed: () {
-                          widget.callBack(_regionSelect, _citySelects);
-                        },
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        ),
-                      ),
+                          onPressed: () {
+                            widget.callBack(_regionSelect, _citySelects);
+                          },
+                          child: Text(
+                            '确定',
+                          )),
                     ],
                   ),
                 )

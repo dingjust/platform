@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/helper/login_check.dart';
-import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
@@ -9,8 +9,8 @@ import 'package:services/services.dart';
 import '_shared/capacity_matching_appbar.dart';
 import '_shared/capacity_matching_list.dart';
 import '_shared/category_selector.dart';
+import '_shared/date_range_selector.dart';
 import '_shared/region_city_selector.dart' as yj;
-import '_shared/sort_condition.dart';
 
 class CapacityMatchingPage extends StatefulWidget
     implements PreferredSizeWidget {
@@ -24,8 +24,6 @@ class CapacityMatchingPage extends StatefulWidget
 class _CapacityMatchingPageState extends State<CapacityMatchingPage>
     with LoginCheck {
   List<String> _dropDownHeaderItemStrings = ['全国', '品类', '时间', '筛选'];
-  List<SortCondition> _distanceSortConditions = [];
-  SortCondition _selectDistanceSortCondition;
   GZXDropdownMenuController _dropdownMenuController =
   GZXDropdownMenuController();
 
@@ -55,10 +53,6 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
           //     preferredSize: Size(75, 20), child: CapacityCondition()),
         ),
         // endDrawer: Drawer(child: Container()),
-        drawer: Drawer(
-          child: Container(),
-        ),
-
         body: Stack(
           key: _stackKey,
           fit: StackFit.expand,
@@ -76,8 +70,8 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
                           GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
                           GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
                           GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
-                          GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
-                              iconData: Icons.menu, iconSize: 18),
+                          // GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                          //     iconData: Icons.menu, iconSize: 18),
                         ],
                         // GZXDropDownHeader对应第一父级Stack的key
                         stackKey: _stackKey,
@@ -85,12 +79,9 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
                         controller: _dropdownMenuController,
                         // 当点击头部项的事件，在这里可以进行页面跳转或openEndDrawer
                         onItemTap: (index) {
-                          if (index == 2) {
-                            _onDateRangeSelect(headerContext);
-                          }
-                          if (index == 3) {
-                            _scaffoldKey.currentState.openEndDrawer();
-                          }
+                          // if (index == 3) {
+                          //   _scaffoldKey.currentState.openEndDrawer();
+                          // }
                         },
 //                // 头部的高度
 //                height: 40,
@@ -150,6 +141,16 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
                                           category, dropMenuContext),
                                 ),
                           )),
+                      GZXDropdownMenuBuilder(
+                          dropDownHeight: 40 * 8.0,
+                          dropDownWidget: Builder(
+                            builder: (selectContext) =>
+                                DateRangeSelector(
+                                  callBack: (star, end) =>
+                                      _onDateRangeSelectCallBack(
+                                          star, end, dropMenuContext),
+                                ),
+                          )),
                     ],
                   ),
             )
@@ -198,50 +199,42 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
       _dropDownHeaderItemStrings[1] = '品类';
       state.setCategory(null);
     }
+    state.clear();
     _dropdownMenuController.hide();
     setState(() {});
   }
 
-  void _onDateRangeSelect(BuildContext selectContext) async {
-    DateTime firstDate;
-    DateTime lastDate;
+  void _onDateRangeSelectCallBack(DateTime star, DateTime end,
+      BuildContext selectContext) async {
     CapacityMatchingState state =
     Provider.of<CapacityMatchingState>(selectContext);
 
-    if (state.dateStartPoint == null) {
-      firstDate = DateTime.now();
-      lastDate = firstDate.add(Duration(days: 7));
-    } else {
-      firstDate = state.dateStartPoint;
-      if (state.dateEndPoint == null) {
-        lastDate = firstDate.add(Duration(days: 7));
-      } else {
-        lastDate = state.dateEndPoint;
-      }
+    print('$star    $end');
+
+    if (star != null) {
+      state.setDateStartPoint(star);
     }
 
-    final List<DateTime> picked = await DateRagePicker.showDatePicker(
-        context: context,
-        initialFirstDate: firstDate,
-        initialLastDate: lastDate,
-        firstDate: DateTime(2019),
-        lastDate: DateTime(2099));
-    if (picked != null && picked.length == 1) {
-      _dropDownHeaderItemStrings[2] = '${picked[0]}';
-      state.setDateStartPoint(picked[0]);
-      state.setDateEndPoint(null);
-      state.clear();
-      setState(() {});
+    if (end != null) {
+      state.setDateEndPoint(end);
     }
-
-    if (picked != null && picked.length == 2) {
+    if (star == null && end == null) {
+      _dropDownHeaderItemStrings[2] = '时间';
+      state.setDateStartPoint(star);
+      state.setDateEndPoint(end);
+    } else if (DateFormatUtil.formatYMD(star) ==
+        DateFormatUtil.formatYMD(end)) {
+      _dropDownHeaderItemStrings[2] = '${star.month}.${star.day}';
+    } else if (star != null && end != null) {
       _dropDownHeaderItemStrings[2] =
-      '${picked[0].month}.${picked[0].day}-${picked[1].month}.${picked[1].day}';
-      state.setDateStartPoint(picked[0]);
-      state.setDateEndPoint(picked[1]);
-      state.clear();
-      setState(() {});
+      '${star.month}.${star.day}-${end.month}.${end.day}';
+    } else {
+      _dropDownHeaderItemStrings[2] = '时间';
     }
+
+    state.clear();
+    _dropdownMenuController.hide();
+    setState(() {});
   }
 
   @override
