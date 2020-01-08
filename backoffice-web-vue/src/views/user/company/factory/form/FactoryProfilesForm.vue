@@ -66,7 +66,7 @@
     props: ['profiles'],
     methods: {
       onSave () {
-        this.$emit('onSave');
+        this.$emit('onSaveProfiles');
       }
     },
     watch: {

@@ -46,31 +46,29 @@
       </el-table-column>
     </el-table>
     <div class="pt-2"></div>
-    <div class="float-right">
-      <el-pagination layout="total, sizes, prev, pager, next, jumper"
-                     @size-change="onPageSizeChanged"
-                     @current-change="onCurrentPageChanged"
-                     :current-page="page.number + 1"
-                     :page-size="page.size"
-                     :page-count="page.totalPages"
-                     :total="page.totalElements">
-      </el-pagination>
-    </div>
+    <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
+                   @size-change="onPageSizeChanged"
+                   @current-change="onCurrentPageChanged"
+                   :current-page="page.number + 1"
+                   :page-size="page.size"
+                   :page-count="page.totalPages"
+                   :total="page.totalElements">
+    </el-pagination>
   </div>
 </template>
 
 <script>
   export default {
     name: 'RequirementOrderSearchResultList',
-    props: ["page"],
+    props: ['page'],
     computed: {},
     methods: {
-      handleFilterChange(val) {
+      handleFilterChange (val) {
         this.statuses = val.status;
 
         this.$emit('onSearch', 0);
       },
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.$store.state.RequirementOrdersModule.isAdvancedSearch) {
@@ -80,23 +78,29 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.$store.state.RequirementOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
+          this.$nextTick(() => {
+            this.$refs.resultTable.bodyWrapper.scrollTop = 0
+          });
           return;
         }
 
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       }
     },
-    data() {
+    data () {
       return {
-        statuses: this.$store.state.RequirementOrdersModule.statuses,
+        statuses: this.$store.state.RequirementOrdersModule.statuses
       }
     }
   }

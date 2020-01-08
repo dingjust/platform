@@ -15,10 +15,10 @@
               <h6 class="info-input-prepend">打样费：</h6>
             </div>
             <el-input placeholder="请输入打样费" v-model="slotData.proofingFee" type="number" size="mini"
-              @mousewheel.native.prevent :min="0">
+              @mousewheel.native.prevent :min="0" :disabled="isRead">
             </el-input>
             <div style="width:230px">
-              <h6 class="info-title_text-sub_warning">（卖家承担运费）</h6>
+              <h6 class="info-title_text-sub_warning" v-if="!isRead">（卖家承担运费）</h6>
             </div>
           </el-row>
         </el-form-item>
@@ -26,7 +26,7 @@
     </el-row>
     <el-divider></el-divider>
     <el-row>
-      <h6 class="info-title_text">大货价格</span></h6>
+      <h6 class="info-title_text">大货价格</h6>
     </el-row>
     <template v-for="(row,index) in slotData.steppedPrices">
       <el-row :gutter="20" type="flex" align="center">
@@ -38,25 +38,25 @@
               <div style="width:85px">
                 <h6 class="info-input-prepend">{{index+1}}. 起订量:</h6>
               </div>
-              <el-input placeholder="输入起订量" v-model.number="row.minimumQuantity" size="mini">
+              <el-input placeholder="输入起订量" v-model.number="row.minimumQuantity" size="mini" :disabled="isRead">
               </el-input>
             </el-row>
           </el-form-item>
         </el-col>
         <el-col :span="5" class="product-form-row">
           <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入价格', trigger: 'blur' ,type: 'number'}]" :key="row.key"
+                { required: true, message: '请输入价格', trigger: 'blur'}]" :key="row.key"
             :prop="'steppedPrices.' + index+'.price'">
             <el-row type="flex" align="middle">
               <div style="width:60px">
                 <h6 class="info-input-prepend">价格：</h6>
               </div>
-              <el-input placeholder="输入价格" v-model.number="row.price" size="mini">
+              <el-input placeholder="输入价格" v-model="row.price" size="mini" type="number" :disabled="isRead">
               </el-input>
             </el-row>
           </el-form-item>
         </el-col>
-        <el-button type="text" @click="onRemove(index)">删除</el-button>
+        <el-button type="text" @click="onRemove(index)" v-if="!isRead">删除</el-button>
       </el-row>
     </template>
     <el-row type="flex" v-if="slotData.steppedPrices.length<3">
@@ -82,7 +82,7 @@
             <div style="width:100px">
               <h6 class="info-input-prepend" style="width:100px">基础生产量:</h6>
             </div>
-            <el-input placeholder="输入起订量" v-model="slotData.basicProduction" size="mini">
+            <el-input placeholder="输入起订量" v-model="slotData.basicProduction" size="mini" :disabled="isRead">
             </el-input>
           </el-row>
         </el-form-item>
@@ -95,7 +95,7 @@
             <div style="width:85px">
               <h6 class="info-input-prepend">生产天数：</h6>
             </div>
-            <el-input placeholder="输入天数" v-model.number="slotData.productionDays" size="mini">
+            <el-input placeholder="输入天数" v-model.number="slotData.productionDays" size="mini" :disabled="isRead">
             </el-input>
           </el-row>
         </el-form-item>
@@ -108,7 +108,7 @@
             <div style="width:150px">
               <h6 class="info-input-prepend" style="width:150px">生产增量（数量/天）：</h6>
             </div>
-            <el-input placeholder="输入增量" v-model.number="slotData.productionIncrement" size="mini">
+            <el-input placeholder="输入增量" v-model.number="slotData.productionIncrement" size="mini" :disabled="isRead">
             </el-input>
           </el-row>
         </el-form-item>
@@ -119,32 +119,31 @@
 
 <script>
   export default {
-    name: "ApparelProductPriceForm",
-    props: ["slotData", "readOnly"],
+    name: 'ApparelProductPriceForm',
+    props: ['slotData', 'readOnly', 'isRead'],
     components: {},
     computed: {
 
     },
     methods: {
-      onAddRow() {
+      onAddRow () {
         this.slotData.steppedPrices.push({
           minimumQuantity: '',
           price: ''
         });
       },
-      onRemove(index) {
+      onRemove (index) {
         this.slotData.steppedPrices.splice(index, 1);
-      },
+      }
     },
-    data() {
+    data () {
       return {
         activeName: 'images',
-        currentUser: this.$store.getters.currentUser,
+        currentUser: this.$store.getters.currentUser
       };
     },
-    created() {}
+    created () {}
   };
-
 </script>
 <style>
   .info-title_text-sub {

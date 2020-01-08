@@ -53,6 +53,9 @@ abstract class UserRepository {
   ///短信验证重置密码
   Future<bool> resetPassword(String phone, String newPassword, String captcha);
 
+  ///重置密码
+  Future<bool> resetPasswordByPassword(String old, String password, String uid);
+
   //获取所有角色
   Future<List<RoleModel>> roles();
 
@@ -72,4 +75,7 @@ abstract class UserRepository {
   //删除员工列表
   Future<String> employeeDelete(int id);
 
+  ///更新个人资料
+  Future<bool> updateUserInfo(String uid, String name, String phone,
+      MediaModel media);
 }

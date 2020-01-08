@@ -2,6 +2,8 @@ import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_li
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
 import 'package:b2b_commerce/src/business/orders/quote_item.dart';
 import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_edit_form.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
 import 'package:b2b_commerce/src/business/requirement_orders.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
@@ -41,6 +44,10 @@ class _RequirementOrderDetailPageState
   RequirementOrderModel orderModel;
 
   List<QuoteModel> quotesList;
+
+  double _leadingRowWidth = 180;
+  int _flexL = 2;
+  int _flexR = 3;
 
   void initState() {
     super.initState();
@@ -81,17 +88,20 @@ class _RequirementOrderDetailPageState
               color: Colors.grey[100],
               child: ListView(
                 children: <Widget>[
-                  _buildCompanyInfo(),
+                  //发布公司信息
+//                  _buildCompanyInfo(),
+//                  Divider(
+//                    height: 0,
+//                  ),
+                  //标题
+                  _buildTitle(),
+                  Divider(
+                    height: 0,
+                  ),
+                  //需求信息
                   _buildMain(),
                   //品牌端显示
-                  UserBLoC.instance.currentUser.type == UserType.BRAND
-                      ? _buildQuote()
-                      : Container(),
-                  _buildAttachments(),
-                  _buildRemarks(),
-                  _buildAddress(),
-                  _buildHeader(),
-                  _buildButtonGroups()
+                  _buildQuote(),
                 ],
               ),
             );
@@ -128,7 +138,8 @@ class _RequirementOrderDetailPageState
     /// 工厂端显示
     if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
       return Container(
-        margin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.all(15),
+//        margin: EdgeInsets.only(bottom: 10),
         color: Colors.white,
         child: Column(
           children: <Widget>[
@@ -136,9 +147,9 @@ class _RequirementOrderDetailPageState
               children: <Widget>[
                 orderModel.belongTo.profilePicture == null
                     ? Container(
-                  margin: EdgeInsets.all(10),
-                  width: 80,
-                  height: 80,
+                  margin: EdgeInsets.only(right: 10),
+                  width: 60,
+                  height: 60,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
@@ -150,19 +161,19 @@ class _RequirementOrderDetailPageState
                       )),
                 )
                     : Container(
-                  margin: EdgeInsets.all(10),
-                  width: 80,
-                  height: 80,
+                  margin: EdgeInsets.only(right: 10),
+                  width: 60,
+                  height: 60,
                   child: CachedNetworkImage(
-                      width: 100,
-                      height: 100,
+                      width: 80,
+                      height: 80,
                       imageUrl:
                       '${orderModel.belongTo.profilePicture.previewUrl()}',
                       fit: BoxFit.cover,
                       imageBuilder: (context, imageProvider) =>
                           Container(
-                            width: 100,
-                            height: 100,
+                            width: 80,
+                            height: 80,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imageProvider,
@@ -223,67 +234,87 @@ class _RequirementOrderDetailPageState
                     ))
               ],
             ),
-            Divider(
-              height: 0,
-            ),
             Container(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.only(top: 10),
               child: Row(
                 children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text('联系人'),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(text: '发布于：',style: TextStyle(color: Colors.black),),
+                        TextSpan(text: '${DateFormatUtil.formatYMDHM(orderModel.creationTime)}',style: TextStyle(color: Colors.black),),
+                      ]
                     ),
                   ),
-                  Container(
-                    child: Text(
-                      orderModel.details.contactPerson == null
-                          ? ''
-                          : '${orderModel.details.contactPerson}',
-                      style: TextStyle(
-                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                    ),
-                  )
                 ],
               ),
             ),
-            Divider(
-              height: 2,
-            ),
-            GestureDetector(
-              child: Container(
-                padding: EdgeInsets.all(15),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: Text('联系手机'),
-                      ),
-                    ),
-                    Container(
-                      child: Text(
-                        orderModel.details.contactPhone == null
-                            ? ''
-                            : '${orderModel.details.contactPhone}',
-                        style: TextStyle(
-                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              onTap: () {
-                orderModel.details.contactPhone == null
-                    ? null
-                    : _selectActionButton(orderModel.details.contactPhone);
-              },
-            ),
+//            Container(
+//              padding: EdgeInsets.all(15),
+//              child: Row(
+//                children: <Widget>[
+//                  Expanded(
+//                    child: Container(
+//                      child: Text('联系人'),
+//                    ),
+//                  ),
+//                  Container(
+//                    child: Text(
+//                      orderModel.details.contactPerson == null
+//                          ? ''
+//                          : '${orderModel.details.contactPerson}',
+//                      style: TextStyle(
+//                          color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+//                    ),
+//                  )
+//                ],
+//              ),
+//            ),
+//            Divider(
+//              height: 2,
+//            ),
+//            GestureDetector(
+//              child: Container(
+//                padding: EdgeInsets.all(15),
+//                child: Row(
+//                  children: <Widget>[
+//                    Expanded(
+//                      child: Container(
+//                        child: Text('联系手机'),
+//                      ),
+//                    ),
+//                    Container(
+//                      child: Text(
+//                        orderModel.details.contactPhone == null
+//                            ? ''
+//                            : '${orderModel.details.contactPhone}',
+//                        style: TextStyle(
+//                            color: Color.fromRGBO(36, 38, 41, 1), fontSize: 16),
+//                      ),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//              onTap: () {
+//                orderModel.details.contactPhone == null
+//                    ? null
+//                    : _selectActionButton(orderModel.details.contactPhone);
+//              },
+//            ),
           ],
         ),
       );
     } else {
       return Container();
     }
+  }
+
+  Widget _buildTitle(){
+    return Container(
+      padding: EdgeInsets.all(15),
+      color: Colors.white,
+      child: Text(orderModel.details?.productName ?? '无标题',style: TextStyle(fontSize: 20),),
+    );
   }
 
   Widget _buildHeader() {
@@ -342,306 +373,359 @@ class _RequirementOrderDetailPageState
   Widget _buildMain() {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Column(
         children: <Widget>[
-          Column(children: [
-            _buildEntries(),
-          ]),
-          Divider(
-            height: 0,
-          ),
-          InfoRow(
-            label: '期望价格',
-            value: Text(
-              '￥${orderModel.details.maxExpectedPrice ?? 0}',
-              style: TextStyle(color: Colors.red, fontSize: 16),
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          InfoRow(
-            label: '加工类型',
-            value: Text(
-              orderModel.details.machiningType == null
-                  ? ''
-                  : MachiningTypeLocalizedMap[orderModel.details.machiningType],
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          InfoRow(
-            label: '交货时间',
-            value: Text(
-              '${DateFormatUtil.formatYMD(
-                  orderModel.details.expectedDeliveryDate)}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          InfoRow(
-            label: '是否需要打样',
-            value: Text(
-              orderModel.details.proofingNeeded == null
-                  ? ''
-                  : orderModel.details.proofingNeeded ? '是' : '否',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          InfoRow(
-            label: '是否提供样衣',
-            value: Text(
-              orderModel.details.samplesNeeded == null
-                  ? ''
-                  : orderModel.details.samplesNeeded ? '是' : '否',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          InfoRow(
-            label: '生产地区',
-            value: GestureDetector(
-              onTap: () {
-                showDialog(
-                    context: (context),
-                    builder: (context) {
-                      return SimpleDialog(
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.only(
-                              left: 10,
-                              right: 5,
-                            ),
-                            child: Text(
-                              orderModel.details?.productiveOrientations == null
-                                  ? '选取'
-                                  : formatAreaSelectsText(
-                                  orderModel.details.productiveOrientations,
-                                  orderModel.details.productiveOrientations
-                                      .length),
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          )
-                        ],
-                      );
-                    });
-              },
-              child: Text(
-                orderModel.details?.productiveOrientations == null
-                    ? '选取'
-                    : formatAreaSelectsText(
-                    orderModel.details.productiveOrientations, 2),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ),
-          Divider(
-            height: 0,
-          ),
-          InfoRow(
-            label: '是否开票',
-            value: Text(
-              orderModel.details.invoiceNeeded == null
-                  ? ''
-                  : orderModel.details.invoiceNeeded ? '是' : '否',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            hasBottomBorder: false,
-          ),
-          Divider(
-            height: 0,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEntries() {
-    Widget _pictureWidget;
-
-    if (orderModel.details.pictures == null) {
-      _pictureWidget = Container(
-        width: 80,
-        height: 80,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color.fromRGBO(243, 243, 243, 1)),
-        child: Icon(B2BIcons.noPicture,
-            color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-      );
-    } else {
-      if (orderModel.details.pictures.isEmpty) {
-        _pictureWidget = Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Color.fromRGBO(243, 243, 243, 1)),
-          child: Icon(B2BIcons.noPicture,
-              color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-        );
-      } else {
-        _pictureWidget = GestureDetector(
-          child: Stack(
-            alignment: const Alignment(1.0, 1.1),
-            children: <Widget>[
-              Container(
-                width: 80,
-                height: 80,
-                child: CachedNetworkImage(
-                    width: 100,
-                    height: 100,
-                    imageUrl: '${orderModel.details.pictures[0].previewUrl()}',
-                    fit: BoxFit.cover,
-                    imageBuilder: (context, imageProvider) =>
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                    placeholder: (context, url) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        ),
-                    errorWidget: (context, url, error) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        )),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              Container(
-                child: Icon(
-                  Icons.photo_size_select_actual,
-                  color: Colors.black38,
-                  size: 20,
-                ),
-              )
-            ],
-          ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PicturePickPreviewWidget(
-                  medias: orderModel.details.pictures,
-                  isUpload: false,
-                )));
-          },
-        );
-      }
-    }
-
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 15),
-      child: Row(
-        children: <Widget>[
-          _pictureWidget,
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              height: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  orderModel.details.productName != null
-                      ? Text(
-                    orderModel.details.productName,
-                    style: TextStyle(fontSize: 15),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                      : Text(
-                    ' ',
-                    style: TextStyle(fontSize: 15, color: Colors.red),
+//          Column(children: [
+//            _buildEntries(),
+//          ]),
+//          Divider(
+//            height: 0,
+//          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+//                    width: _leadingRowWidth,
+                    child: Text('品       类：'),
                   ),
-                  orderModel.details.productSkuID != null
-                      ? Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      '货号：${orderModel.details.productSkuID}',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  )
-                      : Container(),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      "${orderModel.details.majorCategoryName()}   ${orderModel
-                          .details.category?.name}   ${orderModel.details
-                          .expectedMachiningQuantity}件",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color.fromRGBO(255, 133, 148, 1)),
-                    ),
-                  )
-                ],
-              ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                          '${orderModel.details?.majorCategory?.name}-'
+                          '${orderModel.details?.category?.parent != null ? orderModel.details.category.parent.name + '-' : ''}'
+                          '${orderModel.details?.category?.name}',
+                      style: TextStyle(color: Colors.black, fontSize: 14)),
+                ),
+              ],
             ),
-          )
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('数       量：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                          '${orderModel.details.expectedMachiningQuantity ?? 0}件',
+                      style: TextStyle(color: Colors.black, fontSize: 14)),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('期望价格：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    '￥${orderModel.details.maxExpectedPrice ?? 0}',
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('交货日期：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    '${DateFormatUtil.formatYMD(
+                        orderModel.details.expectedDeliveryDate)}',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('加工类型：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    orderModel.details.machiningType == null
+                        ? ''
+                        : MachiningTypeLocalizedMap[orderModel.details.machiningType],
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('质量等级：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    formatEnumSelectsText(orderModel.details.salesMarket, FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('工厂区域：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    formatAreaSelectsText(
+                        orderModel.details.productiveOrientations, orderModel.details.productiveOrientations.length),
+//                  overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('是否开票：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    orderModel.details.invoiceNeeded == null
+                        ? ''
+                        : orderModel.details.invoiceNeeded ? '是' : '否',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('是否打样：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    orderModel.details.proofingNeeded == null
+                        ? ''
+                        : orderModel.details.proofingNeeded ? '是' : '否',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('发布方式：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    enumMap(PublishingModesEnum,orderModel.details.publishingMode),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: _flexL,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    width: _leadingRowWidth,
+                    child: Text('有效期限：'),
+                  ),
+                ),
+                Expanded(
+                  flex: _flexR,
+                  child: Text(
+                    enumMap(EffectiveDaysEnum, orderModel.details.effectiveDays == null ? '-1' : orderModel.details.effectiveDays.toString()),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Text('参考图片：'),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: EditableAttachments(list: orderModel.details.pictures,editable: false,),
+          ),
+          Divider(
+            height: 0,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            child: Row(
+              children: <Widget>[
+                Text('备注：'),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15,bottom: 15,right: 5),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: Text(orderModel.remarks ?? '')),
+              ],
+            ),
+          ),
+          Divider(
+            height: 0,
+          ),
         ],
       ),
     );
   }
 
-  String _majorCategory() {
-    return orderModel.details.majorCategory != null
-        ? orderModel.details.majorCategory.name
-        : '';
-  }
 
   Widget _buildQuote() {
     return Container(
       color: Colors.white,
+      margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: quotesList != null && quotesList.length > 0
           ? Column(
@@ -684,95 +768,6 @@ class _RequirementOrderDetailPageState
         ModalRoute.withName('/'));
   }
 
-  Widget _buildAttachments() {
-    return orderModel.attachments == null || orderModel.attachments.length <= 0
-        ? Container()
-        : Container(
-      color: Colors.white,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.only(top: 10),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                '附件',
-                style: TextStyle(fontSize: 16),
-              )
-            ],
-          ),
-          Attachments(
-            list: orderModel.attachments,
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRemarks() {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  '备注',
-                  style: TextStyle(fontSize: 16),
-                )
-              ],
-            ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Text(
-                  orderModel.remarks ?? '',
-                  overflow: TextOverflow.clip,
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAddress() {
-    //工厂端显示
-    if (UserBLoC.instance.currentUser.type == UserType.FACTORY) {
-      return Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(bottom: 10),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    '送货地址',
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                  )
-                ],
-              ),
-            ),
-            Row(
-              children: <Widget>[Text(orderModel.deliveryAddress ?? '')],
-            )
-          ],
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
 
   Widget _buildButtonGroups() {
     //品牌端显示
@@ -913,7 +908,6 @@ class _RequirementOrderDetailPageState
   List<PopupMenuItem<String>> _buildPopupMenu() {
     if (orderModel.editable != null &&
         orderModel.editable &&
-        UserBLoC.instance.currentUser.type == UserType.BRAND &&
         orderModel.status == RequirementOrderStatus.PENDING_QUOTE) {
       return <PopupMenuItem<String>>[
         PopupMenuItem<String>(
@@ -971,6 +965,18 @@ class _RequirementOrderDetailPageState
     }
   }
 
+  Future<bool> _onCancle(){
+    bool result = false;
+    try{
+      widget.onRequirementCancle();
+      result = true;
+    }catch(e){
+      result = false;
+    }
+
+    return Future.value(result);
+  }
+
   onMenuSelect(String value) async {
     switch (value) {
       case 'edit':
@@ -990,11 +996,34 @@ class _RequirementOrderDetailPageState
                 cancelButtonText: '取消',
                 dialogHeight: 180,
                 confirmAction: () async {
-                  await widget.onRequirementCancle();
-                  setState(() {
-                    orderModel.status = RequirementOrderStatus.CANCELLED;
+                  Navigator.pop(context);
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoading(
+                          requestCallBack: _onCancle(),
+                          outsideDismiss: false,
+                          loadingText: '正在关闭。。。',
+                          entrance: '',
+                        );
+                      }).then((value) {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            successTips: '关闭成功',
+                            failTips: '关闭失败',
+                            callbackResult: value,
+                            confirmAction: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          );
+                        });
                   });
-                  Navigator.of(context).pop();
                 },
               );
             });
@@ -1008,9 +1037,27 @@ class _RequirementOrderDetailPageState
 
   void onEdit() {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => RequirementOrderFrom(
-          order: orderModel,
-        )));
+        builder: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              builder: (_) => RequirementOrderFormState(detailModel: orderModel),
+            ),
+          ],
+          child: Builder(
+            builder: (context) {
+              RequirementOrderFormState state = Provider.of<RequirementOrderFormState>(context);
+              print('dddd');
+              return RequirementOrderSecondEditForm(formState: state,);
+            }
+          ),
+//          child: Consumer(
+//            builder: (context, RequirementOrderFormState state, _) {
+//              state.model = orderModel;
+//              print('dddd');
+//              return RequirementOrderSecondEditForm(formState: state,);
+//            }
+//          ),
+        ),));
   }
 
   ///TODO分享
@@ -1120,28 +1167,3 @@ class _RequirementOrderDetailPageState
   }
 }
 
-class InfoRow extends StatelessWidget {
-  const InfoRow({Key key, this.label, this.value, this.hasBottomBorder = true})
-      : super(key: key);
-
-  final String label;
-  final Widget value;
-  final bool hasBottomBorder;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            label,
-            style: TextStyle(fontSize: 16),
-          ),
-          value
-        ],
-      ),
-    );
-  }
-}

@@ -1,10 +1,15 @@
+import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
+import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
+import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
+import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
 import 'package:b2b_commerce/src/my/my_contract.dart';
 import 'package:b2b_commerce/src/my/my_contract_manage_page.dart';
+import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +56,9 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
+  static const ROUTE_SUBCONTRACTS_POOL = '/business/subcontract/subcontract_pool';
+  static const ROUTE_SUBCONTRACTS_MINE = '/business/subcontract/subcontract_mine';
+
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
   static const ROUTE_MY_FACTORY = '/my/my_factory';
@@ -74,6 +82,9 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_BILL = '/my/my_bill';
   static const ROUTE_DELIVERY = '/business/delivery';
 
+  static const ROUTE_ORDER_COORDINATION = '/business/order_coordination';
+  static const ROUTE_PUBLISH_CENTER = '/home/publish_center';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -83,10 +94,12 @@ class AppRoutes with GlobalRoutes {
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),
     ROUTE_SAMPLE_GARMENTS: (context) => SampleGarmentsPage(),
     ROUTE_SUPPLIERS: (context) => SuppliersPage(),
+    ROUTE_SUBCONTRACTS_POOL: (context) => SubContractPoolPage(),
+    ROUTE_SUBCONTRACTS_MINE: (context) => SubContractMinePage(),
     ROUTE_MY_HOME: (context) => MyHomePage(),
     ROUTE_MY_ACCOUNT: (context) => MyAccountPage(),
 //    ROUTE_MY_BRAND: (context) => MyBrandPage(),
-//    ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
+    ROUTE_MY_FACTORY: (context) => MyFactoryPage(),
     ROUTE_MY_ADDRESSES: (context) => MyAddressesPage(),
     ROUTE_MY_INVOICES: (context) => MyInvoicesPage(),
     ROUTE_MY_CONTRACT: (context) => MyContractManagePage(),
@@ -101,5 +114,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_BILL: (context) => MyBillPage(),
     ROUTE_MY_HELP: (context) => MyHelpPage(),
     ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage(),
+    ROUTE_ORDER_COORDINATION: (context) => OrderCoordinationPage(),
+    ROUTE_PUBLISH_CENTER: (context) => PublishCenterPage()
   };
 }

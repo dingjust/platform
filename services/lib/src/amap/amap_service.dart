@@ -32,7 +32,8 @@ class AmapService {
         'output': 'json',
         'key': GlobalConfigs.AMAP_TIP_KEY,
         'keywords': keywords ?? '',
-        'city': city ?? ''
+        'city': city ?? '',
+        'citylimit': true
       });
     } on DioError catch (e) {
       print(e);
@@ -97,5 +98,25 @@ class AmapService {
     AMapLocationClient.stopLocation();
     print('${aMapLocation.longitude}           ${aMapLocation.latitude}');
     return aMapLocation;
+  }
+
+  ///获取高德地理编码
+  Future<AmapGeocodeResponse> AmapGeoCode(String address) async {
+    Response<Map<String, dynamic>> response;
+    try {
+      response = await http$.get(Apis.AMAP_GEOCODE, data: {
+        'key': GlobalConfigs.AMAP_TIP_KEY,
+        'address': address,
+      });
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      AmapGeocodeResponse amapResponse =
+      AmapGeocodeResponse.fromJson(response.data);
+      return amapResponse;
+    } else {
+      return null;
+    }
   }
 }

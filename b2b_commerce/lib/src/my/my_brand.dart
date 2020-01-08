@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
+import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
 import 'package:b2b_commerce/src/my/company/form/my_company_certificate.dart';
@@ -18,12 +19,12 @@ import 'company/form/my_company_contact_form.dart';
 /// 认证信息
 class MyBrandPage extends StatefulWidget {
   MyBrandPage(
-    this.brand, {
+    this.brandUid, {
     this.isDetail = false,
     this.isSupplier = false,
   });
 
-  final BrandModel brand;
+  final String brandUid;
   final bool isDetail;
   final bool isSupplier;
 
@@ -31,40 +32,11 @@ class MyBrandPage extends StatefulWidget {
 }
 
 class _MyBrandPageState extends State<MyBrandPage> {
-  final Map<PurchaseOrderStatus, MaterialColor> _statusColors = {
-    PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
-    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Colors.yellow,
-    PurchaseOrderStatus.OUT_OF_STORE: Colors.yellow,
-    PurchaseOrderStatus.IN_PRODUCTION: Colors.yellow,
-    PurchaseOrderStatus.COMPLETED: Colors.green,
-    PurchaseOrderStatus.CANCELLED: Colors.grey,
-  };
-
-  Widget _buildContact(BuildContext context) {
-    return Container(
-      width: 80,
-      child: IconButton(
-        icon: Text(
-          '联系方式',
-          style: TextStyle(),
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MyCompanyContactFormPage(
-                    company: widget.brand,
-                    isDetail: widget.isDetail,
-                  ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+  BrandModel _brand;
 
   @override
   void initState() {
+//    _brand = BrandModel.fromJson(BrandModel.toJson(widget.brand));
     super.initState();
   }
 
@@ -76,8 +48,64 @@ class _MyBrandPageState extends State<MyBrandPage> {
     PurchaseOrderBLoC.instance.reset();
   }
 
+  Future<BrandModel> _getData() {
+    return UserRepositoryImpl().getBrand(widget.brandUid);
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    return FutureBuilder<BrandModel>(
+      future: _getData(),
+      initialData: BrandModel(),
+      builder: (context, snapshot) {
+          _brand = snapshot.data;
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              centerTitle: true,
+              title: const Text('公司介绍'),
+              elevation: 0.5,
+              actions: <Widget>[
+                Offstage(
+                  offstage:
+                  UserBLoC.instance.currentUser.companyCode != _brand.uid,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        IconButton(icon: Text('编辑',style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1),),), onPressed: ()async{
+                          dynamic result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MyBrandBaseFormPage(_brand)));
+                          if(result == true){
+                            dynamic brand = await UserRepositoryImpl().getBrand(_brand.uid);
+                            print(brand.name);
+                            if(brand != null){
+                              _brand = brand;
+                            }
+                          }
+                        })
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            body:
+
+            snapshot.data != null ? ListView(
+              children: _buildWidgets(),
+            ):Column(children: <Widget>[NoDataShow()],crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,),
+          );
+      }
+    );
+  }
+
+  _buildWidgets(){
     List<Widget> _widgets = [
       SizedBox(
         height: 10,
@@ -88,9 +116,8 @@ class _MyBrandPageState extends State<MyBrandPage> {
       _buildBrandBaseInfo(context),
     ];
     //获取与该品牌最新的报价单
-    _widgets.add(Offstage(
-      offstage: !widget.isSupplier,
-      child: Column(
+    if(widget.isSupplier){
+      _widgets.add(Column(
         children: <Widget>[
           SizedBox(
             height: 10,
@@ -103,12 +130,11 @@ class _MyBrandPageState extends State<MyBrandPage> {
             child: buildQuoteItem(),
           ),
         ],
-      ),
-    ));
+      ));
+    }
     //获取与该品牌最新的生产订单
-    _widgets.add(Offstage(
-      offstage: !widget.isSupplier,
-      child: Column(
+    if(widget.isSupplier){
+      _widgets.add(Column(
         children: <Widget>[
           SizedBox(
             height: 10,
@@ -121,8 +147,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
             child: buildPurchaseOrderItem(),
           ),
         ],
-      ),
-    ));
+      ));
+    }
+
     _widgets.add(
       SizedBox(
         height: 10,
@@ -141,21 +168,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
       ),
     );
     _widgets.add(_buildBrandRegisterDate());
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('公司介绍'),
-        elevation: 0.5,
-        actions: <Widget>[
-          _buildContact(context),
-        ],
-      ),
-      body: ListView(
-        children: _widgets,
-      ),
-    );
+    return _widgets;
   }
 
   FutureBuilder<PurchaseOrderModel> buildPurchaseOrderItem() {
@@ -192,7 +205,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CompanyPurchaseListPage(
-                                      companyUid: widget.brand.uid,
+                                      companyUid: _brand.uid,
                                     )));
                       },
                     ),
@@ -234,7 +247,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CompanyQuoteListPage(
-                                      companyUid: widget.brand.uid,
+                                      companyUid: _brand.uid,
                                     )));
                       },
                     ),
@@ -250,7 +263,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
     PurchaseOrderModel purchaseOrderModel;
     PurchaseOrdersResponse purchaseOrdersResponse =
         await PurchaseOrderRepository()
-            .getPurchaseOrdersByBrand(widget.brand.uid, {
+            .getPurchaseOrdersByBrand(_brand.uid, {
       'size': 1,
     });
 
@@ -265,7 +278,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
   Future<QuoteModel> getQuoteItem() async {
     QuoteModel quoteModel;
     QuoteOrdersResponse quoteOrdersResponse =
-        await QuoteOrderRepository().getQuotesByBrand(widget.brand.uid, {
+        await QuoteOrderRepository().getQuotesByBrand(_brand.uid, {
       'size': 1,
     });
 
@@ -282,7 +295,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
       child: ListTile(
         title: Text('注册时间'),
         trailing:
-            Text(DateFormatUtil.formatYMD(widget.brand.creationTime) ?? ''),
+            Text(DateFormatUtil.formatYMD(_brand.creationTime) ?? ''),
       ),
     );
   }
@@ -296,12 +309,12 @@ class _MyBrandPageState extends State<MyBrandPage> {
         title: Text('公司认证信息'),
         trailing: Icon(Icons.chevron_right),
         onTap: () {
-          if (widget.brand.type == CompanyType.INDIVIDUAL_HOUSEHOLD) {
+          if (_brand.type == CompanyType.INDIVIDUAL_HOUSEHOLD) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => MyPersonalCertificatePage(
-                          widget.brand,
+                          _brand,
                           onlyRead: true,
                         )));
           } else {
@@ -309,7 +322,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => MyCompanyCertificatePage(
-                          widget.brand,
+                          _brand,
                           onlyRead: true,
                         )));
           }
@@ -323,41 +336,11 @@ class _MyBrandPageState extends State<MyBrandPage> {
       padding: EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         children: <Widget>[
-          Offstage(
-            offstage:
-            UserBLoC.instance.currentUser.b2bUnit.uid != widget.brand.uid,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  MyBrandBaseFormPage(widget.brand)));
-                    },
-                    child: Container(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 214, 12, 1),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text('编辑'),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               children: <Widget>[
-                widget.brand.profilePicture != null
+                _brand.profilePicture != null
                     ? Container(
                         width: 80,
                         height: 80,
@@ -365,7 +348,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                             width: 100,
                             height: 100,
                             imageUrl:
-                                '${widget.brand.profilePicture.previewUrl()}',
+                                '${_brand.profilePicture.previewUrl()}',
                             fit: BoxFit.cover,
                             imageBuilder: (context, imageProvider) =>
                                 Container(
@@ -415,19 +398,19 @@ class _MyBrandPageState extends State<MyBrandPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          widget.brand.name ?? '',
+                          _brand.name ?? '',
                           style: TextStyle(
                             fontSize: 18,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-//                        widget.brand.starLevel == null ? Container() : Stars(starLevel:widget.brand.starLevel),
+//                        _brand.starLevel == null ? Container() : Stars(starLevel:_brand.starLevel),
                         Stars(
-                          starLevel: widget.brand.starLevel ?? 0,
+                          starLevel: _brand.starLevel ?? 0,
                         ),
                         Container(
                           child: Text(
-                            widget.brand.approvalStatus ==
+                            _brand.approvalStatus ==
                                     ArticleApprovalStatus.approved
                                 ? "已认证"
                                 : '未认证',
@@ -455,7 +438,111 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   ),
                 ),
                 Text(
-                  '${widget.brand.brand ?? ''}',
+                  '${_brand.brand ?? ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '联系人',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${_brand.contactPerson ?? ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '职务',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${_brand.duties ?? ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '联系方式',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${_brand.contactPhone ?? ''}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    '经营地址',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    '${_brand.contactAddress != null && _brand.contactAddress.region != null
+                  ? _brand.contactAddress.details
+                      : ''}',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '座机号码',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  '${_brand.phone ?? ''}',
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
@@ -474,7 +561,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   ),
                 ),
                 Text(
-                  "${widget.brand.cooperativeBrand ?? ''}",
+                  "${_brand.cooperativeBrand ?? ''}",
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
@@ -493,9 +580,9 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   ),
                 ),
                 Text(
-                  widget.brand.scaleRange == null
+                  _brand.scaleRange == null
                       ? ''
-                      : ScaleRangesLocalizedMap[widget.brand.scaleRange],
+                      : ScaleRangesLocalizedMap[_brand.scaleRange],
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
@@ -527,8 +614,8 @@ class _MyBrandPageState extends State<MyBrandPage> {
                                 ),
                                 child: Text(
                                   formatCategoriesSelectText(
-                                      widget.brand.adeptAtCategories,
-                                      widget.brand.adeptAtCategories.length),
+                                      _brand.adeptAtCategories,
+                                      _brand.adeptAtCategories.length),
                                   style: const TextStyle(
                                     fontSize: 16,
                                     color: Colors.grey,
@@ -541,12 +628,31 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   },
                   child: Text(
                     formatCategoriesSelectText(
-                        widget.brand.adeptAtCategories, 2),
+                        _brand.adeptAtCategories, 2),
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
                     ),
                   ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  '质量等级',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  formatEnumSelectsText(_brand.salesMarket, FactoryQualityLevelsEnum, 2),
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
@@ -564,64 +670,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
                   ),
                 ),
                 Text(
-                  formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '年龄段',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  formatAgeRangesText(widget.brand.ageRanges),
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '春夏款价格端',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  formatPriceRangesText(widget.brand.priceRange1s),
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '秋冬款价格端',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                Text(
-                  formatPriceRangesText(widget.brand.priceRange2s),
+                  formatEnumSelectsText(_brand.styles, StyleEnum, 4),
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],

@@ -1,15 +1,15 @@
 <template>
   <div class="info-detail-staff-body">
-    <el-dialog :visible.sync="deliverViewsVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="deliverViewsVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-deliver-views :slotData="slotData" @createNewDeliver="onCreateNewDeliver" />
     </el-dialog>
-    <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-receive :slotData="slotData" />
     </el-dialog>
-    <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-deliver :slotData="slotData" @afterCreate="onAfterCreate" />
     </el-dialog>
-    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-order-info-reconciliation :slotData="slotData" />
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">

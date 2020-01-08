@@ -1,36 +1,16 @@
 <template>
-  <div class="animated fadeIn brand-detail">
-    <el-row class="brand-info-title-row" type="flex" justify="space-between">
-      <div class="brand-info-title">
-        <h6 class="brand-info-title_text">公司信息</h6>
-      </div>
-      <i v-if="!readOnly" class="el-icon-edit" @click="onEdit" style="cursor:pointer;font-size: 20px"></i>
-    </el-row>
-    <el-row type="flex" :gutter="20">
-      <el-col :span="5" class="brand-card-class">
-        <brand-card-info-page :slotData="slotData"/>
-      </el-col>
-      <el-col :span="19">
-        <el-row type="flex">
-          <el-col :span="1">
-            <i class="factory-info" style="position: relative;top: -25px;">&#xe690;</i>
-          </el-col>
-          <el-col :span="11">
-            <brand-scale-info-page :slotData="slotData"/>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
+  <div class="animated fadeIn">
+    <el-card>
+        <brand-from1 :formData = "formData" @onSave="onSave"></brand-from1>
+    </el-card>
   </div>
 </template>
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
+  import BrandFrom1 from '../form/BrandForm1';
 
-  const {mapActions} = createNamespacedHelpers('BrandsModule');
-
-  import BrandCardInfoPage from '../info/BrandCardInfoPage';
-  import BrandScaleInfoPage from '../info/BrandScaleInfoPage';
+  const {mapGetters, mapMutations} = createNamespacedHelpers('BrandsModule');
 
   export default {
     name: 'BrandDetailsPage',
@@ -43,37 +23,104 @@
         default: true
       }
     },
-    components: {BrandScaleInfoPage, BrandCardInfoPage},
+    components: {BrandFrom1},
+    computed: {
+      ...mapGetters({
+        formData: 'formData',
+        isCitiesChanged: 'isCitiesChanged',
+        isDistrictsChanged: 'isDistrictsChanged',
+        cities: 'cities',
+        cityDistricts: 'cityDistricts',
+        brandFormVisible: 'brandFormVisible'
+      })
+    },
     methods: {
-      ...mapActions({
-        refresh: 'refresh'
+      ...mapMutations({
+        setFormData: 'setFormData',
+        setIsCitiesChanged: 'setIsCitiesChanged',
+        setIsDistrictsChanged: 'setIsDistrictsChanged',
+        setBrandFormVisible: 'setBrandFormVisible'
       }),
-      async onSubmit () {
-        let formData = this.slotData;
-
-        const url = this.apis().createBrand();
-        const result = await this.$http.post(url, formData);
+      async getBrand () {
+        var uid = this.$store.getters.currentUser.companyCode;
+        let url = this.apis().getBrand(uid);
+        const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success('品牌创建成功');
-        this.$set(this.slotData, 'code', result);
-        this.refresh();
-        this.fn.closeSlider(true);
+        this.setFormData(Object.assign({}, Object.assign(this.formData, result)));
+
+        if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
+          if (this.formData.contactAddress.region.isocode!='') {
+            this.getCities(this.formData.contactAddress.region);
+            this.setIsCitiesChanged(false);
+          }
+        }
+        if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
+          if (this.formData.contactAddress.city != null&&this.formData.contactAddress.city.code != '') {
+            this.getCityDistricts(this.formData.contactAddress.city);
+            this.setIsDistrictsChanged(false);
+          }
+        }
+
+        this.setBrandFormVisible(true);
       },
-      onCancel () {
-        this.fn.closeSlider();
-      }
-    },
-    computed: {
-      isNewlyCreated: function () {
-        return this.slotData.id === null;
+      async onSave () {
+        let data = Object.assign({}, this.formData);
+        var uid = this.$store.getters.currentUser.companyCode;
+        let url = this.apis().updateBrand(uid);
+        const result = await this.$http.put(url, data);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.getBrand();
+        this.setBrandFormVisible(false);
+        this.$message.success('编辑品牌信息成功');
+      },
+      async getRegions () {
+        const url = this.apis().getRegions();
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.regions = result;
+      },
+      async getCities (region, index) {
+        const url = this.apis().getCities(region.isocode);
+        const result = await this.$http.get(url);
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$store.state.BrandsModule.cities = result;
+      },
+      async getCityDistricts (city) {
+        const url = this.apis().getDistricts(city.code);
+        const result = await this.$http.get(url);
+
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+
+        this.$store.state.BrandsModule.cityDistricts = result;
       }
     },
     data () {
-      return {}
+      return {
+
+      }
+    },
+    created () {
+      this.getBrand();
     }
   }
 </script>

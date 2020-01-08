@@ -3,6 +3,7 @@ import http from '@/common/js/http';
 const state = {
   url: '',
   keyword: '',
+  isAdvancedSearch: false,
   statuses: [],
   currentPageNumber: 0,
   currentPageSize: 10,
@@ -107,6 +108,7 @@ const mutations = {
   url: (state, url) => state.url = url,
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
@@ -117,7 +119,8 @@ const actions = {
   async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('url', url);
     commit('keyword', keyword);
-    if (page) {
+    commit('isAdvancedSearch', false);
+    if (page || page === 0) {
       commit('currentPageNumber', page);
     }
 
@@ -140,7 +143,8 @@ const actions = {
   async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
-    if (page) {
+    commit('isAdvancedSearch', true);
+    if (page || page === 0) {
       commit('currentPageNumber', page);
     }
 
@@ -185,6 +189,7 @@ const getters = {
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
+  isAdvancedSearch: state => state.isAdvancedSearch,
   categories: state => state.categories
 };
 

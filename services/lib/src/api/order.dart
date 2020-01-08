@@ -5,6 +5,9 @@ class OrderApis {
   /// 根据条件获取需求订单列表 POST
   static get requirementOrders => '/{baseSiteId}/orders/requirement';
 
+  /// 传入经纬度需求订单列表 POST
+  static get requirementOrdersMap => '/{baseSiteId}/orders/requirement/map';
+
   ///关闭需求订单
   static get requirementOrderCancle =>
           (code) {
@@ -207,6 +210,11 @@ class OrderApis {
   static get doRecommendation =>
           (code, uid) {
         return '/{baseSiteId}/orders/requirement/$code/factory/$uid/recommend';
+      };
+
+  //邀请工厂（推荐多个需求给多个工厂）
+  static get doRecommendations => () {
+        return '/{baseSiteId}/orders/requirement/factory/recommend';
       };
 
   //确认打样订单

@@ -67,6 +67,15 @@ class TextFieldComponent extends StatefulWidget {
 
 class TextFieldComponentState extends State<TextFieldComponent> {
 
+  String formatNum(double num,int postion){
+    if((num.toString().length-num.toString().lastIndexOf(".")-1)<postion){
+      //小数点后有几位小数
+      return num.toStringAsFixed(postion).substring(0,num.toString().lastIndexOf(".")+postion+1).toString();
+    }else{
+      return num.toString().substring(0,num.toString().lastIndexOf(".")+postion+1).toString();
+    }
+  }
+
   @override
   void initState() {
 
@@ -81,6 +90,9 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         setState(() {
           widget.dividerColor == null? widget.dividerColor = Color.fromRGBO(255,214,12, 1):widget.dividerColor = widget.dividerColor;
           if(widget.prefix != null){
+//            if(widget.prefix == '￥'){
+//              widget.controller.text = formatNum(double.parse(widget.controller.text), 2);
+//            }
             widget.controller.text = widget.controller.text.replaceFirst(widget.prefix, '');
           }
         });
@@ -153,7 +165,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                   decoration: InputDecoration(
                     border: widget.isInputBorder?UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey,width: 0.5)):InputBorder.none,
                     hintText: widget.hintText,
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.grey,),
                   ),
                   autofocus: widget.autofocus,
                   focusNode: widget.focusNode,

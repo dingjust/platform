@@ -655,7 +655,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
               contentText2: '是否提交订单？',
               isNeedConfirmButton: true,
               isNeedCancelButton: true,
-              dialogHeight: 200,
+              dialogHeight: 210,
               confirmAction: () {
                 Navigator.of(context).pop();
                 onSubmit();
@@ -714,25 +714,27 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
             entrance: '',
           );
         }).then((value) {
-      print('==================$value');
       bool result = false;
       if (value != null) {
         result = true;
       }
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '下单失败',
-              successTips: '下单成功',
-              callbackResult: result,
-              confirmAction: () {
-                onPaying(value);
-              },
-            );
-          });
+      if (result) {
+        onPaying(value);
+      }
+      // showDialog(
+      //     context: context,
+      //     barrierDismissible: true,
+      //     builder: (_) {
+      //       return CustomizeDialog(
+      //         dialogType: DialogType.RESULT_DIALOG,
+      //         failTips: '下单失败',
+      //         successTips: '下单成功',
+      //         callbackResult: result,
+      //         confirmAction: () {
+      //           onPaying(value);
+      //         },
+      //       );
+      //     });
     });
   }
 
@@ -780,21 +782,23 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       if (value != null) {
         result = true;
       }
-      print('=================');
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '下单失败',
-              successTips: '下单成功',
-              callbackResult: result,
-              confirmAction: () {
-                onPaying(value);
-              },
-            );
-          });
+      if (result) {
+        onPaying(value);
+      }
+      // showDialog(
+      //     context: context,
+      //     barrierDismissible: false,
+      //     builder: (_) {
+      //       return CustomizeDialog(
+      //         dialogType: DialogType.RESULT_DIALOG,
+      //         failTips: '下单失败',
+      //         successTips: '下单成功',
+      //         callbackResult: result,
+      //         confirmAction: () {
+      //           onPaying(value);
+      //         },
+      //       );
+      //     });
     });
   }
 

@@ -293,8 +293,10 @@ class EditColorSizeNumTable extends StatelessWidget {
       ))
           .toList();
 
-      String colorCode =
-          entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
+      String colorCode = 'FFFFFF';
+      if(entries[0]?.model?.color?.colorCode != null){
+        colorCode = entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
+      }
 
       dataRowList.add(TableRow(children: <Widget>[
         TableCell(

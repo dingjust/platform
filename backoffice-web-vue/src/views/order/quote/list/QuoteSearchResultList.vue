@@ -18,7 +18,8 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品牌" prop="supplier.name" header-align="center" width="180"></el-table-column>
+      <el-table-column v-if="isTenant()" label="发布公司" prop="belongTo.name" header-align="center" width="180"></el-table-column>
+      <el-table-column v-else label="发布公司" prop="supplier.name" header-align="center" width="180"></el-table-column>
       <el-table-column label="报价" prop="user">
         <template slot-scope="scope">
           <span style="color: red">￥{{scope.row.unitPrice}}</span>
@@ -59,10 +60,10 @@
 
   export default {
     name: 'QuoteSearchResultList',
-    props: ["page"],
+    props: ['page'],
     components: {RequirementOrderRequestForm},
     methods: {
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.isAdvancedSearch) {
@@ -72,23 +73,26 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
         }
 
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       }
     },
-    data() {
+    data () {
       return {
-        isAdvancedSearch: this.$store.state.QuotesModule.isAdvancedSearch,
+        isAdvancedSearch: this.$store.state.QuotesModule.isAdvancedSearch
       }
     }
   }

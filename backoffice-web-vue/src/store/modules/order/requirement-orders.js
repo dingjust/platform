@@ -169,7 +169,7 @@ const actions = {
   async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
-    if (page) {
+    if (page != null) {
       commit('currentPageNumber', page);
     }
     if (size) {
@@ -186,7 +186,7 @@ const actions = {
   },
   async searchQuotesAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('quoteQueryFormData', query);
-    if (page) {
+    if (page || page === 0) {
       commit('quoteCurrentPageNumber', page);
     }
     if (size) {
@@ -204,7 +204,7 @@ const actions = {
   },
   async searchCooperatorsAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('cooperatorQueryFormData', query);
-    if (page) {
+    if (page || page === 0) {
       commit('cooperatorCurrentPageNumber', page);
     }
     if (size) {
@@ -222,7 +222,7 @@ const actions = {
   },
   async searchFactoriesAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('factoryQueryFormData', query);
-    if (page) {
+    if (page || page === 0) {
       commit('factoryCurrentPageNumber', page);
     }
     if (size) {

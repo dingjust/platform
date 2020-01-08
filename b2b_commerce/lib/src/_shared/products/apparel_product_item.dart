@@ -147,10 +147,10 @@ class ApparelProductItem extends StatelessWidget {
               ),
             ),
           ),
-          Offstage(
-            offstage: isSelectOption,
-            child: _buildButtons(context),
-          ),
+           UserBLoC.instance.currentUser.type == UserType.FACTORY ? Offstage(
+             offstage: isSelectOption,
+             child: _buildButtons(context),
+           ):Container(),
         ],
       ),
     );

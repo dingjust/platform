@@ -126,7 +126,7 @@
     },
     methods: {
       login() {
-        const username = this.username;
+        const username = this.username.replace(/(\s*$)/g, '');
         const password = this.password;
 
         this.$store.dispatch("login", {

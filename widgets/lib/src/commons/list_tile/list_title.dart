@@ -21,6 +21,7 @@ class B2BListTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Row(
         children: <Widget>[
@@ -30,15 +31,13 @@ class B2BListTitle extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
               child: Row(
                 children: <Widget>[
-                  Expanded(
-                      child:Wrap(
-                        children: <Widget>[
-                          prefix ?? Text(''),
-                          isRequired ? Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)) : Text(''),
-                        ],
-                      )
+                  Wrap(
+                    children: <Widget>[
+                      prefix ?? Text(''),
+                      isRequired ? Text(' *',style: TextStyle(fontSize: 16,color: Colors.red,)) : Text(''),
+                    ],
                   ),
-                  suffix == null? Text('') : suffix,
+                  Expanded(child: suffix == null? Text('') : suffix),
                   Icon(
                     Icons.chevron_right,
                     color: Colors.grey[600],

@@ -1,6 +1,6 @@
 <template>
   <div class="info-remarks-body" @mouseenter="onShowButton(true)" @mouseleave="onShowButton(false)">
-    <el-dialog :visible.sync="estimatedFormVisible" width="30%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="estimatedFormVisible" width="30%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <progress-date-setting-form :slotData="slotData" @afterSubmit="onAfterSubmit" />
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">

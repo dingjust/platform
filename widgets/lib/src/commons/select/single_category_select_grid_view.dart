@@ -33,47 +33,121 @@ class _SingleMajorCategorySelectGridViewState extends State<SingleMajorCategoryS
           widget.onItemTap(category);
         });
       },
-      child: Container(
-        margin: EdgeInsets.only(right: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            category.thumbnail != null ? Container(
-                width: 60,
-                height: 60,
-                decoration: ShapeDecoration(
-                  shadows: _selectRight == category.code ? [BoxShadow(color: Colors.grey,blurRadius: 5)] :[],
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  image: DecorationImage(
-                      image: NetworkImage('${category.thumbnail.actualUrl}'),
-                      fit: BoxFit.cover),
-                )
-            ) :
-            Container(
+      child: _selectRight == category.code ? _buildSelectedWidget(category): _buildWidget(category),
+    );
+  }
+
+  Container _buildSelectedWidget(CategoryModel category) {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          category.thumbnail != null ? Stack(
+            children: <Widget>[
+              Container(
+                  width: 60,
+                  height: 60,
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    image: DecorationImage(
+                        image: NetworkImage('${category.thumbnail.actualUrl}'),
+                        fit: BoxFit.cover),
+                  )
+              ),
+              Stack(
+                children: <Widget>[
+                  Opacity(
+                    opacity: 0.5,
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: ShapeDecoration(
+                        shadows: [BoxShadow(blurRadius: 5)],
+                        color: Colors.black54,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 60,
+                    height: 60,
+                    child: Center(
+                      child: Icon(Icons.check,color: Color(0xffffd60c),),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ):
+          Container(
+            width: 60,
+            height: 60,
+            decoration: ShapeDecoration(
+              shadows: _selectRight == category.code ? [BoxShadow(color: Colors.grey,blurRadius: 5)] :[],
+              color: Color.fromRGBO(243, 243, 243, 1),
+              shape: CircleBorder(),
+            ),
+            child: Icon(
+              B2BIcons.noPicture,
+              color: Color.fromRGBO(200, 200, 200, 1),
+              size: 40,
+            ),
+          ),
+          SizedBox(height: 10,),
+          Text(
+            '${category.name}',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 14,color: _selectRight == category.code
+                ? Color.fromRGBO(255, 219, 0, 1)
+                : Colors.black),
+          )
+        ],
+      ),
+    );
+  }
+  Container _buildWidget(CategoryModel category) {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          category.thumbnail != null ? Container(
               width: 60,
               height: 60,
               decoration: ShapeDecoration(
                 shadows: _selectRight == category.code ? [BoxShadow(color: Colors.grey,blurRadius: 5)] :[],
-                color: Color.fromRGBO(243, 243, 243, 1),
-                shape: CircleBorder(),
-              ),
-              child: Icon(
-                B2BIcons.noPicture,
-                color: Color.fromRGBO(200, 200, 200, 1),
-                size: 40,
-              ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                image: DecorationImage(
+                    image: NetworkImage('${category.thumbnail.actualUrl}'),
+                    fit: BoxFit.cover),
+              )
+          ) :
+          Container(
+            width: 60,
+            height: 60,
+            decoration: ShapeDecoration(
+              shadows: _selectRight == category.code ? [BoxShadow(color: Colors.grey,blurRadius: 5)] :[],
+              color: Color.fromRGBO(243, 243, 243, 1),
+              shape: CircleBorder(),
             ),
-            SizedBox(height: 10,),
-            Text(
-              '${category.name}',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 14,color: _selectRight == category.code
-                  ? Color.fromRGBO(255, 219, 0, 1)
-                  : Colors.black),
-            )
-          ],
-        ),
+            child: Icon(
+              B2BIcons.noPicture,
+              color: Color.fromRGBO(200, 200, 200, 1),
+              size: 40,
+            ),
+          ),
+          SizedBox(height: 10,),
+          Text(
+            '${category.name}',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 14,color: _selectRight == category.code
+                ? Color.fromRGBO(255, 219, 0, 1)
+                : Colors.black),
+          )
+        ],
       ),
     );
   }

@@ -45,8 +45,10 @@ var CDS = {
         var canvas = document.createElement("canvas");
 
         var context = canvas.getContext('2d');
-        canvas.width = 300;
-        canvas.height = 300;
+        canvas.width = 171.5;
+        canvas.height = 171.5;
+        // canvas.width = 100;
+        // canvas.height = 100;
 
         this.commonMethod(cType, fType);
 
@@ -76,10 +78,10 @@ var CDS = {
          */
         function drawCircle() {
             context.translate(0, 0);
-            context.lineWidth = 5;
+            context.lineWidth = 3;
             context.strokeStyle = CDS.baseConf.color;
             context.beginPath();
-            context.arc(width, height, 110, 0, Math.PI * 2);
+            context.arc(width, height, width-5, 0, Math.PI * 2);
             context.stroke();
             context.save();
             var data = canvas.toDataURL("image/jpeg")
@@ -106,7 +108,7 @@ var CDS = {
             for (var i = 0; i < 5; i++) {
                 var x = Math.sin(i * dig);
                 var y = Math.cos(i * dig);
-                context.lineTo(x * 30, y * 30);
+                context.lineTo(x * 20, y * 20);
             }
             context.closePath();
             context.stroke();
@@ -127,19 +129,19 @@ var CDS = {
             // }
 
             // 绘制印章名称
-            context.font = 'bolder 20px ' + CDS.baseConf.font;
+            context.font = 'bolder 15px ' + CDS.baseConf.font;
             context.textBaseline = 'middle'; //设置文本的垂直对齐方式
             context.textAlign = 'center'; //设置文本的水平对对齐方式
             context.lineWidth = 1;
             context.fillStyle = CDS.baseConf.color;
-            context.fillText(title, width, height + 65);
+            context.fillText(title, width, height + 45);
         }
 
         /**
          * 绘制公司名称
          */
         function writeFont() {
-            context.font = 'bolder 30px ' + CDS.baseConf.font;
+            context.font = 'bolder 15px ' + CDS.baseConf.font;
             var count = company.length; // 字数
             var angle = -4 * Math.PI / (3 * (count - 1)); // 字间角度
             var chars = company.split("");
@@ -152,7 +154,7 @@ var CDS = {
                 else
                     context.rotate(angle);
                 context.save();
-                context.translate(95, 0); // 平移到此位置,此时字和x轴垂直，第一个参数是与圆外边的距离，越大距离越近
+                context.translate(72, 0); // 平移到此位置,此时字和x轴垂直，第一个参数是与圆外边的距离，越大距离越近
                 context.rotate(Math.PI / 2); // 旋转90度,让字平行于x轴
                 context.fillText(c, 0, 5); // 此点为字的中心点
                 context.restore();
@@ -178,7 +180,7 @@ var CDS = {
                 else
                     context.rotate(angle);
                 context.save();
-                context.translate(-95, 5); // 平移到此位置,此时字和x轴垂直，第一个参数是与圆外边的距离，越大距离越近
+                context.translate(-65, 5); // 平移到此位置,此时字和x轴垂直，第一个参数是与圆外边的距离，越大距离越近
                 context.rotate(Math.PI / 2); // 旋转90度,让字平行于x轴
                 context.fillStyle = CDS.baseConf.color;
                 context.fillText(c, 0, 5); // 此点为字的中心点
@@ -271,8 +273,10 @@ var CDS = {
         //var canvas = document.getElementById('canvas');
         var canvas = document.createElement("canvas");
 
-        canvas.width = 300;
-        canvas.height = 300;
+        // canvas.width = 300;
+        // canvas.height = 300;
+        canvas.width = 100;
+        canvas.height = 100;
 
         canvas.width = 2 * radiusX + 5;
         canvas.height = 2 * radiusY + 5;

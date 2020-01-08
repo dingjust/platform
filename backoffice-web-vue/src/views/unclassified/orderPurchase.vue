@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="productSelectVisible" width="40%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <product-select :page="page" @onSearch="onSearch" @onSelect="onProductSelect" />
     </el-dialog>
     <el-card class="box-card">
@@ -444,7 +444,7 @@
           <el-col :span="24">
             <el-row type="flex" align="middle">
               <h6 class="info-input-prepend" style="width:45px">结果预览</h6>
-              <el-input type="textarea" autosize v-model="resultPreview" />
+              <el-input type="textarea" autosize v-model="resultPreview">
               </el-input>
             </el-row>
           </el-col>

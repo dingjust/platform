@@ -4,7 +4,7 @@ class B2BIcons {
   static const IconData bool =
       const IconData(0xe656, fontFamily: 'b2bIcons', matchTextDirection: true);
   static const IconData eye_not_see =
-      const IconData(0xe652, fontFamily: 'b2bIcons', matchTextDirection: true);
+  const IconData(0xe611, fontFamily: 'b2bIcons21', matchTextDirection: true);
   static const IconData publish_requirement_success =
       const IconData(0xe69e, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData factory_map =
@@ -95,6 +95,28 @@ class B2BIcons {
   const IconData(0xe723, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData close =
   const IconData(0xe641, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData switch_identity =
+  const IconData(0xe664, fontFamily: 'b2bIcons', matchTextDirection: true);
+
+  ///展开
+  static const IconData arrowOpen = const IconData(0xe714,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///关闭
+  static const IconData arrowClose = const IconData(0xe713,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///无网络
+  static const IconData noNet = const IconData(0xe766,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///分享
+  static const IconData share = const IconData(0xe60d,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///分享
+  static const IconData edit = const IconData(0xe6f5,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
 }
 
 class CommonImage {

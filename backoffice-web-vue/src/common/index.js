@@ -286,6 +286,9 @@ const COMMON_APIS = {
   offShelfProduct(code) {
     return '/b2b/products/apparel/' + code + '/off';
   },
+  deleteProduct(code) {
+    return '/b2b/products/apparel/' + code + '/deleted';
+  },
   createApparelProduct() {
     return '/b2b/products/apparel/create';
   },
@@ -566,7 +569,10 @@ const COMMON_APIS = {
   },
   ///上线倒计时/交货倒计时统计
   reportsProgress(){
-    return  'b2b/company/reports/progress'; 
+    return  'b2b/company/reports/progress';
+  },
+  checkTempName() {
+    return 'b2b/user/agreement/temp/check';
   }
 };
 
@@ -580,7 +586,7 @@ let TENANT_APIS = {
   getAllRequirementOrders() {
     return this.getRequirementOrders();
   },
-  getAllQuotes() {
+  getQuotes() {
     return '/b2b/orders/quote/all';
   },
   getPurchaseOrders() {
@@ -678,6 +684,27 @@ let TENANT_APIS = {
   },
   orderContractClick() {
     return '/b2b/user/agreement/order/validate';
+  },
+  platformOffShelfProduct(code) {
+    return '/b2b/products/apparel/' + code + '/platformOff';
+  },
+  platformDeletedShelfProduct(code) {
+    return '/b2b/products/apparel/' + code + '/platformDeleted';
+  },
+  platformCancelledRequirementOrder(code) {
+    return '/b2b/orders/requirement/platformCancelled/' + code;
+  },
+  platformCancelQuote(code) {
+    return '/b2b/orders/quote/' + code + '/platformCancel';
+  },
+  platformCancellingOfProofing(code) {
+    return '/b2b/orders/proofing/' + code + '/platformCancelling';
+  },
+  forbiddenCompany(uid) {
+    return '/b2b/companies/forbidden/' + uid;
+  },
+  cannelForbiddenCompany(uid) {
+    return '/b2b/companies/cannelForbidden/' + uid;
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);

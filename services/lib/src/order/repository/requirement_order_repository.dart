@@ -7,21 +7,23 @@ import 'package:services/services.dart';
 class RequirementOrderRepository {
   /// 发布需求
   Future<String> publishNewRequirement(RequirementOrderModel form,
-      String factoryUid, bool privacy,{String factories}) async {
-    Map<String,dynamic> map = {};
-    if(factoryUid != null){
+      String factoryUid, bool privacy,
+      {String factories}) async {
+    Map<String, dynamic> map = {};
+    if (factoryUid != null) {
       map['factory'] = factoryUid;
       map['privacy'] = privacy;
     }
 
-    if(factories != null){
+    if (factories != null) {
       map['factories'] = factories;
       map['privacy'] = privacy;
     }
 
     Response response;
     try {
-      response = await http$.post(OrderApis.requirementOrderNew + '?factories=' +factories,
+      response = await http$.post(
+          OrderApis.requirementOrderNew + '?factories=' + factories,
           data: RequirementOrderModel.toJson(form),
 //          queryParameters: map,
           options: Options(responseType: ResponseType.plain));
@@ -92,6 +94,29 @@ class RequirementOrderRepository {
     try {
       response = await http$.put(OrderApis.doRecommendation(code, factoryId),
           options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //邀请报价（推荐需求）
+  Future<bool> doRecommendations(List<String> codes,
+      List<String> factoryUids) async {
+    print(codes);
+    print(factoryUids.join(','));
+    Response response;
+    try {
+      response = await http$.put(OrderApis.doRecommendations(),
+          options: Options(responseType: ResponseType.plain),
+          queryParameters: {
+            'codes': codes.join(','),
+            'factoryUids': factoryUids.join(','),
+          });
     } on DioError catch (e) {
       print(e);
     }

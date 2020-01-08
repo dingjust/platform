@@ -1,6 +1,6 @@
 <template>
   <div class="animated fadeIn content">
-    <el-dialog title="修改密码" :visible.sync="dialogVisible" :modal="false" width="30%">
+    <el-dialog title="修改密码" :visible.sync="dialogVisible" :modal="false" width="30%" :close-on-click-modal="false">
       <change-password-page :username="currentUser.username" :ignore-old-password="false"
         @onChangePassword="doChangePassword" @onCancel="onCancel" />
     </el-dialog>
@@ -89,7 +89,7 @@
         this.dialogVisible = false;
       },
       async doChangePassword(oldPassword, newPassword) {
-        const url = this.apis().changePassword(this.currentUser.username);
+        const url = this.apis().changePassword(this.currentUser.uid);
         const result = await this.$http.put(url, null, {
           old: oldPassword,
           new: newPassword

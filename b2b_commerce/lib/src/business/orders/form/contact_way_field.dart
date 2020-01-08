@@ -27,22 +27,17 @@ class ContactWayFieldState extends State<ContactWayField>{
     return GestureDetector(
         child: Container(
           child: ListTile(
-            leading: Wrap(
-              children: <Widget>[
-                Text(
-                  '联系方式',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black
-                  ),
+            leading:  RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: '联系方式',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
-                Text(
-                    ' *',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.red)
-                ),
-              ],
+                TextSpan(
+                  text: ' *',
+                  style: TextStyle(fontSize: 16, color: Colors.red),
+                )
+              ]),
             ),
             trailing: widget.item.details?.contactPerson == null && widget.item.details?.contactPhone == null ?
             Icon(Icons.chevron_right,color: Colors.black,) :

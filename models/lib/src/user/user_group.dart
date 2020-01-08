@@ -42,9 +42,9 @@ enum AuthenticationStatus {
 // TODO: i18n处理
 const AuthenticationStatusLocalizedMap = {
   AuthenticationStatus.CHECK: '认证中',
-  AuthenticationStatus.UNCERTIFIED : '未认证',
-  AuthenticationStatus.SUCCESS : '认证成功',
-  AuthenticationStatus.FAILED : '认证失败',
+  AuthenticationStatus.UNCERTIFIED: '未认证',
+  AuthenticationStatus.SUCCESS: '认证成功',
+  AuthenticationStatus.FAILED: '认证失败',
 };
 
 /// 公司
@@ -114,6 +114,9 @@ class CompanyModel extends UserGroupModel {
   @JsonKey(toJson: _labelsToJson)
   List<LabelModel> labels;
 
+  //职务
+  String duties;
+
   CompanyModel({
     MediaModel profilePicture,
     String uid,
@@ -139,6 +142,7 @@ class CompanyModel extends UserGroupModel {
     this.approvalStatus,
     this.profiles,
     this.labels,
+    this.duties,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -200,6 +204,7 @@ class OrgUnitModel extends CompanyModel {
     ArticleApprovalStatus approvalStatus,
     List<CompanyProfileModel> companyProfiles,
     List<LabelModel> labels,
+    String duties,
     this.path,
   }) : super(
           profilePicture: profilePicture,
@@ -226,6 +231,7 @@ class OrgUnitModel extends CompanyModel {
           approvalStatus: approvalStatus,
           profiles: companyProfiles,
           labels: labels,
+    duties: duties,
         );
 
   factory OrgUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -246,6 +252,8 @@ class B2BUnitModel extends OrgUnitModel {
   double latitude;
 
   String locationAddress;
+
+  bool profileCompleted;
 
   B2BUnitModel(
       {MediaModel profilePicture,
@@ -273,9 +281,11 @@ class B2BUnitModel extends OrgUnitModel {
       ArticleApprovalStatus approvalStatus,
       List<CompanyProfileModel> companyProfiles,
       List<LabelModel> labels,
+        String duties,
       this.active,
       this.email,
       this.phone,
+        this.profileCompleted,
         this.locationAddress,
       this.longitude,
       this.latitude})
@@ -305,6 +315,7 @@ class B2BUnitModel extends OrgUnitModel {
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
           labels: labels,
+    duties: duties,
         );
 
   factory B2BUnitModel.fromJson(Map<String, dynamic> json) =>
@@ -342,6 +353,9 @@ class BrandModel extends B2BUnitModel {
   //价位段（秋冬）
   List<PriceRanges> priceRange2s;
 
+  //价位段（秋冬）
+  List<String> salesMarket;
+
   BrandModel({
     MediaModel profilePicture,
     String uid,
@@ -370,6 +384,7 @@ class BrandModel extends B2BUnitModel {
     ArticleApprovalStatus approvalStatus,
     List<CompanyProfileModel> companyProfiles,
     List<LabelModel> labels,
+    String duties,
     this.brand,
     this.scaleRange,
     this.ageRanges,
@@ -378,6 +393,7 @@ class BrandModel extends B2BUnitModel {
     this.priceRange2s,
     this.styles,
     this.adeptAtCategories,
+    this.salesMarket,
   }) : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -406,6 +422,7 @@ class BrandModel extends B2BUnitModel {
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
           labels: labels,
+    duties: duties,
         );
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
@@ -510,7 +527,7 @@ class FactoryModel extends B2BUnitModel {
   String freeProofing;
 
   //质量等级
-  String qualityLevel;
+  List<String> qualityLevels;
 
   //产能
   @JsonKey(toJson: _capacitiesToJson)
@@ -543,6 +560,7 @@ class FactoryModel extends B2BUnitModel {
         ArticleApprovalStatus approvalStatus,
         List<CompanyProfileModel> companyProfiles,
         List<LabelModel> labels,
+        String duties,
         this.historyOrdersCount,
         this.orderedSuccessRate,
         this.monthlyCapacityRange,
@@ -563,7 +581,7 @@ class FactoryModel extends B2BUnitModel {
         this.cuttingDepartment,
         this.productionWorkshop,
         this.lastDepartment,
-        this.qualityLevel,
+        this.qualityLevels,
         this.design,
         this.pattern,
         this.freeProofing,
@@ -572,7 +590,7 @@ class FactoryModel extends B2BUnitModel {
         this.coverageArea,
         this.proprietaryProducts,
         this.capacities,
-       this.populationScale})
+        this.populationScale})
       : super(
           profilePicture: profilePicture,
           uid: uid,
@@ -600,6 +618,7 @@ class FactoryModel extends B2BUnitModel {
           approvalStatus: approvalStatus,
           companyProfiles: companyProfiles,
           labels: labels,
+    duties: duties,
         );
 
   factory FactoryModel.fromJson(Map<String, dynamic> json) =>
@@ -614,7 +633,9 @@ class FactoryModel extends B2BUnitModel {
 
   static List<Map<String, dynamic>> _capacitiesToJson(
           List<FactoryCapacityModel> capacities) =>
-      capacities.map((capacity) => FactoryCapacityModel.toJson(capacity)).toList();
+      capacities
+          .map((capacity) => FactoryCapacityModel.toJson(capacity))
+          .toList();
 
   static List<Map<String, dynamic>> _productToJson(
           List<ProductModel> products) =>
@@ -623,7 +644,6 @@ class FactoryModel extends B2BUnitModel {
   static Map<String, dynamic> _industrialClusterToJson(
           IndustrialClusterModel model) =>
       IndustrialClusterModel.toJson(model);
-
 }
 
 @JsonSerializable()
@@ -790,6 +810,10 @@ const ScaleRangesLocalizedMap = {
   ScaleRanges.SR005: "5000万以上",
 };
 
+ScaleRanges scaleRangeFromString(String val) {
+  return _$enumDecodeNullable(_$ScaleRangesEnumMap, val);
+}
+
 enum PopulationScale {
   /// 50人以下
   N01,
@@ -938,20 +962,14 @@ const LastDepartmentLocalizedMap = {
 };
 
 //设计
-enum FactoryDesign {
-  SUPPORTED,
-  NOT_SUPPORTED
-}
+enum FactoryDesign { SUPPORTED, NOT_SUPPORTED }
 
 const FactoryDesignLocalizedMap = {
   FactoryDesign.SUPPORTED: '支持',
   FactoryDesign.NOT_SUPPORTED: '不支持'
 };
 //打板
-enum FactoryPattern {
-  SUPPORTED,
-  NOT_SUPPORTED
-}
+enum FactoryPattern { SUPPORTED, NOT_SUPPORTED }
 
 const FactoryPatternLocalizedMap = {
   FactoryPattern.SUPPORTED: '支持',
@@ -959,10 +977,7 @@ const FactoryPatternLocalizedMap = {
 };
 
 //免费打样
-enum FactoryFreeProofing {
-  SUPPORTED,
-  NOT_SUPPORTED
-}
+enum FactoryFreeProofing { SUPPORTED, NOT_SUPPORTED }
 
 const FactoryFreeProofingLocalizedMap = {
   FactoryFreeProofing.SUPPORTED: '支持',
@@ -1049,7 +1064,6 @@ const CompanyTypeStateLocalizedMap = {
   CompanyTypeState.INDIVIDUAL: '个体户',
 };
 
-
 //认证状态model
 @JsonSerializable()
 class AuthenticationModel extends ItemModel {
@@ -1057,11 +1071,8 @@ class AuthenticationModel extends ItemModel {
   AuthenticationState companyState;
   CompanyTypeState companyType;
 
-  AuthenticationModel({
-    this.personalState,
-    this.companyState,
-    this.companyType
-  });
+  AuthenticationModel(
+      {this.personalState, this.companyState, this.companyType});
 
   factory AuthenticationModel.fromJson(Map<String, dynamic> json) =>
       _$AuthenticationModelFromJson(json);
@@ -1150,7 +1161,6 @@ class CertificationInfo {
 
   static Map<String, dynamic> toJson(CertificationInfo model) =>
       _$CertificationInfoToJson(model);
-
 }
 
 enum VerifyWay {
@@ -1163,7 +1173,7 @@ const VerifyWayLocalizedMap = {
   VerifyWay.WAY2: '纸质材料',
 };
 
-enum AuthenticationRole{
+enum AuthenticationRole {
   AGENT,
   LEGAL,
 }
@@ -1174,14 +1184,14 @@ const AuthenticationRoleLocalizedMap = {
 };
 
 @JsonSerializable()
-class AuthenUserInfo{
+class AuthenUserInfo {
   String mobile;
   String idCardNum;
   String name;
 
-  AuthenUserInfo(this.mobile,this.idCardNum,this.name);
+  AuthenUserInfo(this.mobile, this.idCardNum, this.name);
 
- factory AuthenUserInfo.fromJson(Map<String, dynamic> json) =>
+  factory AuthenUserInfo.fromJson(Map<String, dynamic> json) =>
       _$AuthenUserInfoFromJson(json);
 
   static Map<String, dynamic> toJson(AuthenUserInfo model) =>

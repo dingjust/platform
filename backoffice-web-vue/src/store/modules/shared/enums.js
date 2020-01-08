@@ -840,23 +840,23 @@ const state = {
   //产值
   scaleRanges: [{
       code: 'SR001',
-      name: '0-100万'
+      name: '0-100万元'
     },
     {
       code: 'SR002',
-      name: '100万-500万'
+      name: '100万元-500万元'
     },
     {
       code: 'SR003',
-      name: '500万-1000万'
+      name: '500万元-1000万元'
     },
     {
       code: 'SR004',
-      name: '1000万-5000万'
+      name: '1000万元-5000万元'
     },
     {
       code: 'SR005',
-      name: '5000万以上'
+      name: '5000万元以上'
     }
   ],
   //月均产能
@@ -894,11 +894,11 @@ const state = {
     },
     {
       code: 'N02',
-      name: '51到100人'
+      name: '51-100人'
     },
     {
       code: 'N03',
-      name: '101到200人'
+      name: '101-200人'
     },
     {
       code: 'N04',
@@ -962,15 +962,15 @@ const state = {
   //质量等级
   FactoryQualityLevel: [{
       code: 'A_CHAIN',
-      name: '一线连锁'
+      name: '一线大牌'
     },
     {
       code: 'REGIONAL_CHAIN',
-      name: '区域连锁'
+      name: '区域品牌'
     },
     {
       code: 'STALL_WHOLESALE',
-      name: '档口批发'
+      name: '档口精品'
     },
     {
       code: 'ELECTRONIC_COMMERCE_QUALITY',
@@ -978,7 +978,7 @@ const state = {
     },
     {
       code: 'WHOLESALE_TRADE',
-      name: '外贸批发'
+      name: '外贸跑量'
     }
   ],
   //裁剪部
@@ -1310,15 +1310,15 @@ const state = {
   //质量等级
   SalesMarkets: [{
       code: 'A_CHAIN',
-      name: '一线连锁'
+      name: '一线大牌'
     },
     {
       code: 'REGIONAL_CHAIN',
-      name: '区域连锁'
+      name: '区域品牌'
     },
     {
       code: 'STALL_WHOLESALE',
-      name: '档口批发'
+      name: '档口精品'
     },
     {
       code: 'ELECTRONIC_COMMERCE_QUALITY',
@@ -1326,7 +1326,7 @@ const state = {
     },
     {
       code: 'WHOLESALE_TRADE',
-      name: '外贸批发'
+      name: '外贸跑量'
     }
   ],
   //有效期限

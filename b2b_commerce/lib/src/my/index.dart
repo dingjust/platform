@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/home/_shared/widgets/notifications.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import '../_shared/widgets/image_factory.dart';
 import '../common/app_image.dart';
 import '../common/app_keys.dart';
 import '../common/app_routes.dart';
+import 'account/profile.dart';
 import 'my_authentication.dart';
 
 var menuSeparator = Container(
@@ -20,11 +20,18 @@ var menuSeparator = Container(
 );
 
 /// 我的
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  final VoidCallback turnToHome;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+
+  MyHomePage({this.turnToHome}) : super(key: AppKeys.myHomePage);
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   static final GlobalKey<ScaffoldState> _scaffoldKey =
   GlobalKey<ScaffoldState>();
-
-  MyHomePage() : super(key: AppKeys.myHomePage);
 
   final double _appBarHeight = 160.0;
 
@@ -37,8 +44,8 @@ class MyHomePage extends StatelessWidget {
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
-        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
-            AppRoutes.ROUTE_MY_ACCOUNT),
+        // MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
+        //     AppRoutes.ROUTE_MY_ACCOUNT),
         menuSeparator,
         CompanyIntroductionMenuItem(),
         menuSeparator,
@@ -51,12 +58,6 @@ class MyHomePage extends StatelessWidget {
         MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '发票管理',
             AppRoutes.ROUTE_MY_INVOICES),
         menuSeparator,
-        MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '合同管理',
-            AppRoutes.ROUTE_MY_CONTRACT),
-        MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '产能发布（工厂）',
-            AppRoutes.ROUTE_MY_CAPACITY),
-        MenuItem(B2BImage.invoiceManage(width: 26, height: 21), '空闲产能（品牌）',
-            AppRoutes.ROUTE_CAPACITY_MATCHING),
       ]),
       Menu('', <Widget>[
         MenuItem(B2BImage.customerService(width: 25, height: 25), '联系客服',
@@ -80,10 +81,10 @@ class MyHomePage extends StatelessWidget {
               expandedHeight: _appBarHeight,
               pinned: true,
               actions: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: NotificationsIcon(),
-                ),
+                // Container(
+                //   margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                //   child: NotificationsIcon(),
+                // ),
               ],
               flexibleSpace: FlexibleSpaceBar(
                 key: AppKeys.myHomeSpaceBar,
@@ -116,6 +117,7 @@ class MyHomePage extends StatelessWidget {
                   fit: StackFit.expand,
                   children: <Widget>[
                     _buildTopBackground(context, bloc.currentUser),
+                    _buildSwitchBtn(context),
                   ],
                 ),
               ),
@@ -133,6 +135,13 @@ class MyHomePage extends StatelessWidget {
         if (user.status != UserStatus.ONLINE) {
           Navigator.of(context)
               .push((MaterialPageRoute(builder: (context) => B2BLoginPage())));
+        } else {
+          Navigator.of(context)
+              .push((MaterialPageRoute(builder: (context) => ProfilePage())))
+              .then((val) {
+            //修改资料后刷新
+            setState(() {});
+          });
         }
       },
       child: Container(
@@ -158,7 +167,7 @@ class MyHomePage extends StatelessWidget {
       height: 80,
       margin: const EdgeInsets.fromLTRB(20, 20, 10, 10),
       child: Container(
-        child: ImageFactory.buildDefaultAvatar(user.b2bUnit?.profilePicture),
+        child: ImageFactory.buildDefaultAvatar(user.profilePicture),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white, width: 0.5),
           color: Colors.white,
@@ -184,7 +193,7 @@ class MyHomePage extends StatelessWidget {
                       margin: EdgeInsets.only(top: 20),
                       child: Text(
                         "${user.name}",
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -194,14 +203,19 @@ class MyHomePage extends StatelessWidget {
                     ))
               ],
             ),
-            Container(
-              child: Text(
-                '${UserBLoC.instance.currentUser.companyName}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: const Color.fromRGBO(132, 114, 1, 1),
-                ),
-              ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    '${UserBLoC.instance.currentUser.companyName}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: const Color.fromRGBO(132, 114, 1, 1),
+                    ),
+                  ),
+                )
+              ],
             )
           ],
         ),
@@ -214,6 +228,50 @@ class MyHomePage extends StatelessWidget {
         ),
       );
     }
+  }
+
+  Widget _buildSwitchBtn(BuildContext context) {
+    return Positioned(
+      top: 25,
+      right: 0,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20), topLeft: Radius.circular(20)),
+        ),
+        color: Color.fromRGBO(253, 246, 67, 0.5),
+        child: Container(
+          child: Row(
+            children: <Widget>[
+              Icon(B2BIcons.switch_identity),
+              Text(
+                  '切换至${UserBLoC.instance.currentUser.type == UserType.BRAND
+                      ? '工厂'
+                      : '品牌'}')
+            ],
+          ),
+        ),
+        onPressed: () {
+          if (UserBLoC.instance.currentUser.status == UserStatus.OFFLINE) {
+            UserBLoC.instance.changeUserType(
+                UserBLoC.instance.currentUser.type == UserType.BRAND
+                    ? UserType.FACTORY
+                    : UserType.BRAND);
+            widget.turnToHome?.call();
+            return;
+          }
+          showConfirmDialog(true, message: '切换身份将会退出登录状态，是否确认？', confirm: () {
+            UserBLoC.instance.logout().then((val) {
+              UserBLoC.instance.changeUserType(
+                  UserBLoC.instance.currentUser.type == UserType.BRAND
+                      ? UserType.FACTORY
+                      : UserType.BRAND);
+              widget.turnToHome?.call();
+            });
+          });
+        },
+      ),
+    );
   }
 }
 
@@ -308,12 +366,11 @@ class CompanyIntroductionMenuItem extends StatelessWidget {
       onTap: () {
         // 品牌详情
         if (bloc.currentUser.type == UserType.BRAND) {
-          UserRepositoryImpl()
-              .getBrand(bloc.currentUser.companyCode)
-              .then((brand) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => MyBrandPage(brand)));
-          });
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MyBrandPage(bloc.currentUser.companyCode)));
         }
         // 工厂详情
         if (bloc.currentUser.type == UserType.FACTORY) {

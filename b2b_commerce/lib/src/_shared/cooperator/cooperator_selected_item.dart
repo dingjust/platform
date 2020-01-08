@@ -15,18 +15,25 @@ class CooperatorSelectedItem extends StatelessWidget {
     return Container(
       height: 60,
       decoration: BoxDecoration(
-          color: Color(0xffffd60c),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(5),
 //            border: Border.all(color: Colors.grey),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Expanded(child: Center(child: Text('${model?.partner?.name}',style: TextStyle(color: Colors.white),))),
           Padding(
-            padding: const EdgeInsets.only(right: 15.0),
-            child: Icon(Icons.check,color: Colors.white,),
-          )
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child:  Container(
+              width: 20,
+              decoration: ShapeDecoration(
+                color: Colors.blue,
+                shape: CircleBorder(side: BorderSide(color: Colors.grey,style: BorderStyle.none)),
+              ),
+              child: Icon(Icons.check,size: 15,color: Colors.white,),
+            ),
+          ),
+          Expanded(child: Text('${model?.partner?.name}',style: TextStyle(color: Colors.black,fontSize: 18),)),
         ],
       ),
     );

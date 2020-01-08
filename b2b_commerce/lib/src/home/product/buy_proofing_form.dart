@@ -17,7 +17,10 @@ class BuyProofingForm extends StatefulWidget {
 
   final double heightScale;
 
-  const BuyProofingForm(this.product, {Key key, this.heightScale = 0.75})
+  final VoidCallback onRefresh;
+
+  const BuyProofingForm(this.product,
+      {Key key, this.heightScale = 0.75, this.onRefresh})
       : super(key: key);
 
   @override
@@ -47,14 +50,25 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   //总数
   int totalNum = 0;
 
+  //输入即时刷新监听
+  Function textEditControllerListener;
+
   @override
   void initState() {
     remarksEditingController = TextEditingController();
 
-    productEntries = widget.product.variants
-        .map((variant) => EditApparelSizeVariantProductEntry(
-            controller: TextEditingController(), model: variant))
-        .toList();
+    //初始化监听器
+    textEditControllerListener = () {
+      setState(() {});
+    };
+
+    productEntries = widget.product.variants.map((variant) {
+      TextEditingController controller = TextEditingController();
+      //赋值监听器，即时监听用户输入
+      controller.addListener(textEditControllerListener);
+      return EditApparelSizeVariantProductEntry(
+          controller: controller, model: variant);
+    }).toList();
     if (productEntries != null) {
       productEntries.forEach((entry) {
         if (colorRowList[entry.model.color.code] == null) {
@@ -282,6 +296,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                           inputFormatters: <TextInputFormatter>[
                             WhitelistingTextInputFormatter.digitsOnly,
                           ],
+
                           onChanged: (val) {
                             if (val == '0') {
                               setState(() {
@@ -636,20 +651,23 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
       if (value != null) {
         result = true;
       }
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '下单失败',
-              successTips: '下单成功',
-              callbackResult: result,
-              confirmAction: () {
-                getOrderDetail(value);
-              },
-            );
-          });
+      if (result) {
+        getOrderDetail(value);
+      }
+      // showDialog(
+      //     context: context,
+      //     barrierDismissible: false,
+      //     builder: (_) {
+      //       return CustomizeDialog(
+      //         dialogType: DialogType.RESULT_DIALOG,
+      //         failTips: '下单失败',
+      //         successTips: '下单成功',
+      //         callbackResult: result,
+      //         confirmAction: () {
+      //           getOrderDetail(value);
+      //         },
+      //       );
+      //     });
     });
   }
 
@@ -670,6 +688,10 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   void dispose() {
     // TODO: implement dispose
     _streamController.close();
+    //删除监听器
+    productEntries.forEach((entry) {
+      entry.controller.removeListener(textEditControllerListener);
+    });
     super.dispose();
   }
 }

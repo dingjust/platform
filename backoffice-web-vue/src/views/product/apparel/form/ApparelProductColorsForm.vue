@@ -9,7 +9,7 @@
     </el-row>
     <el-checkbox-group v-model="slotData.colors">
       <template v-for="color in showingColors">
-        <dj-checkbox class="colors-dj-checkbox" :label="color.code" :width="40" :colorCode="color.colorCode">
+        <dj-checkbox class="colors-dj-checkbox" :label="color.code" :width="40" :colorCode="color.colorCode" :disabled="isRead">
           {{color.name}}
         </dj-checkbox>
       </template>
@@ -25,10 +25,10 @@
   import DjCheckbox from '@/components/custom/DjCheckbox';
 
   export default {
-    name: "ApparelProductColorsForm",
-    props: ["slotData", "readOnly"],
+    name: 'ApparelProductColorsForm',
+    props: ['slotData', 'readOnly', 'isRead'],
     components: {
-      DjCheckbox,
+      DjCheckbox
     },
     computed: {
       showingColors: function () {
@@ -40,36 +40,38 @@
       }
     },
     methods: {
-      async getAllColors() {
+      async getAllColors () {
         const url = this.apis().getAllColors();
         this.colors = await this.$http.get(url);
         this.generateColorMap();
       },
-      handleClose(index) {
+      handleClose (index) {
+        if (this.isRead) {
+          return;
+        }
         this.slotData.colors.splice(index, 1);
       },
-      generateColorMap() {
+      generateColorMap () {
         this.colors.forEach(color => {
           this.colorMap[color.code] = color.name;
         });
       },
-      onClickshowAllColor() {
+      onClickshowAllColor () {
         this.showAllColor = !this.showAllColor;
       }
     },
-    data() {
+    data () {
       return {
         colors: [],
         colorMap: {},
-        showAllColor: false,
+        showAllColor: false
 
       };
     },
-    created() {
+    created () {
       this.getAllColors();
     }
   };
-
 </script>
 <style>
   .product-form-item small.el-form-item {

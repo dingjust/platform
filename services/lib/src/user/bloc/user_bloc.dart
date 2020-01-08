@@ -111,13 +111,17 @@ class UserBLoC extends BLoCBase {
 
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
-        UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+        BrandModel brand =
+        await UserRepositoryImpl().getBrand(_user.companyCode);
+        if (brand != null) {
           _user.b2bUnit = brand;
-        });
+        }
       } else if (_user.type == UserType.FACTORY) {
-        UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
-          _user.b2bUnit = factory;
-        });
+        FactoryModel factoryModel =
+        await UserRepositoryImpl().getFactory(_user.companyCode);
+        if (factoryModel != null) {
+          _user.b2bUnit = factoryModel;
+        }
       }
 
       //  记录登录用户信息
@@ -154,12 +158,12 @@ class UserBLoC extends BLoCBase {
           'code': captcha,
         }));
       } else {
-        _loginResultController.sink.add('账号不存在请注册后登陆');
+        _loginResultController.sink.add('账号不存在请注册后登录');
         return LoginResult.FAIL;
       }
     } on DioError catch (e) {
       print(e);
-      //登陆错误回调
+      //登录错误回调
       _loginResultController.sink.add('验证码错误请输入正确的验证码');
       return LoginResult.DIO_ERROR;
     }
@@ -180,7 +184,7 @@ class UserBLoC extends BLoCBase {
         LocalStorage.remove(GlobalConfigs.REFRESH_TOKEN_KEY);
         // 清除授权
         http$.removeAuthorization();
-        //登陆错误回调
+        //登录错误回调
         _loginResultController.sink.add('验证码错误请输入正确的验证码');
         return LoginResult.DIO_ERROR;
       }
@@ -193,16 +197,20 @@ class UserBLoC extends BLoCBase {
 
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
-        UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+        BrandModel brand =
+        await UserRepositoryImpl().getBrand(_user.companyCode);
+        if (brand != null) {
           _user.b2bUnit = brand;
-        });
+        }
       } else if (_user.type == UserType.FACTORY) {
-        UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
-          _user.b2bUnit = factory;
-        });
+        FactoryModel factoryModel =
+        await UserRepositoryImpl().getFactory(_user.companyCode);
+        if (factoryModel != null) {
+          _user.b2bUnit = factoryModel;
+        }
       }
 
-      //  记录登陆用户信息
+      //  记录登录用户信息
       if (remember) {
         LocalStorage.save(
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
@@ -284,13 +292,17 @@ class UserBLoC extends BLoCBase {
 
         // 获取公司信息
         if (_user.type == UserType.BRAND) {
-          UserRepositoryImpl().getBrand(_user.companyCode).then((brand) {
+          BrandModel brand =
+          await UserRepositoryImpl().getBrand(_user.companyCode);
+          if (brand != null) {
             _user.b2bUnit = brand;
-          });
+          }
         } else if (_user.type == UserType.FACTORY) {
-          UserRepositoryImpl().getFactory(_user.companyCode).then((factory) {
-            _user.b2bUnit = factory;
-          });
+          FactoryModel factoryModel =
+          await UserRepositoryImpl().getFactory(_user.companyCode);
+          if (factoryModel != null) {
+            _user.b2bUnit = factoryModel;
+          }
         }
 
         jpush$.setAlias(currentUser.mobileNumber);
@@ -311,6 +323,37 @@ class UserBLoC extends BLoCBase {
     } catch (e) {
       print(e);
       return UserType.DEFAULT;
+    }
+  }
+
+  ///刷新用户信息
+  Future<void> refreshUser() async {
+    // 获取用户信息
+    Response infoResponse;
+    try {
+      infoResponse = await http$.get(UserApis.userInfo(currentUser.uid));
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (infoResponse != null && infoResponse.statusCode == 200) {
+      _user = UserModel.fromJson(infoResponse.data);
+      _user
+        ..name = infoResponse.data['username']
+        ..status = UserStatus.ONLINE;
+    }
+
+    // 获取公司信息
+    if (_user.type == UserType.BRAND) {
+      BrandModel brand = await UserRepositoryImpl().getBrand(_user.companyCode);
+      if (brand != null) {
+        _user.b2bUnit = brand;
+      }
+    } else if (_user.type == UserType.FACTORY) {
+      FactoryModel factoryModel =
+      await UserRepositoryImpl().getFactory(_user.companyCode);
+      if (factoryModel != null) {
+        _user.b2bUnit = factoryModel;
+      }
     }
   }
 

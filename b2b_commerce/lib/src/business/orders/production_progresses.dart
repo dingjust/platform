@@ -123,33 +123,19 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         elevation: 0.5,
         title: Text('生产进度明细'),
         actions: <Widget>[
-          Container(
-            width: 60,
-            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-            child: PopupMenuButton<String>(
-              onSelected: (v) => onMenuSelect(v),
-              icon: Icon(
-                B2BIcons.more,
-                size: 5,
-              ),
-              offset: Offset(0, 50),
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuItem<String>>[
-                PopupMenuItem<String>(
-                  value: 'share',
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        child: Icon(Icons.share),
-                      ),
-                      Text('分享')
-                    ],
-                  ),
+          InkWell(
+              onTap: () => onShare(),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: <Widget>[
+                    Icon(
+                      B2BIcons.share,
+                    ),
+                    Text('分享')
+                  ],
                 ),
-              ],
-            ),
-          )
+              )),
         ],
       ),
       body: Container(
@@ -229,7 +215,8 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         },
         child: Card(
           margin: EdgeInsets.fromLTRB(10, 5, 10, 8),
-          color: order.progresses[i].sequence == _index
+          color: order.progresses[i].sequence == _index &&
+              order.status == PurchaseOrderStatus.IN_PRODUCTION
               ? Color.fromARGB(255, 255, 214, 12)
               : Colors.white,
           elevation: 1.5,
@@ -453,7 +440,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '确定完成当前生产进度吗？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
@@ -484,14 +471,35 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
   }
 
   Future<void> refreshData() async {
-    order = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
-    setState(() {
-      phase = ProductionProgressPhaseLocalizedMap[order.currentPhase];
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack:
+            PurchaseOrderRepository().getPurchaseOrderDetail(order.code),
+            outsideDismiss: false,
+            loadingText: '正在刷新。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      if (value != null) {
+        order = value;
+        widget.order = order;
+        setState(() {
+          phase = ProductionProgressPhaseLocalizedMap[order.currentPhase];
+        });
+      }
     });
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => ProductionProgressesPage(order: order)),
-        ModalRoute.withName('/'));
+    // order = await PurchaseOrderRepository().getPurchaseOrderDetail(order.code);
+    // widget.order = order;
+    // setState(() {
+    //   phase = ProductionProgressPhaseLocalizedMap[order.currentPhase];
+    // });
+    // Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //         builder: (context) => ProductionProgressesPage(order: order)),
+    //     ModalRoute.withName('/'));
   }
 
 //生成Dialog控件 输入数量
@@ -933,7 +941,7 @@ class _ProductionProgressesPageState extends State<ProductionProgressesPage> {
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否无需付款直接跳过？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,

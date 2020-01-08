@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:ui';
+
+import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_select.dart';
+import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
+import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
+import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
-as dj;
-import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
+    as dj;
 import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
-import 'package:b2b_commerce/src/my/company/my_company_certificate_widget.dart';
-import 'package:b2b_commerce/src/my/company/my_company_contact_from_widget.dart';
+import 'package:b2b_commerce/src/my/company/form/my_factory_base_form.dart';
 import 'package:b2b_commerce/src/my/company/my_factory_base_info.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +20,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
 import './company/form/my_company_profile_form.dart';
-import '../business/orders/requirement_order_from.dart';
 import 'company/_shared/cash_products.dart';
 import 'company/form/my_factory_contact_form.dart';
-import 'company/form/my_factory_form.dart';
 import 'company/info/my_company_certificate_info.dart';
 import 'company/info/my_company_contact_info.dart';
-import 'company/my_company_cash_products_widget.dart';
 
 /// 认证信息
 class MyFactoryPage extends StatefulWidget {
@@ -52,7 +52,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     EnumModel('a', '资料介绍'),
     EnumModel('b', '公司认证'),
     EnumModel('c', '上架产品'),
-    EnumModel('d', '联系方式'),
+//    EnumModel('d', '联系方式'),
   ];
 
   FactoryModel _factory;
@@ -107,9 +107,9 @@ class _MyFactoryPageState extends State<MyFactoryPage>
       case 'c':
         return _buildCashProducts(factory);
         break;
-      case 'd':
-        return _buildContactWay(factory);
-        break;
+//      case 'd':
+//        return _buildContactWay(factory);
+//        break;
       default:
         return _buildBaseInfo(factory);
         break;
@@ -136,63 +136,43 @@ class _MyFactoryPageState extends State<MyFactoryPage>
               centerTitle: true,
               elevation: 0.5,
               actions: <Widget>[
-                PopupMenuButton<String>(
-                  onSelected: (v) => onMenuSelect(v, factoryState),
-                  padding: EdgeInsets.only(right: 10),
-                  icon: Icon(
-                    B2BIcons.more,
-                    size: 5,
-                  ),
-                  offset: Offset(0, 50),
-                  itemBuilder: (BuildContext context) => widget.isFactoryDetail
-                      ? <PopupMenuItem<String>>[
-                          PopupMenuItem<String>(
-                            value: 'share',
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Icon(Icons.share),
-                                ),
-                                Text('分享')
-                              ],
-                            ),
+                InkWell(
+                    onTap: () => onShare(factoryState),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            B2BIcons.share,
                           ),
-                        ]
-                      : <PopupMenuItem<String>>[
-                          PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Icon(Icons.edit),
-                                ),
-                                Text('编辑')
-                              ],
-                            ),
-                          ),
-                          PopupMenuItem<String>(
-                            value: 'share',
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Icon(Icons.share),
-                                ),
-                                Text('分享')
-                              ],
-                            ),
-                          ),
+                          Text('分享')
                         ],
-                ),
+                      ),
+                    )),
+                widget.isFactoryDetail
+                    ? Container()
+                    : InkWell(
+                    onTap: () => onEdit(factoryState),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            B2BIcons.edit,
+                          ),
+                          Text('编辑')
+                        ],
+                      ),
+                    ))
               ],
             ),
             body: factoryState.model != null
                 ? _buildBody(factoryState.model)
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                : Column(
+              children: <Widget>[NoDataShow()],
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
 //          FutureBuilder<FactoryModel>(
 //              future: _getFactoryFuture,
 //              builder: (context, snapshot) {
@@ -263,88 +243,47 @@ class _MyFactoryPageState extends State<MyFactoryPage>
               children: <Widget>[
                 Expanded(
                   flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              child: Icon(
-                                Icons.phone,
-                                color: Colors.white,
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(8)),
-                              padding: EdgeInsets.all(2),
-                            ),
-                            Text(model?.contactPerson ?? ''),
-                          ],
+                  child: FlatButton(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          child: Icon(
+                            Icons.phone,
+                            color: Colors.white,
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(8)),
+                          padding: EdgeInsets.all(2),
                         ),
-                        onPressed: () {
-                          _selectActionButton(model.contactPhone);
-                        },
-                      ),
-                    ],
+                        Text(model?.contactPerson ?? ''),
+                      ],
+                    ),
+                    onPressed: () {
+                      _selectActionButton(model.contactPhone);
+                    },
                   ),
                 ),
                 Expanded(
                   flex: 1,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                            height: double.infinity,
-                            child:Container()
-//                            Theme(
-//                                data: ThemeData(
-//                                  canvasColor: Colors.transparent,
-//                                  primaryColor: Colors.white,
-//                                  accentColor: Color.fromRGBO(255, 214, 12, 1),
-//                                  bottomAppBarColor: Colors.grey,
-//                                ),
-//                                child: Builder(
-//                                  builder: (BuildContext buttonContext) =>
-//                                      FlatButton(
-//                                    color: Color.fromRGBO(255, 245, 157, 1),
-//                                    onPressed: () {
-//                                      _createPurchaseByFactoryProduct(context);
-//                                    },
-//                                    disabledColor: Colors.grey[300],
-//                                    child: Text(
-//                                      '下单',
-//                                      style: TextStyle(fontSize: 15),
-//                                    ),
-//                                  ),
-//                                ))
+                  child: Container(
+                      height: double.infinity,
+                      child: Builder(
+                        builder: (BuildContext buttonContext) =>
+                            FlatButton(
+                          color: Color.fromRGBO(255, 214, 12, 1),
+                          onPressed: () {
+                            _publishRequirement();
+                          },
+                          disabledColor: Colors.grey[300],
+                          child: Text(
+                            '发需求',
+                            style: TextStyle(fontSize: 15),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                            height: double.infinity,
-                            child: Builder(
-                              builder: (BuildContext buttonContext) =>
-                                  FlatButton(
-                                color: Color.fromRGBO(255, 214, 12, 1),
-                                onPressed: () {
-                                  _publishRequirement();
-                                },
-                                disabledColor: Colors.grey[300],
-                                child: Text(
-                                  '发需求',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ),
-                            )),
-                      )
-                    ],
-                  ),
+                      )),
                 )
               ],
             ),
@@ -354,7 +293,7 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     );
   }
 
-  _createPurchaseByFactoryProduct(BuildContext pageContext) async{
+  _createPurchaseByFactoryProduct(BuildContext pageContext) async {
     dynamic result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -363,26 +302,200 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     );
 
     print(result);
-    if(result != null){
+    if (result != null) {
       dj.showModalBottomSheet<void>(
           context: pageContext,
           builder: (BuildContext context) {
-            return BuyPurchaseForm(result,heightScale: 0.9,);
+            return BuyPurchaseForm(
+              result,
+              heightScale: 0.9,
+            );
           });
     }
   }
 
   _publishRequirement() {
-    RequirementOrderModel orderModel =
-        RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => RequirementOrderFrom(
-                  order: orderModel,
-                  isCreate: true,
-                  factoryUid: widget.factoryUid,
-                )));
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Opacity(
+            opacity: 1,
+            child: Container(
+              height: 300,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            if (_factory == null) {
+                              return;
+                            }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MultiProvider(
+                                          providers: [
+                                            ChangeNotifierProvider(
+                                              builder: (_) =>
+                                                  RequirementOrderFormState(
+                                                    uid: _factory.uid,
+                                                    factoryDetailModel: _factory,
+                                                  ),
+                                            ),
+                                          ],
+                                          child: Consumer(builder: (context,
+                                              RequirementOrderFormState state,
+                                              _) {
+                                            return RequirementOrderFirstForm(
+                                              formState: state,
+                                            );
+                                          }),
+                                        ))).then((v) {
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Center(
+                                child: Container(
+                                  child: Image.asset(
+                                    'temp/wtsc.png',
+                                    package: 'assets',
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Container(
+                                  child: Text('发布新需求'),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (_factory == null) {
+                              return;
+                            }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        RequirementOrderSelectPage(
+                                          onConfirm: (models) async {
+                                            List<RequirementOrderModel>
+                                            requirements = models as List<
+                                                RequirementOrderModel>;
+                                            List<String> codes = [];
+                                            if (requirements != null) {
+                                              codes = requirements
+                                                  .map((model) => model.code)
+                                                  .toList();
+                                            }
+                                            if (widget.factoryUid != null) {
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (_) {
+                                                    return RequestDataLoading(
+                                                      requestCallBack:
+                                                      RequirementOrderRepository()
+                                                          .doRecommendations(
+                                                          codes, [
+                                                        widget.factoryUid
+                                                      ]),
+                                                      outsideDismiss: false,
+                                                      loadingText: '正在邀请。。。',
+                                                      entrance: '',
+                                                    );
+                                                  }).then((value) {
+                                                showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (_) {
+                                                      return CustomizeDialog(
+                                                        dialogType: DialogType
+                                                            .RESULT_DIALOG,
+                                                        successTips: '邀请成功',
+                                                        failTips: '邀请失败',
+                                                        callbackResult: value,
+                                                        confirmAction: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+//                                                          Navigator.popUntil(context, ModalRoute.withName('/my/my_factory'));
+                                                        },
+                                                      );
+                                                    });
+                                              });
+                                            }
+                                          },
+                                        )));
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Center(
+                                child: Container(
+                                  child: Image.asset(
+                                    'temp/cgdd.png',
+                                    package: 'assets',
+                                    width: 80,
+                                    height: 80,
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Container(
+                                  child: Text('选择已有需求'),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Center(
+                      child: Container(
+                          child: Icon(
+                            Icons.close,
+                            size: 30,
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+//    Navigator.push(
+//      context,
+//      MaterialPageRoute(
+//        builder: (context) => ChangeNotifierProvider(
+//          builder: (_) => RequirementOrderFormState(),
+//          child: Consumer(
+//            builder: (context, RequirementOrderFormState state, _) =>
+//                RequirementOrderFirstForm(
+//              formState: state,
+//            ),
+//          ),
+//        ),
+//      ),
+//    );
   }
 
   List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {
@@ -533,10 +646,13 @@ class _MyFactoryPageState extends State<MyFactoryPage>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MyFactoryFormPage(
-                  factory: state.model,
+            builder: (context) =>
+                MyFactoryBaseFormPage(
+                  state.model,
                 ))).then((v) {
-      state.refresh();
+      if (v == true) {
+        state.refresh();
+      }
     });
   }
 

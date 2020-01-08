@@ -128,7 +128,9 @@ class _ProductionProgressOrderFormState
             margin: EdgeInsets.symmetric(vertical: 10),
             child: Text('款号：${widget.order.product.skuID ?? ''}'),
           ),
-          Text('合作商：${widget.order.cooperator.getName()}')
+          Text(
+              '合作商：${widget.order.getCooperatorName(
+                  UserBLoC.instance.currentUser.type)}')
         ],
       ),
     );

@@ -151,7 +151,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               margin: EdgeInsets.only(top: 10),
               child: Text(
                 '买大货需要支付30%定金',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: TextStyle(fontSize: 16, color: Colors.red),
               ))
         ],
       ),
@@ -486,7 +486,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     dj.showModalBottomSheet<void>(
         context: buildContext,
         builder: (BuildContext context) {
-          return BuyProofingForm(widget.product);
+          return BuyProofingForm(
+            widget.product,
+            onRefresh: () {
+              setState(() {});
+            },
+          );
         });
   }
 

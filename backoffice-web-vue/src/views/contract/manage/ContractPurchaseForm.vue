@@ -1,35 +1,40 @@
 <template>
   <div>
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog"
-               append-to-body>
+               append-to-body :close-on-click-modal="false">
       <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
       <el-divider direction="vertical"></el-divider>
       <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
-    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
-      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible" v-on:turnTempFormVisible="turnTempFormVisible"/>
+    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
+      <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect" :tempFormVisible="tempFormVisible"
+                     :slotData="templateData" :templateId="templateId"
+                     v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-order-select v-if="dialogOrderVisible" :page="orderPage" @onSearchOrder="onSearchOrder"
                              @onOrderSelectChange="onOrderSelectChange"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogContractVisible" width="80%" class="purchase-dialog" append-to-body>
-      <el-button-group>
-        <el-button class="product-select-btn" @click="onContractSelectSure">确定</el-button>
-      </el-button-group>
-      <contract-select :mockData="mockData" @fileSelectChange="onContractSelectChange"/>
+    <el-dialog :visible.sync="dialogContractVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+<!--      <el-button-group>-->
+<!--        <el-button class="product-select-btn" @click="onContractSelectSure">确定</el-button>-->
+<!--      </el-button-group>-->
+<!--      <contract-select :mockData="mockData" @fileSelectChange="onContractSelectChange"/>-->
+      <contract-frame-select v-if="dialogContractVisible" :page="framePage" @onSearchFrameContract="onSearchFrameContract"
+                             @onOrderSelectChange="onOrderSelectChange"
+                             @onContractSelectSure="onContractSelectSure"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
+    <el-dialog :visible.sync="dialogPreviewVisible" width="80%" :close-on-click-modal="false">
       <el-row slot="title">
         <el-button>生成合同</el-button>
       </el-row>
       <contract-preview/>
     </el-dialog>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%" :close-on-click-modal="false">
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract"/>
     </el-dialog>
-    <el-form ref="contractPurchaseForm" :model="contractPurchaseFormData" label-position="left" :rules="rules" label-width="88px" hide-required-asterisk>
+    <el-form ref="contractPurchaseForm" label-position="left" label-width="88px" hide-required-asterisk>
       <el-row type="flex" justify="center" align="middle">
         <span class="create-contract-title">采购订单</span>
       </el-row>
@@ -139,6 +144,7 @@
     import Bus from '@/common/js/bus.js';
     import ContractPreviewPdf from './components/ContractPreviewPdf'
     import ContractSelect from './components/ContractSelect';
+    import ContractFrameSelect from './components/ContractFrameSelect';
 
     const {
       mapGetters,
@@ -149,8 +155,9 @@
 
     export default {
       name: 'ContractPurchaseForm',
-      props: ['slotData', 'formData'],
+      props: ['slotData', 'formData', 'templateData', 'templateId'],
       components: {
+        ContractFrameSelect,
         ContractTypeSelect,
         ContractTemplateSelect,
         ContractPreview,
@@ -220,6 +227,32 @@
           }
           this.orderPage = result;
         },
+        async onSearchFrameContract (page, size, keyword) {
+          var _page = 0;
+          var _size = 10;
+          if (page) {
+            _page = page;
+          }
+          if (size) {
+            _size = size;
+          }
+          const url = this.apis().getContractsList();
+          const result = await http.post(url, {
+            type: 'KJXY',
+            // partyACompany: this.companyUid,
+            state: 'COMPLETE',
+            title: keyword
+          }, {
+            page: _page,
+            size: _size
+          });
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.framePage = result;
+          console.log(this.framePage);
+        },
         onContractTypeChange (val) {
           if (val != null || val != '') {
             this.contractType = val;
@@ -246,9 +279,9 @@
           this.dialogTemplateVisible = false;
           this.selectFile = this.cacheSelectFile;
         },
-        onContractSelectSure () {
+        onContractSelectSure (val) {
           this.dialogContractVisible = false;
-          this.selectContract = this.cacheSelectContract;
+          this.selectContract = val;
         },
         handleExceed (files, fileList) {
           if (fileList > 1) {
@@ -481,7 +514,8 @@
               this.companyUid = this.orderSelectFiles[0].belongTo.uid;
             }
           }
-          this.getContractList(this.companyUid);
+          // this.getContractList(this.companyUid);
+          this.onSearchFrameContract();
           this.dialogContractVisible = true;
         },
         //  订单验证
@@ -530,6 +564,7 @@
           input1: '',
           mockData: [],
           orderPage: [],
+          framePage: [],
           disabled: false,
           pdfFile: '',
           pdfVisible: false,

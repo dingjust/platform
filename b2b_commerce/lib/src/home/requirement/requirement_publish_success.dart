@@ -1,13 +1,17 @@
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/suppliers.dart';
+import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
+import 'package:services/src/home/factory/response/factory_response.dart';
 import 'package:widgets/widgets.dart';
 
 class PublishRequirementSuccessDialog extends StatefulWidget {
@@ -23,22 +27,111 @@ class PublishRequirementSuccessDialog extends StatefulWidget {
 class _PublishRequirementSuccessDialogState
     extends State<PublishRequirementSuccessDialog> {
   bool _isSelected = true;
+  List<FactoryModel> _factoryModels = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<List<FactoryModel>> _getData() async {
+    try {
+      var response = await http$.post(
+          Apis.requestQuoteFactories(widget.model.code),
+          data: {},
+          queryParameters: {'page': 0, 'size': 3});
+      if (response != null && response.statusCode == 200) {
+        FactoriesResponse factoriesResponse =
+        FactoriesResponse.fromJson(response.data);
+        _factoryModels = factoriesResponse.content;
+      }
+    } on DioError catch (e) {
+      print(e);
+    }
+    return _factoryModels;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
-        child: ListView(
-          children: <Widget>[
-            _buildTitle(),
-            _buildOrderInfo(),
-            _buildButtonGroup(),
+    return ChangeNotifierProvider<FactoryTabSectionState>(
+      builder: (context) => FactoryTabSectionState(),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.5,
+          title: Text('发布成功'),
+          centerTitle: true,
+        ),
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(child: _buildTitle()),
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      '为你推荐',
+                      style: TextStyle(fontSize: 20),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration:
+                  BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
+                  child: FutureBuilder<List<FactoryModel>>(
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<FactoryModel>> snapshot) {
+                        print('${snapshot.data}------=====');
+                        if (snapshot.data != null) {
+                          return Column(
+                              children: _factoryModels
+                                  .map((tip) =>
+                                  FactoryItem(
+                                    model: tip,
+                                    showButton: true,
+                                    requirementCode: widget.model.code,
+                                    hasInvited: tip.invited,
+                                    callback: () {
+                                      setState(() {
+                                        _getData();
+                                      });
+                                    },
+                                  ))
+                                  .toList());
+                        } else {
+                          return Container();
+                        }
+                      },
+                      initialData: null,
+                      future: _getData())),
+            )
           ],
+        ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+              color: Color.fromRGBO(255, 214, 12, 1),
+              child: Text(
+                '完成',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              onPressed: () async {
+//              Navigator.popUntil(context, ModalRoute.withName('/'));
+                Navigator.pop(context);
+              }),
         ),
       ),
     );
@@ -137,17 +230,16 @@ class _PublishRequirementSuccessDialogState
           child: CachedNetworkImage(
               imageUrl: '${widget.model.details.pictures[0].previewUrl()}',
               fit: BoxFit.cover,
-              placeholder: (context, url) =>
-                  SpinKitRing(
+              placeholder: (context, url) => SpinKitRing(
                     color: Colors.black12,
                     lineWidth: 2,
                     size: 80,
                   ),
               errorWidget: (context, url, error) => SpinKitRing(
-                color: Colors.black12,
-                lineWidth: 2,
-                size: 80,
-              )),
+                    color: Colors.black12,
+                    lineWidth: 2,
+                    size: 80,
+                  )),
         );
       }
     }
@@ -258,16 +350,15 @@ class _PublishRequirementSuccessDialogState
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                FactoryPage(
-                                  FactoryCondition(
-                                      starLevel: 0,
-                                      labels: [],
-                                      adeptAtCategories: [],
-                                      cooperationModes: []),
-                                  route: '全部工厂',
-                                  requirementCode: widget.model.code,
-                                ),
+                            builder: (context) => FactoryPage(
+                              FactoryCondition(
+                                  starLevel: 0,
+                                  labels: [],
+                                  adeptAtCategories: [],
+                                  cooperationModes: []),
+                              route: '全部工厂',
+                              requirementCode: widget.model.code,
+                            ),
                           ),
                         );
                       },
@@ -290,8 +381,7 @@ class _PublishRequirementSuccessDialogState
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    SuppliersPage(
+                                builder: (context) => SuppliersPage(
                                       quoteInviting: true,
                                       requirementCode: widget.model.code,
                                     )),

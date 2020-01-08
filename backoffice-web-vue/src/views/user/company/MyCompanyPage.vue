@@ -1,11 +1,11 @@
 <template>
   <div class="animated fadeIn content">
     <template v-if="isBrand()">
-      <brand-details-page :slot-data="company"/>
+      <brand-details-page />
     </template>
     <template v-else-if="isFactory()">
       <el-card>
-        <factory-from :formData = "formData" @onSave="onSave" ></factory-from>
+        <factory-from :formData="formData" @onSave="onSave" @onSaveProfiles="onSaveProfiles"></factory-from>
       </el-card>
     </template>
     <template v-else>
@@ -15,16 +15,26 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
-  const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('FactoriesModule');
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+  const {
+    mapGetters,
+    mapMutations,
+    mapActions
+  } = createNamespacedHelpers('FactoriesModule');
 
   import BrandDetailsPage from './brand/details/BrandDetailsPage';
   import FactoryDetailsPage from './factory/details/FactoryDetailsPage';
-  import FactoryFrom from "./factory/form/FactoryForm";
+  import FactoryFrom from './factory/form/FactoryForm';
 
   export default {
     name: 'MyCompanyPage',
-    components: {FactoryFrom, FactoryDetailsPage, BrandDetailsPage},
+    components: {
+      FactoryFrom,
+      FactoryDetailsPage,
+      BrandDetailsPage
+    },
     computed: {
       ...mapGetters({
         formData: 'formData',
@@ -45,7 +55,7 @@
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
-      async getFactory () {
+      async getFactory() {
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().getFactory(uid);
         const result = await this.$http.get(url);
@@ -54,23 +64,32 @@
           return;
         }
 
-        this.setFormData(Object.assign({}, result));
+        this.setFormData(Object.assign({}, Object.assign(this.formData, result)));
 
         if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
-          this.getCities(this.formData.contactAddress.region);
-          this.setIsCitiesChanged(false);
+          if (this.formData.contactAddress.region.isocode!='') {
+            this.getCities(this.formData.contactAddress.region);
+            this.setIsCitiesChanged(false);
+          }
+
         }
         if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
-          this.getCityDistricts(this.formData.contactAddress.city);
-          this.setIsDistrictsChanged(false);
+          if (this.formData.contactAddress.city != null&&this.formData.contactAddress.city.code != '') {
+            this.getCityDistricts(this.formData.contactAddress.city);
+            this.setIsDistrictsChanged(false);
+          }
         }
 
         this.setFactoryFormVisible(true);
       },
-      async onSave () {
+      async onSave() {
+        let data = Object.assign({}, this.formData);
+        if (data.productionMode === '' || data.productionMode == null) {
+          this.$delete(data, 'productionMode');
+        }
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().updateFactory(uid);
-        const result = await this.$http.put(url, this.formData);
+        const result = await this.$http.put(url, data);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
@@ -80,7 +99,7 @@
         this.setFactoryFormVisible(false);
         this.$message.success('编辑工厂信息成功');
       },
-      async getRegions () {
+      async getRegions() {
         const url = this.apis().getRegions();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -90,7 +109,7 @@
 
         this.regions = result;
       },
-      async getCities (region, index) {
+      async getCities(region, index) {
         const url = this.apis().getCities(region.isocode);
         const result = await this.$http.get(url);
 
@@ -101,7 +120,7 @@
 
         this.$store.state.FactoriesModule.cities = result;
       },
-      async getCityDistricts (city) {
+      async getCityDistricts(city) {
         const url = this.apis().getDistricts(city.code);
         const result = await this.$http.get(url);
 
@@ -112,10 +131,10 @@
 
         this.$store.state.FactoriesModule.cityDistricts = result;
       },
-      onClose () {
+      onClose() {
         this.setFactoryFormVisible(false);
       },
-      async onEditProfiles () {
+      async onEditProfiles() {
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().getFactory(uid);
         const result = await this.$http.get(url);
@@ -126,7 +145,7 @@
         this.setFormData(Object.assign({}, result));
         this.factoryProfilesFormVisible = !this.factoryProfilesFormVisible;
       },
-      async onSaveProfiles () {
+      async onSaveProfiles() {
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().updateFactoryProfiles(uid);
         const result = await this.$http.put(url, this.formData);
@@ -140,16 +159,16 @@
         this.$message.success('编辑图文详情信息成功');
       }
     },
-    data () {
+    data() {
       return {
-        // TODO: GET COMPANY
-        company: {}
+
       };
     },
-    created () {
+    created() {
       if (this.isFactory()) {
         this.getFactory();
       }
     }
   };
+
 </script>

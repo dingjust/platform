@@ -470,7 +470,7 @@ class _PdfReaderWidgetState extends State<PdfReaderWidget> {
     } else if (widget.contractModel.state != ContractStatus.COMPLETE &&
         widget.contractModel.state != ContractStatus.INVALID &&
         widget.contractModel.isCreator) {
-      if (widget.contractModel.isSigned) {
+      if (widget.contractModel?.isSigned ?? false) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[

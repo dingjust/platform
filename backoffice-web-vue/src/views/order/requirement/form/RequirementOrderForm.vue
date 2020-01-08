@@ -130,7 +130,7 @@
           <el-col :span="8">
             <el-form-item prop="details.invoiceNeeded">
               <template slot="label">
-                <h6 class="titleTextClass">是否开发票</h6>
+                <h6 class="titleTextClass">是否开票</h6>
               </template>
               <el-radio-group v-model="formData.details.invoiceNeeded">
                 <el-radio border :label="true">是</el-radio>
@@ -140,7 +140,7 @@
           </el-col>
         </el-row>
         <el-row type="flex">
-          <el-col :span="12">
+          <el-col :span="12" v-if="this.isCreated">
             <el-form-item prop="details.publishingMode">
               <template slot="label">
                 <h6 class="titleTextClass">发布方式</h6>
@@ -192,7 +192,7 @@
       </el-button>
     </el-row>
 
-    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="dialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <factory-cooperator-transfer-form v-if="dialogVisible" :selectFactories="selectFactories"
         :selectCooperators="selectCooperators" :selectUids="selectUids" :selectCooperatorIds="selectCooperatorIds"
         :selectFactoryUids="selectFactoryUids" :selectPhoneNumbers="selectPhoneNumbers">

@@ -47,6 +47,8 @@ class MenuItemImage {
       getImage('temp/business/production_order_factory.png');
   static Image quoteFactory =
       getImage('temp/business/quote_manage_factory.png');
+  static Image freeCapacity2 =
+  getImage('temp/index/free_capacity2.png');
 }
 
 class B2BImage {
@@ -228,6 +230,23 @@ class B2BImage {
   ///唯一码导入
   static Image uniqueImport({double width, double height}) {
     return getImage('temp/index/unique_import.png',
+        width: width, height: height);
+  }
+
+  ///面料
+  static Image material({double width, double height}) {
+    return getImage('temp/index/material.png', width: width, height: height);
+  }
+
+  ///需求中心
+  static Image requirementCenter({double width, double height}) {
+    return getImage('temp/index/requirement_center.png',
+        width: width, height: height);
+  }
+
+  ///空闲产能2
+  static Image free_capacity2({double width, double height}) {
+    return getImage('temp/index/free_capacity2.png',
         width: width, height: height);
   }
 }

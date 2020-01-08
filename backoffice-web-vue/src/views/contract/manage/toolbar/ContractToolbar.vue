@@ -1,6 +1,6 @@
 <template>
   <div>
-  <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog">
+  <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" :close-on-click-modal="false">
     <contract-type @onSearch="onSearch" @closeContractTypeDialog="onCloseDialog" @openPreviewPdf="openPreviewPdf"/>
   </el-dialog>
   <el-form :inline="true">
@@ -73,10 +73,10 @@
         this.fn.openSlider('创建', ContractForm, '');
       },
       onReset () {
-        this.keyword = '';
-        this.dateTime = '';
-        this.ordercode = '';
-        this.type = '';
+        this.queryFormData.title = '';
+        this.queryFormData.creationtimeStart = '';
+        this.queryFormData.creationtimeEnd = '';
+        this.queryFormData.type = '';
       },
       onCloseDialog () {
         this.dialogVisible = false;

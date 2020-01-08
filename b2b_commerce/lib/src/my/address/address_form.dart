@@ -144,7 +144,7 @@ class AddressFormState extends State<AddressFormPage> {
                         contentText2: '是否要删除地址？',
                         isNeedConfirmButton: true,
                         isNeedCancelButton: true,
-                        dialogHeight: 200,
+                        dialogHeight: 210,
                         confirmAction: (){
                           Navigator.pop(context);
                           onSure();

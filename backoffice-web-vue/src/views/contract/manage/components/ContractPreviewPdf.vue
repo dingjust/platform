@@ -1,10 +1,10 @@
 <template>
 
   <div>
-    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-supplement-form :slotData="slotData" />
     </el-dialog>
-    <el-dialog :visible.sync="dialogSealVisible" :show-close="true">
+    <el-dialog :visible.sync="dialogSealVisible" :show-close="true" :close-on-click-modal="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
 <!--    <el-dialog :visible.sync="dialogOrderVisible" width="50%" class="purchase-dialog" append-to-body>-->

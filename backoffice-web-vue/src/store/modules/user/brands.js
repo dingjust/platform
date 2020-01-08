@@ -17,6 +17,7 @@ const state = {
     uid: '',
     name: '',
     registrationDate: null,
+    profilePicture: null,
     scaleRange: '',
     contactAddress: {
       id: null,
@@ -38,6 +39,7 @@ const state = {
     },
     styles: [],
     brand: '',
+    labels: [],
     ageRanges: [],
     priceRange1s: [],
     priceRange2s: [],
@@ -55,7 +57,9 @@ const state = {
     businessRegistrationNo: '',
     legalRepresentative: '',
     certificateOfLegal: '',
-    labels:[],
+    salesMarket: [],
+    duties: '',
+    loginDisabled: false
   },
   addressFormData: {
     id: null,
@@ -76,15 +80,25 @@ const state = {
     line1: ''
   },
   queryFormData: {
-    keyword:'',
-    contactPhone:'',
-    cooperativeBrand:'',
-    adeptAtCategories:[],
-    regions:[],
-    cities:[],
-    creationTimeFrom:'',
-    creationTimeTo:'',
-  }
+    keyword: '',
+    contactPhone: '',
+    cooperativeBrand: '',
+    adeptAtCategories: [],
+    regions: [],
+    cities: [],
+    labels: [],
+    creationTimeFrom: '',
+    creationTimeTo: '',
+    approvalStatuses: []
+  },
+  cities: [],
+  cityDistricts: [],
+  categories: [],
+  labels: [],
+  isCitiesChanged: false,
+  isDistrictsChanged: false,
+  brandFormVisible: false,
+  approvalStatus: ''
 };
 
 const mutations = {
@@ -92,12 +106,19 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
+  setFormData: (state, formData) => state.formData = formData,
   page: (state, page) => state.page = page,
-  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
+  setLabels: (state, labels) => state.labels = labels,
+  setIsCitiesChanged: (state, isCitiesChanged) => state.isCitiesChanged = isCitiesChanged,
+  setIsDistrictsChanged: (state, isDistrictsChanged) => state.isDistrictsChanged = isDistrictsChanged,
+  setBrandFormVisible: (state, brandFormVisible) => state.brandFormVisible = brandFormVisible,
+  cities: (state, cities) => state.cities = cities,
+  cityDistricts: (state, cityDistricts) => state.cityDistricts = cityDistricts
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
@@ -116,7 +137,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async advancedSearch({dispatch, commit, state}, {url, queryFormData, page, size}) {
+  async advancedSearch ({dispatch, commit, state}, {url, queryFormData, page, size}) {
     commit('queryFormData', queryFormData);
     commit('currentPageNumber', page);
     if (size) {
@@ -132,7 +153,7 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state}) {
+  refresh ({dispatch, commit, state}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
@@ -147,8 +168,14 @@ const getters = {
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  isAdvancedSearch: state => state.isAdvancedSearch
-
+  isAdvancedSearch: state => state.isAdvancedSearch,
+  formData: state => state.formData,
+  cities: state => state.cities,
+  cityDistricts: state => state.cityDistricts,
+  isCitiesChanged: state => state.isCitiesChanged,
+  isDistrictsChanged: state => state.isDistrictsChanged,
+  brandFormVisible: state => state.brandFormVisible,
+  labels: state => state.labels
 };
 
 export default {

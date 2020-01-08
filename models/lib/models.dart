@@ -23,6 +23,7 @@ export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
 export 'src/capacity/capacity.dart';
 export 'src/msg/msg.dart';
+export 'src/subcontract/subcontract.dart';
 
 
 part 'models.g.dart';
@@ -451,21 +452,21 @@ const FactoryFreeProofingsEnum = [
   EnumModel('NOT_SUPPORTED', '不支持')
 ];
 //销售市场
-const SalesMarketsEnum = [
-  EnumModel('A_CHAIN', '一线连锁'),
-  EnumModel('REGIONAL_CHAIN', '区域连锁'),
-  EnumModel('STALL_WHOLESALE', '档口批发'),
-  EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
-  EnumModel('WHOLESALE_TRADE', '外贸批发'),
-];
+//const SalesMarketsEnum = [
+//  EnumModel('A_CHAIN', '一线连锁'),
+//  EnumModel('REGIONAL_CHAIN', '区域连锁'),
+//  EnumModel('STALL_WHOLESALE', '档口批发'),
+//  EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
+//  EnumModel('WHOLESALE_TRADE', '外贸批发'),
+//];
 
 //发布方式
 const PublishingModesEnum = [
   EnumModel('PUBLIC', '公开发布'),
-  EnumModel('PRIVATE', '私有发布'),
+  EnumModel('PRIVATE', '私密发布'),
 ];
 
-//发布方式
+//有效期限
 const EffectiveDaysEnum = [
   EnumModel('7', '7天'),
   EnumModel('15', '15天'),
@@ -476,11 +477,17 @@ const EffectiveDaysEnum = [
 
 //质量等级
 const FactoryQualityLevelsEnum = [
-  EnumModel('A_CHAIN', '一线连锁'),
-  EnumModel('REGIONAL_CHAIN', '区域连锁'),
-  EnumModel('STALL_WHOLESALE', '档口批发'),
+  EnumModel('A_CHAIN', '一线大牌'),
+  EnumModel('REGIONAL_CHAIN', '区域品牌'),
+  EnumModel('STALL_WHOLESALE', '档口精品'),
   EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
-  EnumModel('WHOLESALE_TRADE', '外贸批发'),
+  EnumModel('WHOLESALE_TRADE', '外贸跑量'),
+];
+
+//转包类型
+const SubContractTypeEnum = [
+  EnumModel('SUBCONTRACT', '转包'),
+  EnumModel('CUTTING_PIECE', '裁片'),
 ];
 
 /// 分页数据

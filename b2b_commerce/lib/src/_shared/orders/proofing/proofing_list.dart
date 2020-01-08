@@ -82,7 +82,7 @@ class _ProofingListState extends State<ProofingList>
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 200,
+            dialogHeight: 210,
             contentText2: '是否取消订单？',
             isNeedConfirmButton: true,
             isNeedCancelButton: true,
@@ -119,23 +119,37 @@ class _ProofingListState extends State<ProofingList>
   }
 
   void _onProofingConfirmReceived(ProofingModel model) async {
-    bool result = false;
-    result = await ProofingOrderRepository().shipped(model.code);
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.RESULT_DIALOG,
-            successTips: '确认收货成功',
-            failTips: '确认收货失败',
-            callbackResult: result,
-            confirmAction: () {
-              Navigator.of(context).pop();
-            },
+          return RequestDataLoading(
+            requestCallBack: ProofingOrderRepository().shipped(model.code),
+            outsideDismiss: false,
+            loadingText: '确认中。。。',
+            entrance: 'orderShippingConfirm',
           );
-        });
-    _handleRefresh();
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return CustomizeDialog(
+              dialogType: DialogType.RESULT_DIALOG,
+              failTips: '确认收货失败',
+              successTips: '确认收货成功',
+              callbackResult: result,
+              confirmAction: () {
+                _handleRefresh();
+                Navigator.of(context).pop();
+              },
+            );
+          });
+    });
   }
 
   void _onProofingUpdating(ProofingModel model) async {

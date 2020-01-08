@@ -6,6 +6,7 @@ import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:services/src/message/message_bloc.dart';
+import 'package:services/src/net/net_state.dart';
 import 'package:services/src/system/bloc/app_bloc.dart';
 import 'package:services/src/user/bloc/user_bloc.dart';
 
@@ -40,9 +41,6 @@ class HttpManager {
         receiveTimeout: 10000,
         headers: authorization != null ? {'Authorization': authorization} : {});
 
-    options.connectTimeout = 10000;
-    options.receiveTimeout = 10000;
-
     _instance = Dio(options);
 
     (_instance.httpClientAdapter as DefaultHttpClientAdapter)
@@ -69,20 +67,27 @@ class HttpManager {
 
       // 所属信息
       options.headers['company'] = UserBLoC.instance.currentUser.companyCode;
+      if (GlobalConfigs.DEBUG) {
+        print("REQUEST[${options?.method}] => PATH: ${options?.path}");
+      }
     }, onResponse: (Response response) {
       // 在返回响应数据之前做一些预处理
-      if (GlobalConfigs.DEBUG) {
-        if (response != null) {
-          print('返回结果: ' + response.toString());
-        }
-      }
       //更改网络状态
+      if (NetState.instance != null) {
+        NetState.instance.setConnectivityResult(ConnectivityResult.mobile);
+      }
       AppBLoC.instance.setConnectivityResult(ConnectivityResult.mobile);
       _clearContext();
+      if (GlobalConfigs.DEBUG) {
+        if (response != null) {
+          print(
+              "RESPONSE[${response?.statusCode}] => PATH: ${response?.request
+                  ?.path}>>>返回结果:${response?.data.toString()}");
+          print('返回结果:${response?.data.toString()}');
+        }
+      }
       return response; // continue
     }, onError: (DioError e) {
-      print('${e.type}');
-      print('${e.response}');
       //未登录或token失效
       if (e?.response != null && e.response.statusCode == 401) {
         //已登录，token失效
@@ -96,8 +101,12 @@ class HttpManager {
         UserBLoC.instance.loginJumpController.add(true);
         return e;
       } else if (e.type == DioErrorType.DEFAULT) {
+        //更改网络状态
+        if (NetState.instance != null) {
+          NetState.instance.setConnectivityResult(ConnectivityResult.none);
+        }
         AppBLoC.instance.setConnectivityResult(ConnectivityResult.none);
-        MessageBLoC.instance.snackMessageController.add('网络链接不可用');
+        // MessageBLoC.instance.snackMessageController.add('网络链接不可用');
         throw -1; // network error
       } else {
         // 消息流推送
@@ -107,12 +116,17 @@ class HttpManager {
         //       .add('${errorResponse.errors[0].message}');
         // }
         if (e.request.headers['ignoreAlert'] != 1) {
-          MessageBLoC.instance.errorMessageController.add('网络异常');
-        }
-        if (GlobalConfigs.DEBUG) {
-          print(e.toString());
+          StreamController streamController =
+              MessageBLoC.instance.errorMessageController;
+          // streamController.onResume;
+          streamController.sink.add('网络异常');
         }
         _clearContext();
+      }
+      if (GlobalConfigs.DEBUG) {
+        print(
+            "ERROR[${e?.response?.statusCode}] => PATH: ${e?.request
+                ?.path}>>>${e?.response?.data.toString()}");
       }
       return e; //continue
     }));

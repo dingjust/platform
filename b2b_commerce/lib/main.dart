@@ -1,9 +1,11 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:b2b_commerce/src/business/index.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
+import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
+import 'package:b2b_commerce/src/my/messages/index.dart';
+import 'package:b2b_commerce/src/observer/b2b_navigator_observer.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,17 +15,20 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import 'src/_shared/error/b2b_error.dart';
 import 'src/common/app_constants.dart';
 import 'src/common/app_keys.dart';
 import 'src/common/app_routes.dart';
 import 'src/home/_shared/models/navigation_menu.dart';
 import 'src/home/_shared/widgets/bottom_navigation.dart';
-import 'src/home/account/login.dart';
+import 'src/home/_shared/widgets/notifications.dart';
 import 'src/home/index.dart';
 import 'src/my/index.dart';
 import 'src/production/index.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   Provider.debugCheckInvalidValueType = null;
 
   debugInstrumentationEnabled = true;
@@ -42,29 +47,20 @@ void main() async {
     //IOS高德定位注册KEY
     AMapLocationClient.setApiKey(GlobalConfigs.AMAP_LOCATION_KEY_IOS);
   }
+
+  //错误页面
+  if (!GlobalConfigs.DEBUG) {
+    ErrorWidget.builder =
+        (FlutterErrorDetails flutterErrorDetails) => B2BErrorPage();
+  }
+
   //强制竖屏
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(BLoCProvider<AppBLoC>(
       bloc: AppBLoC.instance,
-      // child: MyApp(),
       child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(builder: (_) => MyCapacityState()),
-          ChangeNotifierProvider(builder: (_) => ProductionProgressState()),
-          Provider(
-            builder: (_) => AddressState(),
-          ),
-          Provider(
-            builder: (_) => CategoryState(),
-          ),
-          Provider(
-            builder: (_) => MajorCategoryState(),
-          ),
-          Provider(
-            builder: (_) => CarrierState(),
-          ),
-        ],
+        providers: AppProvider.providers,
         child: MyApp(),
       ),
     ));
@@ -114,7 +110,6 @@ class MyAppHomeDelegate extends StatefulWidget {
 class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   int _currentIndex = 0;
-  RequirementOrderModel requirementOrderModel;
 
   /// 处理底部导航
   void _handleNavigation(int index) {
@@ -126,8 +121,18 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   @override
   void initState() {
     // TODO: implement initState
-    WidgetsBinding.instance.addPostFrameCallback((_) => initListener());
+    WidgetsBinding.instance.addPostFrameCallback((_) => globalInit());
     super.initState();
+  }
+
+  ///全局初始化
+  void globalInit() {
+    // //初始化helpers
+    // Provider.of<CertificationStatusHelper>(context)
+    //     .checkCertificationStatus(context);
+
+    //初始化监听
+    initListener();
   }
 
   //初始化监听
@@ -137,60 +142,33 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   }
 
   //监听异常消息,dialog
-  void listenMessage() {
-    MessageBLoC.instance.errorMessageStream.listen((value) {
-      final appContext = _navigatorKey.currentState.overlay.context;
-      final dialog = AlertDialog(
-        content: Text('$value'),
-      );
-      try {
-        showDialog(context: appContext, builder: (x) => dialog);
-      } catch (e) {
-        print(e);
-      }
-    });
-  }
+  // void listenMessage() {
+  //   MessageBLoC.instance.errorMessageStream.listen((value) {
+  //     final appContext = _navigatorKey.currentState.overlay.context;
+  //     final dialog = AlertDialog(
+  //       content: Text('$value'),
+  //     );
+  //     try {
+  //       showDialog(context: appContext, builder: (x) => dialog);
+  //     } catch (e) {
+  //       print(e);
+  //     }
+  //   });
+  // }
 
   //监听未登录接口调用跳转登录页
   void listenLogin() {
     UserBLoC.instance.loginJumpStream.listen((value) {
       if (true) {
-        Navigator.of(_navigatorKey.currentState.overlay.context)
-            .pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => B2BLoginPage()),
-                ModalRoute.withName('/'));
+        if (NavigatorStack.instance.currentRouteName == AppRoutes.ROUTE_LOGIN) {
+          return;
+        } else {
+          Navigator.of(_navigatorKey.currentState.overlay.context)
+              .pushNamedAndRemoveUntil(
+              AppRoutes.ROUTE_LOGIN, ModalRoute.withName('/'));
+        }
       }
     });
-  }
-
-  /// 发布需求
-  void _onPublish(BuildContext context) async {
-    requirementOrderModel =
-        RequirementOrderModel(details: RequirementInfoModel(), attachments: []);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            MultiProvider(
-              providers: [
-                ChangeNotifierProvider(
-                  builder: (_) => RequirementOrderFormState(),
-                ),
-              ],
-              child: Consumer(
-                builder: (context, RequirementOrderFormState state, _) =>
-                    RequirementOrderFirstForm(
-                      formState: state,
-                    ),
-              ),
-            ),
-      ),
-    );
-  }
-
-  bool _isBrand() {
-    return UserBLoC.instance.currentUser.type == UserType.BRAND;
   }
 
   /// 获取导航菜单
@@ -211,15 +189,12 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 35 : 10),
             child: const Icon(B2BIcons.production),
           ),
           activeIcon: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 35 : 10),
             child: const Icon(B2BIcons.production_active),
           ),
           title: Container(
-            margin: EdgeInsets.only(right: _isBrand() ? 35 : 0),
             child: const Text('生产'),
           ),
         ),
@@ -227,16 +202,27 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       ),
       NavigationMenu(
         BottomNavigationBarItem(
+          icon: Container(
+            child: BottomNotificationsIcon(),
+          ),
+          activeIcon: Container(
+            child: BottomNotificationsActiveIcon(),
+          ),
+          title: Container(
+            child: const Text('消息'),
+          ),
+        ),
+        MessagePage(),
+      ),
+      NavigationMenu(
+        BottomNavigationBarItem(
             icon: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 35 : 0),
               child: const Icon(B2BIcons.business),
             ),
             activeIcon: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 35 : 0),
               child: const Icon(B2BIcons.business_active),
             ),
             title: Container(
-              margin: EdgeInsets.only(left: _isBrand() ? 40 : 0),
               child: const Text('工作'),
             )),
         BusinessHomePage(userType: widget.userType),
@@ -244,25 +230,23 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
       NavigationMenu(
         BottomNavigationBarItem(
             icon: Container(
-              margin: EdgeInsets.only(right: 10),
               child: const Icon(
                 B2BIcons.my,
               ),
             ),
             activeIcon: Container(
-              margin: EdgeInsets.only(right: 10),
               child: const Icon(
                 B2BIcons.my_active,
               ),
             ),
             title: Container(
-              margin: EdgeInsets.only(right: 10),
               child: const Text('我的'),
             )),
-        MyHomePage(),
+        MyHomePage(turnToHome: () {
+          _handleNavigation(0);
+        }),
       ),
     ];
-
     return menus;
   }
 
@@ -270,70 +254,48 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   Widget build(BuildContext context) {
     final List<NavigationMenu> menus = _getNavigationMenus();
 
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      title: AppConstants.appTitle,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        accentColor: Color.fromRGBO(255, 214, 12, 1),
-        bottomAppBarColor: Colors.grey,
-      ),
-      home: Builder(
-        builder: (context) => Scaffold(
-          key: AppKeys.appPage,
-          body: menus[_currentIndex].page,
-          bottomNavigationBar: BottomNavigation(
-            currentIndex: _currentIndex,
-            onChanged: _handleNavigation,
-            items: menus.map((menu) => menu.item).toList(),
+    return //1.使用BotToastInit直接包裹MaterialApp
+      BotToastInit(
+        child: MaterialApp(
+          navigatorKey: _navigatorKey,
+          title: AppConstants.appTitle,
+          navigatorObservers: [
+            BotToastNavigatorObserver(),
+            B2BNavigatorObserver()
+          ],
+          //2.注册路由观察者
+          theme: ThemeData(
+            primaryColor: Colors.white,
+            accentColor: Color.fromRGBO(255, 214, 12, 1),
+            bottomAppBarColor: Colors.grey,
           ),
-          floatingActionButton: _isBrand()
-              ? PublishRequirementButton(
-            onPublish: () => _onPublish(context),
-          )
-              : null,
-          floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+          home: Builder(
+            builder: (context) =>
+                Scaffold(
+                  key: AppKeys.appPage,
+                  body: menus[_currentIndex].page,
+                  bottomNavigationBar: BottomNavigation(
+                    currentIndex: _currentIndex,
+                    onChanged: _handleNavigation,
+                    items: menus.map((menu) => menu.item).toList(),
+                  ),
+                ),
+          ),
+          routes: AppRoutes.allRoutes,
+          localizationsDelegates: [
+            //此处
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            ChineseCupertinoLocalizations.delegate
+          ],
+          builder: (ctx, w) {
+            return MaxScaleTextWidget(
+              max: 1.0,
+              child: w,
+            );
+          },
+          supportedLocales: AppConstants.supportedLocales(),
         ),
-      ),
-      routes: AppRoutes.allRoutes,
-      localizationsDelegates: [
-        //此处
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        ChineseCupertinoLocalizations.delegate
-      ],
-      builder: (ctx, w) {
-        return MaxScaleTextWidget(
-          max: 1.0,
-          child: w,
-        );
-      },
-      supportedLocales: AppConstants.supportedLocales(),
-    );
-  }
-}
-
-/// 发布需求按钮·
-class PublishRequirementButton extends StatelessWidget {
-  const PublishRequirementButton({
-    Key key,
-    @required this.onPublish,
-  }) : super(key: key);
-
-  final VoidCallback onPublish;
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      elevation: 0,
-      tooltip: '发布需求',
-      child: Icon(
-        Icons.add,
-        color: Colors.black,
-        size: 45,
-      ),
-      onPressed: onPublish,
     );
   }
 }

@@ -30,6 +30,7 @@ class MyFactoryState with ChangeNotifier{
 
   //刷新model
   refresh(){
+    print('refresh----------------');
     _model = null;
     notifyListeners();
   }

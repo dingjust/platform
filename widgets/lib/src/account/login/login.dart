@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
 //      showDialog(
 //          context: context,
 //          child: SimpleDialog(
-//            title: Text('登陆失败'),
+//            title: Text('登录失败'),
 //            children: <Widget>[
 //              Container(
 //                padding: EdgeInsets.all(10),
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
               });
             },
             child: Text(
-              _isPasswordLogin ? '验证码登陆' : '密码登陆',
+              _isPasswordLogin ? '验证码登录' : '密码登录',
               style: TextStyle(fontSize: 15),
             ),
           ),
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
               controller: _phoneController,
 
               decoration:
-                  InputDecoration(hintText: '请输入', border: InputBorder.none),
+              InputDecoration(hintText: '请输入手机号', border: InputBorder.none),
             ),
             surfix: Container(
                 child: Row(
@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     controller: _passwordController,
                     decoration: InputDecoration(
-                        hintText: '请输入', border: InputBorder.none),
+                        hintText: '请输入密码', border: InputBorder.none),
                   ),
                   surfix: GestureDetector(
                       onTap: () {
@@ -446,7 +446,7 @@ class _LoginPageState extends State<LoginPage> {
         if (result == LoginResult.SUCCESS) {
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else if (result == LoginResult.DIO_ERROR) {
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
         }
       });
     } else {
@@ -474,7 +474,7 @@ class _LoginPageState extends State<LoginPage> {
     );
     bloc.checkUserExist(_phoneController.text).then((value) {
       if (value == UserType.DEFAULT) {
-        bloc.loginStreamController.sink.add('账号不存在请注册后登陆');
+        bloc.loginStreamController.sink.add('账号不存在请注册后登录');
       } else {
         if (bloc.currentUser.type != value) {
           Navigator.of(context).pop();
@@ -485,8 +485,8 @@ class _LoginPageState extends State<LoginPage> {
                 return CustomizeDialog(
                   dialogType: DialogType.LOGIN_MESSAGE_DIALOG,
                   failTips:
-                  '您当前登录账户为${UserTypeLocalizedMap[bloc.currentUser
-                      .type]}账户,与您选择的身份不匹配。',
+                  '您当前选择的是${UserTypeLocalizedMap[bloc.currentUser
+                      .type]},但您登录的账号为${UserTypeLocalizedMap[value]}账号，请问是否继续登录。',
                   callbackResult: false,
                   cancelButtonText: '换个账户',
                   confirmButtonText: '继续登录',
@@ -526,7 +526,7 @@ class _LoginPageState extends State<LoginPage> {
 
   ///记录账户
   void checkLocalUserName() async {
-    // 检测本地登陆过的账户
+    // 检测本地登录过的账户
     String oldUserName = await LocalStorage.get(GlobalConfigs.USER_KEY);
 
     if (oldUserName != null && oldUserName.isNotEmpty) {

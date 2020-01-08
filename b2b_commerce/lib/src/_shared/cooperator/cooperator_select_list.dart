@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/_shared/cooperator/cooperator_item.dart';
+import 'package:b2b_commerce/src/_shared/cooperator/cooperator_no_selected_item.dart';
 import 'package:b2b_commerce/src/_shared/cooperator/cooperator_selected_item.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -127,8 +128,7 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
   Widget _buildRow(CooperatorModel cooperator) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: CooperatorItem(
-        model: cooperator,
+      child: GestureDetector(
         onTap: (){
           setState(() {
             if(_selectIds.contains(cooperator.id)){
@@ -140,6 +140,9 @@ class _CooperatorSelectListState extends State<CooperatorSelectList> {
             }
           });
         },
+        child: CooperatorNoSelectedItem(
+          model: cooperator,
+        ),
       ),
     );
   }

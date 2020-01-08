@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible.sync="dialogOrderVisible" width="80%">
+    <el-dialog :visible.sync="dialogOrderVisible" width="80%" :close-on-click-modal="false">
       <seal-form />
     </el-dialog>
   <div class="animated fadeIn" >

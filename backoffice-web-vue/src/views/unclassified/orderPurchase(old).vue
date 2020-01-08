@@ -303,7 +303,7 @@
           </el-collapse-item>
         </el-collapse>
         <el-button type="success" round>提交</el-button>
-        <el-dialog :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+        <el-dialog :visible.sync="dialogVisible" width="30%" :before-close="handleClose" :close-on-click-modal="false">
           <span>订单xx创建成功，请创建或上传合同</span>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">稍后再说</el-button>

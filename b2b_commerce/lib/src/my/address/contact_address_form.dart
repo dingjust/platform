@@ -1,4 +1,5 @@
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/common/address_picker.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -25,22 +26,34 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
   String regionCityAndDistrict;
 
   List<Widget> tipsWidget;
+  AddressModel _address;
+  String _locationAddress;
+  double _longitude;
+  double _latitude;
 
   @override
   void initState() {
     super.initState();
-    _line1Controller = TextEditingController(text: widget.address?.line1);
+    _line1Controller = TextEditingController(text: widget.company?.contactAddress?.line1);
+    if(widget.company?.contactAddress != null && widget.company?.contactAddress.region?.isocode != null){
+      _address = AddressModel.fromJson(AddressModel.toJson(widget.company?.contactAddress));
+    }else{
+      _address = AddressModel();
+    }
     tipsWidget = [];
-    if (widget.address != null &&
-        widget.address.region != null &&
-        widget.address.city != null &&
-        widget.address.cityDistrict != null) {
-      regionCityAndDistrict = widget.address.region.name +
-          widget.address.city.name +
-          widget.address.cityDistrict.name;
+    if (widget.company?.contactAddress != null &&
+        widget.company?.contactAddress.region != null &&
+        widget.company?.contactAddress.city != null &&
+        widget.company?.contactAddress.cityDistrict != null) {
+      regionCityAndDistrict = widget.company?.contactAddress.region.name +
+          widget.company?.contactAddress.city.name +
+          widget.company?.contactAddress.cityDistrict.name;
     } else {
       regionCityAndDistrict = '';
     }
+    _locationAddress = widget.company.locationAddress;
+    _longitude = widget.company.longitude;
+    _latitude = widget.company.latitude;
   }
 
   _selectRegionCityAndDistrict(BuildContext context) async {
@@ -55,13 +68,13 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
       return;
     }
 
-    widget.address.cityDistrict = result;
-    widget.address.city = result.city;
-    widget.address.region = result.city.region;
+    widget.company?.contactAddress.cityDistrict = result;
+    widget.company?.contactAddress.city = result.city;
+    widget.company?.contactAddress.region = result.city.region;
 
-    regionCityAndDistrict = widget.address.region.name +
-        widget.address.city.name +
-        widget.address.cityDistrict.name;
+    regionCityAndDistrict = widget.company?.contactAddress.region.name +
+        widget.company?.contactAddress.city.name +
+        widget.company?.contactAddress.cityDistrict.name;
   }
 
   @override
@@ -70,7 +83,28 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
       B2BListTitle(
         isRequired: true,
         onTap: () {
-          _selectRegionCityAndDistrict(context);
+          AddressPicker(cacel: () {
+            Navigator.pop(context);
+          }).showAddressPicker(
+            context,
+            selectProvince: (province) {
+              _address.region =
+                  RegionModel(isocode: province['isocode'], name: province['name']);
+            },
+            selectCity: (city) {
+              _address.city =
+                  CityModel(code: city['code'], name: city['name']);
+            },
+            selectArea: (area) {
+              _address.cityDistrict =
+                  DistrictModel(code: area['code'], name: area['name']);
+              setState(() {
+                regionCityAndDistrict = _address.region.name +
+                    _address.city.name +
+                    _address.cityDistrict.name;
+              });
+            },
+          );
         },
         prefix: Text(
           '选择省市区',
@@ -91,31 +125,31 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           style: TextStyle(fontSize: 16),
         ),
         suffix: Text(
-          widget.company.locationAddress != null
-              ? '${widget.company.locationAddress}'
+          _locationAddress != null
+              ? '${_locationAddress}'
               : '请选择定位',
           style: TextStyle(fontSize: 16, color: Colors.grey),
           textAlign: TextAlign.right,
         ),
       ),
       Divider(),
-       TextFieldComponent(
-         isRequired: true,
-         focusNode: _line1FocusNode,
-         controller: _line1Controller,
-         leadingText: Text('详细地址',
-             style: TextStyle(
-               fontSize: 16,
-             )),
-         hintText: '道路、门牌号、小区、楼栋号、单元室等',
-         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-         dividerPadding: EdgeInsets.symmetric(),
-         maxLines: 1,
-         onChanged: (v){
-           widget.address.line1=
-           _line1Controller.text == '' ? null : _line1Controller.text;
-         },
-       ),
+      TextFieldComponent(
+        isRequired: true,
+        focusNode: _line1FocusNode,
+        controller: _line1Controller,
+        leadingText: Text('详细地址',
+            style: TextStyle(
+              fontSize: 16,
+            )),
+        hintText: '道路、门牌号、小区、楼栋号、单元室等',
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+        dividerPadding: EdgeInsets.symmetric(),
+        maxLines: 1,
+        onChanged: (v) {
+          _address.line1 =
+          _line1Controller.text == '' ? null : _line1Controller.text;
+        },
+      ),
 //      InputRow(
 //          label: '详细地址',
 //          isRequired: true,
@@ -156,15 +190,19 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
                 style: TextStyle(),
               ),
               onPressed: () async {
-                if(widget.address.region == null){
+                if (_address.region == null) {
                   _showValidateMsg(context, '请选择省市区');
                   return;
                 }
-                if(_line1Controller.text == ''){
+                if (_line1Controller.text == '') {
                   _showValidateMsg(context, '请填写详细地址');
                   return;
                 }
-                Navigator.of(context).pop(widget.address);
+                widget.company.latitude = _latitude;
+                widget.company.longitude = _longitude;
+                widget.company.locationAddress = _locationAddress;
+                widget.company.contactAddress = _address;
+                Navigator.of(context).pop(_address);
               },
             )
           ],
@@ -181,17 +219,22 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
   void onLocation() async {
     // Tip tip = await showSearch(
     //     context: context,
-    //     delegate: AmapSearchDelegatePage(city: widget.address.city.name));
-    Tip tip = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => AmapSearchPage(city: widget.address.city.name)));
+    //     delegate: AmapSearchDelegatePage(city: widget.company?.contactAddress.city.name));
+    Tip tip = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
 
-    setState(() {
-      List<String> locationArray = tip.location.split(',');
-      widget.company.longitude = double.parse(locationArray[0]);
-      widget.company.latitude = double.parse(locationArray[1]);
-      widget.company.locationAddress = tip.address;
-      _line1Controller.text = tip.address;
-    });
+    if(tip != null){
+      setState(() {
+        List<String> locationArray = tip.location.split(',');
+        _longitude = double.parse(locationArray[0]);
+        _latitude = double.parse(locationArray[1]);
+        _locationAddress = tip.address;
+        _line1Controller.text = tip.address;
+        _address.line1 =
+        _line1Controller.text == '' ? null : _line1Controller.text;
+      });
+    }
+
   }
 
   // void onAmapTip(String keyword) async {
@@ -224,6 +267,7 @@ class ContactAddressFormPageState extends State<ContactAddressFormPage> {
           });
     }
   }
+
   //非空提示
   bool _showValidateMsg(BuildContext context, String message) {
     _validateMessage(context, '${message}');
@@ -296,5 +340,4 @@ class TipRow extends StatelessWidget {
           )),
     );
   }
-
 }

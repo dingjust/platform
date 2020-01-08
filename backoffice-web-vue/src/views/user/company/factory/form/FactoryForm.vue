@@ -2,30 +2,30 @@
   <div class="animated fadeIn factory-edit">
     <el-row class="factory-info-title-row">
       <div class="factory-info-title">
-        <h6 class="factory-info-title_text">编辑资料</h6>
+        <h6 class="factory-info-title_text">{{readOnly? '公司详情' : '编辑资料'}}</h6>
       </div>
     </el-row>
     <div class="titleCardClass">
-      <el-form :model="formData" ref="factoryForm" label-position="left" label-width="75px" :rules="rules" hide-required-asterisk>
+      <el-form :model="tranData" ref="factoryForm" label-position="left" label-width="75px" :rules="rules" hide-required-asterisk :disabled="readOnly">
         <el-row>
-          <factory-basic-form v-if="factoryFormVisible" :form-data="formData"></factory-basic-form>
+          <factory-basic-form v-if="factoryFormVisible" :form-data="tranData" @onSaveProfiles="onSaveProfiles" :readOnly="readOnly"></factory-basic-form>
+        </el-row>
+<!--        <el-row>-->
+<!--          <factory-contact-form :form-data="formData"></factory-contact-form>-->
+<!--        </el-row>-->
+        <el-row>
+          <factory-scale-form :form-data="tranData" @validateField="validateField" :readOnly="readOnly"></factory-scale-form>
         </el-row>
         <el-row>
-          <factory-contact-form :form-data="formData"></factory-contact-form>
+          <factory-capacity-form v-if="factoryFormVisible" :form-data="tranData" :readOnly="readOnly"></factory-capacity-form>
         </el-row>
-        <el-row>
-          <factory-scale-form v-if="factoryFormVisible" :form-data="formData" @validateField="validateField"></factory-scale-form>
-        </el-row>
-        <el-row>
-          <factory-capacity-form :form-data="formData"></factory-capacity-form>
-        </el-row>
-        <el-row>
-          <factory-service-form :form-data="formData"></factory-service-form>
-        </el-row>
+<!--        <el-row>-->
+<!--          <factory-service-form :form-data="formData"></factory-service-form>-->
+<!--        </el-row>-->
       </el-form>
     </div>
 
-    <el-row type="flex" justify="center">
+    <el-row type="flex" justify="center" v-if="!readOnly">
       <el-button class="buttonClass" @click="onSave">
         <h6>保存</h6>
       </el-button>
@@ -36,7 +36,7 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapGetters} = createNamespacedHelpers('FactoriesModule');
+  const {mapGetters, mapMutations} = createNamespacedHelpers('FactoriesModule');
   import FactoryBasicForm from './FactoryBasicForm';
   import FactoryCertificateForm from './FactoryCertificateForm';
   import FactoryContactForm from './FactoryContactForm';
@@ -46,6 +46,7 @@
 
   export default {
     name: 'FactoryFrom',
+    props: ['formData', 'slotData', 'readOnly'],
     components: {
       FactoryServiceForm,
       FactoryCapacityForm,
@@ -57,10 +58,20 @@
     computed: {
       ...mapGetters({
         factoryFormVisible: 'factoryFormVisible'
-      })
+      }),
+      tranData: function () {
+        if (this.readOnly) {
+          this.setFactoryFormVisible(true);
+          return this.slotData;
+        } else {
+          return this.formData;
+        }
+      }
     },
-    props: ['formData'],
     methods: {
+      ...mapMutations({
+        setFactoryFormVisible: 'setFactoryFormVisible',
+      }),
       onSave () {
         this.$refs['factoryForm'].validate((valid) => {
           if (valid) {
@@ -77,21 +88,55 @@
           }
         });
       },
-      validateField(name) {
+      validateField (name) {
         this.$refs.factoryForm.validateField(name);
+      },
+      onSaveProfiles () {
+        this.$emit('onSaveProfiles')
       }
     },
     watch: {
       'formData.adeptAtCategories': function (n, o) {
         this.validateField('adeptAtCategories');
+      },
+      'formData.profilePicture': function (n, o) {
+        this.validateField('profilePicture');
+      },
+      'formData.categories': function (n, o) {
+        this.validateField('categories');
       }
     },
     data () {
       var cheackEquipment = (rule, value, callback) => {
-        if ((this.formData.cuttingDepartment == null || this.formData.cuttingDepartment.length <= 0) &&
-          (this.formData.productionWorkshop == null || this.formData.productionWorkshop.length <= 0) &&
-          (this.formData.lastDepartment == null || this.formData.lastDepartment.length <= 0)) {
+        if (this.formData.cuttingDepartment.length <= 0 &&
+          this.formData.productionWorkshop.length <= 0 &&
+          this.formData.lastDepartment.length <= 0) {
           return callback(new Error('请选择设备'));
+        } else {
+          callback();
+        }
+      };
+      var checkContactPhone = (rule, value, callback) => {
+        let patrn = /^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!value) {
+          return callback(new Error('请输入手机号码'));
+        }
+        if (!patrn.test(this.formData.contactPhone)) {
+          return callback(new Error('请输入正确的手机号码'));
+        } else {
+          callback();
+        }
+      };
+      var checkProfilePicture = (rule, value, callback) => {
+        if (this.formData.profilePicture == null) {
+          return callback(new Error('请上传公司LOGO'));
+        } else {
+          callback();
+        }
+      };
+      var checkCategories = (rule, value, callback) => {
+        if (this.formData.categories.length <= 0) {
+          return callback(new Error('请选择大类'));
         } else {
           callback();
         }
@@ -117,13 +162,31 @@
             {required: true, message: '请填写联系人', trigger: 'blur'}
           ],
           'contactPhone': [
-            {required: true, message: '请填写联系方式', trigger: 'blur'}
+            {validator: checkContactPhone, type: 'object', trigger: 'blur'}
           ],
           'equipment': [
             {validator: cheackEquipment, type: 'object', trigger: 'change'}
           ],
           'adeptAtCategories': [
             {required: true, message: '请选择品类', type: 'array', trigger: 'change'}
+          ],
+          'categories': [
+            {validator: checkCategories, type: 'object', trigger: 'change'}
+          ],
+          'profilePicture': [
+            {validator: checkProfilePicture, type: 'object', trigger: 'change'}
+          ],
+          'duties': [
+            {required: true, message: '请填写职务', trigger: 'blur'}
+          ],
+          'populationScale': [
+            {required: true, message: '请选择工厂人数', trigger: 'change'}
+          ],
+          'cooperationModes': [
+            {required: true, message: '请选择合作方式', trigger: 'change'}
+          ],
+          'qualityLevels': [
+            {required: true, message: '请选择质量等级', trigger: 'change'}
           ]
         }
       }

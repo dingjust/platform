@@ -29,7 +29,8 @@ class _ProductSizeColorNumState extends State<ProductSizeColorNum> {
         actions: <Widget>[
           FlatButton(
             onPressed: () {
-              Navigator.pop(context, widget.data);
+              Navigator.pop(
+                  context, widget.update ? widget.data : widget.editData);
             },
             child: Text(
               '确定',

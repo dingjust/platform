@@ -257,27 +257,28 @@ class _ScreenConditionsState extends State<ScreenConditions> {
           ),
         ),
         onTap: () {
-          address = '';
+          String text = '';
           AddressPicker(cacel: () {
             Navigator.pop(context);
           }).showAddressPicker(
             context,
             selectProvince: (province) {
-              address += province['name'];
+              text += province['name'];
             },
             selectCity: (city) {
-              address += city['name'];
+              if(city != null){
+                text += city['name'];
+              }
             },
             selectArea: (area) {
-              address += area['name'];
+              if(area != null){
+                text += area['name'];
+              }
               setState(() {
-                address = address;
+                address = text;
               });
             },
           );
-          setState(() {
-            address = address;
-          });
         });
   }
 

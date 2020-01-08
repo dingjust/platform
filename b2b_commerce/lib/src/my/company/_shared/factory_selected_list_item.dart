@@ -17,6 +17,17 @@ class FactorySelectedListItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 15),
+          child:  Container(
+            width: 20,
+            decoration: ShapeDecoration(
+              color: Colors.blue,
+              shape: CircleBorder(side: BorderSide(color: Colors.grey,style: BorderStyle.none)),
+            ),
+            child: Icon(Icons.check,size: 15,color: Colors.white,),
+          ),
+        ),
         Expanded(
           child: Column(
             children: <Widget>[
@@ -54,7 +65,6 @@ class FactorySelectedListItem extends StatelessWidget {
             ],
           ),
         ),
-        Icon(Icons.check,color: Colors.black,size: 30,),
       ],
     );
   }

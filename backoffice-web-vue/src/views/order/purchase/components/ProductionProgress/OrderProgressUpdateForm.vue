@@ -1,10 +1,10 @@
 <template>
   <div class="finance-form-body">
-    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <progress-order-form :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder" v-if="hackSet"
         @callback="onCallback" />
     </el-dialog>
-    <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <progress-order-view :purchaseOrder="order" :progress="slotData" :progressOrder="selectProgressOrder" />
     </el-dialog>
     <el-row class="info-title-row" type="flex" justify="space-between">

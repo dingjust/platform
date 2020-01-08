@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="pt-2"></div>
     <el-row type="flex" justify="space-around" :gutter="50">
       <el-col :span="8">
         <div :class="contractType=='1'?'create-contract-type_select':'create-contract-type_not_select'"
@@ -41,7 +42,7 @@
       </el-col>
       <el-col :span="8">
         <div :class="contractType=='3'?'create-contract-type_select':'create-contract-type_not_select'"
-             @click="onCreateSupplementContract">
+             @click="onCreateFrameContract">
           <el-row>
             <el-col :span="24">
               <h5
@@ -77,21 +78,21 @@
       <!--</div>-->
       <!--</el-col>-->
     </el-row>
-    <el-dialog :visible.sync="contractFormDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-form v-if="contractFormDialogVisible" @onSearch="onSearch"
-                     @openPreviewPdf="openPreviewPdf"
+                     @openPreviewPdf="openPreviewPdf" :templateData="mockData" :templateId="templateId"
                      @closeContractFormDialog="closeContractFormDialog"
                      @closeContractTypeDialog="closeContractTypeDialog"/>
     </el-dialog>
-    <el-dialog :visible.sync="contractFormPurchaseDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormPurchaseDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-purchase-form v-if="contractFormPurchaseDialogVisible" @onSearch="onSearch"
-                              @openPreviewPdf="openPreviewPdf"
+                              @openPreviewPdf="openPreviewPdf" :templateData="mockData" :templateId="templateId"
                               @closeContractPurchaseFormDialog="closeContractPurchaseFormDialog"
                               @closeContractTypeDialog="closeContractTypeDialog"/>
     </el-dialog>
-    <el-dialog :visible.sync="contractFormFrameDialogVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="contractFormFrameDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-frame-form v-if="contractFormFrameDialogVisible" @onSearch="onSearch"
-                           @openPreviewPdf="openPreviewPdf"
+                           @openPreviewPdf="openPreviewPdf" :templateData="mockData" :templateId="templateId"
                            @closeContractFrameFormDialog="closeContractFrameFormDialog"
                            @closeContractTypeDialog="closeContractTypeDialog"/>
     </el-dialog>
@@ -99,6 +100,7 @@
 </template>
 
 <script>
+  import http from '@/common/js/http';
   import Bus from '@/common/js/bus.js';
   import ContractForm from '../ContractForm'
   import ContractFrameForm from '../ContractFrameForm'
@@ -119,6 +121,7 @@
         this.contractType = '1';
         // Bus.$emit('openContractType');
         // this.fn.openSlider('创建', ContractForm, '');
+        this.templateId = 0;
         this.contractFormDialogVisible = !this.contractFormDialogVisible;
       },
       closeContractFormDialog () {
@@ -134,17 +137,21 @@
         this.contractType = '2';
         // Bus.$emit('openContractType');
         // this.fn.openSlider('创建', ContractFrameForm, '');
+        this.templateId = 3;
         this.contractFormFrameDialogVisible = !this.contractFormFrameDialogVisible;
       },
       onCreateFrameContract () {
         this.contractType = '3';
-        Bus.$emit('openContractType');
-        this.fn.openSlider('创建', ContractSupplementForm, '');
+        // Bus.$emit('openContractType');
+        this.templateId = 2;
+        this.contractFormFrameDialogVisible = !this.contractFormFrameDialogVisible;
+        // this.fn.openSlider('创建', ContractSupplementForm, '');
       },
       onCreatePurchaseContract () {
         this.contractType = '4';
         // Bus.$emit('openContractType');
         // this.fn.openSlider('创建', ContractPurchaseForm, '');
+        this.templateId = 1;
         this.contractFormPurchaseDialogVisible = !this.contractFormPurchaseDialogVisible;
       },
       closeContractTypeDialog () {
@@ -155,8 +162,37 @@
       //   Bus.$emit('openContractType');
       //   this.fn.openSlider('创建', ContractSupplementForm, '');
       // },
-      openPreviewPdf(val, code) {
+      openPreviewPdf (val, code) {
         this.$emit('openPreviewPdf', val, code)
+      },
+      async getTemplateListPt () {
+        const url = this.apis().getTemplatesListPt();
+        const result = await http.post(url, {
+          keyword: ''
+        }, {
+          page: 0,
+          size: 10
+        });
+        this.mockData = result.content;
+        this.sortData();
+      },
+      sortData () {
+        let arr = [];
+        this.mockData.map(value => {
+          if (value.title === '委托生产合同') {
+            arr[0] = value;
+          }
+          if (value.title === '采购订单') {
+            arr[1] = value;
+          }
+          if (value.title === '框架协议') {
+            arr[2] = value;
+          }
+          if (value.title === '补充协议') {
+            arr[3] = value;
+          }
+        });
+        this.mockData = arr;
       }
     },
     data () {
@@ -174,7 +210,9 @@
           //   label: "上传纸质合同文件",
           //   value: "2"
           // }
-        ]
+        ],
+        mockData: [],
+        templateId: ''
       };
     },
     watch: {
@@ -182,6 +220,9 @@
         console.log('============' + newType);
         this.$emit('contractTypeChange', newType);
       }
+    },
+    created () {
+      this.getTemplateListPt();
     }
   };
 </script>

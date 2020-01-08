@@ -1,6 +1,6 @@
 <template>
   <div class="info-detail-staff-body">
-    <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="dialogVisible" width="80%" height="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <purchase-contract-type @closeContractT="onCloseDialog" :slotData="slotData" v-if="hackSet"
                               @onSaveContractForm="onSaveContractForm"
                               @onSaveContractFormPdf="onSaveContractFormPdf"
@@ -14,10 +14,10 @@
 <!--      <contract-form @closeContractFormDialog="closeContractFormDialog" :slotData="slotData" v-if="hackSet"></contract-form>-->
 <!--    </el-dialog>-->
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="85%" class="purchase-dialog" append-to-body
-      :modal="true">
+      :modal="true" :close-on-click-modal="false">
       <purchase-contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract" @getContractsList="getContractsList" @showContract="showContract"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogSealVisible" :show-close="false">
+    <el-dialog :visible.sync="dialogSealVisible" :show-close="false" :close-on-click-modal="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">

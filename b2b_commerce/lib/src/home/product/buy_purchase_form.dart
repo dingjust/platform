@@ -62,18 +62,32 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   ///预计交货时间
   DateTime expectedDeliveryDate = DateTime.now();
 
+  //输入即时刷新监听
+  Function textEditControllerListener;
+
   @override
   void initState() {
     remarksEditingController = TextEditingController();
+
+    //初始化监听器
+    textEditControllerListener = () {
+      setState(() {});
+    };
+
     produceDay = widget.product.productionDays;
     if (widget.product.steppedPrices != null &&
         widget.product.steppedPrices.isNotEmpty) {
       price = widget.product.minSteppedPrice;
     }
-    productEntries = widget.product.variants
-        .map((variant) => EditApparelSizeVariantProductEntry(
-            controller: TextEditingController(), model: variant))
-        .toList();
+
+    productEntries = widget.product.variants.map((variant) {
+      TextEditingController controller = TextEditingController();
+      //赋值监听器，即时监听用户输入
+      controller.addListener(textEditControllerListener);
+      return EditApparelSizeVariantProductEntry(
+          controller: controller, model: variant);
+    }).toList();
+
     if (productEntries != null) {
       productEntries.forEach((entry) {
         if (colorRowList[entry.model.color.code] == null) {
@@ -293,7 +307,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: '0',
-                            hintStyle: TextStyle(fontSize: 14),
+                            hintStyle: TextStyle(fontSize: 15),
                           ),
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
@@ -308,6 +322,10 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                                 entry.controller.text = '';
                               });
                             }
+
+                            // setState(() {
+                            //   entry.controller.text = int.parse(val).toString();
+                            // });
                           },
                         ),
                       ),
@@ -390,7 +408,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: '0',
-                          hintStyle: TextStyle(fontSize: 14)),
+                          hintStyle: TextStyle(fontSize: 15)),
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14),
@@ -734,20 +752,23 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
       if (value != null) {
         result = true;
       }
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.RESULT_DIALOG,
-              failTips: '下单失败',
-              successTips: '下单成功',
-              callbackResult: result,
-              confirmAction: () {
-                getOrderDetail(value);
-              },
-            );
-          });
+      if (result) {
+        getOrderDetail(value);
+      }
+      // showDialog(
+      //     context: context,
+      //     barrierDismissible: false,
+      //     builder: (_) {
+      //       return CustomizeDialog(
+      //         dialogType: DialogType.RESULT_DIALOG,
+      //         failTips: '下单失败',
+      //         successTips: '下单成功',
+      //         callbackResult: result,
+      //         confirmAction: () {
+      //           getOrderDetail(value);
+      //         },
+      //       );
+      //     });
     });
   }
 
@@ -769,6 +790,10 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   void dispose() {
     // TODO: implement dispose
     _streamController.close();
+    //删除监听器
+    productEntries.forEach((entry) {
+      entry.controller.removeListener(textEditControllerListener);
+    });
     super.dispose();
   }
 }

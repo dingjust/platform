@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
@@ -18,15 +16,17 @@ class ApparelProductsPage extends StatefulWidget {
   _ApparelProductsPageState createState() => _ApparelProductsPageState();
 }
 
-class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTickerProviderStateMixin{
-
-  final List<EnumModel> _statuses = UserBLoC.instance.currentUser.type == UserType.FACTORY ? <EnumModel>[
+class _ApparelProductsPageState extends State<ApparelProductsPage>
+    with SingleTickerProviderStateMixin {
+  final List<EnumModel> _statuses =
+  UserBLoC.instance.currentUser.type == UserType.FACTORY
+      ? <EnumModel>[
     EnumModel('approved', '上架产品'),
     EnumModel('unapproved', '下架产品'),
-  ] : [
+  ]
+      : [
     EnumModel('ALL', '全部产品'),
   ];
-
 
   TabController _tabController;
   bool isChangeTab = false;
@@ -62,16 +62,21 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
                 B2BIcons.search,
                 size: 20,
               ),
-              onPressed: ()async{
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HistorySearch(
-                  hintText: '请输入编码，名称，货号搜索',
-                  historyKey: GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
-                )));
+              onPressed: () async {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            HistorySearch(
+                              hintText: '请输入编码，名称，货号搜索',
+                              historyKey:
+                              GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
+                            )));
               },
             ),
           ],
         ),
-        body:Scaffold(
+        body: Scaffold(
           appBar: TabBar(
             controller: _tabController,
             unselectedLabelColor: Colors.black26,
@@ -80,26 +85,22 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
               return Tab(text: status.name);
             }).toList(),
             labelStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.black),
+                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
             isScrollable: false,
           ),
           body: TabBarView(
             controller: _tabController,
-            children: _statuses
-                .map((status) {
+            children: _statuses.map((status) {
               return Container(
                 padding: EdgeInsets.only(top: 10),
-                child:ApparelProductList(
+                child: ApparelProductList(
                   key: PageStorageKey(status),
                   status: status.code,
-                ),);
-            })
-                .toList(),
+                ),
+              );
+            }).toList(),
           ),
         ),
-
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -111,11 +112,12 @@ class _ApparelProductsPageState extends State<ApparelProductsPage> with SingleTi
                         isCreate: true,
                         enabled: true,
                       )),
-            );
+            ).then((val) {
+              setState(() {});
+            });
           },
         ),
       ),
     );
   }
-
 }

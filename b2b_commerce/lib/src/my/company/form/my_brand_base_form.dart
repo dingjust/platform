@@ -1,4 +1,7 @@
 import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/my/company/form/my_brand_address_form.dart';
+import 'package:b2b_commerce/src/my/company/form/my_brand_contact_form.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -15,6 +18,7 @@ class MyBrandBaseFormPage extends StatefulWidget {
 }
 
 class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
+  BrandModel _brand;
   List<MediaModel> medias = [];
   TextEditingController _nameController = TextEditingController();
   TextEditingController _brandController = TextEditingController();
@@ -23,32 +27,27 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
   FocusNode _brandFocusNode = FocusNode();
   FocusNode _cooperativeBrandFocusNode = FocusNode();
 
-  List<String> _scaleRange = [];
-  List<String> _styleCodes = [];
-  List<String> _ageRanges = [];
-  List<String> _priceRange1s = [];
-  List<String> _priceRange2s = [];
+  String _scaleRange;
+  double _fontSize = 16;
 
   @override
   void initState() {
-    if (widget.brand.profilePicture != null) medias = [widget.brand.profilePicture];
-    _nameController.text = widget.brand.name ?? '';
-    _brandController.text = widget.brand.brand ?? '';
-    _cooperativeBrandController.text = widget.brand.cooperativeBrand ?? '';
-    if (widget.brand.scaleRange != null) {
-      _scaleRange.add(widget.brand.scaleRange.toString().split('.')[1]);
+    _brand = BrandModel.fromJson(BrandModel.toJson(widget.brand));
+    if (_brand.profilePicture != null) medias = [_brand.profilePicture];
+    _nameController.text = _brand.name ?? '';
+    _brandController.text = _brand.brand ?? '';
+    _cooperativeBrandController.text = _brand.cooperativeBrand ?? '';
+    if (_brand.scaleRange != null) {
+      _scaleRange = _brand.scaleRange.toString().split('.')[1];
+      print(_brand.scaleRange.toString().split('.')[1]);
     }
-    _styleCodes.addAll(widget.brand.styles ?? []);
-    _ageRanges.addAll(
-      widget.brand.ageRanges.map((ageRange) => ageRange.toString().split('.')[1]).toList() ?? [],
-    );
-    _priceRange1s.addAll(
-      widget.brand.priceRange1s.map((priceRange1s) => priceRange1s.toString().split('.')[1]).toList() ?? [],
-    );
-    _priceRange2s.addAll(
-      widget.brand.priceRange2s.map((priceRange2s) => priceRange2s.toString().split('.')[1]).toList() ?? [],
-    );
 
+    if (_brand.salesMarket == null) {
+      _brand.salesMarket = [];
+    }
+    if (_brand.styles == null) {
+      _brand.styles = [];
+    }
     // TODO: implement initState
     super.initState();
   }
@@ -62,19 +61,50 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
         elevation: 0.5,
         actions: <Widget>[
           IconButton(
-              icon: Text('确定', style: TextStyle()),
+              icon: Text('保存', style: TextStyle(color: Color(0xffffd60c))),
               onPressed: () {
-                if (medias.length > 0) {
-                  widget.brand.profilePicture = medias[0];
-                } else {
-                  widget.brand.profilePicture = null;
+                if (ObjectUtil.isEmptyList(medias)) {
+                  ShowDialogUtil.showValidateMsg(context, '请上传企业logo');
+                  return;
                 }
-                widget.brand.name = _nameController.text == '' ? null : _nameController.text;
-                widget.brand.brand = _brandController.text == '' ? null : _brandController.text;
-                widget.brand.cooperativeBrand =
-                    _cooperativeBrandController.text == '' ? null : _cooperativeBrandController.text;
+                if (ObjectUtil.isEmptyString(_brand.name)) {
+                  ShowDialogUtil.showValidateMsg(context, '请填写公司名称');
+                  return;
+                }
+                if (ObjectUtil.isEmptyString(_brand.duties) ||
+                    ObjectUtil.isEmptyString(_brand.contactPerson) ||
+                    ObjectUtil.isEmptyString(_brand.contactPhone)) {
+                  ShowDialogUtil.showValidateMsg(context, '请完善联系信息');
+                  return;
+                }
+                if (_brand.contactAddress?.region?.isocode == null ||
+                    ObjectUtil.isEmptyString(_brand.contactAddress.line1)) {
+                  ShowDialogUtil.showValidateMsg(context, '请填写企业地址');
+                  return;
+                }
+                if (ObjectUtil.isEmptyList(_brand.adeptAtCategories)) {
+                  ShowDialogUtil.showValidateMsg(context, '请选择优势品类');
+                  return;
+                }
+                if (medias.length > 0) {
+                  _brand.profilePicture = medias[0];
+                } else {
+                  _brand.profilePicture = null;
+                }
+                _brand.name =
+                _nameController.text == '' ? null : _nameController.text;
+                _brand.brand =
+                _brandController.text == '' ? null : _brandController.text;
+                _brand.cooperativeBrand = _cooperativeBrandController.text == ''
+                    ? null
+                    : _cooperativeBrandController.text;
 
-                UserRepositoryImpl().brandUpdate(widget.brand).then((a) => Navigator.pop(context));
+                UserRepositoryImpl().brandUpdate(_brand).then((a) {
+                  UserBLoC.instance.refreshUser().then((v) {
+                    print('+++++++++++++++++++++');
+                  });
+                  Navigator.pop(context, true);
+                });
               })
         ],
       ),
@@ -84,12 +114,24 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Text(
-                '上传图片',
-                style: TextStyle(
-                  fontSize: 17,
-                  color: Colors.grey,
-                ),
+              child: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '上传企业logo',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: _fontSize,
+                      )),
+                  TextSpan(
+                      text: '*',
+                      style: TextStyle(color: Colors.red, fontSize: _fontSize)),
+                  TextSpan(
+                      text: '(长按编辑)',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      )),
+                ]),
               ),
             ),
             EditableAttachments(
@@ -97,320 +139,366 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
               maxNum: 1,
             ),
             Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 5,
+              ),
               color: Colors.white,
-              child: TextFieldComponent(
-                focusNode: _nameFocusNode,
-                leadingText: Text('公司名称',style: TextStyle(fontSize: 16,)),
-                controller: _nameController,
-                hintText: '请输入公司名称',
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: '公司名称',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: _fontSize,
+                          )),
+                      TextSpan(text: '*', style: TextStyle(color: Colors.red)),
+                    ]),
+                  ),
+                  Expanded(
+                    child: TextFieldComponent(
+                      padding: EdgeInsets.all(0),
+                      focusNode: _nameFocusNode,
+                      controller: _nameController,
+                      hintText: '请输入公司名称',
+                      hideDivider: true,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Container(
-              color: Colors.white,
-              child: TextFieldComponent(
-                focusNode: _brandFocusNode,
-                leadingText: Text('品牌名称',style: TextStyle(fontSize: 16,)),
-                controller: _brandController,
-                hintText: '请输入品牌名称',
-              ),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
-            ),
-            Container(
-              color: Colors.white,
-              child: TextFieldComponent(
-                focusNode: _cooperativeBrandFocusNode,
-                leadingText: Text('合作品牌',style: TextStyle(fontSize: 16,)),
-                controller: _cooperativeBrandController,
-                hintText: '请输入合作品牌',
-              ),
-            ),
-            InkWell(
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MyBrandContactFormPage(
+                              company: _brand,
+                            )));
+              },
               child: Container(
-                color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                color: Colors.white,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: '联系信息',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: _fontSize)),
+                        TextSpan(
+                            text: '*',
+                            style: TextStyle(
+                                color: Colors.red, fontSize: _fontSize)),
+                      ]),
+                    ),
                     Expanded(
                         child: Text(
-                      '产值规模',
-                      style: TextStyle(
-
-                        fontSize: 16,
-                      ),
-                    )),
-                    Text(widget.brand.scaleRange == null ? '' : ScaleRangesLocalizedMap[widget.brand.scaleRange],style: TextStyle(color: Colors.grey),),
-                    Icon(Icons.chevron_right,color: Colors.grey,),
+                          _buildContactText(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.grey),
+                        )),
+                    Icon(
+                      (Icons.chevron_right),
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
+            ),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
+            GestureDetector(
               onTap: () async {
                 dynamic result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EnumSelectPage(
-                            items: ScaleRangesEnum,
-                            title: '产值规模',
-                            codes: _scaleRange,
-                            count: 3,
-                          ),
-                    ));
-
-                if (result != null) _scaleRange = result;
-
-                if (_scaleRange.length > 0) {
-                  ScaleRanges scaleRange = ScaleRanges.values.singleWhere(
-                      (scaleRange) => scaleRange.toString().split('.')[1] == _scaleRange[0],
-                      orElse: () => null);
-
-                  widget.brand.scaleRange = scaleRange;
+                        builder: (context) =>
+                            MyBrandAddressFormPage(
+                              addressModel: _brand.contactAddress,
+                            )));
+                if (result != null) {
+                  _brand.contactAddress = result;
                 }
               },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: '企业地址',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: _fontSize)),
+                        TextSpan(
+                            text: '*',
+                            style: TextStyle(
+                                color: Colors.red, fontSize: _fontSize)),
+                      ]),
+                    ),
+                    Expanded(
+                        child: Text(
+                          '${_brand?.contactAddress?.details ?? ''}',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: Colors.grey),
+                        )),
+                    Icon(
+                      (Icons.chevron_right),
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
-            InkWell(
+            GestureDetector(
               child: Container(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child: Text(
-                      '优势类目',
-                      style: TextStyle(
-
-                        fontSize: 16,
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '优势类目',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: _fontSize)),
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                  color: Colors.red, fontSize: _fontSize)),
+                        ]),
                       ),
-                    )),
-                    Text(
-                      formatCategorySelectText(widget.brand.adeptAtCategories),style: TextStyle(color: Colors.grey)
                     ),
-                    Icon(Icons.chevron_right,color: Colors.grey),
+                    Text(formatCategorySelectText(_brand.adeptAtCategories),
+                        style: TextStyle(color: Colors.grey)),
+                    Icon(Icons.chevron_right, color: Colors.grey),
                   ],
                 ),
               ),
               onTap: () async {
-                List<CategoryModel> categories = await ProductRepositoryImpl().cascadedCategories();
+                List<CategoryModel> categories =
+                await ProductRepositoryImpl().cascadedCategories();
                 dynamic result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
-                          categories: categories,
-                          minCategorySelect: widget.brand.adeptAtCategories,
-                          multiple: true,
-                        ),
+                      categories: categories,
+                      minCategorySelect: _brand.adeptAtCategories,
+                      multiple: true,
+                    ),
                   ),
                 );
 
                 if (result != null) {
-                  widget.brand.adeptAtCategories = result;
+                  _brand.adeptAtCategories = result;
                 }
               },
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
-            InkWell(
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: Text(
-                      '风格',
-                      style: TextStyle(
-
-                        fontSize: 16,
-                      ),
-                    )),
-                    Text(
-                      formatEnumSelectsText(widget.brand.styles, StyleEnum, 4),style: TextStyle(color: Colors.grey)
-                    ),
-                    Icon(Icons.chevron_right,color: Colors.grey),
-                  ],
-                ),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 5,
               ),
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EnumSelectPage(
-                          title: '选择风格',
-                          items: StyleEnum,
-                          codes: widget.brand.styles,
-                          multiple: true,
-                        ),
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: '品牌名称',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: _fontSize,
+                          )),
+                    ]),
                   ),
-                );
-
-                if (result != null) {
-                  widget.brand.styles = result;
-                }
-              },
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      child: TextFieldComponent(
+                        padding: EdgeInsets.all(0),
+                        focusNode: _brandFocusNode,
+                        controller: _brandController,
+                        hintText: '请输入品牌名称',
+                        hideDivider: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
-            InkWell(
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 5,
+              ),
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: '合作品牌',
+                          style: TextStyle(
+                              color: Colors.black, fontSize: _fontSize)),
+                    ]),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      child: TextFieldComponent(
+                        padding: EdgeInsets.all(0),
+                        focusNode: _cooperativeBrandFocusNode,
+                        controller: _cooperativeBrandController,
+                        hintText: '请输入合作品牌',
+                        hideDivider: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
+            GestureDetector(
               child: Container(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child: Text(
-                      '年龄段',
-                      style: TextStyle(
-
-                        fontSize: 16,
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '产值规模',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: _fontSize)),
+                        ]),
                       ),
-                    )),
-                    Text(
-                      formatEnumSelectsText(_ageRanges, AgeRangesEnum, 3),style: TextStyle(color: Colors.grey)
                     ),
-                    Icon(Icons.chevron_right,color: Colors.grey),
+                    Text(
+                      _brand.scaleRange == null
+                          ? ''
+                          : ScaleRangesLocalizedMap[_brand.scaleRange],
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EnumSelectPage(
-                            items: AgeRangesEnum,
-                            title: '年龄段',
-                            codes: _ageRanges,
-                            count: 3,
-                            multiple: true,
-                          ),
-                    ));
-
-                if (result != null) _ageRanges = result;
-
-                if (_ageRanges.length > 0) {
-                  List<AgeRanges> ageRanges = _ageRanges.map((ageRange) {
-                    return AgeRanges.values.singleWhere((scaleRange) => scaleRange.toString().split('.')[1] == ageRange,
-                        orElse: () => null);
-                  }).toList();
-
-                  widget.brand.ageRanges = ageRanges;
-                }
-              },
+              onTap: _onScaleSelect,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
-            InkWell(
+            GestureDetector(
               child: Container(
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child: Text(
-                      '春夏款价格段',
-                      style: TextStyle(
-
-                        fontSize: 16,
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '质量等级',
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: _fontSize)),
+                        ]),
                       ),
-                    )),
-                    Text(
-                      formatEnumSelectsText(_priceRange1s, PriceRangesEnum, 3),style: TextStyle(color: Colors.grey)
                     ),
-                    Icon(Icons.chevron_right,color: Colors.grey),
+                    Text(
+                      formatEnumSelectsText(
+                          _brand.salesMarket, FactoryQualityLevelsEnum, 2),
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
                   ],
                 ),
               ),
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EnumSelectPage(
-                            items: PriceRangesEnum,
-                            title: '春夏款价格段',
-                            codes: _priceRange1s,
-                            count: 3,
-                            multiple: true,
-                          ),
-                    ));
-
-                if (result != null) _priceRange1s = result;
-
-                if (_priceRange1s.length > 0) {
-                  List<PriceRanges> priceRange1s = _priceRange1s.map((priceRange1s) {
-                    return PriceRanges.values.singleWhere(
-                        (priceRange) => priceRange.toString().split('.')[1] == priceRange1s,
-                        orElse: () => null);
-                  }).toList();
-
-                  widget.brand.priceRange1s = priceRange1s;
-                }
-              },
+              onTap: _onQualitySelect,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
-            InkWell(
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: Text(
-                      '秋冬款价格段',
-                      style: TextStyle(
-
-                        fontSize: 16,
+            GestureDetector(
+                child: Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: '风格',
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: _fontSize)),
+                          ]),
+                        ),
                       ),
-                    )),
-                    Text(
-                      formatEnumSelectsText(_priceRange2s, PriceRangesEnum, 3),style: TextStyle(color: Colors.grey)
-                    ),
-                    Icon(Icons.chevron_right,color: Colors.grey),
-                  ],
+                      Text(formatEnumSelectsText(_brand.styles, StyleEnum, 4),
+                          style: TextStyle(color: Colors.grey)),
+                      Icon(Icons.chevron_right, color: Colors.grey),
+                    ],
+                  ),
                 ),
-              ),
-              onTap: () async {
-                dynamic result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EnumSelectPage(
-                            items: PriceRangesEnum,
-                            title: '秋冬款价格段',
-                            codes: _priceRange2s,
-                            count: 3,
-                            multiple: true,
-                          ),
-                    ));
-
-                if (result != null) _priceRange2s = result;
-
-                if (_priceRange2s.length > 0) {
-                  List<PriceRanges> priceRange2s = _priceRange2s.map((priceRange2s) {
-                    return PriceRanges.values.singleWhere(
-                        (priceRange) => priceRange.toString().split('.')[1] == priceRange2s,
-                        orElse: () => null);
-                  }).toList();
-
-                  widget.brand.priceRange2s = priceRange2s;
-                }
-              },
+                onTap: _onStyleSelect),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
             ),
           ],
         ),
       ),
     );
+  }
+
+  String _buildContactText() {
+    String text = '未填写';
+    if (!ObjectUtil.isEmptyString(_brand.duties) &&
+        !ObjectUtil.isEmptyString(_brand.contactPerson) &&
+        !ObjectUtil.isEmptyString(_brand.contactPhone)) {
+      text = '已填写';
+    }
+    return text;
   }
 
   String formatCategorySelectText(List<CategoryModel> categorys) {
@@ -433,5 +521,78 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
     }
 
     return text;
+  }
+
+  void _onScaleSelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SingleEnumSelectPage(
+          items: ScaleRangesEnum,
+          title: '产值规模',
+          code: _scaleRange,
+          count: 3,
+        );
+      },
+    ).then((result) {
+      if (result != null) _scaleRange = result;
+
+      ScaleRanges scaleRange = scaleRangeFromString(_scaleRange);
+
+      setState(() {
+        _brand.scaleRange = scaleRange;
+      });
+    });
+  }
+
+  void _onQualitySelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return EnumSelectPage(
+          items: FactoryQualityLevelsEnum,
+          title: '质量等级',
+          codes: _brand.salesMarket,
+          count: 3,
+          multiple: true,
+        );
+        // return MultiEnumSelect<ScaleRanges>(
+        //   title: '质量等级',
+        //   localizedMap: ScaleRangesLocalizedMap,
+        //   values: [ScaleRanges.SR001],
+        // );
+      },
+    ).then((result) {
+      setState(() {
+        if (result != null) {
+          _brand.salesMarket = result;
+        }
+      });
+    });
+  }
+
+  void _onStyleSelect() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return EnumSelectPage(
+          title: '选择风格',
+          items: StyleEnum,
+          codes: _brand.styles,
+          multiple: true,
+        );
+        // return MultiEnumSelect<ScaleRanges>(
+        //   title: '质量等级',
+        //   localizedMap: ScaleRangesLocalizedMap,
+        //   values: [ScaleRanges.SR001],
+        // );
+      },
+    ).then((result) {
+      setState(() {
+        if (result != null) {
+          _brand.styles = result;
+        }
+      });
+    });
   }
 }

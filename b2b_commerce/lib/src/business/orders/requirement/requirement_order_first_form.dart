@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_form.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 /// 产品分类选择页
 class RequirementOrderFirstForm extends StatefulWidget {
@@ -99,7 +99,13 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<CategoryModel>> snapshot) {
                   if (!snapshot.hasData) {
-                    return Container(child: SizedBox(height: 100,child: Center(child: CircularProgressIndicator()),),color: Colors.white,);
+                    return Container(
+                      child: SizedBox(
+                        height: 100,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      color: Colors.white,
+                    );
                   } else {
                     return Container(
                       padding: EdgeInsets.symmetric(
@@ -110,32 +116,46 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 15,
-                              right: 15,
-                            ),
-                            child: RichText(
-                              text: TextSpan(children: [
-                                TextSpan(
-                                  text: '选择面料类型',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.black),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
                                 ),
-                                TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.red),
-                                )
-                              ]),
-                            ),
+                                child: RichText(
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                      text: '选择面料类型',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black),
+                                    ),
+                                    TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.red),
+                                    )
+                                  ]),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 15),
+                                child: Text(
+                                    '已选：${widget.formState.model.details
+                                        ?.majorCategory?.name ?? ''}'),
+                              )
+                            ],
                           ),
                           SingleMajorCategorySelect(
                             categories: snapshot.data,
                             categorySelect:
                                 widget.formState.model.details.majorCategory,
-                            onItemTap: (categoryModel) => widget.formState.model
-                                .details.majorCategory = categoryModel,
+                            onItemTap: (categoryModel) {
+                              setState(() {
+                                widget.formState.model.details.majorCategory =
+                                    categoryModel;
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -156,7 +176,13 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<CategoryModel>> snapshot) {
                   if (!snapshot.hasData) {
-                    return Container(child: SizedBox(height: 100,child: Center(child: CircularProgressIndicator()),),color: Colors.white,);
+                    return Container(
+                      child: SizedBox(
+                        height: 100,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                      color: Colors.white,
+                    );
                   } else {
                     return Container(
                       padding: EdgeInsets.symmetric(
@@ -358,7 +384,7 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                           setState(() {
                             //获取所有省份
                             rootBundle
-                                .loadString('data/province.json')
+                                .loadString('data/province_only.json')
                                 .then((v) {
                               List data = json.decode(v);
                               showModalBottomSheet(

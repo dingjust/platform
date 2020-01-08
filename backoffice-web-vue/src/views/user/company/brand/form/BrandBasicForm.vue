@@ -112,7 +112,7 @@
       </el-row>
     </el-form>
     <el-dialog title="地址" :modal="false" :visible.sync="addressDialogVisible"
-               :show-close="false" append-to-body width="50%">
+               :show-close="false" append-to-body width="50%" :close-on-click-modal="false">
       <address-form ref="addressForm" :slot-data="addressFormData" :isCompany = "true"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="onAddressInputCanceled">取 消</el-button>

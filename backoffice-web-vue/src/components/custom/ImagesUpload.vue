@@ -32,9 +32,13 @@
         type: Boolean,
         default: false
       },
-      disabled:{
-        type:Boolean,
-        default:false
+      disabled: {
+        type: Boolean,
+        default: false
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
@@ -115,7 +119,7 @@
           })
         }
 
-        if (this.slotData.length === this.limit) {
+        if (this.readOnly || this.slotData.length === this.limit) {
           this.uploadDisabled = true;
         } else {
           this.uploadDisabled = false;

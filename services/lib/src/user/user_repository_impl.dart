@@ -40,8 +40,18 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   Future<BrandModel> getBrand(String uid) async {
-    Response response = await http$.get(Apis.brand(uid));
-    return BrandModel.fromJson(response.data);
+    Response response;
+    try {
+      response = await http$.get(Apis.brand(uid));
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return BrandModel.fromJson(response.data);
+    } else {
+      return null;
+    }
   }
 
   Future<FactoryModel> getFactory(String uid) async {
@@ -288,4 +298,55 @@ class UserRepositoryImpl implements UserRepository {
 
     return result;
   }
+
+  @override
+
+  /// 更新用户资料
+  Future<bool> updateUserInfo(String uid, String name, String phone,
+      MediaModel media) async {
+    Response response;
+    bool result;
+    Map data = {
+      'name': name,
+      'contactPhone': phone,
+    };
+    if (media != null) {
+      data['profilePicture'] = MediaModel.toJson(media);
+    }
+
+    try {
+      response = await http$.put(UserApis.updateUserInfo(uid), data: data);
+    } on DioError catch (e) {
+      print(e);
+    }
+    if (response != null && response.statusCode == 200) {
+      result = true;
+    } else {
+      result = false;
+    }
+    return result;
+  }
+
+  @override
+  Future<bool> resetPasswordByPassword(String old, String password,
+      String uid) async {
+    Response response;
+    try {
+      response = await http$.put(UserApis.resetPasswordByPassword(uid),
+          queryParameters: {"old": old, "new": password});
+    } on DioError catch (e) {
+      print(e);
+      return false;
+    }
+    if (response != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+class ModelData<T> {
+  bool isTimeOut;
+  T t;
 }

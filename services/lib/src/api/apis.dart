@@ -98,6 +98,9 @@ class Apis {
   static const String AMAP_AROUND_API =
       'https://restapi.amap.com/v3/place/around';
 
+  ///高德地理编码
+  static const String AMAP_GEOCODE = 'https://restapi.amap.com/v3/geocode/geo';
+
   ///分享-需求订单
   static get shareRequirement =>
           (String code) {

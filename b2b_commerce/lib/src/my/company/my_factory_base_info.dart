@@ -34,6 +34,7 @@ class MyFactoryBaseInfo extends StatefulWidget {
 class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
   Future _getQuoteFuture;
   Future _getPurchaseFuture;
+  final double TITLE_WIDTH = 90;
 
   @override
   void initState() {
@@ -137,11 +138,32 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                     color: Colors.grey[100] ,
                   ),
                 ),
-                 Container(
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 15),
+                  child: _buildContactInfo(),
+                ),
+                SizedBox(
+                  height: 10,
+                  child: Container(
+                    color: Colors.grey[100] ,
+                  ),
+                ),
+                widget.factory?.capacities != null && widget.factory.capacities.length > 0 ? Container(
                   color: Colors.white,
                   height: 202,
                   padding: EdgeInsets.only(top: 15,right: 10,bottom: 10),
                   child: MyCompanyCapacityInfo(widget.factory,isSupplier: widget.isSupplier),
+                ) :
+                Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.only(top: 15,right: 10,bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('该工厂尚未发布空闲产能',style: TextStyle(fontSize: 16,),),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 10,
@@ -496,6 +518,66 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
           style: const TextStyle(color: Colors.red),
         ),
         const Text('单')
+      ],
+    );
+  }
+
+  Column _buildContactInfo() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(bottom: 15,),
+          child: Row(
+            children: <Widget>[
+              Text('企业信息',
+                  style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold))
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(bottom: 15,),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: TITLE_WIDTH,
+                child: Text(
+                  '联系人',
+                  style: const TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+              ),
+              Text(
+                widget.factory.contactPerson ?? '',
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: TITLE_WIDTH,
+                child: Text(
+                  '经营地址',
+                  style: const TextStyle(color: Colors.grey, fontSize: 16),
+                ),
+              ),
+              Expanded(
+                child: Text('${widget.factory.contactAddress?.details ?? ''}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

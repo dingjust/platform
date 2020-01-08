@@ -1,10 +1,10 @@
 <template>
   <div class="animated fadeIn">
-    <el-dialog :visible.sync="dialogSealVisible" class="purchase-dialog" :show-close="true">
+    <el-dialog :visible.sync="dialogSealVisible" class="purchase-dialog" :show-close="true" :close-on-click-modal="false">
       <contract-seal-list :page="sealPage" :onSearchSeal="onSearchSeal" @onSealSelectChange="onSealSelectChange" />
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-supplement-form v-if="dialogOrderVisible" @openPreviewPdf="previewPdf"
                                 :slotData="thisContract" @onSearch="onSearch" @closeDialogOrderVisible="closeDialogOrderVisible"/>
     </el-dialog>

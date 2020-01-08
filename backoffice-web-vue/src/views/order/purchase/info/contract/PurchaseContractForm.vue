@@ -1,34 +1,34 @@
 <template>
   <div>
     <el-dialog :destroy-on-close="true" :visible.sync="dialogTemplateVisible" width="80%" class="purchase-dialog"
-               append-to-body>
+               append-to-body :close-on-click-modal="false">
       <el-button class="product-select-btn" @click="onFileSelectSure">确定</el-button>
       <el-divider direction="vertical"></el-divider>
       <el-button class="product-select-btn" @click="onCreateTemp">创建模板</el-button>
       <contract-template-select :tempType="tempType" @fileSelectChange="onFileSelectChange" ref="contractTemplateSelect"/>
     </el-dialog>
-    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body>
+    <el-dialog :visible.sync="tempFormVisible" class="purchase-dialog" width="80%" append-to-body :close-on-click-modal="false">
       <template-form v-if="tempFormVisible" @contractTemplateSelect="contractTemplateSelect"
-                     :tempFormVisible="tempFormVisible"
+                     :tempFormVisible="tempFormVisible" :slotData="templateData" :templateId="templateId"
                      v-on:turnTempFormVisible="turnTempFormVisible"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="dialogOrderVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <contract-order-select :page="orderPage" @onSearchOrder="onSearchOrder"
                              @onOrderSelectChange="onOrderSelectChange"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogContractVisible" width="80%" class="purchase-dialog" append-to-body>
+    <el-dialog :visible.sync="dialogContractVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <el-button-group>
         <el-button class="product-select-btn" @click="onContractSelectSure">确定</el-button>
       </el-button-group>
       <contract-select :mockData="mockData" @fileSelectChange="onContractSelectChange"/>
     </el-dialog>
-    <el-dialog :visible.sync="dialogPreviewVisible" width="80%">
+    <el-dialog :visible.sync="dialogPreviewVisible" width="80%" :close-on-click-modal="false">
       <el-row slot="title">
         <el-button>生成合同</el-button>
       </el-row>
       <contract-preview/>
     </el-dialog>
-    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%">
+    <el-dialog :visible.sync="pdfVisible" :show-close="true" style="width: 100%" :close-on-click-modal="false">
       <contract-preview-pdf :fileUrl="fileUrl" :slotData="thisContract"/>
     </el-dialog>
     <el-form ref="requirementForm" label-position="left" label-width="88px" hide-required-asterisk>
@@ -142,7 +142,7 @@
 
   export default {
     name: 'PurchaseContractForm',
-    props: ['slotData'],
+    props: ['slotData', 'templateData', 'templateId'],
     components: {
       ContractTypeSelect,
       ContractPreviewPdf,
