@@ -54,7 +54,7 @@ class CertificationStatusHelper {
         UserBLoC.instance.currentUser.b2bUnit.profileCompleted;
     if (profileCompleted != null && profileCompleted) {
       onJump();
-    } else {
+    } else {      
       showProfileCompleteDialog(true, cancel: () {}, confirm: onProfile);
     }
   }
