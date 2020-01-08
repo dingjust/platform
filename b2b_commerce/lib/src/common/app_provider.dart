@@ -25,5 +25,8 @@ class AppProvider {
     Provider(
       builder: (_) => CertificationStatusHelper(),
     ),
+        Provider(
+          builder: (_) => LabelState(),
+        ),
   ];
 }

@@ -574,13 +574,14 @@ class ConditionPageButton extends StatelessWidget {
 }
 
 class FactoryListView extends StatefulWidget {
-  FactoryListView(
-      {this.showButton = false,
-        this.factoryCondition,
-        this.requirementCode,
-        this.currentLocalCondition,
-        this.isLocalFind = false,
-        @required this.currentCondition});
+  FactoryListView({
+    this.showButton = false,
+    this.factoryCondition,
+    this.requirementCode,
+    this.currentLocalCondition,
+    this.isLocalFind = false,
+    @required this.currentCondition,
+  });
 
   FactoryCondition factoryCondition;
 
@@ -601,7 +602,7 @@ class FactoryListView extends StatefulWidget {
 }
 
 class _FactoryListViewState extends State<FactoryListView> {
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {

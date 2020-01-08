@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class B2BIcons {
   static const IconData bool =
       const IconData(0xe656, fontFamily: 'b2bIcons', matchTextDirection: true);
-  static const IconData eye_not_see =
-  const IconData(0xe611, fontFamily: 'b2bIcons21', matchTextDirection: true);
+  static const IconData eye_not_see = const IconData(0xe611,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
   static const IconData publish_requirement_success =
       const IconData(0xe69e, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData factory_map =
@@ -15,8 +15,8 @@ class B2BIcons {
       const IconData(0xe6cb, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData free_proofing =
       const IconData(0xe69c, fontFamily: 'b2bIcons2', matchTextDirection: true);
-  static const IconData factory_all =
-      const IconData(0xe6ca, fontFamily: 'b2bIcons2', matchTextDirection: true);
+  static const IconData factory_all = const IconData(0xe61b,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
   static const IconData message =
       const IconData(0xe653, fontFamily: 'b2bIcons2', matchTextDirection: true);
   static const IconData left_quotation =
@@ -116,6 +116,18 @@ class B2BIcons {
 
   ///分享
   static const IconData edit = const IconData(0xe6f5,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///衣服
+  static const IconData clothes = const IconData(0xe666,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///认证
+  static const IconData authentication = const IconData(0xe622,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///闪电
+  static const IconData thunder = const IconData(0xe624,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
 }
 
