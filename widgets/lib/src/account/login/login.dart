@@ -520,7 +520,7 @@ class _LoginPageState extends State<LoginPage> {
       (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
         SnackBar(
           content: Text('${widget.snackBarMessage}'),
-          duration: Duration(seconds: 1),
+          duration: Duration(seconds: 3),
         ),
       );
     }

@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart'
 import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
 as yj;
 import 'package:b2b_commerce/src/business/search/search_model.dart';
+import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
@@ -87,7 +88,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
   ScrollController _scrollController;
   ScrollController _factoryScrollController;
 
-  List<String> _dropDownHeaderItemStrings = ['综合', '全国', '品类'];
+  List<String> _dropDownHeaderItemStrings = ['综合', '全国', '品类', '筛选'];
   GZXDropdownMenuController _dropdownMenuController =
   GZXDropdownMenuController();
 
@@ -234,14 +235,14 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                 builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                   if (inited) {
                     return Scaffold(
-                      // endDrawer: Drawer(
-                      //   child: ConditionPage(
-                      //     factoryCondition: factoryCondition,
-                      //     categories: majorCategories,
-                      //     labels: labels,
-                      //   ),
-                      // ),
                         key: _scaffoldKey,
+                        endDrawer: Drawer(
+                          child: ConditionPage(
+                            factoryCondition: factoryCondition,
+                            categories: majorCategories,
+                            labels: labels,
+                          ),
+                        ),
                         body: Stack(
                           key: _stackKey,
                           fit: StackFit.expand,
@@ -316,6 +317,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
           backgroundColor: Colors.grey[100],
           expandedHeight: 130,
           leading: Container(),
+          actions: <Widget>[Container()],
           pinned: false,
           flexibleSpace: FindingFactoryBtnsBar()),
       SliverPersistentHeader(
@@ -326,15 +328,15 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                 GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
                 GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
                 GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
-                // GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
-                //     iconData: Icons.menu, iconSize: 18),
+                GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                    iconData: Icons.menu, iconSize: 18),
               ],
               stackKey: _stackKey,
               controller: _dropdownMenuController,
               onItemTap: (index) {
-                // if (index == 3) {
-                //   _scaffoldKey.currentState.openEndDrawer();
-                // }
+                if (index == 3) {
+                  _scaffoldKey.currentState.openEndDrawer();
+                }
               },
               dividerHeight: 0,
               color: Colors.grey[100],
