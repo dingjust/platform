@@ -163,7 +163,7 @@ class UserRepositoryImpl implements UserRepository {
     if (response != null && response.statusCode == 200) {
       return UserTypeValueMap[response.data];
     } else {
-      return UserType.DEFAULT;
+      return null;
     }
   }
 

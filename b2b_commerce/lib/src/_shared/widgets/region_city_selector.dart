@@ -7,7 +7,13 @@ import 'package:services/services.dart';
 class RegionCitySelector extends StatefulWidget {
   final Function(RegionModel, List<CityModel>) callBack;
 
-  const RegionCitySelector({Key key, this.callBack}) : super(key: key);
+  final VoidCallback cancell;
+
+  final int maximum;
+
+  const RegionCitySelector(
+      {Key key, this.callBack, this.cancell, this.maximum = 99})
+      : super(key: key);
 
   @override
   _RegionCitySelectorState createState() => _RegionCitySelectorState();
@@ -25,7 +31,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
         builder:
             (BuildContext context, AsyncSnapshot<List<RegionModel>> snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Text('加载中'));
           } else {
             return Column(
               children: <Widget>[
@@ -35,6 +41,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                     children: <Widget>[
                       Container(
                         width: 150,
+                        color: Colors.grey[200],
                         child: ListView(
                           children: snapshot.data.map((region) {
                             return GestureDetector(
@@ -54,8 +61,8 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                                   height: 40,
                                   color:
                                       _regionSelect?.isocode == region.isocode
-                                          ? Colors.grey[200]
-                                          : Colors.white,
+                                          ? Colors.white
+                                          : Colors.grey[200],
                                   alignment: Alignment.center,
                                   child:
                                       _regionSelect?.isocode == region.isocode
@@ -72,7 +79,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                       ),
                       Expanded(
                         child: Container(
-                          color: Colors.grey[200],
+                          color: Colors.white,
                           child: _regionSelect == null
                               ? Container()
                               : ListView(
@@ -87,7 +94,10 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                                                         .contains(city)) {
                                                       _citySelects.remove(city);
                                                     } else {
-                                                      _citySelects.add(city);
+                                                      if (_citySelects.length <
+                                                          widget.maximum) {
+                                                        _citySelects.add(city);
+                                                      }
                                                     }
                                                     setState(() {});
                                                   },
@@ -133,34 +143,24 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       FlatButton(
-                        onPressed: () {
-                          widget.callBack(null, null);
-                        },
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      ),
-                      FlatButton(
                           onPressed: () {
                             setState(() {
                               _regionSelect = null;
                               _citySelects = [];
                             });
+                            widget.callBack(_regionSelect, _citySelects);
                           },
-                          child: Icon(
-                            Icons.refresh,
-                            color: Colors.grey,
+                          child: Text(
+                            '重置',
+                            style: TextStyle(color: Colors.grey),
                           )),
                       FlatButton(
-                        onPressed: () {
-                          widget.callBack(_regionSelect, _citySelects);
-                        },
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        ),
-                      ),
+                          onPressed: () {
+                            widget.callBack(_regionSelect, _citySelects);
+                          },
+                          child: Text(
+                            '确定',
+                          )),
                     ],
                   ),
                 )

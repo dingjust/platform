@@ -1,17 +1,22 @@
 import 'dart:convert';
 
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
+import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart';
+import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
+as yj;
 import 'package:b2b_commerce/src/business/search/search_model.dart';
-import 'package:b2b_commerce/src/home/factory/condition_page.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import '_shared/finding_factory_btns.dart';
 
 class FindingFactoryPage extends StatefulWidget {
   FindingFactoryPage(
@@ -54,16 +59,6 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
   bool showCategoriesFilterMenu = false;
 
   String labText = '综合';
-  String _categorySelectText = '分类';
-  String _areaSelectText = '地区';
-  String _localSelectText = '50公里内';
-
-  List<CategoryModel> _category;
-  List<CategoryModel> _categorySelected = [];
-
-  List<RegionModel> _regions = [];
-  RegionModel _regionSelect = RegionModel();
-  List<CityModel> _citySelects = [];
 
   List<FilterConditionEntry> filterLocalEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '50公里内', value: '50000', checked: true),
@@ -88,6 +83,16 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
   List<CategoryModel> majorCategories;
 
   List<LabelModel> labels;
+
+  ScrollController _scrollController;
+  ScrollController _factoryScrollController;
+
+  List<String> _dropDownHeaderItemStrings = ['综合', '全国', '品类'];
+  GZXDropdownMenuController _dropdownMenuController =
+  GZXDropdownMenuController();
+
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey _stackKey = GlobalKey();
 
   @override
   void initState() {
@@ -121,6 +126,13 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
       }
     }
     super.initState();
+
+    //初始化滚动控制器\
+    _scrollController = ScrollController();
+    _factoryScrollController = ScrollController();
+    _factoryScrollController.addListener(() {
+      _scrollController.jumpTo(_factoryScrollController.offset);
+    });
   }
 
   void changeCondition(FilterConditionEntry condition) {
@@ -143,314 +155,198 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
         key: _factoryBLoCProviderKey,
         bloc: FactoryBLoC.instance,
         child: Scaffold(
-          appBar: AppBar(
-            brightness: Brightness.light,
-            automaticallyImplyLeading: false,
-            elevation: 0.5,
-            title: Row(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    child: Icon(
-                      Icons.keyboard_arrow_left,
-                      size: 32,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      String jsonStr = await LocalStorage.get(
-                          GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
-                      if (jsonStr != null && jsonStr != '') {
-                        List<dynamic> list = json.decode(jsonStr);
-                        historyKeywords =
-                            list.map((item) => item as String).toList();
-                      } else {
-                        historyKeywords = [];
-                      }
-                      String result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SearchModelPage(
-                            searchModel: SearchModel(
-                              historyKeywords: historyKeywords,
-                              keyword: factoryCondition.keyword,
-                              searchModelType: SearchModelType.FACTORY,
-                              factoryCondition: factoryCondition,
-                              route: GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-                            ),
-                          ),
-                        ),
-                      );
+            appBar: AppBar(
+              brightness: Brightness.light,
+              automaticallyImplyLeading: false,
+              elevation: 0.5,
+              backgroundColor: Constants.THEME_COLOR_MAIN,
+              title: Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
                     },
                     child: Container(
-                      height: 28,
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey[300], width: 0.5),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          const Icon(B2BIcons.search,
-                              color: Colors.grey, size: 18),
-                          Text(
-                            '   ${generateTitle()}',
-                            style: const TextStyle(
-                                color: Colors.grey, fontSize: 16),
-                          )
-                        ],
+                      child: Icon(
+                        Icons.keyboard_arrow_left,
+                        size: 32,
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              GestureDetector(
-                child: widget.route == '就近找厂'
-                    ? Container(
-                        width: addressLine != null &&
-                                addressLine != '' &&
-                                addressLine.length < 5
-                            ? (15 * addressLine.length + 5).toDouble()
-                            : 80,
-                        child: Center(
-                            child: Text(
-                          '${addressLine != null ? addressLine : ''}',
-                          overflow: TextOverflow.ellipsis,
-                        )))
-                    : Container(),
-                onTap: () {
-                  if (widget.route == '就近找厂') {
-                    onLocation();
-                  }
-                },
-              ),
-              GestureDetector(
-                child: widget.route == '就近找厂'
-                    ? Container(
-                        padding: EdgeInsets.only(right: 5),
-                        child: Icon(
-                          Icons.location_on,
-                        ),
-                      )
-                    : Container(),
-                onTap: () {
-                  if (widget.route == '就近找厂') {
-                    onLocation();
-                  }
-                },
-              ),
-            ],
-          ),
-          body: FutureBuilder<bool>(
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              if (inited) {
-                return Scaffold(
-                  appBar: AppBar(
-                    elevation: 0,
-                    title: RequirementFilterBar(
-                      horizontalPadding: 10,
-                      entries: [
-                        FilterEntry('${labText}⇂', () {
-                          setState(() {
-                            showDateFilterMenu = !showDateFilterMenu;
-                          });
-                        }),
-                        widget.route == '就近找厂'
-                            ? FilterEntry(_localSelectText, () {
-                                setState(() {
-                                  showLocalFilterMenu = !showLocalFilterMenu;
-                                  showDateFilterMenu = true;
-                                });
-                              })
-                            : FilterEntry(_areaSelectText, () {
-                                //获取所有省份
-                                rootBundle
-                                    .loadString('data/province.json')
-                                    .then((v) {
-                                  List data = json.decode(v);
-                                  _regions = data
-                                      .map<RegionModel>((region) =>
-                                          RegionModel.fromJson(region))
-                                      .toList();
-
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: (context) {
-                                        //地区选择器
-                                        return RegionCitySelector(
-                                          regions: _regions,
-                                          regionSelect: _regionSelect,
-                                          citySelects: _citySelects,
-                                        );
-                                      }).then((a) {
-                                    setState(() {
-                                      if (_regionSelect.isocode != null) {
-                                        _areaSelectText = _regionSelect.name;
-                                      } else {
-                                        _areaSelectText = '地区';
-                                      }
-
-                                      factoryCondition.productiveOrientations =
-                                          _regionSelect;
-                                      factoryCondition.cities = _citySelects;
-                                      FactoryBLoC.instance.filterByCondition(
-                                        factoryCondition,
-                                        requirementCode: widget.requirementCode,
-                                      );
-                                    });
-                                  });
-                                });
-                              }),
-                        FilterEntry(_categorySelectText, () async {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                child: CategorySelect(
-                                  categories: _category,
-                                  multiple: false,
-                                  verticalDividerOpacity: 1,
-                                  categorySelect: _categorySelected,
-                                  categoryActionType: CategoryActionType.TO_POP,
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () async {
+                        String jsonStr = await LocalStorage.get(
+                            GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
+                        if (jsonStr != null && jsonStr != '') {
+                          List<dynamic> list = json.decode(jsonStr);
+                          historyKeywords =
+                              list.map((item) => item as String).toList();
+                        } else {
+                          historyKeywords = [];
+                        }
+                        String result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SearchModelPage(
+                                  searchModel: SearchModel(
+                                    historyKeywords: historyKeywords,
+                                    keyword: factoryCondition.keyword,
+                                    searchModelType: SearchModelType.FACTORY,
+                                    factoryCondition: factoryCondition,
+                                    route:
+                                    GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
+                                  ),
                                 ),
-                              );
-                            },
-                          ).then((a) {
-                            setState(() {
-                              if (_categorySelected.isEmpty) {
-                                factoryCondition.categories = null;
-                                _categorySelectText = '分类';
-                              } else {
-                                _categorySelectText = _categorySelected[0].name;
-                                factoryCondition.adeptAtCategories =
-                                    _categorySelected;
-                              }
-                              FactoryBLoC.instance.filterByCondition(
-                                factoryCondition,
-                                requirementCode: widget.requirementCode,
-                              );
-                            });
-                          });
-                          setState(() {
-                            showDateFilterMenu = true;
-                            showLocalFilterMenu = true;
-                          });
-                        }),
-                      ],
-                      action: Container(),
-                    ),
-                    automaticallyImplyLeading: false,
-                  ),
-                  endDrawer: Drawer(
-                    child: ConditionPage(
-                      factoryCondition: factoryCondition,
-                      categories: majorCategories,
-                      labels: labels,
-                    ),
-                  ),
-                  body: Column(
-                    children: <Widget>[
-                      Offstage(
-                        offstage: showDateFilterMenu,
-                        child: FilterSelectMenu(
-                          color: Color.fromRGBO(255, 214, 12, 1),
-                          height: 150,
-                          entries: filterConditionEntries,
-                          streamController:
-                              RequirementPoolBLoC.instance.conditionController,
-                          afterPressed: (String str) {
-                            print(str);
-                            setState(() {
-                              labText = str;
-                              FilterConditionEntry selected;
-                              for (int i = 0;
-                                  i < filterConditionEntries.length;
-                                  i++) {
-                                if (str == filterConditionEntries[i].label) {
-                                  currentCondition = filterConditionEntries[i];
-                                }
-                              }
-                              changeCondition(currentCondition);
-//                        currentCondition
-                              showDateFilterMenu = !showDateFilterMenu;
-                            });
-                          },
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 28,
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(20),
+                          border:
+                          Border.all(color: Colors.grey[300], width: 0.5),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            const Icon(B2BIcons.search,
+                                color: Colors.grey, size: 18),
+                            Text(
+                              '   ${generateTitle()}',
+                              style: const TextStyle(
+                                  color: Colors.grey, fontSize: 16),
+                            )
+                          ],
                         ),
                       ),
-                      Offstage(
-                        offstage: showLocalFilterMenu,
-                        child: FilterSelectMenu(
-                          color: Color.fromRGBO(255, 214, 12, 1),
-                          height: 150,
-                          entries: filterLocalEntries,
-                          streamController:
-                              RequirementPoolBLoC.instance.conditionController,
-                          afterPressed: (String str) {
-                            print(str);
-                            setState(() {
-                              if (str == '全部') {
-                                _localSelectText = '距离';
-                              } else {
-                                _localSelectText = str;
-                              }
-                              FilterConditionEntry selected;
-                              for (int i = 0;
-                                  i < filterLocalEntries.length;
-                                  i++) {
-                                if (str == filterLocalEntries[i].label) {
-                                  currentLocalCondition = filterLocalEntries[i];
-                                }
-                              }
-                              factoryCondition.distance =
-                                  double.parse(currentLocalCondition.value);
-//                          print(currentLocalCondition.value);
-//                          changeCondition(currentLocalCondition);
-//                        currentCondition
-                              showLocalFilterMenu = !showLocalFilterMenu;
-                              FactoryBLoC.instance.filterByCondition(
-                                factoryCondition,
-                                requirementCode: widget.requirementCode,
-                              );
-                            });
-                          },
-                        ),
-                      ),
-                      Expanded(
-                          child: FactoryListView(
-                        factoryCondition: factoryCondition,
-                        showButton: widget.requirementCode != null,
-                        requirementCode: widget.requirementCode,
-                        currentCondition: currentCondition,
-                        currentLocalCondition: currentLocalCondition,
-                        isLocalFind: isLocalFind,
-                      ))
-                    ],
+                    ),
                   ),
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-            // initialData: null,
-            future: _initData(),
-          ),
-        ));
+                ],
+              ),
+            ),
+            body: DefaultTabController(
+              length: 1,
+              child: FutureBuilder<bool>(
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  if (inited) {
+                    return Scaffold(
+                      // endDrawer: Drawer(
+                      //   child: ConditionPage(
+                      //     factoryCondition: factoryCondition,
+                      //     categories: majorCategories,
+                      //     labels: labels,
+                      //   ),
+                      // ),
+                        key: _scaffoldKey,
+                        body: Stack(
+                          key: _stackKey,
+                          fit: StackFit.expand,
+                          children: <Widget>[
+                            NestedScrollView(
+                              headerSliverBuilder: _sliverBuilder,
+                              controller: _scrollController,
+                              body: FactoryListView(
+                                factoryCondition: factoryCondition,
+                                scrollController: _factoryScrollController,
+                                showButton: widget.requirementCode != null,
+                                requirementCode: widget.requirementCode,
+                                currentCondition: currentCondition,
+                                currentLocalCondition: currentLocalCondition,
+                                isLocalFind: isLocalFind,
+                              ),
+                            ),
+                            Builder(
+                              builder: (dropMenuContext) =>
+                                  GZXDropDownMenu(
+                                    controller: _dropdownMenuController,
+                                    // 下拉菜单显示或隐藏动画时长
+                                    animationMilliseconds: 0,
+                                    menus: [
+                                      GZXDropdownMenuBuilder(
+                                        dropDownHeight:
+                                        40.0 * filterConditionEntries.length +
+                                            20,
+                                        dropDownWidget: FilterConditionSelector(
+                                          // cancell: () {},
+                                            entries: filterConditionEntries,
+                                            callBack: (entry) =>
+                                                _onConditionSelect(entry)),
+                                      ),
+                                      GZXDropdownMenuBuilder(
+                                        dropDownHeight: 40 * 8.0,
+                                        dropDownWidget: yj.RegionCitySelector(
+                                            cancell: () {},
+                                            maximum: 1,
+                                            callBack: (region, cities) =>
+                                                _onCitySelect(region, cities)),
+                                      ),
+                                      GZXDropdownMenuBuilder(
+                                          dropDownHeight: 40 * 8.0,
+                                          dropDownWidget: Builder(
+                                            builder: (selectContext) =>
+                                                CategorySelector(
+                                                    callBack: (category) =>
+                                                        _onCategorySelect(
+                                                            category)),
+                                          )),
+                                    ],
+                                  ),
+                            )
+                          ],
+                        ));
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+                // initialData: null,
+                future: _initData(),
+              ),
+            )));
+  }
+
+  List<Widget> _sliverBuilder(BuildContext context, bool innerBoxIsScrolled) {
+    return <Widget>[
+      SliverAppBar(
+          backgroundColor: Colors.grey[100],
+          expandedHeight: 130,
+          leading: Container(),
+          pinned: false,
+          flexibleSpace: FindingFactoryBtnsBar()),
+      SliverPersistentHeader(
+          pinned: true,
+          delegate: _SliverAppBarDelegate(
+            GZXDropDownHeader(
+              items: [
+                GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
+                GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
+                GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
+                // GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                //     iconData: Icons.menu, iconSize: 18),
+              ],
+              stackKey: _stackKey,
+              controller: _dropdownMenuController,
+              onItemTap: (index) {
+                // if (index == 3) {
+                //   _scaffoldKey.currentState.openEndDrawer();
+                // }
+              },
+              dividerHeight: 0,
+              color: Colors.grey[100],
+              dropDownStyle: TextStyle(fontSize: 13, color: Colors.orange),
+              iconDropDownColor: Colors.orange,
+            ),
+          )),
+    ];
   }
 
   void onLocation() async {
     // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
-    AmapState amapState = Provider.of<AmapState>(context);
-
     Tip tip = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
     print(tip.name);
@@ -478,7 +374,6 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
               (label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
           .toList();
       aMapLocation = await AmapService.instance.location();
-      _category = await ProductRepositoryImpl().cascadedCategories();
       if (widget.factoryCondition != null) {
         if (widget.route == '就近找厂') {
           isLocalFind = true;
@@ -528,5 +423,69 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
     } else {
       return '${factoryCondition.keyword}';
     }
+  }
+
+  void _onConditionSelect(FilterConditionEntry entry) {
+    _dropdownMenuController.hide();
+    setState(() {
+      currentCondition = entry;
+      _dropDownHeaderItemStrings[0] = entry.label;
+    });
+    FactoryBLoC.instance.clear();
+  }
+
+  void _onCitySelect(RegionModel region, List<CityModel> cities) {
+    _dropdownMenuController.hide();
+    setState(() {
+      factoryCondition.productiveOrientations = region;
+      if (region != null) {
+        if (cities != null && cities.length > 0) {
+          _dropDownHeaderItemStrings[1] = cities.first.name;
+        } else
+          _dropDownHeaderItemStrings[1] = region.name;
+      } else {
+        _dropDownHeaderItemStrings[1] = '全国';
+      }
+      factoryCondition.cities = cities;
+    });
+    FactoryBLoC.instance.clear();
+  }
+
+  void _onCategorySelect(CategoryModel category) {
+    _dropdownMenuController.hide();
+
+    setState(() {
+      if (category == null) {
+        _dropDownHeaderItemStrings[2] = '品类';
+        factoryCondition.adeptAtCategories = null;
+      } else {
+        factoryCondition.adeptAtCategories = [category];
+        _dropDownHeaderItemStrings[2] = category.name;
+      }
+    });
+    FactoryBLoC.instance.clear();
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this.child);
+
+  final Widget child;
+
+  @override
+  double get minExtent => 40;
+
+  @override
+  double get maxExtent => 40;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset,
+      bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return true;
   }
 }

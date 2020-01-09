@@ -40,8 +40,7 @@ class FactoryItem extends StatelessWidget {
       onTap: () async {
         Provider.of<CertificationStatusHelper>(context).oncheckProfile(
             context: context,
-            onJump: () =>
-                () {
+            onJump: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(

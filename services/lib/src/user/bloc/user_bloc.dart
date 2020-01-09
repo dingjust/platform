@@ -322,7 +322,7 @@ class UserBLoC extends BLoCBase {
       return type;
     } catch (e) {
       print(e);
-      return UserType.DEFAULT;
+      return null;
     }
   }
 
