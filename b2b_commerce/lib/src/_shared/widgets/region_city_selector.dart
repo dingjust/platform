@@ -9,7 +9,10 @@ class RegionCitySelector extends StatefulWidget {
 
   final VoidCallback cancell;
 
-  const RegionCitySelector({Key key, this.callBack, this.cancell})
+  final int maximum;
+
+  const RegionCitySelector(
+      {Key key, this.callBack, this.cancell, this.maximum = 99})
       : super(key: key);
 
   @override
@@ -28,7 +31,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
         builder:
             (BuildContext context, AsyncSnapshot<List<RegionModel>> snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: Text('加载中'));
           } else {
             return Column(
               children: <Widget>[
@@ -38,6 +41,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                     children: <Widget>[
                       Container(
                         width: 150,
+                        color: Colors.grey[200],
                         child: ListView(
                           children: snapshot.data.map((region) {
                             return GestureDetector(
@@ -57,8 +61,8 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                                   height: 40,
                                   color:
                                       _regionSelect?.isocode == region.isocode
-                                          ? Colors.grey[200]
-                                          : Colors.white,
+                                          ? Colors.white
+                                          : Colors.grey[200],
                                   alignment: Alignment.center,
                                   child:
                                       _regionSelect?.isocode == region.isocode
@@ -75,7 +79,7 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                       ),
                       Expanded(
                         child: Container(
-                          color: Colors.grey[200],
+                          color: Colors.white,
                           child: _regionSelect == null
                               ? Container()
                               : ListView(
@@ -90,7 +94,10 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                                                         .contains(city)) {
                                                       _citySelects.remove(city);
                                                     } else {
-                                                      _citySelects.add(city);
+                                                      if (_citySelects.length <
+                                                          widget.maximum) {
+                                                        _citySelects.add(city);
+                                                      }
                                                     }
                                                     setState(() {});
                                                   },
