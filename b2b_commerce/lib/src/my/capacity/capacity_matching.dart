@@ -1,3 +1,6 @@
+import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
+import 'package:b2b_commerce/src/_shared/widgets/date_range_selector.dart';
+import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart' as yj;
 import 'package:b2b_commerce/src/helper/login_check.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +11,6 @@ import 'package:services/services.dart';
 
 import '_shared/capacity_matching_appbar.dart';
 import '_shared/capacity_matching_list.dart';
-import '_shared/category_selector.dart';
-import '_shared/date_range_selector.dart';
-import '_shared/region_city_selector.dart' as yj;
 
 class CapacityMatchingPage extends StatefulWidget
     implements PreferredSizeWidget {

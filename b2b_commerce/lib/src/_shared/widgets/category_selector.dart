@@ -35,6 +35,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                     children: <Widget>[
                       Container(
                         width: 120,
+                        color: Colors.grey[200],
                         child: ListView(
                           children: snapshot.data.map((majorCategory) {
                             return GestureDetector(
@@ -47,8 +48,8 @@ class _CategorySelectorState extends State<CategorySelector> {
                                   height: 40,
                                   color: _selectMajorCategory?.code ==
                                           majorCategory.code
-                                      ? Colors.grey[200]
-                                      : Colors.white,
+                                      ? Colors.white
+                                      : Colors.grey[200],
                                   alignment: Alignment.center,
                                   child: _selectMajorCategory?.code ==
                                           majorCategory.code
@@ -65,7 +66,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                       ),
                       Expanded(
                         child: Container(
-                          color: Colors.grey[200],
+                          color: Colors.white,
                           padding: EdgeInsets.all(10),
                           child: _selectMajorCategory == null
                               ? Container()

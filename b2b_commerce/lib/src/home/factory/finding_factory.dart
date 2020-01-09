@@ -1,16 +1,22 @@
 import 'dart:convert';
 
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
+import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart';
+import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
+as yj;
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:b2b_commerce/src/my/address/amap_search_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import '_shared/finding_factory_btns.dart';
 
 class FindingFactoryPage extends StatefulWidget {
   FindingFactoryPage(
@@ -53,16 +59,6 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
   bool showCategoriesFilterMenu = false;
 
   String labText = '综合';
-  String _categorySelectText = '分类';
-  String _areaSelectText = '地区';
-  String _localSelectText = '50公里内';
-
-  List<CategoryModel> _category;
-  List<CategoryModel> _categorySelected = [];
-
-  List<RegionModel> _regions = [];
-  RegionModel _regionSelect = RegionModel();
-  List<CityModel> _citySelects = [];
 
   List<FilterConditionEntry> filterLocalEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '50公里内', value: '50000', checked: true),
@@ -88,7 +84,15 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
 
   List<LabelModel> labels;
 
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
+  ScrollController _factoryScrollController;
+
+  List<String> _dropDownHeaderItemStrings = ['综合', '全国', '品类'];
+  GZXDropdownMenuController _dropdownMenuController =
+  GZXDropdownMenuController();
+
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey _stackKey = GlobalKey();
 
   @override
   void initState() {
@@ -122,6 +126,13 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
       }
     }
     super.initState();
+
+    //初始化滚动控制器\
+    _scrollController = ScrollController();
+    _factoryScrollController = ScrollController();
+    _factoryScrollController.addListener(() {
+      _scrollController.jumpTo(_factoryScrollController.offset);
+    });
   }
 
   void changeCondition(FilterConditionEntry condition) {
@@ -230,19 +241,63 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                       //     labels: labels,
                       //   ),
                       // ),
-                      body: NestedScrollView(
-                        headerSliverBuilder: _sliverBuilder,
-                        controller: _scrollController,
-                        body: FactoryListView(
-                          factoryCondition: factoryCondition,
-                          showButton: widget.requirementCode != null,
-                          requirementCode: widget.requirementCode,
-                          currentCondition: currentCondition,
-                          currentLocalCondition: currentLocalCondition,
-                          isLocalFind: isLocalFind,
-                        ),
-                      ),
-                    );
+                        key: _scaffoldKey,
+                        body: Stack(
+                          key: _stackKey,
+                          fit: StackFit.expand,
+                          children: <Widget>[
+                            NestedScrollView(
+                              headerSliverBuilder: _sliverBuilder,
+                              controller: _scrollController,
+                              body: FactoryListView(
+                                factoryCondition: factoryCondition,
+                                scrollController: _factoryScrollController,
+                                showButton: widget.requirementCode != null,
+                                requirementCode: widget.requirementCode,
+                                currentCondition: currentCondition,
+                                currentLocalCondition: currentLocalCondition,
+                                isLocalFind: isLocalFind,
+                              ),
+                            ),
+                            Builder(
+                              builder: (dropMenuContext) =>
+                                  GZXDropDownMenu(
+                                    controller: _dropdownMenuController,
+                                    // 下拉菜单显示或隐藏动画时长
+                                    animationMilliseconds: 0,
+                                    menus: [
+                                      GZXDropdownMenuBuilder(
+                                        dropDownHeight:
+                                        40.0 * filterConditionEntries.length +
+                                            20,
+                                        dropDownWidget: FilterConditionSelector(
+                                          // cancell: () {},
+                                            entries: filterConditionEntries,
+                                            callBack: (entry) =>
+                                                _onConditionSelect(entry)),
+                                      ),
+                                      GZXDropdownMenuBuilder(
+                                        dropDownHeight: 40 * 8.0,
+                                        dropDownWidget: yj.RegionCitySelector(
+                                            cancell: () {},
+                                            maximum: 1,
+                                            callBack: (region, cities) =>
+                                                _onCitySelect(region, cities)),
+                                      ),
+                                      GZXDropdownMenuBuilder(
+                                          dropDownHeight: 40 * 8.0,
+                                          dropDownWidget: Builder(
+                                            builder: (selectContext) =>
+                                                CategorySelector(
+                                                    callBack: (category) =>
+                                                        _onCategorySelect(
+                                                            category)),
+                                          )),
+                                    ],
+                                  ),
+                            )
+                          ],
+                        ));
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),
@@ -262,103 +317,29 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
           expandedHeight: 130,
           leading: Container(),
           pinned: false,
-          flexibleSpace: _BtnsBar()),
+          flexibleSpace: FindingFactoryBtnsBar()),
       SliverPersistentHeader(
           pinned: true,
           delegate: _SliverAppBarDelegate(
-            AppBar(
-              elevation: 0,
-              title: RequirementFilterBar(
-                horizontalPadding: 10,
-                entries: [
-                  FilterEntry('${labText}⇂', () {
-                    setState(() {
-                      showDateFilterMenu = !showDateFilterMenu;
-                    });
-                  }),
-                  widget.route == '就近找厂'
-                      ? FilterEntry(_localSelectText, () {
-                    setState(() {
-                      showLocalFilterMenu = !showLocalFilterMenu;
-                      showDateFilterMenu = true;
-                    });
-                  })
-                      : FilterEntry(_areaSelectText, () {
-                    //获取所有省份
-                    rootBundle.loadString('data/province.json').then((v) {
-                      List data = json.decode(v);
-                      _regions = data
-                          .map<RegionModel>(
-                              (region) => RegionModel.fromJson(region))
-                          .toList();
-
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            //地区选择器
-                            return RegionCitySelector(
-                              regions: _regions,
-                              regionSelect: _regionSelect,
-                              citySelects: _citySelects,
-                            );
-                          }).then((a) {
-                        setState(() {
-                          if (_regionSelect.isocode != null) {
-                            _areaSelectText = _regionSelect.name;
-                          } else {
-                            _areaSelectText = '地区';
-                          }
-
-                          factoryCondition.productiveOrientations =
-                              _regionSelect;
-                          factoryCondition.cities = _citySelects;
-                          FactoryBLoC.instance.filterByCondition(
-                            factoryCondition,
-                            requirementCode: widget.requirementCode,
-                          );
-                        });
-                      });
-                    });
-                  }),
-                  FilterEntry(_categorySelectText, () async {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          child: CategorySelect(
-                            categories: _category,
-                            multiple: false,
-                            verticalDividerOpacity: 1,
-                            categorySelect: _categorySelected,
-                            categoryActionType: CategoryActionType.TO_POP,
-                          ),
-                        );
-                      },
-                    ).then((a) {
-                      setState(() {
-                        if (_categorySelected.isEmpty) {
-                          factoryCondition.categories = null;
-                          _categorySelectText = '分类';
-                        } else {
-                          _categorySelectText = _categorySelected[0].name;
-                          factoryCondition.adeptAtCategories =
-                              _categorySelected;
-                        }
-                        FactoryBLoC.instance.filterByCondition(
-                          factoryCondition,
-                          requirementCode: widget.requirementCode,
-                        );
-                      });
-                    });
-                    setState(() {
-                      showDateFilterMenu = true;
-                      showLocalFilterMenu = true;
-                    });
-                  }),
-                ],
-                action: Container(),
-              ),
-              automaticallyImplyLeading: false,
+            GZXDropDownHeader(
+              items: [
+                GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
+                GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
+                GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
+                // GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                //     iconData: Icons.menu, iconSize: 18),
+              ],
+              stackKey: _stackKey,
+              controller: _dropdownMenuController,
+              onItemTap: (index) {
+                // if (index == 3) {
+                //   _scaffoldKey.currentState.openEndDrawer();
+                // }
+              },
+              dividerHeight: 0,
+              color: Colors.grey[100],
+              dropDownStyle: TextStyle(fontSize: 13, color: Colors.orange),
+              iconDropDownColor: Colors.orange,
             ),
           )),
     ];
@@ -366,8 +347,6 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
 
   void onLocation() async {
     // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
-    AmapState amapState = Provider.of<AmapState>(context);
-
     Tip tip = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
     print(tip.name);
@@ -395,7 +374,6 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
               (label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
           .toList();
       aMapLocation = await AmapService.instance.location();
-      _category = await ProductRepositoryImpl().cascadedCategories();
       if (widget.factoryCondition != null) {
         if (widget.route == '就近找厂') {
           isLocalFind = true;
@@ -446,260 +424,68 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
       return '${factoryCondition.keyword}';
     }
   }
+
+  void _onConditionSelect(FilterConditionEntry entry) {
+    _dropdownMenuController.hide();
+    setState(() {
+      currentCondition = entry;
+      _dropDownHeaderItemStrings[0] = entry.label;
+    });
+    FactoryBLoC.instance.clear();
+  }
+
+  void _onCitySelect(RegionModel region, List<CityModel> cities) {
+    _dropdownMenuController.hide();
+    setState(() {
+      factoryCondition.productiveOrientations = region;
+      if (region != null) {
+        if (cities != null && cities.length > 0) {
+          _dropDownHeaderItemStrings[1] = cities.first.name;
+        } else
+          _dropDownHeaderItemStrings[1] = region.name;
+      } else {
+        _dropDownHeaderItemStrings[1] = '全国';
+      }
+      factoryCondition.cities = cities;
+    });
+    FactoryBLoC.instance.clear();
+  }
+
+  void _onCategorySelect(CategoryModel category) {
+    _dropdownMenuController.hide();
+
+    setState(() {
+      if (category == null) {
+        _dropDownHeaderItemStrings[2] = '品类';
+        factoryCondition.adeptAtCategories = null;
+      } else {
+        factoryCondition.adeptAtCategories = [category];
+        _dropDownHeaderItemStrings[2] = category.name;
+      }
+    });
+    FactoryBLoC.instance.clear();
+  }
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._appBar);
+  _SliverAppBarDelegate(this.child);
 
-  final AppBar _appBar;
-
-  @override
-  double get minExtent => _appBar.preferredSize.height + 10;
+  final Widget child;
 
   @override
-  double get maxExtent => _appBar.preferredSize.height + 10;
+  double get minExtent => 40;
+
+  @override
+  double get maxExtent => 40;
 
   @override
   Widget build(BuildContext context, double shrinkOffset,
       bool overlapsContent) {
-    return Column(
-      children: <Widget>[
-        Container(
-          color: Colors.white,
-          child: _appBar,
-        ),
-        SizedBox(
-          height: 10,
-          child: Container(
-            color: Colors.grey[Constants.SIZEDBOX_COLOR],
-          ),
-        ),
-      ],
-    );
+    return child;
   }
 
   @override
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
-    return false;
-  }
-}
-
-class _BtnsBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(20)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            _buildFree(context),
-            _buildAuthentication(context),
-            _buildFast(context),
-            _buildAll(context)
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAll(BuildContext context) {
-    return _IconButton(
-      icon: Icon(
-        B2BIcons.factory_all,
-        color: Color.fromRGBO(148, 161, 246, 1.0),
-        size: 30,
-      ),
-      title: '全部工厂',
-      onPressed: () async {
-        List<CategoryModel> categories =
-        await Provider.of<MajorCategoryState>(context).getMajorCategories();
-        List<LabelModel> labels =
-        await Provider.of<LabelState>(context).getLabels();
-        labels = labels
-            .where((label) =>
-        label.group == 'FACTORY' || label.group == 'PLATFORM')
-            .toList();
-//        labels.add(LabelModel(name: '已认证', id: 1000000));
-        if (categories != null && labels != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  FactoryPage(
-                    FactoryCondition(
-                        starLevel: 0,
-                        adeptAtCategories: [],
-                        labels: [],
-                        cooperationModes: []),
-                    route: '全部工厂',
-                    categories: categories,
-                    labels: labels,
-                  ),
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget _buildFree(BuildContext context) {
-    return _IconButton(
-      icon: Icon(
-        B2BIcons.clothes,
-        color: Colors.lightBlue,
-        size: 30,
-      ),
-      title: '免费打样',
-      onPressed: () async {
-        List<CategoryModel> categories =
-        await Provider.of<MajorCategoryState>(context).getMajorCategories();
-        List<LabelModel> labels =
-        await Provider.of<LabelState>(context).getLabels();
-        labels = labels
-            .where((label) =>
-        label.group == 'FACTORY' || label.group == 'PLATFORM')
-            .toList();
-//        labels.add(LabelModel(name: '已认证', id: 1000000));
-        if (categories != null && labels != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  FactoryPage(
-                    FactoryCondition(
-                        starLevel: 0,
-                        adeptAtCategories: [],
-                        labels: [],
-                        cooperationModes: []),
-                    route: '免费打样',
-                    categories: categories,
-                    labels: labels,
-                  ),
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget _buildAuthentication(BuildContext context) {
-    return _IconButton(
-      icon: Icon(
-        B2BIcons.authentication,
-        color: Colors.lightGreen,
-        size: 30,
-      ),
-      title: '认证工厂',
-      onPressed: () async {
-        List<CategoryModel> categories =
-        await Provider.of<MajorCategoryState>(context).getMajorCategories();
-        List<LabelModel> labels =
-        await Provider.of<LabelState>(context).getLabels();
-        labels = labels
-            .where((label) =>
-        label.group == 'FACTORY' || label.group == 'PLATFORM')
-            .toList();
-//        labels.add(LabelModel(name: '已认证', id: 1000000));
-        if (categories != null && labels != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  FactoryPage(
-                    FactoryCondition(
-                        starLevel: 0,
-                        adeptAtCategories: [],
-                        labels: [],
-                        cooperationModes: []),
-                    route: '认证工厂',
-                    categories: categories,
-                    labels: labels,
-                  ),
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget _buildFast(BuildContext context) {
-    return _IconButton(
-      icon: Icon(
-        B2BIcons.thunder,
-        color: Color.fromRGBO(212, 35, 122, 1.0),
-        size: 30,
-      ),
-      title: '快反工厂',
-      onPressed: () async {
-        List<CategoryModel> categories =
-        await Provider.of<MajorCategoryState>(context).getMajorCategories();
-        List<LabelModel> labels =
-        await Provider.of<LabelState>(context).getLabels();
-        labels = labels
-            .where((label) =>
-        label.group == 'FACTORY' || label.group == 'PLATFORM')
-            .toList();
-//        labels.add(LabelModel(name: '已认证', id: 1000000));
-        if (categories != null && labels != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  FactoryPage(
-                    FactoryCondition(
-                        starLevel: 0,
-                        adeptAtCategories: [],
-                        labels: [],
-                        cooperationModes: []),
-                    route: '快反工厂',
-                    categories: categories,
-                    labels: labels,
-                  ),
-            ),
-          );
-        }
-      },
-    );
-  }
-}
-
-class _IconButton extends StatelessWidget {
-  @required
-  final VoidCallback onPressed;
-
-  @required
-  final String title;
-
-  @required
-  final Icon icon;
-
-  const _IconButton({Key key, this.onPressed, this.title, this.icon})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      child: FlatButton(
-        onPressed: onPressed,
-        child: Column(
-          children: <Widget>[
-            Expanded(flex: 1, child: icon),
-            Container(
-              child: Text(
-                '$title',
-                overflow: TextOverflow.visible,
-                style: TextStyle(fontSize: 14),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+    return true;
   }
 }
