@@ -473,7 +473,9 @@ class _LoginPageState extends State<LoginPage> {
           ProgressIndicatorFactory.buildDefaultProgressIndicator(),
     );
     bloc.checkUserExist(_phoneController.text).then((value) {
-      if (value == UserType.DEFAULT) {
+      if (value == null) {
+        bloc.loginStreamController.sink.add('网络链接失败');
+      } else if (value == UserType.DEFAULT) {
         bloc.loginStreamController.sink.add('账号不存在请注册后登录');
       } else {
         if (bloc.currentUser.type != value) {
