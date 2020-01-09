@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -7,7 +8,6 @@ import 'package:widgets/widgets.dart';
 
 import './address_picker.dart';
 import './find_factory_by_map.dart';
-import '../home/factory/factory_list.dart';
 
 List<CategoryModel> _categories;
 

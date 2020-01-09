@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';

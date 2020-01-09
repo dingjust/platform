@@ -1,10 +1,9 @@
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/supplier/provider/suppliers_provider.dart';
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_pool_recommend.dart';
 import 'package:b2b_commerce/src/my/my_brand.dart';
-import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';

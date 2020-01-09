@@ -1,9 +1,10 @@
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+
+import '../factory_page.dart';
 
 class FindingFactoryBtnsBar extends StatelessWidget {
   @override
