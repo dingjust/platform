@@ -1,12 +1,22 @@
 <template>
   <div class="animated fadeIn">
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="UID" prop="uid"></el-table-column>
-      <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="联系电话" prop="mobileNumber"></el-table-column>
+      <el-table-column label="姓名" prop="name"></el-table-column>
+      <el-table-column label="账号" prop="uid"></el-table-column>
+      <el-table-column label="部门" prop=""></el-table-column>
+      <el-table-column label="角色" prop=""></el-table-column>
+      <el-table-column label="状态" prop=""></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <el-select v-model="scope.row.value" placeholder="请选择" size="mini"
+                     @change="selectionOperation" @visible-change="getData(scope.row)">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </template>
       </el-table-column>
     </el-table>
@@ -25,28 +35,76 @@
 <script>
   export default {
     name: 'B2BCustomerList',
-    props: ["page"],
+    props: ['page'],
     computed: {},
     methods: {
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         this.$emit('onSearch', val - 1);
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
+      onDetails (row) {
         this.$emit('onDetails', row);
       },
+      selectionOperation (current) {
+        console.log(current);
+        if (current === '1') {
+          this.$emit('editInfo', this.slotData);
+        }
+        if (current === '2') {
+          this.$emit('setDepartmentHead', this.slotData);
+        }
+        if (current === '3') {
+          this.$emit('workHandover', this.slotData);
+        }
+        if (current === '4') {
+          this.$emit('forbiddenUser', this.slotData);
+        }
+        if (current === '5') {
+          this.$emit('deleteUser', this.slotData);
+        }
+      },
+      getData (row) {
+        this.slotData = row;
+      }
     },
-    data() {
-      return {}
+    data () {
+      return {
+        options: [{
+          value: '1',
+          label: '编辑信息'
+        }, {
+          value: '2',
+          label: '设为部门负责人'
+        }, {
+          value: '3',
+          label: '工作交接'
+        }, {
+          value: '4',
+          label: '禁用账号'
+        }, {
+          value: '5',
+          label: '删除账号'
+        }],
+        slotData: ''
+      }
     }
   }
 </script>
+<style scoped>
+  /*.el-dropdown-link {*/
+  /*  cursor: pointer;*/
+  /*  color: #409EFF;*/
+  /*}*/
+  /*.el-icon-arrow-down {*/
+  /*  font-size: 12px;*/
+  /*}*/
+</style>

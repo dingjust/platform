@@ -144,6 +144,7 @@ const router = new Router({
         },
         {
           path: 'account',
+          redirect: '/account/index',
           name: '公司',
           component: {
             render(c) {
@@ -170,11 +171,11 @@ const router = new Router({
               name: '认证中心',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/dashboard/authentication/AuthenticationPage')
             },
-            {
-              path: 'employee',
-              name: '员工',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/employee/EmployeePage')
-            },
+            // {
+            //   path: 'employee',
+            //   name: '员工',
+            //   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/employee/EmployeePage')
+            // },
             {
               path: 'user-group',
               name: '用户组',
@@ -184,6 +185,11 @@ const router = new Router({
               path: 'b2b-customer',
               name: '员工',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
+            },
+            {
+              path: 'customerDetail',
+              name: '添加员工',
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/form/B2BCustomerBasicForm'),
             },
             {
               path: 'b2b-unit',
