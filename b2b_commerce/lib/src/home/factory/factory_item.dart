@@ -140,13 +140,24 @@ class FactoryNameText extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Expanded(
-                child: Text('${model.name}', style: TextStyle(fontSize: 18))),
+                flex: 3,
+                child: Text(
+                  '${model.name}',
+                  style: TextStyle(fontSize: 18),
+                  overflow: TextOverflow.ellipsis,
+                )),
             model.distance == null
                 ? Container()
-                : Text(
-                '${(model.distance.toInt() / 1000).toStringAsFixed(1)}' +
-                    'km',
-                style: TextStyle(fontSize: 18, color: Colors.red)),
+                : Expanded(
+              flex: 2,
+              child: Text(
+                '${model.contactAddress.city.name}${model.contactAddress
+                    .cityDistrict.name}',
+                style: TextStyle(fontSize: 15, color: Colors.grey),
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.right,
+              ),
+            ),
           ],
         ),
       );
@@ -295,6 +306,13 @@ class CategoriesText extends StatelessWidget {
       }
     }
 
+    // tags.add((Container(
+    //   child: Text(
+    //     '$distanceStr',
+    //     style: TextStyle(color: Colors.grey),
+    //   ),
+    // )));
+
     return
       // Expanded(
       //   flex: 1,
@@ -320,7 +338,28 @@ class CategoriesText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildTags();
+    //距离
+    String distanceStr = '';
+    if (model.distance == null) {
+      distanceStr = '';
+    } else if (model.distance > 1000) {
+      distanceStr = '${(model.distance.toInt() / 1000).toStringAsFixed(1)}公里';
+    } else {
+      distanceStr = '${model.distance.toInt()}米';
+    }
+
+    return Row(
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: _buildTags(),
+        ),
+        Text(
+          '$distanceStr',
+          style: TextStyle(color: Colors.grey),
+        ),
+      ],
+    );
   }
 }
 

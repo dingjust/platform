@@ -60,23 +60,6 @@ class _FactoryPageState extends State<FactoryPage> {
 
   FilterConditionEntry currentLocalCondition = FilterConditionEntry();
 
-  bool showDateFilterMenu = true;
-  bool showLocalFilterMenu = true;
-  bool showMachineTypeFilterMenu = false;
-  bool showCategoriesFilterMenu = false;
-
-  String labText = '综合';
-  String _categorySelectText = '分类';
-  String _areaSelectText = '地区';
-  String _localSelectText = '50公里内';
-
-  List<CategoryModel> _category;
-  List<CategoryModel> _categorySelected = [];
-
-  List<RegionModel> _regions = [];
-  RegionModel _regionSelect = RegionModel();
-  List<CityModel> _citySelects = [];
-
   List<FilterConditionEntry> cooperationfilterEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '全部', value: null, checked: true),
     FilterConditionEntry(
@@ -88,8 +71,6 @@ class _FactoryPageState extends State<FactoryPage> {
         '${CooperationModesLocalizedMap[CooperationModes.LABOR_AND_MATERIAL]}',
         value: CooperationModes.LABOR_AND_MATERIAL),
   ];
-  double xLocal;
-  double yLocal;
 
   bool isLocalFind = false;
 
@@ -100,9 +81,6 @@ class _FactoryPageState extends State<FactoryPage> {
   List<String> historyKeywords;
 
   bool lock = false;
-
-  ScrollController _scrollController;
-  ScrollController _factoryScrollController;
 
   List<String> _dropDownHeaderItemStrings = ['综合', '全国', '品类', '筛选'];
   GZXDropdownMenuController _dropdownMenuController =
@@ -147,7 +125,7 @@ class _FactoryPageState extends State<FactoryPage> {
       _dropDownHeaderItemStrings[1] = '加工方式';
     }
   }
-  
+
   @override
   void dispose() {
     //注意这里关闭
@@ -393,16 +371,13 @@ class _FactoryPageState extends State<FactoryPage> {
   }
 
   void onLocation() async {
-    // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
     AmapState amapState = Provider.of<AmapState>(context);
-
+    // Tip tip = await showSearch(context: context, delegate: AmapSearchDelegatePage());
     Tip tip = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => AmapSearchPage()));
-    print(tip.name);
     setState(() {
-      List<String> locationArray = tip.location.split(',');
-      factoryCondition.longitude = double.parse(locationArray[0]);
-      factoryCondition.latitude = double.parse(locationArray[1]);
+      factoryCondition.longitude = amapState.longitude;
+      factoryCondition.latitude = amapState.latitude;
 
       FactoryBLoC.instance.filterByCondition(
         factoryCondition,
@@ -412,11 +387,10 @@ class _FactoryPageState extends State<FactoryPage> {
   }
 
   Future<bool> _initData() async {
+    AmapState amapState = Provider.of<AmapState>(context);
+
     if (!inited && !lock) {
       lock = true;
-      aMapLocation = await AmapService.instance.location();
-      _category = await ProductRepositoryImpl().cascadedCategories();
-      print(isLocalFind);
       if (widget.factoryCondition != null) {
         if (widget.route == '就近找厂') {
           isLocalFind = true;
@@ -426,8 +400,8 @@ class _FactoryPageState extends State<FactoryPage> {
               adeptAtCategories: [],
               labels: [],
               cooperationModes: [],
-              longitude: aMapLocation.longitude,
-              latitude: aMapLocation.latitude,
+              longitude: amapState.longitude,
+              latitude: amapState.latitude,
               distance: 50000);
         } else {
           factoryCondition = widget.factoryCondition;
@@ -441,8 +415,8 @@ class _FactoryPageState extends State<FactoryPage> {
               adeptAtCategories: [],
               labels: [],
               cooperationModes: [],
-              longitude: aMapLocation.longitude,
-              latitude: aMapLocation.latitude,
+              longitude: amapState.longitude,
+              latitude: amapState.latitude,
               distance: 50000);
         } else {
           factoryCondition = FactoryCondition(
