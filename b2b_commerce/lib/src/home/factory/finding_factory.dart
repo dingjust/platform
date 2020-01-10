@@ -136,13 +136,6 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
     });
   }
 
-  void changeCondition(FilterConditionEntry condition) {
-    setState(() {
-      currentCondition = condition;
-    });
-    FactoryBLoC.instance.clear();
-  }
-
   @override
   void dispose() {
     //注意这里关闭

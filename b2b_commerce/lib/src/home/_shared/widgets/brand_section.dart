@@ -19,9 +19,8 @@ class BrandEntranceSection extends StatelessWidget {
       GridItem(
         title: '发布需求',
         onPressed: () async {
-          RequirementOrderModel requirementOrderModel = RequirementOrderModel(
-              details: RequirementInfoModel(), attachments: []);
-
+          // RequirementOrderModel requirementOrderModel = RequirementOrderModel(
+          //     details: RequirementInfoModel(), attachments: []);
           Navigator.push(
             context,
             MaterialPageRoute(
