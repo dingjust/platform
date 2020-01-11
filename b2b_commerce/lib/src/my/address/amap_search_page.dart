@@ -109,6 +109,8 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   TextEditingController textEditingController = TextEditingController();
   AMapLocation gpsLocation;
   bool gpsLock = false;
+  String oldCity;
+  Geocode changeGeo;
 
   @override
   void initState() {
@@ -116,12 +118,17 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
     super.initState();
   }
 
-  // var _controller = StreamController<AmapAroundResponse>();
+  // var _controller = StreamController<AmapAroundResponse>();u
 
   // // Stream<UserModel> get stream => _controller.stream;
 
   @override
   Widget build(BuildContext context) {
+    if (oldCity == null) {
+      oldCity = Provider
+          .of<AmapState>(context)
+          .city;
+    }
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(
@@ -162,8 +169,17 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                 dialogType: DialogType.CONFIRM_DIALOG,
                 contentText2: '请选择具体定位地址',
                 isNeedConfirmButton: true,
+                isNeedCancelButton: true,
                 confirmButtonText: '确定',
+                cancelButtonText: '忽略',
                 dialogHeight: 180,
+                cancelAction: () {
+                  if (changeGeo == null) {
+                    Provider.of<AmapState>(context).setCity(oldCity);
+                  }
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
                 confirmAction: () {
                   Navigator.of(context).pop();
                 },
@@ -227,6 +243,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                           aOIName: response.geocodes.first.city,
                           longitude: double.parse(locationArray[0]),
                           latitude: double.parse(locationArray[1]));
+                      changeGeo = response.geocodes.first;
                     }
                   });
                 } catch (e) {
@@ -411,6 +428,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                   GestureDetector(
                     onTap: () {
                       getGpsLocation(state);
+                      changeGeo = Geocode.fromJson({});
                     },
                     child: Container(
                       child: Row(
