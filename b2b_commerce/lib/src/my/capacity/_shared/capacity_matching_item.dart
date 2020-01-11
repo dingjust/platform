@@ -79,14 +79,13 @@ class CapacityMatchingItem extends StatelessWidget {
                         Expanded(
                           child: Container(
                               child: Text(
-                                '${capacity.category.parent.name}-${capacity
-                                    .category.name}',
+                                '${capacity.category.name}',
                                 overflow: TextOverflow.ellipsis,
                           )),
                         ),
                         Container(
                             child: Text(
-                          '${capacity.capacityRange}/天',
+                              '${capacity.capacityRange}件/天',
                           style: TextStyle(
                             color: Colors.red,
                           ),

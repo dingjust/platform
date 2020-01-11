@@ -244,17 +244,17 @@ class _LogisicsInputPageState extends State<LogisticsInputPage> {
               callbackResult: result,
             );
           }).then((val) {
-            ProofingOrdersBLoC.instance.refreshData('PENDING_DELIVERY');
-            ProofingOrdersBLoC.instance.refreshData('SHIPPED');
-            Navigator.pop(context);
-
+        ProofingOrdersBLoC.instance.refreshData('ALL');
+        ProofingOrdersBLoC.instance.refreshData('PENDING_DELIVERY');
+        ProofingOrdersBLoC.instance.refreshData('SHIPPED');
+        Navigator.pop(context);
       });
-      ProofingOrdersBLoC.instance.refreshData('ALL');
     });
   }
 
   void saveOfflinePurchaseOrder() {
     widget.purchaseOrderModel.isOfflineConsignment = true;
+    // widget.purchaseOrderModel.consignment = ConsignmentModel();
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -271,6 +271,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage> {
       if (value != null) {
         result = value;
       }
+      Navigator.of(context).pop();
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -284,7 +285,7 @@ class _LogisicsInputPageState extends State<LogisticsInputPage> {
       PurchaseOrderBLoC.instance.refreshData('ALL');
       PurchaseOrderBLoC.instance.refreshData('WAIT_FOR_OUT_OF_STORE');
       PurchaseOrderBLoC.instance.refreshData('OUT_OF_STORE');
-      Navigator.pop(context);
+      Navigator.of(context).pop();
     });
   }
 
