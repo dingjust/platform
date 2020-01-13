@@ -140,11 +140,15 @@ class CapacityMatchingItem extends StatelessWidget {
     String dateStr = '';
     if (model.longTerm ?? false) {
       dateStr = '长期有效';
+    } else if (model.dateStartPoint == null) {
+      dateStr = '长期有效';
+    } else if (model.dateStartPoint != null && model.dateEndPoint == null) {
+      dateStr =
+      '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~长期有效';
     } else {
       dateStr =
-      '${model?.dateStartPoint?.month ?? ''}.${model?.dateStartPoint?.day ??
-          ''}~${model?.dateEndPoint?.month ?? ''}.${model?.dateEndPoint?.day ??
-          ''}';
+      '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~${model
+          ?.dateEndPoint?.month}.${model?.dateEndPoint?.day}';
     }
 
     return Column(

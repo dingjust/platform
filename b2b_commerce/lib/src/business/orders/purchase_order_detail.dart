@@ -51,6 +51,11 @@ final List<OrderStatusModel> _statusList = [
     'name': '已完成',
     'sort': 5,
   }),
+  OrderStatusModel.fromJson({
+    'code': 'CANCELLED',
+    'name': '已取消',
+    'sort': 6,
+  }),
 ];
 
 class PurchaseOrderDetailPage extends StatefulWidget {
@@ -1724,9 +1729,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         Radius.circular(5),
                       ),
                     ),
-                    onPressed: () async {
-
-                    })
+                    onPressed: () async {})
                     : Container()),
           ),
           Expanded(
@@ -1837,7 +1840,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           ),
                         ),
                         onPressed: () async {
-                          //将支付金额置为定金
+                          //将支付金额置为尾款
                           order.totalPrice = order.balance;
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => OrderPaymentPage(
@@ -2894,7 +2897,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   Widget _buildFAB(BuildContext context) {
-    return SpeedDial(
+    return order.salesApplication == SalesApplication.ONLINE
+        ? null
+        : SpeedDial(
       // animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       // this is ignored if animatedIcon is non null
@@ -2918,7 +2923,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       // backgroundColor: Color.fromRGBO(255,214,12, 1),
       foregroundColor: Colors.black,
       elevation: 8.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0)),
       children: [
         SpeedDialChild(
           child: Center(
@@ -2939,8 +2945,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               ),
             );
           },
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0)),
         ),
         SpeedDialChild(
           child: Center(
@@ -2982,7 +2988,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 builder: (context) =>
                     ReconciliationOrderView(
                       purchaseOrder: order,
-                      reconciliationOrder: order.reconciliationOrders.isNotEmpty
+                      reconciliationOrder:
+                      order.reconciliationOrders.isNotEmpty
                           ? order.reconciliationOrders[0]
                           : null,
                     ),

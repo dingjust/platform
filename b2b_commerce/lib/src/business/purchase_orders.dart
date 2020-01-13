@@ -20,6 +20,8 @@ const statuses = <EnumModel>[
   EnumModel('IN_PRODUCTION', '生产中'),
   EnumModel('WAIT_FOR_OUT_OF_STORE', '待出库'),
   EnumModel('OUT_OF_STORE', '已出库'),
+  EnumModel('COMPLETED', '已完成'),
+  EnumModel('CANCELLED', '已取消'),
 ];
 
 class PurchaseOrdersPage extends StatefulWidget {

@@ -140,7 +140,10 @@ class PurchaseDetailOnlineBtnGroup extends StatelessWidget {
               )),
         )
       ];
-    } else if (order.status == PurchaseOrderStatus.COMPLETED) {
+    } else if (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE &&
+        order.balancePaid == false &&
+        order.balance != null &&
+        order.balance > 0) {
       return [
         Expanded(
           flex: 1,
@@ -149,28 +152,31 @@ class PurchaseDetailOnlineBtnGroup extends StatelessWidget {
               child: Builder(
                 builder: (BuildContext buttonContext) => FlatButton(
                   color: Color.fromRGBO(255, 214, 12, 1),
-                  onPressed: () => onReconciliationForm(context),
+                  onPressed: () async {
+                    //将支付金额置为尾款
+                    order.totalPrice = order.balance;
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            OrderPaymentPage(
+                              order: order,
+                              paymentFor: PaymentFor.BALANCE,
+                            )));
+                  },
                   disabledColor: Colors.grey[300],
                   child: Text(
-                    '对账',
+                    '去支付',
                     style: TextStyle(fontSize: 15),
                   ),
                 ),
               )),
         )
       ];
-    } else if (!isMine() &&
-        order.status == PurchaseOrderStatus.PENDING_CONFIRM) {
+    } else if (order.status == PurchaseOrderStatus.OUT_OF_STORE) {
       return [
         Expanded(
-            flex: 1,
-            child: FlatButton(
-              onPressed: () => onCancel(context),
-              child: Text(
-                '拒单',
-                style: TextStyle(fontSize: 15, color: Colors.red),
-              ),
-            )),
+          flex: 1,
+          child: Container(),
+        ),
         Expanded(
           flex: 1,
           child: Container(
@@ -178,10 +184,25 @@ class PurchaseDetailOnlineBtnGroup extends StatelessWidget {
               child: Builder(
                 builder: (BuildContext buttonContext) => FlatButton(
                   color: Color.fromRGBO(255, 214, 12, 1),
-                  onPressed: () => onConfirm(context),
+                  onPressed: () async {
+                    bool result = false;
+                    result = await PurchaseOrderRepository()
+                        .purchaseOrderShipped(order.code, order);
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            successTips: '确认收货成功',
+                            failTips: '确认收货失败',
+                            callbackResult: result,
+                          );
+                        });
+                  },
                   disabledColor: Colors.grey[300],
                   child: Text(
-                    '接单',
+                    '确认收货',
                     style: TextStyle(fontSize: 15),
                   ),
                 ),

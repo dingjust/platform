@@ -284,12 +284,20 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
     String dateStr = '';
     if (widget.model.longTerm ?? false) {
       dateStr = '长期有效';
+    } else if (widget.model.dateStartPoint == null) {
+      dateStr = '长期有效';
+    } else if (widget.model.dateStartPoint != null &&
+        widget.model.dateEndPoint == null) {
+      dateStr =
+      '${widget.model?.dateStartPoint?.month}.${widget.model?.dateStartPoint
+          ?.day}~长期有效';
     } else {
       dateStr =
       '${widget.model?.dateStartPoint?.month}.${widget.model?.dateStartPoint
           ?.day}~${widget.model?.dateEndPoint?.month}.${widget.model
           ?.dateEndPoint?.day}';
     }
+
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
