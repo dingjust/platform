@@ -373,13 +373,13 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
         if (widget.route == '就近找厂') {
           isLocalFind = true;
           factoryCondition = FactoryCondition(
-              starLevel: 0,
-              adeptAtCategories: [],
-              labels: [],
-              cooperationModes: [],
-              longitude: aMapLocation.longitude,
-              latitude: aMapLocation.latitude,
-              distance: 50000);
+            starLevel: 0,
+            adeptAtCategories: [],
+            labels: [],
+            cooperationModes: [],
+            longitude: aMapLocation.longitude,
+            latitude: aMapLocation.latitude,
+          );
           addressLine = aMapLocation.AOIName ?? '广州';
         } else {
           factoryCondition = widget.factoryCondition;
@@ -388,13 +388,13 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
         if (widget.route == '就近找厂') {
           isLocalFind = true;
           factoryCondition = FactoryCondition(
-              starLevel: 0,
-              adeptAtCategories: [],
-              labels: [],
-              cooperationModes: [],
-              longitude: aMapLocation.longitude,
-              latitude: aMapLocation.latitude,
-              distance: 50000);
+            starLevel: 0,
+            adeptAtCategories: [],
+            labels: [],
+            cooperationModes: [],
+            longitude: aMapLocation.longitude,
+            latitude: aMapLocation.latitude,
+          );
           addressLine = aMapLocation.AOIName ?? '广州';
         } else {
           factoryCondition = FactoryCondition(

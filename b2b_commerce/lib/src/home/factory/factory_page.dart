@@ -396,13 +396,13 @@ class _FactoryPageState extends State<FactoryPage> {
           isLocalFind = true;
           // _initLocation();
           factoryCondition = FactoryCondition(
-              starLevel: 0,
-              adeptAtCategories: [],
-              labels: [],
-              cooperationModes: [],
-              longitude: amapState.longitude,
-              latitude: amapState.latitude,
-              distance: 50000);
+            starLevel: 0,
+            adeptAtCategories: [],
+            labels: [],
+            cooperationModes: [],
+            longitude: amapState.longitude,
+            latitude: amapState.latitude,
+          );
         } else {
           factoryCondition = widget.factoryCondition;
         }
@@ -411,13 +411,13 @@ class _FactoryPageState extends State<FactoryPage> {
           isLocalFind = true;
           // _initLocation();
           factoryCondition = FactoryCondition(
-              starLevel: 0,
-              adeptAtCategories: [],
-              labels: [],
-              cooperationModes: [],
-              longitude: amapState.longitude,
-              latitude: amapState.latitude,
-              distance: 50000);
+            starLevel: 0,
+            adeptAtCategories: [],
+            labels: [],
+            cooperationModes: [],
+            longitude: amapState.longitude,
+            latitude: amapState.latitude,
+          );
         } else {
           factoryCondition = FactoryCondition(
               starLevel: 0,

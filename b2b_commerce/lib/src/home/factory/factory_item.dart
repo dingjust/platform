@@ -151,8 +151,10 @@ class FactoryNameText extends StatelessWidget {
                 : Expanded(
               flex: 2,
               child: Text(
-                '${model.contactAddress.city.name}${model.contactAddress
-                    .cityDistrict.name}',
+                model?.contactAddress != null
+                    ? '${model?.contactAddress?.city?.name}${model
+                    ?.contactAddress?.cityDistrict?.name}'
+                    : '',
                 style: TextStyle(fontSize: 15, color: Colors.grey),
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.right,
