@@ -503,7 +503,7 @@ class _RequirementOrderDetailByFactoryPageState
                   child: Container(
                     alignment: Alignment.centerLeft,
                     width: _leadingRowWidth,
-                    child: Text('销售市场：'),
+                    child: Text('质量等级：'),
                   ),
                 ),
                 Expanded(

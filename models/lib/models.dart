@@ -451,7 +451,7 @@ const FactoryFreeProofingsEnum = [
   EnumModel('SUPPORTED', '支持'),
   EnumModel('NOT_SUPPORTED', '不支持')
 ];
-//销售市场
+//质量等级
 //const SalesMarketsEnum = [
 //  EnumModel('A_CHAIN', '一线连锁'),
 //  EnumModel('REGIONAL_CHAIN', '区域连锁'),

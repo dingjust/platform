@@ -119,7 +119,7 @@ class SubContractInfoModel extends ItemModel {
   @JsonKey(toJson: _regionsToJson)
   List<RegionModel> productiveOrientations;
 
-  //销售市场
+  //质量等级
   List<String> salesMarket;
 
   //有效期限
