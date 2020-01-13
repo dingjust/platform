@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
 import 'package:b2b_commerce/src/_shared/widgets/date_range_selector.dart';
-import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart' as yj;
+import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
+as yj;
 import 'package:b2b_commerce/src/helper/login_check.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,11 @@ import '_shared/capacity_matching_list.dart';
 
 class CapacityMatchingPage extends StatefulWidget
     implements PreferredSizeWidget {
+  ///筛选关键字
+  final String keyword;
+
+  const CapacityMatchingPage({Key key, this.keyword}) : super(key: key);
+
   _CapacityMatchingPageState createState() => _CapacityMatchingPageState();
 
   @override
@@ -41,7 +47,7 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CapacityMatchingState>(
-      builder: (context) => CapacityMatchingState(),
+      builder: (context) => CapacityMatchingState(keyword: widget.keyword),
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(

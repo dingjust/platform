@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
+import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -21,6 +22,10 @@ class BrandIndexSearchDelegatePage extends SearchDelegate<String> {
     FilterConditionEntry(
       label: '款式',
       value: 'product',
+    ),
+    FilterConditionEntry(
+      label: '产能',
+      value: 'capacity',
     )
   ];
 
@@ -131,35 +136,44 @@ class BrandIndexSearchDelegatePage extends SearchDelegate<String> {
             context,
             MaterialPageRoute(
               builder: (context) => FactoryPage(
-                    FactoryCondition(
-                        starLevel: 0,
-                        adeptAtCategories: [],
-                        labels: [],
-                        cooperationModes: [],
-                        keyword: keyword),
-                    route: '全部工厂',
-                  ),
+                FactoryCondition(
+                    starLevel: 0,
+                    adeptAtCategories: [],
+                    labels: [],
+                    cooperationModes: [],
+                    keyword: keyword),
+                route: '全部工厂',
+              ),
             ),
           );
-        } else {
+        } else if (entry.value == 'factory') {
           // 加载条
           showDialog(
             context: context,
             builder: (context) =>
                 ProgressIndicatorFactory.buildDefaultProgressIndicator(),
           );
-          jumpToProducts(context,keyword);
+          jumpToProducts(context, keyword);
+        } else {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) =>
+                  CapacityMatchingPage(
+                    keyword: keyword,
+                  )));
         }
       }
     });
   }
 
-  void jumpToProducts(BuildContext context,String keyword) async {
+  void jumpToProducts(BuildContext context, String keyword) async {
     await ProductRepositoryImpl().cascadedCategories().then((categories) {
       Navigator.of(context).pop();
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ProductsPage(keyword: keyword,),
+          builder: (context) =>
+              ProductsPage(
+                keyword: keyword,
+              ),
         ),
       );
     });
