@@ -153,6 +153,7 @@
           return false;
         }
         const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, this.selectProgressModel.id);
+        this.selectProgressModel.updateOnly=true;
         const result = await this.$http.put(url, this.selectProgressModel);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
