@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_search_delegate_page.dart';
-import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_pool_all.dart';
+import 'package:b2b_commerce/src/home/pool/requirement_pool_order_list.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -25,30 +25,13 @@ class RequirementPoolRecommend extends StatefulWidget {
 class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
   GlobalKey _FactoryBLoCProviderKey = GlobalKey();
 
-  bool showDateFilterMenu = false;
-  bool showMachineTypeFilterMenu = false;
-  bool showCategoriesFilterMenu = false;
-
-  List<CategoryModel> _minCategorySelect = [];
-
-  String filterBarLabel = '综合排序';
-  String _newReleaseSelectText = '最新发布';
-  String _machineTypeSelectText = '加工方式';
-  String _majorCategorySelectText = '面料类别';
-  String _productionAreaSelectText = '生产地区';
-
   ///当前选中条件
-  RequirementFilterCondition currentCodition;
+  RequirementFilterCondition currentCondition;
 
-  List<FilterConditionEntry> dateRangeConditionEntries = <FilterConditionEntry>[
-    FilterConditionEntry(
-        label: '全部', value: RequirementOrderDateRange.ALL, checked: true),
-    FilterConditionEntry(
-        label: '3天内', value: RequirementOrderDateRange.RANGE_3),
-    FilterConditionEntry(
-        label: '7天内', value: RequirementOrderDateRange.RANGE_7),
-    FilterConditionEntry(
-        label: '15天内', value: RequirementOrderDateRange.RANGE_15),
+  List<FilterConditionEntry> sortConditionEntries = <FilterConditionEntry>[
+    FilterConditionEntry(label: '综合', value: null, checked: true),
+    FilterConditionEntry(label: '订单数量', value: 'num'),
+    FilterConditionEntry(label: '交货时间', value: 'time'),
   ];
 
   List<FilterConditionEntry> machiningTypeConditionEntries =
@@ -72,21 +55,17 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
         checked: true),
   ];
 
-  List<RegionModel> _regionSelects = [];
-  List<String> _regionCodeSelects = [];
-  List<RegionModel> _regions = [];
-
   List<String> historyKeywords;
+
+  List<String> _dropDownHeaderItemStrings = ['综合', '加工方式', '商品大类'];
+  GZXDropdownMenuController _dropdownMenuController =
+  GZXDropdownMenuController();
+
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey _stackKey = GlobalKey();
 
   @override
   void initState() {
-    //获取所有省份
-    rootBundle.loadString('data/province_only.json').then((v) {
-      List data = json.decode(v);
-      _regions = data
-          .map<RegionModel>((region) => RegionModel.fromJson(region))
-          .toList();
-    });
     // TODO: implement initState
     categoriesConditionEntries.addAll(widget.categories
         .map((category) =>
@@ -94,9 +73,9 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
         .toList());
 
     if (widget.requirementFilterCondition != null) {
-      currentCodition = widget.requirementFilterCondition;
+      currentCondition = widget.requirementFilterCondition;
     } else {
-      currentCodition = RequirementFilterCondition(
+      currentCondition = RequirementFilterCondition(
           categories: [],
           dateRange: RequirementOrderDateRange.ALL,
           machiningType: null);
@@ -124,23 +103,23 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                   B2BIcons.search,
                   size: 22,
                 ),
-                onPressed: (){
+                onPressed: () {
                   showDialog(
                       context: context,
                       barrierDismissible: false,
                       builder: (_) {
                         return RequestDataLoading(
-                          requestCallBack: LocalStorage.get(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+                          requestCallBack: LocalStorage.get(
+                              GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
                           outsideDismiss: false,
                           loadingText: '加载中。。。',
                           entrance: '',
                         );
-                      }
-                  ).then((value){
+                      }).then((value) {
                     if (value != null && value != '') {
                       List<dynamic> list = json.decode(value);
-                      historyKeywords = list.map((item) => item as String).toList();
-
+                      historyKeywords =
+                          list.map((item) => item as String).toList();
                     } else {
                       historyKeywords = [];
                     }
@@ -150,10 +129,11 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                         builder: (context) => SearchModelPage(
                           searchModel: SearchModel(
                               historyKeywords: historyKeywords,
-                              searchModelType: SearchModelType.REQUIREMENT_QUOTE,
-                              requirementCondition: currentCodition,
-                              route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY
-                          ),
+                              searchModelType:
+                              SearchModelType.REQUIREMENT_QUOTE,
+                              requirementCondition: currentCondition,
+                              route: GlobalConfigs
+                                  .Requirement_HISTORY_KEYWORD_KEY),
                         ),
                       ),
                     );
@@ -161,290 +141,119 @@ class _RequirementPoolRecommendState extends State<RequirementPoolRecommend> {
                 },
 //                onPressed: () => showSearch(
 //                    context: context,
-//                    delegate:
-//                        RequirementOrderSearchDelegatePage(isRecommend: true)),
+//                    delegate: RequirementOrderSearchDelegatePage()),
               ),
             ],
           ),
           body: Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              bottom: RequirementFilterBar(
-                entries: [
-                  FilterEntry(_newReleaseSelectText, () {
-                    setState(() {
-                      showDateFilterMenu = !showDateFilterMenu;
-                      showCategoriesFilterMenu = false;
-                      showMachineTypeFilterMenu = false;
-                    });
-                  }),
-                  FilterEntry(_machineTypeSelectText, () {
-                    setState(() {
-                      showMachineTypeFilterMenu = !showMachineTypeFilterMenu;
-                      showCategoriesFilterMenu = false;
-                      showDateFilterMenu = false;
-                    });
-                  }),
-                  FilterEntry(_majorCategorySelectText, () {
-                    setState(() {
-                      showCategoriesFilterMenu = !showCategoriesFilterMenu;
-                      showDateFilterMenu = false;
-                      showMachineTypeFilterMenu = false;
-                    });
-                  }),
-                  FilterEntry(_productionAreaSelectText, () {
-                    setState(() {
-//                      showAreaFilterMenu = !showAreaFilterMenu;
-                      showDateFilterMenu = false;
-                      showMachineTypeFilterMenu = false;
-                      showCategoriesFilterMenu = false;
-                    });
-                    //获取所有省份
-                    rootBundle.loadString('data/province_only.json').then((v) {
-                      List data = json.decode(v);
-                      _regions = data
-                          .map<RegionModel>(
-                              (region) => RegionModel.fromJson(region))
-                          .toList();
-
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-//                          return StatefulBuilder(builder: (context, mSetState) {
-                          return RegionSelector(
-                            regions: _regions,
-                            regionSelects: _regionSelects,
-                          );
-//                          });
-                        },
-                      ).then((val) {
-                        setState(() {
-                          if (_regionSelects.length > 0) {
-                            _productionAreaSelectText = _regionSelects[0].name;
-                            currentCodition.productiveOrientations =
-                                _regionSelects;
-                          } else {
-                            _productionAreaSelectText = '生产地区';
-                            currentCodition.productiveOrientations = null;
-                          }
-                          RequirementPoolBLoC.instance.clear();
-                        });
-                      });
-                    });
-                  }),
-                ],
-                action: Container(),
-              ),
-            ),
-            body: Column(
-              children: <Widget>[
-                FilterSelectMenu(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  height: showDateFilterMenu ? 200 : 0,
-                  entries: dateRangeConditionEntries,
-                  streamController:
-                  RequirementPoolBLoC.instance.conditionController,
-                  afterPressed: (String str) {
-                    setState(() {
-                      if(str == '全部'){
-                        _newReleaseSelectText = '最新发布';
-                      }else{
-                        _newReleaseSelectText = str;
-                      }
-                      showDateFilterMenu = !showDateFilterMenu;
-                    });
-                  },
+              key: _scaffoldKey,
+              body: Stack(key: _stackKey, fit: StackFit.expand, children: <
+                  Widget>[
+                Column(
+                  children: <Widget>[
+                    GZXDropDownHeader(
+                      items: [
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
+                      ],
+                      stackKey: _stackKey,
+                      controller: _dropdownMenuController,
+                      // onItemTap: (index) {
+                      // },
+                      dividerHeight: 0,
+                      color: Colors.grey[100],
+                      dropDownStyle:
+                      TextStyle(fontSize: 13, color: Colors.orange),
+                      iconDropDownColor: Colors.orange,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: OrdersListView(
+                        currentCondition: currentCondition,
+                        isRecommend: true,
+                      ),
+                    )
+                  ],
                 ),
-                FilterSelectMenu(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  height: showMachineTypeFilterMenu ? 150 : 0,
-                  entries: machiningTypeConditionEntries,
-                  streamController:
-                  RequirementPoolBLoC.instance.conditionController,
-                  afterPressed: (String str) {
-                    setState(() {
-                      if(str == '全部'){
-                        _machineTypeSelectText = '加工方式';
-                      }else{
-                        _machineTypeSelectText = str;
-                      }
-                      showMachineTypeFilterMenu = !showMachineTypeFilterMenu;
-                    });
-                  },
-                ),
-                FilterSelectMenu(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  height: showCategoriesFilterMenu ? 350 : 0,
-                  entries: categoriesConditionEntries,
-                  multipeSelect: false,
-                  streamController:
-                  RequirementPoolBLoC.instance.conditionController,
-                  afterPressed: (String str) {
-                    setState(() {
-                      if(str == '全部'){
-                        _majorCategorySelectText = '面料类别';
-                      }else{
-                        _majorCategorySelectText = str;
-                      }
-
-                      showCategoriesFilterMenu = !showCategoriesFilterMenu;
-                    });
-                  },
-                ),
-                Expanded(
-                  child: OrdersListView(
-                    currentCodition: currentCodition,
+                Builder(
+                  builder: (dropMenuContext) =>
+                      GZXDropDownMenu(
+                        controller: _dropdownMenuController,
+                        // 下拉菜单显示或隐藏动画时长
+                        animationMilliseconds: 0,
+                        menus: [
+                          GZXDropdownMenuBuilder(
+                            dropDownHeight: 40.0 * sortConditionEntries.length +
+                                20,
+                            dropDownWidget: FilterConditionSelector(
+                              // cancell: () {},
+                                entries: sortConditionEntries,
+                                callBack: (entry) =>
+                                    _onSortConditionSelect(entry)),
+                          ),
+                          GZXDropdownMenuBuilder(
+                            dropDownHeight:
+                            40.0 * machiningTypeConditionEntries.length + 20,
+                            dropDownWidget: FilterConditionSelector(
+                              // cancell: () {},
+                                entries: machiningTypeConditionEntries,
+                                callBack: (entry) =>
+                                    _onSortConditionSelect(entry)),
+                          ),
+                          GZXDropdownMenuBuilder(
+                            dropDownHeight:
+                            40.0 * categoriesConditionEntries.length + 20,
+                            dropDownWidget: FilterConditionSelector(
+                              // cancell: () {},
+                                entries: categoriesConditionEntries,
+                                callBack: (entry) =>
+                                    _onSortConditionSelect(entry)),
+                          ),
+                        ],
                   ),
                 )
-              ],
-            ),
-          ),
+              ])),
         ));
+  }
+
+  void _onSortConditionSelect(FilterConditionEntry condition) {
+    _dropdownMenuController.hide();
+
+    if (condition.value is RequirementOrderDateRange && condition.checked) {
+      currentCondition.dateRange = condition.value;
+      _dropDownHeaderItemStrings[0] = condition.label;
+    }
+
+    if (condition.value is MachiningType && condition.checked) {
+      currentCondition.machiningType = condition.value;
+      _dropDownHeaderItemStrings[1] = condition.label;
+    }
+
+    if (condition.value is CategoryModel) {
+      currentCondition.categories = [condition.value];
+      _dropDownHeaderItemStrings[2] = condition.label;
+    }
+
+    if (condition.value == "ALL2") {
+      currentCondition.categories.clear();
+      _dropDownHeaderItemStrings[2] = '商品大类';
+    }
+
+    if (condition.value == "ALL1") {
+      currentCondition.machiningType = null;
+      _dropDownHeaderItemStrings[1] = '加工方式';
+    }
+
+    setState(() {});
+    RequirementPoolBLoC.instance.clear();
   }
 
   String generateTitle() {
-    if (currentCodition.keyword == null || currentCodition.keyword == '') {
+    if (currentCondition.keyword == null || currentCondition.keyword == '') {
       return '推荐需求';
     } else {
-      return '${currentCodition.keyword}';
+      return '${currentCondition.keyword}';
     }
-  }
-}
-
-class OrdersListView extends StatelessWidget {
-  ScrollController _scrollController = ScrollController();
-
-  final RequirementFilterCondition currentCodition;
-
-  OrdersListView({Key key, this.currentCodition}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<RequirementPoolBLoC>(context);
-
-    //监听筛选条件更改
-    bloc.conditionStream.listen((condition) {
-      if (condition.value is RequirementOrderDateRange && condition.checked) {
-        currentCodition.dateRange = condition.value;
-      }
-
-      if (condition.value is MachiningType && condition.checked) {
-        currentCodition.machiningType = condition.value;
-      }
-
-      if (condition.value is CategoryModel) {
-        if (condition.checked) {
-          if (!currentCodition.categories.contains(condition.value)) {
-            currentCodition.categories.add(condition.value);
-          }
-        } else {
-          currentCodition.categories.remove(condition.value);
-        }
-      }
-
-      if (condition.value == "ALL2") {
-        currentCodition.categories.clear();
-      }
-
-      if (condition.value == "ALL1") {
-        currentCodition.machiningType = null;
-      }
-
-      // bloc.filterByCondition(currentCodition);
-      bloc.clear();
-    });
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        bloc.loadingStart();
-        bloc.loadingMoreByCondition(currentCodition, true);
-      }
-    });
-
-    return Container(
-        decoration: BoxDecoration(color: Colors.white),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: RefreshIndicator(
-          onRefresh: () async {
-            bloc.clear();
-          },
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: _scrollController,
-            children: <Widget>[
-              StreamBuilder<List<RequirementOrderModel>>(
-                stream: bloc.stream,
-                initialData: null,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<RequirementOrderModel>> snapshot) {
-                  if (snapshot.data == null) {
-                    //默认条件查询
-                    bloc.filterByCondition(currentCodition, true);
-                    return ProgressIndicatorFactory
-                        .buildPaddedProgressIndicator();
-                  }
-                  if (snapshot.data.length <= 0) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(top: 200),
-                          child: Image.asset(
-                            'temp/logo2.png',
-                            package: 'assets',
-                            width: 80,
-                            height: 80,
-                          ),
-                        ),
-                        Container(child: Text('您还没有收到推荐的需求')),
-                        Container(child: Text('小钉正在拼命为您寻找')),
-                      ],
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: snapshot.data.map((item) {
-                        return RequirementPoolOrderItem(
-                          order: item,
-                        );
-                      }).toList(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                },
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.bottomStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  // if (snapshot.data) {
-                  //   _scrollController.animateTo(_scrollController.offset - 70,
-                  //       duration: new Duration(milliseconds: 500),
-                  //       curve: Curves.easeOut);
-                  // }
-                  return ScrolledToEndTips(
-                    hasContent: snapshot.data,
-                    scrollController: _scrollController,
-                  );
-                },
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.loadingStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return ProgressIndicatorFactory
-                      .buildPaddedOpacityProgressIndicator(
-                    opacity: snapshot.data ? 1.0 : 0,
-                  );
-                },
-              ),
-            ],
-          ),
-        ));
   }
 }

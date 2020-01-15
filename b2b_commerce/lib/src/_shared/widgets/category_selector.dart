@@ -34,7 +34,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        width: 120,
+                        width: 100,
                         color: Colors.grey[200],
                         child: ListView(
                           children: snapshot.data.map((majorCategory) {
@@ -75,8 +75,8 @@ class _CategorySelectorState extends State<CategorySelector> {
                                       SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 3, //横轴三个子widget
                                           childAspectRatio: 3, //宽高比为1时，子widget
-                                          crossAxisSpacing: 8,
-                                          mainAxisSpacing: 8),
+                                          crossAxisSpacing: 12,
+                                          mainAxisSpacing: 12),
                                   children: _selectMajorCategory?.children
                                           ?.map((category) {
                                         return Container(
