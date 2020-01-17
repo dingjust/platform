@@ -1,21 +1,11 @@
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
-import 'package:b2b_commerce/src/business/orders/quote_item.dart';
-import 'package:b2b_commerce/src/business/orders/quote_order_detail.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_edit_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_second_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
-import 'package:b2b_commerce/src/business/orders/requirement_quote_detail.dart';
-import 'package:b2b_commerce/src/business/requirement_orders.dart';
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
-import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
@@ -33,9 +23,7 @@ class SubContractPoolDetailPage extends StatefulWidget {
       _SubContractPoolDetailPageState();
 }
 
-class _SubContractPoolDetailPageState
-    extends State<SubContractPoolDetailPage> {
-
+class _SubContractPoolDetailPageState extends State<SubContractPoolDetailPage> {
   SubContractModel subContractModel;
 
   double _leadingRowWidth = 180;
@@ -51,53 +39,52 @@ class _SubContractPoolDetailPageState
     return FutureBuilder<SubContractModel>(
         initialData: null,
         future: _getData(),
-        builder: (BuildContext context,
-            AsyncSnapshot<SubContractModel> snapshot) {
-        return Scaffold(
-          appBar: AppBar(
-            brightness: Brightness.light,
-            centerTitle: true,
-            elevation: 0.5,
-            title: Text(
-              '转包明细',
-              style: TextStyle(color: Colors.black),
-            ),
-            actions: <Widget>[
-            ],
-          ),
-          bottomNavigationBar: _buildBottomButtons(),
-          body: snapshot.data != null ? Container(
-            color: Colors.grey[100],
-            child: ListView(
-              children: <Widget>[
-                //发布公司信息
+        builder:
+            (BuildContext context, AsyncSnapshot<SubContractModel> snapshot) {
+          return Scaffold(
+              appBar: AppBar(
+                brightness: Brightness.light,
+                centerTitle: true,
+                elevation: 0.5,
+                title: Text(
+                  '转包明细',
+                  style: TextStyle(color: Colors.black),
+                ),
+                actions: <Widget>[],
+              ),
+              bottomNavigationBar: _buildBottomButtons(),
+              body: snapshot.data != null
+                  ? Container(
+                color: Colors.grey[100],
+                child: ListView(
+                  children: <Widget>[
+                    //发布公司信息
 //                  _buildCompanyInfo(),
 //                  Divider(
 //                    height: 0,
 //                  ),
-                //标题
-                _buildTitle(),
-                Divider(
-                  height: 0,
+                    //标题
+                    _buildTitle(),
+                    Divider(
+                      height: 0,
+                    ),
+                    //需求信息
+                    _buildMain(),
+                  ],
                 ),
-                //需求信息
-                _buildMain(),
-              ],
-            ),
-          ):Center(
-            child: CircularProgressIndicator(),
-          )
-        );
-      }
-    );
+              )
+                  : Center(
+                child: CircularProgressIndicator(),
+              ));
+        });
   }
 
   Future<SubContractModel> _getData() async {
     print(widget.code);
     // 查询明细
     // 根据code查询明
-    SubContractModel detail = await SubContractRepositoryImpl()
-        .getSubContract(widget.code);
+    SubContractModel detail =
+    await SubContractRepositoryImpl().getSubContract(widget.code);
 
     subContractModel = detail;
 
@@ -138,7 +125,8 @@ class _SubContractPoolDetailPageState
                       width: 80,
                       height: 80,
                       imageUrl:
-                      '${subContractModel.belongTo.profilePicture.previewUrl()}',
+                      '${subContractModel.belongTo.profilePicture
+                          .previewUrl()}',
                       fit: BoxFit.cover,
                       imageBuilder: (context, imageProvider) =>
                           Container(
@@ -209,12 +197,18 @@ class _SubContractPoolDetailPageState
               child: Row(
                 children: <Widget>[
                   RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(text: '发布于：',style: TextStyle(color: Colors.black),),
-                        TextSpan(text: '${DateFormatUtil.formatYMDHM(subContractModel.creationTime)}',style: TextStyle(color: Colors.black),),
-                      ]
-                    ),
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: '发布于：',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text:
+                        '${DateFormatUtil.formatYMDHM(
+                            subContractModel.creationTime)}',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ]),
                   ),
                 ],
               ),
@@ -279,11 +273,14 @@ class _SubContractPoolDetailPageState
     }
   }
 
-  Widget _buildTitle(){
+  Widget _buildTitle() {
     return Container(
       padding: EdgeInsets.all(15),
       color: Colors.white,
-      child: Text(subContractModel.details?.title ?? '无标题',style: TextStyle(fontSize: 20),),
+      child: Text(
+        subContractModel.details?.title ?? '无标题',
+        style: TextStyle(fontSize: 20),
+      ),
     );
   }
 
@@ -296,7 +293,11 @@ class _SubContractPoolDetailPageState
 //            _buildEntries(),
 //          ]),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -312,7 +313,8 @@ class _SubContractPoolDetailPageState
                   child: Text(
                     subContractModel.details.type == null
                         ? ''
-                        : enumMap(SubContractTypeEnum, subContractModel.details.type),
+                        : enumMap(
+                        SubContractTypeEnum, subContractModel.details.type),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -325,7 +327,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -339,8 +345,10 @@ class _SubContractPoolDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                          '${subContractModel.details?.majorCategory?.name}-'
-                          '${subContractModel.details?.category?.parent != null ? subContractModel.details.category.parent.name + '-' : ''}'
+                      '${subContractModel.details?.majorCategory?.name}-'
+                          '${subContractModel.details?.category?.parent != null
+                          ? subContractModel.details.category.parent.name + '-'
+                          : ''}'
                           '${subContractModel.details?.category?.name}',
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
@@ -351,7 +359,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -365,7 +377,7 @@ class _SubContractPoolDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                          '${subContractModel.details.subContractQuantity ?? 0}件',
+                      '${subContractModel.details.subContractQuantity ?? 0}件',
                       style: TextStyle(color: Colors.black, fontSize: 14)),
                 ),
               ],
@@ -375,7 +387,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -391,7 +407,6 @@ class _SubContractPoolDetailPageState
                   child: Text(
                     '￥${subContractModel.details.maxExpectedPrice ?? 0}',
                     style: TextStyle(color: Colors.red, fontSize: 14),
-
                   ),
                 ),
               ],
@@ -401,7 +416,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -429,7 +448,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -445,7 +468,8 @@ class _SubContractPoolDetailPageState
                   child: Text(
                     subContractModel.details.machiningType == null
                         ? ''
-                        : enumMap(CooperationModesEnum, subContractModel.details.machiningType),
+                        : enumMap(CooperationModesEnum,
+                        subContractModel.details.machiningType),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -458,7 +482,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -472,7 +500,10 @@ class _SubContractPoolDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    formatEnumSelectsText(subContractModel.details.salesMarket, FactoryQualityLevelsEnum, FactoryQualityLevelsEnum.length),
+                    formatEnumSelectsText(
+                        subContractModel.details.salesMarket,
+                        FactoryQualityLevelsEnum,
+                        FactoryQualityLevelsEnum.length),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -485,7 +516,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -500,7 +535,8 @@ class _SubContractPoolDetailPageState
                   flex: _flexR,
                   child: Text(
                     formatAreaSelectsText(
-                        subContractModel.details.productiveOrientations, subContractModel.details.productiveOrientations.length),
+                        subContractModel.details.productiveOrientations,
+                        subContractModel.details.productiveOrientations.length),
 //                  overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 14,
@@ -514,7 +550,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -543,7 +583,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -557,7 +601,12 @@ class _SubContractPoolDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    enumMap(EffectiveDaysEnum, subContractModel.details.effectiveDays == null ? '-1' : subContractModel.details.effectiveDays.toString()),
+                    enumMap(
+                        EffectiveDaysEnum,
+                        subContractModel.details.effectiveDays == null
+                            ? '-1'
+                            : subContractModel.details.effectiveDays
+                            .toString()),
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -570,7 +619,11 @@ class _SubContractPoolDetailPageState
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Text('参考图片：'),
@@ -578,14 +631,25 @@ class _SubContractPoolDetailPageState
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
-            child: EditableAttachments(list: subContractModel.details.pictures,editable: false,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
+            child: EditableAttachments(
+              list: subContractModel.details.pictures,
+              editable: false,
+            ),
           ),
           Divider(
             height: 0,
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,top: 15,),
+            padding: EdgeInsets.only(
+              left: 15,
+              bottom: 15,
+              top: 15,
+            ),
             child: Row(
               children: <Widget>[
                 Text('备注：'),
@@ -593,7 +657,7 @@ class _SubContractPoolDetailPageState
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15,bottom: 15,right: 5),
+            padding: EdgeInsets.only(left: 15, bottom: 15, right: 5),
             child: Row(
               children: <Widget>[
                 Expanded(child: Text(subContractModel.remarks ?? '')),
@@ -645,13 +709,12 @@ class _SubContractPoolDetailPageState
     );
   }
 
-
-  Future<bool> _onCancle(){
+  Future<bool> _onCancle() {
     bool result = false;
-    try{
+    try {
       widget.onRequirementCancle();
       result = true;
-    }catch(e){
+    } catch (e) {
       result = false;
     }
 
@@ -709,8 +772,8 @@ class _SubContractPoolDetailPageState
   void onShare() {
     String title = '';
     String description =
-        " ${subContractModel.details.category?.name}   ${subContractModel.details
-        .subContractQuantity}件\n 交货时间:${DateFormatUtil.formatYMD(
+        " ${subContractModel.details.category?.name}   ${subContractModel
+        .details.subContractQuantity}件\n 交货时间:${DateFormatUtil.formatYMD(
         subContractModel.details.expectedDeliveryDate)}";
 
     if (subContractModel.details.title != null &&
@@ -802,4 +865,3 @@ class _SubContractPoolDetailPageState
     return text;
   }
 }
-
