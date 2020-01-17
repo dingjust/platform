@@ -59,13 +59,13 @@ class FactoryBLoC extends BLoCBase {
       //重置参数
       reset();
       Response<Map<String, dynamic>> response;
-      if ((factoryCondition.longitude != null && factoryCondition.longitude > 0) &&
-          (factoryCondition.latitude != null && factoryCondition.latitude > 0) &&
-          (factoryCondition.distance != null && factoryCondition.distance > 0)) {
+      if ((factoryCondition.longitude != null &&
+          factoryCondition.longitude > 0) &&
+          (factoryCondition.latitude != null &&
+              factoryCondition.latitude > 0)) {
         try {
-          print(11);
-          response = await http$.post(Apis.factoriesForMap,
-              data: factoryCondition.toDataJson(),
+          response = await http$
+              .post(Apis.factoriesForMap, data: factoryCondition.toDataJson(),
               // data:{},
               queryParameters: {
 //                'longitude':113.32106,
@@ -77,7 +77,7 @@ class FactoryBLoC extends BLoCBase {
         } on DioError catch (e) {
           print(e);
         }
-      }else{
+      } else {
         if (requirementCode != null && requirementCode != '') {
           try {
             print(22);
@@ -107,7 +107,6 @@ class FactoryBLoC extends BLoCBase {
           }
         }
       }
-
 
       if (response != null && response.statusCode == 200) {
         FactoriesResponse factoriesResponse =
@@ -177,9 +176,10 @@ class FactoryBLoC extends BLoCBase {
         _bottomController.sink.add(true);
       } else {
         Response<Map<String, dynamic>> response;
-        if ((factoryCondition.longitude != null && factoryCondition.longitude > 0) &&
-            (factoryCondition.latitude != null && factoryCondition.latitude > 0) &&
-            (factoryCondition.distance != null && factoryCondition.distance > 0)) {
+        if ((factoryCondition.longitude != null &&
+            factoryCondition.longitude > 0) &&
+            (factoryCondition.latitude != null &&
+                factoryCondition.latitude > 0)) {
           try {
             print(11);
             currentPage++;
@@ -193,7 +193,7 @@ class FactoryBLoC extends BLoCBase {
           } on DioError catch (e) {
             print(e);
           }
-        }else {
+        } else {
           if (requirementCode != null && requirementCode != '') {
             try {
               currentPage++;

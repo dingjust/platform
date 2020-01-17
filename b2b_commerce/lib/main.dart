@@ -36,6 +36,7 @@ void main() async {
   // 初始化,检测是否有用户登录信息
   await UserBLoC.instance.checkLocalUser();
 
+
   //头部状态栏阴影
   TargetPlatform platform = defaultTargetPlatform;
   if (platform != TargetPlatform.iOS) {

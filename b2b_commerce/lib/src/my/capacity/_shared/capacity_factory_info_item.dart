@@ -60,16 +60,20 @@ class CapacityFactoryInfoItem extends StatelessWidget {
             .map((capacity) => LayoutBuilder(
                   builder: (context, constraints) => Container(
                     width: (constraints.maxWidth - horizonSpacing) / 2,
-                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                     margin: EdgeInsets.only(bottom: 5),
                     child: Row(
                       children: <Widget>[
                         Expanded(
                           child: Container(
                               child: Text(
-                                capacity.category == null ? '' : '${capacity.category.parent == null ? '' : capacity.category.parent.name + '-'}'+'${capacity.category.name}',
-                                  overflow: TextOverflow.ellipsis
-                          )),
+                                  capacity.category == null
+                                      ? ''
+                                      : '${capacity.category.parent == null
+                                      ? ''
+                                      : capacity.category.parent.name + '-'}' +
+                                      '${capacity.category.name}',
+                                  overflow: TextOverflow.ellipsis)),
                         ),
                         Container(
                             child: Text(
@@ -126,9 +130,15 @@ class CapacityFactoryInfoItem extends StatelessWidget {
     String dateStr = '';
     if (model.longTerm ?? false) {
       dateStr = '长期有效';
+    } else if (model.dateStartPoint == null) {
+      dateStr = '长期有效';
+    } else if (model.dateStartPoint != null && model.dateEndPoint == null) {
+      dateStr =
+      '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~长期有效';
     } else {
       dateStr =
-          '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~${model?.dateEndPoint?.month}.${model?.dateEndPoint?.day}';
+      '${model?.dateStartPoint?.month}.${model?.dateStartPoint?.day}~${model
+          ?.dateEndPoint?.month}.${model?.dateEndPoint?.day}';
     }
 
     return Row(

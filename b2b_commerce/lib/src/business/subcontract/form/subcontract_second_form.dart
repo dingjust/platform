@@ -1,13 +1,12 @@
 import 'package:b2b_commerce/src/business/subcontract/form/field/subcontract_contact_input.dart';
 import 'package:b2b_commerce/src/business/subcontract/form/field/subcontract_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
-import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 class SubContractSecondForm extends StatefulWidget {
   SubContractSecondForm({
@@ -620,7 +619,7 @@ class _SubContractSecondFormState extends State<SubContractSecondForm> {
     }
     if (widget.formState.model.details.salesMarket == null ||
         widget.formState.model.details.salesMarket.length == 0) {
-      ShowDialogUtil.showValidateMsg(context, '请选择销售市场');
+      ShowDialogUtil.showValidateMsg(context, '请选择质量等级');
       return;
     }
     if (widget.formState.model.details.effectiveDays == -1) {

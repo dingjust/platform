@@ -1,7 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_form.dart';
 import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
@@ -19,9 +19,8 @@ class BrandEntranceSection extends StatelessWidget {
       GridItem(
         title: '发布需求',
         onPressed: () async {
-          RequirementOrderModel requirementOrderModel = RequirementOrderModel(
-              details: RequirementInfoModel(), attachments: []);
-
+          // RequirementOrderModel requirementOrderModel = RequirementOrderModel(
+          //     details: RequirementInfoModel(), attachments: []);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -47,8 +46,10 @@ class BrandEntranceSection extends StatelessWidget {
         title: '推荐工厂',
         onPressed: () async {
           List<CategoryModel> categories =
-          await ProductRepositoryImpl().majorCategories();
-          List<LabelModel> labels = await UserRepositoryImpl().labels();
+          await Provider.of<MajorCategoryState>(context)
+              .getMajorCategories();
+          List<LabelModel> labels =
+          await Provider.of<LabelState>(context).getLabels();
           labels = labels
               .where((label) =>
           label.group == 'FACTORY' || label.group == 'PLATFORM')
@@ -80,8 +81,9 @@ class BrandEntranceSection extends StatelessWidget {
 
   void _jumpToFastFactory(BuildContext context) async {
     List<CategoryModel> categories =
-    await ProductRepositoryImpl().majorCategories();
-    List<LabelModel> labels = await UserRepositoryImpl().labels();
+    await Provider.of<MajorCategoryState>(context).getMajorCategories();
+    List<LabelModel> labels =
+    await Provider.of<LabelState>(context).getLabels();
     List<LabelModel> conditionLabels =
     labels.where((label) => label.name == '快反工厂').toList();
     labels = labels
@@ -209,8 +211,10 @@ class BrandButtonsSection extends StatelessWidget {
         image: B2BImage.nearbyFactory(),
         onPressed: () async {
           List<CategoryModel> categories =
-          await ProductRepositoryImpl().majorCategories();
-          List<LabelModel> labels = await UserRepositoryImpl().labels();
+          await Provider.of<MajorCategoryState>(context)
+              .getMajorCategories();
+          List<LabelModel> labels =
+          await Provider.of<LabelState>(context).getLabels();
           labels = labels
               .where((label) =>
           label.group == 'FACTORY' || label.group == 'PLATFORM')
@@ -246,8 +250,10 @@ class BrandButtonsSection extends StatelessWidget {
         image: B2BImage.qualityFactory(),
         onPressed: () async {
           List<CategoryModel> categories =
-          await ProductRepositoryImpl().majorCategories();
-          List<LabelModel> labels = await UserRepositoryImpl().labels();
+          await Provider.of<MajorCategoryState>(context)
+              .getMajorCategories();
+          List<LabelModel> labels =
+          await Provider.of<LabelState>(context).getLabels();
           List<LabelModel> conditionLabels =
           labels.where((label) => label.name == '优选工厂').toList();
           labels = labels
@@ -319,8 +325,9 @@ class BrandButtonsSection extends StatelessWidget {
 
   void _jumpToQualityFactory(BuildContext context) async {
     List<CategoryModel> categories =
-    await ProductRepositoryImpl().majorCategories();
-    List<LabelModel> labels = await UserRepositoryImpl().labels();
+    await Provider.of<MajorCategoryState>(context).getMajorCategories();
+    List<LabelModel> labels =
+    await Provider.of<LabelState>(context).getLabels();
     List<LabelModel> conditionLabels =
     labels.where((label) => label.name == '优选工厂').toList();
     labels = labels

@@ -2,6 +2,7 @@ import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_deliver_
 import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_reconciliation_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/form/purchase/purchase_shipping_order_form.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -105,6 +106,45 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
               )),
         )
       ];
+    } else if (isMine() &&
+        order.status == PurchaseOrderStatus.PENDING_CONFIRM &&
+        order.cooperator.type == CooperatorType.OFFLINE) {
+      return [
+        Expanded(
+            flex: 1,
+            child: FlatButton(
+              onPressed: () => onCancel(context),
+              child: Text(
+                '取消订单',
+                style: TextStyle(fontSize: 15, color: Colors.red),
+              ),
+            )),
+        Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductionGenerateUniqueCodePage(
+                                      model: order,
+                                    )));
+                      },
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '唯一码',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+              )),
+        )
+      ];
     } else {
       return [];
     }
@@ -190,6 +230,45 @@ class PurchaseDetailBtnGroup extends StatelessWidget {
                       disabledColor: Colors.grey[300],
                       child: Text(
                         '接单',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+              )),
+        )
+      ];
+    } else if (isMine() &&
+        order.status == PurchaseOrderStatus.PENDING_CONFIRM &&
+        order.cooperator.type == CooperatorType.OFFLINE) {
+      return [
+        Expanded(
+            flex: 1,
+            child: FlatButton(
+              onPressed: () => onCancel(context),
+              child: Text(
+                '取消订单',
+                style: TextStyle(fontSize: 15, color: Colors.red),
+              ),
+            )),
+        Expanded(
+          flex: 1,
+          child: Container(
+              height: double.infinity,
+              child: Builder(
+                builder: (BuildContext buttonContext) =>
+                    FlatButton(
+                      color: Color.fromRGBO(255, 214, 12, 1),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductionGenerateUniqueCodePage(
+                                      model: order,
+                                    )));
+                      },
+                      disabledColor: Colors.grey[300],
+                      child: Text(
+                        '唯一码',
                         style: TextStyle(fontSize: 15),
                       ),
                     ),

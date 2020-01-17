@@ -25,7 +25,6 @@ export 'src/capacity/capacity.dart';
 export 'src/msg/msg.dart';
 export 'src/subcontract/subcontract.dart';
 
-
 part 'models.g.dart';
 
 abstract class ItemModel {
@@ -49,7 +48,7 @@ class EnumModel {
 
 ///根据code获取name
 String enumMap(dynamic enumModels, dynamic code) {
-  if(code == null){
+  if (code == null) {
     return '';
   }
   String text = '';
@@ -89,10 +88,11 @@ List<String> enumCodesToNames(List<String> codes, dynamic enumModels) {
 
 //格式选中的枚举（多选）
 String formatEnumSelectsText(List<String> codes, List<EnumModel> enumModels,
-    int count,{String customText}) {
+    int count,
+    {String customText}) {
   String text = '';
-  if(customText != null && (codes == null || codes.length == 0)){
-    return  customText;
+  if (customText != null && (codes == null || codes.length == 0)) {
+    return customText;
   }
 
   if (codes != null) {
@@ -380,9 +380,9 @@ const CooperationModesEnum = <EnumModel>[
 
 ///数字枚举
 const DightEnum = <EnumModel>[
-  EnumModel(1,'一'),
-  EnumModel(2,'二'),
-  EnumModel(3,'三'),
+  EnumModel(1, '一'),
+  EnumModel(2, '二'),
+  EnumModel(3, '三'),
 ];
 
 //生产模式
@@ -391,7 +391,6 @@ const ProductionModesEnum = <EnumModel>[
   EnumModel('HANGING_PRODUCTION_LINE', '吊挂生产流水线'),
   EnumModel('PIPELINE_PRODUCTION_LINE', '扎流生产线'),
 ];
-
 
 //裁剪部
 const CuttingDepartmentsEnum = <EnumModel>[
@@ -451,7 +450,7 @@ const FactoryFreeProofingsEnum = [
   EnumModel('SUPPORTED', '支持'),
   EnumModel('NOT_SUPPORTED', '不支持')
 ];
-//销售市场
+//质量等级
 //const SalesMarketsEnum = [
 //  EnumModel('A_CHAIN', '一线连锁'),
 //  EnumModel('REGIONAL_CHAIN', '区域连锁'),
@@ -483,6 +482,7 @@ const FactoryQualityLevelsEnum = [
   EnumModel('ELECTRONIC_COMMERCE_QUALITY', '电商品质'),
   EnumModel('WHOLESALE_TRADE', '外贸跑量'),
 ];
+
 
 //转包类型
 const SubContractTypeEnum = [

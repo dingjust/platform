@@ -101,6 +101,9 @@
     mixins: [],
     computed: {
       cooperatorName: function () {
+        if(this.order.cooperator==null){
+          return '';
+        }
         if (this.order.cooperator.type == 'ONLINE') {
           return this.order.cooperator.partner.name;
         } else {

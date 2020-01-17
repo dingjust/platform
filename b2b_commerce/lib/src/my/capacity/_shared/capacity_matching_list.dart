@@ -46,13 +46,16 @@ class CapacityMatchingListView extends StatelessWidget {
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             children: [
-              Column(
+              capacityMatchingState.factoryCapacityModels.isNotEmpty
+                  ? Column(
                 children: capacityMatchingState.factoryCapacityModels
-                    .map((model) => CapacityMatchingItem(
-                          model: model,
-                        ))
+                    .map((model) =>
+                    CapacityMatchingItem(
+                      model: model,
+                    ))
                     .toList(),
-              ),
+              )
+                  : _NoDataInfoRow(),
               ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
                 opacity: capacityMatchingState.loadingMore ? 1.0 : 0,
               ),
@@ -75,5 +78,24 @@ class CapacityMatchingListView extends StatelessWidget {
             ),
           )
         : Container();
+  }
+}
+
+class _NoDataInfoRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 50),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.lightbulb_outline,
+            color: Colors.orange,
+          ),
+          Text('暂无相关数据,您可以更换条件试试')
+        ],
+      ),
+    );
   }
 }

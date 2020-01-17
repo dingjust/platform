@@ -109,6 +109,8 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
   TextEditingController textEditingController = TextEditingController();
   AMapLocation gpsLocation;
   bool gpsLock = false;
+  String oldCity;
+  Geocode changeGeo;
 
   @override
   void initState() {
@@ -116,42 +118,76 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
     super.initState();
   }
 
-  // var _controller = StreamController<AmapAroundResponse>();
+  // var _controller = StreamController<AmapAroundResponse>();u
 
   // // Stream<UserModel> get stream => _controller.stream;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('选择定位地址'),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: Consumer<AmapState>(
-          builder: (context, state, _) =>
-              Container(
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    _buildSearchRow(state),
-                    Divider(),
-                    _buildLocationRow(),
-                    Divider(),
-                    _buildAroundLabelRow(),
-                    textEditingController.text != ''
-                        ? Expanded(
-                      flex: 1,
-                      child: _buildSuggestionsListView(context),
-                    )
-                        : Expanded(
-                      flex: 1,
-                      child: _buildAroundListView(context, state),
-                    )
-                  ],
-                ),
+    if (oldCity == null) {
+      oldCity = Provider
+          .of<AmapState>(context)
+          .city;
+    }
+    return WillPopScope(
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text('选择定位地址'),
+            centerTitle: true,
+            elevation: 0,
           ),
-        ));
+          body: Consumer<AmapState>(
+            builder: (context, state, _) =>
+                Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                      _buildSearchRow(state),
+                      Divider(),
+                      _buildLocationRow(),
+                      Divider(),
+                      _buildAroundLabelRow(),
+                      textEditingController.text != ''
+                          ? Expanded(
+                        flex: 1,
+                        child: _buildSuggestionsListView(context),
+                      )
+                          : Expanded(
+                        flex: 1,
+                        child: _buildAroundListView(context, state),
+                      )
+                    ],
+                  ),
+                ),
+          )),
+      onWillPop: () {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '请选择具体定位地址',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '确定',
+                cancelButtonText: '忽略',
+                dialogHeight: 180,
+                cancelAction: () {
+                  if (changeGeo == null) {
+                    Provider.of<AmapState>(context).setCity(oldCity);
+                  }
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            });
+        return Future.value(false);
+      },
+    );
   }
 
   Widget _buildAroundLabelRow() {
@@ -207,6 +243,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                           aOIName: response.geocodes.first.city,
                           longitude: double.parse(locationArray[0]),
                           latitude: double.parse(locationArray[1]));
+                      changeGeo = response.geocodes.first;
                     }
                   });
                 } catch (e) {
@@ -288,6 +325,13 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                         textEditingController.text = tip.name;
                       },
                       onTap: () {
+                        //修改state
+                        List<String> locationArray = tip.location.split(',');
+                        //设置定位信息
+                        amapState.setAMapLocation(
+                            aOIName: tip.name,
+                            longitude: double.parse(locationArray[0]),
+                            latitude: double.parse(locationArray[1]));
                         Navigator.of(context).pop(tip);
                       },
                     ),
@@ -320,6 +364,12 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                         textEditingController.text = pois.name;
                       },
                       onTap: () {
+                        List<String> locationArray = pois.location.split(',');
+                        //设置定位信息
+                        amapState.setAMapLocation(
+                            aOIName: pois.name,
+                            longitude: double.parse(locationArray[0]),
+                            latitude: double.parse(locationArray[1]));
                         Navigator.of(context).pop(pois);
                       },
                     ),
@@ -378,6 +428,7 @@ class _AmapSearchPageState extends State<AmapSearchPage> {
                   GestureDetector(
                     onTap: () {
                       getGpsLocation(state);
+                      changeGeo = Geocode.fromJson({});
                     },
                     child: Container(
                       child: Row(

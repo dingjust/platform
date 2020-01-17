@@ -618,7 +618,7 @@ class RequirementInfoModel extends ItemModel {
   //产品的Code
   String productCode;
 
-  //销售市场
+  //质量等级
   List<String> salesMarket;
 
   //发布方式

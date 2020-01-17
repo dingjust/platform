@@ -21,7 +21,8 @@ dependencies:
   services:
     path: ../services/
 
-  json_annotation: ^2.0.0
+  # json_annotation: ^2.0.0
+  json_annotation: ^3.0.1
   flutter_redux: ^0.5.2
   shared_preferences: ^0.4.2
   path_provider: ^0.5.0+1
@@ -31,7 +32,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^1.0.0
-  json_serializable: ^2.0.0
+  # json_serializable: ^2.0.0
+  json_serializable: ^3.2.5
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

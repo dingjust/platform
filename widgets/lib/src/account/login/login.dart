@@ -38,6 +38,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _smsCaptchaController = TextEditingController();
   FocusNode _phoneFocusNode = FocusNode();
+  FocusNode _passwordFocusNode = FocusNode();
+  FocusNode _smsFocusNode = FocusNode();
 
   bool _isRemember = true;
   bool _isPasswordHide = true;
@@ -125,7 +127,17 @@ class _LoginPageState extends State<LoginPage> {
             onTap: () {
               setState(() {
                 _isPasswordLogin = !_isPasswordLogin;
+                if (_isPasswordLogin) {
+                  FocusScope.of(context).requestFocus(_passwordFocusNode);
+                } else {
+                  FocusScope.of(context).requestFocus(_smsFocusNode);
+                }
               });
+              if (_isPasswordLogin) {
+                _passwordFocusNode.requestFocus();
+              } else {
+                _smsFocusNode.requestFocus();
+              }
             },
             child: Text(
               _isPasswordLogin ? '验证码登录' : '密码登录',
@@ -214,6 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   field: TextField(
                     autofocus: false,
+                    focusNode: _passwordFocusNode,
                     obscureText: _isPasswordHide,
                     onChanged: (value) {
                       formValidate();
@@ -255,6 +268,7 @@ class _LoginPageState extends State<LoginPage> {
                     inputFormatters: <TextInputFormatter>[
                       WhitelistingTextInputFormatter.digitsOnly,
                     ],
+                    focusNode: _smsFocusNode,
                     controller: _smsCaptchaController,
                     decoration: InputDecoration(
                         hintText: '请输入', border: InputBorder.none),
@@ -520,7 +534,7 @@ class _LoginPageState extends State<LoginPage> {
       (_scaffoldKey.currentState as ScaffoldState).showSnackBar(
         SnackBar(
           content: Text('${widget.snackBarMessage}'),
-          duration: Duration(seconds: 1),
+          duration: Duration(seconds: 3),
         ),
       );
     }

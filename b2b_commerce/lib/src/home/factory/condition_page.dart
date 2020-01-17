@@ -70,6 +70,8 @@ class _ConditionPageState extends State<ConditionPage> {
                   ),
                   _buildLabel('工厂属性'),
                   _buildLabelsBlock(),
+                  _buildLabel('质量等级'),
+                  _buildQualityBlock(),
                 ],
               )),
           persistentFooterButtons: <Widget>[
@@ -101,7 +103,8 @@ class _ConditionPageState extends State<ConditionPage> {
                         widget.factoryCondition.categories = null;
                         widget.factoryCondition.starLevel = 0;
                         widget.factoryCondition.productiveOrientations = null;
-                        widget.factoryCondition.labels =  new List<LabelModel>();
+                        widget.factoryCondition.labels = new List<LabelModel>();
+                        widget.factoryCondition.qualityLevels = [];
                       });
                     }),
               ),
@@ -156,11 +159,11 @@ class _ConditionPageState extends State<ConditionPage> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => CategorySelectPage(
-                          minCategorySelect:
-                              widget.factoryCondition.adeptAtCategories,
-                          categories: categories,
-                          categoryActionType: CategoryActionType.none,
-                        ),
+                      minCategorySelect:
+                      widget.factoryCondition.adeptAtCategories,
+                      categories: categories,
+                      categoryActionType: CategoryActionType.none,
+                    ),
                   ),
                 );
               });
@@ -197,13 +200,10 @@ class _ConditionPageState extends State<ConditionPage> {
           (BuildContext context, int index) {
             //创建子widget
             return ChoiceChip(
-              label:Container(
-                child:  Text(
+              label: Container(
+                child: Text(
                     '${PopulationScaleLocalizedMap[PopulationScale.values[index]]}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black
-                    )),
+                    style: TextStyle(fontSize: 14, color: Colors.black)),
               ),
               selectedColor: Color.fromRGBO(255, 214, 12, 1),
               selected: widget.factoryCondition.populationScale ==
@@ -227,82 +227,131 @@ class _ConditionPageState extends State<ConditionPage> {
   }
 
   Widget _buildCooperationBlock() {
-    return SliverPadding(
-      padding: EdgeInsets.all(10),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, //Grid按两列显示
-          mainAxisSpacing: 5.0,
-          crossAxisSpacing: 10.0,
-          childAspectRatio: 2.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            //创建子widget
-            return ChoiceChip(
-              label: Text(
-                  '${CooperationModesLocalizedMap[CooperationModes.values[index]]}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                  )),
-              selectedColor: Color.fromRGBO(255, 214, 12, 1),
-              selected: widget.factoryCondition.cooperationModes
-                  .contains(CooperationModes.values[index]),
-              onSelected: ((value) {
-                setState(() {
-                  if (value) {
-                    widget.factoryCondition.cooperationModes
-                        .add(CooperationModes.values[index]);
-                  } else {
-                    widget.factoryCondition.cooperationModes
-                        .remove(CooperationModes.values[index]);
-                  }
-                });
-              }),
-            );
-          },
-          childCount: CooperationModes.values.length,
-        ),
+    return _Selector(
+      delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+          //创建子widget
+          return Container(
+              decoration: BoxDecoration(
+                  color: widget.factoryCondition.cooperationModes != null &&
+                      widget.factoryCondition.cooperationModes
+                          .contains(CooperationModes.values[index])
+                      ? Color.fromRGBO(255, 214, 12, 1)
+                      : Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20)),
+              child: InkWell(
+                child: Center(
+                  child: Text(
+                    '${CooperationModesLocalizedMap[CooperationModes
+                        .values[index]]}',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    if (widget.factoryCondition.cooperationModes != null &&
+                        widget.factoryCondition.cooperationModes
+                            .contains(CooperationModes.values[index])) {
+                      widget.factoryCondition.cooperationModes
+                          .remove(CooperationModes.values[index]);
+                    } else {
+                      if (widget.factoryCondition.cooperationModes == null) {
+                        widget.factoryCondition.cooperationModes = [];
+                      }
+                      widget.factoryCondition.cooperationModes
+                          .add(CooperationModes.values[index]);
+                    }
+                  });
+                },
+              ));
+        },
+        childCount: CooperationModes.values?.length ?? 0,
       ),
     );
   }
 
   Widget _buildLabelsBlock() {
-    return SliverPadding(
-      padding: EdgeInsets.all(10),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, //Grid按两列显示
-          mainAxisSpacing: 5.0,
-          crossAxisSpacing: 10.0,
-          childAspectRatio: 2.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            //创建子widget
-            return ChoiceChip(
-              label: Text('${widget.labels[index].name}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black
-                  )),
-              selectedColor: Color.fromRGBO(255, 214, 12, 1),
-              selected:
-                  widget.factoryCondition.labels.contains(widget.labels[index]),
-              onSelected: ((value) {
-                setState(() {
-                  if (value) {
-                    widget.factoryCondition.labels.add(widget.labels[index]);
-                  } else {
-                    widget.factoryCondition.labels.remove(widget.labels[index]);
-                  }
-                });
-              }),
-            );
-          },
-          childCount: widget.labels?.length ?? 0,
-        ),
+    return _Selector(
+      delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+          //创建子widget
+          return Container(
+              decoration: BoxDecoration(
+                  color: widget.factoryCondition.labels != null &&
+                      widget.factoryCondition.labels
+                          .contains(widget.labels[index])
+                      ? Color.fromRGBO(255, 214, 12, 1)
+                      : Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20)),
+              child: InkWell(
+                child: Center(
+                  child: Text(
+                    '${widget.labels[index].name}',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    if (widget.factoryCondition.labels != null &&
+                        widget.factoryCondition.labels
+                            .contains(widget.labels[index])) {
+                      widget.factoryCondition.labels
+                          .remove(widget.labels[index]);
+                    } else {
+                      if (widget.factoryCondition.labels == null) {
+                        widget.factoryCondition.labels = [];
+                      }
+                      widget.factoryCondition.labels
+                          .add((widget.labels[index]));
+                    }
+                  });
+                },
+              ));
+        },
+        childCount: widget.labels?.length ?? 0,
+      ),
+    );
+  }
+
+  Widget _buildQualityBlock() {
+    return _Selector(
+      delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+          //创建子widget
+          return Container(
+              decoration: BoxDecoration(
+                  color: widget.factoryCondition.qualityLevels != null &&
+                      widget.factoryCondition.qualityLevels
+                          .contains(FactoryQualityLevelsEnum[index].code)
+                      ? Color.fromRGBO(255, 214, 12, 1)
+                      : Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20)),
+              child: InkWell(
+                child: Center(
+                  child: Text(
+                    '${FactoryQualityLevelsEnum[index].name}',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    if (widget.factoryCondition.qualityLevels != null &&
+                        widget.factoryCondition.qualityLevels
+                            .contains(FactoryQualityLevelsEnum[index].code)) {
+                      widget.factoryCondition.qualityLevels
+                          .remove(FactoryQualityLevelsEnum[index].code);
+                    } else {
+                      if (widget.factoryCondition.qualityLevels == null) {
+                        widget.factoryCondition.qualityLevels = [];
+                      }
+                      widget.factoryCondition.qualityLevels
+                          .add((FactoryQualityLevelsEnum[index].code));
+                    }
+                  });
+                },
+              ));
+        },
+        childCount: FactoryQualityLevelsEnum?.length ?? 0,
       ),
     );
   }
@@ -317,9 +366,9 @@ class _ConditionPageState extends State<ConditionPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => RegionSelectPage(
-                        RegionRepositoryImpl(),
-                        onlySelectRegion: true,
-                      ),
+                    RegionRepositoryImpl(),
+                    onlySelectRegion: true,
+                  ),
                 ),
               );
 
@@ -367,41 +416,44 @@ class _ConditionPageState extends State<ConditionPage> {
   }
 
   Widget _buildMajorCategoryBlock() {
-    return SliverPadding(
-      padding: EdgeInsets.all(10),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, //Grid按两列显示
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          childAspectRatio: 2.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            //创建子widget
-            return ChoiceChip(
-              label: Text('${widget.categories[index].name}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                  )),
-              selectedColor: Color.fromRGBO(255, 214, 12, 1),
-              selected: widget.factoryCondition.categories ==
-                  widget.categories[index].code,
-              onSelected: ((value) {
-                setState(() {
-                  if (value) {
-                    widget.factoryCondition.categories =
-                        widget.categories[index].code;
-                  } else {
-                    widget.factoryCondition.categories = null;
-                  }
-                });
-              }),
-            );
-          },
-          childCount: widget.categories?.length ?? 0,
-        ),
+    return _Selector(
+      delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+          //创建子widget
+          return Container(
+              decoration: BoxDecoration(
+                  color: widget.factoryCondition.categories != null &&
+                      widget.factoryCondition.categories
+                          .contains(widget.categories[index].code)
+                      ? Color.fromRGBO(255, 214, 12, 1)
+                      : Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20)),
+              child: InkWell(
+                child: Center(
+                  child: Text(
+                    '${widget.categories[index].name}',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    if (widget.factoryCondition.categories != null &&
+                        widget.factoryCondition.categories
+                            .contains(widget.categories[index].code)) {
+                      widget.factoryCondition.categories
+                          .remove(widget.categories[index].code);
+                    } else {
+                      if (widget.factoryCondition.categories == null) {
+                        widget.factoryCondition.categories = [];
+                      }
+                      widget.factoryCondition.categories
+                          .add(widget.categories[index].code);
+                    }
+                  });
+                },
+              ));
+        },
+        childCount: widget.categories?.length ?? 0,
       ),
     );
   }
@@ -492,6 +544,27 @@ class ConditionBlock extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class _Selector extends StatelessWidget {
+  final SliverChildDelegate delegate;
+
+  const _Selector({Key key, this.delegate}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: EdgeInsets.all(10),
+      sliver: SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3, //Grid按两列显示
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: 3.0,
+          ),
+          delegate: delegate),
     );
   }
 }

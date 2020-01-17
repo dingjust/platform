@@ -63,6 +63,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 )),
             _InputRow(
+                label: '账号',
+                child: Text(
+                  '${UserBLoC.instance.currentUser.uid}',
+                  style: TextStyle(color: Colors.grey),
+                )),
+            _InputRow(
               label: '昵称',
               child: TextField(
                 controller: _nameTextEditingController,

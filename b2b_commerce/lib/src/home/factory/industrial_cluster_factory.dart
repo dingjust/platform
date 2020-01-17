@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-import './factory_list.dart';
+import 'factory_page.dart';
 
 class IndustrialClusterPage extends StatefulWidget {
   IndustrialClusterPage({Key key, this.labels,this.factoryLabels}) : super(key: key);
