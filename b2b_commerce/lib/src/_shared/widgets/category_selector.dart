@@ -46,20 +46,32 @@ class _CategorySelectorState extends State<CategorySelector> {
                               },
                               child: Container(
                                   height: 40,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
                                   color: _selectMajorCategory?.code ==
                                           majorCategory.code
                                       ? Colors.white
                                       : Colors.grey[200],
-                                  alignment: Alignment.center,
-                                  child: _selectMajorCategory?.code ==
-                                          majorCategory.code
-                                      ? Text(
-                                          '${majorCategory.name}',
-                                          style: TextStyle(
-                                            color: Colors.orange,
-                                          ),
-                                        )
-                                      : Text('${majorCategory.name}')),
+                                  // alignment: Alignment.center,
+                                  child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: majorCategory.name
+                                          .split('')
+                                          .map(
+                                            (str) =>
+                                            Text(
+                                              '${str}',
+                                              style: TextStyle(
+                                                color: _selectMajorCategory
+                                                    ?.code ==
+                                                    majorCategory.code
+                                                    ? Colors.orange
+                                                    : Colors.black,
+                                              ),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                      )
+                                          .toList())),
                             );
                           }).toList(),
                         ),

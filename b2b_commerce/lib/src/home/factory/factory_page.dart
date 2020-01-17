@@ -143,76 +143,7 @@ class _FactoryPageState extends State<FactoryPage> {
             brightness: Brightness.light,
             automaticallyImplyLeading: false,
             elevation: 0.5,
-            title: Row(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    child: Icon(
-                      Icons.keyboard_arrow_left,
-                      size: 32,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      String jsonStr = await LocalStorage.get(
-                          GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
-                      if (jsonStr != null && jsonStr != '') {
-                        List<dynamic> list = json.decode(jsonStr);
-                        historyKeywords =
-                            list.map((item) => item as String).toList();
-                      } else {
-                        historyKeywords = [];
-                      }
-                      String result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SearchModelPage(
-                            searchModel: SearchModel(
-                              historyKeywords: historyKeywords,
-                              keyword: factoryCondition.keyword,
-                              searchModelType: SearchModelType.FACTORY,
-                              factoryCondition: factoryCondition,
-                              route: GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-                            ),
-                          ),
-                        ),
-                      );
-//                      String keyword = await showSearch(
-//                        context: context,
-//                        delegate: FactorySearchDelegate(),
-//                      );
-//                      factoryCondition.setKeyword(keyword);
-//                      FactoryBLoC.instance.clear();
-                    },
-                    child: Container(
-                      height: 28,
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey[300], width: 0.5),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          const Icon(B2BIcons.search,
-                              color: Colors.grey, size: 18),
-                          Text(
-                            '   ${generateTitle()}',
-                            style: const TextStyle(
-                                color: Colors.grey, fontSize: 16),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            title: _buildTitle(),
             actions: <Widget>[
               GestureDetector(
                 child: widget.route == '就近找厂'
@@ -495,6 +426,71 @@ class _FactoryPageState extends State<FactoryPage> {
       }
     });
     FactoryBLoC.instance.clear();
+  }
+
+  Widget _buildTitle() {
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            child: Icon(
+              Icons.keyboard_arrow_left,
+              size: 32,
+            ),
+          ),
+        ),
+        Expanded(
+          child: GestureDetector(
+            onTap: () async {
+              String jsonStr = await LocalStorage.get(
+                  GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY);
+              if (jsonStr != null && jsonStr != '') {
+                List<dynamic> list = json.decode(jsonStr);
+                historyKeywords = list.map((item) => item as String).toList();
+              } else {
+                historyKeywords = [];
+              }
+              String result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      SearchModelPage(
+                        searchModel: SearchModel(
+                          historyKeywords: historyKeywords,
+                          keyword: factoryCondition.keyword,
+                          searchModelType: SearchModelType.FACTORY,
+                          factoryCondition: factoryCondition,
+                          route: GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
+                        ),
+                      ),
+                ),
+              );
+            },
+            child: Container(
+              height: 28,
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.grey[300], width: 0.5),
+              ),
+              child: Row(
+                children: <Widget>[
+                  const Icon(B2BIcons.search, color: Colors.grey, size: 18),
+                  Text(
+                    '   ${generateTitle()}',
+                    style: const TextStyle(color: Colors.grey, fontSize: 16),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 

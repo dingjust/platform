@@ -54,19 +54,15 @@ class OrderByProductBLoc extends BLoCBase {
       reset();
       Response<Map<String, dynamic>> response;
       try {
-        response = await http$.post(ProductApis.factoriesApparel, data: {
-          "categories": productCondition.categories
-              .map((category) => category.code)
-              .toList(),
-          "keyword": productCondition.keyword ?? '',
-          'approvalStatuses': ['approved'],
-        }, queryParameters: {
-          'page': currentPage,
-          'size': pageSize,
-          'sort': productCondition.sortCondition != null
-              ? '${productCondition.sortCondition},${productCondition.sort}'
-              : ''
-        });
+        response = await http$.post(ProductApis.factoriesApparel,
+            data: productCondition.toDataJson(),
+            queryParameters: {
+              'page': currentPage,
+              'size': pageSize,
+              'sort': productCondition.sortCondition != null
+                  ? '${productCondition.sortCondition},${productCondition.sort}'
+                  : ''
+            });
       } on DioError catch (e) {
         print(e);
       }
@@ -120,16 +116,9 @@ class OrderByProductBLoc extends BLoCBase {
         Response<Map<String, dynamic>> response;
         try {
           currentPage++;
-          response = await http$.post(ProductApis.factoriesApparel, data: {
-            "categories": productCondition.categories
-                .map((category) => category.code)
-                .toList(),
-            "keyword": productCondition.keyword ?? '',
-            'approvalStatuses': ['approved'],
-          }, queryParameters: {
-            'page': currentPage,
-            'size': pageSize
-          });
+          response = await http$.post(ProductApis.factoriesApparel,
+              data: productCondition.toDataJson(),
+              queryParameters: {'page': currentPage, 'size': pageSize});
         } on DioError catch (e) {
           print(e);
         }
@@ -188,7 +177,7 @@ class OrderByProductBLoc extends BLoCBase {
     _controller.sink.add(_products);
   }
 
-  clearProducts(){
+  clearProducts() {
     _controller.sink.add(null);
   }
 
@@ -216,6 +205,43 @@ class ProductCondition {
 
   String sort;
 
+  ///风格
+  List<String> styles;
+
+  double minSteppedPrice;
+
+  double maxSteppedPrice;
+
+  ///省
+  RegionModel region;
+
+  ///市
+  List<CityModel> cities;
+
   ProductCondition(this.categories, this.keyword,
-      {this.sortCondition, this.sort});
+      {this.sortCondition,
+        this.sort,
+        this.styles,
+        this.minSteppedPrice,
+        this.maxSteppedPrice,
+        this.region,
+        this.cities});
+
+  Map<String, dynamic> toDataJson() {
+    var result = {
+      "categories": categories.map((category) => category.code).toList(),
+      "keyword": keyword ?? '',
+      'approvalStatuses': ['approved'],
+      'attributes': styles ?? [],
+      'regions': region?.isocode ?? '',
+      'cities': cities != null ? cities.map((city) => city.code).toList() : []
+    };
+    if (minSteppedPrice != null) {
+      result['minSteppedPrice'] = minSteppedPrice;
+    }
+    if (maxSteppedPrice != null) {
+      result['maxSteppedPrice'] = maxSteppedPrice;
+    }
+    return result;
+  }
 }
