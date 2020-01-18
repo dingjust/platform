@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_alipay/flutter_alipay.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
@@ -607,7 +608,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void aliPay() async {
-    AlipayResponse aliResponse = await AlipayServiceImpl.instance
+    AlipayResult aliResponse = await AlipayServiceImpl.instance
         .pay(widget.order.code, paymentFor: widget.paymentFor);
     //支付成功
     if (aliResponse.resultStatus != null &&
@@ -665,7 +666,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPaymentSucess() {
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
     //成功
     showDialog<void>(
       context: context,
