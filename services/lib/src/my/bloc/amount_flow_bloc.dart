@@ -54,10 +54,12 @@ class AmountFlowBLoC extends BLoCBase {
   getData({DateTime date}) async {
 //    amountFlows.clear();
     //若没有数据则查询
-    if (amountFlowResponse.content.isEmpty) {
+    if (amountFlowResponse == null || amountFlowResponse.content.isEmpty) {
       // TODO: 分页拿数据，response.data;
       amountFlowResponse = await AmountFlowRepository().list();
-      amountFlows.addAll(amountFlowResponse.content);
+      if(amountFlowResponse != null){
+        amountFlows.addAll(amountFlowResponse.content);
+      }
     }
     _controller.sink.add(amountFlows);
   }

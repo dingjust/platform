@@ -1246,7 +1246,7 @@ class QuoteModel extends AbstractOrderModel {
   static Map<String, dynamic> toJson(QuoteModel model) =>
       _$QuoteModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
+  static DateTime _dateTimefromMilliseconds(int date) => date == null ? date :
       DateTime.fromMillisecondsSinceEpoch(date);
 
   static List<Map<String, dynamic>> _attachmentsToJson(

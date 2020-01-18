@@ -144,6 +144,7 @@ class ProductionListView extends StatelessWidget {
                 stream: bloc.purchaseStream,
                 builder: (BuildContext context,
                     AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
+                  print(snapshot.data);
                   if (snapshot.data == null) {
                     bloc.filterByKeyword(keyword);
                     return ProgressIndicatorFactory

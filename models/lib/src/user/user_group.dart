@@ -440,9 +440,7 @@ class BrandModel extends B2BUnitModel {
 
   static List<Map<String, dynamic>> _categorysToJson(
           List<CategoryModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => CategoryModel.toJson(model)).toList();
+      models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -638,29 +636,21 @@ class FactoryModel extends B2BUnitModel {
 
   static List<Map<String, dynamic>> _categoriesToJson(
           List<CategoryModel> categories) =>
-      categories == null
-          ? null
-          : categories
-          .map((category) => CategoryModel.toJson(category))
-          .toList();
+      categories.map((category) => CategoryModel.toJson(category)).toList();
 
   static List<Map<String, dynamic>> _capacitiesToJson(
           List<FactoryCapacityModel> capacities) =>
-      capacities == null
-          ? null
-          : capacities
+      capacities
           .map((capacity) => FactoryCapacityModel.toJson(capacity))
           .toList();
 
   static List<Map<String, dynamic>> _productToJson(
           List<ProductModel> products) =>
-      products == null
-          ? null
-          : products.map((product) => ProductModel.toJson(product)).toList();
+      products.map((product) => ProductModel.toJson(product)).toList();
 
   static Map<String, dynamic> _industrialClusterToJson(
           IndustrialClusterModel model) =>
-      model == null ? null : IndustrialClusterModel.toJson(model);
+      IndustrialClusterModel.toJson(model);
 }
 
 @JsonSerializable()

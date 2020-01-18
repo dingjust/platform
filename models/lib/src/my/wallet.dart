@@ -189,8 +189,10 @@ class BillModel extends ItemModel {
   ///交易单号
   String code;
 
-  ///公司
-  CompanyModel company;
+  ///付款方公司
+  CompanyModel billTo;
+  ///收款方公司
+  CompanyModel billFrom;
 
   ///账户
   BankCardModel account;
@@ -201,17 +203,23 @@ class BillModel extends ItemModel {
   ///流水来源
   FlowSource flowSource;
 
-  ///资金流水类型
-  AmountFlowType amountFlowType;
-
   ///资金状态
   AmountStatus amountStatus;
+
+  ///资金流水类型
+  AmountFlowType amountFlowType;
 
   ///描述
   String description;
 
   ///备注
   String remark;
+
+  ///付款方备注
+  String billToRemarks;
+
+  ///收款方备注
+  String billFromRemarks;
 
   ///平台备注
   String platformRemark;
@@ -229,14 +237,17 @@ class BillModel extends ItemModel {
 
   BillModel({this.id,
     this.code,
-    this.company,
+    this.billTo,
+    this.billFrom,
     this.account,
     this.amount,
     this.flowSource,
-    this.amountFlowType,
     this.amountStatus,
+    this.amountFlowType,
     this.description,
     this.remark,
+    this.billToRemarks,
+    this.billFromRemarks,
     this.platformRemark,
     this.creationtime,
     this.cashCompletionTime,
@@ -248,8 +259,8 @@ class BillModel extends ItemModel {
   static Map<String, dynamic> toJson(BillModel model) =>
       _$BillModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) =>
-      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
+  static DateTime _dateTimefromMilliseconds(int date) => date == null ? date :
+      DateTime.fromMillisecondsSinceEpoch(date);
 
   static int _dateTimetoMilliseconds(DateTime date) =>
       date == null ? null : date.millisecondsSinceEpoch;
@@ -257,7 +268,7 @@ class BillModel extends ItemModel {
 
 const FlowSourceLocalizedMap = {
   FlowSource.CASH_OUT: '提现',
-  FlowSource.PROOFING: '收款',
-  FlowSource.PURCHASE_BALANCE: '收款',
-  FlowSource.PURCHASE_DEPOSIT: '收款',
+  FlowSource.PROOFING: '打样单',
+  FlowSource.PURCHASE_BALANCE: '生产单定金',
+  FlowSource.PURCHASE_DEPOSIT: '生产单尾款',
 };
