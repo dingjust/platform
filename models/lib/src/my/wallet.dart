@@ -60,10 +60,10 @@ class AmountFlowModel extends ItemModel {
       _$AmountFlowModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static int _dateTimetoMilliseconds(DateTime date) =>
-      date.millisecondsSinceEpoch;
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 ///账户流水类型
@@ -176,10 +176,10 @@ class BankCardModel extends ItemModel {
       _$BankCardModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static int _dateTimetoMilliseconds(DateTime date) =>
-      date.millisecondsSinceEpoch;
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 @JsonSerializable()
@@ -249,10 +249,10 @@ class BillModel extends ItemModel {
       _$BillModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static int _dateTimetoMilliseconds(DateTime date) =>
-      date.millisecondsSinceEpoch;
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 const FlowSourceLocalizedMap = {

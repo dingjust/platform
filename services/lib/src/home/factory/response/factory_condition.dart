@@ -79,10 +79,14 @@ class FactoryCondition {
 
   static Map<String, dynamic> _regionToJson(
           RegionModel productiveOrientations) =>
-      RegionModel.toJson(productiveOrientations);
+      productiveOrientations == null
+          ? null
+          : RegionModel.toJson(productiveOrientations);
 
   static List<Map<String, dynamic>> _citiesToJson(List<CityModel> models) =>
-      models.map((model) => CityModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => CityModel.toJson(model)).toList();
 
   Map<String, dynamic> toDataJson() {
     List<String> adeptAtCategoryArray = [];

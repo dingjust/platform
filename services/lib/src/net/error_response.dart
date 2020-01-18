@@ -16,7 +16,9 @@ class ErrorResponse {
       _$ErrorResponseToJson(model);
 
   static List<Map<String, dynamic>> _errorsToJson(List<Error> errors) =>
-      errors.map((error) => Error.toJson(error)).toList();
+      errors == null
+          ? null
+          : errors.map((error) => Error.toJson(error)).toList();
 }
 
 @JsonSerializable()

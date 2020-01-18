@@ -92,7 +92,9 @@ class UserModel extends PrincipalModel {
       _$UserModelToJson(model);
 
   static List<Map<String, dynamic>> _rolesToJson(List<RoleModel> models) =>
-      models.map((model) => RoleModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => RoleModel.toJson(model)).toList();
 }
 
 /// 客户
@@ -158,7 +160,7 @@ class B2BCustomerModel extends CustomerModel {
       _$B2BCustomerModelToJson(model);
 
   static Map<String, dynamic> _b2bUnitToJson(B2BUnitModel model) =>
-      B2BUnitModel.toJson(model);
+      model == null ? null : B2BUnitModel.toJson(model);
 }
 
 /// 地址
@@ -208,15 +210,18 @@ class AddressModel extends ItemModel {
       addressToJson(model);
 
   static Map<String, dynamic> _regionToJson(RegionModel model) =>
-      RegionModel.toJson(model);
+      model == null ? null : RegionModel.toJson(model);
 
   static Map<String, dynamic> _cityToJson(CityModel model) =>
-      CityModel.toJson(model);
+      model == null ? null : CityModel.toJson(model);
 
   static Map<String, dynamic> _cityDistrictToJson(DistrictModel model) =>
-      DistrictModel.toJson(model);
+      model == null ? null : DistrictModel.toJson(model);
 
   static Map<String, dynamic> addressToJson(AddressModel model) {
+    if (model == null) {
+      return null;
+    }
     return {
       'id': model.id,
       'fullname': model.fullname,
@@ -278,7 +283,7 @@ class CityModel extends ItemModel {
       _$CityModelToJson(model);
 
   static Map<String, dynamic> _regionToJson(RegionModel model) =>
-      RegionModel.toJson(model);
+      model == null ? null : RegionModel.toJson(model);
 }
 
 /// 地区
@@ -298,7 +303,7 @@ class DistrictModel extends ItemModel {
       _$DistrictModelToJson(model);
 
   static Map<String, dynamic> _cityToJson(CityModel model) =>
-      CityModel.toJson(model);
+      model == null ? null : CityModel.toJson(model);
 }
 
 ///角色
@@ -383,7 +388,7 @@ class ContractModel extends ItemModel {
       _$ContractModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 enum ContractStatus {
@@ -495,7 +500,7 @@ class SearchResultModel {
       _$SearchResultModelToJson(model);
 
   static Map<String, dynamic> _mediaModelToJson(MediaModel model) =>
-      MediaModel.toJson(model);
+      model == null ? null : MediaModel.toJson(model);
 }
 
 enum AgreementTemplateType {
@@ -551,7 +556,7 @@ class ContractTemplateModel {
       _$ContractTemplateModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 @JsonSerializable()
@@ -575,10 +580,10 @@ class SealModel {
       _$SealModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static Map<String, dynamic> _mediaToJson(MediaModel model) =>
-      MediaModel.toJson(model);
+      model == null ? null : MediaModel.toJson(model);
 }
 
 @JsonSerializable()
@@ -615,5 +620,5 @@ class ContractCallbackModel {
       _$ContractCallbackModelToJson(model);
 
   static Map<String, dynamic> _contractToJson(ContractModel model) =>
-      ContractModel.toJson(model);
+      model == null ? null : ContractModel.toJson(model);
 }

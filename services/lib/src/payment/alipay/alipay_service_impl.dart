@@ -1,5 +1,7 @@
 import 'package:alipay_me/alipay_me.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:services/src/payment/alipay/alipay_constants.dart';
 import 'package:services/src/payment/alipay/alipay_response.dart';
 import 'package:services/src/payment/alipay/alipay_service.dart';
@@ -39,7 +41,22 @@ class AlipayServiceImpl implements AlipayService {
     String payInfo =
         await AlipayHelper.prepay(orderCode, paymentFor: paymentFor);
     if (payInfo != null) {
-      Map payResponse = await AlipayMe.pay(payInfo,urlScheme: GlobalConfigs.ALIPAY_URL_SCHEME);
+      Map payResponse;
+      //IOS  需 urlScheme
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        payResponse = await AlipayMe.pay(payInfo,
+            urlScheme: GlobalConfigs.ALIPAY_URL_SCHEME);
+      } else {
+        print('====================');
+        // Android无需urlScheme
+        // payResponse = await
+        AlipayMe.pay(
+          payInfo,
+        ).then((val) {
+          print(val);
+          payResponse = val;
+        });
+      }
       response = AlipayResponse.generate(payResponse);
     } else {
       print('ali no response');

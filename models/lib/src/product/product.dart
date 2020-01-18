@@ -71,14 +71,16 @@ class CategoryModel extends ItemModel {
       _$CategoryModelToJson(model);
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
-      CategoryModel.toJson(model);
+      model == null ? null : CategoryModel.toJson(model);
 
   static Map<String, dynamic> _mediaToJson(MediaModel model) =>
-      MediaModel.toJson(model);
+      model == null ? null : MediaModel.toJson(model);
 
   static List<Map<String, dynamic>> _categorysToJson(
           List<CategoryModel> models) =>
-      models.map((model) => CategoryModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -262,33 +264,41 @@ class ProductModel extends ItemModel {
       _$ProductModelToJson(model);
 
   static Map<String, dynamic> _mediaToJson(MediaModel model) =>
-      MediaModel.toJson(model);
+      model == null ? null : MediaModel.toJson(model);
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models.map((model) => MediaModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => MediaModel.toJson(model)).toList();
 
   static List<Map<String, dynamic>> _staircasePricesToJson(
           List<StaircasePriceModel> models) =>
-      models.map((model) => StaircasePriceModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => StaircasePriceModel.toJson(model)).toList();
 
   static Map<String, dynamic> stockLevelToJson(StockLevelModel model) =>
-      StockLevelModel.toJson(model);
+      model == null ? null : StockLevelModel.toJson(model);
 
   static Map<String, dynamic> companyToJson(CompanyModel model) =>
-      CompanyModel.toJson(model);
+      model == null ? null : CompanyModel.toJson(model);
 
   static Map<String, dynamic> _superCategory(CategoryModel model) =>
-      CategoryModel.toJson(model);
+      model == null ? null : CategoryModel.toJson(model);
 
   static MediaModel _mediaFromJson(Map<String, dynamic> json) =>
-      MediaModel.fromJson(json);
+      json == null ? null : MediaModel.fromJson(json);
 
   static List<MediaModel> _mediasFromJson(List<dynamic> jsons) =>
-      jsons.map((json) => MediaModel.fromJson(json)).toList();
+      jsons == null
+          ? null
+          : jsons.map((json) => MediaModel.fromJson(json)).toList();
 
   static List<Map<String, dynamic>> _steppedPriceToJson(
       List<SteppedPriceModel> models) =>
-      models.map((model) => SteppedPriceModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => SteppedPriceModel.toJson(model)).toList();
 
   ///最低价
   double get minSteppedPrice {
@@ -470,16 +480,18 @@ class ApparelProductModel extends ProductModel {
 
   static List<Map<String, dynamic>> variantsToJson(
           List<ApparelSizeVariantProductModel> entries) =>
-      entries
+      entries == null
+          ? null
+          : entries
           .map((entry) => ApparelSizeVariantProductModel.toJson(entry))
           .toList();
 
   static Map<String, dynamic> _attributesToJson(
           ApparelProductAttributesModel model) =>
-      ApparelProductAttributesModel.toJson(model);
+      model == null ? null : ApparelProductAttributesModel.toJson(model);
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
-      CategoryModel.toJson(model);
+      model == null ? null : CategoryModel.toJson(model);
 }
 
 @JsonSerializable()
@@ -543,7 +555,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
       _$ApparelStyleVariantProductModelToJson(model);
 
   static Map<String, dynamic> _colorToJson(ColorModel model) =>
-      ColorModel.toJson(model);
+      model == null ? null : ColorModel.toJson(model);
 }
 
 @JsonSerializable()
@@ -608,7 +620,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
       _$ApparelSizeVariantProductModelToJson(model);
 
   static Map<String, dynamic> _sizeToJson(SizeModel model) =>
-      SizeModel.toJson(model);
+      model == null ? null : SizeModel.toJson(model);
 }
 
 @JsonSerializable()
@@ -734,13 +746,11 @@ class ColorModel extends ItemModel {
   String colorCode;
   int sequence;
 
-  ColorModel({
-    @required this.code,
+  ColorModel({@required this.code,
     @required this.name,
     this.active,
     this.colorCode,
-    this.sequence
-  });
+    this.sequence});
 
   factory ColorModel.fromJson(Map<String, dynamic> json) =>
       _$ColorModelFromJson(json);
@@ -756,12 +766,8 @@ class SizeModel extends ItemModel {
   bool active;
   int sequence;
 
-  SizeModel({
-    @required this.code,
-    @required this.name,
-    this.active,
-    this.sequence
-  });
+  SizeModel(
+      {@required this.code, @required this.name, this.active, this.sequence});
 
   factory SizeModel.fromJson(Map<String, dynamic> json) =>
       _$SizeModelFromJson(json);
@@ -792,7 +798,9 @@ class SampleProductModel extends ItemModel {
       _$SampleProductModelToJson(model);
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models.map((model) => MediaModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => MediaModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -853,10 +861,12 @@ class SampleBorrowReturnHistoryModel extends ItemModel {
       _$SampleBorrowReturnHistoryModelToJson(model);
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models.map((model) => MediaModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => MediaModel.toJson(model)).toList();
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 @JsonSerializable()

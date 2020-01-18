@@ -26,13 +26,16 @@ class JPushAndroidResponse extends JPushResponse {
       _$JPushAndroidResponseToJson(model);
 
   static JPushAndroidResponseExtras extrasFromJson(Map<dynamic, dynamic> map) {
+    if (map == null) {
+      return null;
+    }
     return JPushAndroidResponseExtras(
         alertType: map['cn.jpush.android.ALERT_TYPE'] as String,
         notificationId: map['cn.jpush.android.NOTIFICATION_ID'] as int,
         androidExtras: map['cn.jpush.android.EXTRA'] == null
             ? null
             : Extras.fromJson(json.decode(map['cn.jpush.android.EXTRA'])
-                as Map<String, dynamic>));
+        as Map<String, dynamic>));
   }
 }
 
@@ -70,11 +73,9 @@ class Extras {
   static Map<String, dynamic> toJson(Extras model) => _$ExtrasToJson(model);
 }
 
-
 ///JPush安卓响应
 @JsonSerializable()
 class JPushIOSResponse extends JPushResponse {
-
   String params;
 
   MsgModule module;

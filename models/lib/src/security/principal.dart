@@ -42,11 +42,13 @@ class PrincipalModel extends ItemModel {
       _$PrincipalModelToJson(model);
 
   static Map<String, dynamic> mediaToJson(MediaModel model) =>
-      MediaModel.toJson(model);
+      model == null ? null : MediaModel.toJson(model);
 
   static List<Map<String, dynamic>> payPlansToJson(
       List<CompanyPayPlanModel> payPlans) =>
-      payPlans.map((plan) => CompanyPayPlanModel.toJson(plan)).toList();
+      payPlans == null
+          ? null
+          : payPlans.map((plan) => CompanyPayPlanModel.toJson(plan)).toList();
 
   // static Map<String, dynamic> addressToJson(AddressModel model) => AddressModel.toJson(model);
 

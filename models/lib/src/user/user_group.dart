@@ -157,22 +157,29 @@ class CompanyModel extends UserGroupModel {
       _$CompanyModelToJson(model);
 
   static Map<String, dynamic> _addressToJson(AddressModel model) =>
-      AddressModel.toJson(model);
+      model == null ? null : AddressModel.toJson(model);
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models.map((model) => MediaModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => MediaModel.toJson(model)).toList();
 
   static List<Map<String, dynamic>> _companyProfilesToJson(
           List<CompanyProfileModel> models) =>
-      models.map((model) => CompanyProfileModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => CompanyProfileModel.toJson(model)).toList();
 
   static List<Map<String, dynamic>> _labelsToJson(List<LabelModel> models) =>
-      models.map((model) => LabelModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => LabelModel.toJson(model)).toList();
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
+
   static int _dateTimetoMilliseconds(DateTime date) =>
-      date.millisecondsSinceEpoch;
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 @JsonSerializable()
@@ -433,7 +440,9 @@ class BrandModel extends B2BUnitModel {
 
   static List<Map<String, dynamic>> _categorysToJson(
           List<CategoryModel> models) =>
-      models.map((model) => CategoryModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
@@ -629,21 +638,29 @@ class FactoryModel extends B2BUnitModel {
 
   static List<Map<String, dynamic>> _categoriesToJson(
           List<CategoryModel> categories) =>
-      categories.map((category) => CategoryModel.toJson(category)).toList();
+      categories == null
+          ? null
+          : categories
+          .map((category) => CategoryModel.toJson(category))
+          .toList();
 
   static List<Map<String, dynamic>> _capacitiesToJson(
           List<FactoryCapacityModel> capacities) =>
-      capacities
+      capacities == null
+          ? null
+          : capacities
           .map((capacity) => FactoryCapacityModel.toJson(capacity))
           .toList();
 
   static List<Map<String, dynamic>> _productToJson(
           List<ProductModel> products) =>
-      products.map((product) => ProductModel.toJson(product)).toList();
+      products == null
+          ? null
+          : products.map((product) => ProductModel.toJson(product)).toList();
 
   static Map<String, dynamic> _industrialClusterToJson(
           IndustrialClusterModel model) =>
-      IndustrialClusterModel.toJson(model);
+      model == null ? null : IndustrialClusterModel.toJson(model);
 }
 
 @JsonSerializable()
@@ -708,7 +725,9 @@ class CompanyProfileModel extends ItemModel {
       _$CompanyProfileModelToJson(model);
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models.map((model) => MediaModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => MediaModel.toJson(model)).toList();
 }
 
 //供应商
