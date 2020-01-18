@@ -82,19 +82,21 @@ class FactoryCapacityModel extends ItemModel {
       _$FactoryCapacityModelToJson(model);
 
   static Map<String, dynamic> _factoryToJson(FactoryModel belongTo) =>
-      FactoryModel.toJson(belongTo);
+      belongTo == null ? null : FactoryModel.toJson(belongTo);
 
   static List<Map<String, dynamic>> _categoryCapacitiesToJson(
       List<FactoryCategoryCapacityModel> categoryCapacities) =>
-      categoryCapacities
+      categoryCapacities == null
+          ? null
+          : categoryCapacities
           .map((capacity) => FactoryCategoryCapacityModel.toJson(capacity))
           .toList();
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static int _dateTimetoMilliseconds(DateTime date) =>
-      date.millisecondsSinceEpoch;
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 ///工厂产能分类产能信息
@@ -126,5 +128,5 @@ class FactoryCategoryCapacityModel extends ItemModel {
       _$FactoryCategoryCapacityModelToJson(model);
 
   static Map<String, dynamic> _categoryToJson(CategoryModel category) =>
-      CategoryModel.toJson(category);
+      category == null ? null : CategoryModel.toJson(category);
 }

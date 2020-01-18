@@ -64,10 +64,12 @@ class NotifyModel extends ItemModel {
       _$NotifyModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
-      models.map((model) => MediaModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => MediaModel.toJson(model)).toList();
 }
 
 enum MsgModule {

@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/state/state.dart';
@@ -8,7 +7,8 @@ import 'package:services/src/subcontract/repository/subcontract_repository_impl.
 class SubContractPoolState extends PageState {
   String factoryUid;
   SubContractPoolState({this.factoryUid});
-  Map<String,Object> _queryFormData = {};
+
+  Map<String, Object> _queryFormData = {};
   CategoryModel _category;
   CategoryModel _majorCategory;
   List<RegionModel> _regions;
@@ -19,6 +19,9 @@ class SubContractPoolState extends PageState {
   List<SubContractModel> _subcontractModels;
   bool _showTopBtn = false;
   bool _showDateFilterMenu = false;
+
+  ///排序条件
+  String _sortCondition;
 
   List<SubContractModel> get subcontractModels {
     if (_subcontractModels == null) {
@@ -47,14 +50,20 @@ class SubContractPoolState extends PageState {
     _queryFormData = value;
   }
 
+  void setSortCondition(String val) {
+    _sortCondition = val;
+    clear();
+  }
+
   @override
   void getData() async {
     // 延时1s执行返回
-    print(_queryFormData);
     isDownEnd = false;
-    var response = await SubContractRepositoryImpl().getSubcontractsByAllFactory(data:_queryFormData, params:{
+    var response = await SubContractRepositoryImpl()
+        .getSubcontractsByAllFactory(data: _queryFormData, params: {
       'page': currentPage,
       'size': pageSize,
+      'sort': '${_sortCondition ?? ''},desc'
     });
 
     if (response != null) {
@@ -71,16 +80,17 @@ class SubContractPoolState extends PageState {
 
   @override
   void loadMore() async {
-
     if (!lock) {
       //异步调用开始，通知加载组件
       workingStart();
       //接口调用：
       if (currentPage + 1 != totalPages) {
         isDownEnd = false;
-        var response= await SubContractRepositoryImpl().getSubcontractsByAllFactory(data:_queryFormData, params:{
+        var response = await SubContractRepositoryImpl()
+            .getSubcontractsByAllFactory(data: _queryFormData, params: {
           'page': currentPage + 1,
           'size': pageSize,
+          'sort': '${_sortCondition ?? ''},desc'
         });
 
         if (response != null) {
@@ -90,8 +100,7 @@ class SubContractPoolState extends PageState {
           totalPages = response.totalPages;
           totalElements = response.totalElements;
         }
-
-      }else{
+      } else {
         isDownEnd = true;
       }
       //异步调用结束，通知加载组件
@@ -107,7 +116,7 @@ class SubContractPoolState extends PageState {
   }
 
   String get keyword {
-    if(_keyword == null){
+    if (_keyword == null) {
       _keyword = '';
     }
     return _keyword;
@@ -127,21 +136,23 @@ class SubContractPoolState extends PageState {
     _showDateFilterMenu = !_showDateFilterMenu;
     int createdDateTo;
     int createdDateFrom;
-    if(_newDate != null){
+    if (_newDate != null) {
       createdDateTo = DateTime.now().millisecondsSinceEpoch;
-      createdDateFrom = DateTime.now().subtract(Duration(days: _newDate)).millisecondsSinceEpoch;
+      createdDateFrom = DateTime
+          .now()
+          .subtract(Duration(days: _newDate))
+          .millisecondsSinceEpoch;
     }
 
     _queryFormData['createdDateTo'] = createdDateTo;
     _queryFormData['createdDateFrom'] = createdDateFrom;
-    print(_queryFormData);
 
     notifyListeners();
     clear();
   }
 
   List<RegionModel> get regions {
-    if(_regions == null){
+    if (_regions == null) {
       _regions = [];
     }
     return _regions;
@@ -149,9 +160,10 @@ class SubContractPoolState extends PageState {
 
   set regions(List<RegionModel> value) {
     _regions = value;
-    if(_regions != null && _regions.length > 0){
-      _queryFormData['productiveOrientations'] = _regions.map((region) => region.isocode).toList();
-    }else{
+    if (_regions != null && _regions.length > 0) {
+      _queryFormData['productiveOrientations'] =
+          _regions.map((region) => region.isocode).toList();
+    } else {
       _queryFormData['productiveOrientations'] = null;
     }
 
@@ -164,7 +176,6 @@ class SubContractPoolState extends PageState {
   set category(CategoryModel value) {
     _category = value;
     _queryFormData['categories'] = _category != null ? _category.code : null;
-    print(_queryFormData);
     notifyListeners();
     clear();
   }
@@ -173,8 +184,8 @@ class SubContractPoolState extends PageState {
 
   set majorCategory(CategoryModel value) {
     _majorCategory = value;
-    _queryFormData['majorCategories'] = _majorCategory != null ? _majorCategory.code : null;
-    print(_queryFormData);
+    _queryFormData['majorCategories'] =
+    _majorCategory != null ? _majorCategory.code : null;
     notifyListeners();
   }
 
@@ -194,7 +205,7 @@ class SubContractPoolState extends PageState {
     notifyListeners();
   }
 
-  void clearAllCondition(){
+  void clearAllCondition() {
     _newDate = null;
     _regions = [];
     _category = null;

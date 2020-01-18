@@ -27,11 +27,13 @@ class AmapResponse {
       _$AmapResponseToJson(model);
 
   static int _stringToInt(String str) {
-    return int.parse(str);
+    return str == null ? null : int.parse(str);
   }
 
   static List<Tip> _tipsFromJson(List<dynamic> tipsJson) {
-    return tipsJson
+    return tipsJson == null
+        ? null
+        : tipsJson
         .where((map) => map['id'] is String && map['id'] != '')
         .map((map) => Tip.fromJson(map))
         .toList();
@@ -112,7 +114,7 @@ class AmapAroundResponse {
       _$AmapAroundResponseToJson(model);
 
   static int _stringToInt(String str) {
-    return int.parse(str);
+    return str == null ? null : int.parse(str);
   }
 }
 

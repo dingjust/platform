@@ -1,10 +1,12 @@
 <template>
   <div class="finance-form-body">
-    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="formVisible" width="70%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <progress-order-form :purchaseOrder="order" :progress="slotData" :progressOrder="progressOrder" v-if="hackSet"
         @callback="onCallback" />
     </el-dialog>
-    <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="viewVisible" width="70%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <progress-order-view :purchaseOrder="order" :progress="slotData" :progressOrder="selectProgressOrder" />
     </el-dialog>
     <el-row class="info-title-row" type="flex" justify="space-between">
@@ -101,8 +103,20 @@
     mixins: [],
     computed: {
       cooperatorName: function () {
-        if(this.order.cooperator==null){
-          return '';
+        if (this.order.cooperator == null) {
+          if (this.isBrand()) {
+            if (this.order.belongTo != null) {
+              return this.order.belongTo.name;
+            } else {
+              return this.order.companyOfSeller;
+            }
+          } else {
+            if (this.order.purchaser != null) {
+              return this.order.purchaser.name;
+            } else {
+              return this.order.companyOfSeller;
+            }
+          }
         }
         if (this.order.cooperator.type == 'ONLINE') {
           return this.order.cooperator.partner.name;

@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/my/account/bill_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -52,14 +53,22 @@ class _MyBillPageState extends State<MyBillPage> {
   }
 }
 
-class BillListView extends StatelessWidget {
+class BillListView extends StatefulWidget {
+
+  _BillListViewState createState() => _BillListViewState();
+
+}
+class _BillListViewState extends State<BillListView>{
   final ScrollController _scrollController = ScrollController();
 
   ///当前选中条件
   DateTime selectedDate = DateTime.now();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
     var bloc = BLoCProvider.of<MyBillBLoC>(context);
 
     // 监听筛选条件更改
@@ -75,6 +84,11 @@ class BillListView extends StatelessWidget {
         bloc.loadingMoreByDate(date: selectedDate);
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var bloc = BLoCProvider.of<MyBillBLoC>(context);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -103,6 +117,34 @@ class BillListView extends StatelessWidget {
                   bloc.filterByDate(date: selectedDate);
                   return ProgressIndicatorFactory
                       .buildPaddedProgressIndicator();
+                }
+                if (snapshot.data.length <= 0) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 200),
+                        child: Image.asset(
+                          'temp/logo2.png',
+                          package: 'assets',
+                          width: 80,
+                          height: 80,
+                        ),
+                      ),
+                      Container(
+                          child: Text(
+                            AppBLoC.instance.getConnectivityResult ==
+                                ConnectivityResult.none
+                                ? '网络链接不可用请重试'
+                                : '没有相关消息数据',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          )),
+                    ],
+                  );
                 }
                 if (snapshot.hasData) {
                   return Column(
@@ -215,8 +257,8 @@ class BillCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        model.orderCode != null
-                            ? '生产订单${model.orderCode}'
+                        model.flowSource != FlowSource.CASH_OUT
+                            ? '${model.orderCode}'
                             : '提现到银行卡${model.account.cardNumber}',
                         style:
                             const TextStyle(fontSize: 18, color: Colors.black),
@@ -250,12 +292,32 @@ class BillCard extends StatelessWidget {
   }
 
   String getSymbol(AmountFlowType type) {
-    return type == AmountFlowType.INFLOW ? '+' : '-';
+    print(type);
+    String text = '';
+
+    if(type == AmountFlowType.INFLOW){
+      text = '+';
+    }else if(type == AmountFlowType.OUTFLOW){
+      text = '-';
+    }
+    return text;
   }
 
   Color getSymbolColor(AmountFlowType type) {
     return type == AmountFlowType.INFLOW
         ? Color.fromRGBO(255, 68, 68, 1)
-        : Colors.black45;
+        : Colors.black54;
+  }
+
+  String getFlowSourceOrder(FlowSource flowSource){
+    String text = '';
+    if(flowSource == FlowSource.PROOFING){
+      text = '打样订单';
+    }else if(flowSource == FlowSource.PURCHASE_DEPOSIT){
+      text = '生产订单';
+    }else if(flowSource == FlowSource.PURCHASE_BALANCE){
+      text = '生产订单';
+    }
+    return text;
   }
 }

@@ -152,7 +152,9 @@ class AbstractPayPlanModel extends ItemModel {
 
   static List<Map<String, dynamic>> itemsToJson(
           List<AbstractPayPlanItemModel> items) =>
-      items.map((item) => AbstractPayPlanItemModel.toJson(item)).toList();
+      items == null
+          ? null
+          : items.map((item) => AbstractPayPlanItemModel.toJson(item)).toList();
 }
 
 /// 付款方案子项抽象
@@ -224,7 +226,7 @@ class CompanyPayPlanModel extends AbstractPayPlanModel {
       _$CompanyPayPlanModelToJson(model);
 
   static Map<String, dynamic> principalToJson(PrincipalModel belongTo) =>
-      PrincipalModel.toJson(belongTo);
+      belongTo == null ? null : PrincipalModel.toJson(belongTo);
 }
 
 /// 付款方案子项
@@ -315,9 +317,17 @@ class OrderPayPlanItemModel extends AbstractPayPlanItemModel {
 
   static List<Map<String, dynamic>> _paymentOrdersToJson(
           List<PaymentOrderModel> paymentOrders) =>
-      paymentOrders.map((order) => PaymentOrderModel.toJson(order)).toList();
+      paymentOrders == null
+          ? null
+          : paymentOrders
+          .map((order) => PaymentOrderModel.toJson(order))
+          .toList();
 
   static List<Map<String, dynamic>> _receiptOrdersToJson(
           List<ReceiptOrderModel> receiptOrders) =>
-      receiptOrders.map((order) => ReceiptOrderModel.toJson(order)).toList();
+      receiptOrders == null
+          ? null
+          : receiptOrders
+          .map((order) => ReceiptOrderModel.toJson(order))
+          .toList();
 }

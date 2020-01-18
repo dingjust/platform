@@ -69,11 +69,11 @@ class AbstractOrderNoteModel extends ItemModel {
       _$AbstractOrderNoteModelToJson(model);
 
   static Map<String, dynamic> _b2bCustomerToJson(B2BCustomerModel model) =>
-      B2BCustomerModel.toJson(model);
+      model == null ? null : B2BCustomerModel.toJson(model);
 
   static Map<String, dynamic> _consignmentToJson(
       ConsignmentModel consignment) =>
-      ConsignmentModel.toJson(consignment);
+      consignment == null ? null : ConsignmentModel.toJson(consignment);
 }
 
 /// 订单记录行抽象
@@ -138,14 +138,16 @@ class OrderNoteModel extends AbstractOrderNoteModel {
       _$OrderNoteModelToJson(model);
 
   static Map<String, dynamic> orderToJson(AbstractOrderModel belongOrder) =>
-      AbstractOrderModel.toJson(belongOrder);
+      belongOrder == null ? null : AbstractOrderModel.toJson(belongOrder);
 
   static Map<String, dynamic> _b2bCustomerToJson(B2BCustomerModel model) =>
-      B2BCustomerModel.toJson(model);
+      model == null ? null : B2BCustomerModel.toJson(model);
 
   static List<Map<String, dynamic>> entriesToJson(
           List<OrderNoteEntryModel> entries) =>
-      entries.map((entry) => OrderNoteEntryModel.toJson(entry)).toList();
+      entries == null
+          ? null
+          : entries.map((entry) => OrderNoteEntryModel.toJson(entry)).toList();
 }
 
 /// 订单记录行
@@ -168,7 +170,7 @@ class OrderNoteEntryModel extends AbstractOrderNoteEntryModel {
       _$OrderNoteEntryModelToJson(model);
 
   static Map<String, dynamic> orderToJson(OrderNoteModel order) =>
-      OrderNoteModel.toJson(order);
+      order == null ? null : OrderNoteModel.toJson(order);
 }
 
 /// 发货单
@@ -512,18 +514,22 @@ class ProductionProgressOrderModel {
       _$ProductionProgressOrderModelToJson(model);
 
   static Map<String, dynamic> _operatorToJson(B2BCustomerModel model) =>
-      B2BCustomerModel.toJson(model);
+      model == null ? null : B2BCustomerModel.toJson(model);
 
   static List<Map<String, dynamic>> _mediasToJson(List<MediaModel> models) =>
-      models.map((model) => MediaModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => MediaModel.toJson(model)).toList();
 
   static Map<String, dynamic> _progressToJson(ProductionProgressModel model) =>
-      ProductionProgressModel.toJson(model);
+      model == null ? null : ProductionProgressModel.toJson(model);
 
   static List<Map<String, dynamic>> _entriesToJson(
       List<OrderNoteEntryModel> models) =>
-      models.map((model) => OrderNoteEntryModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => OrderNoteEntryModel.toJson(model)).toList();
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 }

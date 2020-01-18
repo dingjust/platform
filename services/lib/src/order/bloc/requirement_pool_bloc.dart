@@ -56,11 +56,21 @@ class RequirementPoolBLoC extends BLoCBase {
         if (isRecommend) {
           response = await http$.post(OrderApis.allRecommendedOrders,
               data: data,
-              queryParameters: {'page': currentPage, 'size': pageSize,'fields':RequirementOrderOptions.DEFAULT});
+              queryParameters: {
+                'page': currentPage,
+                'size': pageSize,
+                'fields': RequirementOrderOptions.DEFAULT,
+                'sort': '${conditions.sortCondition ?? ''},desc'
+              });
         } else {
           response = await http$.post(OrderApis.allOrdersForFactory,
               data: data,
-              queryParameters: {'page': currentPage, 'size': pageSize,'fields':RequirementOrderOptions.DEFAULT});
+              queryParameters: {
+                'page': currentPage,
+                'size': pageSize,
+                'fields': RequirementOrderOptions.DEFAULT,
+                'sort': '${conditions.sortCondition ?? ''},desc'
+              });
         }
       } on DioError catch (e) {
         print(e);
@@ -96,11 +106,19 @@ class RequirementPoolBLoC extends BLoCBase {
           if (isRecommend) {
             response = await http$.post(OrderApis.allRecommendedOrders,
                 data: data,
-                queryParameters: {'page': currentPage, 'size': pageSize});
+                queryParameters: {
+                  'page': currentPage,
+                  'size': pageSize,
+                  'sort': '${conditions.sortCondition ?? ''},desc'
+                });
           } else {
             response = await http$.post(OrderApis.allOrdersForFactory,
                 data: data,
-                queryParameters: {'page': currentPage, 'size': pageSize});
+                queryParameters: {
+                  'page': currentPage,
+                  'size': pageSize,
+                  'sort': '${conditions.sortCondition ?? ''},desc'
+                });
           }
         } on DioError catch (e) {
           print(e);
@@ -249,13 +267,14 @@ class RequirementFilterCondition {
 
   String keyword;
 
-  RequirementFilterCondition({
-    this.dateRange,
+  String sortCondition;
+
+  RequirementFilterCondition({this.dateRange,
     this.machiningType,
     this.categories,
     this.keyword,
     this.productiveOrientations,
-  });
+    this.sortCondition});
 }
 
 enum RequirementOrderDateRange {

@@ -44,7 +44,9 @@ class PaymentOrderModel extends ItemModel {
 
   static Map<String, dynamic> _orderPayPlanItemToJson(
           OrderPayPlanItemModel orderPayPlanItem) =>
-      OrderPayPlanItemModel.toJson(orderPayPlanItem);
+      orderPayPlanItem == null
+          ? null
+          : OrderPayPlanItemModel.toJson(orderPayPlanItem);
 }
 
 /// 收款单
@@ -88,5 +90,7 @@ class ReceiptOrderModel extends ItemModel {
 
   static Map<String, dynamic> _orderPayPlanItemToJson(
           OrderPayPlanItemModel orderPayPlanItem) =>
-      OrderPayPlanItemModel.toJson(orderPayPlanItem);
+      orderPayPlanItem == null
+          ? null
+          : OrderPayPlanItemModel.toJson(orderPayPlanItem);
 }

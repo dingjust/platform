@@ -12,6 +12,7 @@ export 'src/navigator/navigator_stack.dart';
 export 'src/util/class_handle_util.dart';
 export 'src/util/date_util.dart';
 export 'src/util/double_util.dart';
+export 'src/util/enum_util.dart';
 export 'src/util/file_format_util.dart';
 export 'src/util/regex_util.dart';
 export 'src/util/show_dialog_util.dart';

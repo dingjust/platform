@@ -52,19 +52,10 @@ class _BillDetailPageState extends State<BillDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          child: snapshot.data.amountFlowType ==
-                              AmountFlowType.OUTFLOW
-                              ? Text(
-                            '-￥${snapshot.data.amount}',
+                          child: Text(
+                            '${getSymbol(snapshot.data.amountFlowType)}￥${snapshot.data.amount}',
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold),
-                          )
-                              : Text(
-                            '+￥${snapshot.data.amount}',
-                            style: TextStyle(
-                                color: Colors.red,
+                                color: snapshot.data.amountFlowType == AmountFlowType.INFLOW ? Colors.red : Colors.black,
                                 fontSize: 23,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -79,26 +70,33 @@ class _BillDetailPageState extends State<BillDetailPage> {
                       color: Colors.grey[400],
                     ),
                   ),
-                  Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-                    child: DetailRow(
-                      label: '银行卡',
-                      value: '${snapshot.data.account?.cardNumber}',
-                    ),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Divider(
-                      color: Colors.grey[400],
+                  Offstage(
+                    offstage: snapshot.data.flowSource != FlowSource.CASH_OUT,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                          child: DetailRow(
+                            label: '银行卡',
+                            value: '${snapshot.data.account?.cardNumber}',
+                          ),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Divider(
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   // _buildDetailRow('状态',
                   //     '${AmountStatusLocalizedMap[snapshot.data.amountStatus]}'),
-                  _buildDetailRow('类型',
-                      '${AmountFlowTypeLocalizedMap[snapshot.data
-                          .amountFlowType]}'),
+//                  _buildDetailRow('类型',
+//                      '${AmountFlowTypeLocalizedMap[snapshot.data
+//                          .amountFlowType]}'),
                   _buildDetailRow('时间',
                       '${DateFormatUtil.format(snapshot.data.creationtime)}'),
                   // _buildDetailRow(
@@ -138,6 +136,18 @@ class _BillDetailPageState extends State<BillDetailPage> {
     } else {
       return null;
     }
+  }
+
+  String getSymbol(AmountFlowType type) {
+    print(type);
+    String text = '';
+
+    if(type == AmountFlowType.INFLOW){
+      text = '+';
+    }else if(type == AmountFlowType.OUTFLOW){
+      text = '-';
+    }
+    return text;
   }
 }
 

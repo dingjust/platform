@@ -43,7 +43,9 @@ class CompanyRegisterDTO {
       this.contactAddress});
 
   static Map<String, dynamic> _addressToJson(AddressModel contactAddress) =>
-      {
+      contactAddress == null
+          ? null
+          : {
         "region": {"isocode": contactAddress.region.isocode},
         "city": {"code": contactAddress.city.code},
         "cityDistrict": {"code": contactAddress.cityDistrict.code},

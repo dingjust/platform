@@ -37,19 +37,17 @@ class SubContractModel extends ItemModel {
   ///需求距离
   double distance;
 
-  SubContractModel(
-      {
-        this.belongTo,
-        this.details,
-        this.code,
-        this.creationTime,
-        this.modifiedTime,
-        this.remarks,
-        this.distance,
-        this.canneled,
-        this.user,
-        })
-      : super();
+  SubContractModel({
+    this.belongTo,
+    this.details,
+    this.code,
+    this.creationTime,
+    this.modifiedTime,
+    this.remarks,
+    this.distance,
+    this.canneled,
+    this.user,
+  }) : super();
 
   factory SubContractModel.fromJson(Map<String, dynamic> json) =>
       _$SubContractModelFromJson(json);
@@ -58,18 +56,19 @@ class SubContractModel extends ItemModel {
       _$SubContractModelToJson(model);
 
   static Map<String, dynamic> infoToJson(SubContractInfoModel detail) =>
-      SubContractInfoModel.toJson(detail);
+      detail == null ? null : SubContractInfoModel.toJson(detail);
 
   static List<Map<String, dynamic>> _mediasToJson(
       List<MediaModel> attachments) =>
-      attachments.map((media) => MediaModel.toJson(media)).toList();
+      attachments == null
+          ? null
+          : attachments.map((media) => MediaModel.toJson(media)).toList();
 
   static Map<String, dynamic> _companyToJson(CompanyModel belongTo) =>
-      CompanyModel.toJson(belongTo);
+      belongTo == null ? null : CompanyModel.toJson(belongTo);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
-
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 ///转包信息
@@ -149,16 +148,20 @@ class SubContractInfoModel extends ItemModel {
       _$SubContractInfoModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static Map<String, dynamic> _categoryToJson(CategoryModel model) =>
-      CategoryModel.toJson(model);
+      model == null ? null : CategoryModel.toJson(model);
 
   static List<Map<String, dynamic>> _mediaToJson(List<MediaModel> models) =>
-      models.map((model) => MediaModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => MediaModel.toJson(model)).toList();
 
   static List<Map<String, dynamic>> _regionsToJson(List<RegionModel> models) =>
-      models.map((model) => RegionModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => RegionModel.toJson(model)).toList();
 
 //  static MachiningType _machiningTypeFromJson(String machiningType) {
 //    if (machiningType == '') {
@@ -170,4 +173,3 @@ class SubContractInfoModel extends ItemModel {
 
   String majorCategoryName() => majorCategory != null ? majorCategory.name : '';
 }
-

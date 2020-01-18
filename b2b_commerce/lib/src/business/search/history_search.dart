@@ -26,7 +26,7 @@ class _HistorySearchState extends State<HistorySearch> {
   List<String> _historywords = [];
 
   @override
-  void initState(){
+  void initState() {
     controller.text = widget.keyword;
 
     // TODO: implement initState
@@ -36,8 +36,7 @@ class _HistorySearchState extends State<HistorySearch> {
   //获取本地搜索历史记录
   void getHistory() async {
     //解析
-    String jsonStr =
-    await LocalStorage.get(widget.historyKey);
+    String jsonStr = await LocalStorage.get(widget.historyKey);
     if (jsonStr != null && jsonStr != '') {
       List<dynamic> list = json.decode(jsonStr);
       _historywords = list.map((item) => item as String).toList();
@@ -49,124 +48,145 @@ class _HistorySearchState extends State<HistorySearch> {
     getHistory();
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          automaticallyImplyLeading: true,
-          title: Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  height: 35,
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.grey[300], width: 0.5),
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 5),
-                    padding: EdgeInsets.only(left: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: controller,
-                            focusNode: focusNode,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                              hintText: '${widget.hintText}',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                fontSize: 12
+            elevation: 0,
+            automaticallyImplyLeading: true,
+            title: Container(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      flex: 1,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) =>
+                            Container(
+                              width: constraints.maxWidth,
+                              height: 50,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                          color: Colors.grey[300], width: 0.5),
+                                    ),
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      width: constraints.maxWidth,
+                                      child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            flex: 1,
+                                            child: TextField(
+                                              controller: controller,
+                                              focusNode: focusNode,
+                                              autofocus: true,
+                                              decoration: InputDecoration(
+                                                hintText: '${widget.hintText}',
+                                                hintStyle: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 12),
+                                                contentPadding: EdgeInsets.all(
+                                                    0),
+                                                disabledBorder: InputBorder
+                                                    .none,
+                                                enabledBorder: InputBorder.none,
+                                                focusedBorder: InputBorder.none,
+                                                border: InputBorder.none,
+                                              ),
+                                              onChanged: (value) {},
+                                            ),
+                                          ),
+                                          Container(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  controller.text = '';
+                                                });
+                                              },
+                                              child: Icon(
+                                                Icons.clear,
+                                                size: 20,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                ],
                               ),
-                              contentPadding: EdgeInsets.all(0),
-                              disabledBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              border: InputBorder.none,
                             ),
-                            onChanged: (value){
-                            },
-                          ),
+                      )),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    width: 70,
+                    height: 32,
+                    child: FlatButton(
+                      child: Text(
+                        '搜索',
+                        style: TextStyle(
+                          color: Colors.black,
                         ),
-                        Container(
-                          child: GestureDetector(
-                            onTap: (){
-                              setState(() {
-                                controller.text = '';
-                              });
-                            },
-                            child: Icon(
-                              Icons.clear,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      onPressed: () => onSearch(context),
                     ),
                   ),
-                ),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                width: 70,
-                height: 32,
-                child: FlatButton(
-                    child: Text(
-                      '搜索',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    onPressed: () => onSearch(context),
-                ),
-              ),
-            ],
-          ),
-        ),
+            )),
         body: ListView(
           children: <Widget>[
             _buildHistoryListView(context),
           ],
-        )
-    );
+        ));
   }
 
   void onSearch(BuildContext context) {
     setState(() {
-      if(controller.text != ''){
-        if(_historywords.contains(controller.text)){
-         _historywords.remove(controller.text);
+      if (controller.text != '') {
+        if (_historywords.contains(controller.text)) {
+          _historywords.remove(controller.text);
         }
         _historywords.add(controller.text);
         LocalStorage.save(widget.historyKey, json.encode(_historywords));
       }
     });
-      switch(widget.historyKey){
-        case GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY:
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductSearchPage(
-            keyword: controller.text,
-          )));
-          break;
-        case GlobalConfigs.PRODUCT_SELECT_HISTORY_KEYWORD_KEY:
-          Navigator.pop(context,controller.text);
-          break;
+    switch (widget.historyKey) {
+      case GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ProductSearchPage(
+                      keyword: controller.text,
+                    )));
+        break;
+      case GlobalConfigs.PRODUCT_SELECT_HISTORY_KEYWORD_KEY:
+        Navigator.pop(context, controller.text);
+        break;
 //        case GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY:
 //          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductSearchPage(
 //            keyword: controller.text,
 //          )));
 //          break;
-        case GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY:
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ContractSearchResultPage(
-            keyword: controller.text,
-          )));
-          break;
-        default :
-          Navigator.pop(context,controller.text);
-          break;
-      }
-
+      case GlobalConfigs.CONTRACT_HISTORY_KEYWORD_KEY:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    ContractSearchResultPage(
+                      keyword: controller.text,
+                    )));
+        break;
+      default:
+        Navigator.pop(context, controller.text);
+        break;
+    }
   }
 
   //历史搜索部分
@@ -188,7 +208,7 @@ class _HistorySearchState extends State<HistorySearch> {
               ),
               Container(
                 child: FlatButton.icon(
-                  onPressed: (){
+                  onPressed: () {
                     setState(() {
                       _historywords.clear();
                       LocalStorage.remove(widget.historyKey);
@@ -200,9 +220,7 @@ class _HistorySearchState extends State<HistorySearch> {
                   ),
                   label: Text(
                     '清除历史',
-                    style: TextStyle(
-                        color: Color.fromRGBO(100, 100, 100, 1)
-                    ),
+                    style: TextStyle(color: Color.fromRGBO(100, 100, 100, 1)),
                   ),
                 ),
               )
@@ -210,28 +228,27 @@ class _HistorySearchState extends State<HistorySearch> {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 15),
-          child: Wrap(
-              spacing: 8.0, // 主轴(水平)方向间距
-              runSpacing: 4.0, // 纵轴（垂直）方向间距
-              alignment: WrapAlignment.start, //沿主轴方向居中
-              children:_historywords.map((word){
-                return GestureDetector(
-                  onTap: (){
-                    controller.text = word;
-                    this.onSearch(context);
-                  },
-                  child: Chip(
-                    backgroundColor: Color.fromRGBO(245, 245, 245, 1),
-                    label: Text(
-                      word,
-                      style: TextStyle(),
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 15),
+            child: Wrap(
+                spacing: 8.0, // 主轴(水平)方向间距
+                runSpacing: 4.0, // 纵轴（垂直）方向间距
+                alignment: WrapAlignment.start, //沿主轴方向居中
+                children: _historywords.map((word) {
+                  return GestureDetector(
+                    onTap: () {
+                      controller.text = word;
+                      this.onSearch(context);
+                    },
+                    child: Chip(
+                      backgroundColor: Color.fromRGBO(245, 245, 245, 1),
+                      label: Text(
+                        word,
+                        style: TextStyle(),
+                      ),
                     ),
-                  ),
-                );;
-              }).toList()
-          )
-        )
+                  );
+                  ;
+                }).toList()))
       ],
     );
   }

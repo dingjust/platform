@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:b2b_commerce/src/_shared/subcontract/subcontract_pool_list_item.dart';
+import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool_detail.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool_filter.dart';
-import 'package:common_utils/common_utils.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -20,22 +19,47 @@ class SubContractPoolList extends StatefulWidget {
 }
 
 class _SubContractPoolListState extends State<SubContractPoolList> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<RegionModel> _regionSelects = [];
   List<RegionModel> _regions = [];
 
   bool showDateFilterMenu = false;
 
-  List<FilterConditionEntry> dateRangeConditionEntries = <FilterConditionEntry>[
-    FilterConditionEntry(
-        label: '全部', value: null, checked: true),
-    FilterConditionEntry(
-        label: '3天内', value: 3),
-    FilterConditionEntry(
-        label: '7天内', value: 7),
-    FilterConditionEntry(
-        label: '15天内', value: 15),
+  List<FilterConditionEntry> sortConditionEntries = <FilterConditionEntry>[
+    FilterConditionEntry(label: '综合', value: 'ALL0', checked: true),
+    FilterConditionEntry(label: '订单数量', value: 'subContractQuantity'),
+    FilterConditionEntry(label: '交货时间', value: 'expectedDeliveryDate'),
   ];
+
+  List<FilterConditionEntry> machiningTypeConditionEntries =
+  <FilterConditionEntry>[
+    FilterConditionEntry(
+        label: '全部',
+        value: "ALL1",
+        type: FilterConditionEntryType.ALL,
+        checked: true),
+    FilterConditionEntry(
+        label: '包工包料', value: MachiningType.LABOR_AND_MATERIAL),
+    FilterConditionEntry(label: '清加工', value: MachiningType.LIGHT_PROCESSING),
+  ];
+
+  List<FilterConditionEntry> categoriesConditionEntries =
+  <FilterConditionEntry>[
+    FilterConditionEntry(
+        label: '全部',
+        value: "ALL2",
+        type: FilterConditionEntryType.ALL,
+        checked: true),
+  ];
+
+  List<String> historyKeywords;
+
+  List<String> _dropDownHeaderItemStrings = ['综合', '加工方式', '商品大类', '筛选'];
+  GZXDropdownMenuController _dropdownMenuController =
+  GZXDropdownMenuController();
+
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey _stackKey = GlobalKey();
 
   @override
   void initState() {
@@ -45,235 +69,155 @@ class _SubContractPoolListState extends State<SubContractPoolList> {
 
   @override
   Widget build(BuildContext context) {
-    print('building------------');
     return Consumer(
-      builder: (context, SubContractPoolState subContractPoolState,_) => Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          elevation: 0.5,
-          leading: Container(),
-          bottom: PreferredSize(
-              preferredSize: Size(double.infinity, 0),
-              child: Container(
-                child: Row(
+      builder: (context, SubContractPoolState subContractPoolState, _) =>
+          Scaffold(
+              key: _scaffoldKey,
+              endDrawer: Drawer(
+                child: SubContractFilterPage(
+                    subContractPoolState: subContractPoolState),
+              ),
+              body: Stack(key: _stackKey, fit: StackFit.expand, children: <
+                  Widget>[
+                Column(
                   children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: (){
-                            subContractPoolState.showDateFilterMenu = !subContractPoolState.showDateFilterMenu;
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  subContractPoolState.newDate == null ? '最新发布' : '${subContractPoolState.newDate}天内',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                                subContractPoolState.newDate == null
-                                    ? Icon(Icons.keyboard_arrow_down)
-                                    : Container(),
-                              ],
-                            ),
-                          ),
-                        ),
+                    GZXDropDownHeader(
+                      items: [
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                            iconData: Icons.menu, iconSize: 18),
+                      ],
+                      stackKey: _stackKey,
+                      controller: _dropdownMenuController,
+                      onItemTap: (index) {
+                        if (index == 3) {
+                          _scaffoldKey.currentState.openEndDrawer();
+                        }
+                      },
+                      dividerHeight: 0,
+                      color: Colors.grey[100],
+                      dropDownStyle:
+                      TextStyle(fontSize: 13, color: Colors.orange),
+                      iconDropDownColor: Colors.orange,
                     ),
                     Expanded(
                       flex: 1,
-                      child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  ObjectUtil.isEmptyList(subContractPoolState.regions) ? '地区' : subContractPoolState.regions[0]?.name ?? '',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onTap: (){
-                            subContractPoolState.showDateFilterMenu = false;
-                            //获取所有省份
-                            rootBundle.loadString('data/province_only.json').then((v) {
-                              List data = json.decode(v);
-                              _regions = data
-                                  .map<RegionModel>(
-                                      (region) => RegionModel.fromJson(region))
-                                  .toList();
-
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return RegionSelector(
-                                    regions: _regions,
-                                    regionSelects: _regionSelects,
-                                  );
-                                },
-                              ).then((val) {
-                                print('${subContractPoolState.regions}');
-                                subContractPoolState.regions = _regionSelects;
-                              });
-                            });
-                          },
+                      child: subContractPoolState.subcontractModels != null
+                          ? SubContractListView(
+                          subContractPoolState: subContractPoolState)
+                          : Center(
+                        child: CircularProgressIndicator(),
                       ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Consumer(
-                        builder: (context,
-                            CategoryState categoryState,_) =>GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: (){
-                            subContractPoolState.showDateFilterMenu = false;
-                            showModalBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return FutureBuilder(
-                                          future: categoryState
-                                              .getCascadedCategories(),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<List<CategoryModel>>
-                                              snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return Center(
-                                                  child:
-                                                  CircularProgressIndicator());
-                                            } else {
-                                              return SingleCategorySelect(
-                                                  selectLeft: subContractPoolState.category != null ? subContractPoolState.category?.parent?.code : null,
-                                                  categories: snapshot.data,
-                                                  categorySelect: subContractPoolState.category,
-                                                  onItemTap: (categoryModel) {
-                                                    if(subContractPoolState.category != null && subContractPoolState.category.code == categoryModel.code){
-                                                      subContractPoolState.category = null;
-                                                    }else{
-                                                      subContractPoolState.category = categoryModel;
-                                                    }
-
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                );
-                                            }
-                                          },
-                                  );
-                                });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  subContractPoolState.category?.name ?? '品类',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: (){
-                            subContractPoolState.showDateFilterMenu = false;
-                            _scaffoldKey.currentState.openEndDrawer();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '筛选',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.black),
-                                ),
-                                Icon(Icons.menu),
-                              ],
-                            ),
-                          ),
-                        ),
-                    ),
+                    )
                   ],
                 ),
-              )),
-        ),
-        endDrawer: Drawer(
-          child:  SubContractFilterPage(subContractPoolState:subContractPoolState),
-        ),
-        body: Column(
-          children: <Widget>[
-            Container(
-                color: Colors.white,
-                height: subContractPoolState.showDateFilterMenu ? 200 : 0,
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: dateRangeConditionEntries
-                      .map((entry) => GestureDetector(
-                    onTap: () {
-                      dateRangeConditionEntries.forEach((dateEntry){
-                        dateEntry.checked = false;
-                      });
-                      entry.checked = true;
-                      subContractPoolState.newDate = entry.value;
-//                      subContractPoolState.showDateFilterMenu = !subContractPoolState.showDateFilterMenu;
-                    },
-                    child: Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.fromLTRB(40, 10, 20, 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            '${entry.label}',
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: entry.checked
-                                    ? Color.fromRGBO(255, 214, 12, 1)
-                                    : Colors.black),
-                          ),
-                          entry.checked
-                              ? Icon(
-                            Icons.done,
-                            color: Color.fromRGBO(255, 214, 12, 1),
-                            size: 18,
-                          )
-                              : Container()
-                        ],
-                      ),
-                    ),
-                  ))
-                  .toList(),
-              )),
-            Divider(height: 0,),
-            Expanded(
-              child: subContractPoolState.subcontractModels != null ? SubContractListView(subContractPoolState:subContractPoolState):Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          ],
-        ),
-
-
-      ),
+                FutureBuilder(
+                  future: Provider.of<MajorCategoryState>(context)
+                      .getMajorCategories(),
+                  builder: (BuildContext dropMenuContext,
+                      AsyncSnapshot<List<CategoryModel>> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      if (categoriesConditionEntries.length == 1) {
+                        categoriesConditionEntries.addAll(snapshot.data
+                            .map((category) =>
+                            FilterConditionEntry(
+                                label: category.name, value: category))
+                            .toList());
+                      }
+                      return Consumer(
+                        builder: (BuildContext dropMenuContext,
+                            MajorCategoryState majorCategoryState, _) =>
+                            GZXDropDownMenu(
+                              controller: _dropdownMenuController,
+                              // 下拉菜单显示或隐藏动画时长
+                              animationMilliseconds: 0,
+                              menus: [
+                                GZXDropdownMenuBuilder(
+                                  dropDownHeight:
+                                  40.0 * sortConditionEntries.length + 20,
+                                  dropDownWidget: FilterConditionSelector(
+                                      entries: sortConditionEntries,
+                                      callBack: (entry) =>
+                                          _onSortConditionSelect(
+                                              entry, subContractPoolState)),
+                                ),
+                                GZXDropdownMenuBuilder(
+                                  dropDownHeight:
+                                  40.0 * machiningTypeConditionEntries.length +
+                                      20,
+                                  dropDownWidget: FilterConditionSelector(
+                                      entries: machiningTypeConditionEntries,
+                                      callBack: (entry) =>
+                                          _onSortConditionSelect(
+                                              entry, subContractPoolState)),
+                            ),
+                                GZXDropdownMenuBuilder(
+                                  dropDownHeight:
+                                  40.0 * categoriesConditionEntries.length + 20,
+                                  dropDownWidget: FilterConditionSelector(
+                                      entries: categoriesConditionEntries,
+                                      callBack: (entry) =>
+                                          _onSortConditionSelect(
+                                              entry, subContractPoolState)),
+                                ),
+                              ],
+                            ),
+                      );
+                    }
+                  },
+                ),
+              ])),
     );
   }
 
+  void _onSortConditionSelect(FilterConditionEntry condition,
+      SubContractPoolState subContractPoolState) {
+    _dropdownMenuController.hide();
 
+    // if (condition.value is RequirementOrderDateRange && condition.checked) {
+    //   currentCondition.dateRange = condition.value;
+    //   _dropDownHeaderItemStrings[0] = condition.label;
+    // }
+
+    if (condition.value == "ALL1") {
+      subContractPoolState.machiningType = null;
+      _dropDownHeaderItemStrings[1] = '加工方式';
+    }
+
+    if (condition.value is MachiningType) {
+      subContractPoolState.machiningType = EnumUtil.getCode(condition.value);
+      _dropDownHeaderItemStrings[1] = condition.label;
+    }
+    // subContractPoolState.majorCategory = snapshot.data[index];
+
+    if (condition.value == "ALL2") {
+      subContractPoolState.majorCategory = null;
+      _dropDownHeaderItemStrings[2] = '商品大类';
+    }
+
+    if (condition.value is CategoryModel) {
+      subContractPoolState.majorCategory = condition.value;
+      _dropDownHeaderItemStrings[2] = condition.label;
+    }
+
+    if (condition.value == "ALL0") {
+      subContractPoolState.setSortCondition(null);
+      _dropDownHeaderItemStrings[0] = '综合';
+    }
+
+    if (condition.value == "subContractQuantity" ||
+        condition.value == "expectedDeliveryDate") {
+      subContractPoolState.setSortCondition(condition.value);
+      _dropDownHeaderItemStrings[0] = '${condition.label}';
+    }
+    //刷新
+    subContractPoolState.clear();
+    setState(() {});
+  }
 }
 
 class SubContractListView extends StatefulWidget {
@@ -282,7 +226,7 @@ class SubContractListView extends StatefulWidget {
   _SubCOntractListViewState createState() => _SubCOntractListViewState();
 }
 
-class _SubCOntractListViewState extends State<SubContractListView>{
+class _SubCOntractListViewState extends State<SubContractListView> {
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -307,26 +251,24 @@ class _SubCOntractListViewState extends State<SubContractListView>{
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-        onRefresh: () async {
-          widget.subContractPoolState.clear();
-        },
-        child: ListView(
-          physics: AlwaysScrollableScrollPhysics(),
-          controller: _scrollController,
-          children: <Widget>[
-            _buildItems(),
-            ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-              opacity: widget.subContractPoolState.loadingMore ? 1.0 : 0,
-            ),
-            _buildEnd(),
-          ],
-        ),
-      );
-
+      onRefresh: () async {
+        widget.subContractPoolState.clear();
+      },
+      child: ListView(
+        physics: AlwaysScrollableScrollPhysics(),
+        controller: _scrollController,
+        children: <Widget>[
+          _buildItems(),
+          ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+            opacity: widget.subContractPoolState.loadingMore ? 1.0 : 0,
+          ),
+          _buildEnd(),
+        ],
+      ),
+    );
   }
 
   Widget _buildItems() {
@@ -341,9 +283,12 @@ class _SubCOntractListViewState extends State<SubContractListView>{
       children: <Widget>[
         GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context) => SubContractPoolDetailPage(model.code)));
-
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SubContractPoolDetailPage(model.code)));
           },
           child: Container(
             color: Colors.white,
@@ -353,7 +298,9 @@ class _SubCOntractListViewState extends State<SubContractListView>{
             ),
           ),
         ),
-        Divider(height: 0,)
+        Divider(
+          height: 0,
+        )
       ],
     );
   }
@@ -364,11 +311,14 @@ class _SubCOntractListViewState extends State<SubContractListView>{
       padding: EdgeInsets.only(bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[Text('(￢_￢)已经到底了',style: TextStyle(color: Colors.grey),)],
+        children: <Widget>[
+          Text(
+            '(￢_￢)已经到底了',
+            style: TextStyle(color: Colors.grey),
+          )
+        ],
       ),
     )
         : Container();
   }
 }
-
-

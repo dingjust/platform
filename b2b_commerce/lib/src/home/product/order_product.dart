@@ -1,23 +1,24 @@
-import 'dart:convert';
-
-import 'package:b2b_commerce/src/business/products/product_category.dart';
+import 'package:b2b_commerce/src/_shared/widgets/category_selector.dart';
+import 'package:b2b_commerce/src/_shared/widgets/filter_condition_selector.dart';
+import 'package:b2b_commerce/src/_shared/widgets/region_city_selector.dart'
+as yj;
 import 'package:b2b_commerce/src/business/search/history_search.dart';
-import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import '../../_shared/widgets/scroll_to_top_button.dart';
-import '../../home/product/product.dart';
-import '../../home/search/order_product_search.dart';
+import 'order_product_condition_page.dart';
+import 'order_product_view.dart';
 
 class ProductsPage extends StatefulWidget {
   String keyword;
   String factoryUid;
 
-  ProductsPage({Key key, this.keyword,this.factoryUid}) : super(key: key);
+  ProductsPage({Key key, this.keyword, this.factoryUid}) : super(key: key);
 
   _ProductsPageState createState() => _ProductsPageState();
 }
@@ -31,15 +32,27 @@ class _ProductsPageState extends State<ProductsPage> {
   bool showFilterMenu = false;
 
   List<FilterConditionEntry> conditionEntries = <FilterConditionEntry>[
-    FilterConditionEntry(label: '最新', value: null, checked: true),
-    FilterConditionEntry(label: '价格', value: 'minPrice'),
-    FilterConditionEntry(label: '订单数', value: 'totalOrdersCount'),
+    FilterConditionEntry(label: '排序', value: null),
+    FilterConditionEntry(label: '价格升序', value: 'steppedPrice-asc'),
+    FilterConditionEntry(label: '价格降序', value: 'steppedPrice-desc'),
+    FilterConditionEntry(
+      label: '工厂星级',
+      value: 'starLevel',
+    ),
+    FilterConditionEntry(label: '接单数量', value: 'totalOrdersCount'),
   ];
 
   String _title = '看款下单';
   String _textSelect = '全部品类';
 
   List<String> historyKeywords;
+
+  List<String> _dropDownHeaderItemStrings = ['排序', '地区', '品类', '筛选'];
+  GZXDropdownMenuController _dropdownMenuController =
+  GZXDropdownMenuController();
+
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey _stackKey = GlobalKey();
 
   @override
   void initState() {
@@ -52,14 +65,15 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.factoryUid != null){
+    if (widget.factoryUid != null) {
       _title = '现款商品';
-    }else if(productCondition.keyword == null || productCondition.keyword == ''){
+    } else if (productCondition.keyword == null ||
+        productCondition.keyword == '') {
       _title = '${productCondition.keyword}';
     }
 
     return BLoCProvider<OrderByProductBLoc>(
-      key: _productsPageKey,
+      // key: _productsPageKey,
       bloc: OrderByProductBLoc.instance,
       child: Scaffold(
         appBar: AppBar(
@@ -85,15 +99,16 @@ class _ProductsPageState extends State<ProductsPage> {
                     dynamic result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HistorySearch(
-                          historyKey: GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
-                          hintText: '请输入编码，名称，货号搜索',
-                          keyword: productCondition.keyword,
-                        )
-                      ),
+                          builder: (context) =>
+                              HistorySearch(
+                                historyKey: GlobalConfigs
+                                    .ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
+                                hintText: '请输入编码，名称，货号搜索',
+                                keyword: productCondition.keyword,
+                              )),
                     );
 
-                    if(result != null){
+                    if (result != null) {
                       productCondition.keyword = result;
                       OrderByProductBLoc.instance.clearProducts();
                     }
@@ -111,9 +126,11 @@ class _ProductsPageState extends State<ProductsPage> {
                         const Icon(B2BIcons.search,
                             color: Colors.grey, size: 18),
                         Text(
-                          '${productCondition.keyword != null && productCondition.keyword != ''? productCondition.keyword : '请输入编码，名称，货号搜索'}',
-                          style: const TextStyle(
-                              color: Colors.grey, fontSize: 16),
+                          '${productCondition.keyword != null &&
+                              productCondition.keyword != '' ? productCondition
+                              .keyword : '请输入编码，名称，货号搜索'}',
+                          style:
+                          const TextStyle(color: Colors.grey, fontSize: 16),
                         )
                       ],
                     ),
@@ -122,98 +139,140 @@ class _ProductsPageState extends State<ProductsPage> {
               ),
             ],
           ),
-          bottom: PreferredSize(
-              preferredSize: Size(200, 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          showFilterMenu = !showFilterMenu;
-                        });
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            '${conditionEntries.firstWhere((entry) => entry.checked).label}',
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromRGBO(255, 219, 0, 1)),
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Color.fromRGBO(255, 219, 0, 1),
-                          )
-                        ],
-                      )),
-                  Container(
-                    width: 150,
-                    child: FlatButton(
-                      onPressed: () async {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              child: CategorySelect(
-                                categories: cascadedCategories,
-                                multiple: false,
-                                verticalDividerOpacity: 1,
-                                categorySelect: productCondition.categories,
-                                categoryActionType: CategoryActionType.TO_POP,
-                              ),
-                            );
-                          },
-                        ).then((a) {
-                          setState(() {
-                            if(productCondition.categories.length > 0){
-                             _textSelect = productCondition.categories[0].name;
-                            }else{
-                              _textSelect = '全部品类';
-                            }
-                          });
-                          if(widget.factoryUid == null){
-                            OrderByProductBLoc.instance.getData(productCondition);
-                          }else{
-                            OrderByProductBLoc.instance.getCashProducts(widget.factoryUid);
-                          }
-                        });
-                      },
-                      child: Text(
-                        '${generateCategoryStr()}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  )
-                ],
-              )),
         ),
-        body: Column(
-          children: <Widget>[
-            FilterSelectMenu(
-              color: Color.fromRGBO(255, 214, 12, 1),
-              height: showFilterMenu ? 150 : 0,
-              entries: conditionEntries,
-              streamController: OrderByProductBLoc.instance.conditionController,
-              afterPressed: (String str) {
-                setState(() {
-                  showFilterMenu = !showFilterMenu;
-                });
-              },
-            ),
-            Expanded(
-              flex: 1,
-              child: ProductsView(
+        body: Scaffold(
+            key: _scaffoldKey,
+            endDrawer: Drawer(
+              child: ProductConditionPage(
                 productCondition: productCondition,
                 factoryUid: widget.factoryUid,
               ),
             ),
-          ],
-        ),
+            body: Stack(
+              key: _stackKey,
+              fit: StackFit.expand,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    GZXDropDownHeader(
+                      items: [
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0]),
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[1]),
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[2]),
+                        GZXDropDownHeaderItem(_dropDownHeaderItemStrings[3],
+                            iconData: Icons.menu, iconSize: 18),
+                      ],
+                      stackKey: _stackKey,
+                      controller: _dropdownMenuController,
+                      onItemTap: (index) {
+                        if (index == 3) {
+                          _scaffoldKey.currentState.openEndDrawer();
+                        }
+                      },
+                      dividerHeight: 0,
+                      color: Colors.grey[100],
+                      dropDownStyle:
+                      TextStyle(fontSize: 13, color: Colors.orange),
+                      iconDropDownColor: Colors.orange,
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: ProductsView(
+                        productCondition: productCondition,
+                        factoryUid: widget.factoryUid,
+                      ),
+                    )
+                  ],
+                ),
+                Builder(
+                  builder: (dropMenuContext) =>
+                      GZXDropDownMenu(
+                        controller: _dropdownMenuController,
+                        // 下拉菜单显示或隐藏动画时长
+                        animationMilliseconds: 0,
+                        menus: [
+                          GZXDropdownMenuBuilder(
+                            dropDownHeight: 40.0 * conditionEntries.length + 20,
+                            dropDownWidget: FilterConditionSelector(
+                              // cancell: () {},
+                                entries: conditionEntries,
+                                callBack: (entry) => _onConditionSelect(entry)),
+                          ),
+                          GZXDropdownMenuBuilder(
+                            dropDownHeight: 40 * 8.0,
+                            dropDownWidget: yj.RegionCitySelector(
+                                cancell: () {},
+                                maximum: 1,
+                                callBack: (region, cities) =>
+                                    _onCitySelect(region, cities)),
+                          ),
+                          GZXDropdownMenuBuilder(
+                              dropDownHeight: 40 * 8.0,
+                              dropDownWidget: Builder(
+                                builder: (selectContext) =>
+                                    CategorySelector(
+                                        callBack: (category) =>
+                                            _onCategorySelect(category)),
+                              )),
+                        ],
+                      ),
+                )
+              ],
+            )),
         floatingActionButton: ScrollToTopButton<OrderByProductBLoc>(),
       ),
     );
+  }
+
+  void _onConditionSelect(FilterConditionEntry condition) {
+    _dropdownMenuController.hide();
+    setState(() {
+      _dropDownHeaderItemStrings[0] = '${condition.label}';
+      if (condition.value == 'steppedPrice-asc') {
+        productCondition.sortCondition = 'steppedPrice';
+        productCondition.sort = 'asc';
+      } else if (condition.value == 'steppedPrice-desc') {
+        productCondition.sortCondition = 'steppedPrice';
+        productCondition.sort = 'desc';
+      } else {
+        productCondition.sortCondition = condition.value;
+      }
+    });
+
+    _dataUpdate();
+  }
+
+  void _onCitySelect(RegionModel region, List<CityModel> cities) {
+    _dropdownMenuController.hide();
+    setState(() {
+      _dropDownHeaderItemStrings[1] = '${region?.name ?? '全国'}';
+      productCondition.region = region;
+      productCondition.cities = cities ?? [];
+    });
+    _dataUpdate();
+  }
+
+  void _onCategorySelect(CategoryModel category) {
+    _dropdownMenuController.hide();
+    setState(() {
+      if (category == null) {
+        _dropDownHeaderItemStrings[2] = '品类';
+        productCondition.categories = [];
+      } else {
+        productCondition.categories = [category];
+        _dropDownHeaderItemStrings[2] = category.name;
+      }
+    });
+    _dataUpdate();
+  }
+
+  void _dataUpdate() {
+    ///条件更新数据
+    if (widget.factoryUid == null) {
+      OrderByProductBLoc.instance.getData(productCondition);
+    } else {
+      OrderByProductBLoc.instance.getCashProducts(widget.factoryUid);
+    }
   }
 
   String generateCategoryStr() {
@@ -239,192 +298,5 @@ class _ProductsPageState extends State<ProductsPage> {
     // TODO: implement dispose
     OrderByProductBLoc.instance.clear();
     super.dispose();
-  }
-}
-
-class ProductsView extends StatelessWidget {
-  ProductCondition productCondition;
-  String factoryUid;
-
-  ProductsView({this.productCondition,this.factoryUid,});
-
-  ScrollController _scrollController = ScrollController();
-
-  @override
-  Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<OrderByProductBLoc>(context);
-
-    //监听筛选条件更改
-    bloc.conditionStream.listen((condition) {
-      bloc.clear();
-      productCondition.sortCondition = condition.value;
-      //默认价格升序
-      if (condition.value == 'minPrice') {
-        productCondition.sort = 'ASC';
-      } else {
-        productCondition.sort = 'desc';
-      }
-      if(factoryUid == null){
-        OrderByProductBLoc.instance.getData(productCondition);
-      }else{
-        OrderByProductBLoc.instance.getCashProducts(factoryUid);
-      }
-    });
-
-    //监听是否已经到底
-    // bloc.bottomStream.listen((isBottom) {
-    //   if (isBottom) {
-    //     _scrollController.animateTo(_scrollController.offset - 70,
-    //         duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-    //   }
-    // });
-
-    //监听滚动事件，打印滚动位置
-    _scrollController.addListener(() {
-      if (_scrollController.offset < 500) {
-        bloc.hideToTopBtn();
-      } else if (_scrollController.offset >= 500) {
-        bloc.showToTopBtn();
-      }
-    });
-
-    //状态管理触发的返回顶部
-    bloc.returnToTopStream.listen((data) {
-      //返回到顶部时执行动画
-      if (data) {
-        _scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
-      }
-    });
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        bloc.loadingStart();
-        if(factoryUid == null){
-          bloc.loadingMore(productCondition);
-        }else{
-          bloc.loadingMoreByCastProducts(factoryUid);
-        }
-      }
-    });
-
-    return Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1)),
-        child: RefreshIndicator(
-          onRefresh: () async {
-//            bloc.clear();
-            if(factoryUid == null){
-              OrderByProductBLoc.instance.getData(productCondition);
-            }else{
-              OrderByProductBLoc.instance.getCashProducts(factoryUid);
-            }
-          },
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: <Widget>[
-              StreamBuilder<List<ApparelProductModel>>(
-                  stream: bloc.stream,
-                  initialData: null,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<ApparelProductModel>> snapshot) {
-                    //数据为空查询数据，显示加载条
-                    if (snapshot.data == null) {
-                      if(factoryUid == null){
-                        OrderByProductBLoc.instance.getData(productCondition);
-                      }else{
-                        OrderByProductBLoc.instance.getCashProducts(factoryUid);
-                      }
-                      return SliverToBoxAdapter(
-                        child: ProgressIndicatorFactory
-                            .buildPaddedProgressIndicator(),
-                      );
-                    } else {
-                      return SliverToBoxAdapter(
-                        child: Container(),
-                      );
-                    }
-                  }),
-              StreamBuilder<List<ApparelProductModel>>(
-                  stream: bloc.stream,
-                  initialData: bloc.products,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<ApparelProductModel>> snapshot) {
-                  if (snapshot.data != null && snapshot.data.isNotEmpty) {
-                      List<RecommendProductItem> recommendProductItems =
-                          snapshot.data
-                              .map((product) => RecommendProductItem(
-                                    model: product,
-                                    showAddress: true,
-                                  ))
-                              .toList();
-
-                      return SliverPadding(
-                        padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                        sliver: SliverGrid(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, //Grid按两列显示
-                            mainAxisSpacing: 10.0,
-                            crossAxisSpacing: 10.0,
-                            childAspectRatio: 0.60,
-                          ),
-                          delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            return recommendProductItems[index];
-                          }, childCount: snapshot.data.length),
-                        ),
-                      );
-                    } else {
-                      return SliverPadding(
-                        padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                      );
-                    }
-                  }),
-              // StreamBuilder<bool>(
-              //   stream: bloc.bottomStream,
-              //   initialData: false,
-              //   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              //     if (snapshot.data) {
-              //       _scrollController.animateTo(_scrollController.offset - 70,
-              //           duration: new Duration(milliseconds: 500),
-              //           curve: Curves.easeOut);
-              //     }
-              //     // return SliverToBoxAdapter(
-              //     //   child: snapshot.data
-              //     //       ? Container(
-              //     //           padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
-              //     //           child: Center(
-              //     //             child: Text(
-              //     //               "┑(￣Д ￣)┍ 已经到底了",
-              //     //               style: TextStyle(color: Colors.grey),
-              //     //             ),
-              //     //           ),
-              //     //         )
-              //     //       : Container(),
-              //     // );
-              //     return
-              //   },
-              // ),
-              StreamBuilder<bool>(
-                stream: bloc.loadingStream,
-                initialData: false,
-                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  return SliverToBoxAdapter(
-                    child: ProgressIndicatorFactory
-                        .buildPaddedOpacityProgressIndicator(
-                      opacity: snapshot.data ? 1.0 : 0,
-                    ),
-                  );
-                },
-              ),
-              SliverToBoxAdapter(
-                child: Container(
-                  height: 30,
-                ),
-              ),
-            ],
-          ),
-        ));
   }
 }
