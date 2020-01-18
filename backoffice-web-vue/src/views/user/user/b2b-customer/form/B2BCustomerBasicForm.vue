@@ -7,128 +7,273 @@
         </div>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" :model="slotData" :rules="rules" :inline="true" :hide-required-asterisk="true">
-        <el-row type="flex">
-          <el-col :span="9">
-            <el-form-item prop="name">
-              <template slot="label">
-                <h6 class="titleTextClass">员工姓名<span style="color: #F56C6C">*</span></h6>
-              </template>
-              <el-row type="flex">
-                <el-input placeholder="请填写员工姓名" v-model="uid" size="mini" style="width: 194px"></el-input>
-              </el-row>
-            </el-form-item>
-          </el-col>
-          <el-col :span="9">
-            <el-form-item prop="uid">
-              <template slot="label">
-                <h6 class="titleTextClass">员工账号<span style="color: #F56C6C">*</span></h6>
-              </template>
-              <el-row type="flex">
-                <el-input placeholder="请输入员工账号" v-model="name" size="mini" style="width: 194px"></el-input>
-              </el-row>
-              <h6 style="margin-left: 40px;">员工初始密码与账号相同</h6>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-button size="medium" type="primary" class="toolbar-search_input" @click="invite" style="margin-bottom: 10px">
-              邀请
-            </el-button>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :span="9">
-            <el-form-item prop="name">
-              <template slot="label">
-                <h6 class="titleTextClass">所属部门<span style="color: #FFFFFF">*</span></h6>
-              </template>
-              <el-row type="flex">
-                <el-select v-model="value" placeholder="请选择所属部门">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-row>
-            </el-form-item>
-          </el-col>
-          <el-col :span="9">
-            <el-form-item prop="uid">
-              <template slot="label">
-                <h6 class="titleTextClass">选择角色<span style="color: #FFFFFF">*</span></h6>
-              </template>
-              <el-row type="flex">
-                <el-select v-model="value" placeholder="请选择角色">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-row>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <b2-b-customer-permission-form/>
-      </el-form>
+      <div class="titleCardClass">
+        <el-form ref="form" :model="formData" :rules="rules" :inline="true" :hide-required-asterisk="true">
+          <div class="titleClass">
+            <h6>基本信息</h6>
+          </div>
+          <div style="margin: 20px 20px 40px 40px">
+            <el-row type="flex">
+              <el-col :span="9">
+                <el-form-item prop="name">
+                  <template slot="label">
+                    <h6 class="titleTextClass">
+                      员工姓名
+                      <span style="color: #F56C6C">*</span>
+                    </h6>
+                  </template>
+                  <el-row type="flex">
+                    <el-input
+                      placeholder="请填写员工姓名"
+                      v-model="formData.name"
+                      size="mini"
+                      style="width: 194px"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+              <el-col :span="9">
+                <el-form-item prop="uid">
+                  <template slot="label">
+                    <h6 class="titleTextClass">
+                      员工账号
+                      <span style="color: #F56C6C">*</span>
+                    </h6>
+                  </template>
+                  <el-row type="flex">
+                    <el-input
+                      placeholder="请输入员工账号"
+                      v-model="formData.uid"
+                      size="mini"
+                      style="width: 194px"
+                    ></el-input>
+                  </el-row>
+                </el-form-item>
+                <h6 style="padding-left: 120px;color: #909399">员工初始密码与账号相同</h6>
+              </el-col>
+            </el-row>
+            <el-row type="flex">
+
+              <el-col :span="9">
+                <el-form-item prop="b2bDept">
+                  <template slot="label">
+                    <h6 class="titleTextClass">
+                      所属部门
+                      <span style="color: #FFFFFF">*</span>
+                    </h6>
+                  </template>
+                  <el-row type="flex">
+                    <el-tree-select :props="props"
+                                    :placeholder="'请选择部门'"
+                                    :options="deptList"
+                                    :value="formData.b2bDept.id"
+                                    :label="formData.b2bDept.name"
+                                    @getValue="selectDept">
+                    </el-tree-select>
+<!--                    <el-cascader-->
+<!--                      v-model="formData.b2bDept.id"-->
+<!--                      :options="deptList"-->
+<!--                      :props="{ expandTrigger: 'hover' , value:'id',label:'name', checkStrictly: true, emitPath: false}"-->
+<!--                      :change-on-select="true"-->
+<!--                      :show-all-levels="false"-->
+<!--                      @change="deptSelect"-->
+<!--                    ></el-cascader>-->
+                  </el-row>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="9">
+                <el-form-item prop="b2bRoleGroup">
+                  <template slot="label">
+                    <h6 class="titleTextClass">
+                      选择角色
+                      <span style="color: #FFFFFF">*</span>
+                    </h6>
+                  </template>
+                  <el-row type="flex">
+                    <el-select v-model="formData.b2bRoleGroup" placeholder="请选择角色" value-key="id" @change="roleSelect">
+                      <el-option
+                        v-for="item in roleGroupList"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item"
+                      ></el-option>
+                    </el-select>
+                  </el-row>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="titleClass">
+            <h6>权限选择</h6>
+          </div>
+          <div style="margin: 20px 20px 40px 40px">
+            <b2-b-customer-permission-form :formData="formData" ref="permissionForm"/>
+          </div>
+        </el-form>
+      </div>
+      <el-row type="flex" justify="center">
+        <el-button class="buttonClass" @click="onSave">
+          <h6>保存</h6>
+        </el-button>
+      </el-row>
     </el-card>
   </div>
 </template>
 
 <script>
-  import B2BCustomerPermissionForm from './B2BCustomerPermissionForm';
-  export default {
-    name: 'B2BCustomerBasicForm',
-    components: {B2BCustomerPermissionForm},
-    props: ['slotData', 'readOnly'],
-    methods: {
-      invite () {
+import { createNamespacedHelpers } from "vuex";
+const { mapGetters, mapMutations, mapActions } = createNamespacedHelpers(
+  "B2BCustomersModule"
+);
 
+import B2BCustomerPermissionForm from "./B2BCustomerPermissionForm";
+import { B2BCustomersModule } from "../../../../../store/modules";
+import ElTreeSelect from "../tree/treeSelect";
+export default {
+  name: "B2BCustomerBasicForm",
+  components: {ElTreeSelect, B2BCustomerPermissionForm },
+  props: [],
+  computed: {},
+  methods: {
+    async getDeptList() {
+      const url = this.apis().getB2BCustomerDeptList();
+      const result = await this.$http.post(url);
+      if (result["errors"]) {
+        this.$message.error(result["errors"][0].message);
+        return;
       }
+      this.deptList = result.data;
+      this.getTreeData(this.deptList);
     },
-    data () {
-      return {
-        rules: {
-          uid: [{required: true, message: '必填', trigger: 'blur'}],
-          name: [{required: true, message: '必填', trigger: 'blur'}]
-        },
-        uid: '',
-        name: '',
-        mobileNumber: '',
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: ''
+    async getRoleGroupList() {
+      let formData = {};
+      const url = this.apis().getB2BCustomerRoleGroupList();
+      const result = await this.$http.post(url, formData, {
+        page: 0,
+        size: 100
+      });
+      if (result["errors"]) {
+        this.$message.error(result["errors"][0].message);
+        return;
+      }
+      this.roleGroupList = result.content;
+    },
+    async roleSelect (data) {
+      const url = this.apis().getB2BCustomerRoleGroupDetails(data.id);
+      const result = await this.$http.get(url);
+      if (result['errors']) {
+        this.$message.error(result['errors'][0].message);
+        return;
+      }
+      this.$refs.permissionForm.setCheckChange(result.data.roleList);
+    },
+    selectDept(val) {
+      this.b2bDeptId = val;
+    },
+    async onSave() {
+      console.log(this.formData);
+      let data = {
+        name: this.formData.name,
+        uid: this.formData.uid,
+        b2bDept: this.b2bDeptId == 0 ? null : {id: this.b2bDeptId},
+        b2bRoleGroup: this.formData.b2bRoleGroup.id == 0 ? null : {id: this.formData.b2bRoleGroup.id},
+        b2bRoleList: this.distinct(this.formData.b2bRoleList)
       };
+      console.log(data);
+      return ;
+      const url = this.apis().createB2BCustomer();
+      const result = await this.$http.post(url, data);
+      if (result["errors"]) {
+        this.$message.error(result["errors"][0].message);
+        return;
+      }
+      this.$message.success("添加员工成功");
+      this.$router.push({
+        name: "员工"
+      });
     },
-    created () {
+    // 数组去重
+    distinct(arr) {
+      let result = []
+      let obj = {};
+      for (let i of arr) {
+        if (!obj[i]) {
+          result.push(i)
+          obj[i] = 1
+        }
+      }
+      return result
+    },
+    getTreeData(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].children == null) {
+          return;
+        }
+        if (data[i].children.length < 1) {
+          data[i].children = undefined;
+        } else {
+          this.getTreeData(data[i].children);
+        }
+      }
     }
-  };
+  },
+  data() {
+    return {
+      rules: {
+        uid: [{ required: true, message: "必填", trigger: "blur" }],
+        name: [{ required: true, message: "必填", trigger: "blur" }]
+      },
+      uid: "",
+      name: "",
+      mobileNumber: "",
+      formData: {},
+      roleGroupList: [],
+      deptList: [],
+      props:{
+        value: 'id',
+        label: 'name',
+        children: 'children',
+        // disabled:true
+      },
+    };
+  },
+  created() {
+    this.getDeptList();
+    this.getRoleGroupList();
+    if (this.$route.params.formData != null) {
+      this.formData = Object.assign({}, this.$route.params.formData);
+      if (this.formData.b2bDept == null) {
+        this.$set(this.formData, 'b2bDept', {id: ''});
+      }
+    } else {
+      this.formData = Object.assign({}, this.$store.state.B2BCustomersModule.formData);
+    }
+    console.log(this.formData);
+  }
+};
 </script>
 <style scoped>
+  .titleCardClass{
+    border-style: solid;
+    border-width: 1px;
+    border-top: white;
+    border-color: #DCDCDC;
+  }
+
+  .titleClass {
+    padding: 10px 0px 1px 10px;
+    background-color: #DCDCDC;
+  }
+
   .customer-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
 
   .b2bCustomer-toolbar .formLabel {
-    font-size: 12px;display: inline-block;
+    font-size: 12px;
+    display: inline-block;
   }
 
   .toolbar-search_input {
@@ -145,4 +290,16 @@
     /*font-weight: bold;*/
   }
 
+  .el-form-item--mini.el-form-item,
+  .el-form-item--small.el-form-item {
+    margin-bottom: 0px;
+  }
+
+  .buttonClass {
+    padding: 10px 120px 0px 120px;
+    margin-top: 40px;
+    background-color: #ffd60c;
+    color: #0b0e0f;
+    border-radius: 8px;
+  }
 </style>

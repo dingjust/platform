@@ -3,12 +3,24 @@
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="姓名" prop="name"></el-table-column>
       <el-table-column label="账号" prop="uid"></el-table-column>
-      <el-table-column label="部门" prop=""></el-table-column>
-      <el-table-column label="角色" prop=""></el-table-column>
-      <el-table-column label="状态" prop=""></el-table-column>
+      <el-table-column label="部门" prop="b2bDept">
+        <template slot-scope="scope">
+          <span>{{scope.row.b2bDept != null ? scope.row.b2bDept.name : ''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="角色" prop="b2bRoleGroup">
+        <template slot-scope="scope">
+          <span>{{scope.row.b2bRoleGroup != null ? scope.row.b2bRoleGroup.name : ''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="loginDisabled">
+        <template slot-scope="scope">
+          <span>{{scope.row.loginDisabled ? '禁用' : '启用'}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.value" placeholder="请选择" size="mini"
+          <el-select v-model="operation" placeholder="请选择" size="mini"
                      @change="selectionOperation" @visible-change="getData(scope.row)">
             <el-option
               v-for="item in options"
@@ -36,7 +48,9 @@
   export default {
     name: 'B2BCustomerList',
     props: ['page'],
-    computed: {},
+    computed: {
+      
+    },
     methods: {
       onPageSizeChanged (val) {
         this._reset();
@@ -56,45 +70,47 @@
       },
       selectionOperation (current) {
         console.log(current);
-        if (current === '1') {
-          this.$emit('editInfo', this.slotData);
-        }
-        if (current === '2') {
-          this.$emit('setDepartmentHead', this.slotData);
-        }
-        if (current === '3') {
-          this.$emit('workHandover', this.slotData);
-        }
-        if (current === '4') {
-          this.$emit('forbiddenUser', this.slotData);
-        }
-        if (current === '5') {
-          this.$emit('deleteUser', this.slotData);
-        }
+        this.operation = '';
+        this.$emit(current, this.slotData);
+        this.slotData = {};
       },
       getData (row) {
+        this.options = Object.assign([], this.options1);
+        if (row.b2bDept != null) {
+          this.options.push({
+            value: 'setDepartmentHead',
+            label: '设为部门负责人'
+          });
+        }
+        if (row.loginDisabled) {
+          this.options.push({
+            value: 'enableUser',
+            label: '启用账号'
+          });
+        } else {
+          this.options.push({
+            value: 'forbiddenUser',
+            label: '禁用账号'
+          });
+        }
         this.slotData = row;
       }
     },
     data () {
       return {
-        options: [{
-          value: '1',
+        options1: [{
+          value: 'editInfo',
           label: '编辑信息'
         }, {
-          value: '2',
-          label: '设为部门负责人'
-        }, {
-          value: '3',
+          value: 'workHandover',
           label: '工作交接'
         }, {
-          value: '4',
-          label: '禁用账号'
-        }, {
-          value: '5',
+          value: 'deleteUser',
           label: '删除账号'
         }],
-        slotData: ''
+        options: [],
+        slotData: '',
+        operation: ''
       }
     }
   }

@@ -18,19 +18,41 @@ const state = {
     mobileNumber: '',
     password: '',
     confirmPassword: '',
-    roles: []
-  }
+    roles: [],
+    b2bRoleList: [],
+    b2bDept: {
+      id: 0
+    },
+    b2bRoleGroup: {
+      id: 0
+    }
+  },
+  roleForm: {
+    id: null,
+    name: '',
+    roleIds: []
+  },
+  roleList: [],
+  deptList: [],
+  roleGroupList: [],
+  roleCodeList: []
 };
 
 const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  roleList: (state, roleList) => state.roleList = roleList,
+  deptList: (state, deptList) => state.deptList = deptList,
+  roleForm: (state, roleForm) => state.roleForm = roleForm,
+  formData: (state, formData) => state.formData = formData,
+  roleGroupList: (state, roleGroupList) => state.roleGroupList = roleGroupList,
+  roleCodeList: (state, roleCodeList) => state.roleCodeList = roleCodeList
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url,keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
@@ -38,7 +60,7 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword},{
+      keyword: state.keyword}, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -48,20 +70,26 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state},{url}) {
+  refresh ({dispatch, commit, state}, {url}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {url,keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {url, keyword, page: currentPageNumber, size: currentPageSize});
   }
 };
 
 const getters = {
+  formData: state => state.formData,
+  roleForm: state => state.roleForm,
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  roleList: state => state.roleList,
+  deptList: state => state.deptList,
+  roleGroupList: state => state.roleGroupList,
+  roleCodeList: state => state.roleCodeList
 };
 
 export default {

@@ -98,7 +98,6 @@
               };
               this.$emit('onConfirm', formData);
             } else {
-              alert('=====================');
               this.$message.error('请完善表单信息');
               return false;
             }

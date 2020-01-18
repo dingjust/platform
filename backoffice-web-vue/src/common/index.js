@@ -210,8 +210,32 @@ const COMMON_APIS = {
   getB2BCustomers() {
     return '/b2b/b2bCustomers';
   },
+  getB2BCustomerDeptList() {
+    return '/b2b/dept/tree/list';
+  },
+  createB2BCustomerDept() {
+    return '/b2b/dept/save';
+  },
+  deleteB2BCustomerDept(id) {
+    return '/b2b/dept/delete/' + id;
+  },
+  getB2BCustomerRoleGroupList() {
+    return '/b2b/role/group/list';
+  },
+  saveB2BCustomerRoleGroup() {
+    return '/b2b/role/group/save';
+  },
+  removeB2BCustomerRoleGroup(id) {
+    return '/b2b/role/group/delete/' + id;
+  },
+  getB2BCustomerRoleGroupDetails(id) {
+    return '/b2b/role/group/get/' + id;
+  },
   getB2BCustomer(uid) {
     return '/b2b/b2bCustomers/' + uid;
+  },
+  getRoleList() {
+    return '/b2b/role/tree/list';
   },
   createRole() {
     return '/b2b/roles/create';
