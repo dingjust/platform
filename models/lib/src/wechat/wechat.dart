@@ -24,10 +24,8 @@ class WechatPrepayModel {
       this.signType});
 
   factory WechatPrepayModel.fromJson(Map<String, dynamic> json) =>
-      _$WechatPrepayModelFromJson(json);
+      json == null ? null : _$WechatPrepayModelFromJson(json);
 
   static Map<String, dynamic> toJson(WechatPrepayModel model) =>
-      _$WechatPrepayModelToJson(model);
+      model == null ? null : _$WechatPrepayModelToJson(model);
 }
-
-

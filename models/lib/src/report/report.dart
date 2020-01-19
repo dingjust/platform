@@ -11,9 +11,11 @@ class SiteStatisticsModel extends ItemModel {
 
   SiteStatisticsModel({this.label, this.value});
 
-  factory SiteStatisticsModel.fromJson(Map<String, dynamic> json) => _$SiteStatisticsModelFromJson(json);
+  factory SiteStatisticsModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$SiteStatisticsModelFromJson(json);
 
-  static Map<String, dynamic> toJson(SiteStatisticsModel model) => _$SiteStatisticsModelToJson(model);
+  static Map<String, dynamic> toJson(SiteStatisticsModel model) =>
+      model == null ? null : _$SiteStatisticsModelToJson(model);
 }
 
 /// 公司订单报表
@@ -56,7 +58,9 @@ class Reports {
     this.ordersCount9 = 0,
   });
 
-  factory Reports.fromJson(Map<String, dynamic> json) => _$ReportsFromJson(json);
+  factory Reports.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ReportsFromJson(json);
 
-  static Map<String, dynamic> toJson(Reports model) => _$ReportsToJson(model);
+  static Map<String, dynamic> toJson(Reports model) =>
+      model == null ? null : _$ReportsToJson(model);
 }

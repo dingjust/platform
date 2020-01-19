@@ -63,10 +63,10 @@ class AbstractOrderNoteModel extends ItemModel {
         this.consignment});
 
   factory AbstractOrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      _$AbstractOrderNoteModelFromJson(json);
+      json == null ? null : _$AbstractOrderNoteModelFromJson(json);
 
   static Map<String, dynamic> toJson(AbstractOrderNoteModel model) =>
-      _$AbstractOrderNoteModelToJson(model);
+      model == null ? null : _$AbstractOrderNoteModelToJson(model);
 
   static Map<String, dynamic> _b2bCustomerToJson(B2BCustomerModel model) =>
       model == null ? null : B2BCustomerModel.toJson(model);
@@ -91,10 +91,10 @@ class AbstractOrderNoteEntryModel extends ItemModel {
   AbstractOrderNoteEntryModel({this.quantity, this.color, this.size});
 
   factory AbstractOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      _$AbstractOrderNoteEntryModelFromJson(json);
+      json == null ? null : _$AbstractOrderNoteEntryModelFromJson(json);
 
   static Map<String, dynamic> toJson(AbstractOrderNoteEntryModel model) =>
-      _$AbstractOrderNoteEntryModelToJson(model);
+      model == null ? null : _$AbstractOrderNoteEntryModelToJson(model);
 }
 
 /// 订单记录
@@ -132,10 +132,10 @@ class OrderNoteModel extends AbstractOrderNoteModel {
       consignment: consignment);
 
   factory OrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      _$OrderNoteModelFromJson(json);
+      json == null ? null : _$OrderNoteModelFromJson(json);
 
   static Map<String, dynamic> toJson(OrderNoteModel model) =>
-      _$OrderNoteModelToJson(model);
+      model == null ? null : _$OrderNoteModelToJson(model);
 
   static Map<String, dynamic> orderToJson(AbstractOrderModel belongOrder) =>
       belongOrder == null ? null : AbstractOrderModel.toJson(belongOrder);
@@ -164,10 +164,10 @@ class OrderNoteEntryModel extends AbstractOrderNoteEntryModel {
   }) : super(quantity: quantity, color: color, size: size);
 
   factory OrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      _$OrderNoteEntryModelFromJson(json);
+      json == null ? null : _$OrderNoteEntryModelFromJson(json);
 
   static Map<String, dynamic> toJson(OrderNoteEntryModel model) =>
-      _$OrderNoteEntryModelToJson(model);
+      model == null ? null : _$OrderNoteEntryModelToJson(model);
 
   static Map<String, dynamic> orderToJson(OrderNoteModel order) =>
       order == null ? null : OrderNoteModel.toJson(order);
@@ -236,10 +236,10 @@ class ShippingOrderNoteModel extends OrderNoteModel {
             remarks: remarks);
 
   factory ShippingOrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      _$ShippingOrderNoteModelFromJson(json);
+      json == null ? null : _$ShippingOrderNoteModelFromJson(json);
 
   static Map<String, dynamic> toJson(ShippingOrderNoteModel model) =>
-      _$ShippingOrderNoteModelToJson(model);
+      model == null ? null : _$ShippingOrderNoteModelToJson(model);
 }
 
 /// 发货单行
@@ -253,10 +253,10 @@ class ShippingOrderNoteEntryModel extends OrderNoteEntryModel {
   }) : super(quantity: quantity, color: color, size: size, order: order);
 
   factory ShippingOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      _$ShippingOrderNoteEntryModelFromJson(json);
+      json == null ? null : _$ShippingOrderNoteEntryModelFromJson(json);
 
   static Map<String, dynamic> toJson(ShippingOrderNoteEntryModel model) =>
-      _$ShippingOrderNoteEntryModelToJson(model);
+      model == null ? null : _$ShippingOrderNoteEntryModelToJson(model);
 }
 
 /// 收货单
@@ -322,10 +322,10 @@ class DeliveryOrderNoteModel extends OrderNoteModel {
             remarks: remarks);
 
   factory DeliveryOrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      _$DeliveryOrderNoteModelFromJson(json);
+      json == null ? null : _$DeliveryOrderNoteModelFromJson(json);
 
   static Map<String, dynamic> toJson(DeliveryOrderNoteModel model) =>
-      _$DeliveryOrderNoteModelToJson(model);
+      model == null ? null : _$DeliveryOrderNoteModelToJson(model);
 }
 
 /// 收货单行
@@ -339,10 +339,10 @@ class DeliveryOrderNoteEntryModel extends OrderNoteEntryModel {
   }) : super(quantity: quantity, color: color, size: size, order: order);
 
   factory DeliveryOrderNoteEntryModel.fromJson(Map<String, dynamic> json) =>
-      _$DeliveryOrderNoteEntryModelFromJson(json);
+      json == null ? null : _$DeliveryOrderNoteEntryModelFromJson(json);
 
   static Map<String, dynamic> toJson(DeliveryOrderNoteEntryModel model) =>
-      _$DeliveryOrderNoteEntryModelToJson(model);
+      model == null ? null : _$DeliveryOrderNoteEntryModelToJson(model);
 }
 
 /// 对账单
@@ -424,10 +424,10 @@ class ReconciliationOrderNoteModel extends OrderNoteModel {
             remarks: remarks);
 
   factory ReconciliationOrderNoteModel.fromJson(Map<String, dynamic> json) =>
-      _$ReconciliationOrderNoteModelFromJson(json);
+      json == null ? null : _$ReconciliationOrderNoteModelFromJson(json);
 
   static Map<String, dynamic> toJson(ReconciliationOrderNoteModel model) =>
-      _$ReconciliationOrderNoteModelToJson(model);
+      model == null ? null : _$ReconciliationOrderNoteModelToJson(model);
 }
 
 /// 对账单行
@@ -442,10 +442,10 @@ class ReconciliationOrderNoteEntryModel extends OrderNoteEntryModel {
 
   factory ReconciliationOrderNoteEntryModel.fromJson(
           Map<String, dynamic> json) =>
-      _$ReconciliationOrderNoteEntryModelFromJson(json);
+      json == null ? null : _$ReconciliationOrderNoteEntryModelFromJson(json);
 
   static Map<String, dynamic> toJson(ReconciliationOrderNoteEntryModel model) =>
-      _$ReconciliationOrderNoteEntryModelToJson(model);
+      model == null ? null : _$ReconciliationOrderNoteEntryModelToJson(model);
 }
 
 ///生产进度单据状态
@@ -508,10 +508,10 @@ class ProductionProgressOrderModel {
     this.entries});
 
   factory ProductionProgressOrderModel.fromJson(Map<String, dynamic> json) =>
-      _$ProductionProgressOrderModelFromJson(json);
+      json == null ? null : _$ProductionProgressOrderModelFromJson(json);
 
   static Map<String, dynamic> toJson(ProductionProgressOrderModel model) =>
-      _$ProductionProgressOrderModelToJson(model);
+      model == null ? null : _$ProductionProgressOrderModelToJson(model);
 
   static Map<String, dynamic> _operatorToJson(B2BCustomerModel model) =>
       model == null ? null : B2BCustomerModel.toJson(model);

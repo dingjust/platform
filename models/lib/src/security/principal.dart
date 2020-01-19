@@ -36,10 +36,10 @@ class PrincipalModel extends ItemModel {
   });
 
   factory PrincipalModel.fromJson(Map<String, dynamic> json) =>
-      _$PrincipalModelFromJson(json);
+      json == null ? null : _$PrincipalModelFromJson(json);
 
   static Map<String, dynamic> toJson(PrincipalModel model) =>
-      _$PrincipalModelToJson(model);
+      model == null ? null : _$PrincipalModelToJson(model);
 
   static Map<String, dynamic> mediaToJson(MediaModel model) =>
       model == null ? null : MediaModel.toJson(model);
@@ -86,8 +86,8 @@ class PrincipalGroupModel extends PrincipalModel {
         );
 
   factory PrincipalGroupModel.fromJson(Map<String, dynamic> json) =>
-      _$PrincipalGroupModelFromJson(json);
+      json == null ? null : _$PrincipalGroupModelFromJson(json);
 
   static Map<String, dynamic> toJson(PrincipalGroupModel model) =>
-      _$PrincipalGroupModelToJson(model);
+      model == null ? null : _$PrincipalGroupModelToJson(model);
 }

@@ -145,10 +145,10 @@ class AbstractPayPlanModel extends ItemModel {
   });
 
   factory AbstractPayPlanModel.fromJson(Map<String, dynamic> json) =>
-      _$AbstractPayPlanModelFromJson(json);
+      json == null ? null : _$AbstractPayPlanModelFromJson(json);
 
   static Map<String, dynamic> toJson(AbstractPayPlanModel model) =>
-      _$AbstractPayPlanModelToJson(model);
+      model == null ? null : _$AbstractPayPlanModelToJson(model);
 
   static List<Map<String, dynamic>> itemsToJson(
           List<AbstractPayPlanItemModel> items) =>
@@ -191,10 +191,10 @@ class AbstractPayPlanItemModel extends ItemModel {
       this.sequence});
 
   factory AbstractPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
-      _$AbstractPayPlanItemModelFromJson(json);
+      json == null ? null : _$AbstractPayPlanItemModelFromJson(json);
 
   static Map<String, dynamic> toJson(AbstractPayPlanItemModel model) =>
-      _$AbstractPayPlanItemModelToJson(model);
+      model == null ? null : _$AbstractPayPlanItemModelToJson(model);
 }
 
 /// 付款方案
@@ -220,13 +220,15 @@ class CompanyPayPlanModel extends AbstractPayPlanModel {
             payPlanItems: payPlanItems);
 
   factory CompanyPayPlanModel.fromJson(Map<String, dynamic> json) =>
-      _$CompanyPayPlanModelFromJson(json);
+      json == null ? null : _$CompanyPayPlanModelFromJson(json);
 
   static Map<String, dynamic> toJson(CompanyPayPlanModel model) =>
-      _$CompanyPayPlanModelToJson(model);
+      model == null ? null : _$CompanyPayPlanModelToJson(model);
 
   static Map<String, dynamic> principalToJson(PrincipalModel belongTo) =>
-      belongTo == null ? null : PrincipalModel.toJson(belongTo);
+      belongTo == null
+          ? null
+          : belongTo == null ? null : PrincipalModel.toJson(belongTo);
 }
 
 /// 付款方案子项
@@ -248,10 +250,10 @@ class CompanyPayPlanItemModel extends AbstractPayPlanItemModel {
             sequence: sequence);
 
   factory CompanyPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
-      _$CompanyPayPlanItemModelFromJson(json);
+      json == null ? null : _$CompanyPayPlanItemModelFromJson(json);
 
   static Map<String, dynamic> toJson(CompanyPayPlanItemModel model) =>
-      _$CompanyPayPlanItemModelToJson(model);
+      model == null ? null : _$CompanyPayPlanItemModelToJson(model);
 }
 
 /// 订单付款方案
@@ -277,10 +279,10 @@ class OrderPayPlanModel extends AbstractPayPlanModel {
             payPlanItems: payPlanItems);
 
   factory OrderPayPlanModel.fromJson(Map<String, dynamic> json) =>
-      _$OrderPayPlanModelFromJson(json);
+      json == null ? null : _$OrderPayPlanModelFromJson(json);
 
   static Map<String, dynamic> toJson(OrderPayPlanModel model) =>
-      _$OrderPayPlanModelToJson(model);
+      model == null ? null : _$OrderPayPlanModelToJson(model);
 }
 
 /// 订单付款方案子项
@@ -310,10 +312,10 @@ class OrderPayPlanItemModel extends AbstractPayPlanItemModel {
             sequence: sequence);
 
   factory OrderPayPlanItemModel.fromJson(Map<String, dynamic> json) =>
-      _$OrderPayPlanItemModelFromJson(json);
+      json == null ? null : _$OrderPayPlanItemModelFromJson(json);
 
   static Map<String, dynamic> toJson(OrderPayPlanItemModel model) =>
-      _$OrderPayPlanItemModelToJson(model);
+      model == null ? null : _$OrderPayPlanItemModelToJson(model);
 
   static List<Map<String, dynamic>> _paymentOrdersToJson(
           List<PaymentOrderModel> paymentOrders) =>
