@@ -12,13 +12,12 @@ class AmountFlowResponse {
   final int totalElements;
   final List<AmountFlowModel> content;
 
-  AmountFlowResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  AmountFlowResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory AmountFlowResponse.fromJson(Map<String, dynamic> json) =>
-      _$AmountFlowResponseFromJson(json);
+      json == null ? null : _$AmountFlowResponseFromJson(json);
 
   static Map<String, dynamic> toJson(AmountFlowResponse model) =>
-      _$AmountFlowResponseToJson(model);
+      model == null ? null : _$AmountFlowResponseToJson(model);
 }
-

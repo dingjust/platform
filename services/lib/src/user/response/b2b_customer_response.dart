@@ -16,8 +16,8 @@ class B2BCustomerResponse {
       this.totalElements, this.content);
 
   factory B2BCustomerResponse.fromJson(Map<String, dynamic> json) =>
-      _$B2BCustomerResponseFromJson(json);
+      json == null ? null : _$B2BCustomerResponseFromJson(json);
 
   static Map<String, dynamic> toJson(B2BCustomerResponse model) =>
-      _$B2BCustomerResponseToJson(model);
+      model == null ? null : _$B2BCustomerResponseToJson(model);
 }

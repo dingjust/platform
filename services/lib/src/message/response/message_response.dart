@@ -12,8 +12,8 @@ class CountUnreadResponse {
   CountUnreadResponse({this.order, this.system, this.finance});
 
   factory CountUnreadResponse.fromJson(Map<String, dynamic> json) =>
-      _$CountUnreadResponseFromJson(json);
+      json == null ? null : _$CountUnreadResponseFromJson(json);
 
   static Map<String, dynamic> toJson(CountUnreadResponse model) =>
-      _$CountUnreadResponseToJson(model);
+      model == null ? null : _$CountUnreadResponseToJson(model);
 }

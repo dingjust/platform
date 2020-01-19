@@ -12,13 +12,12 @@ class SampleProductHistorysResponse {
   final int totalElements;
   final List<SampleBorrowReturnHistoryModel> content;
 
-  SampleProductHistorysResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  SampleProductHistorysResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory SampleProductHistorysResponse.fromJson(Map<String, dynamic> json) =>
-      _$SampleProductHistorysResponseFromJson(json);
+      json == null ? null : _$SampleProductHistorysResponseFromJson(json);
 
   static Map<String, dynamic> toJson(SampleProductHistorysResponse model) =>
-      _$SampleProductHistorysResponseToJson(model);
+      model == null ? null : _$SampleProductHistorysResponseToJson(model);
 }
-

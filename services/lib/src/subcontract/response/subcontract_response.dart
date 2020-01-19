@@ -16,8 +16,8 @@ class SubContractResponse {
       this.totalElements, this.content);
 
   factory SubContractResponse.fromJson(Map<String, dynamic> json) =>
-      _$SubContractResponseFromJson(json);
+      json == null ? null : _$SubContractResponseFromJson(json);
 
   static Map<String, dynamic> toJson(SubContractResponse model) =>
-      _$SubContractResponseToJson(model);
+      model == null ? null : _$SubContractResponseToJson(model);
 }
