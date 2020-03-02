@@ -3,7 +3,6 @@ import 'package:b2b_commerce/src/common/app_image.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
-import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -193,11 +192,12 @@ class BrandButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.productOrdering(),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ProductsPage(),
-            ),
-          );
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => ProductsPage(),
+          //   ),
+          // );
+          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
         },
         title: '看款下单',
       ),

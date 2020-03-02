@@ -227,8 +227,13 @@ class UserBLoC extends BLoCBase {
     return LoginResult.FAIL;
   }
 
-  Future<void> logout() async {
+  Future<void> logout({UserType type}) async {
     _user = UserModel.empty();
+
+    if (type != null) {
+      _user.type = type;
+    }
+
     //  清理本地记录
     LocalStorage.remove(GlobalConfigs.REFRESH_TOKEN_KEY);
     // 清除授权
