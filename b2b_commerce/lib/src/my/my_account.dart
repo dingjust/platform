@@ -35,7 +35,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     controller: _scrollController,
                     slivers: <Widget>[
                       SliverAppBar(
-                        expandedHeight: 200,
+                        expandedHeight: 205,
                         pinned: true,
                         elevation: 0.5,
                         backgroundColor: const Color.fromRGBO(255, 219, 0, 1),
