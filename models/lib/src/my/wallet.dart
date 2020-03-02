@@ -54,10 +54,10 @@ class AmountFlowModel extends ItemModel {
       this.totalResidualAmount});
 
   factory AmountFlowModel.fromJson(Map<String, dynamic> json) =>
-      _$AmountFlowModelFromJson(json);
+      json == null ? null : _$AmountFlowModelFromJson(json);
 
   static Map<String, dynamic> toJson(AmountFlowModel model) =>
-      _$AmountFlowModelToJson(model);
+      model == null ? null : _$AmountFlowModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
@@ -170,10 +170,10 @@ class BankCardModel extends ItemModel {
     this.iconUrl});
 
   factory BankCardModel.fromJson(Map<String, dynamic> json) =>
-      _$BankCardModelFromJson(json);
+      json == null ? null : _$BankCardModelFromJson(json);
 
   static Map<String, dynamic> toJson(BankCardModel model) =>
-      _$BankCardModelToJson(model);
+      model == null ? null : _$BankCardModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
@@ -191,6 +191,7 @@ class BillModel extends ItemModel {
 
   ///付款方公司
   CompanyModel billTo;
+
   ///收款方公司
   CompanyModel billFrom;
 
@@ -254,13 +255,13 @@ class BillModel extends ItemModel {
     this.orderCode});
 
   factory BillModel.fromJson(Map<String, dynamic> json) =>
-      _$BillModelFromJson(json);
+      json == null ? null : _$BillModelFromJson(json);
 
   static Map<String, dynamic> toJson(BillModel model) =>
-      _$BillModelToJson(model);
+      model == null ? null : _$BillModelToJson(model);
 
-  static DateTime _dateTimefromMilliseconds(int date) => date == null ? date :
-      DateTime.fromMillisecondsSinceEpoch(date);
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      date == null ? date : DateTime.fromMillisecondsSinceEpoch(date);
 
   static int _dateTimetoMilliseconds(DateTime date) =>
       date == null ? null : date.millisecondsSinceEpoch;

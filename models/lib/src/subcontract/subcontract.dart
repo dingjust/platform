@@ -50,10 +50,10 @@ class SubContractModel extends ItemModel {
   }) : super();
 
   factory SubContractModel.fromJson(Map<String, dynamic> json) =>
-      _$SubContractModelFromJson(json);
+      json == null ? null : _$SubContractModelFromJson(json);
 
   static Map<String, dynamic> toJson(SubContractModel model) =>
-      _$SubContractModelToJson(model);
+      model == null ? null : _$SubContractModelToJson(model);
 
   static Map<String, dynamic> infoToJson(SubContractInfoModel detail) =>
       detail == null ? null : SubContractInfoModel.toJson(detail);
@@ -142,10 +142,10 @@ class SubContractInfoModel extends ItemModel {
   });
 
   factory SubContractInfoModel.fromJson(Map<String, dynamic> json) =>
-      _$SubContractInfoModelFromJson(json);
+      json == null ? null : _$SubContractInfoModelFromJson(json);
 
   static Map<String, dynamic> toJson(SubContractInfoModel model) =>
-      _$SubContractInfoModelToJson(model);
+      model == null ? null : _$SubContractInfoModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);

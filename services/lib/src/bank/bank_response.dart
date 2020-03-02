@@ -26,8 +26,10 @@ class BankResponse {
       this.stat});
 
   factory BankResponse.fromJson(Map<String, dynamic> json) =>
+      json == null ? null :
       _$BankResponseFromJson(json);
 
   static Map<String, dynamic> toJson(BankResponse model) =>
+      model == null ? null :
       _$BankResponseToJson(model);
 }

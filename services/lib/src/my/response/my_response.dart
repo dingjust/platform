@@ -12,16 +12,15 @@ class UserGuidelineResponse {
   final int totalElements;
   final List<UserGuidelineModel> content;
 
-  UserGuidelineResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  UserGuidelineResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory UserGuidelineResponse.fromJson(Map<String, dynamic> json) =>
-      _$UserGuidelineResponseFromJson(json);
+      json == null ? null : _$UserGuidelineResponseFromJson(json);
 
   static Map<String, dynamic> toJson(UserGuidelineResponse model) =>
-      _$UserGuidelineResponseToJson(model);
+      model == null ? null : _$UserGuidelineResponseToJson(model);
 }
-
 
 @JsonSerializable()
 class NotifyResponse {
@@ -35,10 +34,10 @@ class NotifyResponse {
       this.content);
 
   factory NotifyResponse.fromJson(Map<String, dynamic> json) =>
-      _$NotifyResponseFromJson(json);
+      json == null ? null : _$NotifyResponseFromJson(json);
 
   static Map<String, dynamic> toJson(NotifyResponse model) =>
-      _$NotifyResponseToJson(model);
+      model == null ? null : _$NotifyResponseToJson(model);
 }
 
 @JsonSerializable()
@@ -53,12 +52,11 @@ class ContractResponse {
       this.content);
 
   factory ContractResponse.fromJson(Map<String, dynamic> json) =>
-      _$ContractResponseFromJson(json);
+      json == null ? null : _$ContractResponseFromJson(json);
 
   static Map<String, dynamic> toJson(ContractResponse model) =>
-      _$ContractResponseToJson(model);
+      model == null ? null : _$ContractResponseToJson(model);
 }
-
 
 @JsonSerializable()
 class ContractTempResponse {
@@ -68,14 +66,14 @@ class ContractTempResponse {
   final int totalElements;
   final List<ContractTemplateModel> content;
 
-  ContractTempResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  ContractTempResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory ContractTempResponse.fromJson(Map<String, dynamic> json) =>
-      _$ContractTempResponseFromJson(json);
+      json == null ? null : _$ContractTempResponseFromJson(json);
 
   static Map<String, dynamic> toJson(ContractTempResponse model) =>
-      _$ContractTempResponseToJson(model);
+      model == null ? null : _$ContractTempResponseToJson(model);
 }
 
 @JsonSerializable()
@@ -90,8 +88,8 @@ class SealResponse {
       this.content);
 
   factory SealResponse.fromJson(Map<String, dynamic> json) =>
-      _$SealResponseFromJson(json);
+      json == null ? null : _$SealResponseFromJson(json);
 
   static Map<String, dynamic> toJson(SealResponse model) =>
-      _$SealResponseToJson(model);
+      model == null ? null : _$SealResponseToJson(model);
 }

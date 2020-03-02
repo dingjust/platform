@@ -16,8 +16,8 @@ class CompanyPayPlanResponse {
       this.totalElements, this.content);
 
   factory CompanyPayPlanResponse.fromJson(Map<String, dynamic> json) =>
-      _$CompanyPayPlanResponseFromJson(json);
+      json == null ? null : _$CompanyPayPlanResponseFromJson(json);
 
   static Map<String, dynamic> toJson(CompanyPayPlanResponse model) =>
-      _$CompanyPayPlanResponseToJson(model);
+      model == null ? null : _$CompanyPayPlanResponseToJson(model);
 }

@@ -12,12 +12,12 @@ class ProductsResponse {
   final int totalElements;
   final List<ApparelProductModel> content;
 
-  ProductsResponse(this.number, this.size, this.totalPages, this.totalElements, this.content);
+  ProductsResponse(this.number, this.size, this.totalPages, this.totalElements,
+      this.content);
 
   factory ProductsResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProductsResponseFromJson(json);
+      json == null ? null : _$ProductsResponseFromJson(json);
 
   static Map<String, dynamic> toJson(ProductsResponse model) =>
-      _$ProductsResponseToJson(model);
+      model == null ? null : _$ProductsResponseToJson(model);
 }
-

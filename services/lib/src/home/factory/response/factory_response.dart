@@ -16,8 +16,8 @@ class FactoriesResponse {
       this.content);
 
   factory FactoriesResponse.fromJson(Map<String, dynamic> json) =>
-      _$FactoriesResponseFromJson(json);
+      json == null ? null : _$FactoriesResponseFromJson(json);
 
   static Map<String, dynamic> toJson(FactoriesResponse model) =>
-      _$FactoriesResponseToJson(model);
+      model == null ? null : _$FactoriesResponseToJson(model);
 }

@@ -15,10 +15,10 @@ class AlipayResponse {
   String memo;
 
   factory AlipayResponse.fromJson(Map<String, dynamic> json) =>
-      _$AlipayResponseFromJson(json);
+      json == null ? null : _$AlipayResponseFromJson(json);
 
   static Map<String, dynamic> toJson(AlipayResponse model) =>
-      _$AlipayResponseToJson(model);
+      model == null ? null : _$AlipayResponseToJson(model);
 
   static AlipayResponse generate(Map payResponse) {
     AlipayResponse alipayResponse = AlipayResponse();
@@ -69,7 +69,9 @@ class Result {
       this.timestamp,
       this.code});
 
-  factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
+  factory Result.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ResultFromJson(json);
 
-  static Map<String, dynamic> toJson(Result result) => _$ResultToJson(result);
+  static Map<String, dynamic> toJson(Result result) =>
+      result == null ? null : _$ResultToJson(result);
 }

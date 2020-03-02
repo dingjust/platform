@@ -3,14 +3,14 @@ import 'package:json_annotation/json_annotation.dart';
 part 'widgets.g.dart';
 
 class FilterConditionEntry {
-  FilterConditionEntry( 
+  FilterConditionEntry(
       {this.label,
       this.value,
       this.onRemind = false,
       this.remindNum,
       this.checked = false,
       this.isDESC = true,
-      this.type=FilterConditionEntryType.VALUE});
+        this.type = FilterConditionEntryType.VALUE});
 
   ///Tab标签
   final String label;
@@ -63,10 +63,10 @@ class EarnestMoney {
       this.estimatePaymentDate});
 
   factory EarnestMoney.fromJson(Map<String, dynamic> json) =>
-      _$EarnestMoneyFromJson(json);
+      json == null ? null : _$EarnestMoneyFromJson(json);
 
   static Map<String, dynamic> toJson(EarnestMoney model) =>
-      _$EarnestMoneyToJson(model);
+      model == null ? null : _$EarnestMoneyToJson(model);
 }
 
 ///筛选条件实体类型

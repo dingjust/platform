@@ -16,8 +16,8 @@ class CooperatorResponse {
       this.totalElements, this.content);
 
   factory CooperatorResponse.fromJson(Map<String, dynamic> json) =>
-      _$CooperatorResponseFromJson(json);
+      json == null ? null : _$CooperatorResponseFromJson(json);
 
   static Map<String, dynamic> toJson(CooperatorResponse model) =>
-      _$CooperatorResponseToJson(model);
+      model == null ? null : _$CooperatorResponseToJson(model);
 }
