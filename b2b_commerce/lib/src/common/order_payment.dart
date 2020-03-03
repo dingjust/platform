@@ -48,33 +48,57 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          brightness: Brightness.light,
-          centerTitle: true,
-          elevation: 0.5,
-          title: Text(
-            '确认订单内容',
-            style: TextStyle(color: Colors.black),
+    return WillPopScope(
+      child: Scaffold(
+          appBar: AppBar(
+            brightness: Brightness.light,
+            centerTitle: true,
+            elevation: 0.5,
+            title: Text(
+              '确认订单内容',
+              style: TextStyle(color: Colors.black),
+            ),
           ),
-        ),
-        bottomSheet: _bubildPaySheet(),
-        body: Container(
-          color: Color.fromRGBO(245, 245, 245, 1),
-          child: ListView(
-            children: <Widget>[
-              _buildDeliveryAddress(),
-              _buildCompanyInfo(),
-              _buildEntries(),
-              _buildOrderInfo(),
-              _buildPaymentWay(),
-              //占位，勿删
-              Container(
-                height: 80,
-              )
-            ],
-          ),
-        ));
+          bottomSheet: _bubildPaySheet(),
+          body: Container(
+            color: Color.fromRGBO(245, 245, 245, 1),
+            child: ListView(
+              children: <Widget>[
+                _buildDeliveryAddress(),
+                _buildCompanyInfo(),
+                _buildEntries(),
+                _buildOrderInfo(),
+                _buildPaymentWay(),
+                //占位，勿删
+                Container(
+                  height: 80,
+                )
+              ],
+            ),
+          )),
+      onWillPop: () {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return CustomizeDialog(
+                dialogType: DialogType.CONFIRM_DIALOG,
+                contentText2: '是否继续?',
+                isNeedConfirmButton: true,
+                isNeedCancelButton: true,
+                confirmButtonText: '确定退出',
+                cancelButtonText: '继续支付',
+                cancelButtonTextStyle: TextStyle(color: Colors.blue),
+                confirmlButtonTextStyle: TextStyle(color: Colors.red),
+                dialogHeight: 180,
+                confirmAction: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              );
+            });
+      },
+    );
   }
 
   //构建收货信息UI
