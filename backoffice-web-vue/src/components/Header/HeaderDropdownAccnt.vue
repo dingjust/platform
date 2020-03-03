@@ -31,67 +31,72 @@
   </div>
 </template>
 <script>
-  import axios from "axios";
-  import ChangePasswordPage from "@/views/shared/account/password/ChangePasswordPage";
+  import axios from 'axios';
+  import ChangePasswordPage from '@/views/shared/account/password/ChangePasswordPage';
   import {
     log
-  } from "util";
+  } from 'util';
 
   export default {
-    name: "header-dropdown-accnt",
+    name: 'header-dropdown-accnt',
     components: {
       ChangePasswordPage
     },
     methods: {
-      onArrowDown() {
+      onArrowDown () {
         this.arrowDown = !this.arrowDown;
       },
-      onChangePassword() {
+      onChangePassword () {
         this.dialogVisible = true;
       },
-      onLogout() {
-        axios.post("/logout").finally(() => {
-          this.$router.push("/login");
+      onLogout () {
+        axios.post('/logout').finally(() => {
+          this.$router.push('/login');
         });
+
+        // 清除sessionStorage缓存
+        sessionStorage.removeItem('authorized');
+        sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('permissions');
+        sessionStorage.removeItem('token');
       },
-      onCancel() {
+      onCancel () {
         this.dialogVisible = false;
       },
-      async doChangePassword(oldPassword, newPassword) {
+      async doChangePassword (oldPassword, newPassword) {
         const url = this.apis().changePassword(this.currentUser.username);
         const result = await this.$http.put(url, null, {
           old: oldPassword,
           new: newPassword
         });
 
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
         this.dialogVisible = false;
 
-        this.$message.success("密码修改成功");
+        this.$message.success('密码修改成功');
       },
-      onJumpToMy() {
-        this.$router.push("/account/my");
+      onJumpToMy () {
+        this.$router.push('/account/my');
       }
     },
-    created() {},
-    data() {
+    created () {},
+    data () {
       return {
         dialogVisible: false,
         currentUser: this.$store.getters.currentUser,
-        arrowDown: true,
+        arrowDown: true
       };
     },
-    mounted() {
-      this.$root.$on("bv::dropdown::show", bvEvent => {
-        console.log("Dropdown is about to be shown", bvEvent);
+    mounted () {
+      this.$root.$on('bv::dropdown::show', bvEvent => {
+        console.log('Dropdown is about to be shown', bvEvent);
       });
     }
   };
-
 </script>
 <style>
   .arrow {

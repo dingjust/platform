@@ -170,6 +170,23 @@
           })
         }
       },
+      // 回显 行 全选/全不选
+      _handleCheckedNodeChange (checkList, item) {
+        console.log(checkList);
+        console.log(checkList);
+        this.$refs.checkbox.forEach(checkbox => {
+          if (checkbox.label == item.id) {
+            item.indeterminate = checkList.length > 0 && checkList.length < item.children.length;
+            if (checkList.length == item.children.length) {
+              checkbox.model = true;
+            } else {
+              checkbox.model = false;
+            }
+          }
+        })
+        this.setRoleList();
+        this._handleCheckAllChange();
+      },
       // 查看员工信息时回显权限
       _setCheckChange (b2bRoleList) {
         this.roleIdList = b2bRoleList;
@@ -182,20 +199,29 @@
               childrenRoleList.push(role.id);
             }
           })
-          this.handleCheckedNodeChange(childrenRoleList, item);
+          this._handleCheckedNodeChange(childrenRoleList, item);
           childrenRoleList = [];
         })
       },
       // 查看角色页面（选择角色）时回显角色的权限
       setCheckChange (roleList) {
         let checkList = [];
+        let nodeItem;
+        console.log(roleList);
         roleList.forEach(item => {
+          this.roleListData.forEach(cItem => {
+            if (item.id === cItem.id) {
+              nodeItem = cItem;
+            }
+          })
+
           item.children.forEach(role => {
             this.roleIdList.push(role.id);
             checkList.push(role.id);
           })
           this.distinct(this.roleIdList);
-          this.handleCheckedNodeChange(checkList, item);
+
+          this._handleCheckedNodeChange(checkList, nodeItem);
           checkList = [];
         })
       },

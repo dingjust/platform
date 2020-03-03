@@ -7,28 +7,33 @@
     </el-row>
     <div class="pt-2"></div>
     <el-row type="flex" justify="center">
-      <el-form ref="form" :model="slotData" :rules="rules" :hide-required-asterisk="true">
+      <el-form ref="form" :model="formData" :rules="rules" :hide-required-asterisk="true" :validate-on-rule-change="false">
         <el-form-item prop="contactPhone">
           <template slot="label">
             <h6 class="titleTextClass">账号<span style="color: #F56C6C">*</span></h6>
           </template>
           <el-row type="flex">
-            <el-input placeholder="请填写手机号" v-model="contactPhone" style="width: 250px"></el-input>
+            <el-input placeholder="请填写手机号" v-model="formData.contactPhone" style="width: 250px"></el-input>
           </el-row>
         </el-form-item>
-        <el-form-item prop="dept">
+        <el-form-item prop="deptId">
           <template slot="label">
             <h6 class="titleTextClass">所属部门<span style="color: #F56C6C">*</span></h6>
           </template>
           <el-row type="flex">
-            <el-select v-model="value" placeholder="请选择所属部门">
+            <!-- <el-select v-model="value" placeholder="请选择所属部门">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="item in deptList[0].children"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
               </el-option>
-            </el-select>
+            </el-select> -->
+            <el-tree-select :props="props"
+                            :placeholder="'请选择部门'"
+                            :options="deptList[0].children"
+                            @getValue="selectDept">
+            </el-tree-select>
           </el-row>
         </el-form-item>
         <el-form-item prop="role">
@@ -38,10 +43,10 @@
           <el-row type="flex">
             <el-select v-model="value" placeholder="请选择角色">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="item in roleGroupList[0].children"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
               </el-option>
             </el-select>
           </el-row>
@@ -56,37 +61,52 @@
 </template>
 
 <script>
+    import {createNamespacedHelpers} from 'vuex';
+    import ElTreeSelect from '../tree/treeSelect';
+
+    const {mapGetters} = createNamespacedHelpers('B2BCustomersModule');
     export default {
       name: 'B2BCustomerInviteDialog',
-      props: ['slotData'],
-      data() {
+      props: [],
+      components: { ElTreeSelect },
+      computed: {
+        ...mapGetters({
+          deptList: 'deptList',
+          roleGroupList: 'roleGroupList'
+        })
+      },
+      data () {
+        var validatePass = (rule, value, callback) => {
+          if (this.formData.deptId == null || this.formData.deptId == '') {
+            callback(new Error('请选择部门'));
+          } else {
+            callback();
+          }
+        };
         return {
           rules: {
             contactPhone: [{required: true, message: '必填', trigger: 'blur'}],
-            dept: [{required: true, message: '必填', trigger: 'blur'}]
+            deptId: [{ validator: validatePass, trigger: ['blur', 'change'] }]
           },
-          contactPhone: '',
+          formData: {
+            contactPhone: '',
+            deptId: ''
+          },
           dept: '',
-          options: [{
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }],
+          props: {
+            value: 'id',
+            label: 'name',
+            children: 'children'
+            // disabled:true
+          },
           value: ''
         }
       },
       methods: {
+        selectDept (val) {
+          console.log(val);
+          this.formData.deptId = val;
+        },
         onCannel () {
           this.$emit('onCannel')
         },
@@ -102,6 +122,15 @@
               return false;
             }
           });
+        }
+      },
+      watch: {
+        'rules': function (n, o) {
+          if (n) {
+            this.$nextTick(() => {
+              this.$refs.form.clearValidate();
+            })
+          }
         }
       }
     }
