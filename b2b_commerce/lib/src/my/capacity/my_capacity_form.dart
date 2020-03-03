@@ -198,11 +198,12 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        dateEndPoint != null
+                        dateStartPoint != null || dateEndPoint != null
                             ? Container(
                           margin: EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
-                            '${DateFormatUtil.formatYMD(dateEndPoint)}',
+                            '${dateEndPoint != null ? DateFormatUtil.formatYMD(
+                                dateEndPoint) : '长期有效'}',
                             style: TextStyle(fontSize: 16),
                           ),
                         )
@@ -359,15 +360,18 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
         initialLastDate: (new DateTime.now()).add(new Duration(days: 7)),
         firstDate: DateTime(2019),
         lastDate: DateTime(2099));
-    print(picked);
     setState(() {
-      if (picked != null && picked.length == 1) {
+      if (picked != null) {
         dateStartPoint = picked[0];
-      } else if (picked != null && picked.length == 2) {
-        dateStartPoint = picked[0];
-        dateEndPoint = picked[1];
+        dateEndPoint = picked.length > 1 ? picked[1] : null;
+        if (dateStartPoint == null && dateEndPoint == null) {
+          form.longTerm = true;
+        } else {
+          form.longTerm = false;
+        }
+      } else {
+        form.longTerm = true;
       }
-      form.longTerm = false;
     });
   }
 
@@ -432,10 +436,17 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
     form.dateEndPoint = dateEndPoint;
     form.dateStartPoint = dateStartPoint;
     form.title = titleController.text;
+
     if (form.longTerm) {
       form.dateStartPoint = null;
       form.dateEndPoint = null;
     }
+
+    ///如果时间都为控制则设置为长期有效
+    if (form.dateStartPoint == null && form.dateEndPoint == null) {
+      form.longTerm = true;
+    }
+
     form.categoryCapacities = capacityEntries.map((entry) {
       if (entry.textController.text == '') {
         entry.model.capacityRange = 0;

@@ -14,7 +14,7 @@ class FactoryCondition {
   int historyOrdersCount;
 
   /// 大类
-  String categories;
+  List<String> categories;
 
   /// 小类
 
@@ -39,6 +39,9 @@ class FactoryCondition {
   /// 加工类型
   List<CooperationModes> cooperationModes;
 
+  ///质量等级
+  List<String> qualityLevels;
+
   ///关键字
   String keyword;
 
@@ -50,7 +53,6 @@ class FactoryCondition {
 
   //经度
   double longitude;
-
 
   FactoryCondition(
       {this.starLevel,
@@ -66,20 +68,25 @@ class FactoryCondition {
         this.latitude,
         this.longitude,
         this.distance,
+        this.qualityLevels,
       this.keyword});
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
-      _$FactoryConditionFromJson(json);
+      json == null ? null : _$FactoryConditionFromJson(json);
 
   static Map<String, dynamic> toJson(FactoryCondition model) =>
-      _$FactoryConditionToJson(model);
+      model == null ? null : _$FactoryConditionToJson(model);
 
   static Map<String, dynamic> _regionToJson(
           RegionModel productiveOrientations) =>
-      RegionModel.toJson(productiveOrientations);
+      productiveOrientations == null
+          ? null
+          : RegionModel.toJson(productiveOrientations);
 
   static List<Map<String, dynamic>> _citiesToJson(List<CityModel> models) =>
-      models.map((model) => CityModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => CityModel.toJson(model)).toList();
 
   Map<String, dynamic> toDataJson() {
     List<String> adeptAtCategoryArray = [];
@@ -110,15 +117,17 @@ class FactoryCondition {
       });
     }
 
-    if((longitude != null && longitude > 0 ) && (latitude != null && latitude > 0)){
+    if ((longitude != null && longitude > 0) &&
+        (latitude != null && latitude > 0)) {
       var result = {
-        'categories': categories != null ? [categories] : [],
+        'categories': categories != null ? categories : [],
         'adeptAtCategories': adeptAtCategoryArray,
         'productiveOrientations': productiveOrientations != null &&
             productiveOrientations.isocode != null
             ? [productiveOrientations.isocode]
             : [],
-        'cities': cities == null ? [] : cities.map((city) => city.code).toList(),
+        'cities':
+        cities == null ? [] : cities.map((city) => city.code).toList(),
         'starLevel': starLevel > 0 ? starLevel : '',
         'labels': labelsArray,
         'cooperationModes': cooperationModesArray,
@@ -131,21 +140,21 @@ class FactoryCondition {
         industrialCuster != null ? [industrialCuster.code] : [],
         'longitude': longitude != null && longitude > 0 ? longitude : '',
         'latitude': latitude != null && latitude > 0 ? latitude : '',
-        'distance': distance != null  ? distance : '',
+        'distance': distance != null ? distance : '',
+        'qualityLevels': qualityLevels ?? []
       };
 
-      print(result);
-
       return result;
-    }else{
+    } else {
       var result = {
-        'categories': categories != null ? [categories] : [],
+        'categories': categories != null ? categories : [],
         'adeptAtCategories': adeptAtCategoryArray,
         'productiveOrientations': productiveOrientations != null &&
             productiveOrientations.isocode != null
             ? [productiveOrientations.isocode]
             : [],
-        'cities': cities == null ? [] : cities.map((city) => city.code).toList(),
+        'cities':
+        cities == null ? [] : cities.map((city) => city.code).toList(),
         'starLevel': starLevel > 0 ? starLevel : '',
         'labels': labelsArray,
         'cooperationModes': cooperationModesArray,
@@ -156,13 +165,11 @@ class FactoryCondition {
         'approvalStatuses': approvalStatus ?? '',
         'industrialClusters':
         industrialCuster != null ? [industrialCuster.code] : [],
+        'qualityLevels': qualityLevels ?? []
       };
-
-      print(result);
 
       return result;
     }
-
   }
 
   void setKeyword(String value) {

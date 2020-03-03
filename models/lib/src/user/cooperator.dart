@@ -90,17 +90,17 @@ class CooperatorModel extends ItemModel {
   });
 
   factory CooperatorModel.fromJson(Map<String, dynamic> json) =>
-      _$CooperatorModelFromJson(json);
+      json == null ? null : _$CooperatorModelFromJson(json);
 
   static Map<String, dynamic> toJson(CooperatorModel model) =>
-      _$CooperatorModelToJson(model);
+      model == null ? null : _$CooperatorModelToJson(model);
 
   static Map<String, dynamic> companyToJson(CompanyModel belongTo) =>
-      CompanyModel.toJson(belongTo);
+      belongTo == null ? null : CompanyModel.toJson(belongTo);
 
   static Map<String, dynamic> companyPayPlanToJson(
       CompanyPayPlanModel payPlan) =>
-      CompanyPayPlanModel.toJson(payPlan);
+      payPlan == null ? null : CompanyPayPlanModel.toJson(payPlan);
 
   String getName() {
     if (type == CooperatorType.ONLINE) {

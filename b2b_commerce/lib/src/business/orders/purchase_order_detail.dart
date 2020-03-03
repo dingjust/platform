@@ -21,6 +21,7 @@ import 'package:widgets/widgets.dart';
 
 import 'form/purchase/purchase_deliver_order_view.dart';
 import 'form/purchase/purchase_detail_btn_group.dart';
+import 'form/purchase/purchase_detail_btn_group_online.dart';
 import 'form/purchase/purchase_reconciliation_order_view.dart';
 import 'form/purchase/purchase_shipping_order_view.dart';
 
@@ -49,6 +50,11 @@ final List<OrderStatusModel> _statusList = [
     'code': 'COMPLETED',
     'name': '已完成',
     'sort': 5,
+  }),
+  OrderStatusModel.fromJson({
+    'code': 'CANCELLED',
+    'name': '已取消',
+    'sort': 6,
   }),
 ];
 
@@ -104,12 +110,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     ScrollController _scrollController = ScrollController();
 
     final bloc = BLoCProvider.of<UserBLoC>(context);
-    return Scaffold(
-      body: FutureBuilder<PurchaseOrderModel>(
-        builder:
-            (BuildContext context, AsyncSnapshot<PurchaseOrderModel> snapshot) {
-          if (snapshot.data != null) {
-            return Container(
+    return FutureBuilder<PurchaseOrderModel>(
+      builder:
+          (BuildContext context, AsyncSnapshot<PurchaseOrderModel> snapshot) {
+        if (snapshot.data != null) {
+          return Scaffold(
+            body: Container(
               child: CustomScrollView(
                 controller: _scrollController,
                 slivers: <Widget>[
@@ -175,24 +181,26 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           _buildFinance(context),
                           _buildLog(context),
                           _buildBottom(context),
-                          _buildCommitButton(context),
                         ],
                       )),
                 ],
               ),
-            );
-          } else {
-            return Center(
+            ),
+            bottomSheet: _bubildBottomSheet(),
+            floatingActionButton: _buildFAB(context),
+            floatingActionButtonLocation: fabLocation,
+          );
+        } else {
+          return Container(
+            color: Colors.white,
+            child: Center(
               child: CircularProgressIndicator(),
-            );
-          }
-        },
-        initialData: null,
-        future: _futureBuilderFuture,
-      ),
-      bottomSheet: _bubildBottomSheet(),
-      floatingActionButton: _buildFAB(context),
-      floatingActionButtonLocation: fabLocation,
+            ),
+          );
+        }
+      },
+      initialData: null,
+      future: _futureBuilderFuture,
     );
   }
 
@@ -377,7 +385,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       },
       child: Container(
         padding: EdgeInsets.all(15),
-        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 50),
         child: Column(
           children: <Widget>[
             Row(
@@ -1612,7 +1620,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              // _buildBrandButton(context),
+              // _buildOnlineBrandButton(context),
               _buildOfflineButton(context),
             ],
           ),
@@ -1620,7 +1628,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       } else {
         return Container(
           margin: EdgeInsets.only(bottom: 10),
-          // child: _buildBrandButton(context),
+          child: _buildOnlineBrandButton(context),
         );
       }
     } else {
@@ -1721,57 +1729,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         Radius.circular(5),
                       ),
                     ),
-                    onPressed: () async {
-                      showDialog<void>(
-                        context: context,
-                        barrierDismissible:
-                        true, // user must tap button!
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(
-                              '提示',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            content: Text('是否要取消订单？'),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text(
-                                  '取消',
-                                  style:
-                                  TextStyle(color: Colors.grey),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              FlatButton(
-                                child: Text(
-                                  '确定',
-                                  style:
-                                  TextStyle(color: Colors.black),
-                                ),
-                                onPressed: () async {
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (_) {
-                                        return RequestDataLoading(
-                                          requestCallBack:
-                                          PurchaseOrderRepository()
-                                              .purchaseOrderCancelling(
-                                              order.code),
-                                          outsideDismiss: false,
-                                          loadingText: '取消中。。。',
-                                          entrance: 'purchaseOrders',
-                                        );
-                                      });
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    })
+                    onPressed: () async {})
                     : Container()),
           ),
           Expanded(
@@ -1850,7 +1808,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   //品牌端显示按钮
-  Widget _buildBrandButton(BuildContext context) {
+  Widget _buildOnlineBrandButton(BuildContext context) {
     if (order.salesApplication == SalesApplication.ONLINE) {
       if (order.depositPaid == false &&
           order.status == PurchaseOrderStatus.PENDING_PAYMENT) {
@@ -1882,7 +1840,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           ),
                         ),
                         onPressed: () async {
-                          //将支付金额置为定金
+                          //将支付金额置为尾款
                           order.totalPrice = order.balance;
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => OrderPaymentPage(
@@ -2928,16 +2886,20 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           Expanded(
               flex: 3,
-              child: PurchaseDetailBtnGroup(
+              child: order.salesApplication == SalesApplication.BELOW_THE_LINE
+                  ? PurchaseDetailBtnGroup(
                 order: order,
-              ))
+              )
+                  : PurchaseDetailOnlineBtnGroup(order: order))
         ],
       ),
     );
   }
 
   Widget _buildFAB(BuildContext context) {
-    return SpeedDial(
+    return order.salesApplication == SalesApplication.ONLINE
+        ? null
+        : SpeedDial(
       // animatedIcon: AnimatedIcons.menu_close,
       animatedIconTheme: IconThemeData(size: 22.0),
       // this is ignored if animatedIcon is non null
@@ -2961,7 +2923,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
       // backgroundColor: Color.fromRGBO(255,214,12, 1),
       foregroundColor: Colors.black,
       elevation: 8.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0)),
       children: [
         SpeedDialChild(
           child: Center(
@@ -2982,8 +2945,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               ),
             );
           },
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0)),
         ),
         SpeedDialChild(
           child: Center(
@@ -3025,7 +2988,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 builder: (context) =>
                     ReconciliationOrderView(
                       purchaseOrder: order,
-                      reconciliationOrder: order.reconciliationOrders.isNotEmpty
+                      reconciliationOrder:
+                      order.reconciliationOrders.isNotEmpty
                           ? order.reconciliationOrders[0]
                           : null,
                     ),

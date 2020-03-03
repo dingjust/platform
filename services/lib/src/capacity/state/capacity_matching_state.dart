@@ -25,6 +25,8 @@ class CapacityMatchingState extends PageState {
   ///品类
   CategoryModel category;
 
+  CapacityMatchingState({this.keyword});
+
   List<FactoryCapacityModel> get factoryCapacityModels {
     if (_factoryCapacityModels == null) {
       getData();

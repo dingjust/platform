@@ -37,14 +37,16 @@ class PaymentOrderModel extends ItemModel {
       this.remainPaymentAmount});
 
   factory PaymentOrderModel.fromJson(Map<String, dynamic> json) =>
-      _$PaymentOrderModelFromJson(json);
+      json == null ? null : _$PaymentOrderModelFromJson(json);
 
   static Map<String, dynamic> toJson(PaymentOrderModel model) =>
-      _$PaymentOrderModelToJson(model);
+      model == null ? null : _$PaymentOrderModelToJson(model);
 
   static Map<String, dynamic> _orderPayPlanItemToJson(
           OrderPayPlanItemModel orderPayPlanItem) =>
-      OrderPayPlanItemModel.toJson(orderPayPlanItem);
+      orderPayPlanItem == null
+          ? null
+          : OrderPayPlanItemModel.toJson(orderPayPlanItem);
 }
 
 /// 收款单
@@ -81,12 +83,14 @@ class ReceiptOrderModel extends ItemModel {
       this.remainPaymentAmount});
 
   factory ReceiptOrderModel.fromJson(Map<String, dynamic> json) =>
-      _$ReceiptOrderModelFromJson(json);
+      json == null ? null : _$ReceiptOrderModelFromJson(json);
 
   static Map<String, dynamic> toJson(ReceiptOrderModel model) =>
-      _$ReceiptOrderModelToJson(model);
+      model == null ? null : _$ReceiptOrderModelToJson(model);
 
   static Map<String, dynamic> _orderPayPlanItemToJson(
           OrderPayPlanItemModel orderPayPlanItem) =>
-      OrderPayPlanItemModel.toJson(orderPayPlanItem);
+      orderPayPlanItem == null
+          ? null
+          : OrderPayPlanItemModel.toJson(orderPayPlanItem);
 }

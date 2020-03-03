@@ -94,9 +94,15 @@ class _RegionCitySelectorState extends State<RegionCitySelector> {
                                                         .contains(city)) {
                                                       _citySelects.remove(city);
                                                     } else {
-                                                      if (_citySelects.length <
-                                                          widget.maximum) {
-                                                        _citySelects.add(city);
+                                                      if (widget.maximum == 1) {
+                                                        _citySelects = [city];
+                                                      } else {
+                                                        if (_citySelects
+                                                            .length <
+                                                            widget.maximum) {
+                                                          _citySelects
+                                                              .add(city);
+                                                        }
                                                       }
                                                     }
                                                     setState(() {});

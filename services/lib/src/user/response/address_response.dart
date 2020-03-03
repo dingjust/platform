@@ -16,9 +16,8 @@ class AddressResponse {
       this.content);
 
   factory AddressResponse.fromJson(Map<String, dynamic> json) =>
-      _$AddressResponseFromJson(json);
+      json == null ? null : _$AddressResponseFromJson(json);
 
   static Map<String, dynamic> toJson(AddressResponse model) =>
-      _$AddressResponseToJson(model);
+      model == null ? null : _$AddressResponseToJson(model);
 }
-

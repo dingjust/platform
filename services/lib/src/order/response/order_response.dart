@@ -12,14 +12,14 @@ class RequirementOrdersResponse {
   final int totalElements;
   final List<RequirementOrderModel> content;
 
-  RequirementOrdersResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  RequirementOrdersResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory RequirementOrdersResponse.fromJson(Map<String, dynamic> json) =>
-      _$RequirementOrdersResponseFromJson(json);
+      json == null ? null : _$RequirementOrdersResponseFromJson(json);
 
   static Map<String, dynamic> toJson(RequirementOrdersResponse model) =>
-      _$RequirementOrdersResponseToJson(model);
+      model == null ? null : _$RequirementOrdersResponseToJson(model);
 }
 
 /// 报价订单列表响应
@@ -31,15 +31,16 @@ class QuoteOrdersResponse {
   final int totalElements;
   final List<QuoteModel> content;
 
-  QuoteOrdersResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  QuoteOrdersResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory QuoteOrdersResponse.fromJson(Map<String, dynamic> json) =>
-      _$QuoteOrdersResponseFromJson(json);
+      json == null ? null : _$QuoteOrdersResponseFromJson(json);
 
   static Map<String, dynamic> toJson(QuoteOrdersResponse model) =>
-      _$QuoteOrdersResponseToJson(model);
+      model == null ? null : _$QuoteOrdersResponseToJson(model);
 }
+
 /// 采购订单列表响应
 @JsonSerializable()
 class PurchaseOrdersResponse {
@@ -49,14 +50,14 @@ class PurchaseOrdersResponse {
   final int totalElements;
   final List<PurchaseOrderModel> content;
 
-  PurchaseOrdersResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  PurchaseOrdersResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory PurchaseOrdersResponse.fromJson(Map<String, dynamic> json) =>
-      _$PurchaseOrdersResponseFromJson(json);
+      json == null ? null : _$PurchaseOrdersResponseFromJson(json);
 
   static Map<String, dynamic> toJson(PurchaseOrdersResponse model) =>
-      _$PurchaseOrdersResponseToJson(model);
+      model == null ? null : _$PurchaseOrdersResponseToJson(model);
 }
 
 /// 打样订单列表响应
@@ -68,12 +69,12 @@ class ProofingOrdersResponse {
   final int totalElements;
   final List<ProofingModel> content;
 
-  ProofingOrdersResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  ProofingOrdersResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory ProofingOrdersResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProofingOrdersResponseFromJson(json);
+      json == null ? null : _$ProofingOrdersResponseFromJson(json);
 
   static Map<String, dynamic> toJson(ProofingOrdersResponse model) =>
-      _$ProofingOrdersResponseToJson(model);
+      model == null ? null : _$ProofingOrdersResponseToJson(model);
 }

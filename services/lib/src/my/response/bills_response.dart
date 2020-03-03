@@ -16,8 +16,8 @@ class BillsResponse {
       this.content);
 
   factory BillsResponse.fromJson(Map<String, dynamic> json) =>
-      _$BillsResponseFromJson(json);
+      json == null ? null : _$BillsResponseFromJson(json);
 
   static Map<String, dynamic> toJson(BillsResponse model) =>
-      _$BillsResponseToJson(model);
+      model == null ? null : _$BillsResponseToJson(model);
 }

@@ -76,25 +76,27 @@ class FactoryCapacityModel extends ItemModel {
     this.categoryCapacities = const []});
 
   factory FactoryCapacityModel.fromJson(Map<String, dynamic> json) =>
-      _$FactoryCapacityModelFromJson(json);
+      json == null ? null : _$FactoryCapacityModelFromJson(json);
 
   static Map<String, dynamic> toJson(FactoryCapacityModel model) =>
-      _$FactoryCapacityModelToJson(model);
+      model == null ? null : _$FactoryCapacityModelToJson(model);
 
   static Map<String, dynamic> _factoryToJson(FactoryModel belongTo) =>
-      FactoryModel.toJson(belongTo);
+      belongTo == null ? null : FactoryModel.toJson(belongTo);
 
   static List<Map<String, dynamic>> _categoryCapacitiesToJson(
       List<FactoryCategoryCapacityModel> categoryCapacities) =>
-      categoryCapacities
+      categoryCapacities == null
+          ? null
+          : categoryCapacities
           .map((capacity) => FactoryCategoryCapacityModel.toJson(capacity))
           .toList();
 
   static DateTime _dateTimefromMilliseconds(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date);
+      date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
 
   static int _dateTimetoMilliseconds(DateTime date) =>
-      date.millisecondsSinceEpoch;
+      date == null ? null : date.millisecondsSinceEpoch;
 }
 
 ///工厂产能分类产能信息
@@ -120,11 +122,11 @@ class FactoryCategoryCapacityModel extends ItemModel {
       {this.id, this.capacity, this.capacityRange, this.sort, this.category});
 
   factory FactoryCategoryCapacityModel.fromJson(Map<String, dynamic> json) =>
-      _$FactoryCategoryCapacityModelFromJson(json);
+      json == null ? null : _$FactoryCategoryCapacityModelFromJson(json);
 
   static Map<String, dynamic> toJson(FactoryCategoryCapacityModel model) =>
-      _$FactoryCategoryCapacityModelToJson(model);
+      model == null ? null : _$FactoryCategoryCapacityModelToJson(model);
 
   static Map<String, dynamic> _categoryToJson(CategoryModel category) =>
-      CategoryModel.toJson(category);
+      category == null ? null : CategoryModel.toJson(category);
 }

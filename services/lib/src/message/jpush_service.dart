@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:services/src/message/notifications_pool.dart';
 import 'package:services/src/message/response/jpush_response.dart';
 
@@ -109,7 +110,10 @@ class JPushService {
         return PurchaseOrderDetailPage(
             code: response.extras.androidExtras.params);
       case 4:
-        return RequirementOrderDetailPage(response.extras.androidExtras.params);
+        return UserBLoC.instance.currentUser.type == UserType.FACTORY
+            ? RequirementOrderDetailByFactoryPage(
+            response.extras.androidExtras.params)
+            : RequirementOrderDetailPage(response.extras.androidExtras.params);
       default:
         return null;
     }
@@ -127,7 +131,9 @@ class JPushService {
       case 3:
         return PurchaseOrderDetailPage(code: response.params);
       case 4:
-        return RequirementOrderDetailPage(response.params);
+        return UserBLoC.instance.currentUser.type == UserType.FACTORY
+            ? RequirementOrderDetailByFactoryPage(response.params)
+            : RequirementOrderDetailPage(response.params);
       default:
         return null;
     }
@@ -144,7 +150,9 @@ class JPushService {
       case 3:
         return PurchaseOrderDetailPage(code: message.params);
       case 4:
-        return RequirementOrderDetailPage(message.params);
+        return UserBLoC.instance.currentUser.type == UserType.FACTORY
+            ? RequirementOrderDetailByFactoryPage(message.params)
+            : RequirementOrderDetailPage(message.params);
       default:
         return null;
     }
@@ -157,9 +165,13 @@ class JPushService {
 
   ///这是别名，再用户登录后设置
   void setAlias(String alias) {
-    _jpush.setAlias(alias).then((value) {
-      print('JPUSH==>setAlias:$value');
-    });
+    try {
+      _jpush.setAlias(alias).then((value) {
+        print('JPUSH==>setAlias:$value');
+      });
+    } catch (e) {
+      print('JPUSH==>ERROR:setAlias');
+    }
   }
 
   ///删除别名，用户退出后调用

@@ -4,15 +4,14 @@ import 'package:b2b_commerce/src/business/orders/form/contact_way_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/expected_delivery_date_field.dart';
 import 'package:b2b_commerce/src/business/orders/form/pictures_field.dart';
 import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_first_edit_form.dart';
-import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_select_publish_target_form.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 import 'RequirementFormMixins.dart';
 
@@ -852,7 +851,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
       return;
     }
     if(widget.formState.editModel.details.salesMarket == null || widget.formState.editModel.details.salesMarket.length == 0){
-      ShowDialogUtil.showValidateMsg(context, '请选择销售市场');
+      ShowDialogUtil.showValidateMsg(context, '请选择质量等级');
       return;
     }
     if(widget.formState.editModel.details.effectiveDays == -1){

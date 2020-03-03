@@ -21,17 +21,19 @@ class AmapResponse {
   AmapResponse(this.status, this.count, this.info, this.infocode, this.tips);
 
   factory AmapResponse.fromJson(Map<String, dynamic> json) =>
-      _$AmapResponseFromJson(json);
+      json == null ? null : _$AmapResponseFromJson(json);
 
   static Map<String, dynamic> toJson(AmapResponse model) =>
-      _$AmapResponseToJson(model);
+      model == null ? null : _$AmapResponseToJson(model);
 
   static int _stringToInt(String str) {
-    return int.parse(str);
+    return str == null ? null : int.parse(str);
   }
 
   static List<Tip> _tipsFromJson(List<dynamic> tipsJson) {
-    return tipsJson
+    return tipsJson == null
+        ? null
+        : tipsJson
         .where((map) => map['id'] is String && map['id'] != '')
         .map((map) => Tip.fromJson(map))
         .toList();
@@ -64,9 +66,11 @@ class Tip {
     this.address,
     this.typecode});
 
-  factory Tip.fromJson(Map<String, dynamic> json) => _$TipFromJson(json);
+  factory Tip.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$TipFromJson(json);
 
-  static Map<String, dynamic> toJson(Tip model) => _$TipToJson(model);
+  static Map<String, dynamic> toJson(Tip model) =>
+      model == null ? null : _$TipToJson(model);
 
   static String _idFromJson(var id) {
     if (id is List<dynamic>) {
@@ -106,13 +110,13 @@ class AmapAroundResponse {
       this.pois);
 
   factory AmapAroundResponse.fromJson(Map<String, dynamic> json) =>
-      _$AmapAroundResponseFromJson(json);
+      json == null ? null : _$AmapAroundResponseFromJson(json);
 
   static Map<String, dynamic> toJson(AmapAroundResponse model) =>
-      _$AmapAroundResponseToJson(model);
+      model == null ? null : _$AmapAroundResponseToJson(model);
 
   static int _stringToInt(String str) {
-    return int.parse(str);
+    return str == null ? null : int.parse(str);
   }
 }
 
@@ -166,9 +170,10 @@ class Geocode {
       });
 
   factory Geocode.fromJson(Map<String, dynamic> json) =>
-      _$GeocodeFromJson(json);
+      json == null ? null : _$GeocodeFromJson(json);
 
-  static Map<String, dynamic> toJson(Geocode model) => _$GeocodeToJson(model);
+  static Map<String, dynamic> toJson(Geocode model) =>
+      model == null ? null : _$GeocodeToJson(model);
 
   static String _stringFromJson(var val) {
     if (val is List<dynamic>) {
@@ -198,10 +203,10 @@ class AmapGeocodeResponse {
       this.geocodes);
 
   factory AmapGeocodeResponse.fromJson(Map<String, dynamic> json) =>
-      _$AmapGeocodeResponseFromJson(json);
+      json == null ? null : _$AmapGeocodeResponseFromJson(json);
 
   static Map<String, dynamic> toJson(AmapGeocodeResponse model) =>
-      _$AmapGeocodeResponseToJson(model);
+      model == null ? null : _$AmapGeocodeResponseToJson(model);
 
   static int _stringToInt(String str) {
     return int.parse(str);

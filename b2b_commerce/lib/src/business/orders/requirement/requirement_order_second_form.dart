@@ -899,7 +899,7 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
     }
     if (widget.formState.model.details.salesMarket == null ||
         widget.formState.model.details.salesMarket.length == 0) {
-      ShowDialogUtil.showValidateMsg(context, '请选择销售市场');
+      ShowDialogUtil.showValidateMsg(context, '请选择质量等级');
       return;
     }
     if (widget.formState.model.details.effectiveDays == -1) {

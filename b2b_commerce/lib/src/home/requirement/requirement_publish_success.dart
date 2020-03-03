@@ -2,7 +2,7 @@ import 'package:b2b_commerce/src/business/orders/requirement_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/suppliers.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
-import 'package:b2b_commerce/src/home/factory/factory_list.dart';
+import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';

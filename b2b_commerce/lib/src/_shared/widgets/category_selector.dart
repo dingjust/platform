@@ -34,7 +34,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        width: 120,
+                        width: 100,
                         color: Colors.grey[200],
                         child: ListView(
                           children: snapshot.data.map((majorCategory) {
@@ -46,20 +46,32 @@ class _CategorySelectorState extends State<CategorySelector> {
                               },
                               child: Container(
                                   height: 40,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
                                   color: _selectMajorCategory?.code ==
                                           majorCategory.code
                                       ? Colors.white
                                       : Colors.grey[200],
-                                  alignment: Alignment.center,
-                                  child: _selectMajorCategory?.code ==
-                                          majorCategory.code
-                                      ? Text(
-                                          '${majorCategory.name}',
-                                          style: TextStyle(
-                                            color: Colors.orange,
-                                          ),
-                                        )
-                                      : Text('${majorCategory.name}')),
+                                  // alignment: Alignment.center,
+                                  child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: majorCategory.name
+                                          .split('')
+                                          .map(
+                                            (str) =>
+                                            Text(
+                                              '${str}',
+                                              style: TextStyle(
+                                                color: _selectMajorCategory
+                                                    ?.code ==
+                                                    majorCategory.code
+                                                    ? Colors.orange
+                                                    : Colors.black,
+                                              ),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                      )
+                                          .toList())),
                             );
                           }).toList(),
                         ),
@@ -75,8 +87,8 @@ class _CategorySelectorState extends State<CategorySelector> {
                                       SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 3, //横轴三个子widget
                                           childAspectRatio: 3, //宽高比为1时，子widget
-                                          crossAxisSpacing: 8,
-                                          mainAxisSpacing: 8),
+                                          crossAxisSpacing: 12,
+                                          mainAxisSpacing: 12),
                                   children: _selectMajorCategory?.children
                                           ?.map((category) {
                                         return Container(

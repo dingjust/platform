@@ -58,6 +58,7 @@ class MyBillBLoC extends BLoCBase {
             .millisecondsSinceEpoch
       };
       Response<Map<String, dynamic>> response;
+      print('${currentPage}=======-------------------');
       try {
         response =
         await http$.post(UserApis.bills, data: data, queryParameters: {
@@ -79,6 +80,7 @@ class MyBillBLoC extends BLoCBase {
   }
 
   loadingMoreByDate({DateTime date}) async {
+    print("===================");
     if (!lock) {
       lock = true;
       //数据到底
@@ -131,7 +133,7 @@ class MyBillBLoC extends BLoCBase {
 
   //下拉刷新
   Future refreshData({DateTime date}) async {
-    _bills.clear();
+
     // _bills = (await Future.delayed(const Duration(seconds: 1), () {
     //   List<BillModel> list = [];
     //   for (int i = 10; i >= 0; i--) {
@@ -143,7 +145,8 @@ class MyBillBLoC extends BLoCBase {
     //   return list;
     // }));
 
-    _controller.sink.add(_bills);
+    _controller.sink.add(null);
+    print("**************----------");
   }
 
   dispose() {

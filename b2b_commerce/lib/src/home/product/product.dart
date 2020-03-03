@@ -140,7 +140,11 @@ class RecommendProductItem extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  '${model.belongTo.contactAddress.region.name}${model.belongTo.contactAddress.city.name}',
+                                  model.belongTo.contactAddress != null
+                                      ? '${model.belongTo.contactAddress.region
+                                      .name}${model.belongTo.contactAddress.city
+                                      .name}'
+                                      : '',
                                   style: TextStyle(
                                       fontSize: 12,
                                       color: Color.fromRGBO(149, 149, 149, 1)),

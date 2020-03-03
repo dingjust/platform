@@ -149,10 +149,10 @@ export default {
       url: '/report',
       icon: 'el-icon-s-data',
       children: [{
-        name: '生产进度',
-        url: 'production-progress',
-        icon: 'iconNone'
-      }
+          name: '生产进度',
+          url: '/report/production-progress',
+          icon: 'iconNone',
+        },
         // {
         //   name: '收货单',
         //   url: 'receipt',
@@ -167,7 +167,7 @@ export default {
       children: [{
         name: '钱包',
         url: '/miscs/wallet',
-        icon: 'iconNone'
+        icon: 'iconNone',
       }]
     }
   ]

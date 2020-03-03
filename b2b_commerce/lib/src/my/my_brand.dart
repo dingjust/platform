@@ -61,7 +61,6 @@ class _MyBrandPageState extends State<MyBrandPage> {
       builder: (context, snapshot) {
           _brand = snapshot.data;
           return Scaffold(
-            backgroundColor: Colors.white,
             appBar: AppBar(
               centerTitle: true,
               title: const Text('公司介绍'),
@@ -69,7 +68,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
               actions: <Widget>[
                 Offstage(
                   offstage:
-                  UserBLoC.instance.currentUser.companyCode != _brand.uid,
+                  UserBLoC.instance.currentUser.companyCode != _brand?.uid,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Row(
@@ -97,8 +96,11 @@ class _MyBrandPageState extends State<MyBrandPage> {
             ),
             body:
 
-            snapshot.data != null ? ListView(
-              children: _buildWidgets(),
+            snapshot.data != null ? Container(
+              color: Colors.grey[100],
+              child: ListView(
+                children: _buildWidgets(),
+              ),
             ):Column(children: <Widget>[NoDataShow()],crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,),
           );
       }
@@ -113,40 +115,46 @@ class _MyBrandPageState extends State<MyBrandPage> {
           color: Colors.grey[Constants.SIZEDBOX_COLOR],
         ),
       ),
-      _buildBrandBaseInfo(context),
+      Container(color: Colors.white,child: _buildBrandBaseInfo(context),),
     ];
     //获取与该品牌最新的报价单
     if(widget.isSupplier){
-      _widgets.add(Column(
-        children: <Widget>[
-          SizedBox(
-            height: 10,
-            child: Container(
-              color: Colors.grey[Constants.SIZEDBOX_COLOR],
+      _widgets.add(Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 10,
+              child: Container(
+                color: Colors.grey[Constants.SIZEDBOX_COLOR],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: buildQuoteItem(),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: buildQuoteItem(),
+            ),
+          ],
+        ),
       ));
     }
     //获取与该品牌最新的生产订单
     if(widget.isSupplier){
-      _widgets.add(Column(
-        children: <Widget>[
-          SizedBox(
-            height: 10,
-            child: Container(
-              color: Colors.grey[Constants.SIZEDBOX_COLOR],
+      _widgets.add(Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 10,
+              child: Container(
+                color: Colors.grey[Constants.SIZEDBOX_COLOR],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: buildPurchaseOrderItem(),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: buildPurchaseOrderItem(),
+            ),
+          ],
+        ),
       ));
     }
 
@@ -158,7 +166,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
         ),
       ),
     );
-    _widgets.add(_buildBrandCertificate(context));
+    _widgets.add(Container(color: Colors.white,child: _buildBrandCertificate(context)));
     _widgets.add(
       SizedBox(
         height: 10,
@@ -167,7 +175,7 @@ class _MyBrandPageState extends State<MyBrandPage> {
         ),
       ),
     );
-    _widgets.add(_buildBrandRegisterDate());
+    _widgets.add(Container(color: Colors.white,child: _buildBrandRegisterDate()));
     return _widgets;
   }
 

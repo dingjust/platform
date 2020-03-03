@@ -13,11 +13,15 @@ class MembershipModel extends ItemModel {
   CompanyModel company;
   MemberRating level;
 
-  MembershipModel({@required this.customer, @required this.company, this.level = MemberRating.C});
+  MembershipModel({@required this.customer,
+    @required this.company,
+    this.level = MemberRating.C});
 
-  factory MembershipModel.fromJson(Map<String, dynamic> json) => _$MembershipModelFromJson(json);
+  factory MembershipModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$MembershipModelFromJson(json);
 
-  static Map<String, dynamic> toJson(MembershipModel model) => _$MembershipModelToJson(model);
+  static Map<String, dynamic> toJson(MembershipModel model) =>
+      model == null ? null : _$MembershipModelToJson(model);
 }
 
 /// 会员请求
@@ -28,9 +32,11 @@ class MemberRequestModel extends ItemModel {
 
   MemberRequestModel({@required this.customer, @required this.company});
 
-  factory MemberRequestModel.fromJson(Map<String, dynamic> json) => _$MemberRequestModelFromJson(json);
+  factory MemberRequestModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$MemberRequestModelFromJson(json);
 
-  static Map<String, dynamic> toJson(MemberRequestModel model) => _$MemberRequestModelToJson(model);
+  static Map<String, dynamic> toJson(MemberRequestModel model) =>
+      model == null ? null : _$MemberRequestModelToJson(model);
 }
 
 /// 会员等级

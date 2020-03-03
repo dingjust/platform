@@ -107,14 +107,14 @@ export default {
       icon: 'el-icon-s-data',
       children: [{
           name: '生产进度',
-          url: 'production-progress',
+          url: '/report/production-progress',
           icon: 'iconNone',
         },
-        {
-          name: '收货单',
-          url: 'receipt',
-          icon: 'iconNone',
-        },
+        // {
+        //   name: '收货单',
+        //   url: 'receipt',
+        //   icon: 'iconNone',
+        // },
       ]
     },
     {

@@ -112,10 +112,26 @@
     mixins: [],
     computed: {
       cooperatorName: function () {
-        if (this.purchaseOrder.cooperator.type == 'ONLINE') {
-          return this.purchaseOrder.cooperator.partner.name;
+        if (this.purchaseOrder.cooperator != null) {
+          if (this.purchaseOrder.cooperator.type == 'ONLINE') {
+            return this.purchaseOrder.cooperator.partner.name;
+          } else {
+            return this.purchaseOrder.cooperator.name;
+          }
         } else {
-          return this.purchaseOrder.cooperator.name;
+          if (this.isBrand()) {
+            if (this.purchaseOrder.belongTo != null) {
+              return this.purchaseOrder.belongTo.name;
+            } else {
+              return this.purchaseOrder.companyOfSeller;
+            }
+          } else {
+            if (this.purchaseOrder.purchaser != null) {
+              return this.purchaseOrder.purchaser.name;
+            } else {
+              return this.purchaseOrder.companyOfSeller;
+            }
+          }
         }
       },
       sizes: function () {
