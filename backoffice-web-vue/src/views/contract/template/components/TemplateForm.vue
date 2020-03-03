@@ -111,15 +111,15 @@
         this.fn.closeSlider(true);
       },
       async onSave () {
-        if (this.tempName == null || this.tempName == '') {
-          this.validateText = '请输入模板名称';
-          // this.$message.error('请完善模板信息');
-          return;
-        }
+        // if (this.tempName == null || this.tempName == '') {
+        //   this.validateText = '请输入模板名称';
+        //   // this.$message.error('请完善模板信息');
+        //   return;
+        // }
         // this.checkTempName();
         if (!this.passCheck) {
-          this.validateText = '模板名称重复，请重新输入';
-          // this.$message.error('请完善模板信息');
+          // this.validateText = '模板名称重复，请重新输入';
+          this.$message.error('请完善页面信息');
           return;
         }
         const url = this.apis().saveTemplate();
@@ -176,7 +176,8 @@
       //   // this.onSelect(this.mockData[0]);
       // },
       async checkTempName () {
-        if (this.tempName == null || this.tempName == '') {
+        console.log(this.tempName.replace(/(^\s*)|(\s*$)/g, '').length);
+        if (this.tempName == null || this.tempName.replace(/(^\s*)|(\s*$)/g, '').length === 0) {
           this.validateText = '请输入模板名称';
           return;
         }
