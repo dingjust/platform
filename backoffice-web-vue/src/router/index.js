@@ -16,7 +16,13 @@ const router = new Router({
       redirect: '/dashboard',
       name: '首页',
       component: Full,
-      children: [{
+      children: [
+        {
+          path: '/message',
+          name: '用户消息',
+          component: () => import( /* webpackChunkName: 'register' */ '@/views/user/message/MessagePage')
+        },
+        {
           path: 'dashboard',
           name: '仪表盘',
           component: () => import( /* webpackChunkName: 'Dashboard' */ '@/views/dashboard/Dashboard')
@@ -170,11 +176,11 @@ const router = new Router({
               name: '认证中心',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/dashboard/authentication/AuthenticationPage')
             },
-            {
-              path: 'employee',
-              name: '员工',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/employee/EmployeePage')
-            },
+            // {
+            //   path: 'employee',
+            //   name: '员工',
+            //   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/employee/EmployeePage')
+            // },
             {
               path: 'user-group',
               name: '用户组',
@@ -182,8 +188,23 @@ const router = new Router({
             },
             {
               path: 'b2b-customer',
+              redirect: '/account/b2b-customer',
               name: '员工',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
+              component: {
+                render (c) {
+                  return c('router-view');
+                }
+              },
+              children: [{
+                path: '',
+                name: '员工列表',
+                component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage')
+              },
+                {
+                  path: 'customerDetail',
+                  name: '添加员工',
+                  component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/form/B2BCustomerBasicForm')
+                }]
             },
             {
               path: 'b2b-unit',

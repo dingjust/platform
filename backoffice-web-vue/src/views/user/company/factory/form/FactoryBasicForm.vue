@@ -175,18 +175,18 @@
         isDistrictsChanged: 'isDistrictsChanged'
       }),
       cities: {
-        get() {
+        get () {
           return this.$store.state.FactoriesModule.cities
         },
-        set(newValue) {
+        set (newValue) {
           this.$store.state.FactoriesModule.cities = newValue
         }
       },
       cityDistricts: {
-        get() {
+        get () {
           return this.$store.state.FactoriesModule.cityDistricts
         },
-        set(newValue) {
+        set (newValue) {
           this.$store.state.FactoriesModule.cityDistricts = newValue
         }
       }
@@ -197,7 +197,7 @@
         setIsCitiesChanged: 'setIsCitiesChanged',
         setIsDistrictsChanged: 'setIsDistrictsChanged'
       }),
-      async getLabels() {
+      async getLabels () {
         const url = this.apis().getGroupLabels('FACTORY');
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -207,13 +207,13 @@
 
         this.setLabels(result);
       },
-      openProfiles() {
+      openProfiles () {
         this.factoryProfilesFormVisible = !this.factoryProfilesFormVisible;
       },
-      onSaveProfiles() {
+      onSaveProfiles () {
         this.$emit('onSaveProfiles');
       },
-      async getRegions() {
+      async getRegions () {
         const url = this.apis().getRegions();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -223,7 +223,7 @@
 
         this.regions = result;
       },
-      onRegionChanged(current) {
+      onRegionChanged (current) {
         this.formData.contactAddress.id = null;
         this.formData.contactAddress.city = null;
         this.formData.contactAddress.cityDistrict = null;
@@ -232,7 +232,7 @@
         this.setIsCitiesChanged(true);
         this.setIsDistrictsChanged(true);
       },
-      async getCities(region) {
+      async getCities (region) {
         const url = this.apis().getCities(region.isocode);
         const result = await this.$http.get(url);
 
@@ -243,7 +243,7 @@
         this.$store.state.FactoriesModule.cities = result
         this.readOnlyCities = result;
       },
-      onCityChanged(current) {
+      onCityChanged (current) {
         if (!current) {
           return;
         }
@@ -251,7 +251,7 @@
         this.getCityDistricts(current);
         this.setIsDistrictsChanged(true);
       },
-      async getCityDistricts(city) {
+      async getCityDistricts (city) {
         const url = this.apis().getDistricts(city.code);
         const result = await this.$http.get(url);
 
@@ -263,11 +263,11 @@
         this.$store.state.FactoriesModule.cityDistricts = result;
         this.readOnlyCityDistricts = result;
       },
-      onCityDistrictChanged() {
+      onCityDistrictChanged () {
         this.formData.contactAddress.id = null;
       }
     },
-    data() {
+    data () {
       return {
         profilePictures: [],
         factoryProfilesFormVisible: false,
@@ -307,15 +307,14 @@
       }
       this.getRegions();
       if (this.readOnly && this.formData.contactAddress != undefined) {
-        // this.getCities(this.formData.contactAddress.region);
-        // this.getCityDistricts(this.formData.contactAddress.city);
+        this.getCities(this.formData.contactAddress.region);
+        this.getCityDistricts(this.formData.contactAddress.city);
       }
       if (this.formData.duties == '') {
         this.formData.duties = '经理';
       }
     }
   };
-
 </script>
 
 <style scoped>

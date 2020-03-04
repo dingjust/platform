@@ -186,7 +186,6 @@
       }
     }
   }
-
 </script>
 <style>
   .purchase-list-button {

@@ -84,26 +84,30 @@
     props: ['slotData'],
     computed: {
       equipments: function () {
-        if(this.slotData.cuttingDepartment === undefined){
-          return '';
-        }
         var result = '';
-        for (var item of this.slotData.cuttingDepartment) {
-          result += this.getEnum('CuttingDepartment', item) + '，'
+        if (this.slotData.cuttingDepartment !== undefined) {
+          for (var item of this.slotData.cuttingDepartment) {
+            result += this.getEnum('CuttingDepartment', item) + '，'
+          }
         }
-        for (item of this.slotData.productionWorkshop) {
-          result += this.getEnum('ProductionWorkshop', item) + '，'
+        if (this.slotData.productionWorkshop !== undefined) {
+          for (item of this.slotData.productionWorkshop) {
+            result += this.getEnum('ProductionWorkshop', item) + '，'
+          }
         }
-        for (item of this.slotData.lastDepartment) {
-          result += this.getEnum('LastDepartment', item) + '，'
+        if (this.slotData.lastDepartment !== undefined) {
+          for (item of this.slotData.lastDepartment) {
+            result += this.getEnum('LastDepartment', item) + '，'
+          }
         }
-        if(result.length > 0){
-          result = result.slice(0,result.lastIndexOf('，'));
+
+        if (result.length > 0) {
+          result = result.slice(0, result.lastIndexOf('，'));
         }
         return result;
       },
       cooperationModes: function () {
-        if(this.slotData.cooperationModes === undefined){
+        if (this.slotData.cooperationModes === undefined) {
           return '';
         }
 
