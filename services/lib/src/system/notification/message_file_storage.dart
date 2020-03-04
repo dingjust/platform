@@ -22,7 +22,7 @@ class MessageFileStorage extends AbstractFileStorage {
   }
 
   @override
-  Future<File> save(List<dynamic> models) async {
+    Future<File> save(List<dynamic> models) async {
     final file = await getLocalFile();
 
     return file.writeAsString(JsonEncoder().convert({

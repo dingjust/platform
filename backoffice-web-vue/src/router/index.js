@@ -16,7 +16,13 @@ const router = new Router({
       redirect: '/dashboard',
       name: '首页',
       component: Full,
-      children: [{
+      children: [
+        {
+          path: '/message',
+          name: '用户消息',
+          component: () => import( /* webpackChunkName: 'register' */ '@/views/user/message/MessagePage')
+        },
+        {
           path: 'dashboard',
           name: '仪表盘',
           component: () => import( /* webpackChunkName: 'Dashboard' */ '@/views/dashboard/Dashboard')

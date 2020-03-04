@@ -94,7 +94,7 @@
       </requirement-order-quote-list>
     </div>
 
-    <el-row style="margin-top: 20px" justify="space-around" type="flex">
+    <el-row style="margin-top: 20px" justify="space-around" type="flex" v-if="!readOnly">
       <el-button class="btn-class" @click="onInvitation" v-if="slotData.status == 'PENDING_QUOTE'">邀请报价</el-button>
       <el-button class="btn-class" @click="onEdit" v-if="slotData.status == 'PENDING_QUOTE' && quotePage.totalElements <= 0">修改</el-button>
       <el-button class="btn-class" @click="onCancel" v-if="slotData.status == 'PENDING_QUOTE'">关闭</el-button>
