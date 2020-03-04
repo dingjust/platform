@@ -14,6 +14,8 @@ import '../common/app_keys.dart';
 import '_shared/widgets/brand_section.dart';
 import '_shared/widgets/factory_section.dart';
 import '_shared/widgets/location.dart';
+import '_shared/widgets/more_factory_section.dart';
+import '_shared/widgets/more_requirement_section.dart';
 import '_shared/widgets/requirement_tab_section.dart';
 
 /// 网站主页
@@ -27,13 +29,15 @@ class HomePage extends StatefulWidget {
       BrandButtonsSection(),
       BrandReportSection(),
       BrandEntranceSection(),
-      FactoryTabSection()
+      FactoryTabSection(),
+      MoreFactorySection()
     ],
     UserType.FACTORY: <Widget>[
       FactoryButtonsSection(),
       FactoryReportSection(),
       FactoryEntranceSection(),
-      RequirementTabSection()
+      RequirementTabSection(),
+      MoreRequirementSection()
     ]
   };
 
