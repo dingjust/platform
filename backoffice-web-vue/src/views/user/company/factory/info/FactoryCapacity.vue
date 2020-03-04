@@ -65,7 +65,7 @@
         <el-col :span="6">
           <el-row type="flex">
             <template v-for="val in formData.labels">
-              <h6 :key="val" class="info-data" style="margin-right:10px;">{{val.name}}</h6>
+              <h6 :key="val.code" class="info-data" style="margin-right:10px;">{{val.name}}</h6>
             </template>
           </el-row>
         </el-col>
@@ -84,33 +84,37 @@
           </el-row>
         </el-col>
       </el-row>
-      <el-row class="info-row" type="flex" justify="start" align="bottom" :gutter="30">
+      <el-row class="info-row" type="flex" justify="start" align="middle" :gutter="30">
         <el-col :span="2" style="background-color:#80808029;">
           <el-row type="flex" justify="center" align="middle">
             <h6 class="info-data">生产大类</h6>
           </el-row>
         </el-col>
         <el-col :span="6">
-          <el-row type="flex">
-              <el-tag v-for="val of formData.categories" class="elTagClass" color="#FFD60C" :key="val.code"
-                size="medium">
-                {{val.name}}
-              </el-tag>
+          <el-row type="flex" align="middle">
+            <el-tag v-for="val of formData.categories" class="elTagClass" style="margin-top:10px;" color="#FFD60C"
+              :key="val.code" size="medium">
+              {{val.name}}
+            </el-tag>
           </el-row>
         </el-col>
       </el-row>
-      <el-form-item prop="categories">
-        <template slot="label">
-          <h6 class="titleTextClass">生产大类<span style="color: red">*</span></h6>
-        </template>
-        <el-tag v-for="val of majorCategories" class="elTagClass" color="#FFD60C" @click="handleTagClick(val)"
-          size="medium">
-          {{val.name}}
-        </el-tag>
-      </el-form-item>
       <el-form-item prop="adeptAtCategories">
         <template slot="label">
           <h6 class="titleTextClass">优势品类<span style="color: red">*</span></h6>
+        </template>
+        <template v-for="(values,key) in adeptAtCategories">
+          <el-row type="flex" align="middle" style="padding-top:10px" :key="key">
+            <el-badge :value="values.length" class="item">
+              <h6>{{key}}</h6>
+            </el-badge>
+          </el-row>
+          <el-divider :key="key"></el-divider>
+          <template v-for="val of values">
+            <el-tag class="elTagClass" color="#FFD60C" size="medium" :key="val">
+              {{val}}
+            </el-tag>
+          </template>
         </template>
         <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"
           :readOnly="readOnly"></category-select>
@@ -119,14 +123,19 @@
         <template slot="label">
           <h6 class="titleTextClass">关键词</h6>
         </template>
-        <tags-of-text :label="'关键词'" @remove="onRemoveKeyword" @add="onAddKeyword" :textData="formData.keyword"
-          :symbol="'，'"></tags-of-text>
+        <el-row type="flex">
+          <template v-for="val in keywords">
+            <el-tag class="elTagClass" style="margin-top:10px;" color="#FFD60C" :key="val" size="medium">
+              {{val}}
+            </el-tag>
+          </template>
+        </el-row>
         <span style="font-size: 10px;color: #F56C6C">{{readOnly? '您可以通过关键词搜索到此公司' : '品牌用户可以通过关键词搜索到您'}}</span>
       </el-form-item>
       <el-row type="flex" justify="start" align="middle">
         <el-col :span="4" style="margin-left: 20px">
           <h6>
-            上传资质荣誉照片：
+            资质荣誉照片：
           </h6>
           <h6 style="color: grey">
             &nbsp;&nbsp;&nbsp;&nbsp;(最多五张)
@@ -168,23 +177,18 @@
         labels: 'labels'
       }),
       cooperativeBrands: function () {
-        return this.formData.cooperativeBrand.split(',');
+        return this.formData.cooperativeBrand.split('，');
+      },
+      keywords: function () {
+        var a = 'asdsad';
+        a.sp
+        return this.formData.keyword.split('，');
       },
     },
     methods: {
       ...mapMutations({
         setLabels: 'setLabels'
       }),
-      async getLabels() {
-        const url = this.apis().getGroupLabels('FACTORY');
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.setLabels(result);
-      },
       async getCategories() {
         const url = this.apis().getMinorCategories();
         const result = await this.$http.get(url);
@@ -334,9 +338,7 @@
     },
     data() {
       return {
-        categories: [],
-        majorCategories: [],
-        selectCodes: [],
+        adeptAtCategories: {},
         factoryDesigns: this.$store.state.EnumsModule.FactoryDesign,
         factoryPatterns: this.$store.state.EnumsModule.FactoryPattern,
         FactoryQualityLevel: this.$store.state.EnumsModule.FactoryQualityLevel,
@@ -344,9 +346,13 @@
       };
     },
     created() {
-      this.getCategories();
-      this.getMajorCategories();
-      this.initShowMajorCategories();
+      this.formData.adeptAtCategories.forEach(category => {
+        if (this.adeptAtCategories[category.parent.name] != null) {
+          this.adeptAtCategories[category.parent.name].push(category.name);
+        } else {
+          this.adeptAtCategories[category.parent.name] = [category.name];
+        }
+      });
     }
   };
 
