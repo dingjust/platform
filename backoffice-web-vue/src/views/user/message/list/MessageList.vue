@@ -23,11 +23,11 @@
     </el-dialog>
     <el-row>
       <el-button  class="toolbar-search_input" @click="onRead">标记已读</el-button>
-      <el-button  @click="onNotRead">标记未读</el-button>
+      <!--<el-button  @click="onNotRead">标记未读</el-button>-->
       <el-button  @click="onDelete">删除消息</el-button>
     </el-row>
-    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed"
-              :height="autoHeight" @row-click="clickRow" @selection-change="handleSelectionChange" :row-key="(row)=> row.code">
+    <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :row-style="{cursor:'pointer'}"
+              :height="autoHeight" @row-click="openOrderDialog" @selection-change="handleSelectionChange" :row-key="(row)=> row.code">
       <el-table-column
         reserve-selection
         type="selection"
@@ -35,8 +35,8 @@
       </el-table-column>
       <el-table-column label="内容" prop="body">
         <template slot-scope="scope">
-          <span :style="{fontWeight: isRead(scope.row.read)}"> {{scope.row.body}}</span>
-          <a v-if='scope.row.groupCode == 1' :style="{fontWeight: isRead(scope.row.read),cursor:'pointer'}" @click="openOrderDialog(scope.row)">去看看>></a>
+          <span :style="{fontWeight: isRead(scope.row.read),}"> {{scope.row.body}}</span>
+          <!--<a v-if='scope.row.groupCode == 1' :style="{fontWeight: isRead(scope.row.read),cursor:'pointer'}" @click="openOrderDialog(scope.row)">去看看>></a>-->
         </template>
       </el-table-column>f
       <el-table-column label="时间" prop="creationtime" width="350">
@@ -64,6 +64,7 @@
   import ProofingDetailsPage from '../../../order/proofing/details/ProofingDetailsPage';
   import RequirementOrderDetailsPage from '../../../order/requirement/details/RequirementOrderDetailsPage';
   import PurchaseOrderDetailsPage from '../../../order/purchase/details/PurchaseOrderDetailsPage';
+  import QuoteDetailsPage from '../../../order/quote/details/QuoteDetailsPage';
   const {
     mapGetters,
     mapActions,
@@ -75,14 +76,19 @@
   export default {
     name: 'MessageList',
     props: ['page'],
-    components: {PurchaseOrderDetailsPage, RequirementOrderDetailsPage, ProofingDetailsPage, RequirementOrderRequestForm},
+    components: {
+      QuoteDetailsPage,
+      PurchaseOrderDetailsPage,
+      RequirementOrderDetailsPage,
+      ProofingDetailsPage,
+      RequirementOrderRequestForm},
     computed: {
       ...mapGetters({
       })
     },
     methods: {
       ...mapActions({
-        search: 'search',
+        search: 'search'
       }),
       ...mapMutations({
       }),
@@ -114,7 +120,7 @@
         this.$refs.resultTable.clearSelection();
       },
       clickRow (row) {
-        this.$refs.resultTable.toggleRowSelection(row);
+        // this.$refs.resultTable.toggleRowSelection(row);
       },
       handleSelectionChange (val) {
         this.selectItems = val;
@@ -180,31 +186,40 @@
           this.$message.error('请选择消息');
           return;
         }
-        var uid = this.$store.getters.currentUser.uid;
-        // 删除消息
-        const url = this.apis().deleteMsgs(uid);
-        const data = this.selectItems.map((item) => item.code);
-        const result = await this.$http.post(url, data);
-        if (result['errors']) {
-          this.$message.error('系统出错');
-          return;
-        }
-        if (result != null && result.code === '0') {
-          this.$message.error('标记失败');
-          return;
-        }
-        this.$message.success('删除消息成功');
-        this.$emit('refreshData');
-        this.$refs.resultTable.clearSelection();
+        this.$confirm('此操作将永久删除该消息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          var uid = this.$store.getters.currentUser.uid;
+          // 删除消息
+          const url = this.apis().deleteMsgs(uid);
+          const data = this.selectItems.map((item) => item.code);
+          const result = await this.$http.post(url, data);
+          if (result['errors']) {
+            this.$message.error('系统出错');
+            return;
+          }
+          if (result != null && result.code === '0') {
+            this.$message.error('删除消息失败');
+            return;
+          }
+          this.$message.success('删除消息成功');
+          this.$emit('refreshData');
+          this.$refs.resultTable.clearSelection();
+        })
       },
       openOrderDialog (row) {
+        console.log(row);
         switch (row.moduleCode) {
           case 'newQuote':
           case 'refuseQuote':
           case 'adoptedQuote':
             this.getQuote(row.params);
-            this.quoteDetailsDialogVisible = !this.quoteDetailsDialogVisible;
-            this.onReadOne(row);
+            this.quoteDetailDialogVisible = !this.quoteDetailDialogVisible;
+            if (!row.read) {
+              this.onReadOne(row);
+            }
             break;
           case 'proofingCreate':
           case 'proofingDeliver':
@@ -212,7 +227,9 @@
           case 'proofingPay':
             this.getProofing(row.params);
             this.proofingDetailDialogVisible = !this.proofingDetailDialogVisible;
-            this.onReadOne(row);
+            if (!row.read) {
+              this.onReadOne(row);
+            }
             break;
           case 'newPurchaseOrder':
           case 'purchaseDeliver':
@@ -224,12 +241,16 @@
           case 'progressUpdated':
             this.getPurchase(row.params);
             this.purchaseDetailDialogVisible = !this.purchaseDetailDialogVisible;
-            this.onReadOne(row);
+            if (!row.read) {
+              this.onReadOne(row);
+            }
             break;
           case 'recommendRequireOrder':
             this.getRequirement(row.params);
             this.requirementDetailDialogVisible = !this.requirementDetailDialogVisible;
-            this.onReadOne(row);
+            if (!row.read) {
+              this.onReadOne(row);
+            }
             break;
         }
       },
@@ -252,7 +273,7 @@
           return;
         }
 
-        this.slotData = result;
+        this.quoteDetailData = result;
       },
       async getRequirement (code) {
         const url = this.apis().getRequirementOrder(code);
