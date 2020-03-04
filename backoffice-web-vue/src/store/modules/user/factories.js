@@ -66,7 +66,8 @@ const state = {
     keyword: '',
     qualityLevels: [],
     duties: '',
-    loginDisabled: false
+    loginDisabled: false,
+    profiles: []
   },
   queryFormData: {
     keyword: '',

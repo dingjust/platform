@@ -13,29 +13,17 @@ const state = {
   },
   formData: {
     id: null,
-    uid: '',
-    name: '',
-    mobileNumber: '',
-    password: '',
-    confirmPassword: '',
-    roles: [],
-    b2bRoleList: [],
-    b2bDept: {
-      id: 0
-    },
-    b2bRoleGroup: {
-      id: 0
-    }
+    title: '',
+    description: '',
+    date: '',
+    type: '',
+    image: '',
+    code: []
   },
-  roleForm: {
-    id: null,
-    name: '',
-    roleIds: []
-  },
-  roleList: [],
-  deptList: [],
-  roleGroupList: [],
-  roleCodeList: []
+  queryFormData: {
+    keyword: '',
+    groupCode: '1'
+  }
 };
 
 const mutations = {
@@ -43,24 +31,21 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   page: (state, page) => state.page = page,
-  roleList: (state, roleList) => state.roleList = roleList,
-  deptList: (state, deptList) => state.deptList = deptList,
-  roleForm: (state, roleForm) => state.roleForm = roleForm,
-  formData: (state, formData) => state.formData = formData,
-  roleGroupList: (state, roleGroupList) => state.roleGroupList = roleGroupList,
-  roleCodeList: (state, roleCodeList) => state.roleCodeList = roleCodeList
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
-    commit('keyword', keyword);
-    commit('currentPageNumber', page);
+  async search ({dispatch, commit, state}, {url, page, size}) {
+    if (page) {
+      commit('currentPageNumber', page);
+    }
+
     if (size) {
       commit('currentPageSize', size);
     }
 
-    const response = await http.post(url, {
-      keyword: state.keyword}, {
+    console.log(state.queryFormData);
+    const response = await http.post(url, state.queryFormData, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -80,16 +65,11 @@ const actions = {
 };
 
 const getters = {
-  formData: state => state.formData,
-  roleForm: state => state.roleForm,
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  roleList: state => state.roleList,
-  deptList: state => state.deptList,
-  roleGroupList: state => state.roleGroupList,
-  roleCodeList: state => state.roleCodeList
+  queryFormData: state => state.queryFormData
 };
 
 export default {

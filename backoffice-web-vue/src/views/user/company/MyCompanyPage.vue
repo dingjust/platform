@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn content">
     <template v-if="isBrand()">
-      <brand-details-page />
+      <brand-details-page @brandLeaveCount="brandLeaveCount"/>
     </template>
     <template v-else-if="isFactory()">
       <el-card>
@@ -55,7 +55,7 @@
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
-      async getFactory() {
+      async getFactory () {
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().getFactory(uid);
         const result = await this.$http.get(url);
@@ -64,17 +64,32 @@
           return;
         }
 
+        if (result.profiles.length <= 0) {
+          result.profiles = [{
+            medias: [],
+            description: ''
+          },
+          {
+            medias: [],
+            description: ''
+          },
+          {
+            medias: [],
+            description: ''
+          }];
+        }
+
         this.setFormData(Object.assign({}, Object.assign(this.formData, result)));
 
         if ((this.formData.contactAddress.region != null && this.isCitiesChanged) || this.cities.length <= 0) {
-          if (this.formData.contactAddress.region.isocode!='') {
+          if (this.formData.contactAddress.region.isocode != '') {
             this.getCities(this.formData.contactAddress.region);
             this.setIsCitiesChanged(false);
           }
 
         }
         if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
-          if (this.formData.contactAddress.city != null&&this.formData.contactAddress.city.code != '') {
+          if (this.formData.contactAddress.city != null && this.formData.contactAddress.city.code != '') {
             this.getCityDistricts(this.formData.contactAddress.city);
             this.setIsDistrictsChanged(false);
           }
@@ -82,7 +97,7 @@
 
         this.setFactoryFormVisible(true);
       },
-      async onSave() {
+      async onSave () {
         let data = Object.assign({}, this.formData);
         if (data.productionMode === '' || data.productionMode == null) {
           this.$delete(data, 'productionMode');
@@ -99,7 +114,7 @@
         this.setFactoryFormVisible(false);
         this.$message.success('编辑工厂信息成功');
       },
-      async getRegions() {
+      async getRegions () {
         const url = this.apis().getRegions();
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -109,7 +124,7 @@
 
         this.regions = result;
       },
-      async getCities(region, index) {
+      async getCities (region, index) {
         const url = this.apis().getCities(region.isocode);
         const result = await this.$http.get(url);
 
@@ -120,7 +135,7 @@
 
         this.$store.state.FactoriesModule.cities = result;
       },
-      async getCityDistricts(city) {
+      async getCityDistricts (city) {
         const url = this.apis().getDistricts(city.code);
         const result = await this.$http.get(url);
 
@@ -131,10 +146,10 @@
 
         this.$store.state.FactoriesModule.cityDistricts = result;
       },
-      onClose() {
+      onClose () {
         this.setFactoryFormVisible(false);
       },
-      async onEditProfiles() {
+      async onEditProfiles () {
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().getFactory(uid);
         const result = await this.$http.get(url);
@@ -145,7 +160,7 @@
         this.setFormData(Object.assign({}, result));
         this.factoryProfilesFormVisible = !this.factoryProfilesFormVisible;
       },
-      async onSaveProfiles() {
+      async onSaveProfiles () {
         var uid = this.$store.getters.currentUser.companyCode;
         let url = this.apis().updateFactoryProfiles(uid);
         const result = await this.$http.put(url, this.formData);
@@ -157,18 +172,44 @@
         this.getFactory();
         this.factoryProfilesFormVisible = false;
         this.$message.success('编辑图文详情信息成功');
+      },
+      brandLeaveCount () {
+        this.count++;
       }
     },
-    data() {
+    data () {
       return {
-
+        count: 0,
       };
     },
-    created() {
+    created () {
       if (this.isFactory()) {
         this.getFactory();
       }
+    },
+    watch: {
+      formData: {
+        handler (val) {
+          if (val) {
+            this.count++
+          }
+        },
+        deep: true
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+    // 判断数据是否修改，如果修改按这个执行，没修改，则直接执行离开此页面
+      if (this.count > 1) {
+        this.$confirm('当前页面数据并未保存，是否要离开？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          next();
+        });
+      } else {
+        next();
+      }
     }
   };
-
 </script>

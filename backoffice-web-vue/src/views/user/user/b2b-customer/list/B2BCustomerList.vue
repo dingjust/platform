@@ -1,12 +1,34 @@
 <template>
   <div class="animated fadeIn">
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="UID" prop="uid"></el-table-column>
-      <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="联系电话" prop="mobileNumber"></el-table-column>
+      <el-table-column label="姓名" prop="name"></el-table-column>
+      <el-table-column label="账号" prop="uid"></el-table-column>
+      <el-table-column label="部门" prop="b2bDept">
+        <template slot-scope="scope">
+          <span>{{scope.row.b2bDept != null ? scope.row.b2bDept.name : ''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="角色" prop="b2bRoleGroup">
+        <template slot-scope="scope">
+          <span>{{scope.row.b2bRoleGroup != null ? scope.row.b2bRoleGroup.name : ''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="loginDisabled">
+        <template slot-scope="scope">
+          <span>{{scope.row.loginDisabled ? '禁用' : '启用'}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <el-select v-model="operation" placeholder="请选择" size="mini"
+                     @change="selectionOperation" @visible-change="getData(scope.row)">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </template>
       </el-table-column>
     </el-table>
@@ -25,28 +47,80 @@
 <script>
   export default {
     name: 'B2BCustomerList',
-    props: ["page"],
-    computed: {},
+    props: ['page'],
+    computed: {
+      
+    },
     methods: {
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         this.$emit('onSearch', val - 1);
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
+      onDetails (row) {
         this.$emit('onDetails', row);
       },
+      selectionOperation (current) {
+        console.log(current);
+        this.operation = '';
+        this.$emit(current, this.slotData);
+        this.slotData = {};
+      },
+      getData (row) {
+        this.options = Object.assign([], this.options1);
+        if (row.b2bDept != null) {
+          this.options.push({
+            value: 'setDepartmentHead',
+            label: '设为部门负责人'
+          });
+        }
+        if (row.loginDisabled) {
+          this.options.push({
+            value: 'enableUser',
+            label: '启用账号'
+          });
+        } else {
+          this.options.push({
+            value: 'forbiddenUser',
+            label: '禁用账号'
+          });
+        }
+        this.slotData = row;
+      }
     },
-    data() {
-      return {}
+    data () {
+      return {
+        options1: [{
+          value: 'editInfo',
+          label: '编辑信息'
+        }, {
+          value: 'workHandover',
+          label: '工作交接'
+        }, {
+          value: 'deleteUser',
+          label: '删除账号'
+        }],
+        options: [],
+        slotData: '',
+        operation: ''
+      }
     }
   }
 </script>
+<style scoped>
+  /*.el-dropdown-link {*/
+  /*  cursor: pointer;*/
+  /*  color: #409EFF;*/
+  /*}*/
+  /*.el-icon-arrow-down {*/
+  /*  font-size: 12px;*/
+  /*}*/
+</style>

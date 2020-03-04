@@ -22,7 +22,8 @@
       <!--<el-table-column label="用印章审批角色" prop="role"  fixed></el-table-column>-->
       <el-table-column label="操作" >
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row.code)">查看</el-button>
+<!--          <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row.code)">编辑</el-button>-->
+          <el-button type="text" icon="el-icon-edit" @click="openPreviewPdf(scope.row.code)">查看</el-button>
           <el-divider direction="vertical"></el-divider>
           <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row.code)">删除</el-button>
           <!--<el-divider direction="vertical"></el-divider>-->
@@ -44,64 +45,67 @@
 </template>
 
 <script>
-  import TemplateForm from "../components/TemplateForm";
+  import TemplateForm from '../components/TemplateForm';
 
   export default {
-    name: "TemplateSearchResultList",
-    props: ["page"],
+    name: 'TemplateSearchResultList',
+    props: ['page'],
     methods: {
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.isAdvancedSearch) {
-          this.$emit("onAdvancedSearch", val);
+          this.$emit('onAdvancedSearch', val);
           return;
         }
 
-        this.$emit("onSearch", 0, val);
+        this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.isAdvancedSearch) {
-          this.$emit("onAdvancedSearch", val - 1);
+          this.$emit('onAdvancedSearch', val - 1);
           return;
         }
 
-        this.$emit("onSearch", val - 1);
+        this.$emit('onSearch', val - 1);
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onSelect(code) {
+      onSelect (code) {
         if (code == this.selectedCode) {
-          this.selectedCode = "";
+          this.selectedCode = '';
         } else {
           this.selectedCode = code;
         }
       },
-      onDetails(code) {
+      onDetails (code) {
         // console.log(row);
         this.$emit('onDetails', code);
       },
-      async onDelete(code){
+      openPreviewPdf (code) {
+        this.$emit('openPreviewPdf', code);
+      },
+      async onDelete (code) {
         const url = this.apis().deleteTemplate(code);
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
-        if(result){
+        if (result) {
           this.$message.success('删除成功');
-        }else{
+        } else {
           this.$message.error('删除失败');
         }
-        this.$emit("onSearch",0);
+        this.$emit('onSearch', 0);
       }
     },
-    data() {
+    data () {
       return {
-        selectedCode: "0",
+        selectedCode: '0',
         mockData: []
       };
     }

@@ -210,10 +210,34 @@ const COMMON_APIS = {
   getB2BCustomers() {
     return '/b2b/b2bCustomers';
   },
-  getB2BCustomer(uid) {
+  getB2BCustomerDeptList() {
+    return '/b2b/dept/tree/list';
+  },
+  createB2BCustomerDept() {
+    return '/b2b/dept/save';
+  },
+  deleteB2BCustomerDept(id) {
+    return '/b2b/dept/delete/' + id;
+  },
+  getB2BCustomerRoleGroupList() {
+    return '/b2b/role/group/list';
+  },
+  saveB2BCustomerRoleGroup() {
+    return '/b2b/role/group/save';
+  },
+  removeB2BCustomerRoleGroup(id) {
+    return '/b2b/role/group/delete/' + id;
+  },
+  getB2BCustomerRoleGroupDetails(id) {
+    return '/b2b/role/group/get/' + id;
+  },
+  getB2BCustomer (uid) {
     return '/b2b/b2bCustomers/' + uid;
   },
-  createRole() {
+  getRoleList() {
+    return '/b2b/role/tree/list';
+  },
+  createRole () {
     return '/b2b/roles/create';
   },
   getRoles() {
@@ -573,6 +597,31 @@ const COMMON_APIS = {
   },
   checkTempName() {
     return 'b2b/user/agreement/temp/check';
+  },
+  /// 未读消息统计
+  countUnreadMsg (uid) {
+    return 'b2b/user/' + uid + '/unread/msg/count';
+  },
+
+  /// 获取消息列表（消息盒子）
+  getMsgList (uid) {
+    return 'b2b/user/' + uid + '/msg/list';
+  },
+
+  /// 消息标记为未读
+  unReadMsgs (uid) {
+    return 'b2b/user/' + uid + '/msg/update/to/unread';
+  },
+  /// 消息标记为已读
+  readMsgs (uid) {
+    return 'b2b/user/' + uid + '/msg/update/to/read';
+  },
+  deleteMsgs (uid) {
+    return 'b2b/user/' + uid + '/msg/delete';
+  },
+  /// 将所有未读消息标记为已读
+  readAllMsg (uid) {
+    return 'b2b/user/' + uid + '/msg/read';
   }
 };
 

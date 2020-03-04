@@ -440,7 +440,9 @@ class BrandModel extends B2BUnitModel {
 
   static List<Map<String, dynamic>> _categorysToJson(
           List<CategoryModel> models) =>
-      models.map((model) => CategoryModel.toJson(model)).toList();
+      models == null
+          ? null
+          : models.map((model) => CategoryModel.toJson(model)).toList();
 }
 
 @JsonSerializable()
