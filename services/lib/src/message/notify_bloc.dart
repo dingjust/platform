@@ -115,7 +115,20 @@ class NotifyBloC extends BLoCBase {
       await getData(status);
   }
 
-
+  deleteMsgResetData(String status, String code) {
+    //删除消息重置数据
+    _dataMap[status].data.removeWhere((item) => item.code == code);
+    _controller.sink.add(MessageData(status: status, data: _dataMap[status].data));
+  }
+  readMsgResetData(String status,String code){
+    //读取消息重置数据
+    _dataMap[status].data.forEach((item){
+      if(item.code == code){
+        item.read = true;
+      }
+    });
+    _controller.sink.add(MessageData(status: status, data: _dataMap[status].data));
+  }
 }
 
 class MessageData {

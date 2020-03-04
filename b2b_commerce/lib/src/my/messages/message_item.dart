@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:services/src/message/repository/message_respository.dart' as mr;
 
 import 'message_detail.dart';
 
@@ -14,8 +15,13 @@ class MessageItemPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        notificationsPool$.read(model.code);
+      onTap: () async{
+        if(!model.read){
+          List<String> codes = model.code != null ? [model.code] : [];
+          notificationsPool$.read(codes);
+          NotifyBloC.instance.readMsgResetData(model.groupCode.toString(),model.code);
+        }
+
         if (model.groupCode != 1) {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -25,9 +31,21 @@ class MessageItemPage extends StatelessWidget {
           );
         } else {
           jpush$.onOpenMessage(model, context);
-          // NotifyBloC.instance.getData();
-          NotifyBloC.instance.refreshData(model.groupCode.toString());
         }
+      },
+        onLongPress: (){
+        ShowDialogUtil.showAlertDialog(context, '是否确认删除该消息', ()async{
+          String uid = UserBLoC().currentUser.uid;
+          bool result = await mr.MessageRepository().deleteMessage(uid,this.model.code);
+          if(result){
+            Navigator.pop(context);
+            ShowDialogUtil.showSnakeBar(context, '删除消息成功');
+            NotifyBloC.instance.deleteMsgResetData(model.groupCode.toString(),model.code);
+          }else{
+            Navigator.pop(context);
+            ShowDialogUtil.showSnakeBar(context, '删除消息失败');
+          }
+        });
       },
       child: Container(
         padding: const EdgeInsets.all(10),
