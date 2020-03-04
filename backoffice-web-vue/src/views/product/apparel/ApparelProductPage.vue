@@ -29,9 +29,14 @@
       <apparel-product-off-shelf-dialog v-if="apparelProductOffShelfPageVisible" @onCancel="onOffShelfCancel"
         @onConfirm="onOffShelfConfirm" />
     </el-dialog>
-    <el-dialog :visible.sync="belongDetailsPageVisible" width="80%" class="purchase-dialog"
+    <el-dialog :visible.sync="factoryDetailsPageVisible" width="80%" class="purchase-dialog"
       :close-on-click-modal="false">
-      <factory-details-read v-if="belongDetailsPageVisible" :slotData="belongDetailsData"></factory-details-read>
+      <factory-details-read v-if="factoryDetailsPageVisible" :slotData="belongDetailsData"></factory-details-read>
+    </el-dialog>
+    <el-dialog :visible.sync="brandDetailsPageVisible" width="80%" class="purchase-dialog"
+      :close-on-click-modal="false">
+      <brand-details-read v-if="brandDetailsPageVisible" :slotData="belongDetailsData">
+      </brand-details-read>
     </el-dialog>
   </div>
 </template>
@@ -53,7 +58,7 @@
   import ApparelProductForbiddenDialog from './form/ApparelProductForbiddenDialog';
   import ApparelProductOffShelfDialog from './form/ApparelProductOffShelfDialog';
   import FactoryDetailsRead from '@/views/user/company/factory/details/FactoryDetailsRead';
-
+  import BrandDetailsRead from '@/views/user/company/brand/details/BrandDetailsRead';
 
   export default {
     name: 'ApparelProductPage',
@@ -63,7 +68,8 @@
       ApparelProductDetailsPage,
       ApparelProductToolbar,
       ApparelProductList,
-      FactoryDetailsRead
+      FactoryDetailsRead,
+      BrandDetailsRead
     },
     computed: {
       ...mapGetters({
@@ -137,11 +143,27 @@
             return;
           }
           this.belongDetailsData = result;
-          this.belongDetailsPageVisible = true;
-        } else if (item.belongTo.type == 'BRAND') {
-
-        } else {
-          return;
+          this.factoryDetailsPageVisible = true;
+        } else 
+        // if (item.belongTo.type == 'BRAND') 
+        {
+          //品牌
+          let url = this.apis().getBrand(item.belongTo.uid);
+          if (this.isTenant()) {
+            url += '?sort=creationtime,desc';
+          }
+          const result = await this.$http.get(url);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          if (result.duties == null || result.duties == undefined) {
+            result.duties = '经理';
+          }
+          this.belongDetailsData = result;
+          this.brandDetailsPageVisible = true;
+        // } else {
+        //   return;
         }
       },
       async onShelf(item) {
@@ -281,7 +303,8 @@
         ],
         activeName: '',
         belongDetailsData: '',
-        belongDetailsPageVisible: false,
+        factoryDetailsPageVisible: false,
+        brandDetailsPageVisible: false,
         apparelProductDetailsPageVisible: false,
         productData: {},
         apparelProductForbiddenPageVisible: false,

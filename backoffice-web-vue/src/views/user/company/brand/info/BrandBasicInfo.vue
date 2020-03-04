@@ -1,9 +1,5 @@
 <template>
   <div class="animated fadeIn factory-basic">
-    <el-dialog width="80%" v-if="factoryProfilesFormVisible" :visible.sync="factoryProfilesFormVisible"
-      class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <factory-profiles-from :profiles="formData.profiles" @onSaveProfiles="onSaveProfiles"></factory-profiles-from>
-    </el-dialog>
     <el-row>
       <div class="titleClass">
         <h6>基本信息</h6>
@@ -13,23 +9,25 @@
       <el-row type="flex" justify="start" align="middle">
         <el-col :span="2">
           <h6 style="font-size: 12px">
-            企业LOGO:
+            上传企业LOGO
           </h6>
         </el-col>
         <el-col :span="18">
           <el-form-item prop="profilePicture">
-            <images-upload :limit="1" :slot-data="this.profilePictures" />
+            <images-upload :limit="1" :slot-data="this.profilePictures" :disabled="true" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row class="info-row" type="flex" justify="start" align="bottom" :gutter="30">
         <el-col :span="2" style="background-color:#80808029;">
           <el-row type="flex" justify="center" align="middle">
-            <h6 class="info-data">公司名称<span style="color: red">*</span></h6>
+            <h6 class="info-data">公司名称</h6>
           </el-row>
         </el-col>
         <el-col :span="6">
-          <h6 class="info-data">{{formData.name}}</h6>
+          <h6 class="info-data">{{formData.name}}<span
+              style="color: red;font-size:8px;margin-left:10px;">({{formData.approvalStatus == 'approved' ? '已认证' : '未认证'}})</span>
+          </h6>
         </el-col>
       </el-row>
       <el-row class="info-row" type="flex" justify="start" align="bottom" :gutter="30">
@@ -80,36 +78,28 @@
   const {
     mapGetters,
     mapMutations
-  } = createNamespacedHelpers('FactoriesModule');
+  } = createNamespacedHelpers('BrandsModule');
 
   import ImagesUpload from '../../../../../components/custom/ImagesUpload';
-  import FactoryProfilesFrom from '../form/FactoryProfilesForm';
 
   export default {
-    name: 'FactoryBasicForm',
-    props: ['formData'],
+    name: 'BrandBasicInfo',
+    props: ['formData', 'readOnly'],
     components: {
-      FactoryProfilesFrom,
       ImagesUpload
+    },
+    methods: {
     },
     data() {
       return {
         profilePictures: [],
-        factoryProfilesFormVisible: false,
       };
     },
     watch: {
-      'profilePictures': function (n, o) {
-        console.log(n);
-        if (n != null && n.length > 0) {
-          this.formData.profilePicture = n[0];
-        } else {
-          this.formData.profilePicture = null;
-        }
-      },
+
     },
     created() {
-
+      console.log(this.formData);
       if (this.formData.profilePicture != null) {
         this.profilePictures = [this.formData.profilePicture];
       }
@@ -155,14 +145,9 @@
     text-align: justify;
     text-align-last: justify;
     display: inline-block;
-    width: 80px;
+    width: 57px;
     font-size: 12px;
-  }
-
-  .info-data {
-    font-size: 12px;
-    padding-top: 5px;
-    /* padding-bottom: 2px; */
+    /*font-weight: bold;*/
   }
 
   .el-input--mini .el-input__inner {
@@ -179,9 +164,10 @@
     height: 100px;
   }
 
-  .authentication-button {
-    width: 100px;
-    color: #F56C6C;
+  .info-data {
+    font-size: 12px;
+    padding-top: 5px;
+    /* padding-bottom: 2px; */
   }
 
   .info-row {

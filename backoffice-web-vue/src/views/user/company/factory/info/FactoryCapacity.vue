@@ -92,46 +92,49 @@
         </el-col>
         <el-col :span="6">
           <el-row type="flex" align="middle">
-            <el-tag v-for="val of formData.categories" class="elTagClass" style="margin-top:10px;" color="#FFD60C"
-              :key="val.code" size="medium">
+            <el-tag v-for="val of formData.categories" class="elTagClass" style="margin-top:0px;color:black;"
+              color="#FFD60C" :key="val.code" size="medium">
               {{val.name}}
             </el-tag>
           </el-row>
         </el-col>
       </el-row>
-      <el-form-item prop="adeptAtCategories">
-        <template slot="label">
-          <h6 class="titleTextClass">优势品类<span style="color: red">*</span></h6>
-        </template>
-        <template v-for="(values,key) in adeptAtCategories">
-          <el-row type="flex" align="middle" style="padding-top:10px" :key="key">
-            <el-badge :value="values.length" class="item">
-              <h6>{{key}}</h6>
-            </el-badge>
+      <el-row class="info-row" type="flex" justify="start" :gutter="30">
+        <el-col :span="2">
+          <el-row type="flex" justify="center" align="middle">
+            <h6 class="info-data">优势品类<span style="color: red">*</span></h6>
           </el-row>
-          <el-divider :key="key"></el-divider>
-          <template v-for="val of values">
-            <el-tag class="elTagClass" color="#FFD60C" size="medium" :key="val">
-              {{val}}
-            </el-tag>
+        </el-col>
+        <el-col :span="18">
+          <template v-for="(values,key) in adeptAtCategories">
+            <el-row type="flex" align="middle" style="padding-top:10px" :key="key">
+              <el-badge :value="values.length" class="item">
+                <h6>{{key}}</h6>
+              </el-badge>
+            </el-row>
+            <el-divider :key="key"></el-divider>
+            <template v-for="val of values">
+              <el-tag class="elTagClass" color="#FFD60C" size="medium" :key="val" style="color:black;">
+                {{val}}
+              </el-tag>
+            </template>
           </template>
-        </template>
-        <category-select v-if="factoryFormVisible" :listData="categories" :selectDatas="formData.adeptAtCategories"
-          :readOnly="readOnly"></category-select>
-      </el-form-item>
-      <el-form-item prop="keyword">
-        <template slot="label">
-          <h6 class="titleTextClass">关键词</h6>
-        </template>
-        <el-row type="flex">
+        </el-col>
+      </el-row>
+      <el-row class="info-row" type="flex" justify="start" :gutter="30">
+        <el-col :span="2">
+          <el-row type="flex" justify="center" align="middle">
+            <h6 class="info-data">关键词</h6>
+          </el-row>
+        </el-col>
+        <el-col :span="18">
           <template v-for="val in keywords">
-            <el-tag class="elTagClass" style="margin-top:10px;" color="#FFD60C" :key="val" size="medium">
+            <el-tag class="elTagClass" style="color:black;" effect="plain" color="#FFD60C" :key="val" size="medium">
               {{val}}
             </el-tag>
           </template>
-        </el-row>
-        <span style="font-size: 10px;color: #F56C6C">{{readOnly? '您可以通过关键词搜索到此公司' : '品牌用户可以通过关键词搜索到您'}}</span>
-      </el-form-item>
+        </el-col>
+      </el-row>
       <el-row type="flex" justify="start" align="middle">
         <el-col :span="4" style="margin-left: 20px">
           <h6>
@@ -180,8 +183,6 @@
         return this.formData.cooperativeBrand.split('，');
       },
       keywords: function () {
-        var a = 'asdsad';
-        a.sp
         return this.formData.keyword.split('，');
       },
     },
@@ -189,152 +190,6 @@
       ...mapMutations({
         setLabels: 'setLabels'
       }),
-      async getCategories() {
-        const url = this.apis().getMinorCategories();
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.categories = result;
-      },
-      onRemoveKeyword(word) {
-        if (this.readOnly) {
-          return;
-        }
-        var keywords = this.formData.keyword.split('，');
-        var index = keywords.indexOf(word);
-        keywords.splice(index, 1);
-        var text = '';
-        for (let keyword of keywords) {
-          text += keyword;
-          text += '，';
-        }
-
-        if (text.length > 0) {
-          text = text.slice(0, text.lastIndexOf('，'));
-        }
-
-        this.formData.keyword = text;
-      },
-      onAddKeyword(word) {
-        if (this.formData.keyword == null || this.formData.keyword === '') {
-          this.formData.keyword = word;
-          this.$forceUpdate();
-          return;
-        }
-        var keywords = this.formData.keyword.split('，');
-        if (keywords.length >= 10) {
-          this.$message.error('最多添加10个关键词');
-          return;
-        }
-
-        var index = this.formData.keyword.indexOf(word);
-        if (index !== -1) {
-          this.$message.error('该关键词已存在');
-          return;
-        }
-
-        if (this.formData.keyword != null && this.formData.keyword.length > 0) {
-          this.formData.keyword += '，';
-          this.formData.keyword += word;
-        } else {
-          this.formData.keyword = word;
-        }
-
-        this.$forceUpdate();
-      },
-      onRemoveCooperativeBrand(word) {
-        if (this.readOnly) {
-          return;
-        }
-        var keywords = this.formData.cooperativeBrand.split('，');
-        var index = keywords.indexOf(word);
-        keywords.splice(index, 1);
-        var text = '';
-        for (let keyword of keywords) {
-          text += keyword;
-          text += '，';
-        }
-
-        if (text.length > 0) {
-          text = text.slice(0, text.lastIndexOf('，'));
-        }
-
-        this.formData.cooperativeBrand = text;
-      },
-      onAddCooperativeBrand(word) {
-        if (this.formData.cooperativeBrand == null || this.formData.cooperativeBrand === '') {
-          this.formData.cooperativeBrand = word;
-          return;
-        }
-        var keywords = this.formData.cooperativeBrand.split('，');
-        if (keywords.length >= 10) {
-          this.$message.error('最多添加10个关键词');
-          return;
-        }
-
-        var index = this.formData.cooperativeBrand.indexOf(word);
-        if (index !== -1) {
-          this.$message.error('该关键词已存在');
-          return;
-        }
-
-        if (this.formData.cooperativeBrand != null && this.formData.cooperativeBrand.length > 0) {
-          this.formData.cooperativeBrand += '，';
-          this.formData.cooperativeBrand += word;
-        } else {
-          this.formData.cooperativeBrand = word;
-        }
-      },
-      async getMajorCategories() {
-        const url1 = this.apis().getMajorCategories();
-        const result1 = await this.$http.get(url1);
-        if (result1['errors']) {
-          this.$message.error(result1['errors'][0].message);
-          return;
-        }
-
-        this.majorCategories = result1;
-      },
-      isSelected(val) {
-        var index = this.selectCodes.indexOf(val.code);
-        if (index > -1) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      handleTagClick(val) {
-        if (this.readOnly) {
-          return;
-        }
-        var mapIndex = -1;
-        for (let i = 0; i < this.formData.categories.length; i++) {
-          if (this.formData.categories[i].code == val.code) {
-            mapIndex = i;
-          }
-        }
-        if (mapIndex > -1) {
-          this.formData.categories.splice(mapIndex, 1);
-        } else {
-          this.formData.categories.push(val);
-        }
-
-        var index = this.selectCodes.indexOf(val.code);
-        if (index > -1) {
-          this.selectCodes.splice(index, 1);
-        } else {
-          this.selectCodes.push(val.code);
-        }
-      },
-      initShowMajorCategories() {
-        for (let i = 0; i < this.formData.categories.length; i++) {
-          this.selectCodes.push(this.formData.categories[i].code);
-        }
-        console.log(this.selectCodes);
-      }
     },
     data() {
       return {

@@ -60,27 +60,31 @@
           <h6 class="info-data">{{getEnum('monthlyCapacityRanges',formData.monthlyCapacityRange)}}</h6>
         </el-col>
       </el-row>
-      <el-form-item prop="equipment">
-        <template slot="label">
-          <h6 class="titleTextClass">拥有设备<span style="color: red">*</span></h6>
-        </template>
-        <template v-for="(values, key) in mapData">
-          <template v-if="mapSelectData[key].length>0">
-            <el-row type="flex" align="middle" style="padding-top:10px" :key="key">
-              <el-badge :value="mapSelectData[key].length" class="item">
-                <h6>{{key}}</h6>
-              </el-badge>
-            </el-row>
-            <el-divider :key="key"></el-divider>
-            <template v-for="val of values">
-              <el-tag v-if="mapSelectData[key].indexOf(val.code)>-1" class="elTagClass" color="#FFD60C" size="medium"
-                :key="val.code">
-                {{val.name}}
-              </el-tag>
+      <el-row class="info-row" type="flex" justify="start" :gutter="30">
+        <el-col :span="2">
+          <el-row type="flex" justify="center" align="middle">
+            <h6 class="info-data">拥有设备<span style="color: red">*</span></h6>
+          </el-row>
+        </el-col>
+        <el-col :span="18">
+          <template v-for="(values, key) in mapData">
+            <template v-if="mapSelectData[key].length>0">
+              <el-row type="flex" align="middle" style="padding-top:10px" :key="key">
+                <el-badge :value="mapSelectData[key].length" class="item">
+                  <h6>{{key}}</h6>
+                </el-badge>
+              </el-row>
+              <el-divider :key="key"></el-divider>
+              <template v-for="val of values">
+                <el-tag v-if="mapSelectData[key].indexOf(val.code)>-1" class="elTagClass" color="#FFD60C" size="medium"
+                  style="color:black;" :key="val.code">
+                  {{val.name}}
+                </el-tag>
+              </template>
             </template>
           </template>
-        </template>
-      </el-form-item>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
