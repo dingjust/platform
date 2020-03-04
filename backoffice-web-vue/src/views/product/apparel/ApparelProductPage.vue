@@ -13,20 +13,25 @@
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <apparel-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-                                @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf" @onOffShelf="onOffShelf" @onDelete="onDelete"/>
+            @onBelongDetail="onBelongDetail" @onAdvancedSearch="onAdvancedSearch" @onShelf="onShelf"
+            @onOffShelf="onOffShelf" @onDelete="onDelete" />
         </el-tab-pane>
       </el-tabs>
     </el-card>
     <el-dialog :visible.sync="apparelProductDetailsPageVisible" width="80%" :close-on-click-modal="false">
-      <apparel-product-details-page v-if="apparelProductDetailsPageVisible" :formData="productData" :read-only="true"/>
+      <apparel-product-details-page v-if="apparelProductDetailsPageVisible" :formData="productData" :read-only="true" />
     </el-dialog>
     <el-dialog title="禁用" :visible.sync="apparelProductForbiddenPageVisible" width="30%" :close-on-click-modal="false">
-      <apparel-product-forbidden-dialog v-if="apparelProductForbiddenPageVisible"
-                                        @onCancel="onDeleteCancel" @onConfirm="onDeleteConfirm"/>
+      <apparel-product-forbidden-dialog v-if="apparelProductForbiddenPageVisible" @onCancel="onDeleteCancel"
+        @onConfirm="onDeleteConfirm" />
     </el-dialog>
     <el-dialog title="下架" :visible.sync="apparelProductOffShelfPageVisible" width="30%" :close-on-click-modal="false">
-      <apparel-product-off-shelf-dialog v-if="apparelProductOffShelfPageVisible"
-                                        @onCancel="onOffShelfCancel" @onConfirm="onOffShelfConfirm"/>
+      <apparel-product-off-shelf-dialog v-if="apparelProductOffShelfPageVisible" @onCancel="onOffShelfCancel"
+        @onConfirm="onOffShelfConfirm" />
+    </el-dialog>
+    <el-dialog :visible.sync="belongDetailsPageVisible" width="80%" class="purchase-dialog"
+      :close-on-click-modal="false">
+      <factory-details-read v-if="belongDetailsPageVisible" :slotData="belongDetailsData"></factory-details-read>
     </el-dialog>
   </div>
 </template>
@@ -47,6 +52,8 @@
   import ApparelProductDetailsPage from './details/ApparelProductDetailsPage';
   import ApparelProductForbiddenDialog from './form/ApparelProductForbiddenDialog';
   import ApparelProductOffShelfDialog from './form/ApparelProductOffShelfDialog';
+  import FactoryDetailsRead from '@/views/user/company/factory/details/FactoryDetailsRead';
+
 
   export default {
     name: 'ApparelProductPage',
@@ -55,7 +62,8 @@
       ApparelProductForbiddenDialog,
       ApparelProductDetailsPage,
       ApparelProductToolbar,
-      ApparelProductList
+      ApparelProductList,
+      FactoryDetailsRead
     },
     computed: {
       ...mapGetters({
@@ -73,7 +81,7 @@
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         this.setAdvancedSearch(false);
         const keyword = this.keyword;
         const url = this.apis().getApparelProducts();
@@ -84,7 +92,7 @@
           size
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         this.setAdvancedSearch(true);
 
         const query = this.queryFormData;
@@ -96,7 +104,7 @@
           size
         });
       },
-      async onDetails (item) {
+      async onDetails(item) {
         const url = this.apis().getApparelProduct(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
@@ -116,7 +124,27 @@
         });
         // this.fn.openSlider('产品：' + item.code, ApparelProductDetailsPage, result);
       },
-      async onShelf (item) {
+      async onBelongDetail(item) {
+        //工厂
+        if (item.belongTo.type == 'FACTORY') {
+          let url = this.apis().getFactory(item.belongTo.uid);
+          if (this.isTenant()) {
+            url += '?sort=creationtime,desc';
+          }
+          const result = await this.$http.get(url);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.belongDetailsData = result;
+          this.belongDetailsPageVisible = true;
+        } else if (item.belongTo.type == 'BRAND') {
+
+        } else {
+          return;
+        }
+      },
+      async onShelf(item) {
         const url = this.apis().onShelfProduct(item.code);
         const result = await this.$http.put(url);
         if (result['errors']) {
@@ -127,7 +155,7 @@
         this.onAdvancedSearch();
         // this.refresh();
       },
-      onOffShelf (item) {
+      onOffShelf(item) {
         this.$confirm('是否确认下架该产品', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -140,7 +168,7 @@
           }
         });
       },
-      async _onOffShelf (item) {
+      async _onOffShelf(item) {
         const url = this.apis().offShelfProduct(item.code);
         const result = await this.$http.put(url);
         if (result['errors']) {
@@ -151,11 +179,11 @@
         this.onAdvancedSearch();
         // this.refresh();
       },
-      async platformOff (item) {
+      async platformOff(item) {
         this.offShelfItem = Object.assign({}, item);
         this.apparelProductOffShelfPageVisible = true;
       },
-      async onOffShelfConfirm (msg) {
+      async onOffShelfConfirm(msg) {
         console.log(msg);
         const url = this.apis().platformOffShelfProduct(this.offShelfItem.code);
         const result = await this.$http.put(url);
@@ -169,7 +197,7 @@
         // this.refresh();
         this.onAdvancedSearch();
       },
-      onDelete (item) {
+      onDelete(item) {
         this.$confirm('是否确认删除产品', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -182,7 +210,7 @@
           }
         });
       },
-      async _onDelete (item) {
+      async _onDelete(item) {
         const url = this.apis().deleteProduct(item.code);
         const result = await this.$http.delete(url);
         if (result['errors']) {
@@ -193,11 +221,11 @@
         // this.refresh();
         this.onAdvancedSearch();
       },
-      platformDeleted (item) {
+      platformDeleted(item) {
         this.forbiddenItem = Object.assign({}, item);
         this.apparelProductForbiddenPageVisible = true;
       },
-      async onDeleteConfirm (msg) {
+      async onDeleteConfirm(msg) {
         console.log(msg);
         const url = this.apis().platformDeletedShelfProduct(this.forbiddenItem.code);
         const result = await this.$http.delete(url);
@@ -212,7 +240,7 @@
         this.onAdvancedSearch();
         // this.refresh();
       },
-      onNew (formData) {
+      onNew(formData) {
         this.$router.push({
           name: '产品详情',
           params: {
@@ -221,7 +249,7 @@
         });
         // this.fn.openSlider('创建产品', ApparelProductDetailsPage, formData);
       },
-      handleTabClick (tab) {
+      handleTabClick(tab) {
         if (tab.name !== '') {
           this.queryFormData.approvalStatuses = tab.name;
         } else {
@@ -229,28 +257,31 @@
         }
         this.onAdvancedSearch();
       },
-      onOffShelfCancel () {
+      onOffShelfCancel() {
         this.apparelProductOffShelfPageVisible = false;
       },
-      onDeleteCancel () {
+      onDeleteCancel() {
         this.apparelProductForbiddenPageVisible = false;
       }
     },
-    data () {
+    data() {
       return {
         statuses: [{
-          code: '',
-          name: '全部'
-        },
-        {
-          code: 'approved',
-          name: '已上架'
-        },
-        {
-          code: 'unapproved',
-          name: '已下架'
-        }],
+            code: '',
+            name: '全部'
+          },
+          {
+            code: 'approved',
+            name: '已上架'
+          },
+          {
+            code: 'unapproved',
+            name: '已下架'
+          }
+        ],
         activeName: '',
+        belongDetailsData: '',
+        belongDetailsPageVisible: false,
         apparelProductDetailsPageVisible: false,
         productData: {},
         apparelProductForbiddenPageVisible: false,
@@ -259,19 +290,22 @@
         offShelfItem: {}
       }
     },
-    created () {
+    created() {
       this.onSearch();
       if (this.isTenant()) {
         this.statuses.push({
           code: 'deleted',
-          name: '已删除'})
+          name: '已删除'
+        })
       }
     }
   };
+
 </script>
 <style scoped>
   .orders-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
+
 </style>

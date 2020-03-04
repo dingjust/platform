@@ -10,6 +10,7 @@
         </template>
       </el-table-column>
       <el-table-column label="产品名" prop="name" min-width="200"></el-table-column>
+      <el-table-column label="编号" prop="code" min-width="100"></el-table-column>
       <el-table-column label="款号" prop="skuID" min-width="120"></el-table-column>
       <el-table-column label="品类" min-width="120">
         <template slot-scope="scope">
@@ -17,7 +18,9 @@
       </el-table-column>
       <el-table-column v-if="isTenant()" label="所属" prop="belongTo" min-width="120">
         <template slot-scope="scope">
-          <span>{{scope.row.belongTo != undefined ? scope.row.belongTo.name:''}}</span>
+          <el-button type="text" @click="onBelongDetail(scope.row)">
+            {{scope.row.belongTo != undefined ? scope.row.belongTo.name:''}}
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="approvalStatus">
@@ -32,12 +35,12 @@
             @click="onShelf(scope.row)">
             上架
           </el-button>
-          <el-button v-if="(isFactory() || isTenant()) && scope.row.approvalStatus==='approved'" type="text" icon="el-icon-edit"
-            @click="onOffShelf(scope.row)">
+          <el-button v-if="(isFactory() || isTenant()) && scope.row.approvalStatus==='approved'" type="text"
+            icon="el-icon-edit" @click="onOffShelf(scope.row)">
             下架
           </el-button>
           <el-button v-if="scope.row.approvalStatus==='unapproved'" type="text" icon="el-icon-edit"
-                     @click="onDelete(scope.row)">删除</el-button>
+            @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,10 +55,9 @@
   export default {
     name: 'ApparelProductList',
     props: ['page'],
-    computed: {
-    },
+    computed: {},
     methods: {
-      onPageSizeChanged (val) {
+      onPageSizeChanged(val) {
         this._reset();
 
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
@@ -65,7 +67,7 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged (val) {
+      onCurrentPageChanged(val) {
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
@@ -73,36 +75,40 @@
 
         this.$emit('onSearch', val - 1);
       },
-      _reset () {
+      _reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails (row) {
+      onDetails(row) {
         this.$emit('onDetails', row);
       },
-      onShelf (row) {
+      onBelongDetail(row){
+        this.$emit('onBelongDetail', row);
+      },
+      onShelf(row) {
         this.$emit('onShelf', row);
       },
-      onOffShelf (row) {
+      onOffShelf(row) {
         this.$emit('onOffShelf', row);
       },
-      onDelete (row) {
+      onDelete(row) {
         this.$emit('onDelete', row);
       },
-      numberFormatter (val) {
+      numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
           return parseFloat(val.price).toFixed(2);
         }
       },
-      handleSelectionChange (val) {
+      handleSelectionChange(val) {
         this.multipleSelection = val;
       }
     },
-    data () {
+    data() {
       return {
         multipleSelection: []
       };
     }
   };
+
 </script>
