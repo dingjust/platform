@@ -87,9 +87,9 @@ class NotificationsPool {
   }
 
   ///点击消息置为已阅
-  Future<bool> read(String code) async {
+  Future<bool> read(List<String> codes) async {
     bool result = await MessageRepository()
-        .readMessage(UserBLoC.instance.currentUser.mobileNumber, code);
+        .readMessage(UserBLoC.instance.currentUser.mobileNumber, codes);
     if (result) {
       checkUnread();
     }
