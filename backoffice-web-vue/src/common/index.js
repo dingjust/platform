@@ -231,14 +231,12 @@ const COMMON_APIS = {
   getB2BCustomerRoleGroupDetails(id) {
     return '/b2b/role/group/get/' + id;
   },
-  getB2BCustomer(uid) {
   getB2BCustomer (uid) {
     return '/b2b/b2bCustomers/' + uid;
   },
   getRoleList() {
     return '/b2b/role/tree/list';
   },
-  createRole() {
   createRole () {
     return '/b2b/roles/create';
   },
