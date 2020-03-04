@@ -14,9 +14,11 @@ class ForumCategoryModel extends ItemModel {
     this.name,
   });
 
-  factory ForumCategoryModel.fromJson(Map<String, dynamic> json) => _$ForumCategoryModelFromJson(json);
+  factory ForumCategoryModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ForumCategoryModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ForumCategoryModel model) => _$ForumCategoryModelToJson(model);
+  static Map<String, dynamic> toJson(ForumCategoryModel model) =>
+      model == null ? null : _$ForumCategoryModelToJson(model);
 }
 
 @JsonSerializable()
@@ -37,7 +39,9 @@ class ForumPostModel extends ItemModel {
     this.status,
   });
 
-  factory ForumPostModel.fromJson(Map<String, dynamic> json) => _$ForumPostModelFromJson(json);
+  factory ForumPostModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ForumPostModelFromJson(json);
 
-  static Map<String, dynamic> toJson(ForumPostModel model) => _$ForumPostModelToJson(model);
+  static Map<String, dynamic> toJson(ForumPostModel model) =>
+      model == null ? null : _$ForumPostModelToJson(model);
 }

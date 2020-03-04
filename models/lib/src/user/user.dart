@@ -86,10 +86,10 @@ class UserModel extends PrincipalModel {
   }
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
+      json == null ? null : _$UserModelFromJson(json);
 
   static Map<String, dynamic> toJson(UserModel model) =>
-      _$UserModelToJson(model);
+      model == null ? null : _$UserModelToJson(model);
 
   static List<Map<String, dynamic>> _rolesToJson(List<RoleModel> models) =>
       models == null
@@ -120,10 +120,10 @@ class CustomerModel extends UserModel {
       mobileNumber: mobileNumber);
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) =>
-      _$CustomerModelFromJson(json);
+      json == null ? null : _$CustomerModelFromJson(json);
 
   static Map<String, dynamic> toJson(CustomerModel model) =>
-      _$CustomerModelToJson(model);
+      model == null ? null : _$CustomerModelToJson(model);
 }
 
 /// B2B客户
@@ -154,10 +154,10 @@ class B2BCustomerModel extends CustomerModel {
         );
 
   factory B2BCustomerModel.fromJson(Map<String, dynamic> json) =>
-      _$B2BCustomerModelFromJson(json);
+      json == null ? null : _$B2BCustomerModelFromJson(json);
 
   static Map<String, dynamic> toJson(B2BCustomerModel model) =>
-      _$B2BCustomerModelToJson(model);
+      model == null ? null : _$B2BCustomerModelToJson(model);
 
   static Map<String, dynamic> _b2bUnitToJson(B2BUnitModel model) =>
       model == null ? null : B2BUnitModel.toJson(model);
@@ -203,9 +203,12 @@ class AddressModel extends ItemModel {
           '${line1 ?? ''}');
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
-      _$AddressModelFromJson(json);
+      json == null ? null : _$AddressModelFromJson(json);
 
   static Map<String, dynamic> toJson(AddressModel model) =>
+      model == null
+          ? null
+          :
 //      _$AddressModelToJson(model);
       addressToJson(model);
 
@@ -256,10 +259,10 @@ class RegionModel extends ItemModel {
   });
 
   factory RegionModel.fromJson(Map<String, dynamic> json) =>
-      _$RegionModelFromJson(json);
+      json == null ? null : _$RegionModelFromJson(json);
 
   static Map<String, dynamic> toJson(RegionModel model) =>
-      _$RegionModelToJson(model);
+      model == null ? null : _$RegionModelToJson(model);
 }
 
 /// 城市
@@ -277,10 +280,10 @@ class CityModel extends ItemModel {
   });
 
   factory CityModel.fromJson(Map<String, dynamic> json) =>
-      _$CityModelFromJson(json);
+      json == null ? null : _$CityModelFromJson(json);
 
   static Map<String, dynamic> toJson(CityModel model) =>
-      _$CityModelToJson(model);
+      model == null ? null : _$CityModelToJson(model);
 
   static Map<String, dynamic> _regionToJson(RegionModel model) =>
       model == null ? null : RegionModel.toJson(model);
@@ -297,10 +300,10 @@ class DistrictModel extends ItemModel {
   DistrictModel({@required this.code, @required this.name, this.city});
 
   factory DistrictModel.fromJson(Map<String, dynamic> json) =>
-      _$DistrictModelFromJson(json);
+      json == null ? null : _$DistrictModelFromJson(json);
 
   static Map<String, dynamic> toJson(DistrictModel model) =>
-      _$DistrictModelToJson(model);
+      model == null ? null : _$DistrictModelToJson(model);
 
   static Map<String, dynamic> _cityToJson(CityModel model) =>
       model == null ? null : CityModel.toJson(model);
@@ -320,10 +323,10 @@ class RoleModel extends ItemModel {
   });
 
   factory RoleModel.fromJson(Map<String, dynamic> json) =>
-      _$RoleModelFromJson(json);
+      json == null ? null : _$RoleModelFromJson(json);
 
   static Map<String, dynamic> toJson(RoleModel model) =>
-      _$RoleModelToJson(model);
+      model == null ? null : _$RoleModelToJson(model);
 }
 
 ///钱包
@@ -348,10 +351,10 @@ class CompanyWalletModel extends ItemModel {
   });
 
   factory CompanyWalletModel.fromJson(Map<String, dynamic> json) =>
-      _$CompanyWalletModelFromJson(json);
+      json == null ? null : _$CompanyWalletModelFromJson(json);
 
   static Map<String, dynamic> toJson(CompanyWalletModel model) =>
-      _$CompanyWalletModelToJson(model);
+      model == null ? null : _$CompanyWalletModelToJson(model);
 }
 
 //合同
@@ -382,10 +385,10 @@ class ContractModel extends ItemModel {
   });
 
   factory ContractModel.fromJson(Map<String, dynamic> json) =>
-      _$ContractModelFromJson(json);
+      json == null ? null : _$ContractModelFromJson(json);
 
   static Map<String, dynamic> toJson(ContractModel model) =>
-      _$ContractModelToJson(model);
+      model == null ? null : _$ContractModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
@@ -431,10 +434,10 @@ class Certification {
   Certification(this.code, this.msg, this.resultCode, this.data);
 
   factory Certification.fromJson(Map<String, dynamic> json) =>
-      _$CertificationFromJson(json);
+      json == null ? null : _$CertificationFromJson(json);
 
   static Map<String, dynamic> toJson(Certification model) =>
-      _$CertificationToJson(model);
+      model == null ? null : _$CertificationToJson(model);
 }
 
 @JsonSerializable()
@@ -447,10 +450,10 @@ class CertificationState {
   CertificationState(this.code, this.msg, this.resultCode, this.data);
 
   factory CertificationState.fromJson(Map<String, dynamic> json) =>
-      _$CertificationStateFromJson(json);
+      json == null ? null : _$CertificationStateFromJson(json);
 
   static Map<String, dynamic> toJson(CertificationState model) =>
-      _$CertificationStateToJson(model);
+      model == null ? null : _$CertificationStateToJson(model);
 }
 
 @JsonSerializable()
@@ -463,10 +466,10 @@ class CertificationContractCount {
   CertificationContractCount(this.code, this.msg, this.resultCode, this.data);
 
   factory CertificationContractCount.fromJson(Map<String, dynamic> json) =>
-      _$CertificationContractCountFromJson(json);
+      json == null ? null : _$CertificationContractCountFromJson(json);
 
   static Map<String, dynamic> toJson(CertificationContractCount model) =>
-      _$CertificationContractCountToJson(model);
+      model == null ? null : _$CertificationContractCountToJson(model);
 }
 
 @JsonSerializable()
@@ -477,10 +480,10 @@ class ContractCount {
   ContractCount(this.waitMeSign, this.waitPartnerSign);
 
   factory ContractCount.fromJson(Map<String, dynamic> json) =>
-      _$ContractCountFromJson(json);
+      json == null ? null : _$ContractCountFromJson(json);
 
   static Map<String, dynamic> toJson(ContractCount model) =>
-      _$ContractCountToJson(model);
+      model == null ? null : _$ContractCountToJson(model);
 }
 
 @JsonSerializable()
@@ -494,10 +497,10 @@ class SearchResultModel {
   SearchResultModel(this.code, this.msg, this.resultCode, this.data);
 
   factory SearchResultModel.fromJson(Map<String, dynamic> json) =>
-      _$SearchResultModelFromJson(json);
+      json == null ? null : _$SearchResultModelFromJson(json);
 
   static Map<String, dynamic> toJson(SearchResultModel model) =>
-      _$SearchResultModelToJson(model);
+      model == null ? null : _$SearchResultModelToJson(model);
 
   static Map<String, dynamic> _mediaModelToJson(MediaModel model) =>
       model == null ? null : MediaModel.toJson(model);
@@ -550,10 +553,10 @@ class ContractTemplateModel {
     this.createTime});
 
   factory ContractTemplateModel.fromJson(Map<String, dynamic> json) =>
-      _$ContractTemplateModelFromJson(json);
+      json == null ? null : _$ContractTemplateModelFromJson(json);
 
   static Map<String, dynamic> toJson(ContractTemplateModel model) =>
-      _$ContractTemplateModelToJson(model);
+      model == null ? null : _$ContractTemplateModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
@@ -574,10 +577,10 @@ class SealModel {
   SealModel({this.code, this.name, this.enabled, this.media, this.createTime});
 
   factory SealModel.fromJson(Map<String, dynamic> json) =>
-      _$SealModelFromJson(json);
+      json == null ? null : _$SealModelFromJson(json);
 
   static Map<String, dynamic> toJson(SealModel model) =>
-      _$SealModelToJson(model);
+      model == null ? null : _$SealModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);
@@ -597,10 +600,10 @@ class ContractSaveModel {
       {this.userTempCode, this.userSignCode, this.role, this.orderCode});
 
   factory ContractSaveModel.fromJson(Map<String, dynamic> json) =>
-      _$ContractSaveModelFromJson(json);
+      json == null ? null : _$ContractSaveModelFromJson(json);
 
   static Map<String, dynamic> toJson(ContractSaveModel model) =>
-      _$ContractSaveModelToJson(model);
+      model == null ? null : _$ContractSaveModelToJson(model);
 }
 
 @JsonSerializable()
@@ -614,10 +617,10 @@ class ContractCallbackModel {
   ContractCallbackModel(this.code, this.msg, this.resultCode, this.data);
 
   factory ContractCallbackModel.fromJson(Map<String, dynamic> json) =>
-      _$ContractCallbackModelFromJson(json);
+      json == null ? null : _$ContractCallbackModelFromJson(json);
 
   static Map<String, dynamic> toJson(ContractCallbackModel model) =>
-      _$ContractCallbackModelToJson(model);
+      model == null ? null : _$ContractCallbackModelToJson(model);
 
   static Map<String, dynamic> _contractToJson(ContractModel model) =>
       model == null ? null : ContractModel.toJson(model);

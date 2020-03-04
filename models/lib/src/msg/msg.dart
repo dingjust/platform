@@ -13,7 +13,8 @@ class BaseMsg {
   BaseMsg({this.code, this.msg, this.resultCode});
 
   factory BaseMsg.fromJson(Map<String, dynamic> json) =>
-      _$BaseMsgFromJson(json);
+      json == null ? null : _$BaseMsgFromJson(json);
 
-  static Map<String, dynamic> toJson(BaseMsg model) => _$BaseMsgToJson(model);
+  static Map<String, dynamic> toJson(BaseMsg model) =>
+      model == null ? null : _$BaseMsgToJson(model);
 }

@@ -53,8 +53,8 @@ class CompanyRegisterDTO {
       };
 
   factory CompanyRegisterDTO.fromJson(Map<String, dynamic> json) =>
-      _$CompanyRegisterDTOFromJson(json);
+      json == null ? null : _$CompanyRegisterDTOFromJson(json);
 
   static Map<String, dynamic> toJson(CompanyRegisterDTO model) =>
-      _$CompanyRegisterDTOToJson(model);
+      model == null ? null : _$CompanyRegisterDTOToJson(model);
 }

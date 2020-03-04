@@ -1,6 +1,6 @@
 <template>
-  <div class="animated fadeIn content">
-    <el-card>
+  <div class="animated fadeIn">
+<!--    <el-card>-->
       <el-container>
         <el-main>
           <div>
@@ -11,15 +11,20 @@
                 <!--</div>-->
               <!--</el-col>-->
               <!--<el-col :span="4">-->
-                <el-button-group>
-                  <el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>
-                  <!--<el-button @click="onBack">返回</el-button>-->
-                </el-button-group>
-              <!--</el-col>-->
-            <!--</el-row>-->
+<!--            <div style="float:right;margin-bottom: 10px">-->
+<!--                <el-button-group>-->
+<!--&lt;!&ndash;                  <el-button @click="onBack">返回</el-button>&ndash;&gt;-->
+<!--                </el-button-group>-->
+<!--              &lt;!&ndash;</el-col>&ndash;&gt;-->
+<!--              &lt;!&ndash;</el-row>&ndash;&gt;-->
+<!--            </div>-->
+            <div>
+              <el-button type="warning" class="template-form-button" @click="onSave">保存</el-button>
+            </div>
             <el-row class="contract_custom-row">
-              <el-input placeholder="请输入名称" size="mini" v-model="slotData.title"><template slot="prepend">合同模板名称</template>
+              <el-input placeholder="请输入名称" size="mini" v-model="slotData.title" @blur="checkTempName"><template slot="prepend">合同模板名称</template>
               </el-input>
+              <h6 style="color: #F56C6C;margin-left: 120px">{{this.passCheck?'': this.validateText}}</h6>
             </el-row>
             <el-row class="contract_custom-row">
               <el-input placeholder="请输入备注" size="mini" v-model="slotData.remarks"><template slot="prepend">备注</template>
@@ -43,51 +48,56 @@
           </div>
         </el-main>
       </el-container>
-    </el-card>
+<!--    </el-card>-->
   </div>
 </template>
 <script>
-  import "tui-editor/dist/tui-editor.css";
-  import "tui-editor/dist/tui-editor-contents.css";
-  import "highlight.js/styles/github.css";
-  import "codemirror/lib/codemirror.css";
+  import 'tui-editor/dist/tui-editor.css';
+  import 'tui-editor/dist/tui-editor-contents.css';
+  import 'highlight.js/styles/github.css';
+  import 'codemirror/lib/codemirror.css';
   import http from '@/common/js/http';
 
   import {
     Viewer,
     Editor
-  } from "@toast-ui/vue-editor";
+  } from '@toast-ui/vue-editor';
 
   import {createNamespacedHelpers} from 'vuex';
 
   const {mapActions} = createNamespacedHelpers('ContractTemplateModule');
 
   export default {
-    name: "TemplateDetail",
-    props: ["slotData"],
+    name: 'TemplateDetail',
+    props: ['slotData'],
     methods: {
       ...mapActions({
         refresh: 'refresh',
-        search: "search"
+        search: 'search'
       }),
-      onSelect(item) {
+      onSelect (item) {
         this.slotData.content = item.header;
         this.slotData.customizeContent = item.content;
         this.slotData.code = item.code;
         this.slotData.type = item.type;
       },
-      async getTemplate(code) {
+      async getTemplate (code) {
         const url = this.apis().getTemplates(code);
         const result = await this.$http.get(url);
       },
-      onBack(){
+      onBack () {
         this.fn.closeSlider(true);
       },
-      async onSave(){
-        if(this.slotData.title == null || this.slotData.title == ''){
-          this.$message.error('请输入模板名字');
+      async onSave () {
+        console.log('---------------------------------------');
+        if (!this.passCheck) {
+          this.$message.error('请完善页面信息');
           return;
         }
+        // if (this.slotData.title == null || this.slotData.title == '') {
+        //   this.$message.error('请输入模板名字');
+        //   return;
+        // }
         const url = this.apis().saveTemplate();
         const tempData = {
           title: this.slotData.title,
@@ -97,7 +107,7 @@
           available: true,
           code: this.slotData.code,
           remark: this.slotData.remarks,
-          id : this.slotData.id,
+          id: this.slotData.id
         };
         console.log(tempData);
         let formData = Object.assign({}, tempData);
@@ -107,10 +117,35 @@
         //   return;
         // }
         this.$message.success(result.msg);
-
-        this.fn.closeSlider(true);
+        this.$emit('closeDetails');
+        // this.fn.closeSlider(true);
       },
-      async getTemplateListPt(){
+      async checkTempName () {
+        if (this.slotData.title === this.originalTitle) {
+          this.passCheck = true;
+          return;
+        }
+        if (this.slotData.title == null || this.slotData.title.replace(/(^\s*)|(\s*$)/g, '').length === 0) {
+          this.validateText = '请输入模板名称';
+          return;
+        }
+        let formData = {
+          name: this.slotData.title
+        };
+        const url = this.apis().checkTempName();
+        const result = await http.post(url, formData);
+        if (result.code == 1) {
+          this.passCheck = true;
+        } else if (result.code == 0) {
+          this.passCheck = false;
+          this.validateText = '模板名称重复，请重新输入';
+        }
+        // this.passCheck = result;
+        // if (!this.passCheck) {
+        //   this.validateText = '模板名称重复，请重新输入';
+        // }
+      },
+      async getTemplateListPt () {
         const url = this.apis().getTemplatesListPt();
         const result = await http.post(url, {
           keyword: ''
@@ -120,23 +155,26 @@
         });
         console.log(result);
         this.mockData = result.content;
-      },
+      }
     },
-    data() {
+    data () {
       return {
-        editorHtml: "",
+        editorHtml: '',
         editorOptions: {
-          minHeight: "400px",
-          language: "zh_CN",
+          minHeight: '400px',
+          language: 'zh_CN',
           useCommandShortcut: true,
           useDefaultHTMLSanitizer: true,
           usageStatistics: true,
           hideModeSwitch: false
         },
-        tempContent:'',
+        tempContent: '',
         selectedCode: '3',
         editorVisible: true,
         mockData: [],
+        passCheck: false,
+        validateText: '',
+        originalTitle: ''
       };
     },
 
@@ -146,21 +184,21 @@
     },
 
     computed: {
-      contractName() {
+      contractName () {
         return this.propdata.contractName;
       }
     },
 
     watch: {
-      propdata(newValue, oldValue) {
+      propdata (newValue, oldValue) {
         console.log(newValue);
       }
     },
-    created(){
+    created () {
       // this.getTemplateListPt();
+      this.originalTitle = this.slotData.title;
     }
   };
-
 </script>
 <style lang="scss" scoped>
   .template-file {

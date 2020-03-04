@@ -16,8 +16,8 @@ class FactoryCapacityResponse {
       this.totalElements, this.content);
 
   factory FactoryCapacityResponse.fromJson(Map<String, dynamic> json) =>
-      _$FactoryCapacityResponseFromJson(json);
+      json == null ? null : _$FactoryCapacityResponseFromJson(json);
 
   static Map<String, dynamic> toJson(FactoryCapacityResponse model) =>
-      _$FactoryCapacityResponseToJson(model);
+      model == null ? null : _$FactoryCapacityResponseToJson(model);
 }

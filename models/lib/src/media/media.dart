@@ -42,15 +42,15 @@ class MediaModel extends ItemModel {
       this.convertedMedias});
 
   factory MediaModel.fromJson(Map<String, dynamic> json) =>
-      _$MediaModelFromJson(json);
+      json == null ? null : _$MediaModelFromJson(json);
 
   static Map<String, dynamic> toJson(MediaModel model) =>
-      _$MediaModelToJson(model);
+      model == null ? null : _$MediaModelToJson(model);
 
   static List<String> convertedMediasToJson(List<MediaModel> convertedMedias) =>
       null;
 
-  static void populatorMedia(MediaModel source,MediaModel target){
+  static void populatorMedia(MediaModel source, MediaModel target) {
     source.name = target.name;
     source.id = target.id;
     source.url = target.url;
@@ -60,7 +60,7 @@ class MediaModel extends ItemModel {
     source.mediaType = target.mediaType;
   }
 
-  static void clearMedia(MediaModel source,MediaModel target){
+  static void clearMedia(MediaModel source, MediaModel target) {
     source.name = null;
     source.id = null;
     source.url = null;
@@ -85,8 +85,8 @@ class MediaModel extends ItemModel {
 
   ///workingUrl
   String workingUrl() {
-    MediaModel mediaModel =
-        getFormatMedia(MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_WORKING_FORMAT]);
+    MediaModel mediaModel = getFormatMedia(
+        MediaFormatMap[MediaFormat.DEFAULT_PRODUCT_WORKING_FORMAT]);
 
     if (mediaModel != null) {
       // print('${GlobalConfigs.MEDIA_CONTEXT_PATH}${mediaModel.url}');

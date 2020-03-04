@@ -72,10 +72,10 @@ class FactoryCondition {
       this.keyword});
 
   factory FactoryCondition.fromJson(Map<String, dynamic> json) =>
-      _$FactoryConditionFromJson(json);
+      json == null ? null : _$FactoryConditionFromJson(json);
 
   static Map<String, dynamic> toJson(FactoryCondition model) =>
-      _$FactoryConditionToJson(model);
+      model == null ? null : _$FactoryConditionToJson(model);
 
   static Map<String, dynamic> _regionToJson(
           RegionModel productiveOrientations) =>

@@ -23,10 +23,10 @@ class UserGuidelineModel {
       {this.id, this.name, this.group, this.description, this.infos});
 
   factory UserGuidelineModel.fromJson(Map<String, dynamic> json) =>
-      _$UserGuidelineModelFromJson(json);
+      json == null ? null : _$UserGuidelineModelFromJson(json);
 
   static Map<String, dynamic> toJson(UserGuidelineModel model) =>
-      _$UserGuidelineModelToJson(model);
+      model == null ? null : _$UserGuidelineModelToJson(model);
 }
 
 @JsonSerializable()
@@ -45,8 +45,8 @@ class UserGuidelineInfoModel {
   UserGuidelineInfoModel({this.index, this.description, this.media});
 
   factory UserGuidelineInfoModel.fromJson(Map<String, dynamic> json) =>
-      _$UserGuidelineInfoModelFromJson(json);
+      json == null ? null : _$UserGuidelineInfoModelFromJson(json);
 
   static Map<String, dynamic> toJson(UserGuidelineInfoModel model) =>
-      _$UserGuidelineInfoModelToJson(model);
+      model == null ? null : _$UserGuidelineInfoModelToJson(model);
 }

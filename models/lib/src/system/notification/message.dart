@@ -18,10 +18,10 @@ class MessageModel extends ItemModel {
       {this.type, this.date, this.description, this.image, this.code});
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>
-      _$MessageModelFromJson(json);
+      json == null ? null : _$MessageModelFromJson(json);
 
   static Map<String, dynamic> toJson(MessageModel model) =>
-      _$MessageModelToJson(model);
+      model == null ? null : _$MessageModelToJson(model);
 }
 
 @JsonSerializable()
@@ -58,10 +58,10 @@ class NotifyModel extends ItemModel {
     this.params});
 
   factory NotifyModel.fromJson(Map<String, dynamic> json) =>
-      _$NotifyModelFromJson(json);
+      json == null ? null : _$NotifyModelFromJson(json);
 
   static Map<String, dynamic> toJson(NotifyModel model) =>
-      _$NotifyModelToJson(model);
+      model == null ? null : _$NotifyModelToJson(model);
 
   static DateTime _dateTimefromMilliseconds(int date) =>
       date == null ? null : DateTime.fromMillisecondsSinceEpoch(date);

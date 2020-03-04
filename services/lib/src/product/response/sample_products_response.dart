@@ -12,13 +12,12 @@ class SampleProductsResponse {
   final int totalElements;
   final List<SampleProductModel> content;
 
-  SampleProductsResponse(this.number, this.size, this.totalPages, this.totalElements,
-      this.content);
+  SampleProductsResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
 
   factory SampleProductsResponse.fromJson(Map<String, dynamic> json) =>
-      _$SampleProductsResponseFromJson(json);
+      json == null ? null : _$SampleProductsResponseFromJson(json);
 
   static Map<String, dynamic> toJson(SampleProductsResponse model) =>
-      _$SampleProductsResponseToJson(model);
+      model == null ? null : _$SampleProductsResponseToJson(model);
 }
-

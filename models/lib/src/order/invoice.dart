@@ -43,10 +43,10 @@ class InvoiceTitleModel extends ItemModel {
   });
 
   factory InvoiceTitleModel.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceTitleModelFromJson(json);
+      json == null ? null : _$InvoiceTitleModelFromJson(json);
 
   static Map<String, dynamic> toJson(InvoiceTitleModel model) =>
-      _$InvoiceTitleModelToJson(model);
+      model == null ? null : _$InvoiceTitleModelToJson(model);
 
   static Map<String, dynamic> principalToJson(PrincipalModel model) =>
       model == null ? null : PrincipalModel.toJson(model);
@@ -99,10 +99,10 @@ class TaxInvoiceModel extends ItemModel {
   });
 
   factory TaxInvoiceModel.fromJson(Map<String, dynamic> json) =>
-      _$TaxInvoiceModelFromJson(json);
+      json == null ? null : _$TaxInvoiceModelFromJson(json);
 
   static Map<String, dynamic> toJson(TaxInvoiceModel model) =>
-      _$TaxInvoiceModelToJson(model);
+      model == null ? null : _$TaxInvoiceModelToJson(model);
 }
 
 /// 开票类别

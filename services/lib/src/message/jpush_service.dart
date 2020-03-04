@@ -165,9 +165,13 @@ class JPushService {
 
   ///这是别名，再用户登录后设置
   void setAlias(String alias) {
-    _jpush.setAlias(alias).then((value) {
-      print('JPUSH==>setAlias:$value');
-    });
+    try {
+      _jpush.setAlias(alias).then((value) {
+        print('JPUSH==>setAlias:$value');
+      });
+    } catch (e) {
+      print('JPUSH==>ERROR:setAlias');
+    }
   }
 
   ///删除别名，用户退出后调用

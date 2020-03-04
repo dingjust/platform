@@ -61,7 +61,7 @@ dependencies:
   flutter_spinkit: ^3.1.0
   store_redirect: ^1.0.1
   # image_gallery_saver: ^1.1.0
-  alipay_me: ^1.0.0
+  # alipay_me: ^1.0.0
   amap_location: ^0.2.0
   flutter_qq: ^0.0.4
   # flutter_local_notifications: ^0.7.1+3
@@ -89,6 +89,7 @@ dependencies:
   bot_toast: ^2.2.0
   gzx_dropdown_menu: ^1.0.3
   flutter_date_pickers: ^0.0.6
+  flutter_alipay: ^0.1.2
 
 dev_dependencies:
   flutter_test:

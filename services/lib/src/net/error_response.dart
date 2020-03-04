@@ -10,10 +10,10 @@ class ErrorResponse {
   ErrorResponse({this.errors});
 
   factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
-      _$ErrorResponseFromJson(json);
+      json == null ? null : _$ErrorResponseFromJson(json);
 
   static Map<String, dynamic> toJson(ErrorResponse model) =>
-      _$ErrorResponseToJson(model);
+      model == null ? null : _$ErrorResponseToJson(model);
 
   static List<Map<String, dynamic>> _errorsToJson(List<Error> errors) =>
       errors == null
@@ -29,7 +29,9 @@ class Error {
 
   Error({this.message, this.type});
 
-  factory Error.fromJson(Map<String, dynamic> json) => _$ErrorFromJson(json);
+  factory Error.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ErrorFromJson(json);
 
-  static Map<String, dynamic> toJson(Error error) => _$ErrorToJson(error);
+  static Map<String, dynamic> toJson(Error error) =>
+      error == null ? null : _$ErrorToJson(error);
 }

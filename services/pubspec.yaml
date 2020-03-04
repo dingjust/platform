@@ -33,7 +33,7 @@ dependencies:
   store_redirect: ^1.0.1
   amap_location: ^0.2.0
   # IOS不用
-  alipay_me: ^1.0.0
+  # alipay_me: ^1.0.0
   package_info: ^0.4.0+2
   flutter_qq: ^0.0.4
   web_socket_channel: ^1.0.13
@@ -42,7 +42,7 @@ dependencies:
   provider: ^3.1.0+1
   # 权限获取
   location_permissions: ^2.0.3
-
+  flutter_alipay: ^0.1.2
 
 
 
