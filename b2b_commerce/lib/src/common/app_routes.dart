@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
+import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
 import 'package:b2b_commerce/src/my/my_capacity.dart';
@@ -35,6 +36,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_MY_HOME = GlobalRoutes.ROUTE_MY_HOME;
   static const ROUTE_HOT_CATEGORY_FACTORY = '/home/factory/hot_category';
   static const ROUTE_HOT_CATEGORY_PRODUCT = '/home/product/hot_category';
+  static const ROUTE_ORDER_PRODUCTS = '/home/product/order_products';
   static const ROUTE_EMPLOYEES = '/business/employees';
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
@@ -115,6 +117,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_MY_HELP: (context) => MyHelpPage(),
     ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage(),
     ROUTE_ORDER_COORDINATION: (context) => OrderCoordinationPage(),
-    ROUTE_PUBLISH_CENTER: (context) => PublishCenterPage()
+    ROUTE_PUBLISH_CENTER: (context) => PublishCenterPage(),
+    ROUTE_ORDER_PRODUCTS: (context) => ProductsPage()
   };
 }

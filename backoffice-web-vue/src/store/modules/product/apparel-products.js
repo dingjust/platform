@@ -96,6 +96,7 @@ const state = {
 
   },
   queryFormData: {
+    code:'',
     skuID: '',
     name: '',
     approvalStatuses: '',

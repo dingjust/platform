@@ -154,6 +154,10 @@ class ColorSizeNumTable extends StatelessWidget {
             //   0: FixedColumnWidth(85),
             //   1: FixedColumnWidth(255),
             // },
+            columnWidths: <int, TableColumnWidth>{
+              0: FlexColumnWidth(0.3),
+              1: FlexColumnWidth(0.7),
+            },
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             border: TableBorder.all(
                 color: Colors.grey, width: 0.5, style: BorderStyle.solid),
@@ -294,8 +298,9 @@ class EditColorSizeNumTable extends StatelessWidget {
           .toList();
 
       String colorCode = 'FFFFFF';
-      if(entries[0]?.model?.color?.colorCode != null){
-        colorCode = entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
+      if (entries[0]?.model?.color?.colorCode != null) {
+        colorCode =
+            entries[0].model.color.colorCode.replaceAll(RegExp('#'), '');
       }
 
       dataRowList.add(TableRow(children: <Widget>[

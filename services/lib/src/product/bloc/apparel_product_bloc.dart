@@ -237,6 +237,12 @@ class ApparelProductBLoC extends BLoCBase {
     _productsMap[status].currentPage = 0;
   }
 
+  deleteProductResetData(String status,String code){
+    //删除产品重置数据
+    _productsMap[status].data.removeWhere((item) => item.code == code);
+    _controller.sink.add(_productsMap[status]);
+  }
+
   ///重置数据
   clearSearchProductsMap() {
     _searchProductsMap.forEach((key, value) {
@@ -248,5 +254,11 @@ class ApparelProductBLoC extends BLoCBase {
   clearSearchProductsMapByStatus(String status) {
     _searchProductsMap[status].data.clear();
     _searchProductsMap[status].currentPage = 0;
+  }
+
+  deleteSearchProductResetData(String status,String code){
+    //删除查询产品重置数据
+    products.removeWhere((item) => item.code == code);
+    _searchController.sink.add(PageEntry(data: products));
   }
 }

@@ -195,7 +195,7 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
       if(widget.isSelection){
         ApparelProductBLoC.instance.getSelectData(widget.keyword,status: widget.status);
       }else{
-        ApparelProductBLoC.instance.getSearchData(widget.keyword,status: widget.status);
+        ApparelProductBLoC.instance.deleteSearchProductResetData(widget.status,product.code);
       }
     });
   }

@@ -147,8 +147,8 @@ class Apis {
 
   ///消息标记未读
   static get readMsg =>
-          (String uid, String code) {
-        return '/{baseSiteId}/user/$uid/msg/read/$code';
+          (String uid) {
+        return '/{baseSiteId}/user/$uid/msg/update/to/read';
       };
 
   ///将所有未读消息标记为已读
@@ -156,4 +156,9 @@ class Apis {
           (String uid) {
         return '/{baseSiteId}/user/$uid/msg/read';
       };
+
+  ///删除消息
+  static get deleteMsg => (String uid){
+    return '/{baseSiteId}/user/$uid/msg/delete';
+  };
 }

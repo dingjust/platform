@@ -48,6 +48,8 @@ import CapacityModule from './capacity/capacity'
 import ReceiptReportModule from './report/receipt'
 import ProductionProgressReportModule from './report/production_progress'
 
+// 消息
+import MessageModule from './message/message';
 export {
   // shared
   EnumsModule,
@@ -84,13 +86,15 @@ export {
   OperationCoursesModule,
   WalletModule,
   CashOutManagerModule,
-  //contract
+  // contract
   ContractModule,
   ContractTemplateModule,
   ContractSealModule,
-  //产能
+  // 产能
   CapacityModule,
-  //报表
+  // 报表
   ReceiptReportModule,
-  ProductionProgressReportModule
+  ProductionProgressReportModule,
+  // 消息
+  MessageModule
 }

@@ -44,8 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final List<Widget> menus = <Widget>[
       Menu('', <Widget>[
-         MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
-             AppRoutes.ROUTE_MY_ACCOUNT),
+        MenuItem(B2BImage.myAccount(width: 23, height: 27), '我的账户',
+            AppRoutes.ROUTE_MY_ACCOUNT),
         menuSeparator,
         CompanyIntroductionMenuItem(),
         menuSeparator,
@@ -261,13 +261,18 @@ class _MyHomePageState extends State<MyHomePage> {
             return;
           }
           showConfirmDialog(true, message: '切换身份将会退出登录状态，是否确认？', confirm: () {
-            UserBLoC.instance.logout().then((val) {
-              UserBLoC.instance.changeUserType(
-                  UserBLoC.instance.currentUser.type == UserType.BRAND
-                      ? UserType.FACTORY
-                      : UserType.BRAND);
-              widget.turnToHome?.call();
-            });
+            UserBLoC.instance.logout(
+                type: UserBLoC.instance.currentUser.type == UserType.BRAND
+                    ? UserType.FACTORY
+                    : UserType.BRAND);
+            widget.turnToHome?.call();
+            //           .then((val) {
+            //   UserBLoC.instance.changeUserType(
+            //       UserBLoC.instance.currentUser.type == UserType.BRAND
+            //           ? UserType.FACTORY
+            //           : UserType.BRAND);
+            //   widget.turnToHome?.call();
+            // });
           });
         },
       ),

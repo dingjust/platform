@@ -182,8 +182,8 @@ class _ApparelProductListState extends State<ApparelProductList> {
         ),
       ));
 
-      ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-      ApparelProductBLoC.instance.getDatas(status: widget.status);
+//      ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+      ApparelProductBLoC.instance.deleteProductResetData(widget.status,product.code);
     });
   }
 

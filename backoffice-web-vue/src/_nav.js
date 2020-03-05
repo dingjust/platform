@@ -14,7 +14,7 @@ export default {
       icon: 'el-icon-s-home'
     },
     {
-      name: '产品管理',
+      name: '产品',
       url: '/product',
       icon: 'el-icon-goods',
       children: [{
@@ -40,9 +40,9 @@ export default {
       ]
     },
     {
-      name: '商家管理',
+      name: '商家',
       url: '/backoffice/customer',
-      icon: 'icon-puzzle',
+      icon: 'el-icon-money',
       children: [{
           name: '品牌',
           url: '/user/brand',
@@ -56,7 +56,7 @@ export default {
       ]
     },
     {
-      name: '订单管理',
+      name: '订单',
       icon: 'el-icon-s-order',
       children: [{
           name: '需求订单',
@@ -81,9 +81,9 @@ export default {
       ]
     },
     {
-      name: '账户管理',
+      name: '账户',
       url: '/account',
-      icon: 'icon-puzzle',
+      icon: 'el-icon-user-solid',
       children: [{
           name: '员工',
           url: '/account/employee',
@@ -125,7 +125,7 @@ export default {
           name: '合同',
           icon: 'iconNone',
           children: [{
-              name: '合同管理',
+              name: '合同',
               url: '/contract/manage/contract',
               icon: 'iconNone',
             },
@@ -135,7 +135,7 @@ export default {
               icon: 'iconNone',
             },
             {
-              name: '印章管理',
+              name: '印章',
               url: '/contract/seal/seal',
               icon: 'iconNone',
             },
@@ -162,7 +162,7 @@ export default {
           icon: 'iconNone'
         },
         {
-          name: '提现管理',
+          name: '提现',
           url: '/miscs/cashOutManager',
           icon: 'iconNone',
         },
@@ -175,7 +175,7 @@ export default {
               icon: 'iconNone',
             },
             {
-              name: '印章管理',
+              name: '印章',
               url: '/unclassified/sealManagement',
               icon: 'iconNone',
             },

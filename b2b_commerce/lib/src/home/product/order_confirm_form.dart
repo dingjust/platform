@@ -828,7 +828,8 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   order: detailModel,
                   paymentFor: PaymentFor.DEPOSIT,
                 )),
-        ModalRoute.withName('/'));
+        // ModalRoute.withName('/'));
+        ModalRoute.withName('/home/product/order_products'));
   }
 
   void onProofingPaying(String code) async {
@@ -839,7 +840,8 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
             builder: (context) => OrderPaymentPage(
                   order: detailModel,
                 )),
-        ModalRoute.withName('/'));
+        // ModalRoute.withName('/'));
+        ModalRoute.withName('/home/product/order_products'));
   }
 
   @override
