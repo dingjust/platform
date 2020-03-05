@@ -1,10 +1,9 @@
 import 'dart:collection';
 
+import 'package:auto_orientation/auto_orientation.dart';
 import 'package:b2b_commerce/src/business/orders/productionProgresses/components/color_size_report_table.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:orientation/orientation.dart';
 
 class ProgressFullTable extends StatefulWidget {
   final List<PurchaseOrderEntryModel> entries;
@@ -22,7 +21,7 @@ class ProgressFullTable extends StatefulWidget {
 class _ProgressFullTableState extends State<ProgressFullTable> {
   @override
   void initState() {
-    OrientationPlugin.forceOrientation(DeviceOrientation.landscapeLeft);
+    AutoOrientation.landscapeLeftMode();
     super.initState();
   }
 
@@ -88,7 +87,7 @@ class _ProgressFullTableState extends State<ProgressFullTable> {
 
   @override
   void dispose() {
-    OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
+    AutoOrientation.fullAutoMode();
     super.dispose();
   }
 }
