@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -1243,8 +1244,8 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
     PurchaseOrderBLoC.instance.refreshData('ALL');
   }
 
-  void cancelOrder(String code) {
-    showDialog(
+  void cancelOrder(String code) async {
+    await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
@@ -1256,7 +1257,14 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
             entrance: 'purchaseOrders',
           );
         });
+    BotToast.showLoading(
+        duration: Duration(milliseconds: 500), clickClose: true);
+
+    ///刷新全部-状态
     PurchaseOrderBLoC.instance.refreshData('ALL');
+
+    ///刷新待付款-状态(只有待付款订单才能取消)
+    PurchaseOrderBLoC.instance.refreshData('PENDING_PAYMENT');
   }
 
   Future<void> _requestMessage(BuildContext context, String message) async {

@@ -61,6 +61,52 @@ class CapacityMatchingItem extends StatelessWidget {
     double horizonSpacing = 20.0;
     double verticalSpacing = 10.0;
 
+    List<Widget> children = model.categoryCapacities
+        .map((capacity) =>
+        LayoutBuilder(
+          builder: (context, constraints) =>
+              Container(
+                width: constraints.maxWidth / 2 - horizonSpacing,
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                margin: EdgeInsets.only(bottom: 5),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                          child: Text(
+                            '${capacity.category.name}',
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ),
+                    Container(
+                        child: Text(
+                          '${capacity.capacityRange}件/天',
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        )),
+                  ],
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.grey[200],
+                ),
+              ),
+        ))
+        .toList();
+
+    //只有一个时
+    if (children.length == 1) {
+      children.add(LayoutBuilder(
+        builder: (context, constraints) =>
+            Container(
+              width: constraints.maxWidth / 2 - horizonSpacing,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              margin: EdgeInsets.only(bottom: 5),
+            ),
+      ));
+    }
+
     return Wrap(
         direction: Axis.horizontal,
         alignment: WrapAlignment.start,
@@ -68,37 +114,7 @@ class CapacityMatchingItem extends StatelessWidget {
         spacing: horizonSpacing,
         runSpacing: verticalSpacing,
         crossAxisAlignment: WrapCrossAlignment.start,
-        children: model.categoryCapacities
-            .map((capacity) => LayoutBuilder(
-                  builder: (context, constraints) => Container(
-                    width: constraints.maxWidth / 2 - horizonSpacing,
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    margin: EdgeInsets.only(bottom: 5),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                              child: Text(
-                                '${capacity.category.name}',
-                                overflow: TextOverflow.ellipsis,
-                          )),
-                        ),
-                        Container(
-                            child: Text(
-                              '${capacity.capacityRange}件/天',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        )),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey[200],
-                    ),
-                  ),
-                ))
-            .toList());
+        children: children);
   }
 
   Widget _buildBottomRow() {

@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:flutter/material.dart';
@@ -426,6 +427,8 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
               },
             );
           });
+    } else if (titleController.text == '') {
+      BotToast.showText(text: '请填写标题');
     } else {
       onSubmit(myCapacityState);
     }

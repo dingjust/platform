@@ -40,6 +40,13 @@ class CustomizeDialog extends StatefulWidget {
   String confirmButtonText;
   //取消按钮的文本
   String cancelButtonText;
+
+  ///取消按钮的文本样式
+  TextStyle cancelButtonTextStyle;
+
+  ///确认按钮的文本样式
+  TextStyle confirmlButtonTextStyle;
+
   //确认按钮点击动作
   ConfirmAction confirmAction;
   //取消按钮点击动作
@@ -110,7 +117,13 @@ class CustomizeDialog extends StatefulWidget {
     this.titleStyle,
     this.cancelAction,
     this.cancelButtonText,
+    this.cancelButtonTextStyle = const TextStyle(
+      color: Colors.grey,
+    ),
     this.confirmButtonText,
+    this.confirmlButtonTextStyle = const TextStyle(
+      color: Colors.black,
+    ),
     this.isNeedCancelButton = false,
     this.isNeedConfirmButton = false,
     @required this.dialogType,
@@ -315,9 +328,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                           widget.cancelButtonText == ''
                                           ? '取消'
                                           : widget.cancelButtonText}',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
+                                      style: widget.cancelButtonTextStyle,
                                       textAlign: TextAlign.center,
                                     ),
                                     shape: RoundedRectangleBorder(
@@ -337,9 +348,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         widget.confirmButtonText == ''
                                         ? '确定'
                                         : widget.confirmButtonText}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
+                                    style: widget
+                                        .confirmlButtonTextStyle,
                                     textAlign: TextAlign.center,
                                   ),
                                   shape: RoundedRectangleBorder(
@@ -354,9 +364,8 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                       widget.confirmButtonText == ''
                                       ? '确定'
                                       : widget.confirmButtonText}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                                  style: widget
+                                      .confirmlButtonTextStyle,
                                 ),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
@@ -477,9 +486,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     widget.confirmButtonText == ''
                                     ? '确定'
                                     : widget.confirmButtonText}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
+                                style: widget.confirmlButtonTextStyle,
                               ),
                               shape: RoundedRectangleBorder(
                                   borderRadius:
@@ -592,14 +599,11 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 55),
                                     child: Text(
-                                      '${widget.cancelButtonText == null ||
-                                          widget.cancelButtonText == ''
-                                          ? '取消'
-                                          : widget.cancelButtonText}',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
+                                        '${widget.cancelButtonText == null ||
+                                            widget.cancelButtonText == ''
+                                            ? '取消'
+                                            : widget.cancelButtonText}',
+                                        style: widget.cancelButtonTextStyle),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15))),
@@ -615,9 +619,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         widget.confirmButtonText == ''
                                         ? '确定'
                                         : widget.confirmButtonText}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
+                                    style: widget.confirmlButtonTextStyle,
                                   ),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
@@ -819,14 +821,13 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10, horizontal: 55),
                                         child: Text(
-                                          '${widget.cancelButtonText == null ||
-                                              widget.cancelButtonText == ''
-                                              ? '取消'
-                                              : widget.cancelButtonText}',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
+                                            '${widget.cancelButtonText ==
+                                                null ||
+                                                widget.cancelButtonText == ''
+                                                ? '取消'
+                                                : widget.cancelButtonText}',
+                                            style:
+                                            widget.cancelButtonTextStyle),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(15))),
@@ -844,9 +845,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                             widget.confirmButtonText == ''
                                             ? '确定'
                                             : widget.confirmButtonText}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
+                                        style: widget.confirmlButtonTextStyle,
                                       ),
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
@@ -1037,14 +1036,11 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 55),
                                     child: Text(
-                                      '${widget.cancelButtonText == null ||
-                                          widget.cancelButtonText == ''
-                                          ? '取消'
-                                          : widget.cancelButtonText}',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
+                                        '${widget.cancelButtonText == null ||
+                                            widget.cancelButtonText == ''
+                                            ? '取消'
+                                            : widget.cancelButtonText}',
+                                        style: widget.cancelButtonTextStyle),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15))),
@@ -1062,9 +1058,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         widget.confirmButtonText == ''
                                         ? '确定'
                                         : widget.confirmButtonText}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
+                                    style: widget.confirmlButtonTextStyle,
                                   ),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
@@ -1741,14 +1735,11 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                   padding:
                                   const EdgeInsets.symmetric(vertical: 10),
                                   child: Text(
-                                    '${widget.cancelButtonText == null ||
-                                        widget.cancelButtonText == ''
-                                        ? '取消'
-                                        : widget.cancelButtonText}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                      '${widget.cancelButtonText == null ||
+                                          widget.cancelButtonText == ''
+                                          ? '取消'
+                                          : widget.cancelButtonText}',
+                                      style: widget.cancelButtonTextStyle),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
@@ -1775,9 +1766,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                         widget.confirmButtonText == ''
                                         ? '确定'
                                         : widget.confirmButtonText}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
+                                    style: widget.confirmlButtonTextStyle,
                                   ),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(

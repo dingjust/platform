@@ -27,7 +27,7 @@ class _FactoryTabSectionState extends State<FactoryTabSection>
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 700,
+        height: 700,        
         child: ChangeNotifierProvider<FactoryTabSectionState>(
           builder: (context) => FactoryTabSectionState(),
           child: Scaffold(
@@ -47,7 +47,7 @@ class _FactoryTabSectionState extends State<FactoryTabSection>
                 indicatorSize: TabBarIndicatorSize.label,
               ),
               body: TabBarView(
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),          
                 controller: _tabController,
                 children: <Widget>[
                   HotFactoryListView(),

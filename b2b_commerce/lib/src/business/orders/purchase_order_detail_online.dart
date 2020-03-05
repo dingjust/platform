@@ -159,7 +159,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       delegate: SliverChildListDelegate(
                     <Widget>[
                       _buildProductInfo(context),
-                      _buildProductHide(context),
                       (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
                                   order.depositPaid == false) ||
                               order.status == PurchaseOrderStatus.CANCELLED
@@ -1266,7 +1265,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "点击展开全部详情",
+                    isHide ? "点击展开全部详情" : '点击折叠全部详情',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
@@ -1311,6 +1310,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     data: _datas,
                   ),
                 ),
+                _buildProductHide(context),
                 Container(
                   child: ListTile(
                       leading: Text(

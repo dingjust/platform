@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/my/my_help.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -99,7 +100,7 @@ class _ProofingListState extends State<ProofingList>
     await ProofingOrderRepository().proofingCancelling(model.code);
     if (response != null) {
       _handleRefresh();
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
     } else {
       Navigator.of(context).pop();
       showDialog(
@@ -203,8 +204,12 @@ class _ProofingListState extends State<ProofingList>
   void _handleRefresh() {
     var bloc = BLoCProvider.of<ProofingOrdersBLoC>(context);
     if (widget.keyword != null) {
+      BotToast.showLoading(
+          duration: Duration(milliseconds: 500), clickClose: true);
       bloc.filterByKeyword(widget.keyword);
     } else {
+      BotToast.showLoading(
+          duration: Duration(milliseconds: 500), clickClose: true);
       bloc.refreshData(widget.status.code);
     }
   }
