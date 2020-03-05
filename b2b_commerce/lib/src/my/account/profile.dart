@@ -121,15 +121,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               ],
             ),
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).push((MaterialPageRoute(
-                    builder: (context) => ResetPasswordByPasswordPage())));
-              },
-              child: _InputRow(
-                label: '修改密码',
-                padding: EdgeInsets.symmetric(vertical: 10),
-                suffix: Icon(Icons.chevron_right),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push((MaterialPageRoute(
+                      builder: (context) => ResetPasswordByPasswordPage())));
+                },
+                child: _InputRow(
+                  label: '修改密码',
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  suffix: Icon(Icons.chevron_right),
+                ),
               ),
             )
           ],
