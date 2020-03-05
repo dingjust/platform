@@ -21,8 +21,8 @@ const actions = {
   }) {
     // 获取账号权限
     const result = await http.get('/b2b/b2bCustomers/role/' + uid);
-    if (result['errors']) {
-      this.$message.error(result['errors'][0].message);
+    if (result.code === 0) {
+      this.$message.error(result.msg);
       return;
     }
     console.log(result);

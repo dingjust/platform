@@ -22,6 +22,7 @@ import http from '@/common/js/http';
 import autoHeight from '@/mixins/autoHeight';
 import directives from './directives';
 import Authorized from './views/user/user/b2b-customer/auth/Authorized';
+import permission from './common/js/permission';
 
 import App from './App';
 Vue.component('Authorized', Authorized);
@@ -70,6 +71,7 @@ Vue.use(ElementUI, {
 // Vue.use(directives);
 Vue.prototype.fn = {};
 Vue.prototype.$http = http;
+Vue.prototype.permission = permission;
 // 根据命令设置导航数据
 import _nav from '@/_nav.js';
 import _nav_brand from '@/_nav_brand.js';
@@ -140,12 +142,10 @@ Vue.mixin({
       if (authority && authority instanceof Array && authority.length) {
         const roles = store.getters['PermissionModule/permissions'];
         const permissionRoles = authority;
-
         const flag = roles.some(role => {
           return permissionRoles.includes(role);
         });
-
-        if (flag) {
+        if (!flag) {
           return false;
         }
         return true;
