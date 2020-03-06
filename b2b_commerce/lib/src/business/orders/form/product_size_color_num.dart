@@ -23,18 +23,27 @@ class _ProductSizeColorNumState extends State<ProductSizeColorNum> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('选择颜色尺码数量'),
+        title: Text(widget.update?'颜色尺码数量':'选择颜色尺码数量'),
         elevation: 0.5,
         centerTitle: true,
         actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              Navigator.pop(
-                  context, widget.update ? widget.data : widget.editData);
-            },
-            child: Text(
-              '确定',
-              style: TextStyle(color: Colors.black),
+          Offstage(
+            offstage: widget.update,
+            child: FlatButton(
+              onPressed: () {
+                print(widget.update);
+                print(widget.data);
+                print(widget.editData);
+                if(widget.update){
+                  return;
+                }
+                Navigator.pop(
+                    context, widget.update ? widget.data : widget.editData);
+              },
+              child: Text(
+                '确定',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           )
         ],

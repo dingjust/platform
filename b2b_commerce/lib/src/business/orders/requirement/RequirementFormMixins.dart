@@ -38,7 +38,9 @@ class RequirementFormMixin {
 
   void initCreate(RequirementOrderModel order) {
     productNameController.text = order.details.productName;
-    maxExpectedPriceController.text = order.details.maxExpectedPrice?.toString();
+    if(order.details.maxExpectedPrice != -1){
+      maxExpectedPriceController.text = order.details.maxExpectedPrice?.toString();
+    }
     expectedMachiningQuantityController.text = order.details.expectedMachiningQuantity?.toString();
     remarksController.text = order.remarks;
   }

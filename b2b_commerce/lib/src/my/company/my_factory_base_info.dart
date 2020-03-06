@@ -600,6 +600,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                 ),
                 Stars(
                   starLevel: widget.factory.starLevel ?? 0,
+                  highlightOnly:false,
                 ),
                 Container(
                   height: 20,

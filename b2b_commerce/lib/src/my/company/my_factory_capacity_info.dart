@@ -106,7 +106,7 @@ class _MyCompanyCapacityInfoState extends State<MyCompanyCapacityInfo> {
                 ),
               ),
               SizedBox(
-                height: 25,
+                height: 24,
                 child: Center(
                   child: Indicator(
                     pageIndex: state.capacityIndex,

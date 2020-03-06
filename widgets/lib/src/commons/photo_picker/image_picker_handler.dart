@@ -57,6 +57,7 @@ class ImagePickerHandler {
   }
 
   showDialog(BuildContext context) {
+    print('${imagePicker}================');
     imagePicker.getImage(context);
   }
 }

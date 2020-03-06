@@ -66,6 +66,13 @@ class TextFieldBorderComponent extends StatefulWidget {
 class _TextFieldBorderComponentState extends State<TextFieldBorderComponent> {
 
   @override
+  void setState(fn) {
+    if(mounted){
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
 
     if(widget.prefix != null && widget.controller.text != ''){

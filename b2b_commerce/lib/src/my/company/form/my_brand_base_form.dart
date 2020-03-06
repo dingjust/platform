@@ -112,31 +112,42 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
         color: Colors.grey[200],
         child: ListView(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: '上传企业logo',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: _fontSize,
-                      )),
-                  TextSpan(
-                      text: '*',
-                      style: TextStyle(color: Colors.red, fontSize: _fontSize)),
-                  TextSpan(
-                      text: '(长按编辑)',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
-                ]),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '企业logo',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: _fontSize,
+                              )),
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(color: Colors.red, fontSize: _fontSize)),
+                        ]),
+                      ),
+                      Text('（长按编辑）',style: TextStyle(color: Colors.grey),),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: EditableAttachments(
+                      list: medias,
+                      imageWidth: 100,
+                      imageHeight: 100,
+                      isCut: true,
+                      ratioY: 1,
+                      ratioX: 1,
+                      maxNum: 1,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            EditableAttachments(
-              list: medias,
-              maxNum: 1,
             ),
             Container(
               padding: EdgeInsets.symmetric(
