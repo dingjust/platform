@@ -122,136 +122,131 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from "vuex";
-const { mapGetters, mapMutations, mapActions } = createNamespacedHelpers(
-  "B2BCustomersModule"
-);
-
-import B2BCustomerPermissionForm from "./B2BCustomerPermissionForm";
-import { B2BCustomersModule } from "../../../../../store/modules";
-import ElTreeSelect from "../tree/treeSelect";
-export default {
-  name: "B2BCustomerBasicForm",
-  components: {ElTreeSelect, B2BCustomerPermissionForm },
-  props: [],
-  computed: {},
-  methods: {
-    async getDeptList() {
-      const url = this.apis().getB2BCustomerDeptList();
-      const result = await this.$http.post(url);
-      if (result["errors"]) {
-        this.$message.error(result["errors"][0].message);
-        return;
-      }
-      this.deptList = result.data;
-      this.getTreeData(this.deptList);
-    },
-    async getRoleGroupList() {
-      let formData = {};
-      const url = this.apis().getB2BCustomerRoleGroupList();
-      const result = await this.$http.post(url, formData, {
-        page: 0,
-        size: 100
-      });
-      if (result["errors"]) {
-        this.$message.error(result["errors"][0].message);
-        return;
-      }
-      this.roleGroupList = result.content;
-    },
-    async roleSelect (data) {
-      const url = this.apis().getB2BCustomerRoleGroupDetails(data.id);
-      const result = await this.$http.get(url);
-      if (result['errors']) {
-        this.$message.error(result['errors'][0].message);
-        return;
-      }
-      this.$refs.permissionForm.setCheckChange(result.data.roleList);
-    },
-    selectDept(val) {
-      this.b2bDeptId = val;
-    },
-    async onSave() {
-      console.log(this.formData);
-      let data = {
-        name: this.formData.name,
-        uid: this.formData.uid,
-        b2bDept: this.b2bDeptId == 0 ? null : {id: this.b2bDeptId},
-        b2bRoleGroup: this.formData.b2bRoleGroup.id == 0 ? null : {id: this.formData.b2bRoleGroup.id},
-        b2bRoleList: this.distinct(this.formData.b2bRoleList)
-      };
-      console.log(data);
-      return ;
-      const url = this.apis().createB2BCustomer();
-      const result = await this.$http.post(url, data);
-      if (result["errors"]) {
-        this.$message.error(result["errors"][0].message);
-        return;
-      }
-      this.$message.success("添加员工成功");
-      this.$router.push({
-        name: "员工"
-      });
-    },
-    // 数组去重
-    distinct(arr) {
-      let result = []
-      let obj = {};
-      for (let i of arr) {
-        if (!obj[i]) {
-          result.push(i)
-          obj[i] = 1
-        }
-      }
-      return result
-    },
-    getTreeData(data) {
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].children == null) {
+  import B2BCustomerPermissionForm from './B2BCustomerPermissionForm';
+  import ElTreeSelect from '../tree/treeSelect';
+  export default {
+    name: 'B2BCustomerBasicForm',
+    components: {ElTreeSelect, B2BCustomerPermissionForm },
+    props: [],
+    computed: {},
+    methods: {
+      async getDeptList () {
+        const url = this.apis().getB2BCustomerDeptList();
+        const result = await this.$http.post(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
-        if (data[i].children.length < 1) {
-          data[i].children = undefined;
-        } else {
-          this.getTreeData(data[i].children);
+        this.deptList = result.data;
+        this.getTreeData(this.deptList);
+      },
+      async getRoleGroupList () {
+        let formData = {};
+        const url = this.apis().getB2BCustomerRoleGroupList();
+        const result = await this.$http.post(url, formData, {
+          page: 0,
+          size: 100
+        });
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.roleGroupList = result.content;
+      },
+      async roleSelect (data) {
+        const url = this.apis().getB2BCustomerRoleGroupDetails(data.id);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$refs.permissionForm.setCheckChange(result.data.roleList);
+      },
+      selectDept (val) {
+        this.deptId = val;
+      },
+      async onSave () {
+        // console.log(this.formData);
+        let data = {
+          name: this.formData.name,
+          uid: this.formData.uid,
+          b2bDept: this.deptId == 0 ? null : { id: this.deptId },
+          b2bRoleGroup: this.formData.b2bRoleGroup,
+          b2bRoleList: this.distinct(this.formData.b2bRoleList)
+        };
+        // console.log(data);
+        // return ;
+        const url = this.apis().createB2BCustomer();
+        const result = await this.$http.post(url, data);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('添加员工成功');
+        this.$router.push({
+          name: '员工'
+        });
+      },
+      // 数组去重
+      distinct (arr) {
+        let result = []
+        let obj = {};
+        for (let i of arr) {
+          if (!obj[i]) {
+            result.push(i)
+            obj[i] = 1
+          }
+        }
+        return result
+      },
+      getTreeData (data) {
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].children == null) {
+            return;
+          }
+          if (data[i].children.length < 1) {
+            data[i].children = undefined;
+          } else {
+            this.getTreeData(data[i].children);
+          }
         }
       }
-    }
-  },
-  data() {
-    return {
-      rules: {
-        uid: [{ required: true, message: "必填", trigger: "blur" }],
-        name: [{ required: true, message: "必填", trigger: "blur" }]
-      },
-      uid: "",
-      name: "",
-      mobileNumber: "",
-      formData: {},
-      roleGroupList: [],
-      deptList: [],
-      props:{
-        value: 'id',
-        label: 'name',
-        children: 'children',
-        // disabled:true
-      },
-    };
-  },
-  created() {
-    this.getDeptList();
-    this.getRoleGroupList();
-    if (this.$route.params.formData != null) {
-      this.formData = Object.assign({}, this.$route.params.formData);
-      if (this.formData.b2bDept == null) {
-        this.$set(this.formData, 'b2bDept', {id: ''});
+    },
+    data () {
+      return {
+        rules: {
+          uid: [{ required: true, message: '必填', trigger: 'blur' }],
+          name: [{ required: true, message: '必填', trigger: 'blur' }]
+        },
+        uid: '',
+        name: '',
+        mobileNumber: '',
+        formData: {},
+        roleGroupList: [],
+        deptList: [],
+        deptId: 0,
+        props: {
+          value: 'id',
+          label: 'name',
+          children: 'children'
+          // disabled:true
+        }
+      };
+    },
+    created () {
+      this.getDeptList();
+      this.getRoleGroupList();
+      if (this.$route.params.formData != null) {
+        this.formData = Object.assign({}, this.$route.params.formData);
+        if (this.formData.b2bDept == null) {
+          this.$set(this.formData, 'b2bDept', {id: 0});
+        }
+        this.deptId = this.formData.b2bDept.id;
+      } else {
+        this.formData = Object.assign({}, this.$store.state.B2BCustomersModule.formData);
       }
-    } else {
-      this.formData = Object.assign({}, this.$store.state.B2BCustomersModule.formData);
     }
-    console.log(this.formData);
-  }
-};
+  };
 </script>
 <style scoped>
   .titleCardClass{

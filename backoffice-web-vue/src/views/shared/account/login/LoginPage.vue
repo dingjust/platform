@@ -53,54 +53,54 @@
 </template>
 <script>
   export default {
-    name: "LoginPage",
-    data() {
+    name: 'LoginPage',
+    data () {
       return {
-        username: "",
-        password: "",
+        username: '',
+        password: '',
         NC_RESULT: {
-          csessionid: "",
-          sig: "",
-          value: "",
-          token: ""
+          csessionid: '',
+          sig: '',
+          value: '',
+          token: ''
         }
       };
     },
     computed: {
       captchaPass: function () {
-        //人机验证通过 TODO:后端服务调用阿里云验证签名
+        // 人机验证通过 TODO:后端服务调用阿里云验证签名
         return (
-          this.NC_RESULT.csessionid != "" &&
-          this.NC_RESULT.sig != "" &&
-          this.username != "" &&
-          this.password != "" &&
-          this.NC_RESULT.value == "pass"
+          this.NC_RESULT.csessionid != '' &&
+          this.NC_RESULT.sig != '' &&
+          this.username != '' &&
+          this.password != '' &&
+          this.NC_RESULT.value == 'pass'
         );
       }
     },
-    created() {
-      var ua = navigator.userAgent.toLowerCase(); //判断浏览器的类型
+    created () {
+      var ua = navigator.userAgent.toLowerCase(); // 判断浏览器的类型
       console.log(ua);
     },
-    mounted() {
+    mounted () {
       var nc_token = [
-        "FFFF0N00000000008691",
+        'FFFF0N00000000008691',
         new Date().getTime(),
         Math.random()
-      ].join(":");
+      ].join(':');
       var NC_Opt = {
-        renderTo: "#nc_captcha",
-        appkey: "FFFF0N00000000008691",
-        scene: "nc_login",
+        renderTo: '#nc_captcha',
+        appkey: 'FFFF0N00000000008691',
+        scene: 'nc_login',
         token: nc_token,
         customWidth: 300,
         trans: {
-          key1: "code0"
+          key1: 'code0'
         },
         offsetWidth: 300,
-        elementID: ["usernameID"],
+        elementID: ['usernameID'],
         is_Opt: 0,
-        language: "cn",
+        language: 'cn',
         isEnabled: true,
         timeout: 3000,
         times: 5,
@@ -117,25 +117,31 @@
         callback: this.ncCallback
       };
       var nc = new noCaptcha(NC_Opt);
-      nc.upLang("cn", {
-        _startTEXT: "请按住滑块，拖动到最右边",
-        _yesTEXT: "验证通过",
+      nc.upLang('cn', {
+        _startTEXT: '请按住滑块，拖动到最右边',
+        _yesTEXT: '验证通过',
         _error300: '哎呀，出错了，点击<a href="javascript:__nc.reset()">刷新</a>再来一次',
         _errorNetwork: '网络不给力，请<a href="javascript:__nc.reset()">点击刷新</a>'
       });
     },
     methods: {
-      login() {
+      async login () {
         const username = this.username.replace(/(\s*$)/g, '');
         const password = this.password;
 
-        this.$store.dispatch("login", {
+        await this.$store.dispatch('login', {
           username,
           password
         });
+
+        this.getPermission();
       },
-      ///NC验证回调
-      ncCallback(data) {
+      getPermission () {
+        const uid = this.$store.getters.currentUser.uid;
+        this.$store.dispatch('PermissionModule/getPermissions', {uid});
+      },
+      /// NC验证回调
+      ncCallback (data) {
         // window.console && console.log(nc_token);
         // window.console && console.log(data.csessionid);
         // window.console && console.log(data.sig);
@@ -145,14 +151,13 @@
         this.NC_RESULT.token = data.token;
         this.NC_RESULT.value = data.value;
       },
-      onRegister() {
-        this.$router.push("register");
+      onRegister () {
+        this.$router.push('register');
         // this.$router.push('/account/setting/payPlan/create');
         // this.$router.push("/account/my");
       }
     }
   };
-
 </script>
 <style>
   .login-card {

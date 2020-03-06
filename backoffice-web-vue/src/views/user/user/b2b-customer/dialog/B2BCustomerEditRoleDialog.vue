@@ -26,18 +26,6 @@
             </el-form-item>
           </el-row>
         </div>
-<!--        <el-row>-->
-<!--          <el-form-item prop="roleIds">-->
-<!--            <template slot="label">-->
-<!--              <h6 class="titleTextClass">-->
-<!--                权限选择-->
-<!--                <span style="color: #F56C6C">*</span>-->
-<!--              </h6>-->
-<!--            </template>-->
-<!--            <el-button style="background-color: #FFD60C" @click="handleCheckAllChange" size="mini">全选</el-button>-->
-<!--            <el-button native-type="reset" @click="onReset" size="mini">重置</el-button>-->
-<!--          </el-form-item>-->
-<!--        </el-row>-->
         <div class="titleClass">
           <h6>权限选择</h6>
         </div>
@@ -60,65 +48,62 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex';
+  import B2BCustomerAuthorityTree1 from '../tree/B2BCustomerAuthorityTree1';
 
-  const {mapGetters, mapActions} = createNamespacedHelpers('B2BCustomersModule');
-import B2BCustomerAuthorityTree1 from '../tree/B2BCustomerAuthorityTree1';
-
-export default {
-  name: 'B2BCustomerEditRoleDialog',
-  components: { B2BCustomerAuthorityTree1 },
-  computed: {
-  },
-  props: ['slotData'],
-  data () {
-    var validatePass = (rule, value, callback) => {
-      if (this.slotData.roleIds.length <= 0) {
-        callback(new Error('请选择权限'));
-      } else {
-        callback();
-      }
-    };
-    return {
-      rules: {
-        name: [{ required: true, message: '必填', trigger: 'blur' }],
-        roleIds: [{validator: validatePass, trigger: 'change'}],
-      },
-      titleName: '添加角色'
-    };
-  },
-  methods: {
-    handleCheckAllChange () {
-      this.$refs.authorityTree.handleCheckAllChange();
+  export default {
+    name: 'B2BCustomerEditRoleDialog',
+    components: { B2BCustomerAuthorityTree1 },
+    computed: {
     },
-    onReset () {
-      this.$refs.authorityTree.onReset([]);
-    },
-    onSave () {
-      this.$refs['roleForm'].validate((valid) => {
-        if (valid) {
-          let formData = {
-            id: this.slotData.id == '' ? null : this.slotData.id,
-            name: this.slotData.name,
-            roleIds: this.slotData.roleIds
-          }
-          console.log(formData);
-          this.$emit('saveRole', formData);
+    props: ['slotData'],
+    data () {
+      var validatePass = (rule, value, callback) => {
+        if (this.slotData.roleIds.length <= 0) {
+          callback(new Error('请选择权限'));
         } else {
-          this.$message.error('请完善表单信息');
+          callback();
         }
-      });
+      };
+      return {
+        rules: {
+          name: [{ required: true, message: '必填', trigger: 'blur' }],
+          roleIds: [{validator: validatePass, trigger: 'change'}]
+        },
+        titleName: '添加角色'
+      };
     },
-    onCannel () {
-      this.$emit('cannelNewRole');
+    methods: {
+      handleCheckAllChange () {
+        this.$refs.authorityTree.handleCheckAllChange();
+      },
+      onReset () {
+        this.$refs.authorityTree.onReset([]);
+      },
+      onSave () {
+        this.$refs['roleForm'].validate((valid) => {
+          if (valid) {
+            let formData = {
+              id: this.slotData.id == '' ? null : this.slotData.id,
+              name: this.slotData.name,
+              roleIds: this.slotData.roleIds
+            }
+            console.log(formData);
+            this.$emit('saveRole', formData);
+          } else {
+            this.$message.error('请完善表单信息');
+          }
+        });
+      },
+      onCannel () {
+        this.$emit('cannelNewRole');
+      }
+    },
+    created () {
+      if (this.slotData.id != '') {
+        this.titleName = '编辑角色';
+      }
     }
-  },
-  created() {
-    if (this.slotData.id != ''){
-      this.titleName = '编辑角色';
-    }
-  }
-};
+  };
 </script>
 
 <style scoped>

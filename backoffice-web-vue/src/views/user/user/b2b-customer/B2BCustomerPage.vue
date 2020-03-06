@@ -129,17 +129,10 @@
         this.inviteDialogVisible = false;
       },
       async editInfo (data) {
-        const url = this.apis().getB2BCustomer(data.uid);
-        const result = await this.$http.get(url);
-        if (result.code === 0) {
-          this.$message.error(result.msg);
-          return;
-        }
-        this.$set(result, 'b2bRoleGroup', {id: ''});
         this.$router.push({
           name: '添加员工',
           params: {
-            formData: Object.assign({}, result)
+            formData: Object.assign({}, data)
           }
         });
       },
