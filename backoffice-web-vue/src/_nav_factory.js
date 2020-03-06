@@ -46,17 +46,17 @@ export default {
       icon: 'el-icon-s-marketing',
       children: [{
           name: '合同管理',
-          url: '/manage',
+          url: '/contract/manage',
           icon: 'iconNone',
         },
         {
           name: '合同模板',
-          url: '/template',
+          url: '/contract/template',
           icon: 'iconNone',
         },
         {
           name: '签章管理',
-          url: '/seal',
+          url: '/contract/seal',
           icon: 'iconNone',
         },
         // {
@@ -151,7 +151,7 @@ export default {
         },
         {
           name: '认证中心',
-          url: '/Authentication',
+          url: '/account/Authentication',
           icon: 'iconNone',
         },
         {
@@ -161,7 +161,7 @@ export default {
         },
         {
           name: '合作商',
-          url: '/miscs/cooperator',
+          url: '/account/cooperator',
           icon: 'iconNone',
         },
         // {

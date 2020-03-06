@@ -145,7 +145,7 @@
           this.belongDetailsData = result;
           this.factoryDetailsPageVisible = true;
         } else 
-        // if (item.belongTo.type == 'BRAND') 
+        if (item.belongTo.type == 'BRAND') 
         {
           //品牌
           let url = this.apis().getBrand(item.belongTo.uid);
@@ -162,8 +162,8 @@
           }
           this.belongDetailsData = result;
           this.brandDetailsPageVisible = true;
-        // } else {
-        //   return;
+        } else {
+          return;
         }
       },
       async onShelf(item) {

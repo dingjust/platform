@@ -31,7 +31,7 @@
         <h6 class="textClass"><i class="factory-card-info">&#xe692;</i>公司认证</h6>
       </el-row>
       <el-row class="rowClass">
-        <el-button class="buttonClass" @click="$router.push('/Authentication')">认证中心</el-button>
+        <el-button class="buttonClass" @click="$router.push('/account/Authentication')">认证中心</el-button>
       </el-row>
       <el-row class="rowClass2">
         <h6 class="textClass"><i class="factory-card-info">&#xe694;</i>联系方式</h6>

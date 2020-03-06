@@ -81,14 +81,15 @@ export default {
       ]
     },
     {
-      name: '账户',
+      name: '公司',
       url: '/account',
       icon: 'el-icon-user-solid',
-      children: [{
-          name: '员工',
-          url: '/account/employee',
-          icon: 'el-icon-user'
-        },
+      children: [
+        // {
+        //   name: '员工',
+        //   url: '/account/employee',
+        //   icon: 'el-icon-user'
+        // },
         {
           name: '用户组',
           url: '/account/user-group',

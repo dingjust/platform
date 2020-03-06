@@ -180,10 +180,18 @@
         labels: 'labels'
       }),
       cooperativeBrands: function () {
-        return this.formData.cooperativeBrand.split('，');
+        if (this.formData.cooperativeBrand == null) {
+          return [];
+        } else {
+          return this.formData.cooperativeBrand.split('，');
+        }
       },
       keywords: function () {
-        return this.formData.keyword.split('，');
+        if (this.formData.keyword == null) {
+          return [];
+        } else {
+          return this.formData.keyword.split('，');
+        }
       },
     },
     methods: {

@@ -328,7 +328,7 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$router.push('/miscs/cooperator');
+        this.$router.push('/account/cooperator');
       },
       async onSearchPayPlan (page, size) {
         const url = this.apis().getPayPlans();

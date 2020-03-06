@@ -19,25 +19,25 @@ export default {
       url: '/order',
       icon: 'el-icon-s-order',
       children: [{
-        name: '需求订单',
-        url: '/order/requirement',
-        icon: 'iconNone'
-      },
+          name: '需求订单',
+          url: '/order/requirement',
+          icon: 'iconNone'
+        },
         // {
         //   name: '报价单',
         //   url: '/order/quote',
         //   icon: 'iconNone'
         // },
-      {
-        name: '打样订单',
-        url: '/order/proofing',
-        icon: 'iconNone'
-      },
-      {
-        name: '生产订单',
-        url: '/order/purchase',
-        icon: 'iconNone'
-      }
+        {
+          name: '打样订单',
+          url: '/order/proofing',
+          icon: 'iconNone'
+        },
+        {
+          name: '生产订单',
+          url: '/order/purchase',
+          icon: 'iconNone'
+        }
       ]
     },
     {
@@ -45,20 +45,20 @@ export default {
       url: '/contract',
       icon: 'el-icon-s-marketing',
       children: [{
-        name: '合同管理',
-        url: '/manage',
-        icon: 'iconNone'
-      },
-      {
-        name: '合同模板',
-        url: '/template',
-        icon: 'iconNone'
-      },
-      {
-        name: '签章管理',
-        url: '/seal',
-        icon: 'iconNone'
-      }
+          name: '合同管理',
+          url: '/contract/manage',
+          icon: 'iconNone'
+        },
+        {
+          name: '合同模板',
+          url: '/contract/template',
+          icon: 'iconNone'
+        },
+        {
+          name: '签章管理',
+          url: '/contract/seal',
+          icon: 'iconNone'
+        }
         // {
         //   name: '下单',
         //   url: '/orderPurchase',
@@ -81,15 +81,15 @@ export default {
       url: '/product',
       icon: 'el-icon-goods',
       children: [{
-        name: '产品管理',
-        url: '/product/apparel'
-        // icon: 'iconNone',
-      },
-      {
-        name: '样衣管理',
-        url: '/product/sample/sampleProduct',
-        icon: 'iconNone'
-      }
+          name: '产品管理',
+          url: '/product/apparel'
+          // icon: 'iconNone',
+        },
+        {
+          name: '样衣管理',
+          url: '/product/sample/sampleProduct',
+          icon: 'iconNone'
+        }
         // {
         //   name: '样衣借还记录',
         //   url: '/miscs/sample/sampleCheckoutHist',
@@ -101,8 +101,7 @@ export default {
       name: '公司',
       url: '/account',
       icon: 'el-icon-office-building',
-      children: [
-        {
+      children: [{
           name: '主页',
           url: '/account/index',
           icon: 'iconNone'
@@ -119,7 +118,7 @@ export default {
         },
         {
           name: '合作商',
-          url: '/miscs/cooperator',
+          url: '/account/cooperator',
           icon: 'iconNone'
         },
         // {

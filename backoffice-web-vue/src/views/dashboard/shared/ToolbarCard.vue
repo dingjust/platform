@@ -112,7 +112,7 @@
         this.$router.push("orderPurchase");
       },
       jumpToAuthentication() {
-        this.$router.push("/Authentication");
+        this.$router.push("/account/Authentication");
       }
     },
     data() {

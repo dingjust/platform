@@ -40,7 +40,7 @@
             <el-row type="flex">
               <el-input placeholder="请填写公司名称" v-model="formData.name" size="mini"
                 :disabled="formData.approvalStatus === 'approved'"></el-input>
-              <el-button type="text" class="authentication-button" @click="$router.push('/Authentication')">
+              <el-button type="text" class="authentication-button" @click="$router.push('/account/Authentication')">
                 {{formData.approvalStatus == 'approved' ? '已认证' : '未认证'}}
               </el-button>
             </el-row>

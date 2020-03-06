@@ -93,7 +93,11 @@
     props: ['formData', 'readOnly'],
     computed: {
       cooperativeBrands: function () {
-        return this.formData.cooperativeBrand.split('，');
+        if (this.formData.cooperativeBrand == null) {
+          return [];
+        } else {
+          return this.formData.cooperativeBrand.split('，');
+        }
       },
     },
     data() {

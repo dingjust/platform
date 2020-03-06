@@ -16,11 +16,15 @@ const router = new Router({
       redirect: '/dashboard',
       name: '首页',
       component: Full,
-      children: [
-        {
+      children: [{
           path: '/message',
           name: '用户消息',
           component: () => import( /* webpackChunkName: 'register' */ '@/views/user/message/MessagePage')
+        },
+        {
+          path: '/orderPurchase',
+          name: '下单',
+          component: () => import( /* webpackChunkName: 'orderPurchase' */ '@/views/order/purchase/OrderPurchase')
         },
         {
           path: 'dashboard',
@@ -71,10 +75,16 @@ const router = new Router({
               name: '发布产能',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/capacity/capacityFormPage'),
             },
+            {
+              path: 'sample/sampleProduct',
+              name: '样衣管理',
+              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleProduct/SampleProductPage'),
+            },
           ]
         },
         {
           path: 'user',
+          redirect: '/user/brand',
           name: '商家管理',
           component: {
             render(c) {
@@ -150,6 +160,7 @@ const router = new Router({
         },
         {
           path: 'account',
+          redirect: '/account/index',
           name: '公司',
           component: {
             render(c) {
@@ -191,20 +202,21 @@ const router = new Router({
               redirect: '/account/b2b-customer',
               name: '员工',
               component: {
-                render (c) {
+                render(c) {
                   return c('router-view');
                 }
               },
               children: [{
-                path: '',
-                name: '员工列表',
-                component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage')
-              },
+                  path: '',
+                  name: '员工列表',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage')
+                },
                 {
                   path: 'customerDetail',
                   name: '添加员工',
-                  component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/form/B2BCustomerBasicForm')
-                }]
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/form/B2BCustomerBasicForm')
+                }
+              ]
             },
             {
               path: 'b2b-unit',
@@ -255,7 +267,33 @@ const router = new Router({
                 ]
 
               }, ]
-            }
+            },
+            {
+              path: 'cooperator',
+              redirect: '/account/cooperator',
+              name: '合作商',
+              component: {
+                render(c) {
+                  return c('router-view');
+                }
+              },
+              children: [{
+                  path: 'cooperatorCreate',
+                  name: '添加合作商',
+                  component: () => import( /* webpackChunkName: 'operationCourse' */ '@/views/miscs/cooperator/form/CooperatorFormPage')
+                },
+                {
+                  path: 'cooperatorUpdate',
+                  name: '编辑合作商',
+                  component: () => import( /* webpackChunkName: 'operationCourse' */ '@/views/miscs/cooperator/form/CooperatorEditFormPage')
+                },
+                {
+                  path: '',
+                  name: '合作商列表',
+                  component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/CooperatorPage'),
+                }
+              ]
+            },
           ]
         },
         {
@@ -282,38 +320,9 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/label/LabelPage')
             },
             {
-              path: '/product/sample/sampleProduct',
-              name: '样衣管理',
-              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleProduct/SampleProductPage'),
-            },
-            {
               path: '/miscs/sample/sampleCheckoutHist',
               name: '样衣借还记录',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleCheckoutHist/SampleCheckoutHistPage'),
-            }, {
-              path: '/miscs/cooperator',
-              name: '合作商',
-              component: {
-                render(c) {
-                  return c('router-view');
-                }
-              },
-              children: [{
-                  path: 'cooperatorCreate',
-                  name: '添加合作商',
-                  component: () => import( /* webpackChunkName: 'operationCourse' */ '@/views/miscs/cooperator/form/CooperatorFormPage')
-                },
-                {
-                  path: 'cooperatorUpdate',
-                  name: '编辑合作商',
-                  component: () => import( /* webpackChunkName: 'operationCourse' */ '@/views/miscs/cooperator/form/CooperatorEditFormPage')
-                },
-                {
-                  path: '',
-                  name: '合作商列表',
-                  component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/CooperatorPage'),
-                }
-              ]
             }, {
               path: '/miscs/operationCourse',
               name: '使用教程',
@@ -327,16 +336,11 @@ const router = new Router({
               name: '提现管理',
               component: () => import( /* webpackChunkName: 'cashOutManager' */ '@/views/miscs/cashOutManager/cashOutManagerPage')
             },
-            {
-              path: '/Authentication',
-              name: '认证中心',
-              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/dashboard/authentication/AuthenticationPage')
-            },
           ]
         },
         {
           path: '/contract',
-          redirect: '/manage',
+          redirect: '/contract/manage',
           name: '合同',
           component: {
             render(c) {
@@ -344,30 +348,26 @@ const router = new Router({
             }
           },
           children: [{
-              path: '/manage',
+              path: 'manage',
               name: '合同管理',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/manage/ContractPage')
             },
             {
-              path: '/template',
+              path: 'template',
               name: '合同模板',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/template/TemplatePage')
             },
             {
-              path: '/templateForm',
+              path: 'templateForm',
               name: '新建合同模板',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/template/components/TemplateForm')
             },
             {
-              path: '/seal',
+              path: 'seal',
               name: '印章管理',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/seal/SealPage')
             }, {
-              path: '/orderPurchase',
-              name: '下单',
-              component: () => import( /* webpackChunkName: 'orderPurchase' */ '@/views/order/purchase/OrderPurchase')
-            }, {
-              path: '/sealForm',
+              path: 'sealForm',
               name: '印章创建',
               component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/seal/sealForm')
             },
@@ -376,15 +376,15 @@ const router = new Router({
             //   name: '创建合同',
             //   component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/manage/createContract')
             // },
-            {
-              path: '/unclassified/markDown',
-              name: 'markdown',
-              component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/unclassified/markDown')
-            }, {
-              path: '/template/create',
-              name: '创建模板',
-              component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/template/contractTemplate')
-            }
+            // {
+            //   path: '/unclassified/markDown',
+            //   name: 'markdown',
+            //   component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/unclassified/markDown')
+            // }, {
+            //   path: '/template/create',
+            //   name: '创建模板',
+            //   component: () => import( /* webpackChunkName: 'sealManagement' */ '@/views/contract/template/contractTemplate')
+            // }
           ]
         },
       ]

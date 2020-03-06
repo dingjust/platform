@@ -150,7 +150,7 @@
         }
       },
       jumpToCreate() {
-        this.$router.push('/miscs/cooperator/cooperatorCreate');
+        this.$router.push('/account/cooperator/cooperatorCreate');
       }
     },
     created() {

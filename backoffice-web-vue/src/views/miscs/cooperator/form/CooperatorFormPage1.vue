@@ -350,7 +350,7 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$router.push('/miscs/cooperator');
+        this.$router.push('/account/cooperator');
       },
       async onSearchPayPlan (page, size) {
         const keyword = this.$store.state.PayPlanModule.keyword;

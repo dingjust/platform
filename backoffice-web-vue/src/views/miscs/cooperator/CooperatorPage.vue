@@ -136,7 +136,7 @@
         this.onSearch();
       },
       onJumpTo () {
-        this.$router.push('/miscs/cooperator/cooperatorCreate');
+        this.$router.push('/account/cooperator/cooperatorCreate');
       },
       onDialogClose(){
         this.clearOrderPageData();
@@ -151,7 +151,7 @@
 
         this.setEditFormData(result);
 
-        this.$router.push('/miscs/cooperator/cooperatorUpdate');
+        this.$router.push('/account/cooperator/cooperatorUpdate');
       }
     },
     data () {
