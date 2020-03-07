@@ -51,6 +51,8 @@ class ProofingOrdersBLoC extends BLoCBase {
   //锁
   bool lock = false;
 
+  String currentStatus = 'ALL';
+
   filterByStatuses(String status) async {
     if (!lock) {
       lock = true;

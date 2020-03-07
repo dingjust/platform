@@ -344,6 +344,7 @@ class EditableAttachments extends StatefulWidget {
     this.ratioX,
     this.ratioY,
     this.circleShape = false,
+    this.loogPressDelete = true,
   }) : super(key: key);
 
   final List<MediaModel> list;
@@ -378,6 +379,9 @@ class EditableAttachments extends StatefulWidget {
   ///截图的宽高比例
   final double ratioX;
   final double ratioY;
+
+  //是否长按删除
+  final bool loogPressDelete;
 
   _EditableAttachmentsState createState() => _EditableAttachmentsState();
 }
@@ -427,6 +431,9 @@ class _EditableAttachmentsState extends State<EditableAttachments>
 
   @override
   userImage(File _image) async {
+    if(widget.maxNum == 1){
+      widget.list.clear();
+    }
     if (_image != null) {
       await _uploadFile(_image);
     }
@@ -454,7 +461,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
       }
     });
 
-    return Row(
+    return widget.maxNum == 1 ? _buildEditableAttachment() : Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         IconButton(
@@ -484,6 +491,113 @@ class _EditableAttachmentsState extends State<EditableAttachments>
         ),
       ],
     );
+  }
+
+  Widget _buildEditableAttachment(){
+    if(_uploadFileList.length > 0){
+      return GestureDetector(
+        child: Container(
+          width: widget.imageWidth,
+          height: widget.imageHeight,
+          margin: EdgeInsets.symmetric(horizontal: 5),
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Image.file(
+                _uploadFileList[0],
+              ),
+              Container(
+                width: widget.imageWidth,
+                height: widget.imageHeight,
+                color: Colors.black26,
+              ),
+              StreamBuilder<double>(
+                  stream: _streamControllerList[0].stream,
+                  initialData: 0.0,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<double> snapshot) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: snapshot.data,
+                      ),
+                    );
+                  })
+            ],
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onTap: () {},
+        onLongPress: () {},
+      );
+    }else if(widget.list.length > 0){
+      return GestureDetector(
+        child: Container(
+          width: widget.imageWidth,
+          height: widget.imageHeight,
+          margin: EdgeInsets.symmetric(horizontal: 5),
+          child: CachedNetworkImage(
+            imageUrl: '${widget.list[0].previewUrl()}',
+            fit: BoxFit.cover,
+            imageBuilder: (context, imageProvider) =>
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey,
+                  ),
+                ),
+            placeholder: (context, url) => SpinKitRing(
+              color: Colors.black12,
+              lineWidth: 2,
+              size: 30,
+            ),
+            errorWidget: (context, url, error) => SpinKitRing(
+              color: Colors.black12,
+              lineWidth: 2,
+              size: 30,
+            ),
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey,
+          ),
+        ),
+        onTap: () {
+          // onPreview(context, '${model.detailUrl()}', '${model.name}');
+          onPreview(context, widget.list[0]);
+          print('onp');
+        },
+        onLongPress: () {
+          if (widget.editable) _deleteFile(widget.list[0]);
+        },
+      );
+    }else{
+      return GestureDetector(
+        onTap: () {
+          imagePicker.showDialog(context);
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          width: widget.imageWidth,
+          height: widget.imageHeight,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey[300], width: 1.0)),
+          child: Center(
+            child: Icon(
+              Icons.add,
+              size: widget.imageWidth,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget _buildEditableAttachmentsListView(double width, BuildContext context) {
@@ -691,7 +805,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
+        builder: (context1) =>
             GalleryPhotoViewWrapper(
               galleryItems:
               widget.list.map((model) => GalleryItem(model: model)).toList(),
@@ -1012,56 +1126,62 @@ class _EditableAttachmentsState extends State<EditableAttachments>
 
   //TODO :传入Media参数
   Future _deleteFile(MediaModel mediaModel, {String code}) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            '确认删除？',
-            style: TextStyle(fontSize: 18),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                '取消',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+    if(!widget.loogPressDelete){
+      imagePicker.showDialog(context);
+    }else{
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              '确认删除？',
+              style: TextStyle(fontSize: 18),
             ),
-            FlatButton(
-              child: Text(
-                '确认',
-                style: TextStyle(
-                  color: Colors.black,
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  '取消',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
                 ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-              onPressed: () async {
-                //TODO :调用删除接口,暂时隐藏
-                // try {
-                //   Response response = await http$.delete(
-                //     Apis.mediaDelete(mediaModel.id),
-                //   );
-                //   if (response != null && response.statusCode == 200) {
-                setState(() {
-                  widget.list.remove(mediaModel);
-                });
-                Navigator.pop(context);
-                //   } else {
-                //     print('删除失败');
-                //   }
-                // } catch (e) {
-                //   print(e);
-                // }
-              },
-            ),
-          ],
-        );
-      },
-    );
+              FlatButton(
+                child: Text(
+                  '确认',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                onPressed: () async {
+                  //TODO :调用删除接口,暂时隐藏
+                  // try {
+                  //   Response response = await http$.delete(
+                  //     Apis.mediaDelete(mediaModel.id),
+                  //   );
+                  //   if (response != null && response.statusCode == 200) {
+                  setState(() {
+                    widget.list.remove(mediaModel);
+                    print('${widget.list}list');
+                    print('${_uploadFileList}uploadlist');
+                  });
+                  Navigator.pop(context);
+                  //   } else {
+                  //     print('删除失败');
+                  //   }
+                  // } catch (e) {
+                  //   print(e);
+                  // }
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   int _addFile(File file) {

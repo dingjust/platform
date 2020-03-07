@@ -125,22 +125,70 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                 children: <Widget>[
                   Expanded(
                     flex: 3,
-                    child: RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text: '期望价格',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: '期望价格',
+                                style: TextStyle(fontSize: 16, color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(fontSize: 16, color: Colors.red),
+                              )
+                            ]),
+                          ),
                         ),
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(fontSize: 16, color: Colors.red),
-                        )
-                      ]),
+                        Radio(
+                            value: widget.formState.model.details.maxExpectedPrice,
+                            groupValue: -1,
+                            onChanged: (v) {
+                              setState(() {
+                                widget.formState.model.details.maxExpectedPrice = -1;
+                              });
+                            }),
+                        Expanded(
+                            child: GestureDetector(
+                              onTap: (){
+                                setState(() {
+                                  widget.formState.model.details.maxExpectedPrice = -1;
+                                });
+                              },
+                              child: Text(
+                                '面议',
+                                softWrap: false,
+                                overflow: TextOverflow.visible,
+                              ),
+                            )),
+                      ],
                     ),
                   ),
                   Expanded(
                     flex: 2,
-                    child: TextFieldBorderComponent(
+                    child: widget.formState.model.details.maxExpectedPrice == -1
+                        ? Container(
+                      padding: const EdgeInsets.all(13.0),
+                      decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        color: Colors.grey[50],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Center(child: Text('面议',style: TextStyle(color: Colors.grey,fontSize: 16),)),
+                          InkWell(child: Icon(Icons.cancel,size: 20,),onTap: (){
+
+                            setState(() {
+                              widget.formState.model.details.maxExpectedPrice = null;
+
+                            });
+                          },),
+                        ],
+                      ),
+                    )
+                        : TextFieldBorderComponent(
                       padding: EdgeInsets.all(0),
                       hideDivider: true,
                       isRequired: true,

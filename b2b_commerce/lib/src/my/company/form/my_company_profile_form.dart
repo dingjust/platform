@@ -56,13 +56,16 @@ class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
           ),
         ],
       ),
-      body: ListView(
-        children: _companyProfiles.map((companyProfile) {
-          return Container(
-            padding: EdgeInsets.only(bottom: 30),
-            child: CompanyProfileItem(companyProfile),
-          );
-        }).toList(),
+      body: Container(
+        padding: EdgeInsets.only(top: 20),
+        child: ListView(
+          children: _companyProfiles.map((companyProfile) {
+            return Container(
+              padding: EdgeInsets.only(bottom: 30),
+              child: CompanyProfileItem(companyProfile),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

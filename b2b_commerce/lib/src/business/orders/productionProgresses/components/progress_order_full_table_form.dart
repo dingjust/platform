@@ -1,9 +1,8 @@
 import 'dart:collection';
 
+import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:orientation/orientation.dart';
 
 import 'single_color_size_report_table_form.dart';
 
@@ -24,7 +23,7 @@ class _ProgressOrderFullTableFormState
     extends State<ProgressOrderFullTableForm> {
   @override
   void initState() {
-    OrientationPlugin.forceOrientation(DeviceOrientation.landscapeLeft);
+    AutoOrientation.landscapeLeftMode();
     super.initState();
   }
 
@@ -88,7 +87,7 @@ class _ProgressOrderFullTableFormState
 
   @override
   void dispose() {
-    OrientationPlugin.forceOrientation(DeviceOrientation.portraitUp);
+    AutoOrientation.fullAutoMode();
     super.dispose();
   }
 }

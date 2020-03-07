@@ -13,9 +13,10 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProofingOrderDetailPage extends StatefulWidget {
-  ProofingOrderDetailPage(this.code);
+  ProofingOrderDetailPage(this.code,{this.isRefreshData = false});
 
   final String code;
+  final bool isRefreshData;
 
   _ProofingOrderDetailPageState createState() =>
       _ProofingOrderDetailPageState();
@@ -26,54 +27,64 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '打样订单明细',
-          style: TextStyle(color: Colors.black),
+    return WillPopScope(
+      onWillPop: (){
+        if(widget.isRefreshData){
+          ProofingOrdersBLoC.instance.refreshData('ALL');
+          ProofingOrdersBLoC.instance.refreshData('PENDING_PAYMENT');
+        }
+        Navigator.pop(context);
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          brightness: Brightness.light,
+          centerTitle: true,
+          elevation: 0.5,
+          title: Text(
+            '打样订单明细',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
-      ),
-      body: FutureBuilder<ProofingModel>(
-        builder: (BuildContext context, AsyncSnapshot<ProofingModel> snapshot) {
-          if (snapshot.data != null) {
-            return Container(
-              color: Color.fromRGBO(245, 245, 245, 1),
-              child: ListView(
-                children: <Widget>[
+        body: FutureBuilder<ProofingModel>(
+          builder: (BuildContext context, AsyncSnapshot<ProofingModel> snapshot) {
+            if (snapshot.data != null) {
+              return Container(
+                color: Color.fromRGBO(245, 245, 245, 1),
+                child: ListView(
+                  children: <Widget>[
 //            _buildCompanyInfo(),
-                  _buildEntries(),
-                  _buildNumRow(),
-                  Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    child: ColorSizeNumTable(
-                      data: model.entries
-                          .map((entry) => ApparelSizeVariantProductEntry(
-                          quantity: entry.quantity, model: entry.product))
-                          .toList(),
+                    _buildEntries(),
+                    _buildNumRow(),
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: ColorSizeNumTable(
+                        data: model.entries
+                            .map((entry) => ApparelSizeVariantProductEntry(
+                            quantity: entry.quantity, model: entry.product))
+                            .toList(),
+                      ),
                     ),
-                  ),
-                  _buildCostRow(),
-                  _buildRemarks(),
-                  _buildDeliveryAddress(context),
-                  _buildBrandInfo(context),
-                  _buildFactory(),
-                  _buildOrderInfoRow(),
-                  _buildButtonGroup(),
-                ],
-              ),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-        initialData: null,
-        future: _getData(),
+                    _buildCostRow(),
+                    _buildRemarks(),
+                    _buildDeliveryAddress(context),
+                    _buildBrandInfo(context),
+                    _buildFactory(),
+                    _buildOrderInfoRow(),
+                    _buildButtonGroup(),
+                  ],
+                ),
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+          initialData: null,
+          future: _getData(),
+        ),
       ),
     );
   }

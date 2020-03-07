@@ -141,22 +141,71 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                   children: <Widget>[
                     Expanded(
                       flex: 3,
-                      child:  RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                            text: '期望价格',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text: '期望价格',
+                                  style: TextStyle(fontSize: 16, color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(fontSize: 16, color: Colors.red),
+                                )
+                              ]),
+                            ),
                           ),
-                          TextSpan(
-                            text: ' *',
-                            style: TextStyle(fontSize: 16, color: Colors.red),
-                          )
-                        ]),
+                          Radio(
+                              value: widget.formState.editModel.details.maxExpectedPrice,
+                              groupValue: -1,
+                              onChanged: (v) {
+                                setState(() {
+                                  widget.formState.editModel.details.maxExpectedPrice = -1;
+                                });
+                              }),
+                          Expanded(
+                              child: GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    widget.formState.editModel.details.maxExpectedPrice = -1;
+                                  });
+                                },
+                                child: Text(
+                                  '面议',
+                                  softWrap: false,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              )),
+                        ],
                       ),
                     ),
                     Expanded(
                       flex: 2,
-                      child: TextFieldBorderComponent(
+                      child: widget.formState.editModel.details.maxExpectedPrice == -1
+                          ? Container(
+                        padding: const EdgeInsets.all(13.0),
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                          color: Colors.grey[50],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('面议',style: TextStyle(color: Colors.grey,fontSize: 16),),
+                            GestureDetector(child: Icon(Icons.cancel,size: 20,),onTap: (){
+                              setState(() {
+                                print(widget.formState.editModel.details.maxExpectedPrice);
+                                widget.formState.editModel.details.maxExpectedPrice = null;
+                                print(super.maxExpectedPriceController.text);
+
+                              });
+                            },),
+                          ],
+                        ),
+                      )
+                          : TextFieldBorderComponent(
                         padding: EdgeInsets.all(0),
                         hideDivider: true,
                         isRequired: true,
@@ -165,10 +214,20 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
                         inputFormatters: [
                           DecimalInputFormat(),
                         ],
+                        // inputType: TextInputType.number,
                         hintText: '填写',
                         controller: super.maxExpectedPriceController,
                         focusNode: super.maxExpectedPriceFocusNode,
-                        onChanged: (v) {
+                        onChanged: (value) {
+                          if (value.contains('.')) {
+                            int index = value.indexOf('.');
+                            if (value.length > index + 3) {
+                              setState(() {
+                                super.maxExpectedPriceController.text =
+                                    value.substring(0, index + 3);
+                              });
+                            }
+                          }
                           widget.formState.editModel.details.maxExpectedPrice =
                               ClassHandleUtil.removeSymbolRMBToDouble(
                                   super.maxExpectedPriceController.text);
@@ -811,9 +870,12 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
     print(widget.formState.editModel.details.productName);
     print(productNameController.text);
     widget.formState.editModel.details.productName = productNameController.text;
-    widget.formState.editModel.details.maxExpectedPrice =
-        ClassHandleUtil.removeSymbolRMBToDouble(
-            super.maxExpectedPriceController.text);
+    if(widget.formState.editModel.details.maxExpectedPrice != -1){
+      widget.formState.editModel.details.maxExpectedPrice =
+          ClassHandleUtil.removeSymbolRMBToDouble(
+              super.maxExpectedPriceController.text);
+    }
+
     widget.formState.editModel.details.expectedMachiningQuantity =
         ClassHandleUtil.transInt(
             super.expectedMachiningQuantityController.text);
@@ -822,6 +884,7 @@ class _RequirementOrderSecondEditFormState extends State<RequirementOrderSecondE
       ShowDialogUtil.showValidateMsg(context, '请填写标题');
       return;
     }
+    print(widget.formState.editModel.details.maxExpectedPrice);
     if (widget.formState.editModel.details.maxExpectedPrice == null) {
       ShowDialogUtil.showValidateMsg(context, '请填写期望价格');
       return;
