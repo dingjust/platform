@@ -9,8 +9,8 @@
               <span>{{item.name}}</span>
             </template>
             <template v-for="(subItem,subIndex) in item.children">
-              <router-link :key="subIndex" :to="subItem.url">
-                <el-menu-item :key="index+'-'+subIndex" :index="index+'-'+subIndex" :route="item.url">{{subItem.name}}
+              <router-link :key="subIndex" :to="subItem.url" v-if="routeCheck(subItem)">
+                <el-menu-item :key="index+'-'+subIndex" :index="index+'-'+subIndex" :route="item.url" >{{subItem.name}}
                 </el-menu-item>
               </router-link>
             </template>
@@ -39,6 +39,8 @@
   import SidebarNavTitle from './SidebarNavTitle';
   import SidebarNavItem from './SidebarNavItem';
   import SidebarNavLabel from './SidebarNavLabel';
+
+  import {hasPermission} from '@/auth/auth';
 
   export default {
     name: 'sidebar',
@@ -71,6 +73,18 @@
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
+      },
+      //路由权限检测
+      routeCheck(nav){  
+        // if(nav.meta!=null&&nav.meta.requiresAuth!=null&&nav.meta.requiresAuth){
+        //   if(hasPermission(nav.meta.permissions)){
+        //     return true;
+        //   }else{
+        //     return false;
+        //   }
+        // }else{
+          return true;
+        // }
       }
     }
   }

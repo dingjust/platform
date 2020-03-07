@@ -21,7 +21,7 @@ import HttpServletPlugin from '@/plugins/HttpServletPlugin.js';
 import http from '@/common/js/http';
 import autoHeight from '@/mixins/autoHeight';
 import directives from './directives';
-import Authorized from './views/user/user/b2b-customer/auth/Authorized';
+import Authorized from '@/auth/Authorized';
 import permission from './common/js/permission';
 
 import App from './App';
@@ -78,7 +78,7 @@ import _nav_brand from '@/_nav_brand.js';
 import _nav_factory from '@/_nav_factory.js';
 
 Vue.prototype.CONFIG = {
-  nav (type = process.env.NAV) {
+  nav(type = process.env.NAV) {
     return type === 'FACTORY' ? _nav_factory : (type === 'BRAND' ? _nav_brand : _nav);
   }
 };
@@ -86,7 +86,7 @@ Vue.prototype.CONFIG = {
 Vue.mixin({
   props: ['viewMode'],
   mixins: [autoHeight],
-  data () {
+  data() {
     return {
       defaultDateValueFormat: 'yyyy-MM-dd"T"HH:mm:ssZ',
       mediaUploadUrl: '/b2b/media/file/upload',
@@ -96,23 +96,23 @@ Vue.mixin({
   },
   computed: {},
   methods: {
-    apis () {
+    apis() {
       if (this.$store.getters.currentUser != null && this.$store.getters.currentUser.type === 'TENANT') {
         return TENANT_APIS;
       }
 
       return NONE_TENANT_APIS;
     },
-    isBrand () {
+    isBrand() {
       return this.$store.getters.currentUser.type === 'BRAND';
     },
-    isFactory () {
+    isFactory() {
       return this.$store.getters.currentUser.type === 'FACTORY';
     },
-    isTenant () {
+    isTenant() {
       return this.$store.getters.currentUser.type === 'TENANT';
     },
-    compareDate (date1, date2) {
+    compareDate(date1, date2) {
       let result = false;
       if (date1.getFullYear() > date2.getFullYear()) {
         result = true;
@@ -129,7 +129,7 @@ Vue.mixin({
       return result;
     },
     // 枚举类型
-    getEnum (enumsName, code) {
+    getEnum(enumsName, code) {
       if (code !== null && code !== '') {
         const result = this.$store.state.EnumsModule[enumsName].find(e => e.code === code);
         return result ? result['name'] : 'UNKNOWN';
@@ -138,22 +138,22 @@ Vue.mixin({
       }
     },
     //
-    hasPermission (authority) {
-      if (authority && authority instanceof Array && authority.length) {
-        const roles = store.getters['PermissionModule/permissions'];
-        const permissionRoles = authority;
-        const flag = roles.some(role => {
-          return permissionRoles.includes(role);
-        });
-        if (!flag) {
-          return false;
-        }
-        return true;
-      } else {
-        this.$message.error(`need roles! Like v-permission="['admin','editor']"`);
-        return false;
-      }
-    }
+    // hasPermission (authority) {
+    //   if (authority && authority instanceof Array && authority.length) {
+    //     const roles = store.getters['PermissionModule/permissions'];
+    //     const permissionRoles = authority;
+    //     const flag = roles.some(role => {
+    //       return permissionRoles.includes(role);
+    //     });
+    //     if (!flag) {
+    //       return false;
+    //     }
+    //     return true;
+    //   } else {
+    //     this.$message.error(`need roles! Like v-permission="['admin','editor']"`);
+    //     return false;
+    //   }
+    // }
   }
 });
 /* eslint-disable no-new */

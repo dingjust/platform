@@ -21,17 +21,29 @@ export default {
       children: [{
           name: '报价订单',
           url: '/order/quote',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_QUOTE_ORDER']
+          }
         },
         {
           name: '打样订单',
           url: '/order/proofing',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_PROOFING_ORDER']
+          }
         },
         {
           name: '生产订单',
           url: '/order/purchase',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_PURCHASE_ORDER']
+          }
         },
         // {
         //   name: '生产进度',
@@ -48,16 +60,28 @@ export default {
           name: '合同管理',
           url: '/contract/manage',
           icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_AGREEMENT']
+          }
         },
         {
           name: '合同模板',
           url: '/contract/template',
           icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_AGREEMENT_TMPL']
+          }
         },
         {
           name: '签章管理',
           url: '/contract/seal',
           icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_AGREEMENT_SEAL']
+          }
         },
         // {
         //   name: '下单',
@@ -116,11 +140,19 @@ export default {
           name: '产品管理',
           url: '/product/apparel',
           icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_PRODUCT']
+          }
         },
         {
           name: '样衣管理',
           url: '/product/sample/sampleProduct',
           icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_PRODUCT_SAMPLEPRODUCT']
+          }
         },
         // {
         //   name: '样衣借还记录',
@@ -130,7 +162,11 @@ export default {
         {
           name: '产能配置',
           url: '/product/capacity',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_FACTORY_CAPACITY']
+          }
         }
       ]
     },
@@ -153,16 +189,28 @@ export default {
           name: '认证中心',
           url: '/account/Authentication',
           icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_CERT']
+          }
         },
         {
           name: '员工',
           url: '/account/b2b-customer',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_COMPANY_B2BCUSTOMER']
+          }
         },
         {
           name: '合作商',
           url: '/account/cooperator',
           icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_COMPANY_COOPERATOR']
+          }
         },
         // {
         //   name: '组织架构',
@@ -177,12 +225,20 @@ export default {
         {
           name: '地址管理',
           url: '/account/address',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_COMPANY_ADDRESS']
+          }
         },
         {
           name: '账务配置',
           url: '/account/setting/payPlan',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_FACTORY_PAYPLAN']
+          }
         },
       ]
     },
@@ -194,6 +250,10 @@ export default {
           name: '生产进度',
           url: '/report/production-progress',
           icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ROLE_REPORT_PRODUCTION_PROGRESS']
+          }
         },
         // {
         //   name: '收货单',
@@ -210,6 +270,10 @@ export default {
         name: '钱包',
         url: '/miscs/wallet',
         icon: 'iconNone',
+        meta: {
+          requiresAuth: true,
+          permissions: ['ROLE_COMPANY_WALLET']
+        }
       }]
     }
   ]
