@@ -445,7 +445,7 @@ class _RequirementOrderDetailPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    '￥${orderModel.details.maxExpectedPrice ?? 0}',
+                    orderModel.details.maxExpectedPrice == -1 ? '面议' :'￥${orderModel.details.maxExpectedPrice ?? 0}',
                     style: TextStyle(color: Colors.red, fontSize: 14),
 
                   ),

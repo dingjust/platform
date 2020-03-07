@@ -168,26 +168,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         color: Colors.grey[200],
         child: ListView(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: '上传企业logo',
-                      style:
-                      TextStyle(color: Colors.black, fontSize: _fontSize)),
-                  TextSpan(
-                      text: '*',
-                      style: TextStyle(color: Colors.red, fontSize: _fontSize)),
-                  TextSpan(
-                      text: '(长按编辑)',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      )),
-                ]),
-              ),
-            ),
+
             _buildProfilePicture(),
             _buildName(),
             Divider(
@@ -381,14 +362,44 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
         });
   }
 
-  EditableAttachments _buildProfilePicture() {
-    return EditableAttachments(
-      list: _medias,
-      maxNum: 1,
-      ratioX: 1,
-      ratioY: 1,
-      isCut: true,
-      circleShape: true,
+  Widget _buildProfilePicture() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+      child: Row(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '企业logo',
+                      style:
+                      TextStyle(color: Colors.black, fontSize: _fontSize)),
+                  TextSpan(
+                      text: '*',
+                      style: TextStyle(color: Colors.red, fontSize: _fontSize)),
+
+                ]),
+              ),
+              Text('（长按编辑）',style: TextStyle(color: Colors.grey),),
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20),
+            child: EditableAttachments(
+              list: _medias,
+              imageHeight: 80,
+              imageWidth: 80,
+              maxNum: 1,
+              ratioX: 1,
+              ratioY: 1,
+              isCut: true,
+              circleShape: true,
+              loogPressDelete: false,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -77,7 +77,7 @@ class CapacityFactoryInfoItem extends StatelessWidget {
                         ),
                         Container(
                             child: Text(
-                          '${capacity.capacityRange}/天',
+                          '${capacity.capacityRange}件/天',
                           style: TextStyle(
                             color: Colors.red,
                           ),

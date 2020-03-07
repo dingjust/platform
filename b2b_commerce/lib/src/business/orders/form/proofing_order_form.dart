@@ -2,6 +2,8 @@ import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
 import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -509,12 +511,18 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
   int get totalQuantity {
     int sum = 0;
-    if (productEntries != null && productEntries.length > 0) {
-      productEntries.forEach((entry) {
-        if (entry.controller.text != '') {
-          sum = sum + int.parse(entry.controller.text);
-        }
+    if(widget.update){
+      widget.model.entries.forEach((entry){
+        sum += entry.quantity;
       });
+    }else{
+      if (productEntries != null && productEntries.length > 0) {
+        productEntries.forEach((entry) {
+          if (entry.controller.text != '') {
+            sum = sum + int.parse(entry.controller.text);
+          }
+        });
+      }
     }
     return sum;
   }
@@ -703,8 +711,8 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (context) => ProofingOrderDetailPage(code)),
-          ModalRoute.withName('/'));
+              builder: (context) => ProofingOrderDetailPage(code,isRefreshData:true)),
+          ModalRoute.withName(AppRoutes.ROUTE_PROOFING_ORDERS));
     }
   }
 
@@ -751,13 +759,7 @@ class _ProofingOrderFormState extends State<ProofingOrderForm> {
           });
         }
       } else {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('请先选择产品'),
-              );
-            });
+        BotToast.showText(text: '请先选择产品');
         return;
       }
     }
