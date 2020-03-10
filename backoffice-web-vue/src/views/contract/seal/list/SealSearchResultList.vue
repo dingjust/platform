@@ -20,10 +20,12 @@
       </el-table-column>
       <!--<el-table-column label="用印章审批角色" prop="role"  fixed></el-table-column>-->
       <el-table-column label="操作">
-        <template  slot-scope="props">
-          <!--<el-button type="text" icon="el-icon-edit" @click="on1">编辑</el-button>-->
-          <el-button type="text" icon="el-icon-delete" @click="onDelete(props.row.code)">删除</el-button>
-        </template>
+        <Authorized :authority="permission.agreementSealRemove">
+          <template  slot-scope="props">
+            <!--<el-button type="text" icon="el-icon-edit" @click="on1">编辑</el-button>-->
+              <el-button type="text" icon="el-icon-delete" @click="onDelete(props.row.code)">删除</el-button>
+          </template>
+        </Authorized>
       </el-table-column>
     </el-table>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
@@ -39,12 +41,11 @@
 </template>
 
 <script>
-
   export default {
     name: 'SealSearchResultList',
-    props: ["page"],
+    props: ['page'],
     methods: {
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         if (this.isAdvancedSearch) {
@@ -54,7 +55,7 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         if (this.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
@@ -62,31 +63,32 @@
 
         this.$emit('onSearch', val - 1);
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      on1(){
+      on1 () {
 
       },
-      async onDelete(code){
+      async onDelete (code) {
         const url = this.apis().delSeal(code);
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
-        if(result){
+        if (result) {
           this.$message.success('删除成功');
-        }else{
+        } else {
           this.$message.error('删除失败');
         }
-        this.$emit("onSearch",0);
+        this.$emit('onSearch', 0);
       }
     },
-    data() {
+    data () {
       return {
+        removeSeal: ['AGREEMENT_SEAL_REMOVE']
         // tableData: [{
         //   title: 'XX1-印章',
         //   code: '3565512232',

@@ -95,9 +95,9 @@
     </div>
 
     <el-row style="margin-top: 20px" justify="space-around" type="flex" v-if="!readOnly">
-      <el-button class="btn-class" @click="onInvitation" v-if="slotData.status == 'PENDING_QUOTE'">邀请报价</el-button>
-      <el-button class="btn-class" @click="onEdit" v-if="slotData.status == 'PENDING_QUOTE' && quotePage.totalElements <= 0">修改</el-button>
-      <el-button class="btn-class" @click="onCancel" v-if="slotData.status == 'PENDING_QUOTE'">关闭</el-button>
+      <el-button class="btn-class" @click="onInvitation" v-if="pendingShow">邀请报价</el-button>
+      <el-button class="btn-class" @click="onEdit" v-if="modifyShow">修改</el-button>
+      <el-button class="btn-class" @click="onCancel" v-if="closeShow">关闭</el-button>
     </el-row>
 
     <el-dialog :visible.sync="detailsDialogVisible" width="80%"  class="purchase-dialog" :append-to-body="true" :close-on-click-modal="false">
@@ -133,6 +133,7 @@
   import QuoteDetailsPage from '../../quote/details/QuoteDetailsPage';
   import FactoryCooperatorTransfer from '../../../../components/custom/FactoryCooperatorTransfer';
   import RequirementOrderForm from '../form/RequirementOrderForm';
+  import {hasPermission} from '../../../../auth/auth';
 
   const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('RequirementOrdersModule');
 
@@ -163,6 +164,15 @@
         formData: 'formData',
         regions: 'regions'
       }),
+      pendingShow: function() {
+        return this.slotData.status == 'PENDING_QUOTE' && hasPermission(this.permission.requirementOrderRecommended);
+      },
+      modifyShow: function() {
+        return this.slotData.status == 'PENDING_QUOTE' && this.quotePage.totalElements <= 0 && hasPermission(this.permission.requirementOrderModify);
+      },
+      closeShow: function() {
+        return this.slotData.status == 'PENDING_QUOTE' && hasPermission(this.permission.requirementOrderClose);
+      },
       statusColor: function () {
         var color = '';
         switch (this.slotData.status) {

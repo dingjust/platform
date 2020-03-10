@@ -13,10 +13,13 @@
         </el-col>
         <el-col :span="2">
           <div>
+            <authorized :authority="permission.factoryPayplanCreate">
                <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加新方案</el-button>
+            </authorized>
           </div>
         </el-col>
       </el-row>
+      <div class="pt-2"></div>
       <pay-plan-toolbar @onSearch="onSearch" />
       <hr />
       <pay-plan-search-result-list :page="page" @onSearch="onSearch" @onDetails="onDetails" @onEdit="onEdit"

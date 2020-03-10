@@ -79,9 +79,9 @@
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">明细</el-button>
-            <el-divider direction="vertical"></el-divider>
-            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">账务</el-button>
-            <el-divider direction="vertical"></el-divider>
+<!--            <el-divider direction="vertical"></el-divider>-->
+<!--            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">账务</el-button>-->
+<!--            <el-divider direction="vertical"></el-divider>-->
             <!-- <el-button type="text" v-if="scope.row.status=='PENDING_CONFIRM'" @click="onUpdate(scope.row)"
               class="purchase-list-button">修改订单</el-button> -->
           </el-row>

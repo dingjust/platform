@@ -6,6 +6,7 @@
           <h6>报价订单列表</h6>
         </div>
       </el-row>
+      <div class="pt-2"></div>
       <quote-toolbar @clearQueryFormData="clearQueryFormData" @onAdvancedSearch="onAdvancedSearch"/>
 
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
@@ -16,10 +17,12 @@
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.state == 'SELLER_SUBMITTED'">
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
-                <el-divider direction="vertical"></el-divider>
-                <el-button type="text" class="list-button" @click="onDetails(props.item)" v-if="!isTenant()">修改</el-button>
-                <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
-                <el-button type="text" class="list-button" @click="onCannel(props.item)">关闭</el-button>
+<!--                <el-divider direction="vertical"></el-divider>-->
+<!--                <el-button type="text" class="list-button" @click="onDetails(props.item)" v-if="!isTenant()">修改</el-button>-->
+                <authorized :authority="permission.quoteOrderClose">
+                  <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
+                  <el-button type="text" class="list-button" @click="onCannel(props.item)">关闭</el-button>
+                </authorized>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>

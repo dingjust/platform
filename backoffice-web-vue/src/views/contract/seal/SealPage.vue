@@ -1,6 +1,14 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
+      <el-row>
+        <el-col :span="2">
+          <div class="seal-list-title">
+            <h6>印章列表</h6>
+          </div>
+        </el-col>
+      </el-row>
+      <div class="pt-2"></div>
       <seal-toolbar  @onSearch="onSearch" class="seal-toolbar"/>
       <seal-list :page="page" @onDetails="onDetails" @onSearch="onSearch"/>
     </el-card>
@@ -58,8 +66,12 @@
     }
   };
 </script>
-<style>
-.seal-toolbar{
-  margin-bottom: 10px;
-}
+<style scoped>
+  .seal-toolbar{
+    margin-bottom: 10px;
+  }
+  .seal-list-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
 </style>

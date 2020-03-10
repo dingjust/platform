@@ -6,6 +6,7 @@
     <el-form :inline="true">
       <el-row type="flex">
         <!-- <el-form-item label="品牌名"> -->
+        <el-col :span="17">
         <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword"
           class="purchase-toolbar-input"></el-input>
         <!-- </el-form-item> -->
@@ -18,7 +19,6 @@
         <!-- <el-form-item label="跟单员">
       <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
     </el-form-item> -->
-        <el-form-item label="分类">
           <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
           <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
         reserve-keyword clearable>
@@ -27,25 +27,26 @@
           </el-option>
         </el-option-group>
       </el-select> -->
+        <el-form-item label="分类">
           <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories"
-            :props="{ label: 'name',value:'code'}" clearable>
-          </el-cascader>
+              :props="{ label: 'name',value:'code'}" clearable>
+            </el-cascader>
         </el-form-item>
-        <el-row type="flex" align="top">
-          <el-col :span="12">
-            <el-button-group>
+        </el-col>
+        <el-col :span="7">
+        <el-row type="flex" align="top" justify="space-between" :gutter="20">
+          <el-button-group>
               <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
               <el-button native-type="reset">重置</el-button>
-            </el-button-group>
-          </el-col>
-          <el-col :span="12">
-            <el-row type="flex">
-              <el-button class="dashboard-toolbar-btn" @click="jumpToOrderPurchase">创建线下订单</el-button>
-              <el-button class="dashboard-toolbar-btn" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入
-              </el-button>
-            </el-row>
-          </el-col>
+          </el-button-group>
+          <authorized :authority="permission.purchaseOrderOfflineCreate">
+            <el-button class="dashboard-toolbar-btn" @click="jumpToOrderPurchase">创建线下订单</el-button>
+          </authorized>
+          <authorized :authority="permission.purchaseOrderUniqueCodeImport">
+            <el-button class="dashboard-toolbar-btn" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入</el-button>
+          </authorized>
         </el-row>
+        </el-col>
       </el-row>
     </el-form>
   </div>

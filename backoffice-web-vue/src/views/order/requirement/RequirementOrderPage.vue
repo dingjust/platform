@@ -1,13 +1,19 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-row  type="flex" justify="space-between" align="middle" style="margin-bottom: 20px">
-        <div class="info-title">
-          <h6 class="info-title_text">需求订单列表</h6>
-        </div>
-        <el-button class="btn-class" @click="onNew" v-if="!isTenant()"><span style="font-size: 14px">+</span>发布需求</el-button>
+      <el-row type="flex" justify="space-between" align="middle">
+        <el-col :span="3">
+          <div class="orders-list-title">
+            <h6>需求订单列表</h6>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <Authorized :authority="permission.requirementOrderPublish">
+            <el-button class="btn-class" @click="onNew" v-if="!isTenant()"><span style="font-size: 14px">+</span>发布需求</el-button>
+          </Authorized>
+        </el-col>
       </el-row>
-
+      <div class="pt-3"></div>
       <requirement-order-toolbar
                                  @onSimpleNew="onSimpleNew"
                                  @clearQueryFormData="clearQueryFormData"
@@ -20,10 +26,14 @@
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.status == 'PENDING_QUOTE'" >
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
-                <el-divider direction="vertical"></el-divider>
-                <el-button class="list-button" type="text" @click="onEdit(props.item)" v-if="!isTenant()">修改</el-button>
-                <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
-                <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
+                <authorized :authority="permission.requirementOrderModify">
+                  <el-divider direction="vertical"></el-divider>
+                  <el-button class="list-button" type="text" @click="onEdit(props.item)" v-if="!isTenant()">修改</el-button>
+                </authorized>
+                <authorized :authority="permission.requirementOrderClose">
+                  <el-divider direction="vertical" v-if="!isTenant()"></el-divider>
+                  <el-button class="list-button" type="text" @click="onCancelled(props.item)">关闭</el-button>
+                </authorized>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
@@ -365,4 +375,8 @@
     margin-bottom: 20px;
   }
 
+   .seal-list-title {
+     border-left: 2px solid #ffd60c;
+     padding-left: 10px;
+   }
 </style>

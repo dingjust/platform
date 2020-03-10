@@ -1,17 +1,19 @@
 <template>
   <el-form :inline="true">
     <el-row type="flex" justify="space-between">
-      <el-col :span="8">
-        <el-button-group>
-          <el-button @click="onCreate">新建印章</el-button>
-          <!--<el-button>管理设置</el-button>-->
-        </el-button-group>
-      </el-col>
       <el-col :span="6">
         <el-row type="flex" justify="space-between">
-          <el-input v-model="keyword" placeholder="输入名称"></el-input>
+          <el-input v-model="keyword" placeholder="输入印章名称"></el-input>
           <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
         </el-row>
+      </el-col>
+      <el-col :span="2">
+        <el-button-group>
+          <Authorized :authority="permission.agreementSealCreate">
+            <el-button @click="onCreate">新建印章</el-button>
+          </Authorized>
+          <!--<el-button>管理设置</el-button>-->
+        </el-button-group>
       </el-col>
     </el-row>
   </el-form>
@@ -34,25 +36,24 @@
     computed: {},
     methods: {
       ...mapMutations({
-        setKeyword: 'keyword',
+        setKeyword: 'keyword'
       }),
-      onSearch() {
+      onSearch () {
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
-      onCreate() {
+      onCreate () {
         // this.$router.push("sealForm");
         this.fn.openSlider('创建', SealForm, '');
       }
     },
-    data() {
+    data () {
       return {
-        keyword: this.$store.state.ContractSealModule.keyword,
+        keyword: this.$store.state.ContractSealModule.keyword
       }
     },
-    created() {}
+    created () {}
   }
-
 </script>
 <style>
   .el-input__inner {

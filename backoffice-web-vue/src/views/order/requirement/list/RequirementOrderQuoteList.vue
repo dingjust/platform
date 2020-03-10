@@ -83,8 +83,8 @@
       </el-col>
       <el-col :span="6">
         <el-row type="flex" justify="space-around" v-if="item.state == 'SELLER_SUBMITTED'">
-          <el-button class="btn-class" @click="onApprove(item)">确认工厂</el-button>
-          <el-button class="btn-class-1" @click="writeReason(item)">拒绝工厂</el-button>
+            <el-button class="btn-class" @click="onApprove(item)">确认工厂</el-button>
+            <el-button class="btn-class-1" @click="writeReason(item)">拒绝工厂</el-button>
         </el-row>
         <el-row type="flex" justify="space-around" v-if="item.state == 'BUYER_REJECTED'">
           <el-tag style="padding: 10px 20px;line-height: 3px;background-color: #c8c8c8;color: white">已拒绝</el-tag>

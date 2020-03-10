@@ -52,8 +52,8 @@
 
     <el-row type="flex" justify="space-around" style="margin-top: 30px">
       <!--<el-button v-if="isBrand() && slotData.status == 'PENDING_PAYMENT'" class="btn-class" @click="onPayment">去付款</el-button>-->
-      <el-button v-if="isFactory() && slotData.status == 'PENDING_DELIVERY'" class="btn-class" @click="onDelivery">去发货</el-button>
-      <el-button v-if="isBrand() && slotData.status == 'SHIPPED'" class="btn-class" @click="onConfirmReceive">确认收货</el-button>
+      <el-button v-if="deliveryShow" class="btn-class" @click="onDelivery">去发货</el-button>
+      <el-button v-if="confirmReceive" class="btn-class" @click="onConfirmReceive">确认收货</el-button>
     </el-row>
 
     <el-dialog :visible.sync="paymentDialogVisible" width="80%"  class="purchase-dialog" append-to-body :close-on-click-modal="false">
@@ -71,11 +71,12 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex';
-  import ProofingBasicInfoPage from "../info/ProofingBasicInfoPage";
-  import ProofingSupplierInfoPage from "../info/ProofingSupplierInfoPage";
-  import ProofingQCInfoPage from "../info/ProofingQCInfoPage";
-  import ProofingPaymentPage from "../payment/ProofingPaymentPage";
-  import ConsignmentForm from "../../../../components/custom/ConsignmentForm";
+  import ProofingBasicInfoPage from '../info/ProofingBasicInfoPage';
+  import ProofingSupplierInfoPage from '../info/ProofingSupplierInfoPage';
+  import ProofingQCInfoPage from '../info/ProofingQCInfoPage';
+  import ProofingPaymentPage from '../payment/ProofingPaymentPage';
+  import ConsignmentForm from '../../../../components/custom/ConsignmentForm';
+  import {hasPermission} from '../../../../auth/auth';
 
   const {mapGetters, mapMutations, mapActions} = createNamespacedHelpers('ProofingsModule');
 
@@ -102,6 +103,12 @@
       ...mapGetters({
 
       }),
+      deliveryShow: function () {
+        return this.isFactory() && this.slotData.status == 'PENDING_DELIVERY' && hasPermission(this.permission.proofingOrderDeliveryAddress);
+      },
+      confirmReceive: function () {
+        return this.isBrand() && this.slotData.status == 'SHIPPED';
+      },
       statusColor: function () {
         var color = '';
         switch (this.slotData.status) {
@@ -129,13 +136,13 @@
       }),
       ...mapActions({
       }),
-      onPayment() {
+      onPayment () {
         this.paymentDialogVisible = !this.paymentDialogVisible;
       },
-      onDelivery() {
+      onDelivery () {
         this.deliveryDialogVisible = !this.deliveryDialogVisible;
       },
-      async onConfirmDelivery(consignment) {
+      async onConfirmDelivery (consignment) {
         const url = this.apis().confirmDeliveringOfProofing(this.slotData.code);
         const result = await this.$http.put(url, {
           isOfflineConsignment: consignment.isOffline,
@@ -145,12 +152,12 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$emit('onRefresh',this.slotData.code);
+        this.$emit('onRefresh', this.slotData.code);
         this.deliveryDialogVisible = false;
         this.$message.success('确认发货成功');
         this.$emit('onAdvancedSearch');
       },
-      async onConfirmReceive() {
+      async onConfirmReceive () {
         this.$confirm('是否确认收货', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -171,7 +178,7 @@
     data () {
       return {
         paymentDialogVisible: false,
-        deliveryDialogVisible: false,
+        deliveryDialogVisible: false
       }
     },
     created () {
