@@ -12,11 +12,12 @@
     <el-card>
       <el-row>
         <el-col :span="2">
-          <div class="orders-list-title">
+          <div class="contract-list-title">
             <h6>合同列表</h6>
           </div>
         </el-col>
       </el-row>
+      <div class="pt-2"></div>
       <contract-toolbar @openPreviewPdf="openPreviewPdf" :queryFormData="queryFormData" style="margin-bottom: 10px;" @onNew="onNew" @onSearch="onSearch"/>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template v-for="(item, index) in contractStatues">
@@ -202,7 +203,7 @@
     color: #ffd60c;
   }
 
-  .orders-list-title {
+  .contract-list-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }

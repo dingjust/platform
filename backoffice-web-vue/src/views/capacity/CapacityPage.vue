@@ -2,10 +2,12 @@
   <div class="animated fadeIn content">
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
-        <div class="capacity-list-title">
+        <div class="capacity-list-title1">
           <h6>空闲产能</h6>
         </div>
-        <el-button class="capacity-btn" @click="onNew">发布新产能</el-button>
+        <Authorized :authority="permission.factoryCapacityPublish">
+          <el-button class="capacity-btn" @click="onNew">发布新产能</el-button>
+        </Authorized>
       </el-row>
       <capacity-search-result-list class="capacity-list" :page="page" @onDetails="onDetails" @onSearch="onSearch" />
     </el-card>
@@ -87,7 +89,7 @@
 
 </script>
 <style scoped>
-  .capacity-list-title {
+  .capacity-list-title1 {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }

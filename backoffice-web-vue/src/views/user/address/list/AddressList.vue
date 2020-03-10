@@ -16,7 +16,9 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onSetDefault(scope.row)">设置为默认</el-button>
-          <el-button type="text" icon="el-icon-delete" @click="onRemove(scope.row)">删除</el-button>
+          <authorized :authority="permission.companyAddressRemove">
+            <el-button type="text" icon="el-icon-delete" @click="onRemove(scope.row)">删除</el-button>
+          </authorized>
         </template>
       </el-table-column>
     </el-table>
@@ -24,18 +26,18 @@
 </template>
 
 <script>
-  import FullAddress from "@/views/shared/user/address/FullAddress";
+  import FullAddress from '@/views/shared/user/address/FullAddress';
 
   export default {
     name: 'AddressList',
     components: {FullAddress},
-    props: ["results"],
+    props: ['results'],
     computed: {},
     methods: {
-      onSetDefault(row) {
+      onSetDefault (row) {
         this.$emit('onSetDefault', row);
       },
-      onRemove(row) {
+      onRemove (row) {
         this.$confirm('此操作将永久删除该地址, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -45,8 +47,9 @@
         })
       }
     },
-    data() {
-      return {}
+    data () {
+      return {
+      }
     }
   }
 </script>

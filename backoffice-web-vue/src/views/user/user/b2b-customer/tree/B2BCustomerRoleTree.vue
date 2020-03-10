@@ -8,22 +8,26 @@
             {{ data.name }}
           </span>
           <el-input ref="input" v-if="data.id === applyId && showInput" v-model="modifyName" @blur="setName(node, data)" autofocus/>
-          <span v-if="data.id !== applyId || showIconV">
-            <el-button type="text" size="mini">
-              <i v-if="data.depth == 0" class="el-icon-circle-plus-outline" @click="append"/>
-              <i v-else class="el-icon-setting" @click="showIcon(data)"/>
-            </el-button>
-          </span>
-          <span v-else @mouseleave="showOption()">
-            <el-button v-if="data.depth != 0" type="text" size="mini" @click="() => editRole(data)">编辑角色</el-button>
-            <el-button v-if="data.depth != 0" type="text" size="mini" @click="() => remove(node, data)">删除</el-button>
-          </span>
+          <authorized :authority="permission.companyB2bRoleMR">
+            <span v-if="data.id !== applyId || showIconV">
+              <el-button type="text" size="mini">
+                <i v-if="appendShow(data)" class="el-icon-circle-plus-outline" @click="append"/>
+                <i v-if="!data.hasOwnProperty('depth')" class="el-icon-setting" @click="showIcon(data)"/>
+              </el-button>
+            </span>
+            <span v-else @mouseleave="showOption()">
+              <el-button v-if="modifyShow(data)" type="text" size="mini" @click="() => editRole(data)">编辑角色</el-button>
+              <el-button v-if="removeShow(data)" type="text" size="mini" @click="() => remove(node, data)">删除</el-button>
+            </span>
+          </authorized>
         </span>
       </el-tree>
     </div>
 </template>
 
 <script>
+    import {hasPermission} from '../../../../../auth/auth';
+
     export default {
       name: 'B2BCustomerRoleTree',
       props: ['slotData'],
@@ -42,6 +46,15 @@
         };
       },
       methods: {
+        appendShow (data) {
+          return hasPermission(this.permission.companyB2bRoleCreate) && data.depth == 0;
+        },
+        modifyShow (data) {
+          return hasPermission(this.permission.companyB2bRoleModify) && data.depth != 0;
+        },
+        removeShow (data) {
+          return hasPermission(this.permission.companyB2bRoleRemove) && data.depth != 0;
+        },
         append () {
           this.$emit('createRole');
         },
@@ -51,12 +64,8 @@
         remove (node, data) {
           this.$emit('removeRole', data.id);
         },
-        handleClick (tab, event) {
-          console.log(tab, event);
-        },
         dblclick (data) {
-          console.log(data);
-          if (data.depth === 0) {
+          if (data.depth === 0 || hasPermission(this.permission.companyB2bRoleModify)) {
             return
           }
           this.showInput = true;
@@ -108,7 +117,7 @@
           this.isActive = false;
         },
         nodeClassShow (data) {
-          if (data.depth === 0) {
+          if (data.depth === 0 || hasPermission(this.permission.companyB2bRoleModify)) {
             return;
           }
           if (this.applyId == data.id && !this.showInput && this.isActive) {
