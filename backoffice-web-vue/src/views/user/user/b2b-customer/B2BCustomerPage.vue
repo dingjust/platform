@@ -43,7 +43,6 @@
   import B2BCustomerAsideForm from './form/B2BCustomerAsideForm';
   import B2BCustomerInviteDialog from './dialog/B2BCustomerInviteDialog';
   import B2BCustomerEditRoleDialog from './dialog/B2BCustomerEditRoleDialog';
-  import {B2BCustomersModule} from '../../../../store/modules';
 
   export default {
     name: 'B2BCustomerPage',
@@ -235,16 +234,16 @@
         console.log(data);
         let name = data.name;
         let deptName = data.b2bDept.name;
-        this.$confirm('是否将 ' + name +' 设为 ' + deptName +' 的部门负责人?', '提示', {
+        this.$confirm('是否将 ' + name + ' 设为 ' + deptName + ' 的部门负责人?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          _setDepartmentHead(data);
+          this._setDepartmentHead(data);
         });
       },
       _setDepartmentHead (data) {
-        //TODO 设置部门负责人
+        // TODO 设置部门负责人
       },
       workHandover (data) {
 

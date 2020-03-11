@@ -14,9 +14,9 @@
 <script>
     import {createNamespacedHelpers} from 'vuex';
 
-    const {mapGetters, mapActions} = createNamespacedHelpers('B2BCustomersModule');
+    const {mapGetters} = createNamespacedHelpers('B2BCustomersModule');
     import B2BCustomerDeptTree from '../tree/B2BCustomerDeptTree';
-    import B2BCustomerRoleTree from "../tree/B2BCustomerRoleTree";
+    import B2BCustomerRoleTree from '../tree/B2BCustomerRoleTree';
 
     export default {
       name: 'B2BCustomerAsideForm',
@@ -27,7 +27,7 @@
       computed: {
         ...mapGetters({
           deptList: 'deptList',
-          roleGroupList: 'roleGroupList',
+          roleGroupList: 'roleGroupList'
         })
       },
       data () {

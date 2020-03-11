@@ -24,7 +24,9 @@
     <el-row>
       <el-button  class="toolbar-search_input" @click="onRead">标记已读</el-button>
       <!--<el-button  @click="onNotRead">标记未读</el-button>-->
-      <el-button  @click="onDelete">删除消息</el-button>
+      <authorized :authority="permission.msgDelete">
+        <el-button  @click="onDelete">删除消息</el-button>
+      </authorized>
     </el-row>
     <el-table ref="resultTable" stripe :data="page.content" v-if="isHeightComputed" :row-style="{cursor:'pointer'}"
               :height="autoHeight" @row-click="openOrderDialog" @selection-change="handleSelectionChange" :row-key="(row)=> row.code">

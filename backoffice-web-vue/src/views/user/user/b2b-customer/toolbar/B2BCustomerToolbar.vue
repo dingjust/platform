@@ -15,10 +15,10 @@
       </el-form-item>
       <el-button style="background-color: #FFD60C" @click="onSearch" size="mini">搜索</el-button>
       <el-button @click="onReset" size="mini">重置</el-button>
-<!--      <authorized :authority="['add', 'admin']">-->
-        <el-button style="background-color: #FFD60C" @click="onInvite" size="mini">邀请员工</el-button>
-<!--      </authorized>-->
-      <el-button style="background-color: #FFD60C" @click="onNew" size="mini">添加员工</el-button>
+      <!--        <el-button style="background-color: #FFD60C" @click="onInvite" size="mini">邀请员工</el-button>-->
+      <authorized :authority="permission.companyB2bCustomerCreate">
+        <el-button style="background-color: #FFD60C" @click="onNew" size="mini">添加员工</el-button>
+      </authorized>
     </el-form>
   </div>
 </template>

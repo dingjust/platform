@@ -2,18 +2,18 @@
   <el-row class="purchase-order-row" type="flex" justify="center" align="middle" :gutter="50">
     <el-button class="purchase-order-btn" v-if="isMyself&&isPending&&isOffline" @click="onUniqueCode">唯一码
     </el-button>
-    <el-button class="purchase-order-btn" v-if="isBrand()&&!isPending&&!isCompleted" @click="onCreateReceive">收货
+    <el-button class="purchase-order-btn" v-if="isBrand()&&!isPending&&!isCompleted&&hasPer(permission.purchaseOrderConfirmReceived)"
+               @click="onCreateReceive">收货
     </el-button>
-    <el-button class="purchase-order-btn" v-if="isBrand()&&isCompleted" @click="onCreateReconciliation">对账单</el-button>
+    <el-button class="purchase-order-btn" v-if="isBrand()&&isCompleted&&hasPer(permission.purchaseOrderReconciliation)" @click="onCreateReconciliation">对账单</el-button>
     <!-- <el-button class="purchase-order-btn" v-if="slotData.status=='COMPLETED'" @click="onCreateAgain">
       {{isBrand()?'再下一单':'重新创建'}}</el-button> -->
           <!-- <el-button class="purchase-order-btn" v-if="isPending&&isMyself" @click="onUpdate">修改订单</el-button> -->
-    <el-button class="purchase-order-btn2" @click="
-    onCancel" v-if="isPending">{{isMyself?'取消订单':'拒单'}}
+    <el-button class="purchase-order-btn2" @click="onCancel" v-if="isPending && judgeType">{{isMyself?'取消订单':'拒单'}}
     </el-button>
-    <el-button class="purchase-order-btn" v-if="!isMyself&&isPending" @click="onConfirm">接单</el-button>
-    <el-button class="purchase-order-btn" v-if="isFactory()&&(isProduction||isWaitForOutOfStore)"
-      @click="onDeliverViewsOpen">发货</el-button>
+    <el-button class="purchase-order-btn" v-if="!isMyself&&isPending&&hasPer(permission.purchaseOrderConfirm)" @click="onConfirm">接单</el-button>
+    <el-button class="purchase-order-btn" v-if="isFactory()&&(isProduction||isWaitForOutOfStore)&&hasPer(permission.purchaseOrderConfirmDelivering)"
+               @click="onDeliverViewsOpen">发货</el-button>
     <el-button class="purchase-order-btn" v-if="isFactory()&&isOutStore" @click="onCreateReceive"
       :disabled="!hasDeliveryOrders">
       {{hasDeliveryOrders?'查看收货单':'对方尚未创建收货单'}}</el-button>
@@ -24,8 +24,10 @@
 </template>
 
 <script>
+  import {hasPermission} from '../../../../auth/auth';
+
   export default {
-    name: "PurchaseOrdersButtonGroup",
+    name: 'PurchaseOrdersButtonGroup',
     props: ['slotData'],
     components: {},
     computed: {
@@ -34,6 +36,19 @@
           return this.slotData.creator.uid == this.$store.getters.currentUser.companyCode;
         } else {
           return false;
+        }
+      },
+      judgeType: function () {
+        let flag;
+        if (this.slotData.creator != null) {
+          flag = this.slotData.creator.uid == this.$store.getters.currentUser.companyCode;
+        } else {
+          flag = false;
+        }
+        if (flag) {
+          return hasPermission(this.permission.purchaseOrderClose)
+        } else {
+          return hasPermission(this.permission.purchaseOrderConfirm);
         }
       },
       isProduction: function () {
@@ -57,7 +72,7 @@
         //   }
         //   return false
         // } else {
-          return this.slotData.status == 'PENDING_CONFIRM';
+        return this.slotData.status == 'PENDING_CONFIRM';
         // }
       },
       isOutStore: function () {
@@ -80,47 +95,49 @@
       }
     },
     methods: {
-      isBrand() {
+      hasPer (permission) {
+        return hasPermission(permission);
+      },
+      isBrand () {
         return this.$store.getters.currentUser.type == 'BRAND';
       },
-      isFactory() {
+      isFactory () {
         return this.$store.getters.currentUser.type == 'FACTORY';
       },
-      onUniqueCode() {
+      onUniqueCode () {
         this.$emit('onUniqueCode');
       },
       onCancel () {
         // if (this.isMyself) {
         //   this.$emit('onCancel');
         // } else {
-          this.$emit('onRefuse');
+        this.$emit('onRefuse');
         // }
       },
-      onConfirm() {
+      onConfirm () {
         this.$emit('onConfirm');
       },
-      onCreateAgain() {
+      onCreateAgain () {
         this.$emit('onCreateAgain');
       },
-      onCreateReceive() {
+      onCreateReceive () {
         this.$emit('onCreateReceive');
       },
-      onDeliverViewsOpen() {
+      onDeliverViewsOpen () {
         this.$emit('onDeliverViewsOpen');
       },
-      onCreateReconciliation() {
+      onCreateReconciliation () {
         this.$emit('onReconciliation');
       },
-      onUpdate(){
+      onUpdate () {
         this.$emit('onUpdate');
       }
     },
-    data() {
+    data () {
       return {};
     },
-    created() {}
+    created () {}
   };
-
 </script>
 <style>
   .purchase-order-btn {

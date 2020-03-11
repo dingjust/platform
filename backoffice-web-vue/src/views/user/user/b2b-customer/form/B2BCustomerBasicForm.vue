@@ -14,7 +14,7 @@
           </div>
           <div style="margin: 20px 20px 40px 40px">
             <el-row type="flex">
-              <el-col :span="9">
+              <el-col :span="12">
                 <el-form-item prop="name">
                   <template slot="label">
                     <h6 class="titleTextClass">
@@ -32,7 +32,7 @@
                   </el-row>
                 </el-form-item>
               </el-col>
-              <el-col :span="9">
+              <el-col :span="12">
                 <el-form-item prop="uid">
                   <template slot="label">
                     <h6 class="titleTextClass">
@@ -49,12 +49,12 @@
                     ></el-input>
                   </el-row>
                 </el-form-item>
-                <h6 style="padding-left: 120px;color: #909399">员工初始密码与账号相同</h6>
+                <h6 style="padding-left: 25%;color: #909399">员工初始密码与账号相同</h6>
               </el-col>
             </el-row>
             <el-row type="flex">
 
-              <el-col :span="9">
+              <el-col :span="12">
                 <el-form-item prop="b2bDept">
                   <template slot="label">
                     <h6 class="titleTextClass">
@@ -82,7 +82,7 @@
                 </el-form-item>
               </el-col>
 
-              <el-col :span="9">
+              <el-col :span="12">
                 <el-form-item prop="b2bRoleGroup">
                   <template slot="label">
                     <h6 class="titleTextClass">

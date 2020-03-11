@@ -23,9 +23,11 @@
         type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning"
         class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
-      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
-                 class="toolbar-search_input" @click="onSearchSeal">签署
-      </el-button>
+      <authorized :authority="permission.agreementSign">
+        <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
+                   class="toolbar-search_input" @click="onSearchSeal">签署
+        </el-button>
+      </authorized>
     </div>
     <!--<center>-->
     <!--<table height="150px" border="0" id='waitPage'>-->
@@ -81,7 +83,7 @@
         dialogOrderVisible: false,
         dialogSealVisible: false,
         isLoading: false,
-        openUrl: '',
+        openUrl: ''
       }
     },
     methods: {
@@ -162,13 +164,13 @@
         if (result.data != null) {
           this.openUrl = result.data;
           this.$confirm('是否跳转到合同签署页面?', '', {
-              confirmButtonText: '是',
-              cancelButtonText: '否',
-              type: 'warning'
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
           }).then(() => {
-              this.dialogSealVisible = false;
-              this.$emit('closePdfVisible');
-              window.open(result.data);
+            this.dialogSealVisible = false;
+            this.$emit('closePdfVisible');
+            window.open(result.data);
           });
         } else {
           this.$message.error(result.msg);
