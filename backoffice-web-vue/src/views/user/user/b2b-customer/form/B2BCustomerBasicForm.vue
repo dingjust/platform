@@ -174,6 +174,9 @@
           b2bRoleGroup: this.formData.b2bRoleGroup,
           b2bRoleList: this.distinct(this.formData.b2bRoleList)
         };
+        if (this.formData.hasOwnProperty('id')) {
+          data.id = this.formData.id;
+        }
         // console.log(data);
         // return ;
         const url = this.apis().createB2BCustomer();

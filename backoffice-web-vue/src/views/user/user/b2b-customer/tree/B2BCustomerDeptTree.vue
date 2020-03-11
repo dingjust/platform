@@ -81,17 +81,23 @@
         },
         remove (node, data) {
           if (node.childNodes.length > 0) {
-            this.$message.error('此部门下有子部门，暂不支持删除操作');
-            return;
+            this.$confirm('删除该部门下会将下级部门一并删除，请问是否继续?', '删除部门', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$emit('removeDept', data.id);
+            });
+          } else {
+            this.$emit('removeDept', data.id);
           }
-          this.$emit('removeDept', data.id);
         },
         handleClick (tab, event) {
           console.log(tab, event);
         },
         dblclick (data) {
           console.log(data);
-          if (data.depth === 0 || hasPermission(this.permission.companyB2bDeptRename)) {
+          if (data.depth === 0 || !hasPermission(this.permission.companyB2bDeptRename)) {
             return
           }
           this.showInput = true;
@@ -174,7 +180,7 @@
           this.isActive = false;
         },
         nodeClassShow (data) {
-          if (data.depth === 0 || hasPermission(this.permission.companyB2bDeptRename)) {
+          if (data.depth === 0 || !hasPermission(this.permission.companyB2bDeptRename)) {
             return;
           }
           if (this.name == data.name && !this.showInput && this.isActive) {

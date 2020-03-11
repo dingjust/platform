@@ -67,9 +67,6 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails (row) {
-        this.$emit('onDetails', row);
-      },
       selectionOperation (current) {
         console.log(current);
         this.operation = '';

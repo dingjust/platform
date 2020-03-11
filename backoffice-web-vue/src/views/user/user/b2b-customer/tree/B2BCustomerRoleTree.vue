@@ -65,7 +65,7 @@
           this.$emit('removeRole', data.id);
         },
         dblclick (data) {
-          if (data.depth === 0 || hasPermission(this.permission.companyB2bRoleModify)) {
+          if (data.depth === 0 || !hasPermission(this.permission.companyB2bRoleModify)) {
             return
           }
           this.showInput = true;
@@ -117,7 +117,7 @@
           this.isActive = false;
         },
         nodeClassShow (data) {
-          if (data.depth === 0 || hasPermission(this.permission.companyB2bRoleModify)) {
+          if (data.depth === 0 || !hasPermission(this.permission.companyB2bRoleModify)) {
             return;
           }
           if (this.applyId == data.id && !this.showInput && this.isActive) {

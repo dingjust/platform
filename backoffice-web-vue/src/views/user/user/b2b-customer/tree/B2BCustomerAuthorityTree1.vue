@@ -3,27 +3,29 @@
 <!--    <el-row type="flex" align="bottom">-->
 <!--      <el-checkbox :indeterminate="indeterminate" v-model="checkAll" @change="handleCheckAllChange" style="padding-bottom: 0px;margin-bottom: 0px">全选</el-checkbox>-->
 <!--    </el-row>-->
+<!--    <div v-for="(item, index) in roleListData" :key="index">-->
     <el-row type="flex" v-for="(item, index) in roleListData" :key="index" style="padding-bottom: 20px">
       <el-col :span="2">
         <el-row type="flex">
           <el-checkbox ref="superCheckbox" :indeterminate="item.indeterminate" v-model="item.checked" :label="item.id"
-                        @change="handleCheckNodeAllChange($event, item)">
+                       @change="handleCheckNodeAllChange($event, item)">
             {{item.name}}
           </el-checkbox>
         </el-row>
-        <el-row type="flex" justify="center">
-          <div class="left_line1"></div>
-        </el-row>
+<!--        <el-row type="flex" justify="center">-->
+<!--          <div class="left_line1"></div>-->
+<!--        </el-row>-->
       </el-col>
       <el-col :span="22" style="padding-top: 30px">
         <el-row type="flex" align="top" v-for="(role, index) in item.children" :key="index">
           <el-col :span="6">
             <el-row type="flex" align="middle">
               <el-col :span="1">
-                <div class="bottom_line"></div>
+                <div :class="index == 0 ? 'left_line1' : 'left_line2'"></div>
+                <div class="bottom_line1"></div>
               </el-col>
               <el-col :span="23">
-                <el-checkbox ref="checkbox" :indeterminate="role.indeterminate" v-model="role.checked" :label="role.id" :name="item.id.toString()"
+                <el-checkbox ref="checkbox" :indeterminate="role.indeterminate" v-model="role.checked" :label="role.id"
                              @change="handleCheckedParentNodeChange($event, role, item)">
                   {{role.name}}
                 </el-checkbox>
@@ -32,7 +34,7 @@
           </el-col>
           <el-col :span="18">
             <el-checkbox-group v-model="roleIdList" @change="handleCheckedNodeChange($event, role, item)">
-              <el-checkbox v-for="role1 in role.children" :label="role1.id" :key="role1.id" style="width: 100px">
+              <el-checkbox v-for="role1 in role.children" :label="role1.id" :key="role1.id" style="width: 150px">
                 {{role1.name}}
               </el-checkbox>
             </el-checkbox-group>
@@ -40,6 +42,8 @@
         </el-row>
       </el-col>
     </el-row>
+<!--    <el-divider v-if="index != roleListData.length-1"></el-divider>-->
+<!--    </div>-->
   </div>
 </template>
 <script>
@@ -75,7 +79,7 @@
         let index;
         let indeterminateFlag = false;
         let checkFlag = false;
-        if (role.children) {
+        if (role.children && role.children.length > 0) {
           role.children.forEach(role1 => {
             index = checkList.indexOf(role1.id);
             if (index > -1) {
@@ -155,9 +159,11 @@
       },
       // 父级——>行
       handleCheckNodeAllChange (flag, item) {
+        this.$set(item, 'indeterminate', false);
         if (flag) {
           item.children.forEach(role => {
             this.pushRoleId(role);
+            this.$set(role, 'indeterminate', false);
             this.$refs.checkbox.forEach(checkbox => {
               if (checkbox.label === role.id) {
                 checkbox.model = true;
@@ -167,6 +173,7 @@
         } else {
           item.children.forEach(role => {
             this.popRoleId(role);
+            this.$set(role, 'indeterminate', false);
             this.$refs.checkbox.forEach(checkbox => {
               if (checkbox.label === role.id) {
                 checkbox.model = false;
@@ -174,6 +181,12 @@
             })
           })
         }
+        this.secondRoleArr.forEach(value => {
+          if (value.parentId == item.id) {
+            value.indeterminateFlag = false;
+            value.checkFlag = flag;
+          }
+        })
         this.setRoleList();
       },
       pushRoleId (item) {
@@ -252,12 +265,7 @@
       },
       // 查看员工信息时回显权限
       _setCheckChange (b2bRoleList) {
-        this.roleIdList = b2bRoleList;
-        this.roleListData.forEach(item => {
-          item.children.forEach(role => {
-            this.handleCheckedNodeChange(b2bRoleList, role, item);
-          })
-        })
+        this.__setCheckChange(b2bRoleList);
       },
       // 查看角色页面（选择角色）时回显角色的权限
       setCheckChange (roleList) {
@@ -270,32 +278,41 @@
               })
             } else {
               checkList.push(role.id);
-              this.$refs.checkbox.forEach(checkbox => {
-                if (checkbox.label == role.id) {
-                  checkbox.model = true;
-                }
-              })
-              this.secondRoleArr.forEach(item => {
-                if (item.id == role.id) {
-                  item.checkFlag = true;
-                  item.indeterminateFlag = false;
-                  this.$set(role, 'indeterminate', false);
-                }
-              })
-              this._handleCheckedNodeChange(item);
             }
           })
         })
         this.distinct(checkList);
-        this.roleIdList = checkList;
-        roleList.forEach(item => {
+        this.__setCheckChange(checkList);
+        checkList = [];
+      },
+      __setCheckChange (roleList) {
+        let index;
+        this.roleIdList = roleList;
+        console.log(roleList);
+        this.roleListData.forEach(item => {
           item.children.forEach(role => {
-            if (role.children) {
-              this.handleCheckedNodeChange(checkList, role, item);
+            if (role.children && role.children.length > 0) {
+              this.handleCheckedNodeChange(roleList, role, item);
+            } else {
+              index = roleList.indexOf(role.id);
+              console.log(index);
+              if (index > -1) {
+                this.secondRoleArr.forEach(value => {
+                  if (value.id == role.id) {
+                    value.indeterminateFlag = false;
+                    value.checkFlag = true;
+                  }
+                })
+                this.$refs.checkbox.forEach(checkbox => {
+                  if (checkbox.label == role.id) {
+                    checkbox.model = true;
+                  }
+                })
+                this._handleCheckedNodeChange(item);
+              }
             }
           })
         })
-        checkList = [];
       },
       // 数组去重
       distinct (arr) {
@@ -316,6 +333,7 @@
       this.getRoleList();
     },
     created () {
+      console.log(document.body.clientWidth);
     }
   }
 </script>
@@ -325,7 +343,7 @@
     margin-top: 10px;
   }
 
-  /deep/ .bottom_line{
+  /deep/ .bottom_line1{
     width: 35%;
     position: absolute;
     height: 52%;
@@ -335,12 +353,22 @@
     border-bottom: 1px dashed #409EFF;
   }
 
-  /deep/ .left_line1{
+  .left_line1{
     position: absolute;
-    height: 70px;
-    left: 6px;
+    height: 22px;
+    left: -34%;
     top: 0px;
     overflow: hidden;
     border-left: 1px dashed #409EFF;
   }
+
+  .left_line2{
+    position: absolute;
+    height: 35px;
+    left: -34%;
+    top: -14px;
+    overflow: hidden;
+    border-left: 1px dashed #409EFF;
+  }
+
 </style>

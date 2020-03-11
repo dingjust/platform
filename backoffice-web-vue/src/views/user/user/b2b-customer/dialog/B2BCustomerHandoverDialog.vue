@@ -17,23 +17,29 @@
 </template>
 
 <script>
-    export default {
-      name: 'B2BCustomerHandoverDialog',
-      props: ['slotData'],
-      data () {
-        return {
+  import {createNamespacedHelpers} from 'vuex';
 
-        }
+  const {mapGetters, mapActions} = createNamespacedHelpers('B2BCustomersModule');
+  export default {
+    name: 'B2BCustomerHandoverDialog',
+    props: ['slotData'],
+    computed: {
+
+    },
+    data () {
+      return {
+
+      }
+    },
+    methods: {
+      onCannel () {
+        this.$emit('onHandoverCannel');
       },
-      methods: {
-        onCannel () {
-          this.$emit('onHandoverCannel');
-        },
-        onConfirm () {
-          this.$emit('onHandoverConfirm');
-        }
+      onConfirm () {
+        this.$emit('onHandoverConfirm');
       }
     }
+  }
 </script>
 
 <style scoped>
