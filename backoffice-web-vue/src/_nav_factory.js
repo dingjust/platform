@@ -24,7 +24,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_QUOTE_ORDER']
+            permissions: ['QUOTE_ORDER']
           }
         },
         {
@@ -33,7 +33,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_PROOFING_ORDER']
+            permissions: ['PROOFING_ORDER']
           }
         },
         {
@@ -42,7 +42,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_PURCHASE_ORDER']
+            permissions: ['PURCHASE_ORDER']
           }
         },
         // {
@@ -62,7 +62,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_AGREEMENT']
+            permissions: ['AGREEMENT']
           }
         },
         {
@@ -71,7 +71,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_AGREEMENT_TMPL']
+            permissions: ['AGREEMENT_TMPL']
           }
         },
         {
@@ -80,7 +80,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_AGREEMENT_SEAL']
+            permissions: ['AGREEMENT_SEAL']
           }
         },
         // {
@@ -142,7 +142,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_PRODUCT']
+            permissions: ['PRODUCT']
           }
         },
         {
@@ -151,7 +151,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_PRODUCT_SAMPLEPRODUCT']
+            permissions: ['PRODUCT_SAMPLEPRODUCT']
           }
         },
         // {
@@ -165,7 +165,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_FACTORY_CAPACITY']
+            permissions: ['FACTORY_CAPACITY']
           }
         }
       ]
@@ -191,7 +191,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_CERT']
+            permissions: ['CERT']
           }
         },
         {
@@ -200,7 +200,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_COMPANY_B2BCUSTOMER']
+            permissions: ['COMPANY_B2BCUSTOMER']
           }
         },
         {
@@ -209,7 +209,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_COMPANY_COOPERATOR']
+            permissions: ['COMPANY_COOPERATOR']
           }
         },
         // {
@@ -228,7 +228,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_COMPANY_ADDRESS']
+            permissions: ['COMPANY_ADDRESS']
           }
         },
         {
@@ -237,7 +237,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_FACTORY_PAYPLAN']
+            permissions: ['FACTORY_PAYPLAN']
           }
         },
       ]
@@ -252,7 +252,7 @@ export default {
           icon: 'iconNone',
           meta: {
             requiresAuth: true,
-            permissions: ['ROLE_REPORT_PRODUCTION_PROGRESS']
+            permissions: ['REPORT_PRODUCTION_PROGRESS']
           }
         },
         // {
@@ -272,7 +272,7 @@ export default {
         icon: 'iconNone',
         meta: {
           requiresAuth: true,
-          permissions: ['ROLE_COMPANY_WALLET']
+          permissions: ['COMPANY_WALLET']
         }
       }]
     }

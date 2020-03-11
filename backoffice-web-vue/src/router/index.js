@@ -67,12 +67,12 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/ApparelProductPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_PRODUCT']
+                permissions: ['PRODUCT']
               }
             },
             {
-              path: 'apparelDetail',
               name: '产品详情',
+              path: 'apparelDetail',
               component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/product/apparel/details/ApparelProductDetailsPage')
             },
             {
@@ -81,7 +81,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/capacity/capacityPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_FACTORY_CAPACITY']
+                permissions: ['FACTORY_CAPACITY']
               }
             }, {
               path: 'capacityPublish',
@@ -94,7 +94,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/sample/sampleProduct/SampleProductPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_PRODUCT_SAMPLEPRODUCT']
+                permissions: ['PRODUCT_SAMPLEPRODUCT']
               }
             },
           ]
@@ -135,7 +135,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/requirement/RequirementOrderPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_REQUIREMENT_ORDER']
+                permissions: ['REQUIREMENT_ORDER']
               }
             },
             {
@@ -144,7 +144,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/quote/QuotePage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_QUOTE_ORDER']
+                permissions: ['QUOTE_ORDER']
               }
             },
             {
@@ -153,7 +153,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/proofing/ProofingPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_PROOFING_ORDER']
+                permissions: ['PROOFING_ORDER']
               }
             },
             {
@@ -162,7 +162,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/purchase/PurchaseOrderPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_PURCHASE_ORDER']
+                permissions: ['PURCHASE_ORDER']
               }
             },
             {
@@ -187,7 +187,7 @@ const router = new Router({
             component: () => import( /* webpackChunkName: 'reports' */ '@/views/report/production-progress/ProductionProgressReportPage'),
             meta: {
               requiresAuth: true,
-              permissions: ['ROLE_REPORT_PRODUCTION_PROGRESS']
+              permissions: ['REPORT_PRODUCTION_PROGRESS']
             }
           }, {
             path: 'receipt',
@@ -225,7 +225,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/dashboard/authentication/AuthenticationPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_CERT']
+                permissions: ['CERT']
               }
             },
             // {
@@ -253,7 +253,7 @@ const router = new Router({
                   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/user/b2b-customer/B2BCustomerPage'),
                   meta: {
                     requiresAuth: true,
-                    permissions: ['ROLE_COMPANY_B2BCUSTOMER']
+                    permissions: ['COMPANY_B2BCUSTOMER']
                   }
                 },
                 {
@@ -279,7 +279,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/address/AddressPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_COMPANY_ADDRESS']
+                permissions: ['COMPANY_ADDRESS']
               }
             },
             {
@@ -304,7 +304,7 @@ const router = new Router({
                     component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/payPlan/PayPlanPage'),
                     meta: {
                       requiresAuth: true,
-                      permissions: ['ROLE_FACTORY_PAYPLAN']
+                      permissions: ['FACTORY_PAYPLAN']
                     }
                   },
                   {
@@ -346,7 +346,7 @@ const router = new Router({
                   component: () => import( /* webpackChunkName: 'cooperator' */ '@/views/miscs/cooperator/CooperatorPage'),
                   meta: {
                     requiresAuth: true,
-                    permissions: ['ROLE_COMPANY_COOPERATOR']
+                    permissions: ['COMPANY_COOPERATOR']
                   }
                 }
               ]
@@ -390,7 +390,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'wallet' */ '@/views/miscs/wallet/WalletPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_COMPANY_WALLET']
+                permissions: ['COMPANY_WALLET']
               }
             }, {
               path: '/miscs/cashOutManager',
@@ -414,7 +414,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/manage/ContractPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_AGREEMENT']
+                permissions: ['AGREEMENT']
               }
             },
             {
@@ -423,7 +423,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/template/TemplatePage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_AGREEMENT_TMPL']
+                permissions: ['AGREEMENT_TMPL']
               }
             },
             {
@@ -437,7 +437,7 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/contract/seal/SealPage'),
               meta: {
                 requiresAuth: true,
-                permissions: ['ROLE_AGREEMENT_SEAL']
+                permissions: ['AGREEMENT_SEAL']
               }
             }, {
               path: 'sealForm',
