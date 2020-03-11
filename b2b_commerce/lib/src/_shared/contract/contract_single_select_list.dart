@@ -24,7 +24,7 @@ class _ContractSingleSelectListState extends State<ContractSingleSelectList>{
       if (_scrollController.offset < 500) {
         widget.contractListState.showTopBtn = false;
       } else if (_scrollController.offset >= 500) {
-        widget.contractListState.showTopBtn = true;
+        widget.contractListState.showTopBtn = true;        
       }
     });
 

@@ -214,4 +214,9 @@ abstract class UserApis {
   static get contractOrdersValidate =>
       '/{baseSiteId}/user/agreement/order/validate';
 
+  /// 用户权限列表
+  static get authorizations =>
+          (id) {
+        return '/{baseSiteId}/b2bCustomers/role/$id';
+      };
 }

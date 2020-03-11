@@ -24,6 +24,7 @@ export 'src/widget/widgets.dart';
 export 'src/capacity/capacity.dart';
 export 'src/msg/msg.dart';
 export 'src/subcontract/subcontract.dart';
+export 'src/auth/authorization.dart';
 
 part 'models.g.dart';
 

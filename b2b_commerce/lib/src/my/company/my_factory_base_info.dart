@@ -151,7 +151,7 @@ class MyFactoryBaseInfoState extends State<MyFactoryBaseInfo> {
                 ),
                 widget.factory?.capacities != null && widget.factory.capacities.length > 0 ? Container(
                   color: Colors.white,
-                  height: 202,
+                  height: 210,
                   padding: EdgeInsets.only(top: 15,right: 10,bottom: 10),
                   child: MyCompanyCapacityInfo(widget.factory,isSupplier: widget.isSupplier),
                 ) :

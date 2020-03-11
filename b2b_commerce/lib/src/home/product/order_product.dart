@@ -61,6 +61,7 @@ class _ProductsPageState extends State<ProductsPage> {
         .addPostFrameCallback((_) => getCascadedCategories());
     productCondition = ProductCondition([], widget.keyword ?? '');
     super.initState();
+    // LcfarmFlutterUmeng.beginLogPageView('order_product_page');
   }
 
   @override
@@ -297,6 +298,7 @@ class _ProductsPageState extends State<ProductsPage> {
   void dispose() {
     // TODO: implement dispose
     OrderByProductBLoc.instance.clear();
+    // LcfarmFlutterUmeng.endLogPageView('order_product_page');
     super.dispose();
   }
 }

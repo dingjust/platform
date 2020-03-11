@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:b2b_commerce/b2b_commerce.dart';
 import 'package:b2b_commerce/src/_shared/orders/requirement/requirement_order_select.dart';
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/_shared/widgets/share_dialog.dart';
@@ -271,19 +272,25 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                   child: Container(
                       height: double.infinity,
                       child: Builder(
-                        builder: (BuildContext buttonContext) =>
-                            FlatButton(
-                          color: Color.fromRGBO(255, 214, 12, 1),
-                          onPressed: () {
-                            _publishRequirement();
-                          },
-                          disabledColor: Colors.grey[300],
-                          child: Text(
-                            '发需求',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      )),
+                          builder: (BuildContext buttonContext) =>
+                              AuthorizationDector(
+                                authorizations: [
+                                  Authorization.REQUIREMENT_ORDER_PUBLISH
+                                ],
+                                show: false,
+                                message: '无操作权限',
+                                child: FlatButton(
+                                  color: Color.fromRGBO(255, 214, 12, 1),
+                                  onPressed: () {
+                                    _publishRequirement();
+                                  },
+                                  disabledColor: Colors.grey[300],
+                                  child: Text(
+                                    '发需求',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                              ))),
                 )
               ],
             ),
