@@ -67,11 +67,7 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails (row) {
-        this.$emit('onDetails', row);
-      },
       selectionOperation (current) {
-        console.log(current);
         this.operation = '';
         this.$emit(current, this.slotData);
         this.slotData = {};
@@ -97,7 +93,7 @@
         if (hasPermission(this.permission.companyB2bCustomerRemove)) {
           this.options.push({
             value: 'deleteUser',
-            label: '删除员工'
+            label: '删除账号'
           });
         }
         if (row.b2bDept != null && hasPermission(this.permission.companyB2bDeptSetManager)) {

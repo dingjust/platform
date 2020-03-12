@@ -14,11 +14,12 @@
         </el-aside>
         <el-main width="80%" class="info-main-body">
           <b2-b-customer-toolbar @onNew="onNew" @onSearch="onSearch" @onInvite="onInvite"/>
-          <b2-b-customer-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
+          <b2-b-customer-list :page="page" @onSearch="onSearch"
                               @editInfo="editInfo"
                               @setDepartmentHead="setDepartmentHead"
                               @workHandover="workHandover"
                               @forbiddenUser="forbiddenUser"
+                              @enableUser="enableUser"
                               @deleteUser="deleteUser"/>
         </el-main>
       </el-container>
@@ -28,6 +29,11 @@
     </el-dialog>
     <el-dialog :visible.sync="editRoleVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog">
       <b2-b-customer-edit-role-dialog v-if='editRoleVisible' :slotData='roleGroupData' @saveRole='saveRole' @cannelNewRole='cannelNewRole'/>
+    </el-dialog>
+    <el-dialog :visible.sync="workHandoverVisible" width="30%" :close-on-click-modal="false">
+      <b2-b-customer-handover-dialog v-if="workHandoverVisible" :slot-data="handoverData"
+                                     @onHandoverCannel="onHandoverCannel"
+                                     @onHandoverConfirm="onHandoverConfirm"/>
     </el-dialog>
   </div>
 </template>
@@ -39,14 +45,15 @@
 
   import B2BCustomerToolbar from './toolbar/B2BCustomerToolbar';
   import B2BCustomerList from './list/B2BCustomerList';
-  import B2BCustomerDetailsPage from './details/B2BCustomerDetailsPage';
   import B2BCustomerAsideForm from './form/B2BCustomerAsideForm';
   import B2BCustomerInviteDialog from './dialog/B2BCustomerInviteDialog';
   import B2BCustomerEditRoleDialog from './dialog/B2BCustomerEditRoleDialog';
+  import B2BCustomerHandoverDialog from './dialog/B2BCustomerHandoverDialog';
 
   export default {
     name: 'B2BCustomerPage',
     components: {
+      B2BCustomerHandoverDialog,
       B2BCustomerEditRoleDialog,
       B2BCustomerInviteDialog,
       B2BCustomerAsideForm,
@@ -69,21 +76,21 @@
         const url = this.apis().getB2BCustomers();
         this.search({url, keyword, page, size});
       },
-      async onDetails (item) {
-        const url = this.apis().getB2BCustomer(item.uid);
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.fn.openSlider('员工：' + item.name, B2BCustomerDetailsPage, result);
-      },
+      // async onDetails (item) {
+      //   const url = this.apis().getB2BCustomer(item.uid);
+      //   const result = await this.$http.get(url);
+      //   if (result['errors']) {
+      //     this.$message.error(result['errors'][0].message);
+      //     return;
+      //   }
+      //
+      //   this.fn.openSlider('员工：' + item.name, B2BCustomerDetailsPage, result);
+      // },
       async getDeptList () {
         const url = this.apis().getB2BCustomerDeptList();
         const result = await this.$http.post(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
           return;
         }
         let deptList = [{
@@ -100,8 +107,8 @@
           page: 0,
           size: 100
         });
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
           return;
         }
         let roleGroupList = [{
@@ -146,8 +153,8 @@
       async removeDept (id) {
         const url = this.apis().deleteB2BCustomerDept(id);
         const result = await this.$http.delete(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
           return;
         }
         this.$message.success('删除部门成功');
@@ -156,8 +163,8 @@
       async removeRole (id) {
         const url = this.apis().removeB2BCustomerRoleGroup(id);
         const result = await this.$http.delete(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
           return;
         }
         this.$message.success('删除角色成功');
@@ -175,8 +182,8 @@
       async editRole (data) {
         const url = this.apis().getB2BCustomerRoleGroupDetails(data.id);
         const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result == 0) {
+          this.$message.error(result.msg);
           return;
         }
         this.roleGroupData = result.data;
@@ -185,8 +192,8 @@
       async saveRoleName (data) {
         const url = this.apis().getB2BCustomerRoleGroupDetails(data.id);
         const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result == 0) {
+          this.$message.error(result.msg);
           return;
         }
         this.getRolesNode(result.data.roleList);
@@ -194,7 +201,6 @@
 
         const url1 = this.apis().saveB2BCustomerRoleGroup();
         const result1 = await this.$http.put(url1, data, data);
-        console.log(result1);
         if (result1.code == 0) {
           this.$message.error(result1.msg);
           return;
@@ -231,7 +237,6 @@
         this.editRoleVisible = false;
       },
       setDepartmentHead (data) {
-        console.log(data);
         let name = data.name;
         let deptName = data.b2bDept.name;
         this.$confirm('是否将 ' + name + ' 设为 ' + deptName + ' 的部门负责人?', '提示', {
@@ -246,13 +251,62 @@
         // TODO 设置部门负责人
       },
       workHandover (data) {
-
+        this.handoverData = Object.assign({}, data);
+        this.workHandoverVisible = true;
       },
+      onHandoverCannel () {
+        this.workHandoverVisible = false;
+      },
+      onHandoverConfirm () {
+        this.onSearch();
+        this.workHandoverVisible = false;
+      },
+      // async changeLoginDisabled (uid) {
+      //   // const url = this.apis().changeLoginDisabled(uid);
+      //   // const result = await this.$http.put(url);
+      //   // if (result['errors']) {
+      //   //   this.$message.error(result['errors'][0].message);
+      //        return;
+      //   // }
+      //   this.$message.success('更改员工账号状态成功');
+      //   this.onSearch();
+      // },
       forbiddenUser (data) {
-
+        this.$confirm('禁用后员工将无法正常使用账号 ， 请问是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // this.changeLoginDisabled(data.uid);
+        });
+      },
+      enableUser (data) {
+        this.$confirm('启用账号后账号将恢复正常使用 ， 请问是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // this.changeLoginDisabled(data.uid);
+        });
       },
       deleteUser (data) {
-
+        this.$confirm('删除后员工将无法正常使用账号 ， 请问是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._deleteUser(data.uid);
+        });
+      },
+      async _deleteUser (uid) {
+        const url = this.apis().removeB2BCustomer(uid);
+        const result = await this.$http.put(url);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('删除账号成功');
+        this.onSearch();
       }
     },
     data () {
@@ -261,7 +315,9 @@
         editRoleVisible: false,
         roleGroupData: {},
         roleIds: [],
-        countRoleIds: []
+        countRoleIds: [],
+        workHandoverVisible: false,
+        handoverData: ''
       };
     },
     created () {

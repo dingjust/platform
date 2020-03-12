@@ -14,7 +14,7 @@
     <div class="progress-modal" v-show="showButton" v-if="modalExist">
       <el-row type="flex" justify="center" align="middle" class="progress-modal-row">
         <el-button type="primary" plain @click="estimatedFormVisible=true"
-                   :disabled="!hasPermission(permission.purchaseOrderOperate)">设置预计完成时间</el-button>
+                   :disabled="!hasPer(permission.purchaseOrderOperate)">设置预计完成时间</el-button>
       </el-row>
     </div>
   </div>
@@ -23,6 +23,7 @@
 <script>
   import PurchaseOrderProgress from '../components/ProductionProgress/PurchaseOrderProgress';
   import ProgressDateSettingForm from '../components/ProgressDateSettingForm';
+  import {hasPermission} from '../../../../auth/auth';
 
   export default {
     name: 'PurchaseOrderInfoProgress',
@@ -48,37 +49,39 @@
       }
     },
     methods: {
-      onAfterCreate() {
+      hasPer (permission) {
+        return hasPermission(permission);
+      },
+      onAfterCreate () {
         this.deliverFormVisible = false;
       },
-      onShowButton(value) {
+      onShowButton (value) {
         this.showButton = value;
       },
-      async refreshData() {
+      async refreshData () {
         const url = this.apis().getPurchaseOrder(this.slotData.code);
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
-        //跟新slotData
+        // 跟新slotData
         this.$set(this.slotData, 'progresses', result.progresses);
       },
-      onAfterSubmit() {
-        this.estimatedFormVisible=false;
+      onAfterSubmit () {
+        this.estimatedFormVisible = false;
         this.refreshData();
       }
     },
-    data() {
+    data () {
       return {
         deliverFormVisible: false,
         showButton: false,
-        estimatedFormVisible: false,
+        estimatedFormVisible: false
       }
     },
-    created() {}
+    created () {}
   }
-
 </script>
 <style>
   .info-remarks-body {

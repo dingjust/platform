@@ -65,7 +65,7 @@
           this.$emit('removeRole', data.id);
         },
         dblclick (data) {
-          if (data.depth === 0 || hasPermission(this.permission.companyB2bRoleModify)) {
+          if (data.depth === 0 || !hasPermission(this.permission.companyB2bRoleModify)) {
             return
           }
           this.showInput = true;
@@ -77,7 +77,6 @@
           })
         },
         async setName (node, data) {
-          console.log(data);
           if (this.modifyName.match(/^\s*$/) || this.modifyName == data.name) {
             this.showInput = false;
             this.isActive = false;
@@ -93,7 +92,6 @@
           this.$emit('saveRoleName', formData);
         },
         showIcon (data) {
-          console.log(data);
           this.applyId = data.id;
           this.showIconV = false;
         },
@@ -117,7 +115,7 @@
           this.isActive = false;
         },
         nodeClassShow (data) {
-          if (data.depth === 0 || hasPermission(this.permission.companyB2bRoleModify)) {
+          if (data.depth === 0 || !hasPermission(this.permission.companyB2bRoleModify)) {
             return;
           }
           if (this.applyId == data.id && !this.showInput && this.isActive) {
