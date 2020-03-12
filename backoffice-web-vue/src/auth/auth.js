@@ -12,9 +12,9 @@ export function getCurrentAuthority() {
 
 //检查是否拥有权限
 export function hasPermission(authority) {
-  if (authority && authority instanceof Array && authority.length) {
-    const permissions = sessionStorage.getItem('permissions');
-    const flag = authority.every(val => permissions.includes(val));
+  if (authority!=null && authority instanceof Array && authority.length>0) {
+    const permissions = JSON.parse(sessionStorage.getItem('permissions'));
+    const flag = authority.every(val => permissions.indexOf(val)>-1);
     if (flag != null && flag) {
       return true;
     } else {
