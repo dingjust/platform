@@ -25,9 +25,9 @@ const purchaseOrder = ['PURCHASE_ORDER']
 const purchaseOrderDetail = ['PURCHASE_ORDER_DETAIL']
 const purchaseOrderOperate = ['PURCHASE_ORDER_OPERATE']
 const purchaseOrderPayplanOp = ['PURCHASE_ORDER_PAYPLAN_OP']
-const purchaseOrderClose = ['PURCHASR_ORDER_CLOSE']
-const purchaseOrderOfflineCreate = ['PURCHASR_ORDER_OFFLINE_CREATE']
-const purchaseOrderUniqueCodeImport = ['PURCHASR_ORDER_UNIQUECODE_IMPORT']
+const purchaseOrderClose = ['PURCHASE_ORDER_CLOSE']
+const purchaseOrderOfflineCreate = ['PURCHASE_ORDER_OFFLINE_CREATE']
+const purchaseOrderUniqueCodeImport = ['PURCHASE_ORDER_UNIQUECODE_IMPORT']
 const purchaseOrderConfirmDelivering = ['PURCHASE_ORDER_CONFIRM_DELIVERING']
 const purchaseOrderConfirmReceived = ['PURCHASE_ORDER_CONFIRM_RECEIVED']
 const purchaseOrderConfirm = ['PURCHASE_ORDER_CONFIRM']
@@ -82,6 +82,9 @@ const companyB2bDeptSetManager = ['COMPANY_B2BDEPT_SET_MANAGER']
 const companyB2bRoleCreate = ['COMPANY_B2BROLE_CREATE']
 const companyB2bRoleRemove = ['COMPANY_B2BROLE_REMOVE']
 const companyB2bRoleModify = ['COMPANY_B2BROLE_MODIFY']
+
+const companyB2bDeptCR = ['COMPANY_B2BDEPT_CREATE', 'COMPANY_B2BDEPT_REMOVE']
+const companyB2bRoleMR = ['COMPANY_B2BROLE_CREATE', 'COMPANY_B2BROLE_MODIFY']
 
 // 合作商
 const companyCooperator = ['COMPANY_COOPERATOR']
@@ -192,6 +195,8 @@ export default {
   companyB2bRoleCreate,
   companyB2bRoleRemove,
   companyB2bRoleModify,
+  companyB2bDeptCR,
+  companyB2bRoleMR,
 
   // 合作商
   companyCooperator,

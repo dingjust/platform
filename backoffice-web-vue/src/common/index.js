@@ -622,6 +622,10 @@ const COMMON_APIS = {
   /// 将所有未读消息标记为已读
   readAllMsg (uid) {
     return 'b2b/user/' + uid + '/msg/read';
+  },
+  // 删除员工
+  removeB2BCustomer (id) {
+    return 'b2b/companies/remove/sub/account/' + id;
   }
 };
 

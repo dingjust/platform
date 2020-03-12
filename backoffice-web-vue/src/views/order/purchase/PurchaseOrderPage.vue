@@ -21,6 +21,7 @@
           </div>
         </el-col>
       </el-row>
+      <div class="pt-2"></div>
       <purchase-order-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">

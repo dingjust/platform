@@ -7,15 +7,24 @@
       <template-detail :slotData="templateData" @closeDetails="closeDetails"/>
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
-        <el-button type="warning" @click="onDetails" class="toolbar-search_input">编辑</el-button>
-      </div>
+      <authorized :authority="permission.agreementTmplView">
+        <div style="float:right;margin-bottom: 10px;margin-top: 10px;height: 30px;">
+          <el-button type="warning" @click="onDetails" class="toolbar-search_input">编辑</el-button>
+        </div>
+      </authorized>
       <iframe id='previewPdf' :src="'static/pdf/web/viewer.html?file=' + fileUrl"
               height="480" width="100%">
       </iframe>
     </el-dialog>
-
     <el-card>
+      <el-row>
+        <el-col :span="3">
+          <div class="template-list-title">
+            <h6>合同模板列表</h6>
+          </div>
+        </el-col>
+      </el-row>
+      <div class="pt-2"></div>
       <template-toolbar ref="tempTool" @onNew="onNew" @onSearch="onSearch" class="template-toolbar"/>
       <template-list ref="tempList" :page="page" @onDetails="onDetails" @onSearch="onSearch" @openPreviewPdf="openPreviewPdf"/>
     </el-card>
@@ -124,6 +133,11 @@
   .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
+  }
+
+  .template-list-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
   }
 
 </style>

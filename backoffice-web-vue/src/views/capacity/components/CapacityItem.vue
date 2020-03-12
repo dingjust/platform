@@ -60,8 +60,9 @@
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="center">
-                <el-button class="capacity-edit" @click="onDetails">
-                  编辑</el-button>
+                <authorized :authority="permission.factoryCapacityModify">
+                  <el-button class="capacity-edit" @click="onDetails">编辑</el-button>
+                </authorized>
               </el-row>
               <el-row type="flex" justify="center">
                 <el-button class="capacity-refresh" @click="onRefresh"
@@ -78,75 +79,75 @@
 
 <script>
   export default {
-    name: "capacityItem",
-    props: ["slotData"],
+    name: 'capacityItem',
+    props: ['slotData'],
     components: {},
     computed: {
       dateRangeStr: function () {
-        var result = "";
+        var result = '';
         if (this.slotData.longTerm) {
-          result = "长期有效";
+          result = '长期有效';
         } else {
           result =
             this.timestampToTime(this.slotData.dateStartPoint) +
-            "~" +
+            '~' +
             this.timestampToTime(this.slotData.dateEndPoint);
         }
         return result;
       }
     },
     methods: {
-      timestampToTime(timestamp) {
+      timestampToTime (timestamp) {
         const date = new Date(timestamp); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
         // const Y = date.getFullYear() + '-'; // 此时为四位数字表示 getYear()的话为两位数字表示
         const M =
-          (date.getMonth() + 1 < 10 ?
-            "0" + (date.getMonth() + 1) :
-            date.getMonth() + 1) + ""; // 当前月份(0-11,0代表1月)
-        const D = date.getDate() + " "; // 当前日(1-31)
+          (date.getMonth() + 1 < 10
+            ? '0' + (date.getMonth() + 1)
+            : date.getMonth() + 1) + ''; // 当前月份(0-11,0代表1月)
+        const D = date.getDate() + ' '; // 当前日(1-31)
         /* const h = date.getHours() + ':';
              const  m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
              const s = date.getSeconds() + ':';
              const ms = date.getMilliseconds();//毫秒值 */
 
-        return M + "." + D; // 此处可以自定义需要的显示类型
+        return M + '.' + D; // 此处可以自定义需要的显示类型
       },
-      async onStatusChange(val) {
+      async onStatusChange (val) {
         const url = this.apis().capacitySwitchStatus(this.slotData.code);
         const result = await this.$http.get(url, {
           'enabled': this.slotData.enabled
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.$message.success(val ? '开启成功' : '关闭成功');
       },
-      async onRefresh() {
+      async onRefresh () {
         const url = this.apis().capacityRefresh(this.slotData.code);
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         if (result.resultCode == 1) {
           this.$message.success('刷新成功');
-          this.$emit("refresh");
+          this.$emit('refresh');
         } else {
           this.$message.error('刷新失败 : ' + result.msg);
         }
       },
-      onDetails() {
-        this.$emit("onDetails", this.slotData.code);
+      onDetails () {
+        this.$emit('onDetails', this.slotData.code);
       }
     },
-    data() {
-      return {};
+    data () {
+      return {
+      };
     },
-    created() {},
-    mounted() {}
+    created () {},
+    mounted () {}
   };
-
 </script>
 <style scoped>
   .capacity-item {

@@ -17,6 +17,7 @@ class BrandEntranceSection extends StatelessWidget {
     final List<GridItem> items = <GridItem>[
       GridItem(
         title: '发布需求',
+        authorizations: [Authorization.REQUIREMENT_ORDER_PUBLISH],
         onPressed: () async {
           // RequirementOrderModel requirementOrderModel = RequirementOrderModel(
           //     details: RequirementInfoModel(), attachments: []);
@@ -130,7 +131,7 @@ class BrandButtonsSection extends StatelessWidget {
                   _buildProductionFactory(context),
                   _buildFreeCapacity(context),
                   _buildProductOrdering(context),
-                  _buildNearbyFactory(context)
+                  _buildNearbyFactory(context),
                 ],
               ),
               Row(
@@ -197,6 +198,9 @@ class BrandButtonsSection extends StatelessWidget {
           //     builder: (context) => ProductsPage(),
           //   ),
           // );
+          // LcfarmFlutterUmeng.event("order_product_page").then((val) {
+
+          // });
           Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
         },
         title: '看款下单',

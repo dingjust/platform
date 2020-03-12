@@ -45,8 +45,8 @@
           快捷功能<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="1">创建线下订单</el-dropdown-item>
-            <el-dropdown-item command="2">唯一码导入</el-dropdown-item>
+            <el-dropdown-item v-if="hasper(permission.purchaseOrderOfflineCreate)" command="1">创建线下订单</el-dropdown-item>
+            <el-dropdown-item v-if="hasper(permission.purchaseOrderUniqueCodeImport)" command="2">唯一码导入</el-dropdown-item>
             <el-dropdown-item command="3">认证中心</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -69,11 +69,12 @@
 
 </template>
 <script>
-  import HeaderDropdownAccnt from "./Header/HeaderDropdownAccnt";
+  import {hasPermission} from '../auth/auth';
+  import HeaderDropdownAccnt from './Header/HeaderDropdownAccnt';
   import UniquecodeImportForm from '@/components/custom/UniquecodeImportForm';
 
   export default {
-    name: "AppHeader",
+    name: 'AppHeader',
     components: {
       HeaderDropdownAccnt,
       UniquecodeImportForm
@@ -103,53 +104,55 @@
         }
       }
     },
-    data() {
+    data () {
       return {
-        input2: "",
+        input2: '',
         uniquecodeFormVisible: false,
         authenticationInfo: this.$store.getters.authenticationInfo,
         currentUser: this.$store.getters.currentUser,
-        messageDialogVisible: false,
+        messageDialogVisible: false
       };
     },
     methods: {
-      sidebarToggle(e) {
-        e.preventDefault();
-        document.body.classList.toggle("sidebar-hidden");
+      hasper(permission) {
+        return hasPermission(permission);
       },
-      sidebarMinimize(e) {
+      sidebarToggle (e) {
         e.preventDefault();
-        document.body.classList.toggle("sidebar-minimized");
+        document.body.classList.toggle('sidebar-hidden');
       },
-      mobileSidebarToggle(e) {
+      sidebarMinimize (e) {
         e.preventDefault();
-        document.body.classList.toggle("sidebar-mobile-show");
+        document.body.classList.toggle('sidebar-minimized');
       },
-      asideToggle(e) {
+      mobileSidebarToggle (e) {
         e.preventDefault();
-        document.body.classList.toggle("aside-menu-hidden");
+        document.body.classList.toggle('sidebar-mobile-show');
       },
-      handleCommand(command) {
+      asideToggle (e) {
+        e.preventDefault();
+        document.body.classList.toggle('aside-menu-hidden');
+      },
+      handleCommand (command) {
         switch (command) {
           case '1':
-            this.$router.push("/orderPurchase");
+            this.$router.push('/orderPurchase');
             break;
           case '2':
             this.uniquecodeFormVisible = !this.uniquecodeFormVisible;
             break;
           case '3':
-            this.$router.push("/account/Authentication");
+            this.$router.push('/account/Authentication');
             break;
           default:
             break;
         }
       },
-      jumpToMessagePage(){
+      jumpToMessagePage () {
         this.$router.push('/message');
       }
     }
   };
-
 </script>
 
 <style>

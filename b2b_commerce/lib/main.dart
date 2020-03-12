@@ -1,4 +1,5 @@
 import 'package:amap_location/amap_location.dart';
+import 'package:b2b_commerce/src/_shared/widgets/authorization_dector.dart';
 import 'package:b2b_commerce/src/business/index.dart';
 import 'package:b2b_commerce/src/common/app_provider.dart';
 import 'package:b2b_commerce/src/home/account/client_select.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+// import 'package:lcfarm_flutter_umeng/lcfarm_flutter_umeng.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -35,7 +38,6 @@ void main() async {
 
   // 初始化,检测是否有用户登录信息
   await UserBLoC.instance.checkLocalUser();
-
 
   //头部状态栏阴影
   TargetPlatform platform = defaultTargetPlatform;
@@ -132,6 +134,11 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     // Provider.of<CertificationStatusHelper>(context)
     //     .checkCertificationStatus(context);
 
+    // LcfarmFlutterUmeng.init(
+    //     androidAppKey: "5e61b75d0cafb2aa19000058",
+    //     // channel: "test1",
+    //     logEnable: true);
+
     //初始化监听
     initListener();
   }
@@ -188,19 +195,23 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
         HomePage(userType: widget.userType),
       ),
       NavigationMenu(
-        BottomNavigationBarItem(
-          icon: Container(
-            child: const Icon(B2BIcons.production),
+          BottomNavigationBarItem(
+            icon: Container(
+              child: const Icon(B2BIcons.production),
+            ),
+            activeIcon: Container(
+              child: const Icon(B2BIcons.production_active),
+            ),
+            title: Container(
+              child: const Text('生产'),
+            ),
           ),
-          activeIcon: Container(
-            child: const Icon(B2BIcons.production_active),
-          ),
-          title: Container(
-            child: const Text('生产'),
-          ),
-        ),
-        ProductionPage(),
-      ),
+          AuthorizationDector(
+            authorizations: [Authorization.PURCHASE_ORDER],
+            show: false,
+            message: '无操作权限',
+            child: ProductionPage(),
+          )),
       NavigationMenu(
         BottomNavigationBarItem(
           icon: Container(
@@ -283,6 +294,9 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
                 ),
           ),
           routes: AppRoutes.allRoutes,
+          onUnknownRoute: (RouteSettings settings) {
+            print(settings.name);
+          },
           localizationsDelegates: [
             //此处
             GlobalMaterialLocalizations.delegate,

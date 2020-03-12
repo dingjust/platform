@@ -2,6 +2,7 @@ import http from '@/common/js/http';
 
 const state = {
   keyword: '',
+  roleGroupName: '',
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -42,6 +43,7 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
+  roleGroupName: (state, roleGroupName) => state.roleGroupName = roleGroupName,
   page: (state, page) => state.page = page,
   roleList: (state, roleList) => state.roleList = roleList,
   deptList: (state, deptList) => state.deptList = deptList,
@@ -52,15 +54,18 @@ const mutations = {
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, roleGroupName, page, size}) {
     commit('keyword', keyword);
+    commit('roleGroupName', roleGroupName);
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword}, {
+      keyword: state.keyword,
+      roleGroupName: state.roleGroupName
+    }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
     });
@@ -72,6 +77,7 @@ const actions = {
   },
   refresh ({dispatch, commit, state}, {url}) {
     const keyword = state.keyword;
+    // const roleGroupName = state.roleGroupName;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
@@ -83,6 +89,7 @@ const getters = {
   formData: state => state.formData,
   roleForm: state => state.roleForm,
   keyword: state => state.keyword,
+  roleGroupName: roleGroupName => roleGroupName.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,

@@ -20,7 +20,9 @@
       </el-select>
     </el-form-item>
     <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
-    <el-button type="primary" class="toolbar-search_input" @click="onCreate">新建</el-button>
+    <authorized :authority="permission.agreementTmplCreate">
+      <el-button type="primary" class="toolbar-search_input" @click="onCreate">新建</el-button>
+    </authorized>
   </el-form>
   <!--<el-form :inline="true">-->
     <!--<el-row type="flex" justify="space-between">-->
@@ -138,8 +140,7 @@
         {
           code: 'KJXY',
           name: '框架协议'
-        }
-        ]
+        }]
       };
     },
     created () {

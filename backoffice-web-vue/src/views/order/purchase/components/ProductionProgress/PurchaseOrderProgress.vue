@@ -49,14 +49,18 @@
           </el-row> -->
           <div class="progress-block-modal" :style="getBlockStyle(index)" v-show="showButtonArray[index]">
             <el-row type="flex" justify="center" align="middle" class="progress-block-modal-row">
-              <el-button type="primary" plain @click="onEdit(item)">{{judgeReadonly(item)?'查看':'编辑'}}</el-button>
+              <el-button type="primary" plain @click="onEdit(item)" :disabled="readEditShow(item)">
+                {{judgeReadonly(item)?'查看':'编辑'}}
+              </el-button>
             </el-row>
           </div>
           <div style="height:20%;">
             <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
               v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-              <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
-                {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
+              <authorized :authority="permission.purchaseOrderOperate">
+                <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
+                  {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
+              </authorized>
             </el-row>
           </div>
         </el-col>
@@ -68,7 +72,7 @@
 <script>
   import {
     createNamespacedHelpers
-  } from "vuex";
+  } from 'vuex';
   import Bus from '@/common/js/bus.js';
 
   const {
@@ -76,20 +80,21 @@
     mapActions,
     mapMutations
   } = createNamespacedHelpers(
-    "PurchaseOrdersModule"
+    'PurchaseOrdersModule'
   );
 
   import OrderProgressUpdateForm from './OrderProgressUpdateForm';
+  import {hasPermission} from '../../../../../auth/auth';
 
   export default {
-    name: "PurchaseOrderProgress",
+    name: 'PurchaseOrderProgress',
     props: ['slotData'],
     components: {
       OrderProgressUpdateForm
     },
     computed: {
       ...mapGetters({
-        contentData: "detailData"
+        contentData: 'detailData'
       }),
       currentSequence: function () {
         var result = 0;
@@ -99,14 +104,17 @@
           }
         });
         return result;
-      },
+      }
     },
     methods: {
       ...mapActions({
-        refreshDetail: "refreshDetail",
+        refreshDetail: 'refreshDetail'
       }),
-      ///判断左边线样式
-      getLeftLine(index, data) {
+      readEditShow (item) {
+        return !this.judgeReadonly(item) && !hasPermission(this.permission.purchaseOrderOperate);
+      },
+      /// 判断左边线样式
+      getLeftLine (index, data) {
         if (index == 0) {
           return 'progress-line-horizon_none'
         } else {
@@ -117,8 +125,8 @@
           }
         }
       },
-      ///判断右边线样式
-      getRightLine(index, data) {
+      /// 判断右边线样式
+      getRightLine (index, data) {
         if (index == data.length - 1) {
           return 'progress-line-horizon_none'
         } else {
@@ -133,27 +141,27 @@
           }
         }
       },
-      ///判断是否正在进行中
-      isDoing(index, data) {
+      /// 判断是否正在进行中
+      isDoing (index, data) {
         if (this.slotData.status == 'IN_PRODUCTION') {
           return data[index].phase == this.slotData.currentPhase;
         } else {
           return false;
         }
       },
-      onEdit(item) {
-        this.readonly=this.judgeReadonly(item);
+      onEdit (item) {
+        this.readonly = this.judgeReadonly(item);
         this.selectProgressModel = item;
         this.selectProgressModel.updateOnly = true;
         this.updateFormVisible = !this.updateFormVisible;
       },
-      async onEditSubmit() {
+      async onEditSubmit () {
         if (this.compareDate(new Date(), new Date(this.selectProgressModel.estimatedDate))) {
           this.$message.error('预计完成时间不能小于当前时间');
           return false;
         }
         const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, this.selectProgressModel.id);
-        this.selectProgressModel.updateOnly=true;
+        this.selectProgressModel.updateOnly = true;
         const result = await this.$http.put(url, this.selectProgressModel);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
@@ -162,7 +170,7 @@
         this.$message.success('更新成功');
         this.updateFormVisible = false;
       },
-      async onProgressFinish(item, index) {
+      async onProgressFinish (item, index) {
         item.updateOnly = false;
         const url = this.apis().updateProgressOfPurchaseOrder(this.slotData.code, item.id);
         const result = await this.$http.put(url, item);
@@ -178,20 +186,20 @@
           this.slotData.status = 'WAIT_FOR_OUT_OF_STORE';
         }
       },
-      onShowButton(value, index) {
+      onShowButton (value, index) {
         this.$set(this.showButtonArray, index, value);
       },
-      getShowVal(index) {
+      getShowVal (index) {
         return this.showButtonArray[index];
       },
-      getBlockStyle(index) {
+      getBlockStyle (index) {
         var width = 100 / this.slotData.progresses.length;
         return {
           'width': width + '%',
-          'left': width * index + '%',
+          'left': width * index + '%'
         }
       },
-      async onCallback() {
+      async onCallback () {
         await this.refreshDetail();
         this.contentData.progresses.forEach(item => {
           if (item.id == this.selectProgressModel.id) {
@@ -199,7 +207,7 @@
           }
         });
       },
-      judgeReadonly(item) {
+      judgeReadonly (item) {
         if (item.sequence >= this.currentSequence && this.slotData.status == 'IN_PRODUCTION' && this.isFactory()) {
           return false;
         } else {
@@ -207,7 +215,7 @@
         }
       }
     },
-    data() {
+    data () {
       return {
         updateFormVisible: false,
         hackSet: true,
@@ -216,18 +224,17 @@
           CUTTING: '&#xe677;',
           STITCHING: '&#xe67a;',
           AFTER_FINISHING: '&#xe67a;',
-          INSPECTION: '&#xe689;',
+          INSPECTION: '&#xe689;'
         },
         selectProgressModel: '',
         showButtonArray: [],
-        readonly:false
+        readonly: false
       };
     },
-    created() {
+    created () {
       this.showButtonArray = this.slotData.progresses.map((val) => false);
     }
   };
-
 </script>
 <style>
   .progress-status {

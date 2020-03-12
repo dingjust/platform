@@ -21,7 +21,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-select v-model="operation" placeholder="请选择" size="mini"
-                     @change="selectionOperation" @visible-change="getData(scope.row)">
+                     @change="selectionOperation" @visible-change="getData($event, scope.row)">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -45,11 +45,13 @@
 </template>
 
 <script>
+  import {hasPermission} from '@/auth/auth';
+
   export default {
     name: 'B2BCustomerList',
     props: ['page'],
     computed: {
-      
+
     },
     methods: {
       onPageSizeChanged (val) {
@@ -65,29 +67,48 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails (row) {
-        this.$emit('onDetails', row);
-      },
       selectionOperation (current) {
-        console.log(current);
         this.operation = '';
         this.$emit(current, this.slotData);
         this.slotData = {};
       },
-      getData (row) {
-        this.options = Object.assign([], this.options1);
-        if (row.b2bDept != null) {
+      getData (flag, row) {
+        if (!flag) {
+          this.options = [];
+          return;
+        }
+        // this.options = Object.assign([], this.options1);
+        if (hasPermission(this.permission.companyB2bCustomerModify)) {
+          this.options.push({
+            value: 'editInfo',
+            label: '编辑员工信息'
+          });
+        }
+        if (hasPermission(this.permission.companyB2bCustomerHandOff)) {
+          this.options.push({
+            value: 'workHandover',
+            label: '工作交接'
+          });
+        }
+        if (hasPermission(this.permission.companyB2bCustomerRemove)) {
+          this.options.push({
+            value: 'deleteUser',
+            label: '删除账号'
+          });
+        }
+        if (row.b2bDept != null && hasPermission(this.permission.companyB2bDeptSetManager)) {
           this.options.push({
             value: 'setDepartmentHead',
             label: '设为部门负责人'
           });
         }
-        if (row.loginDisabled) {
+        if (row.loginDisabled && hasPermission(this.permission.companyB2bCustomerEnableState)) {
           this.options.push({
             value: 'enableUser',
             label: '启用账号'
           });
-        } else {
+        }
+        if (!row.loginDisabled && hasPermission(this.permission.companyB2bCustomerEnableState)) {
           this.options.push({
             value: 'forbiddenUser',
             label: '禁用账号'
@@ -98,16 +119,18 @@
     },
     data () {
       return {
-        options1: [{
-          value: 'editInfo',
-          label: '编辑信息'
-        }, {
-          value: 'workHandover',
-          label: '工作交接'
-        }, {
-          value: 'deleteUser',
-          label: '删除账号'
-        }],
+        // options1: [{
+        //   value: 'editInfo',
+        //   label: '编辑信息'
+        // }
+        // // , {
+        // //   value: 'workHandover',
+        // //   label: '工作交接'
+        // // }, {
+        // //   value: 'deleteUser',
+        // //   label: '删除账号'
+        // // }
+        // ],
         options: [],
         slotData: '',
         operation: ''

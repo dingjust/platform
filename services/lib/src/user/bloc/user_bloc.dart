@@ -109,6 +109,9 @@ class UserBLoC extends BLoCBase {
         _controller.sink.add(_user);
       }
 
+      //获取用户授权信息
+      await AuthorizationBLoC.instance.getAuthorizations(_user.uid);
+
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
         BrandModel brand =
@@ -153,7 +156,7 @@ class UserBLoC extends BLoCBase {
         loginResponse = await http$.post(
             HttpUtils.generateUrl(url: GlobalConfigs.AUTH_TOKEN_URL, data: {
           'grant_type': GlobalConfigs.GRANT_TYPE_AUTHORIZATION_CODE,
-          'client_id': 'asm',
+              'client_id': 'nbyjy',
           'client_secret': GlobalConfigs.B2B_CLIENT_SECRET,
           'code': captcha,
         }));
@@ -194,6 +197,9 @@ class UserBLoC extends BLoCBase {
         _user.name = infoResponse.data['username'];
         _user.status = UserStatus.ONLINE;
       }
+
+      //获取用户授权信息
+      await AuthorizationBLoC.instance.getAuthorizations(_user.uid);
 
       // 获取公司信息
       if (_user.type == UserType.BRAND) {
@@ -295,6 +301,9 @@ class UserBLoC extends BLoCBase {
           _user.status = UserStatus.ONLINE;
         }
 
+        //获取用户授权信息
+        await AuthorizationBLoC.instance.getAuthorizations(_user.uid);
+
         // 获取公司信息
         if (_user.type == UserType.BRAND) {
           BrandModel brand =
@@ -346,6 +355,9 @@ class UserBLoC extends BLoCBase {
         ..name = infoResponse.data['username']
         ..status = UserStatus.ONLINE;
     }
+
+    //获取用户授权信息
+    await AuthorizationBLoC.instance.getAuthorizations(_user.uid);
 
     // 获取公司信息
     if (_user.type == UserType.BRAND) {

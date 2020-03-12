@@ -12,13 +12,15 @@
     <el-card>
       <el-row type="flex" justify="space-between">
         <el-col>
-          <div class="cooperator-list-title">
+          <div class="cooperator-list-title1">
             <h6>合作商列表</h6>
           </div>
         </el-col>
         <el-col :span="2">
           <div>
-               <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加合作商</el-button>
+            <authorized :authority="permission.companyCooperatorCreate">
+              <el-button type="primary" class="toolbar-search_input" @click="onJumpTo">添加合作商</el-button>
+            </authorized>
           </div>
         </el-col>
       </el-row>
@@ -178,6 +180,9 @@
   };
 </script>
 
-<style>
-
+<style scoped>
+  .cooperator-list-title1 {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
 </style>

@@ -87,7 +87,6 @@
               name: this.slotData.name,
               roleIds: this.slotData.roleIds
             }
-            console.log(formData);
             this.$emit('saveRole', formData);
           } else {
             this.$message.error('请完善表单信息');

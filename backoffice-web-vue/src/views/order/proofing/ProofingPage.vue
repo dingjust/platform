@@ -6,6 +6,7 @@
           <h6>打样订单列表</h6>
         </div>
       </el-row>
+      <div class="pt-2"></div>
       <proofing-toolbar @onAdvancedSearch="onAdvancedSearch" @clearQueryFormData="clearQueryFormData"/>
 
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
@@ -18,8 +19,8 @@
             <template slot="operations" slot-scope="props">
               <el-row v-if="props.item.status == 'PENDING_PAYMENT'">
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
-                <el-divider v-if="isFactory()||isTenant()" direction="vertical"></el-divider>
-                <el-button v-if="isFactory()||isTenant()" type="text" class="list-button" @click="onCancel(props.item)">关闭</el-button>
+                <el-divider v-if="closeShow" direction="vertical"></el-divider>
+                <el-button v-if="closeShow" type="text" class="list-button" @click="onCancel(props.item)">关闭</el-button>
               </el-row>
               <el-row v-else>
                 <el-button type="text" class="list-button" @click="onDetails(props.item)">详情</el-button>
@@ -67,6 +68,7 @@
   import RequirementOrderDetailsPage from '../requirement/details/RequirementOrderDetailsPage';
   import ProofingDetailsPage from './details/ProofingDetailsPage';
   import ProofingCloseDialog from './form/ProofingCloseDialog';
+  import {hasPermission} from '../../../auth/auth';
 
   export default {
     name: 'ProofingPage',
@@ -83,7 +85,10 @@
         queryFormData: 'queryFormData',
         categories: 'categories',
         page: 'page'
-      })
+      }),
+      closeShow: function () {
+        return (this.isFactory() && hasPermission(this.permission.proofingOrderClose)) || this.isTenant()
+      }
     },
     methods: {
       ...mapMutations({

@@ -64,31 +64,30 @@
       SidebarNavLabel
     },
     methods: {
-      handleClick(e) {
+      handleClick (e) {
         e.preventDefault();
         e.target.parentElement.classList.toggle('open')
       },
-      handleOpen(key, keyPath) {
+      handleOpen (key, keyPath) {
         console.log(key, keyPath);
       },
-      handleClose(key, keyPath) {
+      handleClose (key, keyPath) {
         console.log(key, keyPath);
       },
-      //路由权限检测
-      routeCheck(nav){  
-        // if(nav.meta!=null&&nav.meta.requiresAuth!=null&&nav.meta.requiresAuth){
-        //   if(hasPermission(nav.meta.permissions)){
-        //     return true;
-        //   }else{
-        //     return false;
-        //   }
-        // }else{
+      // 路由权限检测
+      routeCheck (nav) {
+        if (nav.meta != null && nav.meta.requiresAuth != null && nav.meta.requiresAuth) {
+          if (hasPermission(nav.meta.permissions)) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
           return true;
-        // }
+        }
       }
     }
   }
-
 </script>
 
 <style lang="css">
