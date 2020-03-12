@@ -489,16 +489,16 @@ router.beforeEach((to, from, next) => {
 
   if (authorized) {
     // TODO: 检查权限
-    // if (to.meta.requiresAuth) {
-    //   if (hasPermission(to.meta.permissions)) {
-    //     return next();
-    //   } else {
-    //     Message.error("无权限访问");
-    //     return next(false);
-    //   }
-    // } else {
+    if (to.meta.requiresAuth) {
+      if (hasPermission(to.meta.permissions)) {
+        return next();
+      } else {
+        Message.error("无权限访问");
+        return next(false);
+      }
+    } else {
       return next() // 确保一定要调用 next()
-    // }
+    }
   }
 
   next({
