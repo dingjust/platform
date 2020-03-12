@@ -1,3 +1,5 @@
+import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_update_deduction_amount_dialog.dart';
+import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_update_total_price_dialog.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
@@ -7,6 +9,7 @@ import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -59,12 +62,18 @@ final List<OrderStatusModel> _statusList = [
 ];
 
 class PurchaseOrderDetailPage extends StatefulWidget {
+
+
+  final PurchaseOrderModel model;
+
   final String code;
 
   final bool isProduction;
 
+  final Function refreshAmount;
+
   PurchaseOrderDetailPage(
-      {Key key, @required this.code, this.isProduction = false})
+      {Key key, @required this.code, this.isProduction = false,this.refreshAmount,this.model,})
       : super(key: key);
 
   _PurchaseDetailPageState createState() => _PurchaseDetailPageState();
@@ -1410,7 +1419,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       ),
                     ),
                     Text(
-                      '${order.deposit == null ? 0 : order.deposit}',
+                      '${order.deposit == null ? 0 : order.deposit.toStringAsFixed(2)}',
                       style: TextStyle(
                         fontSize: 22,
                         color: Colors.red,
@@ -1418,7 +1427,33 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     )
                   ],
                 )),
-          )
+          ),
+          Offstage(
+            offstage: (order.depositPaid != null && !order.depositPaid) || (order.balancePaid != null && order.balancePaid),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('其他扣款'),
+                  Text('-￥${(order.deductionAmount ?? 0).toStringAsFixed(2)}',style: TextStyle(color: Colors.black),)
+                ],
+              ),
+            ),
+          ),
+          Offstage(
+            offstage:  (order.depositPaid != null && !order.depositPaid) || (order.balancePaid != null && order.balancePaid),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('实付金额',style: TextStyle(fontSize: 18,),),
+                  Text('￥${((order.balance ?? 0) - (order.deductionAmount ?? 0)).toStringAsFixed(2)}',style: TextStyle(color: Colors.red,fontSize: 18,),)
+                ],
+              ),
+            ),
+          ),
         ],
       ),
       decoration: BoxDecoration(
@@ -1970,40 +2005,23 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(5))),
                   onPressed: () {
-                    TextEditingController con = new TextEditingController();
-                    TextEditingController con1 = new TextEditingController();
-                    TextEditingController con2 = new TextEditingController();
-                    FocusNode node = new FocusNode();
-                    FocusNode node1 = new FocusNode();
-                    con.text = order.totalPrice.toString();
-                    con1.text = order.deposit.toString();
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (_) {
-                          return CustomizeDialog(
-                            dialogType: DialogType.PRICE_INPUT_DIALOG,
-                            outsideDismiss: false,
-                            inputController: con,
-                            inputController1: con1,
-//                            inputController2: con2,
-                            focusNode: node,
-                            focusNode1: node1,
-                            expectedDeliveryDate: order.expectedDeliveryDate,
-//                            focusNode2: node2,
-                          );
-                        }).then((value) {
-                      if (value != null && value != '') {
-                        String str = value;
-                        str = str.replaceAll('￥', '');
-                        print(str);
-                        String deposit = str.substring(0, str.indexOf(','));
-                        String date =
-                        str.substring(str.indexOf(',') + 1, str.length);
-                        _showDepositDialog(context, order, deposit,
-                            date == 'null' ? null : DateTime.parse(date));
-                      }
-                    });
+//                    showDialog(
+//                        context: context,
+//                        barrierDismissible: false,
+//                        builder: (_) {
+//                          return PurchaseUpdateTotalPriceDialog(purchaseOrderModel: order,);
+//                        }).then((value) {
+//                      if (value != null && value != '') {
+//                        String str = value;
+//                        str = str.replaceAll('￥', '');
+//                        print(str);
+//                        String deposit = str.substring(0, str.indexOf(','));
+//                        String date =
+//                        str.substring(str.indexOf(',') + 1, str.length);
+//                        _showDepositDialog(context, order, deposit,
+//                            date == 'null' ? null : DateTime.parse(date));
+//                      }
+//                    });
                   }),
             ),
           ),
@@ -2097,7 +2115,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(5))),
                   onPressed: () {
-                    _showBalanceDialog(context, order);
+                    onUpdateBalance();
                   },
                 ),
               ),
@@ -2367,233 +2385,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     });
   }
 
-  //修改金额按钮方法
-  Future<void> _neverUpdateBalance(
-      BuildContext context, PurchaseOrderModel model) async {
-    TextEditingController dialogText = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            '提示',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  '订单总额：￥${model.totalPrice}',
-                ),
-                Text(
-                  '已付定金：￥${model.deposit}',
-                ),
-                Text(
-                  '应付尾款：￥${model.totalPrice != null && model.deposit != null ? model.totalPrice - model.deposit : ''}',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                  color: Colors.black12,
-                  child: TextField(
-                    controller: dialogText,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '请输入尾款',
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(right: 30),
-                  width: 230,
-                  child: FlatButton(
-                      color: Color(0xFFFFD600),
-                      child: Text(
-                        '确定',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      onPressed: () async {
-                        Navigator.of(context).pop();
-                        double balance =
-                            dialogText.text == null || dialogText.text == ''
-                                ? model.balance
-                                : double.parse(dialogText.text);
-                        model.balance = balance;
-                        model.skipPayBalance = false;
-                        try {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (_) {
-                                return RequestDataLoading(
-                                  requestCallBack: PurchaseOrderRepository()
-                                      .purchaseOrderBalanceUpdate(
-                                      model.code, model),
-                                  outsideDismiss: false,
-                                  loadingText: '保存中。。。',
-                                  entrance: 'purchaseOrders',
-                                );
-                              });
-                        } catch (e) {
-                          print(e);
-                        }
-                        if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
-                          try {
-                            for (int i = 0; i < order.progresses.length; i++) {
-                              if (order.currentPhase ==
-                                  order.progresses[i].phase) {
-                                await PurchaseOrderRepository()
-                                    .productionProgressUpload(
-                                        order.code,
-                                        order.progresses[i].id.toString(),
-                                        order.progresses[i]);
-                              }
-                            }
-                          } catch (e) {
-                            print(e);
-                          }
-                        }
-                      }),
-                ),
-                FlatButton(
-                  child: Text(
-                    '无需付款直接跳过>>',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    _showTips(context, model);
-                  },
-                ),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  //修改定金
-  Future<void> _neverUpdateDeposit(
-      BuildContext context, PurchaseOrderModel model) async {
-    TextEditingController depositText = TextEditingController();
-    TextEditingController unitText = TextEditingController();
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            '提示',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  '订单总额：￥${model.totalPrice}',
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                  color: Colors.black12,
-                  child: TextField(
-                    controller: depositText,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '定金：￥${model.deposit}',
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                  color: Colors.black12,
-                  child: TextField(
-                    controller: unitText,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '单价：￥${model.unitPrice}',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            Container(
-              padding: EdgeInsets.only(right: 30),
-              width: 230,
-              child: FlatButton(
-                  color: Color(0xFFFFD600),
-                  child: Text(
-                    '确定',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  onPressed: () async {
-                    double unit = unitText.text == null || unitText.text == ''
-                        ? model.unitPrice
-                        : double.parse(unitText.text);
-                    double deposit =
-                        depositText.text == null || depositText.text == ''
-                            ? model.deposit
-                            : double.parse(depositText.text);
-                    setState(() {
-                      model.deposit = deposit;
-                      model.unitPrice = unit;
-                      model.totalPrice = unit * totalQuantity;
-                    });
-                    model.skipPayBalance = false;
-                    Navigator.of(context).pop();
-                    try {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) {
-                            return RequestDataLoading(
-                              requestCallBack: PurchaseOrderRepository()
-                                  .purchaseOrderDepositUpdate(
-                                  model.code, model),
-                              outsideDismiss: false,
-                              loadingText: '保存中。。。',
-                              entrance: '0',
-                            );
-                          });
-                    } catch (e) {
-                      print(e);
-                    }
-
-//                    _showMessage(context, result, '修改');
-                  }),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   void uploadPicture(ProductionProgressModel model) async {
     await PurchaseOrderRepository()
@@ -2601,38 +2392,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   //打开修改尾款金额弹框
-  void _showBalanceDialog(BuildContext context, PurchaseOrderModel model) {
-    TextEditingController con = new TextEditingController();
-    TextEditingController con1 = new TextEditingController();
-    TextEditingController con2 = new TextEditingController();
-    TextEditingController con3 = new TextEditingController();
-    FocusNode node = new FocusNode();
-    FocusNode node1 = new FocusNode();
-    FocusNode node2 = new FocusNode();
-    FocusNode node3 = new FocusNode();
-    con.text = order.totalPrice.toString();
-    con1.text = order.deposit.toString();
-    con2.text = order.unitPrice.toString();
+  void onUpdateBalance() {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.BALANCE_INPUT_DIALOG,
-            outsideDismiss: false,
-            inputController: con,
-            inputController1: con1,
-            inputController2: con2,
-            inputController3: con3,
-            focusNode: node,
-            focusNode1: node1,
-            focusNode2: node2,
-            focusNode3: node3,
-            jumpAction: () {
-              Navigator.of(context).pop();
-              _showTips(context, model);
-            },
-          );
+          return PurchaseUpdateDeductionAmountDialog(purchaseOrderModel: order,);
         }).then((value) {
       if (value != null && value != '') {
         String str = value;
@@ -2642,63 +2407,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   }
 
   void _updateBalance(BuildContext context, PurchaseOrderModel model,
-      String balanceText) async {
-    bool result = false;
-    Navigator.of(context).pop();
-    if (balanceText != null && balanceText != '') {
-      double balance = double.parse(balanceText.replaceAll('￥', ''));
-      model.balance = balance;
-      model.skipPayBalance = false;
-      try {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return RequestDataLoading(
-                requestCallBack: PurchaseOrderRepository()
-                    .purchaseOrderBalanceUpdate(model.code, model),
-                outsideDismiss: false,
-                loadingText: '保存中。。。',
-                entrance: 'purchaseOrders',
-              );
-            }).then((value) async {
-          if (value) {
-            if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
-              try {
-                for (int i = 0; i < order.progresses.length; i++) {
-                  if (order.currentPhase == order.progresses[i].phase) {
-                    await PurchaseOrderRepository().productionProgressUpload(
-                        order.code,
-                        order.progresses[i].id.toString(),
-                        order.progresses[i]);
-                  }
-                }
-              } catch (e) {
-                print(e);
-              }
-            }
-          }
-        });
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
+      String text) async {
+    double amount = double.parse(text);
 
-  //打开修改定金金额弹框
-  void _showDepositDialog(BuildContext context, PurchaseOrderModel model,
-      String depositText, DateTime date) {
-    double deposit = model.deposit;
-    if (depositText != null && depositText != '') {
-      if (depositText.indexOf('￥') != 0) {
-        deposit = double.parse(depositText.replaceAll('￥', ''));
-      }
-    }
-    setState(() {
-      model.deposit = deposit;
-      model.expectedDeliveryDate = date;
-    });
-    model.skipPayBalance = false;
     try {
       showDialog(
           context: context,
@@ -2706,13 +2417,85 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           builder: (_) {
             return RequestDataLoading(
               requestCallBack: PurchaseOrderRepository()
-                  .purchaseOrderDepositUpdate(model.code, model),
+                  .purchaseOrderDeductionAmountUpdate(model.code, PurchaseOrderModel(deductionAmount: amount)),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: 'purchaseOrders',
+            );
+          }).then((value) async {
+        if(value){
+          PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
+          setState(() {
+            order = purchaseOrderModel;
+            widget.model.deductionAmount = purchaseOrderModel.deductionAmount;
+            BotToast.showText(text: '修改价格成功');
+          });
+        }else{
+          BotToast.showText(text: '修改价格失败');
+        }
+//          if (value) {
+//            if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
+//              try {
+//                for (int i = 0; i < _model.progresses.length; i++) {
+//                  if (_model.currentPhase ==
+//                      _model.progresses[i].phase) {
+//                    await PurchaseOrderRepository().productionProgressUpload(
+//                        _model.code,
+//                        _model.progresses[i].id.toString(),
+//                        _model.progresses[i]);
+//                  }
+//                }
+//              } catch (e) {
+//                print(e);
+//              }
+//            }
+//          }
+      });
+    } catch (e) {
+      print(e);
+    }
+    PurchaseOrderBLoC.instance.refreshData('ALL');
+    PurchaseOrderBLoC.instance.refreshData('WAIT_FOR_OUT_OF_STORE');
+  }
+
+  //打开修改定金金额弹框
+  void _showDepositDialog(BuildContext context, PurchaseOrderModel model,
+      String depositText, DateTime date) {
+    double totalPrice = 0.0;
+    if (depositText != null && depositText != '') {
+      if (depositText.indexOf('￥') != 0) {
+        totalPrice = double.parse(depositText.replaceAll('￥', ''));
+      }
+    }
+
+//    model.skipPayBalance = false;
+//    model.totalPrice = totalPrice;
+//    model.expectedDeliveryDate = date;
+    try {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoading(
+              requestCallBack: PurchaseOrderRepository()
+                  .purchaseOrderDepositUpdate(model.code,  PurchaseOrderModel(totalPrice: totalPrice,expectedDeliveryDate: date)),
               outsideDismiss: false,
               loadingText: '保存中。。。',
               entrance: '0',
             );
-          }).then((_) {
-        PurchaseOrderBLoC.instance.refreshData('ALL');
+          }).then((value) async{
+        if(value){
+          PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
+          setState(() {
+            order = purchaseOrderModel;
+            widget.model.deposit = purchaseOrderModel.deposit;
+            widget.model.totalPrice = purchaseOrderModel.totalPrice;
+            BotToast.showText(text: '修改价格成功');
+          });
+        }else{
+          BotToast.showText(text: '修改价格失败');
+        }
+
       });
     } catch (e) {
       print(e);
@@ -2755,7 +2538,21 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
               loadingText: '保存中。。。',
               entrance: 'purchaseOrders',
             );
+          }).then((value)async{
+        if(value){
+          PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
+          setState(() {
+            model = purchaseOrderModel;
+            BotToast.showText(text: '跳过尾款成功');
+            PurchaseOrderBLoC.instance.refreshData('ALL');
+            PurchaseOrderBLoC.instance.refreshData('WAIT_FOR_OUT_OF_STORE');
+            PurchaseOrderBLoC.instance.refreshData('OUT_OF_STORE');
           });
+        }else{
+          BotToast.showText(text: '跳过尾款失败');
+        }
+      });
+
       if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
         try {
           for (int i = 0; i < order.progresses.length; i++) {
@@ -2890,10 +2687,31 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                   ? PurchaseDetailBtnGroup(
                 order: order,
               )
-                  : PurchaseDetailOnlineBtnGroup(order: order))
+                  : PurchaseDetailOnlineBtnGroup(order: order,onUpdateDeposit: onUpdateDeposit,onUpdateBalance: onUpdateBalance,))
         ],
       ),
     );
+  }
+
+  //修改定金
+  onUpdateDeposit(){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return PurchaseUpdateTotalPriceDialog(purchaseOrderModel: order,);
+        }).then((value) {
+      if (value != null && value != '') {
+        String str = value;
+        str = str.replaceAll('￥', '');
+        print(str);
+        String deposit = str.substring(0, str.indexOf(','));
+        String date =
+        str.substring(str.indexOf(',') + 1, str.length);
+        _showDepositDialog(context, order, deposit,
+            date == 'null' ? null : DateTime.parse(date));
+      }
+    });
   }
 
   Widget _buildFAB(BuildContext context) {

@@ -905,7 +905,7 @@ class PurchaseOrderModel extends OrderModel {
   ///优惠金额
   double offerAmount;
 
-  ///扣除金额
+  ///尾款扣除金额
   double deductionAmount;
 
   ///品牌跟单人
