@@ -104,7 +104,6 @@
       },
       methods: {
         selectDept (val) {
-          console.log(val);
           this.formData.deptId = val;
         },
         onCannel () {

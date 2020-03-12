@@ -272,7 +272,7 @@
         let checkList = [];
         roleList.forEach(item => {
           item.children.forEach(role => {
-            if (role.children) {
+            if (role.children && role.children.length > 0) {
               role.children.forEach(role1 => {
                 checkList.push(role1.id);
               })
@@ -288,14 +288,12 @@
       __setCheckChange (roleList) {
         let index;
         this.roleIdList = roleList;
-        console.log(roleList);
         this.roleListData.forEach(item => {
           item.children.forEach(role => {
             if (role.children && role.children.length > 0) {
               this.handleCheckedNodeChange(roleList, role, item);
             } else {
               index = roleList.indexOf(role.id);
-              console.log(index);
               if (index > -1) {
                 this.secondRoleArr.forEach(value => {
                   if (value.id == role.id) {
@@ -333,7 +331,6 @@
       this.getRoleList();
     },
     created () {
-      console.log(document.body.clientWidth);
     }
   }
 </script>

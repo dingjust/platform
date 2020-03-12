@@ -55,7 +55,7 @@
       onReset () {
         this.keyword = '';
         this.name = '';
-        this.role = '';
+        this.b2bRoleGroup = '';
       },
       onInvite () {
         this.$emit('onInvite');
@@ -79,4 +79,5 @@
   .el-button {
     margin-top: 2px;
   }
+
 </style>

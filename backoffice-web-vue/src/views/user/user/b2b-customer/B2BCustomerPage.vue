@@ -201,7 +201,6 @@
 
         const url1 = this.apis().saveB2BCustomerRoleGroup();
         const result1 = await this.$http.put(url1, data, data);
-        console.log(result1);
         if (result1.code == 0) {
           this.$message.error(result1.msg);
           return;
@@ -238,7 +237,6 @@
         this.editRoleVisible = false;
       },
       setDepartmentHead (data) {
-        console.log(data);
         let name = data.name;
         let deptName = data.b2bDept.name;
         this.$confirm('是否将 ' + name + ' 设为 ' + deptName + ' 的部门负责人?', '提示', {
@@ -263,19 +261,24 @@
         this.onSearch();
         this.workHandoverVisible = false;
       },
+      // async changeLoginDisabled (uid) {
+      //   // const url = this.apis().changeLoginDisabled(uid);
+      //   // const result = await this.$http.put(url);
+      //   // if (result['errors']) {
+      //   //   this.$message.error(result['errors'][0].message);
+      //        return;
+      //   // }
+      //   this.$message.success('更改员工账号状态成功');
+      //   this.onSearch();
+      // },
       forbiddenUser (data) {
         this.$confirm('禁用后员工将无法正常使用账号 ， 请问是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // if (result.code === 0) {
-          //   this.$message.error(result.msg);
-          //   return;
-          // }
-          this.$message.success('禁用账号成功');
+          // this.changeLoginDisabled(data.uid);
         });
-        this.onSearch();
       },
       enableUser (data) {
         this.$confirm('启用账号后账号将恢复正常使用 ， 请问是否继续?', '提示', {
@@ -283,13 +286,8 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // if (result.code === 0) {
-          //   this.$message.error(result.msg);
-          //   return;
-          // }
-          this.$message.success('启用账号成功');
+          // this.changeLoginDisabled(data.uid);
         });
-        this.onSearch();
       },
       deleteUser (data) {
         this.$confirm('删除后员工将无法正常使用账号 ， 请问是否继续?', '提示', {
@@ -297,12 +295,17 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // if (result.code === 0) {
-          //   this.$message.error(result.msg);
-          //   return;
-          // }
-          this.$message.success('删除账号成功');
+          this._deleteUser(data.uid);
         });
+      },
+      async _deleteUser (uid) {
+        const url = this.apis().removeB2BCustomer(uid);
+        const result = await this.$http.put(url);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('删除账号成功');
         this.onSearch();
       }
     },

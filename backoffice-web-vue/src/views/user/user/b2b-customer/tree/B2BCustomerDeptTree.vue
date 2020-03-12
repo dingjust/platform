@@ -92,11 +92,7 @@
             this.$emit('removeDept', data.id);
           }
         },
-        handleClick (tab, event) {
-          console.log(tab, event);
-        },
         dblclick (data) {
-          console.log(data);
           if (data.depth === 0 || !hasPermission(this.permission.companyB2bDeptRename)) {
             return
           }
