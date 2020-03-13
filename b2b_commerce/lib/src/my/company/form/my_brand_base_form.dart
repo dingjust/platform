@@ -144,6 +144,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       ratioY: 1,
                       ratioX: 1,
                       maxNum: 1,
+                      loogPressDelete:false,
                     ),
                   ),
                 ],

@@ -125,7 +125,7 @@ class PurchaseDetailOnlineBtnGroup extends StatelessWidget {
                   color: Color.fromRGBO(255, 214, 12, 1),
                   onPressed: () {
                     //将支付金额置为定金
-                    order.totalPrice = order.deposit;
+//                    order.totalPrice = order.deposit;
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => OrderPaymentPage(
                               order: order,
@@ -155,7 +155,7 @@ class PurchaseDetailOnlineBtnGroup extends StatelessWidget {
                   color: Color.fromRGBO(255, 214, 12, 1),
                   onPressed: () async {
                     //将支付金额置为尾款
-                    order.totalPrice = order.balance;
+//                    order.totalPrice = order.balance;
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             OrderPaymentPage(
