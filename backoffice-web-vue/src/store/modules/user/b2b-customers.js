@@ -2,7 +2,6 @@ import http from '@/common/js/http';
 
 const state = {
   keyword: '',
-  roleGroupName: '',
   currentPageNumber: 0,
   currentPageSize: 10,
   page: {
@@ -28,6 +27,11 @@ const state = {
       id: 0
     }
   },
+  queryFormData: {
+    keyword: '',
+    roleGroupName: '',
+    deptName: ''
+  },
   roleForm: {
     id: null,
     name: '',
@@ -43,28 +47,27 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
-  roleGroupName: (state, roleGroupName) => state.roleGroupName = roleGroupName,
   page: (state, page) => state.page = page,
   roleList: (state, roleList) => state.roleList = roleList,
   deptList: (state, deptList) => state.deptList = deptList,
   roleForm: (state, roleForm) => state.roleForm = roleForm,
   formData: (state, formData) => state.formData = formData,
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   roleGroupList: (state, roleGroupList) => state.roleGroupList = roleGroupList,
   roleCodeList: (state, roleCodeList) => state.roleCodeList = roleCodeList
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, roleGroupName, page, size}) {
-    commit('keyword', keyword);
-    commit('roleGroupName', roleGroupName);
+  async search ({dispatch, commit, state}, {url, page, size}) {
     commit('currentPageNumber', page);
     if (size) {
       commit('currentPageSize', size);
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword,
-      roleGroupName: state.roleGroupName
+      keyword: state.queryFormData.keyword,
+      roleGroupName: state.queryFormData.roleGroupName,
+      deptName: state.queryFormData.deptName
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -75,9 +78,23 @@ const actions = {
       commit('page', response);
     }
   },
+  async searchAside ({dispatch, commit, state}, {url, keyword, deptName, roleName, page, size}) {
+    const response = await http.post(url, {
+      keyword: keyword,
+      roleGroupName: roleName,
+      deptName: deptName
+    }, {
+      page: page,
+      size: size
+    });
+
+    // console.log(JSON.stringify(response));
+    if (!response['errors']) {
+      commit('page', response);
+    }
+  },
   refresh ({dispatch, commit, state}, {url}) {
     const keyword = state.keyword;
-    // const roleGroupName = state.roleGroupName;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
@@ -87,9 +104,9 @@ const actions = {
 
 const getters = {
   formData: state => state.formData,
+  queryFormData: state => state.queryFormData,
   roleForm: state => state.roleForm,
   keyword: state => state.keyword,
-  roleGroupName: roleGroupName => roleGroupName.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,

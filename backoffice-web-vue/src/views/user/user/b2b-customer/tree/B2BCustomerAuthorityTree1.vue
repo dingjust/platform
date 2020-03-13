@@ -221,6 +221,13 @@
         this.distinct(this.roleIdList);
       },
       setRoleList () {
+        this.secondRoleArr.forEach(item => {
+          if (item.checkFlag || item.indeterminateFlag) {
+            this.roleIdList.push(item.id);
+            this.roleIdList.push(item.parentId);
+          }
+        })
+        this.distinct(this.roleIdList)
         if (this.isRolePage) {
           this.formData.roleIds = this.roleIdList;
         } else {

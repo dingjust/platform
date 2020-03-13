@@ -19,36 +19,41 @@ const state = {
   authenticationInfo: {
     companyState: '',
     companyType: '',
-    personalState: '',
-  }
+    personalState: ''
+  },
+  permissions: []
 };
 const mutations = {
-  authorized(state, authorized) {
+  authorized (state, authorized) {
     sessionStorage.setItem('authorized', authorized);
     state.authorized = authorized;
   },
-  token(state, token) {
+  token (state, token) {
     sessionStorage.setItem('token', token);
     state.token = token;
   },
-  expiresIn(state, expiredIn) {
+  expiresIn (state, expiredIn) {
     localStorage.setItem('expiresIn', expiredIn);
     state.expiresIn = expiredIn;
   },
-  refreshToken(state, refreshToken) {
+  refreshToken (state, refreshToken) {
     localStorage.setItem('refreshToken', refreshToken);
     state.refreshToken = refreshToken;
   },
-  currentUser(state, currentUser) {
+  currentUser (state, currentUser) {
     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
     state.currentUser = currentUser;
   },
-  authenticationInfo(state, authenticationInfo) {
+  authenticationInfo (state, authenticationInfo) {
     state.authenticationInfo = authenticationInfo;
+  },
+  permissions (state, permissions) {
+    sessionStorage.setItem('permissions', JSON.stringify(permissions));
+    state.permissions = permissions;
   }
 };
 const actions = {
-  async login({
+  async login ({
     dispatch,
     commit,
     state
@@ -67,7 +72,7 @@ const actions = {
       return;
     }
     if (!response['access_token']) {
-      alert("账号密码不正确");
+      alert('账号密码不正确');
       return;
     }
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response['access_token'];
@@ -85,21 +90,29 @@ const actions = {
     // console.log(JSON.stringify(userInfo));
     commit('currentUser', userInfo);
 
-    //获取认证信息
+    // 获取认证信息
     // const url = this.apis().getAuthenticationState();
     const result = await http.get('/b2b/cert/state');
     if (!result['errors']) {
       commit('authenticationInfo', result.data);
     }
 
+    // 获取用户权限
+    const uid = state.currentUser.uid;
+    const res = await http.get('/b2b/b2bCustomers/role/' + uid);
+    if (res.code === 0) {
+      this.$message.error(res.msg);
+      return;
+    }
+    commit('permissions', res.data);
     router.push('/');
   },
-  async getProfile({
+  async getProfile ({
     dispatch,
     commit,
     state
   }, {
-    uid,
+    uid
   }) {
     console.log(JSON.stringify(state.currentUser));
     // 获取当前登录用户信息
@@ -107,7 +120,7 @@ const actions = {
     axios.defaults.headers.common['company'] = userInfo['companyCode'];
     commit('currentUser', userInfo);
 
-    //获取认证信息
+    // 获取认证信息
     // const url = this.apis().getAuthenticationState();
     const result = await http.get('/b2b/cert/state');
     if (!result['errors']) {
@@ -115,7 +128,7 @@ const actions = {
     }
     location.reload();
   },
-  async refreshToken({
+  async refreshToken ({
     dispatch,
     commit,
     state
@@ -136,20 +149,26 @@ const actions = {
   }
 };
 const getters = {
-  currentUser() {
+  currentUser () {
     if (!state.currentUser) {
       return JSON.parse(sessionStorage.getItem('currentUser'));
     }
     return state.currentUser;
   },
-  token() {
+  token () {
     return 'Bearer ' + sessionStorage.getItem('token');
   },
   authenticationInfo: state => state.authenticationInfo,
+  permissions () {
+    if (state.permissions.length <= 0) {
+      return JSON.parse(sessionStorage.getItem('permissions'));
+    }
+    return state.permissions;
+  }
 };
 
 export default {
-  /*namespaced: true,*/
+  /* namespaced: true, */
   state,
   mutations,
   actions,
