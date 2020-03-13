@@ -19,8 +19,8 @@
         </template>
       </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button @click="editInfo(scope.row)" size="mini" v-if="hasper(permission.companyB2bCustomerModify)">
+        <template slot-scope="scope" v-if="scope.$index != 0">
+          <el-button @click="editInfo(scope.row, scope)" size="mini" v-if="hasper(permission.companyB2bCustomerModify)">
             编辑信息
           </el-button>
           <el-select v-model="operation" placeholder="更多" size="mini" style="width: 40%"
@@ -72,7 +72,7 @@
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      editInfo (row) {
+      editInfo (row, scope) {
         this.$emit('editInfo', row);
       },
       selectionOperation (current) {
