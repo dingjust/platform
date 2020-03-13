@@ -91,6 +91,11 @@ class OrderApis {
         return '/{baseSiteId}/orders/purchase/$code/balance';
       };
 
+  //修改生产订单尾款扣款金额
+  static get purchaseOrderDeductionAmountUpdate => (code) {
+        return '/{baseSiteId}/orders/purchase/$code//update/deductionAmount';
+      };
+
   //修改生产订单定金和单价
   static get purchaseOrderDepositUpdate => (code) {
         return '/{baseSiteId}/orders/purchase/$code/deposit';
