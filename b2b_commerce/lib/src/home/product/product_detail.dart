@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
 as dj;
+import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
 import 'package:b2b_commerce/src/home/product/buy_proofing_form.dart';
 import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
@@ -12,6 +13,8 @@ import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
 
+import 'package:core/core.dart';
+
 class ProductDetailPage extends StatefulWidget {
   ProductDetailPage({Key key, @required this.product}) : super(key: key);
 
@@ -23,6 +26,8 @@ class ProductDetailPage extends StatefulWidget {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   TextEditingController _numController = TextEditingController();
   TextEditingController _remarksController = TextEditingController();
+
+  int product_type = 1;
 
   void initState() {
     super.initState();
@@ -66,9 +71,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           child: ListView(
             children: <Widget>[
               ProductCarousel(thumbnails, 400),
+              _buildTypeSection(),
               _buildHeaderSection(),
               _buildBasicInfoSection(bloc),
-              // _buildOrderButton(),
+              ProductAttributesTab(widget.product),
               _buildImagesSection()
             ],
           ),
@@ -78,10 +84,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
+  Widget _buildTypeSection() {
+    return Container(
+        color: Colors.white,
+        height: 80,
+        margin: EdgeInsets.only(top: 10),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+                flex: 1,
+                child: FlatButton(
+                  color: product_type == 1 ? Constants.THEME_COLOR_MAIN : null,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  shape: Border.all(width: 0.5, color: Colors.grey[300]),
+                  onPressed: () {
+                    setState(() {
+                      product_type = 1;
+                    });
+                  },
+                  child: Text('现货'),
+                )),
+            Expanded(
+                flex: 1,
+                child: FlatButton(
+                  color: product_type == 2 ? Constants.THEME_COLOR_MAIN : null,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  shape: Border.all(width: 0.5, color: Colors.grey[300]),
+                  onPressed: () {
+                    setState(() {
+                      product_type = 2;
+                    });
+                  },
+                  child: Text('期货'),
+                )),
+          ],
+        ));
+  }
+
   Widget _buildHeaderSection() {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.only(bottom: 10),
       color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,33 +141,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               overflow: TextOverflow.clip,
             ),
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: <Widget>[
-          //     RichText(
-          //       text: TextSpan(
-          //           text: '￥',
-          //           style: TextStyle(
-          //               color: Color.fromRGBO(255, 45, 45, 1), fontSize: 16),
-          //           children: <TextSpan>[
-          //             TextSpan(
-          //                 text: '${_minPrice[0]}.',
-          //                 style: TextStyle(fontSize: 25)),
-          //             TextSpan(text: '${_minPrice[1]}'),
-          //             TextSpan(text: '——￥'),
-          //             TextSpan(
-          //                 text: '${_maxPrice[0]}.',
-          //                 style: TextStyle(fontSize: 25)),
-          //             TextSpan(text: '${_maxPrice[1]}')
-          //           ]),
-          //     ),
-          //     Text(
-          //       '${widget.product.belongTo.contactAddress.region.name}${widget.product.belongTo.contactAddress.city.name}',
-          //       style: TextStyle(
-          //           color: Color.fromRGBO(150, 150, 150, 1), fontSize: 15),
-          //     )
-          //   ],
-          // )
           _buildMoneyRow(),
           Container(
             margin: EdgeInsets.only(top: 10),
@@ -174,49 +190,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   jumpToFactory(bloc);
                 }),
           ),
-          BasicInfoRow(
-            label: '参数',
-            value: '面料、含量、风格...',
-            onTap: onAttribute,
-          ),
         ],
       ),
     );
   }
-
-  // Widget _buildOrderButton() {
-  //   return Container(
-  //     margin: EdgeInsets.only(top: 20),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: <Widget>[
-  //         FlatButton(
-  //             onPressed: () {
-  //               FastRequirementForm fastRequirementForm =
-  //                   new FastRequirementForm();
-  //               fastRequirementForm
-  //                 ..categories = [widget.product.category]
-  //                 ..product = widget.product.code
-  //                 ..factoryUid = widget.product.belongTo.uid;
-  //               Navigator.of(context).push(MaterialPageRoute(
-  //                   builder: (context) => RequirementDatePick(
-  //                         fastRequirementForm: fastRequirementForm,
-  //                         nowTime: DateTime.now(),
-  //                       )));
-  //             },
-  //             shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(40)),
-  //             color: Color.fromRGBO(255, 214, 12, 1),
-  //             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 150),
-  //             child: Text(
-  //               '下单',
-  //               style: TextStyle(
-  //                   color: Color.fromRGBO(36, 38, 41, 1), fontSize: 20),
-  //             )),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildMoneyRow() {
     ///阶梯价空处理
@@ -342,6 +319,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       },
     );
   }
+
 
   Widget _buildImagesSection() {
     return Container(
@@ -501,25 +479,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         builder: (BuildContext context) {
           return BuyPurchaseForm(widget.product);
         });
-  }
-
-  /// 发布
-  void onPublish() async {
-    RequirementOrderModel form = RequirementOrderModel();
-
-    // // form..
-    // String code =
-    //     await RequirementOrderRepository().publishNewRequirement(form);
-    // if (code != null) {
-    //   form.code = code;
-    //   Navigator.of(context).pushAndRemoveUntil(
-    //       MaterialPageRoute(
-    //         builder: (context) => PublishRequirementSuccessDialog(
-    //               model: form,
-    //             ),
-    //       ),
-    //       ModalRoute.withName('/'));
-    // }
   }
 
   //拨打联系人
