@@ -46,7 +46,7 @@
           flag = false;
         }
         if (flag) {
-          return hasPermission(this.permission.purchaseOrderClose)
+          return hasPermission(this.permission.purchaseOrderOfflineCreate)
         } else {
           return hasPermission(this.permission.purchaseOrderConfirm);
         }
