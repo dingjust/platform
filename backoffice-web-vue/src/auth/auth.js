@@ -1,19 +1,18 @@
 import store from '@/store';
 
-
 // const currentAuth
 
 // export { currentAuth };
 
 export function getCurrentAuthority() {
   //   return currentAuth;
-  return store.getters['PermissionModule/permissions'];
+  return JSON.parse(sessionStorage.getItem('permissions'));
 }
 
-//检查是否拥有权限
+// 检查是否拥有权限
 export function hasPermission(authority) {
   if (authority && authority instanceof Array && authority.length) {
-    const permissions = sessionStorage.getItem('permissions');
+    const permissions = JSON.parse(sessionStorage.getItem('permissions'));
     const flag = authority.every(val => permissions.includes(val));
     if (flag != null && flag) {
       return true;
@@ -24,7 +23,6 @@ export function hasPermission(authority) {
     return true;
   }
 }
-
 
 export function check(authority) {
   if (authority && authority instanceof Array && authority.length) {

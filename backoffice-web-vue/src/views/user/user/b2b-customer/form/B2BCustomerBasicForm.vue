@@ -166,6 +166,20 @@
         this.deptId = val;
       },
       async onSave () {
+        this.$refs['form'].validate(valid => {
+          if (valid) {
+            if (!this.formData.b2bRoleList || this.formData.b2bRoleList.length == 0) {
+              this.$message.error('权限不能为空');
+              return
+            }
+            this._onSave();
+          } else {
+            this.$message.error('请完善表单信息');
+            return false;
+          }
+        });
+      },
+      async _onSave () {
         // console.log(this.formData);
         let data = {
           name: this.formData.name,
@@ -178,12 +192,13 @@
           data.id = this.formData.id;
         }
         // console.log(data);
-        // return ;
+        // return;
         const url = this.apis().createB2BCustomer();
         const result = await this.$http.post(url, data);
         if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
+          let index = result['errors'][0].message.indexOf(':');
+          let msg = result['errors'][0].message.substring(index + 1);
+          this.$message.error(msg);
         }
         this.$message.success('添加员工成功');
         this.$router.push({
@@ -218,8 +233,11 @@
     data () {
       return {
         rules: {
-          uid: [{ required: true, message: '必填', trigger: 'blur' }],
-          name: [{ required: true, message: '必填', trigger: 'blur' }]
+          name: [
+            { required: true, message: '必填', trigger: 'blur' },
+            { max: 10, message: '员工名称最多可输入10个字符', trigger: 'blur' }
+          ],
+          uid: [{ required: true, message: '必填', trigger: 'blur' }]
         },
         uid: '',
         name: '',

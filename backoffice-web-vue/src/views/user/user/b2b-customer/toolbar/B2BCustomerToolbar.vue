@@ -5,13 +5,19 @@
         <template slot="label">
           <h6 class="formLabel">姓名</h6>
         </template>
-        <el-input placeholder="请输入员工姓名" v-model="keyword" style="width: 150px"></el-input>
+        <el-input placeholder="请输入员工姓名" v-model="queryFormData.keyword" style="width: 150px"></el-input>
       </el-form-item>
       <el-form-item label="">
         <template slot="label">
           <h6 class="formLabel">角色</h6>
         </template>
-        <el-input placeholder="请输入角色" v-model="roleGroupName" style="width: 150px"></el-input>
+        <el-input placeholder="请输入角色" v-model="queryFormData.roleGroupName" style="width: 150px"></el-input>
+      </el-form-item>
+      <el-form-item label="">
+        <template slot="label">
+          <h6 class="formLabel">部门</h6>
+        </template>
+        <el-input placeholder="请输入角色" v-model="queryFormData.deptName" style="width: 150px"></el-input>
       </el-form-item>
       <el-button style="background-color: #FFD60C" @click="onSearch" size="mini">搜索</el-button>
       <el-button @click="onReset" size="mini">重置</el-button>
@@ -26,18 +32,18 @@
 <script>
   import {createNamespacedHelpers} from 'vuex';
 
-  const {mapMutations} = createNamespacedHelpers('B2BCustomersModule');
+  const {mapGetters} = createNamespacedHelpers('B2BCustomersModule');
 
   export default {
     name: 'B2BCustomerToolbar',
     components: {},
-    computed: {},
+    computed: {
+      ...mapGetters({
+        queryFormData: 'queryFormData'
+      })
+    },
     methods: {
-      ...mapMutations({
-        setKeyword: 'keyword'
-      }),
       onSearch () {
-        this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
       onNew () {
@@ -53,9 +59,10 @@
         this.$emit('onNew', formData);
       },
       onReset () {
-        this.keyword = '';
-        this.name = '';
-        this.roleGroupName = '';
+        this.queryFormData.keyword = '';
+        this.queryFormData.name = '';
+        this.queryFormData.roleGroupName = '';
+        this.queryFormData.deptName = '';
       },
       onInvite () {
         this.$emit('onInvite');
@@ -66,6 +73,8 @@
         keyword: '',
         name: '',
         roleGroupName: '',
+        b2bDept: '',
+        deptName: '',
         formData: this.$store.state.B2BCustomersModule.formData,
         categories: []
       }

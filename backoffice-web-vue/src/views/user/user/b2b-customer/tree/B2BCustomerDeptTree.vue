@@ -1,26 +1,36 @@
 <template>
-    <div>
-      <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent=10>
+    <div class="tree-container">
+      <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent=10 class="tree filter-tree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
-          <span v-if="data.name !== name || !showInput" @dblclick="dblclick(data)"
+          <span v-if="data.name !== name || !showInput" @dblclick="dblclick(data)" @click="searchOnDept(data)"
                 @mouseover="onActive(data)" @mouseleave="offActive"
                 :class="nodeClassShow(data)? 'active_tree_node':''">
             {{ data.name }}
           </span>
-          <el-input ref="input" v-if="data.name === name && showInput" v-model="modifyName" @blur="setName(node, data)" autofocus/>
-          <authorized :authority="permission.companyB2bDeptCR">
-            <span v-if="data.name !== name || showIconV">
-              <el-button type="text" size="mini">
-                <i v-if="topAppendShow(data)" class="el-icon-circle-plus-outline" @click="append(node, data)"/>
-                <i v-if="data.depth > 0" class="el-icon-setting" @click="showIcon(data)"/>
-              </el-button>
-            </span>
-            <span v-else @mouseleave="showOption()">
-                <el-button v-if="appendShow(data)" type="text" size="mini" @click="() => append(node, data)">添加子部门</el-button>
-  <!--            <el-button v-if="data.depth > 1 && type==='role' && !appendInputVisible" type="text" size="mini" @click="() => editRole(node, data)">编辑角色</el-button>-->
-                <el-button v-if="removeShow(data)" type="text" size="mini" @click="() => remove(node, data)">删除</el-button>
-            </span>
-          </authorized>
+          <el-input ref="input" v-if="data.name === name && showInput"
+                    v-model="modifyName"
+                    @blur="setName(node, data)"
+                    autofocus
+                    onkeydown="if(event.keyCode==13){blur()}"/>
+<!--          <authorized :authority="permission.companyB2bDeptCR">-->
+            <el-button type="text" size="mini" v-if="topAppendShow(data)">
+              <i class="el-icon-circle-plus-outline" @click="append(node, data)"/>
+            </el-button>
+            <el-dropdown trigger="click" v-if="data.depth > 0 && (hasPer(permission.companyB2bDeptCreate) || hasPer(permission.companyB2bDeptRemove))" @command="handleCommand($event, node, data)">
+              <span class="el-dropdown-link">
+                <i class="el-icon-setting" style="color: #409eff" @click="showIcon(data)"/>
+              </span>
+              <el-dropdown-menu slot="dropdown" >
+                <el-dropdown-item v-if="appendShow(data)" command="append">添加子部门</el-dropdown-item>
+                <el-dropdown-item v-if="removeShow(data)" command="remove">删除</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+<!--            <span v-else @mouseleave="showOption()">-->
+<!--                <el-button v-if="appendShow(data)" type="text" size="mini" @click="() => append(node, data)">添加子部门</el-button>-->
+<!--  &lt;!&ndash;            <el-button v-if="data.depth > 1 && type==='role' && !appendInputVisible" type="text" size="mini" @click="() => editRole(node, data)">编辑角色</el-button>&ndash;&gt;-->
+<!--                <el-button v-if="removeShow(data)" type="text" size="mini" @click="() => remove(node, data)">删除</el-button>-->
+<!--            </span>-->
+<!--          </authorized>-->
         </span>
       </el-tree>
     </div>
@@ -48,6 +58,23 @@
         };
       },
       methods: {
+        searchOnDept (data) {
+          let deptName = '';
+          if (data.name != '所有部门') {
+            deptName = data.name;
+          }
+          this.$emit('searchInAside', deptName, '')
+        },
+        hasPer (permission) {
+          return hasPermission(permission);
+        },
+        handleCommand (command, node, data) {
+          if (command == 'append') {
+            this.append(node, data);
+          } else if (command == 'remove') {
+            this.remove(node, data);
+          }
+        },
         topAppendShow (data) {
           return hasPermission(this.permission.companyB2bDeptCreate) && data.depth == 0;
         },
@@ -189,6 +216,9 @@
 </script>
 
 <style scoped>
+  /deep/ .el-tree-node__content {
+    padding-left: 0px !important;
+  }
   .custom-tree-node {
     flex: 1;
     display: flex;
@@ -210,5 +240,62 @@
   }
   .noactive_tree_node {
     color: black;
+  }
+
+
+  /* 树形结构节点添加连线 */
+  .tree /deep/ .el-tree-node {
+    position: relative;
+    padding-left: 16px;
+  }
+
+  .tree /deep/ .el-tree-node__children {
+    padding-left: 16px;
+  }
+
+  .tree /deep/ .el-tree-node :last-child:before {
+    height: 38px;
+  }
+
+  .tree /deep/ .el-tree > .el-tree-node:before {
+    border-left: none;
+  }
+
+  .tree-container /deep/ .el-tree > .el-tree-node:after {
+    border-top: none;
+  }
+
+  .tree /deep/ .el-tree-node:before {
+    content: "";
+    left: -4px;
+    position: absolute;
+    right: auto;
+    border-width: 1px;
+  }
+
+  .tree /deep/ .el-tree-node:after {
+    content: "";
+    left: -4px;
+    position: absolute;
+    right: auto;
+    border-width: 1px;
+  }
+  .tree /deep/ .el-tree-node__expand-icon.is-leaf {
+    display: none;
+  }
+
+  .tree /deep/ .el-tree-node:before {
+    border-left: 1px dashed #b8b9bb;
+    bottom: 0px;
+    height: 100%;
+    top: -26px;
+    width: 1px;
+  }
+
+  .tree /deep/ .el-tree-node:after {
+    border-top: 1px dashed #b8b9bb;
+    height: 20px;
+    top: 12px;
+    width: 24px;
   }
 </style>

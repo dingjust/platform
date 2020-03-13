@@ -133,12 +133,6 @@
           username,
           password
         });
-
-        this.getPermission();
-      },
-      getPermission () {
-        const uid = this.$store.getters.currentUser.uid;
-        this.$store.dispatch('PermissionModule/getPermissions', {uid});
       },
       /// NC验证回调
       ncCallback (data) {
