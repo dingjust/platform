@@ -42,39 +42,37 @@
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
       <el-button v-if="companyState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
-      <el-button v-if="companyState == 'SUCCESS'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >重新认证</el-button>
+      <el-button v-if="reverificationShow" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >重新认证</el-button>
     </el-row>
   </div>
 </template>
 
 <script>
   import http from '@/common/js/http';
+  import {hasPermission} from '../../../auth/auth';
 
   export default {
     name: 'AuthenticationBusinessFrom',
-    props: ['businessSlotData', 'businessReadOnly','companyState'],
+    props: ['businessSlotData', 'businessReadOnly', 'companyState'],
     components: {
-
     },
     mixins: [],
     computed: {
-
+      reverificationShow: function () {
+        return this.companyState == 'SUCCESS' && hasPermission(this.permission.certReverification);
+      }
     },
     methods: {
-      async onSave(){
-        if(this.businessSlotData.companyName == null || this.businessSlotData.companyName == ''){
+      async onSave () {
+        if (this.businessSlotData.companyName == null || this.businessSlotData.companyName == '') {
           this.$message.error('请填写公司名称');
-          return;
-        }else if(this.businessSlotData.username == null || this.businessSlotData.username == ''){
+        } else if (this.businessSlotData.username == null || this.businessSlotData.username == '') {
           this.$message.error('请填写办理人姓名');
-          return;
-        }else if(this.businessSlotData.idCardNum == null || this.businessSlotData.idCardNum == ''){
+        } else if (this.businessSlotData.idCardNum == null || this.businessSlotData.idCardNum == '') {
           this.$message.error('请填写办理人身份证号');
-          return;
-        }else if(this.businessSlotData.type == null || this.businessSlotData.type == ''){
+        } else if (this.businessSlotData.type == null || this.businessSlotData.type == '') {
           this.$message.error('请选择认证方式');
-          return;
-        }else{
+        } else {
           const url = this.apis().enterpriseAuthentication();
           const tempData = {
             companyName: this.businessSlotData.companyName,
@@ -87,32 +85,30 @@
           };
           let formData = Object.assign({}, tempData);
           const result = await http.post(url, formData);
-          if(result.data !=  null){
+          if (result.data != null) {
             window.open(result.data, '_blank');
-          }else{
+          } else {
             this.$message.success(result.msg);
           }
         }
-
       }
     },
-    data() {
+    data () {
       return {
         rules: {
           companyName: [{required: true, message: '必填', trigger: 'blur'}],
           username: [{required: true, message: '必填', trigger: 'blur'}],
           idCardNum: [{required: true, message: '必填', trigger: 'blur'}],
-          verifyWay: [{required: true, message: '必填', trigger: 'blur'}],
-        },
+          verifyWay: [{required: true, message: '必填', trigger: 'blur'}]
+        }
       }
     },
-    created() {
+    created () {
 
     },
-    mounted() {}
+    mounted () {}
 
   }
-
 </script>
 <style>
   .form-row{

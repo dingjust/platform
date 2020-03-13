@@ -16,7 +16,7 @@
       </el-form>
     </div>
     <el-row type="flex" justify="center">
-      <el-button v-if="!readOnly" class="buttonClass" @click="onSave">
+      <el-button v-if="saveShow" class="buttonClass" @click="onSave">
         <h6>保存</h6>
       </el-button>
     </el-row>
@@ -30,6 +30,8 @@
 
   import BrandBasicInfoForm from './BrandBasicInfoForm';
   import BrandCapacityForm from './BrandCapacityForm';
+  import {hasPermission} from '../../../../../auth/auth';
+
   export default {
     name: 'BrandFrom1',
     components: {
@@ -65,6 +67,9 @@
       ...mapGetters({
         brandFormVisible: 'brandFormVisible'
       }),
+      saveShow: function () {
+        return !this.readOnly && hasPermission(this.permission.entInfoModify);
+      },
       tranData: function () {
         if (this.readOnly) {
           this.setBrandFormVisible(true);
