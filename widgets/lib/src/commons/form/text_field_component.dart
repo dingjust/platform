@@ -67,6 +67,13 @@ class TextFieldComponent extends StatefulWidget {
 
 class TextFieldComponentState extends State<TextFieldComponent> {
 
+  @override
+  void setState(fn) {
+    if(mounted){
+      super.setState(fn);
+    }
+  }
+
   String formatNum(double num,int postion){
     if((num.toString().length-num.toString().lastIndexOf(".")-1)<postion){
       //小数点后有几位小数
@@ -98,7 +105,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         });
       } else {
         setState(() {
-          widget.dividerColor == null? widget.dividerColor = Color(Constants.DIVIDER_COLOR):widget.dividerColor = widget.dividerColor;
+          widget.dividerColor = Color(Constants.DIVIDER_COLOR);
           if(widget.prefix != null && widget.controller.text != ''){
             widget.controller.text = widget.prefix + widget.controller.text;
           }
@@ -166,6 +173,8 @@ class TextFieldComponentState extends State<TextFieldComponent> {
                     border: widget.isInputBorder?UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey,width: 0.5)):InputBorder.none,
                     hintText: widget.hintText,
                     hintStyle: TextStyle(color: Colors.grey,),
+                    contentPadding: EdgeInsets.only()
+//                      ,prefixText: '已付定金：',prefixStyle: TextStyle(color: Colors.black87,fontSize: 16)
                   ),
                   autofocus: widget.autofocus,
                   focusNode: widget.focusNode,
@@ -189,7 +198,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         Offstage(
           offstage: widget.hideDivider,
           child: Padding(
-            padding: widget.dividerPadding ?? widget.dividerPadding ?? EdgeInsets.symmetric(horizontal: 15),
+            padding: widget.dividerPadding ?? EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

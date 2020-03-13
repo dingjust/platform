@@ -107,6 +107,7 @@ class PurchaseOrderRepository {
     if (response != null && response.statusCode == 200) {
       print(response);
       PurchaseOrderModel model = PurchaseOrderModel.fromJson(response.data);
+      print('${model.deductionAmount}oooooooooooooooo');
       return model;
     } else
       return null;
@@ -193,6 +194,25 @@ class PurchaseOrderRepository {
     }
   }
 
+  /// 修改订单尾款扣除金额
+  Future<bool> purchaseOrderDeductionAmountUpdate(
+      String code, PurchaseOrderModel form) async {
+    Response response;
+    try {
+      response = await http$.put(OrderApis.purchaseOrderDeductionAmountUpdate(code),
+          data: {'deductionAmount':form.deductionAmount},
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /// 修改订单定金金额
   Future<bool> purchaseOrderDepositUpdate(
       String code, PurchaseOrderModel form) async {
@@ -201,7 +221,7 @@ class PurchaseOrderRepository {
       response = await http$.put(
         OrderApis.purchaseOrderDepositUpdate(code),
         data: PurchaseOrderModel.toJson(form),
-      );
+          options: Options(responseType: ResponseType.plain));
     } on DioError catch (e) {
       print(e);
     }
