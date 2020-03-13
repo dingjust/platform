@@ -108,7 +108,7 @@
         },
         remove (node, data) {
           if (node.childNodes.length > 0) {
-            this.$confirm('删除该部门下会将下级部门一并删除，请问是否继续?', '删除部门', {
+            this.$confirm('删除该部门下会将下级部门一并删除，请问是否继续?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
@@ -116,7 +116,13 @@
               this.$emit('removeDept', data.id);
             });
           } else {
-            this.$emit('removeDept', data.id);
+            this.$confirm('确认后删除部门，请问是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$emit('removeDept', data.id);
+            });
           }
         },
         dblclick (data) {

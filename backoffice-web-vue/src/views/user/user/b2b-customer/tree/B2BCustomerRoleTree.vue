@@ -84,7 +84,13 @@
           this.$emit('editRole', data);
         },
         remove (data) {
-          this.$emit('removeRole', data.id);
+          this.$confirm('确认后删除角色，请问是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$emit('removeRole', data.id);
+          });
         },
         dblclick (data) {
           if (data.depth === 0 || !hasPermission(this.permission.companyB2bRoleModify)) {
