@@ -27,7 +27,7 @@
     <el-dialog :visible.sync="inviteDialogVisible" width="30%" :close-on-click-modal="false">
       <b2-b-customer-invite-dialog v-if="inviteDialogVisible" @onCannel="inviteCannel" @onConfirm="inviteConfirm"/>
     </el-dialog>
-    <el-dialog :visible.sync="editRoleVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog">
+    <el-dialog :visible.sync="editRoleVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog" :before-close="handleClose">
       <b2-b-customer-edit-role-dialog v-if='editRoleVisible' :slotData='roleGroupData' @saveRole='saveRole' @cannelNewRole='cannelNewRole'/>
     </el-dialog>
     <el-dialog :visible.sync="workHandoverVisible" width="30%" :close-on-click-modal="false">
@@ -315,6 +315,13 @@
         }
         this.$message.success('删除账号成功');
         this.onSearch();
+      },
+      handleClose (done) {
+        this.$confirm('是否确认关闭此弹窗，填写的信息将不会保存')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
     },
     data () {

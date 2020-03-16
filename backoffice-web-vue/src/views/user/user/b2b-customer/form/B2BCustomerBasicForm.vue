@@ -251,7 +251,8 @@
           label: 'name',
           children: 'children'
           // disabled:true
-        }
+        },
+        count: 0
       };
     },
     created () {
@@ -265,6 +266,37 @@
         this.deptId = this.formData.b2bDept.id;
       } else {
         this.formData = Object.assign({}, this.$store.state.B2BCustomersModule.formData);
+      }
+    },
+    watch: {
+      formData: {
+        handler (val) {
+          if (val) {
+            this.count++
+            console.log(this.count);
+          }
+        },
+        deep: true
+      },
+      deptId: function (nval, oval) {
+        if (nval) {
+          this.count++;
+          console.log(this.count);
+        }
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      // 判断数据是否修改，如果修改按这个执行，没修改，则直接执行离开此页面
+      if ((this.$route.params.formData != null && this.count > 2) || (this.$route.params.formData == null && this.count > 1)) {
+        this.$confirm('当前页面数据并未保存，是否要离开？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          next();
+        });
+      } else {
+        next();
       }
     }
   };

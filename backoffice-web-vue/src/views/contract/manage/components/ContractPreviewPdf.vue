@@ -23,11 +23,9 @@
         type="warning" class="toolbar-search_input" @click="onRefuseConfirm(slotData.code)">拒签</el-button>
       <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && slotData.isCreator" type="warning"
         class="toolbar-search_input" @click="onRevokeConfirm(slotData.code)">撤回</el-button>
-      <authorized :authority="permission.agreementSign">
-        <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID'" type="warning"
-                   class="toolbar-search_input" @click="onSearchSeal">签署
-        </el-button>
-      </authorized>
+      <el-button v-if="slotData.state != 'COMPLETE' && slotData.state != 'INVALID' && hasPer(permission.agreementSign)" type="warning"
+                 class="toolbar-search_input" @click="onSearchSeal">签署
+      </el-button>
     </div>
     <!--<center>-->
     <!--<table height="150px" border="0" id='waitPage'>-->
@@ -64,6 +62,7 @@
   import ContractSealList from '../components/ContractSealList';
   import Bus from '@/common/js/bus.js';
   import ContractSupplementForm from '../ContractSupplementForm'
+  import {hasPermission} from '../../../../auth/auth';
 
   export default {
     name: 'ContractPreviewPdf',
@@ -87,6 +86,9 @@
       }
     },
     methods: {
+      hasPer (permission) {
+        return hasPermission(permission);
+      },
       onBCXY () {
         this.dialogOrderVisible = true;
         Bus.$emit('closePdfView');

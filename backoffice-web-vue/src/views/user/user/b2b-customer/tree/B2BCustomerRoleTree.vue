@@ -1,6 +1,6 @@
 <template>
     <div class="tree-container">
-      <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent=10 class="tree filter-tree">
+      <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent='10' class="tree filter-tree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span v-if="data.id !== applyId || !showInput" @dblclick="dblclick(data)" @click="searchOnRole(data)"
                 @mouseover="onActive(data)" @mouseleave="offActive"
@@ -32,7 +32,7 @@
 
 <script>
     import {hasPermission} from '../../../../../auth/auth';
-
+    var time;
     export default {
       name: 'B2BCustomerRoleTree',
       props: ['slotData'],
@@ -52,11 +52,14 @@
       },
       methods: {
         searchOnRole (data) {
-          let roleName = '';
-          if (data.name != '所有角色') {
-            roleName = data.name;
-          }
-          this.$emit('searchInAside', '', roleName);
+          clearTimeout(time);
+          time = setTimeout(() => {
+            let roleName = '';
+            if (data.name != '所有角色') {
+              roleName = data.name;
+            }
+            this.$emit('searchInAside', '', roleName);
+          }, 200)
         },
         showDropdown (data) {
           return !data.hasOwnProperty('depth') && (hasPermission(this.permission.companyB2bRoleModify) || hasPermission(this.permission.companyB2bRoleRemove))
@@ -84,7 +87,7 @@
           this.$emit('editRole', data);
         },
         remove (data) {
-          this.$confirm('确认后删除角色，请问是否继续?', '提示', {
+          this.$confirm('确认后将删除此角色，请问是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -93,6 +96,7 @@
           });
         },
         dblclick (data) {
+          clearTimeout(time);
           if (data.depth === 0 || !hasPermission(this.permission.companyB2bRoleModify)) {
             return
           }
