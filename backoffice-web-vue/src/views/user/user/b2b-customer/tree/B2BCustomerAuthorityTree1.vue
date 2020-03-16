@@ -203,7 +203,7 @@
         } else {
           this.roleIdList.push(item.id);
         }
-        this.distinct(this.roleIdList);
+        this.roleIdList = this.distinct(this.roleIdList);
       },
       popRoleId (item) {
         let index;
@@ -220,7 +220,7 @@
             this.roleIdList.splice(index, 1);
           }
         }
-        this.distinct(this.roleIdList);
+        this.roleIdList = this.distinct(this.roleIdList);
       },
       setRoleList () {
         this.secondRoleArr.forEach(item => {
@@ -229,7 +229,7 @@
             this.roleIdList.push(item.parentId);
           }
         })
-        this.distinct(this.roleIdList)
+        this.roleIdList = this.distinct(this.roleIdList)
         if (this.isRolePage) {
           this.formData.roleIds = this.roleIdList;
         } else {

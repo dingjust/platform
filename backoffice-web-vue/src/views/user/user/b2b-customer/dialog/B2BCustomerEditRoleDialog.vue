@@ -74,14 +74,14 @@
       onSave () {
         this.$refs['roleForm'].validate((valid) => {
           if (valid) {
-            if (this.slotData.roleIds || this.slotData.roleIds.length < 0) {
+            if (!this.slotData.roleIds || this.slotData.roleIds.length < 0) {
               this.$message.error('请选择角色的权限');
               return;
             }
             let formData = {
               id: this.slotData.id == '' ? null : this.slotData.id,
               name: this.slotData.name,
-              roleIds: this.slotData.roleIds
+              roleIds: this.distinct(this.slotData.roleIds)
             }
             this.$emit('saveRole', formData);
           } else {
@@ -91,6 +91,18 @@
       },
       onCannel () {
         this.$emit('cannelNewRole');
+      },
+      // 数组去重
+      distinct (arr) {
+        let result = []
+        let obj = {};
+        for (let i of arr) {
+          if (!obj[i]) {
+            result.push(i)
+            obj[i] = 1
+          }
+        }
+        return result
       }
     },
     created () {

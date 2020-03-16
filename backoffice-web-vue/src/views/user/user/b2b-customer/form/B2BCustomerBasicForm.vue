@@ -172,6 +172,7 @@
               this.$message.error('权限不能为空');
               return
             }
+            this.isSave = true;
             this._onSave();
           } else {
             this.$message.error('请完善表单信息');
@@ -252,7 +253,8 @@
           children: 'children'
           // disabled:true
         },
-        count: 0
+        count: 0,
+        isSave: false
       };
     },
     created () {
@@ -287,7 +289,7 @@
     },
     beforeRouteLeave (to, from, next) {
       // 判断数据是否修改，如果修改按这个执行，没修改，则直接执行离开此页面
-      if ((this.$route.params.formData != null && this.count > 2) || (this.$route.params.formData == null && this.count > 1)) {
+      if ((this.$route.params.formData != null && this.count > 2 && !this.isSave) || (this.$route.params.formData == null && this.count > 1 && !this.isSave)) {
         this.$confirm('当前页面数据并未保存，是否要离开？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
