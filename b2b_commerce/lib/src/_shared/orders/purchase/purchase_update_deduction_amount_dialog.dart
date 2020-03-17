@@ -27,8 +27,16 @@ class _PurchaseUpdateDeductionAmountDialogState extends State<PurchaseUpdateDedu
     // TODO: implement initState
     super.initState();
 
-    _payAmount = (widget.purchaseOrderModel.balance ?? 0.00) - (widget.purchaseOrderModel.deductionAmount ?? 0);
-    _deductionAmountController.text = widget.purchaseOrderModel.deductionAmount?.toString();
+    _payAmount = (widget.purchaseOrderModel.balance ?? 0.00) +
+        (widget.purchaseOrderModel.deductionAmount ?? 0);
+    if (widget.purchaseOrderModel.deductionAmount != null &&
+        widget.purchaseOrderModel.deductionAmount < 0) {
+      _deductionAmountController.text =
+          widget.purchaseOrderModel.deductionAmount.toString().substring(1);
+    } else {
+      _deductionAmountController.text =
+          widget.purchaseOrderModel.deductionAmount?.toString();
+    }
   }
 
   @override
@@ -112,7 +120,9 @@ class _PurchaseUpdateDeductionAmountDialogState extends State<PurchaseUpdateDedu
                                 child: Row(
                                   children: <Widget>[
                                     Text('订单总额：',style: _titleStyle,),
-                                    Text('￥${widget.purchaseOrderModel.totalPrice ?? 0.00}',style: _valueStyle,),
+                                    Text('￥${(widget.purchaseOrderModel
+                                        .totalPrice ?? 0.00).toStringAsFixed(
+                                        2)}', style: _valueStyle,),
                                   ],
                                 ),
                               ),
@@ -122,7 +132,10 @@ class _PurchaseUpdateDeductionAmountDialogState extends State<PurchaseUpdateDedu
                                 child: Row(
                                   children: <Widget>[
                                     Text('已付定金：',style: _titleStyle,),
-                                    Text('￥${widget.purchaseOrderModel.deposit ?? 0.00}',style: _valueStyle,),
+                                    Text(
+                                      '￥${(widget.purchaseOrderModel.deposit ??
+                                          0.00).toStringAsFixed(2)}',
+                                      style: _valueStyle,),
                                   ],
                                 ),
                               ),
@@ -132,7 +145,10 @@ class _PurchaseUpdateDeductionAmountDialogState extends State<PurchaseUpdateDedu
                                 child: Row(
                                   children: <Widget>[
                                     Text('应付尾款：',style: _titleStyle,),
-                                    Text('￥${widget.purchaseOrderModel.balance ?? 0.00}',style: _valueStyle,),
+                                    Text(
+                                      '￥${(widget.purchaseOrderModel.balance ??
+                                          0.00).toStringAsFixed(2)}',
+                                      style: _valueStyle,),
                                   ],
                                 ),
                               ),
@@ -158,11 +174,21 @@ class _PurchaseUpdateDeductionAmountDialogState extends State<PurchaseUpdateDedu
                                   onChanged: (v){
                                     if(v == '' || double.parse(v) == 0){
                                       setState(() {
-                                        _payAmount = widget.purchaseOrderModel.balance;
+                                        _payAmount =
+                                            widget.purchaseOrderModel.balance ??
+                                                0;
                                       });
                                     }else{
                                       setState(() {
-                                        _payAmount = widget.purchaseOrderModel.balance - double.parse(v);
+                                        if (double.parse(v) ==
+                                            widget.purchaseOrderModel.balance) {
+                                          _payAmount = 0;
+                                        } else {
+                                          _payAmount =
+                                              (widget.purchaseOrderModel
+                                                  .balance ?? 0) -
+                                                  double.parse(v);
+                                        }
                                       });
                                     }
                                   },
@@ -182,7 +208,7 @@ class _PurchaseUpdateDeductionAmountDialogState extends State<PurchaseUpdateDedu
                                 child: Row(
                                   children: <Widget>[
                                     Text('实付金额：',style: TextStyle(fontSize: 20),),
-                                    Text('￥${_payAmount.toStringAsFixed(2)}',
+                                    Text('￥${_payAmount?.toStringAsFixed(2)}',
                                       style: TextStyle(fontSize: 20,color: Colors.grey,),),
                                   ],
                                 ),
@@ -218,12 +244,13 @@ class _PurchaseUpdateDeductionAmountDialogState extends State<PurchaseUpdateDedu
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(15))),
                                     onPressed: () {
-//                                    if(_deductionAmountController.text != ''){
-//                                      widget.purchaseOrderModel.deductionAmount = double.parse(_deductionAmountController.text);
-//                                    }else{
-//                                      widget.purchaseOrderModel.deductionAmount = 0;
-//                                    }
-                                      Navigator.pop(context,_deductionAmountController.text);
+                                      String text = '0';
+                                      if (_deductionAmountController.text !=
+                                          '') {
+                                        text = '-' +
+                                            _deductionAmountController.text;
+                                      }
+                                      Navigator.pop(context, text);
 
                                     }),
                                 decoration: BoxDecoration(

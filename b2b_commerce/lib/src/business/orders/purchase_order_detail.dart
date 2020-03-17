@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_update_deduction_amount_dialog.dart';
-import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_update_total_price_dialog.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
@@ -9,7 +7,6 @@ import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +21,6 @@ import 'package:widgets/widgets.dart';
 
 import 'form/purchase/purchase_deliver_order_view.dart';
 import 'form/purchase/purchase_detail_btn_group.dart';
-import 'form/purchase/purchase_detail_btn_group_online.dart';
 import 'form/purchase/purchase_reconciliation_order_view.dart';
 import 'form/purchase/purchase_shipping_order_view.dart';
 
@@ -70,10 +66,8 @@ class PurchaseOrderDetailPage extends StatefulWidget {
 
   final bool isProduction;
 
-  final Function refreshAmount;
-
   PurchaseOrderDetailPage(
-      {Key key, @required this.code, this.isProduction = false,this.refreshAmount,this.model,})
+      {Key key, @required this.code, this.isProduction = false, this.model,})
       : super(key: key);
 
   _PurchaseDetailPageState createState() => _PurchaseDetailPageState();
@@ -187,8 +181,9 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                           _buildRemarks(context),
                           _buildContracts(context),
                           _buildFinance(context),
-                          _buildLog(context),
+//                          _buildLog(context),
                           _buildBottom(context),
+                          _buildCommitButton(context),
                         ],
                       )),
                 ],
@@ -1262,7 +1257,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   //提示付款信息
   Widget _buildTipsPayment(BuildContext context) {
     final bloc = BLoCProvider.of<UserBLoC>(context);
-    return order.depositPaid == false
+    return order.status == PurchaseOrderStatus.PENDING_PAYMENT
         ? Container(
             padding: EdgeInsets.only(left: 15),
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -1400,60 +1395,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           Divider(
             height: 1,
           ),
-          Container(
-            child: ListTile(
-                leading: Text(
-                  '定金',
-                  style: TextStyle(
-                    fontSize: 22,
-                  ),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      '￥',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.red,
-                      ),
-                    ),
-                    Text(
-                      '${order.deposit == null ? 0 : order.deposit.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.red,
-                      ),
-                    )
-                  ],
-                )),
-          ),
-          Offstage(
-            offstage: (order.depositPaid != null && !order.depositPaid) || (order.balancePaid != null && order.balancePaid),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('其他扣款'),
-                  Text('-￥${(order.deductionAmount ?? 0).toStringAsFixed(2)}',style: TextStyle(color: Colors.black),)
-                ],
-              ),
-            ),
-          ),
-          Offstage(
-            offstage:  (order.depositPaid != null && !order.depositPaid) || (order.balancePaid != null && order.balancePaid),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('实付金额',style: TextStyle(fontSize: 18,),),
-                  Text('￥${((order.balance ?? 0) - (order.deductionAmount ?? 0)).toStringAsFixed(2)}',style: TextStyle(color: Colors.red,fontSize: 18,),)
-                ],
-              ),
-            ),
-          ),
         ],
       ),
       decoration: BoxDecoration(
@@ -1518,7 +1459,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildContracts(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -1536,17 +1477,17 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       : B2BImage.notSigned(width: 50, height: 30)
                 ],
               )),
-          FlatButton(
-            color: const Color.fromRGBO(255, 219, 0, 1),
-            onPressed: () {},
-            child: Text('签署合同'),
-          )
+//          FlatButton(
+//            color: const Color.fromRGBO(255, 219, 0, 1),
+//            onPressed: () {},
+//            child: Text('签署合同'),
+//          )
         ],
       ),
     );
   }
 
-  //财务
+  //账务
   Widget _buildFinance(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(top: 10),
@@ -1564,15 +1505,15 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.only(right: 10),
-                          child: Text('财务管理'),
+                          child: Text('账务'),
                         ),
                       ],
                     )),
-                FlatButton(
-                  color: const Color.fromRGBO(255, 219, 0, 1),
-                  onPressed: () {},
-                  child: Text('财务详情'),
-                )
+//                FlatButton(
+//                  color: const Color.fromRGBO(255, 219, 0, 1),
+//                  onPressed: () {},
+//                  child: Text('账务详情'),
+//                )
               ],
             ),
             Row(
@@ -1788,7 +1729,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                     ),
                     onPressed: () {
                       //将支付金额置为定金
-                      order.totalPrice = order.deposit;
+//                      order.totalPrice = order.deposit;
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) =>
                               OrderPaymentPage(
@@ -1876,7 +1817,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                         ),
                         onPressed: () async {
                           //将支付金额置为尾款
-                          order.totalPrice = order.balance;
+//                          order.totalPrice = order.balance;
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => OrderPaymentPage(
                                 order: order,
@@ -1983,79 +1924,8 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
 
   //工厂端按钮
   Widget _buildFactoryButton(BuildContext context) {
-    //流程是待付款状态并定金未付的情况下能修改订单金额
-    if (order.status == PurchaseOrderStatus.PENDING_PAYMENT &&
-        order.depositPaid == false) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              height: 30,
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-              child: FlatButton(
-                  color: Colors.red,
-                  child: const Text(
-                    '修改价格',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(5))),
-                  onPressed: () {
-//                    showDialog(
-//                        context: context,
-//                        barrierDismissible: false,
-//                        builder: (_) {
-//                          return PurchaseUpdateTotalPriceDialog(purchaseOrderModel: order,);
-//                        }).then((value) {
-//                      if (value != null && value != '') {
-//                        String str = value;
-//                        str = str.replaceAll('￥', '');
-//                        print(str);
-//                        String deposit = str.substring(0, str.indexOf(','));
-//                        String date =
-//                        str.substring(str.indexOf(',') + 1, str.length);
-//                        _showDepositDialog(context, order, deposit,
-//                            date == 'null' ? null : DateTime.parse(date));
-//                      }
-//                    });
-                  }),
-            ),
-          ),
-        ],
-      );
-    }
-    //流程是生产中时，显示验货完成按钮
-//    else if (order.status == PurchaseOrderStatus.IN_PRODUCTION) {
-//      return Container(
-//        width: 300,
-//        margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
-//        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-//        height: 40,
-//        child: FlatButton(
-//            color: Color(0xFFFFD600),
-//            child: Text(
-//              '验货完成',
-//              style: TextStyle(
-//                color: Colors.black,
-//                fontWeight: FontWeight.w500,
-//                fontSize: 18,
-//              ),
-//            ),
-//            shape: RoundedRectangleBorder(
-//                borderRadius:
-//                BorderRadius.all(Radius.circular(5))),
-//            onPressed: () {
-//              _showBalanceDialog(context, order);
-//            }
-//        ),
-//      );
-//    }
     //当流程是待出库状态下
-    else if (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
+    if (order.status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
       //尾款已付时，出现确认发货
       if (order.balancePaid ||
           order.balance == 0 ||
@@ -2086,36 +1956,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
                             isProductionOrder: true, purchaseOrderModel: order),
                       ),
                     );
-                  },
-                ),
-              ),
-            ),
-          ],
-        );
-      } else if (order.salesApplication == SalesApplication.ONLINE &&
-          !order.balancePaid) {
-        //未付尾款时可以修改金额
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                height: 30,
-                padding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
-                child: FlatButton(
-                  color: Colors.red,
-                  child: const Text(
-                    '修改金额',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(5))),
-                  onPressed: () {
-                    onUpdateBalance();
                   },
                 ),
               ),
@@ -2391,187 +2231,6 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         .productionProgressUpload(order.code, model.id.toString(), model);
   }
 
-  //打开修改尾款金额弹框
-  void onUpdateBalance() {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return PurchaseUpdateDeductionAmountDialog(purchaseOrderModel: order,);
-        }).then((value) {
-      if (value != null && value != '') {
-        String str = value;
-        _updateBalance(context, order, str);
-      }
-    });
-  }
-
-  void _updateBalance(BuildContext context, PurchaseOrderModel model,
-      String text) async {
-    double amount = double.parse(text);
-
-    try {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: PurchaseOrderRepository()
-                  .purchaseOrderDeductionAmountUpdate(model.code, PurchaseOrderModel(deductionAmount: amount)),
-              outsideDismiss: false,
-              loadingText: '保存中。。。',
-              entrance: 'purchaseOrders',
-            );
-          }).then((value) async {
-        if(value){
-          PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
-          setState(() {
-            order = purchaseOrderModel;
-            widget.model.deductionAmount = purchaseOrderModel.deductionAmount;
-            BotToast.showText(text: '修改价格成功');
-          });
-        }else{
-          BotToast.showText(text: '修改价格失败');
-        }
-//          if (value) {
-//            if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
-//              try {
-//                for (int i = 0; i < _model.progresses.length; i++) {
-//                  if (_model.currentPhase ==
-//                      _model.progresses[i].phase) {
-//                    await PurchaseOrderRepository().productionProgressUpload(
-//                        _model.code,
-//                        _model.progresses[i].id.toString(),
-//                        _model.progresses[i]);
-//                  }
-//                }
-//              } catch (e) {
-//                print(e);
-//              }
-//            }
-//          }
-      });
-    } catch (e) {
-      print(e);
-    }
-    PurchaseOrderBLoC.instance.refreshData('ALL');
-    PurchaseOrderBLoC.instance.refreshData('WAIT_FOR_OUT_OF_STORE');
-  }
-
-  //打开修改定金金额弹框
-  void _showDepositDialog(BuildContext context, PurchaseOrderModel model,
-      String depositText, DateTime date) {
-    double totalPrice = 0.0;
-    if (depositText != null && depositText != '') {
-      if (depositText.indexOf('￥') != 0) {
-        totalPrice = double.parse(depositText.replaceAll('￥', ''));
-      }
-    }
-
-//    model.skipPayBalance = false;
-//    model.totalPrice = totalPrice;
-//    model.expectedDeliveryDate = date;
-    try {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: PurchaseOrderRepository()
-                  .purchaseOrderDepositUpdate(model.code,  PurchaseOrderModel(totalPrice: totalPrice,expectedDeliveryDate: date)),
-              outsideDismiss: false,
-              loadingText: '保存中。。。',
-              entrance: '0',
-            );
-          }).then((value) async{
-        if(value){
-          PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
-          setState(() {
-            order = purchaseOrderModel;
-            widget.model.deposit = purchaseOrderModel.deposit;
-            widget.model.totalPrice = purchaseOrderModel.totalPrice;
-            BotToast.showText(text: '修改价格成功');
-          });
-        }else{
-          BotToast.showText(text: '修改价格失败');
-        }
-
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> _showTips(BuildContext context, PurchaseOrderModel model) {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.CONFIRM_DIALOG,
-            dialogHeight: 210,
-            contentText2: '是否无需付款直接跳过？',
-            isNeedConfirmButton: true,
-            isNeedCancelButton: true,
-            confirmAction: () {
-              Navigator.of(context).pop();
-              _neverComplete(context, order);
-            },
-          );
-        });
-  }
-
-  //确认跳过按钮
-  Future<void> _neverComplete(BuildContext context,
-      PurchaseOrderModel model) async {
-    model.balance = 0;
-    model.skipPayBalance = true;
-    try {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: PurchaseOrderRepository()
-                  .purchaseOrderBalanceUpdate(model.code, model),
-              outsideDismiss: false,
-              loadingText: '保存中。。。',
-              entrance: 'purchaseOrders',
-            );
-          }).then((value)async{
-        if(value){
-          PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
-          setState(() {
-            model = purchaseOrderModel;
-            BotToast.showText(text: '跳过尾款成功');
-            PurchaseOrderBLoC.instance.refreshData('ALL');
-            PurchaseOrderBLoC.instance.refreshData('WAIT_FOR_OUT_OF_STORE');
-            PurchaseOrderBLoC.instance.refreshData('OUT_OF_STORE');
-          });
-        }else{
-          BotToast.showText(text: '跳过尾款失败');
-        }
-      });
-
-      if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
-        try {
-          for (int i = 0; i < order.progresses.length; i++) {
-            if (order.currentPhase == order.progresses[i].phase) {
-              await PurchaseOrderRepository().productionProgressUpload(
-                  order.code,
-                  order.progresses[i].id.toString(),
-                  order.progresses[i]);
-            }
-          }
-        } catch (e) {
-          print(e);
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   void _showMessage(BuildContext context, bool result, String message) {
     _requestMessage(context, result == true ? '${message}成功' : '${message}失败');
   }
@@ -2683,35 +2342,12 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
           ),
           Expanded(
               flex: 3,
-              child: order.salesApplication == SalesApplication.BELOW_THE_LINE
-                  ? PurchaseDetailBtnGroup(
+              child: PurchaseDetailBtnGroup(
                 order: order,
-              )
-                  : PurchaseDetailOnlineBtnGroup(order: order,onUpdateDeposit: onUpdateDeposit,onUpdateBalance: onUpdateBalance,))
+              ))
         ],
       ),
     );
-  }
-
-  //修改定金
-  onUpdateDeposit(){
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return PurchaseUpdateTotalPriceDialog(purchaseOrderModel: order,);
-        }).then((value) {
-      if (value != null && value != '') {
-        String str = value;
-        str = str.replaceAll('￥', '');
-        print(str);
-        String deposit = str.substring(0, str.indexOf(','));
-        String date =
-        str.substring(str.indexOf(',') + 1, str.length);
-        _showDepositDialog(context, order, deposit,
-            date == 'null' ? null : DateTime.parse(date));
-      }
-    });
   }
 
   Widget _buildFAB(BuildContext context) {
@@ -2819,5 +2455,18 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
         ),
       ],
     );
+  }
+
+  _getDeductionAmountText(double amount) {
+    String text = '';
+    if (amount != null) {
+      if (amount < 0) {
+        text += '-￥';
+        amount = -amount;
+      }
+      text += amount.toString();
+    }
+
+    return text;
   }
 }

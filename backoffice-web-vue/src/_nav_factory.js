@@ -183,7 +183,11 @@ export default {
         {
           name: '主页',
           url: '/account/index',
-          icon: 'iconNone'
+          icon: 'iconNone',
+          // meta: {
+          //   requiresAuth: true,
+          //   permissions: ['ENT_INFO']
+          // }
         },
         {
           name: '认证中心',

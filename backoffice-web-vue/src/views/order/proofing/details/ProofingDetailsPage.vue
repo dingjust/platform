@@ -104,10 +104,10 @@
 
       }),
       deliveryShow: function () {
-        return this.isFactory() && this.slotData.status == 'PENDING_DELIVERY' && hasPermission(this.permission.proofingOrderDeliveryAddress);
+        return this.isFactory() && this.slotData.status == 'PENDING_DELIVERY';
       },
       confirmReceive: function () {
-        return this.isBrand() && this.slotData.status == 'SHIPPED';
+        return this.isBrand() && this.slotData.status == 'SHIPPED' && hasPermission(this.permission.purchaseOrderConfirmReceived);
       },
       statusColor: function () {
         var color = '';

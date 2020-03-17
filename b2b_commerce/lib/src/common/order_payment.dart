@@ -356,9 +356,27 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
           ),
           _buildInfoRow(
             '合计总价',
-            '￥${widget.order.totalPrice}',
+            '￥${(widget.order.totalPrice ?? 0).toStringAsFixed(2)}',
           ),
           _buildDeposit(),
+          Offstage(
+            offstage: !(widget.order is PurchaseOrderModel &&
+                (widget.order as PurchaseOrderModel).status ==
+                    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE),
+            child: Container(
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('其他扣款'),
+                  Text(_getDeductionAmountText(
+                      (widget.order as PurchaseOrderModel).deductionAmount),
+                    style: TextStyle(color: Colors.black),)
+                ],
+              ),
+            ),
+          ),
           _buildActualPay(),
           Container(
             margin: EdgeInsets.only(top: 10),
@@ -456,7 +474,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
-            '￥${getPayAmount()}',
+            '￥${getPayAmount().toStringAsFixed(2)}',
             style: TextStyle(fontSize: 18, color: Colors.red),
           ),
           Container(
@@ -512,7 +530,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   Widget _buildActualPay() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+//      margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: <Widget>[
@@ -526,7 +544,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               Expanded(
                 flex: 1,
                 child: Text(
-                  '￥${getPayAmount()}',
+                  '￥${getPayAmount().toStringAsFixed(2)}',
                   style: TextStyle(color: Colors.red, fontSize: 16),
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.right,
@@ -796,7 +814,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
         break;
       case PaymentFor.BALANCE:
         PurchaseOrderModel model = widget.order as PurchaseOrderModel;
-        result = model.balance;
+        result = (model.balance ?? 0) + (model.deductionAmount ?? 0);
         break;
       default:
         break;
@@ -830,5 +848,18 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     // TODO: implement dispose
     fluwx.dispose();
     super.dispose();
+  }
+
+  _getDeductionAmountText(double amount) {
+    String text = '';
+    if (amount != null) {
+      if (amount < 0) {
+        text += '-￥';
+        amount = -amount;
+      }
+      text += amount.toString();
+    }
+
+    return text;
   }
 }

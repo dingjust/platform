@@ -12,16 +12,16 @@
             {{item.name}}
           </el-checkbox>
         </el-row>
-<!--        <el-row type="flex" justify="center">-->
-<!--          <div class="left_line1"></div>-->
-<!--        </el-row>-->
+        <el-row type="flex" justify="center">
+          <div ref="leftLine" class="leftLine" :style="{ height: leftLH[index] + 'px' }"></div>
+        </el-row>
       </el-col>
       <el-col :span="22" style="padding-top: 30px">
         <el-row type="flex" align="top" v-for="(role, index) in item.children" :key="index">
           <el-col :span="6">
             <el-row type="flex" align="middle">
               <el-col :span="1">
-                <div :class="index == 0 ? 'left_line1' : 'left_line2'"></div>
+<!--                <div :class="index == 0 ? 'left_line1' : 'left_line2'"></div>-->
                 <div class="bottom_line1"></div>
               </el-col>
               <el-col :span="23">
@@ -69,7 +69,9 @@
         roleListData: [],
         roleIdList: [],
         defaultNode: [],
-        secondRoleArr: []
+        secondRoleArr: [],
+        leftLH: [],
+        screenWidth: ''
       }
     },
     methods: {
@@ -201,7 +203,7 @@
         } else {
           this.roleIdList.push(item.id);
         }
-        this.distinct(this.roleIdList);
+        this.roleIdList = this.distinct(this.roleIdList);
       },
       popRoleId (item) {
         let index;
@@ -218,9 +220,16 @@
             this.roleIdList.splice(index, 1);
           }
         }
-        this.distinct(this.roleIdList);
+        this.roleIdList = this.distinct(this.roleIdList);
       },
       setRoleList () {
+        this.secondRoleArr.forEach(item => {
+          if (item.checkFlag || item.indeterminateFlag) {
+            this.roleIdList.push(item.id);
+            this.roleIdList.push(item.parentId);
+          }
+        })
+        this.roleIdList = this.distinct(this.roleIdList)
         if (this.isRolePage) {
           this.formData.roleIds = this.roleIdList;
         } else {
@@ -250,6 +259,7 @@
         })
 
         this.initial();
+        this.leftLineHeightCount();
       },
       initial () {
         if (!this.isRolePage && this.formData.b2bRoleList.length > 0) {
@@ -323,12 +333,45 @@
           }
         }
         return result
+      },
+      leftLineHeightCount () {
+        this.leftLH = [];
+        let item;
+        let parentY;
+        let childrenY;
+        this.$nextTick(() => {
+          this.roleListData.forEach(val => {
+            item = val.children[val.children.length - 1];
+            this.$refs.superCheckbox.forEach(superCheckbox => {
+              if (val.id == superCheckbox.label) {
+                parentY = superCheckbox.$el.getBoundingClientRect().y
+              }
+            })
+            this.$refs.checkbox.forEach(checkbox => {
+              if (item.id == checkbox.label) {
+                childrenY = checkbox.$el.getBoundingClientRect().y;
+              }
+            })
+            this.leftLH.push(childrenY - parentY);
+          })
+        })
       }
     },
     watch: {
+      screenWidth: function (nVal, oVal) {
+        if (nVal) {
+          this.leftLineHeightCount();
+        }
+      }
     },
     mounted () {
       this.getRoleList();
+      this.screenWidth = document.body.clientWidth;
+      window.onresize = () => {
+        return (() => {
+          this.screenWidth = document.body.clientWidth;
+        })();
+      };
     },
     created () {
     }
@@ -350,11 +393,11 @@
     border-bottom: 1px dashed #409EFF;
   }
 
-  .left_line1{
+  .leftLine{
     position: absolute;
-    height: 22px;
-    left: -34%;
-    top: 0px;
+    /*height: 22px;*/
+    left: 8%;
+    top: -17px;
     overflow: hidden;
     border-left: 1px dashed #409EFF;
   }

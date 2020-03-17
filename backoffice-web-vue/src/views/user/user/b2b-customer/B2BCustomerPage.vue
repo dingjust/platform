@@ -10,7 +10,7 @@
       <el-container>
         <el-aside width="20%">
           <b2-b-customer-aside-form @editRole='editRole' @createRole="createRole" @removeRole="removeRole" @saveRoleName="saveRoleName"
-                                    @appendDept="appendDept" @removeDept="removeDept" />
+                                    @appendDept="appendDept" @removeDept="removeDept" @searchInAside="searchInAside"/>
         </el-aside>
         <el-main width="80%" class="info-main-body">
           <b2-b-customer-toolbar @onNew="onNew" @onSearch="onSearch" @onInvite="onInvite"/>
@@ -27,7 +27,7 @@
     <el-dialog :visible.sync="inviteDialogVisible" width="30%" :close-on-click-modal="false">
       <b2-b-customer-invite-dialog v-if="inviteDialogVisible" @onCannel="inviteCannel" @onConfirm="inviteConfirm"/>
     </el-dialog>
-    <el-dialog :visible.sync="editRoleVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog">
+    <el-dialog :visible.sync="editRoleVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog" :before-close="handleClose">
       <b2-b-customer-edit-role-dialog v-if='editRoleVisible' :slotData='roleGroupData' @saveRole='saveRole' @cannelNewRole='cannelNewRole'/>
     </el-dialog>
     <el-dialog :visible.sync="workHandoverVisible" width="30%" :close-on-click-modal="false">
@@ -63,18 +63,26 @@
     computed: {
       ...mapGetters({
         page: 'page',
-        keyword: 'keyword',
-        formData: 'formData'
+        queryFormData: 'queryFormData'
       })
     },
     methods: {
       ...mapActions({
-        search: 'search'
+        search: 'search',
+        searchAside: 'searchAside'
       }),
       onSearch (page, size) {
-        const keyword = this.keyword;
         const url = this.apis().getB2BCustomers();
-        this.search({url, keyword, page, size});
+        this.search({url, page, size});
+      },
+      searchInAside (deptN, roleN) {
+        const page = 0;
+        const size = 10;
+        const keyword = this.queryFormData.keyword;
+        const deptName = deptN == '' ? this.queryFormData.deptName : deptN;
+        const roleName = roleN == '' ? this.queryFormData.roleGroupName : roleN;
+        const url = this.apis().getB2BCustomers();
+        this.searchAside({url, keyword, deptName, roleName, page, size});
       },
       // async onDetails (item) {
       //   const url = this.apis().getB2BCustomer(item.uid);
@@ -307,6 +315,13 @@
         }
         this.$message.success('删除账号成功');
         this.onSearch();
+      },
+      handleClose (done) {
+        this.$confirm('是否确认关闭此弹窗，填写的信息将不会保存')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
     },
     data () {

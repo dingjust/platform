@@ -17,6 +17,7 @@ import '../_shared/widgets/tab_factory.dart';
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
   EnumModel('PENDING_PAYMENT', '待付款'),
+  EnumModel('PENDING_CONFIRM', '待确认'),
   EnumModel('IN_PRODUCTION', '生产中'),
   EnumModel('WAIT_FOR_OUT_OF_STORE', '待出库'),
   EnumModel('OUT_OF_STORE', '已出库'),

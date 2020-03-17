@@ -2,11 +2,11 @@
   <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="组织架构" name="dept">
       <h6><i class="el-icon-document"/>&nbsp;部门最多创建三级</h6>
-      <b2-b-customer-dept-tree :slotData='deptList' @appendDept="appendDept" @removeDept="removeDept"/>
+      <b2-b-customer-dept-tree :slotData='deptList' @appendDept="appendDept" @removeDept="removeDept" @searchInAside="searchInAside"/>
     </el-tab-pane>
     <el-tab-pane label="角色管理" name="role">
       <b2-b-customer-role-tree :slotData="roleGroupList" @editRole="editRole" @removeRole="removeRole"
-                               @createRole="createRole" @saveRoleName="saveRoleName"/>
+                               @createRole="createRole" @saveRoleName="saveRoleName" @searchInAside="searchInAside"/>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -42,6 +42,9 @@
         };
       },
       methods: {
+        searchInAside (deptN, roleN) {
+          this.$emit('searchInAside', deptN, roleN);
+        },
         handleClick (tab, event) {
           if (tab.name === 'dept') {
             this.type = 'dept';

@@ -207,7 +207,11 @@ const router = new Router({
           children: [{
               path: 'index',
               name: '主页',
-              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage')
+              component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
+              // meta: {
+              //   requiresAuth: true,
+              //   permissions: ['ENT_INFO']
+              // }
             },
             {
               path: 'my',

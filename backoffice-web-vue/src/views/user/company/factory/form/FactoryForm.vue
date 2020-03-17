@@ -25,8 +25,8 @@
       </el-form>
     </div>
 
-    <el-row type="flex" justify="center" v-if="!readOnly">
-      <el-button class="buttonClass" @click="onSave">
+    <el-row type="flex" justify="center">
+      <el-button v-if="saveShow" class="buttonClass" @click="onSave">
         <h6>保存</h6>
       </el-button>
     </el-row>
@@ -43,6 +43,7 @@
   import FactoryScaleForm from './FactoryScaleForm';
   import FactoryCapacityForm from './FactoryCapacityForm';
   import FactoryServiceForm from './FactoryServiceForm';
+  import {hasPermission} from "../../../../../auth/auth";
 
   export default {
     name: 'FactoryFrom',
@@ -59,6 +60,9 @@
       ...mapGetters({
         factoryFormVisible: 'factoryFormVisible'
       }),
+      saveShow: function () {
+        return !this.readOnly && hasPermission(this.permission.entInfoModify);
+      },
       tranData: function () {
         if (this.readOnly) {
           this.setFactoryFormVisible(true);

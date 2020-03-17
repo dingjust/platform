@@ -51,7 +51,7 @@
     </el-form>
     <el-row class="seal_custom-row" type="flex" justify="center" align="middle">
       <el-button v-if="companyState == 'CHECK'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="onSave" >继续认证</el-button>
-      <el-button v-if="companyState == 'SUCCESS' || companyState == 'FAILED'" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="reAuthentication" >重新认证</el-button>
+      <el-button v-if="reverificationShow" style="margin-top: 10px;width: 400px" size="mini" type="warning" @click="reAuthentication" >重新认证</el-button>
     </el-row>
     <a id="a" href="" target="_blank"></a>
   </div>
@@ -59,82 +59,79 @@
 
 <script>
   import http from '@/common/js/http';
+  import {hasPermission} from '../../../auth/auth';
   export default {
     name: 'AuthenticationEnterpriseFrom',
-    props: ['enterpriseSlotData', 'enterpriseReadOnly','companyState'],
+    props: ['enterpriseSlotData', 'enterpriseReadOnly', 'companyState'],
     components: {
 
     },
     mixins: [],
     computed: {
-
+      reverificationShow: function () {
+        return (this.companyState == 'SUCCESS' || this.companyState == 'FAILED') && hasPermission(this.permission.certReverification);
+      }
     },
     methods: {
-      async onSave(){
-        if(this.enterpriseSlotData.companyName == null || this.enterpriseSlotData.companyName == ''){
+      async onSave () {
+        if (this.enterpriseSlotData.companyName == null || this.enterpriseSlotData.companyName == '') {
           this.$message.error('请填写企业名称');
-          return;
-        }else if(this.enterpriseSlotData.organization == null || this.enterpriseSlotData.organization == ''){
+        } else if (this.enterpriseSlotData.organization == null || this.enterpriseSlotData.organization == '') {
           this.$message.error('请填写税号');
-          return;
-        }else if(this.enterpriseSlotData.role == null || this.enterpriseSlotData.role == ''){
+        } else if (this.enterpriseSlotData.role == null || this.enterpriseSlotData.role == '') {
           this.$message.error('请选择办理人身份');
-          return;
-        }else if(this.enterpriseSlotData.username == null || this.enterpriseSlotData.username == ''){
+        } else if (this.enterpriseSlotData.username == null || this.enterpriseSlotData.username == '') {
           this.$message.error('请填写办理人姓名');
-          return;
-        }else if(this.enterpriseSlotData.idCardNum == null || this.enterpriseSlotData.idCardNum == ''){
+        } else if (this.enterpriseSlotData.idCardNum == null || this.enterpriseSlotData.idCardNum == '') {
           this.$message.error('请填写办理人身份证');
-          return;
-        }else{
+        } else {
           const url = this.apis().enterpriseAuthentication();
           const tempData = {
-            companyName: this.enterpriseSlotData.companyName,
-            organization: this.enterpriseSlotData.organization,
-            role: this.enterpriseSlotData.role,
-            username: this.enterpriseSlotData.username,
-            idCardNum: this.enterpriseSlotData.idCardNum,
-            verifyWay: 'WAY1',
-            companyType: 'TYPE1'
+  companyName: this.enterpriseSlotData.companyName,
+  organization: this.enterpriseSlotData.organization,
+  role: this.enterpriseSlotData.role,
+  username: this.enterpriseSlotData.username,
+  idCardNum: this.enterpriseSlotData.idCardNum,
+  verifyWay: 'WAY1',
+  companyType: 'TYPE1'
           };
           let formData = Object.assign({}, tempData);
           const result = await http.post(url, formData);
-          if(result.data !=  null){
-            this.$confirm('是否跳转到认证页面？', '', {
-                confirmButtonText: '是',
-                cancelButtonText: '否',
-                type: 'warning'
-            }).then(() => {
-                window.open(result.data);
-            });
-          }else{
-            this.$message.success(result.msg);
+          if (result.data != null) {
+  this.$confirm('是否跳转到认证页面？', '', {
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              type: 'warning'
+  }).then(() => {
+              window.open(result.data);
+  });
+          } else {
+  this.$message.success(result.msg);
           }
         }
       },
-      reAuthentication(){
+      reAuthentication () {
         this.readOnly = false;
       }
     },
-    data() {
+    data () {
       return {
         rules: {
           companyName: [{required: true, message: '必填', trigger: 'blur'}],
           username: [{required: true, message: '必填', trigger: 'blur'}],
           idCardNum: [{required: true, message: '必填', trigger: 'blur'}],
           role: [{required: true, message: '必填', trigger: 'blur'}],
-          organization: [{required: true, message: '必填', trigger: 'blur'}],
+          organization: [{required: true, message: '必填', trigger: 'blur'}]
         },
-        readOnly:false,
+        readOnly: false
       }
     },
-    created() {
+    created () {
       this.readOnly = this.enterpriseReadOnly;
     },
-    mounted() {}
+    mounted () {}
 
   }
-
 </script>
 <style>
   .form-row{
