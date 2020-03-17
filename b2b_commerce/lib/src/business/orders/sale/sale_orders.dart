@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_list.dart';
+import 'package:b2b_commerce/src/business/search/search_model.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -22,44 +26,45 @@ class _SaleOrdersPageState extends State<SaleOrdersPage>
     with AutomaticKeepAliveClientMixin {
   List<String> historyKeywords;
 
-  // Widget _buildSearchButton() {
-  //   return IconButton(
-  //     icon: const Icon(B2BIcons.search, size: 20),
-  //     onPressed: () {
-  //       showDialog(
-  //           context: context,
-  //           barrierDismissible: false,
-  //           builder: (_) {
-  //             return RequestDataLoading(
-  //               requestCallBack:
-  //                   LocalStorage.get(GlobalConfigs.SALE_HISTORY_KEYWORD_KEY),
-  //               outsideDismiss: false,
-  //               loadingText: '加载中。。。',
-  //               entrance: '',
-  //             );
-  //           }).then((value) {
-  //         if (value != null && value != '') {
-  //           List<dynamic> list = json.decode(value);
-  //           historyKeywords = list.map((item) => item as String).toList();
-  //         } else {
-  //           historyKeywords = [];
-  //         }
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => SearchModelPage(
-  //               searchModel: SearchModel(
-  //                 historyKeywords: historyKeywords,
-  //                 searchModelType: SearchModelType.SALE_ORDER,
-  //                 route: GlobalConfigs.SALE_HISTORY_KEYWORD_KEY,
-  //               ),
-  //             ),
-  //           ),
-  //         );
-  //       });
-  //     },
-  //   );
-  // }
+  Widget _buildSearchButton() {
+    return IconButton(
+      icon: const Icon(B2BIcons.search, size: 20),
+      onPressed: () {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) {
+              return RequestDataLoading(
+                requestCallBack:
+                LocalStorage.get(GlobalConfigs.SALE_HISTORY_KEYWORD_KEY),
+                outsideDismiss: false,
+                loadingText: '加载中。。。',
+                entrance: '',
+              );
+            }).then((value) {
+          if (value != null && value != '') {
+            List<dynamic> list = json.decode(value);
+            historyKeywords = list.map((item) => item as String).toList();
+          } else {
+            historyKeywords = [];
+          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  SearchModelPage(
+                    searchModel: SearchModel(
+                      historyKeywords: historyKeywords,
+                      searchModelType: SearchModelType.SALE_ORDER,
+                      route: GlobalConfigs.SALE_HISTORY_KEYWORD_KEY,
+                    ),
+                  ),
+            ),
+          );
+        });
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -70,17 +75,17 @@ class _SaleOrdersPageState extends State<SaleOrdersPage>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    PurchaseOrderBLoC.instance.reset();
+    SaleOrderBLoC.instance.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BLoCProvider<PurchaseOrderBLoC>(
-      bloc: PurchaseOrderBLoC.instance,
+    return BLoCProvider<SaleOrderBLoC>(
+      bloc: SaleOrderBLoC.instance,
       child: Scaffold(
         appBar: AppBarFactory.buildDefaultAppBar(
           '销售订单',
-          // actions: <Widget>[_buildSearchButton()],
+          actions: <Widget>[_buildSearchButton()],
         ),
         body: DefaultTabController(
           length: statuses.length,

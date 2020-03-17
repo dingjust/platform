@@ -67,6 +67,9 @@ enum SearchModelType {
   //打样订单
   PROOFING_ORDER,
 
+  ///销售订单
+  SALE_ORDER,
+
   //产品
   PRODUCT,
 

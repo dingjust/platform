@@ -386,89 +386,96 @@ class _MyFactoryPageState extends State<MyFactoryPage>
                             ],
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            if (_factory == null) {
-                              return;
-                            }
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        RequirementOrderSelectPage(
-                                          onConfirm: (models) async {
-                                            List<RequirementOrderModel>
-                                            requirements = models as List<
-                                                RequirementOrderModel>;
-                                            List<String> codes = [];
-                                            if (requirements != null) {
-                                              codes = requirements
-                                                  .map((model) => model.code)
-                                                  .toList();
-                                            }
-                                            if (widget.factoryUid != null) {
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false,
-                                                  builder: (_) {
-                                                    return RequestDataLoading(
-                                                      requestCallBack:
-                                                      RequirementOrderRepository()
-                                                          .doRecommendations(
-                                                          codes, [
-                                                        widget.factoryUid
-                                                      ]),
-                                                      outsideDismiss: false,
-                                                      loadingText: '正在邀请。。。',
-                                                      entrance: '',
-                                                    );
-                                                  }).then((value) {
+                        AuthorizationDector(
+                          authorizations: [
+                            Authorization.REQUIREMENT_ORDER_RECOMMENDED
+                          ],
+                          message: '需要邀请报价权限',
+                          show: false,
+                          child: GestureDetector(
+                            onTap: () {
+                              if (_factory == null) {
+                                return;
+                              }
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RequirementOrderSelectPage(
+                                            onConfirm: (models) async {
+                                              List<RequirementOrderModel>
+                                              requirements = models as List<
+                                                  RequirementOrderModel>;
+                                              List<String> codes = [];
+                                              if (requirements != null) {
+                                                codes = requirements
+                                                    .map((model) => model.code)
+                                                    .toList();
+                                              }
+                                              if (widget.factoryUid != null) {
                                                 showDialog(
                                                     context: context,
                                                     barrierDismissible: false,
                                                     builder: (_) {
-                                                      return CustomizeDialog(
-                                                        dialogType: DialogType
-                                                            .RESULT_DIALOG,
-                                                        successTips: '邀请成功',
-                                                        failTips: '邀请失败',
-                                                        callbackResult: value,
-                                                        confirmAction: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          Navigator.pop(
-                                                              context);
-                                                          Navigator.pop(
-                                                              context);
-//                                                          Navigator.popUntil(context, ModalRoute.withName('/my/my_factory'));
-                                                        },
+                                                      return RequestDataLoading(
+                                                        requestCallBack:
+                                                        RequirementOrderRepository()
+                                                            .doRecommendations(
+                                                            codes, [
+                                                          widget.factoryUid
+                                                        ]),
+                                                        outsideDismiss: false,
+                                                        loadingText: '正在邀请。。。',
+                                                        entrance: '',
                                                       );
-                                                    });
-                                              });
-                                            }
-                                          },
-                                        )));
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Center(
-                                child: Container(
-                                  child: Image.asset(
-                                    'temp/cgdd.png',
-                                    package: 'assets',
-                                    width: 80,
-                                    height: 80,
+                                                    }).then((value) {
+                                                  showDialog(
+                                                      context: context,
+                                                      barrierDismissible: false,
+                                                      builder: (_) {
+                                                        return CustomizeDialog(
+                                                          dialogType: DialogType
+                                                              .RESULT_DIALOG,
+                                                          successTips: '邀请成功',
+                                                          failTips: '邀请失败',
+                                                          callbackResult: value,
+                                                          confirmAction: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+//                                                          Navigator.popUntil(context, ModalRoute.withName('/my/my_factory'));
+                                                          },
+                                                        );
+                                                      });
+                                                });
+                                              }
+                                            },
+                                          )));
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Center(
+                                  child: Container(
+                                    child: Image.asset(
+                                      'temp/cgdd.png',
+                                      package: 'assets',
+                                      width: 80,
+                                      height: 80,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Center(
-                                child: Container(
-                                  child: Text('选择已有需求'),
-                                ),
-                              )
-                            ],
+                                Center(
+                                  child: Container(
+                                    child: Text('选择已有需求'),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                   ),

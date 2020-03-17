@@ -25,7 +25,7 @@ class _SaleOrderListState extends State<SaleOrderList>
   void initState() {
     super.initState();
 
-    var bloc = BLoCProvider.of<PurchaseOrderBLoC>(context);
+    var bloc = BLoCProvider.of<SaleOrderBLoC>(context);
 
     widget.scrollController.addListener(() {
       if (widget.scrollController.position.pixels ==
@@ -60,7 +60,7 @@ class _SaleOrderListState extends State<SaleOrderList>
 
   @override
   Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<PurchaseOrderBLoC>(context);
+    var bloc = BLoCProvider.of<SaleOrderBLoC>(context);
 
     return Container(
       decoration: BoxDecoration(color: Colors.grey[100]),

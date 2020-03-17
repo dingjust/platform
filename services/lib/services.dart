@@ -52,6 +52,7 @@ export 'src/net/net_state.dart';
 export 'src/order/bloc/proofing_orders_bloc.dart';
 export 'src/order/bloc/purchase_order_bloc.dart';
 export 'src/order/bloc/quote_orders_bloc.dart';
+export 'src/order/bloc/sale_orders_bloc.dart';
 export 'src/order/bloc/requirement_order_bloc.dart';
 export 'src/order/bloc/requirement_pool_bloc.dart';
 export 'src/order/bloc/requirement_quote_detail_bloc.dart';
