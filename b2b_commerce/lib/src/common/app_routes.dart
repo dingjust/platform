@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
+import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
-import 'package:b2b_commerce/src/business/sale_orders.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/home/factory/publish_center.dart';

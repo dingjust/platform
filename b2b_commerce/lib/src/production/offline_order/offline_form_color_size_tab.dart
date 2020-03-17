@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
+import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_quantity_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';

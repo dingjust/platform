@@ -1,11 +1,10 @@
+import 'package:b2b_commerce/src/_shared/widgets/app_bar_factory.dart';
+import 'package:b2b_commerce/src/_shared/widgets/tab_factory.dart';
+import 'package:b2b_commerce/src/business/orders/sale/sale_order_list.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-
-import '../_shared/orders/purchase/purchase_order_list.dart';
-import '../_shared/widgets/app_bar_factory.dart';
-import '../_shared/widgets/tab_factory.dart';
 
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
@@ -89,7 +88,7 @@ class _SaleOrdersPageState extends State<SaleOrdersPage>
             appBar: TabFactory.buildDefaultTabBar(statuses, scrollable: true),
             body: TabBarView(
               children: statuses
-                  .map((status) => PurchaseOrderList(status: status))
+                  .map((status) => SaleOrderList(status: status))
                   .toList(),
             ),
           ),

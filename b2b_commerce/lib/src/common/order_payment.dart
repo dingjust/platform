@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:cached_network_image/cached_network_image.dart';
