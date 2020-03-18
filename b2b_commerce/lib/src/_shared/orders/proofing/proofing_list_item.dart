@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 
-import '../../../business/orders/proofing_order_detail.dart';
+import '../../../../b2b_commerce.dart';
 import '../../widgets/image_factory.dart';
 
 /// 取消订单

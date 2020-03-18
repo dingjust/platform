@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -360,15 +360,18 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
           ),
           _buildDeposit(),
           Offstage(
-            offstage: !(widget.order is PurchaseOrderModel && (widget.order as PurchaseOrderModel).status == PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE),
+            offstage: !(widget.order is PurchaseOrderModel &&
+                (widget.order as PurchaseOrderModel).status ==
+                    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE),
             child: Container(
               margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text('其他扣款'),
-                  Text(_getDeductionAmountText((widget.order as PurchaseOrderModel).deductionAmount),
+                  Text(_getDeductionAmountText(
+                      (widget.order as PurchaseOrderModel).deductionAmount),
                     style: TextStyle(color: Colors.black),)
                 ],
               ),
@@ -847,10 +850,10 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     super.dispose();
   }
 
-  _getDeductionAmountText(double amount){
+  _getDeductionAmountText(double amount) {
     String text = '';
-    if(amount != null){
-      if(amount < 0){
+    if (amount != null) {
+      if (amount < 0) {
         text += '-￥';
         amount = -amount;
       }

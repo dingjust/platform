@@ -1,4 +1,4 @@
-import 'package:b2b_commerce/src/business/orders/proofing_order_quantity_input.dart';
+import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_quantity_input.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';

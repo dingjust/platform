@@ -34,7 +34,7 @@ class PurchaseOrderBLoC extends BLoCBase {
     'PENDING_PAYMENT':
         PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'PENDING_CONFIRM':
-        PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
+    PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'IN_PRODUCTION':
         PageEntry(currentPage: 0, size: 10, data: List<PurchaseOrderModel>()),
     'WAIT_FOR_OUT_OF_STORE':
@@ -326,15 +326,16 @@ class PurchaseOrderBLoC extends BLoCBase {
   }
 
   ///刷新修改后的列表价格
-  updateAmountResetData(String status,PurchaseOrderModel model){
-    _ordersMap[status].data.forEach((item){
-      if(item.code == model.code){
+  updateAmountResetData(String status, PurchaseOrderModel model) {
+    _ordersMap[status].data.forEach((item) {
+      if (item.code == model.code) {
         item.totalPrice = model.totalPrice;
         item.deposit = model.deposit;
         item.deductionAmount = model.deductionAmount;
       }
     });
-    _controller.sink.add(PurchaseData(status: status, data: _ordersMap[status].data));
+    _controller.sink.add(
+        PurchaseData(status: status, data: _ordersMap[status].data));
   }
 
   dispose() {

@@ -1,6 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/form/product_size_color_num.dart';
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/products/product_select.dart';
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:bot_toast/bot_toast.dart';

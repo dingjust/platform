@@ -1,5 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/form/proofing_order_form.dart';
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/home/pool/requirement_quote_order_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
@@ -142,7 +142,7 @@ class _QuoteOrderDetailPageState extends State<QuoteOrderDetailPage> {
                   Text(
                     '复制',
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: Colors.orangeAccent,
                     ),
                   )
                 ],
