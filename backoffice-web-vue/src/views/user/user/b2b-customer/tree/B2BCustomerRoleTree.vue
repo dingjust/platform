@@ -109,6 +109,21 @@
           })
         },
         async setName (node, data) {
+          setTimeout(() => {
+            this.$confirm('是否保存修改?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._setName(node, data);
+            }).catch(() => {
+              this.$nextTick(() => {
+                this.$refs.input.focus();
+              })
+            });
+          }, 10);
+        },
+        _setName (node, data) {
           if (this.modifyName.match(/^\s*$/) || this.modifyName == data.name) {
             this.showInput = false;
             this.isActive = false;

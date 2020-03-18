@@ -17,6 +17,7 @@
           <b2-b-customer-list :page="page" @onSearch="onSearch"
                               @editInfo="editInfo"
                               @setDepartmentHead="setDepartmentHead"
+                              @removeDepartmentHead="removeDepartmentHead"
                               @workHandover="workHandover"
                               @forbiddenUser="forbiddenUser"
                               @enableUser="enableUser"
@@ -28,7 +29,7 @@
       <b2-b-customer-invite-dialog v-if="inviteDialogVisible" @onCannel="inviteCannel" @onConfirm="inviteConfirm"/>
     </el-dialog>
     <el-dialog :visible.sync="editRoleVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog" :before-close="handleClose">
-      <b2-b-customer-edit-role-dialog v-if='editRoleVisible' :slotData='roleGroupData' @saveRole='saveRole' @cannelNewRole='cannelNewRole'/>
+      <b2-b-customer-edit-role-dialog v-if='editRoleVisible' @saveRole='saveRole' @cannelNewRole='cannelNewRole' @watchCount='watchCount'/>
     </el-dialog>
     <el-dialog :visible.sync="workHandoverVisible" width="30%" :close-on-click-modal="false">
       <b2-b-customer-handover-dialog v-if="workHandoverVisible" :slot-data="handoverData"
@@ -49,6 +50,7 @@
   import B2BCustomerInviteDialog from './dialog/B2BCustomerInviteDialog';
   import B2BCustomerEditRoleDialog from './dialog/B2BCustomerEditRoleDialog';
   import B2BCustomerHandoverDialog from './dialog/B2BCustomerHandoverDialog';
+  import {B2BCustomersModule, UsersModule} from '../../../../store/modules';
 
   export default {
     name: 'B2BCustomerPage',
@@ -179,12 +181,8 @@
         this.getRoleGroupList();
       },
       createRole () {
-        this.roleGroupData = {
-          id: '',
-          name: '',
-          roleList: [],
-          roleIds: []
-        };
+        // this.roleGroupData = this.$store.state.B2BCustomersModule.roleGroupData;
+        this.count = 0;
         this.editRoleVisible = true;
       },
       async editRole (data) {
@@ -194,7 +192,8 @@
           this.$message.error(result.msg);
           return;
         }
-        this.roleGroupData = result.data;
+        this.$store.state.B2BCustomersModule.roleGroupData = result.data;
+        this.count = 0;
         this.editRoleVisible = true;
       },
       async saveRoleName (data) {
@@ -232,7 +231,7 @@
       },
       async saveRole (data) {
         const url = this.apis().saveB2BCustomerRoleGroup();
-        const result = await this.$http.put(url, data, data);
+        const result = await this.$http.post(url, data, data);
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;
@@ -245,9 +244,9 @@
         this.editRoleVisible = false;
       },
       setDepartmentHead (data) {
-        let name = data.name;
-        let deptName = data.b2bDept.name;
-        this.$confirm('是否将 ' + name + ' 设为 ' + deptName + ' 的部门负责人?', '提示', {
+        const name = data.name;
+        const deptName = data.b2bDept.name;
+        this.$confirm('是否将 \t' + name + ' \t设为\t ' + deptName + ' \t的部门负责人?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -255,8 +254,27 @@
           this._setDepartmentHead(data);
         });
       },
-      _setDepartmentHead (data) {
-        // TODO 设置部门负责人
+      async _setDepartmentHead (data) {
+        const url = this.apis().setDepartmentHead(data.uid);
+        const result = await this.$http.put(url);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('设置部门负责人成功');
+        this.onSearch();
+      },
+      removeDepartmentHead (data) {
+        const name = data.name;
+        const deptName = data.b2bDept.name;
+        this.$confirm('是否将 \t' + name + ' \t移除\t ' + deptName + ' \t的部门负责人?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // TODO 移除部门负责人
+          this.$message.error('请先完成工作交接再移除部门负责人');
+        });
       },
       workHandover (data) {
         this.handoverData = Object.assign({}, data);
@@ -269,23 +287,24 @@
         this.onSearch();
         this.workHandoverVisible = false;
       },
-      // async changeLoginDisabled (uid) {
-      //   // const url = this.apis().changeLoginDisabled(uid);
-      //   // const result = await this.$http.put(url);
-      //   // if (result['errors']) {
-      //   //   this.$message.error(result['errors'][0].message);
-      //        return;
-      //   // }
-      //   this.$message.success('更改员工账号状态成功');
-      //   this.onSearch();
-      // },
+      async _changeLoginDisabled (data) {
+        const currentUser = this.$store.getters.currentUser;
+        const url = this.apis().changeLoginDisabled(currentUser.uid);
+        const result = await this.$http.put(url, data);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('更改员工账号状态成功');
+        this.onSearch();
+      },
       forbiddenUser (data) {
         this.$confirm('禁用后员工将无法正常使用账号 ， 请问是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // this.changeLoginDisabled(data.uid);
+          this._changeLoginDisabled(data);
         });
       },
       enableUser (data) {
@@ -294,7 +313,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // this.changeLoginDisabled(data.uid);
+          this._changeLoginDisabled(data);
         });
       },
       deleteUser (data) {
@@ -316,23 +335,33 @@
         this.$message.success('删除账号成功');
         this.onSearch();
       },
+      watchCount () {
+        this.count++;
+      },
       handleClose (done) {
-        this.$confirm('是否确认关闭此弹窗，填写的信息将不会保存')
-          .then(_ => {
+        // setTimeout(() => {
+          if (this.count > 0) {
+            this.$confirm('是否确认关闭此弹窗，填写的信息将不会保存')
+              .then(_ => {
+                done();
+              })
+              .catch(_ => {
+              });
+          } else {
             done();
-          })
-          .catch(_ => {});
+          }
+        // }, 10);
       }
     },
     data () {
       return {
         inviteDialogVisible: false,
         editRoleVisible: false,
-        roleGroupData: {},
         roleIds: [],
         countRoleIds: [],
         workHandoverVisible: false,
-        handoverData: ''
+        handoverData: '',
+        count: 0
       };
     },
     created () {

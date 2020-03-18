@@ -70,14 +70,6 @@
                                     :label="formData.b2bDept.name"
                                     @getValue="selectDept">
                     </el-tree-select>
-<!--                    <el-cascader-->
-<!--                      v-model="formData.b2bDept.id"-->
-<!--                      :options="deptList"-->
-<!--                      :props="{ expandTrigger: 'hover' , value:'id',label:'name', checkStrictly: true, emitPath: false}"-->
-<!--                      :change-on-select="true"-->
-<!--                      :show-all-levels="false"-->
-<!--                      @change="deptSelect"-->
-<!--                    ></el-cascader>-->
                   </el-row>
                 </el-form-item>
               </el-col>
@@ -118,15 +110,21 @@
         </el-button>
       </el-row>
     </el-card>
+
+    <el-dialog :visible.sync="tipDialogVisible" width="400px" :close-on-press-escape="false" :show-close="false">
+      <leave-tip-dialog @leavelHandler="leavelHandler">
+      </leave-tip-dialog>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import B2BCustomerPermissionForm from './B2BCustomerPermissionForm';
   import ElTreeSelect from '../tree/treeSelect';
+  import LeaveTipDialog from '../../../../common/LeaveTipDialog';
   export default {
     name: 'B2BCustomerBasicForm',
-    components: {ElTreeSelect, B2BCustomerPermissionForm },
+    components: {LeaveTipDialog, ElTreeSelect, B2BCustomerPermissionForm },
     props: [],
     computed: {},
     methods: {
@@ -147,8 +145,8 @@
           page: 0,
           size: 100
         });
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
           return;
         }
         this.roleGroupList = result.content;
@@ -156,8 +154,8 @@
       async roleSelect (data) {
         const url = this.apis().getB2BCustomerRoleGroupDetails(data.id);
         const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code == 0) {
+          this.$message.error(result.msg);
           return;
         }
         this.$refs.permissionForm.setCheckChange(result.data.roleList);
@@ -196,10 +194,11 @@
         // return;
         const url = this.apis().createB2BCustomer();
         const result = await this.$http.post(url, data);
-        if (result['errors']) {
-          let index = result['errors'][0].message.indexOf(':');
-          let msg = result['errors'][0].message.substring(index + 1);
-          this.$message.error(msg);
+        if (result.code == 0) {
+          // let index = result['errors'][0].message.indexOf(':');
+          // let msg = result['errors'][0].message.substring(index + 1);
+          this.$message.error(result.msg);
+          return;
         }
         this.$message.success('添加员工成功');
         this.$router.push({
@@ -229,6 +228,16 @@
             this.getTreeData(data[i].children);
           }
         }
+      },
+      leavelHandler (b) {
+        const leave = this.leave;
+        if (b) {
+          this.status = true;
+          this.$router.push({ name: leave.name, query: leave.query, params: leave.params });
+        } else {
+          this.status = false;
+        }
+        this.tipDialogVisible = false;
       }
     },
     data () {
@@ -254,7 +263,10 @@
           // disabled:true
         },
         count: 0,
-        isSave: false
+        leave: {},
+        status: false,
+        isSave: false,
+        tipDialogVisible: false
       };
     },
     created () {
@@ -288,18 +300,31 @@
       }
     },
     beforeRouteLeave (to, from, next) {
-      // 判断数据是否修改，如果修改按这个执行，没修改，则直接执行离开此页面
+      next(false);
       if ((this.$route.params.formData != null && this.count > 2 && !this.isSave) || (this.$route.params.formData == null && this.count > 1 && !this.isSave)) {
-        this.$confirm('当前页面数据并未保存，是否要离开？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          next();
-        });
+        if (this.status) {
+          next()
+          return
+        }
+        this.leave = to;
+        next(false);
+        this.tipDialogVisible = true;
       } else {
         next();
       }
+      // next(false);
+      // // 判断数据是否修改，如果修改按这个执行，没修改，则直接执行离开此页面
+      // if ((this.$route.params.formData != null && this.count > 2 && !this.isSave) || (this.$route.params.formData == null && this.count > 1 && !this.isSave)) {
+      //   this.$confirm('当前页面数据并未保存，是否要离开？', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     next();
+      //   });
+      // } else {
+      //   next();
+      // }
     }
   };
 </script>

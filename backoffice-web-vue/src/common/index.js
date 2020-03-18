@@ -626,6 +626,14 @@ const COMMON_APIS = {
   // 删除员工
   removeB2BCustomer (id) {
     return 'b2b/companies/remove/sub/account/' + id;
+  },
+  // 改变员工账号启/禁用状态
+  changeLoginDisabled (uid) {
+    return 'b2b/users/' + uid + '/active';
+  },
+  // 设置部门负责人
+  setDepartmentHead (uid) {
+    return 'b2b/dept/update/manager/' + uid;
   }
 };
 
