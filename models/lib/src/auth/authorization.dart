@@ -63,6 +63,9 @@ enum Authorization {
   ///邀请报价
   REQUIREMENT_ORDER_RECOMMENDED,
 
+  ///需求订单详情
+  REQUIREMENT_ORDER_DETAIL,
+
   ///关闭需求订单
   REQUIREMENT_ORDER_CLOSE,
 
