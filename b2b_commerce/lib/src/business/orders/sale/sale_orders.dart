@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -22,9 +23,32 @@ class SaleOrdersPage extends StatefulWidget {
   _SaleOrdersPageState createState() => _SaleOrdersPageState();
 }
 
-class _SaleOrdersPageState extends State<SaleOrdersPage>
-    with AutomaticKeepAliveClientMixin {
+class _SaleOrdersPageState extends State<SaleOrdersPage> {
   List<String> historyKeywords;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<SaleOrdersState>(
+      builder: (context) => SaleOrdersState(),
+      child: Scaffold(
+        appBar: AppBarFactory.buildDefaultAppBar(
+          '销售订单',
+          actions: <Widget>[_buildSearchButton()],
+        ),
+        body: DefaultTabController(
+          length: statuses.length,
+          child: Scaffold(
+            appBar: TabFactory.buildDefaultTabBar(statuses, scrollable: true),
+            body: TabBarView(
+              children: statuses
+                  .map((status) => SaleOrderListPage(status: status))
+                  .toList(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildSearchButton() {
     return IconButton(
@@ -75,31 +99,7 @@ class _SaleOrdersPageState extends State<SaleOrdersPage>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    SaleOrderBLoC.instance.reset();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BLoCProvider<SaleOrderBLoC>(
-      bloc: SaleOrderBLoC.instance,
-      child: Scaffold(
-        appBar: AppBarFactory.buildDefaultAppBar(
-          '销售订单',
-          actions: <Widget>[_buildSearchButton()],
-        ),
-        body: DefaultTabController(
-          length: statuses.length,
-          child: Scaffold(
-            appBar: TabFactory.buildDefaultTabBar(statuses, scrollable: true),
-            body: TabBarView(
-              children: statuses
-                  .map((status) => SaleOrderList(status: status))
-                  .toList(),
-            ),
-          ),
-        ),
-      ),
-    );
+    // SaleOrderBLoC.instance.reset();
   }
 
   @override

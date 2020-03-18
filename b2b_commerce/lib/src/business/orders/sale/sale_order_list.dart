@@ -1,188 +1,132 @@
-import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_list_item.dart';
-import 'package:b2b_commerce/src/my/my_help.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-class SaleOrderList extends StatefulWidget {
-  SaleOrderList({Key key, this.status, this.companyUid, this.keyword});
-
-  final String keyword;
+class SaleOrderListPage extends StatefulWidget {
   final EnumModel status;
-  final String companyUid;
 
-  final ScrollController scrollController = ScrollController();
+  const SaleOrderListPage({Key key, this.status}) : super(key: key);
 
-  _SaleOrderListState createState() => _SaleOrderListState();
+  @override
+  _SaleOrderListPageState createState() => _SaleOrderListPageState();
 }
 
-class _SaleOrderListState extends State<SaleOrderList>
+class _SaleOrderListPageState extends State<SaleOrderListPage>
     with AutomaticKeepAliveClientMixin {
   @override
-  void initState() {
-    super.initState();
-
-    var bloc = BLoCProvider.of<SaleOrderBLoC>(context);
-
-    widget.scrollController.addListener(() {
-      if (widget.scrollController.position.pixels ==
-          widget.scrollController.position.maxScrollExtent) {
-        bloc.loadingStart();
-        if (widget.status == null) {
-          bloc.lodingMoreByCompany(widget.companyUid);
-        } else {
-          bloc.loadingMoreByStatuses(widget.status.code);
-        }
-      }
-    });
-
-    // 监听滚动事件，打印滚动位置
-    widget.scrollController.addListener(() {
-      if (widget.scrollController.offset < 500) {
-        bloc.hideToTopBtn();
-      } else if (widget.scrollController.offset >= 500) {
-        bloc.showToTopBtn();
-      }
-    });
-
-    // 状态管理触发的返回顶部
-    bloc.returnToTopStream.listen((data) {
-      // 返回到顶部时执行动画
-      if (data) {
-        widget.scrollController.animateTo(.0,
-            duration: Duration(milliseconds: 200), curve: Curves.ease);
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var bloc = BLoCProvider.of<SaleOrderBLoC>(context);
-
-    return Container(
-      decoration: BoxDecoration(color: Colors.grey[100]),
-      child: RefreshIndicator(
-        onRefresh: () async {
-          if (widget.companyUid != null) {
-            return await bloc.getPurchaseDataByCompany(widget.companyUid);
-          } else {
-            return await bloc.refreshData(widget.status.code);
-          }
-        },
-        child: ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: widget.scrollController,
-          children: <Widget>[
-            StreamBuilder<PurchaseData>(
-              stream: widget.status == null
-                  ? bloc.stream
-                  : bloc.stream.where((purchaseData) =>
-                      purchaseData.status == widget.status.code),
-              // initialData: null,
-              builder:
-                  (BuildContext context, AsyncSnapshot<PurchaseData> snapshot) {
-                if (snapshot.data == null) {
-                  if (widget.companyUid != null) {
-                    bloc.getPurchaseDataByCompany(widget.companyUid);
-                  } else {
-                    bloc.filterByStatuses(widget.status.code);
-                  }
-
-                  return ProgressIndicatorFactory
-                      .buildPaddedProgressIndicator();
-                }
-                if (snapshot.data.data.length <= 0) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(top: 200),
-                        child: Image.asset(
-                          'temp/logo2.png',
-                          package: 'assets',
-                          width: 80,
-                          height: 80,
-                        ),
-                      ),
-                      Container(
-                          child: Text(
-                        AppBLoC.instance.getConnectivityResult ==
-                                ConnectivityResult.none
-                            ? '网络链接不可用请重试'
-                            : '没有相关订单数据',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      )),
-                      AppBLoC.instance.getConnectivityResult !=
-                              ConnectivityResult.none
-                          ? Container(
-                              child: FlatButton(
-                                color: Color.fromRGBO(255, 214, 12, 1),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => MyHelpPage()));
-                                },
-                                child: Text('如何创建订单？'),
-                              ),
-                            )
-                          : Container()
-                    ],
-                  );
-                }
-                if (snapshot.hasData) {
-                  return Column(
-                    children: snapshot.data.data.map((order) {
-                      return SaleOrderListItem(
-                        model: order,
-                      );
-                    }).toList(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-              },
+    return Consumer<SaleOrdersState>(
+      builder: (context, SaleOrdersState state, _) =>
+          Container(
+            child: state
+                .getEntry(widget.status.code)
+                .totalElements > -1
+                ? SaleOrderList(
+              state: state,
+              status: widget.status,
+            )
+                : Center(
+              child: CircularProgressIndicator(),
             ),
-            StreamBuilder<bool>(
-              stream: bloc.bottomStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                // if (snapshot.data) {
-                //   widget.scrollController.animateTo(
-                //     widget.scrollController.offset - 70,
-                //     duration: const Duration(milliseconds: 500),
-                //     curve: Curves.easeOut,
-                //   );
-                // }
-                return ScrolledToEndTips(
-                  hasContent: snapshot.data,
-                  scrollController: widget.scrollController,
-                );
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.loadingStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory
-                    .buildPaddedOpacityProgressIndicator(
-                  opacity: snapshot.data ? 1.0 : 0,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
   @override
+  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+}
+
+class SaleOrderList extends StatelessWidget {
+  final EnumModel status;
+
+  final SaleOrdersState state;
+
+  final ScrollController _scrollController = ScrollController();
+
+  SaleOrderList({
+    Key key,
+    this.status,
+    this.state,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    //监听加载更多
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        state.loadMoreOrders(status.code);
+      }
+    });
+
+    return Container(
+      child: RefreshIndicator(
+        child: ListView(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              state
+                  .orders(status.code)
+                  .isNotEmpty
+                  ? Column(
+                children: state
+                    .orders(status.code)
+                    .map((model) =>
+                    SaleOrderListItem(
+                      model: model,
+                    ))
+                    .toList(),
+              )
+                  : _NoDataInfoRow(),
+              ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                opacity: state.loadingMore ? 1.0 : 0,
+              ),
+              _buildEnd()
+            ]),
+        onRefresh: () async {
+          state.clear();
+        },
+      ),
+    );
+  }
+
+  Widget _buildEnd() {
+    return state
+        .getEntry(status.code)
+        .currentPage + 1 ==
+        state
+            .getEntry(status.code)
+            .totalPages
+        ? Container(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[Text('已经到底了')],
+      ),
+    )
+        : Container();
+  }
+}
+
+class _NoDataInfoRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 50),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.lightbulb_outline,
+            color: Colors.orange,
+          ),
+          Text('暂无相关数据,您可以更换条件试试')
+        ],
+      ),
+    );
+  }
 }
