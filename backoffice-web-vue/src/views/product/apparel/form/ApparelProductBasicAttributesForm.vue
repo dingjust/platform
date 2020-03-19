@@ -35,46 +35,6 @@
     </el-row>
     <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
-        <el-row type="flex" align="middle">
-          <el-col :span="24">
-            <el-form-item class="product-form-item" :rules="[
-                { required: true, message: '请输入重量', trigger: 'blur'}]" prop="gramWeight">
-              <el-row type="flex" align="middle" justify="start" :gutter="10">
-                <el-col :span="6">
-                  <h6 class="attributes-row-label" style="width:80px">重量(KG)</h6>
-                </el-col>
-                <el-col :span="18">
-                  <el-input-number v-model="slotData.gramWeight" :precision="3" :min="0" size="mini" :disabled="isRead">
-                  </el-input-number>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-col>
-      <el-col :span="12">
-        <el-row type="flex" align="middle">
-          <el-col :span="24">
-            <el-row type="flex" align="middle" justify="start" :gutter="10">
-              <el-col :span="6">
-                <h6 class="attributes-row-label" style="width:80px">吊牌</h6>
-              </el-col>
-              <el-col :span="18">
-                <div style="padding-top:10px;">
-                  <el-radio-group v-model="slotData.attributes.taggable" text-color="#000000" fill="#ffd60c"
-                    :disabled="isRead">
-                    <el-radio :label="true" :key="1" class="product-attributes-radio">有</el-radio>
-                    <el-radio :label="false" :key="0" class="product-attributes-radio">没有</el-radio>
-                  </el-radio-group>
-                </div>
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
-    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
-      <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
             <el-row type="flex" align="middle" justify="start" :gutter="10">
@@ -190,10 +150,10 @@
           <el-col :span="24">
             <el-row type="flex" align="middle" justify="start" :gutter="10">
               <el-col :span="6">
-                <h6 class="attributes-row-label" style="">图案</h6>
+                <h6 class="attributes-row-label" style="">图案<span class="info-title_text-sub">(多选)</span></h6>
               </el-col>
               <el-col :span="18">
-                <el-select class="attributes-form-selector" v-model="slotData.attributes.decorativePatterns"
+                <el-select class="attributes-form-selector" multiple v-model="slotData.attributes.decorativePatterns"
                   placeholder="请选择">
                   <el-option v-for="item in decorativePatterns" :key="item.code" :label="item.name" :value="item.code">
                   </el-option>
@@ -208,10 +168,10 @@
           <el-col :span="24">
             <el-row type="flex" align="middle" justify="start" :gutter="10">
               <el-col :span="6">
-                <h6 class="attributes-row-label" style="">流行元素</h6>
+                <h6 class="attributes-row-label" style="">流行元素<span class="info-title_text-sub">(多选)</span></h6>
               </el-col>
               <el-col :span="18">
-                <el-select class="attributes-form-selector" v-model="slotData.attributes.popularElements"
+                <el-select class="attributes-form-selector" multiple v-model="slotData.attributes.popularElements"
                   placeholder="请选择">
                   <el-option v-for="item in popularElements" :key="item.code" :label="item.name" :value="item.code">
                   </el-option>
@@ -288,6 +248,46 @@
                   <el-option v-for="item in plackets" :key="item.code" :label="item.name" :value="item.code">
                   </el-option>
                 </el-select>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
+      <el-col :span="12">
+        <el-row type="flex" align="middle">
+          <el-col :span="24">
+            <el-form-item class="product-form-item" :rules="[
+                { required: true, message: '请输入重量', trigger: 'blur'}]" prop="gramWeight">
+              <el-row type="flex" align="middle" justify="start" :gutter="10">
+                <el-col :span="6">
+                  <h6 class="attributes-row-label" style="width:80px">重量(KG)</h6>
+                </el-col>
+                <el-col :span="18">
+                  <el-input-number v-model="slotData.gramWeight" :precision="3" :min="0" size="mini" :disabled="isRead">
+                  </el-input-number>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="12">
+        <el-row type="flex" align="middle">
+          <el-col :span="24">
+            <el-row type="flex" align="middle" justify="start" :gutter="10">
+              <el-col :span="6">
+                <h6 class="attributes-row-label" style="width:80px">吊牌</h6>
+              </el-col>
+              <el-col :span="18">
+                <div style="padding-top:10px;">
+                  <el-radio-group v-model="slotData.attributes.taggable" text-color="#000000" fill="#ffd60c"
+                                  :disabled="isRead">
+                    <el-radio :label="true" :key="1" class="product-attributes-radio">有</el-radio>
+                    <el-radio :label="false" :key="0" class="product-attributes-radio">没有</el-radio>
+                  </el-radio-group>
+                </div>
               </el-col>
             </el-row>
           </el-col>

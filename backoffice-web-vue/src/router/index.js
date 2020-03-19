@@ -170,6 +170,17 @@ const router = new Router({
               name: '生产进度',
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/production/ProductionPage')
             },
+            {
+              path: 'sales',
+              name: '销售订单',
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/sales/SalesOrderPage'),
+            },
+            {
+              path: 'sales/:code',
+              name: '销售订单详情',
+              props:true,
+              component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/sales/details/SalesOrderDetailsPage')
+            },
           ]
         },
         {

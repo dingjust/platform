@@ -75,7 +75,8 @@
       ...mapGetters({
         page: 'page',
         keyword: 'keyword',
-        queryFormData: 'queryFormData'
+        queryFormData: 'queryFormData',
+        newFormData: 'newFormData'
       })
     },
     methods: {
@@ -122,6 +123,7 @@
           this.apparelProductDetailsPageVisible = true;
           return;
         }
+        Object.assign(this.newFormData,result);
         this.$router.push({
           name: '产品详情',
           params: {
@@ -262,11 +264,11 @@
         this.onAdvancedSearch();
         // this.refresh();
       },
-      onNew(formData) {
+      onNew() {
         this.$router.push({
           name: '产品详情',
           params: {
-            slotData: formData
+            slotData: this.formData
           }
         });
         // this.fn.openSlider('创建产品', ApparelProductDetailsPage, formData);
@@ -310,7 +312,8 @@
         apparelProductForbiddenPageVisible: false,
         apparelProductOffShelfPageVisible: false,
         forbiddenItem: {},
-        offShelfItem: {}
+        offShelfItem: {},
+        formData: this.$store.state.ApparelProductsModule.newFormData,
       }
     },
     created() {

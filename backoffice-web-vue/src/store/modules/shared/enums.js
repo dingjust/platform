@@ -1359,173 +1359,21 @@ const state = {
     code: 'CANCEL',
     name: '作废'
   }],
-//   MsgModule: [
-//     {
-//       code: 'DEFAULT',
-//       name: '',
-//     },
-//     {
-//       code: 'UserLogin',
-//       name: '',
-//     },
-//     {
-//       code: 'REGISTER',
-//       name: '',
-//     },
-//     {
-//       code: 'DEFAULT',
-//       name: '',
-//     },
-//     {
-//       code: 'QUOTE_NEW',
-//       name: '',
-//     },
-//     {
-//       code: 'QUOTE_REFUSE',
-//       name: '',
-//     },
-//     {
-//       code: 'QUOTE_ADOPTED',
-//       name: '',
-//     },
-//     {
-//       code: 'PROOFING_CREATE',
-//       name: '',
-//     },
-//     {
-//       code: 'PROOFING_DELIVER',
-//       name: '',
-//     },
-//     {
-//       code: 'PROOFING_DELIVER',
-//       name: '',
-//     },
-//     {
-//       code: 'PROOFING_DELIVER',
-//       name: '',
-//     },
-//     {
-//       code: 'PROOFING_RECEIVED',
-//       name: '',
-//     },
-//     {
-//       code: 'PROOFING_PAY',
-//       name: '',
-//     },
-//     {
-//       code: 'PURCHASE_DELIVER',
-//       name: '',
-//     },
-//     {
-//       code: 'PURCHASE_RECEIVED',
-//       name: '',
-//     },
-//     {
-//       code: 'RECOMMEND_REQUIRE_ORDER',
-//       name: '',
-//     },
-//     {
-//       code: 'NEW_PURCHASE_ORDER',
-//       name: '',
-//     },
-//     {
-//       code: 'PAY_DEPOSIT',
-//       name: '',
-//     },
-//     {
-//       code: 'PAY_THE_REST',
-//       name: '',
-//     },
-//     {
-//       code: 'PROGRESS_UPDATED',
-//       name: '',
-//     },
-//     {
-//       code: 'PURCHASE_FACTORY_DELAY',
-//       name: '',
-//     },
-//     {
-//       code: 'PURCHASE_BRAND_DELAY',
-//       name: '',
-//     },
-//
-// ///默认
-// @JsonValue('default')
-//   DEFAULT,
-//
-// ///用户登录
-//     @JsonValue('userLogin')
-//   UserLogin,
-//
-// ///用户注册
-//     @JsonValue('register')
-//   REGISTER,
-//
-// ///新报价
-//     @JsonValue('newQuote')
-//   QUOTE_NEW,
-//
-// ///拒绝报价
-//     @JsonValue('refuseQuote')
-//   QUOTE_REFUSE,
-//
-// ///通过报价
-//     @JsonValue('adoptedQuote')
-//   QUOTE_ADOPTED,
-//
-// ///打样订单创建
-//     @JsonValue('proofingCreate')
-//   PROOFING_CREATE,
-//
-// ///打样订单确认发货
-//     @JsonValue('proofingDeliver')
-//   PROOFING_DELIVER,
-//
-// ///打样订单确认收货
-//     @JsonValue('proofingReceived')
-//   PROOFING_RECEIVED,
-//
-// ///打样订单付款
-//     @JsonValue('proofingPay')
-//   PROOFING_PAY,
-//
-// ///生产订单确认发货
-//     @JsonValue('purchaseDeliver')
-//   PURCHASE_DELIVER,
-//
-// ///生产订单确认收货
-//     @JsonValue('purchaseReceived')
-//   PURCHASE_RECEIVED,
-//
-// ///推荐需求
-//     @JsonValue('recommendRequireOrder')
-//   RECOMMEND_REQUIRE_ORDER,
-//
-// ///新的生产订单
-//     @JsonValue('newPurchaseOrder')
-//   NEW_PURCHASE_ORDER,
-//
-// ///支付生产订单定金
-//     @JsonValue('payDeposit')
-//   PAY_DEPOSIT,
-//
-// //支付生产订单尾款
-//     @JsonValue('payTheRest')
-//   PAY_THE_REST,
-//
-// ///生产订单流程更新
-//     @JsonValue('progressUpdated')
-//   PROGRESS_UPDATED,
-//
-// ///生产订单工厂延期提醒
-//     @JsonValue('purchaseFactoryDelay')
-//   PURCHASE_FACTORY_DELAY,
-//
-// ///生产订单品牌延期提醒
-//     @JsonValue('purchaseBrandDelay')
-//   PURCHASE_BRAND_DELAY
-//
-//   ]
+  ///产品类型
+  ProductTypes:[
+    {
+      code: 'SPOT_GOODS',
+      name: '现货',
+    },
+    {
+      code: 'FUTURE_GOODS',
+      name: '期货',
+    },
+    {
+      code: 'TAIL_GOODS',
+      name: '库存尾货',
+    },
+  ]
 };
 
 const mutations = {};

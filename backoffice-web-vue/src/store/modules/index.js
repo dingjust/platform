@@ -22,6 +22,8 @@ import RequirementOrdersModule from './order/requirement-orders';
 import PurchaseOrdersModule from './order/purchase-orders';
 import QuotesModule from './order/quotes';
 import ProofingsModule from './order/proofings';
+import SalesOrdersModule from './order/sales-orders';
+
 
 // miscs
 import SampleProductModule from './miscs/sampleProduct';
@@ -74,6 +76,7 @@ export {
   PurchaseOrdersModule,
   QuotesModule,
   ProofingsModule,
+  SalesOrdersModule,
   // miscs
   CarouselsModule,
   IndustrialClustersModule,

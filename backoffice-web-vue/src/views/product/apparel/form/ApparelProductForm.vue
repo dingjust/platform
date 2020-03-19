@@ -12,10 +12,10 @@
             </div>
           </el-col>
           <el-col :span="8">
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="现货"></el-checkbox>
-              <el-checkbox label="期货"></el-checkbox>
-              <el-checkbox label="库存尾货"></el-checkbox>
+            <el-checkbox-group v-model="slotData.productType">
+              <template v-for="type in productTypes">
+                <el-checkbox :label="type.code">{{type.name}}</el-checkbox>
+              </template>
             </el-checkbox-group>
           </el-col>
           <el-col :span="6">
@@ -34,28 +34,26 @@
         <apparel-product-basic-form :slot-data="slotData" :read-only="false" :isRead="isRead">
         </apparel-product-basic-form>
         <el-divider></el-divider>
-        <el-row class="info-title-row">
-          <h6 class="info-title_text">选择品类：</h6>
-        </el-row>
-        <apparel-product-categories-form :slot-data="slotData" :isRead="isRead"></apparel-product-categories-form>
+        <!--<el-row class="info-title-row">-->
+          <!--<h6 class="info-title_text">选择品类：</h6>-->
+        <!--</el-row>-->
+        <!--<apparel-product-categories-form :slot-data="slotData" :isRead="isRead"></apparel-product-categories-form>-->
+        <!--<el-divider></el-divider>-->
+        <apparel-product-colors-sizes-form :slot-data="slotData" :isRead="isRead"></apparel-product-colors-sizes-form>
         <el-divider></el-divider>
-        <apparel-product-colors-form :slot-data="slotData" :isRead="isRead"></apparel-product-colors-form>
-        <el-divider></el-divider>
-        <apparel-product-sizes-form :slot-data="slotData" :isRead="isRead"></apparel-product-sizes-form>
-        <el-divider></el-divider>
+        <!--<apparel-product-sizes-form :slot-data="slotData" :isRead="isRead"></apparel-product-sizes-form>-->
+        <!--<el-divider></el-divider>-->
         <apparel-product-images-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
         </apparel-product-images-form>
       </el-card>
       <div class="pt-2"></div>
-      <div class="pt-2"></div>
       <el-card class="box-card">
         <apparel-product-price-form :slot-data="slotData" :isRead="isRead"></apparel-product-price-form>
       </el-card>
-      <div class="pt-2"></div>
-      <el-card class="box-card">
-        <apparel-product-attributes-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
-        </apparel-product-attributes-form>
-      </el-card>
+      <!--<el-card class="box-card">-->
+        <!--<apparel-product-attributes-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">-->
+        <!--</apparel-product-attributes-form>-->
+      <!--</el-card>-->
       <el-row type="flex" justify="center" class="product-form-row">
         <el-button class="product-form-btn" @click="onUpdate()"
           v-if="this.slotData.code!=null&&this.slotData.code!=''&&!isRead">更新产品信息</el-button>
@@ -67,18 +65,30 @@
 </template>
 
 <script>
-  import ApparelProductImagesForm from "./ApparelProductImagesForm";
-  import ApparelProductBasicForm from "./ApparelProductBasicForm";
-  import ApparelProductVariantsForm from "./ApparelProductVariantsForm";
-  import ApparelProductAttributesForm from "./ApparelProductAttributesForm";
-  import ApparelProductCategoriesForm from "./ApparelProductCategoriesForm";
-  import ApparelProductColorsForm from "./ApparelProductColorsForm";
-  import ApparelProductSizesForm from "./ApparelProductSizesForm";
-  import ApparelProductPriceForm from "./ApparelProductPriceForm";
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapMutations,
+    mapActions
+  } = createNamespacedHelpers('ApparelProductsModule');
+
+  import ApparelProductImagesForm from './ApparelProductImagesForm';
+  import ApparelProductBasicForm from './ApparelProductBasicForm';
+  import ApparelProductVariantsForm from './ApparelProductVariantsForm';
+  import ApparelProductAttributesForm from './ApparelProductAttributesForm';
+  import ApparelProductCategoriesForm from './ApparelProductCategoriesForm';
+  import ApparelProductColorsForm from './ApparelProductColorsForm';
+  import ApparelProductSizesForm from './ApparelProductSizesForm';
+  import ApparelProductPriceForm from './ApparelProductPriceForm';
+  import ApparelProductColorsSizesForm from './ApparelProductColorsSizesForm';
 
   export default {
-    name: "ApparelProductFrom",
+    name: 'ApparelProductFrom',
     components: {
+      ApparelProductColorsSizesForm,
       ApparelProductImagesForm,
       ApparelProductBasicForm,
       ApparelProductVariantsForm,
@@ -88,78 +98,138 @@
       ApparelProductSizesForm,
       ApparelProductPriceForm
     },
-    props: ["slotData", "readOnly", "isRead"],
+    props: [ 'readOnly', 'isRead'],
+    computed: {
+      ...mapGetters({
+        slotData: 'newFormData'
+      })
+    },
+    mounted () {
+      // window.addEventListener('beforeunload', e => this.beforeunloadHandler(e));
+    },
     methods: {
-      onUpdate() {
+      ...mapActions({
+        resetFormData: 'resetFormData'
+      }),
+      // beforeunloadHandler (e) {
+      //   e = e || window.event
+      //   if (e) {
+      //     e.returnValue = '关闭提示'
+      //   }
+      //   return '关闭提示'
+      // },
+      onUpdate () {
         if (this.slotData.images == null || this.slotData.images.length == 0) {
-          this.$message.error("请上次产品主图");
+          this.$message.error('请上次产品主图');
           return;
         }
-        this.$refs["form"].validate(valid => {
+        this.$refs['form'].validate(valid => {
           if (valid) {
             this._Update();
             return true;
           } else {
-            this.$message.error("请完善表单信息");
+            this.$message.error('请完善表单信息');
             return false;
           }
         });
       },
-      async _Update() {
+      async _Update () {
         this.formData = Object.assign({}, this.slotData);
         this.slotData.variants = [];
         this.steppedPrices = [];
+        var colorSizes = [];
+        this.formData.colorSizes.forEach((item) => {
+          var obj = {
+            'colorCode': item[0].colorCode,
+            'colorName': item[0].color,
+            'sizes': []
+          };
+          if (item[0].previewImg != null && item[0].previewImg.length > 0) {
+            obj.previewImg = item[0].previewImg[0];
+          }
+          item.forEach((item1) => {
+            obj.sizes.push({
+              'code': item1.sizeCode,
+              'name': item1.size,
+              'quality': item1.quality
+            });
+          });
+          colorSizes.push(obj);
+        });
+        this.formData.colorSizes = colorSizes;
         const url = this.apis().updateOfApparelProduct(this.slotData.code);
-        const result = await this.$http.put(url, this.slotData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        const result = await this.$http.put(url, this.formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success("更新基本信息成功");
+        this.$message.success('更新基本信息成功');
         this.$router.go(-1);
       },
-      onCreate() {
+      onCreate () {
         if (this.slotData.images == null || this.slotData.images.length == 0) {
-          this.$message.error("请上次产品主图");
+          this.$message.error('请上次产品主图');
           return;
         }
-        this.$refs["form"].validate(valid => {
+        this.$refs['form'].validate(valid => {
           if (valid) {
             this._Create();
             return true;
           } else {
-            this.$message.error("请完善表单信息");
+            this.$message.error('请完善表单信息');
             return false;
           }
         });
       },
-      async _Create() {
+      async _Create () {
         this.formData = Object.assign({}, this.slotData);
+        var colorSizes = [];
+        this.formData.colorSizes.forEach((item) => {
+          var obj = {
+            'colorCode': item[0].colorCode,
+            'colorName': item[0].color,
+            'sizes': []
+          };
+          if (item[0].previewImg != null && item[0].previewImg.length > 0) {
+            obj.previewImg = item[0].previewImg[0];
+          }
+          item.forEach((item1) => {
+            obj.sizes.push({
+              'code': item1.sizeCode,
+              'name': item1.size,
+              'quality': item1.quality
+            });
+          });
+          colorSizes.push(obj);
+        });
+        this.formData.colorSizes = colorSizes;
         const url = this.apis().createApparelProduct();
         const result = await this.$http.post(url, this.formData);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success("产品创建成功，产品编号： " + result);
+        this.$message.success('产品创建成功，产品编号： ' + result);
         // this.$set(this.slotData, 'code', result);
         this.$router.go(-1);
       }
     },
-    computed: {},
-    data() {
+    data () {
       return {
+        productTypes: this.$store.state.EnumsModule.ProductTypes,
         imagesDialogVisible: false,
         basicDialogVisible: false,
         variantsDialogVisible: false,
         attributesDialogVisible: false,
-        formData: {},
-        checkList: []
+        formData: {}
       };
+    },
+    destroyed () {
+      this.resetFormData();
+    //   window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
     }
   };
-
 </script>
 <style>
   .info-title {

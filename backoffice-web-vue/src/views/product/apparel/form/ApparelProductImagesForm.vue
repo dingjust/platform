@@ -1,28 +1,52 @@
 <template>
   <div>
-    <el-row class="info-title-row" type="flex" align="center" justify="space-between">
-      <h6 class="info-title_text">上传图片：</h6>
-      <h6 class="info-title_info">大小不超过5m一张，最多5张主图,图像分辨率为180X180</h6>
+    <el-row class="basic-form-row" type="flex" align="top">
+      <el-col :span="2">
+        <h6 class="info-input-prepend" style="margin-top: 41px;">添加主图</h6>
+      </el-col>
+      <el-col :span="20">
+        <images-upload class="product-images-form-upload" :slot-data="slotData.images" :read-only="isRead" :disabled="isRead">
+          <template slot="picBtn" slot-scope="props">
+            <h6>大小不超过5M/张，且最多5张主图</h6>
+          </template>
+        </images-upload>
+        <!--<h6>大小不超过5M/张</h6>-->
+        <!--<h6>最多5张主图</h6>-->
+      </el-col>
     </el-row>
-    <el-tabs v-model="activeName" class="product-images-form-tab">
-      <el-tab-pane label="上传图片" name="images">
-        <images-upload class="product-images-form-upload" :slot-data="slotData.images" :read-only="isRead" :disabled="isRead"/>
-      </el-tab-pane>
-      <el-tab-pane label="上传图片详情" name="detailImages">
-        <images-upload class="product-images-form-upload" :slot-data="slotData.details" :read-only="isRead" :disabled="isRead"/>
-      </el-tab-pane>
-    </el-tabs>
+    <el-row class="basic-form-row" type="flex" align="top">
+      <el-col :span="2">
+        <h6 class="info-input-prepend" style="margin-top: 42px;">添加详情图</h6>
+      </el-col>
+      <el-col :span="20">
+        <images-upload class="product-images-form-upload" :slot-data="slotData.details" :read-only="isRead" :disabled="isRead">
+          <template slot="picBtn" slot-scope="props">
+            <h6>大小不超过5M/张，且最多8张详情图</h6>
+          </template>
+        </images-upload>
+      </el-col>
+    </el-row>
+    <!--<el-tabs v-model="activeName" class="product-images-form-tab">-->
+      <!--<el-tab-pane label="上传图片" name="images">-->
+        <!--<images-upload class="product-images-form-upload" :slot-data="slotData.images" :read-only="isRead" :disabled="isRead"/>-->
+      <!--</el-tab-pane>-->
+      <!--<el-tab-pane label="上传图片详情" name="detailImages">-->
+        <!--<images-upload class="product-images-form-upload" :slot-data="slotData.details" :read-only="isRead" :disabled="isRead"/>-->
+      <!--</el-tab-pane>-->
+    <!--</el-tabs>-->
   </div>
 </template>
 
 <script>
-  import ImagesUpload from '@/components/custom/ImagesUpload';
+  import ImagesUploadText from "../../../../components/custom/ImagesUploadText";
+  import ImagesUpload from "../../../../components/custom/ImagesUpload";
 
   export default {
     name: 'ApparelProductImagesForm',
     props: ['slotData', 'readOnly', 'isRead'],
     components: {
-      ImagesUpload
+      ImagesUpload,
+      ImagesUploadText,
     },
     computed: {
 

@@ -5,26 +5,26 @@
         <h6 class="info-title_text">价格设置<span class="info-title_text-sub">(上架必备)</span></h6>
       </div>
     </el-row>
-    <el-row :gutter="10" type="flex" align="center">
-      <el-col :span="9" class="product-form-row">
-        <el-form-item class="product-form-item" :rules="[
-                { required: true, message: '请输入打样费', trigger: 'blur'}]"
-          :prop="currentUser.type=='FACTORY'?'proofingFee':''">
-          <el-row type="flex" align="middle" justify="start">
-            <div style="width:80px">
-              <h6 class="info-input-prepend">打样费：</h6>
-            </div>
-            <el-input placeholder="请输入打样费" v-model="slotData.proofingFee" type="number" size="mini"
-              @mousewheel.native.prevent :min="0" :disabled="isRead">
-            </el-input>
-            <div style="width:230px">
-              <h6 class="info-title_text-sub_warning" v-if="!isRead">（卖家承担运费）</h6>
-            </div>
-          </el-row>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-divider></el-divider>
+    <!--<el-row :gutter="10" type="flex" align="center">-->
+      <!--<el-col :span="9" class="product-form-row">-->
+        <!--<el-form-item class="product-form-item" :rules="[-->
+                <!--{ required: true, message: '请输入打样费', trigger: 'blur'}]"-->
+          <!--:prop="currentUser.type=='FACTORY'?'proofingFee':''">-->
+          <!--<el-row type="flex" align="middle" justify="start">-->
+            <!--<div style="width:80px">-->
+              <!--<h6 class="info-input-prepend">打样费：</h6>-->
+            <!--</div>-->
+            <!--<el-input placeholder="请输入打样费" v-model="slotData.proofingFee" type="number" size="mini"-->
+              <!--@mousewheel.native.prevent :min="0" :disabled="isRead">-->
+            <!--</el-input>-->
+            <!--<div style="width:230px">-->
+              <!--<h6 class="info-title_text-sub_warning" v-if="!isRead">（卖家承担运费）</h6>-->
+            <!--</div>-->
+          <!--</el-row>-->
+        <!--</el-form-item>-->
+      <!--</el-col>-->
+    <!--</el-row>-->
+    <!--<el-divider></el-divider>-->
     <el-row>
       <h6 class="info-title_text">大货价格</h6>
     </el-row>
@@ -142,7 +142,8 @@
         currentUser: this.$store.getters.currentUser
       };
     },
-    created () {}
+    created () {
+    }
   };
 </script>
 <style>

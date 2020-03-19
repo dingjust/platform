@@ -45,6 +45,11 @@ export default {
             permissions: ['PURCHASE_ORDER']
           }
         },
+        {
+          name: '销售订单',
+          url: '/order/sales',
+          icon: 'iconNone',
+        }
         // {
         //   name: '生产进度',
         //   url: '/order/production',

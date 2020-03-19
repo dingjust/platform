@@ -6,8 +6,8 @@
           :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :file-list="fileList"
           :on-exceed="handleExceed" :on-preview="handlePreview" :limit="limit" :on-remove="handleRemove"
           :class="{disabled:uploadDisabled,picClass:picClass}">
-          <i class="el-icon-plus" slot="default"></i>
-          <div slot="tip" class="el-upload__tip"><slot name="picBtn" ></slot></div>
+          <!--<i class="el-icon-plus" slot="default"></i>-->
+          <div slot="tip" class="el-upload__tip"> <slot name="picBtn" ></slot></div>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible" :modal="false">
           <img width="100%" :src="dialogImageUrl" alt="">
@@ -19,7 +19,7 @@
 
 <script>
   export default {
-    name: 'ImagesUpload',
+    name: 'ImagesUploadText',
     props: {
       slotData: {
         type: Array,
