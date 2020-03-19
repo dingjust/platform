@@ -219,10 +219,10 @@ const router = new Router({
               path: 'index',
               name: '主页',
               component: () => import( /* webpackChunkName: 'accounts' */ '@/views/user/company/MyCompanyPage'),
-              // meta: {
-              //   requiresAuth: true,
-              //   permissions: ['ENT_INFO']
-              // }
+              meta: {
+                requiresAuth: true,
+                permissions: ['ENT_INFO']
+              }
             },
             {
               path: 'my',

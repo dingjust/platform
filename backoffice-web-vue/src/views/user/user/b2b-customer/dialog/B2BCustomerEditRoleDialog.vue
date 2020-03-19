@@ -55,13 +55,15 @@
     components: { B2BCustomerAuthorityTree1 },
     computed: {
     },
-    props: ['slotData'],
+    props: [],
     data () {
       return {
         rules: {
           name: [{ required: true, message: '必填', trigger: 'blur' }]
         },
-        titleName: '添加角色'
+        titleName: '添加角色',
+        count: 0,
+        slotData: this.$store.state.B2BCustomersModule.roleGroupData
       };
     },
     methods: {
@@ -103,6 +105,16 @@
           }
         }
         return result
+      }
+    },
+    watch: {
+      slotData: {
+        handler (val) {
+          if (val) {
+            this.$emit('watchCount');
+          }
+        },
+        deep: true
       }
     },
     created () {

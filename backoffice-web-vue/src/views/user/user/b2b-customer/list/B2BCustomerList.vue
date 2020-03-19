@@ -1,25 +1,30 @@
 <template>
   <div class="animated fadeIn">
     <el-table v-if="isHeightComputed" ref="resultTable" stripe :data="page.content" :height="autoHeight">
-      <el-table-column label="姓名" prop="name" width="140"></el-table-column>
-      <el-table-column label="账号" prop="uid" width="140"></el-table-column>
-      <el-table-column label="部门" prop="b2bDept" width="140">
+      <el-table-column label="姓名" prop="name" min-width="22%">
+        <template slot-scope="scope">
+          <span>{{scope.row.name != null ? scope.row.name : ''}}</span>
+          <el-tag v-if="scope.row.manager" type="success">{{'经理'}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="账号" prop="uid" min-width="15%"></el-table-column>
+      <el-table-column label="部门" prop="b2bDept" min-width="16%">
         <template slot-scope="scope">
           <span>{{scope.row.b2bDept != null ? scope.row.b2bDept.name : ''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" prop="b2bRoleGroup" width="140">
+      <el-table-column label="角色" prop="b2bRoleGroup" min-width="16%">
         <template slot-scope="scope">
           <span>{{scope.row.b2bRoleGroup != null ? scope.row.b2bRoleGroup.name : ''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="loginDisabled" width="80">
+      <el-table-column label="状态" prop="loginDisabled" min-width="6%">
         <template slot-scope="scope">
           <span>{{scope.row.loginDisabled ? '禁用' : '启用'}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope" v-if="scope.$index != 0">
+      <el-table-column label="操作" min-width="24%">
+        <template slot-scope="scope" v-if="!scope.row.root">
           <el-button @click="editInfo(scope.row, scope)" size="mini" v-if="hasper(permission.companyB2bCustomerModify)">
             编辑信息
           </el-button>
@@ -97,10 +102,16 @@
             label: '删除账号'
           });
         }
-        if (row.b2bDept != null && hasPermission(this.permission.companyB2bDeptSetManager)) {
+        if (row.b2bDept != null && !row.manager && hasPermission(this.permission.companyB2bDeptSetManager)) {
           this.options.push({
             value: 'setDepartmentHead',
             label: '设为部门负责人'
+          });
+        }
+        if (row.b2bDept != null && row.manager && hasPermission(this.permission.companyB2bDeptSetManager)) {
+          this.options.push({
+            value: 'removeDepartmentHead',
+            label: '移除部门负责人'
           });
         }
         if (row.loginDisabled && hasPermission(this.permission.companyB2bCustomerEnableState)) {
@@ -135,4 +146,19 @@
   /*.el-icon-arrow-down {*/
   /*  font-size: 12px;*/
   /*}*/
+  /*/deep/ .el-tabs_item {*/
+  /*  font-size: 8px !important;*/
+  /*}*/
+  /deep/ .el-tag--small {
+    height: 24px;
+    padding: 0 8px;
+    line-height: 22px;
+    display: inline-block;
+    transform: scale(0.8);
+  }
+  /deep/ .el-tag.el-tag--success {
+    background-color: #fff;
+    border-color: #67c23a;
+    color: #67c23a;
+  }
 </style>

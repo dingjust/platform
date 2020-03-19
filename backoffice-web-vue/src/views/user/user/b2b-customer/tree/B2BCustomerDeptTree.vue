@@ -9,8 +9,8 @@
           </span>
           <el-input ref="input" v-if="data.name === name && showInput"
                     v-model="modifyName"
-                    @blur="setName(node, data)"
                     autofocus
+                    @blur="setName(node, data)"
                     onkeydown="if(event.keyCode==13){blur()}"/>
 <!--          <authorized :authority="permission.companyB2bDeptCR">-->
             <el-button type="text" size="mini" v-if="topAppendShow(data)">
@@ -142,9 +142,25 @@
           })
         },
         async setName (node, data) {
+          // 去空格
           if (!this.modifyName.match(/^\s*$/)) {
             data.name = this.modifyName.trim();
           }
+          setTimeout(() => {
+            this.$confirm('是否保存修改?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._setName(node, data);
+            }).catch(() => {
+              this.$nextTick(() => {
+                this.$refs.input.focus();
+              })
+            });
+          }, 10)
+        },
+        async _setName (node, data) {
           if (data.name === '未命名') {
             this.$message.error('请给部门名称命名');
             // input获取焦点
