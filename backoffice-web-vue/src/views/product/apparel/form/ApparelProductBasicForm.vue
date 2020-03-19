@@ -24,7 +24,7 @@
         </el-form-item>
       </el-col>
     </el-row>
-        <el-row class="basic-form-row" type="flex" align="top">
+    <el-row class="basic-form-row" type="flex" align="top">
       <el-col :span="2">
         <h6 class="info-input-prepend">商品属性</h6>
       </el-col>
@@ -34,57 +34,57 @@
         </div>
       </el-col>
     </el-row>
-    <el-row :gutter="10" class="product-form-row">
-      <el-col :span="6">
-        <el-form-item class="product-form-item" :rules="[
-                { required: true, message: '请输入货号', trigger: 'blur'}]" prop="skuID">
-          <el-row type="flex" align="middle" justify="start">
-            <div style="width:50px">
-              <h6 class="info-input-prepend">货号：</h6>
-            </div>
-            <el-input placeholder="请输入货号" v-model="slotData.skuID" size="mini" :disabled="isRead"></el-input>
-          </el-row>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item class="product-form-item" prop="brand">
-          <el-row type="flex" align="middle">
-            <div style="width:50px">
-              <h6 class="info-input-prepend">品牌：</h6>
-            </div>
-            <el-input placeholder="请输入品牌" v-model="slotData.brand" size="mini" :disabled="isRead"></el-input>
-          </el-row>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item class="product-form-item" :rules="[
-                { required: true, message: '请输入重量', trigger: 'blur'}]" prop="gramWeight">
-          <el-row type="flex" align="middle">
-            <div style="width:80px">
-              <h6 class="info-input-prepend" style="width:80px">重量（KG）：</h6>
-            </div>
-            <el-input-number v-model="slotData.gramWeight" :precision="3" :min="0" size="mini" :disabled="isRead">
-            </el-input-number>
-          </el-row>
-        </el-form-item>
-      </el-col>
-      <!-- <el-col :span="6">
-          <el-form-item label="标题" prop="name">
-            <el-input v-model="slotData.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="产品类目" prop="category">
-            <el-select v-model="slotData.category.code" placeholder="请选择" class="w-100">
-              <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
-                <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name"
-                  :value="level2.code">
-                </el-option>
-              </el-option-group>
-            </el-select>
-          </el-form-item>
-      </el-col>-->
-    </el-row>
+    <!--<el-row :gutter="10" class="product-form-row">-->
+      <!--<el-col :span="6">-->
+        <!--<el-form-item class="product-form-item" :rules="[-->
+                <!--{ required: true, message: '请输入货号', trigger: 'blur'}]" prop="skuID">-->
+          <!--<el-row type="flex" align="middle" justify="start">-->
+            <!--<div style="width:50px">-->
+              <!--<h6 class="info-input-prepend">货号：</h6>-->
+            <!--</div>-->
+            <!--<el-input placeholder="请输入货号" v-model="slotData.skuID" size="mini" :disabled="isRead"></el-input>-->
+          <!--</el-row>-->
+        <!--</el-form-item>-->
+      <!--</el-col>-->
+      <!--<el-col :span="6">-->
+        <!--<el-form-item class="product-form-item" prop="brand">-->
+          <!--<el-row type="flex" align="middle">-->
+            <!--<div style="width:50px">-->
+              <!--<h6 class="info-input-prepend">品牌：</h6>-->
+            <!--</div>-->
+            <!--<el-input placeholder="请输入品牌" v-model="slotData.brand" size="mini" :disabled="isRead"></el-input>-->
+          <!--</el-row>-->
+        <!--</el-form-item>-->
+      <!--</el-col>-->
+      <!--<el-col :span="6">-->
+        <!--<el-form-item class="product-form-item" :rules="[-->
+                <!--{ required: true, message: '请输入重量', trigger: 'blur'}]" prop="gramWeight">-->
+          <!--<el-row type="flex" align="middle">-->
+            <!--<div style="width:80px">-->
+              <!--<h6 class="info-input-prepend" style="width:80px">重量（KG）：</h6>-->
+            <!--</div>-->
+            <!--<el-input-number v-model="slotData.gramWeight" :precision="3" :min="0" size="mini" :disabled="isRead">-->
+            <!--</el-input-number>-->
+          <!--</el-row>-->
+        <!--</el-form-item>-->
+      <!--</el-col>-->
+      <!--&lt;!&ndash; <el-col :span="6">-->
+          <!--<el-form-item label="标题" prop="name">-->
+            <!--<el-input v-model="slotData.name"></el-input>-->
+          <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col :span="6">-->
+          <!--<el-form-item label="产品类目" prop="category">-->
+            <!--<el-select v-model="slotData.category.code" placeholder="请选择" class="w-100">-->
+              <!--<el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">-->
+                <!--<el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name"-->
+                  <!--:value="level2.code">-->
+                <!--</el-option>-->
+              <!--</el-option-group>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+      <!--</el-col>&ndash;&gt;-->
+    <!--</el-row>-->
     <!-- <el-row :gutter="10">
         <el-col :span="6">
           <el-form-item label="供货价" prop="price">

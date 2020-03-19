@@ -62,6 +62,7 @@ const state = {
     skuID: '',
     name: '',
     price: 0.00,
+    gramWeight: 0.0,
     minPrice: 0.00,
     maxPrice: 0.00,
     category: {
@@ -69,7 +70,6 @@ const state = {
       name: ''
     },
     brand: '',
-    gramWeight: 0.0,
     variants: [],
     colors: [],
     sizes: [],
@@ -92,8 +92,14 @@ const state = {
       uid: '',
       name: ''
     },
-    steppedPrices:[]
-
+    steppedPrices:[
+      {
+        minimumQuantity: '',
+        price: ''
+      }
+    ],
+    productType: [],
+    colorSizes: [],
   },
   queryFormData: {
     code:'',
@@ -111,6 +117,7 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
+  newFormData: (state, newFormData) => state.newFormData = newFormData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
 };
@@ -166,6 +173,55 @@ const actions = {
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
+  },
+  resetFormData({dispatch, commit, state}){
+    commit('newFormData',{
+      id: null,
+      images: [],
+      details:[],
+      code: '',
+      skuID: '',
+      name: '',
+      price: 0.00,
+      gramWeight: 0.0,
+      minPrice: 0.00,
+      maxPrice: 0.00,
+      category: {
+        code: '',
+        name: ''
+      },
+      brand: '',
+      variants: [],
+      colors: [],
+      sizes: [],
+      attributes: {
+        styles: [],
+        fabricCompositions: [],
+        editionType: '',
+        pattern: '',
+        sleeveType: '',
+        sleeveLength: '',
+        decorativePatterns: [],
+        popularElements: [],
+        filler: '',
+        thickness: '',
+        season: '',
+        taggable: false,
+        placket: ''
+      },
+      belongTo: {
+        uid: '',
+        name: ''
+      },
+      steppedPrices:[
+        {
+          minimumQuantity: '',
+          price: ''
+        }
+      ],
+      productType: [],
+      colorSizes: [],
+    });
   }
 };
 
@@ -174,6 +230,7 @@ const getters = {
   keyword: state => state.keyword,
   isAdvancedSearch: state => state.isAdvancedSearch,
   queryFormData: state => state.queryFormData,
+  newFormData: state => state.newFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page
