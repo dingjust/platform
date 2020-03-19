@@ -280,7 +280,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                   Text('${entry.model.size.name}',
                       style: TextStyle(color: Colors.black87, fontSize: 14)),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
+                      Text('库存：100',
+                          style:
+                          TextStyle(color: Colors.grey, fontSize: 12)),
                       IconButton(
                         icon: Icon(
                           B2BIcons.remove_rect,

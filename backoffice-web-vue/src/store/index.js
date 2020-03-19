@@ -26,6 +26,7 @@ import {
   PurchaseOrdersModule,
   QuotesModule,
   ProofingsModule,
+  SalesOrdersModule,
   // miscs
   CarouselsModule,
   IndustrialClustersModule,
@@ -102,6 +103,7 @@ export default new Vuex.Store({
     PurchaseOrdersModule,
     QuotesModule,
     ProofingsModule,
+    SalesOrdersModule,
     // miscs
     CarouselsModule,
     IndustrialClustersModule,

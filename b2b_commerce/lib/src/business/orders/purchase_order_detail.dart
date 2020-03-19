@@ -1,5 +1,3 @@
-import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_update_deduction_amount_dialog.dart';
-import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_update_total_price_dialog.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/production_progresses.dart';
 import 'package:b2b_commerce/src/business/purchase_orders.dart';
@@ -9,7 +7,6 @@ import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:b2b_commerce/src/production/production_generate_unique_code.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +21,6 @@ import 'package:widgets/widgets.dart';
 
 import 'form/purchase/purchase_deliver_order_view.dart';
 import 'form/purchase/purchase_detail_btn_group.dart';
-import 'form/purchase/purchase_detail_btn_group_online.dart';
 import 'form/purchase/purchase_reconciliation_order_view.dart';
 import 'form/purchase/purchase_shipping_order_view.dart';
 
@@ -71,7 +67,7 @@ class PurchaseOrderDetailPage extends StatefulWidget {
   final bool isProduction;
 
   PurchaseOrderDetailPage(
-      {Key key, @required this.code, this.isProduction = false,this.model,})
+      {Key key, @required this.code, this.isProduction = false, this.model,})
       : super(key: key);
 
   _PurchaseDetailPageState createState() => _PurchaseDetailPageState();
@@ -1463,7 +1459,7 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
   Widget _buildContracts(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       color: Colors.white,
       child: Row(
         children: <Widget>[
@@ -2461,10 +2457,10 @@ class _PurchaseDetailPageState extends State<PurchaseOrderDetailPage> {
     );
   }
 
-  _getDeductionAmountText(double amount){
+  _getDeductionAmountText(double amount) {
     String text = '';
-    if(amount != null){
-      if(amount < 0){
+    if (amount != null) {
+      if (amount < 0) {
         text += '-￥';
         amount = -amount;
       }

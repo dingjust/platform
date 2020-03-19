@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
+import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
@@ -48,6 +49,7 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_PRODUCTS_OFF_THE_SHELF =
       '/business/products_off_the_shelf';
   static const ROUTE_PURCHASE_ORDERS = '/business/purchase_orders';
+  static const ROUTE_SALE_ORDERS = '/business/sale_orders';
   static const ROUTE_QUOTES = '/business/quotes';
   static const ROUTE_REQUIREMENT_ORDERS = '/business/requirement_orders';
   static const ROUTE_REQUIREMENT_ORDERS_DETAIL =
@@ -58,8 +60,10 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_SALES_ORDERS = '/business/sales_orders';
   static const ROUTE_SAMPLE_GARMENTS = '/business/sample_garments';
   static const ROUTE_SUPPLIERS = '/business/suppliers';
-  static const ROUTE_SUBCONTRACTS_POOL = '/business/subcontract/subcontract_pool';
-  static const ROUTE_SUBCONTRACTS_MINE = '/business/subcontract/subcontract_mine';
+  static const ROUTE_SUBCONTRACTS_POOL =
+      '/business/subcontract/subcontract_pool';
+  static const ROUTE_SUBCONTRACTS_MINE =
+      '/business/subcontract/subcontract_mine';
 
   static const ROUTE_MY_ACCOUNT = '/my/my_account';
   static const ROUTE_MY_BRAND = '/my/my_brand';
@@ -118,6 +122,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_CAPACITY_MATCHING: (context) => CapacityMatchingPage(),
     ROUTE_ORDER_COORDINATION: (context) => OrderCoordinationPage(),
     ROUTE_PUBLISH_CENTER: (context) => PublishCenterPage(),
-    ROUTE_ORDER_PRODUCTS: (context) => ProductsPage()
+    ROUTE_ORDER_PRODUCTS: (context) => ProductsPage(),
+    ROUTE_SALE_ORDERS: (context) => SaleOrdersPage(),
   };
 }

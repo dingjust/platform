@@ -13,7 +13,7 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ProofingOrderDetailPage extends StatefulWidget {
-  ProofingOrderDetailPage(this.code,{this.isRefreshData = false});
+  ProofingOrderDetailPage(this.code, {this.isRefreshData = false});
 
   final String code;
   final bool isRefreshData;
@@ -28,8 +28,8 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
-        if(widget.isRefreshData){
+      onWillPop: () {
+        if (widget.isRefreshData) {
           ProofingOrdersBLoC.instance.refreshData('ALL');
           ProofingOrdersBLoC.instance.refreshData('PENDING_PAYMENT');
         }
@@ -47,7 +47,8 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           ),
         ),
         body: FutureBuilder<ProofingModel>(
-          builder: (BuildContext context, AsyncSnapshot<ProofingModel> snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<ProofingModel> snapshot) {
             if (snapshot.data != null) {
               return Container(
                 color: Color.fromRGBO(245, 245, 245, 1),
@@ -62,7 +63,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                       child: ColorSizeNumTable(
                         data: model.entries
                             .map((entry) => ApparelSizeVariantProductEntry(
-                            quantity: entry.quantity, model: entry.product))
+                                quantity: entry.quantity, model: entry.product))
                             .toList(),
                       ),
                     ),
@@ -92,7 +93,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
   Future<ProofingModel> _getData() async {
     // 查询明细
     ProofingModel detailModel =
-    await ProofingOrderRepository().proofingDetail(widget.code);
+        await ProofingOrderRepository().proofingDetail(widget.code);
     model = detailModel;
     return detailModel;
   }
@@ -111,94 +112,92 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
         children: <Widget>[
           model.product.thumbnail != null
               ? GestureDetector(
-            child: Stack(
-              alignment: const Alignment(0.6, 1.1),
-              children: <Widget>[
-                model.product != null &&
-                    model.product.thumbnail != null &&
-                    model.product.thumbnail.url != null
-                    ? Container(
-                  margin: EdgeInsets.only(right: 15),
-                  padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
-                  width: 80,
-                  height: 80,
-                  child: CachedNetworkImage(
-                      width: 100,
-                      height: 100,
-                      imageUrl:
-                      '${model.product.thumbnail.previewUrl()}',
-                      fit: BoxFit.cover,
-                      imageBuilder: (context, imageProvider) =>
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
+                  child: Stack(
+                    alignment: const Alignment(0.6, 1.1),
+                    children: <Widget>[
+                      model.product != null &&
+                              model.product.thumbnail != null &&
+                              model.product.thumbnail.url != null
+                          ? Container(
+                              margin: EdgeInsets.only(right: 15),
+                              padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                              width: 80,
+                              height: 80,
+                              child: CachedNetworkImage(
+                                  width: 100,
+                                  height: 100,
+                                  imageUrl:
+                                      '${model.product.thumbnail.previewUrl()}',
+                                  fit: BoxFit.cover,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                  placeholder: (context, url) => SpinKitRing(
+                                        color: Colors.black12,
+                                        lineWidth: 2,
+                                        size: 30,
+                                      ),
+                                  errorWidget: (context, url, error) =>
+                                      SpinKitRing(
+                                        color: Colors.black12,
+                                        lineWidth: 2,
+                                        size: 30,
+                                      )),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              borderRadius:
-                              BorderRadius.circular(10),
+                            )
+                          : Container(
+                              margin: EdgeInsets.only(right: 15),
+                              padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      'temp/picture.png',
+                                      package: "assets",
+                                    ),
+                                    fit: BoxFit.cover,
+                                  )),
                             ),
-                          ),
-                      placeholder: (context, url) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          ),
-                      errorWidget: (context, url, error) =>
-                          SpinKitRing(
-                            color: Colors.black12,
-                            lineWidth: 2,
-                            size: 30,
-                          )),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                      Container(
+                        child: Icon(
+                          Icons.photo_size_select_actual,
+                          color: Colors.black38,
+                          size: 20,
+                        ),
+                      )
+                    ],
                   ),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PicturePickPreviewWidget(
+                              medias: model.product.thumbnails,
+                              isUpload: false,
+                            )));
+                  },
                 )
-                    : Container(
-                  margin: EdgeInsets.only(right: 15),
-                  padding: EdgeInsets.fromLTRB(0, 10, 15, 0),
+              : Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'temp/picture.png',
-                          package: "assets",
-                        ),
-                        fit: BoxFit.cover,
-                      )),
+                      borderRadius: BorderRadius.circular(5),
+                      color: Color.fromRGBO(243, 243, 243, 1)),
+                  child: Icon(B2BIcons.noPicture,
+                      color: Color.fromRGBO(200, 200, 200, 1), size: 60),
                 ),
-                Container(
-                  child: Icon(
-                    Icons.photo_size_select_actual,
-                    color: Colors.black38,
-                    size: 20,
-                  ),
-                )
-              ],
-            ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      PicturePickPreviewWidget(
-                        medias: model.product.thumbnails,
-                        isUpload: false,
-                      )));
-            },
-          )
-              : Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Color.fromRGBO(243, 243, 243, 1)),
-            child: Icon(B2BIcons.noPicture,
-                color: Color.fromRGBO(200, 200, 200, 1), size: 60),
-          ),
           Expanded(
             flex: 1,
             child: Container(
@@ -260,12 +259,12 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           Text(
             '样衣数量',
             style:
-            TextStyle(fontSize: 18, color: Color.fromRGBO(50, 50, 50, 1)),
+                TextStyle(fontSize: 18, color: Color.fromRGBO(50, 50, 50, 1)),
           ),
           Text(
             'x${sum}',
             style:
-            TextStyle(fontSize: 18, color: Color.fromRGBO(255, 68, 68, 1)),
+                TextStyle(fontSize: 18, color: Color.fromRGBO(255, 68, 68, 1)),
           )
         ],
       ),
@@ -282,7 +281,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
           Text(
             '样衣费用',
             style:
-            TextStyle(fontSize: 18, color: Color.fromRGBO(50, 50, 50, 1)),
+                TextStyle(fontSize: 18, color: Color.fromRGBO(50, 50, 50, 1)),
           ),
           Row(
             children: <Widget>[
@@ -340,32 +339,32 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               title: Row(
                 children: <Widget>[
                   model.deliveryAddress == null ||
-                      model.deliveryAddress.fullname == null
+                          model.deliveryAddress.fullname == null
                       ? Container()
                       : Text(model.deliveryAddress.fullname),
                   model.deliveryAddress == null ||
-                      model.deliveryAddress.cellphone == null
+                          model.deliveryAddress.cellphone == null
                       ? Container()
                       : Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text(model.deliveryAddress.cellphone),
-                  )
+                          margin: EdgeInsets.only(left: 10),
+                          child: Text(model.deliveryAddress.cellphone),
+                        )
                 ],
               ),
               subtitle: model.deliveryAddress == null ||
-                  model.deliveryAddress.region == null ||
-                  model.deliveryAddress.city == null ||
-                  model.deliveryAddress.cityDistrict == null ||
-                  model.deliveryAddress.line1 == null
+                      model.deliveryAddress.region == null ||
+                      model.deliveryAddress.city == null ||
+                      model.deliveryAddress.cityDistrict == null ||
+                      model.deliveryAddress.line1 == null
                   ? Container()
                   : Text(
-                  model.deliveryAddress.region.name +
-                      model.deliveryAddress.city.name +
-                      model.deliveryAddress.cityDistrict.name +
-                      model.deliveryAddress.line1,
-                  style: TextStyle(
-                    color: Colors.black,
-                  )),
+                      model.deliveryAddress.region.name +
+                          model.deliveryAddress.city.name +
+                          model.deliveryAddress.cityDistrict.name +
+                          model.deliveryAddress.line1,
+                      style: TextStyle(
+                        color: Colors.black,
+                      )),
             ),
             SizedBox(
               child: Image.asset(
@@ -389,20 +388,13 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                     children: <Widget>[
                       Container(
                         child: Text(
-                          '${model.consignment != null &&
-                              model.consignment.carrierDetails != null &&
-                              model.consignment.carrierDetails.name != null
-                              ? model.consignment.carrierDetails.name
-                              : ''}',
+                          '${model.consignment != null && model.consignment.carrierDetails != null && model.consignment.carrierDetails.name != null ? model.consignment.carrierDetails.name : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
                       Container(
                         child: Text(
-                          '${model.consignment != null &&
-                              model.consignment.carrierDetails != null &&
-                              model.consignment.trackingID != null ? model
-                              .consignment.trackingID : ''}',
+                          '${model.consignment != null && model.consignment.carrierDetails != null && model.consignment.trackingID != null ? model.consignment.trackingID : ''}',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -431,44 +423,44 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
       onTap: () async {
         UserBLoC.instance.currentUser.type == UserType.BRAND
             ? Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MyAddressesPage(isJumpSource: true)),
-          //接收返回数据并处理
-        ).then((value) {
-          if (value != null) {
-            setState(() {
-              _getData();
-            });
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) {
-                  return RequestDataLoading(
-                    requestCallBack: ProofingOrderRepository()
-                        .updateAddress(model.code, model),
-                    outsideDismiss: false,
-                    loadingText: '保存中。。。',
-                    entrance: '0',
-                  );
-                }).then((value) {
-              showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (_) {
-                    return CustomizeDialog(
-                      dialogType: DialogType.RESULT_DIALOG,
-                      successTips: '地址修改成功',
-                      failTips: '地址修改失败',
-                      callbackResult: value,
-                      confirmAction: () {
-                        Navigator.of(context).pop();
-                      },
-                    );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyAddressesPage(isJumpSource: true)),
+                //接收返回数据并处理
+              ).then((value) {
+                if (value != null) {
+                  setState(() {
+                    _getData();
                   });
-            });
-          }
-        })
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) {
+                        return RequestDataLoading(
+                          requestCallBack: ProofingOrderRepository()
+                              .updateAddress(model.code, model),
+                          outsideDismiss: false,
+                          loadingText: '保存中。。。',
+                          entrance: '0',
+                        );
+                      }).then((value) {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) {
+                          return CustomizeDialog(
+                            dialogType: DialogType.RESULT_DIALOG,
+                            successTips: '地址修改成功',
+                            failTips: '地址修改失败',
+                            callbackResult: value,
+                            confirmAction: () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        });
+                  });
+                }
+              })
             : null;
         ProofingOrdersBLoC().refreshData('ALL');
       },
@@ -486,89 +478,85 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               Row(
                 children: <Widget>[
                   model.supplier == null ||
-                      model.supplier.profilePicture == null
+                          model.supplier.profilePicture == null
                       ? Container(
-                    margin: EdgeInsets.all(10),
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: AssetImage(
-                            'temp/picture.png',
-                            package: "assets",
-                          ),
-                          fit: BoxFit.cover,
-                        )),
-                  )
+                          margin: EdgeInsets.all(10),
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'temp/picture.png',
+                                  package: "assets",
+                                ),
+                                fit: BoxFit.cover,
+                              )),
+                        )
                       : Container(
-                    margin: EdgeInsets.all(10),
-                    width: 80,
-                    height: 80,
-                    child: CachedNetworkImage(
-                        width: 100,
-                        height: 100,
-                        imageUrl:
-                        '${model.supplier.profilePicture.previewUrl()}',
-                        fit: BoxFit.cover,
-                        imageBuilder: (context, imageProvider) =>
-                            Container(
+                          margin: EdgeInsets.all(10),
+                          width: 80,
+                          height: 80,
+                          child: CachedNetworkImage(
                               width: 100,
                               height: 100,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                        placeholder: (context, url) =>
-                            SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            ),
-                        errorWidget: (context, url, error) =>
-                            SpinKitRing(
-                              color: Colors.black12,
-                              lineWidth: 2,
-                              size: 30,
-                            )),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                              imageUrl:
+                                  '${model.supplier.profilePicture.previewUrl()}',
+                              fit: BoxFit.cover,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                              placeholder: (context, url) => SpinKitRing(
+                                    color: Colors.black12,
+                                    lineWidth: 2,
+                                    size: 30,
+                                  ),
+                              errorWidget: (context, url, error) => SpinKitRing(
+                                    color: Colors.black12,
+                                    lineWidth: 2,
+                                    size: 30,
+                                  )),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                   Container(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              '${model.supplier == null ||
-                                  model.supplier.name == null ? '' : model
-                                  .supplier.name}',
-                              textScaleFactor: 1.3,
-                            ),
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(top: 5),
-                              color: Color.fromRGBO(254, 252, 235, 1),
-                              child: model.supplier.approvalStatus ==
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          '${model.supplier == null || model.supplier.name == null ? '' : model.supplier.name}',
+                          textScaleFactor: 1.3,
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 5),
+                          color: Color.fromRGBO(254, 252, 235, 1),
+                          child: model.supplier.approvalStatus ==
                                   ArticleApprovalStatus.approved
-                                  ? Text('  已认证  ',
+                              ? Text('  已认证  ',
                                   style: TextStyle(
                                     color: Color.fromRGBO(255, 133, 148, 1),
                                   ))
-                                  : Text(
-                                '  未认证  ',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(255, 133, 148, 1),
-                                ),
-                              ))
-                        ],
-                      ))
+                              : Text(
+                                  '  未认证  ',
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(255, 133, 148, 1),
+                                  ),
+                                ))
+                    ],
+                  ))
                 ],
               ),
             ],
@@ -588,8 +576,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        MyFactoryPage(
+                    builder: (context) => MyFactoryPage(
                           factoryUid: model.belongTo.uid,
                           isFactoryDetail: true,
                         )));
@@ -657,9 +644,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                         children: <Widget>[
                           Text('历史接单'),
                           Text(
-                            '${model.belongTo.historyOrdersCount == null
-                                ? ''
-                                : model.belongTo.historyOrdersCount}',
+                            '${model.belongTo.historyOrdersCount == null ? '' : model.belongTo.historyOrdersCount}',
                             style: TextStyle(color: Colors.red),
                           ),
                           Text('单')
@@ -671,9 +656,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            '${model.belongTo.contactAddress?.city
-                                ?.name} ${model.belongTo.contactAddress
-                                ?.cityDistrict?.name}',
+                            '${model.belongTo.contactAddress?.city?.name} ${model.belongTo.contactAddress?.cityDistrict?.name}',
                             style: TextStyle(color: Colors.grey),
                           ),
                         ],
@@ -727,9 +710,9 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
             ),
             model.requirementOrderRef != null
                 ? Text(
-              '需求订单号：${model.requirementOrderRef}',
-              style: TextStyle(color: Colors.black),
-            )
+                    '需求订单号：${model.requirementOrderRef}',
+                    style: TextStyle(color: Colors.black),
+                  )
                 : Container()
           ],
         ),
@@ -762,8 +745,8 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => OrderPaymentPage(
-                        order: model,
-                      )));
+                            order: model,
+                          )));
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
@@ -834,9 +817,9 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => LogisticsInputPage(
-                      isProductionOrder: false,
-                      proofingModel: model,
-                    )));
+                          isProductionOrder: false,
+                          proofingModel: model,
+                        )));
               },
               color: Color(0xFFFFD600),
               child: Text(
@@ -883,7 +866,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
 
   void _onProofingConfirm(ProofingModel model) async {
     bool result =
-    await ProofingOrderRepository().proofingConfirm(model.code, model);
+        await ProofingOrderRepository().proofingConfirm(model.code, model);
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -942,7 +925,7 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
 
   void cancelOrder(ProofingModel model) async {
     String response =
-    await ProofingOrderRepository().proofingCancelling(model.code);
+        await ProofingOrderRepository().proofingCancelling(model.code);
     if (response != null) {
       ProofingOrdersBLoC.instance.refreshData('ALL');
       Navigator.of(context).pop();
@@ -967,17 +950,17 @@ class _ProofingOrderDetailPageState extends State<ProofingOrderDetailPage> {
   void onUpdate() async {
     //查询明细
     ProofingModel detailModel =
-    await ProofingOrderRepository().proofingDetail(model.code);
+        await ProofingOrderRepository().proofingDetail(model.code);
 
     QuoteModel quoteModel =
-    await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
+        await QuoteOrderRepository().getQuoteDetails(detailModel.quoteRef);
 
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ProofingOrderForm(
-          quoteModel: quoteModel,
-          model: detailModel,
-          update: true,
-        )));
+              quoteModel: quoteModel,
+              model: detailModel,
+              update: true,
+            )));
   }
 
   void _showMessage(BuildContext context, bool result, String message) {

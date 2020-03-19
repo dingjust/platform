@@ -4,7 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:widgets/src/commons/gallery/gallery_item.dart';
+import 'package:widgets/src/commons/gallery/gallery_photo_view_wrapper.dart';
 
 /// 轮播图
 class ProductCarousel<T extends MediaModel> extends StatefulWidget {
@@ -18,12 +19,10 @@ class ProductCarousel<T extends MediaModel> extends StatefulWidget {
 }
 
 class _ProductCarouselState extends State<ProductCarousel> {
-  static int length = 1000;
-
   int _curPageIndex = 0;
   int _curIndicatorsIndex = 0;
 
-  PageController _pageController = PageController(initialPage: length ~/ 2);
+  PageController _pageController;
 
   List<Widget> _indicators = [];
   List<MediaModel> _items = [];
@@ -37,7 +36,8 @@ class _ProductCarouselState extends State<ProductCarousel> {
   @override
   void initState() {
     super.initState();
-    _curPageIndex = length ~/ 2;
+    _pageController = PageController(initialPage: widget.items.length ~/ 2);
+    _curPageIndex = widget.items.length ~/ 2;
 
     initTimer();
   }
@@ -63,7 +63,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
 
   // 用于做banner循环
   _initItems() {
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < widget.items.length; i++) {
       _items.addAll(widget.items);
     }
   }
@@ -84,7 +84,8 @@ class _ProductCarouselState extends State<ProductCarousel> {
   _changePage(int index) {
     _curPageIndex = index;
     // 获取指示器索引
-    if(widget.items.length > 0) _curIndicatorsIndex = index % widget.items.length;
+    if (widget.items.length > 0)
+      _curIndicatorsIndex = index % widget.items.length;
 
     setState(() {});
   }
@@ -102,7 +103,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
           height: 22.0,
           child: Center(
             child: Text(
-              '${_curIndicatorsIndex+1}/${widget.items.length}',
+              '${_curIndicatorsIndex + 1}/${widget.items.length}',
               style: TextStyle(color: Colors.white),
             ),
           )),
@@ -149,19 +150,41 @@ class _ProductCarouselState extends State<ProductCarousel> {
         onTapUp: (up) {
           _isEndScroll = true;
         },
+        onTap: () {
+          print('==');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Container(
+                      child: GalleryPhotoViewWrapper(
+                        galleryItems: widget.items
+                            .map((model) => GalleryItem(model: model))
+                            .toList(),
+                        backgroundDecoration: const BoxDecoration(
+                          color: Colors.black,
+                        ),
+                        initialIndex: _curIndicatorsIndex,
+                        scrollDirection: Axis.horizontal,
+                      ),
+                    )),
+          );
+        },
         child: CachedNetworkImage(
-            imageUrl: item.url,
-            fit: BoxFit.cover,
-            placeholder: (context, url) =>  SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: 30,
-            ),
-            errorWidget: (context, url, error) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth: 2,
-              size: 30,
-            ),
+          imageUrl: item.url,
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+              SpinKitRing(
+                color: Colors.black12,
+                lineWidth: 2,
+                size: 30,
+              ),
+          errorWidget: (context, url, error) =>
+              SpinKitRing(
+                color: Colors.black12,
+                lineWidth: 2,
+                size: 30,
+              ),
         ),
       ),
     );
@@ -170,14 +193,13 @@ class _ProductCarouselState extends State<ProductCarousel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height,
-      //指示器覆盖在pager view上，所以用Stack
-      child: Stack(
-        children: <Widget>[
-          _buildPagerView(),
-          _buildIndicators(),
-        ],
-      ),
-    );
+        height: widget.height,
+        //指示器覆盖在pager view上，所以用Stack
+        child: Stack(
+          children: <Widget>[
+            _buildPagerView(),
+            _buildIndicators(),
+          ],
+        ));
   }
 }

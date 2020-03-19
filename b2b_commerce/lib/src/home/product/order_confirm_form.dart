@@ -116,8 +116,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
   Widget _buildMainListView() {
     return Container(
+      color: Colors.white,
       padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom / 3),
+      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom / 3),
       child: ListView(
         children: <Widget>[
           Container(
@@ -130,7 +131,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
             ),
             decoration: BoxDecoration(
                 border:
-                    Border(bottom: BorderSide(width: 0.5, color: Colors.grey))),
+                Border(bottom: BorderSide(width: 0.5, color: Colors.grey))),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(0, 20, 0, 20),

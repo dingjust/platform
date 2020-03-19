@@ -92,115 +92,7 @@ class BrandSiteStatisticsSection extends StatelessWidget {
   }
 }
 
-// class BrandOrderMenus extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//         padding: EdgeInsets.symmetric(vertical: 20),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: <Widget>[
-//             Container(
-//               margin: EdgeInsets.only(left: 10),
-//               child: Text(
-//                 '订单管理',
-//                 style: TextStyle(fontSize: 16),
-//               ),
-//             ),
-//             GridView.count(
-//               shrinkWrap: true,
-//               physics: NeverScrollableScrollPhysics(),
-//               padding: const EdgeInsets.all(0.0),
-//               crossAxisCount: 4,
-//               mainAxisSpacing: 20.0,
-//               crossAxisSpacing: 4.0,
-//               childAspectRatio: (1.3),
-//               children: <Widget>[
-//                 buildChild(context, MenuItemImage.requirementOrder, '需求订单',
-//                     AppRoutes.ROUTE_REQUIREMENT_ORDERS),
-//                 buildChild(context, MenuItemImage.priceManage, '报价管理',
-//                     AppRoutes.ROUTE_QUOTES),
-//                 buildChild(context, MenuItemImage.proofingOrder, '打样订单',
-//                     AppRoutes.ROUTE_PROOFING_ORDERS),
-//                 buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
-//                     AppRoutes.ROUTE_PURCHASE_ORDERS),
-//               ],
-//             )
-//           ],
-//         ));
-//   }
-
-//   Widget buildChild(BuildContext context, Image image, String title,
-//       String routeTo) {
-//     return GestureDetector(
-//         child: Container(
-//           color: Colors.white,
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               image,
-//               Container(
-//                 margin: const EdgeInsets.only(top: 8.0),
-//                 child: Text(
-//                   title,
-//                   style: TextStyle(
-//                     color: Color.fromRGBO(100, 100, 100, 1),
-//                     fontSize: 15.0,
-//                     fontWeight: FontWeight.w400,
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//         onTap: () {
-//           Navigator.pushNamed(context, routeTo);
-//         });
-//   }
-// }
-
 class BrandMenusSection extends StatelessWidget {
-//  Widget _buildOrderMenu() {
-//    return Container(
-//      color: Colors.white,
-//      child: Row(
-//        children: <Widget>[
-//          AdvanceMenu('订单管理', <AdvanceMenuItem>[
-//            AdvanceMenuItem(MenuItemImage.requirementOrder, '需求订单',
-//                AppRoutes.ROUTE_REQUIREMENT_ORDERS),
-//            AdvanceMenuItem(
-//                MenuItemImage.priceManage, '报价管理', AppRoutes.ROUTE_QUOTES),
-//            AdvanceMenuItem(MenuItemImage.proofingOrder, '打样订单',
-//                AppRoutes.ROUTE_PROOFING_ORDERS),
-//            AdvanceMenuItem(MenuItemImage.purchaseOrder, '生产订单',
-//                AppRoutes.ROUTE_PURCHASE_ORDERS),
-//          ])
-//        ],
-//      ),
-//    );
-//  }
-//
-//  Widget _buildCompanyMenu() {
-//    return Container(
-//      color: Colors.white,
-//      child: Row(
-//        children: <Widget>[
-//          AdvanceMenu('店铺管理', <AdvanceMenuItem>[
-//            AdvanceMenuItem(
-//                MenuItemImage.productFactory, '产品管理', AppRoutes.ROUTE_PRODUCTS),
-//            // AdvanceMenuItem(MenuItemImage.employeeManage, '员工管理',
-//            //     AppRoutes.ROUTE_EMPLOYEES),
-//            AdvanceMenuItem(MenuItemImage.partnerFactory, '合作商管理',
-//                AppRoutes.ROUTE_SUPPLIERS),
-//            AdvanceMenuItem(MenuItemImage.clothesManage, '样衣借还',
-//                AppRoutes.ROUTE_SAMPLE_GARMENTS),
-//          ])
-//        ],
-//      ),
-//    );
-//  }
-
   Widget _buildOrderMenu(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 20),
@@ -234,6 +126,9 @@ class BrandMenusSection extends StatelessWidget {
                     authorizations: [Authorization.PROOFING_ORDER]),
                 buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
                     AppRoutes.ROUTE_PURCHASE_ORDERS,
+                    authorizations: [Authorization.PURCHASE_ORDER]),
+                buildChild(context, MenuItemImage.saleOrder, '销售订单',
+                    AppRoutes.ROUTE_SALE_ORDERS,
                     authorizations: [Authorization.PURCHASE_ORDER]),
               ],
             )

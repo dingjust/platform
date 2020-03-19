@@ -37,6 +37,12 @@ const state = {
     name: '',
     roleIds: []
   },
+  roleGroupData: {
+    id: '',
+    name: '',
+    roleList: [],
+    roleIds: []
+  },
   roleList: [],
   deptList: [],
   roleGroupList: [],
@@ -50,6 +56,7 @@ const mutations = {
   page: (state, page) => state.page = page,
   roleList: (state, roleList) => state.roleList = roleList,
   deptList: (state, deptList) => state.deptList = deptList,
+  roleGroupData: (state, roleGroupData) => state.roleGroupData = roleGroupData,
   roleForm: (state, roleForm) => state.roleForm = roleForm,
   formData: (state, formData) => state.formData = formData,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
@@ -112,6 +119,7 @@ const getters = {
   page: state => state.page,
   roleList: state => state.roleList,
   deptList: state => state.deptList,
+  roleGroupData: state => state.roleGroupData,
   roleGroupList: state => state.roleGroupList,
   roleCodeList: state => state.roleCodeList
 };

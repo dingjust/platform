@@ -28,9 +28,11 @@
     </div>
 
     <el-row type="flex" justify="center">
-      <el-button class="buttonClass" @click="onSave">
-        <h6>保存</h6>
-      </el-button>
+      <authorized :authority="permission.entInfoModify">
+        <el-button class="buttonClass" @click="onSave">
+          <h6>保存</h6>
+        </el-button>
+      </authorized>
     </el-row>
   </div>
 </template>

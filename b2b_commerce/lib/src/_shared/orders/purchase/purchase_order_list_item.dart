@@ -71,9 +71,11 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
           Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) =>
-                    widget.order.salesApplication == SalesApplication.BELOW_THE_LINE ?
-                    PurchaseOrderDetailPage(code: widget.order.code,):
-                    PurchaseOrderDetailOnlinePage(code: widget.order.code)),
+                widget.order.salesApplication == SalesApplication.BELOW_THE_LINE
+                    ?
+                PurchaseOrderDetailPage(code: widget.order.code,)
+                    :
+                PurchaseOrderDetailOnlinePage(code: widget.order.code)),
           );
         }
       },
@@ -88,17 +90,17 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
           Row(
             children: <Widget>[
               (widget.order.salesApplication == SalesApplication.ONLINE &&
-                          widget.order.depositPaid == false &&
-                          widget.order.deposit != null &&
-                          widget.order.deposit != 0 &&
-                          widget.order.status ==
+                  widget.order.depositPaid == false &&
+                  widget.order.deposit != null &&
+                  widget.order.deposit != 0 &&
+                  widget.order.status ==
                               PurchaseOrderStatus.PENDING_PAYMENT) ||
-                      (widget.order.salesApplication ==
+                  (widget.order.salesApplication ==
                               SalesApplication.ONLINE &&
-                          widget.order.balancePaid == false &&
-                          widget.order.balance != null &&
-                          widget.order.balance != 0 &&
-                          widget.order.status ==
+                      widget.order.balancePaid == false &&
+                      widget.order.balance != null &&
+                      widget.order.balance != 0 &&
+                      widget.order.status ==
                               PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE)
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
@@ -113,9 +115,16 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                           ),
                         ),
                         Text(
-                          '${widget.order.salesApplication == SalesApplication.ONLINE && widget.order.depositPaid == false &&
-                              widget.order.status == PurchaseOrderStatus.PENDING_PAYMENT ? widget.order.deposit == null ? 0.0 :
-                          widget.order.deposit.toStringAsFixed(2) : widget.order.balance == null ? 0.0 : (widget.order.balance + (widget.order.deductionAmount ?? 0)).toStringAsFixed(2)}',
+                          '${widget.order.salesApplication ==
+                              SalesApplication.ONLINE &&
+                              widget.order.depositPaid == false &&
+                              widget.order.status ==
+                                  PurchaseOrderStatus.PENDING_PAYMENT ? widget
+                              .order.deposit == null ? 0.0 :
+                          widget.order.deposit.toStringAsFixed(2) : widget.order
+                              .balance == null ? 0.0 : (widget.order.balance +
+                              (widget.order.deductionAmount ?? 0))
+                              .toStringAsFixed(2)}',
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                             fontSize: 18,
@@ -145,7 +154,8 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            '${PurchaseOrderStatusLocalizedMap[widget.order.status]}',
+                            '${PurchaseOrderStatusLocalizedMap[widget.order
+                                .status]}',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                               fontSize: 18,
@@ -180,7 +190,10 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                 ),
               ),
               Text(
-                '${widget.order.salesApplication == null ? '' : SalesApplicationLocalizedMap[widget.order.salesApplication]}',
+                '${widget.order.salesApplication == null
+                    ? ''
+                    : SalesApplicationLocalizedMap[widget.order
+                    .salesApplication]}',
                 textAlign: TextAlign.end,
                 style: const TextStyle(fontSize: 16),
               )
@@ -253,10 +266,10 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                       Align(
                         alignment: Alignment.topLeft,
                         child: widget.order.product == null ||
-                                widget.order.product.name == null
+                            widget.order.product.name == null
                             ? Container()
                             : Text(
-                                '${widget.order.product.name}',
+                          '${widget.order.product.name}',
                           overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w500),
@@ -271,14 +284,16 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
-                            '货号：${widget.order.product == null || widget.order.product.skuID == null ? '' : widget.order.product.skuID}',
+                            '货号：${widget.order.product == null ||
+                                widget.order.product.skuID == null ? '' : widget
+                                .order.product.skuID}',
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.grey),
                           ),
                         ),
                       ),
                       widget.order.product == null ||
-                              widget.order.product.category == null
+                          widget.order.product.category == null
                           ? Container()
                           : Container(
                               padding: const EdgeInsets.all(3),
@@ -673,7 +688,8 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                         context: context,
                         barrierDismissible: false,
                         builder: (_) {
-                          return PurchaseUpdateTotalPriceDialog(purchaseOrderModel: widget.order,);
+                          return PurchaseUpdateTotalPriceDialog(
+                            purchaseOrderModel: widget.order,);
                         }).then((value) {
                       if (value != null && value != '') {
                         String str = value;
@@ -870,8 +886,10 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
               if(value){
                 PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
                 setState(() {
-                  PurchaseOrderBLoC.instance.updateAmountResetData('ALL', purchaseOrderModel);
-                  PurchaseOrderBLoC.instance.updateAmountResetData('WAIT_FOR_OUT_OF_STORE', purchaseOrderModel);
+                  PurchaseOrderBLoC.instance.updateAmountResetData(
+                      'ALL', purchaseOrderModel);
+                  PurchaseOrderBLoC.instance.updateAmountResetData(
+                      'WAIT_FOR_OUT_OF_STORE', purchaseOrderModel);
                   BotToast.showText(text: '修改价格成功');
                 });
               }else{
@@ -909,8 +927,10 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
             if(value){
               PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
               setState(() {
-                PurchaseOrderBLoC.instance.updateAmountResetData('ALL', purchaseOrderModel);
-                PurchaseOrderBLoC.instance.updateAmountResetData('PENDING_PAYMENT', purchaseOrderModel);
+                PurchaseOrderBLoC.instance.updateAmountResetData(
+                    'ALL', purchaseOrderModel);
+                PurchaseOrderBLoC.instance.updateAmountResetData(
+                    'PENDING_PAYMENT', purchaseOrderModel);
                 BotToast.showText(text: '修改价格成功');
               });
             }else{

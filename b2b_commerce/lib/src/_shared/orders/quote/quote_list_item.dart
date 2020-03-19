@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/business/orders/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:core/core.dart';
@@ -7,6 +6,7 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
+import '../../../../b2b_commerce.dart';
 import '../../../business/orders/quote_order_detail.dart';
 import '../../widgets/image_factory.dart';
 

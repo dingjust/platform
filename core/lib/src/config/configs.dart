@@ -1,20 +1,20 @@
 class GlobalConfigs {
   static const PAGE_SIZE = 20;
 
-  // static const DEBUG = true;
+  static const DEBUG = true;
 
-  static const DEBUG = false;
+  // static const DEBUG = false;
   //测试
-  // static const CONTEXT_PATH = 'https://sc.nbyjy.net';
-  // static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
+  static const CONTEXT_PATH = 'https://sc.nbyjy.net';
+  static const MEDIA_CONTEXT_PATH = 'https://sc.nbyjy.net';
 
   // static const CONTEXT_PATH = 'https://192.168.31.177:9002/djwebservices/v2';
   // static const MEDIA_CONTEXT_PATH =
   //     'https://192.168.31.177:9002/djwebservices/v2';
 
   // 生产
-  static const CONTEXT_PATH = 'https://ht.nbyjy.net';
-  static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
+  // static const CONTEXT_PATH = 'https://ht.nbyjy.net';
+  // static const MEDIA_CONTEXT_PATH = 'http://img.nbyjy.net';
 
   ///websocket 连接
   // static get WEBSOCKET_URL => (String token, String uid) {
@@ -52,6 +52,7 @@ class GlobalConfigs {
       'brand_index_history_keyword_key';
   static const Requirement_HISTORY_KEYWORD_KEY =
       'requirement_history_keyword_key';
+  static const SALE_HISTORY_KEYWORD_KEY = 'sale_history_keyword_key';
   static const CAPACITY_HISTORY_KEYWORD_KEY = 'capacity_history_keyword_key';
 
   static const CONTRACT_HISTORY_KEYWORD_KEY = 'contract_history_keyword_key';

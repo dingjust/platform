@@ -1,6 +1,6 @@
 <template>
     <div class="tree-container">
-      <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent=10 class="tree filter-tree">
+      <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent='0'class="tree filter-tree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span v-if="data.name !== name || !showInput" @dblclick="dblclick(data)" @click="searchOnDept(data)"
                 @mouseover="onActive(data)" @mouseleave="offActive"
@@ -9,8 +9,8 @@
           </span>
           <el-input ref="input" v-if="data.name === name && showInput"
                     v-model="modifyName"
-                    @blur="setName(node, data)"
                     autofocus
+                    @blur="setName(node, data)"
                     onkeydown="if(event.keyCode==13){blur()}"/>
 <!--          <authorized :authority="permission.companyB2bDeptCR">-->
             <el-button type="text" size="mini" v-if="topAppendShow(data)">
@@ -38,7 +38,7 @@
 
 <script>
     import {hasPermission} from '../../../../../auth/auth';
-
+    var time = null;
     export default {
       name: 'B2BCustomerDeptTree',
       props: ['slotData'],
@@ -59,11 +59,14 @@
       },
       methods: {
         searchOnDept (data) {
-          let deptName = '';
-          if (data.name != '所有部门') {
-            deptName = data.name;
-          }
-          this.$emit('searchInAside', deptName, '')
+          clearTimeout(time);
+          time = setTimeout(() => {
+            let deptName = '';
+            if (data.name != '所有部门') {
+              deptName = data.name;
+            }
+            this.$emit('searchInAside', deptName, '');
+          }, 200)
         },
         hasPer (permission) {
           return hasPermission(permission);
@@ -116,7 +119,7 @@
               this.$emit('removeDept', data.id);
             });
           } else {
-            this.$confirm('确认后删除部门，请问是否继续?', '提示', {
+            this.$confirm('确认后将删除此部门，请问是否继续?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
@@ -126,6 +129,7 @@
           }
         },
         dblclick (data) {
+          clearTimeout(time);
           if (data.depth === 0 || !hasPermission(this.permission.companyB2bDeptRename)) {
             return
           }
@@ -138,9 +142,25 @@
           })
         },
         async setName (node, data) {
+          // 去空格
           if (!this.modifyName.match(/^\s*$/)) {
             data.name = this.modifyName.trim();
           }
+          setTimeout(() => {
+            this.$confirm('是否保存修改?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this._setName(node, data);
+            }).catch(() => {
+              this.$nextTick(() => {
+                this.$refs.input.focus();
+              })
+            });
+          }, 10)
+        },
+        async _setName (node, data) {
           if (data.name === '未命名') {
             this.$message.error('请给部门名称命名');
             // input获取焦点
@@ -249,10 +269,10 @@
   }
 
 
-  /* 树形结构节点添加连线 */
+  /*!* 树形结构节点添加连线 *!*/
   .tree /deep/ .el-tree-node {
     position: relative;
-    padding-left: 16px;
+    padding-left: 8px;
   }
 
   .tree /deep/ .el-tree-node__children {
@@ -286,9 +306,9 @@
     right: auto;
     border-width: 1px;
   }
-  .tree /deep/ .el-tree-node__expand-icon.is-leaf {
-    display: none;
-  }
+  /*.tree /deep/ .el-tree-node__expand-icon.is-leaf {*/
+  /*  display: none;*/
+  /*}*/
 
   .tree /deep/ .el-tree-node:before {
     border-left: 1px dashed #b8b9bb;

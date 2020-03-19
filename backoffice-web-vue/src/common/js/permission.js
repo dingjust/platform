@@ -64,9 +64,12 @@ const factoryCapacityModify = ['FACTORY_CAPACITY_MODIFY']
 const factoryCapacityPublish = ['FACTORY_CAPACITY_PUBLISH']
 
 // 主页
+const entInfo = ['ENT_INFO']
+const entInfoModify = ['ENT_INFO_MODIFY']
 
 // 认证中心
 const cert = ['CERT']
+const certReverification = ['CERT_REVERIFICATION']
 
 // 员工
 const companyB2bCustomer = ['COMPANY_B2BCUSTOMER']
@@ -177,9 +180,12 @@ export default {
   factoryCapacityPublish,
 
   // 主页
+  entInfo,
+  entInfoModify,
 
   // 认证中心
   cert,
+  certReverification,
 
   // 员工
   companyB2bCustomer,

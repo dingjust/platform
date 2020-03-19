@@ -129,6 +129,18 @@ class B2BIcons {
   ///闪电
   static const IconData thunder = const IconData(0xe624,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///双箭头右
+  static const IconData double_arrow_right = const IconData(0xe640,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///双箭头左
+  static const IconData double_arrow_left = const IconData(0xe641,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///货车
+  static const IconData truck = const IconData(0xe616,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
 }
 
 class CommonImage {

@@ -11,6 +11,10 @@
     <template v-else>
       系统异常，请重新登录
     </template>
+    <el-dialog :visible.sync="tipDialogVisible" width="400px" :close-on-press-escape="false" :show-close="false">
+      <leave-tip-dialog @leavelHandler="leavelHandler">
+      </leave-tip-dialog>
+    </el-dialog>
   </div>
 </template>
 
@@ -27,10 +31,12 @@
   import BrandDetailsPage from './brand/details/BrandDetailsPage';
   import FactoryDetailsPage from './factory/details/FactoryDetailsPage';
   import FactoryFrom from './factory/form/FactoryForm';
+  import LeaveTipDialog from '../../common/LeaveTipDialog';
 
   export default {
     name: 'MyCompanyPage',
     components: {
+      LeaveTipDialog,
       FactoryFrom,
       FactoryDetailsPage,
       BrandDetailsPage
@@ -86,7 +92,6 @@
             this.getCities(this.formData.contactAddress.region);
             this.setIsCitiesChanged(false);
           }
-
         }
         if ((this.formData.contactAddress.city != null && this.isDistrictsChanged) || this.cities.length <= 0) {
           if (this.formData.contactAddress.city != null && this.formData.contactAddress.city.code != '') {
@@ -175,11 +180,24 @@
       },
       brandLeaveCount () {
         this.count++;
+      },
+      leavelHandler (b) {
+        const leave = this.leave;
+        if (b) {
+          this.status = true;
+          this.$router.push({ name: leave.name, query: leave.query, params: leave.params });
+        } else {
+          this.status = false;
+        }
+        this.tipDialogVisible = false;
       }
     },
     data () {
       return {
         count: 0,
+        leave: {},
+        status: false,
+        tipDialogVisible: false
       };
     },
     created () {
@@ -198,18 +216,30 @@
       }
     },
     beforeRouteLeave (to, from, next) {
-    // 判断数据是否修改，如果修改按这个执行，没修改，则直接执行离开此页面
+      next(false);
       if (this.count > 1) {
-        this.$confirm('当前页面数据并未保存，是否要离开？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          next();
-        });
+        if (this.status) {
+          next()
+          return
+        }
+        this.leave = to;
+        next(false);
+        this.tipDialogVisible = true;
       } else {
         next();
       }
+      // // 判断数据是否修改，如果修改按这个执行，没修改，则直接执行离开此页面
+      // if (this.count > 1) {
+      //   this.$confirm('当前页面数据并未保存，是否要离开？', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     next();
+      //   });
+      // } else {
+      //   next();
+      // }
     }
   };
 </script>

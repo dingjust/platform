@@ -55,21 +55,15 @@
     components: { B2BCustomerAuthorityTree1 },
     computed: {
     },
-    props: ['slotData'],
+    props: [],
     data () {
-      var validatePass = (rule, value, callback) => {
-        if (this.slotData.roleIds.length <= 0) {
-          callback(new Error('请选择权限'));
-        } else {
-          callback();
-        }
-      };
       return {
         rules: {
-          name: [{ required: true, message: '必填', trigger: 'blur' }],
-          roleIds: [{validator: validatePass, trigger: 'change'}]
+          name: [{ required: true, message: '必填', trigger: 'blur' }]
         },
-        titleName: '添加角色'
+        titleName: '添加角色',
+        count: 0,
+        slotData: this.$store.state.B2BCustomersModule.roleGroupData
       };
     },
     methods: {
@@ -82,10 +76,14 @@
       onSave () {
         this.$refs['roleForm'].validate((valid) => {
           if (valid) {
+            if (!this.slotData.roleIds || this.slotData.roleIds.length < 0) {
+              this.$message.error('请选择角色的权限');
+              return;
+            }
             let formData = {
               id: this.slotData.id == '' ? null : this.slotData.id,
               name: this.slotData.name,
-              roleIds: this.slotData.roleIds
+              roleIds: this.distinct(this.slotData.roleIds)
             }
             this.$emit('saveRole', formData);
           } else {
@@ -95,6 +93,28 @@
       },
       onCannel () {
         this.$emit('cannelNewRole');
+      },
+      // 数组去重
+      distinct (arr) {
+        let result = []
+        let obj = {};
+        for (let i of arr) {
+          if (!obj[i]) {
+            result.push(i)
+            obj[i] = 1
+          }
+        }
+        return result
+      }
+    },
+    watch: {
+      slotData: {
+        handler (val) {
+          if (val) {
+            this.$emit('watchCount');
+          }
+        },
+        deep: true
       }
     },
     created () {
