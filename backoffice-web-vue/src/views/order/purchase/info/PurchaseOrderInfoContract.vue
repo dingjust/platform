@@ -26,7 +26,7 @@
         </h6>
       </div>
       <el-button
-        v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED'"
+        v-if="(contracts ==null || contracts == '')&& slotData.status != 'PENDING_CONFIRM' && slotData.status != 'CANCELLED' && !isTenant()"
         type="text" class="info-detail-logistics_info-btn2" @click="onCreate">签署合同
       </el-button>
       <!--<el-button v-if="contract !=null && contract.state != 'INVALID'" type="text" class="info-detail-logistics_info-btn2" @click="openContract">查看合同-->

@@ -27,6 +27,9 @@
         setCheckChange (data) {
           this.$refs.authorityTree.setCheckChange(data);
         },
+        setCheckRoleList (data) {
+          this.$refs.authorityTree.setCheckRoleList(data);
+        },
         handleCheckAllChange () {
           this.$refs.authorityTree.handleCheckAllChange();
         },

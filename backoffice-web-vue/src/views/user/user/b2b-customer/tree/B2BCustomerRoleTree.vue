@@ -1,8 +1,8 @@
 <template>
     <div class="tree-container">
       <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent='10' class="tree filter-tree">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
-          <span v-if="data.id !== applyId || !showInput" @dblclick="dblclick(data)" @click="searchOnRole(data)"
+        <span class="custom-tree-node" slot-scope="{ node, data }" @click="searchOnRole(data)">
+          <span v-if="data.id !== applyId || !showInput" @dblclick="dblclick(data)"
                 @mouseover="onActive(data)" @mouseleave="offActive"
                 :class="nodeClassShow(data)? 'active_tree_node':''">
             {{ data.name }}
@@ -17,8 +17,8 @@
             <i v-if="appendShow(data)" class="el-icon-circle-plus-outline" @click="append"/>
           </el-button>
           <el-dropdown trigger="click" v-if="showDropdown(data)" @command="handleCommand($event, data)">
-              <span class="el-dropdown-link">
-                <i class="el-icon-setting" style="color: #409eff" @click="showIcon(data)"/>
+              <span @click="showIcon(data)">
+                <i class="el-icon-setting" style="color: #409eff"/>
               </span>
               <el-dropdown-menu slot="dropdown" >
                 <el-dropdown-item v-if="modifyShow(data)" command="modify">编辑角色</el-dropdown-item>
@@ -81,6 +81,7 @@
           return hasPermission(this.permission.companyB2bRoleRemove) && data.depth != 0;
         },
         append () {
+          event.stopPropagation();
           this.$emit('createRole');
         },
         editRole (data) {
@@ -113,7 +114,8 @@
             this.$confirm('是否保存修改?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
-              type: 'warning'
+              type: 'warning',
+              closeOnClickModal: false
             }).then(() => {
               this._setName(node, data);
             }).catch(() => {
@@ -139,6 +141,7 @@
           this.$emit('saveRoleName', formData);
         },
         showIcon (data) {
+          event.stopPropagation();
           this.applyId = data.id;
           this.showIconV = false;
         },

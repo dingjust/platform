@@ -4,7 +4,7 @@
       <!--<template-report />-->
     <!--</div>-->
     <el-dialog :visible.sync="templateDetailVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <template-detail :slotData="templateData" @closeDetails="closeDetails"/>
+      <template-detail v-if="templateDetailVisible" :slotData="templateData" @closeDetails="closeDetails"/>
     </el-dialog>
     <el-dialog :visible.sync="pdfVisible" :show-close="true" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <authorized :authority="permission.agreementTmplView">

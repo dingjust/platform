@@ -49,7 +49,7 @@
                     ></el-input>
                   </el-row>
                 </el-form-item>
-                <h6 style="padding-left: 25%;color: #909399">员工初始密码与账号相同</h6>
+                <h6 style="padding-left: 25%;color: #909399;padding-top: 10px">员工初始密码与账号相同</h6>
               </el-col>
             </el-row>
             <el-row type="flex">
@@ -158,7 +158,7 @@
           this.$message.error(result.msg);
           return;
         }
-        this.$refs.permissionForm.setCheckChange(result.data.roleList);
+        this.$refs.permissionForm.setCheckRoleList(result.data.roleList);
       },
       selectDept (val) {
         this.deptId = val;
@@ -241,13 +241,23 @@
       }
     },
     data () {
+      var checkContactPhone = (rule, value, callback) => {
+        // const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+        // if (value === '') {
+        //   callback(new Error('请输入手机号码'));
+        // } else if (!reg.test(value)) {
+        //   callback(new Error('请输入合法手机号码'));
+        // } else {
+          callback();
+        // }
+      };
       return {
         rules: {
           name: [
             { required: true, message: '必填', trigger: 'blur' },
             { max: 10, message: '员工名称最多可输入10个字符', trigger: 'blur' }
           ],
-          uid: [{ required: true, message: '必填', trigger: 'blur' }]
+          uid: [{validator: checkContactPhone, type: 'object', trigger: 'blur'}]
         },
         uid: '',
         name: '',
@@ -266,7 +276,8 @@
         leave: {},
         status: false,
         isSave: false,
-        tipDialogVisible: false
+        tipDialogVisible: false,
+        hasDept: true
       };
     },
     created () {
@@ -275,6 +286,7 @@
       if (this.$route.params.formData != null) {
         this.formData = Object.assign({}, this.$route.params.formData);
         if (this.formData.b2bDept == null) {
+          this.hasDept = false;
           this.$set(this.formData, 'b2bDept', {id: 0});
         }
         this.deptId = this.formData.b2bDept.id;
@@ -301,7 +313,10 @@
     },
     beforeRouteLeave (to, from, next) {
       next(false);
-      if ((this.$route.params.formData != null && this.count > 2 && !this.isSave) || (this.$route.params.formData == null && this.count > 1 && !this.isSave)) {
+      const flag = !this.isSave && ((this.$route.params.formData != null && !this.hasDept && this.count > 2) ||
+                                  (this.$route.params.formData != null && this.hasDept && this.count > 3) ||
+                                  (this.$route.params.formData == null && this.count > 1));
+      if (flag) {
         if (this.status) {
           next()
           return
