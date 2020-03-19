@@ -76,7 +76,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-row type="flex" justify="space-around" style="margin-top: 30px" v-if="slotData.state === 'BUYER_APPROVED'">
+    <el-row type="flex" justify="space-around" style="margin-top: 30px" v-if="slotData.state === 'BUYER_APPROVED' && !isTenant()">
       <authorized :authority="permission.proofingOrderCreate">
         <el-button class="btn-class" style="width: 200px" @click="onCreatedProofingOrder" :disabled="true">创建打样订单</el-button>
       </authorized>

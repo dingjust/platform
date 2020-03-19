@@ -181,7 +181,13 @@
         this.getRoleGroupList();
       },
       createRole () {
-        // this.roleGroupData = this.$store.state.B2BCustomersModule.roleGroupData;
+        const roleGroupData = {
+          id: '',
+          name: '',
+          roleList: [],
+          roleIds: []
+        }
+        this.$store.state.B2BCustomersModule.roleGroupData = roleGroupData;
         this.count = 0;
         this.editRoleVisible = true;
       },
@@ -340,16 +346,16 @@
       },
       handleClose (done) {
         // setTimeout(() => {
-          if (this.count > 0) {
-            this.$confirm('是否确认关闭此弹窗，填写的信息将不会保存')
-              .then(_ => {
-                done();
-              })
-              .catch(_ => {
-              });
-          } else {
-            done();
-          }
+        if (this.count > 0) {
+          this.$confirm('是否确认关闭此弹窗，填写的信息将不会保存')
+            .then(_ => {
+              done();
+            })
+            .catch(_ => {
+            });
+        } else {
+          done();
+        }
         // }, 10);
       }
     },

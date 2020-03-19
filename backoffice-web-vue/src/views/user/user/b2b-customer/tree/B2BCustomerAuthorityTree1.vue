@@ -144,17 +144,10 @@
         if (flag) {
           if (!role.children || role.children.length > 0) {
             this.pushRoleId(role);
-          } else {
-            this.roleIdList.push(role.id);
           }
         } else {
           if (!role.children || role.children.length > 0) {
             this.popRoleId(role);
-          } else {
-            let index = this.roleIdList.indexOf(role.id);
-            if (index > -1) {
-              this.roleIdList.splice(index, 1);
-            }
           }
         }
         this._handleCheckedNodeChange(item);
@@ -223,6 +216,17 @@
         this.roleIdList = this.distinct(this.roleIdList);
       },
       setRoleList () {
+        let index;
+        this.secondRoleArr.forEach(value => {
+          index = this.roleIdList.indexOf(value.id);
+          if (index > -1) {
+            this.roleIdList.splice(index, 1);
+          }
+          index = this.roleIdList.indexOf(value.parentId);
+          if (index > -1) {
+            this.roleIdList.splice(index, 1);
+          }
+        })
         this.secondRoleArr.forEach(item => {
           if (item.checkFlag || item.indeterminateFlag) {
             this.roleIdList.push(item.id);
@@ -230,6 +234,7 @@
           }
         })
         this.roleIdList = this.distinct(this.roleIdList)
+        console.log(this.roleIdList);
         if (this.isRolePage) {
           this.formData.roleIds = this.roleIdList;
         } else {
@@ -273,11 +278,33 @@
           })
         }
       },
+      // 选择角色回显角色权限
+      setCheckRoleList (roleList) {
+        console.log(roleList);
+        // item 订单
+        roleList.forEach(item => {
+          this.roleIdList.push(item.id);
+          if (item.children && item.children.length > 0) {
+            // role打样订单
+            item.children.forEach(role => {
+              this.roleIdList.push(role.id);
+              if (role.children && role.children.length > 0) {
+                role.children.forEach(role1 => {
+                  this.roleIdList.push(role1.id);
+                })
+              }
+            })
+          }
+        })
+        this.roleIdList = this.distinct(this.roleIdList);
+        this.__setCheckChange(this.roleIdList);
+      },
       // 查看员工信息时回显权限
       _setCheckChange (b2bRoleList) {
+        this.roleIdList = b2bRoleList;
         this.__setCheckChange(b2bRoleList);
       },
-      // 查看角色页面（选择角色）时回显角色的权限
+      // 查看角色页面时回显角色的权限
       setCheckChange (roleList) {
         let checkList = [];
         roleList.forEach(item => {
@@ -292,12 +319,12 @@
           })
         })
         this.distinct(checkList);
+        this.roleIdList = checkList;
         this.__setCheckChange(checkList);
         checkList = [];
       },
       __setCheckChange (roleList) {
         let index;
-        this.roleIdList = roleList;
         this.roleListData.forEach(item => {
           item.children.forEach(role => {
             if (role.children && role.children.length > 0) {

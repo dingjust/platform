@@ -111,7 +111,7 @@
         refreshDetail: 'refreshDetail'
       }),
       readEditShow (item) {
-        return !this.judgeReadonly(item) && !hasPermission(this.permission.purchaseOrderOperate);
+        return (!this.judgeReadonly(item) && !hasPermission(this.permission.purchaseOrderOperate)) || this.isTenant();
       },
       /// 判断左边线样式
       getLeftLine (index, data) {

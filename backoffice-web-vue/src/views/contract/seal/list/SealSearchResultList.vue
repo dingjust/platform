@@ -20,12 +20,10 @@
       </el-table-column>
       <!--<el-table-column label="用印章审批角色" prop="role"  fixed></el-table-column>-->
       <el-table-column label="操作">
-        <Authorized :authority="permission.agreementSealRemove">
-          <template  slot-scope="props">
+          <template  slot-scope="scope">
             <!--<el-button type="text" icon="el-icon-edit" @click="on1">编辑</el-button>-->
-              <el-button type="text" icon="el-icon-delete" @click="onDelete(props.row.code)">删除</el-button>
+            <el-button type="text" icon="el-icon-delete" @click="onDelete(scope.row.code)" v-if="hasper(permission.agreementSealRemove)">删除</el-button>
           </template>
-        </Authorized>
       </el-table-column>
     </el-table>
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
@@ -41,10 +39,15 @@
 </template>
 
 <script>
+  import {hasPermission} from '../../../../auth/auth';
+
   export default {
     name: 'SealSearchResultList',
     props: ['page'],
     methods: {
+      hasper (permission) {
+        return hasPermission(permission);
+      },
       onPageSizeChanged (val) {
         this._reset();
 
@@ -72,6 +75,7 @@
 
       },
       async onDelete (code) {
+        console.log(code);
         const url = this.apis().delSeal(code);
         const result = await this.$http.get(url);
         if (result['errors']) {

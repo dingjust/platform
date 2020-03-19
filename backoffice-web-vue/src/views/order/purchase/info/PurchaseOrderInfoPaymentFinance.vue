@@ -42,7 +42,7 @@
                 剩余未付￥{{(payPlanItem.remainingUnpaidAmount,2)|floatFormat}}</h6>
             </el-col>
             <el-col :span="8">
-              <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true">
+              <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true && !isTenant()">
                 <authorized :authority="permission.purchaseOrderPayplanOp">
                   <el-button class="info-finance-logistics_info-btn3" @click="onPayment(payPlanItem)">付款
                   </el-button>

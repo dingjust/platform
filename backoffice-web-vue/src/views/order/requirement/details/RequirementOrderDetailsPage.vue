@@ -165,13 +165,13 @@
         regions: 'regions'
       }),
       pendingShow: function() {
-        return this.slotData.status == 'PENDING_QUOTE' && hasPermission(this.permission.requirementOrderRecommended);
+        return this.slotData.status == 'PENDING_QUOTE' && hasPermission(this.permission.requirementOrderRecommended) && !this.isTenant();
       },
       modifyShow: function() {
-        return this.slotData.status == 'PENDING_QUOTE' && this.quotePage.totalElements <= 0 && hasPermission(this.permission.requirementOrderModify);
+        return this.slotData.status == 'PENDING_QUOTE' && this.quotePage.totalElements <= 0 && hasPermission(this.permission.requirementOrderModify) && !this.isTenant();
       },
       closeShow: function() {
-        return this.slotData.status == 'PENDING_QUOTE' && hasPermission(this.permission.requirementOrderClose);
+        return this.slotData.status == 'PENDING_QUOTE' && hasPermission(this.permission.requirementOrderClose) && !this.isTenant();
       },
       statusColor: function () {
         var color = '';

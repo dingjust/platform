@@ -7,45 +7,47 @@
       <el-row type="flex">
         <!-- <el-form-item label="品牌名"> -->
         <el-col :span="17">
-        <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword"
-          class="purchase-toolbar-input"></el-input>
-        <!-- </el-form-item> -->
-        <el-form-item label="日期">
-          <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
-            value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
-            :picker-options="pickerOptions">
-          </el-date-picker>
-        </el-form-item>
-        <!-- <el-form-item label="跟单员">
-      <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
-    </el-form-item> -->
-          <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
-          <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
-        reserve-keyword clearable>
-        <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
-          <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name" :value="level2.name">
-          </el-option>
-        </el-option-group>
-      </el-select> -->
-        <el-form-item label="分类">
-          <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories"
-              :props="{ label: 'name',value:'code'}" clearable>
-            </el-cascader>
-        </el-form-item>
+          <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword"
+            class="purchase-toolbar-input"></el-input>
+          <!-- </el-form-item> -->
+          <el-form-item label="日期">
+            <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
+              value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </el-form-item>
+          <!-- <el-form-item label="跟单员">
+        <el-input placeholder="输入编号" class="purchase-toolbar-input"></el-input>
+      </el-form-item> -->
+            <!-- <el-input placeholder="" class="purchase-toolbar-input"></el-input> -->
+            <!-- <el-select v-model="queryFormData.keyword" class="purchase-toolbar-input" placeholder="请选择" filterable
+          reserve-keyword clearable>
+          <el-option-group v-for="level1 in categories" :key="level1.code" :label="level1.name">
+            <el-option v-for="level2 in level1.children" :key="level2.code" :label="level2.name" :value="level2.name">
+            </el-option>
+          </el-option-group>
+        </el-select> -->
+          <el-form-item label="分类">
+            <el-cascader v-model="queryFormData.categories" :show-all-levels="false" :options="categories"
+                :props="{ label: 'name',value:'code'}" clearable>
+              </el-cascader>
+          </el-form-item>
         </el-col>
         <el-col :span="7">
-        <el-row type="flex" align="top" justify="space-between" :gutter="20">
-          <el-button-group>
-              <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
-              <el-button native-type="reset">重置</el-button>
-          </el-button-group>
-          <authorized :authority="permission.purchaseOrderOfflineCreate">
-            <el-button class="dashboard-toolbar-btn" @click="jumpToOrderPurchase">创建线下订单</el-button>
-          </authorized>
-          <authorized :authority="permission.purchaseOrderUniqueCodeImport">
-            <el-button class="dashboard-toolbar-btn" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入</el-button>
-          </authorized>
-        </el-row>
+          <el-row type="flex" align="top" justify="space-between" :gutter="20">
+            <el-button-group>
+                <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+                <el-button native-type="reset">重置</el-button>
+            </el-button-group>
+            <el-row v-if="!isTenant()">
+              <authorized :authority="permission.purchaseOrderOfflineCreate">
+                <el-button class="dashboard-toolbar-btn" @click="jumpToOrderPurchase">创建线下订单</el-button>
+              </authorized>
+              <authorized :authority="permission.purchaseOrderUniqueCodeImport">
+                <el-button class="dashboard-toolbar-btn" @click="uniquecodeFormVisible=!uniquecodeFormVisible">唯一码导入</el-button>
+              </authorized>
+            </el-row>
+          </el-row>
         </el-col>
       </el-row>
     </el-form>
