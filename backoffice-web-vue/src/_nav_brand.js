@@ -49,6 +49,11 @@ export default {
             requiresAuth: true,
             permissions: ['PURCHASE_ORDER']
           }
+        },
+        {
+          name: '销售订单',
+          url: '/order/sales',
+          icon: 'iconNone',
         }
       ]
     },

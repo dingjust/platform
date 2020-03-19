@@ -562,6 +562,11 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
 class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
   @JsonKey(toJson: _sizeToJson)
   SizeModel size;
+
+  ///颜色尺码组
+  @JsonKey(toJson: _colorSizesToJson)
+  List<ColorSizeModel> colorSizes;
+
   ApparelSizeVariantProductModel({
     String code,
     String name,
@@ -576,6 +581,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     String baseProduct,
     ColorModel color,
     this.size,
+    this.colorSizes,
     double minPrice,
     double maxPrice,
     CompanyModel belongTo,
@@ -621,6 +627,12 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
 
   static Map<String, dynamic> _sizeToJson(SizeModel model) =>
       model == null ? null : SizeModel.toJson(model);
+
+  static List<Map<String, dynamic>> _colorSizesToJson(
+      List<ColorSizeModel> models) =>
+      models == null
+          ? null
+          : models.map((model) => ColorSizeModel.toJson(model));
 }
 
 @JsonSerializable()
@@ -957,4 +969,55 @@ class SteppedPriceModel extends ItemModel {
 
   static Map<String, dynamic> toJson(SteppedPriceModel model) =>
       model == null ? null : _$SteppedPriceModelToJson(model);
+}
+
+///产品颜色尺码款组
+@JsonSerializable()
+class ColorSizeModel extends ItemModel {
+  String colorName;
+  String colorCode;
+
+  @JsonKey(toJson: _mediaToJson)
+  MediaModel previewImg;
+
+  @JsonKey(toJson: _sizesToJson)
+  List<ColorSizeEntryModel> sizes;
+
+  ColorSizeModel({this.colorName, this.colorCode, this.previewImg, this.sizes});
+
+  static Map<String, dynamic> _mediaToJson(MediaModel model) =>
+      model == null ? null : MediaModel.toJson(model);
+
+  static List<Map<String, dynamic>> _sizesToJson(
+      List<ColorSizeEntryModel> models) =>
+      models == null
+          ? null
+          : models.map((model) => ColorSizeEntryModel.toJson(model));
+
+  factory ColorSizeModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ColorSizeModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ColorSizeModel model) =>
+      model == null ? null : _$ColorSizeModelToJson(model);
+}
+
+///产品颜色尺码款组
+@JsonSerializable()
+class ColorSizeEntryModel extends ItemModel {
+  ///颜色编码
+  String code;
+
+  ///数量
+  int quality;
+
+  ColorSizeEntryModel({
+    this.code,
+    this.quality,
+  });
+
+  factory ColorSizeEntryModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$ColorSizeEntryModelFromJson(json);
+
+  static Map<String, dynamic> toJson(ColorSizeEntryModel model) =>
+      model == null ? null : _$ColorSizeEntryModelToJson(model);
 }
