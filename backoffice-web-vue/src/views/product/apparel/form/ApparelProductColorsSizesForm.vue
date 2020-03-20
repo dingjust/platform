@@ -228,6 +228,7 @@
           let index = this.selectColors.indexOf(color);
           if (index > -1) {
             this.selectColors[index].name = color.name;
+            this.selectColors[index].code = null;
             this.slotData.colorSizes = this.getColorSizes();
           } else {
             this.selectColors.push(color);
@@ -252,6 +253,7 @@
           let index = this.selectSizes.indexOf(color);
           if (index > -1) {
             this.selectSizes[index].name = color.name;
+            this.selectSizes[index].code = null;
             this.slotData.colorSizes = this.getColorSizes();
           } else {
             this.selectSizes.push(color);
@@ -337,7 +339,21 @@
     /*margin-left: 0px;*/
   }
 
-.el-checkbox.is-bordered+.el-checkbox.is-bordered {
+  .basic-form-row {
+    padding-left: 30px;
+    margin-bottom: 20px;
+  }
+
+  .info-input-prepend {
+    display: inline-block;
+    margin: 0 5px;
+    /* margin-top: 5px; */
+    width: 60px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+ /deep/ .el-checkbox.is-bordered+.el-checkbox.is-bordered {
     margin-left: 0px;
 }
 
@@ -365,4 +381,5 @@
   /deep/ .border-none .el-input__inner{
     border:none
   }
+
 </style>

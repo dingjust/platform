@@ -5,7 +5,7 @@
         <h6 class="info-input-prepend">标题</h6>
       </el-col>
       <el-col :span="20">
-        <el-form-item class="product-form-item" :rules="[
+        <el-form-item  :rules="[
                 { required: true, message: '请输入产品标题', trigger: 'blur'}]" prop="name">
           <el-input placeholder="输入产品标题" v-model="slotData.name" size="mini" :disabled="isRead" maxlength="40" show-word-limit>
           </el-input>
@@ -14,13 +14,15 @@
     </el-row>
     <el-row class="basic-form-row" type="flex" align="middle">
       <el-col :span="2">
-        <h6 class="info-input-prepend">品类</h6>
+        <h6 class="info-input-prepend">品类<span style="color:red;">*</span></h6>
       </el-col>
       <el-col :span="20">
-        <el-form-item class="product-form-item" :rules="[
-                { required: true, message: '请选择品类', trigger: 'blur'}]" prop="category">
-          <el-cascader class="product-category-cascader" v-model="category" :options="cascaderCategories"
-            @change="onCategoryChange"></el-cascader>
+        <el-form-item :rules="[{
+            type: 'object',
+            validator: checkCategory,
+            trigger: 'change'
+          }]" prop="category">
+          <el-cascader class="product-category-cascader" v-model="slotData.category" :options="cascaderCategories"></el-cascader>
         </el-form-item>
       </el-col>
     </el-row>
@@ -128,23 +130,31 @@
 </template>
 
 <script>
-  import ApparelProductBasicAttributesForm from "./ApparelProductBasicAttributesForm";
+  import ApparelProductBasicAttributesForm from './ApparelProductBasicAttributesForm';
 
   export default {
-    name: "ApparelProductBaseForm",
-    props: ["slotData", "readOnly", "isRead"],
-        components: {
-      ApparelProductBasicAttributesForm,
+    name: 'ApparelProductBaseForm',
+    props: ['slotData', 'readOnly', 'isRead'],
+    components: {
+      ApparelProductBasicAttributesForm
     },
     methods: {
-      validate(callback) {
+      checkCategory  (rule, value, callback) {
+        console.log(value);
+        if (!value) {
+          return callback(new Error('请选择品类'));
+        } else {
+          callback();
+        }
+      },
+      validate (callback) {
         this.$refs.form.validate(callback);
       },
-      async getCategories() {
+      async getCategories () {
         const url = this.apis().getMinorCategories();
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.categories = result;
@@ -165,67 +175,35 @@
           };
         });
       },
-      onCategoryChange(value) {
-        value.forEach(val => {
-          if (value != null) {
-            this.category = val;
-            this.slotData.category.code = val;
-          }
-        });
-      }
     },
-    data() {
+    data () {
       return {
-        rules: {
-          name: [{
-            required: true,
-            message: "必填",
-            trigger: "blur"
-          }],
-          skuID: [{
-            required: true,
-            message: "必填",
-            trigger: "blur"
-          }],
-          category: [{
-            required: true,
-            message: "必填",
-            trigger: "blur"
-          }],
-          price: [{
-            required: true,
-            message: "必填",
-            trigger: "blur"
-          }]
-        },
         categories: [],
         cascaderCategories: [],
         companies: [],
-        category: ""
       };
     },
-    created() {
+    created () {
       this.getCategories();
       if (this.slotData.category != null) {
-        this.category = this.slotData.category.code;
+        this.slotData.category = [undefined, this.slotData.category.code];
       }
     }
   };
-
 </script>
-<style>
-  .product-form-item small.el-form-item {
+<style scoped>
+  /deep/ .product-form-item small.el-form-item {
     margin-bottom: 0px !important;
   }
 
-  .product-form-item .el-form-item--mini.el-form-item,
+  /deep/ .product-form-item .el-form-item--mini.el-form-item,
   .el-form-item--small.el-form-item {
     margin-bottom: 0px !important;
   }
 
-  .product-form-item .el-form-item__error {
-    padding-left: 70px !important;
-  }
+  /*/deep/ .product-form-item .el-form-item__error {*/
+    /*padding-left: 70px !important;*/
+  /*}*/
 
   .product-form-row {
     margin-bottom: 15px;
@@ -245,4 +223,12 @@
     padding:10px;
   }
 
+  .info-input-prepend {
+    display: inline-block;
+    margin: 0 5px;
+    /* margin-top: 5px; */
+    width: 60px;
+    font-size: 12px;
+    font-weight: 500;
+  }
 </style>
