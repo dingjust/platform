@@ -29,7 +29,7 @@
       <h6 class="info-title_text">大货价格</h6>
     </el-row>
     <template v-for="(row,index) in slotData.steppedPrices">
-      <el-row :gutter="20" type="flex" align="center">
+      <el-row :gutter="20" type="flex" align="center" style="align-items: baseline">
         <el-col :span="6" class="product-form-row">
             <el-row type="flex" align="middle">
               <div style="width:85px">
