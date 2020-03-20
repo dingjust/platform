@@ -44,6 +44,25 @@ const ReturnStateLocalizedMap = {
   ReturnState.RETURNED: "已还",
 };
 
+///产品类型
+enum ProductType {
+  ///现货
+  SPOT_GOODS,
+
+  ///期货
+  FUTURE_GOODS,
+
+  ///库存
+  TAIL_GOODS
+}
+
+// TODO: i18n处理
+const ProductTypeLocalizedMap = {
+  ProductType.SPOT_GOODS: "现货",
+  ProductType.FUTURE_GOODS: "期货",
+  ProductType.TAIL_GOODS: "库存"
+};
+
 @JsonSerializable()
 class CategoryModel extends ItemModel {
   String code;
@@ -230,8 +249,14 @@ class ProductModel extends ItemModel {
   @JsonKey(toJson: companyToJson)
   CompanyModel belongTo;
 
-  ProductModel({
-    this.code,
+  ///产品类型
+  List<ProductType> productType;
+
+  ///颜色尺码组
+  @JsonKey(toJson: _colorSizesToJson)
+  List<ColorSizeModel> colorSizes;
+
+  ProductModel({this.code,
     this.name,
     this.price,
     this.minPrice,
@@ -255,7 +280,8 @@ class ProductModel extends ItemModel {
     this.productionDays,
     this.productionIncrement,
     this.steppedPrices,
-  });
+    this.colorSizes,
+    this.productType = const [ProductType.FUTURE_GOODS]});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductModelFromJson(json);
@@ -300,6 +326,12 @@ class ProductModel extends ItemModel {
           ? null
           : models.map((model) => SteppedPriceModel.toJson(model)).toList();
 
+  static List<Map<String, dynamic>> _colorSizesToJson(
+      List<ColorSizeModel> models) =>
+      models == null
+          ? null
+          : models.map((model) => ColorSizeModel.toJson(model));
+
   ///最低价
   double get minSteppedPrice {
     if (steppedPrices == null || steppedPrices.isEmpty) {
@@ -336,8 +368,7 @@ class VariantProductModel extends ProductModel {
   String baseProduct;
   String skuID;
 
-  VariantProductModel({
-    String code,
+  VariantProductModel({String code,
     String name,
     double price,
     MediaModel thumbnail,
@@ -360,28 +391,31 @@ class VariantProductModel extends ProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
-  }) : super(
-    code: code,
-    name: name,
-    price: price,
-    thumbnail: thumbnail,
-    staircasePrices: staircasePrices,
-    privacy: privacy,
-    ratingIfPrivacy: ratingIfPrivacy,
-    superCategories: superCategories,
-    minPrice: minPrice,
-    maxPrice: maxPrice,
-    belongTo: belongTo,
-    thumbnails: thumbnails,
-    images: images,
-    details: details,
-    category: category,
-    proofingFee: proofingFee,
-    basicProduction: basicProduction,
-    productionDays: productionDays,
-    productionIncrement: productionIncrement,
-    steppedPrices: steppedPrices,
-  );
+    List<ColorSizeModel> colorSizes,
+    List<ProductType> productType = const [ProductType.FUTURE_GOODS]})
+      : super(
+      code: code,
+      name: name,
+      price: price,
+      thumbnail: thumbnail,
+      staircasePrices: staircasePrices,
+      privacy: privacy,
+      ratingIfPrivacy: ratingIfPrivacy,
+      superCategories: superCategories,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      belongTo: belongTo,
+      thumbnails: thumbnails,
+      images: images,
+      details: details,
+      category: category,
+      proofingFee: proofingFee,
+      basicProduction: basicProduction,
+      productionDays: productionDays,
+      productionIncrement: productionIncrement,
+      steppedPrices: steppedPrices,
+      colorSizes: colorSizes,
+      productType: productType);
 
   factory VariantProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$VariantProductModelFromJson(json);
@@ -434,6 +468,7 @@ class ApparelProductModel extends ProductModel {
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
+    List<ProductType> productType = const [ProductType.FUTURE_GOODS],
     this.variants,
     this.attributes,
     this.skuID,
@@ -445,28 +480,28 @@ class ApparelProductModel extends ProductModel {
     this.suggestedPrice,
     this.isRecommend,
   }) : super(
-    code: code,
-    name: name,
-    price: price,
-    thumbnail: thumbnail,
-    staircasePrices: staircasePrices,
-    privacy: privacy,
-    salesVolume: salesVolume,
-    ratingIfPrivacy: ratingIfPrivacy,
-    superCategories: superCategories,
-    stockLevel: stockLevel,
-    thumbnails: thumbnails,
-    images: images,
-    minPrice: minPrice,
-    maxPrice: maxPrice,
-    belongTo: belongTo,
-    proofingFee: proofingFee,
-    basicProduction: basicProduction,
-    productionDays: productionDays,
-    productionIncrement: productionIncrement,
-    steppedPrices: steppedPrices,
-    details: details,
-  );
+      code: code,
+      name: name,
+      price: price,
+      thumbnail: thumbnail,
+      staircasePrices: staircasePrices,
+      privacy: privacy,
+      salesVolume: salesVolume,
+      ratingIfPrivacy: ratingIfPrivacy,
+      superCategories: superCategories,
+      stockLevel: stockLevel,
+      thumbnails: thumbnails,
+      images: images,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      belongTo: belongTo,
+      proofingFee: proofingFee,
+      basicProduction: basicProduction,
+      productionDays: productionDays,
+      productionIncrement: productionIncrement,
+      steppedPrices: steppedPrices,
+      details: details,
+      productType: productType);
 
   ApparelProductModel.empty() {
     this.attributes = ApparelProductAttributesModel.empty();
@@ -499,8 +534,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
   @JsonKey(toJson: _colorToJson)
   ColorModel color;
 
-  ApparelStyleVariantProductModel({
-    String code,
+  ApparelStyleVariantProductModel({String code,
     String name,
     double price,
     MediaModel thumbnail,
@@ -523,30 +557,33 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
-  }) : super(
-    code: code,
-    name: name,
-    price: price,
-    thumbnail: thumbnail,
-    variants: variants,
-    staircasePrices: staircasePrices,
-    privacy: privacy,
-    ratingIfPrivacy: ratingIfPrivacy,
-    baseProduct: baseProduct,
-    superCategories: superCategories,
-    minPrice: minPrice,
-    maxPrice: maxPrice,
-    belongTo: belongTo,
-    thumbnails: thumbnails,
-    images: images,
-    category: category,
-    proofingFee: proofingFee,
-    basicProduction: basicProduction,
-    productionDays: productionDays,
-    productionIncrement: productionIncrement,
-    steppedPrices: steppedPrices,
-    details: details,
-  );
+    List<ColorSizeModel> colorSizes,
+    List<ProductType> productType})
+      : super(
+      code: code,
+      name: name,
+      price: price,
+      thumbnail: thumbnail,
+      variants: variants,
+      staircasePrices: staircasePrices,
+      privacy: privacy,
+      ratingIfPrivacy: ratingIfPrivacy,
+      baseProduct: baseProduct,
+      superCategories: superCategories,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      belongTo: belongTo,
+      thumbnails: thumbnails,
+      images: images,
+      category: category,
+      proofingFee: proofingFee,
+      basicProduction: basicProduction,
+      productionDays: productionDays,
+      productionIncrement: productionIncrement,
+      steppedPrices: steppedPrices,
+      details: details,
+      colorSizes: colorSizes,
+      productType: productType);
 
   factory ApparelStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ApparelStyleVariantProductModelFromJson(json);
@@ -563,12 +600,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
   @JsonKey(toJson: _sizeToJson)
   SizeModel size;
 
-  ///颜色尺码组
-  @JsonKey(toJson: _colorSizesToJson)
-  List<ColorSizeModel> colorSizes;
-
-  ApparelSizeVariantProductModel({
-    String code,
+  ApparelSizeVariantProductModel({String code,
     String name,
     double price,
     MediaModel thumbnail,
@@ -581,7 +613,6 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     String baseProduct,
     ColorModel color,
     this.size,
-    this.colorSizes,
     double minPrice,
     double maxPrice,
     CompanyModel belongTo,
@@ -593,31 +624,34 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
-  }) : super(
-    code: code,
-    name: name,
-    price: price,
-    thumbnail: thumbnail,
-    variants: variants,
-    staircasePrices: staircasePrices,
-    privacy: privacy,
-    ratingIfPrivacy: ratingIfPrivacy,
-    baseProduct: baseProduct,
-    color: color,
-    superCategories: superCategories,
-    minPrice: minPrice,
-    maxPrice: maxPrice,
-    belongTo: belongTo,
-    thumbnails: thumbnails,
-    images: images,
-    category: category,
-    proofingFee: proofingFee,
-    basicProduction: basicProduction,
-    productionDays: productionDays,
-    productionIncrement: productionIncrement,
-    steppedPrices: steppedPrices,
-    details: details,
-  );
+    List<ColorSizeModel> colorSizes,
+    List<ProductType> productType})
+      : super(
+      code: code,
+      name: name,
+      price: price,
+      thumbnail: thumbnail,
+      variants: variants,
+      staircasePrices: staircasePrices,
+      privacy: privacy,
+      ratingIfPrivacy: ratingIfPrivacy,
+      baseProduct: baseProduct,
+      color: color,
+      superCategories: superCategories,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      belongTo: belongTo,
+      thumbnails: thumbnails,
+      images: images,
+      category: category,
+      proofingFee: proofingFee,
+      basicProduction: basicProduction,
+      productionDays: productionDays,
+      productionIncrement: productionIncrement,
+      steppedPrices: steppedPrices,
+      details: details,
+      colorSizes: colorSizes,
+      productType: productType);
 
   factory ApparelSizeVariantProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ApparelSizeVariantProductModelFromJson(json);
@@ -627,12 +661,6 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
 
   static Map<String, dynamic> _sizeToJson(SizeModel model) =>
       model == null ? null : SizeModel.toJson(model);
-
-  static List<Map<String, dynamic>> _colorSizesToJson(
-      List<ColorSizeModel> models) =>
-      models == null
-          ? null
-          : models.map((model) => ColorSizeModel.toJson(model));
 }
 
 @JsonSerializable()
@@ -656,25 +684,26 @@ class FabricProductModel extends ProductModel {
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
+    List<ProductType> productType = const [ProductType.FUTURE_GOODS],
     this.variants,
   }) : super(
-          code: code,
-          name: name,
-          price: price,
-          thumbnail: thumbnail,
-          staircasePrices: staircasePrices,
-          privacy: privacy,
-          ratingIfPrivacy: ratingIfPrivacy,
-          superCategories: superCategories,
-          thumbnails: thumbnails,
-          images: images,
-    proofingFee: proofingFee,
-    basicProduction: basicProduction,
-    productionDays: productionDays,
-    productionIncrement: productionIncrement,
-    steppedPrices: steppedPrices,
-    details: details,
-        );
+      code: code,
+      name: name,
+      price: price,
+      thumbnail: thumbnail,
+      staircasePrices: staircasePrices,
+      privacy: privacy,
+      ratingIfPrivacy: ratingIfPrivacy,
+      superCategories: superCategories,
+      thumbnails: thumbnails,
+      images: images,
+      proofingFee: proofingFee,
+      basicProduction: basicProduction,
+      productionDays: productionDays,
+      productionIncrement: productionIncrement,
+      steppedPrices: steppedPrices,
+      details: details,
+      productType: productType);
 
   factory FabricProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FabricProductModelFromJson(json);

@@ -178,11 +178,25 @@ class RecommendProductItem extends StatelessWidget {
                 ],
               ),
             ),
-            RecommendProductTag(Text(
-              '现货',
-              style: TextStyle(fontSize: 18),
-            )),
+            buildProductTypeTag()
           ],
         ));
+  }
+
+  Widget buildProductTypeTag() {
+    String str = ProductTypeLocalizedMap[ProductType.FUTURE_GOODS];
+    if (model.productType.length == 1) {
+      str = ProductTypeLocalizedMap[model.productType.first];
+    } else if (model.productType.length > 1) {
+      str = ProductTypeLocalizedMap[ProductType.SPOT_GOODS];
+    }
+    return RecommendProductTag(
+      Text(
+        str,
+        style: TextStyle(fontSize: 15),
+      ),
+      height: 50,
+      width: 50,
+    );
   }
 }

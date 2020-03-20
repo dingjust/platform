@@ -12,19 +12,19 @@ import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
-class BuyPurchaseForm extends StatefulWidget {
+class BuyStockForm extends StatefulWidget {
   final ApparelProductModel product;
 
   final double heightScale;
 
-  const BuyPurchaseForm(this.product, {Key key, this.heightScale = 0.75})
+  const BuyStockForm(this.product, {Key key, this.heightScale = 0.75})
       : super(key: key);
 
   @override
-  _BuyPurchaseFormState createState() => _BuyPurchaseFormState();
+  _BuyStockFormState createState() => _BuyStockFormState();
 }
 
-class _BuyPurchaseFormState extends State<BuyPurchaseForm>
+class _BuyStockFormState extends State<BuyStockForm>
     with SingleTickerProviderStateMixin {
   List<EditApparelSizeVariantProductEntry> productEntries;
 
@@ -51,14 +51,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
   ///单价
   double price = 0;
 
-  ///订金
-  double deposit = 0;
+  //总价
+  double totalPrice = 0;
 
   ///生产天数
   int produceDay = 0;
-
-  ///订金百分比
-  double depositPercent = 0.3;
 
   ///预计交货时间
   DateTime expectedDeliveryDate = DateTime.now();
@@ -116,6 +113,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     _tabController.addListener(() {
       setState(() {});
     });
+
     super.initState();
   }
 
@@ -265,11 +263,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: TabBar(
+          controller: _tabController,
           unselectedLabelColor: Colors.black26,
           labelColor: Colors.black,
           indicatorSize: TabBarIndicatorSize.label,
           tabs: _buildTabs(),
-          controller: _tabController,
           labelStyle: TextStyle(
               fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
           isScrollable: true,
@@ -298,6 +296,8 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
+                      Text('库存：100',
+                          style: TextStyle(color: Colors.grey, fontSize: 12)),
                       IconButton(
                         icon: Icon(
                           B2BIcons.remove_rect,
@@ -505,8 +505,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                             ]),
                       ),
                       Text(
-                        '￥${DoubleUtil.getDecimalsValue(
-                            snapshot.data * price, 2)}',
+                        '￥${DoubleUtil.getDecimalsValue(snapshot.data * price, 2)}',
                         style: TextStyle(color: Colors.red, fontSize: 14),
                       ),
                     ],
@@ -528,11 +527,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                   ),
                   RichText(
                     text: TextSpan(
-                        text: '订金(总额x30%): ',
+                        text: '总额: ',
                         style: TextStyle(color: Colors.grey, fontSize: 14),
                         children: <TextSpan>[
                           TextSpan(
-                              text: '￥$deposit',
+                              text: '￥$totalPrice',
                               style: TextStyle(color: Colors.red)),
                         ]),
                   ),
@@ -559,7 +558,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
   Widget _buildTab(
       String color, List<EditApparelSizeVariantProductEntry> entries) {
     String colorCode =
-    entries[0].model.color.colorCode?.replaceAll(RegExp('#'), '');
+        entries[0].model.color.colorCode?.replaceAll(RegExp('#'), '');
     return Tab(
       // text: '${entries[0].model.color.name}',
       child: Container(
@@ -646,7 +645,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     countProduceDays(totalNum);
     //计算单价
     countUnitPrice(totalNum);
-    deposit = DoubleUtil.getDecimalsValue(totalNum * price * depositPercent, 2);
+    totalPrice = DoubleUtil.getDecimalsValue(totalNum * price, 2);
     _streamController.sink.add(totalNum);
     return totalNum;
   }
@@ -747,7 +746,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
       ..unitPrice = price
       ..totalPrice = totalNum * price
       ..totalQuantity = totalNum
-      ..deposit = deposit
+      // ..deposit = deposit
       ..salesApplication = SalesApplication.ONLINE
       ..machiningType = MachiningType.LABOR_AND_MATERIAL
       ..invoiceNeeded = false
@@ -772,20 +771,6 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
       if (result) {
         getOrderDetail(value);
       }
-      // showDialog(
-      //     context: context,
-      //     barrierDismissible: false,
-      //     builder: (_) {
-      //       return CustomizeDialog(
-      //         dialogType: DialogType.RESULT_DIALOG,
-      //         failTips: '下单失败',
-      //         successTips: '下单成功',
-      //         callbackResult: result,
-      //         confirmAction: () {
-      //           getOrderDetail(value);
-      //         },
-      //       );
-      //     });
     });
   }
 
@@ -809,10 +794,8 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     ColorSizeModel currentColor = widget.product.colorSizes
         .firstWhere((item) => item.colorCode == colorCode, orElse: () => null);
     if (currentColor != null && currentColor.previewImg != null) {
-      print('==================${currentColor.previewImg.previewUrl()}');
       return currentColor.previewImg.previewUrl();
     } else {
-      print('==================${widget.product.thumbnail.previewUrl()}');
       return widget.product.thumbnail.previewUrl();
     }
   }
