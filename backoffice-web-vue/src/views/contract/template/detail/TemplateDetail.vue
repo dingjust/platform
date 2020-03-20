@@ -89,6 +89,9 @@
         this.fn.closeSlider(true);
       },
       async onSave () {
+        if (this.slotData.title === this.originalTitle) {
+          this.passCheck = true;
+        }
         console.log('---------------------------------------');
         if (!this.passCheck) {
           this.$message.error('请完善页面信息');
@@ -121,11 +124,12 @@
         // this.fn.closeSlider(true);
       },
       async checkTempName () {
+        this.passCheck = false;
         if (this.slotData.title === this.originalTitle) {
           this.passCheck = true;
           return;
         }
-        if (this.slotData.title == null || this.slotData.title.replace(/(^\s*)|(\s*$)/g, '').length === 0) {
+        if (this.slotData.title == null || this.slotData.title == '' || this.slotData.title.replace(/(^\s*)|(\s*$)/g, '').length === 0) {
           this.validateText = '请输入模板名称';
           return;
         }
@@ -174,7 +178,8 @@
         mockData: [],
         passCheck: false,
         validateText: '',
-        originalTitle: ''
+        originalTitle: '',
+        count: 0
       };
     },
 
@@ -197,6 +202,7 @@
     created () {
       // this.getTemplateListPt();
       this.originalTitle = this.slotData.title;
+      console.log(this.originalTitle);
     }
   };
 </script>

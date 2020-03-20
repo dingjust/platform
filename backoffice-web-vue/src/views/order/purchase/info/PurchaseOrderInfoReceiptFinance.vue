@@ -33,7 +33,7 @@
               <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnReceiptAmount != 0">剩余未收￥{{payPlanItem.remainingUnReceiptAmount,2 | floatFormat}}</h6>
             </el-col>
             <el-col :span="8">
-              <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true">
+              <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true && !isTenant()">
                 <authorized :authority="permission.purchaseOrderPayplanOp">
                   <el-button class="info-finance-logistics_info-btn3" @click="onReceipt(payPlanItem)">收款
                   </el-button>

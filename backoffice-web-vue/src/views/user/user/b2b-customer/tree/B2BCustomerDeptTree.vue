@@ -1,36 +1,32 @@
 <template>
     <div class="tree-container">
       <el-tree :data="slotData" node-key="id" default-expand-all :expand-on-click-node="false" :indent='0'class="tree filter-tree">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
-          <span v-if="data.name !== name || !showInput" @dblclick="dblclick(data)" @click="searchOnDept(data)"
+        <span class="custom-tree-node" slot-scope="{ node, data }" @click="searchOnDept(data)">
+          <span v-if="data.name !== name || !showInput" @dblclick="dblclick(data)"
                 @mouseover="onActive(data)" @mouseleave="offActive"
                 :class="nodeClassShow(data)? 'active_tree_node':''">
             {{ data.name }}
           </span>
-          <el-input ref="input" v-if="data.name === name && showInput"
+          <el-input ref="input" v-if="data.name === name && showInput" id="text"
                     v-model="modifyName"
                     autofocus
                     @blur="setName(node, data)"
-                    onkeydown="if(event.keyCode==13){blur()}"/>
-<!--          <authorized :authority="permission.companyB2bDeptCR">-->
-            <el-button type="text" size="mini" v-if="topAppendShow(data)">
-              <i class="el-icon-circle-plus-outline" @click="append(node, data)"/>
-            </el-button>
-            <el-dropdown trigger="click" v-if="data.depth > 0 && (hasPer(permission.companyB2bDeptCreate) || hasPer(permission.companyB2bDeptRemove))" @command="handleCommand($event, node, data)">
-              <span class="el-dropdown-link">
-                <i class="el-icon-setting" style="color: #409eff" @click="showIcon(data)"/>
-              </span>
-              <el-dropdown-menu slot="dropdown" >
-                <el-dropdown-item v-if="appendShow(data)" command="append">添加子部门</el-dropdown-item>
-                <el-dropdown-item v-if="removeShow(data)" command="remove">删除</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-<!--            <span v-else @mouseleave="showOption()">-->
-<!--                <el-button v-if="appendShow(data)" type="text" size="mini" @click="() => append(node, data)">添加子部门</el-button>-->
-<!--  &lt;!&ndash;            <el-button v-if="data.depth > 1 && type==='role' && !appendInputVisible" type="text" size="mini" @click="() => editRole(node, data)">编辑角色</el-button>&ndash;&gt;-->
-<!--                <el-button v-if="removeShow(data)" type="text" size="mini" @click="() => remove(node, data)">删除</el-button>-->
-<!--            </span>-->
-<!--          </authorized>-->
+                    onkeydown="if(event.keyCode==13){blur()}">
+
+          </el-input>
+          <el-button type="text" size="mini" v-if="topAppendShow(data)">
+            <i class="el-icon-circle-plus-outline" @click="append(node, data)"/>
+          </el-button>
+          <el-dropdown trigger="click" v-if="data.depth > 0 && (hasPer(permission.companyB2bDeptCreate) || hasPer(permission.companyB2bDeptRemove))"
+                       @command="handleCommand($event, node, data)">
+            <span @click="showIcon(data)">
+              <i class="el-icon-setting" style="color: #409eff"/>
+            </span>
+            <el-dropdown-menu slot="dropdown" >
+              <el-dropdown-item v-if="appendShow(data)" command="append">添加子部门</el-dropdown-item>
+              <el-dropdown-item v-if="removeShow(data)" command="remove">删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </span>
       </el-tree>
     </div>
@@ -54,7 +50,8 @@
           modifyName: '',
           modifyLabel: '',
           showIconV: true,
-          isActive: false
+          isActive: false,
+          isCreate: false
         };
       },
       methods: {
@@ -88,6 +85,7 @@
           return data.depth > 0 && !this.appendInputVisible && hasPermission(this.permission.companyB2bDeptRemove);
         },
         append (node, data) {
+          event.stopPropagation();
           const depth = data.depth;
           if (depth === 3) {
             this.$message.error('部门最多可以创建三级');
@@ -102,8 +100,12 @@
           this.name = newChild.name;
           this.showInput = true;
           this.appendInputVisible = true;
+          this.isCreate = true;
           this.$nextTick(() => {
             this.$refs.input.focus();
+            let text = document.getElementById('text');
+            // 选中框中的所有文本;
+            text.select();
           })
         },
         editRole (node, data) {
@@ -139,6 +141,9 @@
           // input获取焦点
           this.$nextTick(() => {
             this.$refs.input.focus();
+            let text = document.getElementById('text');
+            // 选中框中的所有文本;
+            text.select();
           })
         },
         async setName (node, data) {
@@ -146,11 +151,16 @@
           if (!this.modifyName.match(/^\s*$/)) {
             data.name = this.modifyName.trim();
           }
+          if (this.isCreate) {
+            this._setName(node, data);
+            return;
+          }
           setTimeout(() => {
             this.$confirm('是否保存修改?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
-              type: 'warning'
+              type: 'warning',
+              closeOnClickModal: false
             }).then(() => {
               this._setName(node, data);
             }).catch(() => {
@@ -200,12 +210,14 @@
             })
             return;
           }
+          this.isCreate = false;
           this.$emit('appendDept', formData);
           this.appendInputVisible = false;
           this.showInput = false;
           this.isActive = false;
         },
         showIcon (data) {
+          event.stopPropagation();
           this.name = data.name;
           this.showIconV = false;
         },

@@ -41,7 +41,7 @@ const agreementSign = ['AGREEMENT_SIGN']
 const agreementTmpl = ['AGREEMENT_TMPL']
 const agreementTmplCreate = ['AGREEMENT_TMPL_CREATE']
 const agreementTmplView = ['AGREEMENT_TMPL_VIEW']
-const agreementTmplDelete = ['AGREEMENT_TMPL_DELETE']
+const agreementTmplDelete = ['AGREEMENT_TPML_DELETE']
 
 // 签章管理
 const agreementSeal = ['AGREEMENT_SEAL']
