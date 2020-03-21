@@ -13,47 +13,27 @@ class SaleOrdersState extends PageState {
     'ALL': PageEntry(
         currentPage: 0,
         size: 10,
-        data: List<PurchaseOrderModel>(),
+        data: List<SalesOrderModel>(),
         totalElements: -1),
     'PENDING_PAYMENT': PageEntry(
         currentPage: 0,
         size: 10,
-        data: List<PurchaseOrderModel>(),
+        data: List<SalesOrderModel>(),
+        totalElements: -1),
+    'PENDING_DELIVERY': PageEntry(
+        currentPage: 0,
+        size: 10,
+        data: List<SalesOrderModel>(),
         totalElements: -1),
     'PENDING_CONFIRM': PageEntry(
         currentPage: 0,
         size: 10,
-        data: List<PurchaseOrderModel>(),
+        data: List<SalesOrderModel>(),
         totalElements: -1),
-    'IN_PRODUCTION': PageEntry(
+    'ON_RETURN': PageEntry(
         currentPage: 0,
         size: 10,
-        data: List<PurchaseOrderModel>(),
-        totalElements: -1),
-    'WAIT_FOR_OUT_OF_STORE': PageEntry(
-        currentPage: 0,
-        size: 10,
-        data: List<PurchaseOrderModel>(),
-        totalElements: -1),
-    'OUT_OF_STORE': PageEntry(
-        currentPage: 0,
-        size: 10,
-        data: List<PurchaseOrderModel>(),
-        totalElements: -1),
-    'COMPLETED': PageEntry(
-        currentPage: 0,
-        size: 10,
-        data: List<PurchaseOrderModel>(),
-        totalElements: -1),
-    'CANCELLED': PageEntry(
-        currentPage: 0,
-        size: 10,
-        data: List<PurchaseOrderModel>(),
-        totalElements: -1),
-    'SEARCH': PageEntry(
-        currentPage: 0,
-        size: 10,
-        data: List<PurchaseOrderModel>(),
+        data: List<SalesOrderModel>(),
         totalElements: -1),
   };
 
@@ -64,7 +44,7 @@ class SaleOrdersState extends PageState {
     return _ordersMap[status];
   }
 
-  List<PurchaseOrderModel> orders(String status) {
+  List<SalesOrderModel> orders(String status) {
     if (_ordersMap[status].totalElements < 0) {
       getOrders(status);
     }
@@ -84,27 +64,30 @@ class SaleOrdersState extends PageState {
       }
       if (status == 'PENDING_PAYMENT') {
         data = {
-          'balancePaid': false,
-          'depositPaid': false,
           'statuses': [status],
         };
       }
+
+      if (status == 'ON_RETURN') {
+        data = {};
+      }
+
       Response<Map<String, dynamic>> response;
 
       try {
         response = await http$
-            .post(OrderApis.purchaseOrders, data: data, queryParameters: {
+            .post(OrderApis.salesOrderList, data: data, queryParameters: {
           'page': _ordersMap[status].currentPage,
           'size': _ordersMap[status].size,
-          'fields': PurchaseOrderOptions.DEFAULT
+          'fields': SalesOptions.DEFAULT
         });
       } on DioError catch (e) {
         print(e);
       }
 
       if (response != null && response.statusCode == 200) {
-        PurchaseOrdersResponse ordersResponse =
-            PurchaseOrdersResponse.fromJson(response.data);
+        SalesOrdersResponse ordersResponse =
+        SalesOrdersResponse.fromJson(response.data);
         _ordersMap[status].totalPages = ordersResponse.totalPages;
         _ordersMap[status].totalElements = ordersResponse.totalElements;
         _ordersMap[status].data.clear();
@@ -142,11 +125,11 @@ class SaleOrdersState extends PageState {
         }
 
         if (response.statusCode == 200) {
-          PurchaseOrdersResponse ordersResponse =
-              PurchaseOrdersResponse.fromJson(response.data);
+          SalesOrdersResponse ordersResponse =
+          SalesOrdersResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
-          _ordersMap[status].data.addAll(ordersResponse.content);
+          _ordersMap[status].data.addAll(ordersResponse.content); 
         }
       }
 
@@ -160,7 +143,7 @@ class SaleOrdersState extends PageState {
     _ordersMap.forEach((key, entry) {
       entry.currentPage = 0;
       entry.size = 10;
-      entry.data = List<PurchaseOrderModel>();
+      entry.data = List<SalesOrderModel>();
       entry.totalElements = -1;
     });
     notifyListeners();

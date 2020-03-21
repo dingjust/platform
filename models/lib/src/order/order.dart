@@ -1118,8 +1118,15 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
 /// 销售订单
 @JsonSerializable()
 class SalesOrderModel extends OrderModel {
+  @JsonKey(toJson: _productToJson)
+  ApparelProductModel product;
+
+  @JsonKey(toJson: _companyToJson)
   CompanyModel belongTo;
+
+  @JsonKey(toJson: _entriesToJson)
   List<SalesOrderEntryModel> entries;
+
   SalesOrderStatus status;
 
   SalesOrderModel({
@@ -1148,12 +1155,27 @@ class SalesOrderModel extends OrderModel {
 
   static Map<String, dynamic> toJson(SalesOrderModel model) =>
       model == null ? null : _$SalesOrderModelToJson(model);
+
+  static List<Map<String, dynamic>> _entriesToJson(
+      List<SalesOrderEntryModel> entries) =>
+      entries == null
+          ? null
+          : entries.map((entry) => SalesOrderEntryModel.toJson(entry)).toList();
+
+  static Map<String, dynamic> _companyToJson(CompanyModel belongTo) =>
+      belongTo == null ? null : CompanyModel.toJson(belongTo);
+
+  static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
+      model == null ? null : ApparelProductModel.toJson(model);
 }
 
 /// 销售订单行
 @JsonSerializable()
 class SalesOrderEntryModel extends OrderEntryModel {
+  @JsonKey(toJson: _productToJson)
   ApparelProductModel product;
+
+  @JsonKey(toJson: _orderToJson)
   SalesOrderModel order;
 
   SalesOrderEntryModel({
@@ -1175,6 +1197,12 @@ class SalesOrderEntryModel extends OrderEntryModel {
 
   static Map<String, dynamic> toJson(SalesOrderEntryModel model) =>
       model == null ? null : _$SalesOrderEntryModelToJson(model);
+
+  static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
+      model == null ? null : ApparelProductModel.toJson(model);
+
+  static Map<String, dynamic> _orderToJson(SalesOrderModel model) =>
+      model == null ? null : {'code': model.code ?? ''};
 }
 
 /// 报价单

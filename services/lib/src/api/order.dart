@@ -360,4 +360,10 @@ class OrderApis {
           (id, orderId) {
         return '/b2b/orders/purchase/progress/$id/order/$orderId';
       };
+
+  ///看款下单创建销售订单 POST
+  static get salesCreateByProduct => '/{baseSiteId}/b2b/orders/sales/create';
+
+  ///看款下单创建销售订单 POST
+  static get salesOrderList => '/{baseSiteId}/b2b/orders/sales';
 }

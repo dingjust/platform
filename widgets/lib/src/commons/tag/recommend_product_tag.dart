@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -10,8 +12,7 @@ class RecommendProductTag extends StatelessWidget {
 
   final Color color;
 
-  const RecommendProductTag(
-    this.text, {
+  const RecommendProductTag(this.text, {
     Key key,
     this.width = 60,
     this.height = 60,
@@ -24,6 +25,8 @@ class RecommendProductTag extends StatelessWidget {
     return Container(
       width: width,
       height: height,
+      // decoration: BoxDecoration(
+      //     color: Colors.green, borderRadius: BorderRadius.circular(5)),
       child: CustomPaint(
           painter: _RecommendProductTagPainter(color),
           child: Align(
@@ -42,7 +45,9 @@ class RecommendProductTag extends StatelessWidget {
 class _RecommendProductTagPainter extends CustomPainter {
   final Color color;
 
-  _RecommendProductTagPainter(this.color);
+  final double radius;
+
+  _RecommendProductTagPainter(this.color, {this.radius = 5});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -50,9 +55,15 @@ class _RecommendProductTagPainter extends CustomPainter {
     paint.color = color;
     paint.strokeWidth = 1;
 
+    final Rect arcRect =
+    Rect.fromCircle(center: Offset(radius, radius), radius: radius);
+    canvas.drawArc(arcRect, -pi / 2, pi * radius / 2, true, paint);
+
     var path = Path();
+    path.moveTo(0, radius);
     path.lineTo(0, size.height);
     path.lineTo(size.width, 0);
+    path.lineTo(radius, 0);
     path.close();
 
     paint.style = PaintingStyle.fill;
