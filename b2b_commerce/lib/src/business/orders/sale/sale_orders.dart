@@ -17,6 +17,7 @@ const statuses = <EnumModel>[
   EnumModel('PENDING_DELIVERY', '待发货'),
   EnumModel('PENDING_CONFIRM', '待收货'),
   EnumModel('ON_RETURN', '退款/售后'),
+  EnumModel('COMPLETED', '完成'),
 ];
 
 class SaleOrdersPage extends StatefulWidget {
@@ -101,7 +102,4 @@ class _SaleOrdersPageState extends State<SaleOrdersPage> {
     super.dispose();
     // SaleOrderBLoC.instance.reset();
   }
-
-  @override
-  bool get wantKeepAlive => false;
 }

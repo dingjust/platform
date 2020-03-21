@@ -366,4 +366,10 @@ class OrderApis {
 
   ///看款下单创建销售订单 POST
   static get salesOrderList => '/{baseSiteId}/b2b/orders/sales';
+
+  ///销售订单详情
+  static get salesOrderDetails =>
+          (code) {
+        return '/{baseSiteId}/b2b/orders/sales/$code';
+      };
 }

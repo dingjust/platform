@@ -86,7 +86,13 @@ class _BuyStockFormState extends State<BuyStockForm>
     productEntries = widget.product.variants.map((variant) {
       TextEditingController controller = TextEditingController();
       //赋值监听器，即时监听用户输入
-      controller.addListener(textEditControllerListener);
+      controller.addListener(() {
+        if (int.parse(controller.text) > variant.quality) {
+          setState(() {
+            controller.text = '${variant.quality}';
+          });
+        }
+      });
       return EditApparelSizeVariantProductEntry(
           controller: controller, model: variant);
     }).toList();
@@ -296,7 +302,7 @@ class _BuyStockFormState extends State<BuyStockForm>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text('库存：100',
+                      Text('库存：${entry.model.quality}',
                           style: TextStyle(color: Colors.grey, fontSize: 12)),
                       IconButton(
                         icon: Icon(
@@ -339,7 +345,13 @@ class _BuyStockFormState extends State<BuyStockForm>
                                 entry.controller.text = '';
                               });
                             }
-
+                            if (int.parse(entry.controller.text) >
+                                entry.model.quality) {
+                              setState(() {
+                                entry.controller.text =
+                                '${entry.model.quality}';
+                              });
+                            }
                             // setState(() {
                             //   entry.controller.text = int.parse(val).toString();
                             // });
@@ -355,6 +367,12 @@ class _BuyStockFormState extends State<BuyStockForm>
                           setState(() {
                             if (entry.controller.text == '') {
                               entry.controller.text = '1';
+                            } else if (entry.controller.text ==
+                                '${entry.model.quality}') {
+                              setState(() {
+                                entry.controller.text =
+                                '${entry.model.quality}';
+                              });
                             } else {
                               int i = int.parse(entry.controller.text);
                               i++;
@@ -513,18 +531,8 @@ class _BuyStockFormState extends State<BuyStockForm>
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                        text: '预计生产天数：',
-                        style: TextStyle(color: Colors.grey, fontSize: 14),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '${countProduceDays(snapshot.data)}',
-                              style: TextStyle(color: Colors.black87)),
-                        ]),
-                  ),
                   RichText(
                     text: TextSpan(
                         text: '总额: ',
@@ -641,26 +649,11 @@ class _BuyStockFormState extends State<BuyStockForm>
       }
     });
     totalNum = i;
-    //计算生产天数
-    countProduceDays(totalNum);
     //计算单价
     countUnitPrice(totalNum);
     totalPrice = DoubleUtil.getDecimalsValue(totalNum * price, 2);
     _streamController.sink.add(totalNum);
     return totalNum;
-  }
-
-  int countProduceDays(int totalNum) {
-    //基础生产天数
-    int basic = widget.product.productionDays;
-    int addOnDay = 0;
-    if (totalNum > widget.product.basicProduction) {
-      addOnDay = ((totalNum - widget.product.basicProduction) /
-              widget.product.productionIncrement)
-          .ceil();
-    }
-    produceDay = basic + addOnDay;
-    return produceDay;
   }
 
   double countUnitPrice(int totalNum) {
@@ -702,28 +695,57 @@ class _BuyStockFormState extends State<BuyStockForm>
 
   ///校验表单
   bool validateForm() {
-    //TODO校验库存
-
-    // if (widget.product.steppedPrices.isNotEmpty) {
-    //   return totalNum >= widget.product.steppedPrices[0].minimumQuantity;
-    // } else {
+    if (widget.product.steppedPrices.isNotEmpty) {
+      return totalNum >= widget.product.steppedPrices[0].minimumQuantity;
+    } else {
       return true;
-    // }
+    }
+  }
+
+  ///校验库存
+  bool validateStock() {
+    String message = '';
+    productEntries
+        .where((entry) => entry.controller.text != '')
+        .forEach((entry) {
+      if (int.parse(entry.controller.text) > entry.model.quality) {
+        message +=
+        '${entry.model.color.name}-${entry.model.size.name}:${entry.controller
+            .text}件\n';
+      }
+    });
+    if (message != '') {
+      Toast.show(
+        '$message\n超出库存！',
+        context,
+        duration: 3,
+        gravity: Toast.CENTER,
+      );
+      return false;
+    } else {
+      return true;
+    }
   }
 
   void onSure() {
+    //校验起订量
     if (validateForm()) {
+      //校验库存
+      if (!validateStock()) {
+        return;
+      }
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => OrderConfirmForm(
-                product: widget.product,
-                colorRowList: colorRowList,
-                productEntries: productEntries,
-                remarksEditingController: remarksEditingController,
-                totalEditingControllerMap: totalEditingControllerMap,
+            product: widget.product,
+            colorRowList: colorRowList,
+            productEntries: productEntries,
+            remarksEditingController: remarksEditingController,
+            totalEditingControllerMap: totalEditingControllerMap,
             orderType: OrderType.SALES,
-              )));
+          )));
     } else {
-      Toast.show("未达最低采购量", context,
+      Toast.show(
+          "未达最低采购量${widget.product.steppedPrices[0].minimumQuantity}件", context,
           duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
     }
   }

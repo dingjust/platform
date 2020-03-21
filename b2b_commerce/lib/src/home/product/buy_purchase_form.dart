@@ -747,10 +747,8 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     ColorSizeModel currentColor = widget.product.colorSizes
         .firstWhere((item) => item.colorCode == colorCode, orElse: () => null);
     if (currentColor != null && currentColor.previewImg != null) {
-      print('==================${currentColor.previewImg.previewUrl()}');
       return currentColor.previewImg.previewUrl();
     } else {
-      print('==================${widget.product.thumbnail.previewUrl()}');
       return widget.product.thumbnail.previewUrl();
     }
   }

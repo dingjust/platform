@@ -13,6 +13,12 @@ enum SalesOrderStatus {
   /// 待发货
   PENDING_DELIVERY,
 
+  ///待确认
+  PENDING_CONFIRM,
+
+  ///已取消
+  CANCELLED,
+
   /// 已发货
   SHIPPED,
 
@@ -24,6 +30,8 @@ enum SalesOrderStatus {
 const SalesOrderStatusLocalizedMap = {
   SalesOrderStatus.PENDING_PAYMENT: "待付款",
   SalesOrderStatus.PENDING_DELIVERY: "待发货",
+  SalesOrderStatus.PENDING_CONFIRM: "待收货",
+  SalesOrderStatus.CANCELLED: "已取消",
   SalesOrderStatus.SHIPPED: "已发货",
   SalesOrderStatus.COMPLETED: "已完成"
 };
@@ -1127,22 +1135,32 @@ class SalesOrderModel extends OrderModel {
   @JsonKey(toJson: _entriesToJson)
   List<SalesOrderEntryModel> entries;
 
+  @JsonKey(toJson: _companyToJson)
+  CompanyModel user;
+
+  @JsonKey(toJson: _companyToJson)
+  CompanyModel seller;
+
   SalesOrderStatus status;
+
+  int quality;
 
   SalesOrderModel({
     String code,
     this.status,
-    int totalQuantity,
     double totalPrice,
     DateTime creationTime,
     AddressModel deliveryAddress,
     String remarks,
     PrincipalModel supplier,
+    this.user,
+    this.seller,
     this.belongTo,
     this.entries,
+    this.quality,
   }) : super(
     code: code,
-    totalQuantity: totalQuantity,
+    totalQuantity: quality,
     totalPrice: totalPrice,
     creationTime: creationTime,
     deliveryAddress: deliveryAddress,
@@ -1173,7 +1191,7 @@ class SalesOrderModel extends OrderModel {
 @JsonSerializable()
 class SalesOrderEntryModel extends OrderEntryModel {
   @JsonKey(toJson: _productToJson)
-  ApparelProductModel product;
+  ApparelSizeVariantProductModel product;
 
   @JsonKey(toJson: _orderToJson)
   SalesOrderModel order;
@@ -1198,8 +1216,9 @@ class SalesOrderEntryModel extends OrderEntryModel {
   static Map<String, dynamic> toJson(SalesOrderEntryModel model) =>
       model == null ? null : _$SalesOrderEntryModelToJson(model);
 
-  static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
-      model == null ? null : ApparelProductModel.toJson(model);
+  static Map<String, dynamic> _productToJson(
+      ApparelSizeVariantProductModel model) =>
+      model == null ? null : ApparelSizeVariantProductModel.toJson(model);
 
   static Map<String, dynamic> _orderToJson(SalesOrderModel model) =>
       model == null ? null : {'code': model.code ?? ''};

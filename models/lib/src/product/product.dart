@@ -597,10 +597,14 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
 
 @JsonSerializable()
 class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
+  ///库存数量
+  int quality;
+
   @JsonKey(toJson: _sizeToJson)
   SizeModel size;
 
-  ApparelSizeVariantProductModel({String code,
+  ApparelSizeVariantProductModel({
+    String code,
     String name,
     double price,
     MediaModel thumbnail,
@@ -613,6 +617,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     String baseProduct,
     ColorModel color,
     this.size,
+    this.quality,
     double minPrice,
     double maxPrice,
     CompanyModel belongTo,
@@ -625,8 +630,8 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
     List<ColorSizeModel> colorSizes,
-    List<ProductType> productType})
-      : super(
+    List<ProductType> productType,
+  }) : super(
       code: code,
       name: name,
       price: price,

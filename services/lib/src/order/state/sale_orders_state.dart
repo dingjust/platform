@@ -9,7 +9,7 @@ import '../PageEntry.dart';
 
 ///销售状态管理
 class SaleOrdersState extends PageState {
-  static Map<String, PageEntry> _ordersMap = {
+  Map<String, PageEntry> _ordersMap = {
     'ALL': PageEntry(
         currentPage: 0,
         size: 10,
@@ -31,6 +31,11 @@ class SaleOrdersState extends PageState {
         data: List<SalesOrderModel>(),
         totalElements: -1),
     'ON_RETURN': PageEntry(
+        currentPage: 0,
+        size: 10,
+        data: List<SalesOrderModel>(),
+        totalElements: -1),
+    'COMPLETED': PageEntry(
         currentPage: 0,
         size: 10,
         data: List<SalesOrderModel>(),
@@ -57,19 +62,14 @@ class SaleOrdersState extends PageState {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {};
-      if (status != 'ALL' && status != 'PENDING_PAYMENT') {
+      if (status != 'ALL') {
         data = {
           'statuses': [status]
         };
       }
-      if (status == 'PENDING_PAYMENT') {
-        data = {
-          'statuses': [status],
-        };
-      }
 
       if (status == 'ON_RETURN') {
-        data = {};
+        data = {'refunding': true};
       }
 
       Response<Map<String, dynamic>> response;
@@ -103,7 +103,6 @@ class SaleOrdersState extends PageState {
     if (!lock) {
       //异步调用开始，通知加载组件
       workingStart();
-      Map params = {};
       //接口调用：
       if (_ordersMap[status].currentPage + 1 != _ordersMap[status].totalPages) {
         Map data = {};
@@ -112,13 +111,16 @@ class SaleOrdersState extends PageState {
             'statuses': [status]
           };
         }
+        if (status == 'ON_RETURN') {
+          data = {'refunding': true};
+        }
         Response<Map<String, dynamic>> response;
         try {
           response = await http$
-              .post(OrderApis.purchaseOrders, data: data, queryParameters: {
+              .post(OrderApis.salesOrderList, data: data, queryParameters: {
             'page': ++_ordersMap[status].currentPage,
             'size': _ordersMap[status].size,
-            'fields': PurchaseOrderOptions.DEFAULT,
+            'fields': SalesOptions.DEFAULT,
           });
         } on DioError catch (e) {
           print(e);
@@ -129,7 +131,7 @@ class SaleOrdersState extends PageState {
           SalesOrdersResponse.fromJson(response.data);
           _ordersMap[status].totalPages = ordersResponse.totalPages;
           _ordersMap[status].totalElements = ordersResponse.totalElements;
-          _ordersMap[status].data.addAll(ordersResponse.content); 
+          _ordersMap[status].data.addAll(ordersResponse.content);
         }
       }
 

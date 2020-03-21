@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_constants.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_detail_page.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -44,6 +45,12 @@ class SaleOrderListItem extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    //根据显示买卖方
+    UserType userType = BLoCProvider
+        .of<UserBLoC>(context)
+        .currentUser
+        .type;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
       child: Column(
@@ -56,7 +63,9 @@ class SaleOrderListItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(
-                      '广东贸易有限公司',
+                      userType != UserType.FACTORY
+                          ? '${model?.seller?.name ?? ''}'
+                          : '${model?.user?.name ?? ''}',
                       textAlign: TextAlign.start,
                       style: const TextStyle(
                         fontSize: 16,
@@ -77,7 +86,7 @@ class SaleOrderListItem extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      '${PurchaseOrderStatusLocalizedMap[model.status]}',
+                      '${SalesOrderStatusLocalizedMap[model.status]}',
                       textAlign: TextAlign.end,
                       style: TextStyle(
                         fontSize: 18,
@@ -91,17 +100,10 @@ class SaleOrderListItem extends StatelessWidget {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Expanded(
-                child: Container(
-                  child: Text(
-                    '2022夏季裙装特供款',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),
               Text(
-                '￥15,000.0',
+                '￥${model.quality}',
                 textAlign: TextAlign.end,
                 style: const TextStyle(fontSize: 16),
               )
@@ -139,7 +141,7 @@ class SaleOrderListItem extends StatelessWidget {
                             model.product == null || model.product.name == null
                                 ? Container()
                                 : Text(
-                                    '${model.product.name}',
+                              '${model.entries.first.product.name}',
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                         fontSize: 16,

@@ -157,7 +157,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   style: TextStyle(fontSize: 16, color: Colors.black87),
                   children: <TextSpan>[
                     TextSpan(
-                        text: '￥${widget.product.proofingFee}',
+                        text: '￥${widget.product.proofingFee ?? ''}',
                         style: TextStyle(color: Colors.red))
                   ]),
             ),

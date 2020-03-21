@@ -6,7 +6,10 @@ enum PaymentFor {
   DEPOSIT,
 
   ///生产单-尾款
-  BALANCE
+  BALANCE,
+
+  ///销售单
+  SALES
 }
 
 const PaymentForEnumMap = <PaymentFor, dynamic>{

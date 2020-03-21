@@ -29,7 +29,7 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
   bool isHide = true;
   int totalQuantity = 0;
 
-  PurchaseOrderModel order;
+  SalesOrderModel order;
 
   _PurchaseDetailPageState({this.order});
 
@@ -42,9 +42,8 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
   Widget build(BuildContext context) {
     ScrollController _scrollController = ScrollController();
 
-    return FutureBuilder<PurchaseOrderModel>(
-      builder:
-          (BuildContext context, AsyncSnapshot<PurchaseOrderModel> snapshot) {
+    return FutureBuilder<SalesOrderModel>(
+      builder: (BuildContext context, AsyncSnapshot<SalesOrderModel> snapshot) {
         if (snapshot.data != null) {
           return Scaffold(
             body: Container(
@@ -98,6 +97,7 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                     <Widget>[
                       _buildProductInfo(context),
                       _buildDeliveryAddress(context),
+                      _buildRemarks(context),
                       _buildBottom(context),
                     ],
                   )),
@@ -122,17 +122,19 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
   }
 
   /// 查询明细
-  Future<PurchaseOrderModel> _getData() async {
-    PurchaseOrderModel detailModel =
-        await PurchaseOrderBLoC().getPurchaseOrderDetail(widget.code);
-    order = detailModel;
+  Future<SalesOrderModel> _getData() async {
+    if (order == null) {
+      SalesOrderModel detailModel =
+      await SalesOrderRespository().getSalesOrderDetail(widget.code);
+      order = detailModel;
+    }
     if (order != null) {
       initData(order);
     }
-    return detailModel;
+    return order;
   }
 
-  initData(PurchaseOrderModel order) {
+  initData(SalesOrderModel order) {
     setState(() {
       mockData.clear();
       //把颜色尺码封装成ApparelSizeVariantProductEntry
@@ -409,8 +411,6 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                     order.consignment.trackingID != null &&
                     order.consignment.carrierDetails.name != null) {
                   copyToClipboard(order.consignment.trackingID);
-                } else {
-                  null;
                 }
               },
             ),
@@ -521,6 +521,57 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
       Clipboard.setData(ClipboardData(text: text));
       BotToast.showText(text: '复制到粘贴板');
     }
+  }
+
+  ///备注
+  Widget _buildRemarks(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 15),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      '备注',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+                Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: order.remarks == null
+                          ? Container()
+                          : Text(
+                        '${order.remarks}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+          )
+        ],
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+      ),
+    );
   }
 
   ///底部按钮

@@ -15,7 +15,7 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
   TextEditingController _reasonController = TextEditingController();
   FocusNode _reasonNode = FocusNode();
   List<MediaModel> medias = [];
-  String type;
+  String type = '';
 
   @override
   Widget build(BuildContext context) {

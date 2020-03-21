@@ -191,10 +191,12 @@ class RecommendProductItem extends StatelessWidget {
 
   Widget buildProductTypeTag() {
     ProductType type = ProductType.FUTURE_GOODS;
-    if (model.productType.length == 1) {
-      type = model.productType.first;
-    } else if (model.productType.length > 1) {
-      type = ProductType.SPOT_GOODS;
+    if (model.productType != null) {
+      if (model.productType.length == 1) {
+        type = model.productType.first;
+      } else if (model.productType.length > 1) {
+        type = ProductType.SPOT_GOODS;
+      }
     }
     return RecommendProductTag(
       Text(
