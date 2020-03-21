@@ -9,7 +9,7 @@ import 'package:widgets/widgets.dart';
 import 'form/return_form_page.dart';
 
 class SaleOrderListItem extends StatelessWidget {
-  final PurchaseOrderModel model;
+  final SalesOrderModel model;
 
   const SaleOrderListItem({Key key, this.model}) : super(key: key);
 

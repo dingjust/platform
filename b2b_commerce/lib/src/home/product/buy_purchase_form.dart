@@ -727,68 +727,6 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     }
   }
 
-  void onSubmit() async {
-    //拼装数据
-    PurchaseOrderModel model = new PurchaseOrderModel();
-    model.entries = productEntries.where((entry) {
-      return entry.controller.text != '';
-    }).map((entry) {
-      ApparelSizeVariantProductModel variantProduct = entry.model;
-      variantProduct
-        ..thumbnail = widget.product.thumbnail
-        ..thumbnails = widget.product.thumbnails
-        ..images = widget.product.images;
-      return PurchaseOrderEntryModel(
-        quantity: int.parse(entry.controller.text),
-        product: variantProduct,
-      );
-    }).toList();
-    model
-      ..unitPrice = price
-      ..totalPrice = totalNum * price
-      ..totalQuantity = totalNum
-      ..deposit = deposit
-      ..salesApplication = SalesApplication.ONLINE
-      ..machiningType = MachiningType.LABOR_AND_MATERIAL
-      ..invoiceNeeded = false
-      ..expectedDeliveryDate = expectedDeliveryDate
-      ..remarks = remarksEditingController.text;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return RequestDataLoading(
-            requestCallBack: PurchaseOrderRepository()
-                .purchaseByProduct(model, widget.product.belongTo.uid),
-            outsideDismiss: false,
-            loadingText: '保存中。。。',
-            entrance: '',
-          );
-        }).then((value) {
-      bool result = false;
-      if (value != null) {
-        result = true;
-      }
-      if (result) {
-        getOrderDetail(value);
-      }
-      // showDialog(
-      //     context: context,
-      //     barrierDismissible: false,
-      //     builder: (_) {
-      //       return CustomizeDialog(
-      //         dialogType: DialogType.RESULT_DIALOG,
-      //         failTips: '下单失败',
-      //         successTips: '下单成功',
-      //         callbackResult: result,
-      //         confirmAction: () {
-      //           getOrderDetail(value);
-      //         },
-      //       );
-      //     });
-    });
-  }
-
   void getOrderDetail(String code) async {
     if (code != null && code != '') {
       PurchaseOrderModel detailModel =

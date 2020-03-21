@@ -17,6 +17,12 @@ class RecommendProductItem extends StatelessWidget {
 
   final bool showAddress;
 
+  static Map<ProductType, Color> _tagColors = {
+    ProductType.FUTURE_GOODS: Color.fromRGBO(20, 138, 255, 1),
+    ProductType.SPOT_GOODS: Color.fromRGBO(255, 137, 12, 1),
+    ProductType.TAIL_GOODS: Color.fromRGBO(255, 214, 12, 1),
+  };
+
   @override
   Widget build(BuildContext context) {
     // print('=====${model.thumbnails[0].normalUrl()}');
@@ -184,19 +190,20 @@ class RecommendProductItem extends StatelessWidget {
   }
 
   Widget buildProductTypeTag() {
-    String str = ProductTypeLocalizedMap[ProductType.FUTURE_GOODS];
+    ProductType type = ProductType.FUTURE_GOODS;
     if (model.productType.length == 1) {
-      str = ProductTypeLocalizedMap[model.productType.first];
+      type = model.productType.first;
     } else if (model.productType.length > 1) {
-      str = ProductTypeLocalizedMap[ProductType.SPOT_GOODS];
+      type = ProductType.SPOT_GOODS;
     }
     return RecommendProductTag(
       Text(
-        str,
-        style: TextStyle(fontSize: 15),
+        ProductTypeLocalizedMap[type],
+        style: TextStyle(fontSize: 15, color: Colors.white),
       ),
       height: 50,
       width: 50,
+      color: _tagColors[type],
     );
   }
 }

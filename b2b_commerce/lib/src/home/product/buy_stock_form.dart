@@ -702,11 +702,13 @@ class _BuyStockFormState extends State<BuyStockForm>
 
   ///校验表单
   bool validateForm() {
-    if (widget.product.steppedPrices.isNotEmpty) {
-      return totalNum >= widget.product.steppedPrices[0].minimumQuantity;
-    } else {
+    //TODO校验库存
+
+    // if (widget.product.steppedPrices.isNotEmpty) {
+    //   return totalNum >= widget.product.steppedPrices[0].minimumQuantity;
+    // } else {
       return true;
-    }
+    // }
   }
 
   void onSure() {
@@ -718,60 +720,12 @@ class _BuyStockFormState extends State<BuyStockForm>
                 productEntries: productEntries,
                 remarksEditingController: remarksEditingController,
                 totalEditingControllerMap: totalEditingControllerMap,
-                orderType: OrderType.PURCHASE,
+            orderType: OrderType.SALES,
               )));
     } else {
       Toast.show("未达最低采购量", context,
           duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
     }
-  }
-
-  void onSubmit() async {
-    //拼装数据
-    PurchaseOrderModel model = new PurchaseOrderModel();
-    model.entries = productEntries.where((entry) {
-      return entry.controller.text != '';
-    }).map((entry) {
-      ApparelSizeVariantProductModel variantProduct = entry.model;
-      variantProduct
-        ..thumbnail = widget.product.thumbnail
-        ..thumbnails = widget.product.thumbnails
-        ..images = widget.product.images;
-      return PurchaseOrderEntryModel(
-        quantity: int.parse(entry.controller.text),
-        product: variantProduct,
-      );
-    }).toList();
-    model
-      ..unitPrice = price
-      ..totalPrice = totalNum * price
-      ..totalQuantity = totalNum
-      // ..deposit = deposit
-      ..salesApplication = SalesApplication.ONLINE
-      ..machiningType = MachiningType.LABOR_AND_MATERIAL
-      ..invoiceNeeded = false
-      ..expectedDeliveryDate = expectedDeliveryDate
-      ..remarks = remarksEditingController.text;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return RequestDataLoading(
-            requestCallBack: PurchaseOrderRepository()
-                .purchaseByProduct(model, widget.product.belongTo.uid),
-            outsideDismiss: false,
-            loadingText: '保存中。。。',
-            entrance: '',
-          );
-        }).then((value) {
-      bool result = false;
-      if (value != null) {
-        result = true;
-      }
-      if (result) {
-        getOrderDetail(value);
-      }
-    });
   }
 
   void getOrderDetail(String code) async {

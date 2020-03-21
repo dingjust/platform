@@ -61,6 +61,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   ///单价
   double price = 0;
 
+  ///总价
+  double totalPrice = 0;
+
   ///订金
   double deposit = 0;
 
@@ -118,7 +121,10 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     return Container(
       color: Colors.white,
       padding:
-      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom / 3),
+      EdgeInsets.only(bottom: MediaQuery
+          .of(context)
+          .viewInsets
+          .bottom / 3),
       child: ListView(
         children: <Widget>[
           Container(
@@ -487,13 +493,21 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                 text: '￥${totalNum * widget.product.proofingFee}',
                 style: TextStyle(color: Colors.red)),
           ]);
+    } else if (widget.orderType == OrderType.SALES) {
+      return TextSpan(
+          text: '总额: ',
+          style: TextStyle(color: Colors.grey, fontSize: 14),
+          children: <TextSpan>[
+            TextSpan(text: '￥$totalPrice', style: TextStyle(color: Colors.red)),
+          ]);
     } else {
       return null;
     }
   }
 
   Text _buildPriceText() {
-    if (widget.orderType == OrderType.PURCHASE) {
+    if (widget.orderType == OrderType.PURCHASE ||
+        widget.orderType == OrderType.SALES) {
       return Text(
         totalNum == 0
             ? '￥${widget.product.minSteppedPrice} ~ ￥${widget.product.maxSteppedPrice}'
@@ -572,6 +586,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     produceDay = countProduceDays(totalNum);
     //计算单价
     price = countUnitPrice(totalNum);
+    totalPrice = DoubleUtil.getDecimalsValue(totalNum * price, 2);
     deposit = DoubleUtil.getDecimalsValue(totalNum * price * depositPercent, 2);
     _streamController.sink.add(totalNum);
     return totalNum;
@@ -673,6 +688,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         break;
       case OrderType.PURCHASE:
         onPurchaseSubmit();
+        break;
+      case OrderType.SALES:
+        onSalesSubmit();
         break;
       default:
         Toast.show("未知订单类型", context,
@@ -803,6 +821,47 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     });
   }
 
+  ///销售下单
+  void onSalesSubmit() async {
+    //拼装数据
+    SalesOrderModel model = new SalesOrderModel();
+    model.entries = widget.productEntries
+        .where((entry) {
+      return entry.controller.text != '';
+    })
+        .map((entry) =>
+        SalesOrderEntryModel(
+          quantity: int.parse(entry.controller.text),
+          product: ApparelProductModel(code: entry.model.code),
+        ))
+        .toList();
+    model
+      ..unitPrice = price
+      ..totalPrice = totalNum * price
+      ..totalQuantity = totalNum
+      ..deliveryAddress = addressModel
+      ..remarks = widget.remarksEditingController.text;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: SalesOrderRespository().orderByProduct(model),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      bool result = false;
+      if (value != null) {
+        result = true;
+      }
+      if (result) {
+        onPaying(value);
+      }
+    });
+  }
+
   void onPaying(String code) async {
     if (code != null && code != '') {
       switch (widget.orderType) {
@@ -814,8 +873,12 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           print('$code');
           onPurchasePaying(code);
           break;
+        case OrderType.SALES:
+          print('$code');
+          onPurchasePaying(code);
+          break;
         default:
-          print('!!!!!!!!!!!!!!!');
+          print('ERROR:看款下单失败');
       }
     }
   }
@@ -1075,4 +1138,7 @@ enum OrderType {
 
   /// 采购
   PURCHASE,
+
+  ///销售
+  SALES
 }
