@@ -2,14 +2,18 @@
   <div>
     <el-row class="basic-form-row" type="flex" align="top">
       <el-col :span="2">
-        <h6 class="info-input-prepend" style="margin-top: 41px;">添加主图</h6>
+        <h6 class="info-input-prepend" style="margin-top: 41px;">添加主图<span style="color:red">*</span></h6>
       </el-col>
       <el-col :span="20">
-        <images-upload class="product-images-form-upload" :slot-data="slotData.images" :read-only="isRead" :disabled="isRead">
-          <template slot="picBtn" slot-scope="props">
-            <h6>大小不超过5M/张，且最多5张主图</h6>
-          </template>
-        </images-upload>
+        <el-form-item prop="images" :rules="[
+                { required: true, message: '请上传主图', trigger: 'change'}]">
+          <images-upload class="product-images-form-upload" :slot-data="slotData.images" :read-only="isRead" :disabled="isRead" :limit="5">
+            <template slot="picBtn" slot-scope="props">
+              <h6>大小不超过5M/张，且最多5张主图</h6>
+            </template>
+          </images-upload>
+        </el-form-item>
+
         <!--<h6>大小不超过5M/张</h6>-->
         <!--<h6>最多5张主图</h6>-->
       </el-col>
@@ -19,7 +23,7 @@
         <h6 class="info-input-prepend" style="margin-top: 42px;">添加详情图</h6>
       </el-col>
       <el-col :span="20">
-        <images-upload class="product-images-form-upload" :slot-data="slotData.details" :read-only="isRead" :disabled="isRead">
+        <images-upload class="product-images-form-upload" :slot-data="slotData.details" :read-only="isRead" :disabled="isRead" :limit="8">
           <template slot="picBtn" slot-scope="props">
             <h6>大小不超过5M/张，且最多8张详情图</h6>
           </template>
@@ -63,6 +67,19 @@
   };
 </script>
 <style>
+  .basic-form-row {
+    padding-left: 30px;
+    margin-bottom: 20px;
+  }
+
+  .info-input-prepend {
+    display: inline-block;
+    margin: 0 5px;
+    /* margin-top: 5px; */
+    width: 60px;
+    font-size: 12px;
+    font-weight: 500;
+  }
   .product-images-form-tab .el-tabs__active-bar {
     background-color: #ffd60c;
   }
@@ -86,10 +103,6 @@
     font-weight: 400;
     color: rgba(0, 0, 0, 0.65);
     font-size: 10px;
-  }
-
-  .product-images-form-upload {
-    margin-left: 50px;
   }
 
   .product-images-form-upload .el-upload--picture-card {
