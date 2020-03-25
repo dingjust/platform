@@ -1,15 +1,5 @@
 <template>
   <div class="animated fadeIn content">
-    <!-- <el-dialog @open="getContract" @close="initContract" :visible.sync="dialogDetailVisible" width="85%"
-      class="purchase-dialog" :close-on-click-modal="false">
-      <purchase-order-details-page :contracts="contracts" :slotData="contentData" @onDetails="onDetails"
-                                   :dialogDetailVisible="dialogDetailVisible" @onSearch="onSearch"
-                                   @closeDialogDetailVisible="closeDialogDetailVisible"/>
-    </el-dialog>
-    <el-dialog :visible.sync="cannelMsgVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <purchase-order-cannel-msg-dialog :contracts="contracts" :slotData="contentData"
-                                        @closeCannelMsgVisible="closeCannelMsgVisible" @onSearch="onSearch"/>
-    </el-dialog> -->
     <el-card>
       <el-row>
         <el-col :span="2">
@@ -19,27 +9,31 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <sales-order-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+      <sales-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
       <el-tabs v-model="activeStatus" @tab-click="handleClick">
         <template v-for="(item, index) in statues">
           <el-tab-pane :name="item.code" :key="index">
             <span slot="label">
               <tab-label-bubble :label="item.name" :num="0" />
             </span>
-            <sales-order-search-result-list :page="page" @onDetails="onDetails" @onSearch="onSearch"
-              @onUpdate="onUpdate" @onAdvancedSearch="onAdvancedSearch" />
+            <sales-order-search-result-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
+                                            @cannelOrder="cannelOrder" @remindDelivery="remindDelivery"
+                                            @confirmDelivery="confirmDelivery" @onDeliveryForm="onDeliveryForm"/>
           </el-tab-pane>
         </template>
       </el-tabs>
     </el-card>
+    <el-dialog :visible.sync="deliveryFormShow" width="75%"
+               class="purchase-dialog" :close-on-click-modal="false">
+      <delivery-form v-if="deliveryFormShow" @onSubmit="onDeliverySubmit" :slotData="deliveryData"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import {
     createNamespacedHelpers
-  } from "vuex";
-  import Bus from '@/common/js/bus.js';
+  } from 'vuex';
 
   const {
     mapGetters,
@@ -51,19 +45,16 @@
 
   import SalesOrderToolbar from './toolbar/SalesOrderToolbar';
   import SalesOrderSearchResultList from './list/SalesOrderSearchResultList';
-  // import PurchaseOrderDetailsPage from './details/PurchaseOrderDetailsPage';
   import TabLabelBubble from '@/components/custom/TabLabelBubble';
-  import http from '@/common/js/http';
-  // import PurchaseOrderCannelMsgDialog from './info/PurchaseOrderCannelMsgDialog';
+  import DeliveryForm from "./form/DeliveryForm";
 
   export default {
     name: 'SalesOrderPage',
     components: {
-      // PurchaseOrderCannelMsgDialog,
+      DeliveryForm,
       SalesOrderToolbar,
       SalesOrderSearchResultList,
-      TabLabelBubble,
-      // PurchaseOrderDetailsPage
+      TabLabelBubble
     },
     computed: {
       ...mapGetters({
@@ -82,10 +73,10 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch (page, size) {
+      async onSearch (page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
-        const url = this.apis().getPurchaseOrders();
+        const url = this.apis().getSalesOrderList();
         this.setIsAdvancedSearch(false);
         this.search({
           url,
@@ -98,7 +89,7 @@
       onAdvancedSearch (page, size) {
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
-        const url = this.apis().getPurchaseOrders();
+        const url = this.apis().getSalesOrderList();
         this.searchAdvanced({
           url,
           query,
@@ -106,109 +97,94 @@
           size
         });
       },
-      onNew (formData) {
-        // this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
-      },
       handleClick (tab, event) {
-        // console.log(tab.name);
+        console.log(tab.name);
         if (tab.name == 'ALL') {
+          this.queryFormData.statuses = [];
+          this.queryFormData.refunding = '';
           this.onSearch('');
+        } else if (tab.name == 'PENDING_RETURN') {
+          this.queryFormData.statuses = [];
+          this.queryFormData.refunding = true;
+          this.onAdvancedSearch();
         } else {
           this.queryFormData.statuses = [tab.name];
+          this.queryFormData.refunding = false;
           this.onAdvancedSearch();
         }
       },
-      async onDetails (row) {
-        const url = this.apis().getPurchaseOrder(row.code);
+      async onDeliveryForm (row) {
+        const url = this.apis().getSalesOrderDetails(row.code);
         const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
           return;
         }
-        // this.contentData = result;
-        this.setDetailData(result);
-        if (result.status != 'CANCELLED' && (result.creator != null || result.creator != undefined)) {
-          if ((result.creator.uid != this.$store.getters.currentUser.companyCode) && result.cannelStatus == 'APPLYING') {
-            console.log(this.contentData);
-            this.cannelMsgVisible = true;
-            return;
-          }
-        }
-        // this.fn.openSlider('生产订单：' + result.code, PurchaseOrderDetailsPage, result);
-        this.dialogDetailVisible = true;
+        this.deliveryData = Object.assign({}, result);
+        this.deliveryFormShow = true;
       },
-      onNew (formData) {
-        this.fn.openSlider('创建手工单', PurchaseOrderDetailsPage, formData);
-      },
-      async onUpdate(row) {
-        const url = this.apis().getPurchaseOrder(row.code);
-        const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+      async onDeliverySubmit (formData) {
+        const url = this.apis().updateConsignment(this.deliveryData.code);
+        const result = await this.$http.post(url, formData);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
           return;
         }
-        this.$router.push({
-          name: "下单",
-          params: {
-            isUpdate: true,
-            data: result
-          }
-        });
+        this.onAdvancedSearch();
+        this.deliveryFormShow = false;
       },
-      async getContract () {
-        console.log(this.contentData);
-        const url = this.apis().getContractsList();
-        const result = await http.post(url, {
-          orderCode: this.contentData.code
-        }, {
-          page: 0,
-          size: 100
-        });
-        for (var i = 0; i < result.content.length; i++) {
-          if (result.content[i].state != 'INVALID') {
-            this.contracts.push(result.content[i]);
-          }
-        };
-        console.log(this.contracts);
+      async cannelOrder (row) {
+        const url = this.apis().cannelSalesOrder(row.code);
+        const result = await this.$http.put(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('取消订单成功！')
+        this.onAdvancedSearch();
       },
-      initContract () {
-        this.contracts = [];
+      async remindDelivery (row) {
+        const url = this.apis().reminderSalesOrderDelivery(row.code);
+        const result = await this.$http.get(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('提醒发货成功！')
       },
-      closeCannelMsgVisible () {
-        this.cannelMsgVisible = false;
-      },
-      closeDialogDetailVisible () {
-        this.dialogDetailVisible = false;
+      async confirmDelivery (row) {
+        const url = this.apis().confirmReceived(row.code);
+        const result = await this.$http.put(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('确认收货成功！')
+        this.onAdvancedSearch();
       }
     },
     data () {
       return {
-        dialogDetailVisible: false,
-        cannelMsgVisible: false,
-        // contentData: {},
         formData: this.$store.state.SalesOrdersModule.formData,
         activeStatus: 'ALL',
         statues: [{
           code: 'ALL',
           name: '全部'
         }],
-        contracts: []
+        deliveryFormShow: false,
+        deliveryData: {}
       };
     },
     created () {
       this.onSearch();
-      this.$store.state.EnumsModule.purchaseOrderStatuses.forEach(element => {
+      this.$store.state.EnumsModule.salesOrderStatuses.forEach(element => {
         this.statues.push(element);
-      });
-      Bus.$on('my-event', args => {
-        // this.dialogDetailVisible = !this.dialogDetailVisible;
       });
     },
     mounted () {
 
     }
   };
-
 </script>
 <style>
   .report {

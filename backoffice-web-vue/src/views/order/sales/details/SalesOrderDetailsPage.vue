@@ -12,18 +12,45 @@
       <el-row type="flex" justify="center">
         <el-col :span="20">
           <div class="sale-details-b1">
-            <div class="sale-details-stepbox">
-              <el-steps :active="2" align-center finish-status="success">
-                <el-step title="步骤1" description="这是一段很长很长很长的描述性文字"></el-step>
-                <el-step title="步骤2" description="这是一段很长很长很长的描述性文字"></el-step>
-                <el-step title="步骤3" description="这是一段很长很长很长的描述性文字"></el-step>
-                <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
+            <div class="sale-details-stepbox" v-if="formData.status != 'CANCELLED'">
+              <el-steps :active="active" align-center finish-status="success" v-if="formData.refunding && formData.status == 'PENDING_DELIVERY'">
+                <el-step title="买家付款" :description="formData.hasOwnProperty('payTime') ? getTime(formData.payTime) : ''"></el-step>
+                <el-step title="退款/售后"></el-step>
+                <el-step title="交易完成"></el-step>
+              </el-steps>
+              <el-steps :active="active" align-center finish-status="success" v-else>
+                <el-step title="买家付款" :description="formData.hasOwnProperty('payTime') ? getTime(formData.payTime) : ''"></el-step>
+                <el-step title="卖家发货"></el-step>
+                <el-step v-if="!formData.refunding" title="确认收货"></el-step>
+                <el-step v-if="formData.refunding" title="退款/售后"></el-step>
+                <el-step title="交易完成"></el-step>
               </el-steps>
             </div>
-            <payment-panel />
-            <delivery-panel />
-            <receiving-panel />
-            <return-panel/>
+            <div class="_sale-details-stepbox" v-else>
+              <el-row type="flex" align="middle" justify="center">
+                <h6 style="color: #d2d1d1;font-size: 16px">该订单已关闭</h6>
+              </el-row>
+            </div>
+            <payment-panel v-if="paymentPanelShow" :slotData="formData" @cannelOrder="cannelOrder"/>
+            <delivery-panel v-if="deliveryPanelShow" :slotData="formData" @getSalesOrderDetails="getSalesOrderDetails" @onReturnForm="onReturnForm" @remindDelivery="remindDelivery"/>
+            <receiving-panel v-if="receivingPanelShow" :slotData="formData" @onReturnForm="onReturnForm" @confirmDelivery="confirmDelivery"/>
+            <return-panel v-if="returnPanelShow" :formData="formData.refundApply" @returnAudit="returnAudit" @onRefuseReturnForm="onRefuseReturnForm"
+                          @platformIntervene="platformIntervene" @cannelApply="cannelApply"/>
+            <completed-panel v-if="completedPanelShow" :slotData="formData"/>
+<!--            <div class="_sale-details-stepbox" style="padding: 40px;" v-if="auditMsgShow">-->
+<!--              <el-divider/>-->
+<!--              <el-row type="flex">-->
+<!--                <h6>-->
+<!--                  <span style="color:red;font-weight: bold;">卖家拒绝退款</span>-->
+<!--                </h6>-->
+<!--              </el-row>-->
+<!--              <el-row type="flex">-->
+<!--                <h6>-->
+<!--                  拒绝理由：-->
+<!--                  <span style="color:red;font-weight: bold;">{{this.formData.refundApply.auditMsg}}</span>-->
+<!--                </h6>-->
+<!--              </el-row>-->
+<!--            </div>-->
           </div>
           <div class="sale-details-b2">
             <div class="sale-details-b2_title">
@@ -43,36 +70,36 @@
               <div style="padding-left:20px;margin-top:10px">
                 <el-row type="flex" class="sales-detail-row">
                   <el-col :span="14">
-                    <h6>订单编号：456456456156456456</h6>
+                    <h6>订单编号：{{formData.code}}</h6>
                   </el-col>
                   <el-col :span="10">
-                    <h6>供应商：广州贸易服装有限公司</h6>
+                    <h6>供应商：{{formData.seller.name}}</h6>
                   </el-col>
                 </el-row>
                 <el-row type="flex" class="sales-detail-row">
                   <el-col :span="14">
-                    <h6>姓名：张三</h6>
+                    <h6>姓名：{{formData.deliveryAddress.fullname}}</h6>
                   </el-col>
                   <el-col :span="10">
-                    <h6>联系方式：18888888888</h6>
+                    <h6>联系方式：{{formData.seller.contactPhone}}</h6>
                   </el-col>
                 </el-row>
                 <el-row type="flex" class="sales-detail-row">
                   <el-col :span="14">
-                    <h6>联系方式：1388888888</h6>
+                    <h6>联系方式：{{formData.deliveryAddress.cellphone}}</h6>
                   </el-col>
                   <el-col :span="10">
-                    <h6>地址：广东庞爰是低级哦亲我今儿哦</h6>
+                    <h6>地址：{{formData.seller.locationAddress}}</h6>
                   </el-col>
                 </el-row>
                 <el-row type="flex" class="sales-detail-row">
                   <el-col :span="14">
-                    <h6>地址：非洲请问囧请叫我二我今儿哦i解耦</h6>
+                    <h6>地址：{{formData.deliveryAddress.details}}</h6>
                   </el-col>
                 </el-row>
-                <order-rows-table style="margin-top:20px;" />
+                <order-rows-table style="margin-top:20px;" :slotData="formData" @summary="summary"/>
                 <el-row type="flex" justify="end" style="margin-top:50px">
-                  <h6>总计：<span class="sales-total-price">1200</span>元</h6>
+                  <h6>总计：<span class="sales-total-price">{{total}}</span>元</h6>
                 </el-row>
               </div>
             </div>
@@ -80,41 +107,217 @@
         </el-col>
       </el-row>
     </el-card>
+    <el-dialog :visible.sync="returnFormVisible" width="60%" class="purchase-dialog" :close-on-click-modal="false">
+      <return-form v-if="returnFormVisible" @submitReturnForm="submitReturnForm" :code="this.code"/>
+    </el-dialog>
+    <el-dialog :visible.sync="refuseReturnFormVisible" width="60%" class="purchase-dialog" :close-on-click-modal="false">
+      <refuse-return-form v-if="refuseReturnFormVisible" @returnAudit="returnAudit" :code="this.code"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import http from "@/common/js/http";
-  import OrderRowsTable from "./OrderRowsTable";
-  import PaymentPanel from "./PaymentPanel";
-  import DeliveryPanel from "./DeliveryPanel";
-  import ReceivingPanel from "./ReceivingPanel";
-  import ReturnPanel from "./ReturnPanel";
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers(
+    'SalesOrdersModule'
+  );
+
+  import OrderRowsTable from './OrderRowsTable';
+  import PaymentPanel from './PaymentPanel';
+  import DeliveryPanel from './DeliveryPanel';
+  import ReceivingPanel from './ReceivingPanel';
+  import ReturnPanel from './ReturnPanel';
+  import ReturnForm from '../form/ReturnForm';
+  import CompletedPanel from './CompletedPanel';
+  import RefuseReturnForm from "../form/RefuseReturnForm";
+  import {formatDate} from '@/common/js/filters';
 
   export default {
-    name: "SalesOrderDetailsPage",
-    props: ["code"],
+    name: 'SalesOrderDetailsPage',
+    props: ['code'],
     components: {
+      RefuseReturnForm,
+      CompletedPanel,
+      ReturnForm,
       OrderRowsTable,
       PaymentPanel,
       DeliveryPanel,
       ReceivingPanel,
       ReturnPanel
     },
-    computed: {},
-    methods: {
-
+    computed: {
+      ...mapGetters({
+        formData: 'formData'
+      }),
+      active: function () {
+        if (this.formData.status == 'PENDING_PAYMENT') {
+          return 0;
+        } else if (this.formData.status == 'PENDING_DELIVERY' && this.formData.refundStatus != 'IN_REFUND') {
+          return 1;
+        } else if (this.formData.status == 'PENDING_CONFIRM' || (this.formData.refundStatus == 'IN_REFUND' && this.formData.status == 'PENDING_DELIVERY')){
+          return 2;
+        } else if ((this.formData.status == 'PENDING_DELIVERY' && this.formData.refundStatus == 'COMPLETED') || (this.formData.status == 'PENDING_CONFIRM' && this.formData.refundStatus == 'IN_REFUND')){
+          return 3;
+        } else if (this.formData.status == 'COMPLETED'){
+          return 4;
+        }
+      },
+      paymentPanelShow: function () {
+        return this.formData.status === 'PENDING_PAYMENT';
+      },
+      deliveryPanelShow: function () {
+        return this.formData.status === 'PENDING_DELIVERY' && !this.formData.refunding;
+      },
+      receivingPanelShow: function () {
+        return this.formData.status === 'PENDING_CONFIRM' && !this.formData.refunding;
+      },
+      returnPanelShow: function () {
+        return this.formData.refunding;
+      },
+      completedPanelShow: function () {
+        if (this.formData.refundStatus) {
+          return this.formData.status === 'COMPLETED' || this.formData.refundStatus === 'COMPLETED';
+        } else {
+          return this.formData.status === 'COMPLETED';
+        }
+      }
     },
-    data() {
+    methods: {
+      getTime (time) {
+        if (time === null || time == '') {
+          return '';
+        }
+        let date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd hh:mm');
+      },
+      async getSalesOrderDetails () {
+        const url = this.apis().getSalesOrderDetails(this.code);
+        const result = await this.$http.get(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$store.state.SalesOrdersModule.formData = Object.assign({}, result);
+      },
+      onReturnForm () {
+        this.returnFormVisible = true;
+      },
+      async submitReturnForm (data) {
+        const url = this.apis().orderRefundApply();
+        const result = await this.$http.post(url, data);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('申请退款成功！');
+        this.getSalesOrderDetails();
+        this.returnFormVisible = false;
+      },
+      summary (total) {
+        this.total = total;
+      },
+      async cannelOrder () {
+        const url = this.apis().cannelSalesOrder(this.code);
+        const result = await this.$http.put(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('取消订单成功！')
+        this.getSalesOrderDetails();
+      },
+      // async remindDelivery () {
+      //   // const nextTime = this.formData.nextReminderDeliveryTime;
+      //   // const now = new Date().getTime();
+      //   // if (this.formData.hasOwnProperty('reminderDeliveryTime')) {
+      //   //   const nextTime = this.formData.nextReminderDeliveryTime;
+      //   //   const now = new Date().getTime();
+      //   //   if (now - nextTime > 0) {
+      //   //     this._remindDelivery();
+      //   //   } else {
+      //   //     this.$message.error('24小时内只能提醒一次发货！');
+      //   //   }
+      //   // } else {
+      //     this._remindDelivery();
+      //   }/
+      // },
+      async remindDelivery () {
+        const url = this.apis().reminderSalesOrderDelivery(this.code);
+        const result = await this.$http.get(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('提醒发货成功！')
+      },
+      async confirmDelivery () {
+        const url = this.apis().confirmReceived(this.code);
+        const result = await this.$http.put(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('确认收货成功！')
+        this.getSalesOrderDetails();
+      },
+      onRefuseReturnForm () {
+        this.refuseReturnFormVisible = true;
+      },
+      async returnAudit (flag, data) {
+        let formData;
+        if (flag) {
+          formData = {
+            code: this.code,
+            agree: flag
+          }
+        } else {
+          formData = Object.assign({}, data)
+        }
+        const url = this.apis().auditRefundApply();
+        const result = await this.$http.post(url, formData);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        const msg = flag ? '同意退款成功！' : '拒绝退款成功！'
+        this.$message.success(msg);
+        this.refuseReturnFormVisible = false;
+        this.getSalesOrderDetails();
+      },
+      platformIntervene () {
+        alert('平台介入');
+      },
+      async cannelApply () {
+        const url = this.apis().cancelRefundApply(this.code);
+        const result = await this.$http.get(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$message.success('撤销退款操作成功');
+        this.getSalesOrderDetails();
+      }
+    },
+    data () {
       return {
-
+        total: '',
+        returnFormVisible: false,
+        refuseReturnFormVisible: false,
+        returnFormData: ''
       };
     },
-    created() {
+    created () {
+      this.getSalesOrderDetails();
     },
-    mounted() {}
+    mounted () {}
   };
-
 </script>
 <style>
   .report {
@@ -123,12 +326,12 @@
 
   .sale-details-b1 {
     border: #d2d1d1 solid 0.5px;
-    /* padding: 20px; */
+     padding: 20px;
     padding: 20px 0 0px 0;
   }
 
   .sale-details-b1_body {
-    padding: 20px;
+    padding: 40px;
   }
 
   .sale-details-b2 {
@@ -160,6 +363,13 @@
   .sale-details-stepbox {
     border-bottom: #d2d1d1 solid 0.5px;
     padding: 20px 0px 20px 0px;
+  }
+  ._sale-details-stepbox {
+    padding: 20px 0px 20px 0px;
+  }
+  .sale-details-stepbox1 {
+    /*border-bottom: #d2d1d1 solid 0.5px;*/
+    padding: 20px 0px 0px 40px;
   }
 
   .sales-total-price {

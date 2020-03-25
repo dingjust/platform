@@ -15,72 +15,29 @@ const state = {
     content: [] // 当前页数据
   },
   formData: {
-    id: null,
     code: '',
-    quoteRef: '',
-    belongTo: {
-      uid: '',
-      name: ''
-    },
-    salesApplication: 'BELOW_THE_LINE',
-    companyOfSeller: '',
-    contactPersonOfSeller: '',
-    contactOfSeller: '',
-    expectedDeliveryDate: null,
-    deposit: 0,
-    depositPaid: false,
-    depositPaidDate: null,
-    balance: 0,
-    balancePaid: false,
-    balancePaidDate: null,
-    machiningType: null,
-    invoiceNeeded: false,
-    uniqueCode: '',
-    requirementOrderCode: '',
-    unitPrice: 0,
     entries: [],
-    remarks: '',
-    consignment: {
-      trackingID: '',
-      carrierDetails: {
-        code: '',
-        name: ''
-      }
-    },
-    deliveryAddress: {
-      id: null,
-      fullname: '',
-      cellphone: '',
-      region: {
-        isocode: '',
-        name: ''
-      },
-      city: {
-        code: '',
-        name: ''
-      },
-      cityDistrict: {
-        code: '',
-        name: ''
-      },
-      line1: ''
-    },
-    progresses: [],
-    targetPurchaseOrderCode:'',
+    deliveryAddress: {},
+    id: '',
+    status: '',
+    user: {},
+    quality: '',
+    seller: {}
   },
   queryFormData: {
     code: '',
     requirementOrderCode: '',
     skuID: '',
     statuses: [],
+    refunding: '',
     expectedDeliveryDateFrom: null,
     expectedDeliveryDateTo: null,
     createdDateFrom: null,
     createdDateTo: null,
     // belongTos: [],
     // purchasers:[],
-    keyword:'',
-    categories:[]
+    keyword: '',
+    categories: []
   },
   addressFormData: {
     id: null,
@@ -107,7 +64,7 @@ const state = {
       name: ''
     }
   },
-  detailData:{
+  detailData: {
 
   }
 };
@@ -118,19 +75,20 @@ const mutations = {
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
   statuses: (state, statuses) => state.statuses = statuses,
+  formData: (state, formData) => state.formData = formData,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
-  detailData: (state, detailData) => state.detailData = detailData,
+  detailData: (state, detailData) => state.detailData = detailData
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
-    console.log(keyword+"test"+page+"test"+size);
+  async search ({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
+    console.log(keyword + 'test' + page + 'test' + size);
     commit('url', url);
     commit('keyword', keyword);
     commit('statuses', statuses);
-    if (page||page===0) {
+    if (page || page === 0) {
       console.log(page);
       commit('currentPageNumber', page);
     }
@@ -152,7 +110,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('queryFormData', query);
     commit('currentPageNumber', page);
     if (size) {
@@ -169,7 +127,7 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state}) {
+  refresh ({dispatch, commit, state}) {
     const keyword = state.keyword;
     const statuses = state.statuses;
     const currentPageNumber = state.currentPageNumber;
@@ -177,8 +135,8 @@ const actions = {
 
     dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
   },
-  async refreshDetail({dispatch, commit, state}){
-    const url = '/b2b/orders/purchase/'+state.detailData.code;
+  async refreshDetail ({dispatch, commit, state}) {
+    const url = '/b2b/orders/purchase/' + state.detailData.code;
     const result = await http.get(url);
     if (!result['errors']) {
       commit('detailData', result);
@@ -191,11 +149,12 @@ const getters = {
   keyword: state => state.keyword,
   statuses: state => state.statuses,
   isAdvancedSearch: state => state.isAdvancedSearch,
+  formData: state => state.formData,
   queryFormData: state => state.queryFormData,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  detailData:state=>state.detailData
+  detailData: state => state.detailData
 };
 
 export default {

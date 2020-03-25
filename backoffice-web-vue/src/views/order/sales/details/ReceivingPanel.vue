@@ -1,31 +1,45 @@
 <template>
   <div class="sale-details-b1_body">
-    <el-dialog :visible.sync="formShow" width="60%" class="purchase-dialog" :close-on-click-modal="false">
-      <return-form @onSubmit="onReturnSubmit" />
-    </el-dialog>
     <el-row type="flex" align="top">
       <h6>
         订单当前状态：
-        <span style="font-weight: bold;">卖家已发货，等待买家确认</span>
+        <span v-if="stateJudge" style="color: red;font-weight: bold;">卖家已拒绝退款</span>
+        <span v-else style="color: #ffac76;font-weight: bold;">卖家已发货，等待买家确认</span>
       </h6>
     </el-row>
-    <el-row type="flex" align="bottom">
-      <el-col :span="2" :offset="3">
-        <h6 class="sales-details-info">物流信息：</h6>
+    <el-row type="flex" align="bottom" v-if="stateJudge">
+      <el-col :span="10" :offset="3">
+        <h6 class="sales-details-info">拒绝理由：</h6>
       </el-col>
     </el-row>
-    <el-row type="flex">
+    <el-row type="flex" v-if="stateJudge">
       <el-col :span="20" :offset="5">
-        <h6>顺丰速运 运单号：<el-button type="text"><span style="color:blue">SF4654654651231132</span></el-button>
-        </h6>
+        <h6 style="color: #F56C6C">{{this.slotData.refundApply.auditMsg}}</h6>
       </el-col>
     </el-row>
-    <el-row type="flex">
-      <el-col :span="20" :offset="5">
-        <span style="color:red;font-size:12px;">点击运单号查看物流</span>
-      </el-col>
-    </el-row>
-    <el-row type="flex" justify="end">
+    <el-divider v-if="stateJudge"/>
+    <div>
+      <el-row type="flex" align="bottom">
+        <el-col :span="2" :offset="3">
+          <h6 class="sales-details-info">物流信息：</h6>
+        </el-col>
+      </el-row>
+      <el-row type="flex">
+        <el-col :span="20" :offset="5">
+          <h6>{{slotData.consignment ? slotData.consignment.carrierDetails.name : ''}} 运单号：
+            <el-button type="text" @click="selectLogistics">
+              <span style="color:blue">{{slotData.consignment.trackingID}}</span>
+            </el-button>
+          </h6>
+        </el-col>
+      </el-row>
+      <el-row type="flex">
+        <el-col :span="20" :offset="5">
+          <span style="color:red;font-size:12px;">点击运单号查看物流</span>
+        </el-col>
+      </el-row>
+    </div>
+    <el-row type="flex" justify="end" v-if="isBrand()">
       <el-col :span="3">
         <el-button class="sales-order-btn" style="background:white" @click="onReturn">申请退货</el-button>
       </el-col>
@@ -37,37 +51,54 @@
 </template>
 
 <script>
-  import ReturnForm from "../form/ReturnForm";
+  import ReturnForm from '../form/ReturnForm';
 
   export default {
-    name: "ReceivingPanel",
+    name: 'ReceivingPanel',
+    props: ['slotData'],
     components: {
       ReturnForm
     },
-    computed: {},
+    computed: {
+      stateJudge: function () {
+        if (this.slotData.hasOwnProperty('refundApply') && this.slotData.refundApply.auditMsg != null) {
+          return true;
+        }
+        return false;
+      }
+    },
     methods: {
-      onSure(){
-
+      selectLogistics () {
+        alert('查询物流');
       },
-      onReturn() {
-        this.formShow = true;
+      onSure () {
+        this.$confirm('是否确认收货?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$emit('confirmDelivery');
+        });
       },
-      onReturnSubmit() {
-        //Todo APi
+      onReturn () {
+        // this.formShow = true;
+        this.$emit('onReturnForm');
+      },
+      onReturnSubmit () {
+        // Todo APi
         this.formShow = false;
       }
     },
-    data() {
+    data () {
       return {
         formShow: false
       }
     },
-    created() {
+    created () {
 
     },
-    mounted() {}
+    mounted () {}
   };
-
 </script>
 <style>
 </style>
