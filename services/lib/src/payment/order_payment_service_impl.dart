@@ -27,6 +27,9 @@ class OrderPaymentServiceImpl implements OrderPaymentService {
         paymentFor == PaymentFor.BALANCE) {
       //生产单-尾款
       apiUrl = PaymentApis.purchaseBalancePaidConfirm(order.code, type);
+    } else if (order is SalesOrderModel) {
+      //销售订单
+      apiUrl = PaymentApis.salesOrderPayStatus(order.code);
     } else {
       return null;
     }

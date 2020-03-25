@@ -49,18 +49,18 @@ enum ProductType {
   ///现货
   SPOT_GOODS,
 
+  ///库存
+  TAIL_GOODS,
+
   ///期货
   FUTURE_GOODS,
-
-  ///库存
-  TAIL_GOODS
 }
 
 // TODO: i18n处理
 const ProductTypeLocalizedMap = {
   ProductType.SPOT_GOODS: "现货",
+  ProductType.TAIL_GOODS: "库存",
   ProductType.FUTURE_GOODS: "期货",
-  ProductType.TAIL_GOODS: "库存"
 };
 
 @JsonSerializable()
@@ -366,6 +366,10 @@ class ProductModel extends ItemModel {
 @JsonSerializable()
 class VariantProductModel extends ProductModel {
   String baseProduct;
+
+  @JsonKey(toJson: _apparelProductToJson)
+  ApparelProductModel baseProductDetail;
+
   String skuID;
 
   VariantProductModel({String code,
@@ -379,6 +383,7 @@ class VariantProductModel extends ProductModel {
     CategoryModel superCategories,
     CategoryModel category,
     this.baseProduct,
+    this.baseProductDetail,
     this.skuID,
     double minPrice,
     double maxPrice,
@@ -422,6 +427,10 @@ class VariantProductModel extends ProductModel {
 
   static Map<String, dynamic> toJson(VariantProductModel model) =>
       model == null ? null : _$VariantProductModelToJson(model);
+
+  static Map<String, dynamic> _apparelProductToJson(
+      ApparelProductModel model) =>
+      null;
 }
 
 @JsonSerializable()
@@ -545,6 +554,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     CategoryModel category,
     MemberRating ratingIfPrivacy,
     String baseProduct,
+    ApparelProductModel baseProductDetail,
     this.color,
     double minPrice,
     double maxPrice,
@@ -569,6 +579,7 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
       privacy: privacy,
       ratingIfPrivacy: ratingIfPrivacy,
       baseProduct: baseProduct,
+      baseProductDetail: baseProductDetail,
       superCategories: superCategories,
       minPrice: minPrice,
       maxPrice: maxPrice,
@@ -615,6 +626,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     CategoryModel category,
     MemberRating ratingIfPrivacy,
     String baseProduct,
+    ApparelProductModel baseProductDetail,
     ColorModel color,
     this.size,
     this.quality,
@@ -641,6 +653,7 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
       privacy: privacy,
       ratingIfPrivacy: ratingIfPrivacy,
       baseProduct: baseProduct,
+      baseProductDetail: baseProductDetail,
       color: color,
       superCategories: superCategories,
       minPrice: minPrice,

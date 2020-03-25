@@ -31,13 +31,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   void initState() {
     super.initState();
-    //若产品没有类型或只有一个类型
+    //若产品没有类型
     if (widget.product.productType == null ||
         widget.product.productType.isEmpty) {
       //默认期货
       productType = ProductType.FUTURE_GOODS;
     } else {
-      productType = widget.product.productType.first;
+      if (widget.product.productType.contains(ProductType.SPOT_GOODS)) {
+        productType = ProductType.SPOT_GOODS;
+      } else if (widget.product.productType.contains(ProductType.TAIL_GOODS)) {
+        productType = ProductType.TAIL_GOODS;
+      } else {
+        productType = ProductType.FUTURE_GOODS;
+      }
     }
   }
 
@@ -97,6 +103,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     if (widget.product.productType != null &&
         widget.product.productType.isNotEmpty) {
       productTypes = widget.product.productType;
+      //排序
+      productTypes.forEach((type) {
+        print('${type}${type.index}');
+      });
+      productTypes.sort((o1, o2) => (o1.index - o2.index));
     } else {
       productTypes = [ProductType.FUTURE_GOODS];
     }
@@ -150,32 +161,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           _buildMoneyRow(),
           Container(
-            margin: EdgeInsets.only(top: 10),
-            child: RichText(
-              text: TextSpan(
-                  text: '打样费: ',
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '￥${widget.product.proofingFee ?? ''}',
-                        style: TextStyle(color: Colors.red))
-                  ]),
-            ),
-          ),
-          Container(
               margin: EdgeInsets.only(top: 10),
               child: Text(
-                '生产天数：${widget.product.basicProduction}件内${widget.product
+                productType == ProductType.FUTURE_GOODS
+                    ? '出货周期：${widget.product.basicProduction}件内${widget.product
                     .productionDays}天，每加${widget.product
-                    .productionIncrement}件多1天',
+                    .productionIncrement}件多1天'
+                    : '出货周期：72小时内',
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               )),
-          Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text(
-                '买大货需要支付30%定金',
-                style: TextStyle(fontSize: 16, color: Colors.red),
-              ))
+          Opacity(
+            opacity: productType == ProductType.FUTURE_GOODS ? 1 : 0,
+            child: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text(
+                  '注：买期货需要支付30%定金',
+                  style: TextStyle(fontSize: 16, color: Colors.red),
+                )),
+          )
         ],
       ),
     );
@@ -215,8 +218,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     List<Widget> _moneyRows = [];
     for (int i = 0; i < widget.product.steppedPrices.length; i++) {
+      if (i == 0) {
+        _moneyRows.add(_buildMoneyRowBlock(
+            '￥${widget.product.steppedPrices[i].price}',
+            '${widget.product.steppedPrices[i].minimumQuantity}件起批'));
+      }
       //最后一个阶梯价
-      if (i == widget.product.steppedPrices.length - 1) {
+      else if (i == widget.product.steppedPrices.length - 1) {
         _moneyRows.add(_buildMoneyRowBlock(
             '￥${widget.product.steppedPrices[i].price}',
             '≥${widget.product.steppedPrices[i].minimumQuantity}件'));
@@ -363,7 +371,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -403,32 +411,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             flex: 1,
             child: Row(
               children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                      height: double.infinity,
-                      child: Theme(
-                          data: ThemeData(
-                            canvasColor: Colors.transparent,
-                            primaryColor: Colors.white,
-                            accentColor: Color.fromRGBO(255, 214, 12, 1),
-                            bottomAppBarColor: Colors.grey,
-                          ),
-                          child: Builder(
-                            builder: (BuildContext buttonContext) =>
-                                FlatButton(
-                                  color: Color.fromRGBO(255, 245, 157, 1),
-                                  onPressed: () {
-                                    onBuyProofing(buttonContext);
-                                  },
-                                  disabledColor: Colors.grey[300],
-                                  child: Text(
-                                    '买样衣',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                          ))),
-                ),
+                // Expanded(
+                //   flex: 1,
+                //   child: Container(
+                //       height: double.infinity,
+                //       child: Theme(
+                //           data: ThemeData(
+                //             canvasColor: Colors.transparent,
+                //             primaryColor: Colors.white,
+                //             accentColor: Color.fromRGBO(255, 214, 12, 1),
+                //             bottomAppBarColor: Colors.grey,
+                //           ),
+                //           child: Builder(
+                //             builder: (BuildContext buttonContext) =>
+                //                 FlatButton(
+                //                   color: Color.fromRGBO(255, 245, 157, 1),
+                //                   onPressed: () {
+                //                     onBuyProofing(buttonContext);
+                //                   },
+                //                   disabledColor: Colors.grey[300],
+                //                   child: Text(
+                //                     '买样衣',
+                //                     style: TextStyle(fontSize: 15),
+                //                   ),
+                //                 ),
+                //           ))),
+                // ),
                 Expanded(
                   flex: 1,
                   child: Container(

@@ -1145,8 +1145,17 @@ class SalesOrderModel extends OrderModel {
 
   int quality;
 
-  SalesOrderModel({
-    String code,
+  ///是否退款中
+  bool refunding;
+
+  ///退款状态
+  SalesOrderRefundStatus refundStatus;
+
+  ///退款信息
+  @JsonKey(toJson: refundToJson)
+  SalesOrderRefundDetailModel refundApply;
+
+  SalesOrderModel({String code,
     this.status,
     double totalPrice,
     DateTime creationTime,
@@ -1158,7 +1167,10 @@ class SalesOrderModel extends OrderModel {
     this.belongTo,
     this.entries,
     this.quality,
-  }) : super(
+    this.refunding,
+    this.refundStatus,
+    this.refundApply})
+      : super(
     code: code,
     totalQuantity: quality,
     totalPrice: totalPrice,
@@ -1185,6 +1197,9 @@ class SalesOrderModel extends OrderModel {
 
   static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
       model == null ? null : ApparelProductModel.toJson(model);
+
+  static Map<String, dynamic> refundToJson(SalesOrderRefundDetailModel model) =>
+      model == null ? null : SalesOrderRefundDetailModel.toJson(model);
 }
 
 /// 销售订单行

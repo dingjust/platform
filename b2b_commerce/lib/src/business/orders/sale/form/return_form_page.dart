@@ -1,12 +1,20 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/sale/components/input_row.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-///销售订单申请退货表单
+///销售订单申请退货
 class ReturnFormPage extends StatefulWidget {
+  final SalesOrderModel order;
+
+  final String code;
+
+  const ReturnFormPage(this.code, {Key key, this.order}) : super(key: key);
+
   @override
   _ReturnFormPageState createState() => _ReturnFormPageState();
 }
@@ -15,26 +23,43 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
   TextEditingController _reasonController = TextEditingController();
   FocusNode _reasonNode = FocusNode();
   List<MediaModel> medias = [];
-  String type = '';
+  SalesOrderRefundType type = SalesOrderRefundType.ONLY_MONEY;
+
+  SalesOrderModel order;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '申请退货',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: Container(
-        child: ListView(
-          children: <Widget>[_buildProductInfo(), _buildForm()],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomSheet(),
+    return FutureBuilder<SalesOrderModel>(
+      builder: (BuildContext context, AsyncSnapshot<SalesOrderModel> snapshot) {
+        if (snapshot.data != null) {
+          return Scaffold(
+            appBar: AppBar(
+              brightness: Brightness.light,
+              centerTitle: true,
+              elevation: 0.5,
+              title: Text(
+                '申请退货',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            body: Container(
+              child: ListView(
+                children: <Widget>[_buildProductInfo(), _buildForm()],
+              ),
+            ),
+            bottomNavigationBar: _buildBottomSheet(),
+          );
+        } else {
+          return Container(
+            color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+      initialData: null,
+      future: _getData(),
     );
   }
 
@@ -46,7 +71,8 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Row(
           children: <Widget>[
-            ImageFactory.buildThumbnailImage(null),
+            ImageFactory.buildThumbnailImage(
+                order.entries.first.product.baseProductDetail.thumbnail),
             Expanded(
                 flex: 1,
                 child: Container(
@@ -57,13 +83,16 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Expanded(child: Text('啊是的请问王企鹅王企鹅请'))
+                          Expanded(
+                              child: Text(
+                                  '${order.entries.first.product
+                                      .baseProductDetail.name}'))
                         ],
                       ),
                       Row(
                         children: <Widget>[
                           Text(
-                            '￥120.00',
+                            '￥${order.totalPrice}',
                             style: TextStyle(color: Colors.red),
                           )
                         ],
@@ -93,7 +122,7 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text('$type'),
+                  Text('${SalesOrderRefundTypeLocalizedMap[type]}'),
                   Row(
                     children: <Widget>[
                       Text(
@@ -175,7 +204,7 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
                 height: double.infinity,
                 child: FlatButton(
                     color: Constants.THEME_COLOR_MAIN,
-                    onPressed: () {},
+                    onPressed: _onSubmit,
                     child: Text(
                       '提交',
                       style: TextStyle(fontSize: 18),
@@ -190,7 +219,8 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
     showModalBottomSheet(
         context: context,
         builder: (context) => Container(
-              height: 155,
+          // height: 155,
+          height: 120,
               color: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Column(
@@ -201,7 +231,7 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
                   ),
                   GestureDetector(
                       onTap: () {
-                        _onItemSelect('退货退款');
+                        _onItemSelect(SalesOrderRefundType.ONLY_MONEY);
                       },
                       behavior: HitTestBehavior.translucent,
                       child: Container(
@@ -209,51 +239,83 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text('退货退款',
+                            Text(
+                                SalesOrderRefundTypeLocalizedMap[
+                                SalesOrderRefundType.ONLY_MONEY],
                                 style: TextStyle(
-                                    color: type == '退货退款'
+                                    color:
+                                    type == SalesOrderRefundType.ONLY_MONEY
                                         ? Constants.THEME_COLOR_MAIN
                                         : Colors.black87)),
                             Radio(
                               groupValue: type,
-                              value: '退货退款',
+                              value: SalesOrderRefundType.ONLY_MONEY,
                               onChanged: _onItemSelect,
                             )
                           ],
                         ),
                       )),
                   Divider(),
-                  GestureDetector(
-                      onTap: () {
-                        _onItemSelect('仅退款');
-                      },
-                      behavior: HitTestBehavior.translucent,
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('仅退款',
-                                style: TextStyle(
-                                    color: type == '仅退款'
-                                        ? Constants.THEME_COLOR_MAIN
-                                        : Colors.black87)),
-                            Radio(
-                              groupValue: type,
-                              value: '仅退款',
-                              onChanged: _onItemSelect,
-                            )
-                          ],
-                        ),
-                      ))
                 ],
               ),
             ));
   }
 
-  void _onItemSelect(String val) {
+  void _onItemSelect(SalesOrderRefundType val) {
     setState(() {
       type = val;
     });
     Navigator.of(context).pop();
+  }
+
+  /// 查询明细
+  Future<SalesOrderModel> _getData() async {
+    if (order != null && order.deliveryAddress != null) {
+      order = order;
+    }
+
+    if (order == null && widget.code != null) {
+      SalesOrderModel detailModel =
+      await SalesOrderRespository().getSalesOrderDetail(widget.code);
+      order = detailModel;
+    }
+    return order;
+  }
+
+  void _onSubmit() {
+    if (_reasonController.text == '') {
+      BotToast.showText(text: '请填写退货原因');
+      return;
+    }
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.CONFIRM_DIALOG,
+            dialogHeight: 210,
+            contentText2: '是否确认退货？',
+            isNeedConfirmButton: true,
+            isNeedCancelButton: true,
+            confirmAction: () {
+              Navigator.of(context).pop();
+              _submit();
+            },
+          );
+        });
+  }
+
+  void _submit() async {
+    SalesOrderRespository()
+        .refundApply(SalesOrderRefundInfoModel(
+        code: order.code,
+        refundType: type,
+        applyReason: _reasonController.text,
+        applyImages: medias))
+        .then((msg) {
+      if (msg.resultCode == 0) {
+        Navigator.of(context).pop(true);
+      }
+    });
   }
 }

@@ -97,3 +97,5 @@ class SalesOrdersResponse {
   static Map<String, dynamic> toJson(SalesOrdersResponse model) =>
       model == null ? null : _$SalesOrdersResponseToJson(model);
 }
+
+

@@ -80,7 +80,7 @@ class _ProductAttributesTabState extends State<ProductAttributesTab>
                 child: Column(
                   children: <Widget>[
                     _buildInfoRow(
-                        '重量：${widget.model?.gramWeight ?? 0 > 0 ? widget.model
+                        '重量：${widget.model.gramWeight != null ? widget.model
                             .gramWeight : ''}',
                         '风格：${_strArrayResult(enumCodesToNames(widget.model.attributes.styles ?? [], StyleEnum))}'),
                     _buildInfoRow(

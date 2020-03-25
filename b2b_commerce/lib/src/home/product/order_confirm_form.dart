@@ -6,7 +6,6 @@ import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -847,12 +846,10 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
             entrance: '',
           );
         }).then((value) {
-      bool result = false;
-      if (value != null) {
-        result = true;
-      }
-      if (result) {
-        // onPaying(value);
+      CommonResponse response = value as CommonResponse;
+      if (response != null && response.resultCode == 0) {
+        List<dynamic> codes = response.data as List<dynamic>;
+        onPaying(codes.first);
       }
     });
   }
@@ -870,7 +867,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           break;
         case OrderType.SALES:
           print('$code');
-          onPurchasePaying(code);
+          onSalesPaying(code);
           break;
         default:
           print('ERROR:看款下单失败');
@@ -887,7 +884,6 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   order: detailModel,
                   paymentFor: PaymentFor.DEPOSIT,
                 )),
-        // ModalRoute.withName('/'));
         ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
   }
 
@@ -899,7 +895,6 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
             builder: (context) => OrderPaymentPage(
                   order: detailModel,
                 )),
-        // ModalRoute.withName('/'));
         ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
   }
 
@@ -914,7 +909,6 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   order: detailModel,
                   paymentFor: PaymentFor.SALES,
                 )),
-        // ModalRoute.withName('/'));
         ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
   }
 

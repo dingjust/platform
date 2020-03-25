@@ -36,11 +36,9 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
     PurchaseOrderStatus.CANCELLED: Colors.grey,
   };
 
-
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -71,11 +69,12 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
           Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) =>
-                widget.order.salesApplication == SalesApplication.BELOW_THE_LINE
-                    ?
-                PurchaseOrderDetailPage(code: widget.order.code,)
-                    :
-                PurchaseOrderDetailOnlinePage(code: widget.order.code)),
+                widget.order.salesApplication ==
+                    SalesApplication.BELOW_THE_LINE
+                    ? PurchaseOrderDetailPage(
+                  code: widget.order.code,
+                )
+                    : PurchaseOrderDetailOnlinePage(code: widget.order.code)),
           );
         }
       },
@@ -120,8 +119,8 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                               widget.order.depositPaid == false &&
                               widget.order.status ==
                                   PurchaseOrderStatus.PENDING_PAYMENT ? widget
-                              .order.deposit == null ? 0.0 :
-                          widget.order.deposit.toStringAsFixed(2) : widget.order
+                              .order.deposit == null ? 0.0 : widget.order
+                              .deposit.toStringAsFixed(2) : widget.order
                               .balance == null ? 0.0 : (widget.order.balance +
                               (widget.order.deductionAmount ?? 0))
                               .toStringAsFixed(2)}',
@@ -689,7 +688,8 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                         barrierDismissible: false,
                         builder: (_) {
                           return PurchaseUpdateTotalPriceDialog(
-                            purchaseOrderModel: widget.order,);
+                            purchaseOrderModel: widget.order,
+                          );
                         }).then((value) {
                       if (value != null && value != '') {
                         String str = value;
@@ -807,7 +807,7 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
                   ),
                   shape: const RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(5))),
-                  onPressed: () async{
+                  onPressed: () async {
                     _showBalanceDialog(context, widget.order);
                   },
                 ),
@@ -856,49 +856,53 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
         context: context,
         barrierDismissible: false,
         builder: (_) {
-          return PurchaseUpdateDeductionAmountDialog(purchaseOrderModel: model,);
+          return PurchaseUpdateDeductionAmountDialog(
+            purchaseOrderModel: model,
+          );
         }).then((value) {
       if (value != null && value != '') {
         String str = value;
         _updateBalance(context, model, str);
       }
     });
-
   }
 
   void _updateBalance(BuildContext context, PurchaseOrderModel model,
       String text) async {
     double amount = double.parse(text);
 
-      try {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return RequestDataLoading(
-                requestCallBack: PurchaseOrderRepository()
-                    .purchaseOrderDeductionAmountUpdate(model.code, PurchaseOrderModel(deductionAmount: amount)),
-                outsideDismiss: false,
-                loadingText: '保存中。。。',
-                entrance: 'purchaseOrders',
-              );
-            }).then((value) async {
-              if(value){
-                PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
-                setState(() {
-                  PurchaseOrderBLoC.instance.updateAmountResetData(
-                      'ALL', purchaseOrderModel);
-                  PurchaseOrderBLoC.instance.updateAmountResetData(
-                      'WAIT_FOR_OUT_OF_STORE', purchaseOrderModel);
-                  BotToast.showText(text: '修改价格成功');
-                });
-              }else{
-                BotToast.showText(text: '修改价格失败');
-              }
-        });
-      } catch (e) {
-        print(e);
-      }
+    try {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return RequestDataLoading(
+              requestCallBack: PurchaseOrderRepository()
+                  .purchaseOrderDeductionAmountUpdate(
+                  model.code, PurchaseOrderModel(deductionAmount: amount)),
+              outsideDismiss: false,
+              loadingText: '保存中。。。',
+              entrance: 'purchaseOrders',
+            );
+          }).then((value) async {
+        if (value) {
+          PurchaseOrderModel purchaseOrderModel =
+          await PurchaseOrderRepository()
+              .getPurchaseOrderDetail(model.code);
+          setState(() {
+            PurchaseOrderBLoC.instance
+                .updateAmountResetData('ALL', purchaseOrderModel);
+            PurchaseOrderBLoC.instance.updateAmountResetData(
+                'WAIT_FOR_OUT_OF_STORE', purchaseOrderModel);
+            BotToast.showText(text: '修改价格成功');
+          });
+        } else {
+          BotToast.showText(text: '修改价格失败');
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   //打开修改定金金额弹框
@@ -918,25 +922,29 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
           builder: (_) {
             return RequestDataLoading(
               requestCallBack: PurchaseOrderRepository()
-                  .purchaseOrderDepositUpdate(model.code,  PurchaseOrderModel(totalPrice: totalPrice,expectedDeliveryDate: date)),
+                  .purchaseOrderDepositUpdate(
+                  model.code,
+                  PurchaseOrderModel(
+                      totalPrice: totalPrice, expectedDeliveryDate: date)),
               outsideDismiss: false,
               loadingText: '保存中。。。',
               entrance: '0',
             );
-          }).then((value) async{
-            if(value){
-              PurchaseOrderModel purchaseOrderModel = await PurchaseOrderRepository().getPurchaseOrderDetail(model.code);
-              setState(() {
-                PurchaseOrderBLoC.instance.updateAmountResetData(
-                    'ALL', purchaseOrderModel);
-                PurchaseOrderBLoC.instance.updateAmountResetData(
-                    'PENDING_PAYMENT', purchaseOrderModel);
-                BotToast.showText(text: '修改价格成功');
-              });
-            }else{
-              BotToast.showText(text: '修改价格失败');
-            }
-
+          }).then((value) async {
+        if (value) {
+          PurchaseOrderModel purchaseOrderModel =
+          await PurchaseOrderRepository()
+              .getPurchaseOrderDetail(model.code);
+          setState(() {
+            PurchaseOrderBLoC.instance
+                .updateAmountResetData('ALL', purchaseOrderModel);
+            PurchaseOrderBLoC.instance
+                .updateAmountResetData('PENDING_PAYMENT', purchaseOrderModel);
+            BotToast.showText(text: '修改价格成功');
+          });
+        } else {
+          BotToast.showText(text: '修改价格失败');
+        }
       });
     } catch (e) {
       print(e);
@@ -979,13 +987,12 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
               loadingText: '保存中。。。',
               entrance: '',
             );
-          }).then((value){
-        if(value){
+          }).then((value) {
+        if (value) {
           BotToast.showText(text: '跳过尾款成功');
           PurchaseOrderBLoC.instance.refreshData('ALL');
           PurchaseOrderBLoC.instance.refreshData('WAIT_FOR_OUT_OF_STORE');
           PurchaseOrderBLoC.instance.refreshData('OUT_OF_STORE');
-
         }
       });
       if (model.status == PurchaseOrderStatus.IN_PRODUCTION) {
@@ -1005,7 +1012,6 @@ class _PurchaseOrderListItemState extends State<PurchaseOrderListItem>
     } catch (e) {
       print(e);
     }
-
   }
 
   void _showMessage(BuildContext context, bool result, String message) {

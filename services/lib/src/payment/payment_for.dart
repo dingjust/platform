@@ -16,6 +16,7 @@ const PaymentForEnumMap = <PaymentFor, dynamic>{
   PaymentFor.DEFAULT: 'DEFAULT',
   PaymentFor.DEPOSIT: 'DEPOSIT',
   PaymentFor.BALANCE: 'BALANCE',
+  PaymentFor.SALES: 'DEFAULT'
 };
 
 enum PaymentStatus {
