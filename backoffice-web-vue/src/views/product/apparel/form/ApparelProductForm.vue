@@ -4,19 +4,20 @@
       <el-card class="box-card product-card-1">
         <el-row type="flex" align="middle">
           <el-col :span="3">
-            <div class="info-title">
-              <h6 class="info-title_text">
+              <h6 class="info-input-prepend">
                 货品类型
                 <span style="color:red;">*</span>
               </h6>
-            </div>
           </el-col>
           <el-col :span="8">
-            <el-checkbox-group v-model="slotData.productType">
-              <template v-for="type in productTypes">
-                <el-checkbox :label="type.code">{{type.name}}</el-checkbox>
-              </template>
-            </el-checkbox-group>
+            <el-form-item prop="productType" :rules="[
+                { required: true, message: '请选择货品类型', trigger: 'change'}]">
+              <el-checkbox-group v-model="slotData.productType">
+                <template v-for="type in productTypes">
+                  <el-checkbox :label="type.code" :disabled="isDisabled(type.code)">{{type.name}}</el-checkbox>
+                </template>
+              </el-checkbox-group>
+            </el-form-item>
           </el-col>
           <el-col :span="6">
             <h6 class="product-card-1_text">
@@ -119,10 +120,10 @@
       //   return '关闭提示'
       // },
       onUpdate () {
-        if (this.slotData.images == null || this.slotData.images.length == 0) {
-          this.$message.error('请上次产品主图');
-          return;
-        }
+        // if (this.slotData.images == null || this.slotData.images.length == 0) {
+        //   this.$message.error('请上次产品主图');
+        //   return;
+        // }
         this.$refs['form'].validate(valid => {
           if (valid) {
             this._Update();
@@ -135,6 +136,7 @@
       },
       async _Update () {
         this.formData = Object.assign({}, this.slotData);
+        this.formData.category = {code: this.slotData.category[1]};
         this.slotData.variants = [];
         this.steppedPrices = [];
         var colorSizes = [];
@@ -167,10 +169,11 @@
         this.$router.go(-1);
       },
       onCreate () {
-        if (this.slotData.images == null || this.slotData.images.length == 0) {
-          this.$message.error('请上次产品主图');
-          return;
-        }
+        // if (this.slotData.images == null || this.slotData.images.length == 0) {
+        //   this.$message.error('请上次产品主图');
+        //   return;
+        // }
+        this.$refs['form'].validateField('category');
         this.$refs['form'].validate(valid => {
           if (valid) {
             this._Create();
@@ -183,6 +186,7 @@
       },
       async _Create () {
         this.formData = Object.assign({}, this.slotData);
+        this.formData.category = {code: this.slotData.category[1]};
         var colorSizes = [];
         this.formData.colorSizes.forEach((item) => {
           var obj = {
@@ -213,6 +217,27 @@
         this.$message.success('产品创建成功，产品编号： ' + result);
         // this.$set(this.slotData, 'code', result);
         this.$router.go(-1);
+      },
+      isDisabled (typeCode) {
+        var flag = false;
+        switch (typeCode) {
+          case 'SPOT_GOODS':
+            if (this.slotData.productType.indexOf('TAIL_GOODS') > -1) {
+              flag = true;
+            }
+            break;
+          case 'FUTURE_GOODS':
+            if (this.slotData.productType.indexOf('TAIL_GOODS') > -1) {
+              flag = true;
+            }
+            break;
+          case 'TAIL_GOODS':
+            if (this.slotData.productType.indexOf('SPOT_GOODS') > -1 || this.slotData.productType.indexOf('FUTURE_GOODS') > -1) {
+              flag = true;
+            }
+            break;
+        }
+        return flag;
       }
     },
     data () {
@@ -231,7 +256,7 @@
     }
   };
 </script>
-<style>
+<style scoped>
   .info-title {
     width: 100%;
     border-left: 2px solid #ffd60c;
@@ -285,4 +310,7 @@
     color: red;
   }
 
+  /deep/ .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+    margin-bottom: 0px;
+  }
 </style>

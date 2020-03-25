@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -60,6 +60,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
   ///单价
   double price = 0;
+
+  ///总价
+  double totalPrice = 0;
 
   ///订金
   double deposit = 0;
@@ -118,7 +121,10 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     return Container(
       color: Colors.white,
       padding:
-      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom / 3),
+      EdgeInsets.only(bottom: MediaQuery
+          .of(context)
+          .viewInsets
+          .bottom / 3),
       child: ListView(
         children: <Widget>[
           Container(
@@ -333,75 +339,82 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       List<EditApparelSizeVariantProductEntry> entries, String color) {
     List<Widget> widgets = entries
         .map((entry) => Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    '${entry.model.size.name}',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          B2BIcons.remove_rect,
-                          color: Colors.grey[300],
-                        ),
-                        onPressed: () {
-                          if (int.parse(entry.controller.text) > 1) {
-                            setState(() {
-                              int i = int.parse(entry.controller.text);
-                              i--;
-                              entry.controller.text = '$i';
-                            });
-                          }
-                        },
-                      ),
-                      Container(
-                        width: 40,
-                        child: TextField(
-                          controller: entry.controller,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '0',
-                              hintStyle: TextStyle(fontSize: 14)),
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 14),
-                          //只能输入数字
-                          inputFormatters: <TextInputFormatter>[
-                            WhitelistingTextInputFormatter.digitsOnly,
-                          ],
-                          onChanged: (val) {
-                            if (val == '0') {
-                              setState(() {
-                                entry.controller.text = '';
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          B2BIcons.add_rect,
-                          color: Colors.grey[300],
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            if (entry.controller.text == '') {
-                              entry.controller.text = '1';
-                            } else {
-                              int i = int.parse(entry.controller.text);
-                              i++;
-                              entry.controller.text = '$i';
-                            }
-                          });
-                        },
-                      )
-                    ],
-                  )
-                ],
-              ),
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '${entry.model.size.name}',
+            style: TextStyle(fontSize: 14),
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                width: 40,
+                // height: 40,
+                child: Text('${entry.controller.text}'),
+              )
+              // IconButton(
+              //   icon: Icon(
+              //     B2BIcons.remove_rect,
+              //     color: Colors.grey[300],
+              //   ),
+              //   onPressed: () {
+              //     if (int.parse(entry.controller.text) > 1) {
+              //       setState(() {
+              //         int i = int.parse(entry.controller.text);
+              //         i--;
+              //         entry.controller.text = '$i';
+              //       });
+              //     }
+              //   },
+              // ),
+              // Container(
+              //   width: 40,
+              //   child: TextField(
+              //     controller: entry.controller,
+              //     decoration: InputDecoration(
+              //         border: InputBorder.none,
+              //         hintText: '0',
+              //         hintStyle: TextStyle(fontSize: 14)),
+              //     keyboardType: TextInputType.number,
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(fontSize: 14),
+              //     //只能输入数字
+              //     inputFormatters: <TextInputFormatter>[
+              //       WhitelistingTextInputFormatter.digitsOnly,
+              //     ],
+              //     onChanged: (val) {
+              //       if (val == '0') {
+              //         setState(() {
+              //           entry.controller.text = '';
+              //         });
+              //       }
+              //     },
+              //   ),
+              // ),
+              // IconButton(
+              //   icon: Icon(
+              //     B2BIcons.add_rect,
+              //     color: Colors.grey[300],
+              //   ),
+              //   onPressed: () {
+              //     setState(() {
+              //       if (entry.controller.text == '') {
+              //         entry.controller.text = '1';
+              //       } else {
+              //         int i = int.parse(entry.controller.text);
+              //         i++;
+              //         entry.controller.text = '$i';
+              //       }
+              //     });
+              //   },
+              // )
+            ],
+          )
+        ],
+      ),
             ))
         .toList();
     return Column(
@@ -487,13 +500,21 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                 text: '￥${totalNum * widget.product.proofingFee}',
                 style: TextStyle(color: Colors.red)),
           ]);
+    } else if (widget.orderType == OrderType.SALES) {
+      return TextSpan(
+          text: '总额: ',
+          style: TextStyle(color: Colors.grey, fontSize: 14),
+          children: <TextSpan>[
+            TextSpan(text: '￥$totalPrice', style: TextStyle(color: Colors.red)),
+          ]);
     } else {
       return null;
     }
   }
 
   Text _buildPriceText() {
-    if (widget.orderType == OrderType.PURCHASE) {
+    if (widget.orderType == OrderType.PURCHASE ||
+        widget.orderType == OrderType.SALES) {
       return Text(
         totalNum == 0
             ? '￥${widget.product.minSteppedPrice} ~ ￥${widget.product.maxSteppedPrice}'
@@ -572,6 +593,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     produceDay = countProduceDays(totalNum);
     //计算单价
     price = countUnitPrice(totalNum);
+    totalPrice = DoubleUtil.getDecimalsValue(totalNum * price, 2);
     deposit = DoubleUtil.getDecimalsValue(totalNum * price * depositPercent, 2);
     _streamController.sink.add(totalNum);
     return totalNum;
@@ -646,6 +668,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   void onSure() {
+    //校验起订量
     if (validateForm()) {
       showDialog(
           context: context,
@@ -673,6 +696,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         break;
       case OrderType.PURCHASE:
         onPurchaseSubmit();
+        break;
+      case OrderType.SALES:
+        onSalesSubmit();
         break;
       default:
         Toast.show("未知订单类型", context,
@@ -786,20 +812,45 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       if (result) {
         onPaying(value);
       }
-      // showDialog(
-      //     context: context,
-      //     barrierDismissible: false,
-      //     builder: (_) {
-      //       return CustomizeDialog(
-      //         dialogType: DialogType.RESULT_DIALOG,
-      //         failTips: '下单失败',
-      //         successTips: '下单成功',
-      //         callbackResult: result,
-      //         confirmAction: () {
-      //           onPaying(value);
-      //         },
-      //       );
-      //     });
+    });
+  }
+
+  ///销售下单
+  void onSalesSubmit() async {
+    //拼装数据
+    SalesOrderModel model = new SalesOrderModel();
+    model.entries = widget.productEntries
+        .where((entry) {
+      return entry.controller.text != '';
+    })
+        .map((entry) =>
+        SalesOrderEntryModel(
+          quantity: int.parse(entry.controller.text),
+          product: ApparelSizeVariantProductModel(code: entry.model.code),
+        ))
+        .toList();
+    model
+      ..unitPrice = price
+      ..totalPrice = totalNum * price
+      ..totalQuantity = totalNum
+      ..deliveryAddress = addressModel
+      ..remarks = widget.remarksEditingController.text;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: SalesOrderRespository().orderByProduct(model),
+            outsideDismiss: false,
+            loadingText: '保存中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      CommonResponse response = value as CommonResponse;
+      if (response != null && response.resultCode == 0) {
+        List<dynamic> codes = response.data as List<dynamic>;
+        onPaying(codes.first);
+      }
     });
   }
 
@@ -814,8 +865,12 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           print('$code');
           onPurchasePaying(code);
           break;
+        case OrderType.SALES:
+          print('$code');
+          onSalesPaying(code);
+          break;
         default:
-          print('!!!!!!!!!!!!!!!');
+          print('ERROR:看款下单失败');
       }
     }
   }
@@ -829,8 +884,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   order: detailModel,
                   paymentFor: PaymentFor.DEPOSIT,
                 )),
-        // ModalRoute.withName('/'));
-        ModalRoute.withName('/home/product/order_products'));
+        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
   }
 
   void onProofingPaying(String code) async {
@@ -841,8 +895,21 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
             builder: (context) => OrderPaymentPage(
                   order: detailModel,
                 )),
-        // ModalRoute.withName('/'));
-        ModalRoute.withName('/home/product/order_products'));
+        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
+  }
+
+  void onSalesPaying(String code) async {
+    SalesOrderModel detailModel =
+    await SalesOrderRespository().getSalesOrderDetail(code);
+
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) =>
+                OrderPaymentPage(
+                  order: detailModel,
+                  paymentFor: PaymentFor.SALES,
+                )),
+        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
   }
 
   @override
@@ -1075,4 +1142,7 @@ enum OrderType {
 
   /// 采购
   PURCHASE,
+
+  ///销售
+  SALES
 }

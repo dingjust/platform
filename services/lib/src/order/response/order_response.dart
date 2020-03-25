@@ -78,3 +78,24 @@ class ProofingOrdersResponse {
   static Map<String, dynamic> toJson(ProofingOrdersResponse model) =>
       model == null ? null : _$ProofingOrdersResponseToJson(model);
 }
+
+/// 销售订单列表响应
+@JsonSerializable()
+class SalesOrdersResponse {
+  final int number;
+  final int size;
+  final int totalPages;
+  final int totalElements;
+  final List<SalesOrderModel> content;
+
+  SalesOrdersResponse(this.number, this.size, this.totalPages,
+      this.totalElements, this.content);
+
+  factory SalesOrdersResponse.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$SalesOrdersResponseFromJson(json);
+
+  static Map<String, dynamic> toJson(SalesOrdersResponse model) =>
+      model == null ? null : _$SalesOrdersResponseToJson(model);
+}
+
+

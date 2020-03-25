@@ -24,4 +24,10 @@ class PaymentApis {
   static get purchaseBalancePaidConfirm => (code, type) {
         return '/{baseSiteId}/orders/purchase/$code/paid/balance/$type';
       };
+
+  /// 销售单支付状态
+  static get salesOrderPayStatus =>
+          (code) {
+        return '/{baseSiteId}/b2b/orders/sales/$code/check/paid/state';
+      };
 }

@@ -319,6 +319,9 @@ class FactoryMenusSection extends StatelessWidget {
                 buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
                     AppRoutes.ROUTE_PURCHASE_ORDERS,
                     authorizations: [Authorization.PURCHASE_ORDER]),
+                buildChild(context, MenuItemImage.saleOrder, '销售订单',
+                    AppRoutes.ROUTE_SALE_ORDERS,
+                    authorizations: [Authorization.PURCHASE_ORDER]),
               ],
             )
           ],

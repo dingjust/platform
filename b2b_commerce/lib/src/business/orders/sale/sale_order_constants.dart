@@ -4,11 +4,11 @@ import 'package:models/models.dart';
 class SaleOrderConstants {
   ///状态颜色
   static const STATUS_COLORS = {
-    PurchaseOrderStatus.PENDING_PAYMENT: Colors.red,
-    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE: Color(0xFFFFD600),
-    PurchaseOrderStatus.OUT_OF_STORE: Color(0xFFFFD600),
-    PurchaseOrderStatus.IN_PRODUCTION: Color(0xFFFFD600),
-    PurchaseOrderStatus.COMPLETED: Colors.green,
-    PurchaseOrderStatus.CANCELLED: Colors.grey,
+    SalesOrderStatus.PENDING_PAYMENT: Colors.red,
+    SalesOrderStatus.PENDING_CONFIRM: Color(0xFFFFD600),
+    // SalesOrderStatus.OUT_OF_STORE: Color(0xFFFFD600),
+    // SalesOrderStatus.IN_PRODUCTION: Color(0xFFFFD600),
+    SalesOrderStatus.COMPLETED: Colors.green,
+    SalesOrderStatus.CANCELLED: Colors.grey,
   };
 }

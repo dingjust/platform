@@ -27,7 +27,8 @@ class BuyProofingForm extends StatefulWidget {
   _BuyProofingFormState createState() => _BuyProofingFormState();
 }
 
-class _BuyProofingFormState extends State<BuyProofingForm> {
+class _BuyProofingFormState extends State<BuyProofingForm>
+    with SingleTickerProviderStateMixin {
   List<EditApparelSizeVariantProductEntry> productEntries;
 
   ///按颜色分组
@@ -52,6 +53,11 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
 
   //输入即时刷新监听
   Function textEditControllerListener;
+
+  TabController _tabController;
+
+  ///颜色Code tab索引映射
+  List<String> tabsIndexColorCodeMap = [];
 
   @override
   void initState() {
@@ -80,8 +86,18 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
     colorRowList.forEach((color, entries) {
       totalEditingControllerMap[color] = TextEditingController();
       tabs.add(_buildTab(color, entries));
+      //建立索引映射数组
+      tabsIndexColorCodeMap.add(entries.first.model.color.code);
       views.add(_buildViewBody(entries, color));
     });
+
+    //初始化tabController
+    _tabController = TabController(length: colorRowList.length, vsync: this);
+    //tab切换刷新图片
+    _tabController.addListener(() {
+      setState(() {});
+    });
+
     super.initState();
   }
 
@@ -140,7 +156,7 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
         child: CachedNetworkImage(
             width: imageSize,
             height: imageSize,
-            imageUrl: '${widget.product.thumbnail.previewUrl()}',
+            imageUrl: '${getImgURL()}',
             fit: BoxFit.cover,
             imageBuilder: (context, imageProvider) => Container(
                   width: imageSize,
@@ -229,21 +245,22 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
   Widget _buildBody() {
     return Expanded(
       flex: 1,
-      child: DefaultTabController(
-        length: colorRowList.length,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: TabBar(
-            unselectedLabelColor: Colors.black26,
-            labelColor: Colors.black,
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: _buildTabs(),
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-            isScrollable: true,
-            indicatorColor: Color.fromRGBO(255, 214, 12, 1),
-          ),
-          body: TabBarView(children: views),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: TabBar(
+          unselectedLabelColor: Colors.black26,
+          labelColor: Colors.black,
+          indicatorSize: TabBarIndicatorSize.label,
+          tabs: _buildTabs(),
+          controller: _tabController,
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+          isScrollable: true,
+          indicatorColor: Color.fromRGBO(255, 214, 12, 1),
+        ),
+        body: TabBarView(
+          children: views,
+          controller: _tabController,
         ),
       ),
     );
@@ -681,6 +698,18 @@ class _BuyProofingFormState extends State<BuyProofingForm> {
                     order: detailModel,
                   )),
           ModalRoute.withName('/'));
+    }
+  }
+
+  ///预览图片URL
+  String getImgURL() {
+    String colorCode = tabsIndexColorCodeMap[_tabController.index];
+    ColorSizeModel currentColor = widget.product.colorSizes
+        .firstWhere((item) => item.colorCode == colorCode, orElse: () => null);
+    if (currentColor != null && currentColor.previewImg != null) {
+      return currentColor.previewImg.previewUrl();
+    } else {
+      return widget.product.thumbnail.previewUrl();
     }
   }
 

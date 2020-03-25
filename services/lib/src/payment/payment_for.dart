@@ -6,13 +6,17 @@ enum PaymentFor {
   DEPOSIT,
 
   ///生产单-尾款
-  BALANCE
+  BALANCE,
+
+  ///销售单
+  SALES
 }
 
 const PaymentForEnumMap = <PaymentFor, dynamic>{
   PaymentFor.DEFAULT: 'DEFAULT',
   PaymentFor.DEPOSIT: 'DEPOSIT',
   PaymentFor.BALANCE: 'BALANCE',
+  PaymentFor.SALES: 'DEFAULT'
 };
 
 enum PaymentStatus {

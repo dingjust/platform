@@ -360,4 +360,53 @@ class OrderApis {
           (id, orderId) {
         return '/b2b/orders/purchase/progress/$id/order/$orderId';
       };
+
+  ///看款下单创建销售订单 POST
+  static get salesCreateByProduct => '/{baseSiteId}/b2b/orders/sales/create';
+
+  ///看款下单创建销售订单 POST
+  static get salesOrderList => '/{baseSiteId}/b2b/orders/sales';
+
+  ///销售订单详情
+  static get salesOrderDetails =>
+          (code) {
+        return '/{baseSiteId}/b2b/orders/sales/$code';
+      };
+
+  ///销售订单发货
+  static get salesOrderDelivery =>
+          (code) {
+        return '/{baseSiteId}/b2b/orders/sales/update/consignment/$code';
+      };
+
+  ///销售订单确认收货
+  static get salesOrderConfirmReceived =>
+          (code) {
+        return '/{baseSiteId}/b2b/orders/sales/$code/confirmReceived';
+      };
+
+  ///销售订单关闭订单
+  static get salesOrderCancel =>
+          (code) {
+        return '/{baseSiteId}/b2b/orders/sales/$code/cancel/order';
+      };
+
+  ///销售订单申请退款
+  static get salesOrderRefundApply => '/{baseSiteId}/sales/order/refund/apply';
+
+  ///销售订单退款信息
+  static get salesOrderRefundInfo =>
+          (code) {
+        return '/{baseSiteId}/sales/order/refund/apply/$code';
+      };
+
+  ///销售订单退款处理
+  static get salesOrderRefundAudit =>
+      '/{baseSiteId}/sales/order/refund/audit/apply';
+
+  ///销售订单退款处理
+  static get salesOrderRefundCancel =>
+          (code) {
+        return '/{baseSiteId}/sales/order/refund/apply/cancel/$code';
+      };
 }

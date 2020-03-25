@@ -13,6 +13,12 @@ enum SalesOrderStatus {
   /// 待发货
   PENDING_DELIVERY,
 
+  ///待确认
+  PENDING_CONFIRM,
+
+  ///已取消
+  CANCELLED,
+
   /// 已发货
   SHIPPED,
 
@@ -24,6 +30,8 @@ enum SalesOrderStatus {
 const SalesOrderStatusLocalizedMap = {
   SalesOrderStatus.PENDING_PAYMENT: "待付款",
   SalesOrderStatus.PENDING_DELIVERY: "待发货",
+  SalesOrderStatus.PENDING_CONFIRM: "待收货",
+  SalesOrderStatus.CANCELLED: "已取消",
   SalesOrderStatus.SHIPPED: "已发货",
   SalesOrderStatus.COMPLETED: "已完成"
 };
@@ -1118,24 +1126,53 @@ class PurchaseOrderEntryModel extends OrderEntryModel {
 /// 销售订单
 @JsonSerializable()
 class SalesOrderModel extends OrderModel {
+  @JsonKey(toJson: _productToJson)
+  ApparelProductModel product;
+
+  @JsonKey(toJson: _companyToJson)
   CompanyModel belongTo;
+
+  @JsonKey(toJson: _entriesToJson)
   List<SalesOrderEntryModel> entries;
+
+  @JsonKey(toJson: _companyToJson)
+  CompanyModel user;
+
+  @JsonKey(toJson: _companyToJson)
+  CompanyModel seller;
+
   SalesOrderStatus status;
 
-  SalesOrderModel({
-    String code,
+  int quality;
+
+  ///是否退款中
+  bool refunding;
+
+  ///退款状态
+  SalesOrderRefundStatus refundStatus;
+
+  ///退款信息
+  @JsonKey(toJson: refundToJson)
+  SalesOrderRefundDetailModel refundApply;
+
+  SalesOrderModel({String code,
     this.status,
-    int totalQuantity,
     double totalPrice,
     DateTime creationTime,
     AddressModel deliveryAddress,
     String remarks,
     PrincipalModel supplier,
+    this.user,
+    this.seller,
     this.belongTo,
     this.entries,
-  }) : super(
+    this.quality,
+    this.refunding,
+    this.refundStatus,
+    this.refundApply})
+      : super(
     code: code,
-    totalQuantity: totalQuantity,
+    totalQuantity: quality,
     totalPrice: totalPrice,
     creationTime: creationTime,
     deliveryAddress: deliveryAddress,
@@ -1148,12 +1185,30 @@ class SalesOrderModel extends OrderModel {
 
   static Map<String, dynamic> toJson(SalesOrderModel model) =>
       model == null ? null : _$SalesOrderModelToJson(model);
+
+  static List<Map<String, dynamic>> _entriesToJson(
+      List<SalesOrderEntryModel> entries) =>
+      entries == null
+          ? null
+          : entries.map((entry) => SalesOrderEntryModel.toJson(entry)).toList();
+
+  static Map<String, dynamic> _companyToJson(CompanyModel belongTo) =>
+      belongTo == null ? null : CompanyModel.toJson(belongTo);
+
+  static Map<String, dynamic> _productToJson(ApparelProductModel model) =>
+      model == null ? null : ApparelProductModel.toJson(model);
+
+  static Map<String, dynamic> refundToJson(SalesOrderRefundDetailModel model) =>
+      model == null ? null : SalesOrderRefundDetailModel.toJson(model);
 }
 
 /// 销售订单行
 @JsonSerializable()
 class SalesOrderEntryModel extends OrderEntryModel {
-  ApparelProductModel product;
+  @JsonKey(toJson: _productToJson)
+  ApparelSizeVariantProductModel product;
+
+  @JsonKey(toJson: _orderToJson)
   SalesOrderModel order;
 
   SalesOrderEntryModel({
@@ -1175,6 +1230,13 @@ class SalesOrderEntryModel extends OrderEntryModel {
 
   static Map<String, dynamic> toJson(SalesOrderEntryModel model) =>
       model == null ? null : _$SalesOrderEntryModelToJson(model);
+
+  static Map<String, dynamic> _productToJson(
+      ApparelSizeVariantProductModel model) =>
+      model == null ? null : ApparelSizeVariantProductModel.toJson(model);
+
+  static Map<String, dynamic> _orderToJson(SalesOrderModel model) =>
+      model == null ? null : {'code': model.code ?? ''};
 }
 
 /// 报价单

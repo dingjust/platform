@@ -3,8 +3,10 @@ as dj;
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
 import 'package:b2b_commerce/src/home/product/buy_proofing_form.dart';
 import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
+import 'package:b2b_commerce/src/home/product/buy_stock_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -12,8 +14,6 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:widgets/widgets.dart';
-
-import 'package:core/core.dart';
 
 class ProductDetailPage extends StatefulWidget {
   ProductDetailPage({Key key, @required this.product}) : super(key: key);
@@ -27,10 +27,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   TextEditingController _numController = TextEditingController();
   TextEditingController _remarksController = TextEditingController();
 
-  int product_type = 1;
+  ProductType productType;
 
   void initState() {
     super.initState();
+    //若产品没有类型
+    if (widget.product.productType == null ||
+        widget.product.productType.isEmpty) {
+      //默认期货
+      productType = ProductType.FUTURE_GOODS;
+    } else {
+      if (widget.product.productType.contains(ProductType.SPOT_GOODS)) {
+        productType = ProductType.SPOT_GOODS;
+      } else if (widget.product.productType.contains(ProductType.TAIL_GOODS)) {
+        productType = ProductType.TAIL_GOODS;
+      } else {
+        productType = ProductType.FUTURE_GOODS;
+      }
+    }
   }
 
   @override
@@ -85,40 +99,44 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildTypeSection() {
+    List<ProductType> productTypes;
+    if (widget.product.productType != null &&
+        widget.product.productType.isNotEmpty) {
+      productTypes = widget.product.productType;
+      //排序
+      productTypes.forEach((type) {
+        print('${type}${type.index}');
+      });
+      productTypes.sort((o1, o2) => (o1.index - o2.index));
+    } else {
+      productTypes = [ProductType.FUTURE_GOODS];
+    }
+
     return Container(
         color: Colors.white,
         height: 80,
         margin: EdgeInsets.only(top: 10),
         child: Row(
-          children: <Widget>[
-            Expanded(
-                flex: 1,
-                child: FlatButton(
-                  color: product_type == 1 ? Constants.THEME_COLOR_MAIN : null,
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  shape: Border.all(width: 0.5, color: Colors.grey[300]),
-                  onPressed: () {
-                    setState(() {
-                      product_type = 1;
-                    });
-                  },
-                  child: Text('现货'),
-                )),
-            Expanded(
-                flex: 1,
-                child: FlatButton(
-                  color: product_type == 2 ? Constants.THEME_COLOR_MAIN : null,
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  shape: Border.all(width: 0.5, color: Colors.grey[300]),
-                  onPressed: () {
-                    setState(() {
-                      product_type = 2;
-                    });
-                  },
-                  child: Text('期货'),
-                )),
-          ],
-        ));
+            children: productTypes
+                .map(
+                  (type) =>
+                  Expanded(
+                      flex: 1,
+                      child: FlatButton(
+                        color: productType == type
+                            ? Constants.THEME_COLOR_MAIN
+                            : null,
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        shape: Border.all(width: 0.5, color: Colors.grey[300]),
+                        onPressed: () {
+                          setState(() {
+                            productType = type;
+                          });
+                        },
+                        child: Text('${ProductTypeLocalizedMap[type]}'),
+                      )),
+            )
+                .toList()));
   }
 
   Widget _buildHeaderSection() {
@@ -143,32 +161,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           _buildMoneyRow(),
           Container(
-            margin: EdgeInsets.only(top: 10),
-            child: RichText(
-              text: TextSpan(
-                  text: '打样费: ',
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '￥${widget.product.proofingFee}',
-                        style: TextStyle(color: Colors.red))
-                  ]),
-            ),
-          ),
-          Container(
               margin: EdgeInsets.only(top: 10),
               child: Text(
-                '生产天数：${widget.product.basicProduction}件内${widget.product
+                productType == ProductType.FUTURE_GOODS
+                    ? '出货周期：${widget.product.basicProduction}件内${widget.product
                     .productionDays}天，每加${widget.product
-                    .productionIncrement}件多1天',
+                    .productionIncrement}件多1天'
+                    : '出货周期：72小时内',
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               )),
-          Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text(
-                '买大货需要支付30%定金',
-                style: TextStyle(fontSize: 16, color: Colors.red),
-              ))
+          Opacity(
+            opacity: productType == ProductType.FUTURE_GOODS ? 1 : 0,
+            child: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text(
+                  '注：买期货需要支付30%定金',
+                  style: TextStyle(fontSize: 16, color: Colors.red),
+                )),
+          )
         ],
       ),
     );
@@ -208,8 +218,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     List<Widget> _moneyRows = [];
     for (int i = 0; i < widget.product.steppedPrices.length; i++) {
+      if (i == 0) {
+        _moneyRows.add(_buildMoneyRowBlock(
+            '￥${widget.product.steppedPrices[i].price}',
+            '${widget.product.steppedPrices[i].minimumQuantity}件起批'));
+      }
       //最后一个阶梯价
-      if (i == widget.product.steppedPrices.length - 1) {
+      else if (i == widget.product.steppedPrices.length - 1) {
         _moneyRows.add(_buildMoneyRowBlock(
             '￥${widget.product.steppedPrices[i].price}',
             '≥${widget.product.steppedPrices[i].minimumQuantity}件'));
@@ -320,7 +335,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-
   Widget _buildImagesSection() {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 70),
@@ -357,7 +371,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -397,32 +411,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             flex: 1,
             child: Row(
               children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                      height: double.infinity,
-                      child: Theme(
-                          data: ThemeData(
-                            canvasColor: Colors.transparent,
-                            primaryColor: Colors.white,
-                            accentColor: Color.fromRGBO(255, 214, 12, 1),
-                            bottomAppBarColor: Colors.grey,
-                          ),
-                          child: Builder(
-                            builder: (BuildContext buttonContext) =>
-                                FlatButton(
-                                  color: Color.fromRGBO(255, 245, 157, 1),
-                                  onPressed: () {
-                                    onBuyProofing(buttonContext);
-                                  },
-                                  disabledColor: Colors.grey[300],
-                                  child: Text(
-                                    '买样衣',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                          ))),
-                ),
+                // Expanded(
+                //   flex: 1,
+                //   child: Container(
+                //       height: double.infinity,
+                //       child: Theme(
+                //           data: ThemeData(
+                //             canvasColor: Colors.transparent,
+                //             primaryColor: Colors.white,
+                //             accentColor: Color.fromRGBO(255, 214, 12, 1),
+                //             bottomAppBarColor: Colors.grey,
+                //           ),
+                //           child: Builder(
+                //             builder: (BuildContext buttonContext) =>
+                //                 FlatButton(
+                //                   color: Color.fromRGBO(255, 245, 157, 1),
+                //                   onPressed: () {
+                //                     onBuyProofing(buttonContext);
+                //                   },
+                //                   disabledColor: Colors.grey[300],
+                //                   child: Text(
+                //                     '买样衣',
+                //                     style: TextStyle(fontSize: 15),
+                //                   ),
+                //                 ),
+                //           ))),
+                // ),
                 Expanded(
                   flex: 1,
                   child: Container(
@@ -432,7 +446,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             FlatButton(
                               color: Color.fromRGBO(255, 214, 12, 1),
                               onPressed: () {
+                                switch (productType) {
+                                  case ProductType.FUTURE_GOODS:
                                 onBuyPurchase(buttonContext);
+                                break;
+                                  case ProductType.SPOT_GOODS:
+                                    onBuyStock(buttonContext);
+                                    break;
+                                  case ProductType.TAIL_GOODS:
+                                    onBuyStock(buttonContext);
+                                    break;
+                                  default:
+                                }
                               },
                               disabledColor: Colors.grey[300],
                               child: Text(
@@ -460,6 +485,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         });
   }
 
+  ///买样衣
   void onBuyProofing(BuildContext buildContext) {
     dj.showModalBottomSheet<void>(
         context: buildContext,
@@ -473,11 +499,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         });
   }
 
+  ///买期货
   void onBuyPurchase(BuildContext buildContext) {
     dj.showModalBottomSheet<void>(
         context: buildContext,
         builder: (BuildContext context) {
           return BuyPurchaseForm(widget.product);
+        });
+  }
+
+  ///买现货/尾货
+  void onBuyStock(BuildContext buildContext) {
+    dj.showModalBottomSheet<void>(
+        context: buildContext,
+        builder: (BuildContext context) {
+          return BuyStockForm(widget.product);
         });
   }
 

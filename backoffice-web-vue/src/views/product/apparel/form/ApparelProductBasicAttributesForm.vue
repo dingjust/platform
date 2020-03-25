@@ -4,17 +4,16 @@
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
-            <el-form-item class="product-form-item" :rules="[
-                { required: true, message: '请输入货号', trigger: 'blur'}]" prop="skuID">
               <el-row type="flex" align="middle" justify="start" :gutter="10">
                 <el-col :span="6">
                   <h6 class="attributes-row-label">货号<span style="color:red;">*</span></h6>
                 </el-col>
                 <el-col :span="18">
-                  <el-input placeholder="请输入货号" v-model="slotData.skuID" size="mini" :disabled="isRead"></el-input>
+                  <el-form-item :rules="[{ required: true, message: '请输入货号', trigger: 'blur'}]" prop="skuID">
+                    <el-input placeholder="请输入货号" v-model="slotData.skuID" size="mini" :disabled="isRead"></el-input>
+                  </el-form-item>
                 </el-col>
               </el-row>
-            </el-form-item>
           </el-col>
         </el-row>
       </el-col>
@@ -324,9 +323,9 @@
   };
 
 </script>
-<style>
+<style scoped>
   .product-basic-attributes {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .attributes-row-label {
@@ -339,4 +338,13 @@
     width: 100%;
   }
 
+  /deep/ .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
+    margin-bottom: 0px;
+  }
+
+  .info-title_text-sub {
+    font-weight: 500;
+    color: #CCCCCC;
+    font-size: 12px;
+  }
 </style>

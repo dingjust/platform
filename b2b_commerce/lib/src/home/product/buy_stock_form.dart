@@ -12,19 +12,19 @@ import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
-class BuyPurchaseForm extends StatefulWidget {
+class BuyStockForm extends StatefulWidget {
   final ApparelProductModel product;
 
   final double heightScale;
 
-  const BuyPurchaseForm(this.product, {Key key, this.heightScale = 0.75})
+  const BuyStockForm(this.product, {Key key, this.heightScale = 0.75})
       : super(key: key);
 
   @override
-  _BuyPurchaseFormState createState() => _BuyPurchaseFormState();
+  _BuyStockFormState createState() => _BuyStockFormState();
 }
 
-class _BuyPurchaseFormState extends State<BuyPurchaseForm>
+class _BuyStockFormState extends State<BuyStockForm>
     with SingleTickerProviderStateMixin {
   List<EditApparelSizeVariantProductEntry> productEntries;
 
@@ -51,14 +51,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
   ///单价
   double price = 0;
 
-  ///订金
-  double deposit = 0;
+  //总价
+  double totalPrice = 0;
 
   ///生产天数
   int produceDay = 0;
-
-  ///订金百分比
-  double depositPercent = 0.3;
 
   ///预计交货时间
   DateTime expectedDeliveryDate = DateTime.now();
@@ -89,7 +86,13 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     productEntries = widget.product.variants.map((variant) {
       TextEditingController controller = TextEditingController();
       //赋值监听器，即时监听用户输入
-      controller.addListener(textEditControllerListener);
+      controller.addListener(() {
+        if (int.parse(controller.text) > variant.quality) {
+          setState(() {
+            controller.text = '${variant.quality}';
+          });
+        }
+      });
       return EditApparelSizeVariantProductEntry(
           controller: controller, model: variant);
     }).toList();
@@ -116,6 +119,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     _tabController.addListener(() {
       setState(() {});
     });
+
     super.initState();
   }
 
@@ -265,11 +269,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: TabBar(
+          controller: _tabController,
           unselectedLabelColor: Colors.black26,
           labelColor: Colors.black,
           indicatorSize: TabBarIndicatorSize.label,
           tabs: _buildTabs(),
-          controller: _tabController,
           labelStyle: TextStyle(
               fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
           isScrollable: true,
@@ -298,6 +302,8 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
+                      Text('库存：${entry.model.quality}',
+                          style: TextStyle(color: Colors.grey, fontSize: 12)),
                       IconButton(
                         icon: Icon(
                           B2BIcons.remove_rect,
@@ -339,7 +345,13 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                                 entry.controller.text = '';
                               });
                             }
-
+                            if (int.parse(entry.controller.text) >
+                                entry.model.quality) {
+                              setState(() {
+                                entry.controller.text =
+                                '${entry.model.quality}';
+                              });
+                            }
                             // setState(() {
                             //   entry.controller.text = int.parse(val).toString();
                             // });
@@ -355,6 +367,12 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                           setState(() {
                             if (entry.controller.text == '') {
                               entry.controller.text = '1';
+                            } else if (entry.controller.text ==
+                                '${entry.model.quality}') {
+                              setState(() {
+                                entry.controller.text =
+                                '${entry.model.quality}';
+                              });
                             } else {
                               int i = int.parse(entry.controller.text);
                               i++;
@@ -505,8 +523,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                             ]),
                       ),
                       Text(
-                        '￥${DoubleUtil.getDecimalsValue(
-                            snapshot.data * price, 2)}',
+                        '￥${DoubleUtil.getDecimalsValue(snapshot.data * price, 2)}',
                         style: TextStyle(color: Colors.red, fontSize: 14),
                       ),
                     ],
@@ -514,25 +531,15 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   RichText(
                     text: TextSpan(
-                        text: '预计生产天数：',
+                        text: '总额: ',
                         style: TextStyle(color: Colors.grey, fontSize: 14),
                         children: <TextSpan>[
                           TextSpan(
-                              text: '${countProduceDays(snapshot.data)}',
-                              style: TextStyle(color: Colors.black87)),
-                        ]),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                        text: '订金(总额x30%): ',
-                        style: TextStyle(color: Colors.grey, fontSize: 14),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: '￥$deposit',
+                              text: '￥$totalPrice',
                               style: TextStyle(color: Colors.red)),
                         ]),
                   ),
@@ -559,7 +566,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
   Widget _buildTab(
       String color, List<EditApparelSizeVariantProductEntry> entries) {
     String colorCode =
-    entries[0].model.color.colorCode?.replaceAll(RegExp('#'), '');
+        entries[0].model.color.colorCode?.replaceAll(RegExp('#'), '');
     return Tab(
       // text: '${entries[0].model.color.name}',
       child: Container(
@@ -642,26 +649,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
       }
     });
     totalNum = i;
-    //计算生产天数
-    countProduceDays(totalNum);
     //计算单价
     countUnitPrice(totalNum);
-    deposit = DoubleUtil.getDecimalsValue(totalNum * price * depositPercent, 2);
+    totalPrice = DoubleUtil.getDecimalsValue(totalNum * price, 2);
     _streamController.sink.add(totalNum);
     return totalNum;
-  }
-
-  int countProduceDays(int totalNum) {
-    //基础生产天数
-    int basic = widget.product.productionDays;
-    int addOnDay = 0;
-    if (totalNum > widget.product.basicProduction) {
-      addOnDay = ((totalNum - widget.product.basicProduction) /
-              widget.product.productionIncrement)
-          .ceil();
-    }
-    produceDay = basic + addOnDay;
-    return produceDay;
   }
 
   double countUnitPrice(int totalNum) {
@@ -710,19 +702,50 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     }
   }
 
+  ///校验库存
+  bool validateStock() {
+    String message = '';
+    productEntries
+        .where((entry) => entry.controller.text != '')
+        .forEach((entry) {
+      if (int.parse(entry.controller.text) > entry.model.quality) {
+        message +=
+        '${entry.model.color.name}-${entry.model.size.name}:${entry.controller
+            .text}件\n';
+      }
+    });
+    if (message != '') {
+      Toast.show(
+        '$message\n超出库存！',
+        context,
+        duration: 3,
+        gravity: Toast.CENTER,
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   void onSure() {
+    //校验起订量
     if (validateForm()) {
+      //校验库存
+      if (!validateStock()) {
+        return;
+      }
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => OrderConfirmForm(
-                product: widget.product,
-                colorRowList: colorRowList,
-                productEntries: productEntries,
-                remarksEditingController: remarksEditingController,
-                totalEditingControllerMap: totalEditingControllerMap,
-                orderType: OrderType.PURCHASE,
-              )));
+            product: widget.product,
+            colorRowList: colorRowList,
+            productEntries: productEntries,
+            remarksEditingController: remarksEditingController,
+            totalEditingControllerMap: totalEditingControllerMap,
+            orderType: OrderType.SALES,
+          )));
     } else {
-      Toast.show("未达最低采购量", context,
+      Toast.show(
+          "未达最低采购量${widget.product.steppedPrices[0].minimumQuantity}件", context,
           duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
     }
   }

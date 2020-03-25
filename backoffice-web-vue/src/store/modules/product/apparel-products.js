@@ -65,10 +65,7 @@ const state = {
     gramWeight: 0.0,
     minPrice: 0.00,
     maxPrice: 0.00,
-    category: {
-      code: '',
-      name: ''
-    },
+    category: null,
     brand: '',
     variants: [],
     colors: [],
