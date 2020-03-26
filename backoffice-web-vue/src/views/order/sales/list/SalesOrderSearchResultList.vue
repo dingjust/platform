@@ -11,32 +11,45 @@
       </el-table-column>
       <el-table-column label="产品" min-width="150">
         <template slot-scope="scope">
-          <el-row type="flex" justify="space-between" align="middle" :gutter="50">
-            <el-col :span="6">
+          <el-row type="flex" align="middle" justify="start">
+            <el-col>
               <img width="54px" v-if="scope.row.entries !=null" height="54px"
                 :src="scope.row.entries[0].product.baseProductDetail.images != null && scope.row.entries[0].product.baseProductDetail.images.length != 0 ?
                       scope.row.entries[0].product.baseProductDetail.images[0].url : 'static/img/nopicture.png'" />
             </el-col>
-            <el-col :span="12">
+            <el-col>
+              <el-row>
+                <span class="ellipsis-name" :title="scope.row.entries[0].product.baseProductDetail.name">
+                  {{scope.row.entries[0].product.baseProductDetail.name}}
+                </span>
+              </el-row>
               <el-row>
                 <span>货号:{{scope.row.entries != null ? scope.row.entries[0].product.baseProductDetail.skuID:''}}</span>
-              </el-row>
-              <el-row>
-                <span>数量:{{scope.row.quality}}</span>
-              </el-row>
-            </el-col>
-            <el-col :span="6">
-              <el-row>
-                <span>现货</span>
               </el-row>
             </el-col>
           </el-row>
         </template>
       </el-table-column>
+      <el-table-column label="数量">
+        <template slot-scope="scope">
+          <span>{{scope.row.quality}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="产品品类">
+        <template slot-scope="scope">
+          <span>{{scope.row.entries[0].product.baseProductDetail.category.parent.name}}-{{scope.row.entries[0].product.baseProductDetail.category.name}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="产品类型">
+        <template slot-scope="scope">
+          <span>现货</span>
+        </template>
+      </el-table-column>
       <el-table-column label="订单状态" prop="status" :column-key="'status'" :filters="statuses">
         <template slot-scope="scope">
           <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-          <span>{{getEnum('salesOrderStatuses', scope.row.status)}}</span>
+          <span>{{judgeState(scope.row)}}</span>
+<!--          <span>{{getEnum('salesOrderStatuses', scope.row.status)}}</span>-->
         </template>
       </el-table-column>
       <el-table-column label="订单生成时间" min-width="100">
@@ -89,11 +102,18 @@
     name: 'SalesOrderSearchResultList',
     props: ['page'],
     components: {},
-    computed: {},
+    computed: {
+    },
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
+      judgeState (row) {
+        if (row.refunding) {
+          return '退款/售后';
+        }
+        return this.getEnum('salesOrderStatuses', row.status);
+      },
       allowRemind (row) {
         if (!row.hasOwnProperty('nextReminderDeliveryTime')) {
           return true;
@@ -203,11 +223,16 @@
       }
     }
   }
-
 </script>
 <style>
   .purchase-list-button {
     color: #FFA403;
   }
 
+  .ellipsis-name {
+    width: 50px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+  }
 </style>

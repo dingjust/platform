@@ -101,7 +101,7 @@
         console.log(tab.name);
         if (tab.name == 'ALL') {
           this.queryFormData.statuses = [];
-          this.queryFormData.refunding = '';
+          this.queryFormData.refunding = false;
           this.onSearch('');
         } else if (tab.name == 'PENDING_RETURN') {
           this.queryFormData.statuses = [];

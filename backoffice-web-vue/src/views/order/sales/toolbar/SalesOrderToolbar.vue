@@ -3,7 +3,7 @@
     <el-form :inline="true">
       <el-row type="flex">
         <el-col :span="17">
-        <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号"
+        <el-input style="width:220px;" placeholder="订单号/产品名称/款号"
                   v-model="queryFormData.keyword" class="purchase-toolbar-input">
         </el-input>
         <el-form-item label="日期">
