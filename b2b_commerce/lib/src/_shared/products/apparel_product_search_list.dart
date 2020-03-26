@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
+import 'package:b2b_commerce/src/business/products/brand/apparel_product_brand_detail.dart';
+import 'package:b2b_commerce/src/business/products/apparel_product_detail.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
@@ -207,9 +209,11 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
         MaterialPageRoute(
           builder: (context) => BLoCProvider(
                 bloc: ApparelProductBLoC.instance,
-                child: ApparelProductFormPage(
+                child: UserBLoC.instance.currentUser.type == UserType.FACTORY ? ApparelProductDetailPage(
                   item: product,
                   status: widget.status,
+                ): ApparelProductBrandDetailPage(
+                  item: product,
                 ),
               ),
         ),

@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
+import 'package:b2b_commerce/src/business/products/brand/apparel_product_brand_detail.dart';
+import 'package:b2b_commerce/src/business/products/apparel_product_detail.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
@@ -13,7 +15,7 @@ import 'package:widgets/widgets.dart';
 class ApparelProductList extends StatefulWidget {
   ApparelProductList({
     Key key,
-    this.status,
+    this.status = 'ALL',
     this.isSelectOption = false,
     this.keyword,
   }) : super(key: key);
@@ -64,8 +66,8 @@ class _ApparelProductListState extends State<ApparelProductList> {
 //        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: RefreshIndicator(
           onRefresh: () async {
-            ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-            return await bloc.getDatas(status: widget.status,keyword: widget.keyword);
+            return ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+//            return await bloc.getDatas(status: widget.status,keyword: widget.keyword);
           },
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -75,6 +77,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
                 stream: widget.status == null ? bloc.stream : bloc.stream.where((pageEntry) => pageEntry.status == widget.status),
                 builder: (BuildContext context,
                     AsyncSnapshot<PageEntry> snapshot) {
+                  print(snapshot.data);
                   if (snapshot.data == null) {
                     bloc.getDatas(status: widget.status,keyword: widget.keyword);
                     return Padding(
@@ -194,13 +197,19 @@ class _ApparelProductListState extends State<ApparelProductList> {
         MaterialPageRoute(
           builder: (context) => BLoCProvider(
                 bloc: ApparelProductBLoC.instance,
-                child: ApparelProductFormPage(
+                child: UserBLoC.instance.currentUser.type == UserType.FACTORY ? ApparelProductDetailPage(
                   item: product,
                   status: widget.status,
+                ): ApparelProductBrandDetailPage(
+                  item: product,
                 ),
               ),
         ),
-      );
+      ).then((val){
+        if(val != null && val){
+          ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
+        }
+      });
     });
   }
 
@@ -250,8 +259,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
                 },
               );
             });
-        ApparelProductBLoC.instance.clearProductsMap();
-        ApparelProductBLoC.instance.getDatas(status: widget.status);
+        ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
       });
     } else if (product.approvalStatus == ArticleApprovalStatus.unapproved) {
       if (product.variants == null || product.variants.isEmpty) {
@@ -290,6 +298,13 @@ class _ApparelProductListState extends State<ApparelProductList> {
           }
       }
 
+      if(product.productType != null && (product.productType.contains(ProductType.SPOT_GOODS) || product.productType.contains(ProductType.TAIL_GOODS))){
+        product.steppedPrices.sort((a,b) => a.minimumQuantity.compareTo(b.minimumQuantity));
+        if(_colorTotalNum(product.colorSizes) < product.steppedPrices[0].minimumQuantity){
+          _showValidateMsg(context, '库存总数量小于最小起订量，不可上架');
+          return;
+        }
+      }
 
 
       showDialog(
@@ -324,10 +339,19 @@ class _ApparelProductListState extends State<ApparelProductList> {
                 },
               );
             });
-            ApparelProductBLoC.instance.clearProductsMap();
-            ApparelProductBLoC.instance.getDatas(status: widget.status);
+            ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
       });
     }
+  }
+
+  int _colorTotalNum(List<ColorSizeModel> colorSizes) {
+    int result = 0;
+    colorSizes?.forEach((colorSize) {
+      colorSize.sizes.forEach((size){
+        result += size.quality ?? 0;
+      });
+    });
+    return result;
   }
 
   //非空提示

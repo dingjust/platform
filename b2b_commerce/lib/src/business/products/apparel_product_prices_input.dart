@@ -86,7 +86,7 @@ class _ApparelProductPricesInputPageState
 
     return Scaffold(
         appBar: AppBar(
-            title: Text('价格设置'),
+            title: Text(widget.enabled ? '价格设置' : '价格明细'),
             elevation: 0.5,
             brightness: Brightness.light,
             centerTitle: true,

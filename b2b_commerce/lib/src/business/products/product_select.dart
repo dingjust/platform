@@ -79,7 +79,6 @@ class _ProductSelectPageState extends State<ProductSelectPage> {
                       ApparelProductFormPage(
                         item: ApparelProductBLoC.instance.newProduct,
                         isCreate: true,
-                        enabled: true,
                       )),
             );
           },

@@ -142,6 +142,7 @@ class ApparelProductBLoC extends BLoCBase {
 
   //产品管理
   getDatas({String status,String keyword}) async {
+
     if (!lock) {
       lock = true;
       if (status == null) status = 'ALL';
@@ -235,6 +236,7 @@ class ApparelProductBLoC extends BLoCBase {
   clearProductsMapByStatus(String status) {
     _productsMap[status].data.clear();
     _productsMap[status].currentPage = 0;
+    _controller.sink.add(null);
   }
 
   deleteProductResetData(String status,String code){

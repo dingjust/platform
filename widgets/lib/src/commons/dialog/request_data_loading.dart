@@ -59,7 +59,8 @@ class _RequestDataLoadingPageState extends State<RequestDataLoading> {
   @override
   Widget build(BuildContext context) {
     MessageBLoC.instance.errorMessageStream.listen((value) {
-      Navigator.of(context).pop();
+      print('${value}--errorlisten');
+//      Navigator.of(context).pop();
     });
 
 
