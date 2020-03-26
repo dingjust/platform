@@ -191,16 +191,7 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
               padding: EdgeInsets.only(bottom: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    '•${SalesOrderStatusLocalizedMap[order.status]}',
-                    style: TextStyle(
-                        color:
-                        SaleOrderConstants.STATUS_COLORS[order.status],
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
+                children: <Widget>[_getOrderStatus()],
               ),
             ),
             Row(
@@ -222,10 +213,11 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                   ),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PicturePickPreviewWidget(
-                          medias: apparelProductModel.thumbnails,
-                          isUpload: false,
-                        )));
+                        builder: (context) =>
+                            PicturePickPreviewWidget(
+                              medias: apparelProductModel.thumbnails,
+                              isUpload: false,
+                            )));
                   },
                 ),
                 Expanded(
@@ -336,8 +328,7 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
               alignment: Alignment.centerLeft,
               child: order.payTime == null
                   ? Container()
-                  : Text(
-                  '付款时间：${DateFormatUtil.formatYMDHMS(order.payTime)}',
+                  : Text('付款时间：${DateFormatUtil.formatYMDHMS(order.payTime)}',
                       style: _infoStyle)),
           // Align(
           //     alignment: Alignment.centerLeft,
@@ -658,5 +649,24 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
     if (widget.callback != null) {
       widget.callback();
     }
+  }
+
+  ///订单状态
+  Widget _getOrderStatus() {
+    if (order.refunding != null && order.refunding) {
+      return Text(
+        '•退款/售后',
+        style: TextStyle(
+            color: Colors.purple, fontSize: 16, fontWeight: FontWeight.w500),
+      );
+    }
+
+    return Text(
+      '•${SalesOrderStatusLocalizedMap[order.status]}',
+      style: TextStyle(
+          color: SaleOrderConstants.STATUS_COLORS[order.status],
+          fontSize: 16,
+          fontWeight: FontWeight.w500),
+    );
   }
 }

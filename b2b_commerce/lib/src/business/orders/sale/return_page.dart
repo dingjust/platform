@@ -191,8 +191,24 @@ class _ReturnPageState extends State<ReturnPage> {
               )
             ],
           ));
+    } else if (model.status == SalesOrderRefundStatus.IN_REFUND) {
+      return Container(
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('退款处理中',
+                style: TextStyle(
+                  color: Colors.red,
+                ))
+          ],
+        ),
+      );
     } else {
-      return Container();
+      return Container(
+        height: 1,
+      );
     }
   }
 
