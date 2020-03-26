@@ -68,6 +68,7 @@ class PurchaseOrderSearchResultPage extends StatelessWidget {
         onWillPop: () {
           Navigator.of(context).pop();
           PurchaseOrderBLoC().refreshData('ALL');
+          return Future.value(false);
         },
       ),
     );

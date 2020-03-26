@@ -75,6 +75,7 @@ class _RequirementSearchResultPageState
         onWillPop: () {
           Navigator.of(context).pop();
           RequirementOrderBLoC().refreshData('ALL');
+          return Future.value(false);
         },
       ),
     );

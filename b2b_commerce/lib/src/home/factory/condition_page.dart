@@ -43,6 +43,7 @@ class _ConditionPageState extends State<ConditionPage> {
     return WillPopScope(
         onWillPop: () {
           Navigator.pop(context, widget.factoryCondition);
+          return Future.value(false);
         },
         child: Scaffold(
 //          appBar: AppBar(

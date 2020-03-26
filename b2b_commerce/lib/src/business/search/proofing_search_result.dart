@@ -74,6 +74,7 @@ class _ProofingSearchResultPageState extends State<ProofingSearchResultPage> {
         onWillPop: () {
           Navigator.of(context).pop();
           ProofingOrdersBLoC().refreshData('ALL');
+          return Future.value(false);
         },
       ),
     );

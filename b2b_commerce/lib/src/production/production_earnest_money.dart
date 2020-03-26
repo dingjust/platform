@@ -92,6 +92,7 @@ class _ProductionEarnestMoneyState extends State<ProductionEarnestMoney> {
           earnest.isTailPayment = isTailPayment;
           earnest.tailPaymentDate = tailPaymentDate;
           Navigator.of(context).pop(earnest);
+          return Future.value(false);
         }
     );
   }
