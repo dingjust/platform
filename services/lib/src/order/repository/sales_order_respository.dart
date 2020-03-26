@@ -151,4 +151,21 @@ class SalesOrderRespository {
       return null;
     }
   }
+
+  /// 提醒发货
+  Future<BaseMsg> remind(String code) async {
+    Response response;
+    try {
+      response = await http$.get(OrderApis.salesOrderRemind(code),
+          options: Options(responseType: ResponseType.plain));
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    if (response != null && response.statusCode == 200) {
+      return BaseMsg.fromJson(json.decode(response.data));
+    } else {
+      return null;
+    }
+  }
 }

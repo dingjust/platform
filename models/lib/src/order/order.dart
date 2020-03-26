@@ -1155,6 +1155,18 @@ class SalesOrderModel extends OrderModel {
   @JsonKey(toJson: refundToJson)
   SalesOrderRefundDetailModel refundApply;
 
+  ///支付时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime payTime;
+
+  ///提醒时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime reminderDeliveryTime;
+
+  ///下次可提醒时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime nextReminderDeliveryTime;
+
   SalesOrderModel({String code,
     this.status,
     double totalPrice,
@@ -1169,7 +1181,10 @@ class SalesOrderModel extends OrderModel {
     this.quality,
     this.refunding,
     this.refundStatus,
-    this.refundApply})
+    this.refundApply,
+    this.payTime,
+    this.reminderDeliveryTime,
+    this.nextReminderDeliveryTime})
       : super(
     code: code,
     totalQuantity: quality,
@@ -1200,6 +1215,9 @@ class SalesOrderModel extends OrderModel {
 
   static Map<String, dynamic> refundToJson(SalesOrderRefundDetailModel model) =>
       model == null ? null : SalesOrderRefundDetailModel.toJson(model);
+
+  static DateTime _dateTimefromMilliseconds(int date) =>
+      date == null ? date : DateTime.fromMillisecondsSinceEpoch(date);
 }
 
 /// 销售订单行

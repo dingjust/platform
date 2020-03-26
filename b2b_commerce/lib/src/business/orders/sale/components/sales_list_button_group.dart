@@ -1,4 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/sale/components/sales_detail_button_group.dart';
+import 'package:b2b_commerce/src/common/order_payment.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -69,7 +71,7 @@ class SalesListButtonGroup extends SalesDetailButtonGroup {
           break;
         case SalesOrderStatus.PENDING_DELIVERY:
           buttons.add(buildBtn1(context, () => onRefund(context), '退货'));
-          buttons.add(buildBtn2(context, onRemind, '提醒发货'));
+          buttons.add(buildRemindBtn(context));
           break;
         case SalesOrderStatus.PENDING_CONFIRM:
           buttons.add(buildBtn1(context, () => onRefund(context), '退货'));
@@ -130,5 +132,83 @@ class SalesListButtonGroup extends SalesDetailButtonGroup {
               ),
               onPressed: onPressed)),
     );
+  }
+
+  @override
+  Widget buildEnableRemindBtn(BuildContext context) {
+    return Expanded(
+      child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          height: 30,
+          child: FlatButton(
+              color: Colors.orangeAccent,
+              child: Text(
+                '提醒发货',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+              shape: const RoundedRectangleBorder(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              onPressed: () {
+                remind();
+              })),
+    );
+  }
+
+  @override
+  Widget buildDisableRemindBtn(BuildContext context) {
+    return Expanded(
+      child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          height: 30,
+          child: FlatButton(
+              color: Colors.grey[300],
+              child: Text(
+                '提醒发货',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+              shape: const RoundedRectangleBorder(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              onPressed: () {
+                BotToast.showText(text: '一天只能提醒一次');
+              })),
+    );
+  }
+
+  ///支付
+  @override
+  void onPay(BuildContext context) async {
+    BotToast.showLoading(
+        duration: Duration(milliseconds: 500),
+        clickClose: true,
+        crossPage: false);
+
+    SalesOrderModel detailModel =
+    await SalesOrderRespository().getSalesOrderDetail(model.code);
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+        builder: (context) =>
+            OrderPaymentPage(
+              order: detailModel,
+              paymentFor: PaymentFor.SALES,
+            )))
+        .then((val) {
+      if (val) {
+        //成功回调刷新
+        callback();
+      }
+    });
   }
 }

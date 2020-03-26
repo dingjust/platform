@@ -76,13 +76,9 @@ class _ProductAttributesTabState extends State<ProductAttributesTab>
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10), 
                 child: Column(
                   children: <Widget>[
-                    _buildInfoRow(
-                        '重量：${widget.model.gramWeight != null ? widget.model
-                            .gramWeight : ''}',
-                        '风格：${_strArrayResult(enumCodesToNames(widget.model.attributes.styles ?? [], StyleEnum))}'),
                     _buildInfoRow(
                         '版型：${enumMap(EditionTypeEnum, widget.model.attributes.editionType)}',
                         '款式：${enumMap(PatternEnum, widget.model.attributes.pattern)}'),

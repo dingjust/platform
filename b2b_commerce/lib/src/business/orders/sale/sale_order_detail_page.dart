@@ -5,7 +5,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:models/models.dart';
-import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -335,18 +334,18 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                     )),
           Align(
               alignment: Alignment.centerLeft,
-              child: order.creationTime == null
+              child: order.payTime == null
                   ? Container()
                   : Text(
-                      '付款时间：${DateFormatUtil.formatYMDHMS(order.creationTime)}',
+                  '付款时间：${DateFormatUtil.formatYMDHMS(order.payTime)}',
                       style: _infoStyle)),
-          Align(
-              alignment: Alignment.centerLeft,
-              child: order.creationTime == null
-                  ? Container()
-                  : Text(
-                      '发货时间：${DateFormatUtil.formatYMDHMS(order.creationTime)}',
-                      style: _infoStyle)),
+          // Align(
+          //     alignment: Alignment.centerLeft,
+          //     child: order.creationTime == null
+          //         ? Container()
+          //         : Text(
+          //             '发货时间：${DateFormatUtil.formatYMDHMS(order.creationTime)}',
+          //             style: _infoStyle)),
         ],
       ),
       decoration: BoxDecoration(

@@ -141,6 +141,10 @@ class B2BIcons {
   ///货车
   static const IconData truck = const IconData(0xe616,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///左箭头
+  static const IconData left_fill = const IconData(0xe73d,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
 }
 
 class CommonImage {
