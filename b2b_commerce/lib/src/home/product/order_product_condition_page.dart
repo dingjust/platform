@@ -154,7 +154,8 @@ class _ProductConditionPageState extends State<ProductConditionPage> {
                           widget.productCondition.maxSteppedPrice ==
                               _priceRanges[index].maxPrice
                       ? Color.fromRGBO(255, 214, 12, 1)
-                      : Colors.grey[300],
+                      : Colors.white,
+                  border: Border.all(color: Colors.grey[300], width: 0.5),
                   borderRadius: BorderRadius.circular(20)),
               child: InkWell(
                 child: Center(
@@ -243,7 +244,8 @@ class _ProductConditionPageState extends State<ProductConditionPage> {
                           widget.productCondition.styles
                               .contains(StyleEnum[index].code)
                       ? Color.fromRGBO(255, 214, 12, 1)
-                      : Colors.grey[300],
+                      : Colors.white,
+                  border: Border.all(color: Colors.grey[300], width: 0.5),
                   borderRadius: BorderRadius.circular(20)),
               child: InkWell(
                 child: Center(

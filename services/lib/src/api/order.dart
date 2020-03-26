@@ -409,4 +409,10 @@ class OrderApis {
           (code) {
         return '/{baseSiteId}/sales/order/refund/apply/cancel/$code';
       };
+
+  ///销售订单提醒发货
+  static get salesOrderRemind =>
+          (code) {
+        return '/{baseSiteId}/b2b/orders/sales/$code/reminder/delivery';
+      };
 }

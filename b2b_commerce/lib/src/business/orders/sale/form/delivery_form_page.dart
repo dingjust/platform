@@ -312,6 +312,7 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
         return null;
       }
     }
+    _submit();
   }
 
   void _submit() {

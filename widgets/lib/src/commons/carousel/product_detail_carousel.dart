@@ -28,7 +28,7 @@ class _ProductCarouselState extends State<ProductCarousel> {
   List<MediaModel> _items = [];
 
   Timer _timer;
-  Duration _duration = Duration(seconds: 3);
+  Duration _duration = Duration(seconds: 3000000000);
   Duration _animationDuration = Duration(milliseconds: 500);
 
   bool _isEndScroll = true;

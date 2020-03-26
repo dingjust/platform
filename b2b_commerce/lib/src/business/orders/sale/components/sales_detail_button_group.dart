@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/business/orders/sale/form/delivery_form_page.dart';
 import 'package:b2b_commerce/src/business/orders/sale/form/return_form_page.dart';
 import 'package:b2b_commerce/src/common/order_payment.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -79,7 +80,7 @@ class SalesDetailButtonGroup extends StatelessWidget {
           break;
         case SalesOrderStatus.PENDING_DELIVERY:
           buttons.add(buildBtn1(context, () => onRefund(context), '退货'));
-          buttons.add(buildBtn2(context, onRemind, '提醒发货'));
+          buttons.add(buildRemindBtn(context));
           break;
         case SalesOrderStatus.PENDING_CONFIRM:
           buttons.add(buildBtn1(context, () => onRefund(context), '退货'));
@@ -135,6 +136,7 @@ class SalesDetailButtonGroup extends StatelessWidget {
           height: double.infinity,
           child: FlatButton(
               shape: RoundedRectangleBorder(),
+              disabledColor: Colors.grey,
               onPressed: onPressed,
               child: Text('$text',
                   style: TextStyle(
@@ -165,6 +167,60 @@ class SalesDetailButtonGroup extends StatelessWidget {
   ///空按钮（占位）
   Widget buildSpaceBtn() {
     return Expanded(flex: 1, child: Container());
+  }
+
+  ///提醒发货按钮
+  Widget buildRemindBtn(BuildContext context) {
+    //判定是否可以再次点击
+    if (this.model.nextReminderDeliveryTime == null) {
+      return buildEnableRemindBtn(context);
+    }
+
+    if (DateTime.now().isAfter(model.nextReminderDeliveryTime)) {
+      return buildEnableRemindBtn(context);
+    } else {
+      return buildDisableRemindBtn(context);
+    }
+  }
+
+  ///可用提醒按钮
+  Widget buildEnableRemindBtn(BuildContext context) {
+    return Expanded(
+        flex: 1,
+        child: Container(
+          height: double.infinity,
+          child: FlatButton(
+              color: Color.fromRGBO(255, 212, 74, 1),
+              shape: RoundedRectangleBorder(),
+              onPressed: () {
+                remind();
+              },
+              child: Text('提醒发货',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ))),
+        ));
+  }
+
+  ///禁用提醒按钮
+  Widget buildDisableRemindBtn(BuildContext context) {
+    return Expanded(
+        flex: 1,
+        child: Container(
+          height: double.infinity,
+          child: FlatButton(
+              color: Colors.grey[300],
+              shape: RoundedRectangleBorder(),
+              onPressed: () {
+                BotToast.showText(text: '一天只能提醒一次');
+              },
+              child: Text('提醒发货',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ))),
+        ));
   }
 
   ///关闭订单
@@ -353,6 +409,13 @@ class SalesDetailButtonGroup extends StatelessWidget {
               },
             );
           });
+    }
+  }
+
+  void remind() async {
+    BaseMsg msg = await SalesOrderRespository().remind(model.code);
+    if (msg != null && msg.resultCode == 0) {
+      callback();
     }
   }
 }

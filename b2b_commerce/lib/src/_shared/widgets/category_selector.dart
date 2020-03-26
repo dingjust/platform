@@ -97,7 +97,10 @@ class _CategorySelectorState extends State<CategorySelector> {
                                                         category.code
                                                     ? Color.fromRGBO(
                                                         255, 214, 12, 1)
-                                                    : Colors.grey[300],
+                                                    : Colors.white,
+                                                border: Border.all(
+                                                    width: 0.5,
+                                                    color: Colors.grey[300]),
                                                 borderRadius:
                                                     BorderRadius.circular(20)),
                                             child: InkWell(

@@ -70,26 +70,43 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       data: ThemeData(canvasColor: Colors.transparent),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          elevation: 0.5,
-          centerTitle: true,
-          title: Text(
-            '现款详情',
-            style: TextStyle(color: Colors.black87),
-          ),
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black87),
-        ),
         body: Container(
           color: Color.fromRGBO(248, 248, 248, 1),
-          child: ListView(
-            children: <Widget>[
-              ProductCarousel(thumbnails, 400),
-              _buildTypeSection(),
-              _buildHeaderSection(),
-              _buildBasicInfoSection(bloc),
-              ProductAttributesTab(widget.product),
-              _buildImagesSection()
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                expandedHeight: 400,
+                pinned: true,
+                elevation: 0,
+                backgroundColor: Color.fromRGBO(255, 255, 255, 0),
+                actionsIconTheme: IconThemeData(color: Colors.grey[300]),
+                // backgroundColor: Constants.THEME_COLOR_MAIN,
+                brightness: Brightness.dark,
+                leading: IconButton(
+                    icon: Icon(
+                      B2BIcons.left_fill,
+                      color: Color.fromRGBO(211, 211, 211, 0.7),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      ProductCarousel(thumbnails, 400),
+                    ],
+                  ),
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                    // ProductCarousel(thumbnails, 400),
+                    _buildTypeSection(),
+                    _buildHeaderSection(),
+                    ProductAttributesTab(widget.product),
+                    _buildImagesSection()
+                  ])),
             ],
           ),
         ),
@@ -114,7 +131,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     return Container(
         color: Colors.white,
-        height: 80,
+        height: 50,
         margin: EdgeInsets.only(top: 10),
         child: Row(
             children: productTypes
@@ -123,17 +140,28 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Expanded(
                       flex: 1,
                       child: FlatButton(
-                        color: productType == type
-                            ? Constants.THEME_COLOR_MAIN
-                            : null,
                         padding: EdgeInsets.symmetric(vertical: 10),
-                        shape: Border.all(width: 0.5, color: Colors.grey[300]),
                         onPressed: () {
                           setState(() {
                             productType = type;
                           });
                         },
-                        child: Text('${ProductTypeLocalizedMap[type]}'),
+                        child: Column(
+                          children: <Widget>[
+                            Text('${ProductTypeLocalizedMap[type]}'),
+                            Container(
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  border: productType == type
+                                      ? Border(
+                                      bottom: BorderSide(
+                                          width: 3,
+                                          color:
+                                          Constants.THEME_COLOR_MAIN))
+                                      : null,
+                                ))
+                          ],
+                        ),
                       )),
             )
                 .toList()));
@@ -184,27 +212,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  Widget _buildBasicInfoSection(UserBLoC bloc) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          BasicInfoRow(
-            label: '工厂',
-            value: '${widget.product.belongTo?.name}',
-            action: JumpTo(
-                label: '进厂',
-                onTap: () {
-                  jumpToFactory(bloc);
-                }),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildMoneyRow() {
     ///阶梯价空处理
     if (widget.product.steppedPrices == null) {
@@ -238,7 +245,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: _moneyRows),
     );
   }
@@ -337,29 +344,39 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Widget _buildImagesSection() {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 70),
-      child: Column(
-          children: widget.product.images
-              .map(
-                (media) =>
-                CachedNetworkImage(
-                    imageUrl: '${media.detailUrl()}',
-                    fit: BoxFit.fitWidth,
-                    placeholder: (context, url) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        ),
-                    errorWidget: (context, url, error) =>
-                        SpinKitRing(
-                          color: Colors.black12,
-                          lineWidth: 2,
-                          size: 30,
-                        )),
-          )
-              .toList()),
-    );
+        margin: EdgeInsets.fromLTRB(0, 10, 0, 70),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[Text('商品详情')],
+              ),
+            ),
+            Column(
+                children: widget.product.images
+                    .map(
+                      (media) =>
+                      CachedNetworkImage(
+                          imageUrl: '${media.detailUrl()}',
+                          fit: BoxFit.fitWidth,
+                          placeholder: (context, url) =>
+                              SpinKitRing(
+                                color: Colors.black12,
+                                lineWidth: 2,
+                                size: 30,
+                              ),
+                          errorWidget: (context, url, error) =>
+                              SpinKitRing(
+                                color: Colors.black12,
+                                lineWidth: 2,
+                                size: 30,
+                              )),
+                )
+                    .toList()),
+          ],
+        ));
   }
 
   Widget _bubildOrderSheet(UserBLoC bloc) {
@@ -376,67 +393,98 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                FlatButton(
-                  child: Column(
-                    children: <Widget>[
-                      Icon(
-                        B2BIcons.home_2,
-                        size: 28,
-                        // color: Colors.green,
+                Expanded(
+                  child: Material(
+                    child: InkWell(
+                      onTap: () {
+                        jumpToFactory(bloc);
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            B2BIcons.home_2,
+                            size: 20,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            '工厂主页',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
                       ),
-                      Text('工厂主页')
-                    ],
+                    ),
                   ),
-                  onPressed: () {
-                    jumpToFactory(bloc);
-                  },
                 ),
-                FlatButton(
-                  child: Column(
-                    children: <Widget>[
-                      Icon(
-                        B2BIcons.phone_2,
-                        size: 28,
-                        // color: Colors.green,
+                Expanded(
+                  child: Material(
+                    child: InkWell(
+                      onTap: onTel,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            B2BIcons.phone_2,
+                            size: 20,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            '联系',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
                       ),
-                      Text('联系')
-                    ],
+                    ),
                   ),
-                  onPressed: onTel,
-                ),
+                )
+
+                // FlatButton(
+                //   child: Column(
+                //     children: <Widget>[
+                //       Icon(
+                //         B2BIcons.home_2,
+                //         size: 20,
+                //         // color: Colors.green,
+                //       ),
+                //       Text(
+                //         '工厂主页',
+                //         style: TextStyle(fontSize: 12),
+                //       )
+                //     ],
+                //   ),
+                //   onPressed: () {
+                //     jumpToFactory(bloc);
+                //   },
+                // ),
+                // FlatButton(
+                //   child: Column(
+                //     children: <Widget>[
+                //       Icon(
+                //         B2BIcons.phone_2,
+                //         size: 20,
+                //         // color: Colors.green,
+                //       ),
+                //       Text(
+                //         '联系',
+                //         style: TextStyle(fontSize: 12),
+                //       )
+                //     ],
+                //   ),
+                //   onPressed: onTel,
+                // ),
               ],
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 3,
             child: Row(
               children: <Widget>[
-                // Expanded(
-                //   flex: 1,
-                //   child: Container(
-                //       height: double.infinity,
-                //       child: Theme(
-                //           data: ThemeData(
-                //             canvasColor: Colors.transparent,
-                //             primaryColor: Colors.white,
-                //             accentColor: Color.fromRGBO(255, 214, 12, 1),
-                //             bottomAppBarColor: Colors.grey,
-                //           ),
-                //           child: Builder(
-                //             builder: (BuildContext buttonContext) =>
-                //                 FlatButton(
-                //                   color: Color.fromRGBO(255, 245, 157, 1),
-                //                   onPressed: () {
-                //                     onBuyProofing(buttonContext);
-                //                   },
-                //                   disabledColor: Colors.grey[300],
-                //                   child: Text(
-                //                     '买样衣',
-                //                     style: TextStyle(fontSize: 15),
-                //                   ),
-                //                 ),
-                //           ))),
-                // ),
                 Expanded(
                   flex: 1,
                   child: Container(
@@ -448,8 +496,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               onPressed: () {
                                 switch (productType) {
                                   case ProductType.FUTURE_GOODS:
-                                onBuyPurchase(buttonContext);
-                                break;
+                                    onBuyPurchase(buttonContext);
+                                    break;
                                   case ProductType.SPOT_GOODS:
                                     onBuyStock(buttonContext);
                                     break;

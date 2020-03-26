@@ -307,7 +307,7 @@ class _BuyStockFormState extends State<BuyStockForm>
                       IconButton(
                         icon: Icon(
                           B2BIcons.remove_rect,
-                          color: Colors.grey[300],
+                          color: Color.fromRGBO(255, 214, 12, 1),
                         ),
                         onPressed: () {
                           if (int.parse(entry.controller.text) > 0) {
@@ -361,7 +361,7 @@ class _BuyStockFormState extends State<BuyStockForm>
                       IconButton(
                         icon: Icon(
                           B2BIcons.add_rect,
-                          color: Colors.grey[300],
+                          color: Color.fromRGBO(255, 214, 12, 1),
                         ),
                         onPressed: () {
                           setState(() {
