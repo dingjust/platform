@@ -95,6 +95,9 @@
         refresh: 'refresh'
       }),
       allowRemind (row) {
+        if (!row.hasOwnProperty('nextReminderDeliveryTime')) {
+          return true;
+        }
         const nextTime = row.nextReminderDeliveryTime;
         const now = new Date().getTime();
         if (now - nextTime > 0) {

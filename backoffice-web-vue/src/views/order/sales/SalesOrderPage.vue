@@ -150,7 +150,8 @@
           this.$message.error(result.msg);
           return;
         }
-        this.$message.success('提醒发货成功！')
+        this.$message.success('提醒发货成功！');
+        this.onAdvancedSearch();
       },
       async confirmDelivery (row) {
         const url = this.apis().confirmReceived(row.code);

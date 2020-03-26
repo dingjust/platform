@@ -52,6 +52,9 @@
         return false;
       },
       allowRemind: function () {
+        if (!this.slotData.hasOwnProperty('nextReminderDeliveryTime')) {
+          return true;
+        }
         const nextTime = this.slotData.nextReminderDeliveryTime;
         const now = new Date().getTime();
         if (now - nextTime > 0) {

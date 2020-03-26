@@ -161,7 +161,7 @@
           return 0;
         } else if (this.formData.status == 'PENDING_DELIVERY' && this.formData.refundStatus != 'IN_REFUND') {
           return 1;
-        } else if (this.formData.status == 'PENDING_CONFIRM' || (this.formData.refundStatus == 'IN_REFUND' && this.formData.status == 'PENDING_DELIVERY')){
+        } else if ((this.formData.status == 'PENDING_CONFIRM' && this.formData.refundStatus != 'IN_REFUND') || (this.formData.refundStatus == 'IN_REFUND' && this.formData.status == 'PENDING_DELIVERY')){
           return 2;
         } else if ((this.formData.status == 'PENDING_DELIVERY' && this.formData.refundStatus == 'COMPLETED') || (this.formData.status == 'PENDING_CONFIRM' && this.formData.refundStatus == 'IN_REFUND')){
           return 3;
@@ -255,7 +255,8 @@
           this.$message.error(result.msg);
           return;
         }
-        this.$message.success('提醒发货成功！')
+        this.$message.success('提醒发货成功！');
+        this.getSalesOrderDetails();
       },
       async confirmDelivery () {
         const url = this.apis().confirmReceived(this.code);
