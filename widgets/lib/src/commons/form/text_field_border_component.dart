@@ -182,21 +182,6 @@ class _TextFieldBorderComponentState extends State<TextFieldBorderComponent> {
             ],
           ),
         ),
-        Offstage(
-          offstage: widget.hideDivider,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Divider(
-                height: 0,
-              ),
-              Offstage(
-                offstage: widget.helperText == null,
-                child: widget.helperText,
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }

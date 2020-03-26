@@ -8,7 +8,7 @@
       </el-col>
     </el-row>
     <div class="pt-2"></div>
-    <el-form ref="form" :model="form" label-width="80px" label-position="left">
+    <el-form ref="form" :model="form" label-width="80px" label-position="left" :rules="rules" hide-required-asterisk>
       <el-row type="flex">
         <h6>发货信息</h6>
       </el-row>
@@ -16,18 +16,21 @@
         <el-row type="flex" :gutter="20">
           <el-col :span="8">
             <el-form-item label="发货人">
-              <el-input v-model="form.consignorName" :disabled="true"></el-input>
+              <el-input v-model="slotData.seller.name" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系方式">
-              <el-input v-model="form.consignorPhoe" :disabled="true"></el-input>
+              <el-input v-model="slotData.seller.contactPhone" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row type="flex" :gutter="20">
           <el-col :span="8">
-            <el-form-item label="物流公司">
+            <el-form-item prop="logistics">
+              <template slot="label">
+                <h6 class="titleTextClass">物流公司<span :style="form.isOffline ? 'color: white' : 'color: #F56C6C'">*</span></h6>
+              </template>
               <el-select v-model="form.logistics" placeholder="请选择" :disabled="form.isOffline" style="width:100%">
                 <el-option v-for="item in carriers" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
@@ -35,7 +38,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="物流单号">
+            <el-form-item prop="logisticsCode">
+              <template slot="label">
+                <h6 class="titleTextClass">物流单号<span :style="form.isOffline ? 'color: white' : 'color: #F56C6C'">*</span></h6>
+              </template>
               <el-input v-model="form.logisticsCode" :disabled="form.isOffline"></el-input>
             </el-form-item>
           </el-col>
@@ -54,24 +60,24 @@
         <el-row type="flex" :gutter="20">
           <el-col :span="8">
             <el-form-item label="收货人">
-              <el-input v-model="form.consigneeName" :disabled="true"></el-input>
+              <el-input v-model="slotData.deliveryAddress.fullname" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系方式">
-              <el-input v-model="form.consigneePhone" :disabled="true"></el-input>
+              <el-input v-model="slotData.deliveryAddress.cellphone" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="联系地址">
-              <el-input v-model="form.address" :disabled="true"></el-input>
+              <el-input v-model="slotData.deliveryAddress.details" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </div>
       <el-row type="flex" justify="center">
         <!-- <el-col :span="12"> -->
-        <el-button class="sales-order-btn"  @click="onSubmit">确定</el-button>        
+        <el-button class="sales-order-btn" @click="onSubmit">确定</el-button>
         <!-- </el-col> -->
       </el-row>
     </el-form>
@@ -80,51 +86,71 @@
 
 <script>
   export default {
-    name: "DeliveryForm",
-    props: ["code"],
+    name: 'DeliveryForm',
+    props: ['code', 'slotData'],
     components: {},
     computed: {},
     methods: {
-      onSubmit() {
-        this.$emit('onSubmit');
+      onSubmit () {
+        if (this.form.isOffline) {
+          this._onSubmit();
+          return;
+        }
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            this._onSubmit();
+          } else {
+            this.$message.error('请完善表单信息');
+            return false;
+          }
+        });
       },
-      async getCarriers() {
+      _onSubmit () {
+        const formData = {
+          trackingID: this.form.logisticsCode,
+          carrierCode: this.form.logistics,
+          offlineConsignment: this.form.isOffline
+        }
+        this.$emit('onSubmit', formData);
+      },
+      async getCarriers () {
         const url = this.apis().getCarriers();
         const result = await this.$http.get(url);
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.carriers = result;
       },
-      onOfflineChange(v) {
+      onOfflineChange (v) {
+        this.$refs['form'].resetFields();
         if (this.form.isOffline) {
           this.form.logistics = '';
           this.form.logisticsCode = '';
         }
       }
     },
-    data() {
+    data () {
       return {
         carriers: [],
         form: {
-          consignorName: "广州贸易公司",
-          consignorPhoe: '13588888888',
           logistics: '',
           logisticsCode: '',
-          isOffline: false,
-          consigneeName: '张三',
-          consigneePhone: '18555555555',
-          address: '广东省广州市天河区权威哦请问囧饿哦i去我家',
+          isOffline: false
+        },
+        rules: {
+          logistics: [{required: true, message: '请选择物流公司', trigger: 'change'}],
+          logisticsCode: [{required: true, message: '请填写物流单号', trigger: 'change'}]
         }
       };
     },
-    created() {
+    created () {
+      console.log('------------------------')
+      console.log(this.slotData);
       this.getCarriers();
     },
-    mounted() {}
+    mounted () {}
   };
-
 </script>
 <style>
   .report {
@@ -135,4 +161,12 @@
     padding: 10px 20px 10px 20px;
   }
 
+  .titleTextClass {
+    text-align: justify;
+    text-align-last: justify;
+    display: inline-block;
+    width: 65px;
+    font-size: 14px;
+    /*font-weight: bold;*/
+  }
 </style>

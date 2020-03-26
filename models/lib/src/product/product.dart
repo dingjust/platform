@@ -46,6 +46,9 @@ const ReturnStateLocalizedMap = {
 
 ///产品类型
 enum ProductType {
+  ///默认
+  DEFAULT_GOODS,
+
   ///现货
   SPOT_GOODS,
 
@@ -58,6 +61,7 @@ enum ProductType {
 
 // TODO: i18n处理
 const ProductTypeLocalizedMap = {
+  ProductType.DEFAULT_GOODS: "默认",
   ProductType.SPOT_GOODS: "现货",
   ProductType.TAIL_GOODS: "库存",
   ProductType.FUTURE_GOODS: "期货",
@@ -177,7 +181,7 @@ class ApparelProductAttributesModel extends ItemModel {
     this.filler,
     this.thickness,
     this.season,
-    this.taggable = false,
+    this.taggable,
     this.placket,
   });
 
@@ -281,7 +285,8 @@ class ProductModel extends ItemModel {
     this.productionIncrement,
     this.steppedPrices,
     this.colorSizes,
-    this.productType = const [ProductType.FUTURE_GOODS]});
+    this.productType
+  });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductModelFromJson(json);
@@ -330,7 +335,7 @@ class ProductModel extends ItemModel {
       List<ColorSizeModel> models) =>
       models == null
           ? null
-          : models.map((model) => ColorSizeModel.toJson(model));
+          : models.map((model) => ColorSizeModel.toJson(model)).toList();
 
   ///最低价
   double get minSteppedPrice {
@@ -397,7 +402,7 @@ class VariantProductModel extends ProductModel {
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
     List<ColorSizeModel> colorSizes,
-    List<ProductType> productType = const [ProductType.FUTURE_GOODS]})
+    List<ProductType> productType})
       : super(
       code: code,
       name: name,
@@ -444,6 +449,9 @@ class ApparelProductModel extends ProductModel {
   String skuID;
   String brand;
 
+  /// 面料成分
+  List<String> fabricCompositions;
+
   @JsonKey(toJson: _categoryToJson)
   CategoryModel category;
   double price1;
@@ -477,7 +485,7 @@ class ApparelProductModel extends ProductModel {
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
-    List<ProductType> productType = const [ProductType.FUTURE_GOODS],
+    List<ProductType> productType,
     this.variants,
     this.attributes,
     this.skuID,
@@ -488,6 +496,7 @@ class ApparelProductModel extends ProductModel {
     this.price3,
     this.suggestedPrice,
     this.isRecommend,
+    this.fabricCompositions,
   }) : super(
       code: code,
       name: name,
@@ -702,7 +711,7 @@ class FabricProductModel extends ProductModel {
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
     List<MediaModel> details,
-    List<ProductType> productType = const [ProductType.FUTURE_GOODS],
+    List<ProductType> productType,
     this.variants,
   }) : super(
       code: code,
@@ -1023,6 +1032,8 @@ class SteppedPriceModel extends ItemModel {
 class ColorSizeModel extends ItemModel {
   String colorName;
   String colorCode;
+  ///是否是自定义
+  bool customize;
 
   @JsonKey(toJson: _mediaToJson)
   MediaModel previewImg;
@@ -1030,7 +1041,7 @@ class ColorSizeModel extends ItemModel {
   @JsonKey(toJson: _sizesToJson)
   List<ColorSizeEntryModel> sizes;
 
-  ColorSizeModel({this.colorName, this.colorCode, this.previewImg, this.sizes});
+  ColorSizeModel({this.colorName, this.colorCode, this.previewImg, this.sizes,this.customize});
 
   static Map<String, dynamic> _mediaToJson(MediaModel model) =>
       model == null ? null : MediaModel.toJson(model);
@@ -1039,7 +1050,7 @@ class ColorSizeModel extends ItemModel {
       List<ColorSizeEntryModel> models) =>
       models == null
           ? null
-          : models.map((model) => ColorSizeEntryModel.toJson(model));
+          : models.map((model) => ColorSizeEntryModel.toJson(model)).toList();
 
   factory ColorSizeModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ColorSizeModelFromJson(json);
@@ -1051,15 +1062,23 @@ class ColorSizeModel extends ItemModel {
 ///产品颜色尺码款组
 @JsonSerializable()
 class ColorSizeEntryModel extends ItemModel {
-  ///颜色编码
+  ///尺码编码
   String code;
+
+  ///尺码名称
+  String name;
 
   ///数量
   int quality;
 
+  ///是否是自定义
+  bool customize;
+
   ColorSizeEntryModel({
     this.code,
     this.quality,
+    this.name,
+    this.customize
   });
 
   factory ColorSizeEntryModel.fromJson(Map<String, dynamic> json) =>

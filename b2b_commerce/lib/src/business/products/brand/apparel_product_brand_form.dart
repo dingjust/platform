@@ -1,7 +1,10 @@
-import 'package:b2b_commerce/src/business/products/apparel_product_prices_input.dart';
+import 'package:b2b_commerce/src/business/products/form/attributes_field.dart';
+import 'package:b2b_commerce/src/business/products/form/color_size_stock_field.dart';
 import 'package:b2b_commerce/src/business/products/form/colors_sizes_field.dart';
+import 'package:b2b_commerce/src/business/products/form/detail_picture_field.dart';
 import 'package:b2b_commerce/src/business/products/form/fabricCompositions_field.dart';
-import 'package:b2b_commerce/src/business/products/form/stocks_field.dart';
+import 'package:b2b_commerce/src/business/products/form/minor_category_field.dart';
+import 'package:b2b_commerce/src/business/products/form/normal_picture_field.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -11,30 +14,26 @@ import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
-import 'form/attributes_field.dart';
-import 'form/color_size_stock_field.dart';
-import 'form/detail_picture_field.dart';
-import 'form/minor_category_field.dart';
-import 'form/normal_picture_field.dart';
-
-class ApparelProductFormPage extends StatefulWidget {
-  ApparelProductFormPage({
+class ApparelProductBrandFormPage extends StatefulWidget {
+  ApparelProductBrandFormPage({
     Key key,
     @required this.item,
     this.isCreate = false,
     this.status = 'ALL',
     this.keyword,
+    this.enabled = false,
   }) : super(key: const Key('__apparelProductFormPage__'));
 
   ApparelProductModel item;
   final bool isCreate;
   final String status;
   final String keyword;
+  final bool enabled;
 
-  ApparelProductFormState createState() => ApparelProductFormState();
+  _ApparelProductBrandFormState createState() => _ApparelProductBrandFormState();
 }
 
-class ApparelProductFormState extends State<ApparelProductFormPage> {
+class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
   GlobalKey<FormState> _apparelProductForm = GlobalKey<FormState>();
   FocusNode _nameFocusNode = FocusNode();
   TextEditingController _nameController = TextEditingController();
@@ -47,11 +46,12 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   FocusNode _gramWeightFocusNode = FocusNode();
   TextEditingController _gramWeightController = TextEditingController();
 
+  bool _enabled = false;
   ApparelProductModel _product = ApparelProductModel();
 
   @override
   void initState() {
-    print(widget.item.productType);
+    _enabled = widget.enabled;
     _product
       ..id = widget.item.id
       ..name = widget.item.name
@@ -76,9 +76,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ..basicProduction = widget.item.basicProduction
       ..productionDays = widget.item.productionDays
       ..productionIncrement = widget.item.productionIncrement
-      ..productType = widget.item.productType ?? [ProductType.FUTURE_GOODS]
-      ..fabricCompositions = widget.item.fabricCompositions ?? []
       ..colorSizes = widget.item.colorSizes ?? []
+      ..fabricCompositions = widget.item.fabricCompositions ?? []
       ..salesVolume = widget.item.salesVolume;
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
@@ -89,35 +88,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
     super.initState();
   }
 
-  //判断产品类型是否可选
-  bool isCanSelect(ProductType type){
-    bool result = true;
-    switch(type){
-      case ProductType.DEFAULT_GOODS:
-          break;
-      case ProductType.SPOT_GOODS:
-        if(_product.productType.contains(ProductType.TAIL_GOODS)){
-          result = false;
-        }
-          break;
-      case ProductType.FUTURE_GOODS:
-        if(_product.productType.contains(ProductType.TAIL_GOODS)){
-          result = false;
-        }
-          break;
-      case ProductType.TAIL_GOODS:
-        if(_product.productType.contains(ProductType.SPOT_GOODS) || _product.productType.contains(ProductType.FUTURE_GOODS)){
-          result = false;
-        }
-          break;
-    }
-    return result;
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
+        if (_enabled) {
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -125,7 +100,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 return CustomizeDialog(
                   dialogType: DialogType.CONFIRM_DIALOG,
                   contentText2:
-                      widget.isCreate ? '正在创建产品，是否确认退出' : '正在编辑产品，是否确认退出',
+                  widget.isCreate ? '正在创建产品，是否确认退出' : '正在编辑产品，是否确认退出',
                   isNeedConfirmButton: true,
                   isNeedCancelButton: true,
                   confirmButtonText: '退出',
@@ -139,6 +114,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               }).then((_) {
 //            Navigator.of(context).pop();
           });
+        } else {
+          Navigator.pop(context);
+        }
 
         return Future.value(false);
       },
@@ -147,49 +125,49 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
           elevation: 0.5,
           centerTitle: true,
           title: Text(widget.isCreate ? '新建产品' : '编辑产品'),
-          actions: <Widget>[],
+          actions: <Widget>[
+          ],
         ),
-        bottomNavigationBar: Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                height: 50,
-                child: RaisedButton(
-                  color: Color.fromRGBO(255, 214, 12, 1),
-                  child: Text(
-                    '确定',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  onPressed: onPublish,
-                ),
+        bottomNavigationBar: !_enabled
+            ? null
+            : Container(
+          margin: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          height: 50,
+          child: RaisedButton(
+            color: Color.fromRGBO(255, 214, 12, 1),
+            child: Text(
+              '确定',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
               ),
+            ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            onPressed: onPublish,
+          ),
+        ),
         body: ListView(
           children: <Widget>[
             NormalPictureField(
               _product,
-              enabled: true,
+              enabled: _enabled,
             ),
             DetailPictureField(
               _product,
-              enabled: true,
+              enabled: _enabled,
             ),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
-            _buildProductType(context),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Divider(
+                height: 0,
+                color: Color(Constants.DIVIDER_COLOR),
+              ),
             ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
-                dividerPadding: EdgeInsets.all(0),
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -201,20 +179,19 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     style: TextStyle(
                       fontSize: 16,
                     )),
-                hintText: '请填写产品标题',
-                textInputAction: TextInputAction.next,
+                hintText: !_enabled ? '' : '请填写产品标题',
                 onChanged: (value) {
                   _product.name = value;
                 },
                 onEditingComplete: () {
                   FocusScope.of(context).requestFocus(_skuIDFocusNode);
                 },
+                enabled: _enabled,
               ),
             ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
-                dividerPadding: EdgeInsets.all(0),
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -226,7 +203,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     style: TextStyle(
                       fontSize: 16,
                     )),
-                hintText: '请填写产品货号',
+                hintText: !_enabled ? '' : '请填写产品货号',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   _product.skuID = value;
@@ -234,19 +211,17 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 onEditingComplete: () {
                   FocusScope.of(context).requestFocus(_brandFocusNode);
                 },
+                enabled: _enabled,
               ),
             ),
             Container(
               color: Colors.white,
               child: MinorCategoryField(
                 _product,
-                enabled: true,
+                enabled: _enabled,
               ),
             ),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
-            ),
+            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
             Container(
               color: Colors.white,
               padding: EdgeInsets.all(15),
@@ -255,7 +230,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 onTap: () async{
                   List<ColorSizeModel> colors = await Provider.of<ColorState>(context).getPartColors();
                   List<ColorSizeEntryModel> sizes = await Provider.of<SizeState>(context).getPartSizes();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ColorsSizesField(_product,colors: colors,sizes: sizes,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ColorsSizesField(_product,colors: colors,sizes: sizes)));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -279,39 +254,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     Text(colorSizeSelectText(_product.colorSizes),style: TextStyle(color: Colors.grey,),),
                     Icon(Icons.chevron_right,color: Colors.blueGrey,),
                   ],
-                ),
-              ),
-            ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
-            Offstage(
-              offstage: !(_product.productType.contains(ProductType.SPOT_GOODS) || _product.productType.contains(ProductType.TAIL_GOODS)),
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.all(15),
-                child: GestureDetector(
-                  behavior:HitTestBehavior.opaque,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => StocksField(_product,enabled: true)));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: '库存设置',
-                                    style: TextStyle(color: Colors.black,fontSize: 16,)
-                                ),
-                              ]
-                          ),
-                        ),
-                      ),
-                      Text('库存总数量：${_colorTotalNum()}',style: TextStyle(color: Colors.grey,),),
-                      Icon(Icons.chevron_right,color: Colors.blueGrey,),
-                    ],
-                  ),
                 ),
               ),
             ),
@@ -353,7 +295,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
             Container(
               color: Colors.white,
               child: TextFieldComponent(
-                dividerPadding: EdgeInsets.all(0),
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -364,7 +305,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     style: TextStyle(
                       fontSize: 16,
                     )),
-                hintText: '请填写品牌',
+                hintText: !_enabled ? '' : '请填写品牌',
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   _product.brand = value;
@@ -377,32 +318,12 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     FocusScope.of(context).requestFocus(_gramWeightFocusNode);
                   }
                 },
+                enabled: _enabled,
               ),
-            ),
-            Container(
-              color: Colors.white,
-              child: Container(
-                color: Colors.white,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                        ApparelProductPricesInputPage(
-                          _product, enabled: true,)));
-                  },
-                  child: ShowSelectTile(
-                    leadingText: '价格设置',
-                  ),
-                ),
-              ),
-            ),
-            Divider(
-              height: 0,
-              color: Color(Constants.DIVIDER_COLOR),
             ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
-                dividerPadding: EdgeInsets.all(0),
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
@@ -414,161 +335,42 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                     style: TextStyle(
                       fontSize: 16,
                     )),
-                hintText: '请填写重量（数字）',
+                hintText: !_enabled ? '' : '请填写重量（数字）',
                 inputFormatters: [
                   DecimalInputFormat(),
                 ],
                 onChanged: (value) {
                   _product.gramWeight = double.parse(value);
                 },
+                enabled: _enabled,
               ),
             ),
             Container(
               color: Colors.white,
               child: AttributesField(
                 _product,
-                enabled: true,
+                enabled: _enabled,
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Container _buildProductType(BuildContext context) {
-    return Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '产品类型',
-                              style: TextStyle(color: Colors.black,fontSize: 16,)
-                            ),
-                            TextSpan(
-                              text: ' *',
-                              style: TextStyle(color: Colors.red,)
-                            ),
-                          ]
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: (context),
-                              builder: (context) {
-                                return MessageDialog(
-                                  title: Text(
-                                    '如何选择产品类型',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  message: RichText(
-                                    text: TextSpan(children: [
-                                      TextSpan(
-                                          text:
-                                          '注：库存尾货不能和现货、期货同时选择',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black)),
-                                    ]),
-                                  ),
-                                  onCloseEvent: () {
-                                    Navigator.pop(context);
-                                  },
-                                  negativeText: '我知道了',
-                                );
-                              });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(left: 0),
-                          child: Icon(
-                            Icons.help,
-                            color: Colors.red,
-                            size: 15,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: ProductType.values.where((v) => v != ProductType.DEFAULT_GOODS).map((type){
-                    return GestureDetector(
-                      onTap: () {
-                        if(!isCanSelect(type)){
-                          return;
-                        }
-                        setState(() {
-                          if (!_product.productType.contains(type)) {
-                            _product.productType.add(type);
-                          } else {
-                            _product.productType.remove(type);
-                          }
-                        });
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Checkbox(
-                            onChanged: (v) {
-                              if(!isCanSelect(type)){
-                                return;
-                              }
-                              print(type);
-                              print(_product.productType);
-                              print(type == _product.productType);
-                              setState(() {
-                                if (v) {
-                                  _product.productType.add(type);
-                                } else {
-                                  _product.productType.remove(type);
-                                }
-                              });
-                            },
-                            activeColor: Colors.orange,
-                            value: _product.productType.contains(type),
-                          ),
-                          Text(
-                            ProductTypeLocalizedMap[type],
-                            softWrap: false,
-                            overflow: TextOverflow.visible,
-                            style: TextStyle(color: isCanSelect(type) ? Colors.black : Colors.grey),
-                          )
-                        ],
-                      ),
-                    );
-                  }).toList()
-                )
-              ],
-            ),
-          );
+//        }
+//        );
   }
 
   onPublish() {
     if (_product.images == null || _product.images.isEmpty) {
       _showValidateMsg(context, '请上传主图');
       return;
-    }
-    if (_product.productType == null || _product.productType.isEmpty) {
-      _showValidateMsg(context, '选择产品类型');
-      return;
-    }
-    if (_product.name == null) {
+    } else if (_product.name == null) {
       _showValidateMsg(context, '请填写产品标题');
       return;
-    }
-    if (_product.skuID == null) {
+    } else if (_product.skuID == null) {
       _showValidateMsg(context, '请填写产品货号');
       return;
-    }
-    if (_product.category == null) {
+    } else if (_product.category == null) {
       _showValidateMsg(context, '请选择产品类别');
       return;
     }
@@ -580,11 +382,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       _showValidateMsg(context, '请选择面料成分');
       return;
     }
-//    if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
-//        _product.price == null) {
-//      _showValidateMsg(context, '请填写产品价格');
-//      return;
-//    }
     if (_product.attributes == null) {
       _product.attributes = ApparelProductAttributesModel();
     }
@@ -604,12 +401,11 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               keyword: widget.keyword,
             );
           }).then((value){
-            if(value){
-              Navigator.pop(context,value);
-              ApparelProductBLoC.instance.clearProductsMapByStatus(widget.status);
-            }else{
-              BotToast.showText(text: '系统错误，创建产品失败');
-            }
+        if(value){
+          Navigator.pop(context,value);
+        }else{
+          BotToast.showText(text: '系统错误，创建产品失败');
+        }
       });
     } else {
       showDialog(
@@ -624,11 +420,9 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               keyword: widget.keyword,
             );
           }).then((value){
-            print('${value}-==============');
+            print(value);
             if(value){
-              Navigator.of(context).pop(value);
-              ApparelProductBLoC.instance.clearProductsMap();
-              ApparelProductBLoC.instance.getDatas();
+              Navigator.pop(context,value);
             }else{
               BotToast.showText(text: '系统错误，更新产品失败');
             }
@@ -636,14 +430,24 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
     }
   }
 
-  int _colorTotalNum() {
-    int result = 0;
-    _product.colorSizes.forEach((colorSize) {
-      colorSize.sizes.forEach((size){
-        result += size.quality ?? 0;
-      });
-    });
-    return result;
+  //非空提示
+  bool _showValidateMsg(BuildContext context, String message) {
+    _validateMessage(context, '${message}');
+    return false;
+  }
+
+  Future<void> _validateMessage(BuildContext context, String message) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '${message}',
+            callbackResult: false,
+            outsideDismiss: true,
+          );
+        });
   }
 
   //格式化选中的颜色尺码
@@ -698,25 +502,5 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       }
     }
     return text;
-  }
-
-  //非空提示
-  bool _showValidateMsg(BuildContext context, String message) {
-    _validateMessage(context, '${message}');
-    return false;
-  }
-
-  Future<void> _validateMessage(BuildContext context, String message) async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return CustomizeDialog(
-            dialogType: DialogType.RESULT_DIALOG,
-            failTips: '${message}',
-            callbackResult: false,
-            outsideDismiss: true,
-          );
-        });
   }
 }

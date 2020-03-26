@@ -46,7 +46,7 @@ class ColorSizeSelectPageState extends State<ColorSizeSelectPage> {
 
   List<Attribute> attributes = [
     Attribute('styles', '风格', StyleEnum,multiple: true),
-    Attribute('fabricCompositions', '面料成分', FabricCompositionEnum,multiple: true),
+//    Attribute('fabricCompositions', '面料成分', FabricCompositionEnum,multiple: true),
     Attribute('editionType', '版型', EditionTypeEnum),
     Attribute('pattern', '款式', PatternEnum),
     Attribute('sleeveType', '袖型', SleeveTypeEnum),

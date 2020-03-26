@@ -16,10 +16,10 @@ abstract class ProductRepository {
   Future<ApparelProductModel> detail(String code);
 
   //创建产品
-  Future<String> create(ApparelProductModel form);
+  Future<bool> create(ApparelProductModel form);
 
   //编辑产品
-  Future<String> update(ApparelProductModel form);
+  Future<bool> update(ApparelProductModel form);
 
   //删除产品
   Future<String> delete(String code);

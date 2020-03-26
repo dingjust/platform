@@ -58,10 +58,6 @@ class ShowSelectTile extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
-        ),
       ],
     );
   }

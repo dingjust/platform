@@ -23,7 +23,7 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
   @override
   void initState() {
     super.initState();
-    _minorCategoryText = widget.item?.category?.name;
+    _minorCategoryText = productCategoryInfo();
     if (widget.item?.category != null) {
       _minCategorySelect = [widget.item?.category];
     }
@@ -53,14 +53,14 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
 
             if (_minCategorySelect.length > 0) {
               widget.item.category = _minCategorySelect[0];
-              _minorCategoryText = _minCategorySelect[0]?.name;
+              _minorCategoryText = productCategoryInfo();
             } else {
               _minorCategoryText = '';
               widget.item.category = null;
             }
           },
           child: ShowSelectTile(
-            isRequired: true,
+            isRequired: widget.enabled,
             leadingText: '产品品类',
             tralingText: _minorCategoryText,
             isShowIcon: widget.enabled,
@@ -68,5 +68,17 @@ class _MinorCategoryFieldState extends State<MinorCategoryField> {
         ),
       ],
     );
+  }
+
+  //格式化产品分类(明细)
+  String productCategoryInfo() {
+    String text = '';
+    if(widget.item.category?.parent != null){
+      text += widget.item.category.parent.name;
+      text += '-';
+    }
+    text += widget.item.category?.name ?? '';
+
+    return text;
   }
 }
