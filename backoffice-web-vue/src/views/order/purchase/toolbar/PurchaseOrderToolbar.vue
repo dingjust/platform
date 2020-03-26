@@ -6,7 +6,7 @@
     <el-form :inline="true">
       <el-row type="flex">
         <!-- <el-form-item label="品牌名"> -->
-        <el-col :span="17">
+        <el-col :span="20">
           <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword"
             class="purchase-toolbar-input"></el-input>
           <!-- </el-form-item> -->
@@ -32,13 +32,13 @@
                 :props="{ label: 'name',value:'code'}" clearable>
               </el-cascader>
           </el-form-item>
+          <el-button-group>
+            <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+            <el-button native-type="reset">重置</el-button>
+          </el-button-group>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="4">
           <el-row type="flex" align="top" justify="space-between" :gutter="20">
-            <el-button-group>
-                <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
-                <el-button native-type="reset">重置</el-button>
-            </el-button-group>
             <el-row v-if="!isTenant()">
               <authorized :authority="permission.purchaseOrderOfflineCreate">
                 <el-button class="dashboard-toolbar-btn" @click="jumpToOrderPurchase">创建线下订单</el-button>
