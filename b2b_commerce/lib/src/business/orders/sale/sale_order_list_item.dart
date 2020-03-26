@@ -96,17 +96,8 @@ class SaleOrderListItem extends StatelessWidget {
                 flex: 3,
                 child: Container(
                   child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      '${SalesOrderStatusLocalizedMap[model.status]}',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: SaleOrderConstants.STATUS_COLORS[model.status],
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: _getOrderStatus()),
                 ),
               ),
             ],
@@ -195,6 +186,31 @@ class SaleOrderListItem extends StatelessWidget {
                     ],
                   )))
         ],
+      ),
+    );
+  }
+
+  ///订单状态
+  Widget _getOrderStatus() {
+    if (model.refunding != null && model.refunding) {
+      return Text(
+        '退款/售后',
+        textAlign: TextAlign.end,
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.purple,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
+
+    return Text(
+      '${SalesOrderStatusLocalizedMap[model.status]}',
+      textAlign: TextAlign.end,
+      style: TextStyle(
+        fontSize: 18,
+        color: SaleOrderConstants.STATUS_COLORS[model.status],
+        fontWeight: FontWeight.w500,
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/home/product/order_confirm_form.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +89,7 @@ class _BuyStockFormState extends State<BuyStockForm>
       //赋值监听器，即时监听用户输入
       controller.addListener(() {
         if (int.parse(controller.text) > variant.quality) {
+          BotToast.showText(text: '库存不足');
           setState(() {
             controller.text = '${variant.quality}';
           });
@@ -364,6 +366,14 @@ class _BuyStockFormState extends State<BuyStockForm>
                           color: Color.fromRGBO(255, 214, 12, 1),
                         ),
                         onPressed: () {
+                          if (entry.controller.text != '') {
+                            if (int.parse(entry.controller.text) ==
+                                entry.model.quality) {
+                              BotToast.showText(text: '库存不足');
+                              return;
+                            }
+                          }
+
                           setState(() {
                             if (entry.controller.text == '') {
                               entry.controller.text = '1';
@@ -388,7 +398,7 @@ class _BuyStockFormState extends State<BuyStockForm>
             ))
         .toList();
 
-    widgets.add(_buildTotal(entries, color));
+    // widgets.add(_buildTotal(entries, color));
 
     return ListView(
       children: widgets,
