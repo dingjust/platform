@@ -420,9 +420,10 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                 //       B2BIcons.truck,
                 //       color: Colors.grey[400],
                 //     )),
-                order.isOfflineConsignment
+                order.isOfflineConsignment ?? false
                     ? Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Text('订单已走线下物流'),
                 )
                     : Container()
