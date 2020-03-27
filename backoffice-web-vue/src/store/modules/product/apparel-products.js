@@ -16,7 +16,7 @@ const state = {
   formData: {
     id: null,
     images: [],
-    details:[],
+    details: [],
     code: '',
     skuID: '',
     name: '',
@@ -51,13 +51,13 @@ const state = {
       uid: '',
       name: ''
     },
-    steppedPrices:[]
+    steppedPrices: []
 
   },
   newFormData: {
     id: null,
     images: [],
-    details:[],
+    details: [],
     code: '',
     skuID: '',
     name: '',
@@ -70,9 +70,9 @@ const state = {
     variants: [],
     colors: [],
     sizes: [],
+    fabricCompositions: [],
     attributes: {
       styles: [],
-      fabricCompositions: [],
       editionType: '',
       pattern: '',
       sleeveType: '',
@@ -89,17 +89,23 @@ const state = {
       uid: '',
       name: ''
     },
-    steppedPrices:[
+    steppedPrices: [
       {
         minimumQuantity: '',
         price: ''
       }
     ],
-    productType: [],
-    colorSizes: [],
+    spotSteppedPrices: [
+      {
+        minimumQuantity: '',
+        price: ''
+      }
+    ],
+    productType: ['FUTURE_GOODS'],
+    colorSizes: []
   },
   queryFormData: {
-    code:'',
+    code: '',
     skuID: '',
     name: '',
     approvalStatuses: '',
@@ -116,16 +122,16 @@ const mutations = {
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   newFormData: (state, newFormData) => state.newFormData = newFormData,
   page: (state, page) => state.page = page,
-  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
+  isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('url', url);
     commit('keyword', keyword);
     // commit('currentPageNumber', page);
 
-    if (page||page===0) {
+    if (page || page === 0) {
       console.log(page);
       commit('currentPageNumber', page);
     }
@@ -146,7 +152,7 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
     commit('url', url);
     commit('queryFormData', query);
     commit('currentPageNumber', page);
@@ -164,18 +170,18 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh({dispatch, commit, state}) {
+  refresh ({dispatch, commit, state}) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
     dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
   },
-  resetFormData({dispatch, commit, state}){
-    commit('newFormData',{
+  resetFormData ({dispatch, commit, state}) {
+    commit('newFormData', {
       id: null,
       images: [],
-      details:[],
+      details: [],
       code: '',
       skuID: '',
       name: '',
@@ -183,17 +189,14 @@ const actions = {
       gramWeight: 0.0,
       minPrice: 0.00,
       maxPrice: 0.00,
-      category: {
-        code: '',
-        name: ''
-      },
+      category: null,
       brand: '',
       variants: [],
       colors: [],
       sizes: [],
+      fabricCompositions: [],
       attributes: {
         styles: [],
-        fabricCompositions: [],
         editionType: '',
         pattern: '',
         sleeveType: '',
@@ -210,14 +213,20 @@ const actions = {
         uid: '',
         name: ''
       },
-      steppedPrices:[
+      steppedPrices: [
         {
           minimumQuantity: '',
           price: ''
         }
       ],
-      productType: [],
-      colorSizes: [],
+      spotSteppedPrices: [
+        {
+          minimumQuantity: '',
+          price: ''
+        }
+      ],
+      productType: ['FUTURE_GOODS'],
+      colorSizes: []
     });
   }
 };

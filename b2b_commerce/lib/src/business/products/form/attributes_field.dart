@@ -44,7 +44,7 @@ class _AttributesFieldState extends State<AttributesField> {
 
   void generateAttributes() {
     if(widget.item.attributes != null){
-      _attributes[0].valueSelects = widget.item.attributes.styles;
+      _attributes[0].valueSelects = widget.item.attributes.styles ?? [];
       _attributes[1].valueSelects = widget.item.attributes.editionType == null ? [] : [widget.item.attributes.editionType];
       _attributes[2].valueSelects = widget.item.attributes.pattern == null ? [] : [widget.item.attributes.pattern];
       _attributes[3].valueSelects = widget.item.attributes.sleeveType == null ? [] : [widget.item.attributes.sleeveType];

@@ -56,7 +56,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
       ..id = widget.item.id
       ..name = widget.item.name
       ..code = widget.item.code
-      ..attributes = widget.item.attributes ?? ApparelProductAttributesModel()
+      ..attributes = widget.item.attributes ?? ApparelProductAttributesModel(styles: [],popularElements: [],decorativePatterns: [],fabricCompositions: [])
       ..category = widget.item.category
       ..approvalStatus = widget.item.approvalStatus
       ..thumbnail = widget.item.thumbnail
@@ -79,9 +79,6 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
       ..colorSizes = widget.item.colorSizes ?? []
       ..salesVolume = widget.item.salesVolume;
 
-    if(_product.attributes.fabricCompositions == null){
-      _product.attributes.fabricCompositions = [];
-    }
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
