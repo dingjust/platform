@@ -198,6 +198,7 @@ class _ColorsSizesFieldState extends State<ColorsSizesField> {
       ),
       color: Colors.white,
     ):Container(
+      padding: EdgeInsets.only(top: 10),
       color: Colors.white,
       child: GridView.count(
         physics: NeverScrollableScrollPhysics(),

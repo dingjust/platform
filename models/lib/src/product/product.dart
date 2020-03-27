@@ -449,9 +449,6 @@ class ApparelProductModel extends ProductModel {
   String skuID;
   String brand;
 
-  /// 面料成分
-  List<String> fabricCompositions;
-
   @JsonKey(toJson: _categoryToJson)
   CategoryModel category;
   double price1;
@@ -496,7 +493,6 @@ class ApparelProductModel extends ProductModel {
     this.price3,
     this.suggestedPrice,
     this.isRecommend,
-    this.fabricCompositions,
   }) : super(
       code: code,
       name: name,

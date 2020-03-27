@@ -13,9 +13,9 @@ import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
 class FabricCompositionsField extends StatefulWidget {
-  FabricCompositionsField(this.product, {this.enabled = false});
+  FabricCompositionsField(this.fabricCompositions, {this.enabled = false});
 
-  final ApparelProductModel product;
+  final List<String> fabricCompositions;
   final bool enabled;
 
   @override
@@ -29,10 +29,9 @@ class _FabricCompositionsFieldState extends State<FabricCompositionsField> {
   @override
   void initState() {
     super.initState();
-    print('${widget.product.fabricCompositions}-=-=-=--=-=-=');
 
-    if(widget.product.fabricCompositions != null){
-      _selectFabric = List.from(widget.product.fabricCompositions);
+    if(widget.fabricCompositions != null){
+      _selectFabric = List.from(widget.fabricCompositions);
     }
 
   }
@@ -49,8 +48,7 @@ class _FabricCompositionsFieldState extends State<FabricCompositionsField> {
               ? IconButton(
                   icon: Text('确定'),
                   onPressed: () {
-                    widget.product.fabricCompositions = _selectFabric;
-                    Navigator.pop(context);
+                    Navigator.pop(context,_selectFabric);
                   })
               : Container()
         ],

@@ -272,7 +272,7 @@ class _ApparelProductListState extends State<ApparelProductList> {
         _showValidateMsg(context, '产品价格为空不可上架');
         return;
       } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY ){
-          if(product.proofingFee == null || product.basicProduction == null || product.productionIncrement == null || product.productionDays == null) {
+          if(product.basicProduction == null || product.productionIncrement == null || product.productionDays == null) {
             _showValidateMsg(context, '价格设置资料未完善，不可上架');
             return;
           }else{
@@ -305,7 +305,6 @@ class _ApparelProductListState extends State<ApparelProductList> {
           return;
         }
       }
-
 
       showDialog(
           context: context,
