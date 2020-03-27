@@ -215,6 +215,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
               widget.estimatedDate5 != null) {
             Navigator.of(context).popUntil(ModalRoute.withName('/'));
           }
+          return Future.value(false);
         },
       );
     }

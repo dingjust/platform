@@ -56,7 +56,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
       ..id = widget.item.id
       ..name = widget.item.name
       ..code = widget.item.code
-      ..attributes = widget.item.attributes
+      ..attributes = widget.item.attributes ?? ApparelProductAttributesModel(styles: [],popularElements: [],decorativePatterns: [],fabricCompositions: [])
       ..category = widget.item.category
       ..approvalStatus = widget.item.approvalStatus
       ..thumbnail = widget.item.thumbnail
@@ -77,8 +77,8 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
       ..productionDays = widget.item.productionDays
       ..productionIncrement = widget.item.productionIncrement
       ..colorSizes = widget.item.colorSizes ?? []
-      ..fabricCompositions = widget.item.fabricCompositions ?? []
       ..salesVolume = widget.item.salesVolume;
+
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
@@ -263,8 +263,11 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
               padding: EdgeInsets.all(15),
               child: GestureDetector(
                 behavior:HitTestBehavior.opaque,
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FabricCompositionsField(_product,enabled: true)));
+                onTap: () async{
+                  dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FabricCompositionsField(_product.attributes.fabricCompositions,enabled: true)));
+                  if(result != null){
+                    _product.attributes.fabricCompositions = result;
+                  }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -276,10 +279,6 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                               TextSpan(
                                   text: '面料成分',
                                   style: TextStyle(color: Colors.black,fontSize: 16,)
-                              ),
-                              TextSpan(
-                                  text: '*',
-                                  style: TextStyle(color: Colors.red,fontSize: 16,)
                               ),
                             ]
                         ),
@@ -378,10 +377,10 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
       _showValidateMsg(context, '请选择颜色尺码');
       return;
     }
-    if (_product.fabricCompositions == null || _product.fabricCompositions.isEmpty) {
-      _showValidateMsg(context, '请选择面料成分');
-      return;
-    }
+//    if (_product.attributes.fabricCompositions == null || _product.attributes.fabricCompositions.isEmpty) {
+//      _showValidateMsg(context, '请选择面料成分');
+//      return;
+//    }
     if (_product.attributes == null) {
       _product.attributes = ApparelProductAttributesModel();
     }
@@ -492,8 +491,8 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
   //格式化选中的面料成分
   String fabricSelectText() {
     String text = '';
-    if(_product.fabricCompositions != null){
-      var names = enumCodesToNames(_product.fabricCompositions, FabricCompositionEnum);
+    if(_product.attributes.fabricCompositions != null){
+      var names = enumCodesToNames(_product.attributes.fabricCompositions, FabricCompositionEnum);
       if(names.length > 2){
         text = names.sublist(0,2).join('、');
         text += '...';

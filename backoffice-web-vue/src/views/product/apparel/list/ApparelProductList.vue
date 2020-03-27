@@ -101,6 +101,52 @@
         this.$emit('onBelongDetail', row);
       },
       onShelf (row) {
+        if (row.productType == null || row.productType.length <= 0 || row.productType.indexOf('FUTURE_GOODS') > -1) {
+          console.log(row.productType);
+          if (row.steppedPrices == null || row.steppedPrices.length <= 0 || row.basicProduction == null ||
+            row.productionIncrement == null || row.productionDays == null) {
+            this.$message.error('价格设置资料未完善，不可上架');
+            return;
+          }
+          let flag = false;
+          row.steppedPrices.some((p) => {
+            if (p.minimumQuantity == null || p.price == null) {
+              flag = true;
+              return true;
+            }
+          });
+          if (flag) {
+            this.$message.error('价格设置资料未完善，不可上架');
+            return;
+          }
+        }
+
+        if (row.productType != null && (row.productType.indexOf('SPOT_GOODS') > -1 || row.productType.indexOf('TAIL_GOODS') > -1)) {
+          if (row.spotSteppedPrices == null || row.spotSteppedPrices.length <= 0 || row.deliveryDays == null) {
+            this.$message.error('现货/库存尾货价格设置资料未完善，不可上架');
+            return;
+          }
+          let flag = false;
+          row.spotSteppedPrices.some((p) => {
+            if (p.minimumQuantity == null || p.price == null) {
+              flag = true;
+              return true;
+            }
+          });
+          if (flag) {
+            this.$message.error('现货/库存尾货价格设置资料未完善，不可上架');
+            return;
+          }
+          var totalQuality = this.totalQuality(row.colorSizes);
+          row.spotSteppedPrices.sort(function (a, b) {
+            return a.minimumQuantity - b.minimumQuantity;
+          });
+          if (totalQuality < row.spotSteppedPrices[0].minimumQuantity) {
+            this.$message.error('库存总数量小于现货/库存最小起订量，不可上架');
+            return;
+          }
+        }
+
         this.$emit('onShelf', row);
       },
       onOffShelf (row) {
@@ -116,6 +162,19 @@
       },
       handleSelectionChange (val) {
         this.multipleSelection = val;
+      },
+      totalQuality (colorSizes) {
+        var total = 0;
+        colorSizes.forEach((colorSize) => {
+          if (colorSize.sizes != null) {
+            colorSize.sizes.forEach((size) => {
+              if (size.quality != null) {
+                total += size.quality;
+              }
+            });
+          }
+        });
+        return total;
       }
     },
     data () {

@@ -374,8 +374,8 @@ class ApparelProductFormState extends State<ApparelProductDetailPage> {
   //格式化选中的面料成分
   String fabricSelectText() {
     String text = '';
-    if(widget.item.fabricCompositions != null){
-      text = enumCodesToNames(widget.item.fabricCompositions, FabricCompositionEnum).join('、');
+    if(widget.item.attributes != null && widget.item.attributes.fabricCompositions != null){
+      text = enumCodesToNames(widget.item.attributes.fabricCompositions, FabricCompositionEnum).join('、');
     }
     return text;
   }

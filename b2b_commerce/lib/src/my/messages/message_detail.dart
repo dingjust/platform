@@ -39,6 +39,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
       onWillPop: (){
         NotifyBloC.instance.refreshData(widget.model.groupCode.toString());
         Navigator.pop(context);
+        return Future.value(false);
       },
     );
   }

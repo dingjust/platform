@@ -73,6 +73,7 @@ class _QuoteSearchResultPageState extends State<QuoteSearchResultPage> {
         onWillPop: () {
           Navigator.of(context).pop();
           QuoteOrdersBLoC().refreshData('ALL');
+          return Future.value(false);
         },
       ),
     );

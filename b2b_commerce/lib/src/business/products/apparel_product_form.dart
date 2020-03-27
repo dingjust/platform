@@ -56,7 +56,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ..id = widget.item.id
       ..name = widget.item.name
       ..code = widget.item.code
-      ..attributes = widget.item.attributes
+      ..attributes = widget.item.attributes ?? ApparelProductAttributesModel(fabricCompositions: [])
       ..category = widget.item.category
       ..approvalStatus = widget.item.approvalStatus
       ..thumbnail = widget.item.thumbnail
@@ -71,15 +71,16 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ..images = widget.item.images
       ..details = widget.item.details
       ..brand = widget.item.brand
-      ..proofingFee = widget.item.proofingFee
       ..steppedPrices = widget.item.steppedPrices
       ..basicProduction = widget.item.basicProduction
       ..productionDays = widget.item.productionDays
       ..productionIncrement = widget.item.productionIncrement
       ..productType = widget.item.productType ?? [ProductType.FUTURE_GOODS]
-      ..fabricCompositions = widget.item.fabricCompositions ?? []
       ..colorSizes = widget.item.colorSizes ?? []
       ..salesVolume = widget.item.salesVolume;
+    if(_product.attributes.fabricCompositions == null){
+      _product.attributes.fabricCompositions = [];
+    }
     _nameController.text = widget.item?.name;
     _skuIDController.text = widget.item?.skuID;
     _brandController.text = widget.item?.brand;
@@ -321,9 +322,14 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
               padding: EdgeInsets.all(15),
               child: GestureDetector(
                 behavior:HitTestBehavior.opaque,
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FabricCompositionsField(_product,enabled: true)));
-                },
+                onTap: () async{
+                  dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FabricCompositionsField(_product.attributes.fabricCompositions,enabled: true)));
+                  if(result != null){
+                    setState(() {
+                      _product.attributes.fabricCompositions = result;
+                    });
+                  }
+                  },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -335,10 +341,10 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                                   text: '面料成分',
                                   style: TextStyle(color: Colors.black,fontSize: 16,)
                               ),
-                              TextSpan(
-                                  text: '*',
-                                  style: TextStyle(color: Colors.red,fontSize: 16,)
-                              ),
+//                              TextSpan(
+//                                  text: '*',
+//                                  style: TextStyle(color: Colors.red,fontSize: 16,)
+//                              ),
                             ]
                         ),
                       ),
@@ -576,10 +582,10 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       _showValidateMsg(context, '请选择颜色尺码');
       return;
     }
-    if (_product.fabricCompositions == null || _product.fabricCompositions.isEmpty) {
-      _showValidateMsg(context, '请选择面料成分');
-      return;
-    }
+//    if (_product.attributes.fabricCompositions == null || _product.attributes.fabricCompositions.isEmpty) {
+//      _showValidateMsg(context, '请选择面料成分');
+//      return;
+//    }
 //    if (UserBLoC.instance.currentUser.type == UserType.BRAND &&
 //        _product.price == null) {
 //      _showValidateMsg(context, '请填写产品价格');
@@ -688,8 +694,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
   //格式化选中的面料成分
   String fabricSelectText() {
     String text = '';
-    if(_product.fabricCompositions != null){
-      var names = enumCodesToNames(_product.fabricCompositions, FabricCompositionEnum);
+    if(_product.attributes.fabricCompositions != null){
+      var names = enumCodesToNames(_product.attributes.fabricCompositions, FabricCompositionEnum);
       if(names.length > 2){
         text = names.sublist(0,2).join('、');
         text += '...';

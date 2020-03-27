@@ -2,7 +2,7 @@
   <div>
     <el-row class="info-title-row">
       <div class="info-title">
-        <h6 class="info-title_text">期货价格设置<span class="info-title_text-sub">（上架必填）</span></h6>
+        <h6 class="info-title_text">现货/库存尾货价格设置<span class="info-title_text-sub">（上架必填）</span></h6>
       </div>
     </el-row>
     <!--<el-row :gutter="10" type="flex" align="center">-->
@@ -25,10 +25,7 @@
       <!--</el-col>-->
     <!--</el-row>-->
     <!--<el-divider></el-divider>-->
-    <el-row>
-      <h6 class="info-title_text">大货价格</h6>
-    </el-row>
-    <template v-for="(row,index) in slotData.steppedPrices">
+    <template v-for="(row,index) in slotData.spotSteppedPrices">
       <el-row :gutter="20" type="flex" align="center" style="align-items: baseline">
         <el-col :span="6" class="product-form-row">
             <el-row type="flex" align="middle">
@@ -37,7 +34,7 @@
               </div>
               <el-form-item class="purchase-form-item" :rules="[
                 { required: true, message: '请输入报价', trigger: 'blur' ,type: 'number'}]" :key="row.key"
-                            :prop="'steppedPrices.' + index+'.minimumQuantity'">
+                            :prop="'spotSteppedPrices.' + index+'.minimumQuantity'">
                   <el-input placeholder="输入起订量" v-model.number="row.minimumQuantity" size="mini" :disabled="isRead"></el-input>
               </el-form-item>
             </el-row>
@@ -49,7 +46,7 @@
               </div>
               <el-form-item class="purchase-form-item" :rules="[
                 { required: true, message: '请输入价格', trigger: 'blur'}]" :key="row.key"
-                            :prop="'steppedPrices.' + index+'.price'">
+                            :prop="'spotSteppedPrices.' + index+'.price'">
                   <el-input placeholder="输入价格" v-model="row.price" size="mini" type="number" :disabled="isRead"></el-input>
               </el-form-item>
             </el-row>
@@ -57,7 +54,7 @@
         <el-button type="text" @click="onRemove(index)" v-if="!isRead">删除</el-button>
       </el-row>
     </template>
-    <el-row type="flex" v-if="slotData.steppedPrices.length<3">
+    <el-row type="flex" v-if="slotData.spotSteppedPrices.length<3">
       <el-col :span="11">
         <div @click="onAddRow" class="product-price-form_btn-row">
           <el-row type="flex" justify="center" align="center">
@@ -68,53 +65,27 @@
       </el-col>
     </el-row>
     <el-divider></el-divider>
-    <el-row>
-      <h6 class="info-title_text">生产天数</h6>
-    </el-row>
-    <el-row :gutter="20" type="flex" align="center">
-      <el-col :span="5" class="product-form-row">
+    <div class="product-form-row">
+      <el-row type="flex" align="middle">
+        <div style="width:100px">
+          <h6 class="info-input-prepend" style="width:85px">发货周期:</h6>
+        </div>
+        <el-form-item label="" class="purchase-form-item" :rules="[
+                { required: true, message: '请输入发货周期', trigger: 'blur'}]"
+                      prop="deliveryDays">
           <el-row type="flex" align="middle">
-            <div style="width:100px">
-              <h6 class="info-input-prepend" style="width:100px">基础生产量:</h6>
-            </div>
-            <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入产量', trigger: 'blur'}]"
-                          :prop="currentUser.type=='FACTORY'?'basicProduction':''">
-                <el-input placeholder="输入起订量" v-model="slotData.basicProduction" size="mini" :disabled="isRead"></el-input>
-            </el-form-item>
+            <el-input v-model="slotData.deliveryDays" size="mini" :disabled="isRead"></el-input>
+            <span style="margin-left: 10px">天</span>
           </el-row>
-      </el-col>
-      <el-col :span="5" class="product-form-row">
-          <el-row type="flex" align="middle">
-            <div style="width:85px">
-              <h6 class="info-input-prepend">生产天数：</h6>
-            </div>
-            <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入价格', trigger: 'blur' ,type: 'number'}]"
-                          :prop="currentUser.type=='FACTORY'?'productionDays':''">
-                <el-input placeholder="输入天数" v-model.number="slotData.productionDays" size="mini" :disabled="isRead"></el-input>
-            </el-form-item>
-          </el-row>
-      </el-col>
-      <el-col :span="7" class="product-form-row">
-          <el-row type="flex" align="middle">
-            <div style="width:150px">
-              <h6 class="info-input-prepend" style="width:150px">生产增量（数量/天）：</h6>
-            </div>
-            <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请输入生产增量', trigger: 'blur'}]"
-                          :prop="currentUser.type=='FACTORY'?'productionIncrement':''">
-                <el-input placeholder="输入增量" v-model.number="slotData.productionIncrement" size="mini" :disabled="isRead"></el-input>
-            </el-form-item>
-          </el-row>
-      </el-col>
-    </el-row>
+        </el-form-item>
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'ApparelProductPriceForm',
+    name: 'ApparelProductSpotPriceForm',
     props: ['slotData', 'readOnly', 'isRead'],
     components: {},
     computed: {
@@ -122,13 +93,13 @@
     },
     methods: {
       onAddRow () {
-        this.slotData.steppedPrices.push({
+        this.slotData.spotSteppedPrices.push({
           minimumQuantity: '',
           price: ''
         });
       },
       onRemove (index) {
-        this.slotData.steppedPrices.splice(index, 1);
+        this.slotData.spotSteppedPrices.splice(index, 1);
       }
     },
     data () {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form ref="form" :model="slotData">
-      <el-card class="box-card product-card-1">
+      <el-card v-if="isFactory()" class="box-card product-card-1">
         <el-row type="flex" align="middle">
           <el-col :span="3">
               <h6 class="info-input-prepend">
@@ -47,10 +47,18 @@
         <apparel-product-images-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
         </apparel-product-images-form>
       </el-card>
-      <div class="pt-2"></div>
-      <el-card class="box-card">
-        <apparel-product-price-form :slot-data="slotData" :isRead="isRead"></apparel-product-price-form>
-      </el-card>
+      <div v-if="isShowSpotPrices()">
+        <div class="pt-2"></div>
+        <el-card class="box-card">
+          <apparel-product-spot-price-form :slot-data="slotData" :isRead="isRead"></apparel-product-spot-price-form>
+        </el-card>
+      </div>
+     <div v-if="isShowPrices()">
+       <div class="pt-2"></div>
+       <el-card class="box-card">
+         <apparel-product-price-form :slot-data="slotData" :isRead="isRead"></apparel-product-price-form>
+       </el-card>
+     </div>
       <!--<el-card class="box-card">-->
         <!--<apparel-product-attributes-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">-->
         <!--</apparel-product-attributes-form>-->
@@ -85,10 +93,12 @@
   import ApparelProductSizesForm from './ApparelProductSizesForm';
   import ApparelProductPriceForm from './ApparelProductPriceForm';
   import ApparelProductColorsSizesForm from './ApparelProductColorsSizesForm';
+  import ApparelProductSpotPriceForm from "./ApparelProductSpotPriceForm";
 
   export default {
     name: 'ApparelProductFrom',
     components: {
+      ApparelProductSpotPriceForm,
       ApparelProductColorsSizesForm,
       ApparelProductImagesForm,
       ApparelProductBasicForm,
@@ -112,6 +122,22 @@
       ...mapActions({
         resetFormData: 'resetFormData'
       }),
+      isShowSpotPrices () {
+        if (this.isFactory() && this.slotData.productType != null &&
+          (this.slotData.productType.indexOf('SPOT_GOODS') > -1 || this.slotData.productType.indexOf('TAIL_GOODS') > -1)) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      isShowPrices () {
+        if (this.isFactory() && this.slotData.productType != null &&
+          (this.slotData.productType.indexOf('FUTURE_GOODS') > -1)) {
+          return true;
+        } else {
+          return false;
+        }
+      },
       // beforeunloadHandler (e) {
       //   e = e || window.event
       //   if (e) {
@@ -165,7 +191,7 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('更新基本信息成功');
+        this.$message.success('更新产品信息成功');
         this.$router.go(-1);
       },
       onCreate () {
@@ -214,7 +240,7 @@
           return;
         }
 
-        this.$message.success('产品创建成功，产品编号： ' + result);
+        this.$message.success('产品创建成功，产品编号： ' + result.code);
         // this.$set(this.slotData, 'code', result);
         this.$router.go(-1);
       },

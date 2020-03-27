@@ -117,6 +117,7 @@ class _PicturePickPreviewWidget extends State<PicturePickPreviewWidget> {
         } else {
           Navigator.of(context).pop();
         }
+        return Future.value(false);
       },
     );
   }
