@@ -86,7 +86,7 @@ class _ApparelProductPricesInputPageState
 
     return Scaffold(
         appBar: AppBar(
-            title: Text('价格设置'),
+            title: Text(widget.enabled ? '价格设置' : '价格明细'),
             elevation: 0.5,
             brightness: Brightness.light,
             centerTitle: true,
@@ -163,46 +163,43 @@ class _ApparelProductPricesInputPageState
     return Container(
       child: Column(
         children: <Widget>[
-          Container(
-            color: Colors.white,
-            child: TextFieldComponent(
-              focusNode: _proofingFeeFocusNode,
-              controller: _proofingFeeController,
-              leadingText: Text('打样费',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              hintText: widget.enabled ? '请输入单件打样价格' : '',
-              prefix: '￥',
-              inputFormatters: [
-                DecimalInputFormat(),
-              ],
-              enabled: widget.enabled,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isShowSteppedPrices = !isShowSteppedPrices;
-                });
-              },
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      '大货价',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    isShowSteppedPrices
-                        ? Icon(Icons.keyboard_arrow_down)
-                        : Icon(Icons.keyboard_arrow_right),
-                  ],
-                ),
+//          Container(
+//            color: Colors.white,
+//            child: TextFieldComponent(
+//              focusNode: _proofingFeeFocusNode,
+//              controller: _proofingFeeController,
+//              leadingText: Text('打样费',
+//                  style: TextStyle(
+//                    fontSize: 16,
+//                  )),
+//              hintText: widget.enabled ? '请输入单件打样价格' : '',
+//              prefix: '￥',
+//              inputFormatters: [
+//                DecimalInputFormat(),
+//              ],
+//              enabled: widget.enabled,
+//            ),
+//          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isShowSteppedPrices = !isShowSteppedPrices;
+              });
+            },
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    '大货价',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  isShowSteppedPrices
+                      ? Icon(Icons.keyboard_arrow_down)
+                      : Icon(Icons.keyboard_arrow_right),
+                ],
               ),
             ),
           ),
@@ -334,7 +331,7 @@ class _ApparelProductPricesInputPageState
                   TextFieldComponent(
                     focusNode: _productionIncrementFocusNode,
                     controller: _productionIncrementController,
-                    leadingWidth: 135,
+                    leadingWidth: 170,
                     leadingText: Text('生产增量（数量/1天）',
                         style: TextStyle(
                           fontSize: 16,

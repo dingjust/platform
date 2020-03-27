@@ -1,6 +1,8 @@
 import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
+import 'package:b2b_commerce/src/business/products/brand/apparel_product_brand_detail.dart';
+import 'package:b2b_commerce/src/business/products/apparel_product_detail.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
@@ -207,9 +209,11 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
         MaterialPageRoute(
           builder: (context) => BLoCProvider(
                 bloc: ApparelProductBLoC.instance,
-                child: ApparelProductFormPage(
+                child: UserBLoC.instance.currentUser.type == UserType.FACTORY ? ApparelProductDetailPage(
                   item: product,
                   status: widget.status,
+                ): ApparelProductBrandDetailPage(
+                  item: product,
                 ),
               ),
         ),
@@ -280,18 +284,38 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
         _showValidateMsg(context, '产品价格为空不可上架');
         return;
       } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY ){
-          if(product.proofingFee == null || product.basicProduction == null || product.productionIncrement == null || product.productionDays == null) {
-            _showValidateMsg(context, '价格设置资料未完善，不可上架');
-            return;
+        if(product.basicProduction == null || product.productionIncrement == null || product.productionDays == null) {
+          _showValidateMsg(context, '价格设置资料未完善，不可上架');
+          return;
+        }else{
+          bool b = false;
+          if(product.steppedPrices == null || product.steppedPrices.isEmpty){
+            print('${product.steppedPrices}-------');
+            b = true;
           }else{
+            print('${product.steppedPrices}======');
             for (var stepped in product.steppedPrices) {
               if(stepped.minimumQuantity == null || stepped.price == null){
-                _showValidateMsg(context, '价格设置资料未完善，不可上架');
+                b = true;
                 return;
               }
             }
           }
 
+          if(b){
+            _showValidateMsg(context, '价格设置资料未完善，不可上架');
+            return;
+          }
+
+        }
+      }
+
+      if(product.productType != null && (product.productType.contains(ProductType.SPOT_GOODS) || product.productType.contains(ProductType.TAIL_GOODS))){
+        product.steppedPrices.sort((a,b) => a.minimumQuantity.compareTo(b.minimumQuantity));
+        if(_colorTotalNum(product.colorSizes) < product.steppedPrices[0].minimumQuantity){
+          _showValidateMsg(context, '库存总数量小于最小起订量，不可上架');
+          return;
+        }
       }
 
       showDialog(
@@ -353,6 +377,16 @@ class _ApparelProductSearchListState extends State<ApparelProductSearchList> {
             outsideDismiss: true,
           );
         });
+  }
+
+  int _colorTotalNum(List<ColorSizeModel> colorSizes) {
+    int result = 0;
+    colorSizes?.forEach((colorSize) {
+      colorSize.sizes.forEach((size){
+        result += size.quality ?? 0;
+      });
+    });
+    return result;
   }
 }
 

@@ -20,8 +20,6 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
   List<SizeModel> _sizeFilters = <SizeModel>[];
   List<ColorModel> _colors;
   List<SizeModel> _sizes;
-//  Map<ColorModel,List<SizeStockItem>> _items = Map();
-//  Map<ColorModel,List<SizeStockItem>> _newItems;
 
   @override
   void initState() {
@@ -74,72 +72,14 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
             });
             widget.item.variants = variants;
 
-            //选择完颜色，生成库存item
-//            _newItems = Map.from(_items);
-//            _items.clear();
-//            _colorFilters.forEach((color){
-//              ColorModel itemColor = _newItems.keys.firstWhere((key) => key.code == color.code,orElse: ()=>null);
-//
-//              if(itemColor != null){
-//                _items[itemColor] = _sizeFilters.map((size){
-//                  SizeStockItem item = _newItems[itemColor].firstWhere((sizeStockItem) => sizeStockItem.size.code == size.code,orElse: ()=>null);
-//                  if(item != null){
-//                    return item;
-//                  }else{
-//                    return SizeStockItem(size: size);
-//                  }
-//                }).toList();
-//              }else{
-//                _items[color] = _sizeFilters.map((size) => SizeStockItem(size: size)).toList();
-//              }
-//            });
-
           },
           child: ShowSelectTile(
-            isRequired: true,
+            isRequired: widget.enabled,
             leadingText: '颜色/尺码',
             tralingText: colorSizeSelectText(),
             isShowIcon: widget.enabled,
           ),
         ),
-//        InkWell(
-//          onTap: () async{
-//            if(_colorFilters.length <= 0){
-//              showDialog(
-//                context: context,
-//                builder: (context) => AlertDialog(
-//                  title: Text('请先选择颜色尺码'),
-//                ),
-//              );
-//              return;
-//            }else{
-//              if(_sizeFilters.length <=0 ){
-//                showDialog(
-//                  context: context,
-//                  builder: (context) => AlertDialog(
-//                    title: Text('请选择尺码'),
-//                  ),
-//                );
-//                return;
-//              }
-//            }
-//
-//            dynamic result = await Navigator.push(
-//              context,
-//              MaterialPageRoute(
-//                builder: (context) => ApparelProductStockInputPage(items: _items,),
-//              ),
-//            );
-//
-//            if(result != null){
-//              _items = result;
-//            }
-//          },
-//          child: ListTile(
-//            title: Text('库存'),
-//            trailing: Icon(Icons.chevron_right),
-//          ),
-//        ),
       ],
     );
   }
@@ -158,10 +98,6 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
                     '颜色/尺码',
                     style: const TextStyle(color: Colors.black, fontSize: 16),
                   ),
-                  Text(
-                    ' *',
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
-                  ),
                 ],
               ),
               Container(
@@ -179,10 +115,6 @@ class _ColorSizeStockFieldState extends State<ColorSizeStockField> {
               ),
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0,),
         ),
       ],
     );

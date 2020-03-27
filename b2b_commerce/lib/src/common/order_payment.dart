@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/sale/sale_order_detail_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -97,6 +98,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 },
               );
             });
+        return Future.value(false);
       },
     );
   }
@@ -189,12 +191,15 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   Widget _buildCompanyInfo() {
-    var model;
+    String companyName;
 
+    ///按订单类型取字段
     if (widget.order is ProofingModel) {
-      model = widget.order as ProofingModel;
+      companyName = (widget.order as ProofingModel).belongTo.name;
     } else if (widget.order is PurchaseOrderModel) {
-      model = widget.order as PurchaseOrderModel;
+      companyName = (widget.order as PurchaseOrderModel).belongTo.name;
+    } else if (widget.order is SalesOrderModel) {
+      companyName = (widget.order as SalesOrderModel).seller.name;
     } else {
       return Container(
         color: Colors.white,
@@ -208,18 +213,24 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
       color: Colors.white,
       child: Row(
-        children: <Widget>[Text('${model.belongTo.name}')],
+        children: <Widget>[Text('${companyName}')],
       ),
     );
   }
 
   Widget _buildEntries() {
     var model;
+    var product;
 
     if (widget.order is ProofingModel) {
       model = widget.order as ProofingModel;
+      product = model.entries[0].product;
     } else if (widget.order is PurchaseOrderModel) {
       model = widget.order as PurchaseOrderModel;
+      product = model.entries[0].product;
+    } else if (widget.order is SalesOrderModel) {
+      model = widget.order as SalesOrderModel;
+      product = model.entries[0].product.baseProductDetail;
     } else {
       return Container(
         child: Center(
@@ -239,14 +250,14 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Row(
         children: <Widget>[
-          model.product?.thumbnail != null
+          product?.thumbnail != null
               ? Container(
                   width: 80,
                   height: 80,
                   child: CachedNetworkImage(
                       width: 100,
                       height: 100,
-                      imageUrl: '${model.product.thumbnail.previewUrl()}',
+                      imageUrl: '${product.thumbnail.previewUrl()}',
                       fit: BoxFit.cover,
                       imageBuilder: (context, imageProvider) =>
                           Container(
@@ -293,7 +304,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    model.entries[0].product.name,
+                    '${product.name}',
                     style: TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -303,7 +314,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      '货号：${model.entries[0].product.skuID}',
+                      '货号：${product.skuID}',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ),
@@ -313,7 +324,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${model.entries[0].product.name}   ${model.entries[0].product.category.name}   ${sum}件",
+                      "${product.name}   ${product.category.name}   ${sum}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -359,35 +370,21 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             '￥${(widget.order.totalPrice ?? 0).toStringAsFixed(2)}',
           ),
           _buildDeposit(),
+          _buildOtherDeduction(),
+          _buildActualPay(),
           Offstage(
-            offstage: !(widget.order is PurchaseOrderModel &&
-                (widget.order as PurchaseOrderModel).status ==
-                    PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE),
+            offstage: widget.paymentFor != PaymentFor.DEPOSIT,
             child: Container(
               margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('其他扣款'),
-                  Text(_getDeductionAmountText(
-                      (widget.order as PurchaseOrderModel).deductionAmount),
-                    style: TextStyle(color: Colors.black),)
+                  Text(
+                    '买大货需要支付30%的订金',
+                    style: TextStyle(color: Colors.red, fontSize: 16),
+                  ),
                 ],
               ),
-            ),
-          ),
-          _buildActualPay(),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  '买大货需要支付30%的订金',
-                  style: TextStyle(color: Colors.red, fontSize: 16),
-                ),
-              ],
             ),
           )
         ],
@@ -523,6 +520,30 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
     if (widget.order is PurchaseOrderModel) {
       PurchaseOrderModel model = widget.order as PurchaseOrderModel;
       return _buildInfoRow('订金(总额x30%)', '￥${model.deposit}');
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _buildOtherDeduction() {
+    if (widget.order is PurchaseOrderModel &&
+        (widget.order as PurchaseOrderModel).status ==
+            PurchaseOrderStatus.WAIT_FOR_OUT_OF_STORE) {
+      return Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text('其他扣款'),
+            Text(
+              _getDeductionAmountText(
+                  (widget.order as PurchaseOrderModel).deductionAmount),
+              style: TextStyle(color: Colors.black),
+            )
+          ],
+        ),
+      );
     } else {
       return Container();
     }
@@ -735,11 +756,17 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                   ///TODO:生产单
                 } else if (widget.order is PurchaseOrderModel) {
                   //查询明细
-
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) =>
                               PurchaseOrderDetailPage(code: widget.order.code)),
+                      ModalRoute.withName('/'));
+                } //销售订单
+                else if (widget.order is SalesOrderModel) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SaleOrderDetailPage(code: widget.order.code)),
                       ModalRoute.withName('/'));
                 }
               },
@@ -815,6 +842,9 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
       case PaymentFor.BALANCE:
         PurchaseOrderModel model = widget.order as PurchaseOrderModel;
         result = (model.balance ?? 0) + (model.deductionAmount ?? 0);
+        break;
+      case PaymentFor.SALES:
+        result = widget.order.totalPrice;
         break;
       default:
         break;

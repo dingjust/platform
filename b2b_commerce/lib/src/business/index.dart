@@ -159,7 +159,7 @@ class BrandMenusSection extends StatelessWidget {
               childAspectRatio: (1.3),
               children: <Widget>[
                 buildChild(context, MenuItemImage.productFactory, '产品管理',
-                    AppRoutes.ROUTE_PRODUCTS,
+                    UserBLoC.instance.currentUser.type == UserType.FACTORY ? AppRoutes.ROUTE_PRODUCTS : AppRoutes.ROUTE_PRODUCTS_BRAND,
                     authorizations: [Authorization.PRODUCT]),
                 //  buildChild(context, MenuItemImage.employeeManage, '员工管理',
                 //      AppRoutes.ROUTE_EMPLOYEES),
@@ -318,6 +318,9 @@ class FactoryMenusSection extends StatelessWidget {
                     authorizations: [Authorization.PROOFING_ORDER]),
                 buildChild(context, MenuItemImage.purchaseOrder, '生产订单',
                     AppRoutes.ROUTE_PURCHASE_ORDERS,
+                    authorizations: [Authorization.PURCHASE_ORDER]),
+                buildChild(context, MenuItemImage.saleOrder, '销售订单',
+                    AppRoutes.ROUTE_SALE_ORDERS,
                     authorizations: [Authorization.PURCHASE_ORDER]),
               ],
             )

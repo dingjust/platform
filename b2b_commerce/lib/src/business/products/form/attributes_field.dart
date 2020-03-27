@@ -19,7 +19,7 @@ class AttributesField extends StatefulWidget {
 class _AttributesFieldState extends State<AttributesField> {
   List<Attribute> _attributes = [
     Attribute('styles', '风格', StyleEnum,multiple: true),
-    Attribute('fabricCompositions', '面料成分', FabricCompositionEnum,multiple: true,),
+//    Attribute('fabricCompositions', '面料成分', FabricCompositionEnum,multiple: true,),
     Attribute('editionType', '版型', EditionTypeEnum),
     Attribute('pattern', '款式', PatternEnum),
     Attribute('sleeveType', '袖型', SleeveTypeEnum),
@@ -35,25 +35,28 @@ class _AttributesFieldState extends State<AttributesField> {
 
   @override
   void initState() {
-    if(widget.item.attributes != null){
-      _attributes[0].valueSelects = widget.item.attributes.styles;
-      _attributes[1].valueSelects = widget.item.attributes.fabricCompositions;
-      _attributes[2].valueSelects = widget.item.attributes.editionType == null ? [] : [widget.item.attributes.editionType];
-      _attributes[3].valueSelects = widget.item.attributes.pattern == null ? [] : [widget.item.attributes.pattern];
-      _attributes[4].valueSelects = widget.item.attributes.sleeveType == null ? [] : [widget.item.attributes.sleeveType];
-      _attributes[5].valueSelects = widget.item.attributes.sleeveLength == null ? [] : [widget.item.attributes.sleeveLength];
-      _attributes[6].valueSelects = widget.item.attributes.decorativePatterns;
-      _attributes[7].valueSelects = widget.item.attributes.popularElements;
-      _attributes[8].valueSelects = widget.item.attributes.filler == null ? [] : [widget.item.attributes.filler];
-      _attributes[9].valueSelects = widget.item.attributes.thickness == null ? [] : [widget.item.attributes.thickness];
-      _attributes[10].valueSelects = widget.item.attributes.season == null ? [] : [widget.item.attributes.season];
-      _attributes[11].valueSelects = widget.item.attributes.taggable == null ? [] : [widget.item.attributes.taggable.toString()];
-      _attributes[12].valueSelects = widget.item.attributes.placket == null ? [] : [widget.item.attributes.placket];
-    }
-    
+    generateAttributes();
 
+    print(_attributes[3].valueSelects);
     // TODO: implement initState
     super.initState();
+  }
+
+  void generateAttributes() {
+    if(widget.item.attributes != null){
+      _attributes[0].valueSelects = widget.item.attributes.styles ?? [];
+      _attributes[1].valueSelects = widget.item.attributes.editionType == null ? [] : [widget.item.attributes.editionType];
+      _attributes[2].valueSelects = widget.item.attributes.pattern == null ? [] : [widget.item.attributes.pattern];
+      _attributes[3].valueSelects = widget.item.attributes.sleeveType == null ? [] : [widget.item.attributes.sleeveType];
+      _attributes[4].valueSelects = widget.item.attributes.sleeveLength == null ? [] : [widget.item.attributes.sleeveLength];
+      _attributes[5].valueSelects = widget.item.attributes.decorativePatterns;
+      _attributes[6].valueSelects = widget.item.attributes.popularElements;
+      _attributes[7].valueSelects = widget.item.attributes.filler == null ? [] : [widget.item.attributes.filler];
+      _attributes[8].valueSelects = widget.item.attributes.thickness == null ? [] : [widget.item.attributes.thickness];
+      _attributes[9].valueSelects = widget.item.attributes.season == null ? [] : [widget.item.attributes.season];
+      _attributes[10].valueSelects = widget.item.attributes.taggable == null ? [] : [widget.item.attributes.taggable.toString()];
+      _attributes[11].valueSelects = widget.item.attributes.placket == null ? [] : [widget.item.attributes.placket];
+    }
   }
 
   @override
@@ -85,16 +88,13 @@ class _AttributesFieldState extends State<AttributesField> {
               result['taggable'] = ClassHandleUtil.isNotEmpty(result['taggable']) ? ClassHandleUtil.strToBool(result['taggable'][0]) : null;
               var model = ApparelProductAttributesModel.fromJson(result);
               widget.item.attributes = model;
+              generateAttributes();
             }
           },
           child: ListTile(
             title: Text('属性'),
             trailing: Icon(Icons.chevron_right),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0, color: Colors.grey[400]),
         ),
       ],
     );
@@ -127,10 +127,6 @@ class _AttributesFieldState extends State<AttributesField> {
               ),
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Divider(height: 0,),
         ),
       ],
     );

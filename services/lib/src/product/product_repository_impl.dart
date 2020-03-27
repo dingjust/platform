@@ -56,7 +56,7 @@ class ProductRepositoryImpl extends ProductRepository{
   Future<ApparelProductModel> detail(String code) async{
     Response response;
     try{
-      response = response = await http$.get(ProductApis.detail(code),data: {'fields':ApparelProductOptions.DEFAULT});
+      response = await http$.get(ProductApis.detail(code),data: {'fields':ApparelProductOptions.DEFAULT});
     } on DioError catch (e) {
       print(e);
     }
@@ -68,7 +68,7 @@ class ProductRepositoryImpl extends ProductRepository{
   }
 
   @override
-  Future<String> create(ApparelProductModel form) async{
+  Future<bool> create(ApparelProductModel form) async{
     Response response;
     try{
       response = await http$.post(ProductApis.create,data: ApparelProductModel.toJson(form));
@@ -76,15 +76,15 @@ class ProductRepositoryImpl extends ProductRepository{
       print(e);
     }
     if(response != null && response.statusCode == 200){
-      return response.data;
+      BaseMsg model = BaseMsg.fromJson(response.data);
+      return model.code == 1;
     }else{
-      return null;
+      return false;
     }
   }
 
   @override
-  Future<String> update(ApparelProductModel form) async{
-    print(form.approvalStatus);
+  Future<bool> update(ApparelProductModel form) async{
     Response response;
     try{
       response = await http$.put(ProductApis.update(form.code),data: ApparelProductModel.toJson(form));
@@ -92,9 +92,9 @@ class ProductRepositoryImpl extends ProductRepository{
       print(e);
     }
     if(response != null && response.statusCode == 200){
-      return response.data;
+      return true;
     }else{
-      return null;
+      return false;
     }
   }
 

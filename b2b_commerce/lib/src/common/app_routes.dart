@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/business/apparel_products_brand.dart';
 import 'package:b2b_commerce/src/business/orders/order_coordination.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
@@ -46,6 +47,7 @@ class AppRoutes with GlobalRoutes {
       '/business/product_stock_adjust_history';
   static const ROUTE_PRODUCTION_ORDERS = '/business/production_orders';
   static const ROUTE_PRODUCTS = '/business/products';
+  static const ROUTE_PRODUCTS_BRAND = '/business/products_brand';
   static const ROUTE_PRODUCTS_OFF_THE_SHELF =
       '/business/products_off_the_shelf';
   static const ROUTE_PURCHASE_ORDERS = '/business/purchase_orders';
@@ -95,6 +97,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
     ROUTE_PRODUCTS: (context) => ApparelProductsPage(),
+    ROUTE_PRODUCTS_BRAND: (context) => ApparelProductsBrandPage(),
     ROUTE_PURCHASE_ORDERS: (context) => PurchaseOrdersPage(),
     ROUTE_REQUIREMENT_ORDERS: (context) => RequirementOrdersPage(),
     ROUTE_QUOTES: (context) => QuoteOrdersPage(),

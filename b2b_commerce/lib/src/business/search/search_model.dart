@@ -224,179 +224,43 @@ class _SearchModelPageState extends State<SearchModelPage> {
   }
 
   onSubmit() {
-    if (widget.searchModel.searchModelType == SearchModelType.PURCHASE_ORDER) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  PurchaseOrderSearchResultPage(
-                    searchModel: widget.searchModel,
-                  )));
-      if (controller.text != '') {
-        if (widget.searchModel.historyKeywords.contains(controller.text)) {
-          widget.searchModel.historyKeywords.remove(controller.text);
-        }
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
+    switch (widget.searchModel.searchModelType) {
+      case SearchModelType.PURCHASE_ORDER:
+        searchPurchaseOrders();
+        break;
+      case SearchModelType.QUOTE_ORDER:
+        searchQuoteOrders();
+        break;
+      case SearchModelType.REQUIREMENT_ORDER:
+        searchRequirementOrders();
+        break;
+      case SearchModelType.PROOFING_ORDER:
+        searchProofingOrders();
+        break;
+      case SearchModelType.PRODUCT:
+        searchProducts();
+        break;
+      case SearchModelType.PRODUCT_SELECT:
+        searchProductSelect();
+        break;
+      case SearchModelType.FACTORY:
+        searchFactories();
+        break;
+      case SearchModelType.PRODUCTION_ORDER:
+        searchProductionOrders();
+        break;
+      case SearchModelType.EXIST_PRODUCT:
+        searchExistProduct();
+        break;
+      case SearchModelType.REQUIREMENT_QUOTE:
+        searchRequirementQuote();
+        break;
+      case SearchModelType.SALE_ORDER:
+        searchSalesOrders();
+        break;
+      default:
     }
-    if (widget.searchModel.searchModelType == SearchModelType.QUOTE_ORDER) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  QuoteSearchResultPage(
-                    searchModel: widget.searchModel,
-                  )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-    }
-    if (widget.searchModel.searchModelType ==
-        SearchModelType.REQUIREMENT_ORDER) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  RequirementSearchResultPage(
-                    searchModel: widget.searchModel,
-                  )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-    }
-    if (widget.searchModel.searchModelType == SearchModelType.PROOFING_ORDER) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  ProofingSearchResultPage(
-                    searchModel: widget.searchModel,
-                  )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-    }
-    if (widget.searchModel.searchModelType == SearchModelType.PRODUCT) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  ProductSearchResultPage(
-                    searchModel: widget.searchModel,
-                  )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        _historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-    }
-    if (widget.searchModel.searchModelType == SearchModelType.PRODUCT_SELECT) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  ProductSearchResultPage(
-                    searchModel: widget.searchModel,
-                  )));
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        _historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.PRODUCT_SELECT_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-    }
-    if (widget.searchModel.searchModelType == SearchModelType.FACTORY) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: delayedLoading(),
-              outsideDismiss: false,
-              loadingText: '加载中。。。',
-              entrance: '',
-            );
-          }).then((value) {
-        Navigator.of(context).pop();
-        FactoryCondition condition = widget.searchModel.factoryCondition;
-        condition.keyword = controller.text;
-        FactoryBLoC.instance.clear();
-      });
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-      Navigator.of(context).pop();
-    }
-    if (widget.searchModel.searchModelType ==
-        SearchModelType.PRODUCTION_ORDER) {
-      ProductionBLoC.instance.clear();
-      Navigator.of(context).pop(controller.text);
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-    }
-    if (widget.searchModel.searchModelType == SearchModelType.EXIST_PRODUCT) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: delayedLoading(),
-              outsideDismiss: false,
-              loadingText: '加载中。。。',
-              entrance: '',
-            );
-          }).then((value) {
-        ProductCondition condition = widget.searchModel.productCondition;
-        condition.keyword = controller.text;
-        OrderByProductBLoc.instance.clear();
-        OrderByProductBLoc.instance.getData(condition);
-        Navigator.of(context).pop();
-        if (controller.text != '' && controller.text.isNotEmpty) {
-          widget.searchModel.historyKeywords.add(controller.text);
-          LocalStorage.save(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
-              json.encode(widget.searchModel.historyKeywords));
-        }
-      });
-      Navigator.of(context).pop();
-    }
-    if (widget.searchModel.searchModelType ==
-        SearchModelType.REQUIREMENT_QUOTE) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return RequestDataLoading(
-              requestCallBack: delayedLoading(),
-              outsideDismiss: false,
-              loadingText: '加载中。。。',
-              entrance: '',
-            );
-          }).then((value) {
-        RequirementFilterCondition condition =
-            widget.searchModel.requirementCondition;
-        condition.keyword = controller.text;
-        RequirementPoolBLoC.instance.clear();
-        Navigator.of(context).pop();
-      });
-      if (controller.text != '' && controller.text.isNotEmpty) {
-        widget.searchModel.historyKeywords.add(controller.text);
-        LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
-            json.encode(widget.searchModel.historyKeywords));
-      }
-      Navigator.of(context).pop();
-    }
+
 //    if (widget.searchModel.searchModelType == SearchModelType.CONTRACT_SEARCH) {
 //      Navigator.push(
 //          context,
@@ -411,6 +275,8 @@ class _SearchModelPageState extends State<SearchModelPage> {
 //            json.encode(widget.searchModel.historyKeywords));
 //      }
 //    }
+
+    //
   }
 
   delayedLoading() {
@@ -607,5 +473,200 @@ class _SearchModelPageState extends State<SearchModelPage> {
         )
       ],
     );
+  }
+
+  ///生产单
+  void searchPurchaseOrders() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                PurchaseOrderSearchResultPage(
+                  searchModel: widget.searchModel,
+                )));
+    if (controller.text != '') {
+      if (widget.searchModel.historyKeywords.contains(controller.text)) {
+        widget.searchModel.historyKeywords.remove(controller.text);
+      }
+      widget.searchModel.historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+  }
+
+  ///报价单
+  void searchQuoteOrders() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                QuoteSearchResultPage(
+                  searchModel: widget.searchModel,
+                )));
+    if (controller.text != '' && controller.text.isNotEmpty) {
+      widget.searchModel.historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+  }
+
+  ///需求订单
+  void searchRequirementOrders() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                RequirementSearchResultPage(
+                  searchModel: widget.searchModel,
+                )));
+    if (controller.text != '' && controller.text.isNotEmpty) {
+      widget.searchModel.historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+  }
+
+  ///打样订单
+  void searchProofingOrders() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ProofingSearchResultPage(
+                  searchModel: widget.searchModel,
+                )));
+    if (controller.text != '' && controller.text.isNotEmpty) {
+      widget.searchModel.historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+  }
+
+  ///产品
+  void searchProducts() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ProductSearchResultPage(
+                  searchModel: widget.searchModel,
+                )));
+    if (controller.text != '' && controller.text.isNotEmpty) {
+      _historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.PRODUCT_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+  }
+
+  ///产品选择
+  void searchProductSelect() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ProductSearchResultPage(
+                  searchModel: widget.searchModel,
+                )));
+    if (controller.text != '' && controller.text.isNotEmpty) {
+      _historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.PRODUCT_SELECT_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+  }
+
+  ///工厂
+  void searchFactories() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: delayedLoading(),
+            outsideDismiss: false,
+            loadingText: '加载中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      Navigator.of(context).pop();
+      FactoryCondition condition = widget.searchModel.factoryCondition;
+      condition.keyword = controller.text;
+      FactoryBLoC.instance.clear();
+    });
+    if (controller.text != '' && controller.text.isNotEmpty) {
+      widget.searchModel.historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.FACTORY_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+    Navigator.of(context).pop();
+  }
+
+  ///生产订单
+  void searchProductionOrders() {
+    ProductionBLoC.instance.clear();
+    Navigator.of(context).pop(controller.text);
+    if (controller.text != '' && controller.text.isNotEmpty) {
+      widget.searchModel.historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.PRODUCTION_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+  }
+
+  ///
+  void searchExistProduct() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: delayedLoading(),
+            outsideDismiss: false,
+            loadingText: '加载中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      ProductCondition condition = widget.searchModel.productCondition;
+      condition.keyword = controller.text;
+      OrderByProductBLoc.instance.clear();
+      OrderByProductBLoc.instance.getData(condition);
+      Navigator.of(context).pop();
+      if (controller.text != '' && controller.text.isNotEmpty) {
+        widget.searchModel.historyKeywords.add(controller.text);
+        LocalStorage.save(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
+            json.encode(widget.searchModel.historyKeywords));
+      }
+    });
+    Navigator.of(context).pop();
+  }
+
+  ///需求报价
+  void searchRequirementQuote() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return RequestDataLoading(
+            requestCallBack: delayedLoading(),
+            outsideDismiss: false,
+            loadingText: '加载中。。。',
+            entrance: '',
+          );
+        }).then((value) {
+      RequirementFilterCondition condition =
+          widget.searchModel.requirementCondition;
+      condition.keyword = controller.text;
+      RequirementPoolBLoC.instance.clear();
+      Navigator.of(context).pop();
+    });
+    if (controller.text != '' && controller.text.isNotEmpty) {
+      widget.searchModel.historyKeywords.add(controller.text);
+      LocalStorage.save(GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY,
+          json.encode(widget.searchModel.historyKeywords));
+    }
+    Navigator.of(context).pop();
+  }
+
+  ///销售订单
+  void searchSalesOrders() {
+
   }
 }

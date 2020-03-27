@@ -224,14 +224,54 @@ const state = {
       name: '待发货'
     },
     {
-      code: 'SHIPPED',
-      name: '已发货'
+      code: 'PENDING_CONFIRM',
+      name: '待收货'
     },
     {
       code: 'COMPLETED',
       name: '已完成'
+    },
+    {
+      code: 'CANCELLED',
+      name: '已关闭'
+    },
+    {
+      code: 'PENDING_RETURN',
+      name: '退款/售后'
     }
   ],
+  refundStatus: [{
+      code: 'NONE',
+      name: '无'
+    },
+    {
+      code: 'PENDING_CONFIRM',
+      name: '待确认'
+    },
+    {
+      code: 'REJECT',
+      name: '拒绝'
+    },
+    {
+      code: 'IN_REFUND',
+      name: '退款中'
+    },
+    {
+      code: 'COMPLETED',
+      name: '完成'
+    },
+    {
+      code: 'CANCELED',
+      name: '取消'
+    }
+  ],
+  refundType: [{
+    code: 'ONLY_MONEY',
+    name: '仅退款'
+  }, {
+    code: 'MONEY_AND_PRODUCT',
+    name: '退款退货'
+  }],
   salesOrderStatusProcessFlow: {
     'PENDING_PAYMENT': 0,
     'PENDING_DELIVERY': 1,

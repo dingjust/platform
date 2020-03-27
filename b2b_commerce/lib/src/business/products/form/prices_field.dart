@@ -35,7 +35,7 @@ class _PricesFieldState extends State<PricesField> {
           child: ShowSelectTile(
 //            isRequired: true,
 //            isShowIcon: widget.enabled,
-            leadingText: '价格设置',
+            leadingText: '价格明细',
 //            tralingText: widget.item.minPrice == null && widget.item.maxPrice == null ? '' : '￥${widget.item.minPrice ?? ''} ~ ￥${widget.item.maxPrice ?? ''}',
           ),
         ),

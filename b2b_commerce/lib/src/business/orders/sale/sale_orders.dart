@@ -14,9 +14,10 @@ import 'package:widgets/widgets.dart';
 const statuses = <EnumModel>[
   EnumModel('ALL', '全部'),
   EnumModel('PENDING_PAYMENT', '待付款'),
-  EnumModel('IN_PRODUCTION', '代发货'),
-  EnumModel('WAIT_FOR_OUT_OF_STORE', '待收货'),
-  EnumModel('OUT_OF_STORE', '退款/售后'),
+  EnumModel('PENDING_DELIVERY', '待发货'),
+  EnumModel('PENDING_CONFIRM', '待收货'),
+  EnumModel('ON_RETURN', '退款/售后'),
+  EnumModel('COMPLETED', '完成'),
 ];
 
 class SaleOrdersPage extends StatefulWidget {
@@ -101,7 +102,4 @@ class _SaleOrdersPageState extends State<SaleOrdersPage> {
     super.dispose();
     // SaleOrderBLoC.instance.reset();
   }
-
-  @override
-  bool get wantKeepAlive => false;
 }

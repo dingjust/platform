@@ -110,7 +110,6 @@ class _ApparelProductsPageState extends State<ApparelProductsPage>
                   builder: (context) => ApparelProductFormPage(
                         item: ApparelProductBLoC.instance.newProduct,
                         isCreate: true,
-                        enabled: true,
                       )),
             ).then((val) {
               setState(() {});

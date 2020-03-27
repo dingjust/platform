@@ -215,6 +215,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
               widget.estimatedDate5 != null) {
             Navigator.of(context).popUntil(ModalRoute.withName('/'));
           }
+          return Future.value(false);
         },
       );
     }
@@ -583,6 +584,7 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                 inputType: widget.inputType1,
                                 hideDivider: true,
                                 maxLength: 120,
+                                hintText: widget.title ?? '',
                               ),
                             ),
                           ],
@@ -625,8 +627,12 @@ class _CustomizeDialogPageState extends State<CustomizeDialog> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(15))),
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(widget.inputController1.text);
+                                    if (widget.confirmAction != null) {
+                                      widget.confirmAction();
+                                    } else {
+                                      Navigator.of(context)
+                                          .pop(widget.inputController1.text);
+                                    }
                                   }),
                               decoration: BoxDecoration(
                                   border: Border(

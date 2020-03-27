@@ -95,7 +95,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
     widget.focusNode.addListener(() {
       if (widget.focusNode.hasFocus) {
         setState(() {
-          widget.dividerColor == null? widget.dividerColor = Color.fromRGBO(255,214,12, 1):widget.dividerColor = widget.dividerColor;
+//          widget.dividerColor == null? widget.dividerColor = Color.fromRGBO(255,214,12, 1):widget.dividerColor = widget.dividerColor;
           if(widget.prefix != null){
 //            if(widget.prefix == '￥'){
 //              widget.controller.text = formatNum(double.parse(widget.controller.text), 2);
@@ -105,7 +105,7 @@ class TextFieldComponentState extends State<TextFieldComponent> {
         });
       } else {
         setState(() {
-          widget.dividerColor = Color(Constants.DIVIDER_COLOR);
+//          widget.dividerColor = Color(Constants.DIVIDER_COLOR);
           if(widget.prefix != null && widget.controller.text != ''){
             widget.controller.text = widget.prefix + widget.controller.text;
           }

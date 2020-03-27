@@ -24,7 +24,8 @@ class BuyPurchaseForm extends StatefulWidget {
   _BuyPurchaseFormState createState() => _BuyPurchaseFormState();
 }
 
-class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
+class _BuyPurchaseFormState extends State<BuyPurchaseForm>
+    with SingleTickerProviderStateMixin {
   List<EditApparelSizeVariantProductEntry> productEntries;
 
   ///按颜色分组
@@ -65,6 +66,11 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   //输入即时刷新监听
   Function textEditControllerListener;
 
+  TabController _tabController;
+
+  ///颜色Code tab索引映射
+  List<String> tabsIndexColorCodeMap = [];
+
   @override
   void initState() {
     remarksEditingController = TextEditingController();
@@ -99,7 +105,16 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     colorRowList.forEach((color, entries) {
       totalEditingControllerMap[color] = TextEditingController();
       tabs.add(_buildTab(color, entries));
+      //建立索引映射数组
+      tabsIndexColorCodeMap.add(entries.first.model.color.code);
       views.add(_buildViewBody(entries, color));
+    });
+
+    //初始化tabController
+    _tabController = TabController(length: colorRowList.length, vsync: this);
+    //tab切换刷新图片
+    _tabController.addListener(() {
+      setState(() {});
     });
     super.initState();
   }
@@ -159,7 +174,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
         child: CachedNetworkImage(
             width: imageSize,
             height: imageSize,
-            imageUrl: '${widget.product.thumbnail.previewUrl()}',
+            imageUrl: '${getImgURL()}',
             fit: BoxFit.cover,
             imageBuilder: (context, imageProvider) => Container(
                   width: imageSize,
@@ -247,21 +262,22 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
   Widget _buildBody() {
     return Expanded(
       flex: 1,
-      child: DefaultTabController(
-        length: colorRowList.length,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: TabBar(
-            unselectedLabelColor: Colors.black26,
-            labelColor: Colors.black,
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: _buildTabs(),
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-            isScrollable: true,
-            indicatorColor: Color.fromRGBO(255, 214, 12, 1),
-          ),
-          body: TabBarView(children: views),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: TabBar(
+          unselectedLabelColor: Colors.black26,
+          labelColor: Colors.black,
+          indicatorSize: TabBarIndicatorSize.label,
+          tabs: _buildTabs(),
+          controller: _tabController,
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+          isScrollable: true,
+          indicatorColor: Color.fromRGBO(255, 214, 12, 1),
+        ),
+        body: TabBarView(
+          children: views,
+          controller: _tabController,
         ),
       ),
     );
@@ -282,13 +298,10 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text('库存：100',
-                          style:
-                          TextStyle(color: Colors.grey, fontSize: 12)),
                       IconButton(
                         icon: Icon(
                           B2BIcons.remove_rect,
-                          color: Colors.grey[300],
+                          color: Color.fromRGBO(255, 214, 12, 1),
                         ),
                         onPressed: () {
                           if (int.parse(entry.controller.text) > 0) {
@@ -336,7 +349,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                       IconButton(
                         icon: Icon(
                           B2BIcons.add_rect,
-                          color: Colors.grey[300],
+                          color: Color.fromRGBO(255, 214, 12, 1),
                         ),
                         onPressed: () {
                           setState(() {
@@ -714,68 +727,6 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
     }
   }
 
-  void onSubmit() async {
-    //拼装数据
-    PurchaseOrderModel model = new PurchaseOrderModel();
-    model.entries = productEntries.where((entry) {
-      return entry.controller.text != '';
-    }).map((entry) {
-      ApparelSizeVariantProductModel variantProduct = entry.model;
-      variantProduct
-        ..thumbnail = widget.product.thumbnail
-        ..thumbnails = widget.product.thumbnails
-        ..images = widget.product.images;
-      return PurchaseOrderEntryModel(
-        quantity: int.parse(entry.controller.text),
-        product: variantProduct,
-      );
-    }).toList();
-    model
-      ..unitPrice = price
-      ..totalPrice = totalNum * price
-      ..totalQuantity = totalNum
-      ..deposit = deposit
-      ..salesApplication = SalesApplication.ONLINE
-      ..machiningType = MachiningType.LABOR_AND_MATERIAL
-      ..invoiceNeeded = false
-      ..expectedDeliveryDate = expectedDeliveryDate
-      ..remarks = remarksEditingController.text;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return RequestDataLoading(
-            requestCallBack: PurchaseOrderRepository()
-                .purchaseByProduct(model, widget.product.belongTo.uid),
-            outsideDismiss: false,
-            loadingText: '保存中。。。',
-            entrance: '',
-          );
-        }).then((value) {
-      bool result = false;
-      if (value != null) {
-        result = true;
-      }
-      if (result) {
-        getOrderDetail(value);
-      }
-      // showDialog(
-      //     context: context,
-      //     barrierDismissible: false,
-      //     builder: (_) {
-      //       return CustomizeDialog(
-      //         dialogType: DialogType.RESULT_DIALOG,
-      //         failTips: '下单失败',
-      //         successTips: '下单成功',
-      //         callbackResult: result,
-      //         confirmAction: () {
-      //           getOrderDetail(value);
-      //         },
-      //       );
-      //     });
-    });
-  }
-
   void getOrderDetail(String code) async {
     if (code != null && code != '') {
       PurchaseOrderModel detailModel =
@@ -787,6 +738,18 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm> {
                     paymentFor: PaymentFor.DEPOSIT,
                   )),
           ModalRoute.withName('/'));
+    }
+  }
+
+  ///预览图片URL
+  String getImgURL() {
+    String colorCode = tabsIndexColorCodeMap[_tabController.index];
+    ColorSizeModel currentColor = widget.product.colorSizes
+        .firstWhere((item) => item.colorCode == colorCode, orElse: () => null);
+    if (currentColor != null && currentColor.previewImg != null) {
+      return currentColor.previewImg.previewUrl();
+    } else {
+      return widget.product.thumbnail.previewUrl();
     }
   }
 

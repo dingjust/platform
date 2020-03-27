@@ -2,29 +2,30 @@ library models;
 
 import 'package:json_annotation/json_annotation.dart';
 
+export 'src/auth/authorization.dart';
+export 'src/capacity/capacity.dart';
 export 'src/media/media.dart';
+export 'src/msg/msg.dart';
 export 'src/my/guideline.dart';
 export 'src/my/wallet.dart';
+export 'src/order/finance.dart';
 export 'src/order/invoice.dart';
 export 'src/order/order.dart';
-export 'src/order/finance.dart';
-export 'src/order/payment_order.dart';
 export 'src/order/order_note.dart';
+export 'src/order/payment_order.dart';
 export 'src/product/product.dart';
 export 'src/report/report.dart';
 export 'src/security/principal.dart';
+export 'src/subcontract/subcontract.dart';
 export 'src/system/notification/message.dart';
-export 'src/user/dto.dart';
 export 'src/user/cooperator.dart';
+export 'src/user/dto.dart';
 export 'src/user/member.dart';
 export 'src/user/user.dart';
 export 'src/user/user_group.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
-export 'src/capacity/capacity.dart';
-export 'src/msg/msg.dart';
-export 'src/subcontract/subcontract.dart';
-export 'src/auth/authorization.dart';
+export 'src/info/sales_order_refund_info.dart';
 
 part 'models.g.dart';
 
@@ -484,7 +485,6 @@ const FactoryQualityLevelsEnum = [
   EnumModel('WHOLESALE_TRADE', '外贸跑量'),
 ];
 
-
 //转包类型
 const SubContractTypeEnum = [
   EnumModel('SUBCONTRACT', '转包'),
@@ -565,6 +565,15 @@ class FactoryOptions {
 }
 
 class BrandOptions {
+  static const BASIC = "BASIC";
+  static const DEFAULT = "DEFAULT";
+  static const FULL = "FULL";
+  static const BASIC_UID_NAME = "BASIC_UID_NAME";
+  static const CONTACT = "CONTACT";
+  static const CERTIFICATE = "CERTIFICATE";
+}
+
+class SalesOptions {
   static const BASIC = "BASIC";
   static const DEFAULT = "DEFAULT";
   static const FULL = "FULL";

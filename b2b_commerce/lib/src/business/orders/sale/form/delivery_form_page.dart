@@ -1,10 +1,20 @@
 import 'package:b2b_commerce/src/business/orders/sale/components/input_row.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 ///销售订单发货表单
 class DeliveryFormPage extends StatefulWidget {
+  final String code;
+
+  final SalesOrderModel order;
+
+  const DeliveryFormPage(this.code, {Key key, this.order}) : super(key: key);
+
   @override
   _DeliveryFormPageState createState() => _DeliveryFormPageState();
 }
@@ -12,30 +22,48 @@ class DeliveryFormPage extends StatefulWidget {
 class _DeliveryFormPageState extends State<DeliveryFormPage> {
   bool _showReciverInfo = true;
 
-  TextEditingController _logisticsController = TextEditingController();
-  FocusNode _logisticsNode = FocusNode();
   TextEditingController _orderCodeController = TextEditingController();
   FocusNode _orderCodeNode = FocusNode();
   bool _isOffline = false;
 
+  ///物流
+  CarrierModel carrier;
+
+  SalesOrderModel order;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        centerTitle: true,
-        elevation: 0.5,
-        title: Text(
-          '发货',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: Container(
-        child: ListView(
-          children: <Widget>[_buildReceiverInfo(), _buildDelivererForm()],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomSheet(),
+    return FutureBuilder<SalesOrderModel>(
+      builder: (BuildContext context, AsyncSnapshot<SalesOrderModel> snapshot) {
+        if (snapshot.data != null) {
+          return Scaffold(
+            appBar: AppBar(
+              brightness: Brightness.light,
+              centerTitle: true,
+              elevation: 0.5,
+              title: Text(
+                '发货',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            body: Container(
+              child: ListView(
+                children: <Widget>[_buildReceiverInfo(), _buildDelivererForm()],
+              ),
+            ),
+            bottomNavigationBar: _buildBottomSheet(),
+          );
+        } else {
+          return Container(
+            color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+      initialData: null,
+      future: _getData(),
     );
   }
 
@@ -63,7 +91,7 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
                   child: Row(
                     children: <Widget>[
                       Text(
-                        '萨达',
+                        '${order.deliveryAddress.fullname}',
                         style: TextStyle(color: Colors.grey),
                       ),
                       Icon(
@@ -85,7 +113,8 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
                       label: '收件人',
                       child: TextField(
                         enabled: false,
-                        controller: TextEditingController(text: '阿达'),
+                        controller: TextEditingController(
+                            text: '${order.deliveryAddress.fullname}'),
                         style: TextStyle(color: Colors.grey),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -98,7 +127,8 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
                       label: '联系方式',
                       child: TextField(
                         enabled: false,
-                        controller: TextEditingController(text: '13321321232'),
+                        controller: TextEditingController(
+                            text: '${order.deliveryAddress.cellphone}'),
                         style: TextStyle(color: Colors.grey),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -111,8 +141,8 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
                       label: '收货地址',
                       child: TextField(
                         enabled: false,
-                        controller:
-                            TextEditingController(text: '广州市天河区啊就送i的骄傲四季度'),
+                        controller: TextEditingController(
+                            text: '${order.deliveryAddress.details}'),
                         style: TextStyle(color: Colors.grey),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -150,15 +180,46 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
             children: <Widget>[
               SaleOrderInputRow(
                 label: '物流公司',
-                child: TextField(
-                  controller: _logisticsController,
-                  focusNode: _logisticsNode,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: '请填写',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                ),
+                child: FutureBuilder<List<CarrierModel>>(
+                    future: Provider.of<CarrierState>(context).getCarriers(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<CarrierModel>> snapshot) {
+                      if (snapshot.data != null) {
+                        return PopupMenuButton<CarrierModel>(
+                            onSelected: (val) {
+                              setState(() {
+                                carrier = val;
+                              });
+                            },
+                            itemBuilder: (BuildContext context) =>
+                                snapshot.data
+                                    .map((carrier) =>
+                                    PopupMenuItem<CarrierModel>(
+                                      value: carrier,
+                                      child: new Text(carrier.name),
+                                    ))
+                                    .toList(),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    carrier != null
+                                        ? '${carrier?.name ?? '选择物流公司'}'
+                                        : '选择物流公司',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.chevron_right,
+                                  color: Colors.grey,
+                                )
+                              ],
+                            ));
+                      } else {
+                        return Container();
+                      }
+                    }),
               ),
               SaleOrderInputRow(
                 label: '物流单号',
@@ -232,7 +293,7 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
                 height: double.infinity,
                 child: FlatButton(
                     color: Constants.THEME_COLOR_MAIN,
-                    onPressed: () {},
+                    onPressed: _onSubmit,
                     child: Text(
                       '确定',
                       style: TextStyle(fontSize: 18),
@@ -241,5 +302,40 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
             )
           ],
         ));
+  }
+
+  ///发货`
+  void _onSubmit() {
+    if (!_isOffline) {
+      if (_orderCodeController.text == '' || carrier == null) {
+        BotToast.showText(text: '请填写物流单号并选择物流公司');
+        return null;
+      }
+    }
+    _submit();
+  }
+
+  void _submit() {
+    SalesOrderRespository()
+        .delivery(widget.code, _orderCodeController.text, carrier.code)
+        .then((msg) {
+      if (msg.resultCode == 0) {
+        Navigator.of(context).pop(true);
+      }
+    });
+  }
+
+  /// 查询明细
+  Future<SalesOrderModel> _getData() async {
+    if (widget.order != null && widget.order.deliveryAddress != null) {
+      order = order;
+    }
+
+    if (order == null && widget.code != null) {
+      SalesOrderModel detailModel =
+      await SalesOrderRespository().getSalesOrderDetail(widget.code);
+      order = detailModel;
+    }
+    return order;
   }
 }

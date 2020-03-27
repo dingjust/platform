@@ -3,9 +3,9 @@
     <el-form :inline="true">
       <el-row type="flex">
         <el-col :span="17">
-        <el-input style="width:220px;" placeholder="订单号/产品名称/合作商/款号" v-model="queryFormData.keyword"
-          class="purchase-toolbar-input"></el-input>
-        <!-- </el-form-item> -->
+        <el-input style="width:220px;" placeholder="订单号/产品名称/款号"
+                  v-model="queryFormData.keyword" class="purchase-toolbar-input">
+        </el-input>
         <el-form-item label="日期">
           <el-date-picker v-model="dateTime" type="daterange" align="right" unlink-panels range-separator="~"
             value-format="timestamp" @change="onDateChange" start-placeholder="开始日期" end-placeholder="截止日期"
@@ -22,7 +22,7 @@
         <el-row type="flex" align="top" justify="space-between" :gutter="20">
           <el-button-group>
               <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
-              <el-button native-type="reset">重置</el-button>
+              <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-row>
         </el-col>
@@ -48,18 +48,18 @@
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
-        setQueryFormData: 'queryFormData',
+        setQueryFormData: 'queryFormData'
       }),
-      onSearch() {
+      onSearch () {
         this.$store.state.SalesOrdersModule.keyword = this.keyword;
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
-      onAdvancedSearch() {
+      onAdvancedSearch () {
         this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
-      async getFactories(query) {
+      async getFactories (query) {
         const url = this.apis().getFactories();
         const result = await this.$http.post(url, {
           keyword: query
@@ -67,13 +67,13 @@
           page: 0,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.factories = result.content;
       },
-      async getBrands(query) {
+      async getBrands (query) {
         const url = this.apis().getBrands();
         const result = await this.$http.post(url, {
           keyword: query
@@ -81,33 +81,41 @@
           page: 0,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.brands = result.content;
       },
-      onDateChange(values) {
+      onDateChange (values) {
         console.log(values[0]);
         this.queryFormData.createdDateFrom = values[0];
         this.queryFormData.createdDateTo = values[1];
         this.onAdvancedSearch();
       },
-      async getCategories() {
+      async getCategories () {
         const url = this.apis().getMinorCategories();
         const results = await this.$http.get(url);
         if (!results['errors']) {
           this.categories = results;
         }
       },
+      onReset () {
+        this.queryFormData.keyword = '';
+        this.queryFormData.createdDateFrom = '';
+        this.queryFormData.createdDateTo = '';
+        this.queryFormData.categories = [];
+        // this.setQueryFormData(this.queryFormData);
+        // this.setKeyword('');
+      }
     },
-    data() {
+    data () {
       return {
         uniquecodeFormVisible: false,
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
@@ -115,7 +123,7 @@
             }
           }, {
             text: '最近一个月',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
@@ -123,7 +131,7 @@
             }
           }, {
             text: '最近三个月',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
@@ -137,10 +145,10 @@
         keyword: this.$store.state.SalesOrdersModule.keyword,
         formData: this.$store.state.SalesOrdersModule.formData,
         queryFormData: this.$store.state.SalesOrdersModule.queryFormData,
-        categories: [],
+        categories: []
       }
     },
-    created() {
+    created () {
       this.getCategories();
       if (this.isTenant()) {
         this.getFactories();
@@ -159,7 +167,6 @@
       }
     }
   }
-
 </script>
 <style>
   .el-input__inner {
