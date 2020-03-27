@@ -2,107 +2,115 @@
   <div>
     <el-row class="basic-form-row" type="flex" align="top">
       <el-col :span="2">
-        <h6 class="info-input-prepend">商品规格</h6>
+        <h6 class="info-input-prepend">商品规格<span style="color: red">*</span></h6>
       </el-col>
       <el-col :span="20">
-        <div class="border-container">
-          <el-row type="flex">
-            <h6>颜色</h6>&nbsp;&nbsp;<h6>最多支持30个颜色</h6>
-          </el-row>
-          <el-checkbox-group v-model="slotData.colors" :disabled="isRead">
-            <template v-for="color in colors">
-              <el-checkbox class="size-tag" :label="color.name" @change="((val,$event)=>colorHanleClick(val,color))" style="margin-bottom: 20px">
-                <el-row  type="flex" style="float: left;margin-bottom: -13px;" >
-                  <div :style="{width: '13px',height: '13px',backgroundColor: color.colorCode==null?'#': color.colorCode,marginRight: '5px',align:'middle'}">
-                  </div>
-                  <h6>{{color.name}}</h6>
-                </el-row>
-              </el-checkbox>
-            </template>
-          </el-checkbox-group>
-          <el-row type="flex"  v-for="(color,index) in customColors" v-if="index%4 == 0">
-            <template v-for="(customColor) in customColors.slice(index,index+4)" >
-              <el-col :span="6">
-                <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
-                  <el-input v-model="customColor.name" @change="editCustomColor(customColor)"></el-input>
-                  <el-button type="text" @click="removeCustomColor(customColor)"> 删除</el-button>
-                </el-row>
-              </el-col>
-            </template>
-            <el-row type="flex" v-if="Math.floor(index/4) == Math.floor(customColors.length/4)">
+        <el-form-item prop="colorSizes" :rules="[{
+            type: 'object',
+            validator: checkColorSizes,
+            trigger: 'change'
+          }]">
+          <div class="border-container">
+            <el-row type="flex">
+              <h6>颜色</h6>&nbsp;&nbsp;<h6>最多支持30个颜色</h6>
+            </el-row>
+            <el-checkbox-group v-model="slotData.colors" :disabled="isRead">
+              <template v-for="color in colors">
+                <el-checkbox class="size-tag" :label="color.name" @change="((val,$event)=>colorHanleClick(val,color))" style="margin-bottom: 20px">
+                  <el-row  type="flex" style="float: left;margin-bottom: -13px;" >
+                    <div :style="{width: '13px',height: '13px',backgroundColor: color.colorCode==null?'#': color.colorCode,marginRight: '5px',align:'middle'}">
+                    </div>
+                    <h6>{{color.name}}</h6>
+                  </el-row>
+                </el-checkbox>
+              </template>
+            </el-checkbox-group>
+            <el-row type="flex"  v-for="(color,index) in customColors" v-if="index%4 == 0">
+              <template v-for="(customColor) in customColors.slice(index,index+4)" >
+                <el-col :span="6">
+                  <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                    <el-input v-model="customColor.name" @change="editCustomColor(customColor)"></el-input>
+                    <el-button type="text" @click="removeCustomColor(customColor)"> 删除</el-button>
+                  </el-row>
+                </el-col>
+              </template>
+              <el-row type="flex" v-if="Math.floor(index/4) == Math.floor(customColors.length/4)">
+                <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
+              </el-row>
+            </el-row>
+            <el-row type="flex" v-if="customColors.length%4 == 0">
               <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
             </el-row>
-          </el-row>
-          <el-row type="flex" v-if="customColors.length%4 == 0">
-            <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomColor">+ 添加自定义颜色</el-button>
-          </el-row>
-          <el-row type="flex"  v-for="(color,index) in selectColors" v-if="index%6 == 0">
-            <template v-for="(color) in selectColors.slice(index,index+6)">
-              <el-col :span="4">
-                <images-upload :limit="1" :slotData="color.previewImg" />
-                <h6 style="width: 100px;text-align: center;">{{color.name}}</h6>
-              </el-col>
-            </template>
-          </el-row>
-        </div>
-        <div class="border-container" style="margin-top: 10px;margin-bottom: 20px">
-          <el-row type="flex">
-            <h6>尺码</h6>&nbsp;&nbsp;<h6>最多支持30个尺码</h6>
-          </el-row>
-          <el-checkbox-group v-model="slotData.sizes" :disabled="isRead" >
-            <template v-for="size in sizes">
-              <el-checkbox class="size-tag" style="margin-bottom: 20px" :label="size.name" @change="sizeHanleClick(size)">
-                {{size.name}}
-              </el-checkbox>
-            </template>
-          </el-checkbox-group>
-          <el-row type="flex"  v-for="(size,index) in customSizes" v-if="index%4 == 0">
-            <template v-for="(customSize) in customSizes.slice(index,index+4)" >
-              <el-col :span="6">
-                <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
-                  <el-input v-model="customSize.name" @change="editCustomSize(customSize)"></el-input>
-                  <el-button type="text" @click="removeCustomSize(customSize)"> 删除</el-button>
-                </el-row>
-              </el-col>
-            </template>
-            <el-row type="flex" v-if="Math.floor(index/4) == Math.floor(customSizes.length/4)">
+            <el-row type="flex"  v-for="(color,index) in selectColors" v-if="index%6 == 0">
+              <template v-for="(color) in selectColors.slice(index,index+6)">
+                <el-col :span="4">
+                  <images-upload :limit="1" :slotData="color.previewImg" />
+                  <h6 style="width: 100px;text-align: center;">{{color.name}}</h6>
+                </el-col>
+              </template>
+            </el-row>
+          </div>
+          <div class="border-container" style="margin-top: 10px;margin-bottom: 20px">
+            <el-row type="flex">
+              <h6>尺码</h6>&nbsp;&nbsp;<h6>最多支持30个尺码</h6>
+            </el-row>
+            <el-checkbox-group v-model="slotData.sizes" :disabled="isRead" >
+              <template v-for="size in sizes">
+                <el-checkbox class="size-tag" style="margin-bottom: 20px" :label="size.name" @change="sizeHanleClick(size)">
+                  {{size.name}}
+                </el-checkbox>
+              </template>
+            </el-checkbox-group>
+            <el-row type="flex"  v-for="(size,index) in customSizes" v-if="index%4 == 0">
+              <template v-for="(customSize) in customSizes.slice(index,index+4)" >
+                <el-col :span="6">
+                  <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                    <el-input v-model="customSize.name" @change="editCustomSize(customSize)"></el-input>
+                    <el-button type="text" @click="removeCustomSize(customSize)"> 删除</el-button>
+                  </el-row>
+                </el-col>
+              </template>
+              <el-row type="flex" v-if="Math.floor(index/4) == Math.floor(customSizes.length/4)">
+                <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomSize">+ 添加自定义尺码</el-button>
+              </el-row>
+            </el-row>
+            <el-row type="flex" v-if="customSizes.length%4 == 0">
               <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomSize">+ 添加自定义尺码</el-button>
             </el-row>
-          </el-row>
-          <el-row type="flex" v-if="customSizes.length%4 == 0">
-            <el-button style="margin-right: 11px;margin-bottom: 20px" @click="appendCustomSize">+ 添加自定义尺码</el-button>
+          </div>
+        </el-form-item>
+        <div v-if="isShowStocks()">
+          <el-row type="flex" v-for="(item,index) in slotData.colorSizes" v-if="index%3==0">
+            <template v-for="colors in slotData.colorSizes.slice(index,index+3)">
+              <el-col :span="8">
+                <el-table v-if=" colors != null && colors instanceof Array"
+                  :data="colors"
+                  :span-method="objectSpanMethod"
+                  border
+                  style="width: 100%;">
+                  <el-table-column
+                    :resizable="false"
+                    prop="color"
+                    label="颜色">
+                  </el-table-column>
+                  <el-table-column
+                    :resizable="false"
+                    prop="size"
+                    label="尺码">
+                  </el-table-column>
+                  <el-table-column
+                    :resizable="false"
+                    prop="quality"
+                    label="库存数量">
+                    <template slot-scope="scope">
+                      <el-input v-model="scope.row.quality" class="border-none" @input="inputChange(scope.row)" type="number" :min="0"></el-input>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-col>
+            </template>
           </el-row>
         </div>
-        <el-row type="flex" v-for="(item,index) in slotData.colorSizes" v-if="index%3==0">
-          <template v-for="colors in slotData.colorSizes.slice(index,index+3)">
-            <el-col :span="8">
-              <el-table
-                :data="colors"
-                :span-method="objectSpanMethod"
-                border
-                style="width: 100%;">
-                <el-table-column
-                  :resizable="false"
-                  prop="color"
-                  label="颜色">
-                </el-table-column>
-                <el-table-column
-                  :resizable="false"
-                  prop="size"
-                  label="尺码">
-                </el-table-column>
-                <el-table-column
-                  :resizable="false"
-                  prop="quality"
-                  label="库存数量">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.quality" class="border-none" @input="inputChange(scope.row)" type="number" :min="0"></el-input>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-col>
-          </template>
-        </el-row>
       </el-col>
     </el-row>
   </div>
@@ -125,6 +133,22 @@
       }
     },
     methods: {
+      checkColorSizes  (rule, value, callback) {
+        console.log(value);
+        if (value == null || value.length <= 0 || value[0].length <= 0) {
+          return callback(new Error('请填写商品规格'));
+        } else {
+          callback();
+        }
+      },
+      isShowStocks () {
+        if (this.isFactory() && this.slotData.productType != null &&
+          (this.slotData.productType.indexOf('SPOT_GOODS') > -1 || this.slotData.productType.indexOf('TAIL_GOODS') > -1)) {
+          return true;
+        } else {
+          return false;
+        }
+      },
       async getAllSizes () {
         const url = this.apis().getAllSizes();
         this.sizes = await this.$http.get(url);
@@ -132,7 +156,6 @@
       async getAllColors () {
         const url = this.apis().getAllColors();
         this.colors = await this.$http.get(url);
-        console.log(this.colors);
       },
       getColorSizes () {
         var colors = [];
@@ -191,7 +214,7 @@
         } else {
           this.selectSizes.splice(index, 1);
         }
-        // 根据尺码code排序
+        // 根据尺码sequence排序
         var compare = function (prop) {
           return function (obj1, obj2) {
             var val1 = obj1[prop];

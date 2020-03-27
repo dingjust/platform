@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-row class="basic-form-row" type="flex" align="middle">
       <el-col :span="2">
-        <h6 class="info-input-prepend">标题</h6>
+        <h6 class="info-input-prepend">标题<span style="color: red">*</span></h6>
       </el-col>
       <el-col :span="20">
         <el-form-item  :rules="[

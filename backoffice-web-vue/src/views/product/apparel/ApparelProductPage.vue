@@ -175,7 +175,7 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
+        this.$message.success('编号为' + item.code + '的产品上架成功');
         this.onAdvancedSearch();
         // this.refresh();
       },
@@ -199,7 +199,7 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-
+        this.$message.success('编号为' + item.code + '的产品下架成功');
         this.onAdvancedSearch();
         // this.refresh();
       },
