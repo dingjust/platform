@@ -69,7 +69,13 @@ class SalesDetailButtonGroup extends StatelessWidget {
       //TODO退款状态判断
       if (model.refunding != null && model.refunding) {
         buttons.add(buildSpaceBtn());
-        buttons.add(buildBtn2(context, () => onCancelRefund(context), '撤销退货'));
+        if (model.refundStatus == SalesOrderRefundStatus.PENDING_CONFIRM) {
+          buttons
+              .add(buildBtn2(context, () => onCancelRefund(context), '撤销退货'));
+        } else if (model.refundStatus == SalesOrderRefundStatus.IN_REFUND) {
+          buttons
+              .add(buildBtn2(context, () => onRefundDetail(context), '查看退货详情'));
+        }
         return buttons;
       }
 

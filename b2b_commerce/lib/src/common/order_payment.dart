@@ -362,7 +362,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
               )),
           _buildInfoRow(
             '单价x数量',
-            '￥${widget.order.unitPrice}x${widget.order.totalQuantity}',
+            '￥${widget.order.unitPrice}x${widget.order.totalQuantity ??
+                (widget.order as SalesOrderModel).quality}',
           ),
           _buildInfoRow(
             '合计总价',

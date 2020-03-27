@@ -40,29 +40,34 @@ class SaleOrdersState extends PageState {
         size: 10,
         data: List<SalesOrderModel>(),
         totalElements: -1),
+    'SEARCH': PageEntry(
+        currentPage: 0,
+        size: 10,
+        data: List<SalesOrderModel>(),
+        totalElements: -1),
   };
 
-  PageEntry getEntry(String status) {
+  PageEntry getEntry(String status, {String keyword}) {
     if (_ordersMap[status].totalElements < 0) {
-      getOrders(status);
+      getOrders(status, keyword: keyword);
     }
     return _ordersMap[status];
   }
 
-  List<SalesOrderModel> orders(String status) {
+  List<SalesOrderModel> orders(String status, {String keyword}) {
     if (_ordersMap[status].totalElements < 0) {
-      getOrders(status);
+      getOrders(status, keyword: keyword);
     }
     return _ordersMap[status].data;
   }
 
-  void getOrders(String status) async {
+  void getOrders(String status, {String keyword}) async {
     //若没有数据则查询
     if (_ordersMap[status].totalElements < 0) {
       //  分页拿数据，response.data;
       //请求参数
       Map data = {};
-      if (status != 'ALL') {
+      if (status != 'ALL' && status != 'SEARCH') {
         data = {
           'statuses': [status]
         };
@@ -70,6 +75,10 @@ class SaleOrdersState extends PageState {
 
       if (status == 'ON_RETURN') {
         data = {'refunding': true};
+      }
+
+      if (status == 'SEARCH' && keyword != null) {
+        data = {'keyword': keyword};
       }
 
       Response<Map<String, dynamic>> response;
@@ -99,7 +108,7 @@ class SaleOrdersState extends PageState {
     }
   }
 
-  void loadMoreOrders(String status) async {
+  void loadMoreOrders(String status, {String keyword}) async {
     if (!lock) {
       //异步调用开始，通知加载组件
       workingStart();
@@ -114,6 +123,11 @@ class SaleOrdersState extends PageState {
         if (status == 'ON_RETURN') {
           data = {'refunding': true};
         }
+
+        if (status == 'SEARCH' && keyword != null) {
+          data = {'keyword': keyword};
+        }
+
         Response<Map<String, dynamic>> response;
         try {
           response = await http$

@@ -79,8 +79,8 @@ class _BuyStockFormState extends State<BuyStockForm>
     };
 
     produceDay = widget.product.productionDays;
-    if (widget.product.steppedPrices != null &&
-        widget.product.steppedPrices.isNotEmpty) {
+    if (widget.product.spotSteppedPrices != null &&
+        widget.product.spotSteppedPrices.isNotEmpty) {
       price = widget.product.minSteppedPrice;
     }
 
@@ -346,9 +346,12 @@ class _BuyStockFormState extends State<BuyStockForm>
                               setState(() {
                                 entry.controller.text = '';
                               });
+                            } else {
+                              setState(() {});
                             }
-                            if (int.parse(entry.controller.text) >
-                                entry.model.quality) {
+                            if (entry.controller.text != '' &&
+                                int.parse(entry.controller.text) >
+                                    entry.model.quality) {
                               setState(() {
                                 entry.controller.text =
                                 '${entry.model.quality}';
@@ -580,7 +583,7 @@ class _BuyStockFormState extends State<BuyStockForm>
     return Tab(
       // text: '${entries[0].model.color.name}',
       child: Container(
-        width: 60,
+        width: 40.0 + 10 * entries[0].model.color.name.length,
         height: 30,
         child: Stack(
           fit: StackFit.expand,
@@ -601,10 +604,11 @@ class _BuyStockFormState extends State<BuyStockForm>
                   )
                 : Container(),
             Container(
-              margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+              margin: EdgeInsets.fromLTRB(colorCode != null ? 20 : 0, 5, 0, 0),
               child: Text(
                 '${entries[0].model.color.name}',
                 style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
               ),
             ),
             colorTotalNum(entries) > 0
@@ -667,23 +671,24 @@ class _BuyStockFormState extends State<BuyStockForm>
   }
 
   double countUnitPrice(int totalNum) {
-    for (int i = 0; i < widget.product.steppedPrices.length; i++) {
-      if (i == widget.product.steppedPrices.length - 1) {
-        if (totalNum >= widget.product.steppedPrices[i].minimumQuantity) {
-          price = widget.product.steppedPrices[i].price;
+    for (int i = 0; i < widget.product.spotSteppedPrices.length; i++) {
+      if (i == widget.product.spotSteppedPrices.length - 1) {
+        if (totalNum >= widget.product.spotSteppedPrices[i].minimumQuantity) {
+          price = widget.product.spotSteppedPrices[i].price;
           return price;
         }
       } else {
-        if (totalNum >= widget.product.steppedPrices[i].minimumQuantity &&
-            totalNum < widget.product.steppedPrices[i + 1].minimumQuantity) {
-          price = widget.product.steppedPrices[i].price;
+        if (totalNum >= widget.product.spotSteppedPrices[i].minimumQuantity &&
+            totalNum <
+                widget.product.spotSteppedPrices[i + 1].minimumQuantity) {
+          price = widget.product.spotSteppedPrices[i].price;
           return price;
         }
       }
     }
-    if (widget.product.steppedPrices != null &&
-        widget.product.steppedPrices.isNotEmpty) {
-      price = widget.product.steppedPrices.first.price;
+    if (widget.product.spotSteppedPrices != null &&
+        widget.product.spotSteppedPrices.isNotEmpty) {
+      price = widget.product.spotSteppedPrices.first.price;
     } else {
       price = 0;
     }
@@ -705,8 +710,8 @@ class _BuyStockFormState extends State<BuyStockForm>
 
   ///校验表单
   bool validateForm() {
-    if (widget.product.steppedPrices.isNotEmpty) {
-      return totalNum >= widget.product.steppedPrices[0].minimumQuantity;
+    if (widget.product.spotSteppedPrices.isNotEmpty) {
+      return totalNum >= widget.product.spotSteppedPrices[0].minimumQuantity;
     } else {
       return true;
     }
@@ -755,8 +760,10 @@ class _BuyStockFormState extends State<BuyStockForm>
           )));
     } else {
       Toast.show(
-          "未达最低采购量${widget.product.steppedPrices[0].minimumQuantity}件", context,
-          duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+          "未达最低采购量${widget.product.spotSteppedPrices[0].minimumQuantity}件",
+          context,
+          duration: Toast.LENGTH_SHORT,
+          gravity: Toast.CENTER);
     }
   }
 

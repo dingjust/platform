@@ -252,39 +252,38 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
                     // margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: Row(
-                  children: <Widget>[
-                    Text(
-                      '${entries[0].model.color.name}',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                )),
-                entries[0].model.color.colorCode != null
-                    ? Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                            color: Color(int.parse('0xFF${colorCode}')),
-                            border: Border.all(
-                                width: 0.5, color: Colors.grey[300])),
-                        child: Text(''),
-                      )
-                    : Container(),
-              ],
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            '${entries[0].model.color.name}',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      )),
+                  entries[0].model.color.colorCode != null
+                      ? Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                        color: Color(int.parse('0xFF${colorCode}')),
+                        border: Border.all(
+                            width: 0.5, color: Colors.grey[300])),
+                    child: Text(''),
+                  )
+                      : Container(),
+                ],
+              ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: _buildViewBody(entries, color),
-          )
+          _buildViewBody(entries, color),
         ],
       ),
     );
@@ -341,78 +340,17 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         .map((entry) => Container(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(
-            '${entry.model.size.name}',
-            style: TextStyle(fontSize: 14),
+          Container(
+            margin: EdgeInsets.only(right: 150),
+            child: Text(
+              '${entry.model.size.name}',
+              style: TextStyle(fontSize: 14),
+            ),
           ),
-          Row(
-            children: <Widget>[
-              Container(
-                width: 40,
-                // height: 40,
-                child: Text('${entry.controller.text}'),
-              )
-              // IconButton(
-              //   icon: Icon(
-              //     B2BIcons.remove_rect,
-              //     color: Colors.grey[300],
-              //   ),
-              //   onPressed: () {
-              //     if (int.parse(entry.controller.text) > 1) {
-              //       setState(() {
-              //         int i = int.parse(entry.controller.text);
-              //         i--;
-              //         entry.controller.text = '$i';
-              //       });
-              //     }
-              //   },
-              // ),
-              // Container(
-              //   width: 40,
-              //   child: TextField(
-              //     controller: entry.controller,
-              //     decoration: InputDecoration(
-              //         border: InputBorder.none,
-              //         hintText: '0',
-              //         hintStyle: TextStyle(fontSize: 14)),
-              //     keyboardType: TextInputType.number,
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(fontSize: 14),
-              //     //只能输入数字
-              //     inputFormatters: <TextInputFormatter>[
-              //       WhitelistingTextInputFormatter.digitsOnly,
-              //     ],
-              //     onChanged: (val) {
-              //       if (val == '0') {
-              //         setState(() {
-              //           entry.controller.text = '';
-              //         });
-              //       }
-              //     },
-              //   ),
-              // ),
-              // IconButton(
-              //   icon: Icon(
-              //     B2BIcons.add_rect,
-              //     color: Colors.grey[300],
-              //   ),
-              //   onPressed: () {
-              //     setState(() {
-              //       if (entry.controller.text == '') {
-              //         entry.controller.text = '1';
-              //       } else {
-              //         int i = int.parse(entry.controller.text);
-              //         i++;
-              //         entry.controller.text = '$i';
-              //       }
-              //     });
-              //   },
-              // )
-            ],
-          )
+          Text('${entry.controller.text}'),
         ],
       ),
             ))

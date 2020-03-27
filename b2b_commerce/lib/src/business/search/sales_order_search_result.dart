@@ -1,13 +1,10 @@
 import 'dart:convert';
 
-import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_list_item.dart';
-import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
+import 'package:b2b_commerce/src/business/orders/sale/sale_order_list_item.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
-import 'package:b2b_commerce/src/my/my_help.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -15,60 +12,63 @@ class SalesOrderSearchResultPage extends StatelessWidget {
   SalesOrderSearchResultPage({Key key, this.searchModel}) : super(key: key);
 
   SearchModel searchModel;
-  GlobalKey _productionOrderBlocProviderKey = GlobalKey();
   List<String> historyKeywords;
 
   @override
   Widget build(BuildContext context) {
-    return BLoCProvider<PurchaseOrderBLoC>(
-      key: _productionOrderBlocProviderKey,
-      bloc: PurchaseOrderBLoC.instance,
-      child: WillPopScope(
+    return ChangeNotifierProvider<SaleOrdersState>(
+        builder: (context) => SaleOrdersState(),
         child: Scaffold(
-          appBar: AppBar(
-            elevation: 0.5,
-            title: Row(
-              children: <Widget>[
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      onClick(context);
-                    },
-                    child: Container(
-                      height: 35,
-                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey[300], width: 0.5),
-                      ),
+            appBar: AppBar(
+              elevation: 0.5,
+              title: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        onClick(context);
+                      },
                       child: Container(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          '${searchModel.keyword}',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
+                        height: 35,
+                        padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(20),
+                          border:
+                          Border.all(color: Colors.grey[300], width: 0.5),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            '${searchModel.keyword}',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          body: ProductionListView(
-            keyword: searchModel.keyword,
-            // isContractSelect: isContractSelect,
-          ),
-        ),
-        onWillPop: () {
-          Navigator.of(context).pop();
-          PurchaseOrderBLoC().refreshData('ALL');
-        },
-      ),
-    );
+            body: Consumer<SaleOrdersState>(
+              builder: (context, SaleOrdersState state, _) =>
+                  Container(
+                    child: state
+                        .getEntry('SEARCH', keyword: searchModel.keyword)
+                        .totalElements >
+                        -1
+                        ? SaleOrderSearchList(
+                      state: state,
+                      keyword: searchModel.keyword,
+                    )
+                        : Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+            )));
   }
 
   void onClick(BuildContext context) {
@@ -99,8 +99,8 @@ class SalesOrderSearchResultPage extends StatelessWidget {
             searchModel: SearchModel(
                 historyKeywords: historyKeywords,
                 keyword: searchModel.keyword,
-                searchModelType: SearchModelType.PURCHASE_ORDER,
-                route: GlobalConfigs.Requirement_HISTORY_KEYWORD_KEY),
+                searchModelType: SearchModelType.SALE_ORDER,
+                route: GlobalConfigs.SALE_HISTORY_KEYWORD_KEY),
           ),
         ),
       );
@@ -108,128 +108,95 @@ class SalesOrderSearchResultPage extends StatelessWidget {
   }
 }
 
-class ProductionListView extends StatelessWidget {
-  String keyword;
-  bool isContractSelect;
+class SaleOrderSearchList extends StatelessWidget {
+  final String status = 'SEARCH';
 
-  ScrollController _scrollController = new ScrollController();
+  final String keyword;
 
-  ProductionListView({Key key, @required this.keyword, this.isContractSelect})
-      : super(key: key);
+  final SaleOrdersState state;
+
+  final ScrollController _scrollController = ScrollController();
+
+  SaleOrderSearchList({
+    Key key,
+    this.keyword,
+    this.state,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('=======');
-
-    var bloc = BLoCProvider.of<PurchaseOrderBLoC>(context);
-    bloc.reset();
+    //监听加载更多
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        bloc.loadingStart();
-        bloc.loadingMoreByKeyword(keyword);
+        state.loadMoreOrders(status, keyword: keyword);
       }
     });
 
     return Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        color: Colors.grey[200],
+      child: RefreshIndicator(
         child: ListView(
-          controller: _scrollController,
-          children: <Widget>[
-            StreamBuilder<List<PurchaseOrderModel>>(
-                initialData: null,
-                stream: bloc.purchaseStream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<PurchaseOrderModel>> snapshot) {
-                  print(snapshot.data);
-                  if (snapshot.data == null) {
-                    bloc.filterByKeyword(keyword);
-                    return ProgressIndicatorFactory
-                        .buildPaddedProgressIndicator();
-                  }
-                  if (snapshot.data.length <= 0) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(top: 200),
-                          child: Image.asset(
-                            'temp/logo2.png',
-                            package: 'assets',
-                            width: 80,
-                            height: 80,
-                          ),
-                        ),
-                        Container(
-                            child: Text(
-                          AppBLoC.instance.getConnectivityResult ==
-                                  ConnectivityResult.none
-                              ? '网络链接不可用请重试'
-                              : '没有相关订单数据',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        )),
-                        AppBLoC.instance.getConnectivityResult !=
-                                ConnectivityResult.none
-                            ? Container(
-                                child: FlatButton(
-                                  color: Color.fromRGBO(255, 214, 12, 1),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                MyHelpPage()));
-                                  },
-                                  child: Text('如何创建订单？'),
-                                ),
-                              )
-                            : Container()
-                      ],
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    return Column(
-                      children: snapshot.data.map((order) {
-                        return PurchaseOrderListItem(
-                          order: order,
-                          isContractSelect: isContractSelect,
-                        );
-                      }).toList(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                }),
-            StreamBuilder<bool>(
-              stream: bloc.bottomStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                // if (snapshot.data) {
-                //   _scrollController.animateTo(_scrollController.offset - 70,
-                //       duration: new Duration(milliseconds: 500), curve: Curves.easeOut);
-                // }
-                return ScrolledToEndTips(
-                  hasContent: snapshot.data,
-                  scrollController: _scrollController,
-                );
-              },
-            ),
-            StreamBuilder<bool>(
-              stream: bloc.loadingStream,
-              initialData: false,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                return ProgressIndicatorFactory
-                    .buildPaddedOpacityProgressIndicator(
-                        opacity: snapshot.data ? 1.0 : 0);
-              },
-            ),
-          ],
-        ));
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              state
+                  .orders(status, keyword: keyword)
+                  .isNotEmpty
+                  ? Column(
+                children: state
+                    .orders(status, keyword: keyword)
+                    .map((model) =>
+                    SaleOrderListItem(
+                      model: model,
+                    ))
+                    .toList(),
+              )
+                  : _NoDataInfoRow(),
+              ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                opacity: state.loadingMore ? 1.0 : 0,
+              ),
+              _buildEnd()
+            ]),
+        onRefresh: () async {
+          state.clear();
+        },
+      ),
+    );
+  }
+
+  Widget _buildEnd() {
+    return state
+        .getEntry(status, keyword: keyword)
+        .currentPage + 1 ==
+        state
+            .getEntry(status, keyword: keyword)
+            .totalPages
+        ? Container(
+      padding: EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[Text('已经到底了')],
+      ),
+    )
+        : Container();
+  }
+}
+
+class _NoDataInfoRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 50),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.lightbulb_outline,
+            color: Colors.orange,
+          ),
+          Text('暂无相关数据,您可以更换条件试试')
+        ],
+      ),
+    );
   }
 }

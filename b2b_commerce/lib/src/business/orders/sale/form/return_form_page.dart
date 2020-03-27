@@ -144,10 +144,24 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
             padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
             child: Row(
               children: <Widget>[
-                Text(
-                  '退货原因：',
-                  style: TextStyle(fontSize: 18),
-                )
+                // Text(
+                //   '退货原因：',
+                //   style: TextStyle(fontSize: 18),
+                // ),
+                RichText(
+                    text: TextSpan(
+                        text: '退货原因',
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                        children: [
+                          TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.red)),
+                          TextSpan(
+                            text: '：',
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          )
+                        ]))
               ],
             ),
           ),
@@ -306,6 +320,10 @@ class _ReturnFormPageState extends State<ReturnFormPage> {
   }
 
   void _submit() async {
+    BotToast.showLoading(
+        duration: Duration(milliseconds: 500),
+        clickClose: true,
+        crossPage: false);
     SalesOrderRespository()
         .refundApply(SalesOrderRefundInfoModel(
         code: order.code,
