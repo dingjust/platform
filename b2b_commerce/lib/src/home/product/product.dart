@@ -135,9 +135,7 @@ class RecommendProductItem extends StatelessWidget {
                                           color: Colors.red, fontSize: 14),
                                       children: <TextSpan>[
                                         TextSpan(
-                                            text:
-                                            '${model?.minSteppedPrice ??
-                                                model?.maxSteppedPrice ?? ''}',
+                                            text: '${model?.minPrice}',
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold)),
