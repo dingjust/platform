@@ -253,28 +253,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // mainAxisAlignment: MainAxisAlignment.st,
           children: _moneyRows),
     );
   }
 
   Widget _buildMoneyRowBlock(String price, String decription) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            '$price',
-            style: TextStyle(
-                color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold),
+    return Expanded(
+        flex: 1,
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                '$price',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '$decription',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              )
+            ],
           ),
-          Text(
-            '$decription',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
-          )
-        ],
-      ),
-    );
+        ));
   }
 
   void onOrder() {

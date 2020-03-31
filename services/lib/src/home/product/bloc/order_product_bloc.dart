@@ -118,7 +118,14 @@ class OrderByProductBLoc extends BLoCBase {
           currentPage++;
           response = await http$.post(ProductApis.factoriesApparel,
               data: productCondition.toDataJson(),
-              queryParameters: {'page': currentPage, 'size': pageSize});
+              queryParameters: {
+                'page': currentPage,
+                'size': pageSize,
+                'sort': productCondition.sortCondition != null
+                    ? '${productCondition.sortCondition},${productCondition
+                    .sort}'
+                    : ''
+              });
         } on DioError catch (e) {
           print(e);
         }
