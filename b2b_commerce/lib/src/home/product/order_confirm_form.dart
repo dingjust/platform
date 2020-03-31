@@ -551,26 +551,51 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   double countUnitPrice(int totalNum) {
-    for (int i = 0; i < widget.product.steppedPrices.length; i++) {
-      if (i == widget.product.steppedPrices.length - 1) {
-        if (totalNum >= widget.product.steppedPrices[i].minimumQuantity) {
-          price = widget.product.steppedPrices[i].price;
-          return price;
-        }
-      } else {
-        if (totalNum >= widget.product.steppedPrices[i].minimumQuantity &&
-            totalNum < widget.product.steppedPrices[i + 1].minimumQuantity) {
-          price = widget.product.steppedPrices[i].price;
-          return price;
+    if (widget.orderType == OrderType.PURCHASE) {
+      for (int i = 0; i < widget.product.steppedPrices.length; i++) {
+        if (i == widget.product.steppedPrices.length - 1) {
+          if (totalNum >= widget.product.steppedPrices[i].minimumQuantity) {
+            price = widget.product.steppedPrices[i].price;
+            return price;
+          }
+        } else {
+          if (totalNum >= widget.product.steppedPrices[i].minimumQuantity &&
+              totalNum < widget.product.steppedPrices[i + 1].minimumQuantity) {
+            price = widget.product.steppedPrices[i].price;
+            return price;
+          }
         }
       }
+      if (widget.product.steppedPrices != null &&
+          widget.product.steppedPrices.isNotEmpty) {
+        price = widget.product.steppedPrices.first.price;
+      } else {
+        price = 0;
+      }
+    } else if (widget.orderType == OrderType.SALES) {
+      for (int i = 0; i < widget.product.spotSteppedPrices.length; i++) {
+        if (i == widget.product.spotSteppedPrices.length - 1) {
+          if (totalNum >= widget.product.spotSteppedPrices[i].minimumQuantity) {
+            price = widget.product.spotSteppedPrices[i].price;
+            return price;
+          }
+        } else {
+          if (totalNum >= widget.product.spotSteppedPrices[i].minimumQuantity &&
+              totalNum <
+                  widget.product.spotSteppedPrices[i + 1].minimumQuantity) {
+            price = widget.product.spotSteppedPrices[i].price;
+            return price;
+          }
+        }
+      }
+      if (widget.product.spotSteppedPrices != null &&
+          widget.product.spotSteppedPrices.isNotEmpty) {
+        price = widget.product.spotSteppedPrices.first.price;
+      } else {
+        price = 0;
+      }
     }
-    if (widget.product.steppedPrices != null &&
-        widget.product.steppedPrices.isNotEmpty) {
-      price = widget.product.steppedPrices.first.price;
-    } else {
-      price = 0;
-    }
+
     return price;
   }
 
@@ -620,7 +645,10 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
               dialogHeight: 210,
               confirmAction: () {
                 Navigator.of(context).pop();
+                //埋点>>>看款下单-确认下单
+                // FlutterUmplus.event("order_product_confirm").then((val) {
                 onSubmit();
+                // });
               },
             );
           });

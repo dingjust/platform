@@ -78,8 +78,23 @@ enum FlowSource {
   PURCHASE_DEPOSIT,
 
   ///生产单尾款
-  PURCHASE_BALANCE
+  PURCHASE_BALANCE,
+
+  ///销售订单
+  SALES_ORDER,
+
+  ///销售订单退款
+  SALES_ORDER_REFUND
 }
+
+const FlowSourceLocalizedMap = {
+  FlowSource.CASH_OUT: '提现',
+  FlowSource.PROOFING: '打样单',
+  FlowSource.PURCHASE_BALANCE: '生产单定金',
+  FlowSource.PURCHASE_DEPOSIT: '生产单尾款',
+  FlowSource.SALES_ORDER: '销售订单',
+  FlowSource.SALES_ORDER_REFUND: '销售订单退款',
+};
 
 ///资金流水类型
 enum AmountFlowType {
@@ -266,10 +281,3 @@ class BillModel extends ItemModel {
   static int _dateTimetoMilliseconds(DateTime date) =>
       date == null ? null : date.millisecondsSinceEpoch;
 }
-
-const FlowSourceLocalizedMap = {
-  FlowSource.CASH_OUT: '提现',
-  FlowSource.PROOFING: '打样单',
-  FlowSource.PURCHASE_BALANCE: '生产单定金',
-  FlowSource.PURCHASE_DEPOSIT: '生产单尾款',
-};
