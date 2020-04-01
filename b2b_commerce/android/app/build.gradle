@@ -114,5 +114,8 @@ android {
 //      implementation 'com.android.support:support-v4:28.0.0-alpha3'
         /// 注意这里需要在主项目增加一条依赖，否则可能发生编译不通过的情况-----高德
         implementation 'com.amap.api:location:latest.integration'
+
+        compile 'com.umeng.umsdk:analytics:8.1.6'
+        compile 'com.umeng.umsdk:common:2.0.0'
     }
 }

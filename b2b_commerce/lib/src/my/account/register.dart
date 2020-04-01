@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -38,6 +39,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String phoneValidateStr = "";
   String passwordValidateStr = "";
+
+  ///参数填入埋点是否已提交
+  bool _formEventTracked = false;
 
   @override
   void initState() {
@@ -481,7 +485,10 @@ class _RegisterPageState extends State<RegisterPage> {
     return legal;
   }
 
+  ///表单校验
   void formValidate() {
+    //埋点判断
+    _formEventTrack();
     if (!RegexUtil.isMobile(_phoneController.text)) {
       setState(() {
         phoneValidateStr = '输入正确手机号';
@@ -543,7 +550,7 @@ class _RegisterPageState extends State<RegisterPage> {
         //验证公司名字
         showValidateDialog(context, '请输入公司名称');
       } else if (!_isAgree) {
-        showValidateDialog(context, '请先同意《钉单平台服务协议》和《钉单平台带块代收代付服务协议》');
+        showValidateDialog(context, '请先同意《钉单平台服务协议》和《钉单平台贷款代收代付服务协议》');
       } else if (userType != UserType.BRAND && userType != UserType.FACTORY) {
         showValidateDialog(context, '请选择注册类型');
       } else {
@@ -589,6 +596,9 @@ class _RegisterPageState extends State<RegisterPage> {
         .register(type: UserTypeMap[userType], form: form);
 
     if (response != null) {
+      //注册成功
+      //埋点>>>用户注册-成功
+      FlutterUmplus.event("user_register_success");
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -813,5 +823,24 @@ class _RegisterPageState extends State<RegisterPage> {
             },
           );
         });
+  }
+
+  ///用户是否填入参数
+  void _formEventTrack() {
+    if (!_formEventTracked) {
+      if (_phoneController.text != "" ||
+          _captchaController.text != "" ||
+          _passwordController.text != "" ||
+          _againPasswordController.text != "" ||
+          _contactPersonController.text != "" ||
+          _nameController.text != "") {
+        //注册填写
+        //埋点>>>用户注册-用户填写过参数
+        FlutterUmplus.event("user_register_form_input");
+        setState(() {
+          _formEventTracked = true;
+        });
+      }
+    }
   }
 }

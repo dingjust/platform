@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -132,10 +133,8 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
     // Provider.of<CertificationStatusHelper>(context)
     //     .checkCertificationStatus(context);
 
-    // LcfarmFlutterUmeng.init(
-    //     androidAppKey: "5e61b75d0cafb2aa19000058",
-    //     // channel: "test1",
-    //     logEnable: true);
+    //友盟初始化
+    initUMeng();
 
     //初始化监听
     initListener();
@@ -145,6 +144,19 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
   void initListener() {
     // listenMessage();
     listenLogin();
+  }
+
+  ///友盟初始化
+  initUMeng() {
+    TargetPlatform platform = defaultTargetPlatform;
+    FlutterUmplus.init(
+      platform == TargetPlatform.android
+          ? GlobalConfigs.UMENG_APP_KEY_ANDROID
+          : GlobalConfigs.UMENG_APP_KEY_IOS,
+      reportCrash: false,
+      logEnable: GlobalConfigs.DEBUG,
+      encrypt: true,
+    );
   }
 
   //监听异常消息,dialog

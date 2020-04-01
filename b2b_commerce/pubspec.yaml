@@ -90,7 +90,9 @@ dependencies:
   flutter_date_pickers: ^0.0.6
   flutter_alipay: ^0.1.2
   auto_orientation: ^1.0.6
-  lcfarm_flutter_umeng: ^0.1.8
+  # lcfarm_flutter_umeng: ^0.1.8
+  flutter_umplus: ^0.0.1
+
 
 dev_dependencies:
   flutter_test:
