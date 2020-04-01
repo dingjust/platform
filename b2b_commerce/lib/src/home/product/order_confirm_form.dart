@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:toast/toast.dart';
@@ -252,14 +253,13 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            child: Container(
+          Container(
+              width: 100,
               margin: EdgeInsets.only(right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Row(
                 children: <Widget>[
                   Container(
-                    // margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
+                      margin: EdgeInsets.only(right: 20),
                       child: Row(
                         children: <Widget>[
                           Text(
@@ -280,9 +280,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   )
                       : Container(),
                 ],
-              ),
-            ),
-          ),
+              )),
           _buildViewBody(entries, color),
         ],
       ),
@@ -340,11 +338,11 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         .map((entry) => Container(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(right: 150),
+            // margin: EdgeInsets.only(right: 150),
             child: Text(
               '${entry.model.size.name}',
               style: TextStyle(fontSize: 14),
@@ -355,9 +353,10 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
       ),
             ))
         .toList();
-    return Column(
+    return Expanded(
+        child: Column(
       children: widgets,
-    );
+        ));
   }
 
   Widget _buildBottomSheet() {
@@ -551,26 +550,51 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   double countUnitPrice(int totalNum) {
-    for (int i = 0; i < widget.product.steppedPrices.length; i++) {
-      if (i == widget.product.steppedPrices.length - 1) {
-        if (totalNum >= widget.product.steppedPrices[i].minimumQuantity) {
-          price = widget.product.steppedPrices[i].price;
-          return price;
-        }
-      } else {
-        if (totalNum >= widget.product.steppedPrices[i].minimumQuantity &&
-            totalNum < widget.product.steppedPrices[i + 1].minimumQuantity) {
-          price = widget.product.steppedPrices[i].price;
-          return price;
+    if (widget.orderType == OrderType.PURCHASE) {
+      for (int i = 0; i < widget.product.steppedPrices.length; i++) {
+        if (i == widget.product.steppedPrices.length - 1) {
+          if (totalNum >= widget.product.steppedPrices[i].minimumQuantity) {
+            price = widget.product.steppedPrices[i].price;
+            return price;
+          }
+        } else {
+          if (totalNum >= widget.product.steppedPrices[i].minimumQuantity &&
+              totalNum < widget.product.steppedPrices[i + 1].minimumQuantity) {
+            price = widget.product.steppedPrices[i].price;
+            return price;
+          }
         }
       }
+      if (widget.product.steppedPrices != null &&
+          widget.product.steppedPrices.isNotEmpty) {
+        price = widget.product.steppedPrices.first.price;
+      } else {
+        price = 0;
+      }
+    } else if (widget.orderType == OrderType.SALES) {
+      for (int i = 0; i < widget.product.spotSteppedPrices.length; i++) {
+        if (i == widget.product.spotSteppedPrices.length - 1) {
+          if (totalNum >= widget.product.spotSteppedPrices[i].minimumQuantity) {
+            price = widget.product.spotSteppedPrices[i].price;
+            return price;
+          }
+        } else {
+          if (totalNum >= widget.product.spotSteppedPrices[i].minimumQuantity &&
+              totalNum <
+                  widget.product.spotSteppedPrices[i + 1].minimumQuantity) {
+            price = widget.product.spotSteppedPrices[i].price;
+            return price;
+          }
+        }
+      }
+      if (widget.product.spotSteppedPrices != null &&
+          widget.product.spotSteppedPrices.isNotEmpty) {
+        price = widget.product.spotSteppedPrices.first.price;
+      } else {
+        price = 0;
+      }
     }
-    if (widget.product.steppedPrices != null &&
-        widget.product.steppedPrices.isNotEmpty) {
-      price = widget.product.steppedPrices.first.price;
-    } else {
-      price = 0;
-    }
+
     return price;
   }
 
@@ -628,6 +652,8 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   void onSubmit() {
+    //埋点>>>看款下单-确认下单
+    FlutterUmplus.event("order_product_confirm");
     switch (widget.orderType) {
       case OrderType.PROOFING:
         onProofingSubmit();
