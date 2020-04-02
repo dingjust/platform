@@ -114,6 +114,8 @@ class JPushService {
             ? RequirementOrderDetailByFactoryPage(
             response.extras.androidExtras.params)
             : RequirementOrderDetailPage(response.extras.androidExtras.params);
+      case 5:
+        return SaleOrderDetailPage(code: response.extras.androidExtras.params);
       default:
         return null;
     }
@@ -134,6 +136,8 @@ class JPushService {
         return UserBLoC.instance.currentUser.type == UserType.FACTORY
             ? RequirementOrderDetailByFactoryPage(response.params)
             : RequirementOrderDetailPage(response.params);
+      case 5:
+        return SaleOrderDetailPage(code: response.params);
       default:
         return null;
     }
@@ -153,6 +157,8 @@ class JPushService {
         return UserBLoC.instance.currentUser.type == UserType.FACTORY
             ? RequirementOrderDetailByFactoryPage(message.params)
             : RequirementOrderDetailPage(message.params);
+      case 5:
+        return SaleOrderDetailPage(code: message.params);
       default:
         return null;
     }
@@ -218,4 +224,5 @@ const PAGE_ROUTE_MAP = <MsgModule, int>{
   MsgModule.PURCHASE_FACTORY_DELAY: 3,
   MsgModule.PURCHASE_BRAND_DELAY: 3,
   MsgModule.RECOMMEND_REQUIRE_ORDER: 4,
+  MsgModule.SALES_ORDER_DELIVERY_REMINDER: 5,
 };

@@ -148,4 +148,8 @@ PURCHASE_FACTORY_DELAY,
 
 ///生产订单品牌延期提醒
 @JsonValue('purchaseBrandDelay')
-PURCHASE_BRAND_DELAY}
+PURCHASE_BRAND_DELAY,
+
+///生产订单品牌延期提醒
+@JsonValue('salesOrderDeliveryReminder')
+SALES_ORDER_DELIVERY_REMINDER,}
