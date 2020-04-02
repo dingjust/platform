@@ -29,35 +29,35 @@ class AuthorizationDector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool hasAuthorization = true;
+    // bool hasAuthorization = true;
 
-    //权限检验
-    if (authorizations != null && authorizations.length > 0) {
-      if (authorizations.every(
-          (item) => AuthorizationBLoC.instance.authorizations.contains(item))) {
-        hasAuthorization = true;
-      } else {
-        hasAuthorization = false;
-      }
-    }
+    // //权限检验
+    // if (authorizations != null && authorizations.length > 0) {
+    //   if (authorizations.every(
+    //       (item) => AuthorizationBLoC.instance.authorizations.contains(item))) {
+    //     hasAuthorization = true;
+    //   } else {
+    //     hasAuthorization = false;
+    //   }
+    // }
 
-    if (hasAuthorization) {
-      return child;
-    } else {
-      return GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            BotToast.showText(text: '$message');
-          },
-          child: IgnorePointer(
-            ignoring: true,
-            child: show
-                ? child
-                : Opacity(
-                    opacity: opacity,
-                    child: child,
-                  ),
-          ));
-    }
+    // if (hasAuthorization) {
+    return child;
+    //   } else {
+    //     return GestureDetector(
+    //         behavior: HitTestBehavior.translucent,
+    //         onTap: () {
+    //           BotToast.showText(text: '$message');
+    //         },
+    //         child: IgnorePointer(
+    //           ignoring: true,
+    //           child: show
+    //               ? child
+    //               : Opacity(
+    //                   opacity: opacity,
+    //                   child: child,
+    //                 ),
+    //         ));
+    //   }
   }
 }
