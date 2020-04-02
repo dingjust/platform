@@ -220,9 +220,16 @@ class ProductModel extends ItemModel {
   ///打样费
   double proofingFee;
 
-  ///阶梯价
+  ///阶梯价-期货
   @JsonKey(toJson: _steppedPriceToJson)
   List<SteppedPriceModel> steppedPrices;
+
+  ///阶梯价-现货/库存
+  @JsonKey(toJson: _steppedPriceToJson)
+  List<SteppedPriceModel> spotSteppedPrices;
+
+  ///现货发货周期
+  int deliveryDays;
 
   ///基础生产量
   int basicProduction;
@@ -285,8 +292,9 @@ class ProductModel extends ItemModel {
     this.productionIncrement,
     this.steppedPrices,
     this.colorSizes,
-    this.productType
-  });
+    this.productType,
+    this.spotSteppedPrices,
+    this.deliveryDays});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ProductModelFromJson(json);
@@ -337,7 +345,7 @@ class ProductModel extends ItemModel {
           ? null
           : models.map((model) => ColorSizeModel.toJson(model)).toList();
 
-  ///最低价
+  ///最低价-期货
   double get minSteppedPrice {
     if (steppedPrices == null || steppedPrices.isEmpty) {
       return 0;
@@ -352,13 +360,42 @@ class ProductModel extends ItemModel {
     }
   }
 
-  ///最高价
+  ///最高价-期货
   double get maxSteppedPrice {
     double result = 0;
     if (steppedPrices == null) {
       return result;
     }
     steppedPrices.forEach((entry) {
+      if (entry.price > result) {
+        result = entry.price;
+      }
+    });
+    return result;
+  }
+
+  ///最低价-现货/库存
+  double get minSpotSteppedPrice {
+    if (spotSteppedPrices == null || spotSteppedPrices.isEmpty) {
+      return 0;
+    } else {
+      double result = spotSteppedPrices.first.price;
+      spotSteppedPrices.forEach((entry) {
+        if (entry.price < result) {
+          result = entry.price;
+        }
+      });
+      return result;
+    }
+  }
+
+  ///最高价-现货/库存
+  double get maxSpotSteppedPrice {
+    double result = 0;
+    if (spotSteppedPrices == null) {
+      return result;
+    }
+    spotSteppedPrices.forEach((entry) {
       if (entry.price > result) {
         result = entry.price;
       }
@@ -401,6 +438,8 @@ class VariantProductModel extends ProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<SteppedPriceModel> spotSteppedPrices,
+    int deliveryDays,
     List<ColorSizeModel> colorSizes,
     List<ProductType> productType})
       : super(
@@ -425,7 +464,8 @@ class VariantProductModel extends ProductModel {
       productionIncrement: productionIncrement,
       steppedPrices: steppedPrices,
       colorSizes: colorSizes,
-      productType: productType);
+      productType: productType,
+      deliveryDays: deliveryDays);
 
   factory VariantProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$VariantProductModelFromJson(json);
@@ -481,6 +521,8 @@ class ApparelProductModel extends ProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<SteppedPriceModel> spotSteppedPrices,
+    int deliveryDays,
     List<MediaModel> details,
     List<ProductType> productType,
     this.variants,
@@ -515,7 +557,9 @@ class ApparelProductModel extends ProductModel {
       productionIncrement: productionIncrement,
       steppedPrices: steppedPrices,
       details: details,
-      productType: productType);
+      productType: productType,
+      spotSteppedPrices: spotSteppedPrices,
+      deliveryDays: deliveryDays);
 
   ApparelProductModel.empty() {
     this.attributes = ApparelProductAttributesModel.empty();
@@ -571,6 +615,8 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<SteppedPriceModel> spotSteppedPrices,
+    int deliveryDays,
     List<MediaModel> details,
     List<ColorSizeModel> colorSizes,
     List<ProductType> productType})
@@ -599,7 +645,9 @@ class ApparelStyleVariantProductModel extends VariantProductModel {
       steppedPrices: steppedPrices,
       details: details,
       colorSizes: colorSizes,
-      productType: productType);
+      productType: productType,
+      spotSteppedPrices: spotSteppedPrices,
+      deliveryDays: deliveryDays);
 
   factory ApparelStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ApparelStyleVariantProductModelFromJson(json);
@@ -645,6 +693,8 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<SteppedPriceModel> spotSteppedPrices,
+    int deliveryDays,
     List<MediaModel> details,
     List<ColorSizeModel> colorSizes,
     List<ProductType> productType,
@@ -674,7 +724,9 @@ class ApparelSizeVariantProductModel extends ApparelStyleVariantProductModel {
       steppedPrices: steppedPrices,
       details: details,
       colorSizes: colorSizes,
-      productType: productType);
+      productType: productType,
+      spotSteppedPrices: spotSteppedPrices,
+      deliveryDays: deliveryDays);
 
   factory ApparelSizeVariantProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ApparelSizeVariantProductModelFromJson(json);
@@ -706,6 +758,8 @@ class FabricProductModel extends ProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<SteppedPriceModel> spotSteppedPrices,
+    int deliveryDays,
     List<MediaModel> details,
     List<ProductType> productType,
     this.variants,
@@ -726,7 +780,9 @@ class FabricProductModel extends ProductModel {
       productionIncrement: productionIncrement,
       steppedPrices: steppedPrices,
       details: details,
-      productType: productType);
+      productType: productType,
+      spotSteppedPrices: spotSteppedPrices,
+      deliveryDays: deliveryDays);
 
   factory FabricProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FabricProductModelFromJson(json);
@@ -755,26 +811,29 @@ class FabricStyleVariantProductModel extends VariantProductModel {
     int productionDays,
     int productionIncrement,
     List<SteppedPriceModel> steppedPrices,
+    List<SteppedPriceModel> spotSteppedPrices,
+    int deliveryDays,
     List<MediaModel> details,
     this.color,
   }) : super(
-          code: code,
-          name: name,
-          price: price,
-          thumbnail: thumbnail,
-          staircasePrices: staircasePrices,
-          privacy: privacy,
-          ratingIfPrivacy: ratingIfPrivacy,
-          superCategories: superCategories,
-          thumbnails: thumbnails,
-          images: images,
-    proofingFee: proofingFee,
-    basicProduction: basicProduction,
-    productionDays: productionDays,
-    productionIncrement: productionIncrement,
-    steppedPrices: steppedPrices,
-    details: details,
-        );
+      code: code,
+      name: name,
+      price: price,
+      thumbnail: thumbnail,
+      staircasePrices: staircasePrices,
+      privacy: privacy,
+      ratingIfPrivacy: ratingIfPrivacy,
+      superCategories: superCategories,
+      thumbnails: thumbnails,
+      images: images,
+      proofingFee: proofingFee,
+      basicProduction: basicProduction,
+      productionDays: productionDays,
+      productionIncrement: productionIncrement,
+      steppedPrices: steppedPrices,
+      details: details,
+      spotSteppedPrices: spotSteppedPrices,
+      deliveryDays: deliveryDays);
 
   factory FabricStyleVariantProductModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$FabricStyleVariantProductModelFromJson(json);
@@ -1028,6 +1087,7 @@ class SteppedPriceModel extends ItemModel {
 class ColorSizeModel extends ItemModel {
   String colorName;
   String colorCode;
+
   ///是否是自定义
   bool customize;
 
@@ -1037,7 +1097,11 @@ class ColorSizeModel extends ItemModel {
   @JsonKey(toJson: _sizesToJson)
   List<ColorSizeEntryModel> sizes;
 
-  ColorSizeModel({this.colorName, this.colorCode, this.previewImg, this.sizes,this.customize});
+  ColorSizeModel({this.colorName,
+    this.colorCode,
+    this.previewImg,
+    this.sizes,
+    this.customize});
 
   static Map<String, dynamic> _mediaToJson(MediaModel model) =>
       model == null ? null : MediaModel.toJson(model);
@@ -1070,12 +1134,7 @@ class ColorSizeEntryModel extends ItemModel {
   ///是否是自定义
   bool customize;
 
-  ColorSizeEntryModel({
-    this.code,
-    this.quality,
-    this.name,
-    this.customize
-  });
+  ColorSizeEntryModel({this.code, this.quality, this.name, this.customize});
 
   factory ColorSizeEntryModel.fromJson(Map<String, dynamic> json) =>
       json == null ? null : _$ColorSizeEntryModelFromJson(json);

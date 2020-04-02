@@ -5,6 +5,7 @@ as yj;
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -60,8 +61,9 @@ class _ProductsPageState extends State<ProductsPage> {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => getCascadedCategories());
     productCondition = ProductCondition([], widget.keyword ?? '');
+    //埋点>>>看款下单
+    FlutterUmplus.event("order_product_page");
     super.initState();
-    // LcfarmFlutterUmeng.beginLogPageView('order_product_page');
   }
 
   @override
@@ -298,7 +300,7 @@ class _ProductsPageState extends State<ProductsPage> {
   void dispose() {
     // TODO: implement dispose
     OrderByProductBLoc.instance.clear();
-    // LcfarmFlutterUmeng.endLogPageView('order_product_page');
+
     super.dispose();
   }
 }

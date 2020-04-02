@@ -12,6 +12,8 @@ import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
+import 'components/color_appbar.dart';
+
 class BuyProofingForm extends StatefulWidget {
   final ApparelProductModel product;
 
@@ -247,16 +249,9 @@ class _BuyProofingFormState extends State<BuyProofingForm>
       flex: 1,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: TabBar(
-          unselectedLabelColor: Colors.black26,
-          labelColor: Colors.black,
-          indicatorSize: TabBarIndicatorSize.label,
-          tabs: _buildTabs(),
-          controller: _tabController,
-          labelStyle: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-          isScrollable: true,
-          indicatorColor: Color.fromRGBO(255, 214, 12, 1),
+        appBar: ColorAppbar(
+          tabController: _tabController,
+          tabs: tabs,
         ),
         body: TabBarView(
           children: views,

@@ -32,10 +32,8 @@ class _SaleOrdersPageState extends State<SaleOrdersPage> {
     return ChangeNotifierProvider<SaleOrdersState>(
       builder: (context) => SaleOrdersState(),
       child: Scaffold(
-        appBar: AppBarFactory.buildDefaultAppBar(
-          '销售订单',
-          actions: <Widget>[_buildSearchButton()],
-        ),
+        appBar: AppBarFactory.buildDefaultAppBar('销售订单',
+            actions: <Widget>[_buildSearchButton()]),
         body: DefaultTabController(
           length: statuses.length,
           child: Scaffold(
@@ -54,40 +52,33 @@ class _SaleOrdersPageState extends State<SaleOrdersPage> {
   Widget _buildSearchButton() {
     return IconButton(
       icon: const Icon(B2BIcons.search, size: 20),
-      onPressed: () {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) {
-              return RequestDataLoading(
-                requestCallBack:
-                LocalStorage.get(GlobalConfigs.SALE_HISTORY_KEYWORD_KEY),
-                outsideDismiss: false,
-                loadingText: '加载中。。。',
-                entrance: '',
-              );
-            }).then((value) {
-          if (value != null && value != '') {
-            List<dynamic> list = json.decode(value);
-            historyKeywords = list.map((item) => item as String).toList();
-          } else {
-            historyKeywords = [];
-          }
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  SearchModelPage(
-                    searchModel: SearchModel(
-                      historyKeywords: historyKeywords,
-                      searchModelType: SearchModelType.SALE_ORDER,
-                      route: GlobalConfigs.SALE_HISTORY_KEYWORD_KEY,
-                    ),
-                  ),
-            ),
-          );
-        });
+      onPressed: () async {
+        String value =
+        await LocalStorage.get(GlobalConfigs.SALE_HISTORY_KEYWORD_KEY);
+        if (value != null && value != '') {
+          List<dynamic> list = json.decode(value);
+          historyKeywords = list.map((item) => item as String).toList();
+        } else {
+          historyKeywords = [];
+        }
+        _toSearchResultPage();
       },
+    );
+  }
+
+  void _toSearchResultPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            SearchModelPage(
+              searchModel: SearchModel(
+                historyKeywords: historyKeywords,
+                searchModelType: SearchModelType.SALE_ORDER,
+                route: GlobalConfigs.SALE_HISTORY_KEYWORD_KEY,
+              ),
+            ),
+      ),
     );
   }
 

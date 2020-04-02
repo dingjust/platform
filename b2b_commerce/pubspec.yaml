@@ -48,7 +48,7 @@ dependencies:
   path_provider: ^0.5.0+1
   # flutter_cache_manager: ^0.3.0
   flutter_cache_manager: ^1.1.1
-  open_file: ^2.0.3
+  open_file: ^3.0.1
   url_launcher: ^5.0.2
   flutter_speed_dial: ^1.0.9
   flutter_map: ^0.1.4
@@ -68,11 +68,11 @@ dependencies:
   image_picker_saver: ^0.3.0
   image_cropper: 1.0.2
   jpush_flutter: ^0.1.0
-  permission_handler: ^3.1.0
+  permission_handler: ^5.0.0+hotfix.1
   flutter_widget_from_html: ^0.3.2
 #  flutter_inappbrowser: 1.2.1
   toast: ^0.1.5
-  flutter_webview_plugin: 0.3.5
+  flutter_webview_plugin: ^0.3.10+2
   flutter_markdown: ^0.2.0
   convert: 2.1.1
   # flutter_full_pdf_viewer: ^1.0.1
@@ -90,7 +90,9 @@ dependencies:
   flutter_date_pickers: ^0.0.6
   flutter_alipay: ^0.1.2
   auto_orientation: ^1.0.6
-  lcfarm_flutter_umeng: ^0.1.8
+  # lcfarm_flutter_umeng: ^0.1.8
+  flutter_umplus: ^0.0.1
+
 
 dev_dependencies:
   flutter_test:

@@ -130,8 +130,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     return Container(
-        color: Colors.white,
         height: 50,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
         margin: EdgeInsets.only(top: 10),
         child: Row(
             children: productTypes
@@ -147,6 +150,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           });
                         },
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Text('${ProductTypeLocalizedMap[type]}'),
                             Container(
@@ -195,7 +199,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ? '出货周期：${widget.product.basicProduction}件内${widget.product
                     .productionDays}天，每加${widget.product
                     .productionIncrement}件多1天'
-                    : '出货周期：72小时内',
+                    : '出货周期：${widget.product.deliveryDays}天内',
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               )),
           Opacity(
@@ -213,8 +217,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildMoneyRow() {
+    List<SteppedPriceModel> steppedPrices;
+    if (productType == ProductType.FUTURE_GOODS) {
+      steppedPrices = widget.product.steppedPrices;
+    } else {
+      steppedPrices = widget.product.spotSteppedPrices;
+    }
+
     ///阶梯价空处理
-    if (widget.product.steppedPrices == null) {
+    if (steppedPrices == null) {
       return Container(
         margin: EdgeInsets.symmetric(vertical: 10),
         child: Row(
@@ -224,49 +235,50 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     List<Widget> _moneyRows = [];
-    for (int i = 0; i < widget.product.steppedPrices.length; i++) {
+    for (int i = 0; i < steppedPrices.length; i++) {
       if (i == 0) {
-        _moneyRows.add(_buildMoneyRowBlock(
-            '￥${widget.product.steppedPrices[i].price}',
-            '${widget.product.steppedPrices[i].minimumQuantity}件起批'));
+        _moneyRows.add(_buildMoneyRowBlock('￥${steppedPrices[i].price}',
+            '${steppedPrices[i].minimumQuantity}件起批'));
       }
       //最后一个阶梯价
-      else if (i == widget.product.steppedPrices.length - 1) {
-        _moneyRows.add(_buildMoneyRowBlock(
-            '￥${widget.product.steppedPrices[i].price}',
-            '≥${widget.product.steppedPrices[i].minimumQuantity}件'));
+      else if (i == steppedPrices.length - 1) {
+        _moneyRows.add(_buildMoneyRowBlock('￥${steppedPrices[i].price}',
+            '≥${steppedPrices[i].minimumQuantity}件'));
       } else {
-        _moneyRows.add(_buildMoneyRowBlock(
-            '￥${widget.product.steppedPrices[i].price}',
-            '${widget.product.steppedPrices[i].minimumQuantity}~${widget.product
-                .steppedPrices[i + 1].minimumQuantity - 1}件'));
+        _moneyRows.add(_buildMoneyRowBlock('￥${steppedPrices[i].price}',
+            '${steppedPrices[i].minimumQuantity}~${steppedPrices[i + 1]
+                .minimumQuantity - 1}件'));
       }
     }
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // mainAxisAlignment: MainAxisAlignment.st,
           children: _moneyRows),
     );
   }
 
   Widget _buildMoneyRowBlock(String price, String decription) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            '$price',
-            style: TextStyle(
-                color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold),
+    return Expanded(
+        flex: 1,
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                '$price',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '$decription',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              )
+            ],
           ),
-          Text(
-            '$decription',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
-          )
-        ],
-      ),
-    );
+        ));
   }
 
   void onOrder() {
@@ -509,7 +521,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               },
                               disabledColor: Colors.grey[300],
                               child: Text(
-                                '买大货',
+                                '立即购买',
                                 style: TextStyle(fontSize: 15),
                               ),
                             ),

@@ -317,7 +317,10 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
 
   void _submit() {
     SalesOrderRespository()
-        .delivery(widget.code, _orderCodeController.text, carrier.code)
+        .delivery(widget.code,
+        carrierCode: carrier?.code ?? '',
+        trackingID: _orderCodeController.text,
+        offlineConsignment: _isOffline)
         .then((msg) {
       if (msg.resultCode == 0) {
         Navigator.of(context).pop(true);

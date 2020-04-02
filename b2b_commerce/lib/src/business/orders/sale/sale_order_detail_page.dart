@@ -40,68 +40,28 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController _scrollController = ScrollController();
-
     return FutureBuilder<SalesOrderModel>(
       builder: (BuildContext context, AsyncSnapshot<SalesOrderModel> snapshot) {
         if (snapshot.data != null) {
           return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text('销售订单明细'),
+              backgroundColor: Constants.THEME_COLOR_MAIN,
+              elevation: 0.5,
+            ),
             body: Container(
               padding: EdgeInsets.only(bottom: 10),
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: <Widget>[
-                  SliverAppBar(
-                    expandedHeight: 250.0,
-                    pinned: true,
-                    elevation: 0.5,
-                    centerTitle: true,
-                    title: Text('销售订单明细'),
-                    actions: <Widget>[
-                      IconButton(
-                        iconSize: 4,
-                        icon: Icon(B2BIcons.more),
-                        onPressed: () {},
-                      )
-                    ],
-                    brightness: Brightness.dark,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Stack(
-                        fit: StackFit.loose,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.fromLTRB(20, 100, 20, 10),
-                            decoration: const BoxDecoration(
-                              color: const Color.fromRGBO(255, 219, 0, 1),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            child: Container(
-                              width: 2000,
-                              height: 60,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Container(
-                            child: _buildEntries(context),
-                            padding: EdgeInsets.fromLTRB(20, 100, 20, 10),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SliverList(
-                      delegate: SliverChildListDelegate(
-                    <Widget>[
-                      _buildProductInfo(context),
-                      _builRefundInfo(),
-                      _buildDeliveryAddress(context),
-                      _buildRemarks(context),
-                      _buildBottom(context),
-                    ],
-                  )),
+              child: ListView(
+                children: <Widget>[
+                  _buildStatusRow(),
+                  _buildProductRow(),
+                  _buildEntriesRow(),
+                  _buildProductInfo(context),
+                  _builRefundInfo(),
+                  _buildDeliveryAddress(context),
+                  _buildRemarks(context),
+                  _buildBottom(context),
                 ],
               ),
             ),
@@ -162,120 +122,98 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
             mockData.add(entry);
           }
         }
+        //大于三行不隐藏
+        if (order.entries.length < 4) {
+          isHide = false;
+        }
       }
     });
   }
 
+  Widget _buildStatusRow() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[_getOrderStatus()],
+      ),
+    );
+  }
+
+  ///订单状态
+  Widget _getOrderStatus() {
+    if (order.refunding != null && order.refunding) {
+      return Text(
+        '·退款/售后',
+        textAlign: TextAlign.end,
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.purple,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
+
+    return Text(
+      '·${SalesOrderStatusLocalizedMap[order.status]}',
+      textAlign: TextAlign.end,
+      style: TextStyle(
+        fontSize: 18,
+        color: SaleOrderConstants.STATUS_COLORS[order.status],
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
   /// 产品详情
-  Widget _buildEntries(BuildContext context) {
-    ApparelProductModel apparelProductModel =
+  Widget _buildProductRow() {
+    ApparelProductModel productModel =
         order.entries.first.product.baseProductDetail;
 
-    //计算总数
-    int sum = 0;
-    order.entries.forEach((entry) {
-      sum = sum + entry.quantity;
-    });
-
-    return apparelProductModel == null
-        ? Container()
-        : Container(
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-              color: Colors.grey[300], offset: Offset(2, 3), blurRadius: 5)
-        ], color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        padding: EdgeInsets.all(15),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(bottom: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[_getOrderStatus()],
-              ),
-            ),
-            Row(
-              children: <Widget>[
-                GestureDetector(
-                  child: Stack(
-                    alignment: const Alignment(0.6, 1.1),
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        children: <Widget>[
+          ImageFactory.buildThumbnailImage(productModel?.thumbnail,
+              containerSize: 60),
+          Expanded(
+              child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  height: 60,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      ImageFactory.buildThumbnailImage(
-                          apparelProductModel?.thumbnail),
-                      Container(
-                        child: Icon(
-                          Icons.photo_size_select_actual,
-                          color: Colors.black38,
-                          size: 20,
-                        ),
-                      )
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              '${productModel.name}',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          Text(
+                            '￥${order.entries.first.basePrice}',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '货号：${productModel.skuID}',
+                        style:
+                        const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ],
-                  ),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            PicturePickPreviewWidget(
-                              medias: apparelProductModel.thumbnails,
-                              isUpload: false,
-                            )));
-                  },
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    height: 100,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        apparelProductModel == null ||
-                            apparelProductModel.name == null
-                            ? Container()
-                            : Text(
-                          apparelProductModel.name,
-                          style: TextStyle(fontSize: 15),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10)),
-                          child: apparelProductModel == null ||
-                              apparelProductModel.skuID == null
-                              ? Container()
-                              : Text(
-                            '货号：${apparelProductModel.skuID}',
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(255, 243, 243, 1),
-                              borderRadius: BorderRadius.circular(10)),
-                          child: apparelProductModel == null ||
-                              apparelProductModel.category == null
-                              ? Container()
-                              : Text(
-                            "${apparelProductModel.category.name}  ${sum}件",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color:
-                                Color.fromRGBO(255, 133, 148, 1)),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ],
-        ));
+                  )))
+        ],
+      ),
+    );
   }
 
   /// 底部订单信息
@@ -330,13 +268,13 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                   ? Container()
                   : Text('付款时间：${DateFormatUtil.formatYMDHMS(order.payTime)}',
                       style: _infoStyle)),
-          // Align(
-          //     alignment: Alignment.centerLeft,
-          //     child: order.creationTime == null
-          //         ? Container()
-          //         : Text(
-          //             '发货时间：${DateFormatUtil.formatYMDHMS(order.creationTime)}',
-          //             style: _infoStyle)),
+          Align(
+              alignment: Alignment.centerLeft,
+              child: order.deliveryTime == null
+                  ? Container()
+                  : Text(
+                  '发货时间：${DateFormatUtil.formatYMDHMS(order.deliveryTime)}',
+                  style: _infoStyle)),
         ],
       ),
       decoration: BoxDecoration(
@@ -476,16 +414,23 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[300]),
-                        shape: BoxShape.circle),
-                    padding: EdgeInsets.fromLTRB(5, 2, 5, 5),
-                    margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
-                    child: Icon(
-                      B2BIcons.truck,
-                      color: Colors.grey[400],
-                    )),
+                // Container(
+                //     decoration: BoxDecoration(
+                //         border: Border.all(color: Colors.grey[300]),
+                //         shape: BoxShape.circle),
+                //     padding: EdgeInsets.fromLTRB(5, 2, 5, 5),
+                //     margin: EdgeInsets.fromLTRB(20, 0, 0, 10),
+                //     child: Icon(
+                //       B2BIcons.truck,
+                //       color: Colors.grey[400],
+                //     )),
+                order.isOfflineConsignment ?? false
+                    ? Container(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text('订单已走线下物流'),
+                )
+                    : Container()
               ],
             ),
           ],
@@ -501,6 +446,9 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
 
   /// 提示隐藏产品颜色尺码UI
   Widget _buildProductHide(BuildContext context) {
+    if (order.entries.length < 4) {
+      return Container();
+    }
     return GestureDetector(
         child: Container(
           margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -535,13 +483,6 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
 
   /// 产品的颜色尺码及价格
   Widget _buildProductInfo(BuildContext context) {
-    List<ApparelSizeVariantProductEntry> _datas;
-    if (isHide) {
-      _datas = mockData.getRange(0, 1).toList();
-    } else {
-      _datas = mockData;
-    }
-
     TextStyle _infoStyle = TextStyle(color: Colors.grey, fontSize: 16);
 
     return mockData.isEmpty
@@ -550,26 +491,22 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
             child: Column(
               children: <Widget>[
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: ColorSizeNumTable(
-                    data: _datas,
-                  ),
-                ),
                 _buildProductHide(context),
                 Container(
                   child: ListTile(
                       leading: Text('单价X数量', style: _infoStyle),
                       trailing: Text(
                         '￥${order.unitPrice}x${order.quality}',
-                        style: _infoStyle,
                       )),
                 ),
                 Container(
                   child: ListTile(
                     leading: Text('合计总价', style: _infoStyle),
-                    trailing: Text('￥${order.totalPrice}', style: _infoStyle),
+                    trailing: Text('￥${order.totalPrice}',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                        )),
                   ),
                 ),
               ],
@@ -640,6 +577,44 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
     );
   }
 
+  ///尺码
+  Widget _buildEntriesRow() {
+    List<Widget> entryRows = [];
+
+    for (int i = 0; i < order.entries.length; i++) {
+      if (i < 3 || !isHide) {
+        entryRows.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Container(
+                margin: EdgeInsets.only(left: 50),
+                child: Text(
+                  '颜色：${order.entries[i].product.color.name}',
+                  style: TextStyle(color: Colors.grey),
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text('尺码：${order.entries[i].product.size.name}',
+                  style: TextStyle(color: Colors.grey)),
+            ),
+            Text('x${order.entries[i].quantity}')
+          ],
+        ));
+      }
+    }
+
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: Column(children: entryRows),
+    );
+  }
+
   ///按钮组回调
   void _buttonGroupCallback() {
     //回调刷新页面
@@ -649,24 +624,5 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
     if (widget.callback != null) {
       widget.callback();
     }
-  }
-
-  ///订单状态
-  Widget _getOrderStatus() {
-    if (order.refunding != null && order.refunding) {
-      return Text(
-        '•退款/售后',
-        style: TextStyle(
-            color: Colors.purple, fontSize: 16, fontWeight: FontWeight.w500),
-      );
-    }
-
-    return Text(
-      '•${SalesOrderStatusLocalizedMap[order.status]}',
-      style: TextStyle(
-          color: SaleOrderConstants.STATUS_COLORS[order.status],
-          fontSize: 16,
-          fontWeight: FontWeight.w500),
-    );
   }
 }

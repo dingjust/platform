@@ -37,7 +37,6 @@ class _AttributesFieldState extends State<AttributesField> {
   void initState() {
     generateAttributes();
 
-    print(_attributes[3].valueSelects);
     // TODO: implement initState
     super.initState();
   }
@@ -49,8 +48,8 @@ class _AttributesFieldState extends State<AttributesField> {
       _attributes[2].valueSelects = widget.item.attributes.pattern == null ? [] : [widget.item.attributes.pattern];
       _attributes[3].valueSelects = widget.item.attributes.sleeveType == null ? [] : [widget.item.attributes.sleeveType];
       _attributes[4].valueSelects = widget.item.attributes.sleeveLength == null ? [] : [widget.item.attributes.sleeveLength];
-      _attributes[5].valueSelects = widget.item.attributes.decorativePatterns;
-      _attributes[6].valueSelects = widget.item.attributes.popularElements;
+      _attributes[5].valueSelects = widget.item.attributes.decorativePatterns ?? [];
+      _attributes[6].valueSelects = widget.item.attributes.popularElements ?? [];
       _attributes[7].valueSelects = widget.item.attributes.filler == null ? [] : [widget.item.attributes.filler];
       _attributes[8].valueSelects = widget.item.attributes.thickness == null ? [] : [widget.item.attributes.thickness];
       _attributes[9].valueSelects = widget.item.attributes.season == null ? [] : [widget.item.attributes.season];

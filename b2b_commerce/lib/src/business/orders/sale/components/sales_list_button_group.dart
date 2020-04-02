@@ -60,7 +60,12 @@ class SalesListButtonGroup extends SalesDetailButtonGroup {
       //TODO退款状态判断
       if (model.refunding != null && model.refunding) {
         buttons.add(buildSpaceBtn());
-        buttons.add(buildBtn2(context, () => onCancelRefund(context), '撤销退货'));
+        if (model.refundStatus == SalesOrderRefundStatus.PENDING_CONFIRM) {
+          buttons
+              .add(buildBtn2(context, () => onCancelRefund(context), '撤销退货'));
+        } else if (model.refundStatus == SalesOrderRefundStatus.IN_REFUND) {
+          buttons.add(buildBtn2(context, null, '退款中'));
+        }
         return buttons;
       }
 

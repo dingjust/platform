@@ -1,20 +1,18 @@
 import 'dart:convert';
 
 import 'package:b2b_commerce/src/_shared/products/apparel_product_item.dart';
-import 'package:b2b_commerce/src/_shared/products/apparel_product_list.dart';
 import 'package:b2b_commerce/src/_shared/products/apparel_product_search_list.dart';
 import 'package:b2b_commerce/src/_shared/widgets/scrolled_to_end_tips.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_from.dart';
 import 'package:b2b_commerce/src/business/products/apparel_product_detail.dart';
-import 'package:b2b_commerce/src/business/products/apparel_product_form.dart';
 import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:b2b_commerce/src/my/my_help.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
-import 'package:widgets/widgets.dart';
 import 'package:services/src/order/PageEntry.dart';
+import 'package:widgets/widgets.dart';
 
 class ProductSearchResultPage extends StatefulWidget{
   ProductSearchResultPage({

@@ -1167,6 +1167,13 @@ class SalesOrderModel extends OrderModel {
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   DateTime nextReminderDeliveryTime;
 
+  ///下次可提醒时间
+  @JsonKey(fromJson: _dateTimefromMilliseconds)
+  DateTime deliveryTime;
+
+  ///是否线下物流
+  bool isOfflineConsignment;
+
   SalesOrderModel({String code,
     this.status,
     double totalPrice,
@@ -1184,7 +1191,9 @@ class SalesOrderModel extends OrderModel {
     this.refundApply,
     this.payTime,
     this.reminderDeliveryTime,
-    this.nextReminderDeliveryTime})
+    this.nextReminderDeliveryTime,
+    this.isOfflineConsignment,
+    this.deliveryTime})
       : super(
     code: code,
     totalQuantity: quality,
@@ -1229,14 +1238,17 @@ class SalesOrderEntryModel extends OrderEntryModel {
   @JsonKey(toJson: _orderToJson)
   SalesOrderModel order;
 
-  SalesOrderEntryModel({
-    int entryNumber,
+  ///购买单价
+  double basePrice;
+
+  SalesOrderEntryModel({int entryNumber,
     this.product,
     this.order,
     double price,
     int quantity,
     double totalPrice,
-  }) : super(
+    this.basePrice})
+      : super(
     entryNumber: entryNumber,
     price: price,
     quantity: quantity,

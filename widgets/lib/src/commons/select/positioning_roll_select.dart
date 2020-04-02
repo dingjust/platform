@@ -36,7 +36,7 @@ class _PositioningRollPageState extends State<PositioningRollPage> {
   @override
   void initState() {
     _attributes = widget.attributes.map((attr) => Attribute(
-      attr.code,attr.name,attr.values,valueSelects: attr.valueSelects.map((val) => val).toList(),multiple: attr.multiple,offset: attr.offset
+      attr.code,attr.name,attr.values,valueSelects: attr.valueSelects?.map((val) => val)?.toList(),multiple: attr.multiple,offset: attr.offset
     )).toList();
     widget.attributes.forEach((attr) => print(attr.valueSelects));
     if (_attributes != null && _attributes.length > 0)

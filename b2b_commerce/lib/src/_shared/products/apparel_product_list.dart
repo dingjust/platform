@@ -272,37 +272,83 @@ class _ApparelProductListState extends State<ApparelProductList> {
         _showValidateMsg(context, '产品价格为空不可上架');
         return;
       } else if (UserBLoC.instance.currentUser.type == UserType.FACTORY ){
-          if(product.basicProduction == null || product.productionIncrement == null || product.productionDays == null) {
+        if(product.productType.contains(ProductType.SPOT_GOODS) || product.productType.contains(ProductType.TAIL_GOODS)){
+          if(product.deliveryDays == null){
             _showValidateMsg(context, '价格设置资料未完善，不可上架');
             return;
-          }else{
-            bool b = false;
-            if(product.steppedPrices == null || product.steppedPrices.isEmpty){
-              print('${product.steppedPrices}-------');
-              b = true;
+          }
+          if(product.spotSteppedPrices == null || product.spotSteppedPrices.isEmpty){
+            _showValidateMsg(context, '价格设置资料未完善，不可上架');
+            return;
+          }
+          for(int i=0;i<product.spotSteppedPrices.length;i++){
+            if(product.spotSteppedPrices[i].price == null && product.spotSteppedPrices[i].minimumQuantity == null){
+              product.spotSteppedPrices.remove(product.spotSteppedPrices[i]);
+            }else if(product.spotSteppedPrices[i].price != null && product.spotSteppedPrices[i].minimumQuantity != null){
+
             }else{
-              print('${product.steppedPrices}======');
-              for (var stepped in product.steppedPrices) {
-                if(stepped.minimumQuantity == null || stepped.price == null){
-                  b = true;
+              ShowDialogUtil.showValidateMsg(context, '价格设置资料未完善，不可上架');
+              return;
+            }
+          }
+
+          if(product.spotSteppedPrices.length >1){
+            for(int i=0;i<product.spotSteppedPrices.length;i++){
+              if(i == product.spotSteppedPrices.length - 1){
+                break;
+              }
+
+              if(product.spotSteppedPrices[i + 1].minimumQuantity != null && product.spotSteppedPrices[i].minimumQuantity != null){
+                if(product.spotSteppedPrices[i + 1].minimumQuantity <= product.spotSteppedPrices[i].minimumQuantity){
+                  ShowDialogUtil.showValidateMsg(context, '现货/尾货第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
                   return;
                 }
               }
-            }
 
-            if(b){
-              _showValidateMsg(context, '价格设置资料未完善，不可上架');
+            }
+          }
+
+          product.spotSteppedPrices.sort((a,b) => a.minimumQuantity.compareTo(b.minimumQuantity));
+          if(_colorTotalNum(product.colorSizes) < product.spotSteppedPrices[0].minimumQuantity){
+            _showValidateMsg(context, '库存总数量小于最小起订量，不可上架');
+            return;
+          }
+        }
+        if(product.productType == null || product.productType.contains(ProductType.FUTURE_GOODS)){
+          if(product.basicProduction == null || product.productionIncrement == null || product.productionDays == null) {
+            _showValidateMsg(context, '价格设置资料未完善，不可上架');
+            return;
+          }
+          if(product.steppedPrices == null || product.steppedPrices.isEmpty){
+            _showValidateMsg(context, '价格设置资料未完善，不可上架');
+            return;
+          }
+          for(int i=0;i<product.steppedPrices.length;i++){
+            if(product.steppedPrices[i].price == null && product.steppedPrices[i].minimumQuantity == null){
+              product.steppedPrices.remove(product.steppedPrices[i]);
+            }else if(product.steppedPrices[i].price != null && product.steppedPrices[i].minimumQuantity != null){
+
+            }else{
+              ShowDialogUtil.showValidateMsg(context, '价格设置资料未完善，不可上架');
               return;
             }
-
           }
-      }
 
-      if(product.productType != null && (product.productType.contains(ProductType.SPOT_GOODS) || product.productType.contains(ProductType.TAIL_GOODS))){
-        product.steppedPrices.sort((a,b) => a.minimumQuantity.compareTo(b.minimumQuantity));
-        if(_colorTotalNum(product.colorSizes) < product.steppedPrices[0].minimumQuantity){
-          _showValidateMsg(context, '库存总数量小于最小起订量，不可上架');
-          return;
+          if(product.steppedPrices.length >1){
+            for(int i=0;i<product.steppedPrices.length;i++){
+              if(i == product.steppedPrices.length - 1){
+                break;
+              }
+
+              if(product.steppedPrices[i + 1].minimumQuantity != null && product.steppedPrices[i].minimumQuantity != null){
+                if(product.steppedPrices[i + 1].minimumQuantity <= product.steppedPrices[i].minimumQuantity){
+                  ShowDialogUtil.showValidateMsg(context, '期货第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
+                  return;
+                }
+              }
+
+            }
+          }
         }
       }
 

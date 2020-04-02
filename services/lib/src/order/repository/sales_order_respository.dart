@@ -37,12 +37,16 @@ class SalesOrderRespository {
   }
 
   /// 更新物流信息（发货）
-  Future<BaseMsg> delivery(String code, String trackingID,
-      String carrierCode) async {
+  Future<BaseMsg> delivery(String code,
+      {String trackingID, String carrierCode, bool offlineConsignment}) async {
     Response response;
     try {
       response = await http$.post(OrderApis.salesOrderDelivery(code),
-          data: {'trackingID': trackingID, 'carrierCode': carrierCode},
+          data: {
+            'trackingID': trackingID,
+            'carrierCode': carrierCode,
+            'offlineConsignment': offlineConsignment
+          },
           options: Options(responseType: ResponseType.plain));
     } on DioError catch (e) {
       print(e);

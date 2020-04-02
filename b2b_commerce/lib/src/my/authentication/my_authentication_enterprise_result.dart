@@ -164,7 +164,7 @@ class _MyAuthenticationEnterpriseResultState
     Map map = {
       'companyName': '${model.name}',
       'organization': model.organization,
-      'role': '${model.agent != null ? '我是法人' : '我是代理人'}',
+      'role': '${model.agent != null ? 'LEGAL' : 'AGENT'}',
       'username': '${model.agent != null ? model.agent.name : ''}',
       'idCardNum':
       '${model.agent != null ? (model.agent.idCardNum == null ? '' : model.agent
@@ -250,7 +250,7 @@ class _MyAuthenticationEnterpriseResultState
         _buildInfo('企业名称', '${model.name}'),
         _buildInfo('社会信用代码', '${model.organization}'),
         _buildInfo('法定代表人', '${model.agent != null ? model.agent.name : ''}'),
-        _buildInfo('我的身份', '${model.agent != null ? '我是法人' : '我是代理人'}'),
+        _buildInfo('我的身份', '${_getIdentifyInfo(model)}'),
         _buildInfo('我的姓名',
             '${model.agent != null ? (model.agent.name == null ? '' : model
                 .agent.name) : (model.legal.name == null ? '' : model.legal
@@ -259,9 +259,9 @@ class _MyAuthenticationEnterpriseResultState
             '${model.agent != null ? (model.agent.idCardNum == null ? '' : model
                 .agent.idCardNum) : (model.legal.idCardNum == null ? '' : model
                 .legal.idCardNum)}'),
-        _buildInfo('银行账号', '${model.bankCardNo}'),
-        _buildInfo('开户银行', '${model.bankName}'),
-        _buildInfo('开户支行', '${model.bankDetailName}'),
+        _buildInfo('银行账号', '${model.bankCardNo ?? ''}'),
+        _buildInfo('开户银行', '${model.bankName ?? ''}'),
+        _buildInfo('开户支行', '${model.bankDetailName ?? ''}'),
 //        _buildCertificates(),
       ],
     );
@@ -441,5 +441,15 @@ class _MyAuthenticationEnterpriseResultState
             ));
       },
     );
+  }
+
+  String _getIdentifyInfo(AuthenticationInfoModel model) {
+    if (model.agent != null) {
+      return '我是代理人';
+    } else if (model.legal != null) {
+      return '我是法人';
+    } else {
+      return '';
+    }
   }
 }

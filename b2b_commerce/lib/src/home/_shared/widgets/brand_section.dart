@@ -198,9 +198,6 @@ class BrandButtonsSection extends StatelessWidget {
           //     builder: (context) => ProductsPage(),
           //   ),
           // );
-          // LcfarmFlutterUmeng.event("order_product_page").then((val) {
-
-          // });
           Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
         },
         title: '看款下单',

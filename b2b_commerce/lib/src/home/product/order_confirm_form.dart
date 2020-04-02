@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:toast/toast.dart';
@@ -106,7 +107,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           },
         ),
         title: Text(
-          '确认订单',
+          '订单明细',
           style: TextStyle(color: Colors.black87),
         ),
         centerTitle: true,
@@ -253,38 +254,34 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                    // margin: EdgeInsets.fromLTRB(20, 5, 0, 0),
-                    child: Row(
-                  children: <Widget>[
-                    Text(
-                      '${entries[0].model.color.name}',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                )),
-                entries[0].model.color.colorCode != null
-                    ? Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                            color: Color(int.parse('0xFF${colorCode}')),
-                            border: Border.all(
-                                width: 0.5, color: Colors.grey[300])),
-                        child: Text(''),
-                      )
-                    : Container(),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: _buildViewBody(entries, color),
-          )
+              width: 100,
+              margin: EdgeInsets.only(right: 20),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.only(right: 20),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            '${entries[0].model.color.name}',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      )),
+                  entries[0].model.color.colorCode != null
+                      ? Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                        color: Color(int.parse('0xFF${colorCode}')),
+                        border: Border.all(
+                            width: 0.5, color: Colors.grey[300])),
+                    child: Text(''),
+                  )
+                      : Container(),
+                ],
+              )),
+          _buildViewBody(entries, color),
         ],
       ),
     );
@@ -327,7 +324,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   ],
                 ),
               ),
-              _buildProduceDayRow(snapshot)
+              widget.orderType == OrderType.PURCHASE
+                  ? _buildProduceDayRow(snapshot)
+                  : Container()
             ],
           ),
         );
@@ -344,82 +343,22 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(
-            '${entry.model.size.name}',
-            style: TextStyle(fontSize: 14),
+          Container(
+            // margin: EdgeInsets.only(right: 150),
+            child: Text(
+              '${entry.model.size.name}',
+              style: TextStyle(fontSize: 14),
+            ),
           ),
-          Row(
-            children: <Widget>[
-              Container(
-                width: 40,
-                // height: 40,
-                child: Text('${entry.controller.text}'),
-              )
-              // IconButton(
-              //   icon: Icon(
-              //     B2BIcons.remove_rect,
-              //     color: Colors.grey[300],
-              //   ),
-              //   onPressed: () {
-              //     if (int.parse(entry.controller.text) > 1) {
-              //       setState(() {
-              //         int i = int.parse(entry.controller.text);
-              //         i--;
-              //         entry.controller.text = '$i';
-              //       });
-              //     }
-              //   },
-              // ),
-              // Container(
-              //   width: 40,
-              //   child: TextField(
-              //     controller: entry.controller,
-              //     decoration: InputDecoration(
-              //         border: InputBorder.none,
-              //         hintText: '0',
-              //         hintStyle: TextStyle(fontSize: 14)),
-              //     keyboardType: TextInputType.number,
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(fontSize: 14),
-              //     //只能输入数字
-              //     inputFormatters: <TextInputFormatter>[
-              //       WhitelistingTextInputFormatter.digitsOnly,
-              //     ],
-              //     onChanged: (val) {
-              //       if (val == '0') {
-              //         setState(() {
-              //           entry.controller.text = '';
-              //         });
-              //       }
-              //     },
-              //   ),
-              // ),
-              // IconButton(
-              //   icon: Icon(
-              //     B2BIcons.add_rect,
-              //     color: Colors.grey[300],
-              //   ),
-              //   onPressed: () {
-              //     setState(() {
-              //       if (entry.controller.text == '') {
-              //         entry.controller.text = '1';
-              //       } else {
-              //         int i = int.parse(entry.controller.text);
-              //         i++;
-              //         entry.controller.text = '$i';
-              //       }
-              //     });
-              //   },
-              // )
-            ],
-          )
+          Text('${entry.controller.text}'),
         ],
       ),
             ))
         .toList();
-    return Column(
+    return Expanded(
+        child: Column(
       children: widgets,
-    );
+        ));
   }
 
   Widget _buildBottomSheet() {
@@ -600,12 +539,15 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   int countProduceDays(int totalNum) {
+    if (widget.product.basicProduction == null) {
+      return 0;
+    }
     //基础生产天数
     int basic = widget.product.productionDays;
     int addOnDay = 0;
-    if (totalNum > widget.product.basicProduction) {
-      addOnDay = ((totalNum - widget.product.basicProduction) /
-              widget.product.productionIncrement)
+    if (totalNum > widget.product.basicProduction ?? 0) {
+      addOnDay = ((totalNum - widget.product.basicProduction ?? 0) /
+          widget.product.productionIncrement)
           .ceil();
     }
     produceDay = basic + addOnDay;
@@ -613,26 +555,51 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   double countUnitPrice(int totalNum) {
-    for (int i = 0; i < widget.product.steppedPrices.length; i++) {
-      if (i == widget.product.steppedPrices.length - 1) {
-        if (totalNum >= widget.product.steppedPrices[i].minimumQuantity) {
-          price = widget.product.steppedPrices[i].price;
-          return price;
-        }
-      } else {
-        if (totalNum >= widget.product.steppedPrices[i].minimumQuantity &&
-            totalNum < widget.product.steppedPrices[i + 1].minimumQuantity) {
-          price = widget.product.steppedPrices[i].price;
-          return price;
+    if (widget.orderType == OrderType.PURCHASE) {
+      for (int i = 0; i < widget.product.steppedPrices.length; i++) {
+        if (i == widget.product.steppedPrices.length - 1) {
+          if (totalNum >= widget.product.steppedPrices[i].minimumQuantity) {
+            price = widget.product.steppedPrices[i].price;
+            return price;
+          }
+        } else {
+          if (totalNum >= widget.product.steppedPrices[i].minimumQuantity &&
+              totalNum < widget.product.steppedPrices[i + 1].minimumQuantity) {
+            price = widget.product.steppedPrices[i].price;
+            return price;
+          }
         }
       }
+      if (widget.product.steppedPrices != null &&
+          widget.product.steppedPrices.isNotEmpty) {
+        price = widget.product.steppedPrices.first.price;
+      } else {
+        price = 0;
+      }
+    } else if (widget.orderType == OrderType.SALES) {
+      for (int i = 0; i < widget.product.spotSteppedPrices.length; i++) {
+        if (i == widget.product.spotSteppedPrices.length - 1) {
+          if (totalNum >= widget.product.spotSteppedPrices[i].minimumQuantity) {
+            price = widget.product.spotSteppedPrices[i].price;
+            return price;
+          }
+        } else {
+          if (totalNum >= widget.product.spotSteppedPrices[i].minimumQuantity &&
+              totalNum <
+                  widget.product.spotSteppedPrices[i + 1].minimumQuantity) {
+            price = widget.product.spotSteppedPrices[i].price;
+            return price;
+          }
+        }
+      }
+      if (widget.product.spotSteppedPrices != null &&
+          widget.product.spotSteppedPrices.isNotEmpty) {
+        price = widget.product.spotSteppedPrices.first.price;
+      } else {
+        price = 0;
+      }
     }
-    if (widget.product.steppedPrices != null &&
-        widget.product.steppedPrices.isNotEmpty) {
-      price = widget.product.steppedPrices.first.price;
-    } else {
-      price = 0;
-    }
+
     return price;
   }
 
@@ -670,26 +637,28 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   void onSure() {
     //校验起订量
     if (validateForm()) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText2: '是否提交订单？',
-              isNeedConfirmButton: true,
-              isNeedCancelButton: true,
-              dialogHeight: 210,
-              confirmAction: () {
-                Navigator.of(context).pop();
-                onSubmit();
-              },
-            );
-          });
+      // showDialog(
+      //     context: context,
+      //     barrierDismissible: false,
+      //     builder: (_) {
+      //       return CustomizeDialog(
+      //         dialogType: DialogType.CONFIRM_DIALOG,
+      //         contentText2: '是否提交订单？',
+      //         isNeedConfirmButton: true,
+      //         isNeedCancelButton: true,
+      //         dialogHeight: 210,
+      //         confirmAction: () {
+      //           Navigator.of(context).pop();
+      onSubmit();
+      //     },
+      //   );
+      // });
     }
   }
 
   void onSubmit() {
+    //埋点>>>看款下单-确认下单
+    FlutterUmplus.event("order_product_confirm");
     switch (widget.orderType) {
       case OrderType.PROOFING:
         onProofingSubmit();
