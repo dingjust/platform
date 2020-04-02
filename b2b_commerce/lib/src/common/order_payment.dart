@@ -56,7 +56,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
             centerTitle: true,
             elevation: 0.5,
             title: Text(
-              '确认订单内容',
+              '选择支付方式',
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -303,10 +303,16 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    '${product.name}',
-                    style: TextStyle(fontSize: 15),
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          '${product.name}',
+                          style: TextStyle(fontSize: 15),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
@@ -324,7 +330,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                         color: Color.fromRGBO(255, 243, 243, 1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "${product.name}   ${product.category.name}   ${sum}件",
+                      "${product.category.name}   ${sum}件",
                       style: TextStyle(
                           fontSize: 15,
                           color: Color.fromRGBO(255, 133, 148, 1)),
@@ -520,7 +526,8 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   Widget _buildDeposit() {
     if (widget.order is PurchaseOrderModel) {
       PurchaseOrderModel model = widget.order as PurchaseOrderModel;
-      return _buildInfoRow('订金(总额x30%)', '￥${model.deposit}');
+      return _buildInfoRow(
+          '订金(总额x30%)', '￥${model.deposit.toStringAsFixed(2)}');
     } else {
       return Container();
     }

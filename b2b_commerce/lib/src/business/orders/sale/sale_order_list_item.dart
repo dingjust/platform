@@ -23,6 +23,12 @@ class _SaleOrderListItemState extends State<SaleOrderListItem> {
   bool showMore = false;
 
   @override
+  void initState() {
+    showMore = widget.model.entries.length > 3 ? false : true;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext itemContext) {
     final bloc = BLoCProvider.of<UserBLoC>(itemContext);
     return GestureDetector(
@@ -204,36 +210,43 @@ class _SaleOrderListItemState extends State<SaleOrderListItem> {
   }
 
   Widget _buildEntriesRow() {
+    List<Widget> entryRows = [];
+
+    for (int i = 0; i < widget.model.entries.length; i++) {
+      if (i < 3 || showMore) {
+        entryRows.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Container(
+                margin: EdgeInsets.only(left: 50),
+                child: Text(
+                  '颜色：${widget.model.entries[i].product.color.name}',
+                  style: TextStyle(color: Colors.grey),
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text('尺码：${widget.model.entries[i].product.size.name}',
+                  style: TextStyle(color: Colors.grey)),
+            ),
+            Text('x${widget.model.entries[i].quantity}')
+          ],
+        ));
+      }
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Column(
-        children: widget.model.entries
-            .where((entry) =>
-        entry.hashCode == widget.model.entries.first.hashCode ||
-            showMore)
-            .map((entry) =>
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 50),
-                  child: Text(
-                    '颜色：${entry.product.color.name}',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
-                Text('尺码：${entry.product.size.name}',
-                    style: TextStyle(color: Colors.grey)),
-                Text('x${entry.quantity}')
-              ],
-            ))
-            .toList(),
-      ),
+      child: Column(children: entryRows),
     );
   }
 
   Widget _buildMoreBtnRow() {
-    return widget.model.entries.length > 1
+    return widget.model.entries.length > 3
         ? Row(
       children: <Widget>[
         Expanded(

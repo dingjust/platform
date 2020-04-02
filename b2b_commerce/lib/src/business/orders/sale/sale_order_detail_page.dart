@@ -122,6 +122,10 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
             mockData.add(entry);
           }
         }
+        //大于三行不隐藏
+        if (order.entries.length < 4) {
+          isHide = false;
+        }
       }
     });
   }
@@ -201,7 +205,7 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                         ],
                       ),
                       Text(
-                        '${productModel.skuID}',
+                        '货号：${productModel.skuID}',
                         style:
                         const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
@@ -442,6 +446,9 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
 
   /// 提示隐藏产品颜色尺码UI
   Widget _buildProductHide(BuildContext context) {
+    if (order.entries.length < 4) {
+      return Container();
+    }
     return GestureDetector(
         child: Container(
           margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -490,13 +497,16 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
                       leading: Text('单价X数量', style: _infoStyle),
                       trailing: Text(
                         '￥${order.unitPrice}x${order.quality}',
-                        style: _infoStyle,
                       )),
                 ),
                 Container(
                   child: ListTile(
                     leading: Text('合计总价', style: _infoStyle),
-                    trailing: Text('￥${order.totalPrice}', style: _infoStyle),
+                    trailing: Text('￥${order.totalPrice}',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                        )),
                   ),
                 ),
               ],
@@ -569,31 +579,39 @@ class _PurchaseDetailPageState extends State<SaleOrderDetailPage> {
 
   ///尺码
   Widget _buildEntriesRow() {
+    List<Widget> entryRows = [];
+
+    for (int i = 0; i < order.entries.length; i++) {
+      if (i < 3 || !isHide) {
+        entryRows.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Container(
+                margin: EdgeInsets.only(left: 50),
+                child: Text(
+                  '颜色：${order.entries[i].product.color.name}',
+                  style: TextStyle(color: Colors.grey),
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text('尺码：${order.entries[i].product.size.name}',
+                  style: TextStyle(color: Colors.grey)),
+            ),
+            Text('x${order.entries[i].quantity}')
+          ],
+        ));
+      }
+    }
+
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      child: Column(
-        children: order.entries
-            .where((entry) =>
-        entry.hashCode == order.entries.first.hashCode || !isHide)
-            .map((entry) =>
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 50),
-                  child: Text(
-                    '颜色：${entry.product.color.name}',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
-                Text('尺码：${entry.product.size.name}',
-                    style: TextStyle(color: Colors.grey)),
-                Text('x${entry.quantity}')
-              ],
-            ))
-            .toList(),
-      ),
+      child: Column(children: entryRows),
     );
   }
 

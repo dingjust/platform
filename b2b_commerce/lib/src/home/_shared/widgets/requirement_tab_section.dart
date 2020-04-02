@@ -173,7 +173,7 @@ class _RequirementItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      model.belongTo.contactAddress.city != null
+                      model?.belongTo?.contactAddress?.city != null
                           ? '${model.belongTo.contactAddress.city.name}${model
                           .belongTo.contactAddress.cityDistrict.name}'
                           : '',

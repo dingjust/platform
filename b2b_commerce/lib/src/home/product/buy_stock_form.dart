@@ -13,6 +13,8 @@ import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
+import 'components/color_appbar.dart';
+
 class BuyStockForm extends StatefulWidget {
   final ApparelProductModel product;
 
@@ -242,7 +244,9 @@ class _BuyStockFormState extends State<BuyStockForm>
                         flex: 1,
                         child: Text(
                           totalNum == 0
-                              ? '￥${widget.product.minSteppedPrice} ~ ￥${widget.product.maxSteppedPrice}'
+                              ? '￥${widget.product
+                              .minSpotSteppedPrice} ~ ￥${widget.product
+                              .maxSpotSteppedPrice}'
                               : '￥$price',
                           style: TextStyle(color: Colors.red, fontSize: 16),
                           textAlign: TextAlign.left,
@@ -270,16 +274,9 @@ class _BuyStockFormState extends State<BuyStockForm>
       flex: 1,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: TabBar(
-          controller: _tabController,
-          unselectedLabelColor: Colors.black26,
-          labelColor: Colors.black,
-          indicatorSize: TabBarIndicatorSize.label,
-          tabs: _buildTabs(),
-          labelStyle: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
-          isScrollable: true,
-          indicatorColor: Color.fromRGBO(255, 214, 12, 1),
+        appBar: ColorAppbar(
+          tabController: _tabController,
+          tabs: tabs,
         ),
         body: TabBarView(
           children: views,

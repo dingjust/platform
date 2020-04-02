@@ -345,7 +345,7 @@ class ProductModel extends ItemModel {
           ? null
           : models.map((model) => ColorSizeModel.toJson(model)).toList();
 
-  ///最低价
+  ///最低价-期货
   double get minSteppedPrice {
     if (steppedPrices == null || steppedPrices.isEmpty) {
       return 0;
@@ -360,13 +360,42 @@ class ProductModel extends ItemModel {
     }
   }
 
-  ///最高价
+  ///最高价-期货
   double get maxSteppedPrice {
     double result = 0;
     if (steppedPrices == null) {
       return result;
     }
     steppedPrices.forEach((entry) {
+      if (entry.price > result) {
+        result = entry.price;
+      }
+    });
+    return result;
+  }
+
+  ///最低价-现货/库存
+  double get minSpotSteppedPrice {
+    if (spotSteppedPrices == null || spotSteppedPrices.isEmpty) {
+      return 0;
+    } else {
+      double result = spotSteppedPrices.first.price;
+      spotSteppedPrices.forEach((entry) {
+        if (entry.price < result) {
+          result = entry.price;
+        }
+      });
+      return result;
+    }
+  }
+
+  ///最高价-现货/库存
+  double get maxSpotSteppedPrice {
+    double result = 0;
+    if (spotSteppedPrices == null) {
+      return result;
+    }
+    spotSteppedPrices.forEach((entry) {
       if (entry.price > result) {
         result = entry.price;
       }

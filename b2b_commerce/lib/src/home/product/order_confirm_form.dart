@@ -107,7 +107,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           },
         ),
         title: Text(
-          '确认订单',
+          '订单明细',
           style: TextStyle(color: Colors.black87),
         ),
         centerTitle: true,
@@ -324,7 +324,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   ],
                 ),
               ),
-              _buildProduceDayRow(snapshot)
+              widget.orderType == OrderType.PURCHASE
+                  ? _buildProduceDayRow(snapshot)
+                  : Container()
             ],
           ),
         );
@@ -537,12 +539,15 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   int countProduceDays(int totalNum) {
+    if (widget.product.basicProduction == null) {
+      return 0;
+    }
     //基础生产天数
     int basic = widget.product.productionDays;
     int addOnDay = 0;
-    if (totalNum > widget.product.basicProduction) {
-      addOnDay = ((totalNum - widget.product.basicProduction) /
-              widget.product.productionIncrement)
+    if (totalNum > widget.product.basicProduction ?? 0) {
+      addOnDay = ((totalNum - widget.product.basicProduction ?? 0) /
+          widget.product.productionIncrement)
           .ceil();
     }
     produceDay = basic + addOnDay;
@@ -632,22 +637,22 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   void onSure() {
     //校验起订量
     if (validateForm()) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) {
-            return CustomizeDialog(
-              dialogType: DialogType.CONFIRM_DIALOG,
-              contentText2: '是否提交订单？',
-              isNeedConfirmButton: true,
-              isNeedCancelButton: true,
-              dialogHeight: 210,
-              confirmAction: () {
-                Navigator.of(context).pop();
-                onSubmit();
-              },
-            );
-          });
+      // showDialog(
+      //     context: context,
+      //     barrierDismissible: false,
+      //     builder: (_) {
+      //       return CustomizeDialog(
+      //         dialogType: DialogType.CONFIRM_DIALOG,
+      //         contentText2: '是否提交订单？',
+      //         isNeedConfirmButton: true,
+      //         isNeedCancelButton: true,
+      //         dialogHeight: 210,
+      //         confirmAction: () {
+      //           Navigator.of(context).pop();
+      onSubmit();
+      //     },
+      //   );
+      // });
     }
   }
 

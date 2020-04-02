@@ -146,7 +146,7 @@ class BrandIndexSearchDelegatePage extends SearchDelegate<String> {
               ),
             ),
           );
-        } else if (entry.value == 'factory') {
+        } else if (entry.value == 'product') {
           // 加载条
           showDialog(
             context: context,
