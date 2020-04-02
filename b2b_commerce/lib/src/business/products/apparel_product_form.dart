@@ -205,7 +205,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                       fontSize: 16,
                     )),
                 hintText: '请填写产品标题',
-                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   _product.name = value;
                 },
@@ -227,7 +226,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                       fontSize: 16,
                     )),
                 hintText: '请填写产品货号',
-                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   _product.skuID = value;
                 },
