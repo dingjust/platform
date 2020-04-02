@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/orders/sale/components/input_row.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -272,23 +273,32 @@ class _ReturnPageState extends State<ReturnPage> {
     TextEditingController inputController = TextEditingController();
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (_) {
           return CustomizeDialog(
             dialogType: DialogType.INPUTS_DIALOG,
             inputController1: inputController,
             title: '填写拒绝原因',
             focusNode1: FocusNode(),
+            cancelAction: () {
+              Navigator.of(context).pop();
+            },
+            confirmAction: () {
+              refuseRefund(inputController.text);
+            },
           );
-        }).then((val) {
-      refuseRefund(val);
-    });
+        });
   }
 
   void refuseRefund(String reason) async {
+    if (reason == null || reason == '') {
+      BotToast.showText(text: '请填写拒绝原因');
+      return;
+    }
     BaseMsg msg = await SalesOrderRespository()
         .refundAudit(widget.order.code, false, '$reason');
     if (msg != null && msg.resultCode == 0) {
+      Navigator.of(context).pop(true);
       Navigator.of(context).pop(true);
     }
   }

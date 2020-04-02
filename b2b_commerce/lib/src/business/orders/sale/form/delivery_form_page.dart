@@ -318,7 +318,7 @@ class _DeliveryFormPageState extends State<DeliveryFormPage> {
   void _submit() {
     SalesOrderRespository()
         .delivery(widget.code,
-        carrierCode: carrier.code,
+        carrierCode: carrier?.code ?? '',
         trackingID: _orderCodeController.text,
         offlineConsignment: _isOffline)
         .then((msg) {
