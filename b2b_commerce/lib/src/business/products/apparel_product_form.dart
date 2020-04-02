@@ -72,6 +72,8 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       ..details = widget.item.details
       ..brand = widget.item.brand
       ..steppedPrices = widget.item.steppedPrices
+      ..spotSteppedPrices = widget.item.spotSteppedPrices
+      ..deliveryDays = widget.item.deliveryDays
       ..basicProduction = widget.item.basicProduction
       ..productionDays = widget.item.productionDays
       ..productionIncrement = widget.item.productionIncrement
@@ -207,9 +209,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 onChanged: (value) {
                   _product.name = value;
                 },
-                onEditingComplete: () {
-                  FocusScope.of(context).requestFocus(_skuIDFocusNode);
-                },
               ),
             ),
             Container(
@@ -231,9 +230,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   _product.skuID = value;
-                },
-                onEditingComplete: () {
-                  FocusScope.of(context).requestFocus(_brandFocusNode);
                 },
               ),
             ),
@@ -375,14 +371,6 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                 onChanged: (value) {
                   _product.brand = value;
                 },
-                onEditingComplete: () {
-                  if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
-                    FocusScope.of(context).requestFocus(_priceFocusNode);
-                  } else if (UserBLoC.instance.currentUser.type ==
-                      UserType.FACTORY) {
-                    FocusScope.of(context).requestFocus(_gramWeightFocusNode);
-                  }
-                },
               ),
             ),
             Container(
@@ -397,6 +385,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
                   },
                   child: ShowSelectTile(
                     leadingText: '价格设置',
+                    isRequired: true,
                   ),
                 ),
               ),
@@ -582,6 +571,91 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       _showValidateMsg(context, '请选择颜色尺码');
       return;
     }
+    if(_product.productType.contains(ProductType.SPOT_GOODS) || _product.productType.contains(ProductType.TAIL_GOODS)){
+      for(int i=0;i<_product.spotSteppedPrices.length;i++){
+        if(_product.spotSteppedPrices[i].price == null && _product.spotSteppedPrices[i].minimumQuantity == null){
+          _product.spotSteppedPrices.remove(_product.spotSteppedPrices[i]);
+        }else if(_product.spotSteppedPrices[i].price != null && _product.spotSteppedPrices[i].minimumQuantity != null){
+
+        }else{
+          ShowDialogUtil.showValidateMsg(context, '请完善期货阶梯起订量和价格');
+          return;
+        }
+      }
+      if(_product.spotSteppedPrices == null || _product.spotSteppedPrices.isEmpty){
+        _showValidateMsg(context, '请填写现货/尾货阶梯价');
+        return;
+      }
+      if(_product.deliveryDays == null){
+        _showValidateMsg(context, '请填写现货/尾货发货周期');
+        return;
+      }
+
+
+      if(_product.spotSteppedPrices.length >1){
+        for(int i=0;i<_product.spotSteppedPrices.length;i++){
+          if(i == _product.spotSteppedPrices.length - 1){
+            break;
+          }
+
+          if(_product.spotSteppedPrices[i + 1].minimumQuantity != null && _product.spotSteppedPrices[i].minimumQuantity != null){
+            if(_product.spotSteppedPrices[i + 1].minimumQuantity <= _product.spotSteppedPrices[i].minimumQuantity){
+              ShowDialogUtil.showValidateMsg(context, '现货/尾货第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
+              return;
+            }
+          }
+
+        }
+      }
+    }
+    if(_product.productType.contains(ProductType.FUTURE_GOODS)){
+      if(_product.steppedPrices == null || _product.steppedPrices.isEmpty){
+        _showValidateMsg(context, '请填写期货阶梯价');
+        return;
+      }
+      for(int i=0;i<_product.steppedPrices.length;i++){
+        if(_product.steppedPrices[i].price == null && _product.steppedPrices[i].minimumQuantity == null){
+          _product.steppedPrices.remove(_product.steppedPrices[i]);
+        }else if(_product.steppedPrices[i].price != null && _product.steppedPrices[i].minimumQuantity != null){
+
+        }else{
+          ShowDialogUtil.showValidateMsg(context, '请完善期货阶梯起订量和价格');
+          return;
+        }
+      }
+      if(_product.basicProduction == null || _product.productionIncrement == null || _product.productionDays == null) {
+        _showValidateMsg(context, '请填写期货生产天数');
+        return;
+      }
+
+      for(int i=0;i<_product.steppedPrices.length;i++){
+        if(_product.steppedPrices[i].price == null && _product.steppedPrices[i].minimumQuantity == null){
+          _product.steppedPrices.remove(_product.steppedPrices[i]);
+        }else if(_product.steppedPrices[i].price != null && _product.steppedPrices[i].minimumQuantity != null){
+
+        }else{
+          ShowDialogUtil.showValidateMsg(context, '请完善期货阶梯起订量和价格');
+          return;
+        }
+      }
+
+      if(_product.steppedPrices.length >1){
+        for(int i=0;i<_product.steppedPrices.length;i++){
+          if(i == _product.steppedPrices.length - 1){
+            break;
+          }
+
+          if(_product.steppedPrices[i + 1].minimumQuantity != null && _product.steppedPrices[i].minimumQuantity != null){
+            if(_product.steppedPrices[i + 1].minimumQuantity <= _product.steppedPrices[i].minimumQuantity){
+              ShowDialogUtil.showValidateMsg(context, '期货第'+ enumMap(DightEnum, i+2) + '阶梯的起订量不可小于或等于' + '第'+ enumMap(DightEnum, i+1)+'阶梯的起订量');
+              return;
+            }
+          }
+
+        }
+      }
+    }
+
 //    if (_product.attributes.fabricCompositions == null || _product.attributes.fabricCompositions.isEmpty) {
 //      _showValidateMsg(context, '请选择面料成分');
 //      return;
