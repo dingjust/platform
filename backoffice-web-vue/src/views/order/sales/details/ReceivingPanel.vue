@@ -24,12 +24,12 @@
           <h6 class="sales-details-info">物流信息：</h6>
         </el-col>
       </el-row>
-      <el-row type="flex" v-if="!slotData.consignment">
+      <el-row type="flex" v-if="slotData.isOfflineConsignment">
         <el-col :span="20" :offset="5">
-          <h6>订单已走线下物流</h6>
+          <h6>该订单已走线下物流</h6>
         </el-col>
       </el-row>
-      <el-row type="flex" v-if="slotData.consignment">
+      <el-row type="flex" v-if="!slotData.isOfflineConsignment">
         <el-col :span="20" :offset="5">
           <h6>{{slotData.consignment.carrierDetails.name}} 运单号：
             <el-button type="text" @click="selectLogistics">
@@ -38,7 +38,7 @@
           </h6>
         </el-col>
       </el-row>
-      <el-row type="flex" v-if="slotData.consignment">
+      <el-row type="flex" v-if="!slotData.isOfflineConsignment">
         <el-col :span="20" :offset="5">
           <span style="color:red;font-size:12px;">点击运单号查看物流</span>
         </el-col>
