@@ -40,7 +40,7 @@
       </el-row>
       <el-row type="flex" v-if="!slotData.isOfflineConsignment">
         <el-col :span="20" :offset="5">
-          <span style="color:red;font-size:12px;">点击运单号查看物流</span>
+<!--          <span style="color:red;font-size:12px;">点击运单号查看物流</span>-->
         </el-col>
       </el-row>
     </div>
@@ -74,7 +74,7 @@
     },
     methods: {
       selectLogistics () {
-        alert('查询物流');
+        // alert('查询物流');
       },
       onSure () {
         this.$confirm('是否确认收货?', '提示', {

@@ -14,13 +14,13 @@
           <div class="sale-details-b1">
             <div class="sale-details-stepbox" v-if="formData.status != 'CANCELLED'">
               <el-steps :active="active" align-center finish-status="success" v-if="formData.refunding && formData.status == 'PENDING_DELIVERY'">
-                <el-step title="买家付款" :description="formData.hasOwnProperty('payTime') ? getTime(formData.payTime) : ''"></el-step>
+                <el-step title="买家付款"></el-step>
                 <el-step title="退款/售后"></el-step>
                 <el-step title="交易完成"></el-step>
               </el-steps>
               <el-steps :active="active" align-center finish-status="success" v-else>
-                <el-step title="买家付款" :description="formData.hasOwnProperty('payTime') ? getTime(formData.payTime) : ''"></el-step>
-                <el-step title="卖家发货" :description="formData.hasOwnProperty('deliveryTime') ? getTime(formData.deliveryTime) : ''"></el-step>
+                <el-step title="买家付款"></el-step>
+                <el-step title="卖家发货"></el-step>
                 <el-step v-if="!formData.refunding" title="确认收货"></el-step>
                 <el-step v-if="formData.refunding" title="退款/售后"></el-step>
                 <el-step title="交易完成"></el-step>
