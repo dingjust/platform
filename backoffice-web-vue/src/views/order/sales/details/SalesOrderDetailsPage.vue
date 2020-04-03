@@ -13,7 +13,7 @@
         <el-col :span="20">
           <div class="sale-details-b1">
             <div class="sale-details-stepbox" v-if="formData.status != 'CANCELLED'">
-              <el-steps :active="active" align-center finish-status="success" v-if="progressBarShow">
+              <el-steps :active="active" align-center finish-status="success" v-if="formData.refunding && formData.status == 'PENDING_DELIVERY'">
                 <el-step title="买家付款"></el-step>
                 <el-step title="退款/售后"></el-step>
                 <el-step title="交易完成"></el-step>
@@ -136,7 +136,7 @@
   import ReturnPanel from './ReturnPanel';
   import ReturnForm from '../form/ReturnForm';
   import CompletedPanel from './CompletedPanel';
-  import RefuseReturnForm from '../form/RefuseReturnForm';
+  import RefuseReturnForm from "../form/RefuseReturnForm";
   import {formatDate} from '@/common/js/filters';
 
   export default {
@@ -161,11 +161,11 @@
           return 0;
         } else if (this.formData.status == 'PENDING_DELIVERY' && this.formData.refundStatus != 'IN_REFUND') {
           return 1;
-        } else if ((this.formData.status == 'PENDING_CONFIRM' && this.formData.refundStatus != 'IN_REFUND') || (this.formData.refundStatus == 'IN_REFUND' && this.formData.status == 'PENDING_DELIVERY')) {
+        } else if ((this.formData.status == 'PENDING_CONFIRM' && this.formData.refundStatus != 'IN_REFUND') || (this.formData.refundStatus == 'IN_REFUND' && this.formData.status == 'PENDING_DELIVERY')){
           return 2;
-        } else if ((this.formData.status == 'PENDING_DELIVERY' && this.formData.refundStatus == 'COMPLETED') || (this.formData.status == 'PENDING_CONFIRM' && this.formData.refundStatus == 'IN_REFUND')) {
+        } else if ((this.formData.status == 'PENDING_DELIVERY' && this.formData.refundStatus == 'COMPLETED') || (this.formData.status == 'PENDING_CONFIRM' && this.formData.refundStatus == 'IN_REFUND')){
           return 3;
-        } else if (this.formData.status == 'COMPLETED') {
+        } else if (this.formData.status == 'COMPLETED'){
           return 4;
         }
       },
@@ -187,11 +187,6 @@
         } else {
           return this.formData.status === 'COMPLETED';
         }
-      },
-      progressBarShow: function () {
-        // refunding(true)申请退款中 && status 为待发货    ||    退款完成refundStatus('COMPLETED') 而且不是线下,没有发货时间
-        return (this.formData.refunding && this.formData.status == 'PENDING_DELIVERY') ||
-        (this.formData.refundStatus == 'COMPLETED' && !this.formData.deliveryTime && !this.formData.isOfflineConsignment);
       }
     },
     methods: {

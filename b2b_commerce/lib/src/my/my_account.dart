@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/my/account/binding_card_page.dart';
 import 'package:b2b_commerce/src/my/account/withdraw_cash.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -35,7 +36,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     controller: _scrollController,
                     slivers: <Widget>[
                       SliverAppBar(
-                        expandedHeight: 205,
+                        expandedHeight: 210,
                         pinned: true,
                         elevation: 0.5,
                         backgroundColor: const Color.fromRGBO(255, 219, 0, 1),
@@ -78,11 +79,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
             height: 50,
             width: double.infinity,
             child: FlatButton(
-              onPressed: bankCardModel != null
-                  ? () {
-                onWithdraw(snapshot.data);
-              }
-                  : null,
+              onPressed: () => onWithdraw(snapshot.data),
               color: const Color.fromRGBO(255, 219, 0, 1),
               child: Text(
                 '提现',
@@ -398,11 +395,15 @@ class _MyAccountPageState extends State<MyAccountPage> {
   }
 
   void onWithdraw(CompanyWalletModel model) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => WithdrawCash(model, bankCardModel)),
-    );
+    if (bankCardModel != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WithdrawCash(model, bankCardModel)),
+      );
+    } else {
+      BotToast.showText(text: '请先添加银行卡');
+    }
   }
 
   Future<CompanyWalletModel> _getData() async {

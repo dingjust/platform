@@ -156,15 +156,15 @@ export default {
             permissions: ['CERT']
           }
         },
-        {
-          name: '员工',
-          url: '/account/b2b-customer',
-          icon: 'iconNone',
-          meta: {
-            requiresAuth: true,
-            permissions: ['COMPANY_B2BCUSTOMER']
-          }
-        },
+        // {
+        //   name: '员工',
+        //   url: '/account/b2b-customer',
+        //   icon: 'iconNone',
+        //   meta: {
+        //     requiresAuth: true,
+        //     permissions: ['COMPANY_B2BCUSTOMER']
+        //   }
+        // },
         {
           name: '合作商',
           url: '/account/cooperator',
