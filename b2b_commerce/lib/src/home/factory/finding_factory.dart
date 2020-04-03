@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
+import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -362,13 +363,18 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
   Future<bool> _initData() async {
     if (!inited && !lock) {
       lock = true;
-      majorCategories = await ProductRepositoryImpl().majorCategories();
-      labels = await UserRepositoryImpl().labels();
+      majorCategories =
+      await Provider.of<MajorCategoryState>(context).getMajorCategories();
+      labels = await Provider.of<LabelState>(context).getLabels();
       labels = labels
           .where(
               (label) => label.group == 'FACTORY' || label.group == 'PLATFORM')
           .toList();
-      aMapLocation = await AmapService.instance.location();
+
+      if (widget.route == '就近找厂') {
+        aMapLocation = await AmapService.instance.location();
+      }
+
       if (widget.factoryCondition != null) {
         if (widget.route == '就近找厂') {
           isLocalFind = true;
