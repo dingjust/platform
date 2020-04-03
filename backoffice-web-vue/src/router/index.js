@@ -502,7 +502,7 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  // if (authorized) {
+  if (authorized) {
   //   // TODO: 检查权限
   //   if (to.meta.requiresAuth) {
   //     if (hasPermission(to.meta.permissions)) {
@@ -514,14 +514,14 @@ router.beforeEach((to, from, next) => {
   //   } else {
       return next() // 确保一定要调用 next()
   //   }
-  // }
+  }
 
-  // next({
-  //   path: LOGIN_URL,
-  //   query: {
-  //     backUrl: to.fullPath
-  //   }
-  // });
+  next({
+    path: LOGIN_URL,
+    query: {
+      backUrl: to.fullPath
+    }
+  });
 });
 
 export default router;
