@@ -1,13 +1,14 @@
 export default {
-  items: [{
-      title: true,
-      name: '平台',
-      class: '',
-      wrapper: {
-        element: 'span',
-        attributes: {}
-      }
-    },
+  items: [
+    // {
+    //   title: true,
+    //   name: '平台',
+    //   class: '',
+    //   wrapper: {
+    //     element: 'span',
+    //     attributes: {}
+    //   }
+    // },
     {
       name: '主页',
       url: '/dashboard',
@@ -58,6 +59,7 @@ export default {
     {
       name: '订单',
       icon: 'el-icon-s-order',
+      url: '/order',
       children: [{
           name: '需求订单',
           url: '/order/requirement',
@@ -122,26 +124,27 @@ export default {
       name: '其他',
       url: '/miscs',
       icon: 'el-icon-coin',
-      children: [{
-          name: '合同',
-          icon: 'iconNone',
-          children: [{
-              name: '合同',
-              url: '/contract/manage/contract',
-              icon: 'iconNone',
-            },
-            {
-              name: '合同模板',
-              url: '/contract/template/template',
-              icon: 'iconNone',
-            },
-            {
-              name: '印章',
-              url: '/contract/seal/seal',
-              icon: 'iconNone',
-            },
-          ]
-        },
+      children: [
+        // {
+        //   name: '合同',
+        //   icon: 'iconNone',
+        //   children: [{
+        //       name: '合同',
+        //       url: '/contract/manage/contract',
+        //       icon: 'iconNone',
+        //     },
+        //     {
+        //       name: '合同模板',
+        //       url: '/contract/template/template',
+        //       icon: 'iconNone',
+        //     },
+        //     {
+        //       name: '印章',
+        //       url: '/contract/seal/seal',
+        //       icon: 'iconNone',
+        //     },
+        //   ]
+        // },
         {
           name: '轮播图配置',
           url: '/miscs/carousel',
@@ -168,35 +171,40 @@ export default {
           icon: 'iconNone',
         },
         {
-          name: '未分类',
+          name: '产品运营活动',
+          url: '/miscs/promote',
           icon: 'iconNone',
-          children: [{
-              name: '下单',
-              url: '/orderPurchase',
-              icon: 'iconNone',
-            },
-            {
-              name: '印章',
-              url: '/unclassified/sealManagement',
-              icon: 'iconNone',
-            },
-            // {
-            //   name: '创建合同',
-            //   url: '/unclassified/createContract',
-            //   icon: 'iconNone',
-            // },
-            {
-              name: 'markdown',
-              url: '/unclassified/markDown',
-              icon: 'iconNone',
-            },
-            {
-              name: '合同模板',
-              url: '/unclassified/contractTemplate',
-              icon: 'iconNone',
-            }
-          ]
         },
+        // {
+        //   name: '未分类',
+        //   icon: 'iconNone',
+        //   children: [{
+        //       name: '下单',
+        //       url: '/orderPurchase',
+        //       icon: 'iconNone',
+        //     },
+        //     {
+        //       name: '印章',
+        //       url: '/unclassified/sealManagement',
+        //       icon: 'iconNone',
+        //     },
+        //     // {
+        //     //   name: '创建合同',
+        //     //   url: '/unclassified/createContract',
+        //     //   icon: 'iconNone',
+        //     // },
+        //     {
+        //       name: 'markdown',
+        //       url: '/unclassified/markDown',
+        //       icon: 'iconNone',
+        //     },
+        //     {
+        //       name: '合同模板',
+        //       url: '/unclassified/contractTemplate',
+        //       icon: 'iconNone',
+        //     }
+        //   ]
+        // },
       ]
     }
   ]
