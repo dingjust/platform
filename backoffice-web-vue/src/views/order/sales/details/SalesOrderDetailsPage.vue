@@ -21,8 +21,10 @@
               <el-steps :active="active" align-center finish-status="success" v-else>
                 <el-step title="买家付款"></el-step>
                 <el-step title="卖家发货"></el-step>
-                <el-step v-if="!formData.refunding" title="确认收货"></el-step>
-                <el-step v-if="formData.refunding" title="退款/售后"></el-step>
+                <!-- <el-step v-if="!formData.refunding" title="确认收货"></el-step>
+                <el-step v-if="formData.refunding" title="退款/售后"></el-step> -->
+                <el-step v-if="!formData.refunding && formData.refundStatus != 'COMPLETED'" title="确认收货"></el-step>
+<el-step v-if="formData.refunding || formData.refundStatus == 'COMPLETED'" title="退款/售后"></el-step>
                 <el-step title="交易完成"></el-step>
               </el-steps>
             </div>
