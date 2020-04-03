@@ -412,7 +412,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
     } else if (_product.skuID == null) {
       _showValidateMsg(context, '请填写产品货号');
       return;
-    } else if (_product.category.id == null) {
+    } else if (_product?.category?.id == null) {
       _showValidateMsg(context, '请选择产品类别');
       return;
     }

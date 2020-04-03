@@ -560,7 +560,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       _showValidateMsg(context, '请填写产品货号');
       return;
     }
-    if (_product.category.id == null) {
+    if (_product?.category?.id == null) {
       _showValidateMsg(context, '请选择产品类别');
       return;
     }
