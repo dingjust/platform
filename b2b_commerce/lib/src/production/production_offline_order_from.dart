@@ -1267,11 +1267,6 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
       }
     }
 
-    if (cooperatorModel == null) {
-      BotToast.showText(text: '请选择账务方案');
-      return;
-    }
-
     //合作商
     purchaseOrder.cooperator = CooperatorModel(id: cooperatorModel.id);
     if (cooperatorModel.type == CooperatorType.ONLINE) {
@@ -1287,16 +1282,21 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
 
     //账务
     // purchaseOrder.pay
-    List<AbstractPayPlanItemModel> payItems = selectCompanyPayPlanModel
-        .payPlanItems
-        .map((item) =>
-        AbstractPayPlanItemModel(
-            payPercent: item.payPercent,
-            triggerEvent: item.triggerEvent,
-            moneyType: item.moneyType,
-            triggerDays: item.triggerDays,
-            triggerType: item.triggerType))
-        .toList();
+    List<AbstractPayPlanItemModel> payItems;
+    if (selectCompanyPayPlanModel == null) {
+      BotToast.showText(text: '请选择账务方案');
+      return;
+    } else {
+      payItems = selectCompanyPayPlanModel.payPlanItems
+          .map((item) =>
+          AbstractPayPlanItemModel(
+              payPercent: item.payPercent,
+              triggerEvent: item.triggerEvent,
+              moneyType: item.moneyType,
+              triggerDays: item.triggerDays,
+              triggerType: item.triggerType))
+          .toList();
+    }
 
     OrderPayPlanModel orderPayPlanModel = OrderPayPlanModel(
         isHaveDeposit: selectCompanyPayPlanModel.isHaveDeposit,
@@ -1369,6 +1369,9 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 confirmAction: () {
                   Navigator.of(context).pop();
                   doSave(purchaseOrder);
+                },
+                cancelAction: () {
+                  Navigator.of(context).pop();
                 },
               );
             });
