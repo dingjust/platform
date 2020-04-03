@@ -120,6 +120,7 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
             child: Container(
@@ -139,6 +140,7 @@ class _MyCapacityFormPageState extends State<MyCapacityFormPage> {
 //              inputType: TextInputType.number,
               hideDivider: true,
               hintText: '请输入标题',
+              maxLength: 15,
             ),
           ),
         ],

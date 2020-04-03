@@ -47,11 +47,13 @@ class CapacityMatchingItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text(
-            '${model.title}',
-            style: TextStyle(fontSize: 18),
-            overflow: TextOverflow.ellipsis,
-          ),
+          Expanded(
+            child: Text(
+              '${model.title}',
+              style: TextStyle(fontSize: 18),
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
         ],
       ),
     );
