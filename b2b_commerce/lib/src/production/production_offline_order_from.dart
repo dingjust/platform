@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/production/offline_contacts_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_factroy_input.dart';
 import 'package:b2b_commerce/src/production/offline_order_quantity.dart';
 import 'package:b2b_commerce/src/production/production_earnest_money.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
@@ -581,9 +582,12 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text(
-                      '${cooperatorName}',
-                      style: TextStyle(color: Colors.grey),
+                    Expanded(
+                      child: Text(
+                        '${cooperatorName}',
+                        style: TextStyle(color: Colors.grey),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     Icon(Icons.keyboard_arrow_right)
                   ],
@@ -1198,6 +1202,7 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
   void onSubmit() async {
     bool result = false;
     List<PurchaseOrderEntryModel> entries = new List();
+
     //联系人填写
     if (company != null) {
       if (company.name != null) {
@@ -1260,6 +1265,11 @@ class _ProductionOfflineOrderState extends State<ProductionOfflineOrder> {
         });
         entries.add(entryModel);
       }
+    }
+
+    if (cooperatorModel == null) {
+      BotToast.showText(text: '请选择账务方案');
+      return;
     }
 
     //合作商
