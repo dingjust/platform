@@ -90,8 +90,8 @@ enum FlowSource {
 const FlowSourceLocalizedMap = {
   FlowSource.CASH_OUT: '提现',
   FlowSource.PROOFING: '打样单',
-  FlowSource.PURCHASE_BALANCE: '生产单定金',
-  FlowSource.PURCHASE_DEPOSIT: '生产单尾款',
+  FlowSource.PURCHASE_BALANCE: '生产单尾款',
+  FlowSource.PURCHASE_DEPOSIT: '生产单定金',
   FlowSource.SALES_ORDER: '销售订单',
   FlowSource.SALES_ORDER_REFUND: '销售订单退款',
 };
