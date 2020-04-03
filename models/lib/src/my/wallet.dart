@@ -122,6 +122,21 @@ enum AmountStatus {
   ///已完成,
   COMPLETED,
 
+  ///已结算
+  SETTLED,
+
+  ///已退货
+  REFUNDED,
+
+  ///退货中
+  IN_REFUND,
+
+  ///进行中
+  IN_PROGRESS,
+
+  ///关闭
+  CLOSED,
+
   ///已取消
   CANCELED,
 
@@ -137,8 +152,13 @@ enum AmountStatus {
 
 const AmountStatusLocalizedMap = {
   AmountStatus.AUDITING: '未结算',
-  AmountStatus.COMPLETED: '已结算',
+  AmountStatus.COMPLETED: '已完成',
+  AmountStatus.SETTLED: '已结算',
+  AmountStatus.REFUNDED: '已退货',
+  AmountStatus.IN_REFUND: '退货中',
+  AmountStatus.IN_PROGRESS: '进行中',
   AmountStatus.CANCELED: '已取消',
+  AmountStatus.CLOSED: '关闭',
   AmountStatus.REJECTED: '提现拒绝',
   AmountStatus.IN_REVIEW: '审核中',
   AmountStatus.REVIEWED: '已审核',

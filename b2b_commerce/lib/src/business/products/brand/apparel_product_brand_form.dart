@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/business/products/form/attributes_field.dart';
-import 'package:b2b_commerce/src/business/products/form/color_size_stock_field.dart';
 import 'package:b2b_commerce/src/business/products/form/colors_sizes_field.dart';
 import 'package:b2b_commerce/src/business/products/form/detail_picture_field.dart';
 import 'package:b2b_commerce/src/business/products/form/fabricCompositions_field.dart';
@@ -30,7 +29,8 @@ class ApparelProductBrandFormPage extends StatefulWidget {
   final String keyword;
   final bool enabled;
 
-  _ApparelProductBrandFormState createState() => _ApparelProductBrandFormState();
+  _ApparelProductBrandFormState createState() =>
+      _ApparelProductBrandFormState();
 }
 
 class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
@@ -56,7 +56,12 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
       ..id = widget.item.id
       ..name = widget.item.name
       ..code = widget.item.code
-      ..attributes = widget.item.attributes ?? ApparelProductAttributesModel(styles: [],popularElements: [],decorativePatterns: [],fabricCompositions: [])
+      ..attributes = widget.item.attributes ??
+          ApparelProductAttributesModel(
+              styles: [],
+              popularElements: [],
+              decorativePatterns: [],
+              fabricCompositions: [])
       ..category = widget.item.category
       ..approvalStatus = widget.item.approvalStatus
       ..thumbnail = widget.item.thumbnail
@@ -125,8 +130,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
           elevation: 0.5,
           centerTitle: true,
           title: Text(widget.isCreate ? '新建产品' : '编辑产品'),
-          actions: <Widget>[
-          ],
+          actions: <Widget>[],
         ),
         bottomNavigationBar: !_enabled
             ? null
@@ -221,51 +225,79 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                 enabled: _enabled,
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             Container(
               color: Colors.white,
               padding: EdgeInsets.all(15),
               child: GestureDetector(
-                behavior:HitTestBehavior.opaque,
-                onTap: () async{
-                  List<ColorSizeModel> colors = await Provider.of<ColorState>(context).getPartColors();
-                  List<ColorSizeEntryModel> sizes = await Provider.of<SizeState>(context).getPartSizes();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ColorsSizesField(_product,colors: colors,sizes: sizes)));
+                behavior: HitTestBehavior.opaque,
+                onTap: () async {
+                  List<ColorSizeModel> colors =
+                  await Provider.of<ColorState>(context).getPartColors();
+                  List<ColorSizeEntryModel> sizes =
+                  await Provider.of<SizeState>(context).getPartSizes();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ColorsSizesField(_product,
+                                  colors: colors, sizes: sizes)));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Expanded(
                       child: RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: '颜色/尺码',
-                                  style: TextStyle(color: Colors.black,fontSize: 16,)
-                              ),
-                              TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(color: Colors.red,)
-                              ),
-                            ]
-                        ),
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '颜色/尺码',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              )),
+                          TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                color: Colors.red,
+                              )),
+                        ]),
                       ),
                     ),
-                    Text(colorSizeSelectText(_product.colorSizes),style: TextStyle(color: Colors.grey,),),
-                    Icon(Icons.chevron_right,color: Colors.blueGrey,),
+                    Text(
+                      colorSizeSelectText(_product.colorSizes),
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.blueGrey,
+                    ),
                   ],
                 ),
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             Container(
               color: Colors.white,
               padding: EdgeInsets.all(15),
               child: GestureDetector(
-                behavior:HitTestBehavior.opaque,
-                onTap: () async{
-                  dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FabricCompositionsField(_product.attributes.fabricCompositions,enabled: true)));
-                  if(result != null){
+                behavior: HitTestBehavior.opaque,
+                onTap: () async {
+                  dynamic result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              FabricCompositionsField(
+                                  _product.attributes.fabricCompositions,
+                                  enabled: true)));
+                  if (result != null) {
                     _product.attributes.fabricCompositions = result;
                   }
                 },
@@ -274,23 +306,34 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
                   children: <Widget>[
                     Expanded(
                       child: RichText(
-                        text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: '面料成分',
-                                  style: TextStyle(color: Colors.black,fontSize: 16,)
-                              ),
-                            ]
-                        ),
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: '面料成分',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              )),
+                        ]),
                       ),
                     ),
-                    Text('${fabricSelectText()}',style: TextStyle(color: Colors.grey,),),
-                    Icon(Icons.chevron_right,color: Colors.blueGrey,),
+                    Text(
+                      '${fabricSelectText()}',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.blueGrey,
+                    ),
                   ],
                 ),
               ),
             ),
-            Divider(height: 0,color: Color(Constants.DIVIDER_COLOR),),
+            Divider(
+              height: 0,
+              color: Color(Constants.DIVIDER_COLOR),
+            ),
             Container(
               color: Colors.white,
               child: TextFieldComponent(
@@ -369,7 +412,7 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
     } else if (_product.skuID == null) {
       _showValidateMsg(context, '请填写产品货号');
       return;
-    } else if (_product.category == null) {
+    } else if (_product?.category?.id == null) {
       _showValidateMsg(context, '请选择产品类别');
       return;
     }
@@ -399,10 +442,10 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
               entrance: 'apparelProduct',
               keyword: widget.keyword,
             );
-          }).then((value){
-        if(value){
-          Navigator.pop(context,value);
-        }else{
+          }).then((value) {
+        if (value) {
+          Navigator.pop(context, value);
+        } else {
           BotToast.showText(text: '系统错误，创建产品失败');
         }
       });
@@ -418,13 +461,13 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
               entrance: 'apparelProduct',
               keyword: widget.keyword,
             );
-          }).then((value){
-            print(value);
-            if(value){
-              Navigator.pop(context,value);
-            }else{
-              BotToast.showText(text: '系统错误，更新产品失败');
-            }
+          }).then((value) {
+        print(value);
+        if (value) {
+          Navigator.pop(context, value);
+        } else {
+          BotToast.showText(text: '系统错误，更新产品失败');
+        }
       });
     }
   }
@@ -453,33 +496,34 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
   String colorSizeSelectText(List<ColorSizeModel> colorsSizes) {
     String text = '';
     List<ColorSizeEntryModel> sizes;
-    if(colorsSizes != null && colorsSizes.length > 0){
+    if (colorsSizes != null && colorsSizes.length > 0) {
       sizes = colorsSizes[0].sizes;
-      for(int i=0;i < colorsSizes.length;i++){
-        if(i > 1){
+      for (int i = 0; i < colorsSizes.length; i++) {
+        if (i > 1) {
           text += '...';
           break;
         }
 
-        if(i == colorsSizes.length-1){
+        if (i == colorsSizes.length - 1) {
           text += colorsSizes[i].colorName;
-        }else{
+        } else {
           text += colorsSizes[i].colorName + '、';
         }
       }
     }
-    if(colorsSizes.length >0 || (sizes != null && sizes.length>0)) text += '/';
+    if (colorsSizes.length > 0 || (sizes != null && sizes.length > 0))
+      text += '/';
 
-    if(sizes != null && sizes.length > 0){
-      for(int i=0;i<sizes.length;i++){
-        if(i > 1){
+    if (sizes != null && sizes.length > 0) {
+      for (int i = 0; i < sizes.length; i++) {
+        if (i > 1) {
           text += '...';
           break;
         }
 
-        if(i == sizes.length-1){
+        if (i == sizes.length - 1) {
           text += sizes[i].name;
-        }else{
+        } else {
           text += sizes[i].name + '、';
         }
       }
@@ -491,12 +535,13 @@ class _ApparelProductBrandFormState extends State<ApparelProductBrandFormPage> {
   //格式化选中的面料成分
   String fabricSelectText() {
     String text = '';
-    if(_product.attributes.fabricCompositions != null){
-      var names = enumCodesToNames(_product.attributes.fabricCompositions, FabricCompositionEnum);
-      if(names.length > 2){
-        text = names.sublist(0,2).join('、');
+    if (_product.attributes.fabricCompositions != null) {
+      var names = enumCodesToNames(
+          _product.attributes.fabricCompositions, FabricCompositionEnum);
+      if (names.length > 2) {
+        text = names.sublist(0, 2).join('、');
         text += '...';
-      }else{
+      } else {
         text = names.join('、');
       }
     }

@@ -12,7 +12,6 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 import 'form/attributes_field.dart';
-import 'form/color_size_stock_field.dart';
 import 'form/detail_picture_field.dart';
 import 'form/minor_category_field.dart';
 import 'form/normal_picture_field.dart';
@@ -561,7 +560,7 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
       _showValidateMsg(context, '请填写产品货号');
       return;
     }
-    if (_product.category == null) {
+    if (_product?.category?.id == null) {
       _showValidateMsg(context, '请选择产品类别');
       return;
     }

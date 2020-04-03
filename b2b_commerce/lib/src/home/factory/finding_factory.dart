@@ -242,7 +242,7 @@ class _FindingFactoryPageState extends State<FindingFactoryPage> {
                           fit: StackFit.expand,
                           children: <Widget>[
                             NestedScrollView(
-                              headerSliverBuilder: _sliverBuilder,
+                              headerSliverBuilder: _sliverBuilder, 
                               controller: _scrollController,
                               body: FactoryListView(
                                 factoryCondition: factoryCondition,

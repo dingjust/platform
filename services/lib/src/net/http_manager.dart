@@ -83,7 +83,6 @@ class HttpManager {
           print(
               "RESPONSE[${response?.statusCode}] => PATH: ${response?.request
                   ?.path}>>>返回结果:${response?.data.toString()}");
-          print('返回结果:${response?.data.toString()}');
         }
       }
       return response; // continue
