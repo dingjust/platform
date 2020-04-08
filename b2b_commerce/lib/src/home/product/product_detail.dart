@@ -10,6 +10,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,6 +32,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   void initState() {
     super.initState();
+    //数据埋点>>>看款详情
+    FlutterUmplus.event("order_product_detail_page",
+        label: widget.product.code);
+
     //若产品没有类型
     if (widget.product.productType == null ||
         widget.product.productType.isEmpty) {

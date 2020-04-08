@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/orders/requirement/requirement_order_s
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -28,6 +29,9 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
 
   @override
   void initState() {
+    //埋点>>>需求发布1页面进入
+    FlutterUmplus.event("requirement_publish_1_page");
+
     super.initState();
   }
 
@@ -84,6 +88,11 @@ class _RequirementOrderFirstFormState extends State<RequirementOrderFirstForm> {
                   ShowDialogUtil.showValidateMsg(context, '请选择工厂区域');
                   return;
                 }
+                //埋点>>>需求发布1填写下一步
+                FlutterUmplus.event("requirement_publish_1_finsh",
+                    label:
+                    '${widget.formState.model.details.majorCategory.name}');
+
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => RequirementOrderSecondForm(
                           formState: widget.formState,

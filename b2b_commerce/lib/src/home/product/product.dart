@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/home/product/product_detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
@@ -7,8 +8,11 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class RecommendProductItem extends StatelessWidget {
-  const RecommendProductItem(
-      {Key key, this.model, this.imageSize = 200, this.showAddress = false})
+  const RecommendProductItem({Key key,
+    this.model,
+    this.imageSize = 200,
+    this.showAddress = false,
+    this.onClick})
       : super(key: key);
 
   final ApparelProductModel model;
@@ -16,6 +20,9 @@ class RecommendProductItem extends StatelessWidget {
   final double imageSize;
 
   final bool showAddress;
+
+  ///点击回调
+  final VoidCallback onClick;
 
   static Map<ProductType, Color> _tagColors = {
     ProductType.FUTURE_GOODS: Color.fromRGBO(20, 138, 255, 1),
@@ -28,6 +35,11 @@ class RecommendProductItem extends StatelessWidget {
     // print('=====${model.thumbnails[0].normalUrl()}');
     return GestureDetector(
         onTap: () async {
+          ///点击
+          if (onClick != null) {
+            onClick();
+          }
+
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -135,7 +147,7 @@ class RecommendProductItem extends StatelessWidget {
                                           color: Colors.red, fontSize: 14),
                                       children: <TextSpan>[
                                         TextSpan(
-                                            text: '${model?.minPrice}',
+                                            text: '${model?.minPrice ?? ''}',
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold)),

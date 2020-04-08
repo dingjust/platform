@@ -836,7 +836,11 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     });
   }
 
+  ///下单成功则调用付款
   void onPaying(String code) async {
+    //埋点>>>"确认下单"成功生成订单
+    FlutterUmplus.event("order_product_success");
+
     if (code != null && code != '') {
       switch (widget.orderType) {
         case OrderType.PROOFING:
