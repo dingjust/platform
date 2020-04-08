@@ -39,6 +39,7 @@ import {
   OperationCoursesModule,
   WalletModule,
   CashOutManagerModule,
+  PromoteProductModule,
   // contract
   ContractModule,
   ContractTemplateModule,
@@ -116,16 +117,17 @@ export default new Vuex.Store({
     OperationCoursesModule,
     WalletModule,
     CashOutManagerModule,
+    PromoteProductModule,
     // contract
     ContractModule,
     ContractTemplateModule,
     ContractSealModule,
-    //产能
+    // 产能
     CapacityModule,
-    //报表
+    // 报表
     ReceiptReportModule,
     ProductionProgressReportModule,
-
+    //
     MessageModule,
   },
   state,

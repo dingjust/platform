@@ -345,18 +345,26 @@
         this.count++;
       },
       handleClose (done) {
-        // setTimeout(() => {
         if (this.count > 0) {
-          this.$confirm('是否确认关闭此弹窗，填写的信息将不会保存')
-            .then(_ => {
-              done();
-            })
-            .catch(_ => {
-            });
+          // this.$confirm('是否确认关闭此弹窗，填写的信息将不会保存')
+          //   .then(_ => {
+          //     done();
+          //   })
+          //   .catch(_ => {
+          //   });
+          this.$confirm('是否确认关闭此弹窗 , 更改内容将不会被保存', '提示', {
+            confirmButtonText: '离开页面',
+            cancelButtonText: '留在页面',
+            type: 'warning',
+            showClose: false,
+            closeOnHashChange: false
+          }).then(() => {
+            done();
+          }).catch(() => {
+          })
         } else {
           done();
         }
-        // }, 10);
       }
     },
     data () {

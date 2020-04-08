@@ -170,11 +170,11 @@ export default {
           url: '/miscs/cashOutManager',
           icon: 'iconNone',
         },
-        // {
-        //   name: '产品运营活动',
-        //   url: '/miscs/promote',
-        //   icon: 'iconNone',
-        // },
+        {
+          name: '产品运营活动',
+          url: '/miscs/promote',
+          icon: 'iconNone',
+        },
         // {
         //   name: '未分类',
         //   icon: 'iconNone',
