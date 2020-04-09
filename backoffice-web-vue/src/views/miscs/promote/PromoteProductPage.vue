@@ -154,6 +154,8 @@
           this.$message.error(result.msg);
           return;
         }
+        result.data.sequenceProducts.sort(this.compare('sequence'));
+        console.log(result);
         if (result.data != null) {
           this.formData = Object.assign({}, result.data);
         }
@@ -163,6 +165,13 @@
           this.originData = this.formData.sequenceProducts;
         }
         this.returnCount();
+      },
+      compare (property) {
+        return function (a, b) {
+          const value1 = a[property];
+          const value2 = b[property];
+          return value1 - value2;
+        }
       },
       // 提交今日新款
       async onConfirmToday (submitData) {
@@ -177,6 +186,7 @@
         this.returnCount();
       },
       onProuductSelect () {
+        this.onSearch();
         this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
         this.productSelectVisible = true;
       },
@@ -276,7 +286,7 @@
       }
     },
     created () {
-      this.onAdvancedSearch();
+      // this.onSearch();
     },
     beforeRouteLeave (to, from, next) {
       next(false);

@@ -71,10 +71,6 @@
             </template>
           </el-table-column>
         </el-table>
-<!--        <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"-->
-<!--                       @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="formData.number + 1"-->
-<!--                       :page-size="formData.size" :page-count="formData.totalPages" :total="formData.totalElements">-->
-<!--        </el-pagination>-->
       </div>
     </el-row>
     <el-dialog :visible.sync="factoryDetailsPageVisible" width="80%" class="purchase-dialog"
@@ -115,43 +111,17 @@
       ...mapMutations({
         setPromoteProductList: 'promoteProductList'
       }),
-      onPageSizeChanged () {
-
-      },
-      onCurrentPageChanged () {
-
-      },
       getIndex (row) {
         return this.promoteProductList.indexOf(row) + 1;
       },
       clickInput (value) {
         value = value.replace(/^(0+)|[^\d]+/g, '');
       },
-      // onSearch () {
-      //   const key = this.keyword;
-      //   const originData = this.promoteProductList;
-      //   if (this.keyword.replace(/\s*/g, '').length == 0) {
-      //     this.formData = originData;
-      //   } else {
-      //     const searchData = originData.filter(function (item) {
-      //       return item.name.search(key) > -1 || item.skuID.search(key) > -1;
-      //     })
-      //     this.formData = searchData;
-      //   }
-      // },
       onListSearch () {
         const keyword = this.keyword;
         this.$emit('onListSearch', keyword);
       },
       onDelete (row, index) {
-        // let index;
-        // for (let i = 0; i < this.formData.length; i++) {
-        //   if (row.id == this.formData[i].id) {
-        //     index = i;
-        //   }
-        // }
-        // this.formData.splice(index, 1);
-        // this.$store.state.PromoteProductModule.promoteProductList = this.formData;
         const keyword = this.keyword;
         this.$emit('onDelete', row, keyword);
       },
@@ -176,6 +146,11 @@
       },
       moveNumber (modifyIndex, row) {
         const index = row.sequence;
+        if (index === modifyIndex) {
+          this.moveButtonDisabled = false;
+          this.showInput = false;
+          return
+        }
         setTimeout(() => {
           this.$confirm('是否将 ' + row.product.name + ' 的序号从 ' + index + ' 移动到 ' + modifyIndex, '提示', {
             confirmButtonText: '确定',
@@ -188,15 +163,9 @@
         this.moveButtonDisabled = false;
         this.showInput = false;
       },
-      //              4       1
       _moveNumber (index, modifyText) {
         const keyword = this.keyword;
         this.$emit('_moveNumber', index, modifyText, keyword);
-        // const modifyT = modifyText - this.formData.length > 0 ? this.formData.length : modifyText;
-        // const item = this.formData.splice(index - 1, 1);
-        // this.formData.splice(modifyT - 1, 0, item[0]);
-        // this.$store.state.PromoteProductModule.promoteProductList = this.formData;
-        // this.$message.success('移动商品序号成功');
       },
       async onBelongDetail (item) {
         // 工厂

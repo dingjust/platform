@@ -67,8 +67,6 @@
         this.$store.state.PromoteProductModule.promoteProductList = this.selectedItems;
       },
       onSelectAll (selection) {
-        console.log(selection)
-        console.log(this.selectedItems)
         let arr = [];
         selection.forEach(item => {
           const flag = this.selectedItems.some(val => {
@@ -87,6 +85,7 @@
             const index = this.selectedItems.findIndex((row)=> item.id == row.id)
             if (index > -1) {
               this.selectedItems.splice(index, 1);
+              this.$store.state.PromoteProductModule.promoteProductList = this.selectedItems;
             }
           });
         }
@@ -133,10 +132,15 @@
       onCurrentPageChanged (val) {
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
+          this.$nextTick(() => {
+            this.$refs.resultTable.bodyWrapper.scrollTop = 0
+          })
           return;
         }
-
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        })
       },
       async onBelongDetail (item) {
       // 工厂
@@ -176,8 +180,6 @@
       showProduct () {
         const list = this.$store.state.PromoteProductModule.promoteProductList;
         const content = this.page.content;
-        console.log(list)
-        console.log(content)
         if (list.length > 0) {
           content.forEach(item => {
             list.forEach(val => {
@@ -187,8 +189,8 @@
             })
           })
         }
+        this.selectedItems = [];
         list.forEach(item => {
-          this.selectedItems = [];
           if (item.product) {
             this.selectedItems.push(item.product);
           } else {
