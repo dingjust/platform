@@ -63,9 +63,12 @@
         } else {
           this.selectedItems.push(row);
         }
+
         this.$store.state.PromoteProductModule.promoteProductList = this.selectedItems;
       },
       onSelectAll (selection) {
+        console.log(selection)
+        console.log(this.selectedItems)
         let arr = [];
         selection.forEach(item => {
           const flag = this.selectedItems.some(val => {
@@ -173,10 +176,12 @@
       showProduct () {
         const list = this.$store.state.PromoteProductModule.promoteProductList;
         const content = this.page.content;
+        console.log(list)
+        console.log(content)
         if (list.length > 0) {
           content.forEach(item => {
             list.forEach(val => {
-              if (item.id === val.product.id) {
+              if (val.product && item.id === val.product.id) {
                 this.$refs.resultTable.toggleRowSelection(item);
               }
             })
@@ -184,7 +189,11 @@
         }
         list.forEach(item => {
           this.selectedItems = [];
-          this.selectedItems.push(item.product);
+          if (item.product) {
+            this.selectedItems.push(item.product);
+          } else {
+            this.selectedItems.push(item);
+          }
         })
       }
     },

@@ -177,6 +177,7 @@
         this.returnCount();
       },
       onProuductSelect () {
+        this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
         this.productSelectVisible = true;
       },
       confirmPromoteProductList () {
@@ -184,11 +185,10 @@
         let showList = [];
         for (let i = 0; i < list.length; i++) {
           showList[i] = {
-            sequence: i,
+            sequence: i + 1,
             product: list[i]
           }
         }
-        console.log(showList);
         this.promoteProductList = showList;
         this.originData = showList;
         this.$store.state.PromoteProductModule.promoteProductList = showList;
