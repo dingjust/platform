@@ -21,7 +21,7 @@
           <template slot="label">
             <h6 class="title-style">图片2</h6>
           </template>
-          <images-upload-single :formData="carouselData[1].media" @getPicture="getPicture($event, 1)"/>
+          <images-upload-single :formData="carouselData[1].media" @getPicture="getPicture($event, 1)" @removePicture="removePicture(1)"/>
           <h6 style="color: #909399;padding-left: 65px;">(400 * 200)</h6>
         </el-form-item>
         <el-form-item>
@@ -36,7 +36,7 @@
           <template slot="label">
             <h6 class="title-style">图片3</h6>
           </template>
-          <images-upload-single :formData="carouselData[2].media" @getPicture="getPicture($event, 2)"/>
+          <images-upload-single :formData="carouselData[2].media" @getPicture="getPicture($event, 2)" @removePicture="removePicture(2)"/>
           <h6 style="color: #909399;padding-left: 65px;">(400 * 200)</h6>
         </el-form-item>
         <el-form-item>
@@ -51,7 +51,7 @@
           <template slot="label">
             <h6 class="title-style">图片4</h6>
           </template>
-          <images-upload-single :formData="carouselData[3].media" @getPicture="getPicture($event, 3)"/>
+          <images-upload-single :formData="carouselData[3].media" @getPicture="getPicture($event, 3)" @removePicture="removePicture(3)"/>
           <h6 style="color: #909399;padding-left: 65px;">(400 * 200)</h6>
         </el-form-item>
         <el-form-item>
@@ -91,14 +91,14 @@
             item.media = {};
           }
         })
-        let item = {
-          media: {},
-          url: '',
-          active: true,
-          type: 'CT004'
-        }
         const length = result.data.length
         for (let i = 0; i < 4-length; i++) {
+          let item = {
+            media: {},
+            url: '',
+            active: true,
+            type: 'CT004'
+          }
           result.data.push(item);
         }
         if (length > 0) {
@@ -120,22 +120,23 @@
           this.$message.error('至少要有1张轮播图');
           return;
         }
-        let formData = [];
-        this.carouselData.forEach((item, index) => {
-          if (JSON.stringify(item.media) != '{}') {
-            formData.push(item);
-          }
-        });
+        // let formData = [];
+        // this.carouselData.forEach((item, index) => {
+        //   if (JSON.stringify(item.media) != '{}') {
+        //     formData.push(item);
+        //   }
+        // });
         // console.log(formData);
         // return;
         const url = this.apis().updateAllCarousels();
-        const result = await this.$http.put(url, formData);
+        const result = await this.$http.put(url, this.carouselData);
         if (result.code === 0) {
           this.$message.error(result.msg);
           return;
         }
         this.$message.success('操作成功');
         this.getCarousel();
+        this.$emit('returnCount');
       }
     },
     data () {
@@ -157,6 +158,7 @@
     },
     created () {
       this.getCarousel();
+      this.$emit('returnCount');
     }
   }
 </script>

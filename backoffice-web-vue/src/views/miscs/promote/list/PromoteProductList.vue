@@ -46,7 +46,7 @@
               <span>{{getEnum('approvalStatuses', scope.row.product.approvalStatus)}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="排位序号" min-width="100">
+          <el-table-column label="序号" min-width="80">
             <template slot-scope="scope">
               <text-to-input :value="scope.row.sequence"
                              :input-type="'number'"
@@ -175,13 +175,14 @@
         this.moveButtonDisabled = true;
       },
       moveNumber (modifyIndex, row) {
+        const index = row.sequence + 1;
         setTimeout(() => {
-          this.$confirm('是否将 ' + row.product.name + ' 的序号从 ' + row.sequence + ' 移动到 ' + modifyIndex, '提示', {
+          this.$confirm('是否将 ' + row.product.name + ' 的序号从 ' + index + ' 移动到 ' + modifyIndex, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this._moveNumber(row.sequence, modifyIndex);
+            this._moveNumber(index, modifyIndex);
           });
         }, 100);
         this.moveButtonDisabled = false;

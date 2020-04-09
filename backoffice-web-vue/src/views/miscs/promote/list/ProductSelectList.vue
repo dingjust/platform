@@ -183,6 +183,7 @@
           })
         }
         list.forEach(item => {
+          this.selectedItems = [];
           this.selectedItems.push(item.product);
         })
       }

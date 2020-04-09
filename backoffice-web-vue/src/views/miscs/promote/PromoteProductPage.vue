@@ -140,42 +140,6 @@
           this.getPageData(nval);
         })
       },
-      // tabBeforeLeave (nval, oval) {
-      //   switch (this.activeName) {
-      //     case 'carousel':
-      //       if (this.$refs.carousel.count > 0) {
-      //         return this._judge(nval);
-      //       }
-      //       break;
-      //     case 'TODAY_NEW':
-      //       if (this.$refs.today.count > 0) return this._judge(nval);
-      //       break;
-      //     case 'SEASON_HOT':
-      //       if (this.$refs.season.count > 0) {
-      //         return this._judge(nval);
-      //       }
-      //       break;
-      //     case 'LIVE_BROADCAST_PROVIDE':
-      //       if (this.$refs.live.count > 0) return this._judge(nval);
-      //       break;
-      //     case 'RECOMMEND_FOR_YOU':
-      //       if (this.$refs.forYou.count > 0) return this._judge(nval);
-      //       break;
-      //     default :
-      //       return true;
-      //   }
-      // },
-      // _judge (nval) {
-      //   return this.$confirm('是否切换标签 , 更改内容将不会被保存', '提示', {
-      //     confirmButtonText: '离开页面',
-      //     cancelButtonText: '留在页面',
-      //     showClose: false,
-      //     closeOnHashChange: false,
-      //     type: 'warning'
-      //   }).then(() => {
-      //     this.getPageData(nval);
-      //   })
-      // },
       async getProductPlate (activeName) {
         this.formData = {
           title: '',
@@ -194,14 +158,11 @@
           this.formData = Object.assign({}, result.data);
         }
         if (activeName != 'carousel' && activeName != 'TODAY_NEW') {
-          // let productList = [];
-          // this.formData.sequenceProducts.forEach(item => {
-          //   productList.push(item.product);
-          // })
           this.$store.state.PromoteProductModule.promoteProductList = Object.assign([], this.formData.sequenceProducts);
           this.promoteProductList = this.formData.sequenceProducts;
           this.originData = this.formData.sequenceProducts;
         }
+        this.returnCount();
       },
       // 提交今日新款
       async onConfirmToday (submitData) {
@@ -213,6 +174,7 @@
         }
         this.$message.success('操作成功');
         this.getProductPlate(this.activeName);
+        this.returnCount();
       },
       onProuductSelect () {
         this.productSelectVisible = true;
@@ -275,20 +237,16 @@
           this.originData[i].sequence = i + 1;
         }
         this.onListSearch(keyword)
-        // this.promoteProductList = this.originData;
-        // this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
         this.$message.success('删除商品成功');
       },
       _moveNumber (index, modifyText, keyword) {
-        const modifyT = modifyText - this.originData.length > 0 ? this.originData.length : modifyText;
+        const modifyT = modifyText - this.originData.length >= 0 ? this.originData.length : modifyText;
         const item = this.originData.splice(index - 1, 1);
         this.originData.splice(modifyT - 1, 0, item[0]);
         for (let i = 0; i < this.originData.length; i++) {
           this.originData[i].sequence = i + 1;
         }
         this.onListSearch(keyword)
-        // this.promoteProductList = this.originData;
-        // this.$store.state.PromoteProductModule.promoteProductList = this.originData;
         this.$message.success('移动商品序号成功');
       },
       operationCount () {
@@ -305,17 +263,6 @@
         activeName: 'carousel',
         SeeProductPlateType: this.$store.state.EnumsModule.SeeProductPlateType,
         productSelectVisible: false,
-        carouselData: [],
-        promoteProductSeasonList: [],
-        promoteProductLiveList: [],
-        promoteProductForYouList: [],
-        tipDialogVisible: false,
-        status: false,
-        isTabsLeave: false,
-        toTab: '',
-        seasonFormData: this.$store.state.PromoteProductModule.formData,
-        liveFormData: {},
-        forYouFormData: {},
         formData: {
           title: '',
           subtitle: '',
