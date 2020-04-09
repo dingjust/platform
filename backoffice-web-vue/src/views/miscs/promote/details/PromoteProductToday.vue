@@ -70,19 +70,20 @@
         }
       },
       created () {
+        this.$emit('returnCount');
       },
       watch: {
         'formData.picture': function (n, o) {
           this.validateField('picture');
         },
-        // formData: {
-        //   handler (val) {
-        //     if (val) {
-        //       this.count++
-        //     }
-        //   },
-        //   deep: true
-        // }
+        formData: {
+          handler (val) {
+            if (val) {
+              this.$emit('operationCount');
+            }
+          },
+          deep: true
+        }
       }
     }
 </script>

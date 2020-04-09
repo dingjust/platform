@@ -10,21 +10,28 @@
       </el-row>
       <div class="pt-2"></div>
       <el-row>
-        <el-tabs ref="tab" v-model="activeName" type="card" @tab-click="handleClick">
+        <el-tabs ref="tab" v-model="activeName" type="card" @tab-click="handleClick" :before-leave="tabBeforeLeave">
           <el-tab-pane label="看款轮播" name="carousel"/>
           <el-tab-pane label="今日新款" name="TODAY_NEW"/>
           <el-tab-pane label="当季爆款" name="SEASON_HOT"/>
           <el-tab-pane label="直播专供" name="LIVE_BROADCAST_PROVIDE"/>
           <el-tab-pane label="为你推荐" name="RECOMMEND_FOR_YOU"/>
         </el-tabs>
-        <promote-product-carousel ref="carousel" v-if="activeName == 'carousel'"/>
-        <promote-product-today ref="today" v-if="activeName == 'TODAY_NEW'" @onConfirmToday="onConfirmToday" :formData="formData"/>
+        <promote-product-carousel ref="carousel" v-if="activeName == 'carousel'" @operationCount="operationCount" @returnCount="returnCount"/>
+        <promote-product-today ref="today" v-if="activeName == 'TODAY_NEW'" @onConfirmToday="onConfirmToday" :formData="formData"
+                               @operationCount="operationCount" @returnCount="returnCount"/>
         <promote-product-season ref="season" v-if="activeName == 'SEASON_HOT'" :formData="formData" :slotData="promoteProductList"
-                                @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"/>
+                                @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
+                                @operationCount="operationCount" @returnCount="returnCount"
+                                @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
         <promote-product-live ref="live" v-if="activeName == 'LIVE_BROADCAST_PROVIDE'" :formData="formData" :slotData="promoteProductList"
-                              @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"/>
+                              @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
+                              @operationCount="operationCount" @returnCount="returnCount"
+                              @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
         <promote-product-for-you ref="forYou" v-if="activeName == 'RECOMMEND_FOR_YOU'" :formData="formData" :slotData="promoteProductList"
-                                 @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"/>
+                                 @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
+                                 @operationCount="operationCount" @returnCount="returnCount"
+                                 @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="productSelectVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog">
@@ -101,10 +108,37 @@
           size
         });
       },
-      handleClick (tab, event) {
-        if (tab.name != 'carousel') {
-          this.getProductPlate(tab.name);
+      handleClick () {},
+      getPageData (nval) {
+        if (nval != 'carousel') {
+          this.getProductPlate(nval);
         }
+      },
+      tabBeforeLeave (nval, oval) {
+        let flag
+        if (this.activeName === 'carousel' || this.activeName === 'TODAY_NEW') {
+          flag = this.leaveCount > 1;
+        } else {
+          flag = this.leaveCount > 2;
+        }
+
+        if (flag) {
+          return this._judge(nval);
+        } else {
+          this.getPageData(nval);
+          return true;
+        }
+      },
+      _judge (nval) {
+        return this.$confirm('是否切换标签 , 更改内容将不会被保存', '提示', {
+          confirmButtonText: '离开页面',
+          cancelButtonText: '留在页面',
+          showClose: false,
+          closeOnHashChange: false,
+          type: 'warning'
+        }).then(() => {
+          this.getPageData(nval);
+        })
       },
       // tabBeforeLeave (nval, oval) {
       //   switch (this.activeName) {
@@ -160,12 +194,13 @@
           this.formData = Object.assign({}, result.data);
         }
         if (activeName != 'carousel' && activeName != 'TODAY_NEW') {
-          let productList = [];
-          this.formData.sequenceProducts.forEach(item => {
-            productList.push(item.product);
-          })
-          this.$store.state.PromoteProductModule.promoteProductList = Object.assign([], productList);
-          this.promoteProductList = productList;
+          // let productList = [];
+          // this.formData.sequenceProducts.forEach(item => {
+          //   productList.push(item.product);
+          // })
+          this.$store.state.PromoteProductModule.promoteProductList = Object.assign([], this.formData.sequenceProducts);
+          this.promoteProductList = this.formData.sequenceProducts;
+          this.originData = this.formData.sequenceProducts;
         }
       },
       // 提交今日新款
@@ -183,7 +218,18 @@
         this.productSelectVisible = true;
       },
       confirmPromoteProductList () {
-        this.promoteProductList = this.$store.state.PromoteProductModule.promoteProductList;
+        let list = this.$store.state.PromoteProductModule.promoteProductList;
+        let showList = [];
+        for (let i = 0; i < list.length; i++) {
+          showList[i] = {
+            sequence: i,
+            product: list[i]
+          }
+        }
+        console.log(showList);
+        this.promoteProductList = showList;
+        this.originData = showList;
+        this.$store.state.PromoteProductModule.promoteProductList = showList;
         this.productSelectVisible = false;
       },
       // 提交当季爆款,直播专供,为你推荐
@@ -193,14 +239,14 @@
         let item;
         for (let i = 0; i < productList.length; i++) {
           item = {
-            sequence: i + 1,
+            sequence: productList[i].sequence,
             product: {
-              id: productList[i].id
+              id: productList[i].product.id
             }
           }
           productData.push(item);
         }
-        titleData.sequenceProducts = productData;
+        titleData.sequenceProducts = productData
         const url = this.apis().createProductPlate();
         const result = await this.$http.post(url, titleData);
         if (result.code === 0) {
@@ -209,6 +255,48 @@
         }
         this.$message.success('操作成功');
         this.getProductPlate(this.activeName);
+      },
+      onListSearch (keyword) {
+        if (keyword.replace(/\s*/g, '').length == 0) {
+          this.promoteProductList = this.originData;
+          this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
+        } else {
+          const searchData = this.originData.filter(function (item) {
+            return item.product.name.search(keyword) > -1 || item.product.skuID.search(keyword) > -1;
+          })
+          this.promoteProductList = searchData;
+          this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
+        }
+      },
+      onDelete (row, keyword) {
+        const index = this.originData.findIndex((item) => item.id == row.id);
+        this.originData.splice(index, 1);
+        for (let i = 0; i < this.originData.length; i++) {
+          this.originData[i].sequence = i + 1;
+        }
+        this.onListSearch(keyword)
+        // this.promoteProductList = this.originData;
+        // this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
+        this.$message.success('删除商品成功');
+      },
+      _moveNumber (index, modifyText, keyword) {
+        const modifyT = modifyText - this.originData.length > 0 ? this.originData.length : modifyText;
+        const item = this.originData.splice(index - 1, 1);
+        this.originData.splice(modifyT - 1, 0, item[0]);
+        for (let i = 0; i < this.originData.length; i++) {
+          this.originData[i].sequence = i + 1;
+        }
+        this.onListSearch(keyword)
+        // this.promoteProductList = this.originData;
+        // this.$store.state.PromoteProductModule.promoteProductList = this.originData;
+        this.$message.success('移动商品序号成功');
+      },
+      operationCount () {
+        this.leaveCount++;
+        console.log(this.leaveCount);
+      },
+      returnCount () {
+        this.leaveCount = 0;
       }
     },
     data () {
@@ -234,51 +322,40 @@
           picture: {},
           sequenceProducts: []
         },
-        promoteProductList: []
+        promoteProductList: [],
+        searchList: [],
+        originData: [],
+        leaveCount: 0
       }
     },
     created () {
       this.onAdvancedSearch();
+    },
+    beforeRouteLeave (to, from, next) {
+      next(false);
+      let flag
+      if (this.activeName === 'carousel' || this.activeName === 'TODAY_NEW') {
+        flag = this.leaveCount > 1;
+      } else {
+        flag = this.leaveCount > 2;
+      }
+
+      if (flag) {
+        this.$confirm('是否离开此页面 , 更改内容将不会被保存', '提示', {
+          confirmButtonText: '离开页面',
+          cancelButtonText: '留在页面',
+          type: 'warning',
+          showClose: false,
+          closeOnHashChange: false
+        }).then(() => {
+          next();
+        }).catch(() => {
+          throw new Error('取消成功！')
+        })
+      } else {
+        next();
+      }
     }
-    // beforeRouteLeave (to, from, next) {
-    //   next(false);
-    //   let flag;
-    //   switch (this.activeName) {
-    //     case 'carousel':
-    //       flag = this.$refs.carousel.count > 0;
-    //       break;
-    //     case 'today':
-    //       flag = this.$refs.today.count > 0;
-    //       break;
-    //     case 'season':
-    //       flag = this.$refs.season.count > 0;
-    //       break;
-    //     case 'live':
-    //       flag = this.$refs.live.count > 0;
-    //       break;
-    //     case 'forYou':
-    //       flag = this.$refs.forYou.count > 0;
-    //       break;
-    //     default :
-    //       flag = false;
-    //   }
-    //
-    //   if (flag) {
-    //     this.$confirm('是否离开此页面 , 更改内容将不会被保存', '提示', {
-    //       confirmButtonText: '离开页面',
-    //       cancelButtonText: '留在页面',
-    //       type: 'warning',
-    //       showClose: false,
-    //       closeOnHashChange: false
-    //     }).then(() => {
-    //       next();
-    //     }).catch(() => {
-    //       throw new Error('取消成功！')
-    //     })
-    //   } else {
-    //     next();
-    //   }
-    // }
   }
 </script>
 

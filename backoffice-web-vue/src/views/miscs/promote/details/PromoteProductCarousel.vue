@@ -104,6 +104,7 @@
         if (length > 0) {
           this.carouselData = result.data;
         }
+        this.$emit('returnCount');
       },
       getPicture (picture, index) {
         this.carouselData[index].media = Object.assign({}, picture);
@@ -144,16 +145,16 @@
         carouselType: 'CT004'
       }
     },
-    // watch: {
-    //   formData: {
-    //     handler (val) {
-    //       if (val) {
-    //         this.count++
-    //       }
-    //     },
-    //     deep: true
-    //   }
-    // },
+    watch: {
+      carouselData: {
+        handler (val) {
+          if (val) {
+            this.$emit('operationCount');
+          }
+        },
+        deep: true
+      }
+    },
     created () {
       this.getCarousel();
     }

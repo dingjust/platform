@@ -176,12 +176,15 @@
         if (list.length > 0) {
           content.forEach(item => {
             list.forEach(val => {
-              if (item.id === val.id) {
+              if (item.id === val.product.id) {
                 this.$refs.resultTable.toggleRowSelection(item);
               }
             })
           })
         }
+        list.forEach(item => {
+          this.selectedItems.push(item.product);
+        })
       }
     },
     watch: {
@@ -196,7 +199,7 @@
         belongDetailsData: '',
         factoryDetailsPageVisible: false,
         brandDetailsPageVisible: false,
-        selectedItems: this.$store.state.PromoteProductModule.promoteProductList
+        selectedItems: []
       }
     },
     created () {

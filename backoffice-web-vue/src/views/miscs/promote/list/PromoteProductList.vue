@@ -13,7 +13,7 @@
             <h6 class="formLabel">产品</h6>
           </template>
           <el-input v-model="keyword" style="width: 200px" placeholder="请输入名称或款号" suffix-icon="el-icon-search"></el-input>
-          <el-button style="background-color: #FFD60C" size="mini" @click="onSearch">搜索</el-button>
+          <el-button style="background-color: #FFD60C" size="mini" @click="onListSearch">搜索</el-button>
         </el-form-item>
       </el-form>
       <div class="recommend-list-style">
@@ -23,35 +23,35 @@
               <el-row type="flex" align="middle" justify="start">
                 <el-col>
                   <img width="54px" height="54px"
-                       :src="scope.row.thumbnail!=null&&scope.row.thumbnail.length!=0?scope.row.thumbnail.url:'static/img/nopicture.png'">
+                       :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'">
                 </el-col>
               </el-row>
             </template>
           </el-table-column>
-          <el-table-column label="产品名" prop="name" min-width="120"></el-table-column>
-          <el-table-column label="款号" prop="skuID" min-width="120"></el-table-column>
+          <el-table-column label="产品名" prop="product.name" min-width="120"></el-table-column>
+          <el-table-column label="款号" prop="product.skuID" min-width="120"></el-table-column>
           <el-table-column label="品类" min-width="120">
             <template slot-scope="scope">
-              <span>{{scope.row.category.name}}</span> </template>
+              <span>{{scope.row.product.category.name}}</span> </template>
           </el-table-column>
           <el-table-column v-if="isTenant()" label="供应商" prop="product.belongTo" min-width="250">
             <template slot-scope="scope">
-              <el-button type="text" @click="onBelongDetail(scope.row)">
-                {{scope.row.belongTo != undefined ? scope.row.belongTo.name:''}}
+              <el-button type="text" @click="onBelongDetail(scope.row.product)">
+                {{scope.row.product.belongTo != undefined ? scope.row.product.belongTo.name:''}}
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="状态" prop="approvalStatus" min-width="100">
+          <el-table-column label="状态" prop="product.approvalStatus" min-width="100">
             <template slot-scope="scope">
-              <span>{{getEnum('approvalStatuses', scope.row.approvalStatus)}}</span>
+              <span>{{getEnum('approvalStatuses', scope.row.product.approvalStatus)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="排位序号" min-width="100">
             <template slot-scope="scope">
-              <text-to-input :value="scope.$index + 1"
+              <text-to-input :value="scope.row.sequence"
                              :input-type="'number'"
-                             :show-input="showInput && scope.row.id == selectId"
-                             @blur="moveNumber($event, scope.row, scope.$index + 1)"
+                             :show-input="showInput && scope.row.sequence == selectId"
+                             @blur="moveNumber($event, scope.row)"
                              :max-number="20">
               </text-to-input>
             </template>
@@ -61,7 +61,7 @@
           <el-table-column label="操作" min-width="150">
             <template slot-scope="scope">
               <el-row>
-                <el-button type="text" @click="onDelete(scope.row, scope.$index)" class="purchase-list-button">删除</el-button>
+                <el-button type="text" @click="onDelete(scope.row)" class="purchase-list-button">删除</el-button>
                 <el-divider direction="vertical"></el-divider>
                 <el-button type="text" @click="onMove(scope.row, scope.$index)" class="purchase-list-button">移动</el-button>
 <!--                <el-button type="text" @click="onMoveUp(scope.row, scope.$index)" class="purchase-list-button" v-if="scope.$index > 0">上移</el-button>-->
@@ -121,21 +121,27 @@
       onCurrentPageChanged () {
 
       },
+      getIndex (row) {
+        return this.promoteProductList.indexOf(row) + 1;
+      },
       clickInput (value) {
         value = value.replace(/^(0+)|[^\d]+/g, '');
       },
-      onSearch () {
-        const key = this.keyword;
-        const originData = this.promoteProductList;
-        if (this.keyword.replace(/\s*/g, '').length == 0) {
-          this.formData = originData;
-        } else {
-          const searchData = originData.filter(function (item) {
-            return item.name.search(key) > -1 || item.skuID.search(key) > -1;
-          })
-          console.log(searchData);
-          this.formData = searchData;
-        }
+      // onSearch () {
+      //   const key = this.keyword;
+      //   const originData = this.promoteProductList;
+      //   if (this.keyword.replace(/\s*/g, '').length == 0) {
+      //     this.formData = originData;
+      //   } else {
+      //     const searchData = originData.filter(function (item) {
+      //       return item.name.search(key) > -1 || item.skuID.search(key) > -1;
+      //     })
+      //     this.formData = searchData;
+      //   }
+      // },
+      onListSearch () {
+        const keyword = this.keyword;
+        this.$emit('onListSearch', keyword);
       },
       onDelete (row, index) {
         // let index;
@@ -144,8 +150,10 @@
         //     index = i;
         //   }
         // }
-        this.formData.splice(index, 1);
-        this.$store.state.PromoteProductModule.promoteProductList = this.formData;
+        // this.formData.splice(index, 1);
+        // this.$store.state.PromoteProductModule.promoteProductList = this.formData;
+        const keyword = this.keyword;
+        this.$emit('onDelete', row, keyword);
       },
       onMoveUp (row, index) {
         console.log(this.formData);
@@ -162,18 +170,18 @@
         this.$emit('onProuductSelect');
       },
       onMove (row) {
-        this.selectId = row.id;
+        this.selectId = row.sequence;
         this.showInput = true;
         this.moveButtonDisabled = true;
       },
-      moveNumber (modifyIndex, row, index) {
+      moveNumber (modifyIndex, row) {
         setTimeout(() => {
-          this.$confirm('是否将 ' + row.name + ' 的序号从 ' + index + ' 移动到 ' + modifyIndex, '提示', {
+          this.$confirm('是否将 ' + row.product.name + ' 的序号从 ' + row.sequence + ' 移动到 ' + modifyIndex, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this._moveNumber(index, modifyIndex);
+            this._moveNumber(row.sequence, modifyIndex);
           });
         }, 100);
         this.moveButtonDisabled = false;
@@ -181,10 +189,13 @@
       },
       //              4       1
       _moveNumber (index, modifyText) {
-        const item = this.formData.splice(index - 1, 1);
-        this.formData.splice(modifyText - 1, 0, item[0]);
-        this.$store.state.PromoteProductModule.promoteProductList = this.formData;
-        this.$message.success('移动商品序号成功');
+        const keyword = this.keyword;
+        this.$emit('_moveNumber', index, modifyText, keyword);
+        // const modifyT = modifyText - this.formData.length > 0 ? this.formData.length : modifyText;
+        // const item = this.formData.splice(index - 1, 1);
+        // this.formData.splice(modifyT - 1, 0, item[0]);
+        // this.$store.state.PromoteProductModule.promoteProductList = this.formData;
+        // this.$message.success('移动商品序号成功');
       },
       async onBelongDetail (item) {
         // 工厂
@@ -230,7 +241,7 @@
         selectId: '',
         moveButtonDisabled: false,
         keyword: '',
-        searchData: []
+        searchData: this.promoteProductList
         // originData: [],
       }
     },

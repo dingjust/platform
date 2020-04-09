@@ -4,7 +4,8 @@
       <el-form ref="form" :inline="true" :rules="rules" :model="formData">
         <promote-product-toolbar :formData="formData"/>
         <div class="pt-2"></div>
-        <promote-product-list @onProuductSelect="onProuductSelect" :formData="slotData"/>
+        <promote-product-list @onProuductSelect="onProuductSelect" :formData="slotData"
+                              @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
       </el-form>
     </el-row>
     <el-row type="flex" justify="center" style="margin-top: 20px">
@@ -39,6 +40,15 @@
               return false;
             }
           });
+        },
+        onListSearch (keyword) {
+          this.$emit('onListSearch', keyword);
+        },
+        _moveNumber (index, modifyText, keyword) {
+          this.$emit('_moveNumber', index, modifyText, keyword);
+        },
+        onDelete (row, keyword) {
+          this.$emit('onDelete', row, keyword);
         },
         onProuductSelect () {
           this.$emit('onProuductSelect');
@@ -77,17 +87,25 @@
         'formData.picture': function (n, o) {
           this.validateField('picture');
         },
-        // formData: {
-        //   handler (val) {
-        //     if (val) {
-        //       this.count++
-        //       console.log(this.count);
-        //     }
-        //   },
-        //   deep: true
-        // }
+        formData: {
+          handler (val) {
+            if (val) {
+              this.$emit('operationCount');
+            }
+          },
+          deep: true
+        },
+        slotData: {
+          handler (val) {
+            if (val) {
+              this.$emit('operationCount');
+            }
+          },
+          deep: true
+        }
       },
       created() {
+        this.$emit('returnCount');
       }
     }
 </script>

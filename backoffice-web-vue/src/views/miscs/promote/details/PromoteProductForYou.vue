@@ -9,7 +9,8 @@
           <el-input style="width: 200px" placeholder="请输入主标题" v-model="formData.title"></el-input>
         </el-form-item>
         <div class="pt-2"></div>
-        <promote-product-list :formData="slotData" @onProuductSelect="onProuductSelect"/>
+        <promote-product-list :formData="slotData" @onProuductSelect="onProuductSelect"
+                              @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
       </el-form>
     </el-row>
     <el-row type="flex" justify="center" style="margin-top: 20px">
@@ -45,6 +46,15 @@
             return false;
           }
         });
+      },
+      onListSearch (keyword) {
+        this.$emit('onListSearch', keyword);
+      },
+      _moveNumber (index, modifyText, keyword) {
+        this.$emit('_moveNumber', index, modifyText, keyword);
+      },
+      onDelete (row, keyword) {
+        this.$emit('onDelete', row, keyword);
       }
     },
     data () {
@@ -59,12 +69,22 @@
         seeProductPlateType: 'RECOMMEND_FOR_YOU'
       }
     },
+    created() {
+      this.$emit('returnCount');
+    },
     watch: {
       formData: {
         handler (val) {
           if (val) {
-            this.count++
-            console.log(this.count);
+            this.$emit('operationCount');
+          }
+        },
+        deep: true
+      },
+      slotData: {
+        handler (val) {
+          if (val) {
+            this.$emit('operationCount');
           }
         },
         deep: true
