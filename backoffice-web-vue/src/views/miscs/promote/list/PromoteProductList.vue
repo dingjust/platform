@@ -175,7 +175,7 @@
         this.moveButtonDisabled = true;
       },
       moveNumber (modifyIndex, row) {
-        const index = row.sequence + 1;
+        const index = row.sequence;
         setTimeout(() => {
           this.$confirm('是否将 ' + row.product.name + ' 的序号从 ' + index + ' 移动到 ' + modifyIndex, '提示', {
             confirmButtonText: '确定',
