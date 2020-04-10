@@ -186,7 +186,9 @@
         this.returnCount();
       },
       onProuductSelect () {
-        this.onSearch();
+        this.queryFormData.approvalStatuses = 'approved';
+        // this.onSearch();
+        this.onAdvancedSearch();
         this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
         this.productSelectVisible = true;
       },
@@ -261,7 +263,6 @@
       },
       operationCount () {
         this.leaveCount++;
-        console.log(this.leaveCount);
       },
       returnCount () {
         this.leaveCount = 0;

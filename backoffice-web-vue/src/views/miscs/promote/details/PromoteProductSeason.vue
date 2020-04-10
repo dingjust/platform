@@ -65,15 +65,51 @@
             callback();
           }
         };
+        var checkTitleLength = (rule, value, callback) => {
+          let valLength = 0;
+          for (let i = 0; i < value.length; i++) {
+            if (value.charCodeAt(i) > 255) {
+              valLength += 2;
+            } else {
+              valLength += 1;
+            }
+          }
+          if (valLength == 0) {
+            return callback(new Error('请输入主标题文字'));
+          } else if (valLength > 10) {
+            return callback(new Error('主标题最多可输入10个字符'));
+          } else {
+            return callback();
+          }
+        };
+        var checkSubTitleLength = (rule, value, callback) => {
+          let valLength = 0;
+          for (let i = 0; i < value.length; i++) {
+            if (value.charCodeAt(i) > 255) {
+              valLength += 2;
+            } else {
+              valLength += 1;
+            }
+          }
+          if (valLength == 0) {
+            return callback(new Error('请输入副标题文字'));
+          } else if (valLength > 8) {
+            return callback(new Error('副标题最多可输入8个字符'));
+          } else {
+            return callback();
+          }
+        };
         return {
           rules: {
             title: [
-              { required: true, message: '必填', trigger: 'blur' },
-              { max: 10, message: '主标题最多可输入10个字符', trigger: 'blur' }
+              // { required: true, message: '必填', trigger: 'blur' },
+              // { max: 4, message: '主标题最多可输入4个字', trigger: 'change' }
+              {validator: checkTitleLength, required: true, type: 'object', trigger: 'change'}
             ],
             subTitle: [
-              { required: true, message: '必填', trigger: 'blur' },
-              { max: 8, message: '副标题最多可输入8个字符', trigger: 'blur' }
+              // { required: true, message: '必填', trigger: 'blur' },
+              // { max: 4, message: '副标题最多可输入4个字', trigger: 'change' }
+              {validator: checkSubTitleLength, required: true, type: 'object', trigger: 'change'}
             ],
             picture: [
               {validator: checkProfilePicture, required: true, type: 'object', trigger: 'change'}

@@ -11,7 +11,7 @@
     <div style="padding: 10px">
       <product-select-toolbar @onAdvancedSearch="onAdvancedSearch"></product-select-toolbar>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
-        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
+        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code" :disabled="status.code == 'unapproved'">
           <product-select-list ref="selectList" :page="page" @onAdvancedSearch="onAdvancedSearch" @onSearch="onSearch"/>
         </el-tab-pane>
       </el-tabs>
@@ -51,12 +51,12 @@
     data () {
       return {
         queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
-        activeName: '',
+        activeName: 'approved',
         statuses: [
-          {
-            code: '',
-            name: '全部'
-          },
+          // {
+          //   code: '',
+          //   name: '全部'
+          // },
           {
             code: 'approved',
             name: '已上架'
