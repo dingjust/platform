@@ -64,7 +64,6 @@
         this.queryFormData.name = '';
         this.queryFormData.skuID = '';
         this.queryFormData.categories = '';
-        this.queryFormData.approvalStatuses = '';
         this.queryFormData.belongToName = '';
       }
     },

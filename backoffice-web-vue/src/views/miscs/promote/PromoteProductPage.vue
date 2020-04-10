@@ -155,7 +155,6 @@
           return;
         }
         result.data.sequenceProducts.sort(this.compare('sequence'));
-        console.log(result);
         if (result.data != null) {
           this.formData = Object.assign({}, result.data);
         }

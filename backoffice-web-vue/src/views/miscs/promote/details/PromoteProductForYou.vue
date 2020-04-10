@@ -59,20 +59,22 @@
     },
     data () {
       var checkTitleLength = (rule, value, callback) => {
-        let valLength = 0;
-        for (let i = 0; i < value.length; i++) {
-          if (value.charCodeAt(i) > 255) {
-            valLength += 2;
-          } else {
-            valLength += 1;
+        if (value) {
+          let valLength = 0;
+          for (let i = 0; i < value.length; i++) {
+            if (value.charCodeAt(i) > 255) {
+              valLength += 2;
+            } else {
+              valLength += 1;
+            }
           }
-        }
-        if (valLength == 0) {
-          return callback(new Error('请输入主标题文字'));
-        } else if (valLength > 10) {
-          return callback(new Error('主标题最多可输入10个字符'));
-        } else {
-          return callback();
+          if (valLength == 0) {
+            return callback(new Error('请输入主标题文字'));
+          } else if (valLength > 10) {
+            return callback(new Error('主标题最多可输入10个字符'));
+          } else {
+            return callback();
+          }
         }
       };
       return {
