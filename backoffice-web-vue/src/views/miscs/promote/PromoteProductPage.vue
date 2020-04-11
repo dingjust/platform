@@ -11,11 +11,12 @@
       <div class="pt-2"></div>
       <el-row>
         <el-tabs ref="tab" v-model="activeName" type="card" @tab-click="handleClick" :before-leave="tabBeforeLeave">
-          <el-tab-pane label="看款轮播" name="carousel"/>
+          <el-tab-pane label="顶部轮播" name="carousel"/>
           <el-tab-pane label="今日新款" name="TODAY_NEW"/>
           <el-tab-pane label="当季爆款" name="SEASON_HOT"/>
           <el-tab-pane label="直播专供" name="LIVE_BROADCAST_PROVIDE"/>
           <el-tab-pane label="为你推荐" name="RECOMMEND_FOR_YOU"/>
+          <el-tab-pane label="中部轮播" name="BANNER"/>
         </el-tabs>
         <promote-product-carousel ref="carousel" v-if="activeName == 'carousel'" @operationCount="operationCount" @returnCount="returnCount"/>
         <promote-product-today ref="today" v-if="activeName == 'TODAY_NEW'" @onConfirmToday="onConfirmToday" :formData="formData"
@@ -32,6 +33,7 @@
                                  @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
                                  @operationCount="operationCount" @returnCount="returnCount"
                                  @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
+        <promote-product-banner ref="banner" v-if="activeName == 'BANNER'" @operationCount="operationCount" @returnCount="returnCount"/>
       </el-row>
     </el-card>
     <el-dialog :visible.sync="productSelectVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog">
@@ -60,9 +62,11 @@
   import PromoteProductSelectDialog from './dialog/PromoteProductSelectDialog';
   import PromoteProductLive from './details/PromoteProductLive';
   import PromoteProductForYou from './details/PromoteProductForYou';
+  import PromoteProductBanner from './details/PromoteProductBanner';
   export default {
     name: 'PromoteProductPage',
     components: {
+      PromoteProductBanner,
       PromoteProductForYou,
       PromoteProductLive,
       PromoteProductCarousel,
@@ -110,13 +114,13 @@
       },
       handleClick () {},
       getPageData (nval) {
-        if (nval != 'carousel') {
+        if (nval != 'carousel' && nval != 'BANNER') {
           this.getProductPlate(nval);
         }
       },
       tabBeforeLeave (nval, oval) {
         let flag
-        if (this.activeName === 'carousel' || this.activeName === 'TODAY_NEW') {
+        if (this.activeName === 'carousel' || this.activeName === 'BANNER' || this.activeName === 'TODAY_NEW') {
           flag = this.leaveCount > 1;
         } else {
           flag = this.leaveCount > 2;
@@ -291,7 +295,7 @@
     beforeRouteLeave (to, from, next) {
       next(false);
       let flag
-      if (this.activeName === 'carousel' || this.activeName === 'TODAY_NEW') {
+      if (this.activeName === 'carousel'|| this.activeName === 'BANNER' || this.activeName === 'TODAY_NEW') {
         flag = this.leaveCount > 1;
       } else {
         flag = this.leaveCount > 2;

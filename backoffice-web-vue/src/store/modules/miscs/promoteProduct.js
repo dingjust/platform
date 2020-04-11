@@ -23,6 +23,17 @@ const state = {
   promoteProductSeasonList: [],
   promoteProductLiveList: [],
   promoteProductForYouList: [],
+  bannerFormData: [{
+    media: {},
+    url: '',
+    type: 'CT005',
+    active: true
+  }, {
+    media: {},
+    url: '',
+    type: 'CT005',
+    active: true
+  }],
   carouselFormData: [{
     media: {},
     url: '',
@@ -52,6 +63,7 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   page: (state, page) => state.page = page,
   carouselFormData: (state, carouselFormData) => state.carouselFormData = carouselFormData,
+  bannerFormData: (state, bannerFormData) => state.bannerFormData = bannerFormData,
   promoteProductList: (state, promoteProductList) => state.promoteProductList = promoteProductList,
   promoteProductSelectList: (state, promoteProductSelectList) => state.promoteProductSelectList = promoteProductSelectList,
   promoteProductSeasonList: (state, promoteProductSeasonList) => state.promoteProductSeasonList = promoteProductSeasonList,
@@ -93,6 +105,7 @@ const getters = {
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
   carouselFormData: state => state.carouselFormData,
+  bannerFormData: state => state.bannerFormData,
   promoteProductList: state => state.promoteProductList,
   promoteProductSelectList: state => state.promoteProductSelectList,
   promoteProductSeasonList: state => state.promoteProductSeasonList,
