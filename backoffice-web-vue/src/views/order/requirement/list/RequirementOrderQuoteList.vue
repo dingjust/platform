@@ -19,17 +19,17 @@
             <h6 style="color:red;font-weight: bold;">￥{{item.unitPrice ? item.unitPrice : '--'}}</h6>
           </el-col>
           <el-col :span="4">
-            <h6 v-if="checkOrderCodeList.indexOf(String(item.code)) < 0">
+            <h6 v-if="checkOrderCodeList.indexOf(item.id) < 0">
               <i style="color: #c8c8c8;font-size: 12px;cursor: pointer"
                  class="iconfont icon_arrow"
-                 @click="checkDetails(item.code)">
+                 @click="checkDetails(item.id)">
                 查看详细报价&#xe714;&nbsp;
               </i>
             </h6>
-            <h6 v-if="checkOrderCodeList.indexOf(String(item.code)) > -1">
+            <h6 v-if="checkOrderCodeList.indexOf(item.id) > -1">
               <i style="color: #c8c8c8;font-size: 12px;cursor: pointer"
                  class="iconfont icon_arrow"
-                 @click="packupDetails(item.code)">
+                 @click="packupDetails(item.id)">
                 收起详细报价&#xe713;&nbsp;
               </i>
             </h6>
@@ -48,7 +48,7 @@
             <h6 style="color:red;font-weight: bold;">￥{{item.costOfSamples ? item.costOfSamples : '--'}}</h6>
           </el-col>
         </el-row>
-        <el-row type="flex" align="middle" v-if="checkOrderCodeList.indexOf(String(item.code)) > -1">
+        <el-row type="flex" align="middle" v-if="checkOrderCodeList.indexOf(item.id) > -1">
           <el-col :span="2"></el-col>
           ​​​​​​​<div class="one">
           <el-col :span="3">
@@ -166,12 +166,14 @@
       // handleChanged () {
       //   this.setIsShowDetailPrice(!this.isShowDetailPrice);
       // },
-      checkDetails (code) {
-        this.checkOrderCodeList.push(code);
+      checkDetails (id) {
+        this.checkOrderCodeList.push(id);
+        console.log(id)
+        console.log(this.checkOrderCodeList);
         // this.setIsShowDetailPrice(!this.isShowDetailPrice);
       },
-      packupDetails (code) {
-        const index = this.checkOrderCodeList.indexOf(code + '');
+      packupDetails (id) {
+        const index = this.checkOrderCodeList.indexOf(id);
         this.checkOrderCodeList.splice(index, 1);
         // this.setIsShowDetailPrice(!this.isShowDetailPrice);
       },
