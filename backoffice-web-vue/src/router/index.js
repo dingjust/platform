@@ -387,6 +387,11 @@ const router = new Router({
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/industrial-cluster/IndustrialClusterPage')
             },
             {
+              path: 'promote',
+              name: '产品运营活动',
+              component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/promote/PromoteProductPage')
+            },
+            {
               path: 'label',
               name: '标签配置',
               component: () => import( /* webpackChunkName: 'miscs' */ '@/views/miscs/label/LabelPage')

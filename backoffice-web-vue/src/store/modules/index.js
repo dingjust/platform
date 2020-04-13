@@ -24,7 +24,6 @@ import QuotesModule from './order/quotes';
 import ProofingsModule from './order/proofings';
 import SalesOrdersModule from './order/sales-orders';
 
-
 // miscs
 import SampleProductModule from './miscs/sampleProduct';
 import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
@@ -37,6 +36,7 @@ import PayPlanModule from './miscs/payPlan';
 import OperationCoursesModule from './miscs/operationCourses';
 import WalletModule from './miscs/wallet';
 import CashOutManagerModule from './miscs/cashOutManager';
+import PromoteProductModule from './miscs/promoteProduct';
 
 // contract
 import ContractModule from './contract/contract';
@@ -89,6 +89,7 @@ export {
   OperationCoursesModule,
   WalletModule,
   CashOutManagerModule,
+  PromoteProductModule,
   // contract
   ContractModule,
   ContractTemplateModule,

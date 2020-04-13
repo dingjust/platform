@@ -1413,6 +1413,24 @@ const state = {
       code: 'TAIL_GOODS',
       name: '库存尾货',
     },
+  ],
+  SeeProductPlateType: [
+    {
+      code: 'TODAY_NEW',
+      name: '今日新款'
+    },
+    {
+      code: 'SEASON_HOT',
+      name: '当季爆款'
+    },
+    {
+      code: 'LIVE_BROADCAST_PROVIDE',
+      name: '直播专供'
+    },
+    {
+      code: 'RECOMMEND_FOR_YOU',
+      name: '为你推荐'
+    }
   ]
 };
 

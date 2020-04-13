@@ -183,7 +183,7 @@
         return colors;
       },
       colorHanleClick (val, color) {
-        var index = this.selectColors.indexOf(color);
+        var index = this.selectColors.findIndex((v) => v.name === color.name);
         if (index < 0) {
           if (color.previewImg == null) {
             color.previewImg = [];
@@ -208,7 +208,7 @@
         // this.selectColors = this.selectColors.sort(compare('sequence'));
       },
       sizeHanleClick (size) {
-        var index = this.selectSizes.indexOf(size);
+        var index = this.selectSizes.findIndex((v) => v.name === size.name);
         if (index < 0) {
           this.selectSizes.push(size);
         } else {

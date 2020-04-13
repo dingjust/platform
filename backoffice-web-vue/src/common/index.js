@@ -766,6 +766,20 @@ let TENANT_APIS = {
   },
   cannelForbiddenCompany (uid) {
     return '/b2b/companies/cannelForbidden/' + uid;
+  },
+  // 根据类型获取活动产品页面信息
+  getProductPlate (type) {
+    return '/b2b/products/plate/' + type;
+  },
+  createProductPlate () {
+    return '/b2b/products/plate/create';
+  },
+  // 获取轮播图
+  getCarouselsList (type) {
+    return '/b2b/carousels/list/' + type;
+  },
+  updateAllCarousels() {
+    return '/b2b/carousels/updateAll';
   }
 };
 Object.assign(TENANT_APIS, COMMON_APIS);

@@ -110,11 +110,6 @@
         </el-button>
       </el-row>
     </el-card>
-
-    <el-dialog :visible.sync="tipDialogVisible" width="400px" :close-on-press-escape="false" :show-close="false">
-      <leave-tip-dialog @leavelHandler="leavelHandler">
-      </leave-tip-dialog>
-    </el-dialog>
   </div>
 </template>
 
@@ -228,16 +223,6 @@
             this.getTreeData(data[i].children);
           }
         }
-      },
-      leavelHandler (b) {
-        const leave = this.leave;
-        if (b) {
-          this.status = true;
-          this.$router.push({ name: leave.name, query: leave.query, params: leave.params });
-        } else {
-          this.status = false;
-        }
-        this.tipDialogVisible = false;
       }
     },
     data () {
@@ -317,29 +302,20 @@
                                   (this.$route.params.formData != null && this.hasDept && this.count > 3) ||
                                   (this.$route.params.formData == null && this.count > 1));
       if (flag) {
-        if (this.status) {
-          next()
-          return
-        }
-        this.leave = to;
-        next(false);
-        this.tipDialogVisible = true;
+        this.$confirm('是否离开此页面 , 更改内容将不会被保存', '提示', {
+          confirmButtonText: '离开页面',
+          cancelButtonText: '留在页面',
+          type: 'warning',
+          showClose: false,
+          closeOnHashChange: false
+        }).then(() => {
+          next();
+        }).catch(() => {
+          throw new Error('取消成功！')
+        })
       } else {
         next();
       }
-      // next(false);
-      // // 判断数据是否修改，如果修改按这个执行，没修改，则直接执行离开此页面
-      // if ((this.$route.params.formData != null && this.count > 2 && !this.isSave) || (this.$route.params.formData == null && this.count > 1 && !this.isSave)) {
-      //   this.$confirm('当前页面数据并未保存，是否要离开？', '提示', {
-      //     confirmButtonText: '确定',
-      //     cancelButtonText: '取消',
-      //     type: 'warning'
-      //   }).then(() => {
-      //     next();
-      //   });
-      // } else {
-      //   next();
-      // }
     }
   };
 </script>
