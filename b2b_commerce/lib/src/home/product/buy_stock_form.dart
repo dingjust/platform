@@ -764,19 +764,6 @@ class _BuyStockFormState extends State<BuyStockForm>
     }
   }
 
-  void getOrderDetail(String code) async {
-    if (code != null && code != '') {
-      PurchaseOrderModel detailModel =
-          await PurchaseOrderRepository().getPurchaseOrderDetail(code);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) => OrderPaymentPage(
-                    order: detailModel,
-                    paymentFor: PaymentFor.DEPOSIT,
-                  )),
-          ModalRoute.withName('/'));
-    }
-  }
 
   ///预览图片URL
   String getImgURL() {

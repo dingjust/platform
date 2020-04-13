@@ -6,6 +6,7 @@ import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
 import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
+import 'package:b2b_commerce/src/home/product/index.dart';
 import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/my/account/my_bill.dart';
 import 'package:b2b_commerce/src/my/capacity/capacity_matching.dart';
@@ -39,6 +40,8 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_HOT_CATEGORY_FACTORY = '/home/factory/hot_category';
   static const ROUTE_HOT_CATEGORY_PRODUCT = '/home/product/hot_category';
   static const ROUTE_ORDER_PRODUCTS = '/home/product/order_products';
+  static const ROUTE_ORDER_PRODUCTS_INDEX =
+      '/home/product/order_products/index';
   static const ROUTE_EMPLOYEES = '/business/employees';
   static const ROUTE_MEMBERSHIPS = '/business/memberships';
   static const ROUTE_MEMBER_REQUESTS = '/business/member_requests';
@@ -126,6 +129,7 @@ class AppRoutes with GlobalRoutes {
     ROUTE_ORDER_COORDINATION: (context) => OrderCoordinationPage(),
     ROUTE_PUBLISH_CENTER: (context) => PublishCenterPage(),
     ROUTE_ORDER_PRODUCTS: (context) => ProductsPage(),
+    ROUTE_ORDER_PRODUCTS_INDEX: (context) => ProductsHomePage(),
     ROUTE_SALE_ORDERS: (context) => SaleOrdersPage(),
   };
 }

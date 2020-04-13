@@ -138,6 +138,16 @@ class RecommendProductItem extends StatelessWidget {
                             ),
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                '销量${model.salesVolume}件',
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 10),
+                              )
+                            ],
+                          ),
+                          Row(
                             children: <Widget>[
                               Container(
                                 child: RichText(

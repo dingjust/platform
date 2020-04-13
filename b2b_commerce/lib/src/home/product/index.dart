@@ -1,0 +1,201 @@
+import 'package:b2b_commerce/src/_shared/shares.dart';
+import 'package:b2b_commerce/src/home/search/order_product_search.dart';
+import 'package:flutter/material.dart';
+import 'package:models/models.dart';
+import 'package:provider/provider.dart';
+import 'package:services/services.dart';
+import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
+
+import 'components/products_buttons_section.dart';
+import 'components/products_plate_section.dart';
+import 'components/products_recommend_section.dart';
+
+class ProductsHomePage extends StatefulWidget {
+  @override
+  _ProductsHomePageState createState() => _ProductsHomePageState();
+}
+
+class _ProductsHomePageState extends State<ProductsHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+              builder: (_) => PlateProductState(
+                  type: SeeProductPlateType.RECOMMEND_FOR_YOU)),
+        ],
+        child: Scaffold(
+          body: Container(
+              color: Color.fromRGBO(245, 245, 245, 1),
+              child: Consumer<PlateProductState>(
+                  builder: (context, PlateProductState plateProductState, _) =>
+                      ProductsHomePageView(plateProductState))),
+        ));
+  }
+}
+
+class ProductsHomePageView extends StatelessWidget {
+  final PlateProductState plateProductState;
+
+  ScrollController _scrollController = ScrollController();
+
+  ProductsHomePageView(this.plateProductState, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    //监听加载更多
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        plateProductState.loadMore();
+      }
+    });
+
+    return Container(
+        child: CustomScrollView(
+      controller: _scrollController,
+      slivers: <Widget>[
+        SliverAppBar(
+          expandedHeight: 188.0,
+          pinned: true,
+          elevation: 0.5,
+          title: ProductsHomeTitle(
+            leading: GlobalSearchInput<String>(
+              tips: ' 搜索产品名称',
+              delegate: OrderProductSearchDelegate(),
+            ),
+          ),
+          backgroundColor: Constants.THEME_COLOR_MAIN,
+          brightness: Brightness.dark,
+          iconTheme: IconThemeData(color: Colors.white),
+          flexibleSpace: FlexibleSpaceBar(
+            background: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[ProductsHeaderCarousels()],
+            ),
+          ),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          sliver: SliverList(
+              delegate: SliverChildListDelegate([
+            ProductsButtonsSection(),
+            ProductsPlateSection(),
+            // ProductsScroll(),
+            ProductsBodyCarousels()
+          ])),
+        ),
+        SliverToBoxAdapter(
+            child: Container(
+          margin: EdgeInsets.only(top: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '为你推荐',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        )),
+        plateProductState.products != null
+            ? ProductsRecommendSection(
+                products: plateProductState.products,
+              )
+            : SliverToBoxAdapter(
+                child: Container(
+                  margin: EdgeInsets.only(top: 100),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+        SliverToBoxAdapter(
+          child: ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+            opacity: plateProductState.loadingMore ? 1.0 : 0,
+          ),
+        )
+      ],
+    ));
+  }
+}
+
+class ProductsHomeTitle extends StatelessWidget {
+  final Widget leading;
+
+  const ProductsHomeTitle({Key key, this.leading}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: leading,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProductsHeaderCarousels extends StatelessWidget {
+  //Carousel 的MediaModel URL 需为全路径
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ProductHomeCarouselsState>(
+        builder: (context, ProductHomeCarouselsState state, _) {
+      List<MediaModel> medias = state
+          .headerCarousels()
+          .where((carousel) => carousel.media != null)
+          .map((carousel) => MediaModel(url: carousel.media.detailUrl()))
+          .toList();
+
+      // //若为空采用静态图
+      if (medias == null || medias.isEmpty) {
+        return Container();
+      }
+
+      return Carousel(medias, 240);
+    });
+  }
+}
+
+class ProductsBodyCarousels extends StatelessWidget {
+  final double height;
+
+  const ProductsBodyCarousels({Key key, this.height = 50}) : super(key: key);
+
+  //Carousel 的MediaModel URL 需为全路径
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ProductHomeCarouselsState>(
+        builder: (context, ProductHomeCarouselsState state, _) {
+      List<MediaModel> medias = state
+          .bodyCarousels()
+          .where((carousel) => carousel.media != null)
+          .map((carousel) => MediaModel(url: carousel.media.detailUrl()))
+          .toList();
+
+      // //若为空采用静态图
+      if (medias == null || medias.isEmpty) {
+        return Container();
+      }
+
+      return Container(
+          height: height,
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Carousel(
+              medias,
+              height,
+              scrollDirection: Axis.vertical,
+            ),
+          ));
+    });
+  }
+}

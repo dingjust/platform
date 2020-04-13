@@ -15,7 +15,7 @@ class EasyGrid extends StatelessWidget {
   EasyGrid({
     Key key,
     @required this.items,
-    this.height = 90,
+    this.height = 100,
     this.scrollable = false,
   }) : super(key: key);
 
@@ -29,7 +29,7 @@ class EasyGrid extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 250.0,
-            childAspectRatio: 2.40, //宽高比为2
+            childAspectRatio: 2.10, //宽高比为2
             crossAxisSpacing: 10,
           ),
           children: List.generate(
@@ -62,22 +62,40 @@ class EasyGridItem extends StatelessWidget {
           child: FlatButton(
             onPressed: item.onPressed,
             child: Container(
-              padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                      child: Row(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
                             item.title,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               color: Color.fromRGBO(32, 32, 32, 1),
                               fontWeight: FontWeight.bold,
                             ),
                           )
+                        ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                item.subTitle ?? '',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
                         ],
                       )),
                   item.icon != null ? item.icon : Container(),
@@ -106,22 +124,40 @@ class EasyGridItem extends StatelessWidget {
             child: FlatButton(
               onPressed: item.onPressed,
               child: Container(
-                padding: EdgeInsets.fromLTRB(15, 5, 10, 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Expanded(
-                        child: Row(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
                               item.title,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 color: Color.fromRGBO(32, 32, 32, 1),
                                 fontWeight: FontWeight.bold,
                               ),
                             )
+                          ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  item.subTitle ?? '',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ],
                         )),
                     item.icon != null ? item.icon : Container(),
@@ -138,6 +174,9 @@ class GridItem {
   ///标题
   final String title;
 
+  ///副标题
+  final String subTitle;
+
   ///图片
   final Image icon;
 
@@ -147,6 +186,7 @@ class GridItem {
   final List<Authorization> authorizations;
 
   GridItem({
+    this.subTitle,
     this.authorizations,
     @required this.title,
     this.icon,

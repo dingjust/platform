@@ -36,6 +36,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     FlutterUmplus.event("order_product_detail_page",
         label: widget.product.code);
 
+    //点击量
+    ItemRepository().onDetail(widget.product.id);
+
     //若产品没有类型
     if (widget.product.productType == null ||
         widget.product.productType.isEmpty) {

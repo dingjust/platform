@@ -111,6 +111,6 @@ class GlobalConfigs {
   ///友盟APP Key-android
   static const UMENG_APP_KEY_ANDROID = "5e61b75d0cafb2aa19000058";
 
-  ///友盟APP Key-android
+  ///友盟APP Key-ios
   static const UMENG_APP_KEY_IOS = "5e82e0a00cafb27dda0003ce";
 }

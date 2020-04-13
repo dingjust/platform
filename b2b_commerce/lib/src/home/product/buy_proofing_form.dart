@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/home/product/order_confirm_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
@@ -623,76 +621,6 @@ class _BuyProofingFormState extends State<BuyProofingForm>
     } else {
       Toast.show("请输入采购量", context,
           duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
-    }
-  }
-
-  void onSubmit() async {
-    //拼装数据
-    ProofingModel model = ProofingModel();
-    model.entries = productEntries.where((entry) {
-      return entry.controller.text != '';
-    }).map((entry) {
-      ApparelSizeVariantProductModel variantProduct = entry.model;
-      variantProduct
-        ..thumbnail = widget.product.thumbnail
-        ..thumbnails = widget.product.thumbnails
-        ..images = widget.product.images;
-      return ProofingEntryModel(
-        quantity: int.parse(entry.controller.text),
-        product: variantProduct,
-      );
-    }).toList();
-    model
-      ..unitPrice = widget.product.proofingFee
-      ..totalPrice = totalNum * widget.product.proofingFee
-      ..totalQuantity = totalNum
-      ..remarks = remarksEditingController.text;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) {
-          return RequestDataLoading(
-            requestCallBack: ProofingOrderRepository()
-                .proofingCreateByProduct(model, widget.product.belongTo.uid),
-            outsideDismiss: false,
-            loadingText: '保存中。。。',
-            entrance: '',
-          );
-        }).then((value) {
-      bool result = false;
-      if (value != null) {
-        result = true;
-      }
-      if (result) {
-        getOrderDetail(value);
-      }
-      // showDialog(
-      //     context: context,
-      //     barrierDismissible: false,
-      //     builder: (_) {
-      //       return CustomizeDialog(
-      //         dialogType: DialogType.RESULT_DIALOG,
-      //         failTips: '下单失败',
-      //         successTips: '下单成功',
-      //         callbackResult: result,
-      //         confirmAction: () {
-      //           getOrderDetail(value);
-      //         },
-      //       );
-      //     });
-    });
-  }
-
-  void getOrderDetail(String code) async {
-    if (code != null && code != '') {
-      ProofingModel detailModel =
-          await ProofingOrderRepository().proofingDetail(code);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) => OrderPaymentPage(
-                    order: detailModel,
-                  )),
-          ModalRoute.withName('/'));
     }
   }
 

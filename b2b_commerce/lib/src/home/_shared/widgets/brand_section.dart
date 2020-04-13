@@ -17,6 +17,8 @@ class BrandEntranceSection extends StatelessWidget {
     final List<GridItem> items = <GridItem>[
       GridItem(
         title: '发布需求',
+        subTitle: '轻松找厂',
+        icon: B2BImage.requirement_publish(width: 75, height: 75),
         authorizations: [Authorization.REQUIREMENT_ORDER_PUBLISH],
         onPressed: () async {
           // RequirementOrderModel requirementOrderModel = RequirementOrderModel(
@@ -44,6 +46,8 @@ class BrandEntranceSection extends StatelessWidget {
       ),
       GridItem(
         title: '推荐工厂',
+        subTitle: '精品推选',
+        icon: B2BImage.recommend_factory(width: 75, height: 75),
         onPressed: () async {
           List<CategoryModel> categories =
           await Provider.of<MajorCategoryState>(context)
@@ -193,12 +197,12 @@ class BrandButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.productOrdering(),
         onPressed: () {
-          // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
-          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
+          Navigator.pushNamed(
+              context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
+          // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
         },
         title: '看款下单',
-      ),
-    );
+      ),);
   }
 
   Widget _buildNearbyFactory(BuildContext context) {

@@ -45,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordHide = true;
   bool _isPasswordLogin = true;
   bool validate = false;
+  bool _isAgree = true;
 
   @override
   void initState() {
@@ -392,7 +393,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            _buildServiceRow()
+                _buildServiceRow(),
+                _buildProtocolArea()
           ])),
         ],
       ),
@@ -550,6 +552,134 @@ class _LoginPageState extends State<LoginPage> {
         _phoneController.text = oldUserName;
       });
     }
+  }
+
+  Widget _buildProtocolArea() {
+    return Container(
+      // padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+        margin: EdgeInsets.only(top: 200),
+        child: Row(
+          children: <Widget>[
+            Checkbox(
+              onChanged: (v) {
+                setState(() {
+                  _isAgree = v;
+                  formValidate();
+                });
+              },
+              value: _isAgree,
+            ),
+            Expanded(
+              flex: 1,
+              child: Wrap(
+                alignment: WrapAlignment.start, //沿主轴方向居中
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '我已阅读并同意',
+                    style: TextStyle(color: Colors.black54),
+                  ),
+                  GestureDetector(
+                    onTap: showServiceProtocol,
+                    child: Text(
+                      '《钉单平台服务协议》',
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                  Text(
+                    '和',
+                    style: TextStyle(color: Colors.black54),
+                  ),
+                  GestureDetector(
+                    onTap: showPayProtocol,
+                    child: Text(
+                      '《钉单平台货款代收代付服务协议》',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: showPayProtocol,
+                    child: Text(
+                      '《隐私协议》',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ));
+  }
+
+  void showPayProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/paymentProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '钉单货款代收代付服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  void showServiceProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/serviceProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '钉单平台服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
   }
 }
 

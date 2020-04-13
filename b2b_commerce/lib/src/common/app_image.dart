@@ -47,8 +47,7 @@ class MenuItemImage {
       getImage('temp/business/production_order_factory.png');
   static Image quoteFactory =
       getImage('temp/business/quote_manage_factory.png');
-  static Image freeCapacity2 =
-  getImage('temp/index/free_capacity2.png');
+  static Image freeCapacity2 = getImage('temp/index/free_capacity2.png');
 }
 
 class B2BImage {
@@ -248,5 +247,39 @@ class B2BImage {
   static Image free_capacity2({double width, double height}) {
     return getImage('temp/index/free_capacity2.png',
         width: width, height: height);
+  }
+
+  ///看款下单-现货
+  static Image products_spot({double width, double height}) {
+    return getImage('img-temp/200x200/spot_goods.png',
+        width: width, height: height);
+  }
+
+  ///看款下单-库存
+  static Image products_tail({double width, double height}) {
+    return getImage('img-temp/200x200/tail_goods.png',
+        width: width, height: height);
+  }
+
+  ///看款下单-分类
+  static Image products_category({double width, double height}) {
+    return getImage('img-temp/200x200/category.png',
+        width: width, height: height);
+  }
+
+  ///看款下单-期货
+  static Image products_future({double width, double height}) {
+    return getImage('img-temp/200x200/future_goods.png',
+        width: width, height: height);
+  }
+
+  ///首页发布需求
+  static Image requirement_publish({double width, double height}) {
+    return getImage('temp/20200411161233.png', width: width, height: height);
+  }
+
+  ///首页推荐工厂
+  static Image recommend_factory({double width, double height}) {
+    return getImage('temp/20200411161325.png', width: width, height: height);
   }
 }

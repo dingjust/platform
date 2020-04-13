@@ -67,6 +67,13 @@ const ProductTypeLocalizedMap = {
   ProductType.FUTURE_GOODS: "期货",
 };
 
+const ProductTypeValuesdMap = {
+  ProductType.DEFAULT_GOODS: "DEFAULT_GOODS",
+  ProductType.SPOT_GOODS: "SPOT_GOODS",
+  ProductType.TAIL_GOODS: "TAIL_GOODS",
+  ProductType.FUTURE_GOODS: "FUTURE_GOODS",
+};
+
 @JsonSerializable()
 class CategoryModel extends ItemModel {
   String code;
