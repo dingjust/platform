@@ -184,7 +184,11 @@
           });
           colorSizes.push(obj);
         });
+        this.formData.variants = null;
+        this.formData.colors = null;
+        this.formData.sizes = null;
         this.formData.colorSizes = colorSizes;
+        this.formData.belongTo = null;
         const url = this.apis().updateOfApparelProduct(this.slotData.code);
         const result = await this.$http.put(url, this.formData);
         if (result['errors']) {
