@@ -145,6 +145,14 @@ class B2BIcons {
   ///左箭头
   static const IconData left_fill = const IconData(0xe73d,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///三角上
+  static const IconData triangle_up = const IconData(0xe67f,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+  ///三角下
+  static const IconData triangle_down = const IconData(0xe680,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
 }
 
 class CommonImage {

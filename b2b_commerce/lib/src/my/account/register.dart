@@ -414,39 +414,33 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: <Widget>[
                   Text(
-                    '已经阅读或同意',
-                    style: TextStyle(
-                        color: _isAgree
-                            ? Color.fromRGBO(255, 214, 12, 1)
-                            : Colors.black54),
+                    '我已阅读并同意',
+                    style: TextStyle(color: Colors.black54),
                   ),
                   GestureDetector(
-                      onTap: showServiceProtocol,
-                      child: Container(
-                        child: Text(
-                          '《钉单平台服务协议》',
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(
-                              color: _isAgree
-                                  ? Color.fromRGBO(255, 214, 12, 1)
-                                  : Colors.blue),
-                        ),
-                      )),
+                    onTap: showServiceProtocol,
+                    child: Text(
+                      '《钉单平台服务协议》',
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
                   Text(
                     '和',
-                    style: TextStyle(
-                        color: _isAgree
-                            ? Color.fromRGBO(255, 214, 12, 1)
-                            : Colors.black54),
+                    style: TextStyle(color: Colors.black54),
                   ),
                   GestureDetector(
                     onTap: showPayProtocol,
                     child: Text(
                       '《钉单平台货款代收代付服务协议》',
-                      style: TextStyle(
-                          color: _isAgree
-                              ? Color.fromRGBO(255, 214, 12, 1)
-                              : Colors.blue),
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: showPayProtocol,
+                    child: Text(
+                      '《隐私协议》',
+                      style: TextStyle(color: Colors.blue),
                     ),
                   ),
                 ],

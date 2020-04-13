@@ -26,6 +26,8 @@ export 'src/user/user_group.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
 export 'src/info/sales_order_refund_info.dart';
+export 'src/system/page/plate_products.dart';
+export 'src/system/page/carousel.dart';
 
 part 'models.g.dart';
 

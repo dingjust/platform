@@ -76,6 +76,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    // 预加载全局数据
+    // AppProvider().loadData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BLoCProvider<UserBLoC>(
       bloc: UserBLoC.instance,
@@ -148,15 +155,17 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
   ///友盟初始化
   initUMeng() {
-    TargetPlatform platform = defaultTargetPlatform;
-    FlutterUmplus.init(
-      platform == TargetPlatform.android
-          ? GlobalConfigs.UMENG_APP_KEY_ANDROID
-          : GlobalConfigs.UMENG_APP_KEY_IOS,
-      reportCrash: false,
-      logEnable: GlobalConfigs.DEBUG,
-      encrypt: true,
-    );
+    if (!GlobalConfigs.DEBUG) {
+      TargetPlatform platform = defaultTargetPlatform;
+      FlutterUmplus.init(
+        platform == TargetPlatform.android
+            ? GlobalConfigs.UMENG_APP_KEY_ANDROID
+            : GlobalConfigs.UMENG_APP_KEY_IOS,
+        reportCrash: false,
+        logEnable: GlobalConfigs.DEBUG,
+        encrypt: true,
+      );
+    }
   }
 
   //监听异常消息,dialog

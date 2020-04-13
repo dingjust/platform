@@ -7,6 +7,7 @@ import 'package:b2b_commerce/src/home/requirement/requirement_publish_success.da
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
@@ -78,8 +79,12 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
               padding: const EdgeInsets.all(15.0),
               child: Text(
                   '已选：'
-                      '${widget.formState.model.details.majorCategory.name}     '
-                      '${widget.formState.model.details.category.parent != null ? widget.formState.model.details.category.parent.name + '-' : ''}'
+                      '${widget.formState.model.details.majorCategory
+                      .name}     '
+                      '${widget.formState.model.details.category.parent != null
+                      ? widget.formState.model.details.category.parent.name +
+                      '-'
+                      : ''}'
                       '${widget.formState.model.details.category.name}',
                   style: TextStyle(color: Colors.grey, fontSize: 16)),
             ),
@@ -334,19 +339,23 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
                                                 setState(() {
                                                   state(() {
                                                     if (v) {
-                                                      widget.formState.model.details
+                                                      widget.formState.model
+                                                          .details
                                                           .salesMarket
                                                           .add(saleMarket.code);
                                                     } else {
-                                                      widget.formState.model.details
+                                                      widget.formState.model
+                                                          .details
                                                           .salesMarket
-                                                          .remove(saleMarket.code);
+                                                          .remove(
+                                                          saleMarket.code);
                                                     }
                                                   });
                                                 });
                                               },
                                               activeColor: Colors.orange,
-                                              value: widget.formState.model.details
+                                              value: widget.formState.model
+                                                  .details
                                                   .salesMarket
                                                   .contains(saleMarket.code),
                                             );
@@ -979,6 +988,9 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
       widget.formState.model.details.effectiveDays = null;
     }
     ShowDialogUtil.showChoseDiglog(context, '是否确认发布', () {
+      //埋点>>>需求发布2填写并发布
+      FlutterUmplus.event("requirement_publish_2_finsh");
+
       showDialog(
           context: context,
           barrierDismissible: false,
@@ -993,6 +1005,9 @@ class _RequirementOrderSecondFormState extends State<RequirementOrderSecondForm>
             );
           }).then((code) async {
         if (code != null && code != '') {
+          //埋点>>>需求发布成功
+          FlutterUmplus.event("requirement_publish_success");
+
           widget.formState.model.code = code;
           //根据code查询明
           RequirementOrderModel model = await RequirementOrderRepository()

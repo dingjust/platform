@@ -29,6 +29,7 @@ class HomePage extends StatefulWidget {
       BrandButtonsSection(),
       BrandReportSection(),
       BrandEntranceSection(),
+      // ProductsSection(),
       FactoryTabSection(),
       MoreFactorySection()
     ],

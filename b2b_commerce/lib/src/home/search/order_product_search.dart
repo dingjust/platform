@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:b2b_commerce/src/home/product/plate_products_page.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 /// 产品搜索页
@@ -68,7 +70,12 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
       LocalStorage.save(GlobalConfigs.ORDER_PRODUCT_HISTORY_KEYWORD_KEY,
           json.encode(history_keywords));
     }
-    Navigator.pop(context, query);
+    // Navigator.pop(context, query);
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PlateProductsPage(
+              condition: ProductCondition([], query),
+            )));
   }
 
   @override
@@ -102,7 +109,12 @@ class OrderProductSearchDelegate extends SearchDelegate<String> {
                   .map((keyword) => HistoryTag(
                         value: keyword,
                         onTap: () {
-                          Navigator.pop(context, keyword);
+                          // Navigator.pop(context, keyword);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  PlateProductsPage(
+                                    condition: ProductCondition([], keyword),
+                                  )));
                         },
                       ))
                   .toList()),

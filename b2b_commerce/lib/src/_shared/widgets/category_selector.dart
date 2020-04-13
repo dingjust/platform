@@ -27,6 +27,10 @@ class _CategorySelectorState extends State<CategorySelector> {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
+            if (_selectMajorCategory == null && snapshot.data.isNotEmpty) {
+              _selectMajorCategory = snapshot.data.first;
+            }
+
             return Column(
               children: <Widget>[
                 Expanded(
@@ -48,7 +52,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                                   height: 40,
                                   padding: EdgeInsets.symmetric(horizontal: 20),
                                   color: _selectMajorCategory?.code ==
-                                          majorCategory.code
+                                      majorCategory.code
                                       ? Colors.white
                                       : Colors.grey[200],
                                   // alignment: Alignment.center,
@@ -83,44 +87,44 @@ class _CategorySelectorState extends State<CategorySelector> {
                           child: _selectMajorCategory == null
                               ? Container()
                               : GridView(
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 3, //横轴三个子widget
-                                          childAspectRatio: 3, //宽高比为1时，子widget
-                                          crossAxisSpacing: 12,
-                                          mainAxisSpacing: 12),
-                                  children: _selectMajorCategory?.children
-                                          ?.map((category) {
-                                        return Container(
-                                            decoration: BoxDecoration(
-                                                color: _selectCategory?.code ==
-                                                        category.code
-                                                    ? Color.fromRGBO(
-                                                        255, 214, 12, 1)
-                                                    : Colors.white,
-                                                border: Border.all(
-                                                    width: 0.5,
-                                                    color: Colors.grey[300]),
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            child: InkWell(
-                                              child: Center(
-                                                child: Text(
-                                                  '${category.name}',
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                setState(() {
-                                                  _selectCategory = category;
-                                                });
-                                                widget.callBack(category);
-                                              },
-                                            ));
-                                      })?.toList() ??
-                                      [],
-                                ),
+                            gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3, //横轴三个子widget
+                                childAspectRatio: 3, //宽高比为1时，子widget
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12),
+                            children: _selectMajorCategory?.children
+                                ?.map((category) {
+                              return Container(
+                                  decoration: BoxDecoration(
+                                      color: _selectCategory?.code ==
+                                          category.code
+                                          ? Color.fromRGBO(
+                                          255, 214, 12, 1)
+                                          : Colors.white,
+                                      border: Border.all(
+                                          width: 0.5,
+                                          color: Colors.grey[300]),
+                                      borderRadius:
+                                      BorderRadius.circular(20)),
+                                  child: InkWell(
+                                    child: Center(
+                                      child: Text(
+                                        '${category.name}',
+                                        style: TextStyle(
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        _selectCategory = category;
+                                      });
+                                      widget.callBack(category);
+                                    },
+                                  ));
+                            })?.toList() ??
+                                [],
+                          ),
                         ),
                       )
                     ],
@@ -130,7 +134,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                   decoration: BoxDecoration(
                       border: Border(
                           top:
-                              BorderSide(width: 0.5, color: Colors.grey[300]))),
+                          BorderSide(width: 0.5, color: Colors.grey[300]))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

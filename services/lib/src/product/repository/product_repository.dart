@@ -4,13 +4,15 @@ import 'package:services/services.dart';
 /// 市
 abstract class ProductRepository {
   ///获取产品列表
-  Future<ProductsResponse> list(dynamic data,Map<String,Object> params);
+  Future<ProductsResponse> list(dynamic data, Map<String, Object> params);
 
   //品牌获取工厂的现款产品
-  Future<ProductsResponse> getProductsOfFactories(dynamic data,Map<String,Object> params);
+  Future<ProductsResponse> getProductsOfFactories(
+      dynamic data, Map<String, Object> params);
 
   //品牌获取工厂的现款产品
-  Future<ProductsResponse> getProductsOfFactory(dynamic data,Map<String,Object> params,String uid);
+  Future<ProductsResponse> getProductsOfFactory(
+      dynamic data, Map<String, Object> params, String uid);
 
   //获取产品明细
   Future<ApparelProductModel> detail(String code);
@@ -26,6 +28,7 @@ abstract class ProductRepository {
 
   //产品上架
   Future<String> on(String code);
+
   //产品下架
   Future<String> off(String code);
 
@@ -34,7 +37,7 @@ abstract class ProductRepository {
 
   //获取面料类别
   Future<List<CategoryModel>> majorCategories();
-  
+
   //获取所有颜色
   Future<List<ColorModel>> colors();
 
@@ -45,7 +48,7 @@ abstract class ProductRepository {
   Future<List<StyleModel>> styles();
 
   //获取样衣列表
-  Future<SampleProductsResponse> samples(Map<String,dynamic> data);
+  Future<SampleProductsResponse> samples(Map<String, dynamic> data);
 
   //获取样衣明细
   Future<SampleProductModel> getSample(String code);
@@ -57,7 +60,8 @@ abstract class ProductRepository {
   Future<String> updateSample(SampleProductModel smaple);
 
   //获取样衣记录列表
-  Future<SampleProductHistorysResponse> sampleHistorys(dynamic data, Map<String, dynamic> params);
+  Future<SampleProductHistorysResponse> sampleHistorys(
+      dynamic data, Map<String, dynamic> params);
 
   //获取样衣记录明细
   Future<SampleBorrowReturnHistoryModel> getSampleHistory(String id);

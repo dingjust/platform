@@ -7,6 +7,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alipay/flutter_alipay.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:models/models.dart';
@@ -28,6 +29,9 @@ class OrderPaymentPage extends StatefulWidget {
 
 class _OrderPaymentPageState extends State<OrderPaymentPage> {
   void initState() {
+    //埋点>>>进入支付页面
+    FlutterUmplus.event("payment_page");
+
     WidgetsBinding.instance.addPostFrameCallback((_) => initCheck());
     //监听微信回调
     fluwx.responseFromPayment.listen((WeChatPaymentResponse data) async {
@@ -737,6 +741,9 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   }
 
   void onPaymentSucess() {
+    //埋点>>>支付成功
+    FlutterUmplus.event("payment_success", label: '${widget.order.totalPrice}');
+
     // Navigator.of(context).pop();
     //成功
     showDialog<void>(

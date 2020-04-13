@@ -836,7 +836,11 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     });
   }
 
+  ///下单成功则调用付款
   void onPaying(String code) async {
+    //埋点>>>"确认下单"成功生成订单
+    FlutterUmplus.event("order_product_success");
+
     if (code != null && code != '') {
       switch (widget.orderType) {
         case OrderType.PROOFING:
@@ -866,7 +870,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   order: detailModel,
                   paymentFor: PaymentFor.DEPOSIT,
                 )),
-        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
+        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   void onProofingPaying(String code) async {
@@ -877,7 +881,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
             builder: (context) => OrderPaymentPage(
                   order: detailModel,
                 )),
-        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
+        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   void onSalesPaying(String code) async {
@@ -891,7 +895,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                   order: detailModel,
                   paymentFor: PaymentFor.SALES,
                 )),
-        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
+        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   @override

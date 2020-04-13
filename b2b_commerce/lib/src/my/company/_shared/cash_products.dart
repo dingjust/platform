@@ -1,16 +1,12 @@
-import 'package:b2b_commerce/src/business/products/existing_product_item.dart';
-import 'package:b2b_commerce/src/home/product/order_product.dart';
 import 'package:b2b_commerce/src/home/product/product.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class CashProducts extends StatefulWidget {
-  CashProducts({Key key})
-      : super(key: key);
+  CashProducts({Key key}) : super(key: key);
 
   _CashProductsState createState() => _CashProductsState();
 }
@@ -50,12 +46,10 @@ class CashProductsListView extends StatelessWidget {
   final CashProductsState cashProductsState;
   final ScrollController _scrollController = ScrollController();
 
-  CashProductsListView({Key key, this.cashProductsState})
-      : super(key: key);
+  CashProductsListView({Key key, this.cashProductsState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     //监听滚动事件，打印滚动位置
     _scrollController.addListener(() {
       if (_scrollController.offset < 500) {
@@ -75,21 +69,21 @@ class CashProductsListView extends StatelessWidget {
 
     return Scaffold(
       body: RefreshIndicator(
-        child:
-          CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              _buildSlivers(),
-              SliverToBoxAdapter(
-                child:  ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-                  opacity: cashProductsState.loadingMore ? 1.0 : 0,
-                ),
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            _buildSlivers(),
+            SliverToBoxAdapter(
+              child:
+              ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
+                opacity: cashProductsState.loadingMore ? 1.0 : 0,
               ),
-              SliverToBoxAdapter(
-                  child: _buildEnd(),
-              )
-            ],
-          ),
+            ),
+            SliverToBoxAdapter(
+              child: _buildEnd(),
+            )
+          ],
+        ),
         onRefresh: () async {
           cashProductsState.clear();
         },
@@ -111,30 +105,35 @@ class CashProductsListView extends StatelessWidget {
     );
   }
 
-  Widget _buildSlivers(){
-    if (cashProductsState.apparelProductModels != null && cashProductsState.apparelProductModels.isNotEmpty) {
+  Widget _buildSlivers() {
+    if (cashProductsState.apparelProductModels != null &&
+        cashProductsState.apparelProductModels.isNotEmpty) {
       List<RecommendProductItem> recommendProductItems =
       cashProductsState.apparelProductModels
-          .map((product) => RecommendProductItem(
-        model: product,
-        showAddress: true,
-      ))
+          .map((product) =>
+          RecommendProductItem(
+            model: product,
+            showAddress: true,
+            onClick: () {
+              //数据埋点=>工厂详情页点击“上架产品”进入看款详情
+              FlutterUmplus.event("factory_detail_product_click");
+            },
+          ))
           .toList();
 
       return SliverPadding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         sliver: SliverGrid(
-          gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, //Grid按两列显示
             mainAxisSpacing: 10.0,
             crossAxisSpacing: 10.0,
             childAspectRatio: 0.60,
           ),
-          delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                return recommendProductItems[index];
-              }, childCount: cashProductsState.apparelProductModels.length),
+          delegate:
+          SliverChildBuilderDelegate((BuildContext context, int index) {
+            return recommendProductItems[index];
+          }, childCount: cashProductsState.apparelProductModels.length),
         ),
       );
     } else {

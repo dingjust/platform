@@ -138,7 +138,8 @@ class _RequirementItem extends StatelessWidget {
                       flex: 1,
                       child: Text(
                         '${model.details.productName ?? ''}',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

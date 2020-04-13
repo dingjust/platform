@@ -1,9 +1,6 @@
-import 'package:core/core.dart';
 import 'package:dio/dio.dart';
 import 'package:models/models.dart';
-import 'package:services/src/capacity/repository/capacity_repository.dart';
 import 'package:services/src/order/PageEntry.dart';
-import 'package:services/src/product/product_repository.dart';
 import 'package:services/src/state/state.dart';
 
 import '../../../services.dart';

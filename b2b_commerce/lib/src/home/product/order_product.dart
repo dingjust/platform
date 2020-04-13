@@ -30,8 +30,6 @@ class _ProductsPageState extends State<ProductsPage> {
 
   List<CategoryModel> cascadedCategories;
 
-  bool showFilterMenu = false;
-
   List<FilterConditionEntry> conditionEntries = <FilterConditionEntry>[
     FilterConditionEntry(label: '排序', value: null),
     FilterConditionEntry(label: '价格升序', value: 'steppedPrice-asc'),

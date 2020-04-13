@@ -4,15 +4,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:transparent_image/transparent_image.dart';
-import 'package:widgets/src/commons/carousel/banner_jump_detail.dart';
 
 /// 轮播图
 class Carousel<T extends MediaModel> extends StatefulWidget {
-  Carousel(this.items, this.height);
+  Carousel(this.items, this.height, {this.scrollDirection = Axis.horizontal});
 
   final List<T> items;
   final double height;
+  final Axis scrollDirection;
 
   @override
   _CarouselState createState() => _CarouselState();
@@ -116,7 +115,8 @@ class _CarouselState extends State<Carousel> {
     // 检查手指和自动播放的是否冲突，如果滚动停止开启自动播放，反之停止自动播放
     return NotificationListener(
         onNotification: (ScrollNotification scrollNotification) {
-          if (scrollNotification is ScrollEndNotification || scrollNotification is UserScrollNotification) {
+          if (scrollNotification is ScrollEndNotification ||
+              scrollNotification is UserScrollNotification) {
             _isEndScroll = true;
           } else {
             _isEndScroll = false;
@@ -126,6 +126,7 @@ class _CarouselState extends State<Carousel> {
         },
         child: PageView.builder(
           controller: _pageController,
+          scrollDirection: widget.scrollDirection,
           itemBuilder: (BuildContext context, int index) {
             return _buildItem(context, index);
           },
@@ -138,32 +139,33 @@ class _CarouselState extends State<Carousel> {
 
   Widget _buildItem(BuildContext context, int index) {
     MediaModel item = _items[index];
-    return  GestureDetector(
-        onTapDown: (down) {
-          _isEndScroll = false;
-        },
-        onTapUp: (up) {
-          _isEndScroll = true;
-        },
-        onTap: () {
+    return GestureDetector(
+      onTapDown: (down) {
+        _isEndScroll = false;
+      },
+      onTapUp: (up) {
+        _isEndScroll = true;
+      },
+      onTap: () {
 //          Navigator.of(context).push(MaterialPageRoute(
 //              builder: (context) => BannerJumpDetailPage())
 //          );
-        },
-        child: CachedNetworkImage(
-            imageUrl: item.url,
-            fit: BoxFit.cover,
-            placeholder: (context, url) =>  SpinKitRing(
-              color: Colors.black12,
-              lineWidth:2,
-              size: 30.0,
-            ),
-            errorWidget: (context, url, error) => SpinKitRing(
-              color: Colors.black12,
-              lineWidth:2,
-              size: 30,
-            )
-        ),
+      },
+      child: CachedNetworkImage(
+          imageUrl: item.url,
+          fit: BoxFit.cover,
+          placeholder: (context, url) =>
+              SpinKitRing(
+                color: Colors.black12,
+                lineWidth: 2,
+                size: 30.0,
+              ),
+          errorWidget: (context, url, error) =>
+              SpinKitRing(
+                color: Colors.black12,
+                lineWidth: 2,
+                size: 30,
+              )),
     );
   }
 

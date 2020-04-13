@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:b2b_commerce/src/common/order_payment.dart';
 import 'package:b2b_commerce/src/home/product/order_confirm_form.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:models/models.dart';
-import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
 
@@ -722,19 +720,6 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
     }
   }
 
-  void getOrderDetail(String code) async {
-    if (code != null && code != '') {
-      PurchaseOrderModel detailModel =
-          await PurchaseOrderRepository().getPurchaseOrderDetail(code);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) => OrderPaymentPage(
-                    order: detailModel,
-                    paymentFor: PaymentFor.DEPOSIT,
-                  )),
-          ModalRoute.withName('/'));
-    }
-  }
 
   ///预览图片URL
   String getImgURL() {

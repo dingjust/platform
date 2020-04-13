@@ -158,7 +158,23 @@ class Apis {
       };
 
   ///删除消息
-  static get deleteMsg => (String uid){
-    return '/{baseSiteId}/user/$uid/msg/delete';
-  };
+  static get deleteMsg =>
+          (String uid) {
+        return '/{baseSiteId}/user/$uid/msg/delete';
+      };
+
+  ///产品首页items
+  static get productHomePageItems => '/{baseSiteId}/products/plate/home/page';
+
+  ///轮播图
+  static get carousels =>
+          (String type) {
+        return '/{baseSiteId}/carousels/list/$type';
+      };
+
+  ///item详情点击量
+  static get itemDetail =>
+          (int pk) {
+        return '/{baseSiteId}//statistics/update/$pk';
+      };
 }
