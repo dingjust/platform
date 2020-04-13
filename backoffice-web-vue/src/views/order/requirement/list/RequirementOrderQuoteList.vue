@@ -19,17 +19,17 @@
             <h6 style="color:red;font-weight: bold;">￥{{item.unitPrice ? item.unitPrice : '--'}}</h6>
           </el-col>
           <el-col :span="4">
-            <h6 v-if="!isShowDetailPrice">
+            <h6 v-if="checkOrderCodeList.indexOf(String(item.code)) < 0">
               <i style="color: #c8c8c8;font-size: 12px;cursor: pointer"
                  class="iconfont icon_arrow"
-                 @click="handleChanged">
+                 @click="checkDetails(item.code)">
                 查看详细报价&#xe714;&nbsp;
               </i>
             </h6>
-            <h6 v-if="isShowDetailPrice">
+            <h6 v-if="checkOrderCodeList.indexOf(String(item.code)) > -1">
               <i style="color: #c8c8c8;font-size: 12px;cursor: pointer"
                  class="iconfont icon_arrow"
-                 @click="handleChanged">
+                 @click="packupDetails(item.code)">
                 收起详细报价&#xe713;&nbsp;
               </i>
             </h6>
@@ -48,7 +48,7 @@
             <h6 style="color:red;font-weight: bold;">￥{{item.costOfSamples ? item.costOfSamples : '--'}}</h6>
           </el-col>
         </el-row>
-        <el-row type="flex" align="middle" v-if="isShowDetailPrice">
+        <el-row type="flex" align="middle" v-if="checkOrderCodeList.indexOf(String(item.code)) > -1">
           <el-col :span="2"></el-col>
           ​​​​​​​<div class="one">
           <el-col :span="3">
@@ -163,10 +163,19 @@
       onDelete (row) {
         this.$emit('onDelete', row);
       },
-      handleChanged(){
-        this.setIsShowDetailPrice(!this.isShowDetailPrice);
+      // handleChanged () {
+      //   this.setIsShowDetailPrice(!this.isShowDetailPrice);
+      // },
+      checkDetails (code) {
+        this.checkOrderCodeList.push(code);
+        // this.setIsShowDetailPrice(!this.isShowDetailPrice);
       },
-      async onApprove(item){
+      packupDetails (code) {
+        const index = this.checkOrderCodeList.indexOf(code + '');
+        this.checkOrderCodeList.splice(index, 1);
+        // this.setIsShowDetailPrice(!this.isShowDetailPrice);
+      },
+      async onApprove (item) {
         this.$confirm('是否确认报价', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -186,7 +195,7 @@
         this.code = item.code;
         this.reasonDialogVisible = !this.reasonDialogVisible;
       },
-      async onReject(code) {
+      async onReject (code) {
         this.$confirm('是否拒绝报价', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -211,6 +220,7 @@
         reasonDialogVisible: false,
         comment: '',
         code: '',
+        checkOrderCodeList: []
       }
     }
   }
