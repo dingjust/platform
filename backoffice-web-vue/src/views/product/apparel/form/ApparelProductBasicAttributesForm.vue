@@ -4,16 +4,14 @@
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
-              <el-row type="flex" align="middle" justify="start" :gutter="10">
-                <el-col :span="6">
-                  <h6 class="attributes-row-label">货号<span style="color:red;">*</span></h6>
-                </el-col>
-                <el-col :span="18">
-                  <el-form-item :rules="[{ required: true, message: '请输入货号', trigger: 'blur'}]" prop="skuID">
-                    <el-input placeholder="请输入货号" v-model="slotData.skuID" size="mini" :disabled="isRead"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
+            <el-row type="flex" align="middle" justify="start" :gutter="10">
+              <el-col :span="6">
+                <h6 class="info-input-prepend">品牌：</h6>
+              </el-col>
+              <el-col :span="18">
+                <el-input placeholder="请输入品牌" v-model="slotData.brand" size="mini" :disabled="isRead"></el-input>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
       </el-col>

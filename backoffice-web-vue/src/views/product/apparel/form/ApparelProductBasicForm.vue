@@ -12,20 +12,6 @@
         </el-form-item>
       </el-col>
     </el-row>
-<!--    <el-row class="basic-form-row" type="flex" align="middle">-->
-<!--      <el-col :span="2">-->
-<!--        <h6 class="info-input-prepend">品类<span style="color:red;">*</span></h6>-->
-<!--      </el-col>-->
-<!--      <el-col :span="20">-->
-<!--        <el-form-item :rules="[{-->
-<!--            type: 'object',-->
-<!--            validator: checkCategory,-->
-<!--            trigger: 'change'-->
-<!--          }]" prop="category">-->
-<!--          <el-cascader class="product-category-cascader" v-model="slotData.category" :options="cascaderCategories"></el-cascader>-->
-<!--        </el-form-item>-->
-<!--      </el-col>-->
-<!--    </el-row>-->
     <el-row class="basic-form-row" type="flex" align="middle">
       <el-col :span="12">
         <el-row type="flex">
@@ -48,10 +34,12 @@
           <el-col :span="24">
             <el-row type="flex" align="middle" justify="start" :gutter="10">
               <el-col :span="4">
-                <h6 class="info-input-prepend">品牌：</h6>
+                <h6 class="attributes-row-label">货号<span style="color:red;">*</span></h6>
               </el-col>
               <el-col :span="20">
-                <el-input placeholder="请输入品牌" v-model="slotData.brand" size="mini" :disabled="isRead"></el-input>
+                <el-form-item :rules="[{ required: true, message: '请输入货号', trigger: 'blur'}]" prop="skuID">
+                  <el-input placeholder="请输入货号" v-model="slotData.skuID" size="mini" :disabled="isRead"></el-input>
+                </el-form-item>
               </el-col>
             </el-row>
           </el-col>
