@@ -32,25 +32,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   void initState() {
     super.initState();
-    //数据埋点>>>看款详情
-    FlutterUmplus.event("order_product_detail_page",
-        label: widget.product.code);
 
-    //点击量
-    ItemRepository().onDetail(widget.product.id);
+    if (widget.product != null) {
+      //数据埋点>>>看款详情
+      FlutterUmplus.event("order_product_detail_page",
+          label: widget.product.code);
 
-    //若产品没有类型
-    if (widget.product.productType == null ||
-        widget.product.productType.isEmpty) {
-      //默认期货
-      productType = ProductType.FUTURE_GOODS;
-    } else {
-      if (widget.product.productType.contains(ProductType.SPOT_GOODS)) {
-        productType = ProductType.SPOT_GOODS;
-      } else if (widget.product.productType.contains(ProductType.TAIL_GOODS)) {
-        productType = ProductType.TAIL_GOODS;
-      } else {
+      //点击量
+      ItemRepository().onDetail(widget.product.id);
+
+      //若产品没有类型
+      if (widget.product.productType == null ||
+          widget.product.productType.isEmpty) {
+        //默认期货
         productType = ProductType.FUTURE_GOODS;
+      } else {
+        if (widget.product.productType.contains(ProductType.SPOT_GOODS)) {
+          productType = ProductType.SPOT_GOODS;
+        } else if (widget.product.productType
+            .contains(ProductType.TAIL_GOODS)) {
+          productType = ProductType.TAIL_GOODS;
+        } else {
+          productType = ProductType.FUTURE_GOODS;
+        }
       }
     }
   }

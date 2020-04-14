@@ -87,9 +87,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  void homeInit() {
+  void homeInit() async {
     //版本检查
-    AppVersion(homePageKey.currentContext,
+    bool isNew = await AppVersion(homePageKey.currentContext,
         ignoreVersionNotification:
         UserBLoC.instance.ignoreVersionNotification)
         .initCheckVersion(AppBLoC.instance.packageInfo.version, 'nbyjy');
@@ -97,7 +97,8 @@ class _HomePageState extends State<HomePage> {
     CertificationStatusHelper helper =
     Provider.of<CertificationStatusHelper>(context);
 
-    if (!helper.hasInfoValidate) {
+    //isNew为false 则弹出更新提示框，此时不弹出认证信息弹窗
+    if (!helper.hasInfoValidate && isNew) {
       //认证校验
       helper.checkCertificationStatus(context);
       helper.hasInfoValidate = true;
