@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="colorDetailsPageVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <color-details-page v-if="colorDetailsPageVisible" :slot-data="itemData"
                           @colorDetailsPageVisibleTurn="colorDetailsPageVisibleTurn"
-                          @onSearch="onSearch"/>
+                          @onSearch="onSearchwithPage"/>
     </el-dialog>
     <el-card>
       <color-toolbar @onNew="onNew" @onSearch="onSearch"/>
@@ -42,6 +42,10 @@
         const keyword = this.keyword;
         const url = this.apis().getColorsSearch();
         this.search({url, keyword, page, size});
+      },
+      onSearchwithPage () {
+        const number = this.page.number;
+        this.onSearch(number);
       },
       async onDetails (item) {
         const url = this.apis().getColorSearch(item.code);
