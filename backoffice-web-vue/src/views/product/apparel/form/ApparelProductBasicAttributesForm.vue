@@ -22,27 +22,11 @@
           <el-col :span="24">
             <el-row type="flex" align="middle" justify="start" :gutter="10">
               <el-col :span="6">
-                <h6 class="attributes-row-label">品牌：</h6>
-              </el-col>
-              <el-col :span="18">
-                <el-input placeholder="请输入品牌" v-model="slotData.brand" size="mini" :disabled="isRead"></el-input>
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
-    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
-      <el-col :span="12">
-        <el-row type="flex">
-          <el-col :span="24">
-            <el-row type="flex" align="middle" justify="start" :gutter="10">
-              <el-col :span="6">
                 <h6 class="attributes-row-label" style="">风格<span class="info-title_text-sub">(多选)</span></h6>
               </el-col>
               <el-col :span="18">
                 <el-select class="attributes-form-selector" multiple v-model="slotData.attributes.styles"
-                  placeholder="请选择">
+                           placeholder="请选择">
                   <el-option v-for="item in productStyles" :key="item.code" :label="item.name" :value="item.code">
                   </el-option>
                 </el-select>
@@ -51,6 +35,8 @@
           </el-col>
         </el-row>
       </el-col>
+    </el-row>
+    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -69,8 +55,6 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
-    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -88,6 +72,8 @@
           </el-col>
         </el-row>
       </el-col>
+    </el-row>
+    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -105,8 +91,6 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
-    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -124,6 +108,8 @@
           </el-col>
         </el-row>
       </el-col>
+    </el-row>
+    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -142,8 +128,6 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
-    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -153,7 +137,7 @@
               </el-col>
               <el-col :span="18">
                 <el-select class="attributes-form-selector" multiple v-model="slotData.attributes.decorativePatterns"
-                  placeholder="请选择">
+                           placeholder="请选择">
                   <el-option v-for="item in decorativePatterns" :key="item.code" :label="item.name" :value="item.code">
                   </el-option>
                 </el-select>
@@ -162,6 +146,8 @@
           </el-col>
         </el-row>
       </el-col>
+    </el-row>
+    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -180,8 +166,6 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
-    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -199,6 +183,8 @@
           </el-col>
         </el-row>
       </el-col>
+    </el-row>
+    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -216,8 +202,6 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
-        <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -235,6 +219,8 @@
           </el-col>
         </el-row>
       </el-col>
+    </el-row>
+    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex">
           <el-col :span="24">
@@ -252,8 +238,6 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
-    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex" align="middle">
           <el-col :span="24">
@@ -272,6 +256,8 @@
           </el-col>
         </el-row>
       </el-col>
+    </el-row>
+    <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle">
       <el-col :span="12">
         <el-row type="flex" align="middle">
           <el-col :span="24">
@@ -303,7 +289,7 @@
     methods: {
 
     },
-    data() {
+    data () {
       return {
         productStyles: this.$store.state.EnumsModule.productStyles,
         fabricCompositions: this.$store.state.EnumsModule.fabricCompositions,
@@ -316,12 +302,11 @@
         productFillers: this.$store.state.EnumsModule.productFillers,
         productThicknesses: this.$store.state.EnumsModule.productThicknesses,
         productSeasons: this.$store.state.EnumsModule.productSeasons,
-        plackets: this.$store.state.EnumsModule.plackets,
+        plackets: this.$store.state.EnumsModule.plackets
       };
     },
-    created() {}
+    created () {}
   };
-
 </script>
 <style scoped>
   .product-basic-attributes {
