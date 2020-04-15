@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="sizeDetailsPageVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <size-details-page v-if="sizeDetailsPageVisible" :slot-data="itemData"
                          @sizeDetailsPageVisibleTurn="sizeDetailsPageVisibleTurn"
-                          @onSearch="onSearch"/>
+                          @onSearch="onSearchwithPage"/>
     </el-dialog>
     <el-card>
       <size-toolbar @onNew="onNew" @onSearch="onSearch"/>
@@ -42,6 +42,10 @@
         const keyword = this.keyword;
         const url = this.apis().getSizesSearch();
         this.search({url, keyword, page, size});
+      },
+      onSearchwithPage () {
+        const number = this.page.number;
+        this.onSearch(number);
       },
       async onDetails (item) {
         const url = this.apis().getSizeSearch(item.code);
