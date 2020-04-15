@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/state/state.dart';
@@ -9,9 +8,15 @@ class PlateProductState extends PageState {
 
   List<ApparelProductModel> _products;
 
+  ///推荐产品
+  List<ApparelProductModel> recommendProducts;
+
   ProductCondition condition;
 
-  PlateProductState({this.type, this.condition}) {
+  final bool showRecommendProducts;
+
+  PlateProductState(
+      {this.type, this.condition, this.showRecommendProducts = true}) {
     if (condition != null) {
       condition = condition;
     } else {
@@ -42,6 +47,11 @@ class PlateProductState extends PageState {
         currentPage = response.number;
         totalPages = response.totalPages;
         totalElements = response.totalElements;
+
+        //无产品，显示推荐产品
+        if (totalElements == 0 || currentPage + 1 == totalPages) {
+          _getRecommendProducts();
+        }
       }
 
       ///通知刷新
@@ -72,10 +82,29 @@ class PlateProductState extends PageState {
             totalElements = response.totalElements;
           }
         });
+      } else if (showRecommendProducts && recommendProducts == null) {
+        //产品结束，显示推荐产品
+        await _getRecommendProducts();
       }
       //异步调用结束，通知加载组件
       workingEnd();
     }
+  }
+
+  ///获取推荐产品
+  Future<void> _getRecommendProducts() async {
+    await ProductRepositoryImpl().getProductsOfFactories({
+      'plateType':
+      SeeProductPlateTypeValuedMap[SeeProductPlateType.RECOMMEND_FOR_YOU]
+    }, {
+      'page': 0,
+      'size': 20,
+    }).then((response) {
+      if (response != null) {
+        recommendProducts = response.content;
+        notifyListeners();
+      }
+    });
   }
 
   Map<String, dynamic> generateFilterCondition() {
@@ -86,7 +115,6 @@ class PlateProductState extends PageState {
       filterCondition['plateType'] = SeeProductPlateTypeValuedMap[type];
     }
 
-    if (type == SeeProductPlateType.TODAY_NEW) {}
     return filterCondition;
   }
 

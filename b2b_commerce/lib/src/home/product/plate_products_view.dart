@@ -69,16 +69,20 @@ class ProductsListView extends StatelessWidget {
                   ),
                 );
               } else {
-                return _NoDataInfoRow();
+                return _NoDataInfoRow(
+                  state: state,
+                );
               }
             }),
             SliverToBoxAdapter(
               child:
                   ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-                opacity: state.loadingMore ? 1.0 : 0,
-              ),
+                      opacity: state.loadingMore ? 1.0 : 0,
+                      padding: state.loadingMore ? 8 : 0),
             ),
-            _buildEnd()
+            _buildEnd(),
+            _buildRecommendText(),
+            _buildRecommendProducts()
           ],
         ),
         onRefresh: () async {
@@ -95,7 +99,33 @@ class ProductsListView extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[Text('已经到底了')],
+                children: <Widget>[
+                  Icon(
+                    Icons.lightbulb_outline,
+                    color: Colors.orange,
+                  ),
+                  Text('已经到底了')
+                ],
+              ),
+            ),
+    )
+        : SliverToBoxAdapter(
+      child: Container(),
+    );
+  }
+
+  Widget _buildRecommendText() {
+    return (state.recommendProducts != null &&
+        state.recommendProducts.isNotEmpty)
+        ? SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+            border: Border(
+                top: BorderSide(color: Colors.grey[300], width: 0.5))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[Text('为你推荐')],
               ),
             ),
           )
@@ -103,9 +133,46 @@ class ProductsListView extends StatelessWidget {
             child: Container(),
           );
   }
+
+  Widget _buildRecommendProducts() {
+    return Builder(builder: (context) {
+      if (state.recommendProducts != null) {
+        List<RecommendProductItem> recommendProductItems =
+        state.recommendProducts
+            .map((product) =>
+            RecommendProductItem(
+              model: product,
+              showAddress: true,
+            ))
+            .toList();
+
+        return SliverPadding(
+          padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, //Grid按两列显示
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 0.62,
+            ),
+            delegate:
+            SliverChildBuilderDelegate((BuildContext context, int index) {
+              return recommendProductItems[index];
+            }, childCount: state.recommendProducts.length),
+          ),
+        );
+      } else {
+        return SliverToBoxAdapter();
+      }
+    });
+  }
 }
 
 class _NoDataInfoRow extends StatelessWidget {
+  final PlateProductState state;
+
+  const _NoDataInfoRow({Key key, this.state}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(

@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
     Provider.of<CertificationStatusHelper>(context);
 
     //isNew为false 则弹出更新提示框，此时不弹出认证信息弹窗
-    if (!helper.hasInfoValidate && isNew) {
+    if (!helper.hasInfoValidate && isNew ?? true) {
       //认证校验
       helper.checkCertificationStatus(context);
       helper.hasInfoValidate = true;
