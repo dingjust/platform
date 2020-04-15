@@ -70,7 +70,7 @@ class FactoryButtonsSection extends StatelessWidget {
           image: B2BImage.material(),
           imagePadding: EdgeInsets.all(10),
           onPressed: () {
-             Navigator.pushNamed(context, AppRoutes.ROUTE_SUBCONTRACTS_POOL);
+            Navigator.pushNamed(context, AppRoutes.ROUTE_SUBCONTRACTS_POOL);
           },
           title: '转包/裁片',
         ));
@@ -124,12 +124,16 @@ class FactoryEntranceSection extends StatelessWidget {
     final List<GridItem> items = <GridItem>[
       GridItem(
         title: '发布中心',
+        subTitle: '裁片外发',
+        icon: B2BImage.requirement_publish(width: 75, height: 75),
         onPressed: () {
           Navigator.pushNamed(context, AppRoutes.ROUTE_PUBLISH_CENTER);
         },
       ),
       GridItem(
         title: '推荐需求',
+        subTitle: '精准匹配',
+        icon: B2BImage.recommend_requirement(width: 65, height: 65),
         onPressed: () async {
           Provider.of<MajorCategoryState>(context)
               .getMajorCategories()

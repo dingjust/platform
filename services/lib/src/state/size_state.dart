@@ -22,7 +22,7 @@ class SizeState {
     if (_sizeEntries == null) {
       //获取所有标签
       var sizes = await ProductRepositoryImpl().sizes();
-      sizes = sizes.where((size) => size.sequence != null && size.sequence >=1 && size.sequence <=10).toList();
+      // sizes = sizes.where((size) => size.sequence != null && size.sequence >=1 && size.sequence <=10).toList();
       _sizeEntries = sizes.map((size){
         return ColorSizeEntryModel(code: size.code,name: size.name,customize: false,);
       }).toList();

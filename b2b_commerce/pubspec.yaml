@@ -221,6 +221,7 @@ flutter:
     - packages/assets/img-temp/200x200/future_goods.png
     - packages/assets/temp/20200411161233.png
     - packages/assets/temp/20200411161325.png
+    - packages/assets/temp/20200414163706.png
 
   fonts:
     - family: b2bIcons

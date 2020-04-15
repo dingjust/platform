@@ -1,4 +1,3 @@
-import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/business/orders/requirement_order_detail_by_factory.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
@@ -152,7 +151,9 @@ class _RequirementItem extends StatelessWidget {
                         ),
                         Text(
                           '${DateExpress2Util.express(model.creationTime)}',
-                          style: TextStyle(color: Colors.grey, fontSize: 14),
+                          style: TextStyle(
+                              color: Color.fromRGBO(97, 95, 95, 1),
+                              fontSize: 14),
                         )
                       ],
                     )
@@ -164,13 +165,29 @@ class _RequirementItem extends StatelessWidget {
                       flex: 1,
                       child: Row(
                         children: <Widget>[
-                          Text('${model.details.category.name}'),
                           Container(
-                            margin: EdgeInsets.only(left: 10),
+                            margin: EdgeInsets.only(right: 10),
                             child: Text(
-                                '${model.details.expectedMachiningQuantity}件'),
-                          )
+                              '${model.details.expectedMachiningQuantity}件',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                          Text(
+                            '${model.details.category.name}',
+                            style: TextStyle(color: Colors.black54),
+                          ),
                         ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        '${model.belongTo.name}',
+                        style: TextStyle(color: Color.fromRGBO(97, 95, 95, 1)),
                       ),
                     ),
                     Text(
@@ -178,30 +195,8 @@ class _RequirementItem extends StatelessWidget {
                           ? '${model.belongTo.contactAddress.city.name}${model
                           .belongTo.contactAddress.cityDistrict.name}'
                           : '',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
-                    )
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        children: <Widget>[
-                          ImageFactory.buildThumbnailImage(
-                              model.belongTo.profilePicture,
-                              size: 15,
-                              containerSize: 25),
-                          Container(
-                            margin: EdgeInsets.only(left: 10),
-                            child: Text('${model.belongTo.name}'),
-                          )
-                        ],
-                      ),
-                    ),
-                    Text(
-                      '${generateDistanceStr(model.distance)}',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      style: TextStyle(
+                          color: Color.fromRGBO(97, 95, 95, 1), fontSize: 14),
                     )
                   ],
                 )

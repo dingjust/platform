@@ -55,9 +55,9 @@ class DateExpressUtil {
     } else if (difference.inDays == -1) {
       return '昨日发布';
     } else if (difference.inDays < 365) {
-      return '发布:${DateFormat('MM-dd').format(date)}';
+      return '${DateFormat('MM-dd').format(date)}';
     } else {
-      return '发布:${DateFormat('yyyy-MM-dd').format(date)}';
+      return '${DateFormat('yyyy-MM-dd').format(date)}';
     }
   }
 }

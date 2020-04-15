@@ -282,4 +282,9 @@ class B2BImage {
   static Image recommend_factory({double width, double height}) {
     return getImage('temp/20200411161325.png', width: width, height: height);
   }
+
+  ///首页推荐需求
+  static Image recommend_requirement({double width, double height}) {
+    return getImage('temp/20200414163706.png', width: width, height: height);
+  }
 }
