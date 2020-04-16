@@ -7,7 +7,7 @@
             <h6 style="color: #F56C6C" class="title-style">*图片1</h6>
           </template>
           <images-upload-single :formData="carouselData[0].media" @getPicture="getPicture($event, 0)" @removePicture="removePicture(0)"/>
-          <h6 style="color: #909399;padding-left: 13px;">(宽高比例 2:1 图片效果最佳)</h6>
+          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
         </el-form-item>
         <el-form-item>
           <template slot="label">
@@ -22,7 +22,7 @@
             <h6 class="title-style">图片2</h6>
           </template>
           <images-upload-single :formData="carouselData[1].media" @getPicture="getPicture($event, 1)" @removePicture="removePicture(1)"/>
-          <h6 style="color: #909399;padding-left: 13px;">(宽高比例 2:1 图片效果最佳)</h6>
+          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
         </el-form-item>
         <el-form-item>
           <template slot="label">
@@ -37,7 +37,7 @@
             <h6 class="title-style">图片3</h6>
           </template>
           <images-upload-single :formData="carouselData[2].media" @getPicture="getPicture($event, 2)" @removePicture="removePicture(2)"/>
-          <h6 style="color: #909399;padding-left: 13px;">(宽高比例 2:1 图片效果最佳)</h6>
+          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
         </el-form-item>
         <el-form-item>
           <template slot="label">
@@ -52,7 +52,7 @@
             <h6 class="title-style">图片4</h6>
           </template>
           <images-upload-single :formData="carouselData[3].media" @getPicture="getPicture($event, 3)" @removePicture="removePicture(3)"/>
-          <h6 style="color: #909399;padding-left: 13px;">(宽高比例 2:1 图片效果最佳)</h6>
+          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
         </el-form-item>
         <el-form-item>
           <template slot="label">
@@ -180,13 +180,13 @@
  }
 
  /deep/ .el-upload--picture-card {
-   width: 200px;
-   height: 100px;
-   line-height: 100px;
+   width: 192px;
+   height: 108px;
+   line-height: 108px;
  }
 
  /deep/ .el-upload-list--picture-card .el-upload-list__item {
-   width: 200px;
-   height: 100px;
+   width: 192px;
+   height: 108px;
  }
 </style>
