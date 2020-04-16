@@ -13,7 +13,7 @@
           <template slot="label">
             <h6 class="title-style">绑定链接：</h6>
           </template>
-          <el-input v-model="carouselData[0].url" placeholder="请输入商品链接" size="mini" class="input-style"></el-input>
+          <el-input v-model="carouselData[0].url" size="mini" class="input-style"></el-input>
         </el-form-item>
       </el-row>
       <el-row>
@@ -28,7 +28,7 @@
           <template slot="label">
             <h6 class="title-style">绑定链接：</h6>
           </template>
-          <el-input v-model="carouselData[1].url" placeholder="请输入商品链接" size="mini" class="input-style"></el-input>
+          <el-input v-model="carouselData[1].url" size="mini" class="input-style"></el-input>
         </el-form-item>
       </el-row>
     </el-form>
