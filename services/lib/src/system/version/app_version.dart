@@ -22,7 +22,7 @@ class AppVersion {
 
   AppVersion(this.context, {this.ignoreVersionNotification});
 
-  Future<void> initCheckVersion(String packageVersion, String name) async {
+  Future<bool> initCheckVersion(String packageVersion, String name) async {
     if (!ignoreVersionNotification) {
       Response response;
       try {
@@ -42,10 +42,14 @@ class AppVersion {
             1) {
           if (platform != TargetPlatform.iOS) {
             _showNewVersionForAndroid(appVersionResponse.releaseVersion,
-                appVersionResponse.description, appVersionResponse.url);
+                appVersionResponse.description, appVersionResponse.url,
+                force: appVersionResponse.force);
           } else {
-            _showNewVersionForIos(appVersionResponse.releaseVersion);
+            _showNewVersionForIos(appVersionResponse.releaseVersion,
+                appVersionResponse.description, appVersionResponse.url,
+                force: appVersionResponse.force);
           }
+          return false;
         }
       }
     }
@@ -70,9 +74,12 @@ class AppVersion {
           1) {
         if (platform != TargetPlatform.iOS) {
           _showNewVersionForAndroid(appVersionResponse.releaseVersion,
-              appVersionResponse.description, appVersionResponse.url);
+              appVersionResponse.description, appVersionResponse.url,
+              force: appVersionResponse.force);
         } else {
-          _showNewVersionForIos(appVersionResponse.releaseVersion);
+          _showNewVersionForIos(appVersionResponse.releaseVersion,
+              appVersionResponse.description, appVersionResponse.url,
+              force: appVersionResponse.force);
         }
       } else {
         _showMessage(appVersionResponse.releaseVersion);
@@ -87,16 +94,10 @@ class AppVersion {
       builder: (context) {
         return AlertDialog(
           content: Container(
-            height: 250,
+            height: 50,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset(
-                  'temp/login_logo.png',
-                  package: 'assets',
-                  width: 100.0,
-                  height: 100.0,
-                ),
                 Text('已经是最新版本,当前版本：${releaseVersion}'),
               ],
             ),
@@ -120,92 +121,184 @@ class AppVersion {
         androidAppId: "net.nbyjy.b2b", iOSAppId: "1459206673");
   }
 
-  void _showNewVersionForIos(String releaseVersion) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          content: Container(
-            height: 250,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Image.asset(
-                  'temp/login_logo.png',
-                  package: 'assets',
-                  width: 100.0,
-                  height: 100.0,
-                ),
-                Text('发现新版本 ：${releaseVersion}'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('前往AppStore', style: TextStyle(color: Colors.blue)),
-              onPressed: () {
-                _jumpToAppStore();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showNewVersionForAndroid(
-      String releaseVersion, String description, String url) {
+  void _showNewVersionForIos(String releaseVersion, String description,
+      String url,
+      {bool force = false}) {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          // title: Text('确认取消？'),
+          contentPadding: EdgeInsets.only(top: 10),
           content: Container(
-            height: 350,
+            height: 250,
             width: double.maxFinite,
-            child: ListView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Image.asset(
-                  'temp/login_logo.png',
-                  package: 'assets',
-                  width: 100.0,
-                  height: 100.0,
+                Text(
+                  '更新',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
-                Text('版本更新'),
-                Text('新版本：${releaseVersion}'),
-                Text('版本说明：'),
-                Column(children: getDecriptionRows(description)),
-                Text('钉单最新版本来啦，马上更新吧！'),
+                Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView(
+                        children: <Widget>[
+                          Text('版本更新'),
+                          Text('新版本：${releaseVersion}'),
+                          Text('版本说明：'),
+                          Column(children: getDecriptionRows(description)),
+                          Text('钉单最新版本来啦，马上更新吧！'),
+                        ],
+                      ),
+                    )),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          top:
+                          BorderSide(color: Colors.grey[300], width: 0.5))),
+                  child: Row(
+                    children: <Widget>[
+                      (force != null && force)
+                          ? Container()
+                          : Expanded(
+                        child: FlatButton(
+                          child: Text('稍后再说',
+                              style: TextStyle(color: Colors.grey)),
+                          onPressed: () {
+                            UserBLoC.instance.ignoreVersionNotification =
+                            true;
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                      (force != null && force)
+                          ? Container()
+                          : Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                            border: Border(
+                                left: BorderSide(
+                                    color: Colors.grey[300],
+                                    width: 0.5))),
+                      ),
+                      Expanded(
+                        child: FlatButton(
+                          child: Text('前往AppStore',
+                              style: TextStyle(color: Colors.blue)),
+                          onPressed: () {
+                            _jumpToAppStore();
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('稍后再说', style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                UserBLoC.instance.ignoreVersionNotification = true;
-                Navigator.of(context).pop();
-              },
+        );
+      },
+    );
+  }
+
+  void _showNewVersionForAndroid(String releaseVersion, String description,
+      String url,
+      {bool force = false}) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.only(top: 10),
+          content: Container(
+            height: 250,
+            width: double.maxFinite,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                // Image.asset(
+                //   'temp/login_logo.png',
+                //   package: 'assets',
+                //   width: 100.0,
+                //   height: 100.0,
+                // ),
+                Text(
+                  '更新',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView(
+                        children: <Widget>[
+                          Text('版本更新'),
+                          Text('新版本：${releaseVersion}'),
+                          Text('版本说明：'),
+                          Column(children: getDecriptionRows(description)),
+                          Text('钉单最新版本来啦，马上更新吧！'),
+                        ],
+                      ),
+                    )),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          top:
+                          BorderSide(color: Colors.grey[300], width: 0.5))),
+                  child: Row(
+                    children: <Widget>[
+                      (force != null && force)
+                          ? Container()
+                          : Expanded(
+                        child: FlatButton(
+                          child: Text('稍后再说',
+                              style: TextStyle(color: Colors.grey)),
+                          onPressed: () {
+                            UserBLoC.instance.ignoreVersionNotification =
+                            true;
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                      (force != null && force)
+                          ? Container()
+                          : Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                            border: Border(
+                                left: BorderSide(
+                                    color: Colors.grey[300],
+                                    width: 0.5))),
+                      ),
+                      Expanded(
+                        child: FlatButton(
+                          child:
+                          Text('立即更新', style: TextStyle(color: Colors.red)),
+                          onPressed: () async {
+                            updateApp(url);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
-            FlatButton(
-              child: Text('立即更新',
-                  style: TextStyle(color: Color.fromRGBO(255, 214, 12, 1))),
-              onPressed: () async {
-                updateApp(url);
-              },
-            ),
-          ],
+          ),
         );
       },
     );
   }
 
   List<Widget> getDecriptionRows(String description) {
-    List<Widget> result =
-    description.split('\\n').where((str) => str != '').map((str) =>
-        Text('$str')).toList();
+    List<Widget> result = description
+        .split('\\n')
+        .where((str) => str != '')
+        .map((str) => Text('$str'))
+        .toList();
     return result;
   }
 

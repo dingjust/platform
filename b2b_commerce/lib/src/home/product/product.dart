@@ -52,11 +52,13 @@ class RecommendProductItem extends StatelessWidget {
           ApparelProductModel detailProduct =
           await ProductRepositoryImpl().detail(model.code);
           Navigator.of(context).pop();
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) =>
-                  ProductDetailPage(
-                    product: detailProduct,
-                  )));
+          if (detailProduct != null) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    ProductDetailPage(
+                      product: detailProduct,
+                    )));
+          }
         },
         child: Stack(
           children: <Widget>[
@@ -142,8 +144,8 @@ class RecommendProductItem extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 '销量${model.salesVolume}件',
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 10),
+                                style:
+                                TextStyle(color: Colors.grey, fontSize: 10),
                               )
                             ],
                           ),

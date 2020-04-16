@@ -1,6 +1,7 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/_shared/widgets/nodata_show.dart';
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
 import 'package:b2b_commerce/src/home/factory/factory_item.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _FactoryTabSectionState extends State<FactoryTabSection>
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 700,        
+        height: 700,
         child: ChangeNotifierProvider<FactoryTabSectionState>(
           builder: (context) => FactoryTabSectionState(),
           child: Scaffold(
@@ -47,7 +48,7 @@ class _FactoryTabSectionState extends State<FactoryTabSection>
                 indicatorSize: TabBarIndicatorSize.label,
               ),
               body: TabBarView(
-                physics: AlwaysScrollableScrollPhysics(),          
+                physics: AlwaysScrollableScrollPhysics(),
                 controller: _tabController,
                 children: <Widget>[
                   HotFactoryListView(),
@@ -107,7 +108,7 @@ class _FactoryItem extends StatelessWidget {
 
   final double height;
 
-  const _FactoryItem({Key key, this.model, this.height = 120})
+  const _FactoryItem({Key key, this.model, this.height = 130})
       : super(key: key);
 
   @override
@@ -126,79 +127,106 @@ class _FactoryItem extends StatelessWidget {
               context: context, onJump: () => jumpToDetailPage(context));
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ImageFactory.buildThumbnailImage(model.profilePicture,
-                  size: 60, containerSize: 80),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 6),
-                                child: Text(
-                                  '${model.name}',
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          // PopulationScaleText(model: model),
-                          Expanded(
-                            flex: 1,
-                            child: CertifiedTagsAndLabelsText(model: model),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Opacity(
-                            opacity: model?.contactAddress?.region?.name != null
-                                ? 1.0
-                                : 0,
-                            child: Text(
-                              '${model?.contactAddress?.region?.name ??
-                                  ''}${model?.contactAddress?.city?.name ??
-                                  ''}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          )
-                        ],
-                      ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.end,
-                      //   children: <Widget>[
-                      //     Opacity(
-                      //       opacity: model.contactAddress.region.name != null
-                      //           ? 1.0
-                      //           : 0,
-                      //       child: Text(
-                      //         '${model.contactAddress.region.name ?? ''}${model.contactAddress.city.name ?? ''}',
-                      //         style: TextStyle(color: Colors.grey),
-                      //       ),
-                      //     )
-                      //   ],
-                      // )
-                    ],
-                  ),
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              children: <Widget>[
+                _buildMainRow(),
+                Container(
+                  height: 10,
                 ),
-              )
-            ],
-          ),
-        ),
+                _buildEndRow()
+              ],
+            )),
       ),
+    );
+  }
+
+  Widget _buildMainRow() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(right: 10),
+          child: ImageFactory.buildThumbnailImage(model.profilePicture,
+              size: 50, containerSize: 70),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        '${model.name}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 17),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    ApprovedTag(
+                      model: model,
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      '加工方式：',
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                    Expanded(child: Text('${getCooperationModesStr(model)}'))
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      '星 级：',
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                    Expanded(
+                      child: StarLevelAndOrdersCountText(model: model),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildEndRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          '主营品类：',
+          style: TextStyle(color: Colors.black87),
+        ),
+        Expanded(
+            child:
+            //     CategoriesText(
+            //   model: model,
+            // )
+            Text(
+              '${getCategoryStr(model)}',
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: Colors.grey),
+            )),
+        Opacity(
+          opacity: model?.contactAddress?.region?.name != null ? 1.0 : 0,
+          child: Text(
+            '${model?.contactAddress?.region?.name ?? ''}${model?.contactAddress
+                ?.city?.name ?? ''}',
+            style: TextStyle(color: Colors.grey),
+          ),
+        )
+      ],
     );
   }
 
@@ -213,5 +241,21 @@ class _FactoryItem extends StatelessWidget {
             ),
       ),
     );
+  }
+
+  String getCooperationModesStr(FactoryModel model) {
+    String result = '';
+    model.cooperationModes.forEach((mode) {
+      result = '$result ${CooperationModesLocalizedMap[mode]}';
+    });
+    return result;
+  }
+
+  String getCategoryStr(FactoryModel model) {
+    String result = '';
+    model.adeptAtCategories.forEach((category) {
+      result = '$result ${category.name}';
+    });
+    return result;
   }
 }

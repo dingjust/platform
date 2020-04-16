@@ -1,4 +1,5 @@
 import 'package:b2b_commerce/src/helper/certification_status.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -60,37 +61,78 @@ class FactoryItem extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
           child: Column(
             children: <Widget>[
-              Row(
+              showButton
+                  ? Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  FactoryNameText(
-                    model: model,
-                    isLocalFind: isLocalFind,
-                  ),
-                  showButton
-                      ? InviteFactoryButton(
+                  InviteFactoryButton(
                     factoryModel: model,
                     requirementCode: requirementCode,
                     callback: callback,
                   )
-                      : Container(),
                 ],
-              ),
+              )
+                  : Container(),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: <Widget>[
-                    ImageFactory.buildThumbnailImage(model.profilePicture),
+                    Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: ImageFactory.buildThumbnailImage(
+                          model.profilePicture,
+                          containerSize: 70,
+                          size: 70),
+                    ),
                     Expanded(
                       flex: 1,
                       child: Container(
-                        height: 80,
+                        height: 70,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            PopulationScaleText(model: model),
-                            CertifiedTagsAndLabelsText(model: model),
-                            StarLevelAndOrdersCountText(model: model),
+                            Row(
+                              children: <Widget>[
+                                FactoryNameText(
+                                  model: model,
+                                  isLocalFind: isLocalFind,
+                                ),
+                                ApprovedTag(
+                                  model: model,
+                                )
+                              ],
+                            ),
+                            // PopulationScaleText(model: model),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  '星 级：',
+                                  style: TextStyle(color: Colors.black87),
+                                ),
+                                Expanded(
+                                  child:
+                                  StarLevelAndOrdersCountText(model: model),
+                                )
+
+                                // Expanded(
+                                //   flex: 1,
+                                //   child: FactoryTags(model: model),
+                                // )
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  '加工方式：',
+                                  style: TextStyle(color: Colors.black87),
+                                ),
+                                Expanded(
+                                    child: Text(
+                                        '${getCooperationModesStr(model)}'))
+                              ],
+                            ),
+                            // CertifiedTagsAndLabelsText(model: model),
                           ],
                         ),
                       ),
@@ -106,8 +148,30 @@ class FactoryItem extends StatelessWidget {
               //     )
               //   ],
               // )
-              CategoriesText(
-                model: model,
+              Row(
+                children: <Widget>[
+                  Text(
+                    '主营品类：',
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                  Expanded(
+                      child:
+                      //     CategoriesText(
+                      //   model: model,
+                      // )
+                      Text(
+                        '${getCategoryStr(model)}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.grey),
+                      )),
+                  Text(
+                    model.contactAddress != null
+                        ? '${model.contactAddress.city.name} ${model
+                        .contactAddress.cityDistrict.name}'
+                        : '',
+                    style: TextStyle(color: Colors.black54),
+                  )
+                ],
               )
             ],
           ),
@@ -121,6 +185,22 @@ class FactoryItem extends StatelessWidget {
       ),
     );
   }
+
+  String getCooperationModesStr(FactoryModel model) {
+    String result = '';
+    model.cooperationModes.forEach((mode) {
+      result = '$result ${CooperationModesLocalizedMap[mode]}';
+    });
+    return result;
+  }
+
+  String getCategoryStr(FactoryModel model) {
+    String result = '';
+    model.adeptAtCategories.forEach((category) {
+      result = '$result ${category.name}';
+    });
+    return result;
+  }
 }
 
 class FactoryNameText extends StatelessWidget {
@@ -133,7 +213,8 @@ class FactoryNameText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(model.distance);
+    TextStyle textStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
+
     if (isLocalFind) {
       return Expanded(
         flex: 1,
@@ -143,7 +224,7 @@ class FactoryNameText extends StatelessWidget {
                 flex: 3,
                 child: Text(
                   '${model.name}',
-                  style: TextStyle(fontSize: 18),
+                  style: textStyle,
                   overflow: TextOverflow.ellipsis,
                 )),
             model.distance == null
@@ -166,7 +247,11 @@ class FactoryNameText extends StatelessWidget {
     } else {
       return Expanded(
         flex: 1,
-        child: Text('${model.name}', style: TextStyle(fontSize: 18)),
+        child: Text(
+          '${model.name}',
+          style: textStyle,
+          overflow: TextOverflow.ellipsis,
+        ),
       );
     }
   }
@@ -426,39 +511,5 @@ class InviteFactoryButton extends StatelessWidget {
         ),
       );
     }
-  }
-}
-
-class Tag extends StatelessWidget {
-  const Tag({
-    Key key,
-    this.width = 30,
-    this.height = 18,
-    @required this.label,
-    this.color = const Color.fromRGBO(255, 133, 148, 1.0),
-    this.backgroundColor = const Color.fromRGBO(255, 243, 243, 1),
-  }) : super(key: key);
-
-  final double width;
-  final double height;
-  final String label;
-  final Color color;
-  final Color backgroundColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      padding: EdgeInsets.symmetric(horizontal: 2),
-      child: Center(
-        child: Text(
-          label,
-          style: TextStyle(color: color, fontSize: 12),
-        ),
-      ),
-      decoration: BoxDecoration(
-          color: backgroundColor, borderRadius: BorderRadius.circular(6)),
-    );
   }
 }

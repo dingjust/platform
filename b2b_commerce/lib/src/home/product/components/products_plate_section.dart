@@ -73,8 +73,9 @@ class _TodayNew extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => PlateProductsPage(
-                      condition: ProductCondition([], '',
-                          createdDateFrom: todayFrom, createdDateTo: todayTo),
+                  title: '${item.title}',
+                  condition: ProductCondition([], '',
+                      createdDateFrom: todayFrom, createdDateTo: todayTo),
                     )));
           },
           child: Container(

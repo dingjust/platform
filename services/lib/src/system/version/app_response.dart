@@ -20,9 +20,10 @@ class AppVersionResponse {
 
   @JsonKey(fromJson: _dateTimefromMilliseconds)
   final DateTime releaseDate;
-  
+
   final String releaseDescription;
   final String url;
+  final bool force;
 
   AppVersionResponse(
       this.id,
@@ -34,7 +35,8 @@ class AppVersionResponse {
       this.releaseVersion,
       this.releaseDate,
       this.releaseDescription,
-      this.url);
+      this.url,
+      this.force);
 
   factory AppVersionResponse.fromJson(Map<String, dynamic> json) =>
       _$AppVersionResponseFromJson(json);

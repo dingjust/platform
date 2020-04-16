@@ -22,7 +22,7 @@ class ColorState{
     if (_colorEntries == null) {
       //获取所有标签
       var colors = await ProductRepositoryImpl().colors();
-      colors = colors.sublist(0,20);
+      // colors = colors.sublist(0,20);
       _colorEntries = colors.map((color){
         return ColorSizeModel(colorCode: color.code,colorName: color.name,customize: false);
       }).toList();

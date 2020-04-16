@@ -5,7 +5,7 @@ import 'package:b2b_commerce/src/_shared/orders/quote/quote_list_item.dart';
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
 import 'package:b2b_commerce/src/business/supplier/company_purchase_list.dart';
 import 'package:b2b_commerce/src/business/supplier/company_quote_list.dart';
-import 'package:b2b_commerce/src/home/factory/factory_item.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
