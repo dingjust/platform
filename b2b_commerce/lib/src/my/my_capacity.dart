@@ -337,7 +337,8 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
                       ),
                     ),
                     Container(
-                      child: Text('：${widget.model.showTimes}次'),
+                      child: Text(
+                          '：${widget.model?.statistics?.showStatistics ?? 0}次'),
                     ),
                   ],
                 ),
@@ -354,7 +355,8 @@ class _MyCapacityItemState extends State<MyCapacityItem> {
                       ),
                     ),
                     Container(
-                      child: Text('：${widget.model.clickTimes}次'),
+                      child: Text(
+                          '：${widget.model?.statistics?.viewStatistics ?? 0}次'),
                     ),
                   ],
                 ),

@@ -53,6 +53,7 @@ class AppVersion {
         }
       }
     }
+    return true;
   }
 
   void checkVersion(String packageVersion, String name) async {

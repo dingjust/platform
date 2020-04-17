@@ -73,7 +73,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               mediaType: thumbnail.mediaType,
               mime: thumbnail.mime,
               name: thumbnail.name,
-              url: '${thumbnail.detailUrl()}',
+              url: '${thumbnail.normalUrl()}',
               id: thumbnail.id))
           .toList();
     }
@@ -211,7 +211,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ? '出货周期：${widget.product.basicProduction}件内${widget.product
                     .productionDays}天，每加${widget.product
                     .productionIncrement}件多1天'
-                    : '出货周期：${widget.product.deliveryDays}天内',
+                    : '出货周期：72小时内',
                 style: TextStyle(fontSize: 16, color: Colors.black87),
               )),
           Opacity(
@@ -380,24 +380,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             Column(
                 children: widget.product.images
-                    .map(
-                      (media) =>
-                      CachedNetworkImage(
-                          imageUrl: '${media.detailUrl()}',
-                          fit: BoxFit.fitWidth,
-                          placeholder: (context, url) =>
-                              SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              ),
-                          errorWidget: (context, url, error) =>
-                              SpinKitRing(
-                                color: Colors.black12,
-                                lineWidth: 2,
-                                size: 30,
-                              )),
-                )
+                    .map((media) =>
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Container(
+                              child: CachedNetworkImage(
+                                  imageUrl: '${media.normalUrl()}',
+                                  fit: BoxFit.fitWidth,
+                                  placeholder: (context, url) =>
+                                      SpinKitRing(
+                                        color: Colors.black12,
+                                        lineWidth: 2,
+                                        size: 30,
+                                      ),
+                                  errorWidget: (context, url, error) =>
+                                      SpinKitRing(
+                                        color: Colors.black12,
+                                        lineWidth: 2,
+                                        size: 30,
+                                      )),
+                            ))
+                      ],
+                    ))
                     .toList()),
           ],
         ));

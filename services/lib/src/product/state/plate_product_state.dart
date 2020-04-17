@@ -52,10 +52,10 @@ class PlateProductState extends PageState {
         if (totalElements == 0 || currentPage + 1 == totalPages) {
           _getRecommendProducts();
         }
-      }
 
-      ///通知刷新
-      notifyListeners();
+        ///通知刷新
+        notifyListeners();
+      }
     });
   }
 

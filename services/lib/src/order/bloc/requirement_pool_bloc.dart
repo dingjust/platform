@@ -56,6 +56,7 @@ class RequirementPoolBLoC extends BLoCBase {
         if (isRecommend) {
           response = await http$.post(OrderApis.allRecommendedOrders,
               data: data,
+              options: Options(headers: {'statistics': true}),
               queryParameters: {
                 'page': currentPage,
                 'size': pageSize,
@@ -65,6 +66,7 @@ class RequirementPoolBLoC extends BLoCBase {
         } else {
           response = await http$.post(OrderApis.allOrdersForFactory,
               data: data,
+              options: Options(headers: {'statistics': true}),
               queryParameters: {
                 'page': currentPage,
                 'size': pageSize,
@@ -106,6 +108,7 @@ class RequirementPoolBLoC extends BLoCBase {
           if (isRecommend) {
             response = await http$.post(OrderApis.allRecommendedOrders,
                 data: data,
+                options: Options(headers: {'statistics': true}),
                 queryParameters: {
                   'page': currentPage,
                   'size': pageSize,
@@ -114,6 +117,7 @@ class RequirementPoolBLoC extends BLoCBase {
           } else {
             response = await http$.post(OrderApis.allOrdersForFactory,
                 data: data,
+                options: Options(headers: {'statistics': true}),
                 queryParameters: {
                   'page': currentPage,
                   'size': pageSize,

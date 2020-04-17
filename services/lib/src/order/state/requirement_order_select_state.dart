@@ -53,16 +53,17 @@ class RequirementOrderSelectState extends PageState {
     }
 
     if (response != null) {
-      RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
+      RequirementOrdersResponse ordersResponse =
+      RequirementOrdersResponse.fromJson(response.data);
       _requiremenOrderModels = ordersResponse.content;
       pageSize = ordersResponse.size;
       currentPage = ordersResponse.number;
       totalPages = ordersResponse.totalPages;
       totalElements = ordersResponse.totalElements;
-    }
 
-    ///通知刷新
-    notifyListeners();
+      ///通知刷新
+      notifyListeners();
+    }
   }
 
   @override
@@ -86,7 +87,8 @@ class RequirementOrderSelectState extends PageState {
         }
 
         if (response != null) {
-          RequirementOrdersResponse ordersResponse = RequirementOrdersResponse.fromJson(response.data);
+          RequirementOrdersResponse ordersResponse =
+          RequirementOrdersResponse.fromJson(response.data);
           _requiremenOrderModels.addAll(ordersResponse.content);
           pageSize = ordersResponse.size;
           currentPage = ordersResponse.number;

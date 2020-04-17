@@ -131,7 +131,7 @@ class _ApparelProductPricesInputPageState
                       _buildSpotStepeedList(),
                       _createSpotItemBtn(),
                       Divider(height: 0,),
-                      _buildDeliveryDays(context),
+                      // _buildDeliveryDays(context),
                       SizedBox(height: 10,child: Container(color: Colors.grey[100],),),
                     ],
                   ),
@@ -151,29 +151,29 @@ class _ApparelProductPricesInputPageState
             )));
   }
 
-  Widget _buildDeliveryDays(BuildContext context) {
-    return Offstage(
-      offstage: !isShowSpotSteppedPrices,
-      child: Container(
-        color: Colors.white,
-        child: TextFieldComponent(
-                    leadingWidth: 140,
-                    focusNode: _deliveryDaysFocusNode,
-                    controller: _deliveryDaysController,
-                    textInputAction: TextInputAction.next,
-                    leadingText: Text('发货周期（天）',
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
-                    hintText: widget.enabled ? '输入天数' : '',
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
-                    enabled: widget.enabled,
-                  ),
-      ),
-    );
-  }
+  // Widget _buildDeliveryDays(BuildContext context) {
+  //   return Offstage(
+  //     offstage: !isShowSpotSteppedPrices,
+  //     child: Container(
+  //       color: Colors.white,
+  //       child: TextFieldComponent(
+  //                   leadingWidth: 140,
+  //                   focusNode: _deliveryDaysFocusNode,
+  //                   controller: _deliveryDaysController,
+  //                   textInputAction: TextInputAction.next,
+  //                   leadingText: Text('发货周期（天）',
+  //                       style: TextStyle(
+  //                         fontSize: 16,
+  //                       )),
+  //                   hintText: widget.enabled ? '输入天数' : '',
+  //                   inputFormatters: [
+  //                     WhitelistingTextInputFormatter.digitsOnly
+  //                   ],
+  //                   enabled: widget.enabled,
+  //                 ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildFutureStepeedList() {
     return Offstage(

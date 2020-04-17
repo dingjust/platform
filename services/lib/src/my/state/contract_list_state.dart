@@ -7,11 +7,10 @@ import 'package:services/src/state/state.dart';
 class ContractListState extends PageState {
   ContractListState();
 
-  Map<String,Object> _queryFormData = {};
+  Map<String, Object> _queryFormData = {};
 
   List<ContractModel> _contractModels;
   bool _showTopBtn = false;
-
 
   List<ContractModel> get contractModels {
     if (_contractModels == null) {
@@ -20,14 +19,12 @@ class ContractListState extends PageState {
     return _contractModels;
   }
 
-
   bool get showTopBtn => _showTopBtn;
 
   set showTopBtn(bool value) {
     _showTopBtn = value;
     notifyListeners();
   }
-
 
   Map<String, Object> get queryFormData => _queryFormData;
 
@@ -51,10 +48,10 @@ class ContractListState extends PageState {
       currentPage = response.number;
       totalPages = response.totalPages;
       totalElements = response.totalElements;
-    }
 
-    ///通知刷新
-    notifyListeners();
+      ///通知刷新
+      notifyListeners();
+    }
   }
 
   @override
@@ -78,8 +75,7 @@ class ContractListState extends PageState {
           totalPages = response.totalPages;
           totalElements = response.totalElements;
         }
-
-      }else{
+      } else {
         isDownEnd = true;
       }
       //异步调用结束，通知加载组件

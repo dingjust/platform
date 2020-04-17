@@ -153,6 +153,11 @@ class B2BIcons {
   ///三角下
   static const IconData triangle_down = const IconData(0xe680,
       fontFamily: 'b2bIcons21', matchTextDirection: true);
+
+
+  /// 
+  static const IconData click = const IconData(0xe600,
+      fontFamily: 'b2bIcons21', matchTextDirection: true);
 }
 
 class CommonImage {

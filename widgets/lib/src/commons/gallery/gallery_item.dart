@@ -24,7 +24,7 @@ class GalleryItemThumbnail extends StatelessWidget {
         child: Hero(
           tag: galleryExampleItem.model.id,
           child:
-              Image.network(galleryExampleItem.model.detailUrl(), height: 80.0),
+          Image.network(galleryExampleItem.model.normalUrl(), height: 80.0),
         ),
       ),
     );

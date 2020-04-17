@@ -1,8 +1,9 @@
 import 'package:b2b_commerce/src/_shared/widgets/image_factory.dart';
-import 'package:b2b_commerce/src/home/factory/factory_item.dart';
+import 'package:b2b_commerce/src/home/_shared/widgets/factory_widget.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+import 'package:services/services.dart';
 
 class CapacityMatchingItem extends StatelessWidget {
   final FactoryCapacityModel model;
@@ -13,6 +14,9 @@ class CapacityMatchingItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        //点击量
+        ItemRepository().onDetail(model.id);
+
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -25,7 +29,7 @@ class CapacityMatchingItem extends StatelessWidget {
         );
       },
       child: Container(
-        height: 200,
+        height: 160,
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         padding: EdgeInsets.all(10),
         color: Colors.white,
@@ -33,7 +37,7 @@ class CapacityMatchingItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             _buildTitleRow(),
-            _buildFactoryCategoryCapacitiesWrap(context),
+            _buildMain(context),
             _buildBottomRow()
           ],
         ),
@@ -43,19 +47,33 @@ class CapacityMatchingItem extends StatelessWidget {
 
   Widget _buildTitleRow() {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
             child: Text(
               '${model.title}',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
             ),
-          )
+          ),
+          _buildDateItem()
         ],
       ),
+    );
+  }
+
+  Widget _buildMain(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        ImageFactory.buildThumbnailImage(model.belongTo.profilePicture,
+            size: 40, containerSize: 50),
+        Container(
+          width: 10,
+        ),
+        Expanded(child: _buildFactoryCategoryCapacitiesWrap(context)),
+      ],
     );
   }
 
@@ -73,20 +91,20 @@ class CapacityMatchingItem extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 5),
                 child: Row(
                   children: <Widget>[
+                    Container(
+                        child: Text(
+                          '${capacity.category.name}',
+                          style: TextStyle(fontSize: 10),
+                        )),
                     Expanded(
                       child: Container(
                           child: Text(
-                            '${capacity.category.name}',
+                            '${capacity.capacityRange}件/天',
+                            style: TextStyle(color: Colors.red, fontSize: 10),
                             overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
                           )),
-                    ),
-                    Container(
-                        child: Text(
-                          '${capacity.capacityRange}件/天',
-                          style: TextStyle(
-                            color: Colors.red,
-                          ),
-                        )),
+                    )
                   ],
                 ),
                 decoration: BoxDecoration(
@@ -121,37 +139,17 @@ class CapacityMatchingItem extends StatelessWidget {
 
   Widget _buildBottomRow() {
     return Row(
-      children: <Widget>[_buildFactoryItem(), _buildDateItem()],
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            '${model.belongTo.name}',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        ApprovedTag(model: model.belongTo)
+      ],
     );
-  }
-
-  Widget _buildFactoryItem() {
-    return Expanded(
-        flex: 1,
-        child: Row(
-          children: <Widget>[
-            ImageFactory.buildThumbnailImage(model.belongTo.profilePicture,
-                size: 50, containerSize: 60),
-            Expanded(
-              flex: 1,
-              child: Container(
-                  height: 50,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '${model.belongTo.name}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      StarLevelAndOrdersCountText(
-                        model: model.belongTo,
-                      )
-                    ],
-                  )),
-            )
-          ],
-        ));
   }
 
   Widget _buildDateItem() {
@@ -174,11 +172,11 @@ class CapacityMatchingItem extends StatelessWidget {
       children: <Widget>[
         Text(
           dateStr,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
         Text(
           '空闲日期',
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 12),
         ),
       ],
     );

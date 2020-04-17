@@ -583,10 +583,10 @@ class ApparelProductFormState extends State<ApparelProductFormPage> {
         _showValidateMsg(context, '请填写现货/尾货阶梯价');
         return;
       }
-      if(_product.deliveryDays == null){
-        _showValidateMsg(context, '请填写现货/尾货发货周期');
-        return;
-      }
+      // if(_product.deliveryDays == null){
+      //   _showValidateMsg(context, '请填写现货/尾货发货周期');
+      //   return;
+      // }
 
 
       if(_product.spotSteppedPrices.length >1){

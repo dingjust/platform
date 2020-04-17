@@ -47,7 +47,9 @@ class CapacityRepository {
     Response response;
     try {
       response = await http$.post(CapacityApis.search,
-          data: data, queryParameters: params);
+          data: data,
+          options: Options(headers: {'statistics': true}),
+          queryParameters: params);
     } on DioError catch (e) {
       print(e);
     }

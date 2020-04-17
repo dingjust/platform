@@ -33,6 +33,24 @@ part 'models.g.dart';
 
 abstract class ItemModel {
   int id;
+
+  StatisticsModel statistics;
+}
+
+/// 统计
+@JsonSerializable()
+class StatisticsModel {
+  int viewStatistics;
+
+  int showStatistics;
+
+  StatisticsModel({this.viewStatistics, this.showStatistics});
+
+  factory StatisticsModel.fromJson(Map<String, dynamic> json) =>
+      json == null ? null : _$StatisticsModelFromJson(json);
+
+  static Map<String, dynamic> toJson(StatisticsModel model) =>
+      model == null ? null : _$StatisticsModelToJson(model);
 }
 
 /// 枚举

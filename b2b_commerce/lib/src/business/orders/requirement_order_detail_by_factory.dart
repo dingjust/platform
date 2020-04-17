@@ -38,10 +38,6 @@ class _RequirementOrderDetailByFactoryPageState
   int _flexL = 2;
   int _flexR = 3;
 
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<RequirementOrderModel>(
@@ -126,6 +122,9 @@ class _RequirementOrderDetailByFactoryPageState
         .getRequirementOrderDetail(widget.code);
 
     orderModel = detail;
+
+    //点击量
+    ItemRepository().onDetail(orderModel.id);
 
     quotesList = await RequirementOrderRepository().getRequirementOrderQuotes(
       code: detail.code,
@@ -414,7 +413,9 @@ class _RequirementOrderDetailByFactoryPageState
                 Expanded(
                   flex: _flexR,
                   child: Text(
-                    orderModel.details.maxExpectedPrice == -1 ? '面议' :'￥${orderModel.details.maxExpectedPrice ?? 0}',
+                    orderModel.details.maxExpectedPrice == -1
+                        ? '面议'
+                        : '￥${orderModel.details.maxExpectedPrice ?? 0}',
                     style: TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 ),

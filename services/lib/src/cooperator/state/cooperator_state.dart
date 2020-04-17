@@ -7,11 +7,11 @@ import 'package:services/src/state/state.dart';
 class CooperatorState extends PageState {
   String factoryUid;
   CooperatorState({this.factoryUid});
-  Map<String,Object> _queryFormData = {};
+
+  Map<String, Object> _queryFormData = {};
 
   List<CooperatorModel> _cooperatorModels;
   bool _showTopBtn = false;
-
 
   List<CooperatorModel> get cooperatorModels {
     if (_cooperatorModels == null) {
@@ -20,14 +20,12 @@ class CooperatorState extends PageState {
     return _cooperatorModels;
   }
 
-
   bool get showTopBtn => _showTopBtn;
 
   set showTopBtn(bool value) {
     _showTopBtn = value;
     notifyListeners();
   }
-
 
   Map<String, Object> get queryFormData => _queryFormData;
 
@@ -41,10 +39,11 @@ class CooperatorState extends PageState {
     isDownEnd = false;
     var response;
 //    if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-      response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
-        'page': currentPage,
-        'size': pageSize,
-      });
+    response =
+    await CooperatorRepositoryImpl().list(data: _queryFormData, params: {
+      'page': currentPage,
+      'size': pageSize,
+    });
 //    }else{
 //      response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
 //        'page': currentPage,
@@ -58,15 +57,14 @@ class CooperatorState extends PageState {
       currentPage = response.number;
       totalPages = response.totalPages;
       totalElements = response.totalElements;
-    }
 
-    ///通知刷新
-    notifyListeners();
+      ///通知刷新
+      notifyListeners();
+    }
   }
 
   @override
   void loadMore() async {
-
     if (!lock) {
       //异步调用开始，通知加载组件
       workingStart();
@@ -74,7 +72,8 @@ class CooperatorState extends PageState {
       if (currentPage + 1 != totalPages) {
         isDownEnd = false;
         var response;
-        response = await CooperatorRepositoryImpl().list(data:_queryFormData, params:{
+        response = await CooperatorRepositoryImpl()
+            .list(data: _queryFormData, params: {
           'page': currentPage + 1,
           'size': pageSize,
         });
@@ -86,8 +85,7 @@ class CooperatorState extends PageState {
           totalPages = response.totalPages;
           totalElements = response.totalElements;
         }
-
-      }else{
+      } else {
         isDownEnd = true;
       }
       //异步调用结束，通知加载组件

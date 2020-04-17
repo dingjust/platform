@@ -151,7 +151,7 @@ class ProductsHeaderCarousels extends StatelessWidget {
       List<MediaModel> medias = state
           .headerCarousels()
           .where((carousel) => carousel.media != null)
-          .map((carousel) => MediaModel(url: carousel.media.detailUrl()))
+          .map((carousel) => MediaModel(url: carousel.media.normalUrl()))
           .toList();
 
       // //若为空采用静态图

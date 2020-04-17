@@ -168,11 +168,9 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                       setState(() {
                         widget.order.details.pictures = _product.images;
                         widget.order.details.productName = _product.name;
-                        widget.order.details.productSkuID =
-                            _product.skuID;
+                        widget.order.details.productSkuID = _product.skuID;
                         if (_product.category != null) {
-                          widget.order.details.category =
-                              _product.category;
+                          widget.order.details.category = _product.category;
                         }
                       });
                     }
@@ -205,8 +203,7 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
                 onPublish(widget.factoryUid);
               },
             ),
-          )
-      ),
+          )),
     );
   }
 
@@ -510,8 +507,8 @@ class _RequirementOrderFromState extends State<RequirementOrderFrom> {
     }
     if (isSubmit) {
       if (widget.isCreate) {
-        String code = await RequirementOrderRepository().publishNewRequirement(
-            widget.order, factoryUid, false);
+        String code = await RequirementOrderRepository()
+            .publishNewRequirement(widget.order, factoryUid, false);
         if (code != null && code != '') {
           widget.order.code = code;
           //根据code查询明

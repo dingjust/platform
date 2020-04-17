@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:b2b_commerce/src/_shared/orders/purchase/purchase_order_select_list.dart';
-import 'package:b2b_commerce/src/_shared/products/apparel_product_search_list.dart';
 import 'package:b2b_commerce/src/business/search/history_search.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';

@@ -72,10 +72,10 @@ class SubContractPoolState extends PageState {
       currentPage = response.number;
       totalPages = response.totalPages;
       totalElements = response.totalElements;
-    }
 
-    ///通知刷新
-    notifyListeners();
+      ///通知刷新
+      notifyListeners();
+    }
   }
 
   @override

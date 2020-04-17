@@ -19,10 +19,10 @@ class ProductHomeState with ChangeNotifier {
     await ProductPageRepository().productHomePlateItems().then((response) {
       if (response != null) {
         _items = response;
-      }
 
-      ///通知刷新
-      notifyListeners();
+        ///通知刷新
+        notifyListeners();
+      }
     });
   }
 }

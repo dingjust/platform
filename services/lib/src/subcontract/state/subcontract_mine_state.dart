@@ -7,7 +7,7 @@ import 'package:services/src/subcontract/repository/subcontract_repository_impl.
 
 ///工厂产能状态管理
 class SubContractMineState extends PageState {
-  Map<String,PageEntry> _subContractsMap = {
+  Map<String, PageEntry> _subContractsMap = {
     '0': PageEntry(currentPage: 0, size: 10, data: null),
     '1': PageEntry(currentPage: 0, size: 10, data: null),
     '2': PageEntry(currentPage: 0, size: 10, data: null),
@@ -16,7 +16,7 @@ class SubContractMineState extends PageState {
   String _keyword;
   String _key;
   bool _showTopBtn = false;
-  Map<String,dynamic> _queryFromData = {};
+  Map<String, dynamic> _queryFromData = {};
 
   bool get showTopBtn => _showTopBtn;
 
@@ -28,7 +28,8 @@ class SubContractMineState extends PageState {
   @override
   void getData() async {
     isDownEnd = false;
-    var response = await SubContractRepositoryImpl().getSubcontracts(data:_queryFromData, params:{
+    var response = await SubContractRepositoryImpl()
+        .getSubcontracts(data: _queryFromData, params: {
       'page': currentPage,
       'size': pageSize,
     });
@@ -39,16 +40,17 @@ class SubContractMineState extends PageState {
       currentPage = response.number;
       totalPages = response.totalPages;
       totalElements = response.totalElements;
-    }
 
-    ///通知刷新
-    notifyListeners();
+      ///通知刷新
+      notifyListeners();
+    }
   }
 
   void getMapData() async {
     print(_queryFromData);
     isDownEnd = false;
-    var response = await SubContractRepositoryImpl().getSubcontracts(data:_queryFromData, params:{
+    var response = await SubContractRepositoryImpl()
+        .getSubcontracts(data: _queryFromData, params: {
       'page': _subContractsMap[_key].currentPage,
       'size': _subContractsMap[_key].size,
     });
@@ -59,22 +61,24 @@ class SubContractMineState extends PageState {
       _subContractsMap[_key].totalPages = response.totalPages;
       _subContractsMap[_key].totalElements = response.totalElements;
       _subContractsMap[_key].data = response.content;
-    }
 
-    ///通知刷新
-    notifyListeners();
+      ///通知刷新
+      notifyListeners();
+    }
   }
 
   void loadMoreMapData() async {
     print(_subContractsMap[_key].currentPage);
     print(_subContractsMap[_key].totalPages);
-    if(_subContractsMap[_key].data.isNotEmpty){
+    if (_subContractsMap[_key].data.isNotEmpty) {
       //接口调用：
-      if (_subContractsMap[_key].currentPage + 1 != _subContractsMap[_key].totalPages) {
+      if (_subContractsMap[_key].currentPage + 1 !=
+          _subContractsMap[_key].totalPages) {
         //异步调用开始，通知加载组件
         workingStart();
         isDownEnd = false;
-        var response= await SubContractRepositoryImpl().getSubcontracts(data:_queryFromData, params:{
+        var response = await SubContractRepositoryImpl()
+            .getSubcontracts(data: _queryFromData, params: {
           'page': _subContractsMap[_key].currentPage + 1,
           'size': _subContractsMap[_key].size,
         });
@@ -88,11 +92,10 @@ class SubContractMineState extends PageState {
         }
         //异步调用结束，通知加载组件
         workingEnd();
-      }else{
+      } else {
         isDownEnd = true;
       }
     }
-
   }
 
   @override
@@ -103,7 +106,8 @@ class SubContractMineState extends PageState {
       //接口调用：
       if (currentPage + 1 != totalPages) {
         isDownEnd = false;
-        var response= await SubContractRepositoryImpl().getSubcontracts(data:_queryFromData, params:{
+        var response = await SubContractRepositoryImpl()
+            .getSubcontracts(data: _queryFromData, params: {
           'page': currentPage + 1,
           'size': pageSize,
         });
@@ -115,8 +119,7 @@ class SubContractMineState extends PageState {
           totalPages = response.totalPages;
           totalElements = response.totalElements;
         }
-
-      }else{
+      } else {
         isDownEnd = true;
       }
       //异步调用结束，通知加载组件
@@ -136,7 +139,6 @@ class SubContractMineState extends PageState {
     notifyListeners();
   }
 
-
   List<SubContractModel> get subcontractModels {
     if (_subcontractModels == null) {
       getData();
@@ -145,7 +147,7 @@ class SubContractMineState extends PageState {
   }
 
   List<SubContractModel> get subcontractModelsByMap {
-    if(_key == null){
+    if (_key == null) {
       _key = '0';
     }
     if (_subContractsMap[_key].data == null) {
@@ -158,7 +160,7 @@ class SubContractMineState extends PageState {
 
   set key(String value) {
     _key = value;
-    switch(_key){
+    switch (_key) {
       case '0':
         _queryFromData['canneled'] = null;
         break;
@@ -169,14 +171,13 @@ class SubContractMineState extends PageState {
         _queryFromData['canneled'] = true;
         break;
     }
-
   }
 
   String get keyword {
-   if(_keyword == null){
-     _keyword = '';
-   }
-   return _keyword;
+    if (_keyword == null) {
+      _keyword = '';
+    }
+    return _keyword;
   }
 
   set keyword(String value) {
@@ -185,5 +186,4 @@ class SubContractMineState extends PageState {
     notifyListeners();
     clear();
   }
-
 }

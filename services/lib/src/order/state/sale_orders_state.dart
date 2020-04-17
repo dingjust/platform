@@ -101,10 +101,10 @@ class SaleOrdersState extends PageState {
         _ordersMap[status].totalElements = ordersResponse.totalElements;
         _ordersMap[status].data.clear();
         _ordersMap[status].data.addAll(ordersResponse.content);
-      }
 
-      ///通知刷新
-      notifyListeners();
+        ///通知刷新
+        notifyListeners();
+      }
     }
   }
 

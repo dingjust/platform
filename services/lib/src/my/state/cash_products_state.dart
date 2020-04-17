@@ -12,14 +12,12 @@ class CashProductsState extends PageState {
   List<ApparelProductModel> _apparelProductModels;
   bool _showTopBtn = false;
 
-
   List<ApparelProductModel> get apparelProductModels {
     if (_apparelProductModels == null) {
       getData();
     }
     return _apparelProductModels;
   }
-
 
   bool get showTopBtn => _showTopBtn;
 
@@ -31,13 +29,17 @@ class CashProductsState extends PageState {
   @override
   void getData() async {
     var response;
-    if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-      response = await ProductRepositoryImpl().getProductsOfFactory({'approvalStatuses':'approved'}, {
+    if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+      response = await ProductRepositoryImpl().getProductsOfFactory({
+        'approvalStatuses': 'approved'
+      }, {
         'page': currentPage,
         'size': pageSize,
-      },factoryUid);
-    }else{
-      response = await ProductRepositoryImpl().list({'approvalStatuses':'approved'}, {
+      }, factoryUid);
+    } else {
+      response = await ProductRepositoryImpl().list({
+        'approvalStatuses': 'approved'
+      }, {
         'page': currentPage,
         'size': pageSize,
       });
@@ -49,28 +51,31 @@ class CashProductsState extends PageState {
       currentPage = response.number;
       totalPages = response.totalPages;
       totalElements = response.totalElements;
-    }
 
-    ///通知刷新
-    notifyListeners();
+      ///通知刷新
+      notifyListeners();
+    }
   }
 
   @override
   void loadMore() async {
-
     if (!lock) {
       //异步调用开始，通知加载组件
       workingStart();
       //接口调用：
       if (currentPage + 1 != totalPages) {
         var response;
-        if(UserBLoC.instance.currentUser.type == UserType.BRAND){
-          response = await ProductRepositoryImpl().getProductsOfFactory({'approvalStatuses':'approved'}, {
+        if (UserBLoC.instance.currentUser.type == UserType.BRAND) {
+          response = await ProductRepositoryImpl().getProductsOfFactory({
+            'approvalStatuses': 'approved'
+          }, {
             'page': currentPage + 1,
             'size': pageSize,
-          },factoryUid);
-        }else{
-          response = await ProductRepositoryImpl().list({'approvalStatuses':'approved'}, {
+          }, factoryUid);
+        } else {
+          response = await ProductRepositoryImpl().list({
+            'approvalStatuses': 'approved'
+          }, {
             'page': currentPage + 1,
             'size': pageSize,
           });
