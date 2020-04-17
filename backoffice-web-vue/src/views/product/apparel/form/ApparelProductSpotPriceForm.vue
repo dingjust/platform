@@ -64,22 +64,22 @@
         </div>
       </el-col>
     </el-row>
-    <el-divider></el-divider>
-    <div class="product-form-row">
-      <el-row type="flex" align="middle">
-        <div style="width:100px">
-          <h6 class="info-input-prepend" style="width:85px">发货周期:</h6>
-        </div>
-        <el-form-item label="" class="purchase-form-item" :rules="[
-                { required: true, message: '请输入发货周期', trigger: 'blur'}]"
-                      prop="deliveryDays">
-          <el-row type="flex" align="middle">
-            <el-input v-model="slotData.deliveryDays" size="mini" :disabled="isRead"></el-input>
-            <span style="margin-left: 10px">天</span>
-          </el-row>
-        </el-form-item>
-      </el-row>
-    </div>
+<!--    <el-divider></el-divider>-->
+<!--    <div class="product-form-row">-->
+<!--      <el-row type="flex" align="middle">-->
+<!--        <div style="width:100px">-->
+<!--          <h6 class="info-input-prepend" style="width:85px">发货周期:</h6>-->
+<!--        </div>-->
+<!--        <el-form-item label="" class="purchase-form-item" :rules="[-->
+<!--                { required: true, message: '请输入发货周期', trigger: 'blur'}]"-->
+<!--                      prop="deliveryDays">-->
+<!--          <el-row type="flex" align="middle">-->
+<!--            <el-input v-model="slotData.deliveryDays" size="mini" :disabled="isRead"></el-input>-->
+<!--            <span style="margin-left: 10px">天</span>-->
+<!--          </el-row>-->
+<!--        </el-form-item>-->
+<!--      </el-row>-->
+<!--    </div>-->
   </div>
 </template>
 
