@@ -48,12 +48,12 @@
               <el-row type="flex" align="middle" style="margin-top:10px;">
                 <el-col :span="12">
                   <el-row type="flex">
-                    <h6 class="capacity-text info" style="margin-left:20px;">浏览量：{{slotData.showTimes}}</h6>
+                    <h6 class="capacity-text info" style="margin-left:20px;">浏览量：{{slotData.statistics!=null?slotData.statistics.showStatistics:0}}</h6>
                   </el-row>
                 </el-col>
                 <el-col :span="12">
                   <el-row type="flex" justify="center">
-                    <h6 class="capacity-text info" style="margin-left:20px;">点击量：{{slotData.clickTimes}}</h6>
+                    <h6 class="capacity-text info" style="margin-left:20px;">点击量：{{slotData.statistics!=null?slotData.statistics.viewStatistics:0}}</h6>
                   </el-row>
                 </el-col>
               </el-row>
