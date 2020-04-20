@@ -7,7 +7,7 @@
             <h6 style="color: #F56C6C" class="title-style">*图片1</h6>
           </template>
           <images-upload-single :formData="carouselData[0].media" @getPicture="getPicture($event, 0)" @removePicture="removePicture(0)"/>
-          <h6 style="color: #909399;padding-left: 155px;">(1920 * 100)</h6>
+          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
         </el-form-item>
         <el-form-item>
           <template slot="label">
@@ -22,13 +22,43 @@
             <h6 class="title-style">图片2</h6>
           </template>
           <images-upload-single :formData="carouselData[1].media" @getPicture="getPicture($event, 1)" @removePicture="removePicture(1)"/>
-          <h6 style="color: #909399;padding-left: 155px;">(1920 * 100)</h6>
+          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
         </el-form-item>
         <el-form-item>
           <template slot="label">
             <h6 class="title-style">绑定链接：</h6>
           </template>
           <el-input v-model="carouselData[1].url" size="mini" class="input-style"></el-input>
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item>
+          <template slot="label">
+            <h6 class="title-style">图片3</h6>
+          </template>
+          <images-upload-single :formData="carouselData[2].media" @getPicture="getPicture($event, 2)" @removePicture="removePicture(2)"/>
+          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
+        </el-form-item>
+        <el-form-item>
+          <template slot="label">
+            <h6 class="title-style">绑定链接：</h6>
+          </template>
+          <el-input v-model="carouselData[2].url" size="mini" class="input-style"></el-input>
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item>
+          <template slot="label">
+            <h6 class="title-style">图片4</h6>
+          </template>
+          <images-upload-single :formData="carouselData[3].media" @getPicture="getPicture($event, 3)" @removePicture="removePicture(3)"/>
+          <h6 style="color: #909399;padding-left: 60px;">(1920 * 1080)</h6>
+        </el-form-item>
+        <el-form-item>
+          <template slot="label">
+            <h6 class="title-style">绑定链接：</h6>
+          </template>
+          <el-input v-model="carouselData[3].url" size="mini" class="input-style"></el-input>
         </el-form-item>
       </el-row>
     </el-form>
@@ -42,7 +72,7 @@
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
   import ImagesUploadSingle from '../../../../components/custom/ImagesUploadSingle';
   export default {
-    name: 'PromoteProductBanner',
+    name: 'PromoteProductFactoryCarousel',
     props: [],
     components: {ImagesUploadSingle, ImagesUpload},
     computed: {
@@ -62,12 +92,12 @@
           }
         })
         const length = result.data.length
-        for (let i = 0; i < 2 - length; i++) {
+        for (let i = 0; i < 4 - length; i++) {
           let item = {
             media: {},
             url: '',
             active: true,
-            type: 'CT005'
+            type: 'CT002'
           }
           result.data.push(item);
         }
@@ -88,6 +118,14 @@
           this.$message.error('至少要有1张轮播图');
           return;
         }
+        // let formData = [];
+        // this.carouselData.forEach((item, index) => {
+        //   if (JSON.stringify(item.media) != '{}') {
+        //     formData.push(item);
+        //   }
+        // });
+        // console.log(formData);
+        // return;
         const url = this.apis().updateAllCarousels();
         const result = await this.$http.put(url, this.carouselData);
         if (result.code === 0) {
@@ -102,8 +140,8 @@
     data () {
       return {
         count: 0,
-        carouselData: this.$store.state.PromoteProductModule.bannerFormData,
-        carouselType: 'CT005'
+        carouselData: this.$store.state.PromoteProductModule.carouselFactoryFormData,
+        carouselType: 'CT002'
       }
     },
     watch: {
@@ -125,29 +163,28 @@
 
 <style scoped>
 
-  .product-carousel-style {
-    padding: 15px;
-  }
+ .product-carousel-style {
+   padding: 15px;
+ }
 
-  .title-style {
-    padding-top: 25px;
-    padding-right: 10px;
-  }
+ .title-style {
+   padding-top: 40px;
+   padding-right: 10px;
+ }
 
-  .input-style {
-    margin-top: 18px;
-    width: 400px
-  }
+ .input-style {
+   margin-top: 35px;
+   width: 400px
+ }
 
-  /deep/ .el-upload--picture-card {
-    width: 400px;
-    height: 66px;
-    line-height: 66px;
-  }
+ /deep/ .el-upload--picture-card {
+   width: 192px;
+   height: 108px;
+   line-height: 108px;
+ }
 
-  /deep/ .el-upload-list--picture-card .el-upload-list__item {
-    width: 400px;
-    height: 66px;
-  }
+ /deep/ .el-upload-list--picture-card .el-upload-list__item {
+   width: 192px;
+   height: 108px;
+ }
 </style>
-

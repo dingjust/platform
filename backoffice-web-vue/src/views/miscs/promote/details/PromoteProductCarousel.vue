@@ -92,7 +92,7 @@
           }
         })
         const length = result.data.length
-        for (let i = 0; i < 4-length; i++) {
+        for (let i = 0; i < 4 - length; i++) {
           let item = {
             media: {},
             url: '',
@@ -101,9 +101,7 @@
           }
           result.data.push(item);
         }
-        if (length > 0) {
-          this.carouselData = result.data;
-        }
+        this.carouselData = result.data;
         this.$emit('returnCount');
       },
       getPicture (picture, index) {
