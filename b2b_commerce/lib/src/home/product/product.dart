@@ -77,7 +77,7 @@ class RecommendProductItem extends StatelessWidget {
                         imageUrl: '${model?.thumbnails[0].normalUrl()}',
                         width: 200,
                         height: 200,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         imageBuilder: (context, imageProvider) =>
                             Container(
                               width: 200,
@@ -85,7 +85,7 @@ class RecommendProductItem extends StatelessWidget {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: imageProvider,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fill,
                                 ),
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(5),

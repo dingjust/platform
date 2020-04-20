@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:b2b_commerce/src/home/_shared/widgets/dj_bottom_sheet.dart'
 as dj;
 import 'package:b2b_commerce/src/home/_shared/widgets/product_attributes_tab.dart';
@@ -6,7 +8,6 @@ import 'package:b2b_commerce/src/home/product/buy_purchase_form.dart';
 import 'package:b2b_commerce/src/home/product/buy_stock_form.dart';
 import 'package:b2b_commerce/src/my/my_factory.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -97,7 +98,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 leading: IconButton(
                     icon: Icon(
                       B2BIcons.left_fill,
-                      color: Color.fromRGBO(211, 211, 211, 0.7),
+                      color: Color.fromRGBO(0, 0, 0, 0.45),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -114,7 +115,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               SliverList(
                   delegate: SliverChildListDelegate([
                     // ProductCarousel(thumbnails, 400),
-                    _buildTypeSection(),
+                    _buildTypeSectionRow(),
                     _buildHeaderSection(),
                     ProductAttributesTab(widget.product),
                     _buildImagesSection()
@@ -127,7 +128,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  Widget _buildTypeSection() {
+  Widget _buildTypeSectionRow() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) => _buildTypeSection(constraints),
+            ))
+      ],
+    );
+  }
+
+  Widget _buildTypeSection(BoxConstraints constraints) {
+    Color selectedColor = Colors.orange;
+    Color unselectedColor = Colors.blue;
+
     List<ProductType> productTypes;
     if (widget.product.productType != null &&
         widget.product.productType.isNotEmpty) {
@@ -141,46 +156,136 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       productTypes = [ProductType.FUTURE_GOODS];
     }
 
+    List<Widget> widgetRows = [];
+
+    for (int i = 0; i < productTypes.length; i++) {
+      Color backgroundColor;
+
+      if (i == 0 && productTypes.length > 1) {
+        if (productType == productTypes[i]) {
+          backgroundColor = unselectedColor;
+        } else {
+          backgroundColor = selectedColor;
+        }
+      } else {
+        backgroundColor = null;
+      }
+
+      widgetRows.add(Container(
+          height: 80,
+          width: ((constraints.maxWidth - 100) / productTypes.length),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+          ),
+          child: ClipWidget(
+            index: i,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  productType = productTypes[i];
+                });
+              },
+              child: Container(
+                  color: productType == productTypes[i]
+                      ? selectedColor
+                      : unselectedColor,
+                  margin: EdgeInsets.all(0),
+                  child: Center(
+                    child: Text(
+                      '${ProductTypeLocalizedMap[productTypes[i]]}',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )),
+            ),
+          )));
+    }
+
+    // widgetRows.addAll(productTypes
+    //     .map(
+    //       (type) => Expanded(
+    //           flex: 1,
+    //           child: ClipWidget(
+    //             child: FlatButton(
+    //               padding: EdgeInsets.symmetric(vertical: 10),
+    //               color: productType == type ? Colors.orange : Colors.blue,
+    //               onPressed: () {
+    //                 setState(() {
+    //                   productType = type;
+    //                 });
+    //               },
+    //               child: Column(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 children: <Widget>[
+    //                   Text(
+    //                     '${ProductTypeLocalizedMap[type]}',
+    //                     style: TextStyle(
+    //                       color: Colors.white,
+    //                     ),
+    //                   )
+    //                 ],
+    //               ),
+    //             ),
+    //           )),
+    //     )
+    //     .toList());
+
+    // widgetRows.add(Container(
+    //     width: 100,
+    //     height: 50,
+    //     // color: Colors.white,
+    //     child: Center(
+    //       child: Text(
+    //         '已售${widget.product.salesVolume > 9999 ? '9999+' : widget.product.salesVolume}件',
+    //         overflow: TextOverflow.ellipsis,
+    //         textAlign: TextAlign.center,
+    //       ),
+    //     )));
+
     return Container(
         height: 50,
         decoration: BoxDecoration(
-            color: Colors.white,
             border: Border(
                 bottom: BorderSide(color: Colors.grey[300], width: 0.5))),
-        margin: EdgeInsets.only(top: 10),
-        child: Row(
-            children: productTypes
-                .map(
-                  (type) =>
-                  Expanded(
-                      flex: 1,
-                      child: FlatButton(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        onPressed: () {
-                          setState(() {
-                            productType = type;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text('${ProductTypeLocalizedMap[type]}'),
-                            Container(
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  border: productType == type
-                                      ? Border(
-                                      bottom: BorderSide(
-                                          width: 3,
-                                          color:
-                                          Constants.THEME_COLOR_MAIN))
-                                      : null,
-                                ))
-                          ],
-                        ),
-                      )),
-            )
-                .toList()));
+        child: Row(children: [
+          Expanded(
+            child: Container(
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: <Widget>[
+                    productTypes.length > 1
+                        ? Positioned(
+                        left:
+                        (constraints.maxWidth - 100) / productTypes.length -
+                            25,
+                        child: Container(
+                          height: 80,
+                          color: productType == productTypes.last
+                              ? selectedColor
+                              : unselectedColor,
+                          width: 50,
+                        ))
+                        : Container(),
+                    Row(
+                      children: widgetRows,
+                    ),
+                  ],
+                )),
+          ),
+          Container(
+              width: 100,
+              height: 50,
+              // color: Colors.white,
+              child: Center(
+                child: Text(
+                  '已售${widget.product.salesVolume > 9999 ? '9999+' : widget
+                      .product.salesVolume}件',
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+              ))
+        ]));
   }
 
   Widget _buildHeaderSection() {
@@ -712,5 +817,48 @@ class JumpTo extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ClipWidget extends StatelessWidget {
+  final Widget child;
+
+  final int index;
+
+  const ClipWidget({Key key, this.child, this.index}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      clipper: TrianglePath(index),
+      child: Container(child: child),
+    );
+  }
+}
+
+class TrianglePath extends CustomClipper<Path> {
+  final int index;
+
+  TrianglePath(this.index);
+
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    path.lineTo(size.width - (size.height / (2 * tan(pi / 3))), 0);
+    path.lineTo(size.width, size.height / 2);
+    path.lineTo(size.width - (size.height / (2 * tan(pi / 3))), size.height);
+    path.lineTo(0, size.height);
+    // if (index != 0) {
+    //   path.lineTo(size.width / 3, size.height / 2);
+    // }
+    // path.lineTo(0, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
   }
 }

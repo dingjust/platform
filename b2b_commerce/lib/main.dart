@@ -76,13 +76,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    // 预加载全局数据
-    // AppProvider().loadData();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BLoCProvider<UserBLoC>(
       bloc: UserBLoC.instance,
@@ -145,6 +138,9 @@ class _MyAppHomeDelegateState extends State<MyAppHomeDelegate> {
 
     //初始化监听
     initListener();
+
+    // 预加载全局数据
+    AppProvider().preloading(context);
   }
 
   //初始化监听

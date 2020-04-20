@@ -174,7 +174,11 @@ class AmountFlowItem extends StatelessWidget {
                     text: TextSpan(
                         style: TextStyle(color: Colors.black, fontSize: 18),
                         text:
-                            model.flowSource == FlowSource.CASH_OUT ? '-' : '+',
+                        model.amountFlowType == AmountFlowType.INFLOW
+                            ? '+'
+                            : model.amountFlowType == AmountFlowType.OUTFLOW
+                            ? '-'
+                            : '',
                         children: <TextSpan>[
                           TextSpan(text: '￥${model.amount}')
                         ]),

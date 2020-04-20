@@ -19,9 +19,9 @@ class ImagePickerHandler {
   openCamera() async {
     imagePicker.dismissDialog();
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    if(_isCropRequired){
+    if (_isCropRequired) {
       cropImage(image);
-    }else{
+    } else {
       _listener.userImage(image);
     }
   }
@@ -29,27 +29,26 @@ class ImagePickerHandler {
   openGallery() async {
     imagePicker.dismissDialog();
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if(_isCropRequired){
+    if (_isCropRequired) {
       cropImage(image);
-    }else{
+    } else {
       _listener.userImage(image);
     }
-
   }
 
-  void build(int bgColor,int labelColor,bool isCropRequired,double ratioX,double ratioY) {
-    _isCropRequired=isCropRequired;
+  void build(int bgColor, int labelColor, bool isCropRequired, double ratioX,
+      double ratioY) {
+    _isCropRequired = isCropRequired;
     _ratioX = ratioX;
     _ratioY = ratioY;
-    imagePicker = new ImagePickerDialog(this, _controller,bgColor,labelColor);
+    imagePicker = new ImagePickerDialog(this, _controller, bgColor, labelColor);
     imagePicker.initState();
   }
 
   Future cropImage(File image) async {
     File croppedFile = await ImageCropper.cropImage(
-      sourcePath: image.path,
-      ratioX: _ratioX,
-      ratioY: _ratioY,
+        sourcePath: image.path,
+        aspectRatio: CropAspectRatio(ratioX: _ratioX, ratioY: _ratioY)
 //      maxWidth: 512,
 //      maxHeight: 512,
     );

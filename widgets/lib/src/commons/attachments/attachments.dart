@@ -431,7 +431,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
 
   @override
   userImage(File _image) async {
-    if(widget.maxNum == 1){
+    if (widget.maxNum == 1) {
       widget.list.clear();
     }
     if (_image != null) {
@@ -461,7 +461,9 @@ class _EditableAttachmentsState extends State<EditableAttachments>
       }
     });
 
-    return widget.maxNum == 1 ? _buildEditableAttachment() : Row(
+    return widget.maxNum == 1
+        ? _buildEditableAttachment()
+        : Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         IconButton(
@@ -471,8 +473,10 @@ class _EditableAttachmentsState extends State<EditableAttachments>
           ),
           tooltip: '上一张',
           onPressed: () {
-            _scrollController.animateTo(_scrollController.position.pixels - 100,
-                duration: Duration(milliseconds: 200), curve: Curves.ease);
+            _scrollController.animateTo(
+                _scrollController.position.pixels - 100,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.ease);
           },
         ),
         Expanded(
@@ -485,16 +489,18 @@ class _EditableAttachmentsState extends State<EditableAttachments>
           ),
           tooltip: '下一张',
           onPressed: () {
-            _scrollController.animateTo(_scrollController.position.pixels + 100,
-                duration: Duration(milliseconds: 200), curve: Curves.ease);
+            _scrollController.animateTo(
+                _scrollController.position.pixels + 100,
+                duration: Duration(milliseconds: 200),
+                curve: Curves.ease);
           },
         ),
       ],
     );
   }
 
-  Widget _buildEditableAttachment(){
-    if(_uploadFileList.length > 0){
+  Widget _buildEditableAttachment() {
+    if (_uploadFileList.length > 0) {
       return GestureDetector(
         child: Container(
           width: widget.imageWidth,
@@ -531,7 +537,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
         onTap: () {},
         onLongPress: () {},
       );
-    }else if(widget.list.length > 0){
+    } else if (widget.list.length > 0) {
       return GestureDetector(
         child: Container(
           width: widget.imageWidth,
@@ -576,7 +582,7 @@ class _EditableAttachmentsState extends State<EditableAttachments>
           if (widget.editable) _deleteFile(widget.list[0]);
         },
       );
-    }else{
+    } else {
       return GestureDetector(
         onTap: () {
           imagePicker.showDialog(context);
@@ -921,11 +927,12 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                 if (imageFile != null) {
                   if (widget.isCut) {
                     var cropFile = await ImageCropper.cropImage(
-                      sourcePath: imageFile.path,
-                      ratioX: widget.ratioX,
-                      ratioY: widget.ratioY,
-                      circleShape: widget.circleShape,
-                    );
+                        sourcePath: imageFile.path,
+                        cropStyle: CropStyle.circle,
+                        aspectRatio: CropAspectRatio(
+                          ratioX: widget.ratioX,
+                          ratioY: widget.ratioY,
+                        ));
                     if (cropFile != null) {
                       await _uploadFile(cropFile);
                     }
@@ -945,11 +952,12 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                 if (imageFile != null) {
                   if (widget.isCut) {
                     var cropFile = await ImageCropper.cropImage(
-                      sourcePath: imageFile.path,
-                      ratioX: widget.ratioX,
-                      ratioY: widget.ratioY,
-                      circleShape: widget.circleShape,
-                    );
+                        sourcePath: imageFile.path,
+                        cropStyle: CropStyle.circle,
+                        aspectRatio: CropAspectRatio(
+                          ratioX: widget.ratioX,
+                          ratioY: widget.ratioY,
+                        ));
                     if (cropFile != null) {
                       await _uploadFile(cropFile);
                     }
@@ -1126,9 +1134,9 @@ class _EditableAttachmentsState extends State<EditableAttachments>
 
   //TODO :传入Media参数
   Future _deleteFile(MediaModel mediaModel, {String code}) async {
-    if(!widget.loogPressDelete){
+    if (!widget.loogPressDelete) {
       imagePicker.showDialog(context);
-    }else{
+    } else {
       showDialog(
         context: context,
         builder: (BuildContext context) {

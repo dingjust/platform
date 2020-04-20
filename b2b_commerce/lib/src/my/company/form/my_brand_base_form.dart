@@ -140,7 +140,7 @@ class MyBrandBaseFormPageState extends State<MyBrandBaseFormPage> {
                       list: medias,
                       imageWidth: 100,
                       imageHeight: 100,
-                      isCut: true,
+                      // isCut: true,
                       ratioY: 1,
                       ratioX: 1,
                       maxNum: 1,

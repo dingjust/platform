@@ -117,7 +117,7 @@ class RequirementOrderItem extends StatelessWidget {
       return Row(
         children: <Widget>[
           Expanded(
-              child: Text(productName,
+              child: Text(productName ?? '',
                   style: TextStyle(fontSize: 15),
                   overflow: TextOverflow.ellipsis)),
           Text(
@@ -248,7 +248,7 @@ class RequirementOrderItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _buildRow1(model.details.productName),
-                  _buildProductSkuID(model.details.productSkuID),
+                  // _buildProductSkuID(model.details.productSkuID),
                   _buildRow2()
                 ],
               ),
