@@ -11,14 +11,18 @@
       <div class="pt-2"></div>
       <el-row>
         <el-tabs ref="tab" v-model="activeName" type="card" @tab-click="handleClick" :before-leave="tabBeforeLeave">
-          <el-tab-pane label="顶部轮播" name="carousel"/>
+          <el-tab-pane label="顶部轮播(工厂)" name="FACTORY_CAROUSEL"/>
+          <el-tab-pane label="顶部轮播(品牌)" name="BRAND_CAROUSEL"/>
+          <el-tab-pane label="顶部轮播(看款下单)" name="SEE_PRODUCT_CAROUSEL"/>
           <el-tab-pane label="今日新款" name="TODAY_NEW"/>
           <el-tab-pane label="当季爆款" name="SEASON_HOT"/>
           <el-tab-pane label="直播专供" name="LIVE_BROADCAST_PROVIDE"/>
           <el-tab-pane label="为你推荐" name="RECOMMEND_FOR_YOU"/>
-          <el-tab-pane label="中部轮播" name="BANNER"/>
+          <el-tab-pane label="中部轮播(看款下单)" name="BANNER"/>
         </el-tabs>
-        <promote-product-carousel ref="carousel" v-if="activeName == 'carousel'" @operationCount="operationCount" @returnCount="returnCount"/>
+        <promote-product-carousel ref="carousel" v-if="activeName == 'SEE_PRODUCT_CAROUSEL'" @operationCount="operationCount" @returnCount="returnCount"/>
+        <promote-product-factory-carousel v-if="activeName == 'FACTORY_CAROUSEL'" @operationCount="operationCount" @returnCount="returnCount"/>
+        <promote-product-brand-carousel v-if="activeName == 'BRAND_CAROUSEL'" @operationCount="operationCount" @returnCount="returnCount"/>
         <promote-product-today ref="today" v-if="activeName == 'TODAY_NEW'" @onConfirmToday="onConfirmToday" :formData="formData"
                                @operationCount="operationCount" @returnCount="returnCount"/>
         <promote-product-season ref="season" v-if="activeName == 'SEASON_HOT'" :formData="formData" :slotData="promoteProductList"
@@ -63,9 +67,13 @@
   import PromoteProductLive from './details/PromoteProductLive';
   import PromoteProductForYou from './details/PromoteProductForYou';
   import PromoteProductBanner from './details/PromoteProductBanner';
+  import PromoteProductFactoryCarousel from './details/PromoteProductFactoryCarousel';
+  import PromoteProductBrandCarousel from './details/PromoteProductBrandCarousel';
   export default {
     name: 'PromoteProductPage',
     components: {
+      PromoteProductBrandCarousel,
+      PromoteProductFactoryCarousel,
       PromoteProductBanner,
       PromoteProductForYou,
       PromoteProductLive,
@@ -114,17 +122,25 @@
       },
       handleClick () {},
       getPageData (nval) {
-        if (nval != 'carousel' && nval != 'BANNER') {
+        if (this.carouselEnum.indexOf(nval) < 0) {
           this.getProductPlate(nval);
         }
+        // if (nval != 'SEE_PRODUCT_CAROUSEL' && nval != 'BANNER') {
+        //   this.getProductPlate(nval);
+        // }
       },
       tabBeforeLeave (nval, oval) {
         let flag
-        if (this.activeName === 'carousel' || this.activeName === 'BANNER' || this.activeName === 'TODAY_NEW') {
-          flag = this.leaveCount > 1;
+        if (this.carouselEnum.indexOf(this.activeName) > -1 || this.activeName === 'TODAY_NEW') {
+          flag = this.leaveCount > 1
         } else {
           flag = this.leaveCount > 2;
         }
+        // if (this.activeName === 'SEE_PRODUCT_CAROUSEL' || this.activeName === 'Factory_Carousel' || this.activeName === 'Brand_Carousel' || this.activeName === 'BANNER' || this.activeName === 'TODAY_NEW') {
+        //   flag = this.leaveCount > 1;
+        // } else {
+        //   flag = this.leaveCount > 2;
+        // }
 
         if (flag) {
           return this._judge(nval);
@@ -162,11 +178,16 @@
         if (result.data != null) {
           this.formData = Object.assign({}, result.data);
         }
-        if (activeName != 'carousel' && activeName != 'TODAY_NEW') {
+        if (this.carouselEnum.indexOf(activeName) < 0 && activeName != 'TODAY_NEW') {
           this.$store.state.PromoteProductModule.promoteProductList = Object.assign([], this.formData.sequenceProducts);
           this.promoteProductList = this.formData.sequenceProducts;
           this.originData = this.formData.sequenceProducts;
         }
+        // if (activeName != 'SEE_PRODUCT_CAROUSEL' && activeName != 'TODAY_NEW') {
+        //   this.$store.state.PromoteProductModule.promoteProductList = Object.assign([], this.formData.sequenceProducts);
+        //   this.promoteProductList = this.formData.sequenceProducts;
+        //   this.originData = this.formData.sequenceProducts;
+        // }
         this.returnCount();
       },
       compare (property) {
@@ -266,15 +287,17 @@
       },
       operationCount () {
         this.leaveCount++;
+        console.log(this.leaveCount);
       },
       returnCount () {
         this.leaveCount = 0;
+        console.log(this.leaveCount);
       }
     },
     data () {
       return {
         carouselType: 'CT004',
-        activeName: 'carousel',
+        activeName: 'FACTORY_CAROUSEL',
         SeeProductPlateType: this.$store.state.EnumsModule.SeeProductPlateType,
         productSelectVisible: false,
         formData: {
@@ -286,7 +309,13 @@
         promoteProductList: [],
         searchList: [],
         originData: [],
-        leaveCount: 0
+        leaveCount: 0,
+        carouselEnum: [
+          'SEE_PRODUCT_CAROUSEL',
+          'BANNER',
+          'FACTORY_CAROUSEL',
+          'BRAND_CAROUSEL'
+        ]
       }
     },
     created () {
@@ -295,11 +324,16 @@
     beforeRouteLeave (to, from, next) {
       next(false);
       let flag
-      if (this.activeName === 'carousel'|| this.activeName === 'BANNER' || this.activeName === 'TODAY_NEW') {
+      if (this.carouselEnum.indexOf(this.activeName) > -1 || this.activeName === 'TODAY_NEW') {
         flag = this.leaveCount > 1;
       } else {
         flag = this.leaveCount > 2;
       }
+      // if (this.activeName === 'SEE_PRODUCT_CAROUSEL'|| this.activeName === 'BANNER' || this.activeName === 'TODAY_NEW') {
+      //   flag = this.leaveCount > 1;
+      // } else {
+      //   flag = this.leaveCount > 2;
+      // }
 
       if (flag) {
         this.$confirm('是否离开此页面 , 更改内容将不会被保存', '提示', {

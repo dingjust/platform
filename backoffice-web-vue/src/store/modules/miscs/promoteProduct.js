@@ -54,7 +54,49 @@ const state = {
     url: '',
     type: 'CT004',
     active: true
-  }]
+  }],
+  carouselFactoryFormData: [{
+    media: {},
+    url: '',
+    type: 'CT002',
+    active: true
+  }, {
+    media: {},
+    url: '',
+    type: 'CT002',
+    active: true
+  }, {
+    media: {},
+    url: '',
+    type: 'CT002',
+    active: true
+  }, {
+    media: {},
+    url: '',
+    type: 'CT002',
+    active: true
+  }],
+  carouselBrandFormData: [{
+    media: {},
+    url: '',
+    type: 'CT003',
+    active: true
+  }, {
+    media: {},
+    url: '',
+    type: 'CT003',
+    active: true
+  }, {
+    media: {},
+    url: '',
+    type: 'CT003',
+    active: true
+  }, {
+    media: {},
+    url: '',
+    type: 'CT003',
+    active: true
+  }],
 };
 
 const mutations = {
@@ -63,6 +105,8 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   page: (state, page) => state.page = page,
   carouselFormData: (state, carouselFormData) => state.carouselFormData = carouselFormData,
+  carouselBrandFormData: (state, carouselBrandFormData) => state.carouselBrandFormData = carouselBrandFormData,
+  carouselFactoryFormData: (state, carouselFactoryFormData) => state.carouselFactoryFormData = carouselFactoryFormData,
   bannerFormData: (state, bannerFormData) => state.bannerFormData = bannerFormData,
   promoteProductList: (state, promoteProductList) => state.promoteProductList = promoteProductList,
   promoteProductSelectList: (state, promoteProductSelectList) => state.promoteProductSelectList = promoteProductSelectList,
@@ -105,6 +149,8 @@ const getters = {
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
   carouselFormData: state => state.carouselFormData,
+  carouselBrandFormData: state => state.carouselBrandFormData,
+  carouselFactoryFormData: state => state.carouselFactoryFormData,
   bannerFormData: state => state.bannerFormData,
   promoteProductList: state => state.promoteProductList,
   promoteProductSelectList: state => state.promoteProductSelectList,
