@@ -18,7 +18,7 @@ class _RequirementTabSectionState extends State<RequirementTabSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 700,
+        height: 670,
         child: DefaultTabController(
             length: 2,
             child: ChangeNotifierProvider<RequirementTabSectionState>(

@@ -1,11 +1,11 @@
 import 'package:b2b_commerce/src/_shared/shares.dart';
 import 'package:b2b_commerce/src/home/search/order_product_search.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
-import 'package:core/core.dart';
 
 import 'components/products_buttons_section.dart';
 import 'components/products_plate_section.dart';
@@ -28,30 +28,18 @@ class _ProductsHomePageState extends State<ProductsHomePage> {
         child: Scaffold(
           body: Container(
               color: Color.fromRGBO(245, 245, 245, 1),
-              child: Consumer<PlateProductState>(
-                  builder: (context, PlateProductState plateProductState, _) =>
-                      ProductsHomePageView(plateProductState))),
+              child: ProductsHomePageView()),
         ));
   }
 }
 
 class ProductsHomePageView extends StatelessWidget {
-  final PlateProductState plateProductState;
-
   ScrollController _scrollController = ScrollController();
 
-  ProductsHomePageView(this.plateProductState, {Key key}) : super(key: key);
+  ProductsHomePageView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //监听加载更多
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        plateProductState.loadMore();
-      }
-    });
-
     return Container(
         child: CustomScrollView(
       controller: _scrollController,
@@ -82,7 +70,6 @@ class ProductsHomePageView extends StatelessWidget {
               delegate: SliverChildListDelegate([
             ProductsButtonsSection(),
             ProductsPlateSection(),
-            // ProductsScroll(),
             ProductsBodyCarousels()
           ])),
         ),
@@ -99,23 +86,20 @@ class ProductsHomePageView extends StatelessWidget {
             ],
           ),
         )),
-        plateProductState.products != null
-            ? ProductsRecommendSection(
-                products: plateProductState.products,
-              )
-            : SliverToBoxAdapter(
-                child: Container(
-                  margin: EdgeInsets.only(top: 100),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              ),
+        ProductsRecommendSection(),
         SliverToBoxAdapter(
-          child: ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
-            opacity: plateProductState.loadingMore ? 1.0 : 0,
-          ),
-        )
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '已到底',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            )),
       ],
     ));
   }

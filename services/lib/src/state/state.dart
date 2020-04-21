@@ -10,7 +10,6 @@ abstract class PageState with ChangeNotifier {
   bool lock = false;
   bool _isDownEnd = false;
 
-
   bool get isDownEnd => _isDownEnd;
 
   set isDownEnd(bool value) {

@@ -16,6 +16,7 @@ class AppProvider {
     ChangeNotifierProvider(builder: (_) => NetState.instance),
     ChangeNotifierProvider(builder: (_) => ProductHomeState()),
     ChangeNotifierProvider(builder: (_) => ProductHomeCarouselsState()),
+    ChangeNotifierProvider(builder: (_) => RecommendProductState()),
     Provider(
       builder: (_) => AddressState(),
     ),
@@ -52,6 +53,9 @@ class AppProvider {
     Provider.of<ProductHomeState>(context).getData();
     Provider.of<ProductHomeCarouselsState>(context).getBodyData();
     Provider.of<ProductHomeCarouselsState>(context).getHeaderData();
+    Provider
+        .of<RecommendProductState>(context)
+        .products;
     await Provider.of<CategoryState>(context).getCascadedCategories();
     await Provider.of<AddressState>(context).getRegions();
     await Provider.of<MajorCategoryState>(context).getMajorCategories();

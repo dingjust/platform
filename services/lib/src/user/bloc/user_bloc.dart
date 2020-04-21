@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:services/src/api/user.dart';
@@ -136,6 +137,11 @@ class UserBLoC extends BLoCBase {
 
       //设置JPUSH别名
       jpush$.setAlias(currentUser.mobileNumber);
+
+      //埋点>>>登录成功
+      FlutterUmplus.event(
+        "user_login_success",
+      );
 
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;

@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/home/factory/factory_page.dart';
 import 'package:b2b_commerce/src/home/factory/finding_factory.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
 import 'package:services/services.dart';
@@ -154,6 +155,11 @@ class BrandButtonsSection extends StatelessWidget {
   }
 
   Widget _buildProductionFactory(BuildContext context) {
+    //埋点>>>生产找厂
+    FlutterUmplus.event(
+      "factory_finding_all",
+    );
+
     return Expanded(
         flex: 1,
         child: ImageNumButton(
@@ -197,12 +203,12 @@ class BrandButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.productOrdering(),
         onPressed: () {
-          Navigator.pushNamed(
-              context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
+          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
           // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
         },
         title: '看款下单',
-      ),);
+      ),
+    );
   }
 
   Widget _buildNearbyFactory(BuildContext context) {
@@ -221,6 +227,11 @@ class BrandButtonsSection extends StatelessWidget {
           label.group == 'FACTORY' || label.group == 'PLATFORM')
               .toList();
           if (categories != null && labels != null) {
+            //埋点>>>就近找厂
+            FlutterUmplus.event(
+              "factory_finding_location",
+            );
+
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -262,6 +273,12 @@ class BrandButtonsSection extends StatelessWidget {
           label.group == 'FACTORY' || label.group == 'PLATFORM')
               .toList();
           labels.add(LabelModel(name: '已认证', id: 1000000));
+
+          //埋点>>>优选工厂
+          FlutterUmplus.event(
+            "factory_finding_optimization",
+          );
+
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) =>

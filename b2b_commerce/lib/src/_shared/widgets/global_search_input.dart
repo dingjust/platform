@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:widgets/widgets.dart';
 
 /// 全局搜索框
@@ -21,7 +22,7 @@ class GlobalSearchInput<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showSearch(context: context, delegate: delegate),
+      onTap: () => onTap(context),
       child: Container(
         width: width,
         height: height,
@@ -42,5 +43,14 @@ class GlobalSearchInput<T> extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onTap(BuildContext context) {
+    //埋点>>>搜索
+    FlutterUmplus.event(
+      "home_search",
+    );
+
+    showSearch(context: context, delegate: delegate);
   }
 }

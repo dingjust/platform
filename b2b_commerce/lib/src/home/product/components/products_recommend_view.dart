@@ -38,18 +38,7 @@ class ProductsRecommendView extends StatelessWidget {
             ],
           ),
         )),
-        plateProductState.products != null
-            ? ProductsRecommendSection(
-                products: plateProductState.products,
-              )
-            : SliverToBoxAdapter(
-                child: Container(
-                  margin: EdgeInsets.only(top: 100),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              ),
+        ProductsRecommendSection(),
         SliverToBoxAdapter(
           child: ProgressIndicatorFactory.buildPaddedOpacityProgressIndicator(
             opacity: plateProductState.loadingMore ? 1.0 : 0,

@@ -5,6 +5,7 @@ as yj;
 import 'package:b2b_commerce/src/helper/login_check.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,11 @@ class _CapacityMatchingPageState extends State<CapacityMatchingPage>
   @override
   void initState() {
     // TODO: implement initState
+    //埋点>>>空闲产能	
+    FlutterUmplus.event(
+      "capacity_matching",
+    );
+
     super.initState();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => checkLoginStatus(context));

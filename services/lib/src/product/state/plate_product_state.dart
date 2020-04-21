@@ -8,15 +8,11 @@ class PlateProductState extends PageState {
 
   List<ApparelProductModel> _products;
 
-  ///推荐产品
-  List<ApparelProductModel> recommendProducts;
-
   ProductCondition condition;
 
-  final bool showRecommendProducts;
+  bool isEndFlag;
 
-  PlateProductState(
-      {this.type, this.condition, this.showRecommendProducts = true}) {
+  PlateProductState({this.type, this.condition, this.isEndFlag = false}) {
     if (condition != null) {
       condition = condition;
     } else {
@@ -50,7 +46,7 @@ class PlateProductState extends PageState {
 
         //无产品，显示推荐产品
         if (totalElements == 0 || currentPage + 1 == totalPages) {
-          _getRecommendProducts();
+          isEndFlag = true;
         }
 
         ///通知刷新
@@ -82,29 +78,12 @@ class PlateProductState extends PageState {
             totalElements = response.totalElements;
           }
         });
-      } else if (showRecommendProducts && recommendProducts == null) {
-        //产品结束，显示推荐产品
-        await _getRecommendProducts();
+      } else {
+        isEndFlag = true;
       }
       //异步调用结束，通知加载组件
       workingEnd();
     }
-  }
-
-  ///获取推荐产品
-  Future<void> _getRecommendProducts() async {
-    await ProductRepositoryImpl().getProductsOfFactories({
-      'plateType':
-      SeeProductPlateTypeValuedMap[SeeProductPlateType.RECOMMEND_FOR_YOU]
-    }, {
-      'page': 0,
-      'size': 20,
-    }).then((response) {
-      if (response != null) {
-        recommendProducts = response.content;
-        notifyListeners();
-      }
-    });
   }
 
   Map<String, dynamic> generateFilterCondition() {
@@ -116,6 +95,12 @@ class PlateProductState extends PageState {
     }
 
     return filterCondition;
+  }
+
+  ///数据到底
+  @override
+  bool isEnd() {
+    return currentPage + 1 == totalPages && isEndFlag;
   }
 
   @override

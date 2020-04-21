@@ -115,56 +115,60 @@ class ProductsListView extends StatelessWidget {
   }
 
   Widget _buildRecommendText() {
-    return (state.recommendProducts != null &&
-        state.recommendProducts.isNotEmpty)
-        ? SliverToBoxAdapter(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-            border: Border(
-                top: BorderSide(color: Colors.grey[300], width: 0.5))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Text('为你推荐')],
-              ),
-            ),
-          )
-        : SliverToBoxAdapter(
-            child: Container(),
-          );
+    if (state.isEnd()) {
+      return SliverToBoxAdapter(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+              border:
+              Border(top: BorderSide(color: Colors.grey[300], width: 0.5))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[Text('为你推荐')],
+          ),
+        ),
+      );
+    } else {
+      return SliverToBoxAdapter();
+    }
   }
 
   Widget _buildRecommendProducts() {
-    return Builder(builder: (context) {
-      if (state.recommendProducts != null) {
-        List<RecommendProductItem> recommendProductItems =
-        state.recommendProducts
-            .map((product) =>
-            RecommendProductItem(
-              model: product,
-              showAddress: true,
-            ))
-            .toList();
+    if (state.isEnd()) {
+      return Consumer<RecommendProductState>(
+          builder: (context, RecommendProductState recommendState, _) {
+            if (recommendState.products != null) {
+              List<RecommendProductItem> recommendProductItems =
+              recommendState.products
+                  .map((product) =>
+                  RecommendProductItem(
+                    model: product,
+                    showAddress: true,
+                  ))
+                  .toList();
 
-        return SliverPadding(
-          padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, //Grid按两列显示
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 0.62,
-            ),
-            delegate:
-            SliverChildBuilderDelegate((BuildContext context, int index) {
-              return recommendProductItems[index];
-            }, childCount: state.recommendProducts.length),
-          ),
-        );
-      } else {
-        return SliverToBoxAdapter();
-      }
-    });
+              return SliverPadding(
+                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, //Grid按两列显示
+                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 10.0,
+                    childAspectRatio: 0.62,
+                  ),
+                  delegate:
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
+                    return recommendProductItems[index];
+                  }, childCount: recommendState.products.length),
+                ),
+              );
+            } else {
+              return SliverToBoxAdapter();
+            }
+          });
+    } else {
+      return SliverToBoxAdapter();
+    }
   }
 }
 
