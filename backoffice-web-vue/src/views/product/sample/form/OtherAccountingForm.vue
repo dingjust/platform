@@ -15,14 +15,16 @@
       </el-table-column>
       <el-table-column prop="unitPrice" label="不含税单价">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.unitPrice" @change="(val)=>onUnitPriceInput(val,scope.row)" >
+          <el-input v-model="scope.row.unitPrice" @change="(val)=>onUnitPriceInput(val,scope.row)"
+            v-number-input.float="{ min: 0 ,decimal:2}">
           </el-input>
         </template>
       </el-table-column>
       <el-table-column prop="tax" label="税率">
         <template slot-scope="scope">
-          <el-input  @input="(val)=>onTaxInput(val,scope.row)" :value="scope.row.tax*100"
-            v-show="taxIncluded" :disabled="!taxIncluded">
+          <el-input @input="(val)=>onTaxInput(val,scope.row)" :value="showFloatPercentNum(scope.row.tax)"
+            @blur="onBlur(scope.row,'tax')" v-number-input.float="{ min: 0,max:100 ,decimal:1}" v-show="taxIncluded"
+            :disabled="!taxIncluded">
             <h6 slot="suffix" style="padding-top:10px">%</h6>
           </el-input>
         </template>
@@ -30,7 +32,7 @@
       <el-table-column prop="taxUnitPrice" label="含税单价">
         <template slot-scope="scope">
           <el-input v-model="scope.row.taxUnitPrice" @change="(val)=>onTaxUnitPriceInput(val,scope.row)"
-            placeholder="输入"  v-show="taxIncluded" :disabled="!taxIncluded">
+            v-number-input.float="{ min: 0 ,decimal:2}" placeholder="输入" v-show="taxIncluded" :disabled="!taxIncluded">
           </el-input>
         </template>
       </el-table-column>
@@ -47,13 +49,17 @@
     </el-table>
     <el-row type="flex" style="margin-top:10px;">
       <el-col :span="4">
-        <el-button icon="el-icon-plus" @click="onAdd">添加物料</el-button>
+        <el-button icon="el-icon-plus" @click="onAdd">添加加工类型</el-button>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+  import {
+    accMul,
+  } from '@/common/js/number';
+
   export default {
     name: "OtherAccountingForm",
     props: ["slotData", 'taxIncluded'],
@@ -81,17 +87,41 @@
       onRemove(row) {
         this.slotData.splice(this.slotData.indexOf(row), 1);
       },
+      onBlur(row, attribute) {
+        var reg = /\.$/;
+        if (reg.test(row[attribute])) {
+          this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
+          if (row.unitPrice != null && row.unitPrice != '') {
+            row.taxUnitPrice = ((parseFloat(row.tax) + 1) * row.unitPrice).toFixed(2);
+          } else if (row.taxUnitPrice != null && row.taxUnitPrice != '') {
+            row.unitPrice = (row.taxUnitPrice / (1 + row.tax)).toFixed(2);
+          }
+        }
+      },
+      showFloatPercentNum(val) {
+        var reg = /\.$/;
+        if (!reg.test(val)) {
+          return accMul(val, 100);
+        } else {
+          return val;
+        }
+      },
       onTaxInput(val, row) {
-        row.tax = val / 100;
+        var reg = /\.$/;
+        if (!reg.test(val)) {
+          row.tax = (val / 100.0).toFixed(3);
+        } else {
+          row.tax = val;
+        }
         if (row.unitPrice != null && row.unitPrice != '') {
-          row.taxUnitPrice = ((row.tax + 1) * row.unitPrice).toFixed(2);
+          row.taxUnitPrice = ((parseFloat(row.tax) + 1) * row.unitPrice).toFixed(2);
         } else if (row.taxUnitPrice != null && row.taxUnitPrice != '') {
           row.unitPrice = (row.taxUnitPrice / (1 + row.tax)).toFixed(2);
         }
       },
       onUnitPriceInput(val, row) {
         if (row.tax != null && row.tax != '') {
-          row.taxUnitPrice = ((row.tax + 1) * row.unitPrice).toFixed(2);
+          row.taxUnitPrice = ((parseFloat(row.tax) + 1) * row.unitPrice).toFixed(2);
         }
         // else if (row.taxUnitPrice != null && row.taxUnitPrice != '') {
         //   row.tax = (row.taxUnitPrice - row.unitPrice) / row.unitPrice;
@@ -99,9 +129,9 @@
       },
       onTaxUnitPriceInput(val, row) {
         if (row.tax != null && row.tax != '') {
-          row.unitPrice = (row.taxUnitPrice / (1 + row.tax)).toFixed(2);
+          row.unitPrice = (row.taxUnitPrice / (1 + parseFloat(row.tax))).toFixed(2);
         }
-      }
+      },
     },
     data() {
       return {};

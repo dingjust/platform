@@ -27,7 +27,7 @@
         <el-button class="product-form-btn" @click="onUpdate()"
           v-if="this.slotData.code!=null&&this.slotData.code!=''&&!isRead">更新产品信息</el-button>
         <el-button class="product-form-btn" @click="onCreate()"
-          v-if="(this.slotData.code==null||this.slotData.code=='')&&!isRead">确认创建产品</el-button>
+          v-if="(this.slotData.code==null||this.slotData.code=='')&&!isRead">确认创建样衣</el-button>
       </el-row>
     </el-form>
   </div>
@@ -163,14 +163,14 @@
           colorSizes.push(obj);
         });
         this.formData.colorSizes = colorSizes;
-        const url = this.apis().createApparelProduct();
+        const url = this.apis().createSampleProduct();
         const result = await this.$http.post(url, this.formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
 
-        this.$message.success('产品创建成功，产品编号： ' + result.code);
+        this.$message.success('样衣创建成功，产品编号： ' + result.code);
         // this.$set(this.slotData, 'code', result);
         this.$router.go(-1);
       },

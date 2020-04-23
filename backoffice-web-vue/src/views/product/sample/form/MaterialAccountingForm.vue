@@ -35,7 +35,8 @@
       </el-table-column>
       <el-table-column prop="unitPrice" label="不含税单价">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.unitPrice" @change="(val)=>onUnitPriceInput(val,scope.row)">
+          <el-input v-model="scope.row.unitPrice" @change="(val)=>onUnitPriceInput(val,scope.row)"
+            v-number-input.float="{ min: 0 ,decimal:2}">
           </el-input>
         </template>
       </el-table-column>
@@ -51,7 +52,7 @@
       <el-table-column prop="taxUnitPrice" label="含税单价">
         <template slot-scope="scope">
           <el-input v-model="scope.row.taxUnitPrice" @change="(val)=>onTaxUnitPriceInput(val,scope.row)"
-            placeholder="输入" v-show="taxIncluded" :disabled="!taxIncluded">
+            v-number-input.float="{ min: 0 ,decimal:2}" placeholder="输入" v-show="taxIncluded" :disabled="!taxIncluded">
           </el-input>
         </template>
       </el-table-column>
@@ -77,7 +78,6 @@
 <script>
   import {
     accMul,
-    accAdd
   } from '@/common/js/number';
 
   export default {
@@ -112,6 +112,11 @@
         var reg = /\.$/;
         if (reg.test(row[attribute])) {
           this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
+          if (row.unitPrice != null && row.unitPrice != '') {
+            row.taxUnitPrice = ((parseFloat(row.tax) + 1) * row.unitPrice).toFixed(2);
+          } else if (row.taxUnitPrice != null && row.taxUnitPrice != '') {
+            row.unitPrice = (row.taxUnitPrice / (1 + row.tax)).toFixed(2);
+          }
         }
       },
       showFloatPercentNum(val) {

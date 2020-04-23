@@ -35,20 +35,26 @@
             <other-accounting-form :slotData="otherData" :taxIncluded="radio" />
           </el-col>
         </el-row>
-        <!-- <el-divider style="margin-top:24px;margin-bottom:5px;"></el-divider> -->
         <div class="sheet-total">
-        <el-row type="flex" align="center" justify="end">
-          <div class="sheet-total-title">
-            <el-row type="flex" justify="center" align="center">
-              <h6>总计价格</h6>
-            </el-row>
-          </div>
-          <div style="width:160px;text-align:center">
-            <h6>￥5645646456</h6>
-          </div>
-        </el-row>
+          <el-row type="flex" align="center" justify="end">
+            <div class="sheet-total-title">
+              <el-row type="flex" justify="center" align="center">
+                <h6>总计价格</h6>
+              </el-row>
+            </div>
+            <div style="width:160px;text-align:center">
+              <h6>￥5645646456</h6>
+            </div>
+          </el-row>
         </div>
-        <!-- <el-divider style="margin:5px 0"></el-divider> -->
+        <el-row type="flex" align="center" style="margin-top:10px;">
+          <el-col :span="1" class="form-column">
+            <h6 class="accounting-form-title">备注</h6>
+          </el-col>
+          <el-col :span="23">
+            <el-input v-model="remark" placeholder="输入备注" type="textarea" :rows="5"></el-input>
+          </el-col>
+        </el-row>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -68,8 +74,8 @@
       OtherAccountingForm
     },
     computed: {
-            totalPrice: function () {
-        let price1=0;
+      totalPrice: function () {
+        let price1 = 0;
       }
     },
 
@@ -80,6 +86,7 @@
         materialData: [],
         craftData: [],
         otherData: [],
+        remark: ''
       };
     },
     created() {}
@@ -99,14 +106,17 @@
     display: -webkit-flex;
     justify-content: center;
   }
-.sheet-total-title{
-  flex-grow: 1;
-}
-.sheet-total{
-  padding-top: 8px;
-  padding-bottom: 5px;
-  margin-top: 24px;
-  border-top: 1px solid #DCDFE6;
-  border-bottom: 1px solid #DCDFE6;
-}
+
+  .sheet-total-title {
+    flex-grow: 1;
+  }
+
+  .sheet-total {
+    padding-top: 8px;
+    padding-bottom: 5px;
+    margin-top: 24px;
+    border-top: 1px solid #DCDFE6;
+    border-bottom: 1px solid #DCDFE6;
+  }
+
 </style>

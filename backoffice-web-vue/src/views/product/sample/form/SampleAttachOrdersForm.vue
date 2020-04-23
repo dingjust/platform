@@ -40,7 +40,8 @@
           </el-table-column>
           <el-table-column prop="waste" label="损耗">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.waste" placeholder="损耗" type="number">
+              <el-input @input="(val)=>onWasteInput(val,scope.row)" :value="showFloatPercentNum(scope.row.waste)"
+                v-number-input.float="{ min: 0,max:100 ,decimal:0}">
                 <h6 slot="suffix" style="padding-top:10px">%</h6>
               </el-input>
             </template>
@@ -72,6 +73,10 @@
 </template>
 
 <script>
+  import {
+    accMul,
+  } from '@/common/js/number';
+
   import ImagesUpload from "@/components/custom/ImagesUpload";
 
   export default {
@@ -97,9 +102,25 @@
           'sizes': ['S', 'X', 'M']
         })
       },
-      onRemove(row){
-        this.tableData.splice(this.tableData.indexOf(row),1);
-      }
+      onRemove(row) {
+        this.tableData.splice(this.tableData.indexOf(row), 1);
+      },
+      showFloatPercentNum(val) {
+        var reg = /\.$/;
+        if (!reg.test(val)) {
+          return accMul(val, 100);
+        } else {
+          return val;
+        }
+      },
+      onWasteInput(val, row) {
+        var reg = /\.$/;
+        if (!reg.test(val)) {
+          row.waste = (val / 100.0).toFixed(2);
+        } else {
+          row.waste = val;
+        }
+      },
     },
     data() {
       return {
