@@ -21,6 +21,7 @@ import {
   SizesModule,
   CategoriesModule,
   ApparelProductsModule,
+  SampleProductsModule,
   // order
   RequirementOrdersModule,
   PurchaseOrdersModule,
@@ -31,7 +32,6 @@ import {
   CarouselsModule,
   IndustrialClustersModule,
   LabelsModule,
-  SampleProductModule,
   SampleCheckoutHistModule,
   SuppliersModule,
   CooperatorModule,
@@ -99,6 +99,7 @@ export default new Vuex.Store({
     SizesModule,
     CategoriesModule,
     ApparelProductsModule,
+    SampleProductsModule,
     // order
     RequirementOrdersModule,
     PurchaseOrdersModule,
@@ -110,7 +111,6 @@ export default new Vuex.Store({
     IndustrialClustersModule,
     LabelsModule,
     SampleCheckoutHistModule,
-    SampleProductModule,
     SuppliersModule,
     CooperatorModule,
     PayPlanModule,

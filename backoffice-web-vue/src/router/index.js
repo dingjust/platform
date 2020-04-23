@@ -40,7 +40,7 @@ const router = new Router({
         {
           path: 'product',
           redirect: '/product/apparel',
-          name: '产品管理',
+          name: '产品',
           component: {
             render(c) {
               return c('router-view');
@@ -69,6 +69,20 @@ const router = new Router({
                 requiresAuth: true,
                 permissions: ['PRODUCT']
               }
+            },
+            {
+              path: 'sample',
+              name: '样衣',
+              component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/product/sample/SampleProductsPage'),
+              // meta: {
+              //   requiresAuth: true,
+              //   permissions: ['PRODUCT']
+              // }
+            },
+            {
+              name: '样衣详情',
+              path: 'sampleDetail',
+              component: () => import( /* webpackChunkName: 'tenant-products' */ '@/views/product/sample/details/SampleProductDetailsPage')
             },
             {
               name: '产品详情',

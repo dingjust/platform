@@ -52,7 +52,6 @@ const state = {
       name: ''
     },
     steppedPrices: []
-
   },
   newFormData: {
     id: null,
@@ -89,19 +88,14 @@ const state = {
       uid: '',
       name: ''
     },
-    steppedPrices: [
-      {
-        minimumQuantity: '',
-        price: ''
-      }
-    ],
-    spotSteppedPrices: [
-      {
-        minimumQuantity: '',
-        price: ''
-      }
-    ],
-    productType: ['FUTURE_GOODS'],
+    steppedPrices: [{
+      minimumQuantity: '',
+      price: ''
+    }],
+    spotSteppedPrices: [{
+      minimumQuantity: '',
+      price: ''
+    }],
     colorSizes: []
   },
   queryFormData: {
@@ -126,7 +120,16 @@ const mutations = {
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
+  async search({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    keyword,
+    page,
+    size
+  }) {
     commit('url', url);
     commit('keyword', keyword);
     // commit('currentPageNumber', page);
@@ -152,7 +155,16 @@ const actions = {
       commit('page', response);
     }
   },
-  async searchAdvanced ({dispatch, commit, state}, {url, query, page, size}) {
+  async searchAdvanced({
+    dispatch,
+    commit,
+    state
+  }, {
+    url,
+    query,
+    page,
+    size
+  }) {
     commit('url', url);
     commit('queryFormData', query);
     commit('currentPageNumber', page);
@@ -170,14 +182,27 @@ const actions = {
       commit('page', response);
     }
   },
-  refresh ({dispatch, commit, state}) {
+  refresh({
+    dispatch,
+    commit,
+    state
+  }) {
     const keyword = state.keyword;
     const currentPageNumber = state.currentPageNumber;
     const currentPageSize = state.currentPageSize;
 
-    dispatch('search', {url: state.url, keyword, page: currentPageNumber, size: currentPageSize});
+    dispatch('search', {
+      url: state.url,
+      keyword,
+      page: currentPageNumber,
+      size: currentPageSize
+    });
   },
-  resetFormData ({dispatch, commit, state}) {
+  resetFormData({
+    dispatch,
+    commit,
+    state
+  }) {
     commit('newFormData', {
       id: null,
       images: [],
@@ -213,19 +238,14 @@ const actions = {
         uid: '',
         name: ''
       },
-      steppedPrices: [
-        {
-          minimumQuantity: '',
-          price: ''
-        }
-      ],
-      spotSteppedPrices: [
-        {
-          minimumQuantity: '',
-          price: ''
-        }
-      ],
-      productType: ['FUTURE_GOODS'],
+      steppedPrices: [{
+        minimumQuantity: '',
+        price: ''
+      }],
+      spotSteppedPrices: [{
+        minimumQuantity: '',
+        price: ''
+      }],
       colorSizes: []
     });
   }

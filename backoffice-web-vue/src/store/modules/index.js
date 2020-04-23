@@ -17,6 +17,7 @@ import ColorsModule from './product/colors';
 import SizesModule from './product/sizes';
 import CategoriesModule from './product/categories';
 import ApparelProductsModule from './product/apparel-products';
+import SampleProductsModule from './product/sample-products';
 // order
 import RequirementOrdersModule from './order/requirement-orders';
 import PurchaseOrdersModule from './order/purchase-orders';
@@ -25,7 +26,6 @@ import ProofingsModule from './order/proofings';
 import SalesOrdersModule from './order/sales-orders';
 
 // miscs
-import SampleProductModule from './miscs/sampleProduct';
 import SampleCheckoutHistModule from './miscs/sampleCheckoutHist';
 import SuppliersModule from './miscs/suppliers';
 import CooperatorModule from './miscs/cooperator';
@@ -71,6 +71,7 @@ export {
   CategoriesModule,
   ColorsModule,
   SizesModule,
+  SampleProductsModule,
   // order
   RequirementOrdersModule,
   PurchaseOrdersModule,
@@ -81,7 +82,6 @@ export {
   CarouselsModule,
   IndustrialClustersModule,
   LabelsModule,
-  SampleProductModule,
   SampleCheckoutHistModule,
   SuppliersModule,
   CooperatorModule,

@@ -20,7 +20,7 @@ import {
 import HttpServletPlugin from '@/plugins/HttpServletPlugin.js';
 import http from '@/common/js/http';
 import autoHeight from '@/mixins/autoHeight';
-import directives from './directives';
+import {numberInput} from './directives';
 import Authorized from '@/auth/Authorized';
 import permission from './common/js/permission';
 
@@ -69,9 +69,13 @@ Vue.use(ElementUI, {
   size: 'small'
 });
 // Vue.use(directives);
+//数字输入框指令
+Vue.directive('number-input', numberInput);
+
 Vue.prototype.fn = {};
 Vue.prototype.$http = http;
 Vue.prototype.permission = permission;
+
 // 根据命令设置导航数据
 import _nav from '@/_nav.js';
 import _nav_brand from '@/_nav_brand.js';

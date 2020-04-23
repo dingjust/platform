@@ -152,12 +152,12 @@ export default {
         },
         {
           name: '样衣管理',
-          url: '/product/sample/sampleProduct',
+          url: '/product/sample',
           icon: 'iconNone',
-          meta: {
-            requiresAuth: true,
-            permissions: ['PRODUCT_SAMPLEPRODUCT']
-          }
+          // meta: {
+          //   requiresAuth: true,
+          //   permissions: ['PRODUCT_SAMPLEPRODUCT']
+          // }
         },
         // {
         //   name: '样衣借还记录',
