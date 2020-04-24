@@ -634,6 +634,18 @@ const COMMON_APIS = {
   // 设置部门负责人
   setDepartmentHead (uid) {
     return 'b2b/dept/update/manager/' + uid;
+  },
+  // 添加物料
+  saveMaterials () {
+    return '/b2b/materials/save';
+  },
+  // 获取物料列表
+  getMaterialsList () {
+    return '/b2b/materials/search';
+  },
+  // 获取物料详情
+  getMaterialDetails (id) {
+    return '/b2b/materials/' + id;
   }
 };
 
@@ -716,9 +728,9 @@ let TENANT_APIS = {
   saveContract () {
     return '/b2b/user/agreement/save';
   },
-  saveContract () {
-    return '/b2b/user/agreement/save';
-  },
+  // saveContract () {
+  //   return '/b2b/user/agreement/save';
+  // },
   personalAuthentication () {
     return '/b2b/fdd/api/save/personal/verify/data';
   },

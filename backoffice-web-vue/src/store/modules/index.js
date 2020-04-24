@@ -17,6 +17,7 @@ import ColorsModule from './product/colors';
 import SizesModule from './product/sizes';
 import CategoriesModule from './product/categories';
 import ApparelProductsModule from './product/apparel-products';
+import MaterielModule from './product/materiel'
 import SampleProductsModule from './product/sample-products';
 // order
 import RequirementOrdersModule from './order/requirement-orders';
@@ -71,6 +72,7 @@ export {
   CategoriesModule,
   ColorsModule,
   SizesModule,
+  MaterielModule,
   SampleProductsModule,
   // order
   RequirementOrdersModule,

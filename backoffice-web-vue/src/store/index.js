@@ -21,6 +21,7 @@ import {
   SizesModule,
   CategoriesModule,
   ApparelProductsModule,
+  MaterielModule,
   SampleProductsModule,
   // order
   RequirementOrdersModule,
@@ -99,6 +100,7 @@ export default new Vuex.Store({
     SizesModule,
     CategoriesModule,
     ApparelProductsModule,
+    MaterielModule,
     SampleProductsModule,
     // order
     RequirementOrdersModule,

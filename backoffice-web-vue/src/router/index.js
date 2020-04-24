@@ -111,6 +111,32 @@ const router = new Router({
                 permissions: ['PRODUCT_SAMPLEPRODUCT']
               }
             },
+            {
+              path: 'materiel',
+              redirect: '/product/materiel',
+              name: '物料',
+              component: {
+                render(c) {
+                  return c('router-view');
+                }
+              },
+              children: [{
+                path: '',
+                name: '物料管理',
+                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/materiel/MaterielPage')
+              },
+              {
+                path: 'detail',
+                name: '物料详情',
+                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/materiel/details/MaterielDetailsPage')
+              },
+              {
+                path: 'create',
+                name: '添加物料',
+                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/materiel/details/MaterielDetailsPage')
+              }
+              ]
+            }
           ]
         },
         {

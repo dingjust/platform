@@ -172,6 +172,11 @@ export default {
             requiresAuth: true,
             permissions: ['FACTORY_CAPACITY']
           }
+        },
+        {
+          name: '物料管理',
+          url: '/product/materiel',
+          icon: 'iconNone',
         }
       ]
     },
