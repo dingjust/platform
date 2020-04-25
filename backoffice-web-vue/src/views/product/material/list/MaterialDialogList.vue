@@ -77,28 +77,26 @@
       },
       // 回显
       initMaterialList () {
-        // 数据一致根据对象回显
-        this.selectMaterialList.forEach(row => {
-          this.$refs.resultTable.toggleRowSelection(row, true);
-        })
-
-        // 数据不一致根据id回显
-        // let index;
-        // this.page.content.forEach(val => {
-        //   index = this.selectMaterialList.findIndex(item => {
-        //     console.log(item.id == val.id);
-        //     return item.id == val.id;
-        //   });
-        //   console.log(index);
-        //   if (index > -1) {
-        //     this.$refs.resultTable.toggleRowSelection(val, true);
-        //   }
+        // // 数据一致根据对象回显
+        // this.selectMaterialList.forEach(row => {
+        //   this.$refs.resultTable.toggleRowSelection(row, true);
         // })
+
+        // 数据不一致根据id回显,监听page,跳页需再次执行回显
+        let index;
+        this.page.content.forEach(val => {
+          index = this.selectMaterialList.findIndex(item => {
+            return item.id == val.id;
+          });
+          if (index > -1) {
+            this.$refs.resultTable.toggleRowSelection(val, true);
+          }
+        })
       }
     },
     watch: {
       page: function () {
-
+        this.initMaterialList();
       }
     },
     created () {

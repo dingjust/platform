@@ -334,7 +334,7 @@
       async _onSubmit () {
         const flag = this.$refs.materielForm.modifyFlag;
         if (flag) {
-          this.$message.error('请先完成物料信息的填写');
+          this.$message.error('请先保存正在编辑的信息');
           return;
         }
         const formData = {

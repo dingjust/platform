@@ -104,7 +104,7 @@
           switch (typeof row[key]) {
             case 'string':
               if (row[key].replace(/(^s*)|(s*$)/g, '').length === 0) {
-                this.$message.error('请先完成物料信息的填写');
+                this.$message.error('请先保存正在编辑的信息');
                 return;
               }
               break;
@@ -119,7 +119,7 @@
       },
       onDelete (row, index) {
         // if (this.modifyFlag) {
-        //   this.$message.error('请先完成物料信息的填写');
+        //   this.$message.error('请先保存正在编辑的信息');
         //   return;
         // }
         this.formData.variants.splice(index, 1);
