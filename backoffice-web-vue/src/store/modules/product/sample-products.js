@@ -20,16 +20,12 @@ const state = {
     code: '',
     skuID: '',
     name: '',
-    price: 0.00,
-    minPrice: 0.00,
-    maxPrice: 0.00,
     category: {
       code: '',
       name: ''
     },
     brand: '',
     gramWeight: 0.0,
-    variants: [],
     colors: [],
     sizes: [],
     attributes: {
@@ -51,7 +47,10 @@ const state = {
       uid: '',
       name: ''
     },
-    steppedPrices: []
+    entries: [],
+    costingSheets: [],
+    productionProcessContent: '',
+    medias: []
   },
   newFormData: {
     id: null,
@@ -60,13 +59,9 @@ const state = {
     code: '',
     skuID: '',
     name: '',
-    price: 0.00,
     gramWeight: 0.0,
-    minPrice: 0.00,
-    maxPrice: 0.00,
     category: null,
     brand: '',
-    variants: [],
     colors: [],
     sizes: [],
     fabricCompositions: [],
@@ -88,15 +83,11 @@ const state = {
       uid: '',
       name: ''
     },
-    steppedPrices: [{
-      minimumQuantity: '',
-      price: ''
-    }],
-    spotSteppedPrices: [{
-      minimumQuantity: '',
-      price: ''
-    }],
-    colorSizes: []
+    colorSizes: [],
+    entries: [],
+    costingSheets: [],
+    productionProcessContent: '',
+    medias: []
   },
   queryFormData: {
     code: '',
@@ -210,13 +201,9 @@ const actions = {
       code: '',
       skuID: '',
       name: '',
-      price: 0.00,
       gramWeight: 0.0,
-      minPrice: 0.00,
-      maxPrice: 0.00,
       category: null,
       brand: '',
-      variants: [],
       colors: [],
       sizes: [],
       fabricCompositions: [],
@@ -238,16 +225,12 @@ const actions = {
         uid: '',
         name: ''
       },
-      steppedPrices: [{
-        minimumQuantity: '',
-        price: ''
-      }],
-      spotSteppedPrices: [{
-        minimumQuantity: '',
-        price: ''
-      }],
-      colorSizes: []
-    });
+      colorSizes: [],
+      entries: [],
+      costingSheets: [],
+      productionProcessContent: '',
+      medias: []
+    }, );
   }
 };
 

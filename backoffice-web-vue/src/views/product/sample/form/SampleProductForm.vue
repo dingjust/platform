@@ -19,8 +19,7 @@
         </apparel-product-images-form>
         <sample-attach-orders-form :slot-data="slotData" />
         <el-row style="margin-top:20px;">
-          <el-col :span="6"><el-button class="product-form-btn" @click="dialogVisible=true">创建成本核算单</el-button></el-col>
-          
+          <el-col :span="6"><el-button class="product-form-btn" @click="dialogVisible=true">创建成本核算单</el-button></el-col>          
         </el-row>
       </el-card>
       <el-row type="flex" justify="center" class="product-form-row">
@@ -113,7 +112,12 @@
         this.formData.sizes = null;
         this.formData.colorSizes = colorSizes;
         this.formData.belongTo = null;
-        const url = this.apis().updateOfApparelProduct(this.slotData.code);
+
+        //////////////////
+        delete this.formData.approvalStatus;
+
+        ////////
+        const url = this.apis().updateOfSampleProduct(this.slotData.code);
         const result = await this.$http.put(url, this.formData);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

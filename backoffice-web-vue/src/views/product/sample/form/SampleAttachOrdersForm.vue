@@ -2,12 +2,12 @@
   <div>
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane label="物料清单" name="material">
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="slotData.entries" style="width: 100%">
           <el-table-column prop="name" label="品名">
           </el-table-column>
-          <el-table-column prop="size" label="规格">
+          <el-table-column prop="spec" label="规格">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.size" placeholder="请选择">
+              <el-select v-model="scope.row.spec" placeholder="请选择">
                 <el-option v-for="item in scope.row.sizes" :key="item.value" :label="item" :value="item">
                 </el-option>
               </el-select>
@@ -21,26 +21,27 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="unit" label="单位">
+          <el-table-column prop="materialsUnit" label="单位">
           </el-table-column>
-          <el-table-column prop="attribute" label="属性">
+          <el-table-column prop="materialsType" label="属性">
           </el-table-column>
-          <el-table-column prop="suitColor" label="适用颜色">
+          <el-table-column prop="applicableColors" label="适用颜色">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.suitColor" placeholder="请选择">
-                <el-option v-for="item in scope.row.colors" :key="item.value" :label="item" :value="item">
+              <el-select v-model="scope.row.applicableColors" placeholder="请选择" value-key="color" multiple
+                :collapse-tags="false" @change="(val)=>onApplicableColorChange(val,scope.row)">
+                <el-option v-for="(item,index) in clothesColors" :key="index" :label="item.color" :value="item">
                 </el-option>
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="usage" label="单位用量">
+          <el-table-column prop="unitQuantity" label="单位用量">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.usage" placeholder="单位用量"></el-input>
+              <el-input v-model="scope.row.unitQuantity" placeholder="单位用量"></el-input>
             </template>
           </el-table-column>
-          <el-table-column prop="waste" label="损耗">
+          <el-table-column prop="lossRate" label="损耗">
             <template slot-scope="scope">
-              <el-input @input="(val)=>onWasteInput(val,scope.row)" :value="showFloatPercentNum(scope.row.waste)"
+              <el-input @input="(val)=>onLossRateInput(val,scope.row)" :value="showFloatPercentNum(scope.row.lossRate)"
                 v-number-input.float="{ min: 0,max:100 ,decimal:0}">
                 <h6 slot="suffix" style="padding-top:10px">%</h6>
               </el-input>
@@ -60,8 +61,9 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="生产工艺单" name="craft">
-        <el-input type="textarea" placeholder="输入工艺要求" v-model="textarea1" :rows="10"></el-input>
-        <images-upload class="product-images-form-upload" style="margin-top:20px" :slot-data="slotData.details"
+        <el-input type="textarea" placeholder="输入工艺要求" v-model="slotData.productionProcessContent" :rows="10">
+        </el-input>
+        <images-upload class="product-images-form-upload" style="margin-top:20px" :slot-data="slotData.medias"
           :read-only="isRead" :disabled="isRead" :limit="8">
           <template slot="picBtn" slot-scope="props">
             <h6>上传工艺单文件</h6>
@@ -79,31 +81,48 @@
 
   import ImagesUpload from "@/components/custom/ImagesUpload";
 
+
   export default {
     name: "SampleAttachOrdersForm",
     props: ["slotData", "readOnly", "isRead"],
     components: {
-      ImagesUpload
+      ImagesUpload,
+      
     },
-    computed: {},
+    computed: {
+      clothesColors: function () {
+        var result = [{
+          'color': '全部'
+        }];
+        this.slotData.colorSizes.forEach(element => {
+          result.push(element[0]);
+        });
 
+        return result;
+      }
+    },
     methods: {
       onAdd() {
-        this.tableData.push({
-          'name': '物料1',
-          'size': '',
+        this.slotData.entries.push({
+          'code': '',
+          'materialsName': '物料1',
+          'spec': '',
           'color': '',
-          'unit': '米',
-          'attribute': '面料',
-          'suitColor': '',
-          'usage': '',
-          'waste': '',
+          'materialsUnit': '米',
+          'materialsType': '面料',
+          'applicableColors': [],
+          'unitQuantity': '',
+          'lossRate': '',
           'colors': ['红色', '白色'],
-          'sizes': ['S', 'X', 'M']
+          'sizes': ['S', 'X', 'M'],
+          'entries': [{
+            'color': '白色',
+
+          },{},{}]
         })
       },
       onRemove(row) {
-        this.tableData.splice(this.tableData.indexOf(row), 1);
+        this.slotData.entries.splice(this.slotData.entries.indexOf(row), 1);
       },
       showFloatPercentNum(val) {
         var reg = /\.$/;
@@ -113,20 +132,26 @@
           return val;
         }
       },
-      onWasteInput(val, row) {
+      onLossRateInput(val, row) {
         var reg = /\.$/;
         if (!reg.test(val)) {
-          row.waste = (val / 100.0).toFixed(2);
+          row.lossRate = (val / 100.0).toFixed(2);
         } else {
-          row.waste = val;
+          row.lossRate = val;
         }
       },
+      //适用颜色变化
+      onApplicableColorChange(val, row) {
+        //选中全部则适用颜色值置为空
+        if (val != '' && val.findIndex((item) => item.color == '全部') != -1) {
+          row.applicableColors = null;
+        }
+      }
     },
     data() {
       return {
         activeName: "material",
         textarea1: '',
-        tableData: []
       };
     },
     created() {}
