@@ -1,6 +1,5 @@
 <template>
   <div class="animated fadeIn">
-    <el-card>
       <el-row type="flex" justify="space-between" align="middle">
         <div class="materiel-list-title">
           <h6>{{isCreate && !formData.id ? '添加物料' : '物料详情'}}</h6>
@@ -153,7 +152,6 @@
       <el-row type="flex" justify="center" style="margin-top: 20px">
         <el-button v-if="isCreate" size="medium" class="materiel-btn" @click="onSubmit">{{formData.id ? '编辑物料' : '创建物料'}}</el-button>
       </el-row>
-    </el-card>
   </div>
 </template>
 
@@ -165,7 +163,7 @@
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
   import MaterielStyleDetailsForm from '../form/MaterielStyleDetailsForm';
   export default {
-    name: 'MaterielDetailsPage',
+    name: 'MaterielDetailsDialog',
     components: {MaterielStyleDetailsForm, ImagesUpload},
     props: {
     },
@@ -356,9 +354,10 @@
 
         this.$message.success(this.formData.id != null ? '编辑物料成功' : '创建物料成功');
         this.saveAndEdit = true;
-        await this.$router.push({
-          name: '物料管理'
-        });
+        this.$emit('closeMaterialdetailsVisible');
+        // await this.$router.push({
+        //   name: '物料管理'
+        // });
       },
       validateField (name) {
         this.$refs.form.validateField(name);
@@ -538,7 +537,7 @@
   }
 
   .spec_text {
-    padding-top: 16px;
+    padding-top: 5px;
     padding-right: 15px;
   }
 

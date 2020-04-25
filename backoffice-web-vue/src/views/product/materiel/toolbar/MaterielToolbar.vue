@@ -18,6 +18,7 @@
     </el-form-item>
     <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
     <el-button native-type="reset" @click="onReset">重置</el-button>
+    <el-button class="materiel-btn" @click="onNew">添加物料</el-button>
   </el-form>
 </template>
 
@@ -25,6 +26,9 @@
   export default {
     name: 'MaterielToolbar',
     methods: {
+      onNew() {
+        this.$emit('onNew');
+      },
       onSearch () {
         this.$emit('onSearch');
       },
@@ -47,5 +51,9 @@
   .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
+  }
+
+  .materiel-btn {
+    background-color: #ffd60c;
   }
 </style>

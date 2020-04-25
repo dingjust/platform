@@ -33,7 +33,9 @@ const state = {
     name: '',
     code: '',
     materialsType: ''
-  }
+  },
+  isCreate: true,
+  selectMaterialList: []
 };
 
 const mutations = {
@@ -44,6 +46,8 @@ const mutations = {
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
   formData: (state, formData) => state.formData = formData,
+  isCreate: (state, isCreate) => state.isCreate = isCreate,
+  selectMaterialList: (state, selectMaterialList) => state.selectMaterialList = selectMaterialList
 };
 
 const actions = {
@@ -87,6 +91,14 @@ const actions = {
       ],
       variants: []
     });
+  },
+  resetQueryFormData ({dispatch, commit, state}) {
+    commit('queryFormData', {
+      name: '',
+      code: '',
+      materialsType: ''
+    });
+    commit('currentPageNumber', 0);
   }
 };
 
@@ -98,7 +110,9 @@ const getters = {
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
   page: state => state.page,
-  formData: state => state.formData
+  formData: state => state.formData,
+  isCreate: state => state.isCreate,
+  selectMaterialList: state => state.selectMaterialList
 };
 
 export default {

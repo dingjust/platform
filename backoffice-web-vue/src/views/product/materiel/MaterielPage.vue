@@ -1,20 +1,24 @@
 <template>
-  <div class="animated fadeIn content">
+  <div class="animated fadeIn">
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
         <div class="materiel-list-title">
           <h6>物料列表</h6>
         </div>
-        <el-button class="materiel-btn" @click="onNew">添加物料</el-button>
+<!--        <el-button class="materiel-btn" @click="onNew">添加物料</el-button>-->
       </el-row>
       <div class="pt-2"></div>
-      <materiel-toolbar @onSearch="onSearch"/>
+      <materiel-toolbar @onSearch="onSearch" @onNew="onNew"/>
 <!--      <el-tabs v-model="activeName" @tab-click="handleTabClick">-->
 <!--        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">-->
       <materiel-list :page="page" @onSearch="onSearch"  @onDetails="onDetails"/>
 <!--        </el-tab-pane>-->
 <!--      </el-tabs>-->
+<!--      <el-button @click="onDialog">dialog</el-button>-->
     </el-card>
+<!--    <el-dialog :visible.sync="dialog" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">-->
+<!--      <materiel-dialog v-if="dialog" @confirmMaterial="confirmMaterial"></materiel-dialog>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
@@ -30,9 +34,13 @@
 
   import MaterielToolbar from './toolbar/MaterielToolbar';
   import MaterielList from './list/MaterielList';
+  import MaterielDetailsPage from './details/MaterielDetailsPage';
+  import MaterielDialog from './dialog/MaterielDialog';
   export default {
     name: 'MaterielPage',
-    components: {MaterielList, MaterielToolbar},
+    props: {
+    },
+    components: {MaterielDialog, MaterielDetailsPage, MaterielList, MaterielToolbar},
     computed: {
       ...mapGetters({
         page: 'page',
@@ -42,14 +50,18 @@
     },
     methods: {
       ...mapActions({
-        search: 'search'
+        search: 'search',
+        resetFormData: 'resetFormData'
       }),
+      // confirmMaterial (materialList) {
+      //   console.log(materialList);
+      //   this.dialog = false;
+      // },
       onNew () {
+        this.$store.state.MaterielModule.isCreate = true;
         this.$router.push({
           name: '添加物料',
-          params: {
-            isCreate: true
-          }
+          params: {}
         });
       },
       onSearch (page, size) {
@@ -69,33 +81,24 @@
           this.$message.error(result.msg);
           return;
         }
+        this.$store.state.MaterielModule.isCreate = false;
+        this.$store.state.MaterielModule.formData = Object.assign({}, result.data);
         await this.$router.push({
           name: '物料详情',
-          params: {
-            isCreate: false,
-            formData: result.data
-          }
+          params: {}
         });
-      }
+      },
+      // onDialog () {
+      //   this.dialog = true;
+      // }
     },
     data () {
       return {
-        statuses: [{
-          code: '',
-          name: '全部'
-        },
-        {
-          code: 'approved',
-          name: '已上架'
-        },
-        {
-          code: 'unapproved',
-          name: '已下架'
-        }]
+        // dialog: false
       }
     },
     watch: {
-      $route() {
+      $route () {
         // 跳转到该页面后需要进行的操作
         this.onSearch(this.page.number);
       }
