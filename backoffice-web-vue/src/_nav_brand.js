@@ -87,7 +87,7 @@ export default {
             requiresAuth: true,
             permissions: ['AGREEMENT_SEAL']
           }
-        }
+        },
         // {
         //   name: '下单',
         //   url: '/orderPurchase',
@@ -126,6 +126,11 @@ export default {
           //   requiresAuth: true,
           //   permissions: ['PRODUCT_SAMPLEPRODUCT']
           // }
+        },
+        {
+          name: '物料管理',
+          url: '/product/materiel',
+          icon: 'iconNone',
         }
         // {
         //   name: '样衣借还记录',
@@ -156,15 +161,15 @@ export default {
             permissions: ['CERT']
           }
         },
-        // {
-        //   name: '员工',
-        //   url: '/account/b2b-customer',
-        //   icon: 'iconNone',
-        //   meta: {
-        //     requiresAuth: true,
-        //     permissions: ['COMPANY_B2BCUSTOMER']
-        //   }
-        // },
+        {
+          name: '员工',
+          url: '/account/b2b-customer',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['COMPANY_B2BCUSTOMER']
+          }
+        },
         {
           name: '合作商',
           url: '/account/cooperator',

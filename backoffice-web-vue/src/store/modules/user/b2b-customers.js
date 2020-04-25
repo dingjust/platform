@@ -46,7 +46,8 @@ const state = {
   roleList: [],
   deptList: [],
   roleGroupList: [],
-  roleCodeList: []
+  roleCodeList: [],
+  trainData: []
 };
 
 const mutations = {
@@ -61,7 +62,8 @@ const mutations = {
   formData: (state, formData) => state.formData = formData,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   roleGroupList: (state, roleGroupList) => state.roleGroupList = roleGroupList,
-  roleCodeList: (state, roleCodeList) => state.roleCodeList = roleCodeList
+  roleCodeList: (state, roleCodeList) => state.roleCodeList = roleCodeList,
+  trainData: (state, trainData) => state.trainData = trainData
 };
 
 const actions = {
@@ -121,7 +123,8 @@ const getters = {
   deptList: state => state.deptList,
   roleGroupData: state => state.roleGroupData,
   roleGroupList: state => state.roleGroupList,
-  roleCodeList: state => state.roleCodeList
+  roleCodeList: state => state.roleCodeList,
+  trainData: state => state.trainData
 };
 
 export default {

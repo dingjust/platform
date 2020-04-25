@@ -302,6 +302,7 @@
       // 查看员工信息时回显权限
       _setCheckChange (b2bRoleList) {
         this.roleIdList = b2bRoleList;
+        this.$store.state.B2BCustomersModule.trainData = Object.assign([], b2bRoleList);
         this.__setCheckChange(b2bRoleList);
       },
       // 查看角色页面时回显角色的权限
@@ -320,6 +321,7 @@
         })
         this.distinct(checkList);
         this.roleIdList = checkList;
+        this.$store.state.B2BCustomersModule.trainData = Object.assign([], checkList);
         this.__setCheckChange(checkList);
         checkList = [];
       },
@@ -330,7 +332,7 @@
             if (role.children && role.children.length > 0) {
               this.handleCheckedNodeChange(roleList, role, item);
             } else {
-              index = roleList.indexOf(role.id);
+              index = this.$store.state.B2BCustomersModule.trainData.indexOf(role.id);
               if (index > -1) {
                 this.secondRoleArr.forEach(value => {
                   if (value.id == role.id) {
