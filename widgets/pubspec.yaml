@@ -40,7 +40,7 @@ dependencies:
   cool_ui: "^0.1.14"
   crypto: ^2.0.6
   # image_gallery_saver: ^1.1.0
-  image_cropper: ^1.2.1
+  # image_cropper: ^1.2.1
   flutter_cupertino_data_picker: ^0.8.6
   bot_toast: ^2.2.0
 
