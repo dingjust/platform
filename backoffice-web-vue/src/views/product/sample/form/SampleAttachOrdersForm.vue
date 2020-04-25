@@ -1,5 +1,8 @@
 <template>
   <div>
+    <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false">
+      <sample-accounting-sheet-form slot-data="slotData" />
+    </el-dialog>
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane label="物料清单" name="material">
         <el-table :data="slotData.entries" style="width: 100%">
@@ -80,6 +83,7 @@
   } from '@/common/js/number';
 
   import ImagesUpload from "@/components/custom/ImagesUpload";
+  // import  from "@/components/custom/ImagesUpload";
 
 
   export default {
@@ -87,7 +91,7 @@
     props: ["slotData", "readOnly", "isRead"],
     components: {
       ImagesUpload,
-      
+
     },
     computed: {
       clothesColors: function () {
@@ -118,7 +122,7 @@
           'entries': [{
             'color': '白色',
 
-          },{},{}]
+          }, {}, {}]
         })
       },
       onRemove(row) {
@@ -144,7 +148,9 @@
       onApplicableColorChange(val, row) {
         //选中全部则适用颜色值置为空
         if (val != '' && val.findIndex((item) => item.color == '全部') != -1) {
-          row.applicableColors = null;
+          row.applicableColors = [{
+            'color': '全部'
+          }];;
         }
       }
     },

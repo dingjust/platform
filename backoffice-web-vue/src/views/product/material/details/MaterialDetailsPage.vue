@@ -1,10 +1,11 @@
 <template>
   <div class="animated fadeIn">
+    <el-card>
       <el-row type="flex" justify="space-between" align="middle">
-        <div class="materiel-list-title">
+        <div class="material-list-title">
           <h6>{{isCreate && !formData.id ? '添加物料' : '物料详情'}}</h6>
         </div>
-        <el-button class="materiel-btn" v-if="!isCreate" @click="editMaterial">编辑物料</el-button>
+        <el-button class="material-btn" v-if="!isCreate" @click="editMaterial">编辑物料</el-button>
       </el-row>
       <div class="pt-2"></div>
       <el-form :model="formData" ref="form" :rules="rules">
@@ -142,7 +143,7 @@
             </div>
             <div class="border-container" style="margin-top: 10px">
               <el-form-item prop="variants">
-                <materiel-style-details-form ref="materielForm" :formData="formData" :isCreate="isCreate"
+                <material-style-details-form ref="materielForm" :formData="formData" :isCreate="isCreate"
                                              :specsData="formData.specs" :colorsData="selectColors"/>
               </el-form-item>
             </div>
@@ -150,21 +151,22 @@
         </el-row>
       </el-form>
       <el-row type="flex" justify="center" style="margin-top: 20px">
-        <el-button v-if="isCreate" size="medium" class="materiel-btn" @click="onSubmit">{{formData.id ? '编辑物料' : '创建物料'}}</el-button>
+        <el-button v-if="isCreate" size="medium" class="material-btn" @click="onSubmit">{{formData.id ? '编辑物料' : '创建物料'}}</el-button>
       </el-row>
+    </el-card>
   </div>
 </template>
 
 <script>
   import { createNamespacedHelpers } from 'vuex';
 
-  const { mapActions } = createNamespacedHelpers('MaterielModule');
+  const { mapActions } = createNamespacedHelpers('MaterialModule');
 
   import ImagesUpload from '../../../../components/custom/ImagesUpload';
-  import MaterielStyleDetailsForm from '../form/MaterielStyleDetailsForm';
+  import MaterialStyleDetailsForm from '../form/MaterialStyleDetailsForm';
   export default {
-    name: 'MaterielDetailsDialog',
-    components: {MaterielStyleDetailsForm, ImagesUpload},
+    name: 'MaterialDetailsPage',
+    components: {MaterialStyleDetailsForm, ImagesUpload},
     props: {
     },
     computed: {
@@ -354,10 +356,9 @@
 
         this.$message.success(this.formData.id != null ? '编辑物料成功' : '创建物料成功');
         this.saveAndEdit = true;
-        this.$emit('closeMaterialdetailsVisible');
-        // await this.$router.push({
-        //   name: '物料管理'
-        // });
+        await this.$router.push({
+          name: '物料管理'
+        });
       },
       validateField (name) {
         this.$refs.form.validateField(name);
@@ -435,8 +436,8 @@
     },
     created () {
       this.getAllColors();
-      this.formData = this.$store.state.MaterielModule.formData;
-      this.isCreate = this.$store.state.MaterielModule.isCreate;
+      this.formData = this.$store.state.MaterialModule.formData;
+      this.isCreate = this.$store.state.MaterialModule.isCreate;
       if (!this.isCreate) {
         this.formData.colors.forEach(val => {
           this.$set(val, 'key', val.code);
@@ -478,7 +479,7 @@
 </script>
 
 <style scoped>
-  .materiel-list-title {
+  .material-list-title {
     border-left: 2px solid #ffd60c;
     height: 18px;
     padding-left: 10px;
@@ -537,11 +538,11 @@
   }
 
   .spec_text {
-    padding-top: 5px;
+    padding-top: 16px;
     padding-right: 15px;
   }
 
-  .materiel-btn {
+  .material-btn {
     background-color: #ffd60c;
     border-color: #FFD5CE;
     color: #000;

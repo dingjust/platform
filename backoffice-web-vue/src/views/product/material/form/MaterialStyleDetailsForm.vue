@@ -84,7 +84,7 @@
         </el-table-column>
       </el-table>
       <el-row type="flex">
-        <el-button style="margin-right: 11px;margin-top: 20px" @click="appendMateriel" v-if="isCreate">+ 添加物料</el-button>
+        <el-button style="margin-right: 11px;margin-top: 20px" @click="appendMaterial" v-if="isCreate">+ 添加物料</el-button>
       </el-row>
     </el-row>
   </div>
@@ -96,7 +96,7 @@
   } from '@/common/js/number';
 
   export default {
-    name: 'MaterielStyleDetailsForm',
+    name: 'MaterialStyleDetailsForm',
     props: ['formData', 'specsData', 'colorsData', 'isCreate'],
     methods: {
       onSave (row, index) {
@@ -125,10 +125,10 @@
         this.formData.variants.splice(index, 1);
         this.modifyFlag = false;
         if (this.formData.variants.length === 0) {
-          this.appendMateriel();
+          this.appendMaterial();
         }
       },
-      appendMateriel () {
+      appendMaterial () {
         if (this.modifyFlag) {
           return;
         }
@@ -202,7 +202,7 @@
     },
     created () {
       if (this.formData.variants.length === 0) {
-        this.appendMateriel();
+        this.appendMaterial();
       }
     }
   }

@@ -18,13 +18,13 @@
     </el-form-item>
     <el-button type="primary" class="toolbar-search_input" @click="onSearch">搜索</el-button>
     <el-button native-type="reset" @click="onReset">重置</el-button>
-    <el-button class="materiel-btn" @click="onNew">添加物料</el-button>
+    <el-button class="material-btn" @click="onNew">添加物料</el-button>
   </el-form>
 </template>
 
 <script>
   export default {
-    name: 'MaterielToolbar',
+    name: 'MaterialToolbar',
     methods: {
       onNew() {
         this.$emit('onNew');
@@ -40,7 +40,7 @@
     },
     data () {
       return {
-        queryFormData: this.$store.state.MaterielModule.queryFormData,
+        queryFormData: this.$store.state.MaterialModule.queryFormData,
         materialsType: this.$store.state.EnumsModule.MaterialsType
       }
     }
@@ -53,7 +53,7 @@
     border-color: #ffd60c;
   }
 
-  .materiel-btn {
+  .material-btn {
     background-color: #ffd60c;
   }
 </style>

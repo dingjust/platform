@@ -2,22 +2,22 @@
   <div class="animated fadeIn">
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
-        <div class="materiel-list-title">
+        <div class="material-list-title">
           <h6>物料列表</h6>
         </div>
-<!--        <el-button class="materiel-btn" @click="onNew">添加物料</el-button>-->
+<!--        <el-button class="material-btn" @click="onNew">添加物料</el-button>-->
       </el-row>
       <div class="pt-2"></div>
-      <materiel-toolbar @onSearch="onSearch" @onNew="onNew"/>
+      <material-toolbar @onSearch="onSearch" @onNew="onNew"/>
 <!--      <el-tabs v-model="activeName" @tab-click="handleTabClick">-->
 <!--        <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">-->
-      <materiel-list :page="page" @onSearch="onSearch"  @onDetails="onDetails"/>
+      <material-list :page="page" @onSearch="onSearch"  @onDetails="onDetails"/>
 <!--        </el-tab-pane>-->
 <!--      </el-tabs>-->
 <!--      <el-button @click="onDialog">dialog</el-button>-->
     </el-card>
 <!--    <el-dialog :visible.sync="dialog" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">-->
-<!--      <materiel-dialog v-if="dialog" @confirmMaterial="confirmMaterial"></materiel-dialog>-->
+<!--      <material-dialog v-if="dialog" @confirmMaterial="confirmMaterial"></material-dialog>-->
 <!--    </el-dialog>-->
   </div>
 </template>
@@ -30,17 +30,17 @@
   const {
     mapGetters,
     mapActions
-  } = createNamespacedHelpers('MaterielModule');
+  } = createNamespacedHelpers('MaterialModule');
 
-  import MaterielToolbar from './toolbar/MaterielToolbar';
-  import MaterielList from './list/MaterielList';
-  import MaterielDetailsPage from './details/MaterielDetailsPage';
-  import MaterielDialog from './dialog/MaterielDialog';
+  import MaterialToolbar from './toolbar/MaterialToolbar';
+  import MaterialList from './list/MaterialList';
+  import MaterialDetailsPage from './details/MaterialDetailsPage';
+  import MaterialDialog from './dialog/MaterialDialog';
   export default {
-    name: 'MaterielPage',
+    name: 'MaterialPage',
     props: {
     },
-    components: {MaterielDialog, MaterielDetailsPage, MaterielList, MaterielToolbar},
+    components: {MaterialDialog, MaterialDetailsPage, MaterialList, MaterialToolbar},
     computed: {
       ...mapGetters({
         page: 'page',
@@ -58,7 +58,7 @@
       //   this.dialog = false;
       // },
       onNew () {
-        this.$store.state.MaterielModule.isCreate = true;
+        this.$store.state.MaterialModule.isCreate = true;
         this.$router.push({
           name: '添加物料',
           params: {}
@@ -81,8 +81,8 @@
           this.$message.error(result.msg);
           return;
         }
-        this.$store.state.MaterielModule.isCreate = false;
-        this.$store.state.MaterielModule.formData = Object.assign({}, result.data);
+        this.$store.state.MaterialModule.isCreate = false;
+        this.$store.state.MaterialModule.formData = Object.assign({}, result.data);
         await this.$router.push({
           name: '物料详情',
           params: {}
@@ -110,13 +110,13 @@
 </script>
 
 <style scoped>
-  .materiel-list-title {
+  .material-list-title {
     border-left: 2px solid #ffd60c;
     height: 18px;
     padding-left: 10px;
   }
 
-  .materiel-btn {
+  .material-btn {
     background-color: #ffd60c;
     border-color: #ffd60c;
     color: #000;

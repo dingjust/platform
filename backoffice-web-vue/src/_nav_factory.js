@@ -175,7 +175,7 @@ export default {
         },
         {
           name: '物料管理',
-          url: '/product/materiel',
+          url: '/product/material',
           icon: 'iconNone',
         }
       ]

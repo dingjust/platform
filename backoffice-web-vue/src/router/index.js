@@ -112,8 +112,8 @@ const router = new Router({
               }
             },
             {
-              path: 'materiel',
-              redirect: '/product/materiel',
+              path: 'material',
+              redirect: '/product/material',
               name: '物料',
               component: {
                 render(c) {
@@ -123,17 +123,17 @@ const router = new Router({
               children: [{
                 path: '',
                 name: '物料管理',
-                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/materiel/MaterielPage')
+                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/MaterialPage')
               },
               {
                 path: 'detail',
                 name: '物料详情',
-                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/materiel/details/MaterielDetailsPage')
+                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/details/MaterialDetailsPage')
               },
               {
                 path: 'create',
                 name: '添加物料',
-                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/materiel/details/MaterielDetailsPage')
+                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/details/MaterialDetailsPage')
               }
               ]
             }
