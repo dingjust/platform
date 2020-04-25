@@ -48,15 +48,29 @@
     methods: {
       ...mapActions({
         search: 'search',
-        resetQueryFormData: 'resetQueryFormData'
+        resetQueryFormData: 'resetQueryFormData',
+        resetFormData: 'resetFormData'
       }),
       getSelectMaterial (materialList) {
         this.materialList = materialList;
       },
       confirmMaterial () {
+        this.materialList = this.distinct(this.materialList);
         // 保存选择的物料列表
         this.$store.state.MaterialModule.selectMaterialList = this.materialList;
         this.$emit('confirmMaterial', this.materialList);
+      },
+      // 数组去重
+      distinct (arr) {
+        let result = []
+        let obj = {};
+        for (let i of arr) {
+          if (!obj[i.id]) {
+            result.push(i)
+            obj[i.id] = 1
+          }
+        }
+        return result
       },
       onNew () {
         this.$store.state.MaterialModule.isCreate = true;
@@ -117,6 +131,7 @@
       this.onSearch();
     },
     destroyed () {
+      this.resetFormData();
       this.resetQueryFormData();
     }
   }
