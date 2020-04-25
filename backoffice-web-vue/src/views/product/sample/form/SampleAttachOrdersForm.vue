@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false">
-      <sample-accounting-sheet-form slot-data="slotData" />
+      <material-dialog @confirmMaterial="onMaterialSelect"/>
     </el-dialog>
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane label="物料清单" name="material">
@@ -83,7 +83,7 @@
   } from '@/common/js/number';
 
   import ImagesUpload from "@/components/custom/ImagesUpload";
-  // import  from "@/components/custom/ImagesUpload";
+  import MaterialDialog from "@/views/product/material/dialog/MaterialDialog";
 
 
   export default {
@@ -91,7 +91,7 @@
     props: ["slotData", "readOnly", "isRead"],
     components: {
       ImagesUpload,
-
+      MaterialDialog
     },
     computed: {
       clothesColors: function () {
@@ -107,23 +107,33 @@
     },
     methods: {
       onAdd() {
-        this.slotData.entries.push({
-          'code': '',
-          'materialsName': '物料1',
-          'spec': '',
-          'color': '',
-          'materialsUnit': '米',
-          'materialsType': '面料',
-          'applicableColors': [],
-          'unitQuantity': '',
-          'lossRate': '',
-          'colors': ['红色', '白色'],
-          'sizes': ['S', 'X', 'M'],
-          'entries': [{
-            'color': '白色',
+        this.dialogVisible=true;
+        // this.slotData.entries.push({
+        //   'code': '',
+        //   'materialsName': '物料1',
+        //   'spec': '',
+        //   'color': '',
+        //   'materialsUnit': '米',
+        //   'materialsType': '面料',
+        //   'applicableColors': [],
+        //   'unitQuantity': '',
+        //   'lossRate': '',
+        //   'colors': ['红色', '白色'],
+        //   'sizes': ['S', 'X', 'M'],
+        //   'entries': [{
+        //     'color': '白色',
 
-          }, {}, {}]
-        })
+        //   }, {}, {}]
+        // })
+      },
+      onMaterialSelect(materialList){
+        materialList.forEach((materia)=>{
+          this.slotData.entries.push(
+            {
+              
+            }
+          )
+        });
       },
       onRemove(row) {
         this.slotData.entries.splice(this.slotData.entries.indexOf(row), 1);
@@ -156,6 +166,7 @@
     },
     data() {
       return {
+        dialogVisible:false,
         activeName: "material",
         textarea1: '',
       };

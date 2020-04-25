@@ -64,7 +64,7 @@
       },
       onSearch (page, size) {
         const keyword = this.keyword;
-        const url = this.apis().getMaterialsList();
+        const url = this.apis().getMaterialsListBySelect();
         this.search({
           url,
           keyword,
