@@ -79,7 +79,7 @@
       onSearch(page, size) {
         this.setAdvancedSearch(false);
         const keyword = this.keyword;
-        const url = this.apis().getApparelProducts();
+        const url = this.apis().getSampleProducts();
         this.search({
           url,
           keyword,
@@ -91,7 +91,7 @@
         this.setAdvancedSearch(true);
 
         const query = this.queryFormData;
-        const url = this.apis().getApparelProducts();
+        const url = this.apis().getSampleProducts();
         this.searchAdvanced({
           url,
           query,
@@ -100,7 +100,7 @@
         });
       },
       async onDetails(item) {
-        const url = this.apis().getApparelProduct(item.code);
+        const url = this.apis().getSampleProduct(item.code);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);

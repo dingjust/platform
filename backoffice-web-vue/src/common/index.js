@@ -82,7 +82,7 @@ const COMMON_APIS = {
     return '/b2b/products/sample/update/' + code;
   },
   getSampleProducts () {
-    return '/b2b/products/sample';
+    return '/b2b/sample/clothes';
   },
   getSampleProduct (id) {
     return '/b2b/products/sample/' + id;
@@ -304,6 +304,9 @@ const COMMON_APIS = {
   getApparelProduct (code) {
     return '/b2b/products/apparel/' + code;
   },
+  getSampleProduct (code) {
+    return '/b2b/sample/clothes/' + code;
+  },
   onShelfProduct (code) {
     return '/b2b/products/apparel/' + code + '/on';
   },
@@ -316,8 +319,14 @@ const COMMON_APIS = {
   createApparelProduct () {
     return '/b2b/products/apparel/create';
   },
+  createSampleProduct () {
+    return '/b2b/sample/clothes/create';
+  },
   updateOfApparelProduct (code) {
     return '/b2b/products/apparel/' + code;
+  },
+  updateOfSampleProduct (code) {
+    return '/b2b/sample/clothes/' + code;
   },
   updateBasicOfApparelProduct (code) {
     return '/b2b/products/apparel/' + code + '/basic';
@@ -641,6 +650,9 @@ let TENANT_APIS = {
   getApparelProducts () {
     return '/b2b/products/apparel/all';
   },
+  getSampleProducts () {
+    return '/b2b/sample/clothes/all';
+  },
   getRequirementOrders () {
     return '/b2b/orders/requirement/all';
   },
@@ -787,6 +799,9 @@ Object.assign(TENANT_APIS, COMMON_APIS);
 let NONE_TENANT_APIS = {
   getApparelProducts () {
     return '/b2b/products/apparel';
+  },
+  getSampleProducts () {
+    return '/b2b/sample/clothes';
   },
   getRequirementOrders () {
     return '/b2b/orders/requirement';

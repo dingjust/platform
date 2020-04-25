@@ -66,7 +66,7 @@
       onPageSizeChanged (val) {
         this._reset();
 
-        if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
+        if (this.$store.state.SampleProductsModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val);
           return;
         }
@@ -74,7 +74,7 @@
         this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged (val) {
-        if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
+        if (this.$store.state.SampleProductsModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
         }
