@@ -1,5 +1,5 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn content">
     <el-card>
       <el-row type="flex" justify="space-between" align="middle">
         <div class="material-list-title">
@@ -352,8 +352,8 @@
         const result = await this.$http.post(url, formData);
         if (result.code === 0) {
           this.$message.error(result.msg);
+          return;
         }
-
         this.$message.success(this.formData.id != null ? '编辑物料成功' : '创建物料成功');
         this.saveAndEdit = true;
         await this.$router.push({

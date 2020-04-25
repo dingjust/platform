@@ -1,11 +1,12 @@
 <template>
-  <div class="animated fadeIn">
+  <div class="animated fadeIn content">
     <el-card>
-      <el-row type="flex" justify="space-between" align="middle">
-        <div class="material-list-title">
-          <h6>物料列表</h6>
-        </div>
-<!--        <el-button class="material-btn" @click="onNew">添加物料</el-button>-->
+      <el-row>
+        <el-col :span="2">
+          <div class="material-list-title">
+            <h6>物料列表</h6>
+          </div>
+        </el-col>
       </el-row>
       <div class="pt-2"></div>
       <material-toolbar @onSearch="onSearch" @onNew="onNew"/>
@@ -112,7 +113,6 @@
 <style scoped>
   .material-list-title {
     border-left: 2px solid #ffd60c;
-    height: 18px;
     padding-left: 10px;
   }
 
