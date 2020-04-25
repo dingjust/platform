@@ -98,7 +98,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 leading: IconButton(
                     icon: Icon(
                       B2BIcons.left_fill,
-                      color: Color.fromRGBO(211, 211, 211, 0.7),
+                      color: Color.fromRGBO(0, 0, 0, 0.6),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -153,8 +153,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               color: Color.fromRGBO(254, 227, 93, 1),
               child: Center(
                 child: Text(
-                  '已售${widget.product.salesVolume > 9999 ? '9999+' : widget
-                      .product.salesVolume}件',
+                  '已售${widget.product?.salesVolume ?? 0 > 9999
+                      ? '9999+'
+                      : widget.product?.salesVolume ?? 0}件',
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),

@@ -50,9 +50,9 @@ class AppProvider {
         '[nbyjy]================================	预加载开始${DateFormatUtil
             .formatYMDHMS(start)}');
 
-    Provider.of<ProductHomeState>(context).getData();
-    Provider.of<ProductHomeCarouselsState>(context).getBodyData();
-    Provider.of<ProductHomeCarouselsState>(context).getHeaderData();
+    // Provider.of<ProductHomeState>(context).getData();
+    // Provider.of<ProductHomeCarouselsState>(context).getBodyData();
+    // Provider.of<ProductHomeCarouselsState>(context).getHeaderData();
     Provider
         .of<RecommendProductState>(context)
         .products;

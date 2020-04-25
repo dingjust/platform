@@ -203,8 +203,8 @@ class BrandButtonsSection extends StatelessWidget {
       child: ImageNumButton(
         image: B2BImage.productOrdering(),
         onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
-          // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
+          // Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX);
+          Navigator.pushNamed(context, AppRoutes.ROUTE_ORDER_PRODUCTS);
         },
         title: '看款下单',
       ),
