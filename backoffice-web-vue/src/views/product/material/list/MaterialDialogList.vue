@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight" row-key="id" default-expand-all
               @selection-change="handleSelectionChange" @row-click="clickRow">
-      <el-table-column type="selection" width="55" :reserve-selection="true" :selectable="selectable"/>
+      <el-table-column type="selection" width="55" :reserve-selection="true"/>
       <el-table-column label="物料图片" width="120">
         <template slot-scope="scope">
             <img width="54px" height="54px"
@@ -18,9 +18,9 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="onDetails(scope.row)">编辑</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-button type="text">更多</el-button>
+          <el-button type="text" @click="onDetails(scope.row)">查看</el-button>
+<!--          <el-divider direction="vertical"></el-divider>-->
+<!--          <el-button type="text">更多</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -45,12 +45,14 @@
         this.$emit('getSelectMaterial', selection);
       },
       clickRow (row) {
-        if (this.selectMaterialList.findIndex(val => val.id == row.id) > -1) {
-          return;
-        }
+        // if (this.selectMaterialList.findIndex(val => val.id == row.id) > -1) {
+        //   return;
+        // }
         this.$refs.resultTable.toggleRowSelection(row);
       },
       onDetails (row) {
+        // 阻止冒泡
+        event.stopPropagation();
         this.$emit('onDetails', row);
       },
       onPageSizeChanged (val) {
@@ -72,37 +74,37 @@
         this.$emit('onSearch', val - 1);
       },
       // 判断当前行是否可以勾选
-      selectable (row, index) {
-        return this.selectMaterialList.findIndex(val => val.id == row.id) < 0;
-      },
+      // selectable (row, index) {
+      //   return this.selectMaterialList.findIndex(val => val.id == row.id) < 0;
+      // },
       // 回显
-      initMaterialList () {
-        // // 数据一致根据对象回显
-        // this.selectMaterialList.forEach(row => {
-        //   this.$refs.resultTable.toggleRowSelection(row, true);
-        // })
-
-        // 数据不一致根据id回显,监听page,跳页需再次执行回显
-        let index;
-        this.page.content.forEach(val => {
-          index = this.selectMaterialList.findIndex(item => {
-            return item.id == val.id;
-          });
-          if (index > -1) {
-            this.$refs.resultTable.toggleRowSelection(val, true);
-          }
-        })
-      }
+      // initMaterialList () {
+      //   // // 数据一致根据对象回显
+      //   // this.selectMaterialList.forEach(row => {
+      //   //   this.$refs.resultTable.toggleRowSelection(row, true);
+      //   // })
+      //
+      //   // 数据不一致根据id回显,监听page,跳页需再次执行回显
+      //   let index;
+      //   this.page.content.forEach(val => {
+      //     index = this.selectMaterialList.findIndex(item => {
+      //       return item.id == val.id;
+      //     });
+      //     if (index > -1) {
+      //       this.$refs.resultTable.toggleRowSelection(val, true);
+      //     }
+      //   })
+      // }
     },
     watch: {
-      page: function () {
-        this.initMaterialList();
-      }
+      // page: function () {
+      //   this.initMaterialList();
+      // }
     },
     created () {
-      this.$nextTick(() => {
-        this.initMaterialList();
-      })
+      // this.$nextTick(() => {
+      //   this.initMaterialList();
+      // })
     }
   }
 </script>
