@@ -264,15 +264,22 @@
           this.$message.error('此颜色已被使用，若想删除请取消使用后继续操作');
           return;
         }
-        let index = this.customColors.indexOf(color);
-        if (index > -1) {
-          this.customColors.splice(index, 1);
-          let index1 = this.selectColors.indexOf(color);
-          if (index1 > -1) {
-            this.selectColors.splice(index1, 1);
+
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let index = this.customColors.indexOf(color);
+          if (index > -1) {
+            this.customColors.splice(index, 1);
+            let index1 = this.selectColors.indexOf(color);
+            if (index1 > -1) {
+              this.selectColors.splice(index1, 1);
+            }
           }
-        }
-        this.colorsMax = this.colorsMax + 1;
+          this.colorsMax = this.colorsMax + 1;
+        })
       },
       editCustomColor (color) {
         if (color.name != null && color.name !== '') {
@@ -287,10 +294,16 @@
         }
       },
       editSpec (spec) {
+        // const arr = this.formData.specs.filter((item, index) => {
+        //   return item.name == spec.name;
+        // });
+        // if (arr.length > 1) {
+        //   const index = this.formData.specs.findIndex((val) => val.key == spec.key);
+        //   this.formData.specs.splice(index, 1);
+        //   return;
+        // }
         if (spec.name.replace(/(^s*)|(s*$)/g, '').length > 0) {
-          console.log(this.selectSpecs);
           const index = this.selectSpecs.findIndex(item => item.key === spec.key);
-          console.log(index);
           if (index > -1) {
             this.selectSpecs[index].name = spec.name;
             this.selectSpecs[index].code = null;
@@ -331,9 +344,15 @@
         if (formIndex === 0 && this.formData.specs.length === 1) {
           return;
         }
-        this.formData.specs.splice(formIndex, 1);
-        const selectIndex = this.selectSpecs.indexOf(spec);
-        this.selectSpecs.splice(selectIndex, 1);
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.formData.specs.splice(formIndex, 1);
+          const selectIndex = this.selectSpecs.indexOf(spec);
+          this.selectSpecs.splice(selectIndex, 1);
+        });
       },
       specBlur (spec) {
         const index = this.formData.specs.indexOf(spec);
@@ -452,7 +471,6 @@
         handler (val) {
           if (val) {
             this.operationCount();
-            console.log(this.leaveCount);
           }
         },
         deep: true

@@ -261,15 +261,22 @@
           this.$message.error('此颜色已被使用，若想删除请取消使用后继续操作');
           return;
         }
-        let index = this.customColors.indexOf(color);
-        if (index > -1) {
-          this.customColors.splice(index, 1);
-          let index1 = this.selectColors.indexOf(color);
-          if (index1 > -1) {
-            this.selectColors.splice(index1, 1);
+
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let index = this.customColors.indexOf(color);
+          if (index > -1) {
+            this.customColors.splice(index, 1);
+            let index1 = this.selectColors.indexOf(color);
+            if (index1 > -1) {
+              this.selectColors.splice(index1, 1);
+            }
           }
-        }
-        this.colorsMax = this.colorsMax + 1;
+          this.colorsMax = this.colorsMax + 1;
+        })
       },
       editCustomColor (color) {
         if (color.name != null && color.name !== '') {
@@ -327,9 +334,15 @@
         if (formIndex === 0 && this.formData.specs.length === 1) {
           return;
         }
-        this.formData.specs.splice(formIndex, 1);
-        const selectIndex = this.selectSpecs.indexOf(spec);
-        this.selectSpecs.splice(selectIndex, 1);
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.formData.specs.splice(formIndex, 1);
+          const selectIndex = this.selectSpecs.indexOf(spec);
+          this.selectSpecs.splice(selectIndex, 1);
+        });
       },
       specBlur (spec) {
         const index = this.formData.specs.indexOf(spec);

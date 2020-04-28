@@ -132,31 +132,31 @@
         this.modifyFlag = true;
       },
       onDelete (row, index) {
-        if (!this.modifyFlag && row.quantity > 0) {
+        if (this.modifyFlag && index < this.formData.variants.length - 1) {
+          this.$message.error('请先保存正在编辑信息');
+          return;
+        }
+        if (row.quantity > 0) {
           this.$message.error('此物料仍有库存,暂不支持删除操作');
           return;
         }
 
-        const str = row.spec.name + row.color.name;
-        const indexF = this.materialJudgeList.indexOf(str);
-        this.materialJudgeList.splice(indexF, 1);
-
-        // if ((!row.spec && !row.color) || !this.modifyFlag) {
-        this.formData.variants.splice(index, 1);
-        this.modifyFlag = false;
-        this.hasSpecColor = false;
-        if (this.formData.variants.length === 0) {
-          this.appendMaterial();
-        }
-        if (index < this.modifyIndex) {
-          this.modifyIndex = this.modifyIndex - 1;
-          this.modifyFlag = true;
-        } else if (index > this.modifyIndex) {
-          this.modifyFlag = true;
-        }
-        // } else if (this.modifyFlag) {
-        //   this.$message.error('请先保存正在编辑的信息');
-        // }
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.formData.variants.splice(index, 1);
+          this.modifyFlag = false;
+          this.hasSpecColor = false;
+          if (this.formData.variants.length === 0) {
+            this.appendMaterial();
+          }
+          const arr = this.formData.variants.map(item => {
+            return item.spec.name + item.color.name;
+          })
+          this.materialJudgeList = arr;
+        })
       },
       appendMaterial () {
         if (this.modifyFlag) {
