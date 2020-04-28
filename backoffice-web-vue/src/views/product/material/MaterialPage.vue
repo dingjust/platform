@@ -15,11 +15,11 @@
       <material-list :page="page" @onSearch="onSearch"  @onDetails="onDetails"/>
 <!--        </el-tab-pane>-->
 <!--      </el-tabs>-->
-      <el-button @click="onDialog">dialog</el-button>
+<!--      <el-button @click="onDialog">dialog</el-button>-->
     </el-card>
-    <el-dialog :visible.sync="dialog" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <material-dialog v-if="dialog" @confirmMaterial="confirmMaterial"></material-dialog>
-    </el-dialog>
+<!--    <el-dialog :visible.sync="dialog" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">-->
+<!--      <material-dialog v-if="dialog" @confirmMaterial="confirmMaterial"></material-dialog>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
@@ -54,10 +54,10 @@
         search: 'search',
         resetFormData: 'resetFormData'
       }),
-      confirmMaterial (materialList) {
-        console.log(materialList);
-        this.dialog = false;
-      },
+      // confirmMaterial (materialList) {
+      //   console.log(materialList);
+      //   this.dialog = false;
+      // },
       onNew () {
         this.$store.state.MaterialModule.isCreate = true;
         this.$router.push({
@@ -89,13 +89,13 @@
           params: {}
         });
       },
-      onDialog () {
-        this.dialog = true;
-      }
+      // onDialog () {
+      //   this.dialog = true;
+      // }
     },
     data () {
       return {
-        dialog: false
+        // dialog: false
       }
     },
     watch: {
