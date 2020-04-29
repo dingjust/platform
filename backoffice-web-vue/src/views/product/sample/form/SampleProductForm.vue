@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false">
-      <sample-accounting-sheet-form slot-data="slotData" />
+      <sample-accounting-sheet-form :slot-data="sampleAccountingSheet" @onSave="onAccountingSheetSave"
+        :sampleSpecEntries="slotData.entries" />
     </el-dialog>
     <el-form ref="form" :model="slotData">
       <el-card class="box-card">
@@ -19,7 +20,15 @@
         </apparel-product-images-form>
         <sample-attach-orders-form :slot-data="slotData" />
         <el-row style="margin-top:20px;">
-          <el-col :span="6"><el-button class="product-form-btn" @click="dialogVisible=true">创建成本核算单</el-button></el-col>          
+          <el-col :span="4">
+            <el-button class="product-form-btn" @click="onCreateAccountingSheet">创建成本核算单</el-button>
+          </el-col>
+          <el-col :span="18">
+            <template v-for="(sheet,index) in slotData.costingSheets">
+              <el-button :key="index" type="text" @click="onUpdateAccountingSheet(sheet,index)">成本核算单{{index+1}}
+              </el-button>
+            </template>
+          </el-col>
         </el-row>
       </el-card>
       <el-row type="flex" justify="center" class="product-form-row">
@@ -127,10 +136,6 @@
         this.$router.go(-1);
       },
       onCreate() {
-        // if (this.slotData.images == null || this.slotData.images.length == 0) {
-        //   this.$message.error('请上次产品主图');
-        //   return;
-        // }
         this.$refs['form'].validateField('category');
         this.$refs['form'].validate(valid => {
           if (valid) {
@@ -178,11 +183,41 @@
         // this.$set(this.slotData, 'code', result);
         this.$router.go(-1);
       },
+      onCreateAccountingSheet() {
+        this.sampleAccountingSheet = {
+          'isIncludeTax': true,
+          'remarks': '',
+          'totalPrice': 0,
+          'materialsEntries': [],
+          'specialProcessEntries': [],
+          'laborCostEntries': []
+        };
+        this.dialogVisible = true;
+      },
+      onUpdateAccountingSheet(sheet, index) {
+        this.sampleAccountingSheet = Object.assign({}, sheet);
+        this.dialogVisible = true;
+      },
+      onAccountingSheetSave(sheet) {
+        if (sheet.id != null) {
+          var a=[];          
+          var entry = this.slotData.costingSheets.find(item => item.id == sheet.id);
+          Object.assign(entry, sheet);
+        } else if (sheet.key != null) {
+          var entry = this.slotData.costingSheets.find(item => item.key == sheet.key);
+          Object.assign(entry, sheet);
+        } else {
+          sheet['key'] = Date.now.toString;
+          this.slotData.costingSheets.push(sheet);
+        }
+        this.dialogVisible = false;
+      }
     },
     data() {
       return {
         dialogVisible: false,
-        formData: {}
+        formData: {},
+        sampleAccountingSheet: {}
       };
     },
     destroyed() {

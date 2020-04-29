@@ -108,7 +108,6 @@
     },
     methods: {
       checkColorSizes(rule, value, callback) {
-        console.log(value);
         if (value == null || value.length <= 0 || value[0].length <= 0) {
           return callback(new Error('请填写商品规格'));
         } else {

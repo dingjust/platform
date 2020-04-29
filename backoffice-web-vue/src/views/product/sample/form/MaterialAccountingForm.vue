@@ -1,64 +1,75 @@
 <template>
   <div>
+    <el-dialog :visible.sync="dialogVisible" width="65%" class="purchase-dialog" :close-on-click-modal="false"
+      append-to-body>
+      <sample-spec-entries-table :slot-data="sampleSpecEntries" @onAdd="onEntriesAdd" v-if="hackSet" />
+    </el-dialog>
     <el-table :data="slotData" style="width: 100%">
-      <el-table-column prop="name" label="品名">
+      <el-table-column prop="materialsSpecEntry.materialsName" label="品名">
       </el-table-column>
-      <el-table-column prop="size" label="规格">
+      <el-table-column prop="materialsSpecEntry.spec" label="规格">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.size" placeholder="请选择">
-            <el-option v-for="item in scope.row.sizes" :key="item.value" :label="item" :value="item">
-            </el-option>
-          </el-select>
+          {{scope.row.materialsSpecEntry.spec.name}}
         </template>
       </el-table-column>
-      <el-table-column prop="unit" label="单位" width="50px">
-      </el-table-column>
-      <el-table-column prop="attribute" label="属性" width="50px">
-      </el-table-column>
-      <el-table-column prop="usage" label="单位用量">
+      <el-table-column prop="materialsSpecEntry.unitQuantity" label="单位" width="50px">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.usage" v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
+          {{getEnum('MaterialsUnit', scope.row.materialsSpecEntry.materialsUnit)}}
         </template>
       </el-table-column>
-      <el-table-column prop="waste" label="损耗">
+      <el-table-column prop="materialsSpecEntry.materialsType" label="属性" width="50px">
         <template slot-scope="scope">
-          <el-input @input="(val)=>onWasteInput(val,scope.row)" :value="showFloatPercentNum(scope.row.waste)"
-            @blur="onBlur(scope.row,'waste')" v-number-input.float="{ min: 0,max:100 ,decimal:1}">
-            <h6 slot="suffix" style="padding-top:10px">%</h6>
-          </el-input>
+          {{getEnum('MaterialsType', scope.row.materialsSpecEntry.materialsType)}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="materialsSpecEntry.unitQuantity" label="单位用量">
+      </el-table-column>
+      <el-table-column prop="materialsSpecEntry.lossRate" label="损耗">
+        <template slot-scope="scope">
+          {{showFloatPercentNum(scope.row.materialsSpecEntry.lossRate)+'%'}}
         </template>
       </el-table-column>
       <el-table-column prop="actualUsage" label="单位实际用量">
         <template slot-scope="scope">
-          {{scope.row.usage*(1+scope.row.waste)}}
+          {{(scope.row.materialsSpecEntry.unitQuantity*(1+scope.row.materialsSpecEntry.lossRate)).toFixed(2)}}
         </template>
       </el-table-column>
-      <el-table-column prop="unitPrice" label="不含税单价">
+      <el-table-column prop="unitPriceExcludingTax" label="不含税单价">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.unitPrice" @change="(val)=>onUnitPriceInput(val,scope.row)"
-            v-number-input.float="{ min: 0 ,decimal:2}">
-          </el-input>
+          <el-form-item :key="'materialsEntries-UPET'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.unitPriceExcludingTax'"
+            :rules="{required: !taxIncluded, message: '不能为空', trigger: 'blur'}">
+            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input"
+              @change="(val)=>onUnitPriceExcludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}">
+            </el-input>
+          </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column prop="tax" label="税率">
+      <el-table-column prop="taxRate" label="税率">
         <template slot-scope="scope">
-          <el-input @input="(val)=>onTaxInput(val,scope.row)" :value="showFloatPercentNum(scope.row.tax)"
-            @blur="onBlur(scope.row,'tax')" v-number-input.float="{ min: 0,max:100 ,decimal:1}" v-show="taxIncluded"
-            :disabled="!taxIncluded">
-            <h6 slot="suffix" style="padding-top:10px">%</h6>
-          </el-input>
+          <el-form-item :key="'TR'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.taxRate'"
+            :rules="{required: taxIncluded, message: '不能为空', trigger: 'blur'}">
+            <el-input @input="(val)=>onTaxInput(val,scope.row)" :value="showFloatPercentNum(scope.row.taxRate)"
+              @blur="onBlur(scope.row,'taxRate')" v-number-input.float="{ min: 0,max:100 ,decimal:1}" class="form-input"
+              v-show="taxIncluded" :disabled="!taxIncluded">
+              <h6 slot="suffix" style="padding-top:25px">%</h6>
+            </el-input>
+          </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column prop="taxUnitPrice" label="含税单价">
+      <el-table-column prop="unitPriceIncludingTax" label="含税单价">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.taxUnitPrice" @change="(val)=>onTaxUnitPriceInput(val,scope.row)"
-            v-number-input.float="{ min: 0 ,decimal:2}" placeholder="输入" v-show="taxIncluded" :disabled="!taxIncluded">
-          </el-input>
+          <el-form-item :key="'UPIT'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.unitPriceIncludingTax'"
+            :rules="{required: taxIncluded, message: '不能为空', trigger: 'blur'}">
+            <el-input v-model="scope.row.unitPriceIncludingTax" class="form-input"
+              @change="(val)=>onUnitPriceIncludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}"
+              placeholder="输入" v-show="taxIncluded" :disabled="!taxIncluded">
+            </el-input>
+          </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column prop="taxUnitPrice" :label="taxIncluded?'含税单件价格':'不含税单件价格'" fixed="right" width="110px">
+      <el-table-column prop="unitPriceIncludingTax" :label="taxIncluded?'含税单件价格':'不含税单件价格'" fixed="right" width="110px">
         <template slot-scope="scope">
-          {{(scope.row.usage*(1+scope.row.waste)*(taxIncluded?scope.row.taxUnitPrice:scope.row.unitPrice)).toFixed(2)}}
+          {{(scope.row.materialsSpecEntry.unitQuantity*(1+scope.row.materialsSpecEntry.lossRate)*(taxIncluded?scope.row.unitPriceIncludingTax:scope.row.unitPriceExcludingTax)).toFixed(2)}}
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="50px">
@@ -80,31 +91,17 @@
     accMul,
   } from '@/common/js/number';
 
+  import SampleSpecEntriesTable from "../components/SampleSpecEntriesTable";
+
   export default {
     name: "MaterialAccountingForm",
-    props: ["slotData", 'taxIncluded'],
-    components: {},
+    props: ["slotData", 'taxIncluded', 'sampleSpecEntries'],
+    components: {
+      SampleSpecEntriesTable
+    },
     computed: {},
 
     methods: {
-      onAdd() {
-        this.slotData.push({
-          'name': '物料1',
-          'size': '',
-          'color': '',
-          'unit': '米',
-          'attribute': '面料',
-          'suitColor': '',
-          'usage': '',
-          'waste': '',
-          'colors': ['红色', '白色'],
-          'sizes': ['S', 'X', 'M'],
-          'actualUsage': '',
-          'unitPrice': '',
-          'taxUnitPrice': '',
-          'tax': ''
-        })
-      },
       onRemove(row) {
         this.slotData.splice(this.slotData.indexOf(row), 1);
       },
@@ -112,14 +109,17 @@
         var reg = /\.$/;
         if (reg.test(row[attribute])) {
           this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
-          if (row.unitPrice != null && row.unitPrice != '') {
-            row.taxUnitPrice = ((parseFloat(row.tax) + 1) * row.unitPrice).toFixed(2);
-          } else if (row.taxUnitPrice != null && row.taxUnitPrice != '') {
-            row.unitPrice = (row.taxUnitPrice / (1 + row.tax)).toFixed(2);
+          if (row.unitPriceExcludingTax != null && row.unitPriceExcludingTax != '') {
+            row.unitPriceIncludingTax = ((parseFloat(row.taxRate) + 1) * row.unitPriceExcludingTax).toFixed(2);
+          } else if (row.unitPriceIncludingTax != null && row.unitPriceIncludingTax != '') {
+            row.unitPriceExcludingTax = (row.unitPriceIncludingTax / (1 + row.taxRate)).toFixed(2);
           }
         }
       },
       showFloatPercentNum(val) {
+        if (val == null) {
+          return '';
+        }
         var reg = /\.$/;
         if (!reg.test(val)) {
           return accMul(val, 100);
@@ -127,48 +127,68 @@
           return val;
         }
       },
-      onWasteInput(val, row) {
-        var reg = /\.$/;
-        if (!reg.test(val)) {
-          row.waste = (val / 100.0).toFixed(3);
-        } else {
-          row.waste = val;
-        }
-      },
       onTaxInput(val, row) {
         var reg = /\.$/;
         if (!reg.test(val)) {
-          row.tax = (val / 100.0).toFixed(3);
+          row.taxRate = (val / 100.0).toFixed(3);
         } else {
-          row.tax = val;
+          row.taxRate = val;
         }
-        if (row.unitPrice != null && row.unitPrice != '') {
-          row.taxUnitPrice = ((parseFloat(row.tax) + 1) * row.unitPrice).toFixed(2);
-        } else if (row.taxUnitPrice != null && row.taxUnitPrice != '') {
-          row.unitPrice = (row.taxUnitPrice / (1 + row.tax)).toFixed(2);
+        if (row.unitPriceExcludingTax != null && row.unitPriceExcludingTax != '') {
+          row.unitPriceIncludingTax = ((parseFloat(row.taxRate) + 1) * row.unitPriceExcludingTax).toFixed(2);
+        } else if (row.unitPriceIncludingTax != null && row.unitPriceIncludingTax != '') {
+          row.unitPriceExcludingTax = (row.unitPriceIncludingTax / (1 + row.taxRate)).toFixed(2);
         }
       },
-      onUnitPriceInput(val, row) {
-        if (row.tax != null && row.tax != '') {
-          row.taxUnitPrice = ((parseFloat(row.tax) + 1) * row.unitPrice).toFixed(2);
+      onUnitPriceExcludingTaxInput(val, row) {
+        if (row.taxRate != null && row.taxRate != '') {
+          row.unitPriceIncludingTax = ((parseFloat(row.taxRate) + 1) * row.unitPriceExcludingTax).toFixed(2);
         }
-        // else if (row.taxUnitPrice != null && row.taxUnitPrice != '') {
-        //   row.tax = (row.taxUnitPrice - row.unitPrice) / row.unitPrice;
+        // else if (row.unitPriceIncludingTax != null && row.unitPriceIncludingTax != '') {
+        //   row.taxRate = (row.unitPriceIncludingTax - row.unitPriceExcludingTax) / row.unitPriceExcludingTax;
         // }
       },
-      onTaxUnitPriceInput(val, row) {
-        if (row.tax != null && row.tax != '') {
-          row.unitPrice = (row.taxUnitPrice / (1 + parseFloat(row.tax))).toFixed(2);
+      onUnitPriceIncludingTaxInput(val, row) {
+        if (row.taxRate != null && row.taxRate != '') {
+          row.unitPriceExcludingTax = (row.unitPriceIncludingTax / (1 + parseFloat(row.taxRate))).toFixed(2);
         }
       },
+      onAdd() {
+        this.hackSet = false;
+        this.$nextTick(() => {
+          this.hackSet = true;
+        });
+        this.dialogVisible = true;
+      },
+      onEntriesAdd(specEntries) {
+        this.dialogVisible = false;
+        specEntries.filter(item => this.slotData.findIndex(element => element.materialsSpecEntry.materialsCode == item
+          .materialsCode && element.materialsSpecEntry.spec.code == item.spec
+          .code) == -1).forEach(element => {
+          let obj = Object.assign({}, element);
+          this.slotData.push({
+            'materialsSpecEntry': obj,
+            'unitPriceIncludingTax': '',
+            'unitPriceExcludingTax': '',
+            'taxRate': '',
+            'unitTotalPrice': '',
+            'unitActualQuantity': ''
+          });
+        });
+      }
     },
     data() {
-      return {};
+      return {
+        dialogVisible: false,
+        hackSet: true
+      };
     },
     created() {}
   };
 
 </script>
 <style scoped>
-
+  .form-input {
+    padding-top: 15px;
+  }
 </style>
