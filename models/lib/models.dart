@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 export 'src/auth/authorization.dart';
 export 'src/capacity/capacity.dart';
+export 'src/info/sales_order_refund_info.dart';
 export 'src/media/media.dart';
 export 'src/msg/msg.dart';
 export 'src/my/guideline.dart';
@@ -18,6 +19,8 @@ export 'src/report/report.dart';
 export 'src/security/principal.dart';
 export 'src/subcontract/subcontract.dart';
 export 'src/system/notification/message.dart';
+export 'src/system/page/carousel.dart';
+export 'src/system/page/plate_products.dart';
 export 'src/user/cooperator.dart';
 export 'src/user/dto.dart';
 export 'src/user/member.dart';
@@ -25,16 +28,13 @@ export 'src/user/user.dart';
 export 'src/user/user_group.dart';
 export 'src/wechat/wechat.dart';
 export 'src/widget/widgets.dart';
-export 'src/info/sales_order_refund_info.dart';
-export 'src/system/page/plate_products.dart';
-export 'src/system/page/carousel.dart';
 
 part 'models.g.dart';
 
 abstract class ItemModel {
   int id;
 
-  StatisticsModel statistics;
+// StatisticsModel statistics;
 }
 
 /// 统计
