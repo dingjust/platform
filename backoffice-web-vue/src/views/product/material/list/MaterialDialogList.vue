@@ -18,9 +18,9 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="onDetails(scope.row)">编辑</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-button type="text">更多</el-button>
+          <el-button type="text" @click="onDetails(scope.row)">查看</el-button>
+<!--          <el-divider direction="vertical"></el-divider>-->
+<!--          <el-button type="text">更多</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -51,6 +51,8 @@
         this.$refs.resultTable.toggleRowSelection(row);
       },
       onDetails (row) {
+        // 阻止冒泡
+        event.stopPropagation();
         this.$emit('onDetails', row);
       },
       onPageSizeChanged (val) {
@@ -71,17 +73,17 @@
 
         this.$emit('onSearch', val - 1);
       },
-      // // 判断当前行是否可以勾选
+      // 判断当前行是否可以勾选
       // selectable (row, index) {
       //   return this.selectMaterialList.findIndex(val => val.id == row.id) < 0;
       // },
-      // // 回显
+      // 回显
       // initMaterialList () {
       //   // // 数据一致根据对象回显
       //   // this.selectMaterialList.forEach(row => {
       //   //   this.$refs.resultTable.toggleRowSelection(row, true);
       //   // })
-
+      //
       //   // 数据不一致根据id回显,监听page,跳页需再次执行回显
       //   let index;
       //   this.page.content.forEach(val => {

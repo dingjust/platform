@@ -24,7 +24,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item prop="code">
-              <el-input v-model="formData.code" placeholder="输入物料编号" size="mini" :disabled="!isCreate"/>
+              <el-input v-model="formData.code" placeholder="物料编号由系统自动生成" size="mini" :disabled="true"/>
             </el-form-item>
           </el-col>
           <el-col :span="2">
@@ -60,12 +60,12 @@
         </el-row>
         <el-row class="basic-form-row" type="flex" align="middle" :gutter="20">
           <el-col :span="2">
-            <h6 class="info-image-prepend">上传图片<span style="color: red">*</span></h6>
+            <h6 class="info-image-prepend">上传图片</h6>
           </el-col>
           <el-col :span="20">
-              <el-form-item prop="images">
+              <el-form-item>
                 <images-upload class="product-images-form-upload" :slot-data="formData.images" :limit="5" :disabled="!isCreate">
-                  <template slot="picBtn" slot-scope="props">
+                  <template slot="picBtn" slot-scope="props" v-if="isCreate">
                     <h6>大小不超过5M/张，且最多5张主图</h6>
                   </template>
                 </images-upload>
@@ -97,8 +97,8 @@
                 <template v-for="(customColor) in customColors.slice(index,index+4)" >
                   <el-col :span="6">
                     <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
-                      <el-input v-model="customColor.name" @change="editCustomColor(customColor)"></el-input>
-                      <el-button type="text" @click="removeCustomColor(customColor)"> 删除</el-button>
+                      <el-input v-model="customColor.name" @change="editCustomColor(customColor)" :disabled="colorDisabled(customColor)"></el-input>
+                      <el-button type="text" @click="removeCustomColor(customColor)" :disabled="colorDisabled(customColor)"> 删除</el-button>
                     </el-row>
                   </el-col>
                 </template>
@@ -125,14 +125,14 @@
               <el-row type="flex" align="middle" v-for="(specItem,index) in formData.specs" v-if="index % 4 == 0">
                 <template  v-for="(spec) in formData.specs.slice(index, index+4)">
                   <el-col :span="6">
-                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px" v-if="specInputJ(spec)">
-                      <el-input ref="input" v-model="spec.name" @blur="specBlur(spec)" onkeydown="if(event.keyCode==13){blur()}"></el-input>
-                      <el-button type="text" @click="removeSpec(spec)">删除</el-button>
+                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px">
+                      <el-input ref="input" v-model="spec.name" @change="editSpec(spec)" :disabled="specDisabled(spec)"></el-input>
+                      <el-button type="text" @click="removeSpec(spec)" :disabled="specDisabled(spec)">删除</el-button>
                     </el-row>
-                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px" v-else>
-                      <span class="spec_text">{{spec.name}}</span>
-                      <el-button type="text" @click="removeSpec(spec)">删除</el-button>
-                    </el-row>
+<!--                    <el-row type="flex" style="margin-bottom: 20px;margin-right: 10px" v-else>-->
+<!--                      <span class="spec_text">{{spec.name}}</span>-->
+<!--                      <el-button type="text" @click="removeSpec(spec)">删除</el-button>-->
+<!--                    </el-row>-->
                   </el-col>
                 </template>
               </el-row>
@@ -143,14 +143,14 @@
             <div class="border-container" style="margin-top: 10px">
               <el-form-item prop="variants">
                 <material-style-details-form ref="materielForm" :formData="formData" :isCreate="isCreate"
-                                             :specsData="formData.specs" :colorsData="selectColors"/>
+                                             :specsData="selectSpecs" :colorsData="selectColors"/>
               </el-form-item>
             </div>
           </el-col>
         </el-row>
       </el-form>
       <el-row type="flex" justify="center" style="margin-top: 20px">
-        <el-button v-if="isCreate" size="medium" class="material-btn" @click="onSubmit">{{formData.id ? '编辑物料' : '创建物料'}}</el-button>
+        <el-button v-if="isCreate" size="medium" class="material-btn" @click="onSubmit">{{formData.id ? '保存' : '创建物料'}}</el-button>
       </el-row>
   </div>
 </template>
@@ -173,8 +173,14 @@
       ...mapActions({
         resetFormData: 'resetFormData'
       }),
+      specDisabled (spec) {
+        return this.formData.variants.findIndex(item => item.spec.name === spec.name) > -1;
+      },
+      colorDisabled (color) {
+        return this.formData.variants.findIndex(item => item.color.name === color.name) > -1;
+      },
       editMaterial () {
-        this.getAllColors();
+        // this.getAllColors();
         this.selectColors = Object.assign([], this.formData.colors);
         this.customColors = this.formData.colors.filter(val => val.customize);
         this.formData.colors = this.formData.colors.map((color) => color.name);
@@ -237,6 +243,9 @@
         return colors;
       },
       appendCustomColor () {
+        if (this.selectColors.length >= 30) {
+          return;
+        }
         this.customColors.push({
           name: null,
           previewImg: [],
@@ -248,19 +257,26 @@
         const flag = this.formData.variants.some(val => {
           return val.color.name == color.name;
         })
-        if (flag) {
+        if (flag && color.name != null && color.name.replace(/^\s*|\s*$/g, '').length > 0) {
           this.$message.error('此颜色已被使用，若想删除请取消使用后继续操作');
           return;
         }
-        let index = this.customColors.indexOf(color);
-        if (index > -1) {
-          this.customColors.splice(index, 1);
-          let index1 = this.selectColors.indexOf(color);
-          if (index1 > -1) {
-            this.selectColors.splice(index1, 1);
+
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let index = this.customColors.indexOf(color);
+          if (index > -1) {
+            this.customColors.splice(index, 1);
+            let index1 = this.selectColors.indexOf(color);
+            if (index1 > -1) {
+              this.selectColors.splice(index1, 1);
+            }
           }
-        }
-        this.colorsMax = this.colorsMax + 1;
+          this.colorsMax = this.colorsMax + 1;
+        })
       },
       editCustomColor (color) {
         if (color.name != null && color.name !== '') {
@@ -271,6 +287,19 @@
             this.formData.colorSizes = this.getColorSizes();
           } else {
             this.selectColors.push(color);
+          }
+        }
+      },
+      editSpec (spec) {
+        if (spec.name.replace(/(^s*)|(s*$)/g, '').length > 0) {
+          console.log(this.selectSpecs);
+          const index = this.selectSpecs.findIndex(item => item.key === spec.key);
+          console.log(index);
+          if (index > -1) {
+            this.selectSpecs[index].name = spec.name;
+            this.selectSpecs[index].code = null;
+          } else {
+            this.selectSpecs.push(spec);
           }
         }
       },
@@ -301,15 +330,19 @@
           this.$message.error('此规格已被使用，若想删除请取消使用后继续操作');
           return;
         }
-        const index = this.formData.specs.indexOf(spec);
-        // this.specInputShow = false;
-        this.formData.specs.splice(index, 1);
-        if (this.specInputShow) {
+        const formIndex = this.formData.specs.indexOf(spec);
+        if (formIndex === 0 && this.formData.specs.length === 1) {
           return;
         }
-        if (this.formData.specs.length === 0) {
-          this.appendSpec();
-        }
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.formData.specs.splice(formIndex, 1);
+          const selectIndex = this.selectSpecs.indexOf(spec);
+          this.selectSpecs.splice(selectIndex, 1);
+        });
       },
       specBlur (spec) {
         const index = this.formData.specs.indexOf(spec);
@@ -350,6 +383,7 @@
         const result = await this.$http.post(url, formData);
         if (result.code === 0) {
           this.$message.error(result.msg);
+          return;
         }
 
         this.$message.success(this.formData.id != null ? '编辑物料成功' : '创建物料成功');
@@ -410,7 +444,8 @@
         colorsMax: 30,
         codeSelect: 100,
         leaveCount: 0,
-        saveAndEdit: false
+        saveAndEdit: false,
+        selectSpecs: []
       }
     },
     watch: {
@@ -438,6 +473,7 @@
       this.formData = this.$store.state.MaterialModule.formData;
       this.isCreate = this.$store.state.MaterialModule.isCreate;
       if (!this.isCreate) {
+        this.selectSpecs = Object.assign([], this.formData.specs);
         this.formData.colors.forEach(val => {
           this.$set(val, 'key', val.code);
         })

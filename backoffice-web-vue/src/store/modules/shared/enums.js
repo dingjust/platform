@@ -1444,6 +1444,14 @@ const state = {
   ],
   MaterialsUnit: [
     {
+      code: 'INDIVIDUAL',
+      name: '个'
+    },
+    {
+      code: 'CM',
+      name: '厘米'
+    },
+    {
       code: 'MEASURE',
       name: '条'
     },
@@ -1457,7 +1465,7 @@ const state = {
     },
     {
       code: 'KG',
-      name: '公斤'
+      name: '千克'
     },
     {
       code: 'PACKAGE',

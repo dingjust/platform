@@ -4,7 +4,8 @@
       <el-table :data="formData.variants" default-expand-all :highlight-current-row="false">
         <el-table-column prop="specs" label="规格" min-width="100">
           <template slot-scope="scope">
-            <el-select v-if="modifyFlag && scope.$index == modifyIndex" v-model="scope.row.spec" placeholder="请选择" value-key="key">
+            <el-select v-if="modifyFlag && scope.$index == modifyIndex && !hasSpecColor"
+                       v-model="scope.row.spec" placeholder="请选择" value-key="key">
               <el-option
                 v-for="(item,index) in specsData"
                 :key="index"
@@ -17,7 +18,7 @@
         </el-table-column>
         <el-table-column prop="color" label="颜色" min-width="90">
           <template slot-scope="scope">
-            <el-select v-if="modifyFlag && scope.$index == modifyIndex" v-model="scope.row.color" placeholder="请选择" value-key="key">
+            <el-select v-if="modifyFlag && scope.$index == modifyIndex && !hasSpecColor" v-model="scope.row.color" placeholder="请选择" value-key="key">
               <el-option
                 v-for="(item,index) in colorsData"
                 :key="index"
@@ -62,7 +63,7 @@
                       @input="(val)=>onTaxInput(val,scope.row)" v-number-input.float="{ min: 0 , max: 100, decimal: 1 }">
               <h6 slot="suffix" style="padding-top:8px">%</h6>
             </el-input>
-            <span v-else>{{scope.row.taxRate * 100}}%</span>
+            <span v-else>{{scope.row.taxRate ? scope.row.taxRate * 100 : 0}}%</span>
           </template>
         </el-table-column>
         <el-table-column prop="taxPrice" label="含税价（元）" min-width="80">
@@ -100,36 +101,66 @@
     props: ['formData', 'specsData', 'colorsData', 'isCreate'],
     methods: {
       onSave (row, index) {
-        for (var key in row) {
-          switch (typeof row[key]) {
-            case 'string':
-              if (row[key].replace(/(^s*)|(s*$)/g, '').length === 0) {
-                this.$message.error('请先保存正在编辑的信息');
-                return;
-              }
-              break;
-          }
+        if (!row.spec) {
+          this.$message.error('请选择物料规格');
+          return
         }
+        if (!row.color) {
+          this.$message.error('请选择物料颜色');
+          return
+        }
+        const str = row.spec.name + row.color.name;
+        if (this.materialJudgeList.indexOf(str) > -1) {
+          this.$message.error('此规格颜色的物料已添加');
+          return;
+        }
+        this.materialJudgeList.push(str);
         this.modifyIndex = '';
         this.modifyFlag = false;
+        this.hasSpecColor = false;
       },
       onModify (row, index) {
+        if (this.modifyFlag) {
+          return;
+        }
+        const str = row.spec.name + row.color.name;
+        const indexF = this.materialJudgeList.indexOf(str);
+        this.materialJudgeList.splice(indexF, 1);
+
+        this.hasSpecColor = true;
         this.modifyIndex = index;
         this.modifyFlag = true;
       },
       onDelete (row, index) {
-        // if (this.modifyFlag) {
-        //   this.$message.error('请先保存正在编辑的信息');
-        //   return;
-        // }
-        this.formData.variants.splice(index, 1);
-        this.modifyFlag = false;
-        if (this.formData.variants.length === 0) {
-          this.appendMaterial();
+        if (this.modifyFlag && index < this.formData.variants.length - 1) {
+          this.$message.error('请先保存正在编辑信息');
+          return;
         }
+        if (row.quantity > 0) {
+          this.$message.error('此物料仍有库存,暂不支持删除操作');
+          return;
+        }
+
+        this.$confirm('正在执行删除操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.formData.variants.splice(index, 1);
+          this.modifyFlag = false;
+          this.hasSpecColor = false;
+          if (this.formData.variants.length === 0) {
+            this.appendMaterial();
+          }
+          const arr = this.formData.variants.map(item => {
+            return item.spec.name + item.color.name;
+          })
+          this.materialJudgeList = arr;
+        })
       },
       appendMaterial () {
         if (this.modifyFlag) {
+          this.$message.error('请先保存正在填写的信息');
           return;
         }
         const data = {
@@ -144,7 +175,7 @@
         this.modifyIndex = this.formData.variants.length - 1;
         this.modifyFlag = true;
       },
-      onBlur(row, attribute) {
+      onBlur (row, attribute) {
         var reg = /\.$/;
         if (reg.test(row[attribute])) {
           this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
@@ -155,15 +186,15 @@
           }
         }
       },
-      showFloatPercentNum(val) {
+      showFloatPercentNum (val) {
         var reg = /\.$/;
-        if (!reg.test(val)) {
+        if (val && !reg.test(val)) {
           return accMul(val, 100);
         } else {
           return val;
         }
       },
-      onTaxInput(val, row) {
+      onTaxInput (val, row) {
         var reg = /\.$/;
         if (!reg.test(val)) {
           row.taxRate = (val / 100.0).toFixed(3);
@@ -176,7 +207,7 @@
           row.referencePrice = (row.taxPrice / (1 + row.taxRate)).toFixed(2);
         }
       },
-      onUnitPriceInput(val, row) {
+      onUnitPriceInput (val, row) {
         if (row.taxRate != null && row.taxRate != '') {
           row.taxPrice = ((parseFloat(row.taxRate) + 1) * row.referencePrice).toFixed(2);
         }
@@ -184,18 +215,34 @@
         //   row.taxRate = (row.taxPrice - row.referencePrice) / row.referencePrice;
         // }
       },
-      onTaxUnitPriceInput(val, row) {
+      onTaxUnitPriceInput (val, row) {
         if (row.taxRate != null && row.taxRate != '') {
           row.referencePrice = (row.taxPrice / (1 + parseFloat(row.taxRate))).toFixed(2);
         }
       },
+      initFormData () {
+        this.formData.variants.forEach((item, index) => {
+          this.materialJudgeList.push(item.spec.name + item.color.name);
+          if (!item.referencePrice) {
+            this.$set(this.formData.variants[index], 'referencePrice', '')
+          }
+          if (!item.taxRate) {
+            this.$set(this.formData.variants[index], 'taxRate', '')
+          }
+          if (!item.taxPrice) {
+            this.$set(this.formData.variants[index], 'taxPrice', '')
+          }
+        })
+      }
     },
     data () {
       return {
         modifyFlag: false,
         modifyIndex: '',
         materialsUnit: this.$store.state.EnumsModule.MaterialsUnit,
-        taxRate: ''
+        taxRate: '',
+        hasSpecColor: false,
+        materialJudgeList: []
       }
     },
     watch: {
@@ -204,6 +251,7 @@
       if (this.formData.variants.length === 0) {
         this.appendMaterial();
       }
+      this.initFormData();
     }
   }
 </script>

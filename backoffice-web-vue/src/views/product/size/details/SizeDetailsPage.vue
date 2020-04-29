@@ -28,7 +28,8 @@
           if (this.isNewlyCreated) {
             this._onSubmit();
           } else {
-            this._updateSize();
+            // this._updateSize();
+            this.$emit('_updateSize', this.slotData);
           }
         }
       },
@@ -53,23 +54,23 @@
         this.$emit('onSearch');
         this.$emit('sizeDetailsPageVisibleTurn');
       },
-      async _updateSize () {
-        let formData = this.slotData;
-
-        const url = this.apis().updateSize(formData.code);
-        const result = await this.$http.put(url, formData);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.$message.success('尺码修改成功');
-        this.$set(this.slotData, 'code', result);
-        this.refresh(this.apis().getSizes());
-        // this.fn.closeSlider(true);
-        this.$emit('onSearch')
-        this.$emit('sizeDetailsPageVisibleTurn');
-      }
+      // async _updateSize () {
+      //   let formData = this.slotData;
+      //
+      //   const url = this.apis().updateSize(formData.code);
+      //   const result = await this.$http.put(url, formData);
+      //   if (result['errors']) {
+      //     this.$message.error(result['errors'][0].message);
+      //     return;
+      //   }
+      //
+      //   this.$message.success('尺码修改成功');
+      //   this.$set(this.slotData, 'code', result);
+      //   this.refresh(this.apis().getSizes());
+      //   // this.fn.closeSlider(true);
+      //   this.$emit('onSearch')
+      //   this.$emit('sizeDetailsPageVisibleTurn');
+      // }
     },
     computed: {
       isNewlyCreated: function () {
