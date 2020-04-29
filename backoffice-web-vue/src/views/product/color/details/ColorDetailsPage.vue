@@ -28,7 +28,8 @@
           if (this.isNewlyCreated) {
             this._onSubmit();
           } else {
-            this._updateColor();
+            // this._updateColor();
+            this.$emit('_updateColor', this.slotData);
           }
         }
       },
@@ -53,23 +54,23 @@
         this.$emit('onSearch');
         this.$emit('colorDetailsPageVisibleTurn');
       },
-      async _updateColor () {
-        let formData = this.slotData;
-
-        const url = this.apis().updateColor(formData.code);
-        const result = await this.$http.put(url, formData);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-
-        this.$message.success('修改成功');
-        this.$set(this.slotData, 'code', result);
-        this.refresh(this.apis().getColors());
-        // this.fn.closeSlider(true);
-        this.$emit('onSearch');
-        this.$emit('colorDetailsPageVisibleTurn');
-      }
+      // async _updateColor () {
+      //   let formData = this.slotData;
+      //
+      //   const url = this.apis().updateColor(formData.code);
+      //   const result = await this.$http.put(url, formData);
+      //   if (result['errors']) {
+      //     this.$message.error(result['errors'][0].message);
+      //     return;
+      //   }
+      //
+      //   this.$message.success('修改成功');
+      //   this.$set(this.slotData, 'code', result);
+      //   this.refresh(this.apis().getColors());
+      //   // this.fn.closeSlider(true);
+      //   this.$emit('onSearch');
+      //   this.$emit('colorDetailsPageVisibleTurn');
+      // }
     },
     computed: {
       isNewlyCreated: function () {

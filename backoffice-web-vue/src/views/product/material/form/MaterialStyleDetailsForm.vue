@@ -160,6 +160,7 @@
       },
       appendMaterial () {
         if (this.modifyFlag) {
+          this.$message.error('请先保存正在填写的信息');
           return;
         }
         const data = {

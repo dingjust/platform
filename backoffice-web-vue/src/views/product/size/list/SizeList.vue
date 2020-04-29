@@ -12,6 +12,8 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit" @click="onDetails(scope.row)">明细</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-button type="text" icon="el-icon-edit" @click="changeActive(scope.row)">{{scope.row.active ? '禁用' : '启用'}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -49,6 +51,9 @@
       onDetails(row) {
         this.$emit('onDetails', row);
       },
+      changeActive (row) {
+        this.$emit('changeActive', row);
+      }
     },
     data() {
       return {}

@@ -18,6 +18,9 @@ const state = {
     description: '',
     sequence: 0,
     active: true
+  },
+  queryFormData: {
+    active: null
   }
 };
 
@@ -25,11 +28,12 @@ const mutations = {
   currentPageNumber: (state, currentPageNumber) => state.currentPageNumber = currentPageNumber,
   currentPageSize: (state, currentPageSize) => state.currentPageSize = currentPageSize,
   keyword: (state, keyword) => state.keyword = keyword,
-  page: (state, page) => state.page = page
+  page: (state, page) => state.page = page,
+  queryFormData: (state, queryFormData) => state.queryFormData = queryFormData
 };
 
 const actions = {
-  async search({dispatch, commit, state}, {url,keyword, page, size}) {
+  async search({dispatch, commit, state}, {url, keyword, page, size}) {
     commit('keyword', keyword);
     commit('currentPageNumber', page);
     if (size) {
@@ -37,7 +41,8 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword
+      keyword: state.keyword,
+      active: state.queryFormData.active
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -61,7 +66,8 @@ const getters = {
   keyword: state => state.keyword,
   currentPageNumber: state => state.currentPageNumber,
   currentPageSize: state => state.currentPageSize,
-  page: state => state.page
+  page: state => state.page,
+  queryFormData: state => state.queryFormData
 };
 
 export default {
