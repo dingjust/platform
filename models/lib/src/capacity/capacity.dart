@@ -7,7 +7,7 @@ part 'capacity.g.dart';
 @JsonSerializable()
 class FactoryCapacityModel extends ItemModel {
   ///点击统计
-  @JsonKey(fromJson: statisticsFromJson)
+  @JsonKey(fromJson: statisticsFromJson, toJson: statisticsToJson)
   StatisticsModel statistics;
 
   int id;
@@ -114,6 +114,9 @@ class FactoryCapacityModel extends ItemModel {
       }
     }
   }
+
+  static Map<String, dynamic> statisticsToJson(StatisticsModel model) =>
+      model == null ? null : StatisticsModel.toJson(model);
 }
 
 ///工厂产能分类产能信息

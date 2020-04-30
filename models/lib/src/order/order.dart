@@ -237,6 +237,7 @@ const AgreementRoleTypeLocalizedMap = {
 @JsonSerializable()
 class AbstractOrderModel extends ItemModel {
   ///点击统计
+  @JsonKey(fromJson: statisticsFromJson, toJson: statisticsToJson)
   StatisticsModel statistics;
 
   /// 订单号
@@ -350,6 +351,21 @@ class AbstractOrderModel extends ItemModel {
           : reconciliationOrders
           .map((model) => ReconciliationOrderNoteModel.toJson(model))
           .toList();
+
+  static StatisticsModel statisticsFromJson(var json) {
+    if (json == null) {
+      return null;
+    } else {
+      if (json is StatisticsModel) {
+        return json;
+      } else {
+        return StatisticsModel.fromJson(json as Map<String, dynamic>);
+      }
+    }
+  }
+
+  static Map<String, dynamic> statisticsToJson(StatisticsModel model) =>
+      model == null ? null : StatisticsModel.toJson(model);
 }
 
 /// 订单

@@ -71,11 +71,13 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
   @override
   void initState() {
     // TODO: implement initState
-    categoriesConditionEntries.addAll(widget.categories
-        .map((category) =>
-            FilterConditionEntry(label: category.name, value: category))
-        .toList());
-
+    if (widget.categories != null) {
+      categoriesConditionEntries.addAll(widget.categories
+          .map((category) =>
+          FilterConditionEntry(label: category.name, value: category))
+          .toList());
+    }
+    
     if (widget.requirementFilterCondition != null) {
       currentCondition = widget.requirementFilterCondition;
     } else {
