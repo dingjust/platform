@@ -19,13 +19,17 @@
         <apparel-product-images-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
         </apparel-product-images-form>
         <sample-attach-orders-form :slot-data="slotData" />
-        <el-row style="margin-top:20px;">
+        <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">
           <el-col :span="4">
             <el-button class="product-form-btn" @click="onCreateAccountingSheet">创建成本核算单</el-button>
           </el-col>
+          <el-col :span="2">
+            <h6 style="padding-top:8px">核算单：</h6>
+          </el-col>
           <el-col :span="18">
             <template v-for="(sheet,index) in slotData.costingSheets">
-              <el-button :key="index" type="text" @click="onUpdateAccountingSheet(sheet,index)">成本核算单{{index+1}}
+              <el-button :key="index" type="text" @click="onUpdateAccountingSheet(sheet,index)">
+                {{sheet.id!=null?sheet.id:'成本核算单'+index+1}}
               </el-button>
             </template>
           </el-col>
@@ -200,7 +204,7 @@
       },
       onAccountingSheetSave(sheet) {
         if (sheet.id != null) {
-          var a=[];          
+          var a = [];
           var entry = this.slotData.costingSheets.find(item => item.id == sheet.id);
           Object.assign(entry, sheet);
         } else if (sheet.key != null) {

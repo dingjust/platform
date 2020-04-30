@@ -9,7 +9,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <apparel-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
+      <sample-product-toolbar @onNew="onNew" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane v-for="status of statuses" :key="status.code" :label="status.name" :name="status.code">
           <sample-product-list :page="page" @onDetails="onDetails" @onSearch="onSearch" @onBelongDetail="onBelongDetail"
@@ -43,7 +43,7 @@
     mapActions
   } = createNamespacedHelpers('SampleProductsModule');
 
-  import ApparelProductToolbar from './toolbar/ApparelProductToolbar';
+  import SampleProductToolbar from './toolbar/SampleProductToolbar';
   import SampleProductList from './list/SampleProductList';
   import SampleProductDetailsPage from './details/SampleProductDetailsPage';
   import FactoryDetailsRead from '@/views/user/company/factory/details/FactoryDetailsRead';
@@ -53,7 +53,7 @@
     name: 'SampleProductsPage',
     components: {
       SampleProductDetailsPage,
-      ApparelProductToolbar,
+      SampleProductToolbar,
       SampleProductList,
       FactoryDetailsRead,
       BrandDetailsRead

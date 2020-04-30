@@ -34,64 +34,21 @@
           </el-option-group>
         </el-select>
       </el-form-item>
-<!--      </el-col>-->
-<!--      <el-col :span="4">-->
         <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
         <el-button native-type="reset" @click="onReset">重置</el-button>
         <authorized :authority="permission.productCreate">
           <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>
         </authorized>
-<!--      </el-col>-->
-<!--    </el-row>-->
-    <!--    <el-button-group>-->
-    <!--      <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>-->
-    <!--      <el-button v-if="!isTenant()" type="primary" icon="el-icon-plus" @click="onNew">创建产品</el-button>-->
-    <!--    </el-button-group>-->
-    <!--    <el-popover placement="bottom" width="800" trigger="click">-->
-    <!--      <el-row :gutter="10">-->
-    <!--        <el-col :span="6">-->
-    <!--          <el-form-item label="产品货号">-->
-    <!--            <el-input v-model="queryFormData.skuID"></el-input>-->
-    <!--          </el-form-item>-->
-    <!--        </el-col>-->
-    <!--        <el-col :span="6">-->
-    <!--          <el-form-item label="产品名称">-->
-    <!--            <el-input v-model="queryFormData.name"></el-input>-->
-    <!--          </el-form-item>-->
-    <!--        </el-col>-->
-    <!--        <el-col :span="6">-->
-    <!--        </el-col>-->
-    <!--        <el-col :span="6">-->
-    <!--          <el-form-item label="上/下架状态">-->
-    <!--            <el-select v-model="queryFormData.approvalStatuses" placeholder="请选择" class="w-100" multiple>-->
-    <!--              <el-option v-for="item in approvalStatuses"-->
-    <!--                         :key="item.code"-->
-    <!--                         :label="item.name"-->
-    <!--                         :value="item.code">-->
-    <!--              </el-option>-->
-    <!--            </el-select>-->
-    <!--          </el-form-item>-->
-    <!--        </el-col>-->
-    <!--      </el-row>-->
-    <!--      <el-row :gutter="10">-->
-    <!--        <el-col :span="6">-->
-    <!--          <el-button type="primary" icon="el-icon-search" @click="onAdvancedSearch">查询</el-button>-->
-    <!--        </el-col>-->
-    <!--      </el-row>-->
-    <!--      <el-button-group slot="reference">-->
-    <!--        <el-button type="primary">高级查询</el-button>-->
-    <!--      </el-button-group>-->
-    <!--    </el-popover>-->
   </el-form>
 </template>
 
 <script>
     import {createNamespacedHelpers} from 'vuex';
 
-    const {mapMutations} = createNamespacedHelpers('ApparelProductsModule');
+    const {mapMutations} = createNamespacedHelpers('SampleProductsModule');
 
     export default {
-      name: 'ApparelProductToolbar',
+      name: 'SampleProductToolbar',
       components: {},
       computed: {},
       methods: {
@@ -141,8 +98,8 @@
       data () {
         return {
           keyword: '',
-          formData: this.$store.state.ApparelProductsModule.newFormData,
-          queryFormData: this.$store.state.ApparelProductsModule.queryFormData,
+          formData: this.$store.state.SampleProductsModule.newFormData,
+          queryFormData: this.$store.state.SampleProductsModule.queryFormData,
           approvalStatuses: [{
             code: '',
             name: '全部'
