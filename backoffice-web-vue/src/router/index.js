@@ -218,9 +218,30 @@ const router = new Router({
             {
               path: 'sales/:code',
               name: '销售订单详情',
-              props:true,
+              props: true,
               component: () => import( /* webpackChunkName: 'tenant-orders' */ '@/views/order/sales/details/SalesOrderDetailsPage')
             },
+            {
+              path: 'salesProduction',
+              redirect: '/order/salesProduction',
+              name: '销售计划',
+              component: {
+                render(c) {
+                  return c('router-view');
+                }
+              },
+              children: [{
+                  path: '',
+                  name: '计划列表',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/SalesProductionPage'),
+                },
+                {
+                  path: '/create',
+                  name: '创建',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/details/SalesProductionCreatePage')
+                }
+              ]
+            }
           ]
         },
         {
