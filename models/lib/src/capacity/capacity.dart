@@ -6,6 +6,10 @@ part 'capacity.g.dart';
 ///工厂产能信息
 @JsonSerializable()
 class FactoryCapacityModel extends ItemModel {
+  ///点击统计
+  @JsonKey(fromJson: statisticsFromJson)
+  StatisticsModel statistics;
+
   int id;
 
   ///编码
@@ -58,7 +62,8 @@ class FactoryCapacityModel extends ItemModel {
   @JsonKey(toJson: _categoryCapacitiesToJson)
   List<FactoryCategoryCapacityModel> categoryCapacities;
 
-  FactoryCapacityModel({this.id,
+  FactoryCapacityModel({this.statistics,
+    this.id,
     this.code,
     this.title,
     this.lastRefreshTime,
@@ -97,6 +102,18 @@ class FactoryCapacityModel extends ItemModel {
 
   static int _dateTimetoMilliseconds(DateTime date) =>
       date == null ? null : date.millisecondsSinceEpoch;
+
+  static StatisticsModel statisticsFromJson(var json) {
+    if (json == null) {
+      return null;
+    } else {
+      if (json is StatisticsModel) {
+        return json;
+      } else {
+        return StatisticsModel.fromJson(json as Map<String, dynamic>);
+      }
+    }
+  }
 }
 
 ///工厂产能分类产能信息

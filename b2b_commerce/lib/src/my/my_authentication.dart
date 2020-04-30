@@ -1,9 +1,9 @@
 import 'package:b2b_commerce/src/my/authentication/authentication_business_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_enterprise_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
-import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:b2b_commerce/src/my/authentication/my_authentication_enterprise_result.dart';
 import 'package:b2b_commerce/src/my/authentication/my_authentication_result.dart';
+import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
@@ -147,7 +147,8 @@ class _MyAuthenticationState extends State<MyAuthentication> {
     return GestureDetector(
       onTap: () async {
         // 个体户认证且认证中 || 个人认证
-        if ((!_isCompany && model.companyState == AuthenticationState.CHECK) || model.personalState == AuthenticationState.CHECK) {
+        if ((!_isCompany && model.companyState == AuthenticationState.CHECK) ||
+            model.personalState == AuthenticationState.CHECK) {
           promptingDialog();
         } else if (_isCompany || model.companyType == null) {
           if (model.companyState == AuthenticationState.UNCERTIFIED) {
@@ -199,10 +200,15 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                     // color: model.companyState == AuthenticationState.UNCERTIFIED
                     //     ? Colors.black
                     //     : Colors.grey),
-                    color: (model.companyState == AuthenticationState.UNCERTIFIED && model.personalState == AuthenticationState.UNCERTIFIED) 
-                            || (_isCompany && (model.companyState == AuthenticationState.CHECK || model.companyState == AuthenticationState.SUCCESS))
-                            ? Colors.black
-                            : Colors.grey), 
+                    color: (model.companyState ==
+                        AuthenticationState.UNCERTIFIED &&
+                        model.personalState == AuthenticationState.UNCERTIFIED)
+                        || (_isCompany &&
+                            (model.companyState == AuthenticationState.CHECK ||
+                                model.companyState ==
+                                    AuthenticationState.SUCCESS))
+                        ? Colors.black
+                        : Colors.grey),
               ),
             ),
             Expanded(
@@ -236,7 +242,8 @@ class _MyAuthenticationState extends State<MyAuthentication> {
     return GestureDetector(
       onTap: () {
         // 企业认证且认证中 || 个人认证中
-        if ((_isCompany && model.companyState == AuthenticationState.CHECK) || model.personalState == AuthenticationState.CHECK) {
+        if ((_isCompany && model.companyState == AuthenticationState.CHECK) ||
+            model.personalState == AuthenticationState.CHECK) {
           promptingDialog();
         } else if (!_isCompany || model.companyType == null) {
           if (model.companyState == AuthenticationState.UNCERTIFIED) {
@@ -277,10 +284,15 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                     // color: model.companyState == AuthenticationState.UNCERTIFIED
                     //     ? Colors.black
                     //     : Colors.grey),
-                    color: (model.companyState == AuthenticationState.UNCERTIFIED && model.personalState == AuthenticationState.UNCERTIFIED) 
-                            || (!_isCompany && (model.companyState == AuthenticationState.CHECK || model.companyState == AuthenticationState.SUCCESS))
-                            ? Colors.black
-                            : Colors.grey), 
+                    color: (model.companyState ==
+                        AuthenticationState.UNCERTIFIED &&
+                        model.personalState == AuthenticationState.UNCERTIFIED)
+                        || (!_isCompany &&
+                            (model.companyState == AuthenticationState.CHECK ||
+                                model.companyState ==
+                                    AuthenticationState.SUCCESS))
+                        ? Colors.black
+                        : Colors.grey),
               ),
             ),
             Expanded(
@@ -320,7 +332,8 @@ class _MyAuthenticationState extends State<MyAuthentication> {
       onTap: () async {
         if (model.companyState == AuthenticationState.CHECK) {
           promptingDialog();
-        } else if (bloc.isBrandUser && model.companyState != AuthenticationState.SUCCESS) {
+        } else if (bloc.isBrandUser &&
+            model.companyState != AuthenticationState.SUCCESS) {
           if (model.personalState == AuthenticationState.UNCERTIFIED) {
             Navigator.push(
               context,
@@ -354,10 +367,13 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                     // model.personalState == AuthenticationState.UNCERTIFIED
                     //     ? Colors.black
                     //     : Colors.grey),
-                    color: (model.companyState == AuthenticationState.UNCERTIFIED && model.personalState == AuthenticationState.UNCERTIFIED) 
-                            || model.personalState == AuthenticationState.CHECK || model.personalState == AuthenticationState.SUCCESS
-                            ? Colors.black
-                            : Colors.grey),  
+                    color: (model.companyState ==
+                        AuthenticationState.UNCERTIFIED &&
+                        model.personalState == AuthenticationState.UNCERTIFIED)
+                        || model.personalState == AuthenticationState.CHECK ||
+                        model.personalState == AuthenticationState.SUCCESS
+                        ? Colors.black
+                        : Colors.grey),
               ),
             ),
             Expanded(
@@ -561,17 +577,17 @@ class _MyAuthenticationState extends State<MyAuthentication> {
 
   promptingDialog() {
     showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) {
-      return CustomizeDialog(
-        dialogType: DialogType.RESULT_DIALOG,
-        failTips: '正在进行其他认证，请等待认证流程完成后再进行操作',
-        callbackResult: false,
-        confirmAction: () {
-          Navigator.of(context).pop();
-        },
-      );
-    });
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return CustomizeDialog(
+            dialogType: DialogType.RESULT_DIALOG,
+            failTips: '正在进行其他认证，请等待认证流程完成后再进行操作',
+            callbackResult: false,
+            confirmAction: () {
+              Navigator.of(context).pop();
+            },
+          );
+        });
   }
 }

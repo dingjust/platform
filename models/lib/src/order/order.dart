@@ -236,6 +236,9 @@ const AgreementRoleTypeLocalizedMap = {
 
 @JsonSerializable()
 class AbstractOrderModel extends ItemModel {
+  ///点击统计
+  StatisticsModel statistics;
+
   /// 订单号
   String code;
 
@@ -289,7 +292,8 @@ class AbstractOrderModel extends ItemModel {
   ///是否线下物流
   bool isOfflineConsignment;
 
-  AbstractOrderModel({@required this.code,
+  AbstractOrderModel({@required this.statistics,
+    this.code,
     this.totalQuantity = 0,
     this.totalPrice = 0,
     this.creationTime,
@@ -351,7 +355,8 @@ class AbstractOrderModel extends ItemModel {
 /// 订单
 @JsonSerializable()
 class OrderModel extends AbstractOrderModel {
-  OrderModel({String code,
+  OrderModel({StatisticsModel statistics,
+    String code,
     String status,
     int totalQuantity,
     double totalPrice,
@@ -368,6 +373,7 @@ class OrderModel extends AbstractOrderModel {
     //是否线下物流
     bool isOfflineConsignment})
       : super(
+      statistics: statistics,
       code: code,
       totalQuantity: totalQuantity,
       totalPrice: totalPrice,
@@ -750,7 +756,8 @@ class RequirementOrderModel extends OrderModel {
   ///需求距离
   double distance;
 
-  RequirementOrderModel({this.status,
+  RequirementOrderModel({StatisticsModel statistics,
+    this.status,
     this.belongTo,
     this.details,
     this.totalQuotesCount,
@@ -769,6 +776,7 @@ class RequirementOrderModel extends OrderModel {
     this.distance,
     this.labels})
       : super(
+      statistics: statistics,
       code: code,
       totalQuantity: totalQuantity,
       totalPrice: totalPrice,
