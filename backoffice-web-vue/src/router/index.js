@@ -6,7 +6,9 @@ import {
   hasPermission
 } from '@/auth/auth';
 
-import { Message } from 'element-ui';
+import {
+  Message
+} from 'element-ui';
 
 
 Vue.use(Router);
@@ -121,20 +123,20 @@ const router = new Router({
                 }
               },
               children: [{
-                path: '',
-                name: '物料管理',
-                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/MaterialPage')
-              },
-              {
-                path: 'detail',
-                name: '物料详情',
-                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/details/MaterialDetailsPage')
-              },
-              {
-                path: 'create',
-                name: '添加物料',
-                component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/details/MaterialDetailsPage')
-              }
+                  path: '',
+                  name: '物料管理',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/MaterialPage')
+                },
+                {
+                  path: 'detail',
+                  name: '物料详情',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/details/MaterialDetailsPage')
+                },
+                {
+                  path: 'create',
+                  name: '添加物料',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/product/material/details/MaterialDetailsPage')
+                }
               ]
             }
           ]
@@ -236,10 +238,20 @@ const router = new Router({
                   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/SalesProductionPage'),
                 },
                 {
-                  path: '/create',
-                  name: '创建',
-                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/details/SalesProductionCreatePage')
-                }
+                  path: 'create/plan',
+                  name: '录入销售计划',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/form/SalesPlanForm')
+                },
+                {
+                  path: 'create/order',
+                  name: '录入销售订单',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/form/SalesOrderForm')
+                },
+                {
+                  path: 'create/production',
+                  name: '创建生产任务',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-task/ProductionTaskForm')
+                },
               ]
             }
           ]
@@ -569,17 +581,17 @@ router.beforeEach((to, from, next) => {
   }
 
   if (authorized) {
-  //   // TODO: 检查权限
-  //   if (to.meta.requiresAuth) {
-  //     if (hasPermission(to.meta.permissions)) {
-  //       return next();
-  //     } else {
-  //       Message.error("无权限访问");
-  //       return next(false);
-  //     }
-  //   } else {
-      return next() // 确保一定要调用 next()
-  //   }
+    //   // TODO: 检查权限
+    //   if (to.meta.requiresAuth) {
+    //     if (hasPermission(to.meta.permissions)) {
+    //       return next();
+    //     } else {
+    //       Message.error("无权限访问");
+    //       return next(false);
+    //     }
+    //   } else {
+    return next() // 确保一定要调用 next()
+    //   }
   }
 
   next({

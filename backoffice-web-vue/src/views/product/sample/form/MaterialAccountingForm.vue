@@ -5,19 +5,19 @@
       <sample-spec-entries-table :slot-data="sampleSpecEntries" @onAdd="onEntriesAdd" v-if="hackSet" />
     </el-dialog>
     <el-table :data="slotData" style="width: 100%">
-      <el-table-column prop="materialsSpecEntry.materialsName" label="品名">
+      <el-table-column prop="materialsSpecEntry.materialsName" label="物料名称">
       </el-table-column>
-      <el-table-column prop="materialsSpecEntry.spec" label="规格">
+      <el-table-column prop="materialsSpecEntry.spec" label="物料规格">
         <template slot-scope="scope">
           {{scope.row.materialsSpecEntry.spec.name}}
         </template>
       </el-table-column>
-      <el-table-column prop="materialsSpecEntry.unitQuantity" label="单位" width="50px">
+      <el-table-column prop="materialsSpecEntry.unitQuantity" label="物料单位">
         <template slot-scope="scope">
           {{getEnum('MaterialsUnit', scope.row.materialsSpecEntry.materialsUnit)}}
         </template>
       </el-table-column>
-      <el-table-column prop="materialsSpecEntry.materialsType" label="属性" width="50px">
+      <el-table-column prop="materialsSpecEntry.materialsType" label="物料属性">
         <template slot-scope="scope">
           {{getEnum('MaterialsType', scope.row.materialsSpecEntry.materialsType)}}
         </template>
