@@ -49,6 +49,11 @@ export default {
           name: '销售订单',
           url: '/order/sales',
           icon: 'iconNone',
+        },
+        {
+          name: '销售计划',
+          url: '/order/salesProduction',
+          icon: 'iconNone',
         }
         // {
         //   name: '生产进度',
