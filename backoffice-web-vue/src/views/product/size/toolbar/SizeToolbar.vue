@@ -1,7 +1,9 @@
 <template>
   <el-form :inline="true">
     <el-form-item label="">
-      <el-input placeholder="请输入名称" v-model="keyword"></el-input>
+      <el-input placeholder="请输入名称"
+                v-model="keyword"
+                @keyup.enter.native="onSubmit"></el-input>
     </el-form-item>
     <el-button-group>
       <el-button type="primary" icon="el-icon-search" @click="onSearch"></el-button>
@@ -33,6 +35,9 @@
 
         this.$emit('onNew', formData);
       },
+      onSubmit () {
+        this.onSearch();
+      }
     },
     data() {
       return {
