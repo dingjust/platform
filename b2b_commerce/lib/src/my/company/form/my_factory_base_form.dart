@@ -45,7 +45,10 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
 
   @override
   void initState() {
+    print(FactoryModel.toJson(widget.factory));
+    print(FactoryModel.toJson(widget.factory)['statistics']);
     _factory = FactoryModel.fromJson(FactoryModel.toJson(widget.factory));
+//    _factory = widget.factory;
     _nameController.text = _factory.name ?? '';
     _cooperativeBrandController.text = _factory.cooperativeBrand ?? '';
     _coverageAreaController.text = _factory.coverageArea ?? '';
@@ -393,7 +396,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               maxNum: 1,
               ratioX: 1,
               ratioY: 1,
-              // isCut: true,
+               isCut: true,
               circleShape: true,
               loogPressDelete: false,
             ),
