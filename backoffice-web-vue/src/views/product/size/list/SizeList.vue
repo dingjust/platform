@@ -32,30 +32,42 @@
 <script>
   export default {
     name: 'SizeList',
-    props: ["page"],
+    props: ['page'],
     computed: {},
     methods: {
-      onPageSizeChanged(val) {
+      onPageSizeChanged (val) {
         this._reset();
 
         this.$emit('onSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
-      onCurrentPageChanged(val) {
+      onCurrentPageChanged (val) {
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
-      _reset() {
+      _reset () {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails(row) {
+      onDetails (row) {
         this.$emit('onDetails', row);
       },
       changeActive (row) {
-        this.$emit('changeActive', row);
+        this.$confirm('执行操作将更改此颜色的状态, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$emit('changeActive', row);
+        })
       }
     },
-    data() {
+    data () {
       return {}
     }
   }
