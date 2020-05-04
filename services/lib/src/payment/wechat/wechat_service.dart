@@ -13,5 +13,5 @@ abstract class WechatService {
       String description, String thumbnail);
 
   ///检测微信是否安装
-  Future<bool> isWeChatInstalled();
+  Future<bool> isInstalled();
 }

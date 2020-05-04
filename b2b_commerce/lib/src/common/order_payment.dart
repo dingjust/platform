@@ -34,7 +34,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) => initCheck());
     //监听微信回调
-    fluwx.responseFromPayment.listen((WeChatPaymentResponse data) async {
+    weChatResponseEventHandler.listen((data) async {
       print('========Fluwx response ${widget.hashCode}');
       if (data.errCode == 0) {
         Future.delayed(const Duration(seconds: 1), () {
@@ -642,7 +642,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
 
   void wechatPay() async {
     //检查是否安装微信
-    bool result = await WechatServiceImpl.instance.isWeChatInstalled();
+    bool result = await WechatServiceImpl.instance.isInstalled();
     if (result) {
       showDialog(
           context: context,
@@ -891,7 +891,7 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
   @override
   void dispose() {
     // TODO: implement dispose
-    fluwx.dispose();
+    // fluwx.dispose();
     super.dispose();
   }
 
