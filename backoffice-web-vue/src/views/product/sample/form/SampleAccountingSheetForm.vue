@@ -5,8 +5,8 @@
         <el-tab-pane label="成本预算单" name="first">
           <el-row>
             <el-col :span="6">
-              <el-radio v-model="slotData.isIncludeTax" :label="true">含税</el-radio>
-              <el-radio v-model="slotData.isIncludeTax" :label="false">不含税</el-radio>
+              <el-radio v-model="slotData.isIncludeTax" @change="onIncludeTaxChange" :label="true">含税</el-radio>
+              <el-radio v-model="slotData.isIncludeTax" @change="onIncludeTaxChange" :label="false">不含税</el-radio>
             </el-col>
           </el-row>
           <div>
@@ -125,7 +125,6 @@
         return (price1 + price2 + price3).toFixed(2);
       }
     },
-
     methods: {
       onSave() {
         this.$refs['accountingSheetForm'].validate((valid) => {
@@ -136,8 +135,12 @@
             return false;
           }
         });
+      },
+      onIncludeTaxChange(val) {
+        // this.$refs['accountingSheetForm'].validate();
       }
     },
+
     data() {
       return {
         remark: ''

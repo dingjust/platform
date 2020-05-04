@@ -38,7 +38,7 @@
         <template slot-scope="scope">
           <el-form-item :key="'materialsEntries-UPET'+scope.$index"
             :prop="'materialsEntries.' + scope.$index + '.unitPriceExcludingTax'"
-            :rules="{required: !taxIncluded, message: '不能为空', trigger: 'blur'}">
+            :rules="{required: !taxIncluded, message: '不能为空', trigger: 'change'}">
             <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input"
               @change="(val)=>onUnitPriceExcludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}">
             </el-input>
@@ -48,10 +48,10 @@
       <el-table-column prop="taxRate" label="税率">
         <template slot-scope="scope">
           <el-form-item :key="'TR'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.taxRate'"
-            :rules="{required: taxIncluded, message: '不能为空', trigger: 'blur'}">
+            :rules="{required: taxIncluded, message: '不能为空', trigger: 'change'}" v-if="taxIncluded">
             <el-input @input="(val)=>onTaxInput(val,scope.row)" :value="showFloatPercentNum(scope.row.taxRate)"
               @blur="onBlur(scope.row,'taxRate')" v-number-input.float="{ min: 0,max:100 ,decimal:1}" class="form-input"
-              v-show="taxIncluded" :disabled="!taxIncluded">
+              :disabled="!taxIncluded">
               <h6 slot="suffix" style="padding-top:25px">%</h6>
             </el-input>
           </el-form-item>
@@ -60,10 +60,10 @@
       <el-table-column prop="unitPriceIncludingTax" label="含税单价">
         <template slot-scope="scope">
           <el-form-item :key="'UPIT'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.unitPriceIncludingTax'"
-            :rules="{required: taxIncluded, message: '不能为空', trigger: 'blur'}">
+            :rules="{required: taxIncluded, message: '不能为空', trigger: 'change'}" v-if="taxIncluded">
             <el-input v-model="scope.row.unitPriceIncludingTax" class="form-input"
               @change="(val)=>onUnitPriceIncludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}"
-              placeholder="输入" v-show="taxIncluded" :disabled="!taxIncluded">
+              placeholder="输入" :disabled="!taxIncluded">
             </el-input>
           </el-form-item>
         </template>
