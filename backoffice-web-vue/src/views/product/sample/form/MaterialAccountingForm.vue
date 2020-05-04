@@ -31,12 +31,13 @@
       </el-table-column>
       <el-table-column prop="actualUsage" label="单位实际用量">
         <template slot-scope="scope">
-          {{(scope.row.materialsSpecEntry.unitQuantity*(1+scope.row.materialsSpecEntry.lossRate)).toFixed(2)}}
+          {{(scope.row.materialsSpecEntry.unitQuantity*(1+parseFloat(scope.row.materialsSpecEntry.lossRate))).toFixed(2)}}
         </template>
       </el-table-column>
       <el-table-column prop="unitPriceExcludingTax" label="不含税单价">
         <template slot-scope="scope">
-          <el-form-item :key="'materialsEntries-UPET'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.unitPriceExcludingTax'"
+          <el-form-item :key="'materialsEntries-UPET'+scope.$index"
+            :prop="'materialsEntries.' + scope.$index + '.unitPriceExcludingTax'"
             :rules="{required: !taxIncluded, message: '不能为空', trigger: 'blur'}">
             <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input"
               @change="(val)=>onUnitPriceExcludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}">
@@ -191,4 +192,5 @@
   .form-input {
     padding-top: 15px;
   }
+
 </style>

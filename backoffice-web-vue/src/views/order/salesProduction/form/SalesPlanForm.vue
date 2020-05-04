@@ -45,25 +45,6 @@
           </el-col>
         </el-row>
         <my-address-form :vAddress.sync="form.address" />
-        <el-row justify="start" align="middle" :gutter="20">
-          <el-col :span="6">
-            <el-form-item label="联系人" :rules="[
-                { required: true, message: '请填写收货人', trigger: 'blur'}]" prop="address.fullname">
-              <el-input placeholder="名称" v-model="form.address.fullname" size="mini">
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item class="purchase-form-item" :rules="[
-                { required: true, message: '请填写联系方式', trigger: 'blur'}]" prop="address.cellphone">
-              <el-row type="flex" align="middle">
-                <h6 class="info-input-prepend">联系方式</h6>
-                <el-input placeholder="电话" v-model="form.address.cellphone" size="mini">
-                </el-input>
-              </el-row>
-            </el-form-item>
-          </el-col>
-        </el-row>
       </el-form>
     </el-card>
   </div>

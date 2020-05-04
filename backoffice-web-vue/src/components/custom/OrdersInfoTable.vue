@@ -36,12 +36,12 @@
         // });
         // return  Array.from(sizes);
         var sizes = [];
-        this.slotData.forEach(element => {          
+        this.slotData.forEach(element => {
           sizes.push(element.product.size);
         });
         const res = new Map();
-        var result= sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
-        return result.sort((o1,o2)=>o1.sequence-o2.sequence);
+        var result = sizes.filter((size) => !res.has(size.code) && res.set(size.code, 1));
+        return result.sort((o1, o2) => o1.sequence - o2.sequence);
       },
       colors: function () {
         var colors = new Set([]);
