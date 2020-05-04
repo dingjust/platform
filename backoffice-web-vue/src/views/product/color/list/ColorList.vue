@@ -38,9 +38,15 @@
         this._reset();
 
         this.$emit('onSearch', 0, val);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       onCurrentPageChanged (val) {
         this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
       _reset () {
         this.$refs.resultTable.clearSort();

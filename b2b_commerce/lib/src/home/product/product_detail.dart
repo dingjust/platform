@@ -153,7 +153,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               color: Color.fromRGBO(254, 227, 93, 1),
               child: Center(
                 child: Text(
-                  '已售${widget.product?.salesVolume ?? 0 > 9999
+                  '已售${(widget.product?.salesVolume ?? 0) > 9999
                       ? '9999+'
                       : widget.product?.salesVolume ?? 0}件',
                   overflow: TextOverflow.ellipsis,
