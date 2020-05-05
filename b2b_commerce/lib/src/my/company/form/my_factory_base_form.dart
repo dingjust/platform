@@ -396,7 +396,7 @@ class MyFactoryBaseFormPageState extends State<MyFactoryBaseFormPage> {
               maxNum: 1,
               ratioX: 1,
               ratioY: 1,
-               isCut: true,
+              //  isCut: true,
               circleShape: true,
               loogPressDelete: false,
             ),
