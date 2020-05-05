@@ -252,6 +252,11 @@ const router = new Router({
                   name: '创建生产任务',
                   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-task/ProductionTaskForm')
                 },
+                {
+                  path: 'production',
+                  name: '生产任务详情',
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/details/ProductionTaskDetails')
+                },
               ]
             }
           ]

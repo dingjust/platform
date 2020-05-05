@@ -1,5 +1,5 @@
 <template>
-  <el-row type="flex" :gutter="30">
+  <el-row type="flex" :gutter="50">
     <el-col :span="13">
       <el-row>
         <span class="status_name_label">状态：</span>
@@ -39,6 +39,7 @@
 <script>
   export default {
     name: 'SalesProductionStatusBar',
+    props: ['queryFormData'],
     data () {
       return {
         salesProductionStatuses: this.$store.state.EnumsModule.SalesProductionStatuses,
@@ -71,13 +72,7 @@
             code: 'COMPLETE',
             name: '已延期'
           }
-        ],
-        queryFormData: {
-          status: '',
-          hasContact: '',
-          isArrears: '',
-          isDelay: ''
-        }
+        ]
       }
     }
   }
@@ -97,7 +92,7 @@
 
   .status_name_label {
     margin-top: 7px;
-    margin-right: 15px;
+    margin-right: 5px;
   }
 
   /deep/ .el-radio-group {

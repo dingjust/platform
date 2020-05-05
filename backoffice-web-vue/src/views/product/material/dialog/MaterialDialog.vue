@@ -10,7 +10,7 @@
     <material-dialog-list :page="page" @onSearch="onSearch" @onDetails="onDetails"
       @getSelectMaterial="getSelectMaterial" v-if="hackSet" />
     <el-row type="flex" justify="center" align="middle" style="margin-top: 10px">
-      <el-button size="medium" class="sure-button" @click="confirmMaterial">确认添加</el-button>
+      <el-button size="medium" class="sure-button" @click="confirmMaterial" :disabled="materialList.length<1">确认添加</el-button>
     </el-row>
     <el-dialog :visible.sync="materialdetailsVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false" :before-close="beforeClose">

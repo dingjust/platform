@@ -288,7 +288,7 @@
     <el-row class="product-basic-attributes" type="flex" :gutter="50" align="middle" justify="center">
       <!-- <el-row type="flex" justify="center" align="center" class="orders-info-table-btn"> -->
       <i class="iconfont icon_arrow iconfont-btn" v-if="!showAll" @click="showAll=true">&#xe714;&nbsp;展开全部属性</i>
-      <i class="iconfont icon_arrow iconfont-btn" v-if="showAll" @click="showAll=false">&#xe713;&nbsp;收回全部属性</i>
+      <i class="iconfont icon_arrow iconfont-btn" v-if="showAll" @click="showAll=false">&#xe713;&nbsp;折叠全部属性</i>
       <!-- </el-row> -->
     </el-row>
   </div>

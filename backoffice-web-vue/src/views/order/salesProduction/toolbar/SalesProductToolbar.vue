@@ -25,6 +25,7 @@
         </el-col>
       </el-row>
     </el-form>
+    <sales-production-status-bar :queryFormData="queryFormData"/>
   </div>
 </template>
 
@@ -32,6 +33,7 @@
   import {
     createNamespacedHelpers
   } from 'vuex';
+  import SalesProductionStatusBar from '../components/SalesProductionStatusBar';
 
   const {
     mapMutations
@@ -40,6 +42,7 @@
   export default {
     name: 'SalesProductionToolbar',
     components: {
+      SalesProductionStatusBar
     },
     computed: {},
     data () {
@@ -77,8 +80,14 @@
         brands: [],
         keyword: this.$store.state.SalesOrdersModule.keyword,
         formData: this.$store.state.SalesOrdersModule.formData,
-        queryFormData: this.$store.state.SalesOrdersModule.queryFormData,
-        categories: []
+        categories: [],
+        queryFormData: {
+          name: '',
+          status: '',
+          hasContact: '',
+          isArrears: '',
+          isDelay: ''
+        }
       }
     },
     methods: {
@@ -143,12 +152,11 @@
         }
       },
       onReset () {
-        this.queryFormData.keyword = '';
-        this.queryFormData.createdDateFrom = '';
-        this.queryFormData.createdDateTo = '';
-        this.queryFormData.categories = [];
-        // this.setQueryFormData(this.queryFormData);
-        // this.setKeyword('');
+        this.queryFormData.name = '';
+        this.queryFormData.status = '';
+        this.queryFormData.hasContact = '';
+        this.queryFormData.isArrears = '';
+        this.queryFormData.isDelay = '';
       }
     },
     created () {
@@ -171,7 +179,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .toolbar-search_input {
     background-color: #ffd60c;
     border-color: #ffd60c;
@@ -185,7 +193,7 @@
     color: #606266;
   }
 
-  /deep/ .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 0px !important;
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 5px !important;
   }
 </style>

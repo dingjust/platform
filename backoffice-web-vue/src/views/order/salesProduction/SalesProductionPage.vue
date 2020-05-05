@@ -8,25 +8,10 @@
           </div>
         </el-col>
       </el-row>
-      <div class="pt-2"></div>
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
                                 @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"/>
-      <sales-production-status-bar/>
-      <el-divider></el-divider>
+      <el-divider class="sales-divider"></el-divider>
       <sales-production-list :page="page"/>
-      <!-- <sales-order-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch" />
-      <el-tabs v-model="activeStatus" @tab-click="handleClick">
-        <template v-for="(item, index) in statues">
-          <el-tab-pane :name="item.code" :key="index">
-            <span slot="label">
-              <tab-label-bubble :label="item.name" :num="0" />
-            </span>
-            <sales-order-search-result-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-                                            @cannelOrder="cannelOrder" @remindDelivery="remindDelivery"
-                                            @confirmDelivery="confirmDelivery" @onDeliveryForm="onDeliveryForm"/>
-          </el-tab-pane>
-        </template>
-      </el-tabs> -->
     </el-card>
   </div>
 </template>
@@ -104,4 +89,8 @@
      border-left: 2px solid #ffd60c;
      padding-left: 10px;
    }
+
+  .sales-divider {
+    margin: 5px
+  }
 </style>
