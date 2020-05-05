@@ -16,13 +16,23 @@ class WechatServiceImpl implements WechatService {
   WechatServiceImpl._internal() {
     // 初始化
     // //注册微信信息
-    fluwx.register(
+
+    registerWxApi(
         appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: true);
 
+    // fluwx.register(
+    //     appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: true);
+
     //全局监听微信回调
-    fluwx.responseFromPayment.listen((WeChatPaymentResponse data) {
-      print('>>>>>微信回调 ${data.errStr}');
+    weChatResponseEventHandler.listen((res) {
+      if (res is WeChatPaymentResponse) {
+        print('>>>>>微信回调 ${res.errStr}');
+      }
     });
+
+    // fluwx.responseFromPayment.listen((WeChatPaymentResponse data) {
+    //   print('>>>>>微信回调 ${data.errStr}');
+    // });
   }
 
   static WechatServiceImpl _getInstance() {
@@ -40,7 +50,7 @@ class WechatServiceImpl implements WechatService {
         await WechatPayHelper.prepay(orderCode, paymentFor: paymentFor);
 
     if (prepayModel != null) {
-      fluwx.pay(
+      payWithWeChat(
           appId: prepayModel.appId,
           partnerId: prepayModel.partnerId,
           prepayId: prepayModel.prepayId,
@@ -49,6 +59,15 @@ class WechatServiceImpl implements WechatService {
           timeStamp: prepayModel.timeStamp,
           sign: prepayModel.sign,
           signType: prepayModel.signType);
+      // fluwx.pay(
+      //     appId: prepayModel.appId,
+      //     partnerId: prepayModel.partnerId,
+      //     prepayId: prepayModel.prepayId,
+      //     packageValue: prepayModel.packageValue,
+      //     nonceStr: prepayModel.nonceStr,
+      //     timeStamp: prepayModel.timeStamp,
+      //     sign: prepayModel.sign,
+      //     signType: prepayModel.signType);
       return 'success';
     } else {
       print('error get prepay');
@@ -58,41 +77,55 @@ class WechatServiceImpl implements WechatService {
 
   @override
   Future shareText(String content, WeChatScene scene) {
-    fluwx
-        .share(fluwx.WeChatShareTextModel(
-            text: content,
-            transaction: "text${DateTime.now().millisecondsSinceEpoch}",
-        scene: scene))
-        .then((data) {
-      print(data);
+    shareToWeChat(WeChatShareTextModel(content, scene: WeChatScene.SESSION))
+        .then((val) {
+      print(val);
     });
-    //监听微信回调
-    fluwx.responseFromShare.listen((data) {
-      print('>>>>>' + data.toString());
-    });
+
+    // fluwx
+    //     .share(fluwx.WeChatShareTextModel(
+    //         text: content,
+    //         transaction: "text${DateTime.now().millisecondsSinceEpoch}",
+    //         scene: scene))
+    //     .then((data) {
+    //   print(data);
+    // });
+    // //监听微信回调
+    // fluwx.responseFromShare.listen((data) {
+    //   print('>>>>>' + data.toString());
+    // });
   }
 
   @override
-  Future<bool> isWeChatInstalled() async {
-    return await fluwx.isWeChatInstalled() as bool;
+  Future<bool> isInstalled() async {
+    return await isWeChatInstalled;
   }
 
   @override
   Future shareWeb(String url, WeChatScene scene, String title,
       String description, String thumbnail) {
-    fluwx
-        .share(fluwx.WeChatShareWebPageModel(
-        webPage: url,
-        description: '$description',
-        title: '$title',
-        thumbnail: '$thumbnail',
-        scene: scene))
-        .then((data) {
-      print(data);
-    });
-    //监听微信回调
-    fluwx.responseFromShare.listen((data) {
-      print('>>>>>' + data.toString());
-    });
+    // fluwx
+    //     .share(fluwx.WeChatShareWebPageModel(
+    //         webPage: url,
+    //         description: '$description',
+    //         title: '$title',
+    //         thumbnail: '$thumbnail',
+    //         scene: scene))
+    //     .then((data) {
+    //   print(data);
+    // });
+
+    var model = WeChatShareWebPageModel(
+      url,
+      title: title,
+      thumbnail: WeChatImage.network(thumbnail),
+      scene: scene,
+    );
+    shareToWeChat(model);
+
+    // //监听微信回调
+    // fluwx.responseFromShare.listen((data) {
+    //   print('>>>>>' + data.toString());
+    // });
   }
 }

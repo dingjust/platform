@@ -37,6 +37,11 @@
               {{showFloatPercentNum(scope.row.lossRate)+'%'}}
             </template>
           </el-table-column>
+          <el-table-column label="单位实际用量" width="95">
+            <template slot-scope="scope">
+              {{(scope.row.unitQuantity*(1+parseFloat(scope.row.lossRate))).toFixed(2)}}
+            </template>
+          </el-table-column>
           <el-table-column prop="color.name" label="颜色">
           </el-table-column>
           <el-table-column prop="applicableColors" label="适用颜色" min-width="100">
@@ -390,4 +395,8 @@
 
 </script>
 <style scoped>
+  /deep/ .el-table--enable-row-hover .el-table__body tr:hover>td {
+    background-color: #f5f7fa !important;
+  }
+
 </style>

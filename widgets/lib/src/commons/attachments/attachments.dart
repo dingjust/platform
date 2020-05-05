@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 // import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -577,7 +578,6 @@ class _EditableAttachmentsState extends State<EditableAttachments>
         onTap: () {
           // onPreview(context, '${model.detailUrl()}', '${model.name}');
           onPreview(context, widget.list[0]);
-          print('onp');
         },
         onLongPress: () {
           if (widget.editable) _deleteFile(widget.list[0]);
@@ -927,16 +927,16 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                     await ImagePicker.pickImage(source: ImageSource.camera);
                 if (imageFile != null) {
                   if (widget.isCut) {
-                    // var cropFile = await ImageCropper.cropImage(
-                    //     sourcePath: imageFile.path,
-                    //     cropStyle: CropStyle.circle,
-                    //     aspectRatio: CropAspectRatio(
-                    //       ratioX: widget.ratioX,
-                    //       ratioY: widget.ratioY,
-                    //     ));
-                    // if (cropFile != null) {
-                    //   await _uploadFile(cropFile);
-                    // }
+                     var cropFile = await ImageCropper.cropImage(
+                         sourcePath: imageFile.path,
+                         cropStyle: widget.circleShape?CropStyle.circle:CropStyle.rectangle,
+                         aspectRatio: CropAspectRatio(
+                           ratioX: widget.ratioX,
+                           ratioY: widget.ratioY,
+                         ));
+                     if (cropFile != null) {
+                       await _uploadFile(cropFile);
+                     }
                   } else {
                     await _uploadFile(imageFile);
                   }
@@ -952,16 +952,16 @@ class _EditableAttachmentsState extends State<EditableAttachments>
 
                 if (imageFile != null) {
                   if (widget.isCut) {
-                    // var cropFile = await ImageCropper.cropImage(
-                    //     sourcePath: imageFile.path,
-                    //     cropStyle: CropStyle.circle,
-                    //     aspectRatio: CropAspectRatio(
-                    //       ratioX: widget.ratioX,
-                    //       ratioY: widget.ratioY,
-                    //     ));
-                    // if (cropFile != null) {
-                    //   await _uploadFile(cropFile);
-                    // }
+                     var cropFile = await ImageCropper.cropImage(
+                         sourcePath: imageFile.path,
+                         cropStyle: widget.circleShape?CropStyle.circle:CropStyle.rectangle,
+                         aspectRatio: CropAspectRatio(
+                           ratioX: widget.ratioX,
+                           ratioY: widget.ratioY,
+                         ));
+                     if (cropFile != null) {
+                       await _uploadFile(cropFile);
+                     }
                   } else {
                     await _uploadFile(imageFile);
                   }
@@ -1174,8 +1174,6 @@ class _EditableAttachmentsState extends State<EditableAttachments>
                   //   if (response != null && response.statusCode == 200) {
                   setState(() {
                     widget.list.remove(mediaModel);
-                    print('${widget.list}list');
-                    print('${_uploadFileList}uploadlist');
                   });
                   Navigator.pop(context);
                   //   } else {

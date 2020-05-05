@@ -40,7 +40,7 @@ class CompanyProfileItemState extends State<CompanyProfileItem> {
         Container(
           padding: EdgeInsets.only(left: 10),
           child: EditableAttachments(list: widget.companyProfile.medias,
-            // isCut: true,
+             isCut: true,
             ratioX: 1.9,
             ratioY: 1.0,
             maxNum: 1,),

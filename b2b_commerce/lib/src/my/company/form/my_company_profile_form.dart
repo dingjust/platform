@@ -17,7 +17,10 @@ class MyCompanyProfileFormPageState extends State<MyCompanyProfileFormPage> {
 
   @override
   void initState() {
-   if(widget.company.profiles != null) _companyProfiles.addAll(widget.company.profiles);
+   if(widget.company.profiles != null){
+     _companyProfiles.addAll(widget.company.profiles.map((profile) => CompanyProfileModel.fromJson(CompanyProfileModel.toJson(profile))).toList());
+   }
+
     if(widget.company.profiles.length < 3){
       for(int i = widget.company.profiles.length;i<3-widget.company.profiles.length;i++){
         _companyProfiles.add(CompanyProfileModel(
