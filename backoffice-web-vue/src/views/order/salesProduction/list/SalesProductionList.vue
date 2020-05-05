@@ -9,50 +9,36 @@
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="产品" min-width="150">
+      <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">
-          <el-row type="flex" align="middle" justify="start">
-            <el-col>
-              <img width="54px" v-if="scope.row.entries !=null" height="54px"
-                   :src="scope.row.entries[0].product.baseProductDetail.images != null && scope.row.entries[0].product.baseProductDetail.images.length != 0 ?
-                      scope.row.entries[0].product.baseProductDetail.images[0].url : 'static/img/nopicture.png'" />
-            </el-col>
-            <el-col>
-              <el-row>
-                <span class="ellipsis-name" :title="scope.row.entries[0].product.baseProductDetail.name">
-                  {{scope.row.entries[0].product.baseProductDetail.name}}
-                </span>
-              </el-row>
-              <el-row>
-                <span>货号:{{scope.row.entries != null ? scope.row.entries[0].product.baseProductDetail.skuID:''}}</span>
-              </el-row>
-            </el-col>
-          </el-row>
+          <span class="ellipsis-name" :title="scope.row.entries[0].product.baseProductDetail.name">
+            {{scope.row.entries[0].product.baseProductDetail.name}}
+          </span>
         </template>
       </el-table-column>
-      <el-table-column label="数量">
+      <el-table-column label="客户">
         <template slot-scope="scope">
           <span>{{scope.row.quality}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品品类">
+      <el-table-column label="负责人">
         <template slot-scope="scope">
           <span>{{scope.row.entries[0].product.baseProductDetail.category.parent.name}}-{{scope.row.entries[0].product.baseProductDetail.category.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品类型">
+      <el-table-column label="创建日期">
         <template slot-scope="scope">
-          <span>现货</span>
+          <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单状态" prop="status" :column-key="'status'" :filters="statuses">
+      <el-table-column label="审批状态" prop="status">
         <template slot-scope="scope">
           <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
           <span>{{judgeState(scope.row)}}</span>
           <!--          <span>{{getEnum('salesOrderStatuses', scope.row.status)}}</span>-->
         </template>
       </el-table-column>
-      <el-table-column label="订单生成时间" min-width="100">
+      <el-table-column label="订单标签" min-width="100">
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
