@@ -1,12 +1,14 @@
 <template>
   <div class="sidebar">
-    <el-menu default-active="0" class="el-menu-vertical-demo" active-text-color="#FEB026" @open="handleOpen" @close="handleClose">
+    <el-menu default-active="0" class="el-menu-vertical-demo" active-text-color="#FEB026" @open="handleOpen" @close="handleClose" :collapse="true">
       <template v-for="(item,index) in navItems">
         <template v-if="item.children!=null">
           <el-submenu :key="index" :index="''+index">
             <template slot="title">
-              <i :class="item.icon"></i>
-              <span>{{item.name}}</span>
+              <!-- <i :class="item.icon"> -->
+                <i >{{item.name}}</i>
+              <!-- </i> -->
+              <!-- <span slot="title">{{item.name}}</span> -->
             </template>
             <template v-for="(subItem,subIndex) in item.children">
               <router-link :key="subIndex" :to="subItem.url" v-if="routeCheck(subItem)">
@@ -90,7 +92,7 @@
   }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
   .nav-link {
     cursor: pointer;
   }
@@ -110,6 +112,11 @@
 .sidebar{
   overflow: auto;
   /* height: 100%; */
+  
+}
+
+.sidebar .el-menu{
+  border:none
 }
 
 </style>
