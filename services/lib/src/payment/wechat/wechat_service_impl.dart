@@ -1,5 +1,4 @@
 import 'package:fluwx/fluwx.dart';
-import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:models/models.dart';
 import 'package:services/src/payment/payment_for.dart';
 import 'package:services/src/payment/wechat/wechat_pay_helper.dart';
@@ -18,10 +17,10 @@ class WechatServiceImpl implements WechatService {
     // //注册微信信息
 
     registerWxApi(
-        appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: true,universalLink: 'https://ht.nbyjy.net/yijiayi/');
-
-    // fluwx.register(
-    //     appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: true);
+        appId: WechatPayConstants.appId,
+        doOnAndroid: true,
+        doOnIOS: true,
+        universalLink: 'https://ht.nbyjy.net/yijiayi/');
 
     //全局监听微信回调
     weChatResponseEventHandler.listen((res) {
@@ -29,10 +28,6 @@ class WechatServiceImpl implements WechatService {
         print('>>>>>微信回调 ${res.errStr}');
       }
     });
-
-    // fluwx.responseFromPayment.listen((WeChatPaymentResponse data) {
-    //   print('>>>>>微信回调 ${data.errStr}');
-    // });
   }
 
   static WechatServiceImpl _getInstance() {
@@ -59,15 +54,6 @@ class WechatServiceImpl implements WechatService {
           timeStamp: prepayModel.timeStamp,
           sign: prepayModel.sign,
           signType: prepayModel.signType);
-      // fluwx.pay(
-      //     appId: prepayModel.appId,
-      //     partnerId: prepayModel.partnerId,
-      //     prepayId: prepayModel.prepayId,
-      //     packageValue: prepayModel.packageValue,
-      //     nonceStr: prepayModel.nonceStr,
-      //     timeStamp: prepayModel.timeStamp,
-      //     sign: prepayModel.sign,
-      //     signType: prepayModel.signType);
       return 'success';
     } else {
       print('error get prepay');
@@ -81,19 +67,6 @@ class WechatServiceImpl implements WechatService {
         .then((val) {
       print(val);
     });
-
-    // fluwx
-    //     .share(fluwx.WeChatShareTextModel(
-    //         text: content,
-    //         transaction: "text${DateTime.now().millisecondsSinceEpoch}",
-    //         scene: scene))
-    //     .then((data) {
-    //   print(data);
-    // });
-    // //监听微信回调
-    // fluwx.responseFromShare.listen((data) {
-    //   print('>>>>>' + data.toString());
-    // });
   }
 
   @override
@@ -104,28 +77,13 @@ class WechatServiceImpl implements WechatService {
   @override
   Future shareWeb(String url, WeChatScene scene, String title,
       String description, String thumbnail) {
-    // fluwx
-    //     .share(fluwx.WeChatShareWebPageModel(
-    //         webPage: url,
-    //         description: '$description',
-    //         title: '$title',
-    //         thumbnail: '$thumbnail',
-    //         scene: scene))
-    //     .then((data) {
-    //   print(data);
-    // });
-
     var model = WeChatShareWebPageModel(
       url,
-      title: title,
+      title: '$title',
+      description: '$description',
       thumbnail: WeChatImage.network(thumbnail),
       scene: scene,
     );
     shareToWeChat(model);
-
-    // //监听微信回调
-    // fluwx.responseFromShare.listen((data) {
-    //   print('>>>>>' + data.toString());
-    // });
   }
 }
