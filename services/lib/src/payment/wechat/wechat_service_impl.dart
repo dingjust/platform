@@ -18,7 +18,7 @@ class WechatServiceImpl implements WechatService {
     // //注册微信信息
 
     registerWxApi(
-        appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: true);
+        appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: true,universalLink: 'https://ht.nbyjy.net/yijiayi/');
 
     // fluwx.register(
     //     appId: WechatPayConstants.appId, doOnAndroid: true, doOnIOS: true);
