@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/business/search/search_model.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
@@ -77,7 +78,7 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
           FilterConditionEntry(label: category.name, value: category))
           .toList());
     }
-    
+
     if (widget.requirementFilterCondition != null) {
       currentCondition = widget.requirementFilterCondition;
     } else {
@@ -86,6 +87,12 @@ class _RequirementPoolAllPageState extends State<RequirementPoolAllPage> {
           dateRange: RequirementOrderDateRange.ALL,
           machiningType: null);
     }
+
+    //埋点>>>需求中心
+    FlutterUmplus.event(
+      "requirement_center",
+    );
+
     super.initState();
   }
 

@@ -5,6 +5,7 @@ import 'package:b2b_commerce/src/common/app_routes.dart';
 import 'package:b2b_commerce/src/home/account/login.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
@@ -19,6 +20,10 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => checkLoginStatus());
+    //埋点>>>搜索
+    FlutterUmplus.event(
+      "publish_center",
+    );
   }
 
   @override
@@ -66,6 +71,10 @@ class _PublishCenterPageState extends State<PublishCenterPage> {
                     height: 90,
                     image: B2BImage.free_capacity2(),
                     onPressed: () {
+                      //埋点>>>发布空闲产能
+                      FlutterUmplus.event(
+                        "publish_capacity",
+                      );
                       Navigator.pushNamed(context, AppRoutes.ROUTE_MY_CAPACITY);
                     },
                     title: '发布空闲产能',
