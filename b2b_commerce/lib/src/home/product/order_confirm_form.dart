@@ -40,12 +40,16 @@ class OrderConfirmForm extends StatefulWidget {
 }
 
 class _OrderConfirmFormState extends State<OrderConfirmForm> {
+  List<AddressModel> address;
+
   AddressModel addressModel;
+
+  AddressModel defaultAddressModel;
 
   EdgeInsetsGeometry widgetPadding = const EdgeInsets.fromLTRB(20, 0, 20, 0);
 
   Map<String, List<EditApparelSizeVariantProductEntry>> colorResultList =
-      Map<String, List<EditApparelSizeVariantProductEntry>>();
+  Map<String, List<EditApparelSizeVariantProductEntry>>();
 
   //总数流
   var _streamController = StreamController<int>.broadcast();
@@ -83,7 +87,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     widget.colorRowList.forEach((color, entries) {
       List<EditApparelSizeVariantProductEntry> list = entries
           .where((entry) =>
-              entry.controller.text != '' && entry.controller.text != '0')
+      entry.controller.text != '' && entry.controller.text != '0')
           .toList();
       if (list != null && list.isNotEmpty) {
         colorResultList[color] = list;
@@ -119,6 +123,32 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   Widget _buildMainListView() {
+    return FutureBuilder(
+      future: getAddress(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<AddressModel>> snapshot) {
+        if (address == null) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return _buildMainBody();
+        }
+      },
+    );
+  }
+
+  Future<List<AddressModel>> getAddress() async {
+    address = await AddressRepositoryImpl().list();
+
+    defaultAddressModel = address.firstWhere((model) => model.defaultAddress);
+
+    if (defaultAddressModel != null) {
+      addressModel = defaultAddressModel;
+    }
+
+    return address;
+  }
+
+  Widget _buildMainBody() {
     return Container(
       color: Colors.white,
       padding:
@@ -169,24 +199,24 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                 imageUrl: '${widget.product.thumbnail.previewUrl()}',
                 fit: BoxFit.cover,
                 imageBuilder: (context, imageProvider) => Container(
-                      width: imageSize,
-                      height: imageSize,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
+                  width: imageSize,
+                  height: imageSize,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
                     ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
                 placeholder: (context, url) => SpinKitCircle(
-                      color: Colors.black12,
-                      size: imageSize,
-                    ),
+                  color: Colors.black12,
+                  size: imageSize,
+                ),
                 errorWidget: (context, url, error) => SpinKitCircle(
-                      color: Colors.black12,
-                      size: imageSize,
-                    )),
+                  color: Colors.black12,
+                  size: imageSize,
+                )),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               color: Colors.white,
@@ -206,7 +236,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
                           child: Text(
                             '${widget.product.name}',
                             style:
-                                TextStyle(color: Colors.black87, fontSize: 16),
+                            TextStyle(color: Colors.black87, fontSize: 16),
                             textAlign: TextAlign.left,
                           ),
                         )
@@ -240,8 +270,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     );
   }
 
-  Widget _buildColorBlock(
-      List<EditApparelSizeVariantProductEntry> entries, String color) {
+  Widget _buildColorBlock(List<EditApparelSizeVariantProductEntry> entries, String color) {
     //色值
     String colorCode =
     entries[0].model.color.colorCode?.replaceAll(RegExp('#'), '');
@@ -297,7 +326,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           padding: widgetPadding,
           decoration: BoxDecoration(
               border:
-                  Border(top: BorderSide(color: Colors.grey[300], width: 0.5))),
+              Border(top: BorderSide(color: Colors.grey[300], width: 0.5))),
           margin: EdgeInsets.only(bottom: bottomSheetHeight + 10),
           child: Column(
             children: <Widget>[
@@ -334,8 +363,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     );
   }
 
-  Widget _buildViewBody(
-      List<EditApparelSizeVariantProductEntry> entries, String color) {
+  Widget _buildViewBody(List<EditApparelSizeVariantProductEntry> entries, String color) {
     List<Widget> widgets = entries
         .map((entry) => Container(
       padding: EdgeInsets.symmetric(vertical: 10),
@@ -353,11 +381,11 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           Text('${entry.controller.text}'),
         ],
       ),
-            ))
+    ))
         .toList();
     return Expanded(
         child: Column(
-      children: widgets,
+          children: widgets,
         ));
   }
 
@@ -372,7 +400,7 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
           Container(
             height: 50,
             decoration:
-                BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
+            BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
               BoxShadow(
                 color: Colors.grey, //阴影颜色
                 blurRadius: 5.0, //阴影大小
@@ -863,24 +891,24 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
 
   void onPurchasePaying(String code) async {
     PurchaseOrderModel detailModel =
-        await PurchaseOrderRepository().getPurchaseOrderDetail(code);
+    await PurchaseOrderRepository().getPurchaseOrderDetail(code);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (context) => OrderPaymentPage(
-                  order: detailModel,
-                  paymentFor: PaymentFor.DEPOSIT,
-                )),
+              order: detailModel,
+              paymentFor: PaymentFor.DEPOSIT,
+            )),
         ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   void onProofingPaying(String code) async {
     ProofingModel detailModel =
-        await ProofingOrderRepository().proofingDetail(code);
+    await ProofingOrderRepository().proofingDetail(code);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (context) => OrderPaymentPage(
-                  order: detailModel,
-                )),
+              order: detailModel,
+            )),
         ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
