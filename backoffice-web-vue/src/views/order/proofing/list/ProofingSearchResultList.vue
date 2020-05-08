@@ -7,10 +7,10 @@
           <el-row type="flex" align="middle" :gutter="10">
             <el-col :span="8">
               <img width="70px" height="70px"
-                   :src="scope.row.product.images != null && scope.row.product.images.length > 0 ?
-                   scope.row.product.images[0].url : 'static/img/nopicture.png'" />
+                   :src="scope.row.product && scope.row.product.thumbnail != null ?
+                   scope.row.product.thumbnail.url : 'static/img/nopicture.png'" />
             </el-col>
-            <el-col :span="16">
+            <el-col :span="16" v-if="scope.row.product">
               <h6 style="font-size: 12px">品类：{{categoryShow(scope.row.product.category)}}</h6>
               <h6 style="font-size: 12px">货号：{{scope.row.product.skuID}}</h6>
               <h6 style="font-size: 12px">数量：{{scope.row.totalQuantity}}</h6>
