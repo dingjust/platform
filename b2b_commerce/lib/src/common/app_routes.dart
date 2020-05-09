@@ -4,6 +4,7 @@ import 'package:b2b_commerce/src/business/orders/sale/sale_orders.dart';
 import 'package:b2b_commerce/src/business/proofing_orders.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_mine.dart';
 import 'package:b2b_commerce/src/business/subcontract/subcontract_pool.dart';
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/home/factory/publish_center.dart';
 import 'package:b2b_commerce/src/home/product/hot_category.dart';
 import 'package:b2b_commerce/src/home/product/index.dart';
@@ -96,6 +97,8 @@ class AppRoutes with GlobalRoutes {
   static const ROUTE_ORDER_COORDINATION = '/business/order_coordination';
   static const ROUTE_PUBLISH_CENTER = '/home/publish_center';
 
+  static const ROUTE_WEBVIEW_PAGE = '/webview_page';
+
   static Map<String, WidgetBuilder> allRoutes = <String, WidgetBuilder>{
     ROUTE_LOGIN: (context) => B2BLoginPage(),
     ROUTE_EMPLOYEES: (context) => EmployeesPage(),
@@ -131,5 +134,6 @@ class AppRoutes with GlobalRoutes {
     ROUTE_ORDER_PRODUCTS: (context) => ProductsPage(),
     ROUTE_ORDER_PRODUCTS_INDEX: (context) => ProductsHomePage(),
     ROUTE_SALE_ORDERS: (context) => SaleOrdersPage(),
+    ROUTE_WEBVIEW_PAGE: (context) => WebviewPage(),
   };
 }

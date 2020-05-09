@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,7 @@ class MyAuthenticationEnterpriseResult extends StatefulWidget {
   bool isCompany;
   AuthenticationModel authenticationModel;
 
-  MyAuthenticationEnterpriseResult(
-      {this.isCompany: false, this.authenticationModel});
+  MyAuthenticationEnterpriseResult({this.isCompany: false, this.authenticationModel});
 
   @override
   _MyAuthenticationEnterpriseResultState createState() =>
@@ -194,8 +194,7 @@ class _MyAuthenticationEnterpriseResultState
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    WebView111Page(urlString: certification.data)),
+                builder: (context) => WebviewPage(url: certification.data)),
           );
         } else {
           showDialog(

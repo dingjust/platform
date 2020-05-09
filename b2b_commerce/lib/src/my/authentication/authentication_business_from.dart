@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -21,7 +22,6 @@ class _AuthenticationBusinessFromPageState
   TextEditingController _idCardController = TextEditingController();
   String type;
   String typeName;
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +58,9 @@ class _AuthenticationBusinessFromPageState
         ),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
-        onPressed: (){
-
-          if(_enterpriseNameController == null || _enterpriseNameController.text == ''){
+        onPressed: () {
+          if (_enterpriseNameController == null ||
+              _enterpriseNameController.text == '') {
             showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -74,7 +74,7 @@ class _AuthenticationBusinessFromPageState
                     },
                   );
                 });
-          }else if(_xydmController == null || _xydmController.text == ''){
+          } else if (_xydmController == null || _xydmController.text == '') {
             showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -88,7 +88,7 @@ class _AuthenticationBusinessFromPageState
                     },
                   );
                 });
-          }else if(_fddbrController == null || _fddbrController.text == ''){
+          } else if (_fddbrController == null || _fddbrController.text == '') {
             showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -102,7 +102,8 @@ class _AuthenticationBusinessFromPageState
                     },
                   );
                 });
-          }else if(_idCardController == null || _idCardController.text == ''){
+          } else if (_idCardController == null ||
+              _idCardController.text == '') {
             showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -116,7 +117,7 @@ class _AuthenticationBusinessFromPageState
                     },
                   );
                 });
-          }else if(type == null || type == ''){
+          } else if (type == null || type == '') {
             showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -130,7 +131,7 @@ class _AuthenticationBusinessFromPageState
                     },
                   );
                 });
-          } else if(type == null || type == ''){
+          } else if (type == null || type == '') {
             showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -144,7 +145,7 @@ class _AuthenticationBusinessFromPageState
                     },
                   );
                 });
-          }else {
+          } else {
             Map map = {
               'companyName': _enterpriseNameController.text,
               'organization': _xydmController.text,
@@ -161,7 +162,7 @@ class _AuthenticationBusinessFromPageState
     );
   }
 
-  Widget _buildEnterpriseInfo(){
+  Widget _buildEnterpriseInfo() {
     return Container(
       color: Colors.white,
       child: Column(
@@ -178,7 +179,10 @@ class _AuthenticationBusinessFromPageState
               textAlign: TextAlign.right,
               focusNode: _enterpriseNameFocusNode,
               controller: _enterpriseNameController,
-              leadingText: Text('公司名称',style: TextStyle(fontSize: 16,)),
+              leadingText: Text('公司名称',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
               hintText: '输入公司全称',
             ),
           ),
@@ -187,7 +191,10 @@ class _AuthenticationBusinessFromPageState
               textAlign: TextAlign.right,
               focusNode: _xydmFocusNode,
               controller: _xydmController,
-              leadingText: Text('信用代码',style: TextStyle(fontSize: 16,)),
+              leadingText: Text('信用代码',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
               hintText: '输入社会统一信用代码',
             ),
           ),
@@ -196,7 +203,10 @@ class _AuthenticationBusinessFromPageState
               textAlign: TextAlign.right,
               focusNode: _fddbrFocusNode,
               controller: _fddbrController,
-              leadingText: Text('法定代表人',style: TextStyle(fontSize: 16,)),
+              leadingText: Text('法定代表人',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
               hintText: '输入法人姓名',
             ),
           ),
@@ -205,7 +215,10 @@ class _AuthenticationBusinessFromPageState
               textAlign: TextAlign.right,
               focusNode: _idCardFocusNode,
               controller: _idCardController,
-              leadingText: Text('身份证号码',style: TextStyle(fontSize: 16,)),
+              leadingText: Text('身份证号码',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
               hintText: '输入身份证号码',
               hideDivider: true,
             ),
@@ -215,20 +228,24 @@ class _AuthenticationBusinessFromPageState
             color: Colors.grey[100],
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               _showTypeSelect();
             },
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20,horizontal: 15),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
               child: Row(
                 children: <Widget>[
                   Expanded(
                     child: Container(
-                      child: Text('认证方式',style: TextStyle(fontSize: 16,)),
+                      child: Text('认证方式',
+                          style: TextStyle(
+                            fontSize: 16,
+                          )),
                     ),
                   ),
                   Container(
-                    child: Text('${type!=null ? type:'选择认证方式'}',style: TextStyle(fontSize: 16,color: Colors.grey)),
+                    child: Text('${type != null ? type : '选择认证方式'}',
+                        style: TextStyle(fontSize: 16, color: Colors.grey)),
                   )
                 ],
               ),
@@ -238,8 +255,6 @@ class _AuthenticationBusinessFromPageState
       ),
     );
   }
-
-
 
   void _showTypeSelect() async {
     showModalBottomSheet(
@@ -276,14 +291,13 @@ class _AuthenticationBusinessFromPageState
     );
   }
 
-  enterprise(Map map){
+  enterprise(Map map) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:
-            ContractRepository().enterpriseAuthentication(map),
+            requestCallBack: ContractRepository().enterpriseAuthentication(map),
             outsideDismiss: false,
             loadingText: '请稍候。。。',
             entrance: '',
@@ -291,11 +305,13 @@ class _AuthenticationBusinessFromPageState
         }).then((value) {
       Certification certification = value;
       if (certification != null) {
-        if(certification.data !=  null){
+        if (certification.data != null) {
           Navigator.push(
-            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString :certification.data)),
+            context,
+            MaterialPageRoute(
+                builder: (context) => WebviewPage(url: certification.data)),
           );
-        }else{
+        } else {
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -310,7 +326,7 @@ class _AuthenticationBusinessFromPageState
                 );
               });
         }
-      }else{
+      } else {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -327,5 +343,4 @@ class _AuthenticationBusinessFromPageState
       }
     });
   }
-
 }

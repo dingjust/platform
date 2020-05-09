@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -16,7 +17,6 @@ class _AuthenticationPersonFromPageState
   TextEditingController _fddbrController = TextEditingController();
   TextEditingController _idCardController = TextEditingController();
   String type;
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +53,21 @@ class _AuthenticationPersonFromPageState
         ),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
-        onPressed: (){
-          if(_fddbrController != null && _fddbrController.text != null && _fddbrController.text != ''&&
-              _idCardController != null && _idCardController.text != null && _idCardController.text != ''){
-            personal(_fddbrController.text,_idCardController.text);
+        onPressed: () {
+          if (_fddbrController != null &&
+              _fddbrController.text != null &&
+              _fddbrController.text != '' &&
+              _idCardController != null &&
+              _idCardController.text != null &&
+              _idCardController.text != '') {
+            personal(_fddbrController.text, _idCardController.text);
           }
         },
       ),
     );
   }
 
-  personal(String name,String idCard){
+  personal(String name, String idCard) {
     Map map = {
       'username': name,
       'idCardNum': idCard,
@@ -73,8 +77,7 @@ class _AuthenticationPersonFromPageState
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:
-            ContractRepository().personalAuthentication(map),
+            requestCallBack: ContractRepository().personalAuthentication(map),
             outsideDismiss: false,
             loadingText: '请稍候。。。',
             entrance: '',
@@ -83,12 +86,14 @@ class _AuthenticationPersonFromPageState
       Certification certification = value;
       print(certification.msg);
       if (certification != null) {
-        if(certification.data !=  null){
+        if (certification.data != null) {
 //          _launchURL(certification.data);
           Navigator.push(
-            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString:certification.data)),
+            context,
+            MaterialPageRoute(
+                builder: (context) => WebviewPage(url: certification.data)),
           );
-        }else{
+        } else {
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -103,7 +108,7 @@ class _AuthenticationPersonFromPageState
                 );
               });
         }
-      }else{
+      } else {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -121,7 +126,7 @@ class _AuthenticationPersonFromPageState
     });
   }
 
-  Widget _buildEnterpriseInfo(){
+  Widget _buildEnterpriseInfo() {
     return Container(
       color: Colors.white,
       child: Column(
@@ -138,7 +143,10 @@ class _AuthenticationPersonFromPageState
               textAlign: TextAlign.right,
               focusNode: _fddbrFocusNode,
               controller: _fddbrController,
-              leadingText: Text('姓名',style: TextStyle(fontSize: 16,)),
+              leadingText: Text('姓名',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
               hintText: '输入个人姓名',
             ),
           ),
@@ -147,7 +155,10 @@ class _AuthenticationPersonFromPageState
               textAlign: TextAlign.right,
               focusNode: _idCardFocusNode,
               controller: _idCardController,
-              leadingText: Text('身份证号码',style: TextStyle(fontSize: 16,)),
+              leadingText: Text('身份证号码',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
               hintText: '输入身份证号码',
               hideDivider: true,
             ),
@@ -156,8 +167,4 @@ class _AuthenticationPersonFromPageState
       ),
     );
   }
-
-
-
-
 }

@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,8 @@ class SealSelectWidget {
   List<SealModel> rightData;
   String code;
 
-  SealSelectWidget({this.cacel,this.rightData,this.code}){
-    if(this.cacel == null) this.cacel = (){};
+  SealSelectWidget({this.cacel, this.rightData, this.code}) {
+    if (this.cacel == null) this.cacel = () {};
   }
 
   void showPicker(BuildContext context, {
@@ -31,7 +32,7 @@ class SealSelectWidget {
         MaterialLocalizations
             .of(context)
             .modalBarrierDismissLabel,
-        cacel:cacel,
+        cacel: cacel,
         rightData: rightData,
         contractCode: code,
       ),
@@ -83,21 +84,21 @@ class _sealPickerRoute<T> extends PopupRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    Widget bottomSheet =  MediaQuery.removePadding(
+    Widget bottomSheet = MediaQuery.removePadding(
       removeTop: true,
       context: context,
-      child:  _sealPickerWidget(
+      child: _sealPickerWidget(
         route: this,
         data: data,
         selectType: selectType,
         selectTemplate: selectTemplate,
-        cacel:cacel,
+        cacel: cacel,
         rightData: rightData,
         contractCode: contractCode,
       ),
     );
     if (theme != null) {
-      bottomSheet =  Theme(data: theme, child: bottomSheet);
+      bottomSheet = Theme(data: theme, child: bottomSheet);
     }
     return bottomSheet;
   }
@@ -112,7 +113,8 @@ class _sealPickerWidget extends StatefulWidget {
   List rightData;
   String contractCode;
 
-  _sealPickerWidget({Key key,
+  _sealPickerWidget({
+    Key key,
     @required this.route,
     this.data,
     this.selectType,
@@ -124,24 +126,24 @@ class _sealPickerWidget extends StatefulWidget {
 
   @override
   State createState() {
-    return  _sealPickerState();
+    return _sealPickerState();
   }
 }
 
 class _sealPickerState extends State<_sealPickerWidget> {
   FixedExtentScrollController provinceController;
   FixedExtentScrollController cityController;
-  SealModel sealModel ;
+  SealModel sealModel;
   String type;
   String temp;
   int rIndex = 0;
-  List rData =  List();
+  List rData = List();
 
   @override
   void initState() {
     super.initState();
-    provinceController =  FixedExtentScrollController();
-    cityController =  FixedExtentScrollController();
+    provinceController = FixedExtentScrollController();
+    cityController = FixedExtentScrollController();
     rData = widget.rightData;
   }
 
@@ -150,58 +152,59 @@ class _sealPickerState extends State<_sealPickerWidget> {
       onWillPop: () {
         return Future.value(false);
       },
-      child:  Container(
+      child: Container(
           width: double.infinity,
           color: Colors.white,
-          child:  Column(
+          child: Column(
             children: <Widget>[
               Expanded(
-                child:  Container(
+                child: Container(
                   child: Row(
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         child: FlatButton(
                           onPressed: widget.cacel,
-                          child:  Text(
+                          child: Text(
                             '取消',
-                            style:  TextStyle(
+                            style: TextStyle(
                               color: Colors.white,
                             ),
                           ),
                         ),
                         decoration: BoxDecoration(
                             color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(8)
-                        ),
+                            borderRadius: BorderRadius.circular(8)),
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                         child: FlatButton(
                           onPressed: () {
                             sealModel = rData[rIndex];
                             widget.selectType(sealModel);
-                            flowContract(widget.contractCode,sealModel);
+                            flowContract(widget.contractCode, sealModel);
                           },
-                          child:  Text(
+                          child: Text(
                             '确定',
-                            style:  TextStyle(
+                            style: TextStyle(
                               color: Colors.black,
                             ),
                           ),
                         ),
                         decoration: BoxDecoration(
                             color: Color.fromRGBO(255, 214, 12, 1),
-                            borderRadius: BorderRadius.circular(8)
-                        ),
+                            borderRadius: BorderRadius.circular(8)),
                       ),
                     ],
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
                   decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.grey[200],width: 1))
-                  ),
+                      border: Border(
+                          bottom:
+                          BorderSide(color: Colors.grey[200], width: 1))),
                 ),
               ),
               Container(
@@ -212,8 +215,8 @@ class _sealPickerState extends State<_sealPickerWidget> {
                       controller: provinceController,
                       createWidgetList: () {
                         return rData.map((v) {
-                          return  Align(
-                            child:  Text(
+                          return Align(
+                            child: Text(
                               v.name != null && v.name != '' ? v.name : '',
 //                              textScaleFactor: 1.2,
                             ),
@@ -235,7 +238,7 @@ class _sealPickerState extends State<_sealPickerWidget> {
     );
   }
 
-  flowContract(String code, SealModel sealModel){
+  flowContract(String code, SealModel sealModel) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -250,11 +253,13 @@ class _sealPickerState extends State<_sealPickerWidget> {
         }).then((value) {
       Certification certification = value;
       if (certification != null) {
-        if(certification.data !=  null){
+        if (certification.data != null) {
           Navigator.push(
-            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString:certification.data)),
+            context,
+            MaterialPageRoute(
+                builder: (context) => WebviewPage(url: certification.data)),
           );
-        }else{
+        } else {
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -270,7 +275,7 @@ class _sealPickerState extends State<_sealPickerWidget> {
                 );
               });
         }
-      }else{
+      } else {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -291,17 +296,17 @@ class _sealPickerState extends State<_sealPickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
-      child:  AnimatedBuilder(
+    return GestureDetector(
+      child: AnimatedBuilder(
         animation: widget.route.animation,
         builder: (BuildContext context, Widget child) {
-          return  ClipRect(
-            child:  CustomSingleChildLayout(
-              delegate:  _BottomPickerLayout(widget.route.animation.value),
-              child:  GestureDetector(
-                child:  Material(
+          return ClipRect(
+            child: CustomSingleChildLayout(
+              delegate: _BottomPickerLayout(widget.route.animation.value),
+              child: GestureDetector(
+                child: Material(
                   color: Colors.transparent,
-                  child:  Container(
+                  child: Container(
                     width: double.infinity,
                     height: 200.0,
                     child: _bottomView(),
@@ -322,12 +327,11 @@ class _MyAddressPicker extends StatefulWidget {
   final FixedExtentScrollController controller;
   final ValueChanged<int> changed;
 
-  _MyAddressPicker(
-      {this.createWidgetList, this.key, this.controller, this.changed});
+  _MyAddressPicker({this.createWidgetList, this.key, this.controller, this.changed});
 
   @override
   State createState() {
-    return  _MyAddressPickerState();
+    return _MyAddressPickerState();
   }
 }
 
@@ -336,8 +340,8 @@ class _MyAddressPickerState extends State<_MyAddressPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return  Expanded(
-      child:  Container(
+    return Expanded(
+      child: Container(
         padding: const EdgeInsets.all(6.0),
         alignment: Alignment.center,
         height: 100.0,
@@ -355,7 +359,7 @@ class _MyAddressPickerState extends State<_MyAddressPicker> {
               .createWidgetList()
               .length > 0
               ? widget.createWidgetList()
-              : [ Text('')],
+              : [Text('')],
         ),
       ),
       flex: 1,
@@ -374,7 +378,7 @@ class _BottomPickerLayout extends SingleChildLayoutDelegate {
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
     double maxHeight = 150.0;
 
-    return  BoxConstraints(
+    return BoxConstraints(
       minWidth: constraints.maxWidth,
       maxWidth: constraints.maxWidth,
       minHeight: 0.0,
@@ -385,7 +389,7 @@ class _BottomPickerLayout extends SingleChildLayoutDelegate {
   @override
   Offset getPositionForChild(Size size, Size childSize) {
     double height = size.height - childSize.height * progress;
-    return  Offset(0.0, height);
+    return Offset(0.0, height);
   }
 
   @override
