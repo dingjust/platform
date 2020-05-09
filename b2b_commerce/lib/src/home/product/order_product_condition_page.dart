@@ -109,36 +109,36 @@ class _ProductConditionPageState extends State<ProductConditionPage> {
                     }),
               ),
             ),
-            Container(
-                height: 40,
-                margin: EdgeInsets.only(right: 10),
-                child: Center(
-                  child: FlatButton(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 45),
-                      color: Color(0xFFFFD600),
-                      child: const Text(
-                        '确定',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8))),
-                      onPressed: () {
-                        ///条件更新数据
-                        if (widget.factoryUid == null) {
-                          OrderByProductBLoc.instance
-                              .getData(widget.productCondition);
-                        } else {
-                          OrderByProductBLoc.instance
-                              .getCashProducts(widget.factoryUid);
-                        }
-                        Navigator.pop(context, widget.productCondition);
-                      }),
-                )),
+            // Container(
+            //     height: 40,
+            //     margin: EdgeInsets.only(right: 10),
+            //     child: Center(
+            //       child: FlatButton(
+            //           padding: const EdgeInsets.symmetric(
+            //               vertical: 0, horizontal: 45),
+            //           color: Color(0xFFFFD600),
+            //           child: const Text(
+            //             '确定',
+            //             style: const TextStyle(
+            //               color: Colors.black,
+            //               fontSize: 16,
+            //             ),
+            //           ),
+            //           shape: const RoundedRectangleBorder(
+            //               borderRadius:
+            //                   const BorderRadius.all(Radius.circular(8))),
+            //           onPressed: () {
+            //             ///条件更新数据
+            //             if (widget.factoryUid == null) {
+            //               OrderByProductBLoc.instance
+            //                   .getData(widget.productCondition);
+            //             } else {
+            //               OrderByProductBLoc.instance
+            //                   .getCashProducts(widget.factoryUid);
+            //             }
+            //             Navigator.pop(context, widget.productCondition);
+            //           }),
+            //     )),
           ],
         ));
   }
@@ -304,6 +304,19 @@ class _ProductConditionPageState extends State<ProductConditionPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    if (widget.factoryUid == null) {
+      OrderByProductBLoc.instance
+          .getData(widget.productCondition);
+    } else {
+      OrderByProductBLoc.instance
+          .getCashProducts(widget.factoryUid);
+    }
   }
 }
 

@@ -746,7 +746,7 @@ class _BuyStockFormState extends State<BuyStockForm>
       if (!validateStock()) {
         return;
       }
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => OrderConfirmForm(
             product: widget.product,
             colorRowList: colorRowList,
