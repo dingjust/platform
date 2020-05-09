@@ -110,33 +110,33 @@ class _ConditionPageState extends State<ConditionPage> {
                     }),
               ),
             ),
-            Container(
-                height: 40,
-                margin: EdgeInsets.only(right: 10),
-                child: Center(
-                  child: FlatButton(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 45),
-                      color: Color(0xFFFFD600),
-                      child: const Text(
-                        '确定',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8))),
-                      onPressed: () {
-                        ///条件更新数据
-                        FactoryBLoC.instance.filterByCondition(
-                          widget.factoryCondition,
-                          requirementCode: widget.requirementCode,
-                        );
-                        Navigator.pop(context, widget.factoryCondition);
-                      }),
-                )),
+            // Container(
+            //     height: 40,
+            //     margin: EdgeInsets.only(right: 10),
+            //     child: Center(
+            //       child: FlatButton(
+            //           padding: const EdgeInsets.symmetric(
+            //               vertical: 0, horizontal: 45),
+            //           color: Color(0xFFFFD600),
+            //           child: const Text(
+            //             '确定',
+            //             style: const TextStyle(
+            //               color: Colors.black,
+            //               fontSize: 16,
+            //             ),
+            //           ),
+            //           shape: const RoundedRectangleBorder(
+            //               borderRadius:
+            //                   const BorderRadius.all(Radius.circular(8))),
+            //           onPressed: () {
+            //             ///条件更新数据
+            //             FactoryBLoC.instance.filterByCondition(
+            //               widget.factoryCondition,
+            //               requirementCode: widget.requirementCode,
+            //             );
+            //             Navigator.pop(context, widget.factoryCondition);
+            //           }),
+            //     )),
           ],
         ));
   }
@@ -492,6 +492,16 @@ class _ConditionPageState extends State<ConditionPage> {
     setState(() {
       widget.factoryCondition.starLevel = newValue;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    ///条件更新数据
+    FactoryBLoC.instance.filterByCondition(
+      widget.factoryCondition,
+      requirementCode: widget.requirementCode,
+    );
   }
 }
 

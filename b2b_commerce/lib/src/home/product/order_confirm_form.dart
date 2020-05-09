@@ -137,6 +137,9 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   }
 
   Future<List<AddressModel>> getAddress() async {
+    if (addressModel != null) {
+      return address;
+    }
     address = await AddressRepositoryImpl().list();
 
     defaultAddressModel = address.firstWhere((model) => model.defaultAddress);
@@ -892,13 +895,25 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
   void onPurchasePaying(String code) async {
     PurchaseOrderModel detailModel =
     await PurchaseOrderRepository().getPurchaseOrderDetail(code);
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => OrderPaymentPage(
-              order: detailModel,
-              paymentFor: PaymentFor.DEPOSIT,
-            )),
-        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
+
+     Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) =>
+          OrderPaymentPage(
+            order: detailModel,
+            paymentFor: PaymentFor.DEPOSIT,
+            isFormDetail: true,
+          )
+      )
+     ); 
+    // Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //         builder: (context) => OrderPaymentPage(
+    //               order: detailModel,
+    //               paymentFor: PaymentFor.DEPOSIT,
+    //             )),
+    //     ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
+        // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   void onProofingPaying(String code) async {
@@ -907,23 +922,36 @@ class _OrderConfirmFormState extends State<OrderConfirmForm> {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (context) => OrderPaymentPage(
-              order: detailModel,
-            )),
-        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
+                  order: detailModel,
+                )),
+        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
+        // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   void onSalesPaying(String code) async {
     SalesOrderModel detailModel =
     await SalesOrderRespository().getSalesOrderDetail(code);
 
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) =>
-                OrderPaymentPage(
-                  order: detailModel,
-                  paymentFor: PaymentFor.SALES,
-                )),
-        ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) =>
+          OrderPaymentPage(
+            order: detailModel,
+            paymentFor: PaymentFor.SALES,
+            isFormDetail: true,
+          )
+      )
+    );
+    // Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //         builder: (context) =>
+    //             OrderPaymentPage(
+    //               order: detailModel,
+    //               paymentFor: PaymentFor.SALES,
+    //               isFormDetail: true,
+    //             )),
+    //     ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS}'));
+        // ModalRoute.withName('${AppRoutes.ROUTE_ORDER_PRODUCTS_INDEX}'));
   }
 
   @override

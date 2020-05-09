@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
+import 'package:core/core.dart';
 
 import './address/address_form.dart';
 import '../_shared/widgets/scrolled_to_end_tips.dart';
@@ -234,7 +235,7 @@ class AddressItem extends StatelessWidget {
               children: <Widget>[
                 const Text(
                   '默认地址',
-                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                  style: const TextStyle(fontSize: 11, color: Constants.THEME_COLOR_MAIN),
                 ),
               ],
             ),

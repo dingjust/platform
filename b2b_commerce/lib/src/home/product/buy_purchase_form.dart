@@ -705,7 +705,7 @@ class _BuyPurchaseFormState extends State<BuyPurchaseForm>
 
   void onSure() {
     if (validateForm()) {
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => OrderConfirmForm(
                 product: widget.product,
                 colorRowList: colorRowList,

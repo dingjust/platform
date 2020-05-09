@@ -1,5 +1,6 @@
 import 'package:b2b_commerce/src/business/orders/proofing/proofing_order_detail.dart';
 import 'package:b2b_commerce/src/business/orders/purchase_order_detail.dart';
+import 'package:b2b_commerce/src/business/orders/purchase_order_detail_online.dart';
 import 'package:b2b_commerce/src/business/orders/sale/sale_order_detail_page.dart';
 import 'package:b2b_commerce/src/my/my_addresses.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,13 +15,20 @@ import 'package:models/models.dart';
 import 'package:services/services.dart';
 import 'package:toast/toast.dart';
 import 'package:widgets/widgets.dart';
+import 'package:b2b_commerce/src/common/app_routes.dart';
 
 class OrderPaymentPage extends StatefulWidget {
   OrderModel order;
 
   PaymentFor paymentFor;
 
-  OrderPaymentPage({Key key, this.order, this.paymentFor = PaymentFor.DEFAULT})
+  bool isFormDetail;
+
+  OrderPaymentPage(
+      {Key key,
+      this.order,
+      this.paymentFor = PaymentFor.DEFAULT,
+      this.isFormDetail = false})
       : super(key: key);
 
   @override
@@ -97,8 +105,24 @@ class _OrderPaymentPageState extends State<OrderPaymentPage> {
                 confirmlButtonTextStyle: TextStyle(color: Colors.red),
                 dialogHeight: 180,
                 confirmAction: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
+                  if (widget.paymentFor == PaymentFor.SALES &&
+                      widget.isFormDetail) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) =>
+                            SaleOrderDetailPage(code: widget.order.code)));
+                  } else if (widget.paymentFor == PaymentFor.DEPOSIT && widget.isFormDetail) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                          PurchaseOrderDetailOnlinePage(code: widget.order.code)
+                      )
+                    );
+                  } else {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  }
                 },
               );
             });

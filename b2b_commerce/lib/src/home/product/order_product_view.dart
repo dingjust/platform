@@ -113,9 +113,49 @@ class ProductsView extends StatelessWidget {
                   }),
               StreamBuilder<List<ApparelProductModel>>(
                   stream: bloc.stream,
-                  initialData: bloc.products,
+                  initialData: null,
                   builder: (BuildContext context,
                       AsyncSnapshot<List<ApparelProductModel>> snapshot) {
+                    if (snapshot.data != null && snapshot.data.length <= 0) {
+                      return SliverPadding(
+                        padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                        sliver: SliverGrid(gridDelegate: 
+                          new SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            ),
+                          delegate: new SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                            return Container(
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.only(top: 200),
+                                    child: Image.asset(
+                                      'temp/logo2.png',
+                                      package: 'assets',
+                                      width: 80,
+                                      height: 80
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      '未找到符合要求的商品',
+                                      style: TextStyle(
+                                        color: Colors.grey
+                                      )
+                                    )
+                                  )
+                                ]
+                              )
+                            );
+                          }, childCount: 1),  
+                        )
+                      );
+                    }
                     if (snapshot.data != null && snapshot.data.isNotEmpty) {
                       List<RecommendProductItem> recommendProductItems =
                           snapshot.data
