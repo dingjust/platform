@@ -139,9 +139,8 @@ class UserBLoC extends BLoCBase {
       jpush$.setAlias(currentUser.mobileNumber);
 
       //埋点>>>登录成功
-      FlutterUmplus.event(
-        "user_login_success",
-      );
+      FlutterUmplus.event("user_login_success",
+          label: UserTypeLocalizedMap[_user.type]);
 
       _controller.sink.add(_user);
       return LoginResult.SUCCESS;
@@ -228,6 +227,10 @@ class UserBLoC extends BLoCBase {
             GlobalConfigs.REFRESH_TOKEN_KEY, _response.refreshToken);
         LocalStorage.save(GlobalConfigs.USER_KEY, username);
       }
+
+      //埋点>>>登录成功
+      FlutterUmplus.event("user_login_success",
+          label: UserTypeLocalizedMap[_user.type]);
 
       //设置JPUSH别名
       jpush$.setAlias(currentUser.mobileNumber);
@@ -324,6 +327,10 @@ class UserBLoC extends BLoCBase {
             _user.b2bUnit = factoryModel;
           }
         }
+
+        //埋点>>>登录成功
+        FlutterUmplus.event("user_login_success",
+            label: UserTypeLocalizedMap[_user.type]);
 
         jpush$.setAlias(currentUser.mobileNumber);
 

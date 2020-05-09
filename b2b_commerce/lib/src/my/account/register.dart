@@ -592,7 +592,8 @@ class _RegisterPageState extends State<RegisterPage> {
     if (response != null) {
       //注册成功
       //埋点>>>用户注册-成功
-      FlutterUmplus.event("user_register_success");
+      FlutterUmplus.event("user_register_success",
+          label: UserTypeLocalizedMap[userType]);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
