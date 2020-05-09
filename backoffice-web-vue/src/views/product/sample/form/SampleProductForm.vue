@@ -1,8 +1,12 @@
 <template>
   <div>
-    <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false">
       <sample-accounting-sheet-form :slot-data="sampleAccountingSheet" @onSave="onAccountingSheetSave"
         :sampleSpecEntries="slotData.entries" v-if="hackSet" />
+    </el-dialog>
+    <el-dialog :visible.sync="viewDialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false">
+      <sample-accounting-sheet :slot-data="sampleAccountingSheet" :sampleSpecEntries="slotData.entries"
+        v-if="hackSet" />
     </el-dialog>
     <el-form ref="form" :model="slotData">
       <el-card class="box-card">
@@ -61,6 +65,7 @@
   import SampleProductColorsSizesForm from './SampleProductColorsSizesForm';
   import SampleAttachOrdersForm from './SampleAttachOrdersForm';
   import SampleAccountingSheetForm from './SampleAccountingSheetForm';
+  import SampleAccountingSheet from '../components/SampleAccountingSheet';
 
 
   export default {
@@ -70,7 +75,8 @@
       ApparelProductImagesForm,
       ApparelProductBasicForm,
       SampleAttachOrdersForm,
-      SampleAccountingSheetForm
+      SampleAccountingSheetForm,
+      SampleAccountingSheet
     },
     props: ['readOnly', 'isRead'],
     computed: {
@@ -204,13 +210,24 @@
         });
         this.dialogVisible = true;
       },
+      // onUpdateAccountingSheet(sheet, index) {
+      //   let sheetJson = JSON.stringify(sheet);
+      //   var sheetObj = JSON.parse(sheetJson);
+      //   this.sampleAccountingSheet = Object.assign({}, sheetObj);
+
+      //   this.hackSet = false;
+      //   this.$nextTick(() => {
+      //     this.hackSet = true;
+      //   });
+      //   this.dialogVisible = true;
+      // },
       onUpdateAccountingSheet(sheet, index) {
-        this.sampleAccountingSheet = Object.assign({}, sheet);
+        this.sampleAccountingSheet = sheet;
         this.hackSet = false;
         this.$nextTick(() => {
           this.hackSet = true;
         });
-        this.dialogVisible = true;
+        this.viewDialogVisible = true;
       },
       onAccountingSheetSave(sheet) {
         if (sheet.id != null) {
@@ -230,9 +247,10 @@
     data() {
       return {
         dialogVisible: false,
+        viewDialogVisible: false,
         formData: {},
         sampleAccountingSheet: {},
-        hackSet:true
+        hackSet: true
       };
     },
     destroyed() {
