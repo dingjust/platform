@@ -128,6 +128,7 @@
           var arr = [];
           for (let j = 0; j < this.selectSizes.length; j++) {
             let obj = {
+              'id': this.selectColors[i].id,
               'colorCode': this.selectColors[i].code,
               'color': this.selectColors[i].name,
               'previewImg': this.selectColors[i].previewImg,
@@ -153,7 +154,9 @@
           if (color.previewImg == null) {
             color.previewImg = [];
           }
+          console.log(JSON.stringify(color));
           this.selectColors.push(color);
+          console.log(JSON.stringify(this.selectColors));
         } else {
           this.selectColors.splice(index, 1);
         }
@@ -271,6 +274,7 @@
       this.getAllSizes();
       this.slotData.colorSizes.forEach((color) => {
         let colorObj = {
+          'id': color.id,
           'code': color.colorCode,
           'name': color.colorName,
           'customize': color.customize

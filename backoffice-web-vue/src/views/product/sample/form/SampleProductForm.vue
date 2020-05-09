@@ -2,7 +2,7 @@
   <div>
     <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false">
       <sample-accounting-sheet-form :slot-data="sampleAccountingSheet" @onSave="onAccountingSheetSave"
-        :sampleSpecEntries="slotData.entries" />
+        :sampleSpecEntries="slotData.entries" v-if="hackSet" />
     </el-dialog>
     <el-form ref="form" :model="slotData">
       <el-card class="box-card">
@@ -104,6 +104,7 @@
         var colorSizes = [];
         this.formData.colorSizes.forEach((item) => {
           var obj = {
+            'id': item[0].id,
             'colorCode': item[0].colorCode,
             'colorName': item[0].color,
             'sizes': []
@@ -159,6 +160,7 @@
         var colorSizes = [];
         this.formData.colorSizes.forEach((item) => {
           var obj = {
+            'id': item[0].id,
             'colorCode': item[0].colorCode,
             'colorName': item[0].color,
             'sizes': []
@@ -196,10 +198,18 @@
           'specialProcessEntries': [],
           'laborCostEntries': []
         };
+        this.hackSet = false;
+        this.$nextTick(() => {
+          this.hackSet = true;
+        });
         this.dialogVisible = true;
       },
       onUpdateAccountingSheet(sheet, index) {
         this.sampleAccountingSheet = Object.assign({}, sheet);
+        this.hackSet = false;
+        this.$nextTick(() => {
+          this.hackSet = true;
+        });
         this.dialogVisible = true;
       },
       onAccountingSheetSave(sheet) {
@@ -221,7 +231,8 @@
       return {
         dialogVisible: false,
         formData: {},
-        sampleAccountingSheet: {}
+        sampleAccountingSheet: {},
+        hackSet:true
       };
     },
     destroyed() {

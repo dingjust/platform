@@ -93,34 +93,39 @@
         let price2 = 0;
         let price3 = 0;
 
-        this.slotData.materialsEntries.forEach(element => {
-          let sum = parseFloat(element.materialsSpecEntry.unitQuantity * (1 + element.materialsSpecEntry
-            .lossRate) * (this
-            .slotData
-            .isIncludeTax ?
-            element.unitPriceIncludingTax : element.unitPriceExcludingTax));
-          if (sum != null && !isNaN(sum)) {
-            price1 += sum;
-          }
-        });
+        if (this.slotData.materialsEntries != null) {
+          this.slotData.materialsEntries.forEach(element => {
+            let sum = parseFloat(element.materialsSpecEntry.unitQuantity * (1 + element.materialsSpecEntry
+              .lossRate) * (this
+              .slotData
+              .isIncludeTax ?
+              element.unitPriceIncludingTax : element.unitPriceExcludingTax));
+            if (sum != null && !isNaN(sum)) {
+              price1 += sum;
+            }
+          });
+        }
+        if (this.slotData.specialProcessEntries != null) {
+          this.slotData.specialProcessEntries.forEach(element => {
+            let sum = parseFloat(this
+              .slotData
+              .isIncludeTax ? element.unitPriceIncludingTax : element.unitPriceExcludingTax);
+            if (sum != null && !isNaN(sum)) {
+              price2 += sum;
+            }
+          });
+        }
 
-        this.slotData.specialProcessEntries.forEach(element => {
-          let sum = parseFloat(this
-            .slotData
-            .isIncludeTax ? element.unitPriceIncludingTax : element.unitPriceExcludingTax);
-          if (sum != null && !isNaN(sum)) {
-            price2 += sum;
-          }
-        });
-
-        this.slotData.laborCostEntries.forEach(element => {
-          let sum = parseFloat(this
-            .slotData
-            .isIncludeTax ? element.unitPriceIncludingTax : element.unitPriceExcludingTax);
-          if (sum != null && !isNaN(sum)) {
-            price3 += sum;
-          }
-        });
+        if (this.slotData.laborCostEntries != null) {
+          this.slotData.laborCostEntries.forEach(element => {
+            let sum = parseFloat(this
+              .slotData
+              .isIncludeTax ? element.unitPriceIncludingTax : element.unitPriceExcludingTax);
+            if (sum != null && !isNaN(sum)) {
+              price3 += sum;
+            }
+          });
+        }
 
         return (price1 + price2 + price3).toFixed(2);
       }
