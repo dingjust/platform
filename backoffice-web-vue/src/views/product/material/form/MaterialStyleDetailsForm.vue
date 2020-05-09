@@ -4,13 +4,13 @@
       <el-table :data="formData.variants" default-expand-all :highlight-current-row="false">
         <el-table-column prop="specs" label="规格" min-width="100">
           <template slot-scope="scope">
-            <el-select v-if="modifyFlag && scope.$index == modifyIndex && !hasSpecColor"
-                       v-model="scope.row.spec" placeholder="请选择" value-key="key">
+            <el-select v-model="scope.row.spec" placeholder="请选择" value-key="key" v-if="isCreate">
               <el-option
                 v-for="(item,index) in specsData"
                 :key="index"
                 :label="item.name"
-                :value="item">
+                :value="item"
+                :disabled="specDisabled(item, scope.row)">
               </el-option>
             </el-select>
             <span v-else>{{scope.row.spec.name}}</span>
@@ -18,12 +18,13 @@
         </el-table-column>
         <el-table-column prop="color" label="颜色" min-width="90">
           <template slot-scope="scope">
-            <el-select v-if="modifyFlag && scope.$index == modifyIndex && !hasSpecColor" v-model="scope.row.color" placeholder="请选择" value-key="key">
+            <el-select v-model="scope.row.color" placeholder="请选择" value-key="key" v-if="isCreate">
               <el-option
                 v-for="(item,index) in colorsData"
                 :key="index"
                 :label="item.name"
-                :value="item">
+                :value="item"
+                :disabled="colorDisabled(item, scope.row)">
               </el-option>
             </el-select>
             <span v-else>{{scope.row.color.name}}</span>
@@ -31,59 +32,52 @@
         </el-table-column>
         <el-table-column prop="unit" label="单位" min-width="90">
           <template slot-scope="scope">
-<!--            <el-input v-model="scope.row.unit" v-if="modifyFlag && scope.$index == modifyIndex"></el-input>-->
-<!--            <el-select v-if="modifyFlag && scope.$index == modifyIndex" v-model="scope.row.materialsUnit" placeholder="请选择">-->
-<!--              <el-option-->
-<!--                v-for="item in materialsUnit"-->
-<!--                :key="item.code"-->
-<!--                :label="item.name"-->
-<!--                :value="item">-->
-<!--              </el-option>-->
-<!--            </el-select>-->
-<!--            <span v-else>{{isCreate ? scope.row.materialsUnit.name : scope.row.materialsUnit}}</span>-->
             <span>{{getEnum('MaterialsUnit', formData.materialsUnit)}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="quantity" label="库存数量" min-width="80">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.quantity" v-if="modifyFlag && scope.$index == modifyIndex" v-number-input.float="{ min: 0 ,decimal:0}"/>
+            <el-input v-model="scope.row.quantity" v-number-input.float="{ min: 0 ,decimal:0}" v-if="isCreate"/>
             <span v-else>{{scope.row.quantity}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="referencePrice" label="参考价（元）" min-width="80">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.referencePrice" v-if="modifyFlag && scope.$index == modifyIndex"
-                      @change="(val)=>onUnitPriceInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}"/>
+            <el-input v-model="scope.row.referencePrice"
+                      @change="(val)=>onUnitPriceInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}" v-if="isCreate"/>
             <span v-else>{{scope.row.referencePrice}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="taxRate" label="税率" min-width="60">
           <template slot-scope="scope">
-            <el-input :value="showFloatPercentNum(scope.row.taxRate)" @blur="onBlur(scope.row,'taxRate')" v-if="modifyFlag && scope.$index == modifyIndex"
-                      @input="(val)=>onTaxInput(val,scope.row)" v-number-input.float="{ min: 0 , max: 100, decimal: 1 }">
+            <el-input :value="showFloatPercentNum(scope.row.taxRate)" @blur="onBlur(scope.row,'taxRate')"
+                      @input="(val)=>onTaxInput(val,scope.row)" v-number-input.float="{ min: 0 , max: 100, decimal: 1 }" v-if="isCreate">
               <h6 slot="suffix" style="padding-top:8px">%</h6>
             </el-input>
-            <span v-else>{{scope.row.taxRate ? scope.row.taxRate * 100 : 0}}%</span>
+            <span v-else>{{ scope.row.taxRate ? scope.row.taxRate * 100 : 0}}%</span>
           </template>
         </el-table-column>
         <el-table-column prop="taxPrice" label="含税价（元）" min-width="80">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.taxPrice" v-if="modifyFlag && scope.$index == modifyIndex"
+            <el-input v-model="scope.row.taxPrice" v-if="isCreate"
                       @change="(val)=>onTaxUnitPriceInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}"/>
             <span v-else>{{scope.row.taxPrice}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="操作" min-width="120">
           <template slot-scope="scope">
-            <el-button v-if="modifyFlag && scope.$index == modifyIndex" type="text" icon="el-icon-edit"
-                       @click="onSave(scope.row, scope.$index)">保存</el-button>
-            <el-button v-else type="text" icon="el-icon-edit"
-                       @click="onModify(scope.row, scope.$index)" :disabled="!isCreate">修改</el-button>
+<!--            <el-button v-if="modifyFlag && scope.$index == modifyIndex" type="text" icon="el-icon-edit"-->
+<!--                       @click="onSave(scope.row, scope.$index)">保存</el-button>-->
+<!--            <el-button type="text" icon="el-icon-edit" v-if="scope.$index != modifyIndex"-->
+<!--                       @click="onModify(scope.row, scope.$index)" :disabled="!isCreate">修改</el-button>-->
             <el-button type="text" icon="el-icon-edit"
                        @click="onDelete(scope.row, scope.$index)" :disabled="!isCreate">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <el-row type="flex" v-if="isCreate">
+        <span style="color: #909399"><span style="color: #F56C6C">*</span>已选择的规格/颜色无法进行修改或删除操作</span>
+      </el-row>
       <el-row type="flex">
         <el-button style="margin-right: 11px;margin-top: 20px" @click="appendMaterial" v-if="isCreate">+ 添加物料</el-button>
       </el-row>
@@ -120,9 +114,10 @@
         this.hasSpecColor = false;
       },
       onModify (row, index) {
-        if (this.modifyFlag) {
-          return;
-        }
+        // if (this.formData.variants.length > 0 && (!this.formData.variants[this.modifyIndex].spec || !this.formData.variants[this.modifyIndex].color)) {
+        //   this.$message.error('请先为正在编辑的物料选择规格/颜色');
+        //   return;
+        // }
         const str = row.spec.name + row.color.name;
         const indexF = this.materialJudgeList.indexOf(str);
         this.materialJudgeList.splice(indexF, 1);
@@ -132,10 +127,10 @@
         this.modifyFlag = true;
       },
       onDelete (row, index) {
-        if (this.modifyFlag && index < this.formData.variants.length - 1) {
-          this.$message.error('请先保存正在编辑信息');
-          return;
-        }
+        // if (index != this.modifyIndex && (!this.formData.variants[this.modifyIndex].spec || !this.formData.variants[this.modifyIndex].color)) {
+        //   this.$message.error('请先为正在编辑的物料选择规格/颜色');
+        //   return;
+        // }
         if (row.quantity > 0) {
           this.$message.error('此物料仍有库存,暂不支持删除操作');
           return;
@@ -156,11 +151,18 @@
             return item.spec.name + item.color.name;
           })
           this.materialJudgeList = arr;
+          this.modifyIndex = '';
         })
       },
       appendMaterial () {
-        if (this.modifyFlag) {
-          this.$message.error('请先保存正在填写的信息');
+        const arr = this.formData.variants.filter(val => val.spec == '' || val.color == '');
+        // if (this.modifyIndex != '' && this.formData.variants.length > 0 &&
+        // (!this.formData.variants[this.modifyIndex].spec || !this.formData.variants[this.modifyIndex].color)) {
+        //   this.$message.error('请先为正在编辑的物料选择规格/颜色');
+        //   return;
+        // }
+        if (arr.length > 0) {
+          this.$message.error('请先为正在编辑的物料选择规格/颜色');
           return;
         }
         const data = {
@@ -219,6 +221,26 @@
         if (row.taxRate != null && row.taxRate != '') {
           row.referencePrice = (row.taxPrice / (1 + parseFloat(row.taxRate))).toFixed(2);
         }
+      },
+      specDisabled (item, row) {
+        if (row.color != '') {
+          const hasThisColorRow = this.formData.variants.filter(val => val.color == row.color);
+          const hasThisSpecRow = hasThisColorRow.filter(val => val.spec == item);
+          return hasThisSpecRow.length > 0;
+        }
+        return false;
+        // const arr = this.formData.variants.filter(val => val.spec == item);
+        // return arr.length > 0;
+      },
+      colorDisabled (item, row) {
+        if (row.spec != '') {
+          const hasThisSpecRow = this.formData.variants.filter(val => val.spec == row.spec);
+          const hasThisColorRow = hasThisSpecRow.filter(val => val.color == item);
+          return hasThisColorRow.length > 0;
+        }
+        return false;
+        // const arr = this.formData.variants.filter(val => val.color == item);
+        // return arr.length > 0;
       },
       initFormData () {
         this.formData.variants.forEach((item, index) => {
