@@ -5,6 +5,8 @@
       <sample-spec-entries-table :slot-data="sampleSpecEntries" @onAdd="onEntriesAdd" v-if="hackSet" />
     </el-dialog>
     <el-table :data="slotData" style="width: 100%">
+      <el-table-column prop="materialsSpecEntry.title" label="使用名称">
+      </el-table-column>
       <el-table-column prop="materialsSpecEntry.materialsName" label="物料名称">
       </el-table-column>
       <el-table-column prop="materialsSpecEntry.spec" label="物料规格">
@@ -29,7 +31,7 @@
           {{showFloatPercentNum(scope.row.materialsSpecEntry.lossRate)+'%'}}
         </template>
       </el-table-column>
-      <el-table-column prop="actualUsage" label="单位实际用量">
+      <el-table-column prop="actualUsage" label="实际用量">
         <template slot-scope="scope">
           {{(scope.row.materialsSpecEntry.unitQuantity*(1+parseFloat(scope.row.materialsSpecEntry.lossRate))).toFixed(2)}}
         </template>
@@ -68,22 +70,24 @@
           </el-form-item>
         </template>
       </el-table-column>
+      <el-table-column prop="materialsSpecEntry.position" label="部位" width="50px">
+      </el-table-column>
       <el-table-column prop="unitPriceIncludingTax" :label="taxIncluded?'含税单件价格':'不含税单件价格'" fixed="right" width="110px">
         <template slot-scope="scope">
           {{(scope.row.materialsSpecEntry.unitQuantity*(1+scope.row.materialsSpecEntry.lossRate)*(taxIncluded?scope.row.unitPriceIncludingTax:scope.row.unitPriceExcludingTax)).toFixed(2)}}
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" width="50px">
-        <template slot-scope="scope">
+      <el-table-column label="" fixed="right" width="50px">
+        <!-- <template slot-scope="scope">
           <el-button @click="onRemove(scope.row)" type="text" size="small">删除</el-button>
-        </template>
+        </template> -->
       </el-table-column>
     </el-table>
-    <el-row type="flex" style="margin-top:10px;">
+    <!-- <el-row type="flex" style="margin-top:10px;">
       <el-col :span="4">
         <el-button icon="el-icon-plus" @click="onAdd">添加物料</el-button>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
@@ -100,7 +104,9 @@
     components: {
       SampleSpecEntriesTable
     },
-    computed: {},
+    computed: {
+
+    },
 
     methods: {
       onRemove(row) {
@@ -181,10 +187,70 @@
     data() {
       return {
         dialogVisible: false,
-        hackSet: true
+        hackSet: true,
+        accountingEntries: []
       };
     },
-    created() {}
+    // watch: {
+    //   slotData: {
+    //     handler(val) {
+    //       if (this.slotData.length == 0) {
+    //         this.sampleSpecEntries.forEach(element => {
+    //           let obj = Object.assign({}, element);
+    //           this.slotData.push({
+    //             'materialsSpecEntry': obj,
+    //             'unitPriceIncludingTax': '',
+    //             'unitPriceExcludingTax': '',
+    //             'taxRate': '',
+    //             'unitTotalPrice': '',
+    //             'unitActualQuantity': ''
+    //           });
+    //         });
+    //       }
+    //     },
+    //     deep: true
+    //   },
+    // },
+    created() {
+      //新建
+      var newSlotData = [];
+
+      this.sampleSpecEntries.forEach(element => {
+        let obj = Object.assign({}, element);
+
+        //若是已有的清单行，则是否有对应entry
+        let index = this.slotData.findIndex(entry => {
+          if (entry.materialsSpecEntry.id != null) {
+            return entry.materialsSpecEntry.id == element.id;
+          } else if (entry.materialsSpecEntry.uniqueCode != null) {
+            return entry.materialsSpecEntry.uniqueCode == element.uniqueCode;
+          } else {
+            return false;
+          }
+        });
+
+        if (index != -1) {
+          var oldEntry = this.slotData[index];
+          this.$set(oldEntry, 'materialsSpecEntry', obj);
+          newSlotData.push(oldEntry);
+        } else {
+          newSlotData.push({
+            'materialsSpecEntry': obj,
+            'unitPriceIncludingTax': '',
+            'unitPriceExcludingTax': '',
+            'taxRate': '',
+            'unitTotalPrice': '',
+            'unitActualQuantity': ''
+          });
+        }
+
+      });
+      //清空数组赋值
+      this.slotData.splice(0, this.slotData.length);
+      newSlotData.forEach(entry => {
+        this.slotData.push(entry);
+      });
+    }
   };
 
 </script>

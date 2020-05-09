@@ -84,6 +84,9 @@
 
     methods: {
       onAdd() {
+        if (this.slotData == null) {
+          this.slotData = [];
+        }
         this.slotData.push({
           'name': '',
           'position': '',

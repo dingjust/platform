@@ -1,25 +1,24 @@
 <template>
   <div>
-    <el-table :data="slotData" style="width: 100%">
-      <el-table-column prop="name" label="物料名称">
-      </el-table-column>
-      <el-table-column prop="code" label="物料编号">
-      </el-table-column>
-      <el-table-column prop="spec" label="规格">
+    <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false"
+      :append-to-body="true">
+      <material-dialog @confirmMaterial="(list)=>onMaterialsEntriesAdd(list)" v-if="hackSet" />
+    </el-dialog>
+    <el-table :data="materialList" style="width: 100%">
+      <el-table-column label="使用名称" fixed="left">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.spec" placeholder="请选择" value-key="code" @change="onSpecChange(scope.row)"
-            :disabled="isUpdate">
-            <el-option v-for="item in specsMap[scope.row.code]" :key="item.code" :label="item.name" :value="item"
-              :disabled="isSpecContains(scope.row.code,item.code)">
-            </el-option>
-          </el-select>
+          <el-input v-model="scope.row.title"></el-input>
         </template>
       </el-table-column>
-      <el-table-column prop="colors" label="颜色">
+      <el-table-column prop="materialsName" label="物料名称" fixed="left">
+      </el-table-column>
+      <el-table-column prop="materialsCode" label="物料编号" fixed="left">
+      </el-table-column>
+      <el-table-column prop="spec" label="物料规格">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.colors" placeholder="请选择" value-key="code" multiple
-            @change="onColorsChange(scope.row)">
-            <el-option v-for="item in scope.row.spec.colors" :key="item.code" :label="item.name" :value="item">
+          <el-select v-model="scope.row.spec" value-key="code" @change="onSpecChange(scope.row)">
+            <el-option v-for="item in specsMap[scope.row.materialsCode]" :key="item.code" :label="item.name"
+              :value="item">
             </el-option>
           </el-select>
         </template>
@@ -36,7 +35,8 @@
       </el-table-column>
       <el-table-column prop="unitQuantity" label="单位用量">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.unitQuantity" placeholder="单位用量"></el-input>
+          <el-input v-model="scope.row.unitQuantity" v-number-input.float="{ min: 0,decimal:2}" placeholder="">
+          </el-input>
         </template>
       </el-table-column>
       <el-table-column prop="lossRate" label="损耗">
@@ -47,16 +47,36 @@
           </el-input>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="样衣颜色" align="center">
+        <template v-for="(color,index) in colors">
+          <el-table-column :key="index" :label="color.name">
+            <template slot-scope="scope">
+              <el-select v-model="getMaterialsColorEntry(scope.row,color).materialsColor" value-key="code"
+                placeholder="">
+                <el-option v-for="item in getColorsBySpec(scope.row)" :key="item.code" :label="item.name" :value="item">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+        </template>
+      </el-table-column>
+      <el-table-column label="使用部位">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.position"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button @click="onRemove(scope.row)" :disabled="scope.$index==0" type="text" size="small">删除</el-button>
-          <!-- <el-button type="text" size="small">编辑</el-button> -->
         </template>
       </el-table-column>
     </el-table>
+    <el-row type="flex" style="margin-top:10px;">
+      <el-col :span="4">
+        <el-button icon="el-icon-plus" @click="openMaterialDialog">添加物料</el-button>
+      </el-col>
+    </el-row>
     <el-row type="flex" justify="center" class="product-form-row" style="margin-top:20px;">
-      <!-- <el-button class="product-form-btn" @click="onUpdate()"
-        v-if="this.slotData.code!=null&&this.slotData.code!=''&&!isRead">更新产品信息</el-button> -->
       <el-button class="product-form-btn" @click="onSubmit()">提交</el-button>
     </el-row>
   </div>
@@ -66,17 +86,18 @@
   import {
     accMul,
   } from '@/common/js/number';
+  import MaterialDialog from "@/views/product/material/dialog/MaterialDialog";
 
   export default {
     name: "MaterialSpecEntriesForm",
-    props: ["slotData", "colorSizes", "isUpdate", "materialSpecMap", "readOnly", "isRead"],
+    props: ["slotData", "colors"],
     components: {
-
+      MaterialDialog
     },
     computed: {
       specsMap: function () {
         var map = {};
-        this.slotData.forEach(element => {
+        this.materialList.forEach(element => {
           //规格
           let specs = [];
           element.variants.forEach(variant => {
@@ -92,25 +113,15 @@
               specs.push(variant.spec);
             }
           });
-          map[element.code] = specs;
+          map[element.materialsCode] = specs;
         });
         return map;
       },
-      clothesColors: function () {
-        var result = [{
-          'color': '全部'
-        }];
-        this.colorSizes.forEach(element => {
-          result.push(element[0]);
-        });
-
-        return result;
-      }
     },
 
     methods: {
       onRemove(row) {
-        this.slotData.splice(this.slotData.indexOf(row), 1);
+        this.materialList.splice(this.materialList.indexOf(row), 1);
       },
       showFloatPercentNum(val) {
         if (val == null) {
@@ -149,74 +160,95 @@
         });
         return result;
       },
+      getMaterialsColorEntry(row, sampleColor) {
+        let index = row.materialsColorEntries.findIndex(element => {
+          if (element.sampleColor.code == null) {
+            return element.sampleColor.name == sampleColor.name
+          } else {
+            return element.sampleColor.code == sampleColor.code;
+          }
+        });
+        if (index == -1) {
+          //没找到则添加对应颜色对象
+          var newEntry = {
+            'sampleColor': sampleColor,
+            'materialsColor': ''
+          };
+          row.materialsColorEntries.push(newEntry);
+          return newEntry;
+        } else {
+          return row.materialsColorEntries[index];
+        }
+
+      },
+      getColorsBySpec(row) {
+        if (row.spec == null || row.spec.code == null) {
+          return [];
+        }
+        let materialCode = row.materialsCode;
+        let specCode = row.spec.code;
+        let items = this.specsMap[materialCode];
+        let index = items.findIndex(element => element.code != null && element.code == specCode);
+        return items[index].colors;
+      },
       onSpecChange(row) {
         //规格更改清空选中颜色(注:用set刷新，不然选项不能选中)
         this.$set(row, 'colors', []);
       },
-      onColorsChange(row) {
-        row['materialsColorEntries'] = row.colors.map(color => {
-          let index = row.variants.findIndex(item => item.spec.code == row.spec.code && item.color.code == color
-            .code);
-          return {
-            'materialsEntryCode': row.variants[index].code,
-            'color': color,
-            'applicableColors': []
-          }
-        });
-      },
       onSubmit() {
-        this.$emit('onSubmit', this.slotData);
+        this.$emit('onSubmit', this.materialList);
       },
-      isSpecContains(materialCode, code) {
-        if (this.materialSpecMap != null) {
-          if (this.materialSpecMap[materialCode] != null) {
-            return this.materialSpecMap[materialCode].findIndex(element => element == code) == -1 ? false : true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
+      onMaterialsEntriesAdd(materialList) {
+        materialList.forEach(material => {
+          let materialsColorEntries = this.colors.map(color => {
+            return {
+              'sampleColor': color,
+              'materialsColor': ''
+            }
+          });
+          this.materialList.push({
+            'title': '',
+            'position': '',
+            'materialsId': material.id,
+            'materialsCode': material.code,
+            'materialsName': material.name,
+            'materialsUnit': material.materialsUnit,
+            'materialsType': material.materialsType,
+            'spec': material.spec,
+            'unitQuantity': material.unitQuantity,
+            'lossRate': material.lossRate,
+            'variants': material.variants,
+            'colors': material.colors,
+            'materialsColorEntries': materialsColorEntries
+          });
+        });
+        this.dialogVisible = false;
+      },
+      openMaterialDialog() {
+        this.hackSet = false;
+        this.$nextTick(() => {
+          this.hackSet = true;
+        });
+        this.dialogVisible = true;
       }
     },
     created() {
-      //遍历颜色行，生成materialsColorEntries
-      if (this.isUpdate) {
+      if (this.slotData != null) {
         this.slotData.forEach(entry => {
-          this.onColorsChange(entry);
-          //对应规格的颜色组
-          entry.spec['colors'] = this.specsMap[entry.code].find(element => element.code == entry.spec.code).colors;
+          let entryJson = JSON.stringify(entry);
+          this.materialList.push(JSON.parse(entryJson));
         });
       }
-
     },
     data() {
       return {
         dialogVisible: false,
         activeName: "material",
         textarea1: '',
+        hackSet: true,
         materialList: []
       };
     },
-    watch: {
-      tableEntries: {
-        handler(val) {
-
-        },
-        deep: true
-      },
-    },
-    // mounted() {
-    //   this.slotData.forEach(element => {
-    //     if (element.materialsColorEntries.length != 0) {
-    //       let colors = [];
-    //       element.materialsColorEntries.forEach(entry => {
-    //         colors.push(entry.color);
-    //       });
-    //       element['colors'] = colors;
-    //     }
-    //   });
-    // },
   };
 
 </script>
