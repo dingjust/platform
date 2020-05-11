@@ -4,73 +4,89 @@
       :append-to-body="true">
       <material-dialog @confirmMaterial="(list)=>onMaterialsEntriesAdd(list)" v-if="hackSet" />
     </el-dialog>
-    <el-table :data="materialList" style="width: 100%">
-      <el-table-column label="使用名称" fixed="left">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.title"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="materialsName" label="物料名称" fixed="left">
-      </el-table-column>
-      <el-table-column prop="materialsCode" label="物料编号" fixed="left">
-      </el-table-column>
-      <el-table-column prop="spec" label="物料规格">
-        <template slot-scope="scope">
-          <el-select v-model="scope.row.spec" value-key="code" @change="onSpecChange(scope.row)">
-            <el-option v-for="item in specsMap[scope.row.materialsCode]" :key="item.code" :label="item.name"
-              :value="item">
-            </el-option>
-          </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column prop="materialsUnit" label="物料单位">
-        <template slot-scope="scope">
-          {{getEnum('MaterialsUnit', scope.row.materialsUnit)}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="materialsType" label="物料属性">
-        <template slot-scope="scope">
-          {{getEnum('MaterialsType', scope.row.materialsType)}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="unitQuantity" label="单位用量">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.unitQuantity" v-number-input.float="{ min: 0,decimal:2}" placeholder="">
-          </el-input>
-        </template>
-      </el-table-column>
-      <el-table-column prop="lossRate" label="损耗">
-        <template slot-scope="scope">
-          <el-input @input="(val)=>onLossRateInput(val,scope.row)" :value="showFloatPercentNum(scope.row.lossRate)"
-            v-number-input.float="{ min: 0,max:100 ,decimal:0}">
-            <h6 slot="suffix" style="padding-top:10px">%</h6>
-          </el-input>
-        </template>
-      </el-table-column>
-      <el-table-column label="样衣颜色" align="center">
-        <template v-for="(color,index) in colors">
-          <el-table-column :key="index" :label="color.name">
-            <template slot-scope="scope">
-              <el-select v-model="getMaterialsColorEntry(scope.row,color).materialsColor" value-key="code"
-                placeholder="">
-                <el-option v-for="item in getColorsBySpec(scope.row)" :key="item.code" :label="item.name" :value="item">
+    <el-form :model="form" ref="form">
+      <el-table :data="form.materialList" style="width: 100%">
+        <el-table-column label="使用名称" fixed="left">
+          <template slot-scope="scope">
+            <el-form-item :prop="'materialList.' + scope.$index + '.title'"
+              :rules="{required: true, message: '不能为空', trigger: 'change'}">
+              <el-input v-model="scope.row.title" class="form-input"></el-input>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column prop="materialsName" label="物料名称" fixed="left">
+        </el-table-column>
+        <el-table-column prop="materialsCode" label="物料编号" fixed="left">
+        </el-table-column>
+        <el-table-column prop="spec" label="物料规格" min-width="100px">
+          <template slot-scope="scope">
+            <el-form-item :prop="'materialList.' + scope.$index + '.spec'"
+              :rules="{required: true, message: '不能为空', trigger: 'change'}">
+              <el-select v-model="scope.row.spec" value-key="code" @change="onSpecChange(scope.row)" class="form-input">
+                <el-option v-for="item in specsMap[scope.row.materialsCode]" :key="item.code" :label="item.name"
+                  :value="item">
                 </el-option>
               </el-select>
-            </template>
-          </el-table-column>
-        </template>
-      </el-table-column>
-      <el-table-column label="使用部位">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.position"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" fixed="right">
-        <template slot-scope="scope">
-          <el-button @click="onRemove(scope.row)" :disabled="scope.$index==0" type="text" size="small">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column prop="materialsUnit" label="物料单位">
+          <template slot-scope="scope">
+            {{getEnum('MaterialsUnit', scope.row.materialsUnit)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="materialsType" label="物料属性">
+          <template slot-scope="scope">
+            {{getEnum('MaterialsType', scope.row.materialsType)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="unitQuantity" label="单位用量">
+          <template slot-scope="scope">
+            <el-form-item :prop="'materialList.' + scope.$index + '.unitQuantity'"
+              :rules="{required: true, message: '不能为空', trigger: 'change'}">
+              <el-input v-model="scope.row.unitQuantity" v-number-input.float="{ min: 0,decimal:2}" placeholder=""
+                class="form-input">
+              </el-input>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column prop="lossRate" label="损耗">
+          <template slot-scope="scope">
+            <el-form-item :prop="'materialList.' + scope.$index + '.lossRate'"
+              :rules="{required: true, message: '不能为空', trigger: 'change'}">
+              <el-input @input="(val)=>onLossRateInput(val,scope.row)" :value="showFloatPercentNum(scope.row.lossRate)"
+                class="form-input" v-number-input.float="{ min: 0,max:100 ,decimal:0}">
+                <h6 slot="suffix" style="padding-top:25px">%</h6>
+              </el-input>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column label="样衣颜色" align="center">
+          <template v-for="(color,index) in colors">
+            <el-table-column :key="index" :label="color.name">
+              <template slot-scope="scope">
+                <el-select v-model="getMaterialsColorEntry(scope.row,color).materialsColor" value-key="code" size="mini"
+                  placeholder="">
+                  <el-option v-for="item in getColorsBySpec(scope.row)" :key="item.code" :label="item.name"
+                    :value="item">
+                  </el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+          </template>
+        </el-table-column>
+        <el-table-column label="使用部位">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.position"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right">
+          <template slot-scope="scope">
+            <el-button @click="onRemove(scope.row)" :disabled="scope.$index==0" type="text" size="small">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-form>
     <el-row type="flex" style="margin-top:10px;">
       <el-col :span="4">
         <el-button icon="el-icon-plus" @click="openMaterialDialog">添加物料</el-button>
@@ -97,13 +113,17 @@
     computed: {
       specsMap: function () {
         var map = {};
-        this.materialList.forEach(element => {
+        this.form.materialList.forEach(element => {
           //规格
           let specs = [];
           element.variants.forEach(variant => {
             if (specs.findIndex(item => item.code == variant.spec.code) == -1) {
               //颜色
-              let colors = [];
+              var colors = [];
+              colors.push({
+                'code': '',
+                'name': '无'
+              });
               element.variants.filter(v => v.spec.code == variant.spec.code).forEach(v => {
                 if (colors.findIndex(obj => obj.code == v.color.code) == -1) {
                   colors.push(v.color);
@@ -121,7 +141,7 @@
 
     methods: {
       onRemove(row) {
-        this.materialList.splice(this.materialList.indexOf(row), 1);
+        this.form.materialList.splice(this.form.materialList.indexOf(row), 1);
       },
       showFloatPercentNum(val) {
         if (val == null) {
@@ -172,7 +192,10 @@
           //没找到则添加对应颜色对象
           var newEntry = {
             'sampleColor': sampleColor,
-            'materialsColor': ''
+            'materialsColor': {
+              'code': '',
+              'name': '无'
+            }
           };
           row.materialsColorEntries.push(newEntry);
           return newEntry;
@@ -196,7 +219,21 @@
         this.$set(row, 'colors', []);
       },
       onSubmit() {
-        this.$emit('onSubmit', this.materialList);
+        this.$refs['form'].validate((valid) => {
+          if (valid) {
+            //过滤没有code的颜色
+            this.form.materialList.forEach(material => {
+              var newEntries = material.materialsColorEntries.filter(entry => entry.materialsColor != null &&
+                entry.materialsColor.code != '');
+              material.materialsColorEntries = newEntries;
+            });
+            this.$emit('onSubmit', this.form.materialList.filter(material => material.materialsColorEntries.length >
+              0));
+          } else {
+            this.$message.error('请完善表格');
+            return false;
+          }
+        });
       },
       onMaterialsEntriesAdd(materialList) {
         materialList.forEach(material => {
@@ -206,7 +243,7 @@
               'materialsColor': ''
             }
           });
-          this.materialList.push({
+          this.form.materialList.push({
             'title': '',
             'position': '',
             'materialsId': material.id,
@@ -236,7 +273,7 @@
       if (this.slotData != null) {
         this.slotData.forEach(entry => {
           let entryJson = JSON.stringify(entry);
-          this.materialList.push(JSON.parse(entryJson));
+          this.form.materialList.push(JSON.parse(entryJson));
         });
       }
     },
@@ -246,7 +283,9 @@
         activeName: "material",
         textarea1: '',
         hackSet: true,
-        materialList: []
+        form: {
+          materialList: []
+        }
       };
     },
   };
@@ -258,6 +297,14 @@
     border-color: #ffd60c;
     color: #000;
     width: 150px;
+  }
+
+  .form-input {
+    padding-top: 15px;
+  }
+
+  .form-input .el-input--suffix .el-input__inner {
+    padding: 5px !important;
   }
 
 </style>

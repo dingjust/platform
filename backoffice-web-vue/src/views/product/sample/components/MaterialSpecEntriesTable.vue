@@ -74,8 +74,9 @@
     },
     methods: {
       getMaterialColor(row, color) {
-        let item = row.materialsColorEntries.find(val => val.sampleColor.code == color.code||val.sampleColor.name == color.name);
-        return item != null ? item.materialsColor.name : '';
+        let item = row.materialsColorEntries.find(val => val.sampleColor.code == color.code || val.sampleColor.name ==
+          color.name);
+        return (item != null && item.materialsColor) ? item.materialsColor.name : '';
       },
       showFloatPercentNum(val) {
         if (val == null) {
