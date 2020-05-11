@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false" append-to-body>
       <sample-accounting-sheet-form :slot-data="sampleAccountingSheet" @onSave="onAccountingSheetSave"
         :sampleSpecEntries="slotData.entries" v-if="hackSet" />
     </el-dialog>
@@ -72,7 +72,7 @@
       SampleAttachOrdersForm,
       SampleAccountingSheetForm
     },
-    props: ['readOnly', 'isRead'],
+    props: ['readOnly', 'isRead', 'isDialogOpen'],
     computed: {
       ...mapGetters({
         slotData: 'newFormData'
@@ -187,6 +187,10 @@
 
         this.$message.success('样衣创建成功，产品编号： ' + result.code);
         // this.$set(this.slotData, 'code', result);
+        if (this.isDialogOpen) {
+          this.$emit('closeDialog');
+          return;
+        }
         this.$router.go(-1);
       },
       onCreateAccountingSheet() {

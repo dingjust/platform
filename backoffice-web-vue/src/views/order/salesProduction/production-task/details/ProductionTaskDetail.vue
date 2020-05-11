@@ -5,7 +5,7 @@
         <el-row>
           <el-col :span="13">
             <div class="sales-plan-form-title">
-              <h6>生产任务详情</h6>
+              <h6>生产任务明细</h6>
             </div>
           </el-col>
           <el-col :span="11">
@@ -34,7 +34,7 @@
         </el-row>
         <el-row type="flex" style="margin-top: 20px">
           <el-col :span="24">
-            <production-task-product-form :isRead="true"/>
+            <production-task-product-form :code="2"/>
           </el-col>
         </el-row>
         <el-divider></el-divider>
@@ -83,6 +83,7 @@
   import ProductionTaskProductForm from '../form/ProductionTaskProductForm';
   export default {
     name: 'ProductionTaskDetails',
+    props: ['code'],
     components: {ProductionTaskProductForm, InvoiceDetailsForm, ReceivingDetailsForm},
     methods: {
       onConfirm () {
@@ -129,7 +130,6 @@
     border: 1px solid #DCDFE6;
     border-radius: 5px;
     padding-top:10px;
-    background-color: #F5F5F5;
   }
 
   .production-task-btn {

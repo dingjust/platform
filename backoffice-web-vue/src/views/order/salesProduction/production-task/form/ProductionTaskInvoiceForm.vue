@@ -48,14 +48,14 @@
       </el-col>
       <el-col :span="5">
         <el-form-item  label="入仓方式" label-width="100px">
-            <el-select v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-col>
     </el-row>
@@ -94,8 +94,8 @@
     mapGetters
   } = createNamespacedHelpers('CooperatorModule');
 
-  import MTAVAT from '../../../../components/custom/order-form/MTAVAT';
-  import MyAddressForm from '../../../../components/custom/order-form/MyAddressForm';
+  import MTAVAT from '../../../../../components/custom/order-form/MTAVAT';
+  import MyAddressForm from '../../../../../components/custom/order-form/MyAddressForm';
   export default {
     name: 'ProductionTaskInvoiceForm',
     components: {MyAddressForm, MTAVAT},
@@ -214,29 +214,4 @@
     font-weight: 500;
     padding-top: 2px;
   }
-
-  .info-input-prepend {
-    display: inline-block;
-    /*margin-top: 5px; */
-    width: 120px;
-    font-size: 12px;
-    font-weight: 500;
-    padding-top: 9px;
-    padding-left: 10px;
-  }
-
-  /*/deep/ .el-radio {*/
-  /*  margin-right: 10px;*/
-  /*  padding-top: 12px;*/
-  /*  font-size: 12px;*/
-  /*}*/
-
-  .form-label_bubble {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgba(255, 214, 12, 1);
-    text-align: center;
-  }
-
 </style>

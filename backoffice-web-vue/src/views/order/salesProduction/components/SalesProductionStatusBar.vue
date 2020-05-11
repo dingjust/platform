@@ -5,7 +5,7 @@
         <span class="status_name_label">状态：</span>
         <el-radio-group v-model="queryFormData.status">
           <el-radio :label="''">全部</el-radio>
-          <template v-for="(status, index) in salesProductionStatuses">
+          <template v-for="(status, index) in statuses">
             <el-radio :label="status.code">{{status.name}}</el-radio>
           </template>
         </el-radio-group>
@@ -39,10 +39,9 @@
 <script>
   export default {
     name: 'SalesProductionStatusBar',
-    props: ['queryFormData'],
+    props: ['queryFormData', 'statuses'],
     data () {
       return {
-        salesProductionStatuses: this.$store.state.EnumsModule.SalesProductionStatuses,
         contractStates: [
           {
             code: 'INITIATE',

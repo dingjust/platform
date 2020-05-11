@@ -25,7 +25,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <sales-production-status-bar :queryFormData="queryFormData"/>
+    <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses"/>
   </div>
 </template>
 
@@ -78,6 +78,7 @@
         dateTime: '',
         factories: [],
         brands: [],
+        statuses: this.$store.state.EnumsModule.SalesProductionStatuses,
         keyword: this.$store.state.SalesOrdersModule.keyword,
         formData: this.$store.state.SalesOrdersModule.formData,
         categories: [],
@@ -99,7 +100,7 @@
         this.$emit('createSalesPlan');
       },
       createSalesOrder () {
-        this.$emit('createSalesPlan');
+        this.$emit('createSalesOrder');
       },
       onSearch () {
         this.$store.state.SalesOrdersModule.keyword = this.keyword;

@@ -67,10 +67,14 @@
 
       },
       createSalesPlan () {
-
+        this.$router.push({
+          name: '录入销售计划'
+        });
       },
       createSalesOrder () {
-
+        this.$router.push({
+          name: '录入销售订单'
+        });
       }
     },
     data () {

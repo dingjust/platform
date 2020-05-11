@@ -254,8 +254,27 @@ const router = new Router({
                 },
                 {
                   path: 'production',
+                  name: '生产任务列表',
+                  props: true,
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-task/ProductionTaskPage')
+                },
+                {
+                  path: 'production/:code',
                   name: '生产任务详情',
-                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/details/ProductionTaskDetails')
+                  props: true,
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-task/details/ProductionTaskDetail')
+                },
+                {
+                  path: 'salesPlan/:code',
+                  name: '销售计划详情',
+                  props: true,
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/details/SalesPlanDetail')
+                },
+                {
+                  path: 'salesOrder/:code',
+                  name: '销售订单详情',
+                  props: true,
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/details/SalesOrderDetail')
                 },
               ]
             }
