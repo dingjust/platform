@@ -437,7 +437,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: showPayProtocol,
+                    onTap: showPrivacyProtocol,
                     child: Text(
                       '《隐私协议》',
                       style: TextStyle(color: Colors.blue),
@@ -680,6 +680,41 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Center(
                           child: Text(
                             '钉单平台服务协议',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      snapshot.data != null
+                          ? Text(snapshot.data)
+                          : Center(child: CircularProgressIndicator())
+                    ],
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  void showPrivacyProtocol() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (context) {
+        return FutureBuilder(
+            future: DefaultAssetBundle.of(context)
+                .loadString("packages/assets/document/privacyProtocol.txt"),
+            initialData: null,
+            builder: (context, snapshot) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Center(
+                          child: Text(
+                            '隐私政策声明',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
