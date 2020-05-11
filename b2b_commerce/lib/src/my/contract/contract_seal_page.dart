@@ -1,4 +1,4 @@
-
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/contract/webview_contract_page.dart';
 import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,11 +13,15 @@ class ContractSealPage extends StatefulWidget {
   ContractModel model;
   bool isSelect;
 
-  ContractSealPage({this.model, this.sealList,this.isSelect = true,});
+  ContractSealPage({
+    this.model,
+    this.sealList,
+    this.isSelect = true,
+  });
   _ContractSealPageState createState() => _ContractSealPageState();
 }
 
-class _ContractSealPageState extends State<ContractSealPage>{
+class _ContractSealPageState extends State<ContractSealPage> {
   ScrollController scrollController = ScrollController();
 
   @override
@@ -29,8 +33,8 @@ class _ContractSealPageState extends State<ContractSealPage>{
         centerTitle: true,
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 5,vertical: 5),
-        child:GridView.builder(
+        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        child: GridView.builder(
           itemCount: widget.sealList.length,
           //SliverGridDelegateWithFixedCrossAxisCount 构建一个横轴固定数量Widget
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -43,16 +47,15 @@ class _ContractSealPageState extends State<ContractSealPage>{
               //子组件宽高长度比例
               childAspectRatio: 0.99),
 
-              itemBuilder: (BuildContext context, int index) =>
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: _buildItems(
-                        context, widget.sealList[index]),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+          itemBuilder: (BuildContext context, int index) =>
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: _buildItems(context, widget.sealList[index]),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
         ),
       ),
     );
@@ -61,23 +64,28 @@ class _ContractSealPageState extends State<ContractSealPage>{
   Widget _buildItems(BuildContext context, SealModel model) {
     return GestureDetector(
       onTap: () {
-        if(widget.isSelect){
-          flowContract(widget.model?.code,model);
+        if (widget.isSelect) {
+          flowContract(widget.model?.code, model);
         }
-
       },
       child: Container(
         child: Column(
           children: <Widget>[
-            Expanded(child: _buildItemImage(context,model),flex: 5,),
-            Expanded(child: _buildItemTitle(context,model),flex: 1,),
+            Expanded(
+              child: _buildItemImage(context, model),
+              flex: 5,
+            ),
+            Expanded(
+              child: _buildItemTitle(context, model),
+              flex: 1,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildItemImage(BuildContext context,SealModel model){
+  Widget _buildItemImage(BuildContext context, SealModel model) {
     return Container(
         width: 200,
         height: 400,
@@ -112,10 +120,10 @@ class _ContractSealPageState extends State<ContractSealPage>{
         ));
   }
 
-  Widget _buildItemTitle(BuildContext context,SealModel model){
+  Widget _buildItemTitle(BuildContext context, SealModel model) {
     return Container(
       height: 35,
-      margin: EdgeInsets.symmetric(vertical: 5,horizontal: 15),
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
       alignment: Alignment.centerLeft,
       child: Text(
         '${model.name}',
@@ -129,7 +137,7 @@ class _ContractSealPageState extends State<ContractSealPage>{
     );
   }
 
-  flowContract(String code, SealModel sealModel){
+  flowContract(String code, SealModel sealModel) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -144,11 +152,13 @@ class _ContractSealPageState extends State<ContractSealPage>{
         }).then((value) {
       Certification certification = value;
       if (certification != null) {
-        if(certification.data !=  null){
+        if (certification.data != null) {
           Navigator.push(
-            context,MaterialPageRoute(builder: (context) => WebViewContractPage(urlString:certification.data)),
+            context,
+            MaterialPageRoute(
+                builder: (context) => WebviewPage(url: certification.data)),
           );
-        }else{
+        } else {
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -164,7 +174,7 @@ class _ContractSealPageState extends State<ContractSealPage>{
                 );
               });
         }
-      }else{
+      } else {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -182,5 +192,4 @@ class _ContractSealPageState extends State<ContractSealPage>{
       }
     });
   }
-
 }

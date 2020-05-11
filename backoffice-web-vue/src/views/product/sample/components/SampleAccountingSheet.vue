@@ -1,12 +1,19 @@
 <template>
   <div>
+    <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
+      :append-to-body="true">
+      <sample-accounting-sheet-form :slot-data="sampleAccountingSheet" @onSave="onAccountingSheetSave"
+        :sampleSpecEntries="sampleSpecEntries" v-if="hackSet" />
+    </el-dialog>
     <el-form :model="slotData" ref="accountingSheetForm">
       <el-tabs value="first" type="card">
         <el-tab-pane label="成本预算单" name="first">
-          <el-row>
+          <el-row type="flex" justify="space-between">
             <el-col :span="6">
-              <el-radio v-model="slotData.isIncludeTax" @change="onIncludeTaxChange" :label="true">含税</el-radio>
-              <el-radio v-model="slotData.isIncludeTax" @change="onIncludeTaxChange" :label="false">不含税</el-radio>
+              <h6>{{slotData.isIncludeTax?'含税':'不含税'}}</h6>
+            </el-col>
+            <el-col :span="2">
+              <el-button @click="onUpdateAccountingSheet">编辑</el-button>
             </el-col>
           </el-row>
           <div>
@@ -17,7 +24,7 @@
                   <h6 class="accounting-form-title">面辅料</h6>
                 </el-col>
                 <el-col :span="23">
-                  <material-accounting-form :slotData="slotData.materialsEntries" :taxIncluded="slotData.isIncludeTax"
+                  <material-accounting-table :slotData="slotData.materialsEntries" :taxIncluded="slotData.isIncludeTax"
                     :sampleSpecEntries="sampleSpecEntries" />
                 </el-col>
               </el-row>
@@ -27,7 +34,7 @@
                   <h6 class="accounting-form-title">特殊工艺</h6>
                 </el-col>
                 <el-col :span="23">
-                  <craft-accounting-form :slotData="slotData.specialProcessEntries"
+                  <craft-accounting-table :slotData="slotData.specialProcessEntries"
                     :taxIncluded="slotData.isIncludeTax" />
                 </el-col>
               </el-row>
@@ -37,7 +44,7 @@
                   <h6 class="accounting-form-title">工费及其他</h6>
                 </el-col>
                 <el-col :span="23">
-                  <other-accounting-form :slotData="slotData.laborCostEntries" :taxIncluded="slotData.isIncludeTax" />
+                  <other-accounting-table :slotData="slotData.laborCostEntries" :taxIncluded="slotData.isIncludeTax" />
                 </el-col>
               </el-row>
               <div class="sheet-total">
@@ -62,11 +69,8 @@
               <h6 class="accounting-form-title">备注</h6>
             </el-col>
             <el-col :span="23">
-              <el-input v-model="slotData.remarks" placeholder="输入备注" type="textarea" :rows="5"></el-input>
+              {{slotData.remarks}}
             </el-col>
-          </el-row>
-          <el-row type="flex" justify="center" align="middle" style="margin-top: 10px">
-            <el-button size="medium" class="sure-button" @click="onSave">提交</el-button>
           </el-row>
         </el-tab-pane>
       </el-tabs>
@@ -75,17 +79,19 @@
 </template>
 
 <script>
-  import MaterialAccountingForm from "./MaterialAccountingForm";
-  import CraftAccountingForm from "./CraftAccountingForm";
-  import OtherAccountingForm from "./OtherAccountingForm";
+  import MaterialAccountingTable from "./MaterialAccountingTable";
+  import CraftAccountingTable from "./CraftAccountingTable";
+  import OtherAccountingTable from "./OtherAccountingTable";
+  import SampleAccountingSheetForm from '../form/SampleAccountingSheetForm';
 
   export default {
-    name: "SampleAccountingSheetForm",
+    name: "SampleAccountingSheet",
     props: ["slotData", "readOnly", "isRead", "sampleSpecEntries", ],
     components: {
-      MaterialAccountingForm,
-      CraftAccountingForm,
-      OtherAccountingForm,
+      MaterialAccountingTable,
+      OtherAccountingTable,
+      CraftAccountingTable,
+      SampleAccountingSheetForm
     },
     computed: {
       totalPrice: function () {
@@ -131,24 +137,36 @@
       }
     },
     methods: {
-      onSave() {
-        this.$refs['accountingSheetForm'].validate((valid) => {
-          if (valid) {
-            this.$emit('onSave', this.slotData);
-          } else {
-            this.$message.error('请完善表格');
-            return false;
-          }
+      onUpdateAccountingSheet() {
+        let sheetJson = JSON.stringify(this.slotData);
+        var sheetObj = JSON.parse(sheetJson);
+        this.sampleAccountingSheet = Object.assign({}, sheetObj);
+
+        this.hackSet = false;
+        this.$nextTick(() => {
+          this.hackSet = true;
         });
+        this.dialogVisible = true;
       },
-      onIncludeTaxChange(val) {
-        // this.$refs['accountingSheetForm'].validate();
+      onAccountingSheetSave(sheet) {
+        // if (sheet.id != null) {          
+        // var entry = this.slotData.costingSheets.find(item => item.id == sheet.id);
+        Object.assign(this.slotData, sheet);
+        // } else if (sheet.key != null) {
+        //   var entry = this.slotData.costingSheets.find(item => item.key == sheet.key);
+        //   Object.assign(entry, sheet);
+        // } else {
+        //   sheet['key'] = Date.now.toString;
+        //   this.slotData.costingSheets.push(sheet);
+        // }
+        this.dialogVisible = false;
       }
     },
-
     data() {
       return {
-        remark: ''
+        hackSet: true,
+        dialogVisible: false,
+        sampleAccountingSheet: {},
       };
     },
     created() {}

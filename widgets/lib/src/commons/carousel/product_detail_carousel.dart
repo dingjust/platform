@@ -158,15 +158,17 @@ class _ProductCarouselState extends State<ProductCarousel> {
                 builder: (context) =>
                     Container(
                       child: GalleryPhotoViewWrapper(
-                        galleryItems: widget.items
-                            .map((model) => GalleryItem(model: model))
-                            .toList(),
-                        backgroundDecoration: const BoxDecoration(
-                          color: Colors.black,
-                        ),
-                        initialIndex: _curIndicatorsIndex,
-                        scrollDirection: Axis.horizontal,
-                      ),
+                          galleryItems: widget.items
+                              .map((model) => GalleryItem(model: model))
+                              .toList(),
+                          backgroundDecoration: const BoxDecoration(
+                            color: Colors.black,
+                          ),
+                          initialIndex: _curIndicatorsIndex,
+                          scrollDirection: Axis.horizontal,
+                          loadingChild: Center(
+                            child: CircularProgressIndicator(),
+                          )),
                     )),
           );
         },

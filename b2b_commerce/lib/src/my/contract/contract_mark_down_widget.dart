@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/contract/pdf_reader.dart';
 import 'package:b2b_commerce/src/my/contract/seal_select_widget.dart';
 import 'package:b2b_commerce/src/my/contract/webview_page.dart';
@@ -12,20 +13,24 @@ import 'package:services/services.dart';
 import 'package:widgets/widgets.dart';
 
 class ContractMarkDownWidgetPage extends StatefulWidget {
-  ContractModel model ;
+  ContractModel model;
 
   ContractMarkDownWidgetPage({this.model});
-  _ContractMarkDownWidgetPageState createState() => _ContractMarkDownWidgetPageState();
+
+  _ContractMarkDownWidgetPageState createState() =>
+      _ContractMarkDownWidgetPageState();
 }
 
-class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>{
+class _ContractMarkDownWidgetPageState
+    extends State<ContractMarkDownWidgetPage> {
   SealModel sealModel = SealModel();
   List<SealModel> sealList;
   final StreamController _streamController =
   StreamController<double>.broadcast();
 
-  initSeal() async{
-    sealList = await ContractRepository().getSealList({'type':''}, {'page':'0','size':'100'});
+  initSeal() async {
+    sealList = await ContractRepository()
+        .getSealList({'type': ''}, {'page': '0', 'size': '100'});
   }
 
   @override
@@ -79,16 +84,15 @@ class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>
 ////                  }
 //                },
 //              );
-
             },
           ),
-        )
-    );
+        ));
   }
 
   //文件下载打开
   _previewFile() async {
-    SearchResultModel resultModel = await ContractRepository().getContractPdfMedia(widget.model.code);
+    SearchResultModel resultModel =
+    await ContractRepository().getContractPdfMedia(widget.model.code);
     MediaModel pdf = resultModel.data;
 //    final url = "http://africau.edu/images/default/sample.pdf";
     //获取应用目录路径
@@ -117,18 +121,19 @@ class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>
     //打开文件
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PdfReaderWidget(pathPDF: filePath)),
+      MaterialPageRoute(
+          builder: (context) => PdfReaderWidget(pathPDF: filePath)),
     );
   }
 
-  flowContract(SealModel sealModel){
+  flowContract(SealModel sealModel) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (_) {
           return RequestDataLoading(
-            requestCallBack:
-            ContractRepository().flowContract(widget.model.code, sealModel.code),
+            requestCallBack: ContractRepository()
+                .flowContract(widget.model.code, sealModel.code),
             outsideDismiss: false,
             loadingText: '请稍候。。。',
             entrance: '',
@@ -136,12 +141,14 @@ class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>
         }).then((value) {
       Certification certification = value;
       if (certification != null) {
-        if(certification.data !=  null){
+        if (certification.data != null) {
 //          _launchURL(certification.data);
           Navigator.push(
-            context,MaterialPageRoute(builder: (context) => WebView111Page(urlString:certification.data)),
+            context,
+            MaterialPageRoute(
+                builder: (context) => WebviewPage(url: certification.data)),
           );
-        }else{
+        } else {
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -156,7 +163,7 @@ class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>
                 );
               });
         }
-      }else{
+      } else {
         showDialog(
             context: context,
             barrierDismissible: false,
@@ -174,12 +181,15 @@ class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>
     });
   }
 
-  Widget _buildSelectSealItem(){
+  Widget _buildSelectSealItem() {
     return GestureDetector(
-      onTap: (){
-        SealSelectWidget(cacel: () {
-          Navigator.pop(context);
-        },rightData: sealList).showPicker(
+      onTap: () {
+        SealSelectWidget(
+            cacel: () {
+              Navigator.pop(context);
+            },
+            rightData: sealList)
+            .showPicker(
           context,
           selectType: (seal) {
             setState(() {
@@ -194,7 +204,7 @@ class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>
         child: Row(
           children: <Widget>[
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               width: 80,
               height: 80,
               child: Image.asset(
@@ -203,11 +213,12 @@ class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: RichText(
                 text: TextSpan(
-                    text: sealModel != null &&
-                        sealModel.name != null ? '${sealModel.name}' : '选择印章模板',
+                    text: sealModel != null && sealModel.name != null
+                        ? '${sealModel.name}'
+                        : '选择印章模板',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -226,10 +237,8 @@ class _ContractMarkDownWidgetPageState extends State<ContractMarkDownWidgetPage>
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(width: 3,color: Colors.black38)
-        ),
+            border: Border.all(width: 3, color: Colors.black38)),
       ),
     );
   }
-
 }

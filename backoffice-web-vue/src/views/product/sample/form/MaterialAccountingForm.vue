@@ -41,19 +41,18 @@
           <el-form-item :key="'materialsEntries-UPET'+scope.$index"
             :prop="'materialsEntries.' + scope.$index + '.unitPriceExcludingTax'"
             :rules="{required: !taxIncluded, message: '不能为空', trigger: 'change'}">
-            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input"
-              @change="(val)=>onUnitPriceExcludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}">
+            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input" v-if="!taxIncluded"
+              v-number-input.float="{ min: 0 ,decimal:2}">
             </el-input>
           </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column prop="taxRate" label="税率">
+      <el-table-column prop="taxRate" label="税率" min-width="90px">
         <template slot-scope="scope">
-          <el-form-item :key="'TR'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.taxRate'"
+          <el-form-item :key="'TR'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.taxRatePercent'"
             :rules="{required: taxIncluded, message: '不能为空', trigger: 'change'}" v-if="taxIncluded">
-            <el-input @input="(val)=>onTaxInput(val,scope.row)" :value="showFloatPercentNum(scope.row.taxRate)"
-              @blur="onBlur(scope.row,'taxRate')" v-number-input.float="{ min: 0,max:100 ,decimal:1}" class="form-input"
-              :disabled="!taxIncluded">
+            <el-input v-model="scope.row.taxRatePercent" @change="onRateChange(scope.row)"
+              v-number-input.float="{ min: 0,max:100 ,decimal:1}" class="form-input" :disabled="!taxIncluded">
               <h6 slot="suffix" style="padding-top:25px">%</h6>
             </el-input>
           </el-form-item>
@@ -64,8 +63,7 @@
           <el-form-item :key="'UPIT'+scope.$index" :prop="'materialsEntries.' + scope.$index + '.unitPriceIncludingTax'"
             :rules="{required: taxIncluded, message: '不能为空', trigger: 'change'}" v-if="taxIncluded">
             <el-input v-model="scope.row.unitPriceIncludingTax" class="form-input"
-              @change="(val)=>onUnitPriceIncludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}"
-              placeholder="输入" :disabled="!taxIncluded">
+              v-number-input.float="{ min: 0 ,decimal:2}" placeholder="输入" :disabled="!taxIncluded">
             </el-input>
           </el-form-item>
         </template>
@@ -74,7 +72,7 @@
       </el-table-column>
       <el-table-column prop="unitPriceIncludingTax" :label="taxIncluded?'含税单件价格':'不含税单件价格'" fixed="right" width="110px">
         <template slot-scope="scope">
-          {{(scope.row.materialsSpecEntry.unitQuantity*(1+scope.row.materialsSpecEntry.lossRate)*(taxIncluded?scope.row.unitPriceIncludingTax:scope.row.unitPriceExcludingTax)).toFixed(2)}}
+          {{getRowTatoalPrice(scope.row)}}
         </template>
       </el-table-column>
       <el-table-column label="" fixed="right" width="50px">
@@ -112,16 +110,21 @@
       onRemove(row) {
         this.slotData.splice(this.slotData.indexOf(row), 1);
       },
-      onBlur(row, attribute) {
-        var reg = /\.$/;
-        if (reg.test(row[attribute])) {
-          this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
-          if (row.unitPriceExcludingTax != null && row.unitPriceExcludingTax != '') {
-            row.unitPriceIncludingTax = ((parseFloat(row.taxRate) + 1) * row.unitPriceExcludingTax).toFixed(2);
-          } else if (row.unitPriceIncludingTax != null && row.unitPriceIncludingTax != '') {
-            row.unitPriceExcludingTax = (row.unitPriceIncludingTax / (1 + row.taxRate)).toFixed(2);
-          }
+      onRateChange(row) {
+        row.taxRate = (row.taxRatePercent / 100).toFixed(3);
+      },
+      getRowTatoalPrice(row) {
+        if (this.taxIncluded && (row.unitPriceIncludingTax == null || row.unitPriceIncludingTax == '')) {
+          return '';
         }
+
+        if (!this.taxIncluded && (row.unitPriceExcludingTax == null || row.unitPriceExcludingTax == '')) {
+          return '';
+        }
+
+        let result = (row.materialsSpecEntry.unitQuantity * (1 + row.materialsSpecEntry.lossRate) * (
+          this.taxIncluded ? row.unitPriceIncludingTax : row.unitPriceExcludingTax)).toFixed(2);
+        return result;
       },
       showFloatPercentNum(val) {
         if (val == null) {
@@ -132,32 +135,6 @@
           return accMul(val, 100);
         } else {
           return val;
-        }
-      },
-      onTaxInput(val, row) {
-        var reg = /\.$/;
-        if (!reg.test(val)) {
-          row.taxRate = (val / 100.0).toFixed(3);
-        } else {
-          row.taxRate = val;
-        }
-        if (row.unitPriceExcludingTax != null && row.unitPriceExcludingTax != '') {
-          row.unitPriceIncludingTax = ((parseFloat(row.taxRate) + 1) * row.unitPriceExcludingTax).toFixed(2);
-        } else if (row.unitPriceIncludingTax != null && row.unitPriceIncludingTax != '') {
-          row.unitPriceExcludingTax = (row.unitPriceIncludingTax / (1 + row.taxRate)).toFixed(2);
-        }
-      },
-      onUnitPriceExcludingTaxInput(val, row) {
-        if (row.taxRate != null && row.taxRate != '') {
-          row.unitPriceIncludingTax = ((parseFloat(row.taxRate) + 1) * row.unitPriceExcludingTax).toFixed(2);
-        }
-        // else if (row.unitPriceIncludingTax != null && row.unitPriceIncludingTax != '') {
-        //   row.taxRate = (row.unitPriceIncludingTax - row.unitPriceExcludingTax) / row.unitPriceExcludingTax;
-        // }
-      },
-      onUnitPriceIncludingTaxInput(val, row) {
-        if (row.taxRate != null && row.taxRate != '') {
-          row.unitPriceExcludingTax = (row.unitPriceIncludingTax / (1 + parseFloat(row.taxRate))).toFixed(2);
         }
       },
       onAdd() {
@@ -178,6 +155,7 @@
             'unitPriceIncludingTax': '',
             'unitPriceExcludingTax': '',
             'taxRate': '',
+            'taxRatePercent': '',
             'unitTotalPrice': '',
             'unitActualQuantity': ''
           });
@@ -232,13 +210,16 @@
         if (index != -1) {
           var oldEntry = this.slotData[index];
           this.$set(oldEntry, 'materialsSpecEntry', obj);
-          newSlotData.push(oldEntry);
+          oldEntry['taxRatePercent'] = accMul(oldEntry.taxRate, 100);
+          var newObj = JSON.stringify(oldEntry);
+          newSlotData.push(JSON.parse(newObj));
         } else {
           newSlotData.push({
             'materialsSpecEntry': obj,
             'unitPriceIncludingTax': '',
             'unitPriceExcludingTax': '',
             'taxRate': '',
+            'taxRatePercent': '',
             'unitTotalPrice': '',
             'unitActualQuantity': ''
           });
@@ -257,6 +238,10 @@
 <style scoped>
   .form-input {
     padding-top: 15px;
+  }
+
+  .form-input .el-input--suffix .el-input__inner {
+    padding: 5px !important;
   }
 
 </style>

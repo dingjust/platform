@@ -1,4 +1,7 @@
 export function accMul(arg1, arg2) {
+  if(arg1==null||arg2==null){
+    return '';
+  }
   var m = 0;
   var s1 = arg1.toString();
   var s2 = arg2.toString();

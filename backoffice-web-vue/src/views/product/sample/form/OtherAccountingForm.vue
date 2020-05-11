@@ -18,8 +18,8 @@
           <el-form-item :key="'laborCostEntries-UPET'+scope.$index"
             :prop="'laborCostEntries.' + scope.$index + '.unitPriceExcludingTax'"
             :rules="{required: !taxIncluded, message: '不能为空', trigger: 'change'}">
-            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input"
-              @change="(val)=>onUnitPriceExcludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}">
+            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input" v-if="!taxIncluded"
+              v-number-input.float="{ min: 0 ,decimal:2}">
             </el-input>
           </el-form-item>
         </template>
@@ -29,9 +29,8 @@
           <el-form-item :key="'laborCostEntries-TR'+scope.$index"
             :prop="'laborCostEntries.' + scope.$index + '.taxRate'"
             :rules="{required: taxIncluded, message: '不能为空', trigger: 'change'}" v-if="taxIncluded">
-            <el-input @input="(val)=>onTaxInput(val,scope.row)" :value="showFloatPercentNum(scope.row.taxRate)"
-              @blur="onBlur(scope.row,'taxRate')" v-number-input.float="{ min: 0,max:100 ,decimal:1}" class="form-input"
-              v-show="taxIncluded" :disabled="!taxIncluded">
+            <el-input v-model="scope.row.taxRatePercent" @change="onRateChange(scope.row)" class="form-input"
+              v-number-input.float="{ min: 0,max:100 ,decimal:1}">
               <h6 slot="suffix" style="padding-top:25px">%</h6>
             </el-input>
           </el-form-item>
@@ -43,8 +42,7 @@
             :prop="'laborCostEntries.' + scope.$index + '.unitPriceIncludingTax'"
             :rules="{required: taxIncluded, message: '不能为空', trigger: 'change'}" v-if="taxIncluded">
             <el-input v-model="scope.row.unitPriceIncludingTax" class="form-input"
-              @change="(val)=>onUnitPriceIncludingTaxInput(val,scope.row)" v-number-input.float="{ min: 0 ,decimal:2}"
-              placeholder="输入" v-show="taxIncluded" :disabled="!taxIncluded">
+              v-number-input.float="{ min: 0 ,decimal:2}" placeholder="输入" :disabled="!taxIncluded">
             </el-input>
           </el-form-item>
         </template>
@@ -89,22 +87,13 @@
           'unit': '',
           'unitPriceExcludingTax': '',
           'unitPriceIncludingTax': '',
-          'taxRate': ''
+          'taxRate': '',
+          'taxRatePercent': '',
+
         })
       },
       onRemove(row) {
         this.slotData.splice(this.slotData.indexOf(row), 1);
-      },
-      onBlur(row, attribute) {
-        var reg = /\.$/;
-        if (reg.test(row[attribute])) {
-          this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
-          if (row.unitPrice != null && row.unitPrice != '') {
-            row.taxUnitPrice = ((parseFloat(row.tax) + 1) * row.unitPrice).toFixed(2);
-          } else if (row.taxUnitPrice != null && row.taxUnitPrice != '') {
-            row.unitPrice = (row.taxUnitPrice / (1 + row.tax)).toFixed(2);
-          }
-        }
       },
       showFloatPercentNum(val) {
         if (val == null) {
@@ -117,37 +106,18 @@
           return val;
         }
       },
-      onTaxInput(val, row) {
-        var reg = /\.$/;
-        if (!reg.test(val)) {
-          row.taxRate = (val / 100.0).toFixed(3);
-        } else {
-          row.taxRate = val;
-        }
-        if (row.unitPriceExcludingTax != null && row.unitPriceExcludingTax != '') {
-          row.unitPriceIncludingTax = ((parseFloat(row.taxRate) + 1) * row.unitPriceExcludingTax).toFixed(2);
-        } else if (row.unitPriceIncludingTax != null && row.unitPriceIncludingTax != '') {
-          row.unitPriceExcludingTax = (row.unitPriceIncludingTax / (1 + row.taxRate)).toFixed(2);
-        }
-      },
-      onUnitPriceExcludingTaxInput(val, row) {
-        if (row.taxRate != null && row.taxRate != '') {
-          row.unitPriceIncludingTax = ((parseFloat(row.taxRate) + 1) * row.unitPriceExcludingTax).toFixed(2);
-        }
-        // else if (row.unitPriceIncludingTax != null && row.unitPriceIncludingTax != '') {
-        //   row.taxRate = (row.unitPriceIncludingTax - row.unitPriceExcludingTax) / row.unitPriceExcludingTax;
-        // }
-      },
-      onUnitPriceIncludingTaxInput(val, row) {
-        if (row.taxRate != null && row.taxRate != '') {
-          row.unitPriceExcludingTax = (row.unitPriceIncludingTax / (1 + parseFloat(row.taxRate))).toFixed(2);
-        }
+      onRateChange(row) {
+        row.taxRate = (row.taxRatePercent / 100).toFixed(3);
       },
     },
     data() {
       return {};
     },
-    created() {}
+    created() {
+      this.slotData.forEach(element => {
+        this.$set(element, 'taxRatePercent', (element.taxRate * 100).toFixed(1))
+      });
+    }
   };
 
 </script>

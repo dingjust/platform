@@ -1,3 +1,4 @@
+import 'package:b2b_commerce/src/common/webview_page.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_business_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_enterprise_from.dart';
 import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
@@ -202,9 +203,11 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                     //     : Colors.grey),
                     color: (model.companyState ==
                         AuthenticationState.UNCERTIFIED &&
-                        model.personalState == AuthenticationState.UNCERTIFIED)
-                        || (_isCompany &&
-                            (model.companyState == AuthenticationState.CHECK ||
+                        model.personalState ==
+                            AuthenticationState.UNCERTIFIED) ||
+                        (_isCompany &&
+                            (model.companyState ==
+                                AuthenticationState.CHECK ||
                                 model.companyState ==
                                     AuthenticationState.SUCCESS))
                         ? Colors.black
@@ -286,9 +289,11 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                     //     : Colors.grey),
                     color: (model.companyState ==
                         AuthenticationState.UNCERTIFIED &&
-                        model.personalState == AuthenticationState.UNCERTIFIED)
-                        || (!_isCompany &&
-                            (model.companyState == AuthenticationState.CHECK ||
+                        model.personalState ==
+                            AuthenticationState.UNCERTIFIED) ||
+                        (!_isCompany &&
+                            (model.companyState ==
+                                AuthenticationState.CHECK ||
                                 model.companyState ==
                                     AuthenticationState.SUCCESS))
                         ? Colors.black
@@ -369,8 +374,9 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                     //     : Colors.grey),
                     color: (model.companyState ==
                         AuthenticationState.UNCERTIFIED &&
-                        model.personalState == AuthenticationState.UNCERTIFIED)
-                        || model.personalState == AuthenticationState.CHECK ||
+                        model.personalState ==
+                            AuthenticationState.UNCERTIFIED) ||
+                        model.personalState == AuthenticationState.CHECK ||
                         model.personalState == AuthenticationState.SUCCESS
                         ? Colors.black
                         : Colors.grey),
@@ -426,8 +432,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    WebView111Page(urlString: certification.data)),
+                builder: (context) => WebviewPage(url: certification.data)),
           );
         } else {
           showDialog(
@@ -483,8 +488,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    WebView111Page(urlString: certification.data)),
+                builder: (context) => WebviewPage(url: certification.data)),
           );
         } else {
           showDialog(
@@ -539,8 +543,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    WebView111Page(urlString: certification.data)),
+                builder: (context) => WebviewPage(url: certification.data)),
           );
         } else {
           showDialog(
