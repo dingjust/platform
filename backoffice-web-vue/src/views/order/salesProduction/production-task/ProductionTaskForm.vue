@@ -22,7 +22,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <production-task-product-form/>
+        <production-task-product-form :code="1"/>
         <el-divider></el-divider>
         <div class="border-container">
           <production-task-receiving-form/>
@@ -39,9 +39,9 @@
 </template>
 
 <script>
-  import ProductionTaskReceivingForm from '../form/ProductionTaskReceivingForm';
-  import ProductionTaskInvoiceForm from '../form/ProductionTaskInvoiceForm';
-  import ProductionTaskProductForm from '../form/ProductionTaskProductForm';
+  import ProductionTaskReceivingForm from './form/ProductionTaskReceivingForm';
+  import ProductionTaskInvoiceForm from './form/ProductionTaskInvoiceForm';
+  import ProductionTaskProductForm from './form/ProductionTaskProductForm';
   export default {
     name: 'SalesPlanForm',
     components: {

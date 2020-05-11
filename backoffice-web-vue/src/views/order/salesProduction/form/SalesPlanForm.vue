@@ -12,7 +12,7 @@
         <div class="pt-2"></div>
         <div style="padding-left:10px">
           <el-row type="flex">
-            <el-col :span="4">
+            <el-col :span="6">
               <el-form-item label="计划单号">
                 <el-input v-model="form.code" placeholder="系统自动生成" :disabled="true"></el-input>
               </el-form-item>
@@ -72,27 +72,43 @@
                 <el-checkbox v-model="form.noCheck">无需审核</el-checkbox>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
-              <el-form-item label="采购负责人" label-width="85px">
-                <el-select v-model="form.productionCadre">
-                  <el-option label="张三" value="张三"></el-option>
-                  <el-option label="李四" value="李四"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5">
-              <el-form-item label="审批负责人" label-width="85px">
-                <el-select v-model="form.productionCadre" :disabled="form.noCheck">
-                  <el-option label="张三" value="张三"></el-option>
-                  <el-option label="李四" value="李四"></el-option>
-                </el-select>
+            <el-col :span="2">
+              <el-form-item label="" label-width="5px">
+                <el-button @click="appendProductionCadre">+ 添加审批人</el-button>
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row type="flex" align="start" :gutter="10" v-for="(item, index) in form.productionCharge" v-if="index % 6 == 0">
+            <template  v-for="(val) in form.productionCharge.slice(index, index+6)">
+              <el-col :span="4">
+                <el-form-item label="审批人" label-width="85px">
+                  <el-select v-model="form.productionCadre[index]" clearable placeholder="请选择">
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </template>
+          </el-row>
         </div>
       </el-form>
-      <sales-plan-products-table />
+      <sales-plan-products-table :form="form" @appendProduct="appendProduct"/>
+      <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
+        <el-col :span="5">
+          <el-button class="material-btn">创建保存</el-button>
+        </el-col>
+        <el-col :span="5">
+          <el-button class="material-btn">创建并提交审核</el-button>
+        </el-col>
+      </el-row>
     </el-card>
+    <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <sales-plan-append-product v-if="salesProductAppendVisible" @onAppendProduct="onAppendProduct"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -100,10 +116,12 @@
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
   import MyAddressForm from '@/components/custom/order-form/MyAddressForm';
   import SalesPlanProductsTable from '../components/SalesPlanProductsTable';
+  import SalesPlanAppendProduct from '../components/SalesPlanAppendProduct';
 
   export default {
     name: 'SalesPlanForm',
     components: {
+      SalesPlanAppendProduct,
       MTAVAT,
       MyAddressForm,
       SalesPlanProductsTable
@@ -112,10 +130,28 @@
 
     },
     methods: {
-
+      appendProduct () {
+        this.salesProductAppendVisible = true;
+      },
+      onAppendProduct () {
+        this.salesProductAppendVisible = false;
+      },
+      appendProductionCadre () {
+        this.form.productionCharge.push('');
+      }
     },
-    data() {
+    data () {
       return {
+        salesProductAppendVisible: false,
+        options: [{
+          label: '张三',
+          name: '张三',
+          value: '张三'
+        }, {
+          label: '李四',
+          name: '李四',
+          value: '李四'
+        }],
         form: {
           code: '',
           name: '',
@@ -126,20 +162,24 @@
           address: {
 
           },
-          productionCadre: '',
-          noCheck: true
-        },
+          productionCadre: [''],
+          productionCharge: [{
+            label: '张三',
+            name: '张三',
+            value: '张三'
+          }],
+          noCheck: true,
+        }
 
       };
     },
-    created() {
+    created () {
 
     },
-    mounted() {
+    mounted () {
 
     }
   };
-
 </script>
 
 <style scoped>
@@ -152,4 +192,11 @@
     padding-left: 20px;
   }
 
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 120px;
+    height: 40px;
+  }
 </style>

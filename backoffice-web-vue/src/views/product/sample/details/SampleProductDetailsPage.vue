@@ -1,6 +1,7 @@
 <template>
   <div class="animated fadeIn">
-    <sample-product-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated" :isRead="readOnly"/>
+    <sample-product-form ref="form" :slot-data="slotData" :read-only="!isNewlyCreated"
+                         :isRead="readOnly" :isDialogOpen="isDialogOpen" @closeDialog="closeDialog"/>
     <div class="pt-2"></div>
   </div>
 </template>
@@ -49,6 +50,9 @@
         this.refresh();
         this.fn.closeSlider(true);
         this.$emit('afterCreate');
+      },
+      closeDialog () {
+        this.$emit('closeDialog');
       }
     },
     computed: {
@@ -59,6 +63,7 @@
     data () {
       return {
         slotData: {},
+        isDialogOpen: false
       }
     },
     created () {
@@ -70,6 +75,7 @@
         this.slotData = this.$route.params.slotData;
       } else {
         this.slotData = this.$store.state.SampleProductsModule.newFormData;
+        this.isDialogOpen = true;
       }
     }
   }

@@ -1,8 +1,8 @@
 <template>
   <div class="animated fadeIn">
     <el-row class="basic-form-row_top" type="flex" align="middle">
-      <h6 class="info-input-prepend_top" v-if="!isRead">生产信息</h6>
-      <h5 style="fontWeight: bold;" v-else>生产信息</h5>
+      <h6 class="info-input-prepend_top" v-if="code==1">生产信息</h6>
+      <h5 style="fontWeight: bold;" v-if="code==2">生产信息</h5>
     </el-row>
     <el-row type="flex" :gutter="20" justify="start">
       <el-col :span="8">
@@ -11,7 +11,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="2">
-        <el-button size="mini" style="margin-top: 2px">点击选择</el-button>
+        <el-button size="mini" style="margin-top: 2px" @click="appendSample">点击选择</el-button>
       </el-col>
     </el-row>
     <el-row class="basic-form-row" type="flex">
@@ -19,7 +19,7 @@
         <images-upload-single :form-data="picture" :disabled="true"/>
       </el-col>
       <el-col :span="20">
-        <el-table :data="formData" border style="width: 100%" show-summary :summary-method="getSummaries" :span-method="spanMethod">
+        <el-table :data="formData" border style="width: 100%" show-summary :summary-method="getSummaries">
           <el-table-column prop="name" label="属性"></el-table-column>
           <template v-for="(item, index) in sizeList">
             <el-table-column :label="item" :prop="item"></el-table-column>
@@ -32,11 +32,11 @@
 </template>
 
 <script>
-  import ImagesUploadSingle from '../../../../components/custom/ImagesUploadSingle';
+  import ImagesUploadSingle from '../../../../../components/custom/ImagesUploadSingle';
   export default {
     name: 'ProductionTaskProductForm',
     components: {ImagesUploadSingle},
-    props: ['isRead'],
+    props: ['code'],
     methods: {
       transformData () {
         let sum = 0;
@@ -58,7 +58,7 @@
           flag = {};
         })
       },
-      getSummaries(param) {
+      getSummaries (param) {
         const { columns, data } = param;
         const sums = [];
         columns.forEach((column, index) => {
@@ -91,15 +91,13 @@
 
         return sums;
       },
-      spanMethod ({ row, column, rowIndex, columnIndex }) {
-        console.log(row)
-        console.log(column)
-        console.log(rowIndex)
-        console.log(columnIndex)
+      appendSample () {
+        this.dialogVisible = true;
       }
     },
     data () {
       return {
+        dialogVisible: false,
         sizeList: [],
         formData: [],
         sizeArr: [],

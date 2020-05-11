@@ -30,8 +30,8 @@
 </template>
 
 <script>
-  import MTAVAT from '../../../../components/custom/order-form/MTAVAT';
-  import MyAddressForm from '../../../../components/custom/order-form/MyAddressForm';
+  import MTAVAT from '../../../../../components/custom/order-form/MTAVAT';
+  import MyAddressForm from '../../../../../components/custom/order-form/MyAddressForm';
   export default {
     name: 'ProductionTaskReceivingForm',
     components: {MyAddressForm, MTAVAT},

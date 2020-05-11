@@ -6,8 +6,8 @@
       <address-select @onSelect="onAddressSelect" />
     </el-dialog>
     <el-form ref="address" :model="address" label-position="left">
-      <el-row type="flex" align="middle" :gutter="10">
-        <el-col :span="6">
+      <el-row type="flex" align="middle" :gutter="10" justify="space-between">
+        <el-col :span="7">
           <el-form-item label="送货地址" style="padding-top:8px" :rules="[
                 { required: true, message: '请选择省', trigger: 'blur'}]" :prop="'region'">
             <el-select v-model="address.region" value-key="isocode" @change="(val)=>onRegionChanged(val)"
@@ -42,7 +42,7 @@
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="3">
           <el-form-item>
             <el-button size="mini" @click="addressSelect">选择</el-button>
           </el-form-item>

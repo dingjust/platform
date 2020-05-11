@@ -78,7 +78,7 @@
       SampleAccountingSheetForm,
       SampleAccountingSheet
     },
-    props: ['readOnly', 'isRead'],
+    props: ['readOnly', 'isRead', 'isDialogOpen'],
     computed: {
       ...mapGetters({
         slotData: 'newFormData'
@@ -193,6 +193,10 @@
 
         this.$message.success('样衣创建成功，产品编号： ' + result.code);
         // this.$set(this.slotData, 'code', result);
+        if (this.isDialogOpen) {
+          this.$emit('closeDialog');
+          return;
+        }
         this.$router.go(-1);
       },
       onCreateAccountingSheet() {

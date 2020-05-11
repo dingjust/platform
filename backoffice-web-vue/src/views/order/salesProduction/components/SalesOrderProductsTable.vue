@@ -2,9 +2,7 @@
   <div class="border-container">
     <div class="over-tabs">
       <el-row type="flex">
-          <el-button v-if="isCreate" class="material-btn" @click="appendProduct">添加商品</el-button>
-          <el-button v-if="!isCreate" class="material-btn" @click="appendProduct">创建生产任务</el-button>
-          <el-button v-if="!isCreate" class="material-btn" @click="appendProduct">创建采购任务</el-button>
+          <el-button class="material-btn" @click="appendProduct" v-if="isCreate">添加商品</el-button>
       </el-row>
     </div>
     <el-tabs type="border-card">
@@ -38,59 +36,12 @@
               <el-button type="text" @click="onProductDetail(scope.row)">详情</el-button>
               <el-button type="text" @click="onModify(scope.row)">编辑</el-button>
               <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
-<!--              <el-divider direction="vertical"></el-divider>-->
-<!--              <el-dropdown @command="handleCommand">-->
-<!--            <span class="el-dropdown-link">-->
-<!--              更多<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-<!--            </span>-->
-<!--                <el-dropdown-menu slot="dropdown">-->
-<!--                  <el-dropdown-item command="delete">删除</el-dropdown-item>-->
-<!--                  <el-dropdown-item command="close">关闭</el-dropdown-item>-->
-<!--                  <el-dropdown-item command="modify">修改</el-dropdown-item>-->
-<!--                </el-dropdown-menu>-->
-<!--              </el-dropdown>-->
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="生产明细" v-if="form.status && form.status == 'COMPLETE'">
-        <el-table :data="tableData.content" stripe style="width: 100%">
-          <el-table-column type="selection" width="55">
-          </el-table-column>
-          <el-table-column prop="name" label="产品名称" ></el-table-column>
-          <el-table-column prop="name" label="数量"></el-table-column>
-          <el-table-column prop="price" label="关联任务单" min-width="100"></el-table-column>
-          <el-table-column prop="total" label="关联外发单" min-width="100"></el-table-column>
-          <el-table-column prop="budget" label="关联生产工单"></el-table-column>
-          <el-table-column prop="profit" label="关联采购任务"></el-table-column>
-          <el-table-column prop="address" label="交货时间">
-            <template slot-scope="scope">
-              <span>{{scope.row.time | timestampToTime}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="address" label="订单状态">
-            <template slot-scope="scope">
-              <span>{{getEnum('cooperationModes', scope.row.type)}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="address" label="操作" min-width="100">
-            <template slot-scope="scope">
-              <el-button type="text">详情</el-button>
-              <el-button type="text">编辑</el-button>
-              <el-button type="text">删除</el-button>
-<!--              <el-dropdown @command="handleCommand">-->
-<!--            <span class="el-dropdown-link">-->
-<!--              更多<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-<!--            </span>-->
-<!--                <el-dropdown-menu slot="dropdown">-->
-<!--                  <el-dropdown-item command="delete">删除</el-dropdown-item>-->
-<!--                  <el-dropdown-item command="close">关闭</el-dropdown-item>-->
-<!--                  <el-dropdown-item command="modify">修改</el-dropdown-item>-->
-<!--                </el-dropdown-menu>-->
-<!--              </el-dropdown>-->
-            </template>
-          </el-table-column>
-        </el-table>
+      <el-tab-pane label="生产明细" v-if="!isCreate">
+
       </el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="salesProductDetailsVisible" width="80%" class="purchase-dialog" append-to-body
@@ -103,15 +54,12 @@
 <script>
   import SalesPlanProductDetail from '../details/SalesPlanProductDetail';
   export default {
-    name: 'SalesPlanProductsTable',
+    name: 'SalesOrderProductsTable',
     components: {SalesPlanProductDetail},
     props: {
       isCreate: {
         type: Boolean,
         default: true
-      },
-      form: {
-        type: Object
       }
     },
     methods: {
