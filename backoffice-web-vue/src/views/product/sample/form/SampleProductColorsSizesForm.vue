@@ -128,7 +128,7 @@
           var arr = [];
           for (let j = 0; j < this.selectSizes.length; j++) {
             let obj = {
-              'id': this.selectColors[i].id,
+              'colorId': this.selectColors[i].id,
               'colorCode': this.selectColors[i].code,
               'color': this.selectColors[i].name,
               'previewImg': this.selectColors[i].previewImg,
@@ -274,7 +274,7 @@
       this.getAllSizes();
       this.slotData.colorSizes.forEach((color) => {
         let colorObj = {
-          'id': color.id,
+          'colorId': color.colorId,
           'code': color.colorCode,
           'name': color.colorName,
           'customize': color.customize

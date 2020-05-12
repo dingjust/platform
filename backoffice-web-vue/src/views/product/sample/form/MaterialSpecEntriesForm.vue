@@ -181,13 +181,17 @@
         return result;
       },
       getMaterialsColorEntry(row, sampleColor) {
-        let index = row.materialsColorEntries.findIndex(element => {
-          if (element.sampleColor.code == null) {
-            return element.sampleColor.name == sampleColor.name
-          } else {
-            return element.sampleColor.code == sampleColor.code;
-          }
-        });
+        let index = -1;
+        if (row.materialsColorEntries != null) {
+          index = row.materialsColorEntries.findIndex(element => {
+            if (element.sampleColor.code == null) {
+              return element.sampleColor.name == sampleColor.name
+            } else {
+              return element.sampleColor.code == sampleColor.code;
+            }
+          });
+        }
+
         if (index == -1) {
           //没找到则添加对应颜色对象
           var newEntry = {
@@ -197,7 +201,12 @@
               'name': '无'
             }
           };
-          row.materialsColorEntries.push(newEntry);
+          if (row.materialsColorEntries != null) {
+            row.materialsColorEntries.push(newEntry);
+          } else {
+            row.materialsColorEntries = [newEntry];
+          }
+
           return newEntry;
         } else {
           return row.materialsColorEntries[index];

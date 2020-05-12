@@ -122,8 +122,10 @@
           return '';
         }
 
-        let result = (row.materialsSpecEntry.unitQuantity * (1 + row.materialsSpecEntry.lossRate) * (
-          this.taxIncluded ? row.unitPriceIncludingTax : row.unitPriceExcludingTax)).toFixed(2);
+        let result = (parseFloat(row.materialsSpecEntry.unitQuantity) * (1 + parseFloat(row.materialsSpecEntry
+          .lossRate)) * (
+          this.taxIncluded ? parseFloat(row.unitPriceIncludingTax) : parseFloat(row.unitPriceExcludingTax))).toFixed(
+          2);
         return result;
       },
       showFloatPercentNum(val) {

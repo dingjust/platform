@@ -22,7 +22,7 @@
         <el-divider></el-divider>
         <apparel-product-images-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
         </apparel-product-images-form>
-        <sample-attach-orders-form :slot-data="slotData" />
+        <sample-attach-orders-form :slotData="slotData" :productsColors="getClothesColors()" />
         <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">
           <el-col :span="4">
             <el-button class="product-form-btn" @click="onCreateAccountingSheet">创建成本核算单</el-button>
@@ -214,17 +214,6 @@
         });
         this.dialogVisible = true;
       },
-      // onUpdateAccountingSheet(sheet, index) {
-      //   let sheetJson = JSON.stringify(sheet);
-      //   var sheetObj = JSON.parse(sheetJson);
-      //   this.sampleAccountingSheet = Object.assign({}, sheetObj);
-
-      //   this.hackSet = false;
-      //   this.$nextTick(() => {
-      //     this.hackSet = true;
-      //   });
-      //   this.dialogVisible = true;
-      // },
       onUpdateAccountingSheet(sheet, index) {
         this.sampleAccountingSheet = sheet;
         this.hackSet = false;
@@ -246,7 +235,24 @@
           this.slotData.costingSheets.push(sheet);
         }
         this.dialogVisible = false;
-      }
+      },
+      getClothesColors() {
+        var result = [];
+        if (this.slotData.colorSizes != null && this.slotData.colorSizes.length > 0) {
+          this.slotData.colorSizes.forEach(element => {
+            let item = element[0];
+            if (item != null) {
+              result.push({
+                'id': item.colorId,
+                'code': item.colorCode,
+                'name': item.color,
+                'previewImg': item.previewImg
+              });
+            }
+          });
+        }
+        return result;
+      },
     },
     data() {
       return {

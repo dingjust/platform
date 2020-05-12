@@ -1,21 +1,23 @@
 <template>
   <div>
-    <el-dialog :visible.sync="materialSpecEntriesVisible" width="95%" class="purchase-dialog"
+    <el-dialog :visible.sync="materialSpecEntriesVisible" width="95%" class="purchase-dialog" :append-to-body="true"
       :close-on-click-modal="false">
       <material-spec-entries-form :slotData="slotData.entries" @onSubmit="onMaterialEnriesSubmit" v-if="hackSet"
-        :colors="clothesColors" />
+        :colors="productsColors" />
     </el-dialog>
+    <div class="over-tabs">
+      <el-row type="flex" justify="end">
+        <el-col :span="5">
+          <el-button class="material-btn">校对预览</el-button>
+        </el-col>
+        <el-col :span="5">
+          <el-button @click="onEdit" class="material-btn">编辑</el-button>
+        </el-col>
+      </el-row>
+    </div>
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane label="物料清单" name="material">
-        <el-row type="flex" justify="end" style="margin-bottom:10px">
-          <el-col :span="2">
-            <el-button>预览</el-button>
-          </el-col>
-          <el-col :span="2">
-            <el-button @click="onEdit">编辑</el-button>
-          </el-col>
-        </el-row>
-        <material-spec-entries-table :colors="clothesColors" :slotData="slotData.entries" />
+        <material-spec-entries-table :colors="productsColors" :slotData="slotData.entries" />
       </el-tab-pane>
       <el-tab-pane label="生产工艺单" name="craft">
         <el-input type="textarea" placeholder="输入工艺要求" v-model="slotData.productionProcessContent" :rows="10">
@@ -42,7 +44,7 @@
 
   export default {
     name: "SampleAttachOrdersForm",
-    props: ["slotData", "readOnly", "isRead"],
+    props: ["slotData", "productsColors", "readOnly", "isRead"],
     components: {
       ImagesUpload,
       FilesUpload,
@@ -50,23 +52,7 @@
       MaterialSpecEntriesTable
     },
     computed: {
-      clothesColors: function () {
-        var result = [];
-        if (this.slotData.colorSizes != null && this.slotData.colorSizes.length > 0) {
-          this.slotData.colorSizes.forEach(element => {
-            let item = element[0];
-            if (item != null) {
-              result.push({
-                'id': item.id,
-                'code': item.colorCode,
-                'name': item.color,
-                'previewImg': item.previewImg
-              });
-            }
-          });
-        }
-        return result;
-      },
+
     },
     methods: {
       async onEdit() {
@@ -84,7 +70,7 @@
           this.materialSpecEntriesVisible = true;
         } else {
           this.$message({
-            message: '添加物料前请先选择商品颜色和尺码',
+            message: '编辑物料前请先完善商品颜色',
             type: 'warning'
           });
         }
@@ -141,6 +127,23 @@
 <style scoped>
   /deep/ .el-table--enable-row-hover .el-table__body tr:hover>td {
     background-color: #f5f7fa !important;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
+  }
+
+  .over-tabs {
+    position: absolute;
+    z-index: 100;
+    right: 30px;
+    margin-top: 2px;
+    width: 500px;
+    /* padding-right: 30px; */
   }
 
 </style>

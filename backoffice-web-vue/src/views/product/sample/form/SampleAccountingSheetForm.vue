@@ -95,8 +95,9 @@
 
         if (this.slotData.materialsEntries != null) {
           this.slotData.materialsEntries.forEach(element => {
-            let sum = parseFloat(element.materialsSpecEntry.unitQuantity * (1 + element.materialsSpecEntry
-              .lossRate) * (this
+            let sum = parseFloat(element.materialsSpecEntry.unitQuantity * (1 + parseFloat(element
+              .materialsSpecEntry
+              .lossRate)) * (this
               .slotData
               .isIncludeTax ?
               element.unitPriceIncludingTax : element.unitPriceExcludingTax));
@@ -198,6 +199,14 @@
     top: 0px;
     right: 160px;
     /* margin-right: 110px; */
+  }
+
+  .sure-button {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
   }
 
 </style>

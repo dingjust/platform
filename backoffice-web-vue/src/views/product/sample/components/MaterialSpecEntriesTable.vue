@@ -74,6 +74,9 @@
     },
     methods: {
       getMaterialColor(row, color) {
+        if(row.materialsColorEntries==null){
+          return '';
+        }
         let item = row.materialsColorEntries.find(val => val.sampleColor.code == color.code || val.sampleColor.name ==
           color.name);
         return (item != null && item.materialsColor) ? item.materialsColor.name : '';
