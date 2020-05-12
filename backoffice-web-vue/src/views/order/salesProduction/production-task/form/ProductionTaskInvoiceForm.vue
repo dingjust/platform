@@ -1,7 +1,7 @@
 <template>
   <div class="animated fadeIn" style="padding-top: 20px">
     <el-row class="basic-form-row_top" type="flex" align="middle">
-      <h6 class="info-input-prepend_top">发单需求</h6>
+      <h6 class="info-input-prepend_top">{{title ? title : '发单需求'}}</h6>
     </el-row>
     <el-row class="basic-form-row" type="flex" :gutter="20">
       <el-col :span="6">
@@ -98,6 +98,7 @@
   import MyAddressForm from '../../../../../components/custom/order-form/MyAddressForm';
   export default {
     name: 'ProductionTaskInvoiceForm',
+    props: ['title'],
     components: {MyAddressForm, MTAVAT},
     computed: {
       ...mapGetters({
