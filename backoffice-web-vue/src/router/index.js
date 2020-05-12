@@ -276,6 +276,12 @@ const router = new Router({
                   props: true,
                   component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/details/SalesOrderDetail')
                 },
+                {
+                  path: 'create/outboundOrder',
+                  name: '创建外发订单',
+                  props: true,
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/outbound-order/OutboundOrderPage')
+                },
               ]
             }
           ]
@@ -464,6 +470,28 @@ const router = new Router({
               ]
             },
           ]
+        },
+        {
+          path: '/task',
+          name: '任务',
+          component: {
+            render(c) {
+              return c('router-view');
+            }
+          },
+          children: [{
+            path: 'handle',
+            name: '待我处理',
+            component: () => import( /* webpackChunkName: 'task' */ '@/views/task/handle/TaskHandlePage')
+          }, {
+            path: 'approval',
+            name: '我的审批',
+            component: () => import( /* webpackChunkName: 'task' */ '@/views/task/approval/TaskApprovalPage')
+          }, {
+            path: 'assign',
+            name: '待我分配',
+            component: () => import( /* webpackChunkName: 'task' */ '@/views/task/assign/TaskAssignPage')
+          }]
         },
         {
           path: '/miscs',

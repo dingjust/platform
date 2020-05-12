@@ -282,6 +282,24 @@ export default {
       ]
     },
     {
+      name: '任务',
+      url: '/task',
+      icon: 'el-icon-notebook-1',
+      children: [{
+        name: '待我处理',
+        url: '/task/handle',
+        icon: 'iconNone'
+      }, {
+        name: '我的审批',
+        url: '/task/approval',
+        icon: 'iconNone'
+      }, {
+        name: '待我分配',
+        url: '/task/assign',
+        icon: 'iconNone'
+      }]
+    },
+    {
       name: '其他',
       url: '/miscs',
       icon: 'el-icon-coin',
