@@ -1101,7 +1101,7 @@ class PurchaseOrderModel extends OrderModel {
   ///获取合作商名称(非CooperatorModel)
   String getCooperatorName(UserType currentType) {
     if (currentType == UserType.FACTORY) {
-      return supplier.name;
+      return supplier?.name ?? '';
     } else if (currentType == UserType.BRAND) {
       return belongTo.name;
     } else {
