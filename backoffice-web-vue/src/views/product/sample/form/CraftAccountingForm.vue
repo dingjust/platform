@@ -20,17 +20,18 @@
         <template slot-scope="scope">
           <el-form-item :key="'specialProcessEntries-UPET'+scope.$index"
             :prop="'specialProcessEntries.' + scope.$index + '.unitPriceExcludingTax'"
-            :rules="{required: !taxIncluded, message: '不能为空', trigger: 'change'}">
-            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input" v-if="!taxIncluded"
+            :rules="{required: !taxIncluded, message: '不能为空', trigger: 'change'}" v-if="!taxIncluded">
+            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input"
               v-number-input.float="{ min: 0 ,decimal:2}">
             </el-input>
           </el-form-item>
+          <template v-if="taxIncluded">{{getunitPriceExcludingTax(scope.row)}}</template>
         </template>
       </el-table-column>
       <el-table-column prop="taxRate" label="税率">
         <template slot-scope="scope">
           <el-form-item :key="'specialProcessEntries-TR'+scope.$index"
-            :prop="'specialProcessEntries.' + scope.$index + '.taxRate'" v-if="taxIncluded"
+            :prop="'specialProcessEntries.' + scope.$index + '.taxRatePercent'" v-if="taxIncluded"
             :rules="{required: taxIncluded, message: '不能为空', trigger: 'change'}">
             <el-input v-model="scope.row.taxRatePercent" @change="onRateChange(scope.row)" class="form-input"
               v-number-input.float="{ min: 0,max:100 ,decimal:1}">
@@ -112,13 +113,24 @@
       onRateChange(row) {
         row.taxRate = (row.taxRatePercent / 100).toFixed(3);
       },
+      getunitPriceExcludingTax(row) {
+        if (row.unitPriceIncludingTax != null && row.taxRate != null) {
+          let result = parseFloat(row.unitPriceIncludingTax) / (1 + parseFloat(row.taxRate));
+          if (Number.isNaN(result)) {
+            return '';
+          }
+          return result.toFixed(2);
+        } else {
+          return '';
+        }
+      },
     },
     data() {
       return {};
     },
     created() {
       this.slotData.forEach(element => {
-        this.$set(element,'taxRatePercent',(element.taxRate*100).toFixed(1))
+        this.$set(element, 'taxRatePercent', (element.taxRate * 100).toFixed(1))
       });
     }
   };

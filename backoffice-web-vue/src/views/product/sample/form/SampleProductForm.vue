@@ -22,7 +22,8 @@
         <el-divider></el-divider>
         <apparel-product-images-form :slot-data="slotData" :read-only="readOnly" :isRead="isRead">
         </apparel-product-images-form>
-        <sample-attach-orders-form :slotData="slotData" :productsColors="getClothesColors()" />
+        <sample-attach-orders-form :entries.sync="slotData.entries" :medias.sync="slotData.medias"
+          :productionProcessContent.sync="slotData.productionProcessContent" :productsColors="getClothesColors()" />
         <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">
           <el-col :span="4">
             <el-button class="product-form-btn" @click="onCreateAccountingSheet">创建成本核算单</el-button>

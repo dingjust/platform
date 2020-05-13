@@ -7,9 +7,10 @@
       </el-table-column>
       <el-table-column prop="unit" label="单位">
       </el-table-column>
-      <el-table-column label="不含税单价" v-if="!taxIncluded">
+      <el-table-column label="不含税单价">
         <template slot-scope="scope">
-          {{scope.row.unitPriceExcludingTax}}
+          <template v-if="!taxIncluded">{{scope.row.unitPriceExcludingTax}}</template>
+          <template v-if="taxIncluded">{{getunitPriceExcludingTax(scope.row)}}</template>
         </template>
       </el-table-column>
       <el-table-column label="税率" v-if="taxIncluded">
@@ -43,6 +44,17 @@
     computed: {},
 
     methods: {
+      getunitPriceExcludingTax(row) {
+        if (row.unitPriceIncludingTax != null && row.taxRate != null) {
+          let result = parseFloat(row.unitPriceIncludingTax) / (1 + parseFloat(row.taxRate));
+          if (Number.isNaN(result)) {
+            return '';
+          }
+          return result.toFixed(2);
+        } else {
+          return '';
+        }
+      },
       showFloatPercentNum(val) {
         if (val == null) {
           return '';

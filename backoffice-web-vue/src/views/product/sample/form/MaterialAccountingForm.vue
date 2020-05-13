@@ -40,11 +40,12 @@
         <template slot-scope="scope">
           <el-form-item :key="'materialsEntries-UPET'+scope.$index"
             :prop="'materialsEntries.' + scope.$index + '.unitPriceExcludingTax'"
-            :rules="{required: !taxIncluded, message: '不能为空', trigger: 'change'}">
-            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input" v-if="!taxIncluded"
+            :rules="{required: !taxIncluded, message: '不能为空', trigger: 'change'}" v-if="!taxIncluded">
+            <el-input v-model="scope.row.unitPriceExcludingTax" class="form-input"
               v-number-input.float="{ min: 0 ,decimal:2}">
             </el-input>
           </el-form-item>
+          <template v-if="taxIncluded">{{getunitPriceExcludingTax(scope.row)}}</template>
         </template>
       </el-table-column>
       <el-table-column prop="taxRate" label="税率" min-width="90px">
@@ -112,6 +113,17 @@
       },
       onRateChange(row) {
         row.taxRate = (row.taxRatePercent / 100).toFixed(3);
+      },
+      getunitPriceExcludingTax(row) {
+        if (row.unitPriceIncludingTax != null && row.taxRate != null) {
+          let result = parseFloat(row.unitPriceIncludingTax) / (1 + parseFloat(row.taxRate));
+          if (Number.isNaN(result)) {
+            return '';
+          }
+          return result.toFixed(2);
+        } else {
+          return '';
+        }
       },
       getRowTatoalPrice(row) {
         if (this.taxIncluded && (row.unitPriceIncludingTax == null || row.unitPriceIncludingTax == '')) {

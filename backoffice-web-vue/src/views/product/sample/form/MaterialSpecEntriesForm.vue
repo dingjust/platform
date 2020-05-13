@@ -6,7 +6,13 @@
     </el-dialog>
     <el-form :model="form" ref="form">
       <el-table :data="form.materialList" style="width: 100%">
-        <el-table-column label="使用名称" fixed="left">
+        <el-table-column fixed="left">
+          <template slot="header">
+            使用名称 <el-popover placement="top-start" title="使用名称" width="200" trigger="hover"
+              content="使用名称即面料在成衣上的实际用途如：主面料，口袋链，里布等。">
+              <i slot="reference" class="el-icon-question" style="font-size:14px;"></i>
+            </el-popover>
+          </template>
           <template slot-scope="scope">
             <el-form-item :prop="'materialList.' + scope.$index + '.title'"
               :rules="{required: true, message: '不能为空', trigger: 'change'}">
@@ -61,7 +67,13 @@
             </el-form-item>
           </template>
         </el-table-column>
-        <el-table-column label="样衣颜色" align="center">
+        <el-table-column align="center">
+          <template slot="header">
+            款式颜色<el-popover placement="top-start" title="款式颜色" width="200" trigger="hover" ref="popover"
+              content="此处显示对于款式的全部颜色，下方填写对应款式颜色所需物料的对应颜色，如不需要选择">
+              <i slot="reference" class="el-icon-question" v-popover:popover style="font-size:14px;"></i>
+            </el-popover>
+          </template>
           <template v-for="(color,index) in colors">
             <el-table-column :key="index" :label="color.name">
               <template slot-scope="scope">
@@ -288,6 +300,7 @@
     },
     data() {
       return {
+        visible: false,
         dialogVisible: false,
         activeName: "material",
         textarea1: '',

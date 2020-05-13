@@ -128,7 +128,7 @@
           var arr = [];
           for (let j = 0; j < this.selectSizes.length; j++) {
             let obj = {
-              'colorId': this.selectColors[i].id,
+              'colorId': this.selectColors[i].colorId,
               'colorCode': this.selectColors[i].code,
               'color': this.selectColors[i].name,
               'previewImg': this.selectColors[i].previewImg,
@@ -154,9 +154,7 @@
           if (color.previewImg == null) {
             color.previewImg = [];
           }
-          console.log(JSON.stringify(color));
           this.selectColors.push(color);
-          console.log(JSON.stringify(this.selectColors));
         } else {
           this.selectColors.splice(index, 1);
         }
@@ -292,6 +290,7 @@
         color.sizes.forEach((size) => {
           if (size.quality != null) {
             this.inputChange({
+              'colorId':color.colorId,
               'color': color.colorName,
               'size': size.name,
               'quality': size.quality
