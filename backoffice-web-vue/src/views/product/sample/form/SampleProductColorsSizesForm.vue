@@ -128,7 +128,7 @@
           var arr = [];
           for (let j = 0; j < this.selectSizes.length; j++) {
             let obj = {
-              'colorId': this.selectColors[i].colorId,
+              'colorId': this.selectColors[i].id,
               'colorCode': this.selectColors[i].code,
               'color': this.selectColors[i].name,
               'previewImg': this.selectColors[i].previewImg,

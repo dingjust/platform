@@ -39,7 +39,7 @@
             </el-col>
             <el-col :span="4">
               <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnpaidAmount != 0">
-                剩余未付￥{{(payPlanItem.remainingUnpaidAmount,2)|floatFormat}}</h6>
+                剩余未付￥{{payPlanItem.remainingUnpaidAmount.toFixed(2)}}</h6>
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true && !isTenant()">

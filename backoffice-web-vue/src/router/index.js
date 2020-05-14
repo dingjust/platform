@@ -235,7 +235,7 @@ const router = new Router({
               children: [{
                   path: '',
                   name: '计划列表',
-                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/SalesProductionPage'),
+                  component: () => import( /* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/SalesProduction'),
                 },
                 {
                   path: 'create/plan',
