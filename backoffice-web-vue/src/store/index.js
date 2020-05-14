@@ -42,6 +42,8 @@ import {
   WalletModule,
   CashOutManagerModule,
   PromoteProductModule,
+  // sale-plan
+  OutboundOrderModule,
   // contract
   ContractModule,
   ContractTemplateModule,
@@ -122,6 +124,8 @@ export default new Vuex.Store({
     WalletModule,
     CashOutManagerModule,
     PromoteProductModule,
+    // sale-plan
+    OutboundOrderModule,
     // contract
     ContractModule,
     ContractTemplateModule,

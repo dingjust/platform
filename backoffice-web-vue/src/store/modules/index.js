@@ -40,6 +40,9 @@ import WalletModule from './miscs/wallet';
 import CashOutManagerModule from './miscs/cashOutManager';
 import PromoteProductModule from './miscs/promoteProduct';
 
+// sale-plan
+import OutboundOrderModule from './sale-plan/outbound-order'
+
 // contract
 import ContractModule from './contract/contract';
 import ContractTemplateModule from './contract/contractTemplate'
@@ -94,6 +97,8 @@ export {
   WalletModule,
   CashOutManagerModule,
   PromoteProductModule,
+  // sale-plan
+  OutboundOrderModule,
   // contract
   ContractModule,
   ContractTemplateModule,
