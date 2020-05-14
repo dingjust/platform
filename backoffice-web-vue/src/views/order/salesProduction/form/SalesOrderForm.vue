@@ -93,10 +93,10 @@
           </el-col>
         </el-row>
         <div class="form-block-content" style="margin-top: 10px">
-          <el-row type="flex" justify="start" :gutter="20" class="info-order-row">
+          <el-row type="flex" justify="start" :gutter="12" class="info-order-row">
             <el-col :span="10">
-              <el-row type="flex" align="middle" justify="space-between">
-                <h6 style="margin-right:5px;width:180px">
+              <el-row type="flex" align="start" justify="space-between">
+                <h6 style="margin-right:5px;margin-bottom: 0px;width:200px;line-height: normal">
                   {{currentFinancialPlan!=''?'当前选中方案：'+currentFinancialPlan:'当前未选择账务方案'}}</h6>
                 <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain
                            size="mini">选用我的账务方案</el-button>

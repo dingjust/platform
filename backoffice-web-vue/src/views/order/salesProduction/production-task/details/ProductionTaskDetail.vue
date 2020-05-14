@@ -1,78 +1,24 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
-      <el-form :inline="true">
-        <el-row>
-          <el-col :span="13">
-            <div class="sales-plan-form-title">
-              <h6>生产任务明细</h6>
-            </div>
-          </el-col>
-          <el-col :span="11">
-            <el-row>
-              <el-col :span="12">
-                <h6>任务单号:&#12288;{{form.id}}</h6>
-              </el-col>
-              <el-col :span="12">
-                <h6>对应单号:&#12288;{{form.id}}</h6>
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
-        <div class="pt-2"></div>
-        <el-row type="flex" :gutter="20">
-          <el-col :span="12">
-            <div class="border-container">
-              <receiving-details-form/>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="border-container">
-              <invoice-details-form/>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row type="flex" style="margin-top: 20px">
-          <el-col :span="24">
-            <production-task-product-form :code="2"/>
-          </el-col>
-        </el-row>
-        <el-divider></el-divider>
-        <el-row type="flex">
-          <el-col :span="12">
-            <el-form-item label="关联销售订单" label-width="150px">
-              <el-input></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="对应外发订单" label-width="150px">
-              <el-input></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :span="12">
-            <el-form-item label="分配" label-width="150px">
-              <el-select v-model="value" placeholder="请选择">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-row type="flex" justify="center" :gutter="50">
-        <el-col :span="4">
-          <el-button class="production-task-btn" @click="onConfirm">接受</el-button>
+      <el-row type="flex" justify="space-between">
+        <el-col :span="6">
+          <div class="sales-plan-form-title">
+            <h6>生产任务明细</h6>
+          </div>
         </el-col>
-        <el-col :span="4">
-          <el-button class="production-task-btn" @click="onCreate">创建外发订单</el-button>
+        <el-col :span="6">
+          <h6>任务单号:&#12288;{{code}}</h6>
+        </el-col>
+        <el-col :span="6">
+          <h6>订单状态:&#12288;{{form.status}}</h6>
         </el-col>
       </el-row>
+      <div class="pt-2"></div>
+      <receiving-details-form/>
+      <el-form>
+        <production-task-invoice-form :title="title"/>
+      </el-form>
     </el-card>
   </div>
 </template>
@@ -81,10 +27,11 @@
   import ReceivingDetailsForm from '../form/ReceivingDetailsForm';
   import InvoiceDetailsForm from '../form/InvoiceDetailsForm';
   import ProductionTaskProductForm from '../form/ProductionTaskProductForm';
+  import ProductionTaskInvoiceForm from '../form/ProductionTaskInvoiceForm';
   export default {
     name: 'ProductionTaskDetails',
     props: ['code'],
-    components: {ProductionTaskProductForm, InvoiceDetailsForm, ReceivingDetailsForm},
+    components: {ProductionTaskInvoiceForm, ProductionTaskProductForm, InvoiceDetailsForm, ReceivingDetailsForm},
     methods: {
       onConfirm () {
 
@@ -95,8 +42,22 @@
     },
     data () {
       return {
+        title: '生产需求',
         form: {
-          id: 'WX1020399853247895712'
+          id: 'WX1020399853247895712',
+          status: '未审核'
+        },
+        product: {
+          name: '全棉磨毛斜布',
+          code: 'CO00000001',
+          category: 'polo衫',
+          date: '2019-2-19',
+          price: 120000000.00,
+          machiningType: 'LABOR_AND_MATERIAL',
+          quantity: 100000,
+          orderForm: '订单来源',
+          relationOrder: 'CO00000001',
+          address: '广东省广州市海珠区云顶同创汇二期707'
         },
         options: [{
           value: '选项1',
@@ -125,6 +86,28 @@
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
+
+  .purchase-product-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+
+  .info-basic-row {
+    margin-top: 10px;
+  }
+
+
+
+
+
+
+
+
+
+
+
 
   .border-container{
     border: 1px solid #DCDFE6;

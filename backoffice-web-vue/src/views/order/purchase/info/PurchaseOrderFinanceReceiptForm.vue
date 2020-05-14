@@ -15,8 +15,8 @@
       <el-col :span="16">
         <el-row type="flex">
           <h6 class="finance-form-text1" v-if="isFactory()">剩余未收/本期总额</h6>
-          <h6 class="finance-form-text3">￥{{payPlanItem.remainingUnReceiptAmount,2 | floatFormat}}/￥{{payPlanItem.lastItemAmount != null
-            ? payPlanItem.lastItemAmount : slotData.totalPrice * payPlanItem.payPercent,2 | floatFormat}}</h6>
+          <h6 class="finance-form-text3">￥{{payPlanItem.remainingUnReceiptAmount.toFixed(2)}}/￥{{payPlanItem.lastItemAmount != null
+            ? payPlanItem.lastItemAmount : (slotData.totalPrice * payPlanItem.payPercent).toFixed(2)}}</h6>
         </el-row>
       </el-col>
     </el-row>

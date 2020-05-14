@@ -42,7 +42,7 @@
             </el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="3">
+        <el-col :span="2">
           <el-form-item>
             <el-button size="mini" @click="addressSelect">选择</el-button>
           </el-form-item>

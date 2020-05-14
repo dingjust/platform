@@ -34,7 +34,7 @@
           </el-form-item>
           <el-button-group>
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
-            <el-button native-type="reset">重置</el-button>
+            <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
         <el-col :span="4">
@@ -63,29 +63,49 @@
 
   const {
     mapMutations
-  } = createNamespacedHelpers('ContractModule');
+  } = createNamespacedHelpers('PurchaseOrdersModule');
 
   export default {
     name: 'PurchaseOrderToolbar',
     components: {
-      UniquecodeImportForm,
+      UniquecodeImportForm
     },
     computed: {},
     methods: {
       ...mapMutations({
         setKeyword: 'keyword',
-        setQueryFormData: 'queryFormData',
+        setQueryFormData: 'queryFormData'
       }),
-      onSearch() {
+      onSearch () {
         this.$store.state.PurchaseOrdersModule.keyword = this.keyword;
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
-      onAdvancedSearch() {
+      onAdvancedSearch () {
         this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
-      async getFactories(query) {
+      onReset () {
+        this.queryFormData.keyword = '';
+        this.queryFormData.categories = [];
+        this.queryFormData.createdDateTo = null;
+        this.queryFormData.createdDateFrom = null;
+        this.queryFormData.statuses = [];
+        // const query = {
+        //   code: '',
+        //   requirementOrderCode: '',
+        //   skuID: '',
+        //   statuses: [],
+        //   expectedDeliveryDateFrom: null,
+        //   expectedDeliveryDateTo: null,
+        //   createdDateFrom: null,
+        //   createdDateTo: null,
+        //   keyword: '',
+        //   categories: []
+        // }
+        // this.setQueryFormData(query);
+      },
+      async getFactories (query) {
         const url = this.apis().getFactories();
         const result = await this.$http.post(url, {
           keyword: query
@@ -93,13 +113,13 @@
           page: 0,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.factories = result.content;
       },
-      async getBrands(query) {
+      async getBrands (query) {
         const url = this.apis().getBrands();
         const result = await this.$http.post(url, {
           keyword: query
@@ -107,36 +127,36 @@
           page: 0,
           size: 10
         });
-        if (result["errors"]) {
-          this.$message.error(result["errors"][0].message);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
           return;
         }
         this.brands = result.content;
       },
-      onDateChange(values) {
+      onDateChange (values) {
         console.log(values[0]);
         this.queryFormData.createdDateFrom = values[0];
         this.queryFormData.createdDateTo = values[1];
         this.onAdvancedSearch();
       },
-      async getCategories() {
+      async getCategories () {
         const url = this.apis().getMinorCategories();
         const results = await this.$http.get(url);
         if (!results['errors']) {
           this.categories = results;
         }
       },
-      jumpToOrderPurchase() {
-        this.$router.push("/orderPurchase");
-      },
+      jumpToOrderPurchase () {
+        this.$router.push('/orderPurchase');
+      }
     },
-    data() {
+    data () {
       return {
         uniquecodeFormVisible: false,
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
@@ -144,7 +164,7 @@
             }
           }, {
             text: '最近一个月',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
@@ -152,7 +172,7 @@
             }
           }, {
             text: '最近三个月',
-            onClick(picker) {
+            onClick (picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
@@ -166,10 +186,10 @@
         keyword: this.$store.state.PurchaseOrdersModule.keyword,
         formData: this.$store.state.PurchaseOrdersModule.formData,
         queryFormData: this.$store.state.PurchaseOrdersModule.queryFormData,
-        categories: [],
+        categories: []
       }
     },
-    created() {
+    created () {
       this.getCategories();
       if (this.isTenant()) {
         this.getFactories();
@@ -188,7 +208,6 @@
       }
     }
   }
-
 </script>
 <style>
   .el-input__inner {
