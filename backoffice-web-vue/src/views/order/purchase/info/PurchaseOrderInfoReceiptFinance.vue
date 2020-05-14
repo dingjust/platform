@@ -19,18 +19,30 @@
               <h6 class="info-log-content">{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
             </el-col>
             <el-col :span="10">
-              <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
-                {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余全部款项</h6>
-              <h6 class="finance-log-content" v-else>{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后{{payPlanItem.triggerDays}}天
-                {{payPlanItem.triggerType | enumTranslate('TriggerType')}}完成付款
-                {{payPlanItem.payPercent * 100}}%作为{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}</h6>
+              <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后
+                <span v-if="payPlanItem.moneyType === 'MONTHLY_SETTLEMENT'">
+                  次月{{payPlanItem.triggerDays == null || payPlanItem.triggerDays <0 ? '月底' : payPlanItem.triggerDays + '号'}}支付剩余全部款项
+                </span>
+                <span v-else>
+                  {{payPlanItem.triggerDays}}天 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余全部款项
+                </span>
+              </h6>
+              <h6 class="finance-log-content" v-else>{{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后
+                <span v-if="payPlanItem.moneyType === 'MONTHLY_SETTLEMENT'">
+                  次月{{payPlanItem.triggerDays == null || payPlanItem.triggerDays <0 ? '月底' : payPlanItem.triggerDays + '号'}}支付剩余全部款项
+                </span>
+                <span v-else>
+                  {{payPlanItem.triggerDays}}天 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}完成付款
+                {{payPlanItem.payPercent * 100}}%作为{{payPlanItem.moneyType | enumTranslate('PayMoneyType')}}
+                </span>
+              </h6>
             </el-col>
             <el-col :span="2">
               <img v-if="payPlanItem.receiptStatus === 'ARREARS'" width="40px" height="15px" src="static/img/arrears.png" />
               <img v-if="payPlanItem.receiptStatus === 'PAID'" width="40px" height="15px" src="static/img/paid.png" />
             </el-col>
             <el-col :span="4">
-              <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnReceiptAmount != 0">剩余未收￥{{payPlanItem.remainingUnReceiptAmount,2 | floatFormat}}</h6>
+              <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnReceiptAmount != 0">剩余未收￥{{payPlanItem.remainingUnReceiptAmount.toFixed(2)}}</h6>
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true && !isTenant()">

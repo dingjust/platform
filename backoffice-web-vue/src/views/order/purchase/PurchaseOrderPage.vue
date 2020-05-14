@@ -117,7 +117,8 @@
       handleClick (tab, event) {
         // console.log(tab.name);
         if (tab.name == 'ALL') {
-          this.onSearch('');
+          this.queryFormData.statuses = [];
+          this.onAdvancedSearch();
         } else {
           this.queryFormData.statuses = [tab.name];
           this.onAdvancedSearch();

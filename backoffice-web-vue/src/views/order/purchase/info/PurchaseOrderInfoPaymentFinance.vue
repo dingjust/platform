@@ -22,7 +22,7 @@
               <h6 class="finance-log-content" v-if="payPlanItem.isLastItem === true">
                 {{payPlanItem.triggerEvent | enumTranslate('TriggerEvent')}}后
                 <span v-if="payPlanItem.moneyType === 'MONTHLY_SETTLEMENT'">
-                  次月{{payPlanItem.triggerDays}}号支付剩余全部款项
+                  次月{{payPlanItem.triggerDays == null || payPlanItem.triggerDays <0 ? '月底' : payPlanItem.triggerDays + '号'}}支付剩余全部款项
                 </span>
                 <span v-else>
                   {{payPlanItem.triggerDays}}天 {{payPlanItem.triggerType | enumTranslate('TriggerType')}}支付剩余全部款项
@@ -39,7 +39,7 @@
             </el-col>
             <el-col :span="4">
               <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnpaidAmount != 0">
-                剩余未付￥{{(payPlanItem.remainingUnpaidAmount,2)|floatFormat}}</h6>
+                剩余未付￥{{payPlanItem.remainingUnpaidAmount.toFixed(2)}}</h6>
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true && !isTenant()">
