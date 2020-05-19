@@ -49,7 +49,8 @@
                   <img v-if="payPlanItem.receiptStatus === 'PAID'" width="40px" height="15px" src="static/img/paid.png" />
                 </el-col>
                 <el-col :span="4">
-                  <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnReceiptAmount != 0">
+                  <h6 class="info-log-content" style="color: red"
+                      v-if="payPlanItem.remainingUnReceiptAmount && payPlanItem.remainingUnReceiptAmount != 0">
                     剩余未收￥{{payPlanItem.remainingUnReceiptAmount.toFixed(2)}}
                   </h6>
                 </el-col>
@@ -100,8 +101,10 @@
       receiptOrders: function () {
         let result = [];
         for (var payPlanItem of this.slotData.payPlan.payPlanItems) {
-          for (var receipt of payPlanItem.receiptOrders) {
-            result.push(receipt);
+          if (payPlanItem.receiptOrders) {
+            for (var receipt of payPlanItem.receiptOrders) {
+              result.push(receipt);
+            }
           }
         }
 

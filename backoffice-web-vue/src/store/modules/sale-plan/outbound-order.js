@@ -15,29 +15,64 @@ const state = {
     content: [] // 当前页数据
   },
   formData: {
-    code: '',
-    entries: [],
-    deliveryAddress: {},
-    id: '',
-    status: '',
-    user: {},
-    quality: '',
-    seller: {}
+    id: null,
+    outboundOrderType: 'PARTYA',
+    outboundCompanyName: '',
+    outboundContactPerson: '',
+    outboundContactPhone: '',
+    cooperator: {
+      id: ''
+    },
+    entries: [{
+      productionTaskId: '',
+      billPrice: '',
+      expectedDeliveryDate: '',
+      shippingAddress: {},
+      product: {}
+    }],
+    machiningType: 'LABOR_AND_MATERIAL',
+    invoiceNeeded: false,
+    invoiceTaxPoint: 0.03,
+    freightPayer: 'PARTYA',
+    remarks: '',
+    noCheck: true,
+    progressPlan: {},
+    payPlan: {
+      payPlanItems: [],
+      isHaveDeposit: false,
+      payPlanType: 'PHASEONE',
+      deposit: {
+        event: 'ORDER_CONFIRMED',
+        time: 5,
+        range: 'INSIDE',
+        percent: 0.3
+      },
+      balance1: {
+        event: 'ORDER_CONFIRMED',
+        time: 5,
+        range: 'INSIDE',
+        percent: 0.3
+      },
+      balance2: {
+        event: 'ORDER_CONFIRMED',
+        time: 5,
+        range: 'INSIDE',
+        percent: 0.3
+      },
+      monthBalance: {
+        event: 'ORDER_CONFIRMED',
+        time: 5
+      }
+    },
+    // belongOperator: {}
+    operator: [],
+    attachments: []
   },
   queryFormData: {
-    code: '',
-    requirementOrderCode: '',
-    skuID: '',
-    statuses: [],
-    refunding: '',
-    expectedDeliveryDateFrom: null,
-    expectedDeliveryDateTo: null,
-    createdDateFrom: null,
-    createdDateTo: null,
-    // belongTos: [],
-    // purchasers:[],
     keyword: '',
-    categories: []
+    cooperator: '',
+    belongOperator: '',
+    status: ''
   },
   addressFormData: {
     id: null,
@@ -83,11 +118,10 @@ const mutations = {
 };
 
 const actions = {
-  async search ({dispatch, commit, state}, {url, keyword, statuses, page, size}) {
+  async search ({dispatch, commit, state}, {url, keyword, page, size}) {
     console.log(keyword + 'test' + page + 'test' + size);
     commit('url', url);
     commit('keyword', keyword);
-    commit('statuses', statuses);
     if (page || page === 0) {
       console.log(page);
       commit('currentPageNumber', page);
@@ -98,8 +132,7 @@ const actions = {
     }
 
     const response = await http.post(url, {
-      keyword: state.keyword,
-      statuses: state.statuses
+      keyword: state.keyword
     }, {
       page: state.currentPageNumber,
       size: state.currentPageSize
@@ -126,6 +159,70 @@ const actions = {
     if (!response['errors']) {
       commit('page', response);
     }
+  },
+  clearFormData ({dispatch, commit, state}) {
+    commit('formData', {
+      id: null,
+      outboundOrderType: 'PARTYA',
+      outboundCompanyName: '',
+      outboundContactPerson: '',
+      outboundContactPhone: '',
+      cooperator: {
+        id: ''
+      },
+      entries: [{
+        productionTaskId: '',
+        billPrice: '',
+        expectedDeliveryDate: '',
+        shippingAddress: {},
+        product: {}
+      }],
+      machiningType: 'LABOR_AND_MATERIAL',
+      invoiceNeeded: false,
+      invoiceTaxPoint: 0.03,
+      freightPayer: 'PARTYA',
+      remarks: '',
+      noCheck: true,
+      progressPlan: {},
+      payPlan: {
+        payPlanItems: [],
+        isHaveDeposit: false,
+        payPlanType: 'PHASEONE',
+        deposit: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        balance1: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        balance2: {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        },
+        monthBalance: {
+          event: 'ORDER_CONFIRMED',
+          time: 5
+        }
+      },
+      // belongOperator: {},
+      operator: [],
+      attachments: []
+    });
+  },
+  clearQueryFormData ({dispatch, commit, state}) {
+    commit('queryFormData', {
+      keyword: '',
+      cooperator: '',
+      belongOperator: '',
+      status: ''
+    });
   },
   refresh ({dispatch, commit, state}) {
     const keyword = state.keyword;
