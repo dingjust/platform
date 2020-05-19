@@ -69,7 +69,9 @@
               <h6 class="accounting-form-title">备注</h6>
             </el-col>
             <el-col :span="23">
+              <div style="padding-top:10px">
               {{slotData.remarks}}
+              </div>
             </el-col>
           </el-row>
         </el-tab-pane>

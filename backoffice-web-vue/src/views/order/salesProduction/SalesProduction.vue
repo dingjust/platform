@@ -9,9 +9,9 @@
         </el-col>
       </el-row>
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
-                                @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder"/>
+        @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder" />
       <el-divider class="sales-divider"></el-divider>
-      <sales-production-list :page="page"/>
+      <sales-production-list :page="page" />
     </el-card>
   </div>
 </template>
@@ -33,7 +33,7 @@
   );
 
   export default {
-    name: 'SalesProductionOrderPage',
+    name: 'SalesProduction',
     components: {
       SalesProductionList,
       SalesProductionStatusBar,
@@ -56,45 +56,47 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch () {
+      onSearch() {
         const url = this.apis().getSalesOrderList();
         this.setIsAdvancedSearch(false);
         this.search({
           url
         });
       },
-      onAdvancedSearch () {
+      onAdvancedSearch() {
 
       },
-      createSalesPlan () {
+      createSalesPlan() {
         this.$router.push({
           name: '录入销售计划'
         });
       },
-      createSalesOrder () {
+      createSalesOrder() {
         this.$router.push({
           name: '录入销售订单'
         });
       }
     },
-    data () {
-    },
-    created () {
-      this.onSearch();
-    },
-    mounted () {
+    data() {
+      return {
 
+      }
+    },
+    created() {
+      this.onSearch();
     }
-  };
+  }
+
 </script>
 
 <style scoped>
-   .sales-list-title {
-     border-left: 2px solid #ffd60c;
-     padding-left: 10px;
-   }
+  .sales-list-title {
+    border-left: 2px solid #ffd60c;
+    padding-left: 10px;
+  }
 
   .sales-divider {
     margin: 5px
   }
+
 </style>

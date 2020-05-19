@@ -1,5 +1,4 @@
 import 'package:b2b_commerce/src/common/webview_page.dart';
-import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -14,7 +13,8 @@ class MyAuthenticationEnterpriseResult extends StatefulWidget {
   bool isCompany;
   AuthenticationModel authenticationModel;
 
-  MyAuthenticationEnterpriseResult({this.isCompany: false, this.authenticationModel});
+  MyAuthenticationEnterpriseResult(
+      {this.isCompany: false, this.authenticationModel});
 
   @override
   _MyAuthenticationEnterpriseResultState createState() =>
@@ -235,9 +235,9 @@ class _MyAuthenticationEnterpriseResultState
         _buildInfo('公司名称', '${model.name}'),
         _buildInfo('社会信用代码', '${model.organization}'),
         _buildInfo(
-            '法定代表人', '${model.agent.name != null ? model.agent.name : ''}'),
+            '法定代表人', '${model?.agent?.name != null ? model.agent.name : ''}'),
         _buildInfo('身份证号码',
-            '${model.agent.idCardNum != null ? model.agent.idCardNum : ''}'),
+            '${model?.agent?.idCardNum != null ? model.agent.idCardNum : ''}'),
         _buildCertificates(),
       ],
     );

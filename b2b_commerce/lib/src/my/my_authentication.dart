@@ -4,7 +4,6 @@ import 'package:b2b_commerce/src/my/authentication/authentication_enterprise_fro
 import 'package:b2b_commerce/src/my/authentication/authentication_person_from.dart';
 import 'package:b2b_commerce/src/my/authentication/my_authentication_enterprise_result.dart';
 import 'package:b2b_commerce/src/my/authentication/my_authentication_result.dart';
-import 'package:b2b_commerce/src/my/contract/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:models/models.dart';
@@ -147,7 +146,6 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   Widget _buildEnterpriseItem(AuthenticationModel model) {
     return GestureDetector(
       onTap: () async {
-        // 个体户认证且认证中 || 个人认证
         if ((!_isCompany && model.companyState == AuthenticationState.CHECK) ||
             model.personalState == AuthenticationState.CHECK) {
           promptingDialog();
@@ -244,7 +242,6 @@ class _MyAuthenticationState extends State<MyAuthentication> {
   Widget _buildIndividualBusinessItem(AuthenticationModel model) {
     return GestureDetector(
       onTap: () {
-        // 企业认证且认证中 || 个人认证中
         if ((_isCompany && model.companyState == AuthenticationState.CHECK) ||
             model.personalState == AuthenticationState.CHECK) {
           promptingDialog();
@@ -264,6 +261,7 @@ class _MyAuthenticationState extends State<MyAuthentication> {
                   builder: (context) =>
                       MyAuthenticationEnterpriseResult(
                         isCompany: _isCompany,
+                        authenticationModel: model,
                       )),
             );
           }

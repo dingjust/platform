@@ -236,7 +236,7 @@ const router = new Router({
       children: [{
         path: 'plan',
         name: '计划列表',
-        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/SalesProductionPage')
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/SalesProduction')
       },
       {
         path: 'create/plan',
@@ -684,3 +684,4 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
+

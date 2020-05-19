@@ -1,27 +1,29 @@
 <template>
   <div>
-    <el-dialog :visible.sync="materialSpecEntriesVisible" width="95%" class="purchase-dialog"
+    <el-dialog :visible.sync="materialSpecEntriesVisible" width="95%" class="purchase-dialog" :append-to-body="true"
       :close-on-click-modal="false">
-      <material-spec-entries-form :slotData="slotData.entries" @onSubmit="onMaterialEnriesSubmit" v-if="hackSet"
-        :colors="clothesColors" />
+      <material-spec-entries-form :slotData="curEntries" @onSubmit="onMaterialEnriesSubmit" v-if="hackSet"
+        :colors="productsColors" />
     </el-dialog>
+    <div class="over-tabs">
+      <el-row type="flex" justify="end">
+        <el-col :span="5">
+          <el-button class="material-btn">校对预览</el-button>
+        </el-col>
+        <el-col :span="5">
+          <el-button @click="onEdit" class="material-btn">编辑</el-button>
+        </el-col>
+      </el-row>
+    </div>
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane label="物料清单" name="material">
-        <el-row type="flex" justify="end" style="margin-bottom:10px">
-          <el-col :span="2">
-            <el-button>预览</el-button>
-          </el-col>
-          <el-col :span="2">
-            <el-button @click="onEdit">编辑</el-button>
-          </el-col>
-        </el-row>
-        <material-spec-entries-table :colors="clothesColors" :slotData="slotData.entries" />
+        <material-spec-entries-table :colors="productsColors" :slotData="curEntries" />
       </el-tab-pane>
       <el-tab-pane label="生产工艺单" name="craft">
-        <el-input type="textarea" placeholder="输入工艺要求" v-model="slotData.productionProcessContent" :rows="10">
+        <el-input type="textarea" placeholder="输入工艺要求" v-model="curProductionProcessContent" :rows="10">
         </el-input>
         <h6 style="margin-top:10px;">上传工艺单文件</h6>
-        <files-upload class="product-images-form-upload" style="margin-top:20px" :slot-data="slotData.medias"
+        <files-upload class="product-images-form-upload" style="margin-top:20px" :slot-data="curMedias"
           :read-only="isRead" :disabled="isRead" :limit="8">
         </files-upload>
       </el-tab-pane>
@@ -42,7 +44,28 @@
 
   export default {
     name: "SampleAttachOrdersForm",
-    props: ["slotData", "readOnly", "isRead"],
+    props: {
+      entries: {
+        type: Array,
+        default: []
+      },
+      productionProcessContent: {
+        type: String,
+        default: ''
+      },
+      medias: {
+        type: Array,
+        default: []
+      },
+      productsColors: {
+        type: Array,
+        default: []
+      },
+      isRead: {
+        type: Boolean,
+        default: false
+      }
+    },
     components: {
       ImagesUpload,
       FilesUpload,
@@ -50,31 +73,12 @@
       MaterialSpecEntriesTable
     },
     computed: {
-      clothesColors: function () {
-        var result = [];
-        if (this.slotData.colorSizes != null && this.slotData.colorSizes.length > 0) {
-          this.slotData.colorSizes.forEach(element => {
-            let item = element[0];
-            if (item != null) {
-              result.push({
-                'id': item.id,
-                'code': item.colorCode,
-                'name': item.color,
-                'previewImg': item.previewImg
-              });
-            }
-          });
-        }
-        return result;
-      },
+
     },
     methods: {
       async onEdit() {
         //颜色尺码没填写提示
-        if (this.slotData.colorSizes != null && this.slotData.colorSizes[0] != null && this.slotData.colorSizes[0][
-            0
-          ] !=
-          null) {
+        if (this.productsColors != null && this.productsColors[0] != null) {
           //重置组件
           this.hackSet = false;
           this.$nextTick(() => {
@@ -84,7 +88,7 @@
           this.materialSpecEntriesVisible = true;
         } else {
           this.$message({
-            message: '添加物料前请先选择商品颜色和尺码',
+            message: '编辑物料前请先完善商品颜色',
             type: 'warning'
           });
         }
@@ -111,11 +115,11 @@
             .materialsColor != null && element.materialsColor != "");
           material.materialsColorEntries = newEntries;
         })
-        this.$set(this.slotData, 'entries', result);
+        this.$set(this, 'curEntries', result);
       },
       //校验物料列表数据完整性，若缺少相应颜色数据等则查询物料详情  
       async validateMaterials() {
-        for (let entry of this.slotData.entries) {
+        for (let entry of this.curEntries) {
           if (entry.variants == null) {
             //查询物料详情
             const url = this.apis().getMaterialDetails(entry.materialsId);
@@ -129,8 +133,31 @@
       return {
         materialSpecEntriesVisible: false,
         activeName: "material",
-        hackSet: true
+        hackSet: true,
+        curEntries: this.entries,
+        curMedias: this.medias,
+        curProductionProcessContent: this.productionProcessContent
       };
+    },
+    watch: {
+      entries: function (newVal, oldVal) {
+        this.curEntries = newVal;
+      },
+      curEntries: function (newVal, oldVal) {
+        this.$emit("update:entries", newVal);
+      },
+      productionProcessContent: function (newVal, oldVal) {
+        this.curProductionProcessContent = newVal;
+      },
+      curProductionProcessContent: function (newVal, oldVal) {
+        this.$emit("update:productionProcessContent", newVal);
+      },
+      medias: function (newVal, oldVal) {
+        this.curMedias = newVal;
+      },
+      curMedias: function (newVal, oldVal) {
+        this.$emit("update:medias", newVal);
+      },
     },
     created() {
 
@@ -141,6 +168,23 @@
 <style scoped>
   /deep/ .el-table--enable-row-hover .el-table__body tr:hover>td {
     background-color: #f5f7fa !important;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
+  }
+
+  .over-tabs {
+    position: absolute;
+    z-index: 100;
+    right: 30px;
+    margin-top: 2px;
+    width: 500px;
+    /* padding-right: 30px; */
   }
 
 </style>

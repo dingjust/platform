@@ -78,9 +78,9 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row type="flex" align="start" :gutter="10" v-for="(item, index) in form.productionCharge" v-if="index % 6 == 0">
-            <template  v-for="(val) in form.productionCharge.slice(index, index+6)">
-              <el-col :span="4">
+          <el-row type="flex" align="start" :gutter="10" :key="index" v-for="(item, index) in form.productionCharge" v-if="index % 6 == 0">
+            <template  v-for="(val,inner_index) in form.productionCharge.slice(index, index+6)">
+              <el-col :span="4" :key="inner_index">
                 <el-form-item label="审批人" label-width="85px">
                   <el-select v-model="form.productionCadre[index]" clearable placeholder="请选择">
                     <el-option

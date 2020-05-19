@@ -32,9 +32,10 @@
           {{(scope.row.materialsSpecEntry.unitQuantity*(1+parseFloat(scope.row.materialsSpecEntry.lossRate))).toFixed(2)}}
         </template>
       </el-table-column>
-      <el-table-column label="不含税单价" v-if="!taxIncluded">
+      <el-table-column label="不含税单价">
         <template slot-scope="scope">
-          {{scope.row.unitPriceExcludingTax}}
+          <template v-if="!taxIncluded">{{scope.row.unitPriceExcludingTax}}</template>
+          <template v-if="taxIncluded">{{getunitPriceExcludingTax(scope.row)}}</template>
         </template>
       </el-table-column>
       <el-table-column label="税率" min-width="90px" v-if="taxIncluded">
@@ -77,6 +78,17 @@
     },
 
     methods: {
+      getunitPriceExcludingTax(row) {
+        if (row.unitPriceIncludingTax != null && row.taxRate != null) {
+          let result = parseFloat(row.unitPriceIncludingTax) / (1 + parseFloat(row.taxRate));
+          if (Number.isNaN(result)) {
+            return '';
+          }
+          return result.toFixed(2);
+        } else {
+          return '';
+        }
+      },
       getRowTatoalPrice(row) {
         if (this.taxIncluded && (row.unitPriceIncludingTax == null || row.unitPriceIncludingTax == '')) {
           return '';
@@ -86,8 +98,10 @@
           return '';
         }
 
-        let result = (row.materialsSpecEntry.unitQuantity * (1 + row.materialsSpecEntry.lossRate) * (
-          this.taxIncluded ? row.unitPriceIncludingTax : row.unitPriceExcludingTax)).toFixed(2);
+        let result = (parseFloat(row.materialsSpecEntry.unitQuantity) * (1 + parseFloat(row.materialsSpecEntry
+          .lossRate)) * (
+          this.taxIncluded ? parseFloat(row.unitPriceIncludingTax) : parseFloat(row.unitPriceExcludingTax))).toFixed(
+          2);
         return result;
       },
       showFloatPercentNum(val) {
