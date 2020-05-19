@@ -1,29 +1,28 @@
 <template>
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" @filter-change="handleFilterChange" v-if="isHeightComputed"
-              :height="autoHeight">
+      :height="autoHeight">
       <el-table-column label="销售订单号" min-width="130">
         <template slot-scope="scope">
+          <el-row type="flex" justify="space-between" align="middle">
+            <el-tag type="info" effect="plain" style="color: #ffd60c;border-color: #ffd60c;">
+              {{getEnum('SalesProductionOrderType', scope.row.type)}}</el-tag>
+          </el-row>
           <el-row type="flex" justify="space-between" align="middle">
             <span>{{scope.row.code}}</span>
           </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="产品名称" min-width="150">
-        <template slot-scope="scope">
-          <span class="ellipsis-name" :title="scope.row.entries[0].product.baseProductDetail.name">
-            {{scope.row.entries[0].product.baseProductDetail.name}}
-          </span>
-        </template>
+      <el-table-column label="订单名称" min-width="150" prop="name">
       </el-table-column>
       <el-table-column label="客户">
         <template slot-scope="scope">
           <span>{{scope.row.quality}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="负责人">
+      <el-table-column label="创建人">
         <template slot-scope="scope">
-          <span>{{scope.row.entries[0].product.baseProductDetail.category.parent.name}}-{{scope.row.entries[0].product.baseProductDetail.category.name}}</span>
+          <span>{{scope.row.quality}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建日期">
@@ -39,9 +38,8 @@
         </template>
       </el-table-column>
       <el-table-column label="订单标签" min-width="100">
-        <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
-        </template>
+        <!-- <template slot-scope="scope">
+        </template> -->
       </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
@@ -56,8 +54,8 @@
     <div class="pt-2"></div>
     <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-                   :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
     <!-- </div> -->
   </div>
@@ -70,25 +68,24 @@
 
   const {
     mapActions
-  } = createNamespacedHelpers('SalesOrdersModule');
+  } = createNamespacedHelpers('SalesProductionOrdersModule');
 
   export default {
     name: 'SalesProductionList',
     props: ['page'],
     components: {},
-    computed: {
-    },
+    computed: {},
     methods: {
       ...mapActions({
         refresh: 'refresh'
       }),
-      judgeState (row) {
+      judgeState(row) {
         if (row.refunding) {
           return '退款/售后';
         }
         return this.getEnum('salesOrderStatuses', row.status);
       },
-      allowRemind (row) {
+      allowRemind(row) {
         if (!row.hasOwnProperty('nextReminderDeliveryTime')) {
           return true;
         }
@@ -107,7 +104,7 @@
       onPageSizeChanged(val) {
         this._reset();
 
-        if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
+        if (this.$store.state.SalesProductionOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val);
           return;
         }
@@ -115,7 +112,7 @@
         this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
-        if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
+        if (this.$store.state.SalesProductionOrdersModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
         }
@@ -132,7 +129,7 @@
       },
       onDetails(row) {
         // this.$router.push({name:'销售订单详情',params:{}});
-        this.$router.push('/order/sales/' + row.code);
+        this.$router.push('/sales/plan/' + row.id);
       },
       countTotalQuantity(entries) {
         let amount = 0;
@@ -141,7 +138,7 @@
         });
         return amount;
       },
-      cannelOrder (row) {
+      cannelOrder(row) {
         this.$confirm('是否确认取消订单?', '', {
           confirmButtonText: '是',
           cancelButtonText: '否',
@@ -150,7 +147,7 @@
           this.$emit('cannelOrder', row);
         });
       },
-      remindDelivery (row) {
+      remindDelivery(row) {
         this.$confirm('是否要提醒商家发货?', '', {
           confirmButtonText: '是',
           cancelButtonText: '否',
@@ -159,7 +156,7 @@
           this.$emit('remindDelivery', row);
         });
       },
-      confirmDelivery (row) {
+      confirmDelivery(row) {
         this.$confirm('是否要确认收货?', '', {
           confirmButtonText: '是',
           cancelButtonText: '否',
@@ -168,7 +165,7 @@
           this.$emit('confirmDelivery', row);
         });
       },
-      onDeliverySubmit (row) {
+      onDeliverySubmit(row) {
         this.$emit('onDeliveryForm', row);
       }
       // getPaymentStatusTag(row) {
@@ -193,20 +190,22 @@
     },
     data() {
       return {
-        statuses: this.$store.state.SalesOrdersModule.statuses
+        statuses: this.$store.state.SalesProductionOrdersModule.statuses
       }
     }
   }
+
 </script>
-<style>
+<style scoped>
   .purchase-list-button {
     color: #FFA403;
   }
 
   .ellipsis-name {
     width: 50px;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
+
 </style>

@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
       :append-to-body="true">
       <sample-accounting-sheet-form :slot-data="sampleAccountingSheet" @onSave="onAccountingSheetSave"
-        :sampleSpecEntries="sampleSpecEntries" v-if="hackSet" />
+        :unitPrice="unitPrice" :sampleSpecEntries="sampleSpecEntries" v-if="hackSet" />
     </el-dialog>
     <el-form :model="slotData" ref="accountingSheetForm">
       <el-tabs value="first" type="card">
@@ -59,6 +59,29 @@
                   </div>
                 </el-row>
               </div>
+              <div class="sheet-total_2" style="margin-top:0px">
+                <el-row type="flex" align="center" justify="end">
+                  <div class="sheet-total-title">
+                    <el-row type="flex">
+                      <el-col :span="3" class="sheet-total-cell">销售单价</el-col>
+                      <el-col :span="4" class="sheet-total-cell">
+                        {{unitPrice!=null?unitPrice:''}}元</el-col>
+                      <el-col :span="3" class="sheet-total-cell">预计单价成本</el-col>
+                      <el-col :span="4" class="sheet-total-cell">{{totalPrice}}</el-col>
+                      <el-col :span="3" class="sheet-total-cell">预计单件利润</el-col>
+                      <el-col :span="4" class="sheet-total-cell">
+                        {{unitPrice!=null?(unitPrice-totalPrice).toFixed(2):''}}元
+                      </el-col>
+                      <el-col :span="3" class="sheet-total-cell">预计单件利润率</el-col>
+                    </el-row>
+                  </div>
+                  <div style="width: 160px;text-align: center;">
+                    <h6 class="total_profit">
+                      {{countProfit()}}%
+                    </h6>
+                  </div>
+                </el-row>
+              </div>
               <div class="d2">
                 <div class="divider" />
               </div>
@@ -70,7 +93,7 @@
             </el-col>
             <el-col :span="23">
               <div style="padding-top:10px">
-              {{slotData.remarks}}
+                {{slotData.remarks}}
               </div>
             </el-col>
           </el-row>
@@ -88,7 +111,7 @@
 
   export default {
     name: "SampleAccountingSheet",
-    props: ["slotData", "readOnly", "isRead", "sampleSpecEntries", ],
+    props: ["slotData", "readOnly", "isRead", "sampleSpecEntries", 'unitPrice'],
     components: {
       MaterialAccountingTable,
       OtherAccountingTable,
@@ -162,6 +185,20 @@
         //   this.slotData.costingSheets.push(sheet);
         // }
         this.dialogVisible = false;
+      },
+      countProfit() {
+        if (this.unitPrice == null || this.unitPrice == '') {
+          return '';
+        }
+
+        let result = (((parseFloat(this.unitPrice) - this
+            .totalPrice) /
+          parseFloat(this.unitPrice)) * 100).toFixed(2);
+        if (Number.isNaN(result)) {
+          return '';
+        } else {
+          return result;
+        }
       }
     },
     data() {
@@ -193,6 +230,7 @@
     flex-grow: 1;
   }
 
+
   .sheet-total {
     padding-top: 8px;
     padding-bottom: 5px;
@@ -200,6 +238,12 @@
     border-top: 1px solid #DCDFE6;
     border-bottom: 1px solid #DCDFE6;
   }
+
+  .sheet-total_2 {
+    margin-top: 24px;
+    border-bottom: 1px solid #DCDFE6;
+  }
+
 
   .d1 {
     z-index: 1;
@@ -218,6 +262,20 @@
     top: 0px;
     right: 160px;
     /* margin-right: 110px; */
+  }
+
+  .sheet-total-cell {
+    border-right: 1px solid #DCDFE6;
+    line-height: 100%;
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+  .total_profit {
+    padding-top: 10px;
+    color: red;
   }
 
 </style>

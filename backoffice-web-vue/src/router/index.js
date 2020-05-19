@@ -244,7 +244,7 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/form/SalesPlanForm')
       },
       {
-        path: 'plan/:code',
+        path: 'plan/:id',
         name: '销售计划详情',
         props: true,
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/details/SalesPlanDetail')

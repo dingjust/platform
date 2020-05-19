@@ -344,7 +344,7 @@
       </el-row>
     </el-card>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <sales-plan-append-product v-if="salesProductAppendVisible" @onAppendProduct="onAppendProduct"/>
+      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"/>
     </el-dialog>
   </div>
 </template>
@@ -355,12 +355,12 @@
   import MyAddressForm from '../../../../components/custom/order-form/MyAddressForm';
   import PayPlanSelect from '../../../../components/custom/PayPlanSelect';
   import SalesOrderProductsTable from '../components/SalesOrderProductsTable';
-  import SalesPlanAppendProduct from '../components/SalesPlanAppendProduct';
+  import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
 
   export default {
     name: 'SalesPlanForm',
     components: {
-      SalesPlanAppendProduct,
+      SalesPlanAppendProductForm,
       SalesOrderProductsTable,
       PayPlanSelect,
       MyAddressForm,

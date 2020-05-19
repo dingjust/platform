@@ -167,11 +167,9 @@
   import SampleProductsSelectDialog from '../../../product/sample/components/SampleProductsSelectDialog';
   import SampleAttachOrdersForm from '../../../product/sample/form/SampleAttachOrdersForm';
   import SampleAccountingSheetForm from '../../../product/sample/form/SampleAccountingSheetForm';
-  import ProductionTaskInvoiceForm from '../production-task/form/ProductionTaskInvoiceForm';
   export default {
     name: 'SalesPlanProductDetail',
     components: {
-      ProductionTaskInvoiceForm,
       SampleAccountingSheetForm,
       SampleAttachOrdersForm,
       SampleProductsSelectDialog},

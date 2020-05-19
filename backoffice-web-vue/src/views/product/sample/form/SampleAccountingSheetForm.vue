@@ -52,6 +52,26 @@
                   </div>
                 </el-row>
               </div>
+              <div class="sheet-total_2" style="margin-top:0px">
+                <el-row type="flex" align="center" justify="end">
+                  <div class="sheet-total-title_2">
+                    <el-row type="flex">
+                      <el-col :span="3" class="sheet-total-cell">销售单价</el-col>
+                      <el-col :span="4" class="sheet-total-cell">{{unitPrice!=null?unitPrice:''}}元</el-col>
+                      <el-col :span="3" class="sheet-total-cell">预计单价成本</el-col>
+                      <el-col :span="4" class="sheet-total-cell">{{totalPrice}}</el-col>
+                      <el-col :span="3" class="sheet-total-cell">预计单件利润</el-col>
+                      <el-col :span="4" class="sheet-total-cell">
+                        {{unitPrice!=null?(unitPrice-totalPrice).toFixed(2):''}}元</el-col>
+                      <el-col :span="3" class="sheet-total-cell">预计单件利润率</el-col>
+                    </el-row>
+                  </div>
+                  <div style="width:160px;text-align:center">
+                    <h6 class="total_profit">{{countProfit()}}%
+                    </h6>
+                  </div>
+                </el-row>
+              </div>
               <div class="d2">
                 <div class="divider" />
               </div>
@@ -81,7 +101,7 @@
 
   export default {
     name: "SampleAccountingSheetForm",
-    props: ["slotData", "readOnly", "isRead", "sampleSpecEntries", ],
+    props: ["slotData", "readOnly", "isRead", "sampleSpecEntries", 'unitPrice'],
     components: {
       MaterialAccountingForm,
       CraftAccountingForm,
@@ -135,6 +155,8 @@
       onSave() {
         this.$refs['accountingSheetForm'].validate((valid) => {
           if (valid) {
+            //设置总价
+            this.$set(this.slotData,'totalPrice',this.totalPrice);
             this.$emit('onSave', this.slotData);
           } else {
             this.$message.error('请完善表格');
@@ -144,6 +166,18 @@
       },
       onIncludeTaxChange(val) {
         // this.$refs['accountingSheetForm'].validate();
+      },
+      countProfit() {
+        if (this.unitPrice == null||this.unitPrice=='s') {
+          return '';
+        }
+        let result = (((parseFloat(this.unitPrice) - this.totalPrice) / parseFloat(this.unitPrice)) * 100).toFixed(2);
+
+        if (Number.isNaN(result)) {
+          return '';
+        } else {
+          return result;
+        }
       }
     },
 
@@ -174,11 +208,20 @@
     flex-grow: 1;
   }
 
+  .sheet-total-title_2 {
+    flex-grow: 1;
+  }
+
   .sheet-total {
     padding-top: 8px;
     padding-bottom: 5px;
     margin-top: 24px;
     border-top: 1px solid #DCDFE6;
+    border-bottom: 1px solid #DCDFE6;
+  }
+
+  .sheet-total_2 {
+    margin-top: 24px;
     border-bottom: 1px solid #DCDFE6;
   }
 
@@ -207,6 +250,21 @@
     color: #000;
     width: 90px;
     height: 35px;
+  }
+
+
+  .sheet-total-cell {
+    border-right: 1px solid #DCDFE6;
+    line-height: 100%;
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+  .total_profit {
+    padding-top: 10px;
+    color: red;
   }
 
 </style>

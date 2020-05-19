@@ -15,17 +15,15 @@
           </el-col>
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="联系人：" :rules="[{ required: true, message: '请输入联系人', trigger: 'change'}]" prop="contactPerson">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{form.contactPerson}}</h6>
-                <el-input placeholder="请输入联系人" v-model="form.contactPerson" size="mini" v-show="modifyType"></el-input>
+              <el-form-item label="联系人：">
+                <h6 class="sales-plan-h6">{{form.contactPerson}}</h6>
               </el-form-item>
             </el-row>
           </el-col>
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="联系方式：" :rules="[{ type: 'object', validator: validatePhone, trigger: 'change'}]" prop="contactPhone">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{form.contactPhone}}</h6>
-                <el-input placeholder="请输入联系方式" v-model="form.contactPhone" size="mini" v-show="modifyType"></el-input>
+              <el-form-item label="联系方式：">
+                <h6 class="sales-plan-h6">{{form.contactPhone}}</h6>
               </el-form-item>
             </el-row>
           </el-col>
@@ -33,11 +31,14 @@
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="合作方式：" :rules="[{ required: true, message: '请选择合作方式', trigger: 'change'}]" prop="machiningTypes">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{getEnum('cooperationModes', form.machiningTypes)}}</h6>
+              <el-form-item label="合作方式：" :rules="[{ required: true, message: '请选择合作方式', trigger: 'change'}]"
+                prop="machiningTypes">
+                <h6 v-show="!modifyType" class="sales-plan-h6">{{getEnum('cooperationModes', form.cooperationMode)}}
+                </h6>
                 <el-row v-show="modifyType">
-                  <template v-for="(value,key) in machiningTypes">
-                    <el-radio class="sales-radio" v-model="form.machiningTypes" :label="value.code">{{value.name}}</el-radio>
+                  <template v-for="value in machiningTypes">
+                    <el-radio class="sales-radio" :key="value.code" v-model="form.cooperationMode" :label="value.code">
+                      {{value.name}}</el-radio>
                   </template>
                 </el-row>
               </el-form-item>
@@ -45,7 +46,8 @@
           </el-col>
           <el-col :span="10">
             <el-row type="flex" align="middle">
-              <el-form-item label="是否开发票：" :rules="[{ required: true, message: '请选择是否开发票', trigger: 'change'}]" prop="invoice">
+              <el-form-item label="是否开发票：" :rules="[{ required: true, message: '请选择是否开发票', trigger: 'change'}]"
+                prop="invoice">
                 <h6 v-show="!modifyType" class="sales-plan-h6">{{form.invoice ? '开发票' : '不开发票'}}</h6>
                 <el-radio v-show="modifyType" class="sales-radio" v-model="form.invoice" :label="false">不开发票</el-radio>
                 <el-radio v-show="modifyType" class="sales-radio" v-model="form.invoice" :label="true">开发票</el-radio>
@@ -56,19 +58,15 @@
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="订单数量：" :rules="[{ required: true, message: '请输入订单数量', trigger: 'change'}]" prop="quantity">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{form.quantity}}</h6>
-                <el-input v-model="form.quantity" v-number-input.float="{ min: 0 ,decimal:0}" size="mini" v-show="modifyType"></el-input>
+              <el-form-item label="订单数量：">
+                <h6 class="sales-plan-h6">{{form.quantity}}</h6>
               </el-form-item>
             </el-row>
           </el-col>
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="订单总金额：" :rules="[{ required: true, message: '请输入订单总金额', trigger: 'change'}]" prop="total">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{form.total}}元</h6>
-                <el-input v-model="form.total" v-number-input.float="{ min: 0 ,decimal:2}" size="mini" v-show="modifyType">
-                  <h6 slot="suffix" style="padding-top: 8px">元</h6>
-                </el-input>
+              <el-form-item label="订单总金额：">
+                <h6 class="sales-plan-h6">{{form.total}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
@@ -76,32 +74,22 @@
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="预计总成本：" :rules="[{ required: true, message: '请输入预计总成本', trigger: 'change'}]" prop="budget">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{form.budget}}元</h6>
-                <el-input v-model="form.budget" v-number-input.float="{ min: 0 ,decimal:2}" size="mini" v-show="modifyType">
-                  <h6 slot="suffix" style="padding-top: 8px">元</h6>
-                </el-input>
+              <el-form-item label="预计总成本：">
+                <h6 class="sales-plan-h6">{{form.budget}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="预计利润：" :rules="[{ required: true, message: '请输入预计利润', trigger: 'change'}]" prop="profit">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{form.profit}}元</h6>
-                <el-input v-model="form.profit" v-number-input.float="{ min: 0 ,decimal:2}" size="mini" v-show="modifyType">
-                  <h6 slot="suffix" style="padding-top: 8px">元</h6>
-                </el-input>
+              <el-form-item label="预计利润：">
+                <h6 class="sales-plan-h6">{{form.profit}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="预计利润率：" :rules="[{ required: true, message: '请输入预计利润率', trigger: 'change'}]" prop="profit">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{form.profitMargin * 100}}%</h6>
-                <el-input :value="showFloatPercentNum(form.profitMargin)" @input="(val)=>onTaxInput(val, form)" @blur="onBlur(form,'profitMargin')"
-                          v-number-input.float="{ min: 0 , max: 100, decimal: 1 }" size="mini" v-show="modifyType">
-                  <h6 slot="suffix" style="padding-top: 8px">%</h6>
-                </el-input>
+              <el-form-item label="预计利润率：">
+                <h6 class="sales-plan-h6">{{form.profitMargin * 100}}%</h6>
               </el-form-item>
             </el-row>
           </el-col>
@@ -114,14 +102,11 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="审批负责人：" :rules="[{ required: true, message: '请选择审批负责人', trigger: 'change'}]" prop="approvalBy">
+            <el-form-item label="审批负责人：" :rules="[{ required: true, message: '请选择审批负责人', trigger: 'change'}]"
+              prop="approvalBy">
               <h6 v-show="!modifyType" class="sales-plan-h6">{{form.approvalBy}}</h6>
-              <el-select v-model="form.approvalBy" placeholder="请选择" v-show="modifyType">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.label">
+              <el-select v-model="form.approvalBy" placeholder="请选择" v-show="modifyType" value-key="id">
+                <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -129,14 +114,11 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="订单负责人：" :rules="[{ required: true, message: '请选择订单负责人', trigger: 'change'}]" prop="orderOwner">
+            <el-form-item label="订单负责人：" :rules="[{ required: true, message: '请选择订单负责人', trigger: 'change'}]"
+              prop="orderOwner">
               <h6 v-show="!modifyType" class="sales-plan-h6">{{form.orderOwner}}</h6>
-              <el-select v-model="form.orderOwner" placeholder="请选择" v-show="modifyType">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.label">
+              <el-select v-model="form.orderOwner" placeholder="请选择" v-show="modifyType" value-key="id">
+                <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -144,34 +126,28 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="生产负责人：" :rules="[{ required: true, message: '请选择生产负责人', trigger: 'change'}]" prop="productionBy">
+            <el-form-item label="生产负责人：" :rules="[{ required: true, message: '请选择生产负责人', trigger: 'change'}]"
+              prop="productionBy">
               <h6 v-show="!modifyType" class="sales-plan-h6">{{form.productionBy}}</h6>
-              <el-select v-model="form.productionBy" placeholder="请选择" v-show="modifyType">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.label">
+              <el-select v-model="form.productionBy" placeholder="请选择" v-show="modifyType" value-key="id">
+                <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-row>
         </el-row>
-        <el-row type="flex" justify="start" class="basic-form-row">
+        <!-- <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="采购负责人：" :rules="[{ required: true, message: '请选择采购负责人', trigger: 'change'}]" prop="procurementBy">
+            <el-form-item label="采购负责人：" :rules="[{ required: true, message: '请选择采购负责人', trigger: 'change'}]"
+              prop="procurementBy">
               <h6 v-show="!modifyType" class="sales-plan-h6">{{form.procurementBy}}</h6>
               <el-select v-model="form.procurementBy" placeholder="请选择" v-show="modifyType">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.label">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-row>
-        </el-row>
+        </el-row> -->
       </div>
     </div>
   </div>
@@ -193,7 +169,7 @@
       }
     },
     methods: {
-      showFloatPercentNum (val) {
+      showFloatPercentNum(val) {
         var reg = /\.$/;
         if (val && !reg.test(val)) {
           return accMul(val, 100);
@@ -201,13 +177,13 @@
           return val;
         }
       },
-      onBlur (row, attribute) {
+      onBlur(row, attribute) {
         var reg = /\.$/;
         if (reg.test(row[attribute])) {
           this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
         }
       },
-      onTaxInput (val, row) {
+      onTaxInput(val, row) {
         var reg = /\.$/;
         if (!reg.test(val)) {
           row.profitMargin = (val / 100.0).toFixed(3);
@@ -215,7 +191,7 @@
           row.profitMargin = val;
         }
       },
-      validatePhone (rule, value, callback) {
+      validatePhone(rule, value, callback) {
         const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
         if (value === '') {
           callback(new Error('请输入手机号码'));
@@ -225,53 +201,46 @@
           callback();
         }
       },
-      validate (callback) {
+      validate(callback) {
         this.$refs.form.validate(callback);
       }
     },
-    data () {
+    data() {
       return {
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
-        options: [
-          {
-            label: '马化腾',
-            value: 'MMMM'
-          },
-          {
-            label: '周鸿伟',
-            value: 'ZZZZ'
-          },
-          {
-            label: '马云',
-            value: 'YYYY'
-          },
-          {
-            label: '伟腾云',
-            value: 'WWWW'
+        options: [{
+          label: this.$store.getters.currentUser.username,
+          value: {
+            id: this.$store.getters.currentUser.id,
+            name: this.$store.getters.currentUser.username
           }
-        ]
+        }, ]
       }
     }
   }
+
 </script>
 
 <style scoped>
   .sales-plan-box {
-    display:table;
-    margin:0 auto;
+    display: table;
+    margin: 0 auto;
     width: 100%;
   }
+
   .sales-plan-one {
     width: 75%;
     display: table-cell;
   }
+
   .sales-plan-three {
     width: 1%;
     display: table-cell;
   }
+
   .sales-plan-two {
     width: 24%;
-    display:table-cell;
+    display: table-cell;
     z-index: 100;
   }
 
@@ -282,7 +251,7 @@
     top: 0;
   }
 
-  .sales-plan-triangle{
+  .sales-plan-triangle {
     width: 0;
     height: 0;
     border-right: 70px solid white;
@@ -297,10 +266,10 @@
     transform: rotateZ(45deg);
   }
 
-  .sales-border-container{
+  .sales-border-container {
     border: 1px solid #DCDFE6;
     border-radius: 5px;
-    padding-top:10px;
+    padding-top: 10px;
   }
 
   .basic-form-row {
@@ -337,7 +306,9 @@
     margin-top: 2px;
   }
 
-  /deep/ .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  /deep/ .el-form-item--mini.el-form-item,
+  .el-form-item--small.el-form-item {
     margin-bottom: 5px;
   }
+
 </style>

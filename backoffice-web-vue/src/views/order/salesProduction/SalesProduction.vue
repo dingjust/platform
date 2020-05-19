@@ -11,7 +11,8 @@
       <sales-production-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
         @createSalesPlan="createSalesPlan" @createSalesOrder="createSalesOrder" />
       <el-divider class="sales-divider"></el-divider>
-      <sales-production-list :page="page" />
+      <sales-production-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
+        @onDelete="onDelete" />
     </el-card>
   </div>
 </template>
@@ -56,14 +57,31 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch() {
+      onSearch(page, size) {
+        const keyword = this.keyword;
+        const statuses = this.statuses;
         const url = this.apis().getSalesOrderList();
         this.setIsAdvancedSearch(false);
         this.search({
-          url
+          url,
+          keyword,
+          statuses,
+          page,
+          size
         });
       },
-      onAdvancedSearch() {
+      onAdvancedSearch(page, size) {
+        this.setIsAdvancedSearch(true);
+        const query = this.queryFormData;
+        const url = this.apis().getSalesOrderList();
+        this.searchAdvanced({
+          url,
+          query,
+          page,
+          size
+        });
+      },
+      onDelete() {
 
       },
       createSalesPlan() {

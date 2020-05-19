@@ -166,6 +166,7 @@
 
         this.cityDistricts = result;
       },
+
     },
     data() {
       return {
@@ -190,8 +191,13 @@
       },
     },
     created() {
+      this.address = this.vAddress
       this.getRegions();
-
+      //手动加载选中市区数据
+      if (this.address.region.isocode != null) {
+        this.getCities(this.address.region);
+        this.onCityChanged(this.address.city);
+      }
     }
   }
 

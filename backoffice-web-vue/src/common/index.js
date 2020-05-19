@@ -808,7 +808,12 @@ let TENANT_APIS = {
   },
   updateAllCarousels() {
     return '/b2b/carousels/updateAll';
-  }
+  },
+
+  //销售计划  
+  salesPlanSave(needAudit) {
+    return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
+  },
 };
 Object.assign(TENANT_APIS, COMMON_APIS);
 
@@ -948,9 +953,6 @@ let NONE_TENANT_APIS = {
   getSalesOrderDetails(code) {
     return '/b2b/b2b/orders/sales/' + code;
   },
-  getSalesOrderList() {
-    return '/b2b/b2b/orders/sales';
-  },
   updateConsignment(code) {
     return '/b2b/b2b/orders/sales/update/consignment/' + code;
   },
@@ -974,7 +976,23 @@ let NONE_TENANT_APIS = {
   },
   reminderSalesOrderDelivery(code) {
     return '/b2b/b2b/orders/sales/' + code + '/reminder/delivery';
-  }
+  },
+
+
+  //销售计划
+
+
+  salesPlanSave(needAudit) {
+    return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
+  },
+  //销售计划订单列表
+  getSalesOrderList() {
+    return '/b2b/sales/production/order/search';
+  },
+  //销售计划订单详情
+  getSalesProductionOrderDetails(id) {
+    return '/b2b/sales/production/order/' + id;
+  },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 

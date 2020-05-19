@@ -56,11 +56,11 @@
       return {
         estimateDates: [],
         pickerOptions: {
-          disabledDate(time) {
-            let date=new Date();
-            date.setDate(date.getDate()-1);
-            return time.getTime() < date;
-          },
+          // disabledDate(time) {
+          //   let date=new Date();
+          //   date.setDate(date.getDate()-1);
+          //   return time.getTime() < date;
+          // },
         }
       };
     },
