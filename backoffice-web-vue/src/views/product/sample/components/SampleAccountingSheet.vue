@@ -12,7 +12,7 @@
             <el-col :span="6">
               <h6>{{slotData.isIncludeTax?'含税':'不含税'}}</h6>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" v-if="!readOnly">
               <el-button @click="onUpdateAccountingSheet">编辑</el-button>
             </el-col>
           </el-row>
@@ -111,7 +111,21 @@
 
   export default {
     name: "SampleAccountingSheet",
-    props: ["slotData", "readOnly", "isRead", "sampleSpecEntries", 'unitPrice'],
+    props: {
+      slotData: {
+        type: Object
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
+      },
+      sampleSpecEntries: {
+        type: Array,
+      },
+      unitPrice: {
+
+      }
+    },
     components: {
       MaterialAccountingTable,
       OtherAccountingTable,

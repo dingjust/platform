@@ -4,7 +4,7 @@
       :close-on-click-modal="false">
       <supplier-select @onSelect="onSuppliersSelect" />
     </el-dialog>
-    <el-form :model="slotData" ref="taskForm" label-position="left">
+    <el-form :model="slotData" ref="taskForm" label-position="left" :disabled="readOnly">
       <el-row class="basic-form-row_top" type="flex" align="middle">
         <h6 class="info-input-prepend_top">生产要求</h6>
       </el-row>
@@ -61,12 +61,12 @@
       </el-col> -->
       </el-row>
       <el-row style="padding-left: 6px">
-        <my-address-form :vAddress.sync="slotData.shippingAddress" ref="addressComp" />
+        <my-address-form :vAddress.sync="slotData.shippingAddress" ref="addressComp" :readOnly="readOnly" />
       </el-row>
       <el-row class="basic-form-row_top" type="flex" align="middle">
         <h6 class="info-input-prepend_top">人员设置</h6>
       </el-row>
-      <el-row type="flex">
+      <el-row type="flex" class="basic-form-row_top">
         <el-col :span="6">
           <el-form-item label="生产负责人" label-width="95px">
             <el-input placeholder="请输入生产负责人" size="mini" v-model="productionLeader.name" :disabled="true">
@@ -101,6 +101,10 @@
         default: {
           name: ''
         }
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
       }
     },
     components: {

@@ -13,9 +13,9 @@
     <el-dialog :visible.sync="viewDialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
       append-to-body>
       <sample-accounting-sheet :slot-data="openAccountingSheet" :sampleSpecEntries="openSampleSpecEntries"
-        :unitPrice="openAccountingSheetUnitPrice" v-if="viewDialogVisible" />
+        :unitPrice="openAccountingSheetUnitPrice" v-if="viewDialogVisible" :readOnly="readOnly" />
     </el-dialog>
-    <el-form :model="appendProductForm" ref="appendProductForm" label-position="left">
+    <el-form :model="appendProductForm" ref="appendProductForm" label-position="left" :disabled="readOnly">
       <template v-for="(entry, productIndex) in appendProductForm.sampleList">
         <div :key="productIndex">
           <el-row class="info-sales-row" type="flex" justify="space-between" align="middle" :gutter="20">
@@ -105,13 +105,14 @@
               <h6 style="padding-top:8px">核算单：</h6>
             </el-col>
             <el-col :span="18">
-              <el-button type="text" @click="onUpdateAccountingSheet(productIndex)"
+              <h6 class="account_sheet-btn" @click="onUpdateAccountingSheet(productIndex)"
                 v-if="entry.costOrder.isIncludeTax!=null">
-                {{entry.costOrder.id!=null?sheet.id:'成本核算单'}}
-              </el-button>
+                {{entry.costOrder.id!=null?entry.costOrder.id:'成本核算单'}}
+              </h6>
             </el-col>
           </el-row>
-          <production-task :slotData="entry.productionTask" ref="taskComp" :productionLeader="productionLeader" />
+          <production-task :slotData="entry.productionTask" ref="taskComp" :productionLeader="productionLeader"
+            :readOnly="readOnly" />
         </div>
       </template>
       <el-row type="flex" justify="center" class="info-order-row" align="middle" style="margin-top: 20px"
@@ -123,7 +124,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-row type="flex" justify="center" style="margin-top: 20px">
+    <el-row type="flex" justify="center" style="margin-top: 20px" v-if="!readOnly">
       <el-button class="material-btn" @click="onSubmit">{{isUpdate?'保存':'添加产品'}}</el-button>
     </el-row>
   </div>
@@ -168,6 +169,10 @@
       defaultAddress: {
         type: Object,
         default: null
+      },
+      readOnly: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {

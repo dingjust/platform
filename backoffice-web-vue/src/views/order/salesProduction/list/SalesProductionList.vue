@@ -32,14 +32,10 @@
       </el-table-column>
       <el-table-column label="审批状态" prop="status">
         <template slot-scope="scope">
-          <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-          <span>{{judgeState(scope.row)}}</span>
-          <!--          <span>{{getEnum('salesOrderStatuses', scope.row.status)}}</span>-->
+          <span>{{scope.row.auditState!=null? getEnum('SalesProductionAuditStatus', scope.row.auditState):''}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单标签" min-width="100">
-        <!-- <template slot-scope="scope">
-        </template> -->
+      <el-table-column label="订单标签" min-width="100">        
       </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">

@@ -3,7 +3,24 @@
     <el-table :data="data" stripe style="width: 100%">
       <el-table-column type="selection" width="55">
       </el-table-column>
-      <el-table-column prop="product.name" label="产品名称"></el-table-column>
+      <el-table-column label="产品名称" min-width="150">
+        <template slot-scope="scope">
+          <el-row type="flex" justify="space-between" align="middle" :gutter="50">
+            <el-col :span="6">
+              <img width="54px" v-if="scope.row.product!=null" height="54px"
+                :src="scope.row.product.thumbnail!=null&&scope.row.product.thumbnail.length!=0?scope.row.product.thumbnail.url:'static/img/nopicture.png'" />
+            </el-col>
+            <el-col :span="16">
+              <el-row>
+                <span>{{scope.row.product.name}}</span>
+              </el-row>
+              <el-row>
+                <span>货号:{{scope.row.product!=null?scope.row.product.skuID:''}}</span>
+              </el-row>
+            </el-col>
+          </el-row>
+        </template>
+      </el-table-column>
       <el-table-column label="数量">
         <template slot-scope="scope">
           <span>{{getEntryTotalAmount(scope.row)}}</span>
@@ -27,7 +44,7 @@
       </el-table-column>
       <el-table-column label="预计利润率">
         <template slot-scope="scope">
-          {{getEntryProfitPercent(scope.row)}}
+          {{getEntryProfitPercent(scope.row)}}%
         </template>
       </el-table-column>
       <el-table-column label="交货时间">
@@ -37,14 +54,16 @@
       </el-table-column>
       <el-table-column label="审核状态">
         <template slot-scope="scope">
-          <span>{{scope.row.status!=null? getEnum('SalesProductionOrderEntryAuditStatus', scope.row.auditState):''}}</span>
+          <span>{{scope.row.auditState!=null? getEnum('SalesProductionAuditStatus', scope.row.auditState):''}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="120">
         <template slot-scope="scope">
-          <!-- <el-button type="text" @click="onProductDetail(scope.row)">详情</el-button> -->
-          <el-button type="text" @click="onModify(scope.$index)">编辑</el-button>
-          <el-button slot="reference" type="text" @click="onDelete(scope.$index)">删除</el-button>
+          <el-button type="text" @click="onDetail(scope.$index)">详情</el-button>
+          <template v-if="canEdit(scope.row.auditState)">
+            <el-button type="text" @click="onModify(scope.$index)">编辑</el-button>
+            <el-button slot="reference" type="text" @click="onDelete(scope.$index)">删除</el-button>
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -52,6 +71,15 @@
 </template>
 
 <script>
+  import {
+    getEntryCostPrice,
+    getEntryTotalAmount,
+    getEntryTotalPrice,
+    getEntryTotalCost,
+    getEntryProfit,
+    getEntryProfitPercent
+  } from '../js/accounting.js';
+
   export default {
     name: 'SalesProductionProductsTable',
     components: {},
@@ -61,6 +89,12 @@
       }
     },
     methods: {
+      getEntryCostPrice,
+      getEntryTotalAmount,
+      getEntryTotalPrice,
+      getEntryTotalCost,
+      getEntryProfit,
+      getEntryProfitPercent,
       onProductDetail(row) {
         // this.salesProductDetailsVisible = true;
       },
@@ -70,61 +104,23 @@
       onClose() {
 
       },
+      canEdit(state) {
+        if (state == 'AUDITING' || state == 'PASSED') {
+          return false;
+        } else {
+          return true;
+        }
+      },
+      onDetail(index) {
+        this.$emit('onDetail', index);
+      },
       onModify(index) {
         this.$emit('onModify', index);
       },
-      //数量
-      getEntryTotalAmount(entry) {
-        var result = 0;
-        entry.colorSizeEntries.forEach(element => {
-          let num = parseFloat(element.quantity);
-          if (!Number.isNaN(num)) {
-            result += num
-          }
-        });
-        return result;
-      },
-      //销售总价    
-      getEntryTotalPrice(entry) {
-        let result = this.getEntryTotalAmount(entry) * (parseFloat(entry.unitPrice));
-        if (!Number.isNaN(result)) {
-          return result;
-        } else {
-          return '';
-        }
-      },
-      //总成本
-      getEntryTotalCost(entry) {
-        let result = this.getEntryTotalAmount(entry) * (parseFloat(entry.costOrder.totalPrice));
-        if (!Number.isNaN(result)) {
-          return result;
-        } else {
-          return '';
-        }
-      },
-      //利润
-      getEntryProfit(entry) {
-        let result = '';
-        if (this.getEntryTotalPrice(entry) != '' && this.getEntryTotalCost(entry) != '') {
-          result = this.getEntryTotalPrice(entry) - this.getEntryTotalCost(entry);
-        }
-        return result;
-      },
-      //利润率
-      getEntryProfitPercent(entry) {
-        let profit = this.getEntryProfit(entry);
-        let totalPrice = this.getEntryTotalPrice(entry);
-        if (profit != '' && totalPrice != '') {
-          return (parseFloat(profit / totalPrice) * 100).toFixed(2);
-        } else {
-          return '';
-        }
-      },
+
     },
     data() {
-      return {
-
-      }
+      return {}
     }
   }
 

@@ -13,44 +13,30 @@
               </el-form-item>
             </el-row>
           </el-col>
-          <el-col :span="8">
-            <el-row type="flex" align="middle">
-              <el-form-item label="联系人：">
-                <h6 class="sales-plan-h6">{{form.contactPerson}}</h6>
-              </el-form-item>
-            </el-row>
-          </el-col>
-          <el-col :span="8">
-            <el-row type="flex" align="middle">
-              <el-form-item label="联系方式：">
-                <h6 class="sales-plan-h6">{{form.contactPhone}}</h6>
-              </el-form-item>
-            </el-row>
-          </el-col>
         </el-row>
-        <el-row type="flex" justify="start" class="basic-form-row">
+        <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationModes" :needVoice.sync="form.invoiceNeeded"
+          :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" />
+        <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType">
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="合作方式：" :rules="[{ required: true, message: '请选择合作方式', trigger: 'change'}]"
-                prop="machiningTypes">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{getEnum('cooperationModes', form.cooperationMode)}}
+              <el-form-item label="合作方式：">
+                <h6 class="sales-plan-h6">{{getEnum('cooperationModes', form.cooperationMode)}}
                 </h6>
-                <el-row v-show="modifyType">
-                  <template v-for="value in machiningTypes">
-                    <el-radio class="sales-radio" :key="value.code" v-model="form.cooperationMode" :label="value.code">
-                      {{value.name}}</el-radio>
-                  </template>
-                </el-row>
               </el-form-item>
             </el-row>
           </el-col>
           <el-col :span="10">
             <el-row type="flex" align="middle">
-              <el-form-item label="是否开发票：" :rules="[{ required: true, message: '请选择是否开发票', trigger: 'change'}]"
-                prop="invoice">
-                <h6 v-show="!modifyType" class="sales-plan-h6">{{form.invoice ? '开发票' : '不开发票'}}</h6>
-                <el-radio v-show="modifyType" class="sales-radio" v-model="form.invoice" :label="false">不开发票</el-radio>
-                <el-radio v-show="modifyType" class="sales-radio" v-model="form.invoice" :label="true">开发票</el-radio>
+              <el-form-item label="是否开发票：">
+                <h6 class="sales-plan-h6">{{form.invoice ? '开发票' : '不开发票'}}</h6>
+              </el-form-item>
+            </el-row>
+          </el-col>
+          <el-col :span="10">
+            <el-row type="flex" align="middle">
+              <el-form-item label="税点">
+                <h6 class="sales-plan-h6">
+                  {{form.invoiceTaxPoint!=null?(parseFloat(form.invoiceTaxPoint)*100).toFixed(2):''}}%</h6>
               </el-form-item>
             </el-row>
           </el-col>
@@ -59,14 +45,14 @@
           <el-col :span="8">
             <el-row type="flex" align="middle">
               <el-form-item label="订单数量：">
-                <h6 class="sales-plan-h6">{{form.quantity}}</h6>
+                <h6 class="sales-plan-h6">{{totalAmount}}</h6>
               </el-form-item>
             </el-row>
           </el-col>
           <el-col :span="8">
             <el-row type="flex" align="middle">
               <el-form-item label="订单总金额：">
-                <h6 class="sales-plan-h6">{{form.total}}元</h6>
+                <h6 class="sales-plan-h6">{{totalPrice}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
@@ -75,21 +61,21 @@
           <el-col :span="8">
             <el-row type="flex" align="middle">
               <el-form-item label="预计总成本：">
-                <h6 class="sales-plan-h6">{{form.budget}}元</h6>
+                <h6 class="sales-plan-h6">{{totalCost}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
           <el-col :span="8">
             <el-row type="flex" align="middle">
               <el-form-item label="预计利润：">
-                <h6 class="sales-plan-h6">{{form.profit}}元</h6>
+                <h6 class="sales-plan-h6">{{totalProfit}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
           <el-col :span="8">
             <el-row type="flex" align="middle">
               <el-form-item label="预计利润率：">
-                <h6 class="sales-plan-h6">{{form.profitMargin * 100}}%</h6>
+                <h6 class="sales-plan-h6">{{totalProfitPercent}}%</h6>
               </el-form-item>
             </el-row>
           </el-col>
@@ -103,8 +89,9 @@
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
             <el-form-item label="审批负责人：">
-              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.approver!=null?form.approver.name:''}}</h6>
-              <el-select v-model="form.approvalBy" placeholder="请选择" v-show="modifyType" value-key="id">
+              <h6 v-show="!modifyType" class="sales-plan-h6">
+                {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
+              <el-select v-model="form.approvers[0]" placeholder="请选择" v-if="modifyType" value-key="id">
                 <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -115,7 +102,7 @@
           <el-row type="flex" align="middle">
             <el-form-item label="订单负责人：">
               <h6 v-show="!modifyType" class="sales-plan-h6">{{form.planLeader!=null?form.planLeader.name:''}}</h6>
-              <el-select v-model="form.orderOwner" placeholder="请选择" v-show="modifyType" value-key="id">
+              <el-select v-model="form.orderOwner" placeholder="请选择" v-if="modifyType" value-key="id">
                 <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -127,7 +114,7 @@
             <el-form-item label="生产负责人：">
               <h6 v-show="!modifyType" class="sales-plan-h6">
                 {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
-              <el-select v-model="form.productionLeader" placeholder="请选择" v-show="modifyType" value-key="id">
+              <el-select v-model="form.productionLeader" placeholder="请选择" v-if="modifyType" value-key="id">
                 <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -155,8 +142,79 @@
   import {
     accMul
   } from '@/common/js/number';
+
+  import {
+    getEntryTotalAmount,
+    getEntryTotalPrice,
+    getEntryTotalCost,
+    getEntryProfit,
+    getEntryProfitPercent
+  } from '../js/accounting.js';
+
+  import MTAVAT from '@/components/custom/order-form/MTAVAT';
+
+
   export default {
     name: 'SalesOrderDetailForm',
+    computed: {
+      //总数量
+      totalAmount: function () {
+        let total = 0;
+        this.form.entries.forEach(element => {
+          let num = parseFloat(getEntryTotalAmount(element));
+          if (num != null && (!Number.isNaN(num))) {
+            total += num;
+          }
+        });
+        return total;
+      },
+      //销售总价
+      totalPrice: function () {
+        let total = 0;
+        this.form.entries.forEach(element => {
+          let num = parseFloat(getEntryTotalPrice(element));
+          if (num != null && (!Number.isNaN(num))) {
+            total += num;
+          }
+        });
+        return total;
+      },
+      //总成本
+      totalCost: function () {
+        let total = 0;
+        this.form.entries.forEach(element => {
+          let num = parseFloat(getEntryTotalCost(element));
+          if (num != null && (!Number.isNaN(num))) {
+            total += num;
+          }
+        });
+        return total;
+      },
+      //总利润
+      totalProfit: function () {
+        let total = 0;
+        this.form.entries.forEach(element => {
+          let num = parseFloat(getEntryProfit(element));
+          if (num != null && (!Number.isNaN(num))) {
+            total += num;
+          }
+        });
+        return total;
+      },
+      //利润率
+      totalProfitPercent: function () {
+        let profit = this.totalProfit;
+        let totalPrice = this.totalPrice;
+        if (profit != '' && totalPrice != '') {
+          return (parseFloat(profit / totalPrice) * 100).toFixed(2);
+        } else {
+          return '';
+        }
+      },
+    },
+    components: {
+      MTAVAT
+    },
     props: {
       form: {
         type: Object,
@@ -174,6 +232,7 @@
     data() {
       return {
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
+        mtavatLayoutScale: [9, 9, 6],
         options: [{
           label: this.$store.getters.currentUser.username,
           value: {

@@ -5,7 +5,7 @@
       :close-on-click-modal="false">
       <address-select @onSelect="onAddressSelect" />
     </el-dialog>
-    <el-form ref="address" :model="address" label-position="left">
+    <el-form ref="address" :model="address" label-position="left" :disabled="readOnly">
       <el-row type="flex" align="middle" :gutter="10" justify="space-between">
         <el-col :span="7">
           <el-form-item label="送货地址" style="padding-top:8px" :rules="[
@@ -86,6 +86,10 @@
           line1: ''
         }
       },
+      readOnly: {
+        type: Boolean,
+        default: false
+      }
     },
     methods: {
       addressSelect() {

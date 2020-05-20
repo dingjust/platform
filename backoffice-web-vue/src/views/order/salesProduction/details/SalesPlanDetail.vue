@@ -3,7 +3,7 @@
     <el-card>
       <div class="sales-plan-triangle_box">
         <div class="sales-plan-triangle" :style="getTriangleColor">
-          <h6 class="sales-plan-triangle_text">未审核</h6>
+          <h6 class="sales-plan-triangle_text">{{getEnum('SalesProductionAuditStatus', formData.auditState)}}</h6>
         </div>
       </div>
       <el-row type="flex" justify="space-between">
@@ -25,57 +25,18 @@
       <div style="margin-top: 10px">
         <sales-production-tabs :isCreate="false" :form="formData" />
       </div>
-      <div class="sales-border-container" style="margin-top: 10px" v-if="formData.status == 'FAILED'">
+      <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
           <h5 style="font-weight: bold">拒绝原因</h5>
         </el-row>
         <el-row class="basic-form-row" type="flex" justify="center">
           <el-col :span="22">
-            <h6>{{formData.msg}}</h6>
+            <h6 class="reject_reason">{{formData.msg}}</h6>
           </el-col>
         </el-row>
       </div>
-      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50"
-        v-if="formData.status == 'UNAPPROVED' || formData.status == 'FAILED'">
-        <el-col :span="3" v-if="modifyType">
-          <el-button class="material-btn" @click="onReturn">返回</el-button>
-        </el-col>
-        <el-col :span="3" v-if="modifyType">
-          <el-button class="material-btn" @click="onSave">保存</el-button>
-        </el-col>
-        <el-col :span="3" v-if="!modifyType">
-          <el-button class="material-btn" @click="onModify">修改</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button class="material-btn" @click="onSubmit">提交审核</el-button>
-        </el-col>
-        <el-col :span="3" v-if="!modifyType">
-          <el-button class="material-btn" @click="onReturnPage">返回</el-button>
-        </el-col>
-      </el-row>
-      <!--      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50" v-if="form.status == 'APPROVED'">-->
-      <!--        <el-col :span="3">-->
-      <!--          <el-button class="material-btn" @click="onRefuse">拒绝</el-button>-->
-      <!--        </el-col>-->
-      <!--        <el-col :span="3">-->
-      <!--          <el-button class="material-btn" @click="onPass">通过</el-button>-->
-      <!--        </el-col>-->
-      <!--      </el-row>-->
-      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50"
-        v-if="formData.status == 'APPROVED'">
-        <el-col :span="3">
-          <el-button class="material-btn" @click="onRefuse">返回</el-button>
-        </el-col>
-        <el-col :span="3">
-          <el-button class="material-btn" @click="onPass">撤回</el-button>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="space-around" style="margin-top: 20px" :gutter="50"
-        v-if="formData.status == 'COMPLETE'">
-        <el-col :span="3">
-          <el-button class="material-btn" @click="onClose">关闭</el-button>
-        </el-col>
-      </el-row>
+      <sales-plan-detail-btn-group :state="formData.auditState" @onReturn="onReturn" @onSave="onSave(false)"
+        @onSubmit="onSave(true)" />
     </el-card>
     <el-dialog :visible.sync="refuseVisible" width="40%" :close-on-click-modal="false">
       <refuse-dialog v-if="refuseVisible" @getRefuseMsg="getRefuseMsg" />
@@ -102,30 +63,40 @@
   import SalesProductionTabs from '../components/SalesProductionTabs';
   import RefuseDialog from '../components/RefuseDialog';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
+  import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
+
   export default {
     name: 'SalesPlanDetail',
     props: ['id'],
     components: {
       SalesOrderDetailForm,
       RefuseDialog,
-      SalesProductionTabs
+      SalesProductionTabs,
+      SalesPlanDetailBtnGroup
     },
     computed: {
       ...mapGetters({
         formData: 'formData'
       }),
       getTriangleColor: function () {
-        switch (this.formData.status) {
-          case 'APPROVED':
+        switch (this.formData.auditState) {
+          case 'AUDITING':
             return 'border-right: 70px solid #114EE8;';
-          case 'COMPLETE':
+          case 'PASSED':
             return 'border-right: 70px solid #4DE811;';
-          case 'FAILED':
+          case 'AUDITED_FAILED':
             return 'border-right: 70px solid #D91A17;';
-          case 'UNAPPROVED':
+          case 'NONE':
             return 'border-right: 70px solid #BBBBBB;';
           default:
             return 'border-right: 70px solid #BBBBBB;';
+        }
+      },
+      modifyType: function () {
+        if (this.formData.auditState == 'NONE' || this.formData.auditState == 'AUDITED_FAILED') {
+          return true;
+        } else {
+          return false;
         }
       }
     },
@@ -139,30 +110,23 @@
         }
         this.$store.state.SalesProductionOrdersModule.formData = Object.assign({}, result.data);
       },
-      onModify() {
-        // 复制一份原本数据
-        this.originalData = Object.assign({}, this.formData);
-        this.modifyType = true;
-      },
       onReturn() {
-        // 返回取消数据更改
-        this.formData = this.originalData;
-        this.modifyType = false;
+
       },
-      onSave() {
-        this.$refs.form.validate((valid) => {
-          if (valid) {
-            this.$message.success('修改成功');
-            this.originalData = '';
-            this.modifyType = false;
-          } else {
-            this.$message.error('请完善填写信息');
-            return false;
-          }
-        });
-      },
-      onSubmit() {
-        this.$message('-----------提交审核----------------------');
+      async onSave(submitAudit) {
+        const url = this.apis().salesPlanSave(submitAudit);
+        const result = await this.$http.post(url, this.formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == '0') {
+          this.$message.error(result.msg);
+          return;
+        } else if (result.code == '1') {
+          this.$message.success('更新成功');
+          this.$router.go(0);
+        }
       },
       onReturnPage() {
         this.$router.push({
@@ -188,38 +152,6 @@
       onClose() {
         this.$message('-----------关闭----------------------');
       },
-      showFloatPercentNum(val) {
-        var reg = /\.$/;
-        if (val && !reg.test(val)) {
-          return accMul(val, 100);
-        } else {
-          return val;
-        }
-      },
-      onBlur(row, attribute) {
-        var reg = /\.$/;
-        if (reg.test(row[attribute])) {
-          this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
-        }
-      },
-      onTaxInput(val, row) {
-        var reg = /\.$/;
-        if (!reg.test(val)) {
-          row.profitMargin = (val / 100.0).toFixed(3);
-        } else {
-          row.profitMargin = val;
-        }
-      },
-      validatePhone(rule, value, callback) {
-        const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
-        if (value === '') {
-          callback(new Error('请输入手机号码'));
-        } else if (!reg.test(value)) {
-          callback(new Error('请输入合法手机号码'));
-        } else {
-          callback();
-        }
-      },
       validate(callback) {
         this.$refs.form.validate(callback);
       }
@@ -228,7 +160,6 @@
       return {
         refuseVisible: false,
         originalData: '',
-        modifyType: false,
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
       }
     },
@@ -290,6 +221,8 @@
     padding-top: 10px;
     padding-left: 30px;
     transform: rotateZ(45deg);
+    color: white;
+    font-size: 12px;
   }
 
   .sales-border-container {
@@ -335,6 +268,11 @@
   /deep/ .el-form-item--mini.el-form-item,
   .el-form-item--small.el-form-item {
     margin-bottom: 5px;
+  }
+
+  .reject_reason {
+    color: #606266;
+    padding-bottom: 10px;
   }
 
 </style>

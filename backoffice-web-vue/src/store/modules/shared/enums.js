@@ -1521,16 +1521,16 @@ const state = {
     },
   ],
   //销售企划订单行审核状态
-  SalesProductionOrderEntryAuditStatus: [{
+  SalesProductionAuditStatus: [{
       code: 'NONE',
-      name: '无'
+      name: '未提交'
     },
     {
       code: 'AUDITING',
       name: '审核中'
     },
     {
-      code: '"PASSED',
+      code: 'PASSED',
       name: '审核通过'
     },
     {

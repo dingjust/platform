@@ -72,8 +72,10 @@
             </el-col>
             <el-col :span="5">
               <el-form-item label="审批人" label-width="85px" v-if="form.auditNeeded">
-                <el-input v-model="form.approver.name" :disabled="true">
-                </el-input>
+                <template v-for="item in form.approvers">
+                  <el-input :key="item.id" v-model="item.name" :disabled="true">
+                  </el-input>
+                </template>
               </el-form-item>
             </el-col>
             <!-- <el-col :span="2">
@@ -185,8 +187,13 @@
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$message.success('销售计划创建成功，编号： ' + result.code);
-        this.$router.go(-1);
+        if (result.code == '0') {
+          this.$message.error(result.msg);
+          return;
+        } else if (result.code == '1') {
+          this.$message.success('销售计划创建成功，编号： ' + result.code);
+          this.$router.go(-1);
+        }
       },
       appendProductionCadre() {
         this.form.productionCharge.push({
@@ -218,10 +225,10 @@
             id: this.$store.getters.currentUser.id,
             name: this.$store.getters.currentUser.username
           },
-          approver: {
+          approvers: [{
             id: this.$store.getters.currentUser.id,
             name: this.$store.getters.currentUser.username
-          },
+          }],
           auditNeeded: true,
         }
 
