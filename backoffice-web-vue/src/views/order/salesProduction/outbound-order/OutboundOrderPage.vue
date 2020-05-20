@@ -14,7 +14,7 @@
       <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
     </el-card>
     <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <outbound-order-type-select-form :formData="formData" @onSelectType="onSelectType"/>
+      <outbound-order-type-select-form v-if="outboundOrderTypeSelect" :formData="formData"/>
     </el-dialog>
   </div>
 </template>
@@ -34,7 +34,7 @@
 
   import OutboundOrderToolbar from './toolbar/OutboundOrderToolbar';
   import OutboundOrderList from './list/OutboundOrderList';
-  import OutboundOrderTypeSelectForm from "./form/OutboundOrderTypeSelectForm";
+  import OutboundOrderTypeSelectForm from './form/OutboundOrderTypeSelectForm';
   export default {
     name: 'OutboundOrderPage',
     components: {
@@ -79,23 +79,32 @@
       createOutboundOrder () {
         this.outboundOrderTypeSelect = true;
       },
-      onSelectType () {
-        this.$router.push({
-          name: '创建外发订单'
-        });
-      },
-      onModify (code) {
-        this.getDetail(code);
-        this.$router.push('/sales/create/outboundOrder');
-      },
-      async getDetail (code) {
+      async onModify (code) {
         const url = this.apis().getoutboundOrderDetail(code);
         const result = await this.$http.get(url);
         if (result['errors']) {
           this.$message.error(result['errors'][0].message);
           return;
         }
-        this.$store.state.OutboundOrderModule.formData = Object.assign({}, result);
+        let item = {
+          event: 'ORDER_CONFIRMED',
+          time: 5,
+          range: 'INSIDE',
+          percent: 0.3
+        }
+        result.payPlan['deposit'] = item;
+        result.payPlan['balance1'] = item;
+        result.payPlan['balance2'] = item;
+        result.payPlan['monthBalance'] = {
+          event: 'ORDER_CONFIRMED',
+          time: 5
+        };
+        await this.$router.push({
+          name: '创建外发订单',
+          params: {
+            data: result
+          }
+        });
       }
     },
     data () {

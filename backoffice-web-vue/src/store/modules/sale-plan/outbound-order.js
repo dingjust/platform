@@ -16,7 +16,8 @@ const state = {
   },
   formData: {
     id: null,
-    outboundOrderType: 'PARTYA',
+    byAorB: '',
+    managementMode: '',
     outboundCompanyName: '',
     outboundContactPerson: '',
     outboundContactPhone: '',
@@ -64,7 +65,7 @@ const state = {
         time: 5
       }
     },
-    // belongOperator: {}
+    belongOperator: {},
     operator: [],
     attachments: []
   },
@@ -111,6 +112,7 @@ const mutations = {
   keyword: (state, keyword) => state.keyword = keyword,
   statuses: (state, statuses) => state.statuses = statuses,
   formData: (state, formData) => state.formData = formData,
+  setFormData: (state, formData) => state.formData = formData,
   queryFormData: (state, queryFormData) => state.queryFormData = queryFormData,
   page: (state, page) => state.page = page,
   isAdvancedSearch: (state, isAdvancedSearch) => state.isAdvancedSearch = isAdvancedSearch,
@@ -163,7 +165,8 @@ const actions = {
   clearFormData ({dispatch, commit, state}) {
     commit('formData', {
       id: null,
-      outboundOrderType: 'PARTYA',
+      byAorB: '',
+      managementMode: '',
       outboundCompanyName: '',
       outboundContactPerson: '',
       outboundContactPhone: '',
@@ -211,7 +214,7 @@ const actions = {
           time: 5
         }
       },
-      // belongOperator: {},
+      belongOperator: {},
       operator: [],
       attachments: []
     });

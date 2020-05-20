@@ -672,9 +672,33 @@ const COMMON_APIS = {
   getoutboundOrderDetail(code) {
     return '/b2b/orders/outbound/' + code;
   },
-  // 获取外发订单详情
+  // 编辑外发订单详情
   updateOutboundOrder() {
     return '/b2b/orders/outbound/update';
+  },
+  // 获取节点方案列表
+  getProgressPlan () {
+    return '/b2b/progress/plan';
+  },
+  // 新建节点方案
+  createProgressPlan () {
+    return '/b2b/progress/plan/create';
+  },
+  // 获取节点方案详情
+  getProgressPlanDetail (id) {
+    return '/b2b/progress/plan/' + id;
+  },
+  // 启用节点方案
+  enableProgressPlan (id) {
+    return '/b2b/eable/' + id;
+  },
+  // 禁用节点方案
+  disableProgressPlan (id) {
+    return '/b2b/disable/' + id;
+  },
+  // 删除节点方案
+  deleteProgressPlan (id) {
+    return '/b2b/delete/' + id;
   }
 };
 
@@ -826,7 +850,7 @@ let TENANT_APIS = {
     return '/b2b/carousels/updateAll';
   },
 
-  //销售计划  
+  //销售计划
   salesPlanSave(needAudit) {
     return '/b2b/sales/production/order/save?submitAudit=' + needAudit;
   },

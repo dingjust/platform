@@ -10,8 +10,8 @@
         <h6 style="margin-top: 4px;">选择我方身份</h6>
       </el-col>
       <el-col :span="8">
-        <el-radio v-model="formData.outboundOrderType" :label="'PARTYA'">甲方</el-radio>
-        <el-radio v-model="formData.outboundOrderType" :label="'PARTYB'">乙方</el-radio>
+        <el-radio v-model="formData.byAorB" :label="'PARTYA'">甲方</el-radio>
+        <el-radio v-model="formData.byAorB" :label="'PARTYB'">乙方</el-radio>
       </el-col>
     </el-row>
     <el-row type="flex" justify="center">
@@ -25,8 +25,8 @@
         <i class="el-icon-question" style="margin-left: 35px" v-popover:popover/>
       </el-col>
       <el-col :span="8">
-        <el-radio v-model="formData.outboundOrderType" :label="'PARTYA'">协同订单</el-radio>
-        <el-radio v-model="formData.outboundOrderType" :label="'PARTYB  '">自管订单</el-radio>
+        <el-radio v-model="formData.managementMode" :label="'COLLABORATION'">协同订单</el-radio>
+        <el-radio v-model="formData.managementMode" :label="'AUTOGESTION'">自管订单</el-radio>
       </el-col>
     </el-row>
     <el-row type="flex" justify="center" style="margin-top: 20px">
@@ -42,7 +42,7 @@
           </span>
           <span>{{collaborationTitle}}</span>
         </h6>
-        <h6>
+        <h6 style="padding-top: 10px">
           <span style="color: #F56C6C">
             自管订单：
           </span>
@@ -68,8 +68,14 @@
     },
     methods: {
       onSelectType () {
-        this.$emit('onSelectType');
+        this.$router.push({
+          name: '创建外发订单'
+        });
       }
+    },
+    created() {
+      this.formData.byAorB = 'PARTYA';
+      this.formData.managementMode = 'COLLABORATION';
     }
   }
 </script>

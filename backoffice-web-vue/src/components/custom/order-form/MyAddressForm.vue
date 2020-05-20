@@ -9,7 +9,7 @@
       <el-row type="flex" align="middle" :gutter="10" justify="space-between">
         <el-col :span="7">
           <el-form-item label="送货地址" style="padding-top:8px" :rules="[
-                { required: true, message: '请选择省', trigger: 'blur'}]" :prop="'region'">
+                { required: true, message: '请选择省', trigger: 'change'}]" :prop="'region'">
             <el-select v-model="address.region" value-key="isocode" @change="(val)=>onRegionChanged(val)"
               placeholder="选择省份">
               <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
@@ -19,7 +19,7 @@
         </el-col>
         <el-col :span="4">
           <el-form-item :rules="[
-                { required: true, message: '请选择市', trigger: 'blur'}]" prop="city">
+                { required: true, message: '请选择市', trigger: 'change'}]" prop="city">
             <el-select v-model="address.city" @change="(val)=>onCityChanged(val)" value-key="code" placeholder="选择城市">
               <el-option v-for="item in cities" :key="item.code" :label="item.name" :value="item">
               </el-option>
@@ -28,7 +28,7 @@
         </el-col>
         <el-col :span="4">
           <el-form-item :rules="[
-                { required: true, message: '请选择区', trigger: 'blur'}]" prop="cityDistrict">
+                { required: true, message: '请选择区', trigger: 'change'}]" prop="cityDistrict">
             <el-select v-model="address.cityDistrict" value-key="code" placeholder="选择县区">
               <el-option v-for="item in cityDistricts" :key="item.code" :label="item.name" :value="item">
               </el-option>
