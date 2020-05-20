@@ -53,7 +53,7 @@
 
 <script>
   export default {
-    name: 'SalesProductionProductsTable',
+    name: 'SalesProductionTasksTable',
     components: {},
     props: {
       data: {
@@ -83,42 +83,6 @@
           }
         });
         return result;
-      },
-      //销售总价    
-      getEntryTotalPrice(entry) {
-        let result = this.getEntryTotalAmount(entry) * (parseFloat(entry.unitPrice));
-        if (!Number.isNaN(result)) {
-          return result;
-        } else {
-          return '';
-        }
-      },
-      //总成本
-      getEntryTotalCost(entry) {
-        let result = this.getEntryTotalAmount(entry) * (parseFloat(entry.costOrder.totalPrice));
-        if (!Number.isNaN(result)) {
-          return result;
-        } else {
-          return '';
-        }
-      },
-      //利润
-      getEntryProfit(entry) {
-        let result = '';
-        if (this.getEntryTotalPrice(entry) != '' && this.getEntryTotalCost(entry) != '') {
-          result = this.getEntryTotalPrice(entry) - this.getEntryTotalCost(entry);
-        }
-        return result;
-      },
-      //利润率
-      getEntryProfitPercent(entry) {
-        let profit = this.getEntryProfit(entry);
-        let totalPrice = this.getEntryTotalPrice(entry);
-        if (profit != '' && totalPrice != '') {
-          return (parseFloat(profit / totalPrice) * 100).toFixed(2);
-        } else {
-          return '';
-        }
       },
     },
     data() {

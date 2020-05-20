@@ -9,7 +9,7 @@
           <el-col :span="8">
             <el-row type="flex" align="middle">
               <el-form-item label="创建人：">
-                <h6 class="sales-plan-h6">{{form.foundPerson}}</h6>
+                <h6 class="sales-plan-h6">{{form.creator!=null?form.creator.name:''}}</h6>
               </el-form-item>
             </el-row>
           </el-col>
@@ -102,9 +102,8 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="审批负责人：" :rules="[{ required: true, message: '请选择审批负责人', trigger: 'change'}]"
-              prop="approvalBy">
-              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.approvalBy}}</h6>
+            <el-form-item label="审批负责人：">
+              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.approver!=null?form.approver.name:''}}</h6>
               <el-select v-model="form.approvalBy" placeholder="请选择" v-show="modifyType" value-key="id">
                 <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
@@ -114,9 +113,8 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="订单负责人：" :rules="[{ required: true, message: '请选择订单负责人', trigger: 'change'}]"
-              prop="orderOwner">
-              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.orderOwner}}</h6>
+            <el-form-item label="订单负责人：">
+              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.planLeader!=null?form.planLeader.name:''}}</h6>
               <el-select v-model="form.orderOwner" placeholder="请选择" v-show="modifyType" value-key="id">
                 <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
@@ -126,10 +124,10 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="生产负责人：" :rules="[{ required: true, message: '请选择生产负责人', trigger: 'change'}]"
-              prop="productionBy">
-              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.productionBy}}</h6>
-              <el-select v-model="form.productionBy" placeholder="请选择" v-show="modifyType" value-key="id">
+            <el-form-item label="生产负责人：">
+              <h6 v-show="!modifyType" class="sales-plan-h6">
+                {{form.productionLeader!=null?form.productionLeader.name:''}}</h6>
+              <el-select v-model="form.productionLeader" placeholder="请选择" v-show="modifyType" value-key="id">
                 <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -169,38 +167,6 @@
       }
     },
     methods: {
-      showFloatPercentNum(val) {
-        var reg = /\.$/;
-        if (val && !reg.test(val)) {
-          return accMul(val, 100);
-        } else {
-          return val;
-        }
-      },
-      onBlur(row, attribute) {
-        var reg = /\.$/;
-        if (reg.test(row[attribute])) {
-          this.$set(row, attribute, parseFloat(row[attribute] + '0') / 100.0);
-        }
-      },
-      onTaxInput(val, row) {
-        var reg = /\.$/;
-        if (!reg.test(val)) {
-          row.profitMargin = (val / 100.0).toFixed(3);
-        } else {
-          row.profitMargin = val;
-        }
-      },
-      validatePhone(rule, value, callback) {
-        const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
-        if (value === '') {
-          callback(new Error('请输入手机号码'));
-        } else if (!reg.test(value)) {
-          callback(new Error('请输入合法手机号码'));
-        } else {
-          callback();
-        }
-      },
       validate(callback) {
         this.$refs.form.validate(callback);
       }
