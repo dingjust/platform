@@ -11,8 +11,11 @@
       </el-row>
       <div class="pt-2"></div>
       <outbound-order-toolbar @onAdvancedSearch="onAdvancedSearch" @createOutboundOrder="createOutboundOrder"/>
-      <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch"/>
+      <outbound-order-list :page="page" @onAdvancedSearch="onAdvancedSearch" @onModify="onModify"/>
     </el-card>
+    <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <outbound-order-type-select-form :formData="formData" @onSelectType="onSelectType"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -31,9 +34,11 @@
 
   import OutboundOrderToolbar from './toolbar/OutboundOrderToolbar';
   import OutboundOrderList from './list/OutboundOrderList';
+  import OutboundOrderTypeSelectForm from "./form/OutboundOrderTypeSelectForm";
   export default {
     name: 'OutboundOrderPage',
     components: {
+      OutboundOrderTypeSelectForm,
       OutboundOrderList,
       OutboundOrderToolbar
     },
@@ -42,7 +47,7 @@
         page: 'page',
         keyword: 'keyword',
         queryFormData: 'queryFormData',
-        contentData: 'detailData'
+        formData: 'formData'
       })
     },
     methods: {
@@ -54,24 +59,48 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch () {
-        const url = this.apis().getSalesOrderList();
+      onSearch (page, size) {
+        const keyword = this.keyword;
+        const url = this.apis().getoutboundOrdersList();
         this.setIsAdvancedSearch(false);
         this.search({
-          url
+          url,
+          keyword,
+          page,
+          size
         });
       },
-      onAdvancedSearch () {
-
+      onAdvancedSearch (page, size) {
+        const query = this.queryFormData;
+        const url = this.apis().getoutboundOrdersList();
+        this.setIsAdvancedSearch(true);
+        this.searchAdvanced({url, query, page, size});
       },
       createOutboundOrder () {
+        this.outboundOrderTypeSelect = true;
+      },
+      onSelectType () {
         this.$router.push({
-          name: '创建外发订单',
+          name: '创建外发订单'
         });
+      },
+      onModify (code) {
+        this.getDetail(code);
+        this.$router.push('/sales/create/outboundOrder');
+      },
+      async getDetail (code) {
+        const url = this.apis().getoutboundOrderDetail(code);
+        const result = await this.$http.get(url);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$store.state.OutboundOrderModule.formData = Object.assign({}, result);
       }
     },
     data () {
       return {
+        outboundOrderTypeSelect: false
       }
     },
     created () {

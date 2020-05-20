@@ -27,8 +27,8 @@
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
-          <el-col :span="10">
-            <h6>送货地址：{{slotData.address}}</h6>
+          <el-col :span="24">
+            <h6>送货地址：{{slotData.entries[0].shippingAddress.details}}</h6>
           </el-col>
         </el-row>
       </el-col>
@@ -41,15 +41,15 @@
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col>
-            <h6>合作工厂：{{slotData.cooperateFactory}}</h6>
+            <h6>合作工厂：{{slotData.cooperator.name}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">
           <el-col :span="12">
-            <h6>联系人：{{slotData.contactPerson}}</h6>
+            <h6>联系人：{{slotData.cooperator.contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.contactPhone}}</h6>
+            <h6>联系方式：{{slotData.cooperator.contactPhone}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-basic-row" type="flex" align="middle" justify="start" :gutter="20">

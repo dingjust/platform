@@ -659,6 +659,22 @@ const COMMON_APIS = {
   // 获取物料详情
   getMaterialDetails(id) {
     return '/b2b/materials/' + id;
+  },
+  // 获取外发订单列表
+  getoutboundOrdersList() {
+    return '/b2b/orders/outbound';
+  },
+  // 创建外发订单
+  createOutboundOrder() {
+    return '/b2b/orders/outbound/create';
+  },
+  // 获取外发订单详情
+  getoutboundOrderDetail(code) {
+    return '/b2b/orders/outbound/' + code;
+  },
+  // 获取外发订单详情
+  updateOutboundOrder() {
+    return '/b2b/orders/outbound/update';
   }
 };
 

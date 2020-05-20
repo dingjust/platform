@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="20" style="padding-top: 5px">
           <el-form-item label="订单信息" prop="name">
-            <el-input placeholder="请输入订单号，订单名称" v-model="keyword"></el-input>
+            <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keyword"></el-input>
           </el-form-item>
           <el-form-item label="负责人" prop="name">
             <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.name"></el-input>
@@ -24,21 +24,40 @@
         </el-col>
       </el-row>
     </el-form>
-    <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses"/>
+<!--    <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses"/>-->
   </div>
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapActions,
+  } = createNamespacedHelpers(
+    'OutboundOrderModule'
+  );
+
   import SalesProductionStatusBar from '../../components/SalesProductionStatusBar';
   export default {
     name: 'OutboundOrderToolbar',
     components: {SalesProductionStatusBar},
+    computed: {
+      ...mapGetters({
+        queryFormData: 'queryFormData'
+      })
+    },
     methods: {
+      ...mapActions({
+        clearQueryFormData: 'clearQueryFormData'
+      }),
       onAdvancedSearch () {
         this.$emit('onAdvancedSearch');
       },
       onReset () {
-
+        this.clearQueryFormData();
       },
       createOutboundOrder () {
         this.$emit('createOutboundOrder');
@@ -46,15 +65,7 @@
     },
     data () {
       return {
-        keyword: '',
-        statuses: this.$store.state.EnumsModule.SalesProductionStatuses,
-        queryFormData: {
-          name: '',
-          status: '',
-          hasContact: '',
-          isArrears: '',
-          isDelay: ''
-        }
+        // queryFormData: this.$store.state.OutboundOrderModule.queryFormData
       }
     }
   }

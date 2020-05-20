@@ -296,6 +296,22 @@ const router = new Router({
         path: 'purchase',
         name: '采购任务列表',
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/purchase-task/PurchaseTaskPage')
+      },
+      {
+        path: 'progressOrder',
+        name: '进度工单列表',
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-work-order/ProgressOrderPage')
+      },
+      {
+        path: 'create/progressOrder',
+        name: '创建进度工单',
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-work-order/form/ProgressOrderForm')
+      },
+      {
+        path: 'progressOrder/:code',
+        name: '进度工单详情',
+        props: true,
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-work-order/details/ProgressOrderDetail')
       }
       ]
     },

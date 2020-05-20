@@ -52,6 +52,9 @@ export default {
       }, {
         name: '外发订单',
         url: '/sales/outboundOrder'
+      }, {
+        name: '生产进度工单',
+        url: '/sales/progressOrder'
       }]
     },
     {

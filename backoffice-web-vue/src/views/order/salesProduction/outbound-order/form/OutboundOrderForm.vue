@@ -12,40 +12,40 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" label-width="80px">
-        <template v-for="(product, index) in form.productList">
+      <el-form ref="form" label-width="80px" :rules="rules">
+        <el-row>
+          <el-col :span="4">
+            <div style="padding-left: 10px">
+              <h6>合作对象</h6>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="外发工厂" prop="outboundCompanyName">
+              <el-input v-model="formData.outboundCompanyName" :disabled="true"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="联系人" prop="outboundContactPerson">
+              <el-input v-model="formData.outboundContactPerson" :disabled="true"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="联系方式" prop="outboundContactPhone">
+              <el-input v-model="formData.outboundContactPhone" :disabled="true"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商</el-button>
+          </el-col>
+        </el-row>
+        <template v-for="(item, index) in formData.entries">
           <el-row type="flex" justify="end" v-if="index > 0">
             <el-col :span="2">
               <el-button class="outbound-btn" @click="deleteRow(index)">删除</el-button>
             </el-col>
           </el-row>
-            <el-row>
-              <el-col :span="4">
-                <div style="padding-left: 10px">
-                  <h6>合作对象</h6>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-              <el-col :span="8">
-                <el-form-item label="外发工厂">
-                  <el-input v-model="product.companyOfSeller" :disabled="true"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="联系人">
-                  <el-input v-model="product.contactPersonOfSeller" :disabled="true"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="联系方式">
-                  <el-input v-model="product.contactOfSeller" :disabled="true"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商</el-button>
-              </el-col>
-            </el-row>
             <el-row>
               <el-col :span="4">
                 <div style="padding-left: 10px">
@@ -56,28 +56,30 @@
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="8">
                 <el-form-item label="产品名称">
-                  <el-input v-model="product.product.name" :disabled="true" placeholder="请输入"></el-input>
+                  <el-input v-model="item.product.name" :disabled="true" placeholder="请输入"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
-                <el-button @click="onProductSelect" size="mini">选择产品/任务</el-button>
+                <el-button @click="onProductSelect(index)" size="mini">选择产品/任务</el-button>
               </el-col>
             </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="6">
                 <el-form-item label="发单价格">
-                  <el-input v-model="product.price" placeholder="请输入"></el-input>
+                  <el-input v-model="item.billPrice" placeholder="请输入" @blur="onBlur(item,'billPrice')"
+                            v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="交货日期">
-                  <el-date-picker v-model="product.date" type="date" placeholder="选择日期"></el-date-picker>
+                  <el-date-picker v-model="item.expectedDeliveryDate" type="date"
+                                  value-format="timestamp" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="24">
-                <my-address-form :vAddress.sync="product.address" />
+                <my-address-form :vAddress.sync="item.shippingAddress" />
               </el-col>
             </el-row>
           <el-divider/>
@@ -98,8 +100,17 @@
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="18">
-            <MTAVAT :machiningTypes.sync="form.machiningTypes" :needVoice.sync="form.needVoice" :tax.sync="form.tax" />
+            <MTAVAT :machiningTypes.sync="formData.machiningType" :needVoice.sync="formData.invoiceNeeded"
+                    :tax.sync="formData.invoiceTaxPoint" />
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="运费承担：" label-width="120">
+              <el-radio v-model="formData.freightPayer" :label="'PARTYA'">甲方</el-radio>
+              <el-radio v-model="formData.freightPayer" :label="'PARTYB'">乙方</el-radio>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="4">
             <el-form-item label="生产节点">
               <el-input></el-input>
@@ -118,7 +129,7 @@
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-col :span="24">
-            <my-pay-plan-form :vPayPlan.sync="form.vPayPlan"/>
+            <my-pay-plan-form :form="formData.payPlan"/>
           </el-col>
         </el-row>
         <el-row>
@@ -129,12 +140,25 @@
           </el-col>
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-          <el-form-item label="跟单员">
-            <el-select v-model="form.charge" placeholder="请选择" style="width:100%">
-              <el-option label="张三" value="张三"></el-option>
-              <el-option label="李四" value="李四"></el-option>
-            </el-select>
-          </el-form-item>
+          <el-col :span="4">
+            <el-checkbox v-model="formData.noCheck">是否需要审核</el-checkbox>
+          </el-col>
+          <el-col :span="20" v-if="formData.noCheck">
+            <el-input :disabled="true"></el-input>
+          </el-col>
+<!--          <el-col :span="20">-->
+<!--            <template v-for="(value, index) in formData.operator">-->
+<!--              <el-form-item label="审批人">-->
+<!--                <el-select v-model="formData.operator[index]">-->
+<!--                  <el-option v-for="item in options"-->
+<!--                    :key="item.value"-->
+<!--                    :label="item.label"-->
+<!--                    :value="item.value">-->
+<!--                  </el-option>-->
+<!--                </el-select>-->
+<!--              </el-form-item>-->
+<!--            </template>-->
+<!--          </el-col>-->
         </el-row>
         <el-row>
           <el-col :span="4">
@@ -150,20 +174,20 @@
                 type="textarea"
                 :rows="2"
                 placeholder="请输入内容"
-                v-model="form.textarea">
+                v-model="formData.remarks">
               </el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
           <el-form-item label="附件">
-            <images-upload class="order-purchase-upload" :slot-data="form.attachments"/>
+            <images-upload class="order-purchase-upload" :slot-data="formData.attachments"/>
           </el-form-item>
         </el-row>
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
-          <el-button class="material-btn">确认创建</el-button>
+          <el-button class="material-btn" @click="onCreate">确认创建</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -174,6 +198,17 @@
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapActions
+  } = createNamespacedHelpers(
+    'OutboundOrderModule'
+  );
+
   import SuppliersSelect from '../../../../contract/manage/components/SupplierSelect';
   import MyAddressForm from '../../../../../components/custom/order-form/MyAddressForm';
   import MTAVAT from '../../../../../components/custom/order-form/MTAVAT';
@@ -182,70 +217,163 @@
   import SampleProductsSelectDialog from '../../../../product/sample/components/SampleProductsSelectDialog';
   export default {
     name: 'OutboundOrderForm',
-    components: {SampleProductsSelectDialog, ImagesUpload, MyPayPlanForm, MTAVAT, MyAddressForm, SuppliersSelect},
+    components: {
+      SampleProductsSelectDialog,
+      ImagesUpload,
+      MyPayPlanForm,
+      MTAVAT,
+      MyAddressForm,
+      SuppliersSelect
+    },
+    computed: {
+      ...mapGetters({
+        formData: 'formData'
+      })
+    },
     methods: {
+      ...mapActions({
+        clearFormData: 'clearFormData'
+      }),
+      onBlur (row, attribute) {
+        var reg = /\.$/;
+        if (reg.test(row[attribute])) {
+          this.$set(row, attribute, parseFloat(row[attribute] + '0'));
+        }
+      },
       onSuppliersSelect (val) {
         this.suppliersSelectVisible = false;
-        this.form.companyOfSeller = val.name;
-        this.form.contactPersonOfSeller = val.person;
-        this.form.contactOfSeller = val.phone;
-        this.form.cooperator.id = val.id;
+        this.formData.outboundCompanyName = val.name;
+        this.formData.outboundContactPerson = val.person;
+        this.formData.outboundContactPhone = val.phone;
+        this.formData.cooperator.id = val.id;
         if (val.payPlan != null) {
           this.setPayPlan(val.payPlan);
           this.$message.success('已关联选择合作商绑定账务方案：' + val.payPlan.name);
         }
       },
-      onProductSelect () {
+      setPayPlan (payPlan) {
+        this.formData.payPlan.isHaveDeposit = payPlan.isHaveDeposit;
+        this.formData.payPlan.payPlanType = payPlan.payPlanType;
+        payPlan.payPlanItems.forEach((item) => {
+          switch (item.moneyType) {
+            case 'PHASEONE':
+              this.formData.payPlan.balance1.percent = item.payPercent * 100;
+              this.formData.payPlan.balance1.event = item.triggerEvent;
+              this.formData.payPlan.balance1.time = item.triggerDays;
+              this.formData.payPlan.balance1.range = item.triggerType;
+              break;
+            case 'PHASETWO':
+              this.formData.payPlan.balance2.percent = item.payPercent * 100;
+              this.formData.payPlan.balance2.event = item.triggerEvent;
+              this.formData.payPlan.balance2.time = item.triggerDays;
+              this.formData.payPlan.balance2.range = item.triggerType;
+              break;
+            case 'DEPOSIT':
+              this.formData.payPlan.deposit.percent = item.payPercent * 100;
+              this.formData.payPlan.deposit.event = item.triggerEvent;
+              this.formData.payPlan.deposit.time = item.triggerDays;
+              this.formData.payPlan.deposit.range = item.triggerType;
+              break;
+            case 'MONTHLY_SETTLEMENT':
+              this.formData.payPlan.monthBalance.event = item.triggerEvent;
+              this.formData.payPlan.monthBalance.time = item.triggerDays;
+              break;
+          }
+        });
+      },
+      onProductSelect (index) {
         this.sampleDialogVisible = true;
+        this.selectIndex = index;
       },
       addRow () {
         let item = {
-          companyOfSeller: '',
-          contactPersonOfSeller: '',
-          contactOfSeller: '',
-          product: {
-            name: ''
-          },
-          price: '',
-          date: '',
-          address: {}
+          productionTaskId: '',
+          billPrice: '',
+          expectedDeliveryDate: '',
+          shippingAddress: {},
+          product: {}
         };
-        this.productList.push(item);
+        this.formData.entries.push(item);
       },
       deleteRow (index) {
-        this.productList.splice(index, 1);
+        this.formData.entries.splice(index, 1);
       },
       onSelectSample (data) {
         this.sampleDialogVisible = false;
-        console.log(data);
+        this.formData.entries[this.selectIndex].product.name = data.name;
+        this.formData.entries[this.selectIndex].product.id = data.id;
+      },
+      async onCreate () {
+        var payPlanData = {
+          isHaveDeposit: this.formData.payPlan.isHaveDeposit,
+          payPlanType: this.formData.payPlan.payPlanType,
+          payPlanItems: []
+        };
+        if (this.formData.payPlan.isHaveDeposit) {
+          payPlanData.payPlanItems.push({
+            payPercent: this.formData.payPlan.deposit.percent * 0.01,
+            triggerEvent: this.formData.payPlan.deposit.event,
+            triggerDays: this.formData.payPlan.deposit.time,
+            moneyType: 'DEPOSIT',
+            triggerType: this.formData.payPlan.deposit.range
+          });
+        }
+        if (this.formData.payPlan.payPlanType == 'MONTHLY_SETTLEMENT') {
+          payPlanData.payPlanItems.push({
+            triggerEvent: this.formData.payPlan.monthBalance.event,
+            moneyType: 'MONTHLY_SETTLEMENT',
+            triggerDays: this.formData.payPlan.monthBalance.time
+          });
+        } else {
+          payPlanData.payPlanItems.push({
+            payPercent: this.formData.payPlan.balance1.percent * 0.01,
+            triggerEvent: this.formData.payPlan.balance1.event,
+            triggerDays: this.formData.payPlan.balance1.time,
+            moneyType: 'PHASEONE',
+            triggerType: this.formData.payPlan.balance1.range
+          });
+          if (this.formData.payPlanType == 'PHASETWO') {
+            payPlanData.payPlanItems.push({
+              payPercent: this.formData.payPlan.balance2.percent * 0.01,
+              triggerEvent: this.formData.payPlan.balance2.event,
+              triggerDays: this.formData.payPlan.balance2.time,
+              moneyType: 'PHASETWO',
+              triggerType: this.formData.payPlan.balance2.range
+            });
+          }
+        }
+        let data = Object.assign({}, this.formData);
+        data.payPlan = payPlanData;
+
+        const url = this.apis().createOutboundOrder();
+        const result = await this.$http.post(url, data);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('创建外发订单成功');
+        await this.$router.push({
+          name: '外发订单列表'
+        });
       }
     },
     data () {
       return {
+        rules: {
+          outboundCompanyName: [{required: true, message: '请选择外发工厂', trigger: 'change'}]
+        },
         suppliersSelectVisible: false,
         sampleDialogVisible: false,
-        form: {
-          productList: [{
-            companyOfSeller: '',
-            contactPersonOfSeller: '',
-            contactOfSeller: '',
-            product: {
-              name: ''
-            },
-            price: '',
-            date: '',
-            address: {}
-          }],
-          machiningTypes: 'LABOR_AND_MATERIAL',
-          needVoice: false,
-          tax: 0.03,
-          vPayPlan: {},
-          textarea: '',
-          charge: '',
-          medias: {},
-          attachments: []
-        }
+        selectIndex: ''
       }
+    },
+    created() {
+      if (this.formData.payplan.payPlanItems.length > 0) {
+        this.setPayPlan(this.formData.payplan);
+      }
+    },
+    destroyed () {
+      this.clearFormData();
     }
   }
 </script>

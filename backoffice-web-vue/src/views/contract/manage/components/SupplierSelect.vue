@@ -116,14 +116,16 @@
             id: this.selectSupplier.id,
             name: this.selectSupplier.partner.name,
             person: this.selectSupplier.partner.contactPerson,
-            phone: this.selectSupplier.partner.contactPhone
+            phone: this.selectSupplier.partner.contactPhone,
+            payPlan: this.selectSupplier.payPlan
           };
         } else {
           result = {
             id: this.selectSupplier.id,
             name: this.selectSupplier.name,
             person: this.selectSupplier.contactPerson,
-            phone: this.selectSupplier.contactPhone
+            phone: this.selectSupplier.contactPhone,
+            payPlan: this.selectSupplier.payPlan
           };
         }
         this.$emit('onSelect', result);

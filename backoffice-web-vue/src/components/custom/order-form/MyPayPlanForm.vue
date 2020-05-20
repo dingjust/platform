@@ -211,34 +211,8 @@
   export default {
     name: 'MyPayPlanForm',
     props: {
-      vPayPlan: {
-        type: Object,
-        default: {
-          isHaveDeposit: false,
-          payPlanType: 'PHASEONE',
-          deposit: {
-            event: 'ORDER_CONFIRMED',
-            time: 5,
-            range: 'INSIDE',
-            percent: 0.3
-          },
-          balance1: {
-            event: 'ORDER_CONFIRMED',
-            time: 5,
-            range: 'INSIDE',
-            percent: 0.3
-          },
-          balance2: {
-            event: 'ORDER_CONFIRMED',
-            time: 5,
-            range: 'INSIDE',
-            percent: 0.3
-          },
-          monthBalance: {
-            event: 'ORDER_CONFIRMED',
-            time: 5
-          }
-        }
+      form: {
+        type: Object
       }
     },
     components: {
@@ -434,48 +408,51 @@
         payPlanForm: {
           name: '',
           remarks: ''
-        },
-        form: {
-          isHaveDeposit: false,
-          payPlanType: 'PHASEONE',
-          deposit: {
-            event: 'ORDER_CONFIRMED',
-            time: 5,
-            range: 'INSIDE',
-            percent: 0.3
-          },
-          balance1: {
-            event: 'ORDER_CONFIRMED',
-            time: 5,
-            range: 'INSIDE',
-            percent: 0.3
-          },
-          balance2: {
-            event: 'ORDER_CONFIRMED',
-            time: 5,
-            range: 'INSIDE',
-            percent: 0.3
-          },
-          monthBalance: {
-            event: 'ORDER_CONFIRMED',
-            time: 5
-          }
         }
+        // form: {
+        //   isHaveDeposit: false,
+        //   payPlanType: 'PHASEONE',
+        //   deposit: {
+        //     event: 'ORDER_CONFIRMED',
+        //     time: 5,
+        //     range: 'INSIDE',
+        //     percent: 0.3
+        //   },
+        //   balance1: {
+        //     event: 'ORDER_CONFIRMED',
+        //     time: 5,
+        //     range: 'INSIDE',
+        //     percent: 0.3
+        //   },
+        //   balance2: {
+        //     event: 'ORDER_CONFIRMED',
+        //     time: 5,
+        //     range: 'INSIDE',
+        //     percent: 0.3
+        //   },
+        //   monthBalance: {
+        //     event: 'ORDER_CONFIRMED',
+        //     time: 5
+        //   }
+        // }
       }
     },
-    watch: {
-      vPayPlan: function (newVal, oldVal) {
-        this.form = newVal;
-      },
-      form: {
-        handler (newVal, oldName) {
-          this.$emit('update:vPayPlan', newVal);
-        },
-        deep: true
-      }
-    },
+    // watch: {
+    //   vPayPlan: {
+    //     handler (newVal, oldVal) {
+    //       this.form = newVal;
+    //     },
+    //     deep: true
+    //   },
+    //   form: {
+    //     handler (newVal, oldVal) {
+    //       this.$emit('update:vPayPlan', newVal);
+    //     }
+    //   }
+    // },
     created () {
-
+      console.log('-------------------------------')
+      console.log(this.form)
     },
     mounted () {
 
