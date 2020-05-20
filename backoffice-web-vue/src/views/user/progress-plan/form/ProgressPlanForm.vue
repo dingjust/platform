@@ -21,37 +21,38 @@
             <el-input placeholder="" v-model="formData.remarks"></el-input>
           </el-form-item>
         </el-row>
-        <el-row class="progress-basic-row" :gutter="20">
-          <el-col :span="12">
-            <div class="progress-container">
-              <el-table ref="nodeTable" :data="formData.productionProgresses" stripe :height="autoHeight">
-                <el-table-column label="节点名称" prop="phase"></el-table-column>
-                <el-table-column label="预警天数">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row.delayedDays"></el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作">
-                  <template slot-scope="scope">
-                    <el-button type="text" @click="onDelete(scope.row)">删除</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="progress-container">
-              <el-table ref="systemTable" stripe :data="data" :height="autoHeight">
-                <el-table-column label="节点名称" prop="phase"></el-table-column>
-                <el-table-column label="操作">
-                  <template slot-scope="scope">
-                    <el-button type="text" @click="onAppend(scope.row)" :disabled="isDisabled(scope.row)">添加</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </el-col>
-        </el-row>
+        <progress-setting-form :formData="formData"/>
+<!--        <el-row class="progress-basic-row" :gutter="20">-->
+<!--          <el-col :span="12">-->
+<!--            <div class="progress-container">-->
+<!--              <el-table ref="nodeTable" :data="formData.productionProgresses" stripe :height="autoHeight">-->
+<!--                <el-table-column label="节点名称" prop="phase"></el-table-column>-->
+<!--                <el-table-column label="预警天数">-->
+<!--                  <template slot-scope="scope">-->
+<!--                    <el-input v-model="scope.row.delayedDays"></el-input>-->
+<!--                  </template>-->
+<!--                </el-table-column>-->
+<!--                <el-table-column label="操作">-->
+<!--                  <template slot-scope="scope">-->
+<!--                    <el-button type="text" @click="onDelete(scope.row)">删除</el-button>-->
+<!--                  </template>-->
+<!--                </el-table-column>-->
+<!--              </el-table>-->
+<!--            </div>-->
+<!--          </el-col>-->
+<!--          <el-col :span="12">-->
+<!--            <div class="progress-container">-->
+<!--              <el-table ref="systemTable" stripe :data="data" :height="autoHeight">-->
+<!--                <el-table-column label="节点名称" prop="phase"></el-table-column>-->
+<!--                <el-table-column label="操作">-->
+<!--                  <template slot-scope="scope">-->
+<!--                    <el-button type="text" @click="onAppend(scope.row)" :disabled="isDisabled(scope.row)">添加</el-button>-->
+<!--                  </template>-->
+<!--                </el-table-column>-->
+<!--              </el-table>-->
+<!--            </div>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row class="progress-basic-row">
           <el-form-item prop="productionProgresses" label-width="100">
             <div></div>
@@ -63,26 +64,11 @@
 </template>
 
 <script>
+  import ProgressSettingForm from '../components/ProgressSettingForm';
   export default {
     name: 'ProgressPlanForm',
+    components: {ProgressSettingForm},
     methods: {
-      onAppend (row) {
-        let item = {
-          phase: row.phase,
-          sequence: row.sequence,
-          delatedDays: 0
-        }
-        this.formData.productionProgresses.push(item);
-      },
-      onDelete (row) {
-        const index = this.formData.productionProgresses.findIndex(val => val.phase == row.phase);
-        if (index > -1) {
-          this.formData.productionProgresses.splice(index, 1);
-        }
-      },
-      isDisabled (row) {
-        return this.formData.productionProgresses.findIndex(val => val.phase == row.phase) > -1;
-      },
       onSubmit () {
         this.$refs['form'].validate(valid => {
           if (valid) {
@@ -134,42 +120,15 @@
           name: '',
           remarks: '',
           productionProgresses: []
-        },
-        data: [
-          {
-            phase: '备料',
-            sequence: 0,
-            delayedDays: 0
-          },
-          {
-            phase: '裁剪',
-            sequence: 1,
-            delayedDays: 0
-          },
-          {
-            phase: '车缝',
-            sequence: 2,
-            delayedDays: 0
-          },
-          {
-            phase: '后整',
-            sequence: 3,
-            delayedDays: 0
-          },
-          {
-            phase: '验货',
-            sequence: 4,
-            delayedDays: 0
-          }
-        ]
+        }
       }
     },
     watch: {
       'formData.productionProgresses': function (n, o) {
         this.validateField('productionProgresses');
-      },
+      }
     },
-    created() {
+    created () {
       if (this.$route.params.formData != null) {
         this.formData = this.$route.params.formData;
       }
