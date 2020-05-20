@@ -300,18 +300,24 @@ const router = new Router({
       {
         path: 'progressOrder',
         name: '进度工单列表',
-        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-work-order/ProgressOrderPage')
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-order/ProgressOrderPage')
       },
       {
         path: 'create/progressOrder',
         name: '创建进度工单',
-        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-work-order/form/ProgressOrderForm')
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-order/form/ProgressOrderForm')
       },
       {
         path: 'progressOrder/:code',
         name: '进度工单详情',
         props: true,
-        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-work-order/details/ProgressOrderDetail')
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/progress-order/details/ProgressOrderDetail')
+      },
+      {
+        path: 'productionOrder/:code',
+        name: '生产工单详情',
+        props: true,
+        component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-order/details/ProductionOrderDetail')
       }
       ]
     },
