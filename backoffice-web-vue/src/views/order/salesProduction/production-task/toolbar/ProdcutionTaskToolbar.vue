@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true">
       <el-row type="flex" justify="space-between">
-        <el-col :span="19" style="padding-top: 5px">
+        <el-col :span="20" style="padding-top: 5px">
           <el-form-item label="订单信息" prop="name">
             <el-input placeholder="请输入订单号，订单名称" v-model="keyword"></el-input>
           </el-form-item>
@@ -17,7 +17,7 @@
             <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="4">
           <el-row type="flex" justify="end">
             <el-button type="primary" class="create-button" @click="createOutboundOrder">创建外发订单</el-button>
           </el-row>
@@ -42,7 +42,6 @@
       },
       createOutboundOrder () {
         this.$emit('createOutboundOrder');
-        this.$message('----------------创建外放订单---------------------');
       }
     },
     data () {

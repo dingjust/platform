@@ -465,8 +465,31 @@ const router = new Router({
             component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/payPlan/form/PayPlanEditFormPage')
           }
           ]
-
-        } ]
+        }, {
+          path: 'progress-plan',
+          name: '节点配置',
+          component: {
+            render (c) {
+              return c('router-view');
+            }
+          },
+          children: [{
+            path: '',
+            name: '节点配置',
+            component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/progress-plan/ProgressPlanPage'),
+          },
+          {
+            path: 'create',
+            name: '添加新节点',
+            component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/progress-plan/form/ProgressPlanForm')
+          },
+          {
+            path: 'update',
+            name: '编辑节点',
+            component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/progress-plan/form/ProgressPlanForm')
+          }
+          ]
+        }]
       },
       {
         path: 'cooperator',
@@ -684,4 +707,3 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;
-

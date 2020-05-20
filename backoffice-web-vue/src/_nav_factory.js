@@ -95,6 +95,10 @@ export default {
         name: '物料管理',
         url: '/product/material',
         icon: 'iconNone'
+      }, {
+        name: '节点配置',
+        url: '/account/setting/progress-plan',
+        icon: 'iconNone'
       }]
     },
     {

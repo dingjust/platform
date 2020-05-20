@@ -12,7 +12,7 @@
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" label-width="80px" :rules="rules">
+      <el-form ref="form" label-width="80px" :rules="rules" :model="formData">
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -41,11 +41,12 @@
           </el-col>
         </el-row>
         <template v-for="(item, index) in formData.entries">
-          <el-row type="flex" justify="end" v-if="index > 0">
-            <el-col :span="2">
-              <el-button class="outbound-btn" @click="deleteRow(index)">删除</el-button>
-            </el-col>
-          </el-row>
+          <el-form ref="itemForm" label-width="80px" :model="item">
+            <el-row type="flex" justify="end" v-if="index > 0">
+              <el-col :span="2">
+                <el-button class="outbound-btn" @click="deleteRow(index)">删除</el-button>
+              </el-col>
+            </el-row>
             <el-row>
               <el-col :span="4">
                 <div style="padding-left: 10px">
@@ -55,7 +56,7 @@
             </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="8">
-                <el-form-item label="产品名称">
+                <el-form-item label="产品名称" prop="product" :rules="[{ type: 'object', validator: validateProduct, trigger: 'change' }]">
                   <el-input v-model="item.product.name" :disabled="true" placeholder="请输入"></el-input>
                 </el-form-item>
               </el-col>
@@ -65,13 +66,13 @@
             </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="6">
-                <el-form-item label="发单价格">
+                <el-form-item label="发单价格" prop="billPrice" :rules="[{required: true, message: '请填写发单价格', trigger: 'blur'}]">
                   <el-input v-model="item.billPrice" placeholder="请输入" @blur="onBlur(item,'billPrice')"
                             v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item label="交货日期">
+                <el-form-item label="交货日期" prop="expectedDeliveryDate" :rules="[{required: true, message: '请选择交货日期', trigger: 'change'}]">
                   <el-date-picker v-model="item.expectedDeliveryDate" type="date"
                                   value-format="timestamp" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
@@ -79,9 +80,10 @@
             </el-row>
             <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
               <el-col :span="24">
-                <my-address-form :vAddress.sync="item.shippingAddress" />
+                <my-address-form :vAddress.sync="item.shippingAddress" ref="addressForm"/>
               </el-col>
             </el-row>
+          </el-form>
           <el-divider/>
         </template>
         <el-row type="flex" justify="center" class="info-order-row" align="middle">
@@ -111,13 +113,13 @@
           </el-col>
         </el-row>
         <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-          <el-col :span="4">
-            <el-form-item label="生产节点">
-              <el-input></el-input>
+          <el-col :span="6">
+            <el-form-item label="生产节点" prop="progressPlan">
+              <el-input v-model="formData.progressPlan.name" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="2">
-            <el-button class="outbound-btn">选择</el-button>
+            <el-button class="outbound-btn" @click="progressPlanVisible = !progressPlanVisible">选择</el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -132,34 +134,34 @@
             <my-pay-plan-form :form="formData.payPlan"/>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="4">
-            <div style="padding-left: 10px">
-              <h6>人员设置</h6>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row class="outbound-basic-row" type="flex" justify="start" :gutter="20">
-          <el-col :span="4">
-            <el-checkbox v-model="formData.noCheck">是否需要审核</el-checkbox>
-          </el-col>
-          <el-col :span="20" v-if="formData.noCheck">
-            <el-input :disabled="true"></el-input>
-          </el-col>
-<!--          <el-col :span="20">-->
-<!--            <template v-for="(value, index) in formData.operator">-->
-<!--              <el-form-item label="审批人">-->
-<!--                <el-select v-model="formData.operator[index]">-->
-<!--                  <el-option v-for="item in options"-->
-<!--                    :key="item.value"-->
-<!--                    :label="item.label"-->
-<!--                    :value="item.value">-->
-<!--                  </el-option>-->
-<!--                </el-select>-->
-<!--              </el-form-item>-->
-<!--            </template>-->
+<!--        <el-row>-->
+<!--          <el-col :span="4">-->
+<!--            <div style="padding-left: 10px">-->
+<!--              <h6>人员设置</h6>-->
+<!--            </div>-->
 <!--          </el-col>-->
-        </el-row>
+<!--        </el-row>-->
+<!--        <el-row class="outbound-basic-row" style="margin-top: 10px" type="flex" justify="start" :gutter="20" align="top">-->
+<!--          <el-col :span="6">-->
+<!--            <el-form-item label="跟单员">-->
+<!--              <el-select v-model="operator" value-key="id">-->
+<!--                <el-option v-for="item in operatorList"-->
+<!--                           :key="item.id"-->
+<!--                           :label="item.name"-->
+<!--                           :value="item">-->
+<!--                </el-option>-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--          <el-col :span="2">-->
+<!--            <el-checkbox v-model="formData.noCheck" style="padding-top: 5px">是否需要审核</el-checkbox>-->
+<!--          </el-col>-->
+<!--          <el-col :span="6">-->
+<!--            <el-form-item label="审核员">-->
+<!--              <el-input :disabled="true" v-model="formData.belongOperator.name"></el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row>
           <el-col :span="4">
             <div style="padding-left: 10px">
@@ -194,6 +196,9 @@
     <el-dialog :visible.sync="sampleDialogVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
       <sample-products-select-dialog v-if="sampleDialogVisible" @onSelectSample="onSelectSample"/>
     </el-dialog>
+    <el-dialog :visible.sync="progressPlanVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+      <progress-plan-select-dialog v-if="progressPlanVisible" @getProgressPlan="getProgressPlan"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -204,7 +209,8 @@
 
   const {
     mapGetters,
-    mapActions
+    mapActions,
+    mapMutations
   } = createNamespacedHelpers(
     'OutboundOrderModule'
   );
@@ -215,9 +221,11 @@
   import MyPayPlanForm from '../../../../../components/custom/order-form/MyPayPlanForm';
   import ImagesUpload from '../../../../../components/custom/ImagesUpload';
   import SampleProductsSelectDialog from '../../../../product/sample/components/SampleProductsSelectDialog';
+  import ProgressPlanSelectDialog from '../../../../user/progress-plan/components/ProgressPlanSelectDialog';
   export default {
     name: 'OutboundOrderForm',
     components: {
+      ProgressPlanSelectDialog,
       SampleProductsSelectDialog,
       ImagesUpload,
       MyPayPlanForm,
@@ -234,6 +242,13 @@
       ...mapActions({
         clearFormData: 'clearFormData'
       }),
+      ...mapMutations({
+        setFormData: 'setFormData'
+      }),
+      getProgressPlan (val) {
+        this.formData.progressPlan = val;
+        this.progressPlanVisible = false;
+      },
       onBlur (row, attribute) {
         var reg = /\.$/;
         if (reg.test(row[attribute])) {
@@ -303,7 +318,46 @@
         this.formData.entries[this.selectIndex].product.name = data.name;
         this.formData.entries[this.selectIndex].product.id = data.id;
       },
-      async onCreate () {
+      toFormValidate (form) {
+        return new Promise((resolve, reject) => {
+          form.validate((valid) => {
+            if (valid) {
+              resolve();
+            } else {
+              reject(new Error());
+            }
+          })
+        })
+      },
+      onCreate () {
+        var formArr = [];
+        formArr.push(this.$refs['form']);
+        this.$refs['itemForm'].forEach(item => {
+          formArr.push(item);
+        })
+        this.$refs['addressForm'].forEach(item => {
+          formArr.push(item.$refs['address']);
+        })
+        const arr = formArr.map(item => this.toFormValidate(item));
+        const flag = Promise.all(arr).then((res) => {
+          return res.every(item => !!item);
+        })
+        if (flag) {
+          this.$message.success('请完善表单信息');
+          // this._onCreate();
+        } else {
+          this.$message.error('请完善表单信息');
+        }
+        // this.$refs['form'].validate(valid => {
+        //   if (valid) {
+        //     this._onCreate();
+        //   } else {
+        //     this.$message.error('请完善表单信息');
+        //     return false;
+        //   }
+        // });
+      },
+      async _onCreate () {
         var payPlanData = {
           isHaveDeposit: this.formData.payPlan.isHaveDeposit,
           payPlanType: this.formData.payPlan.payPlanType,
@@ -345,31 +399,100 @@
         let data = Object.assign({}, this.formData);
         data.payPlan = payPlanData;
 
-        const url = this.apis().createOutboundOrder();
-        const result = await this.$http.post(url, data);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
+        // 人员设置数据处理
+        // if (!this.formData.noCheck) {
+        //   data['belongOperator'] = null;
+        // }
+        // if (this.formData.byAorB === 'PARTYA') {
+        //   data['partAOperator'] = {id: this.operator.id};
+        // } else {
+        //   data['partBOperator'] = {id: this.operator.id};
+        // }
+
+        if (this.formData.id) {
+          const url = this.apis().updateOutboundOrder();
+          const result = await this.$http.put(url, data);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.$message.success('编辑外发订单成功');
+        } else {
+          const url = this.apis().createOutboundOrder();
+          const result = await this.$http.post(url, data);
+          if (result['errors']) {
+            this.$message.error(result['errors'][0].message);
+            return;
+          }
+          this.$message.success('创建外发订单成功');
         }
-        this.$message.success('创建外发订单成功');
         await this.$router.push({
           name: '外发订单列表'
         });
+      },
+      validateField (name) {
+        this.$refs.form.validateField(name);
+      },
+      validateProduct (rule, value, callback) {
+        if (value.id) {
+          return callback();
+        } else {
+          return callback(new Error('请选择产品'))
+        }
       }
     },
     data () {
+      var checkProgressPlan = (rule, value, callback) => {
+        if (value.id) {
+          return callback();
+        } else {
+          return callback(new Error('请选择生产节点'));
+        }
+      };
+      // var checkProduct = (rule, value, callback) => {
+      //   console.log(value);
+      //   // if (!this.formData.pro.id) {
+      //   //   return callback(new Error('请选择生产节点'));
+      //   // } else {
+      //   //   return callback();
+      //   // }
+      // };
       return {
         rules: {
-          outboundCompanyName: [{required: true, message: '请选择外发工厂', trigger: 'change'}]
+          outboundCompanyName: [{required: true, message: '请选择外发工厂', trigger: 'change'}],
+          outboundContactPerson: [{required: true, message: '请选择联系人', trigger: 'change'}],
+          outboundContactPhone: [{required: true, message: '请选择联系方式', trigger: 'change'}],
+          progressPlan: [{ type: 'object', validator: checkProgressPlan, trigger: 'change' }]
         },
         suppliersSelectVisible: false,
         sampleDialogVisible: false,
-        selectIndex: ''
+        selectIndex: '',
+        progressPlanVisible: false,
+        operator: {},
+        operatorList: [{
+          id: 1,
+          name: '张三'
+        }, {
+          id: 2,
+          name: '李四'
+        }, {
+          id: 3,
+          name: '王五'
+        }]
       }
     },
-    created() {
-      if (this.formData.payplan.payPlanItems.length > 0) {
-        this.setPayPlan(this.formData.payplan);
+    watch: {
+      'formData.progressPlan': function (n, o) {
+        this.validateField('progressPlan');
+      }
+    },
+    created () {
+      this.formData.belongOperator.name = this.$store.getters.currentUser.username;
+      if (this.$route.params.data != null) {
+        this.setFormData(this.$route.params.data);
+      }
+      if (this.formData.payPlan.payPlanItems.length > 0) {
+        this.setPayPlan(this.formData.payPlan);
       }
     },
     destroyed () {
