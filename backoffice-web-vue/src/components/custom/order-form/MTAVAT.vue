@@ -17,7 +17,7 @@
           <el-radio v-model="curNeedVoice" :label="false" :disabled="readOnly">不开发票</el-radio>
         </el-form-item>
       </el-col>
-      <el-col :span="layoutScale[2]">
+      <el-col :span="layoutScale[2]" v-if="curNeedVoice">
         <el-form-item label="税点" label-width="60px">
           <el-select v-model="curTax" placeholder="选择税点" :disabled="readOnly" size="mini" style="width:80px">
             <el-option label="3%" :value="0.03" />

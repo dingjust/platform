@@ -32,7 +32,7 @@
               </el-form-item>
             </el-row>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="10" v-if="form.invoice">
             <el-row type="flex" align="middle">
               <el-form-item label="税点">
                 <h6 class="sales-plan-h6">

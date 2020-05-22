@@ -7,7 +7,7 @@
     </el-dialog>
     <div class="over-tabs">
       <el-row type="flex">
-        <el-button v-if="isCreate" class="material-btn" @click="appendProduct">添加商品</el-button>
+        <el-button v-if="canAdd" class="material-btn" @click="appendProduct">添加商品</el-button>
       </el-row>
     </div>
     <el-tabs type="border-card">
@@ -15,7 +15,7 @@
         <sales-production-products-table :data="form.entries" @onDelete="onProductDelete" @onModify="onProductModify"
           @onDetail="onProductDetail" />
       </el-tab-pane>
-      <el-tab-pane label="生产明细">
+      <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'">
         <sales-production-tasks-table :data="[]" @onDelete="onTaskDelete" @onModify="onTaskModify" />
       </el-tab-pane>
     </el-tabs>
@@ -31,21 +31,19 @@
     Popconfirm
   } from 'element-ui';
 
-  // import SalesPlanProductDetail from '../details/SalesPlanProductDetail';
   import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
   import SalesProductionProductsTable from './SalesProductionProductsTable';
   import SalesProductionTasksTable from './SalesProductionTasksTable';
 
   export default {
-    name: 'SalesProductionTabs',
+    name: 'SalesPlanTabs',
     components: {
-      // SalesPlanProductDetail,
       SalesPlanAppendProductForm,
       SalesProductionProductsTable,
       SalesProductionTasksTable
     },
     props: {
-      isCreate: {
+      canAdd: {
         type: Boolean,
         default: true
       },
@@ -94,7 +92,7 @@
         this.updateIndex = index;
         this.updateEntry = this.form.entries[index];
         this.productFormReadOnly = false,
-        this.salesProductAppendVisible = true;
+          this.salesProductAppendVisible = true;
       },
       //编辑回调
       onSave(entries) {

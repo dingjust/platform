@@ -23,7 +23,7 @@
         <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
-        <sales-production-tabs :isCreate="false" :form="formData" />
+        <sales-plan-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -40,6 +40,11 @@
     </el-card>
     <el-dialog :visible.sync="refuseVisible" width="40%" :close-on-click-modal="false">
       <refuse-dialog v-if="refuseVisible" @getRefuseMsg="getRefuseMsg" />
+    </el-dialog>
+    <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
+        :defaultAddress="formData.address" :isUpdate="false" :productionLeader="formData.productionLeader" />
     </el-dialog>
   </div>
 </template>
@@ -60,10 +65,11 @@
   import {
     accMul
   } from '@/common/js/number';
-  import SalesProductionTabs from '../components/SalesProductionTabs';
+  import SalesPlanTabs from '../components/SalesPlanTabs';
   import RefuseDialog from '../components/RefuseDialog';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
+  import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
 
   export default {
     name: 'SalesPlanDetail',
@@ -71,8 +77,9 @@
     components: {
       SalesOrderDetailForm,
       RefuseDialog,
-      SalesProductionTabs,
-      SalesPlanDetailBtnGroup
+      SalesPlanTabs,
+      SalesPlanDetailBtnGroup,
+      SalesPlanAppendProductForm
     },
     computed: {
       ...mapGetters({
@@ -112,6 +119,25 @@
       },
       onReturn() {
 
+      },
+      appendProduct() {
+        this.salesProductAppendVisible = true;
+      },
+      onAppendProduct(products) {
+        products.forEach(element => {
+          let index = this.formData.entries.findIndex(entry => entry.product.code == element.product.code);
+          if (index == -1) {
+            //移除原有Id;
+            element.materialsSpecEntries.forEach(item => {
+              this.$delete(item, 'id');
+              item.materialsColorEntries.forEach(colorEntry => {
+                this.$delete(colorEntry, 'id');
+              });
+            });
+            this.formData.entries.push(element);
+          }
+        });
+        this.salesProductAppendVisible = false;
       },
       async onSave(submitAudit) {
         const url = this.apis().salesPlanSave(submitAudit);
@@ -159,6 +185,7 @@
     data() {
       return {
         refuseVisible: false,
+        salesProductAppendVisible: false,
         originalData: '',
         machiningTypes: this.$store.state.EnumsModule.cooperationModes,
       }

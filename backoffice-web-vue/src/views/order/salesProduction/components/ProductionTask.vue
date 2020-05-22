@@ -23,8 +23,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="外发工厂规模" label-width="110px" prop='populationScale'
-            :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+          <el-form-item label="外发工厂规模" label-width="110px" prop='populationScale'>
             <el-select v-model="slotData.populationScale" placeholder="请选择">
               <el-option v-for="item in populationScales" :key="item.value" :label="item.name" :value="item.code">
               </el-option>
@@ -34,8 +33,7 @@
       </el-row>
       <el-row class="basic-form-row" type="flex" :gutter="20" align="middle">
         <el-col :span="8">
-          <el-form-item label="指定生产工厂" label-width="110px" prop='appointFactory.name'
-            :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+          <el-form-item label="指定生产工厂" label-width="110px" prop='appointFactory.name'>
             <span style="color:orange">{{slotData.appointFactory!=null?slotData.appointFactory.name:''}}</span>
             <el-button @click="suppliersSelectVisible=!suppliersSelectVisible" size="mini">选择供应商
             </el-button>

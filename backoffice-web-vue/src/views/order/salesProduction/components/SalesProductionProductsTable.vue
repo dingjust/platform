@@ -62,7 +62,7 @@
           <el-button type="text" @click="onDetail(scope.$index)">详情</el-button>
           <template v-if="canEdit(scope.row.auditState)">
             <el-button type="text" @click="onModify(scope.$index)">编辑</el-button>
-            <el-button slot="reference" type="text" @click="onDelete(scope.$index)">删除</el-button>
+            <el-button slot="reference" type="text" @click="onDelete(scope.$index)" :disabled="scope.$index==0">删除</el-button>
           </template>
         </template>
       </el-table-column>

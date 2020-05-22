@@ -1,6 +1,11 @@
 <template>
   <div class="animated fadeIn content">
     <el-card>
+      <div class="sales-plan-triangle_box">
+        <div class="sales-plan-triangle" :style="getTriangleColor">
+          <h6 class="sales-plan-triangle_text">{{getEnum('SalesProductionAuditStatus', formData.auditState)}}</h6>
+        </div>
+      </div>
       <el-row type="flex" justify="space-between">
         <el-col :span="6">
           <div class="sales-plan-form-title">
@@ -9,74 +14,292 @@
         </el-col>
         <el-col :span="16">
           <div>
-            <h6>销售单号：{{code}}</h6>
+            <h6>销售单号：{{formData.code}}</h6>
           </div>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <el-form ref="form" :inline="true" :model="form" hide-required-asterisk>
-        <sales-order-detail-form :form="form"/>
+      <el-form ref="form" :inline="true" :model="formData" hide-required-asterisk>
+        <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
-        <sales-order-products-table :isCreate="false" :form="form"/>
+        <sales-order-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
       </div>
+      <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
+        <el-row type="flex" justify="start" class="basic-form-row">
+          <h5 style="font-weight: bold">拒绝原因</h5>
+        </el-row>
+        <el-row class="basic-form-row" type="flex" justify="center">
+          <el-col :span="22">
+            <h6 class="reject_reason">{{formData.msg}}</h6>
+          </el-col>
+        </el-row>
+      </div>
+      <sales-plan-detail-btn-group :state="formData.auditState" @onReturn="onReturn" @onSave="onSave(false)"
+        @onSubmit="onSave(true)" />
     </el-card>
+    <el-dialog :visible.sync="refuseVisible" width="40%" :close-on-click-modal="false">
+      <refuse-dialog v-if="refuseVisible" @getRefuseMsg="getRefuseMsg" />
+    </el-dialog>
+    <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
+      <sales-order-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :isUpdate="false"
+        :productionLeader="formData.productionLeader" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
-  import SalesOrderProductsTable from '../components/SalesOrderProductsTable';
-  export default {
-    name: 'SalesPlanDetail',
-    props: ['code'],
-    components: {
-      SalesOrderProductsTable,
-      SalesOrderDetailForm
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
 
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers(
+    'SalesProductionOrdersModule'
+  );
+
+  import {
+    accMul
+  } from '@/common/js/number';
+  import SalesOrderTabs from '../components/SalesOrderTabs';
+  import RefuseDialog from '../components/RefuseDialog';
+  import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
+  import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
+  import SalesOrderAppendProductForm from '../form/SalesOrderAppendProductForm';
+
+  export default {
+    name: 'SalesOrderDetail',
+    props: ['id'],
+    components: {
+      SalesOrderDetailForm,
+      RefuseDialog,
+      SalesOrderTabs,
+      SalesPlanDetailBtnGroup,
+      SalesOrderAppendProductForm
     },
     computed: {
-
-    },
-    methods: {
-
-    },
-    data () {
-      return {
-        form: {
-          code: 'CO0000000001',
-          foundPerson: '宁波衣加衣宁波衣加衣',
-          contactPerson: '宁波衣加衣宁波衣加衣',
-          contactPhone: '13888888888',
-          machiningTypes: 'LABOR_AND_MATERIAL',
-          invoice: true,
-          quantity: 5000,
-          total: 1222200202,
-          budget: 12222,
-          profit: 122222,
-          profitMargin: 0.6,
-          approvalBy: '马化腾',
-          orderOwner: '周鸿伟',
-          productionBy: '马云',
-          procurementBy: '伟腾云',
-          status: 'UNAPPROVED',
-          msg: 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz'
+      ...mapGetters({
+        formData: 'formData'
+      }),
+      getTriangleColor: function () {
+        switch (this.formData.auditState) {
+          case 'AUDITING':
+            return 'border-right: 70px solid #114EE8;';
+          case 'PASSED':
+            return 'border-right: 70px solid #4DE811;';
+          case 'AUDITED_FAILED':
+            return 'border-right: 70px solid #D91A17;';
+          case 'NONE':
+            return 'border-right: 70px solid #BBBBBB;';
+          default:
+            return 'border-right: 70px solid #BBBBBB;';
+        }
+      },
+      modifyType: function () {
+        if (this.formData.auditState == 'NONE' || this.formData.auditState == 'AUDITED_FAILED') {
+          return true;
+        } else {
+          return false;
         }
       }
     },
-    created () {
-      console.log(this.code);
+    methods: {
+      appendProduct() {
+        this.salesProductAppendVisible = true;
+      },
+      onAppendProduct(products) {
+        products.forEach(element => {
+          let index = this.formData.entries.findIndex(entry => entry.product.code == element.product.code);
+          if (index == -1) {
+            //移除原有Id;
+            element.materialsSpecEntries.forEach(item => {
+              this.$delete(item, 'id');
+              item.materialsColorEntries.forEach(colorEntry => {
+                this.$delete(colorEntry, 'id');
+              });
+            });
+            this.formData.entries.push(element);
+          }
+        });
+        this.salesProductAppendVisible = false;
+      },
+      async getDetails() {
+        const url = this.apis().getSalesProductionOrderDetails(this.id);
+        const result = await this.$http.get(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$store.state.SalesProductionOrdersModule.formData = Object.assign({}, result.data);
+      },
+      onReturn() {
+        
+      },
+      async onSave(submitAudit) {
+        const url = this.apis().salesPlanSave(submitAudit);
+        const result = await this.$http.post(url, this.formData);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        if (result.code == '0') {
+          this.$message.error(result.msg);
+          return;
+        } else if (result.code == '1') {
+          this.$message.success('更新成功');
+          this.$router.go(0);
+        }
+      },
+      onReturnPage() {
+        this.$router.push({
+          name: '销售计划'
+        })
+      },
+      onRefuse() {
+        this.refuseVisible = true;
+      },
+      getRefuseMsg(msg) {
+        this.refuseVisible = false;
+        this.$message('-----------拒绝销售计划' + msg + '----------------------');
+      },
+      onPass() {
+        this.$confirm('请问是否通过此销售计划', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message('-----------通过销售计划----------------------');
+        });
+      },
+      onClose() {
+        this.$message('-----------关闭----------------------');
+      },
+      validate(callback) {
+        this.$refs.form.validate(callback);
+      }
     },
-    mounted () {
+    data() {
+      return {
+        refuseVisible: false,
+        salesProductAppendVisible: false,
+        originalData: '',
+        machiningTypes: this.$store.state.EnumsModule.cooperationModes,
+      }
+    },
+    created() {
+      this.getDetails();
+    },
+    mounted() {
 
     }
   };
+
 </script>
 
 <style scoped>
   .sales-plan-form-title {
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
+  }
+
+  .sales-plan-box {
+    display: table;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .sales-plan-one {
+    width: 75%;
+    display: table-cell;
+  }
+
+  .sales-plan-three {
+    width: 1%;
+    display: table-cell;
+  }
+
+  .sales-plan-two {
+    width: 24%;
+    display: table-cell;
+    z-index: 100;
+  }
+
+  .sales-plan-triangle_box {
+    margin-top: 1px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .sales-plan-triangle {
+    width: 0;
+    height: 0;
+    border-right: 70px solid white;
+    border-bottom: 70px solid transparent;
+    z-index: 0;
+  }
+
+  .sales-plan-triangle_text {
+    width: 80px;
+    padding-top: 10px;
+    padding-left: 30px;
+    transform: rotateZ(45deg);
+    color: white;
+    font-size: 12px;
+  }
+
+  .sales-border-container {
+    border: 1px solid #DCDFE6;
+    border-radius: 5px;
+    padding-top: 10px;
+  }
+
+  .basic-form-row {
+    padding-left: 10px;
+  }
+
+  .material-btn {
+    background-color: #ffd60c;
+    border-color: #FFD5CE;
+    color: #000;
+    width: 90px;
+    height: 35px;
+  }
+
+  .sales-plan-h6 {
+    padding-top: 8px;
+  }
+
+  /deep/ .el-input__inner {
+    height: 24px;
+    line-height: 24px;
+    border-radius: 2px;
+    padding: 0px;
+  }
+
+  .sales-radio {
+    margin-top: 8px
+  }
+
+  .over-tabs {
+    position: absolute;
+    z-index: 100;
+    right: 30px;
+    margin-top: 2px;
+  }
+
+  /deep/ .el-form-item--mini.el-form-item,
+  .el-form-item--small.el-form-item {
+    margin-bottom: 5px;
+  }
+
+  .reject_reason {
+    color: #606266;
+    padding-bottom: 10px;
   }
 
 </style>

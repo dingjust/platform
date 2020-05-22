@@ -104,7 +104,7 @@
           </el-row> -->
         </div>
       </el-form>
-      <sales-production-tabs :form="form" @appendProduct="appendProduct" />
+      <sales-plan-tabs :form="form" @appendProduct="appendProduct" />
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
           <el-button class="material-btn" @click="onSave(false)">创建保存</el-button>
@@ -125,7 +125,7 @@
 <script>
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
   import MyAddressForm from '@/components/custom/order-form/MyAddressForm';
-  import SalesProductionTabs from '../components/SalesProductionTabs';
+  import SalesPlanTabs from '../components/SalesPlanTabs';
   import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
 
   export default {
@@ -134,7 +134,7 @@
       SalesPlanAppendProductForm,
       MTAVAT,
       MyAddressForm,
-      SalesProductionTabs
+      SalesPlanTabs
     },
     computed: {
 
@@ -151,12 +151,23 @@
         products.forEach(element => {
           let index = this.form.entries.findIndex(entry => entry.product.code == element.product.code);
           if (index == -1) {
+            //移除原有Id;
+            element.materialsSpecEntries.forEach(item => {
+              this.$delete(item, 'id');
+              item.materialsColorEntries.forEach(colorEntry => {
+                this.$delete(colorEntry, 'id');
+              });
+            });
             this.form.entries.push(element);
           }
         });
         this.salesProductAppendVisible = false;
       },
       async validateForms() {
+        if (this.form.entries.length < 1) {
+          this.$message.error('请添加产品');
+          return false;
+        }
         const form = this.$refs.form;
         const addressForm = this.$refs.addressComp.$refs.address;
         // 使用Promise.all 并行去校验结果
@@ -191,7 +202,7 @@
           this.$message.error(result.msg);
           return;
         } else if (result.code == '1') {
-          this.$message.success('销售计划创建成功，编号： ' + result.code);
+          this.$message.success('销售计划创建成功，编号： ' + result.data);
           this.$router.go(-1);
         }
       },
