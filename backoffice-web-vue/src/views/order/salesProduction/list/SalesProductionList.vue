@@ -5,7 +5,7 @@
       <el-table-column label="销售订单号" min-width="130">
         <template slot-scope="scope">
           <el-row type="flex" justify="space-between" align="middle">
-            <el-tag type="info" effect="plain" style="color: #ffd60c;border-color: #ffd60c;">
+            <el-tag type="info" effect="plain" :style="orderTypeTagMap[scope.row.type]">
               {{getEnum('SalesProductionOrderType', scope.row.type)}}</el-tag>
           </el-row>
           <el-row type="flex" justify="space-between" align="middle">
@@ -17,12 +17,12 @@
       </el-table-column>
       <el-table-column label="客户">
         <template slot-scope="scope">
-          <span>{{scope.row.quality}}</span>
+          <span>{{getCustName(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建人">
         <template slot-scope="scope">
-          <span>{{scope.row.quality}}</span>
+          <span>{{scope.row.creator.name}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建日期">
@@ -32,21 +32,17 @@
       </el-table-column>
       <el-table-column label="审批状态" prop="status">
         <template slot-scope="scope">
-          <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-          <span>{{judgeState(scope.row)}}</span>
-          <!--          <span>{{getEnum('salesOrderStatuses', scope.row.status)}}</span>-->
+          <span>{{scope.row.auditState!=null? getEnum('SalesProductionAuditStatus', scope.row.auditState):''}}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单标签" min-width="100">
-        <!-- <template slot-scope="scope">
-        </template> -->
       </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
           <el-row>
             <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">详情</el-button>
-            <el-divider direction="vertical"></el-divider>
-            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">删除</el-button>
+            <!-- <el-divider direction="vertical"></el-divider>
+            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">删除</el-button> -->
           </el-row>
         </template>
       </el-table-column>
@@ -79,11 +75,15 @@
       ...mapActions({
         refresh: 'refresh'
       }),
-      judgeState(row) {
-        if (row.refunding) {
-          return '退款/售后';
+      getCustName(row) {
+        if (row.cooperator != null) {
+          if (row.cooperator.type == 'ONLINE') {
+            return row.cooperator.partner.name;
+          } else {
+            return row.cooperator.name;
+          }
         }
-        return this.getEnum('salesOrderStatuses', row.status);
+        return '';
       },
       allowRemind(row) {
         if (!row.hasOwnProperty('nextReminderDeliveryTime')) {
@@ -128,8 +128,7 @@
         this.$refs.resultTable.clearSelection();
       },
       onDetails(row) {
-        // this.$router.push({name:'销售订单详情',params:{}});
-        this.$router.push('/sales/plan/' + row.id);
+        this.$router.push((row.type == 'SALES_ORDER' ? '/sales/order/' : '/sales/plan/') + row.id);
       },
       countTotalQuantity(entries) {
         let amount = 0;
@@ -190,7 +189,17 @@
     },
     data() {
       return {
-        statuses: this.$store.state.SalesProductionOrdersModule.statuses
+        statuses: this.$store.state.SalesProductionOrdersModule.statuses,
+        orderTypeTagMap: {
+          'SALES_PLAN': {
+            'color': '#ffd60c',
+            'borderColor': '#ffd60c'
+          },
+          'SALES_ORDER': {
+            'color': '#67c23a',
+            'borderColor': '#67c23a'
+          },
+        }
       }
     }
   }

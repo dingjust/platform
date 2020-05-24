@@ -1,16 +1,16 @@
 <template>
   <div class="animated fadeIn">
-    <el-dialog :visible.sync="materialDialogVisible" width="95%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="materialDialogVisible" width="90%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sample-products-select-dialog v-if="materialDialogVisible" @onSelectSample="onSelectSample" />
     </el-dialog>
-    <el-dialog :visible.sync="dialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
+    <el-dialog :visible.sync="dialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false"
       append-to-body>
       <sample-accounting-sheet-form v-if="dialogVisible" :slot-data="openAccountingSheet"
         @onSave="onAccountingSheetSave" :sampleSpecEntries="openSampleSpecEntries"
         :unitPrice="openAccountingSheetUnitPrice" />
     </el-dialog>
-    <el-dialog :visible.sync="viewDialogVisible" width="95%" class="purchase-dialog" :close-on-click-modal="false"
+    <el-dialog :visible.sync="viewDialogVisible" width="90%" class="purchase-dialog" :close-on-click-modal="false"
       append-to-body>
       <sample-accounting-sheet :slot-data="openAccountingSheet" :sampleSpecEntries="openSampleSpecEntries"
         :unitPrice="openAccountingSheetUnitPrice" v-if="viewDialogVisible" :readOnly="readOnly" />
@@ -111,8 +111,6 @@
               </h6>
             </el-col>
           </el-row>
-          <production-task :slotData="entry.productionTask" ref="taskComp" :productionLeader="productionLeader"
-            :readOnly="readOnly" />
         </div>
       </template>
       <el-row type="flex" justify="center" class="info-order-row" align="middle" style="margin-top: 20px"
@@ -145,30 +143,21 @@
   import SampleAttachOrdersForm from '@/views/product/sample/form/SampleAttachOrdersForm';
   import SampleAccountingSheetForm from '@/views/product/sample/form/SampleAccountingSheetForm';
   import SampleAccountingSheet from '@/views/product/sample/components/SampleAccountingSheet';
-  import ProductionTask from '../components/ProductionTask';
   export default {
-    name: 'SalesPlanAppendProductForm',
+    name: 'SalesOrderAppendProductForm',
     components: {
       SampleAccountingSheetForm,
       SampleAccountingSheet,
       SampleAttachOrdersForm,
       SampleProductsSelectDialog,
-      ProductionTask
     },
     props: {
-      productionLeader: {
-        type: Object,
-      },
       isUpdate: {
         type: Boolean,
         default: false
       },
       updataEntry: {
         type: Object,
-      },
-      defaultAddress: {
-        type: Object,
-        default: null
       },
       readOnly: {
         type: Boolean,
@@ -198,17 +187,6 @@
             productionProcessContent: '',
             medias: [],
             costOrder: {},
-            productionTask: {
-              price: '',
-              deliveryTime: '',
-              populationScale: '',
-              cooperationModes: "LABOR_AND_MATERIAL",
-              invoiceTaxPoint: 0.03,
-              invoiceNeeded: false,
-              remark: "",
-              appointFactory: null,
-              shippingAddress: {}
-            }
           }],
         },
         currentProductIndex: 0,
@@ -383,35 +361,13 @@
           productionProcessContent: '',
           medias: [],
           costOrder: {},
-          productionTask: {
-            price: '',
-            deliveryTime: '',
-            populationScale: '',
-            cooperationModes: "LABOR_AND_MATERIAL",
-            invoiceTaxPoint: 0.03,
-            invoiceNeeded: false,
-            remark: "",
-            appointFactory: null,
-            shippingAddress: {}
-          }
         };
-        if (this.defaultAddress != null) {
-          var obj = JSON.parse(JSON.stringify(this.defaultAddress));
-          var address = Object.assign({}, obj);
-          this.$set(newEntry.productionTask, 'shippingAddress', address);
-        }
         this.appendProductForm.sampleList.push(newEntry);
       },
       onSubmit() {
         //获取各层级form
         var forms = [];
         forms.push(this.$refs.appendProductForm);
-        // taskForm数组
-        this.$refs.taskComp.forEach(item => {
-          forms.push(item.$refs.taskForm);
-          //addressForm数组
-          forms.push(item.$refs.addressComp.$refs.address);
-        });
         // 使用Promise.all 并行去校验结果
         Promise.all(forms.map(this.getFormPromise)).then(res => {
           const validateResult = res.every(item => !!item);
@@ -440,12 +396,6 @@
         this.$set(newEntry, 'colors', this.getColorsByEntries(newEntry.colorSizeEntries));
         this.$set(newEntry, 'sizes', this.getSizesByEntries(newEntry.colorSizeEntries));
         this.$set(this.appendProductForm.sampleList, 0, newEntry);
-      } else {
-        if (this.defaultAddress != null) {
-          var obj = JSON.parse(JSON.stringify(this.defaultAddress));
-          var address = Object.assign({}, obj);
-          this.$set(this.appendProductForm.sampleList[0].productionTask, 'shippingAddress', address);
-        }
       }
     }
   }

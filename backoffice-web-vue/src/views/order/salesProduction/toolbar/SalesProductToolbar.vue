@@ -4,7 +4,7 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="19" style="padding-top: 5px">
           <el-form-item label="订单信息" prop="name">
-            <el-input placeholder="请输入订单号，订单名称" v-model="keyword"></el-input>
+            <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keyword"></el-input>
           </el-form-item>
           <el-form-item label="负责人" prop="name">
             <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.name"></el-input>
@@ -13,8 +13,8 @@
             <el-input placeholder="请输入合作商名称" v-model="queryFormData.name"></el-input>
           </el-form-item>
           <el-button-group>
-              <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
-              <el-button native-type="reset" @click="onReset">重置</el-button>
+            <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
+            <el-button native-type="reset" @click="onReset">重置</el-button>
           </el-button-group>
         </el-col>
         <el-col :span="5">
@@ -25,7 +25,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses"/>
+    <sales-production-status-bar :queryFormData="queryFormData" :statuses="statuses" />
   </div>
 </template>
 
@@ -37,7 +37,7 @@
 
   const {
     mapMutations
-  } = createNamespacedHelpers('ContractModule');
+  } = createNamespacedHelpers('SalesProductionOrdersModule');
 
   export default {
     name: 'SalesProductionToolbar',
@@ -45,13 +45,13 @@
       SalesProductionStatusBar
     },
     computed: {},
-    data () {
+    data() {
       return {
         uniquecodeFormVisible: false,
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
@@ -59,7 +59,7 @@
             }
           }, {
             text: '最近一个月',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
@@ -67,7 +67,7 @@
             }
           }, {
             text: '最近三个月',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
@@ -79,8 +79,8 @@
         factories: [],
         brands: [],
         statuses: this.$store.state.EnumsModule.SalesProductionStatuses,
-        keyword: this.$store.state.SalesOrdersModule.keyword,
-        formData: this.$store.state.SalesOrdersModule.formData,
+        keyword: this.$store.state.SalesProductionOrdersModule.keyword,
+        formData: this.$store.state.SalesProductionOrdersModule.formData,
         categories: [],
         queryFormData: {
           name: '',
@@ -96,22 +96,22 @@
         setKeyword: 'keyword',
         setQueryFormData: 'queryFormData'
       }),
-      createSalesPlan () {
+      createSalesPlan() {
         this.$emit('createSalesPlan');
       },
-      createSalesOrder () {
+      createSalesOrder() {
         this.$emit('createSalesOrder');
       },
-      onSearch () {
-        this.$store.state.SalesOrdersModule.keyword = this.keyword;
+      onSearch() {
+        this.$store.state.SalesProductionOrdersModule.keyword = this.keyword;
         this.setKeyword(this.keyword);
         this.$emit('onSearch', 0);
       },
-      onAdvancedSearch () {
+      onAdvancedSearch() {
         this.setQueryFormData(this.queryFormData);
         this.$emit('onAdvancedSearch', 0);
       },
-      async getFactories (query) {
+      async getFactories(query) {
         const url = this.apis().getFactories();
         const result = await this.$http.post(url, {
           keyword: query
@@ -125,7 +125,7 @@
         }
         this.factories = result.content;
       },
-      async getBrands (query) {
+      async getBrands(query) {
         const url = this.apis().getBrands();
         const result = await this.$http.post(url, {
           keyword: query
@@ -139,20 +139,21 @@
         }
         this.brands = result.content;
       },
-      onDateChange (values) {
+      onDateChange(values) {
         console.log(values[0]);
         this.queryFormData.createdDateFrom = values[0];
         this.queryFormData.createdDateTo = values[1];
         this.onAdvancedSearch();
       },
-      async getCategories () {
+      async getCategories() {
         const url = this.apis().getMinorCategories();
         const results = await this.$http.get(url);
         if (!results['errors']) {
           this.categories = results;
         }
       },
-      onReset () {
+      onReset() {
+        this.queryFormData.keyword = '';
         this.queryFormData.name = '';
         this.queryFormData.status = '';
         this.queryFormData.hasContact = '';
@@ -160,7 +161,7 @@
         this.queryFormData.isDelay = '';
       }
     },
-    created () {
+    created() {
       this.getCategories();
       if (this.isTenant()) {
         this.getFactories();
@@ -179,6 +180,7 @@
       }
     }
   }
+
 </script>
 <style scoped>
   .toolbar-search_input {
@@ -194,7 +196,9 @@
     color: #606266;
   }
 
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  .el-form-item--mini.el-form-item,
+  .el-form-item--small.el-form-item {
     margin-bottom: 5px !important;
   }
+
 </style>

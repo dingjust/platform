@@ -1,6 +1,7 @@
 <template>
   <div style="margin-top: 10px">
-    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="payPlanSelectDialogVisible" width="50%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <pay-plan-select @onSelect="onPayPlanSelect" />
     </el-dialog>
     <el-dialog title="保存账务方案" :visible.sync="dialogPayPlanFormVisible" :close-on-click-modal="false">
@@ -22,9 +23,9 @@
         <el-col :span="10">
           <el-row type="flex" align="start" justify="space-between">
             <h6 style="margin-right:5px;margin-bottom: 0px;width:200px;line-height: normal">
-              {{currentFinancialPlan!=''?'当前选中方案：'+currentFinancialPlan:'当前未选择账务方案'}}</h6>
+              {{form.name!=''?'当前选中方案：'+form.name:'当前未选择账务方案'}}</h6>
             <el-button style="margin-right:20px" @click="payPlanSelectDialogVisible=true" type="primary" plain
-                       size="mini">选用我的账务方案</el-button>
+              size="mini">选用我的账务方案</el-button>
             <el-button @click="dialogPayPlanFormVisible=true" type="success" plain size="mini">保存账务方案</el-button>
           </el-row>
         </el-col>
@@ -40,7 +41,7 @@
         <el-col :span="14">
           <span class="info-input-prepend">尾款期数：</span>
           <template v-for="(value,key) in payPlanType">
-            <el-radio class="info-radio" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
+            <el-radio class="info-radio" :key="key" v-model="form.payPlanType" :label="key">{{value}}</el-radio>
           </template>
         </el-col>
       </el-row>
@@ -53,7 +54,7 @@
             <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
             <el-select v-model="form.deposit.event" placeholder="请选择">
               <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key"></el-option>
+                <el-option :label="value" :value="key" :key="key"></el-option>
               </template>
             </el-select>
           </el-row>
@@ -74,8 +75,7 @@
               <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
             </el-col>
             <el-col :span="18">
-              <el-input-number v-model="form.deposit.percent" :precision="0" :step="1" :min="1" :max="99"
-                               size="mini">
+              <el-input-number v-model="form.deposit.percent" :precision="0" :step="1" :min="1" :max="99" size="mini">
               </el-input-number>
               %
             </el-col>
@@ -83,14 +83,14 @@
         </el-col>
       </el-row>
       <el-row class="info-order-row" v-if="form.payPlanType!='MONTHLY_SETTLEMENT'" type="flex" justify="start"
-              align="middle" :gutter="10">
+        align="middle" :gutter="10">
         <el-col :span="8">
           <el-row type="flex" align="middle">
             <h6 style="padding-right: 14px;margin-bottom: 0px">第1期尾款</h6>
             <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
             <el-select v-model="form.balance1.event" placeholder="请选择">
               <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key"></el-option>
+                <el-option :label="value" :value="key" :key="key"></el-option>
               </template>
             </el-select>
           </el-row>
@@ -116,8 +116,7 @@
               <h6 class="info-input-prepend2" style="width: 40px;">付款</h6>
             </el-col>
             <el-col :span="18">
-              <el-input-number v-model="form.balance1.percent" :precision="0" :step="1" :min="1" :max="99"
-                               size="mini">
+              <el-input-number v-model="form.balance1.percent" :precision="0" :step="1" :min="1" :max="99" size="mini">
               </el-input-number>
               %
             </el-col>
@@ -125,14 +124,14 @@
         </el-col>
       </el-row>
       <el-row class="info-order-row" v-if="form.payPlanType=='PHASETWO'" type="flex" justify="start" align="middle"
-              :gutter="10">
+        :gutter="10">
         <el-col :span="8">
           <el-row type="flex" align="middle">
             <h6 style="padding-right: 14px;margin-bottom: 0px">第2期尾款</h6>
             <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
             <el-select v-model="form.balance2.event" placeholder="请选择">
               <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key"></el-option>
+                <el-option :label="value" :value="key" :key="key"></el-option>
               </template>
             </el-select>
           </el-row>
@@ -154,14 +153,14 @@
         </el-col>
       </el-row>
       <el-row class="info-order-row" v-if="form.payPlanType=='MONTHLY_SETTLEMENT'" type="flex" justify="start"
-              align="middle" :gutter="10">
+        align="middle" :gutter="10">
         <el-col :span="8">
           <el-row type="flex" align="middle">
             <h6 style="padding-right: 50px;margin-bottom: 0px">月结</h6>
             <h6 class="info-input-prepend2" style="width:30px;">事件</h6>
             <el-select v-model="form.monthBalance.event" placeholder="请选择">
               <template v-for="(value,key) in triggerEvent">
-                <el-option :label="value" :value="key"></el-option>
+                <el-option :label="value" :value="key" :key="key"></el-option>
               </template>
             </el-select>
           </el-row>
@@ -191,17 +190,6 @@
           </el-row>
         </el-col>
       </el-row>
-      <el-row class="info-order-row" type="flex" justify="start" align="middle" :gutter="10">
-        <el-col :span="2">
-<!--          <el-row type="flex" align="middle">-->
-            <h6 class="info-input-prepend" style="width: 68px">合同显示预览</h6>
-<!--          </el-row>-->
-        </el-col>
-        <el-col :span="22">
-          <el-input type="textarea" autosize v-model="resultPreview">
-          </el-input>
-        </el-col>
-      </el-row>
     </div>
   </div>
 </template>
@@ -209,9 +197,9 @@
 <script>
   import PayPlanSelect from '../PayPlanSelect';
   export default {
-    name: 'MyPayPlanForm',
+    name: 'PayPlanForm',
     props: {
-      form: {
+      vPayPlan: {
         type: Object
       }
     },
@@ -219,82 +207,20 @@
       PayPlanSelect
     },
     computed: {
-      resultPreview: function () {
-        var result;
-        var monthTimeStr = '';
-        if (this.form.monthBalance.time > 0) {
-          monthTimeStr = this.form.monthBalance.time + '号';
-        } else {
-          monthTimeStr = '月底'
-        }
-        if (this.form.isHaveDeposit && this.form.payPlanType == 'PHASETWO') {
-          result = '定金+2期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit
-            .time +
-            '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' +
-            this.form.deposit
-              .percent +
-            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
-            '后' + this.form.balance1
-              .time +
-            '天' + this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent +
-            '%。在产品入库并经甲方检验全部产品合格' +
-            this.triggerEvent[this.form.balance2.event] + '后' +
-            this.form.balance2.time + '天' + this.triggerType[this.form.balance2.range] +
-            '未发现任何产品质量问题的，则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
-        }
-        if (this.form.isHaveDeposit && this.form.payPlanType == 'PHASEONE') {
-          result = '定金+1期尾款\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit
-            .time +
-            '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' +
-            this.form.deposit
-              .percent +
-            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.triggerEvent[this.form.balance1.event] + '后' +
-            this.form.balance1
-              .time +
-            '天' + this.triggerType[this.form.balance1.range] +
-            '未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
-        }
-        if (!this.form.isHaveDeposit && this.form.payPlanType == 'PHASEONE') {
-          result = '无定金1期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库完成在' + this.triggerEvent[this.form.balance1.event] +
-            '后' + this.form
-              .balance1.time + '天' +
-            this.triggerType[this.form.balance1.range] +
-            '未发现任何产品质量问题的则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。'
-        }
-        if (!this.form.isHaveDeposit && this.form.payPlanType == 'PHASETWO') {
-          result = '无定金2期尾款\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,在' + this.triggerEvent[this.form.balance1.event] +
-            '后' + this.form
-              .balance1.time + '天' +
-            this.triggerType[this.form.balance1.range] + '支付合同总价的' + this.form.balance1.percent +
-            '%。在产品入库并经甲方检验全部产品合格' + this.triggerEvent[this.form.balance2.event] + '后' + this.form.balance2.time +
-            '天' + this.triggerType[this.form.balance2.range] +
-            '未发现任何产品质量问题的，则甲方向乙方支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
-        }
-        if (this.form.isHaveDeposit && this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
-          result = '有定金+月结\n        定金：在双方' + this.triggerEvent[this.form.deposit.event] + '后' + this.form.deposit
-            .time +
-            '天' + this.triggerType[this.form.deposit.range] + '，甲方应向乙方支付生效订单总金额的' + this
-              .form.deposit
-              .percent +
-            '%为定金\n        支付方式：甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance.event] +
-            '完成的次月' + monthTimeStr + '支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
-        }
-        if (!this.form.isHaveDeposit && this.form.payPlanType == 'MONTHLY_SETTLEMENT') {
-          result = '无定金月结\n        甲方收到乙方交付的全部产品并经甲方检验全部产品合格入库,甲方在' + this.triggerEvent[this.form.monthBalance
-            .event] +
-            '完成的次月' + monthTimeStr + '支付剩余全部款项（以双方确认的对账单金额为准）。若发现质量问题的，则按甲乙双方对质量的相关条款处理。';
-        }
 
-        return result;
-      }
     },
     methods: {
-      onPayPlanSelect (item) {
-        this.setPayPlan(item);
-        this.currentFinancialPlan = item.name;
+      onPayPlanSelect(item) {
+        //删除原有id
+        this.$delete(item, 'id');
+        item.payPlanItems.forEach(element => {
+          this.$delete(element, 'id');
+        });
+        this.updateCurForm(item);
+        this.form.name = item.name;
         this.payPlanSelectDialogVisible = false;
       },
-      async onPayPlanSave () {
+      async onPayPlanSave() {
         // 组合账务参数
         var payPlanItems = [];
         if (this.form.isHaveDeposit) {
@@ -351,40 +277,95 @@
         this.payPlanForm.remarks = '';
         this.dialogPayPlanFormVisible = false;
       },
-      setPayPlan (payPlan) {
-        this.form.isHaveDeposit = payPlan.isHaveDeposit;
-        this.form.payPlanType = payPlan.payPlanType;
-        payPlan.payPlanItems.forEach((item) => {
-          switch (item.moneyType) {
-            case 'PHASEONE':
-              this.form.balance1.percent = item.payPercent * 100;
-              this.form.balance1.event = item.triggerEvent;
-              this.form.balance1.time = item.triggerDays;
-              this.form.balance1.range = item.triggerType;
-              break;
-            case 'PHASETWO':
-              this.form.balance2.percent = item.payPercent * 100;
-              this.form.balance2.event = item.triggerEvent;
-              this.form.balance2.time = item.triggerDays;
-              this.form.balance2.range = item.triggerType;
-              break;
-            case 'DEPOSIT':
-              this.form.deposit.percent = item.payPercent * 100;
-              this.form.deposit.event = item.triggerEvent;
-              this.form.deposit.time = item.triggerDays;
-              this.form.deposit.range = item.triggerType;
-              break;
-            case 'MONTHLY_SETTLEMENT':
-              this.form.monthBalance.event = item.triggerEvent;
-              this.form.monthBalance.time = item.triggerDays;
-              break;
+      updateCurForm(val) {
+        console.log(JSON.stringify(val));
+
+        if (val.name != null) {
+          this.form.name = val.name;
+        }
+
+        if (val.isHaveDeposit != null) {
+          this.form.isHaveDeposit = val.isHaveDeposit;
+        }
+        if (val.payPlanType != null) {
+          this.form.payPlanType = val.payPlanType;
+        }
+
+        if (val.payPlanItems != null) {
+          val.payPlanItems.forEach(item => {
+            switch (item.moneyType) {
+              case 'DEPOSIT':
+                this.form.deposit.event = item.triggerEvent;
+                this.form.deposit.time = item.triggerDays;
+                this.form.deposit.range = item.triggerType;
+                this.form.deposit.percent = item.payPercent * 100;
+              case 'PHASEONE':
+                this.form.balance1.event = item.triggerEvent;
+                this.form.balance1.time = item.triggerDays;
+                this.form.balance1.range = item.triggerType;
+                this.form.balance1.percent = item.payPercent * 100;
+              case 'PHASETWO':
+                this.form.balance2.event = item.triggerEvent;
+                this.form.balance2.time = item.triggerDays;
+                this.form.balance2.range = item.triggerType;
+                this.form.balance2.percent = item.payPercent * 100;
+              case 'MONTHLY_SETTLEMENT':
+                this.form.monthBalance.event = item.triggerEvent;
+                this.form.monthBalance.time = item.triggerDays;
+            }
+          });
+          this.form.payPlanItems = val.payPlanItems;
+        }
+      },
+      updateBindingForm() {
+        console.log('============');
+        console.log(JSON.stringify(newVal));
+        // 组合账务参数
+        var payPlanItems = [];
+        if (newVal.isHaveDeposit) {
+          payPlanItems.push({
+            payPercent: newVal.deposit.percent * 0.01,
+            triggerEvent: newVal.deposit.event,
+            triggerDays: newVal.deposit.time,
+            moneyType: 'DEPOSIT',
+            triggerType: newVal.deposit.range
+          });
+        }
+        if (newVal.payPlanType == 'MONTHLY_SETTLEMENT') {
+          payPlanItems.push({
+            triggerEvent: newVal.monthBalance.event,
+            moneyType: 'MONTHLY_SETTLEMENT',
+            triggerDays: newVal.monthBalance.time
+          });
+        } else {
+          payPlanItems.push({
+            payPercent: newVal.balance1.percent * 0.01,
+            triggerEvent: newVal.balance1.event,
+            triggerDays: newVal.balance1.time,
+            moneyType: 'PHASEONE',
+            triggerType: newVal.balance1.range
+          });
+          if (newVal.payPlanType == 'PHASETWO') {
+            payPlanItems.push({
+              payPercent: newVal.balance2.percent * 0.01,
+              triggerEvent: newVal.balance2.event,
+              triggerDays: newVal.balance2.time,
+              moneyType: 'PHASETWO',
+              triggerType: newVal.balance2.range
+            });
           }
+        }
+
+        this.$emit('update:vPayPlan', {
+          name: this.form.name,
+          payPlanType: newVal.payPlanType,
+          isHaveDeposit: newVal.isHaveDeposit,
+          payPlanItems: payPlanItems,
         });
       }
     },
-    data () {
+    data() {
       return {
-        currentFinancialPlan: '',
         payPlanSelectDialogVisible: false,
         dialogPayPlanFormVisible: false,
         payPlanType: {
@@ -408,56 +389,97 @@
         payPlanForm: {
           name: '',
           remarks: ''
-        }
-        // form: {
-        //   isHaveDeposit: false,
-        //   payPlanType: 'PHASEONE',
-        //   deposit: {
-        //     event: 'ORDER_CONFIRMED',
-        //     time: 5,
-        //     range: 'INSIDE',
-        //     percent: 0.3
-        //   },
-        //   balance1: {
-        //     event: 'ORDER_CONFIRMED',
-        //     time: 5,
-        //     range: 'INSIDE',
-        //     percent: 0.3
-        //   },
-        //   balance2: {
-        //     event: 'ORDER_CONFIRMED',
-        //     time: 5,
-        //     range: 'INSIDE',
-        //     percent: 0.3
-        //   },
-        //   monthBalance: {
-        //     event: 'ORDER_CONFIRMED',
-        //     time: 5
-        //   }
-        // }
+        },
+        form: {
+          name: '',
+          isHaveDeposit: false,
+          payPlanType: 'PHASEONE',
+          payPlanItems: [],
+          deposit: {
+            event: 'ORDER_CONFIRMED',
+            time: 5,
+            range: 'INSIDE',
+            percent: 0.3
+          },
+          balance1: {
+            event: 'ORDER_CONFIRMED',
+            time: 5,
+            range: 'INSIDE',
+            percent: 0.3
+          },
+          balance2: {
+            event: 'ORDER_CONFIRMED',
+            time: 5,
+            range: 'INSIDE',
+            percent: 0.3
+          },
+          monthBalance: {
+            event: 'ORDER_CONFIRMED',
+            time: 5
+          }
+        },
       }
     },
-    // watch: {
-    //   vPayPlan: {
-    //     handler (newVal, oldVal) {
-    //       this.form = newVal;
-    //     },
-    //     deep: true
-    //   },
-    //   form: {
-    //     handler (newVal, oldVal) {
-    //       this.$emit('update:vPayPlan', newVal);
-    //     }
-    //   }
-    // },
-    created () {
-      console.log('-------------------------------')
-      console.log(this.form)
+    watch: {
+      vPayPlan: {
+        handler(newVal, oldVal) {
+          this.updateCurForm(newVal);
+        },
+      },
+      form: {
+        handler(newVal, oldVal) {
+          // 组合账务参数
+          var payPlanItems = [];
+          if (newVal.isHaveDeposit) {
+            payPlanItems.push({
+              payPercent: newVal.deposit.percent * 0.01,
+              triggerEvent: newVal.deposit.event,
+              triggerDays: newVal.deposit.time,
+              moneyType: 'DEPOSIT',
+              triggerType: newVal.deposit.range
+            });
+          }
+          if (newVal.payPlanType == 'MONTHLY_SETTLEMENT') {
+            payPlanItems.push({
+              triggerEvent: newVal.monthBalance.event,
+              moneyType: 'MONTHLY_SETTLEMENT',
+              triggerDays: newVal.monthBalance.time
+            });
+          } else {
+            payPlanItems.push({
+              payPercent: newVal.balance1.percent * 0.01,
+              triggerEvent: newVal.balance1.event,
+              triggerDays: newVal.balance1.time,
+              moneyType: 'PHASEONE',
+              triggerType: newVal.balance1.range
+            });
+            if (newVal.payPlanType == 'PHASETWO') {
+              payPlanItems.push({
+                payPercent: newVal.balance2.percent * 0.01,
+                triggerEvent: newVal.balance2.event,
+                triggerDays: newVal.balance2.time,
+                moneyType: 'PHASETWO',
+                triggerType: newVal.balance2.range
+              });
+            }
+          }
+          
+          this.$set(this.vPayPlan, 'name', this.form.name);
+          this.$set(this.vPayPlan, 'payPlanType', newVal.payPlanType);
+          this.$set(this.vPayPlan, 'isHaveDeposit', newVal.isHaveDeposit);
+          this.$set(this.vPayPlan, 'payPlanItems', payPlanItems);
+        },
+        deep: true
+      }
     },
-    mounted () {
+    created() {
+      this.updateCurForm(this.vPayPlan);
+    },
+    mounted() {
 
     }
   };
+
 </script>
 
 <style scoped>
@@ -505,4 +527,5 @@
     width: 120px;
     height: 40px;
   }
+
 </style>
