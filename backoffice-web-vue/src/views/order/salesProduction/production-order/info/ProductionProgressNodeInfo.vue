@@ -1,15 +1,15 @@
 <template>
   <div>
     <el-dialog :visible.sync="updateFormVisible" width="70%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
-      <order-progress-update-form :slotData="selectProgressModel" :order="slotData" @callback="onCallback"
-                                  :readonly="readonly" v-if="hackSet" @editSubmit="onEditSubmit" />
+      <progress-report v-if="updateFormVisible" :slotData="selectProgressModel" :readonly="readonly" :order="slotData"
+                       @callback="onCallback" @editSubmit="onEditSubmit"/>
     </el-dialog>
     <el-row type="flex" justify="space-between">
       <template v-for="(item,index) in slotData.progresses">
         <el-col :span="5" :key="index" class="progress-block" @mouseenter.native="onShowButton(true,index)"
                 @mouseleave.native="onShowButton(false,index)">
           <el-row type="flex" justify="center" align="middle">
-            <h6 class="progress-status">{{item.phase}}</h6>
+            <h6 class="progress-status">{{getEnum('productionProgressPhaseTypes', item.phase)}}</h6>
           </el-row>
           <el-row type="flex" justify="center" align="middle">
             <div :class="getLeftLine(index,slotData.progresses)" />
@@ -57,10 +57,8 @@
           <div style="height:20%;">
             <el-row type="flex" style="margin-top:5px;" justify="center" align="middle"
                     v-if="isDoing(index,slotData.progresses)&&slotData.status=='IN_PRODUCTION'&&isFactory()">
-              <authorized :authority="permission.purchaseOrderOperate">
-                <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
-                  {{item.phase}}完成</el-button>
-              </authorized>
+              <el-button size="mini" class="info-detail-logistics_info-btn1" @click="onProgressFinish(item,index)">
+                {{getEnum('productionProgressPhaseTypes', item.phase)}}完成</el-button>
             </el-row>
           </div>
         </el-col>
@@ -70,31 +68,29 @@
 </template>
 
 <script>
+  import {hasPermission} from '@/auth/auth';
+
   import {
     createNamespacedHelpers
   } from 'vuex';
-  import Bus from '@/common/js/bus.js';
+  import ProgressReport from '../report/ProgressReport';
 
   const {
     mapGetters,
     mapActions,
-    mapMutations
   } = createNamespacedHelpers(
-    'PurchaseOrdersModule'
+    'ProductionOrderModule'
   );
-
-  import {hasPermission} from '../../../../../auth/auth';
-  import OrderProgressUpdateForm from '../../../purchase/components/ProductionProgress/OrderProgressUpdateForm';
 
   export default {
     name: 'ProductionProgressNodeInfo',
     props: ['slotData'],
     components: {
-      OrderProgressUpdateForm
+      ProgressReport
     },
     computed: {
       ...mapGetters({
-        contentData: 'detailData'
+        contentData: 'formData'
       }),
       currentSequence: function () {
         var result = 0;
@@ -180,11 +176,12 @@
         }
         this.$message.success('更新成功');
         this.updateFormVisible = false;
-        if (index != this.slotData.progresses.length - 1) {
-          this.slotData.currentPhase = this.slotData.progresses[index + 1].phase;
-        } else {
-          this.slotData.status = 'WAIT_FOR_OUT_OF_STORE';
-        }
+        this.$emit('refreshData');
+        // if (index != this.slotData.progresses.length - 1) {
+        //   this.slotData.currentPhase = this.slotData.progresses[index + 1].phase;
+        // } else {
+        //   this.slotData.status = 'WAIT_FOR_OUT_OF_STORE';
+        // }
       },
       onShowButton (value, index) {
         this.$set(this.showButtonArray, index, value);

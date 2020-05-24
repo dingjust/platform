@@ -6,29 +6,30 @@
           <el-col :span="6">
             <!-- 商品图片 -->
             <img class="purchase-formData-img"
-                 :src="slotData.thumbnail!=null&&slotData.thumbnail.length!=0?slotData.thumbnail.url:'static/img/nopicture.png'">
+                 :src="slotData.product.thumbnail && slotData.product.thumbnail.length!=0 ?
+                 slotData.product.thumbnail.url : 'static/img/nopicture.png'">
           </el-col>
           <el-col :span="18">
             <!-- 商品详情 -->
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>产品名称：{{slotData.name}}</h6>
+                <h6>产品名称：{{slotData.product.name}}</h6>
               </el-col>
               <el-col :span="12">
-                <h6>商品货号：{{slotData.code}}</h6>
-              </el-col>
-            </el-row>
-            <el-row class="info-basic-row" type="flex">
-              <el-col :span="12">
-                <h6>品&#12288;&#12288;类：{{slotData.category}}</h6>
-              </el-col>
-              <el-col :span="12">
-                <h6>交货货期：{{slotData.date}}</h6>
+                <h6>商品货号：{{slotData.product.skuID}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>销售价格：{{slotData.price}}</h6>
+                <h6>品&#12288;&#12288;类：{{slotData.product.category.name}}</h6>
+              </el-col>
+              <el-col :span="12">
+                <h6>交货货期：{{slotData.expectedDeliveryDate | timestampToTime}}</h6>
+              </el-col>
+            </el-row>
+            <el-row class="info-basic-row" type="flex">
+              <el-col :span="12">
+                <h6>销售价格：{{slotData.unitPrice}}</h6>
               </el-col>
               <el-col :span="12">
                 <h6>合作方式：{{getEnum('machiningTypes', slotData.machiningType)}}</h6>
@@ -36,10 +37,10 @@
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>生产数量：{{slotData.quantity}}</h6>
+                <h6>生产数量：{{slotData.totalQuantity}}</h6>
               </el-col>
               <el-col :span="12">
-                <h6>订单来源：{{slotData.orderForm}}</h6>
+                <h6>订单来源：{{slotData.creator.name}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
@@ -49,7 +50,7 @@
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col>
-                <h6>收货地址：{{slotData.address}}</h6>
+                <h6>收货地址：{{slotData.deliveryAddress.details}}</h6>
               </el-col>
             </el-row>
           </el-col>
@@ -60,8 +61,8 @@
             <el-row>
               <el-table :data="showData" border>
                 <el-table-column label="颜色" prop="colorName"></el-table-column>
-                <template v-for="(item, index) in slotData.sizes">
-                  <el-table-column :label="item.name" :prop="item.code"></el-table-column>
+                <template v-for="(item, index) in sizeList">
+                  <el-table-column :label="item.name" :prop="item.name"></el-table-column>
                 </template>
               </el-table>
             </el-row>
@@ -86,15 +87,15 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col>
-            <h6>合作商：</h6>
+            <h6>合作商：{{slotData.cooperator.partner.name}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>联系人：{{slotData.partner.brand.contactsPerson}}</h6>
+            <h6>联系人：{{slotData.cooperator.partner.contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.partner.brand.contactsPhone}}</h6>
+            <h6>联系方式：{{slotData.cooperator.partner.contactPhone}}</h6>
           </el-col>
         </el-row>
 <!--        <el-row class="info-row-title_row">-->
@@ -119,10 +120,10 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>生产负责人：{{slotData.partner.productionCharge}}</h6>
+            <h6>生产负责人：{{isFactory() ? slotData.factoryOperator.name : slotData.brandOperator.name}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>审批人：{{slotData.partner.approvedBy}}</h6>
+            <h6>审批人：{{isFactory() ? slotData.factoryOperator.name : slotData.brandOperator.name}}</h6>
           </el-col>
         </el-row>
         <el-row type="flex">
@@ -203,13 +204,23 @@
       // 构建color/size表数据
       initColorSizeData () {
         let row = {};
-        this.slotData.colorSizes.forEach(val => {
-          row.colorName = val.colorName;
-          val.sizes.forEach(item => {
-            row[item.code] = item.quantity
-          })
-          this.colorSizeData.push(row);
-          row = {};
+        this.slotData.entries.forEach(item => {
+          let index = this.colorSizeData.findIndex(val => val.colorName == item.product.color.name);
+          if (index > -1) {
+            this.colorSizeData[index][item.product.size.name] = item.quantity;
+            this.colorSizeData[index].colorCount += item.quantity;
+          } else {
+            row.colorName = item.product.color.name;
+            row.colorCode = item.product.color.code;
+            row[item.product.size.name] = item.quantity;
+            row.colorCount = item.quantity;
+            this.colorSizeData.push(row);
+            row = {};
+          }
+          let indexS = this.sizeList.findIndex(val => val.name == item.product.size.name);
+          if (indexS < 0) {
+            this.sizeList.push(item.product.size);
+          }
         })
         this.showData = [this.colorSizeData[0]];
       },
@@ -231,13 +242,20 @@
         VIEW_MODE_TABS: 'TABS',
         fileList: [],
         disabled: false,
+        sizeList: [],
         colorSizeData: [],
         showData: [],
         showTable: false
       }
     },
+    watch: {
+      'slotData.entries': function (newVal, oldVal) {
+        if (newVal.length > 0) {
+          this.initColorSizeData();
+        }
+      }
+    },
     created () {
-      this.initColorSizeData();
     }
   }
 </script>

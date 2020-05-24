@@ -63,13 +63,21 @@
           '订单需要双方确认，“生产进度” “发货”等动作由乙方' +
           '完成，任何一方的缺席订单无法顺利完成。',
         selfmanageTitle: '是由甲乙任何一方单方面完成订单的所有流程，' +
-          '不需要双方共同参与，此类订单适合自我单方面管理订单。'
+          '不需要双方共同参与，此类订单适合自我单方面管理订单。',
+        confirmTiTle: '我的身份和订单关联方式一旦选择后期不能更改，' +
+          '你是否确认选择。'
       }
     },
     methods: {
       onSelectType () {
-        this.$router.push({
-          name: '创建外发订单'
+        this.$confirm(this.confirmTiTle, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$router.push({
+            name: '创建外发订单'
+          });
         });
       }
     },
@@ -88,4 +96,5 @@
     width: 120px;
     height: 40px;
   }
+
 </style>

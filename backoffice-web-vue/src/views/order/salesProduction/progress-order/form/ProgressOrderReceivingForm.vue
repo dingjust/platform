@@ -8,7 +8,7 @@
     <el-row class="progress-basic-row" type="flex">
       <el-col :span="6">
         <el-form-item label="工单号">
-          <el-input :disabled="true" placeholder="系统生成"></el-input>
+          <el-input :disabled="true" placeholder="系统生成" v-model="formData.code"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -22,12 +22,12 @@
       </el-col>
       <el-col :span="6">
         <el-form-item label="创建人" prop="creationPerson">
-          <el-input v-model="formData.creationPerson"></el-input>
+          <el-input v-model="formData.creator.name"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="货号" prop="skuID">
-          <el-input v-model="formData.skuID"></el-input>
+          <el-input v-model="formData.product.skuID"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -35,19 +35,19 @@
       <el-col :span="12">
         <el-row>
           <el-form-item label="所属订单">
-            <el-input v-model="formData.order.name"></el-input>
+            <el-input v-model="formData.product.code"></el-input>
           </el-form-item>
           <el-button type="text" style="color: #ffd60c">选择订单</el-button>
         </el-row>
       </el-col>
       <el-col :span="6">
         <el-form-item label="优先级">
-          <el-input v-model="formData.priority"></el-input>
+          <el-input></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="6">
         <el-form-item label="跟单人">
-          <el-input v-model="formData.operator"></el-input>
+          <el-input></el-input>
         </el-form-item>
       </el-col>
     </el-row>

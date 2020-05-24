@@ -44,13 +44,15 @@ import {
   PromoteProductModule,
   // sale-plan
   OutboundOrderModule,
+  ProductionOrderModule,
+  ProgressOrderModule,
   // contract
   ContractModule,
   ContractTemplateModule,
   ContractSealModule,
-  //产能
+  // 产能
   CapacityModule,
-  //报表
+  // 报表
   ReceiptReportModule,
   ProductionProgressReportModule,
 
@@ -126,6 +128,8 @@ export default new Vuex.Store({
     PromoteProductModule,
     // sale-plan
     OutboundOrderModule,
+    ProductionOrderModule,
+    ProgressOrderModule,
     // contract
     ContractModule,
     ContractTemplateModule,
