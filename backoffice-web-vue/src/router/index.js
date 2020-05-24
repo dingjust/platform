@@ -271,7 +271,7 @@ const router = new Router({
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-task/ProductionTaskPage')
       },
       {
-        path: 'production/:code',
+        path: 'production/:id',
         name: '生产任务详情',
         props: true,
         component: () => import(/* webpackChunkName: 'accounts' */ '@/views/order/salesProduction/production-task/details/ProductionTaskDetail')

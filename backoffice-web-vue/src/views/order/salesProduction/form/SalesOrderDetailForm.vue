@@ -8,8 +8,8 @@
         <el-row type="flex" justify="start" align="middle" class="basic-form-row">
           <el-col :span="8">
             <el-row type="flex" align="middle">
-              <el-form-item label="创建人：">
-                <h6 class="sales-plan-h6">{{form.creator!=null?form.creator.name:''}}</h6>
+              <el-form-item label="名称：">
+                <h6 class="sales-plan-h6">{{form.name}}</h6>
               </el-form-item>
             </el-row>
           </el-col>
@@ -88,21 +88,17 @@
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="审批负责人：">
-              <h6 v-show="!modifyType" class="sales-plan-h6">
-                {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
-              <el-select v-model="form.approvers[0]" placeholder="请选择" v-if="modifyType" value-key="id">
-                <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+            <el-form-item label="创建人：">
+              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.creator!=null?form.creator.name:''}}</h6>
             </el-form-item>
           </el-row>
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
-            <el-form-item label="订单负责人：">
-              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.planLeader!=null?form.planLeader.name:''}}</h6>
-              <el-select v-model="form.orderOwner" placeholder="请选择" v-if="modifyType" value-key="id">
+            <el-form-item label="审批负责人：">
+              <h6 v-show="!modifyType" class="sales-plan-h6">
+                {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
+              <el-select v-model="form.approvers[0]" placeholder="请选择" v-if="modifyType" value-key="id">
                 <el-option v-for="item in options" :key="item.value.id" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>

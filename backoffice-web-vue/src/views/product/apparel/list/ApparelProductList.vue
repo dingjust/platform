@@ -23,6 +23,11 @@
           </el-button>
         </template>
       </el-table-column>
+      <el-table-column label="创建时间">
+        <template slot-scope="scope">
+          <span>{{scope.row.creationtime | timestampToTime}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" prop="approvalStatus">
         <template slot-scope="scope">
           <span>{{getEnum('approvalStatuses', scope.row.approvalStatus)}}</span>
@@ -31,16 +36,14 @@
       <el-table-column label="操作" min-width="240">
         <template slot-scope="scope">
           <el-button v-if="modifyShow()" type="text" icon="el-icon-edit" @click="onDetails(scope.row)">详情</el-button>
-          <el-button v-if="approvedShow(scope.row)" type="text" icon="el-icon-edit"
-            @click="onShelf(scope.row)">
+          <el-button v-if="approvedShow(scope.row)" type="text" icon="el-icon-edit" @click="onShelf(scope.row)">
             上架
           </el-button>
-          <el-button v-if="unapprovedShow(scope.row)" type="text"
-            icon="el-icon-edit" @click="onOffShelf(scope.row)">
+          <el-button v-if="unapprovedShow(scope.row)" type="text" icon="el-icon-edit" @click="onOffShelf(scope.row)">
             下架
           </el-button>
-          <el-button v-if="remove(scope.row)" type="text" icon="el-icon-edit"
-                     @click="onDelete(scope.row)">删除</el-button>
+          <el-button v-if="remove(scope.row)" type="text" icon="el-icon-edit" @click="onDelete(scope.row)">删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,26 +55,28 @@
 </template>
 
 <script>
-  import {hasPermission} from '../../../../auth/auth';
+  import {
+    hasPermission
+  } from '../../../../auth/auth';
 
   export default {
     name: 'ApparelProductList',
     props: ['page'],
     computed: {},
     methods: {
-      modifyShow () {
+      modifyShow() {
         return hasPermission(this.permission.productModify)
       },
-      approvedShow (row) {
+      approvedShow(row) {
         return this.isFactory() && row.approvalStatus === 'unapproved' && hasPermission(this.permission.productModify);
       },
-      unapprovedShow (row) {
+      unapprovedShow(row) {
         return this.isFactory() && row.approvalStatus === 'approved' && hasPermission(this.permission.productModify);
       },
-      remove (row) {
+      remove(row) {
         return row.approvalStatus === 'unapproved' && hasPermission(this.permission.productCreate);
       },
-      onPageSizeChanged (val) {
+      onPageSizeChanged(val) {
         this._reset();
 
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
@@ -81,7 +86,7 @@
 
         this.$emit('onSearch', 0, val);
       },
-      onCurrentPageChanged (val) {
+      onCurrentPageChanged(val) {
         if (this.$store.state.ApparelProductsModule.isAdvancedSearch) {
           this.$emit('onAdvancedSearch', val - 1);
           return;
@@ -89,18 +94,18 @@
 
         this.$emit('onSearch', val - 1);
       },
-      _reset () {
+      _reset() {
         this.$refs.resultTable.clearSort();
         this.$refs.resultTable.clearFilter();
         this.$refs.resultTable.clearSelection();
       },
-      onDetails (row) {
+      onDetails(row) {
         this.$emit('onDetails', row);
       },
-      onBelongDetail (row) {
+      onBelongDetail(row) {
         this.$emit('onBelongDetail', row);
       },
-      onShelf (row) {
+      onShelf(row) {
         if (row.productType == null || row.productType.length <= 0 || row.productType.indexOf('FUTURE_GOODS') > -1) {
           console.log(row.productType);
           if (row.steppedPrices == null || row.steppedPrices.length <= 0 || row.basicProduction == null ||
@@ -121,7 +126,8 @@
           }
         }
 
-        if (row.productType != null && (row.productType.indexOf('SPOT_GOODS') > -1 || row.productType.indexOf('TAIL_GOODS') > -1)) {
+        if (row.productType != null && (row.productType.indexOf('SPOT_GOODS') > -1 || row.productType.indexOf(
+            'TAIL_GOODS') > -1)) {
           if (row.spotSteppedPrices == null || row.spotSteppedPrices.length <= 0 || row.deliveryDays == null) {
             this.$message.error('现货/库存尾货价格设置资料未完善，不可上架');
             return;
@@ -149,21 +155,21 @@
 
         this.$emit('onShelf', row);
       },
-      onOffShelf (row) {
+      onOffShelf(row) {
         this.$emit('onOffShelf', row);
       },
-      onDelete (row) {
+      onDelete(row) {
         this.$emit('onDelete', row);
       },
-      numberFormatter (val) {
+      numberFormatter(val) {
         if (val.price !== null && val.price !== '' && val.price !== 'undefined') {
           return parseFloat(val.price).toFixed(2);
         }
       },
-      handleSelectionChange (val) {
+      handleSelectionChange(val) {
         this.multipleSelection = val;
       },
-      totalQuality (colorSizes) {
+      totalQuality(colorSizes) {
         var total = 0;
         colorSizes.forEach((colorSize) => {
           if (colorSize.sizes != null) {
@@ -177,10 +183,11 @@
         return total;
       }
     },
-    data () {
+    data() {
       return {
         multipleSelection: []
       };
     }
   };
+
 </script>

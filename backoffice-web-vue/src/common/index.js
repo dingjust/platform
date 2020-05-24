@@ -677,27 +677,27 @@ const COMMON_APIS = {
     return '/b2b/orders/outbound/update';
   },
   // 获取节点方案列表
-  getProgressPlan () {
+  getProgressPlan() {
     return '/b2b/progress/plan';
   },
   // 新建节点方案
-  createProgressPlan () {
+  createProgressPlan() {
     return '/b2b/progress/plan/create';
   },
   // 获取节点方案详情
-  getProgressPlanDetail (id) {
+  getProgressPlanDetail(id) {
     return '/b2b/progress/plan/' + id;
   },
   // 启用节点方案
-  enableProgressPlan (id) {
+  enableProgressPlan(id) {
     return '/b2b/eable/' + id;
   },
   // 禁用节点方案
-  disableProgressPlan (id) {
+  disableProgressPlan(id) {
     return '/b2b/disable/' + id;
   },
   // 删除节点方案
-  deleteProgressPlan (id) {
+  deleteProgressPlan(id) {
     return '/b2b/delete/' + id;
   }
 };
@@ -1033,7 +1033,16 @@ let NONE_TENANT_APIS = {
   getSalesProductionOrderDetails(id) {
     return '/b2b/sales/production/order/' + id;
   },
+  //生产任务
+  getProductionTaskList() {
+    return '/b2b/production/task/search';
+  },
+  //生产任务详情
+  getProductionTaskDetails(id) {
+    return '/b2b/production/task/detail/' + id;
+  },
 };
+
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
 export {

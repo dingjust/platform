@@ -23,7 +23,7 @@
         <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
-        <sales-order-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
+        <sales-production-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -43,7 +43,7 @@
     </el-dialog>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sales-order-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :isUpdate="false"
+      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :isUpdate="false"
         :productionLeader="formData.productionLeader" />
     </el-dialog>
   </div>
@@ -65,11 +65,11 @@
   import {
     accMul
   } from '@/common/js/number';
-  import SalesOrderTabs from '../components/SalesOrderTabs';
+  import SalesProductionTabs from '../components/SalesProductionTabs';
   import RefuseDialog from '../components/RefuseDialog';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
-  import SalesOrderAppendProductForm from '../form/SalesOrderAppendProductForm';
+  import SalesPlanAppendProductForm from '../form/SalesPlanAppendProductForm';
 
   export default {
     name: 'SalesOrderDetail',
@@ -77,9 +77,9 @@
     components: {
       SalesOrderDetailForm,
       RefuseDialog,
-      SalesOrderTabs,
+      SalesProductionTabs,
       SalesPlanDetailBtnGroup,
-      SalesOrderAppendProductForm
+      SalesPlanAppendProductForm
     },
     computed: {
       ...mapGetters({

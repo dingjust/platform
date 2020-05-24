@@ -16,7 +16,8 @@
         <div class="pt-2"></div>
         <el-row type="flex" :gutter="20">
           <el-col :span="8">
-            <el-form-item label="订单名称">
+            <el-form-item label="订单名称" label-width="110px" prop='name'
+              :rules="{required: true, message: '不能为空', trigger: 'blur'}">
               <el-input v-model="form.name" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
@@ -30,17 +31,20 @@
         </el-row>
         <el-row type="flex" justify="start" :gutter="20">
           <el-col :span="8">
-            <el-form-item label="客户">
+            <el-form-item label="客户" prop='cooperator.name'
+              :rules="{required: true, message: '不能为空', trigger: 'change'}">
               <el-input v-model="form.cooperator.name" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="联系人">
+            <el-form-item label="联系人" prop='cooperator.contactPerson'
+              :rules="{required: true, message: '不能为空', trigger: 'change'}">
               <el-input v-model="form.cooperator.contactPerson" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="联系方式">
+            <el-form-item label="联系方式" prop='cooperator.contactPhone'
+              :rules="{required: true, message: '不能为空', trigger: 'change'}">
               <el-input v-model="form.cooperator.contactPhone" :disabled="true" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
@@ -59,7 +63,7 @@
         <div class="form-block-content">
           <el-row type="flex">
             <el-col :span="18">
-              <MTAVAT :machiningTypes.sync="form.machiningTypes" :needVoice.sync="form.needVoice"
+              <MTAVAT :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.needVoice"
                 :tax.sync="form.tax" />
             </el-col>
           </el-row>
@@ -86,12 +90,12 @@
         </el-row>
         <div class="form-block-content">
           <el-row type="flex" align="center" :gutter="10">
-            <el-col :span="5">
+            <!-- <el-col :span="5">
               <el-form-item label="总负责人" label-width="85px">
                 <el-input v-model="form.productionLeader.name" :disabled="true">
                 </el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="5">
               <el-form-item label="生产负责人" label-width="85px">
                 <el-input v-model="form.productionLeader.name" :disabled="true">
@@ -123,7 +127,7 @@
           <el-col :span="4">订单总数：<span style="color:red;">{{totalAmount}}</span></el-col>
           <el-col :span="4">订单金额：<span style="color:red;">{{totalPrice}}</span></el-col>
         </el-row>
-        <sales-order-tabs style="margin-top:20px;" :form="form" @appendProduct="appendProduct" />
+        <sales-production-tabs style="margin-top:20px;" :form="form" @appendProduct="appendProduct" />
       </el-form>
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
@@ -134,10 +138,10 @@
         </el-col>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="salesProductAppendVisible" width="90%" class="purchase-dialog" append-to-body
+    <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
-      <sales-order-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct" :isUpdate="false"
-        :productionLeader="form.productionLeader" />
+      <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onAppendProduct"
+        :defaultAddress="form.address" :isUpdate="false" :productionLeader="form.productionLeader" />
     </el-dialog>
   </div>
 </template>
@@ -146,9 +150,9 @@
   import SupplierSelect from '@/components/custom/SupplierSelect';
   import MTAVAT from '../../../../components/custom/order-form/MTAVAT';
   import MyAddressForm from '../../../../components/custom/order-form/MyAddressForm';
-  import SalesOrderAppendProductForm from './SalesOrderAppendProductForm';
+  import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
   import PayPlanForm from '@/components/custom/order-form/PayPlanForm';
-  import SalesOrderTabs from '../components/SalesOrderTabs';
+  import SalesProductionTabs from '../components/SalesProductionTabs';
 
   import {
     getEntryTotalAmount,
@@ -158,12 +162,12 @@
   export default {
     name: 'SalesOrderForm',
     components: {
-      SalesOrderAppendProductForm,
+      SalesPlanAppendProductForm,
       MyAddressForm,
       MTAVAT,
       SupplierSelect,
       PayPlanForm,
-      SalesOrderTabs
+      SalesProductionTabs
     },
     computed: {
       //总数量
@@ -288,18 +292,28 @@
           invoiceTaxPoint: 0.03,
           address: {},
           entries: [],
-          machiningTypes: 'LABOR_AND_MATERIAL',
-          payPlan: {},
+          cooperationMode: 'LABOR_AND_MATERIAL',
+          payPlan: {
+            isHaveDeposit: false,
+            payPlanType: 'PHASEONE',
+            payPlanItems: [{
+              moneyType: "PHASEONE",
+              payPercent: 0.003,
+              triggerDays: 5,
+              triggerEvent: "ORDER_CONFIRMED",
+              triggerType: "INSIDE"
+            }]
+          },
           cooperator: {
             id: '',
             name: '',
             contactPhone: '',
             contactPerson: ''
           },
-          planLeader: {
-            id: this.$store.getters.currentUser.id,
-            name: this.$store.getters.currentUser.username
-          },
+          // planLeader: {
+          //   id: this.$store.getters.currentUser.id,
+          //   name: this.$store.getters.currentUser.username
+          // },
           productionLeader: {
             id: this.$store.getters.currentUser.id,
             name: this.$store.getters.currentUser.username

@@ -10,7 +10,7 @@
         <el-col :span="5">
           <el-button class="material-btn">校对预览</el-button>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="5" v-show="!isRead">
           <el-button @click="onEdit" class="material-btn">编辑</el-button>
         </el-col>
       </el-row>
@@ -20,7 +20,7 @@
         <material-spec-entries-table :colors="productsColors" :slotData="curEntries" />
       </el-tab-pane>
       <el-tab-pane label="生产工艺单" name="craft">
-        <el-input type="textarea" placeholder="输入工艺要求" v-model="curProductionProcessContent" :rows="10">
+        <el-input type="textarea" placeholder="输入工艺要求" v-model="curProductionProcessContent" :rows="10" :disabled="isRead">
         </el-input>
         <h6 style="margin-top:10px;">上传工艺单文件</h6>
         <files-upload class="product-images-form-upload" style="margin-top:20px" :slot-data="curMedias"

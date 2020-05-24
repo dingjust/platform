@@ -205,7 +205,7 @@
               cooperationModes: "LABOR_AND_MATERIAL",
               invoiceTaxPoint: 0.03,
               invoiceNeeded: false,
-              remark: "",
+              remarks: "",
               appointFactory: null,
               shippingAddress: {}
             }
@@ -222,6 +222,7 @@
         this.materialDialogVisible = true;
       },
       onSelectSample(data) {
+        console.log(data);
         //构建颜色尺码行
         var colorSizeEntries = [];
         data.colorSizes.forEach(color => {
@@ -390,7 +391,7 @@
             cooperationModes: "LABOR_AND_MATERIAL",
             invoiceTaxPoint: 0.03,
             invoiceNeeded: false,
-            remark: "",
+            remarks: "",
             appointFactory: null,
             shippingAddress: {}
           }
@@ -403,6 +404,13 @@
         this.appendProductForm.sampleList.push(newEntry);
       },
       onSubmit() {
+        //校验是否有核算单
+        let costingValidate = true;
+        this.appendProductForm.sampleList.forEach(element => {
+          if (element.costOrder.isIncludeTax == null) {
+            costingValidate = false;
+          }
+        });
         //获取各层级form
         var forms = [];
         forms.push(this.$refs.appendProductForm);
@@ -415,10 +423,14 @@
         // 使用Promise.all 并行去校验结果
         Promise.all(forms.map(this.getFormPromise)).then(res => {
           const validateResult = res.every(item => !!item);
-          if (validateResult) {
+          if (validateResult && costingValidate) {
             this.$emit('onSave', this.appendProductForm.sampleList);
           } else {
-            this.$message.error('请完善信息');
+            if (!costingValidate) {
+              this.$message.error('请完创建成本核算单');
+            } else {
+              this.$message.error('请完善信息');
+            }
           }
         });
       },

@@ -10,35 +10,31 @@
       </el-table-column>
       <el-table-column label="产品名称" min-width="150">
         <template slot-scope="scope">
-          <span class="ellipsis-name" :title="scope.row.entries[0].product.baseProductDetail.name">
-            {{scope.row.entries[0].product.baseProductDetail.name}}
-          </span>
+          <el-row type="flex" justify="space-between" align="middle" :gutter="50">
+            <el-col :span="6">
+              <img width="54px" v-if="scope.row.productionEntry.product!=null" height="54px"
+                :src="scope.row.productionEntry.product.thumbnail!=null&&scope.row.productionEntry.product.thumbnail.length!=0?scope.row.productionEntry.product.thumbnail.url:'static/img/nopicture.png'" />
+            </el-col>
+            <el-col :span="16">
+              <el-row>
+                <span>{{scope.row.productionEntry.product.name}}</span>
+              </el-row>
+              <el-row>
+                <span>货号:{{scope.row.productionEntry.product!=null?scope.row.productionEntry.product.skuID:''}}</span>
+              </el-row>
+            </el-col>
+          </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="品类">
-        <template slot-scope="scope">
-          <span>{{scope.row.quality}}</span>
-        </template>
+      <el-table-column label="品类" prop="productionEntry.product.category.name">
       </el-table-column>
-      <el-table-column label="订单数量">
-        <template slot-scope="scope">
-          <span>{{scope.row.entries[0].product.baseProductDetail.category.parent.name}}-{{scope.row.entries[0].product.baseProductDetail.category.name}}</span>
-        </template>
+      <el-table-column label="订单数量" prop="productionEntry.quantity">
       </el-table-column>
-      <el-table-column label="创建人">
-        <template slot-scope="scope">
-          <span>{{scope.row.entries[0].product.baseProductDetail.category.parent.name}}-{{scope.row.entries[0].product.baseProductDetail.category.name}}</span>
-        </template>
+      <el-table-column label="创建人" prop="creator.name">
       </el-table-column>
-      <el-table-column label="负责人">
-        <template slot-scope="scope">
-          <span>{{scope.row.entries[0].product.baseProductDetail.category.parent.name}}-{{scope.row.entries[0].product.baseProductDetail.category.name}}</span>
-        </template>
+      <el-table-column label="负责人" prop="productionLeader.name">
       </el-table-column>
-      <el-table-column label="指定工厂">
-        <template slot-scope="scope">
-          <span>{{scope.row.entries[0].product.baseProductDetail.category.parent.name}}-{{scope.row.entries[0].product.baseProductDetail.category.name}}</span>
-        </template>
+      <el-table-column label="指定工厂" prop="appointFactory.name">        
       </el-table-column>
       <el-table-column label="创建日期">
         <template slot-scope="scope">
@@ -53,21 +49,16 @@
       <el-table-column label="状态" prop="status">
         <template slot-scope="scope">
           <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-          <span>{{judgeState(scope.row)}}</span>
+
           <!--          <span>{{getEnum('salesOrderStatuses', scope.row.status)}}</span>-->
-        </template>
-      </el-table-column>
-      <el-table-column label="订单标签" min-width="100">
-        <template slot-scope="scope">
-          <span>{{scope.row.creationtime | formatDate}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
         <template slot-scope="scope">
           <el-row>
-<!--            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">详情</el-button>-->
-<!--            <el-divider direction="vertical"></el-divider>-->
-<!--            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">删除</el-button>-->
+            <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">详情</el-button>
+            <!-- <el-divider direction="vertical"></el-divider>
+                       <el-button type="text" @click="onDetails(scope.row)" class="purchase-list-button">删除</el-button> -->
           </el-row>
         </template>
       </el-table-column>
@@ -75,8 +66,8 @@
     <div class="pt-2"></div>
     <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-                   :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
     <!-- </div> -->
   </div>
@@ -87,6 +78,9 @@
     name: 'ProductionTaskList',
     props: ['page'],
     methods: {
+      onDetails(row) {
+        this.$router.push('/sales/production/' + row.id);
+      },
       onPageSizeChanged(val) {
         // this._reset();
         //
@@ -110,6 +104,7 @@
       },
     }
   }
+
 </script>
 
 <style scoped>

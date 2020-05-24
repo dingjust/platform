@@ -42,7 +42,7 @@
       </el-row>
       <el-row type="flex" align="middle" style="padding-left: 15px">
         <el-col :span="19">
-          <MTAVAT :machiningTypes.sync="slotData.cooperationModes" :needVoice.sync="slotData.invoiceNeeded"
+          <MTAVAT :machiningTypes.sync="slotData.cooperationMode" :needVoice.sync="slotData.invoiceNeeded"
             :tax.sync="slotData.invoiceTaxPoint" />
         </el-col>
         <!-- <el-col :span="5">
@@ -76,7 +76,7 @@
         <h6 class="info-input-prepend_top">备注</h6>
       </el-row>
       <el-row class="basic-form-row" type="flex">
-        <el-input type="textarea" placeholder="请输入内容" v-model="slotData.remark">
+        <el-input type="textarea" placeholder="请输入内容" v-model="slotData.remarks">
         </el-input>
       </el-row>
     </el-form>

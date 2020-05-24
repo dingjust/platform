@@ -44,7 +44,7 @@
     </el-row>
     <el-row type="flex" align="middle" style="padding-left: 15px">
       <el-col :span="19">
-        <MTAVAT :machiningTypes.sync="form.machiningTypes" :needVoice.sync="form.needVoice" :tax.sync="form.tax" />
+        <MTAVAT :machiningTypes.sync="form.machiningType" :needVoice.sync="form.needVoice" :tax.sync="form.tax" />
       </el-col>
       <el-col :span="5">
         <el-form-item  label="入仓方式" label-width="100px">

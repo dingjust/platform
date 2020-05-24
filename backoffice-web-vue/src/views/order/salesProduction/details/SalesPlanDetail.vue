@@ -23,7 +23,7 @@
         <sales-order-detail-form :form="formData" :modifyType="modifyType" />
       </el-form>
       <div style="margin-top: 10px">
-        <sales-plan-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
+        <sales-production-tabs :canAdd="modifyType" :form="formData" @appendProduct="appendProduct" />
       </div>
       <div class="sales-border-container" style="margin-top: 10px" v-if="formData.auditState=='AUDITED_FAILED'">
         <el-row type="flex" justify="start" class="basic-form-row">
@@ -65,7 +65,7 @@
   import {
     accMul
   } from '@/common/js/number';
-  import SalesPlanTabs from '../components/SalesPlanTabs';
+  import SalesProductionTabs from '../components/SalesProductionTabs';
   import RefuseDialog from '../components/RefuseDialog';
   import SalesOrderDetailForm from '../form/SalesOrderDetailForm';
   import SalesPlanDetailBtnGroup from '../components/SalesPlanDetailBtnGroup';
@@ -77,7 +77,7 @@
     components: {
       SalesOrderDetailForm,
       RefuseDialog,
-      SalesPlanTabs,
+      SalesProductionTabs,
       SalesPlanDetailBtnGroup,
       SalesPlanAppendProductForm
     },

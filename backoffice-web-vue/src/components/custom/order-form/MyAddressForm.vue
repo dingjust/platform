@@ -9,7 +9,7 @@
       <el-row type="flex" align="middle" :gutter="10" justify="space-between">
         <el-col :span="7">
           <el-form-item label="送货地址" style="padding-top:8px" :rules="[
-                { required: true, message: '请选择省', trigger: 'change'}]" :prop="'region'">
+                { required: !readOnly, message: '请选择省', trigger: 'change'}]" :prop="'region'">
             <el-select v-model="address.region" value-key="isocode" @change="(val)=>onRegionChanged(val)"
               placeholder="选择省份">
               <el-option v-for="item in regions" :key="item.isocode" :label="item.name" :value="item">
@@ -19,7 +19,7 @@
         </el-col>
         <el-col :span="4">
           <el-form-item :rules="[
-                { required: true, message: '请选择市', trigger: 'change'}]" prop="city">
+                { required: !readOnly, message: '请选择市', trigger: 'change'}]" prop="city">
             <el-select v-model="address.city" @change="(val)=>onCityChanged(val)" value-key="code" placeholder="选择城市">
               <el-option v-for="item in cities" :key="item.code" :label="item.name" :value="item">
               </el-option>
@@ -28,7 +28,7 @@
         </el-col>
         <el-col :span="4">
           <el-form-item :rules="[
-                { required: true, message: '请选择区', trigger: 'change'}]" prop="cityDistrict">
+                { required: !readOnly, message: '请选择区', trigger: 'change'}]" prop="cityDistrict">
             <el-select v-model="address.cityDistrict" value-key="code" placeholder="选择县区">
               <el-option v-for="item in cityDistricts" :key="item.code" :label="item.name" :value="item">
               </el-option>
@@ -37,7 +37,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item :rules="[
-                { required: true, message: '请详细地址', trigger: 'blur'}]" prop="line1">
+                { required: !readOnly, message: '请详细地址', trigger: 'blur'}]" prop="line1">
             <el-input placeholder="详细地址" v-model="address.line1" size="mini">
             </el-input>
           </el-form-item>
@@ -51,14 +51,14 @@
       <el-row type="flex" align="middle" :gutter="10">
         <el-col :span="6">
           <el-form-item label="联系人" label-width="80px" :rules="[
-                { required: true, message: '请填写收货人', trigger: 'blur'}]" prop="fullname">
+                { required: !readOnly, message: '请填写收货人', trigger: 'blur'}]" prop="fullname">
             <el-input placeholder="名称" v-model="address.fullname" size="mini">
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="联系方式" label-width="80px" :rules="[
-                { required: true, message: '请填写联系方式', trigger: 'blur'}]" prop="cellphone">
+                { required: !readOnly, message: '请填写联系方式', trigger: 'blur'}]" prop="cellphone">
             <el-input placeholder="电话" v-model="address.cellphone" size="mini">
             </el-input>
           </el-form-item>
@@ -195,10 +195,10 @@
       },
     },
     created() {
-      this.address = this.vAddress
       this.getRegions();
+      this.address = this.vAddress
       //手动加载选中市区数据
-      if (this.address.region.isocode != null) {
+      if (this.address != null && this.address.region != null && this.address.region != "") {
         this.getCities(this.address.region);
         this.onCityChanged(this.address.city);
       }

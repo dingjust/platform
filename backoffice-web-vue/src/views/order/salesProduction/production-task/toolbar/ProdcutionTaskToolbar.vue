@@ -4,13 +4,13 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="20" style="padding-top: 5px">
           <el-form-item label="订单信息" prop="name">
-            <el-input placeholder="请输入订单号，订单名称" v-model="keyword"></el-input>
+            <el-input placeholder="请输入订单号，订单名称" v-model="queryFormData.keyword"></el-input>
           </el-form-item>
           <el-form-item label="负责人" prop="name">
-            <el-input placeholder="请输入跟单员姓名" v-model="form.name"></el-input>
+            <el-input placeholder="请输入跟单员姓名" v-model="queryFormData.name"></el-input>
           </el-form-item>
           <el-form-item label="合作商" prop="name">
-            <el-input placeholder="请输入合作商名称" v-model="form.name"></el-input>
+            <el-input placeholder="请输入合作商名称" v-model="queryFormData.name"></el-input>
           </el-form-item>
           <el-button-group>
             <el-button type="primary" class="toolbar-search_input" @click="onAdvancedSearch">搜索</el-button>
@@ -24,42 +24,57 @@
         </el-col>
       </el-row>
     </el-form>
-    <sales-production-status-bar :statuses="statuses" :queryFormData="queryFormData"/>
+    <sales-production-status-bar :statuses="statuses" :queryFormData="queryFormData" />
   </div>
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers(
+    'ProductionTasksModule'
+  );
+
   import SalesProductionStatusBar from '../../components/SalesProductionStatusBar';
   export default {
     name: 'ProdcutionTaskToolbar',
-    components: {SalesProductionStatusBar},
+    components: {
+      SalesProductionStatusBar
+    },
     methods: {
-      onAdvancedSearch () {
-
+      ...mapMutations({
+        setKeyword: 'keyword',
+        setQueryFormData: 'queryFormData'
+      }),
+      onAdvancedSearch() {
+        this.setQueryFormData(this.queryFormData);
+        this.$emit('onAdvancedSearch', 0);
       },
-      onReset () {
-
+      onReset() {
+        this.queryFormData.keyword = '';
+        this.queryFormData.status = '';
       },
-      createOutboundOrder () {
+      createOutboundOrder() {
         this.$emit('createOutboundOrder');
       }
     },
-    data () {
+    data() {
       return {
-        keyword: '',
-        form: {
-          name: ''
-        },
         queryFormData: {
+          keyword: '',
           status: '',
-          hasContact: '',
-          isArrears: '',
-          isDelay: ''
         },
         statuses: this.$store.state.EnumsModule.SalesProductionStatuses
       }
     }
   }
+
 </script>
 
 <style scoped>
@@ -76,7 +91,9 @@
     color: #606266;
   }
 
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  .el-form-item--mini.el-form-item,
+  .el-form-item--small.el-form-item {
     margin-bottom: 5px !important;
   }
+
 </style>

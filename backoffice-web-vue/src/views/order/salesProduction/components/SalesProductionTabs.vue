@@ -1,5 +1,5 @@
 <template>
-  <div class="border-container">
+  <div>
     <el-dialog :visible.sync="salesProductAppendVisible" width="80%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
       <sales-plan-append-product-form v-if="salesProductAppendVisible" @onSave="onSave" :isUpdate="true"
@@ -16,7 +16,7 @@
           @onDetail="onProductDetail" />
       </el-tab-pane>
       <el-tab-pane label="生产明细" v-if="form.auditState=='PASSED'">
-        <sales-production-tasks-table :data="[]" @onDelete="onTaskDelete" @onModify="onTaskModify" />
+        <sales-production-tasks-table :data="form.entries" @onDelete="onTaskDelete" @onModify="onTaskModify" />
       </el-tab-pane>
     </el-tabs>
     <!-- <el-dialog :visible.sync="salesProductDetailsVisible" width="80%" class="purchase-dialog" append-to-body
@@ -36,7 +36,7 @@
   import SalesProductionTasksTable from './SalesProductionTasksTable';
 
   export default {
-    name: 'SalesPlanTabs',
+    name: 'SalesProductionTabs',
     components: {
       SalesPlanAppendProductForm,
       SalesProductionProductsTable,

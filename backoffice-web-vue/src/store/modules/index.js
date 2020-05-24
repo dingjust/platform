@@ -42,6 +42,8 @@ import PromoteProductModule from './miscs/promoteProduct';
 
 // sale-plan
 import OutboundOrderModule from './sale-plan/outbound-order'
+import ProductionTasksModule from './sale-plan/production-tasks'
+
 
 // contract
 import ContractModule from './contract/contract';
@@ -99,6 +101,7 @@ export {
   PromoteProductModule,
   // sale-plan
   OutboundOrderModule,
+  ProductionTasksModule,
   // contract
   ContractModule,
   ContractTemplateModule,

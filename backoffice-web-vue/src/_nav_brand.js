@@ -137,16 +137,16 @@ export default {
           permissions: ['COMPANY_COOPERATOR']
         }
       },
-        // {
-        //   name: '组织架构',
-        //   url: '/account/b2b-unit',
-        //   icon: 'iconNone'
-        // },
-        // {
-        //   name: '角色',
-        //   url: '/account/role',
-        //   icon: 'iconNone'
-        // },
+        {
+          name: '组织架构',
+          url: '/account/b2b-unit',
+          icon: 'iconNone'
+        },
+        {
+          name: '角色',
+          url: '/account/role',
+          icon: 'iconNone'
+        },
       {
         name: '地址管理',
         url: '/account/address',

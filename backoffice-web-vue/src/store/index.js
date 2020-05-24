@@ -44,6 +44,7 @@ import {
   PromoteProductModule,
   // sale-plan
   OutboundOrderModule,
+  ProductionTasksModule,
   // contract
   ContractModule,
   ContractTemplateModule,
@@ -126,6 +127,7 @@ export default new Vuex.Store({
     PromoteProductModule,
     // sale-plan
     OutboundOrderModule,
+    ProductionTasksModule,
     // contract
     ContractModule,
     ContractTemplateModule,

@@ -47,41 +47,7 @@
     computed: {},
     data() {
       return {
-        uniquecodeFormVisible: false,
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        dateTime: '',
-        factories: [],
-        brands: [],
         statuses: this.$store.state.EnumsModule.SalesProductionStatuses,
-        keyword: this.$store.state.SalesProductionOrdersModule.keyword,
-        formData: this.$store.state.SalesProductionOrdersModule.formData,
-        categories: [],
         queryFormData: {
           name: '',
           status: '',
@@ -101,11 +67,6 @@
       },
       createSalesOrder() {
         this.$emit('createSalesOrder');
-      },
-      onSearch() {
-        this.$store.state.SalesProductionOrdersModule.keyword = this.keyword;
-        this.setKeyword(this.keyword);
-        this.$emit('onSearch', 0);
       },
       onAdvancedSearch() {
         this.setQueryFormData(this.queryFormData);

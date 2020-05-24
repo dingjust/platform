@@ -21,8 +21,8 @@
         <el-form-item label="税点" label-width="60px">
           <el-select v-model="curTax" placeholder="选择税点" :disabled="readOnly" size="mini" style="width:80px">
             <el-option label="3%" :value="0.03" />
-            <el-option label="5%" :value="0.05" />
-            <el-option label="7%" :value="0.07" />
+            <el-option label="6%" :value="0.06" />
+            <el-option label="13%" :value="0.13" />
           </el-select>
         </el-form-item>
       </el-col>

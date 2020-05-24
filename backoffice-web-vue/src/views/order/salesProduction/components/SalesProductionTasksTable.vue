@@ -26,7 +26,12 @@
           <span>{{getEntryTotalAmount(scope.row)}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="关联任务单"></el-table-column>
+      <el-table-column label="关联任务单" prop="productionTask.code">
+        <template slot-scope="scope">
+          <el-button type="text" @click="onTaskDetail(scope.row.productionTask.id)">{{scope.row.productionTask.code}}
+          </el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="关联外发单">
       </el-table-column>
       <el-table-column label="关联生产单">
@@ -69,6 +74,9 @@
       },
       onDelete(index) {
         this.$emit('onTaskDelete', index);
+      },
+      onTaskDetail(id) {
+        this.$router.push('/sales/production/' + id);
       },
       onClose() {
 

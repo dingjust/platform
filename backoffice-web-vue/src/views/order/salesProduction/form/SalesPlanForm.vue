@@ -78,33 +78,10 @@
                 </template>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="2">
-              <el-form-item label="" label-width="5px">
-                <el-checkbox v-model="form.auditNeeded">无需审核</el-checkbox>
-              </el-form-item>
-            </el-col>
-            <el-col :span="2">
-              <el-form-item label="" label-width="5px">
-                <el-button @click="appendProductionCadre">+ 添加审批人</el-button>
-              </el-form-item>
-            </el-col> -->
           </el-row>
-          <!-- <el-row type="flex" align="start" :gutter="10" :key="index" v-for="(item, index) in form.productionCharge"
-            v-if="index % 6 == 0">
-            <template v-for="(val,inner_index) in form.productionCharge.slice(index, index+6)">
-              <el-col :span="4" :key="inner_index">
-                <el-form-item label="审批人" label-width="85px">
-                  <el-select v-model="form.productionCadre[index]" clearable placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </template>
-          </el-row> -->
         </div>
       </el-form>
-      <sales-plan-tabs :form="form" @appendProduct="appendProduct" />
+      <sales-production-tabs :form="form" @appendProduct="appendProduct" />
       <el-row style="margin-top: 20px" type="flex" justify="center" align="middle" :gutter="50">
         <el-col :span="5">
           <el-button class="material-btn" @click="onSave(false)">创建保存</el-button>
@@ -125,7 +102,7 @@
 <script>
   import MTAVAT from '@/components/custom/order-form/MTAVAT';
   import MyAddressForm from '@/components/custom/order-form/MyAddressForm';
-  import SalesPlanTabs from '../components/SalesPlanTabs';
+  import SalesProductionTabs from '../components/SalesProductionTabs';
   import SalesPlanAppendProductForm from './SalesPlanAppendProductForm';
 
   export default {
@@ -134,7 +111,7 @@
       SalesPlanAppendProductForm,
       MTAVAT,
       MyAddressForm,
-      SalesPlanTabs
+      SalesProductionTabs
     },
     computed: {
 

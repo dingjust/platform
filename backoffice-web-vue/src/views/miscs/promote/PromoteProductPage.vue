@@ -11,40 +11,42 @@
       <div class="pt-2"></div>
       <el-row>
         <el-tabs ref="tab" v-model="activeName" type="card" @tab-click="handleClick" :before-leave="tabBeforeLeave">
-          <el-tab-pane label="顶部轮播(工厂)" name="FACTORY_CAROUSEL"/>
-          <el-tab-pane label="顶部轮播(品牌)" name="BRAND_CAROUSEL"/>
-          <el-tab-pane label="顶部轮播(看款下单)" name="SEE_PRODUCT_CAROUSEL"/>
-          <el-tab-pane label="今日新款" name="TODAY_NEW"/>
-          <el-tab-pane label="当季爆款" name="SEASON_HOT"/>
-          <el-tab-pane label="直播专供" name="LIVE_BROADCAST_PROVIDE"/>
-          <el-tab-pane label="为你推荐" name="RECOMMEND_FOR_YOU"/>
-          <el-tab-pane label="中部轮播(看款下单)" name="BANNER"/>
+          <el-tab-pane label="顶部轮播(工厂)" name="FACTORY_CAROUSEL" />
+          <el-tab-pane label="顶部轮播(品牌)" name="BRAND_CAROUSEL" />
+          <el-tab-pane label="顶部轮播(看款下单)" name="SEE_PRODUCT_CAROUSEL" />
+          <el-tab-pane label="今日新款" name="TODAY_NEW" />
+          <el-tab-pane label="当季爆款" name="SEASON_HOT" />
+          <el-tab-pane label="直播专供" name="LIVE_BROADCAST_PROVIDE" />
+          <el-tab-pane label="为你推荐" name="RECOMMEND_FOR_YOU" />
+          <el-tab-pane label="中部轮播(看款下单)" name="BANNER" />
         </el-tabs>
-        <promote-product-carousel ref="carousel" v-if="activeName == 'SEE_PRODUCT_CAROUSEL'" @operationCount="operationCount" @returnCount="returnCount"/>
-        <promote-product-factory-carousel v-if="activeName == 'FACTORY_CAROUSEL'" @operationCount="operationCount" @returnCount="returnCount"/>
-        <promote-product-brand-carousel v-if="activeName == 'BRAND_CAROUSEL'" @operationCount="operationCount" @returnCount="returnCount"/>
-        <promote-product-today ref="today" v-if="activeName == 'TODAY_NEW'" @onConfirmToday="onConfirmToday" :formData="formData"
-                               @operationCount="operationCount" @returnCount="returnCount"/>
-        <promote-product-season ref="season" v-if="activeName == 'SEASON_HOT'" :formData="formData" :slotData="promoteProductList"
-                                @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
-                                @operationCount="operationCount" @returnCount="returnCount"
-                                @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
-        <promote-product-live ref="live" v-if="activeName == 'LIVE_BROADCAST_PROVIDE'" :formData="formData" :slotData="promoteProductList"
-                              @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
-                              @operationCount="operationCount" @returnCount="returnCount"
-                              @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
-        <promote-product-for-you ref="forYou" v-if="activeName == 'RECOMMEND_FOR_YOU'" :formData="formData" :slotData="promoteProductList"
-                                 @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
-                                 @operationCount="operationCount" @returnCount="returnCount"
-                                 @onListSearch="onListSearch" @onDelete="onDelete" @_moveNumber="_moveNumber"/>
-        <promote-product-banner ref="banner" v-if="activeName == 'BANNER'" @operationCount="operationCount" @returnCount="returnCount"/>
+        <promote-product-carousel ref="carousel" v-if="activeName == 'SEE_PRODUCT_CAROUSEL'"
+          @operationCount="operationCount" @returnCount="returnCount" />
+        <promote-product-factory-carousel v-if="activeName == 'FACTORY_CAROUSEL'" @operationCount="operationCount"
+          @returnCount="returnCount" />
+        <promote-product-brand-carousel v-if="activeName == 'BRAND_CAROUSEL'" @operationCount="operationCount"
+          @returnCount="returnCount" />
+        <promote-product-today ref="today" v-if="activeName == 'TODAY_NEW'" @onConfirmToday="onConfirmToday"
+          :formData="formData" @operationCount="operationCount" @returnCount="returnCount" />
+        <promote-product-season ref="season" v-if="activeName == 'SEASON_HOT'" :formData="formData"
+          :slotData="promoteProductList" @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
+          @operationCount="operationCount" @returnCount="returnCount" @onListSearch="onListSearch" @onDelete="onDelete"
+          @_moveNumber="_moveNumber" />
+        <promote-product-live ref="live" v-if="activeName == 'LIVE_BROADCAST_PROVIDE'" :formData="formData"
+          :slotData="promoteProductList" @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
+          @operationCount="operationCount" @returnCount="returnCount" @onListSearch="onListSearch" @onDelete="onDelete"
+          @_moveNumber="_moveNumber" />
+        <promote-product-for-you ref="forYou" v-if="activeName == 'RECOMMEND_FOR_YOU'" :formData="formData"
+          :slotData="promoteProductList" @onProuductSelect="onProuductSelect" @onConfirm="onConfirm"
+          @operationCount="operationCount" @returnCount="returnCount" @onListSearch="onListSearch" @onDelete="onDelete"
+          @_moveNumber="_moveNumber" />
+        <promote-product-banner ref="banner" v-if="activeName == 'BANNER'" @operationCount="operationCount"
+          @returnCount="returnCount" />
       </el-row>
     </el-card>
     <el-dialog :visible.sync="productSelectVisible" width="80%" :close-on-click-modal="false" class="purchase-dialog">
-      <promote-product-select-dialog v-if="productSelectVisible" :page="page"
-                                     @onAdvancedSearch="onAdvancedSearch"
-                                     @onSearch="onSearch"
-                                     @confirmPromoteProductList="confirmPromoteProductList"/>
+      <promote-product-select-dialog v-if="productSelectVisible" :page="page" @onAdvancedSearch="onAdvancedSearch"
+        @onSearch="onSearch" @confirmPromoteProductList="confirmPromoteProductList" />
     </el-dialog>
   </div>
 </template>
@@ -98,7 +100,7 @@
       ...mapMutations({
         setAdvancedSearch: 'isAdvancedSearch'
       }),
-      onSearch (page, size) {
+      onSearch(page, size) {
         this.setAdvancedSearch(false);
         const keyword = this.keyword;
         const url = this.apis().getApparelProducts();
@@ -109,7 +111,7 @@
           size
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         this.setAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getApparelProducts();
@@ -120,8 +122,8 @@
           size
         });
       },
-      handleClick () {},
-      getPageData (nval) {
+      handleClick() {},
+      getPageData(nval) {
         if (this.carouselEnum.indexOf(nval) < 0) {
           this.getProductPlate(nval);
         }
@@ -129,7 +131,7 @@
         //   this.getProductPlate(nval);
         // }
       },
-      tabBeforeLeave (nval, oval) {
+      tabBeforeLeave(nval, oval) {
         let flag
         if (this.carouselEnum.indexOf(this.activeName) > -1 || this.activeName === 'TODAY_NEW') {
           flag = this.leaveCount > 1
@@ -149,7 +151,7 @@
           return true;
         }
       },
-      _judge (nval) {
+      _judge(nval) {
         return this.$confirm('是否切换标签 , 更改内容将不会被保存', '提示', {
           confirmButtonText: '离开页面',
           cancelButtonText: '留在页面',
@@ -160,7 +162,7 @@
           this.getPageData(nval);
         })
       },
-      async getProductPlate (activeName) {
+      async getProductPlate(activeName) {
         this.formData = {
           title: '',
           subtitle: '',
@@ -179,7 +181,8 @@
           this.formData = Object.assign({}, result.data);
         }
         if (this.carouselEnum.indexOf(activeName) < 0 && activeName != 'TODAY_NEW') {
-          this.$store.state.PromoteProductModule.promoteProductList = Object.assign([], this.formData.sequenceProducts);
+          this.$store.state.PromoteProductModule.promoteProductList = Object.assign([], this.formData
+            .sequenceProducts);
           this.promoteProductList = this.formData.sequenceProducts;
           this.originData = this.formData.sequenceProducts;
         }
@@ -190,7 +193,7 @@
         // }
         this.returnCount();
       },
-      compare (property) {
+      compare(property) {
         return function (a, b) {
           const value1 = a[property];
           const value2 = b[property];
@@ -198,7 +201,7 @@
         }
       },
       // 提交今日新款
-      async onConfirmToday (submitData) {
+      async onConfirmToday(submitData) {
         const url = this.apis().createProductPlate();
         const result = await this.$http.post(url, submitData);
         if (result.code === 0) {
@@ -209,14 +212,14 @@
         this.getProductPlate(this.activeName);
         this.returnCount();
       },
-      onProuductSelect () {
+      onProuductSelect() {
         this.queryFormData.approvalStatuses = 'approved';
         // this.onSearch();
         this.onAdvancedSearch();
         this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
         this.productSelectVisible = true;
       },
-      confirmPromoteProductList () {
+      confirmPromoteProductList() {
         let list = this.$store.state.PromoteProductModule.promoteProductList;
         let showList = [];
         for (let i = 0; i < list.length; i++) {
@@ -231,7 +234,7 @@
         this.productSelectVisible = false;
       },
       // 提交当季爆款,直播专供,为你推荐
-      async onConfirm (titleData) {
+      async onConfirm(titleData) {
         let productList = this.$store.state.PromoteProductModule.promoteProductList;
         let productData = [];
         let item;
@@ -254,7 +257,7 @@
         this.$message.success('操作成功');
         this.getProductPlate(this.activeName);
       },
-      onListSearch (keyword) {
+      onListSearch(keyword) {
         if (keyword.replace(/\s*/g, '').length == 0) {
           this.promoteProductList = this.originData;
           this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
@@ -266,7 +269,7 @@
           this.$store.state.PromoteProductModule.promoteProductList = this.promoteProductList;
         }
       },
-      onDelete (row, keyword) {
+      onDelete(row, keyword) {
         const index = this.originData.findIndex((item) => item.id == row.id);
         this.originData.splice(index, 1);
         for (let i = 0; i < this.originData.length; i++) {
@@ -275,7 +278,7 @@
         this.onListSearch(keyword)
         this.$message.success('删除商品成功');
       },
-      _moveNumber (index, modifyText, keyword) {
+      _moveNumber(index, modifyText, keyword) {
         const modifyT = modifyText - this.originData.length >= 0 ? this.originData.length : modifyText;
         const item = this.originData.splice(index - 1, 1);
         this.originData.splice(modifyT - 1, 0, item[0]);
@@ -285,16 +288,16 @@
         this.onListSearch(keyword)
         this.$message.success('移动商品序号成功');
       },
-      operationCount () {
+      operationCount() {
         this.leaveCount++;
         console.log(this.leaveCount);
       },
-      returnCount () {
+      returnCount() {
         this.leaveCount = 0;
         console.log(this.leaveCount);
       }
     },
-    data () {
+    data() {
       return {
         carouselType: 'CT004',
         activeName: 'FACTORY_CAROUSEL',
@@ -318,10 +321,10 @@
         ]
       }
     },
-    created () {
+    created() {
       // this.onSearch();
     },
-    beforeRouteLeave (to, from, next) {
+    beforeRouteLeave(to, from, next) {
       next(false);
       let flag
       if (this.carouselEnum.indexOf(this.activeName) > -1 || this.activeName === 'TODAY_NEW') {
@@ -352,6 +355,7 @@
       }
     }
   }
+
 </script>
 
 <style scoped>
@@ -359,4 +363,5 @@
     border-left: 2px solid #ffd60c;
     padding-left: 10px;
   }
+
 </style>

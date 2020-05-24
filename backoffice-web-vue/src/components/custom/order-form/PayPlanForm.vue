@@ -473,7 +473,7 @@
       }
     },
     created() {
-      this.updateCurForm(this.vPayPlan);
+      this.updateCurForm(this.vPayPlan);      
     },
     mounted() {
 

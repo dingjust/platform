@@ -8,77 +8,110 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <h6>任务单号:&#12288;{{code}}</h6>
+          <!-- <h6>任务单号:&#12288;{{formData.entries[0].productionTask.code}}</h6> -->
         </el-col>
         <el-col :span="6">
-          <h6>订单状态:&#12288;{{form.status}}</h6>
+          <h6>订单状态:&#12288;{{}}</h6>
         </el-col>
       </el-row>
       <div class="pt-2"></div>
-      <receiving-details-form/>
-      <el-form>
-        <production-task-invoice-form :title="title"/>
-      </el-form>
+      <receiving-details-form :slotData="formData" />
+      <div style="margin-top: 50px">
+        <el-row style="margin-top:20px;">
+          <sample-attach-orders-form v-if="formData.entries[0]!=null"
+            :entries.sync="formData.entries[0].materialsSpecEntries" :medias.sync="formData.entries[0].medias"
+            :isRead="true" :productionProcessContent.sync="formData.entries[0].productionProcessContent"
+            :productsColors="colors" />
+        </el-row>
+        <!-- <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10"> -->
+        <!-- <el-col :span="2">
+            <h6 style="padding-top:8px">核算单：</h6>
+          </el-col>
+          <el-col :span="18">
+            <h6 class="account_sheet-btn" @click="onUpdateAccountingSheet(productIndex)"
+              v-if="entry.costOrder.isIncludeTax!=null">
+              {{entry.costOrder.id!=null?entry.costOrder.id:'成本核算单'}}
+            </h6>
+          </el-col> -->
+        <accounting-sheet-btn :slotData="formData.entries[0].costOrder" :unitPrice="formData.entries[0].unitPrice" />
+        <!-- </el-row> -->
+      </div>
+      <production-task :slotData="formData.entries[0].productionTask" ref="taskComp"
+        :productionLeader="formData.productionLeader" :readOnly="true" />
     </el-card>
   </div>
 </template>
 
 <script>
+  import {
+    createNamespacedHelpers
+  } from 'vuex';
+
+  const {
+    mapGetters,
+    mapActions,
+    mapMutations
+  } = createNamespacedHelpers(
+    'ProductionTasksModule'
+  );
+
+
   import ReceivingDetailsForm from '../form/ReceivingDetailsForm';
-  import InvoiceDetailsForm from '../form/InvoiceDetailsForm';
-  import ProductionTaskProductForm from '../form/ProductionTaskProductForm';
-  import ProductionTaskInvoiceForm from '../form/ProductionTaskInvoiceForm';
+  import ProductionTask from '../../components/ProductionTask';
+  import SampleAttachOrdersForm from '@/views/product/sample/form/SampleAttachOrdersForm';
+  import AccountingSheetBtn from '@/views/product/sample/components/AccountingSheetBtn';
+
   export default {
     name: 'ProductionTaskDetails',
-    props: ['code'],
-    components: {ProductionTaskInvoiceForm, ProductionTaskProductForm, InvoiceDetailsForm, ReceivingDetailsForm},
+    props: ['id'],
+    components: {
+      ReceivingDetailsForm,
+      ProductionTask,
+      SampleAttachOrdersForm,
+      AccountingSheetBtn
+    },
+    computed: {
+      ...mapGetters({
+        formData: 'formData'
+      }),
+      colors: function () {
+        var colors = [];
+        if (this.formData.entries[0] != null) {
+          this.formData.entries[0].colorSizeEntries.forEach(entry => {
+            let index = colors.findIndex(color => color.code == entry.color.code);
+            if (index == -1) {
+              colors.push(entry.color);
+            }
+          });
+        }
+        return colors;
+      },
+    },
     methods: {
-      onConfirm () {
+      async getDetails() {
+        const url = this.apis().getProductionTaskDetails(this.id);
+        const result = await this.$http.get(url);
+        if (result.code === 0) {
+          this.$message.error(result.msg);
+          return;
+        }
+        this.$store.state.ProductionTasksModule.formData = Object.assign({}, result.data);
+      },
+      onConfirm() {
 
       },
-      onCreate () {
+      onCreate() {}
+    },
+    data() {
+      return {
 
       }
     },
-    data () {
-      return {
-        title: '生产需求',
-        form: {
-          id: 'WX1020399853247895712',
-          status: '未审核'
-        },
-        product: {
-          name: '全棉磨毛斜布',
-          code: 'CO00000001',
-          category: 'polo衫',
-          date: '2019-2-19',
-          price: 120000000.00,
-          machiningType: 'LABOR_AND_MATERIAL',
-          quantity: 100000,
-          orderForm: '订单来源',
-          relationOrder: 'CO00000001',
-          address: '广东省广州市海珠区云顶同创汇二期707'
-        },
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: ''
-      }
+    created() {
+      this.getDetails();
     }
   }
+
 </script>
 
 <style scoped>
@@ -98,21 +131,10 @@
     margin-top: 10px;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-  .border-container{
+  .border-container {
     border: 1px solid #DCDFE6;
     border-radius: 5px;
-    padding-top:10px;
+    padding-top: 10px;
   }
 
   .production-task-btn {
@@ -122,4 +144,5 @@
     height: 40px;
     color: #606266;
   }
+
 </style>
