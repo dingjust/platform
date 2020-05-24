@@ -191,14 +191,14 @@ const actions = {
     dispatch('search', {url: state.url, keyword, statuses, page: currentPageNumber, size: currentPageSize});
   },
   async getDetail ({dispatch, commit, state}, {code}) {
-    const url = '/b2b/orders/purchase/' + code;
+    const url = '/b2b/orders/production/work/' + code;
     const result = await http.get(url);
     if (!result['errors']) {
       commit('formData', result);
     }
   },
   async refreshDetail ({dispatch, commit, state}) {
-    const url = '/b2b/orders/purchase/' + state.formData.code;
+    const url = '/b2b/orders/production/work/' + state.formData.code;
     const result = await http.get(url);
     if (!result['errors']) {
       commit('formData', result);

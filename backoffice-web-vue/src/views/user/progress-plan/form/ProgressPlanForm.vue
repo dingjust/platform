@@ -22,37 +22,6 @@
           </el-form-item>
         </el-row>
         <progress-setting-form :formData="formData"/>
-<!--        <el-row class="progress-basic-row" :gutter="20">-->
-<!--          <el-col :span="12">-->
-<!--            <div class="progress-container">-->
-<!--              <el-table ref="nodeTable" :data="formData.productionProgresses" stripe :height="autoHeight">-->
-<!--                <el-table-column label="节点名称" prop="phase"></el-table-column>-->
-<!--                <el-table-column label="预警天数">-->
-<!--                  <template slot-scope="scope">-->
-<!--                    <el-input v-model="scope.row.delayedDays"></el-input>-->
-<!--                  </template>-->
-<!--                </el-table-column>-->
-<!--                <el-table-column label="操作">-->
-<!--                  <template slot-scope="scope">-->
-<!--                    <el-button type="text" @click="onDelete(scope.row)">删除</el-button>-->
-<!--                  </template>-->
-<!--                </el-table-column>-->
-<!--              </el-table>-->
-<!--            </div>-->
-<!--          </el-col>-->
-<!--          <el-col :span="12">-->
-<!--            <div class="progress-container">-->
-<!--              <el-table ref="systemTable" stripe :data="data" :height="autoHeight">-->
-<!--                <el-table-column label="节点名称" prop="phase"></el-table-column>-->
-<!--                <el-table-column label="操作">-->
-<!--                  <template slot-scope="scope">-->
-<!--                    <el-button type="text" @click="onAppend(scope.row)" :disabled="isDisabled(scope.row)">添加</el-button>-->
-<!--                  </template>-->
-<!--                </el-table-column>-->
-<!--              </el-table>-->
-<!--            </div>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
         <el-row class="progress-basic-row">
           <el-form-item prop="productionProgresses" label-width="100">
             <div></div>

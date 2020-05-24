@@ -690,15 +690,15 @@ const COMMON_APIS = {
   },
   // 启用节点方案
   enableProgressPlan (id) {
-    return '/b2b/eable/' + id;
+    return '/b2b/progress/plan/enable/' + id;
   },
   // 禁用节点方案
   disableProgressPlan (id) {
-    return '/b2b/disable/' + id;
+    return '/b2b/progress/plan/disEnable/' + id;
   },
   // 删除节点方案
   deleteProgressPlan (id) {
-    return '/b2b/delete/' + id;
+    return '/b2b/progress/plan/delete/' + id;
   }
 };
 

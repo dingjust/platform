@@ -39,7 +39,7 @@
             icon="el-icon-edit" @click="onOffShelf(scope.row)">
             下架
           </el-button>
-          <el-button v-if="remove(scope.row)" type="text" icon="el-icon-edit"
+          <el-button :disabled="!remove(scope.row)" type="text" icon="el-icon-edit"
                      @click="onDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
