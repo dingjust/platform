@@ -1,7 +1,7 @@
 <template>
   <div class="info-remarks-body" @mouseenter="onShowButton(true)" @mouseleave="onShowButton(false)">
     <el-row>
-      <production-progress-node-info :slot-data="slotData"/>
+      <production-progress-node-info :slot-data="slotData" @refreshData="refreshData"/>
     </el-row>
     <div class="progress-modal" v-show="showButton" v-if="modalExist">
       <el-row type="flex" justify="center" align="middle" class="progress-modal-row">
@@ -42,17 +42,10 @@
       },
       onAfterSubmit () {
         this.estimatedFormVisible = false;
-        // this.refreshData();
+        this.refreshData();
       },
       async refreshData () {
-        const url = this.apis().getPurchaseOrder(this.slotData.code);
-        const result = await this.$http.get(url);
-        if (result['errors']) {
-          this.$message.error(result['errors'][0].message);
-          return;
-        }
-        // 跟新slotData
-        this.$set(this.slotData, 'progresses', result.progresses);
+        this.$emit('refreshData');
       }
     },
     data () {

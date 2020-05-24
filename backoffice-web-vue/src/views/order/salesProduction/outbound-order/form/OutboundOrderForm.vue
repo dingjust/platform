@@ -343,19 +343,10 @@
           return res.every(item => !!item);
         })
         if (flag) {
-          this.$message.success('请完善表单信息');
-          // this._onCreate();
+          this._onCreate();
         } else {
           this.$message.error('请完善表单信息');
         }
-        // this.$refs['form'].validate(valid => {
-        //   if (valid) {
-        //     this._onCreate();
-        //   } else {
-        //     this.$message.error('请完善表单信息');
-        //     return false;
-        //   }
-        // });
       },
       async _onCreate () {
         var payPlanData = {

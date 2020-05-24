@@ -4,7 +4,7 @@
       <el-col :span="12">
         <div class="progress-container">
           <el-table ref="nodeTable" :data="formData.productionProgresses" stripe :height="autoHeight">
-            <el-table-column label="节点名称" prop="phase"></el-table-column>
+            <el-table-column label="节点名称" prop="progressPhase"></el-table-column>
             <el-table-column label="预警天数">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.delayedDays"></el-input>
@@ -21,7 +21,7 @@
       <el-col :span="12">
         <div class="progress-container">
           <el-table ref="systemTable" stripe :data="data" :height="autoHeight">
-            <el-table-column label="节点名称" prop="phase"></el-table-column>
+            <el-table-column label="节点名称" prop="progressPhase"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" @click="onAppend(scope.row)" :disabled="isDisabled(scope.row)">添加</el-button>
@@ -56,21 +56,17 @@
     },
     methods: {
       onAppend (row) {
-        let item = {
-          phase: row.phase,
-          sequence: row.sequence,
-          delatedDays: 0
-        }
-        this.formData.productionProgresses.push(item);
+        row.delayedDays = 0;
+        this.formData.productionProgresses.push(row);
       },
       onDelete (row) {
-        const index = this.formData.productionProgresses.findIndex(val => val.phase == row.phase);
+        const index = this.formData.productionProgresses.findIndex(val => val.progressPhase == row.progressPhase);
         if (index > -1) {
           this.formData.productionProgresses.splice(index, 1);
         }
       },
       isDisabled (row) {
-        return this.formData.productionProgresses.findIndex(val => val.phase == row.phase) > -1;
+        return this.formData.productionProgresses.findIndex(val => val.progressPhase == row.progressPhase) > -1;
       },
       isDeleteDisabled (row) {
         if (this.isCreate) {
@@ -86,29 +82,49 @@
       return {
         data: [
           {
-            phase: '备料',
+            medias: [],
+            progressPhase: '备料',
+            quantity: 0,
             sequence: 0,
-            delayedDays: 0
+            delayedDays: 0,
+            completeAmount: 0,
+            productionProgressOrders: []
           },
           {
-            phase: '裁剪',
+            medias: [],
+            progressPhase: '裁剪',
+            quantity: 0,
             sequence: 1,
-            delayedDays: 0
+            delayedDays: 0,
+            completeAmount: 0,
+            productionProgressOrders: []
           },
           {
-            phase: '车缝',
+            medias: [],
+            progressPhase: '车缝',
+            quantity: 0,
             sequence: 2,
-            delayedDays: 0
+            delayedDays: 0,
+            completeAmount: 0,
+            productionProgressOrders: []
           },
           {
-            phase: '后整',
+            medias: [],
+            progressPhase: '后整',
+            quantity: 0,
             sequence: 3,
-            delayedDays: 0
+            delayedDays: 0,
+            completeAmount: 0,
+            productionProgressOrders: []
           },
           {
-            phase: '验货',
+            medias: [],
+            progressPhase: '验货',
+            quantity: 0,
             sequence: 4,
-            delayedDays: 0
+            delayedDays: 0,
+            completeAmount: 0,
+            productionProgressOrders: []
           }
         ]
       }

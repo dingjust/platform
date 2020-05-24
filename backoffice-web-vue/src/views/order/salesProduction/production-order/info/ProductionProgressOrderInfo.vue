@@ -11,7 +11,7 @@
     <el-row type="flex" justify="center" class="pp-basic-row">
       <el-col :span="23">
         <el-card>
-          <production-progress-node :slotData="slotData"/>
+          <production-progress-node :slotData="slotData" @refreshData="refreshData"/>
         </el-card>
       </el-col>
     </el-row>
@@ -26,7 +26,10 @@
     props: ['slotData'],
     methods: {
       onEdit () {
-        this.$message('--------------edit------------------');
+        this.$router.push('/sales/progressOrder/' + this.slotData.code);
+      },
+      refreshData () {
+        this.$emit('refreshData');
       }
     }
   }

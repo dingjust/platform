@@ -474,6 +474,7 @@ const router = new Router({
         }, {
           path: 'progress-plan',
           name: '节点配置',
+          redirect: '/account/setting/progress-plan',
           component: {
             render (c) {
               return c('router-view');
@@ -481,7 +482,7 @@ const router = new Router({
           },
           children: [{
             path: '',
-            name: '节点配置',
+            name: '节点方案列表',
             component: () => import(/* webpackChunkName: 'accounts' */ '@/views/user/progress-plan/ProgressPlanPage'),
           },
           {

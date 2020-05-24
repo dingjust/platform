@@ -689,16 +689,16 @@ const COMMON_APIS = {
     return '/b2b/progress/plan/' + id;
   },
   // 启用节点方案
-  enableProgressPlan(id) {
-    return '/b2b/eable/' + id;
+  enableProgressPlan (id) {
+    return '/b2b/progress/plan/enable/' + id;
   },
   // 禁用节点方案
-  disableProgressPlan(id) {
-    return '/b2b/disable/' + id;
+  disableProgressPlan (id) {
+    return '/b2b/progress/plan/disEnable/' + id;
   },
   // 删除节点方案
-  deleteProgressPlan(id) {
-    return '/b2b/delete/' + id;
+  deleteProgressPlan (id) {
+    return '/b2b/progress/plan/delete/' + id;
   }
 };
 
@@ -1042,7 +1042,6 @@ let NONE_TENANT_APIS = {
     return '/b2b/production/task/detail/' + id;
   },
 };
-
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);
 
 export {

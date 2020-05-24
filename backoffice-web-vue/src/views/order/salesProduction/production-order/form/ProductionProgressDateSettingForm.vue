@@ -3,7 +3,7 @@
     <template v-for="item in estimateDates">
       <el-row type="flex" justify="center" align="middle" class="progress-date-form-row">
         <div class="progress-date-form-title">
-          <h6>{{item.phase}}</h6>
+          <h6>{{getEnum('productionProgressPhaseTypes', item.phase)}}</h6>
         </div>
         <el-date-picker v-model="item.estimatedDate" :picker-options="pickerOptions" type="date" placeholder="选择日期">
         </el-date-picker>
@@ -42,14 +42,14 @@
         this.estimateDates = array;
       },
       async onSubmit () {
-        // const url = this.apis().updateProgressForBatch(this.slotData.code);
-        // const result = await this.$http.put(url, this.estimateDates);
-        // if (result['errors']) {
-        //   this.$message.error(result['errors'][0].message);
-        //   return;
-        // }
-        // this.$message.success('设置成功');
-        // this.$emit('afterSubmit');
+        const url = this.apis().updateProgressForBatch(this.slotData.code);
+        const result = await this.$http.put(url, this.estimateDates);
+        if (result['errors']) {
+          this.$message.error(result['errors'][0].message);
+          return;
+        }
+        this.$message.success('设置成功');
+        this.$emit('afterSubmit');
       }
     },
     data () {
