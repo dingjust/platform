@@ -20,7 +20,8 @@
         <material-spec-entries-table :colors="productsColors" :slotData="curEntries" />
       </el-tab-pane>
       <el-tab-pane label="生产工艺单" name="craft">
-        <el-input type="textarea" placeholder="输入工艺要求" v-model="curProductionProcessContent" :rows="10" :disabled="isRead">
+        <el-input type="textarea" placeholder="输入工艺要求" v-model="curProductionProcessContent" :rows="10"
+          :disabled="isRead">
         </el-input>
         <h6 style="margin-top:10px;">上传工艺单文件</h6>
         <files-upload class="product-images-form-upload" style="margin-top:20px" :slot-data="curMedias"
@@ -114,8 +115,17 @@
           var newEntries = material.materialsColorEntries.filter(element => element
             .materialsColor != null && element.materialsColor != "");
           material.materialsColorEntries = newEntries;
-        })
+        });
+
+
+        let newIds = [];
+        result.forEach(entry => {
+          newIds.push(entry.id);
+        });
+
         this.$set(this, 'curEntries', result);
+        //通知更新对应核算单数据
+        this.$emit('onSpecEntryUpdate', newIds);
       },
       //校验物料列表数据完整性，若缺少相应颜色数据等则查询物料详情  
       async validateMaterials() {
@@ -127,7 +137,7 @@
             entry['variants'] = result.data.variants;
           }
         }
-      }
+      },
     },
     data() {
       return {
