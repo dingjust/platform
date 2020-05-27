@@ -6,7 +6,7 @@
           <h6>订单基本信息</h6>
         </el-row>
         <el-row type="flex" justify="start" align="middle" class="basic-form-row">
-          <el-col :span="8">
+          <el-col :span="20">
             <el-row type="flex" align="middle">
               <el-form-item label="名称：">
                 <h6 class="sales-plan-h6">{{form.name}}</h6>
@@ -17,7 +17,7 @@
         <MTAVAT v-if="modifyType" :machiningTypes.sync="form.cooperationModes" :needVoice.sync="form.invoiceNeeded"
           :tax.sync="form.invoiceTaxPoint" :layoutScale="mtavatLayoutScale" class="basic-form-row" />
         <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-row type="flex" align="middle">
               <el-form-item label="合作方式：">
                 <h6 class="sales-plan-h6">{{getEnum('cooperationModes', form.cooperationMode)}}
@@ -25,14 +25,41 @@
               </el-form-item>
             </el-row>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="12">
             <el-row type="flex" align="middle">
-              <el-form-item label="是否开发票：">
-                <h6 class="sales-plan-h6">{{form.invoice ? '开发票' : '不开发票'}}</h6>
+              <el-form-item label="订单数量：">
+                <h6 class="sales-plan-h6">{{totalAmount}}</h6>
+              </el-form-item>
+
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType">
+          <el-col :span="12">
+            <el-row type="flex" align="middle">
+              <el-form-item label="合作方式：">
+                <h6 class="sales-plan-h6">{{getEnum('cooperationModes', form.cooperationMode)}}
+                </h6>
               </el-form-item>
             </el-row>
           </el-col>
-          <el-col :span="10" v-if="form.invoice">
+          <el-col :span="12">
+            <el-row type="flex" align="middle">
+              <el-form-item label="订单数量：">
+                <h6 class="sales-plan-h6">{{totalAmount}}</h6>
+              </el-form-item>
+            </el-row>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="start" class="basic-form-row" v-if="!modifyType">
+          <el-col :span="12">
+            <el-row type="flex" align="middle">
+              <el-form-item label="是否开发票：">
+                <h6 class="sales-plan-h6">{{form.invoiceNeeded ? '开发票' : '不开发票'}}</h6>
+              </el-form-item>
+            </el-row>
+          </el-col>
+          <el-col :span="12" v-if="form.invoiceNeeded">
             <el-row type="flex" align="middle">
               <el-form-item label="税点">
                 <h6 class="sales-plan-h6">
@@ -42,37 +69,30 @@
           </el-col>
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
-          <el-col :span="8">
-            <el-row type="flex" align="middle">
-              <el-form-item label="订单数量：">
-                <h6 class="sales-plan-h6">{{totalAmount}}</h6>
-              </el-form-item>
-            </el-row>
-          </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-row type="flex" align="middle">
               <el-form-item label="订单总金额：">
                 <h6 class="sales-plan-h6">{{totalPrice}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
-        </el-row>
-        <el-row type="flex" justify="start" class="basic-form-row">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-row type="flex" align="middle">
               <el-form-item label="预计总成本：">
                 <h6 class="sales-plan-h6">{{totalCost}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
-          <el-col :span="8">
+        </el-row>
+        <el-row type="flex" justify="start" class="basic-form-row">
+          <el-col :span="12">
             <el-row type="flex" align="middle">
               <el-form-item label="预计利润：">
                 <h6 class="sales-plan-h6">{{totalProfit}}元</h6>
               </el-form-item>
             </el-row>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-row type="flex" align="middle">
               <el-form-item label="预计利润率：">
                 <h6 class="sales-plan-h6">{{totalProfitPercent}}%</h6>
@@ -87,14 +107,12 @@
           <h6>人员设置</h6>
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
-          <el-row type="flex" align="middle">
+          <el-col :span="10">
             <el-form-item label="创建人：">
-              <h6 v-show="!modifyType" class="sales-plan-h6">{{form.creator!=null?form.creator.name:''}}</h6>
+              <h6 class="sales-plan-h6">{{form.creator!=null?form.creator.name:''}}</h6>
             </el-form-item>
-          </el-row>
-        </el-row>
-        <el-row type="flex" justify="start" class="basic-form-row">
-          <el-row type="flex" align="middle">
+          </el-col>
+          <el-col :span="10">
             <el-form-item label="审批负责人：">
               <h6 v-show="!modifyType" class="sales-plan-h6">
                 {{(form.approvers!=null&&form.approvers[0]!=null)?form.approvers[0].name:''}}</h6>
@@ -103,7 +121,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-row>
+          </el-col>
         </el-row>
         <el-row type="flex" justify="start" class="basic-form-row">
           <el-row type="flex" align="middle">
@@ -250,7 +268,7 @@
   }
 
   .sales-plan-one {
-    width: 75%;
+    width: 55%;
     display: table-cell;
   }
 
@@ -260,7 +278,7 @@
   }
 
   .sales-plan-two {
-    width: 24%;
+    width: 44%;
     display: table-cell;
     z-index: 100;
   }

@@ -27,7 +27,7 @@
                 </h6>
               </el-col>
               <el-col :span="12">
-                <h6>交货货期：{{slotData.entries[0].deliveryDate}}</h6>
+                <h6>交货货期：{{slotData.entries[0].deliveryDate | timestampToTime}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
@@ -140,7 +140,7 @@
         </el-row>
         <el-row class="info-row-title_row" type="flex">
           <el-col>
-            <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
+            <!-- <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
               :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
               :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
               <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
@@ -156,7 +156,7 @@
                   </span>
                 </span>
               </div>
-            </el-upload>
+            </el-upload> -->
           </el-col>
         </el-row>
       </el-col>

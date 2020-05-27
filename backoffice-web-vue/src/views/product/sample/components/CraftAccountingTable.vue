@@ -3,7 +3,7 @@
     <el-table :data="slotData" style="width: 100%">
       <el-table-column prop="name" label="工艺名称">
       </el-table-column>
-      <el-table-column prop="position" label="部件">
+      <el-table-column prop="position" label="部位">
       </el-table-column>
       <el-table-column prop="unit" label="单位">
       </el-table-column>

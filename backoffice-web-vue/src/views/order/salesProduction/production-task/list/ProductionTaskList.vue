@@ -34,7 +34,7 @@
       </el-table-column>
       <el-table-column label="负责人" prop="productionLeader.name">
       </el-table-column>
-      <el-table-column label="指定工厂" prop="appointFactory.name">        
+      <el-table-column label="指定工厂" prop="appointFactory.name">
       </el-table-column>
       <el-table-column label="创建日期">
         <template slot-scope="scope">
@@ -45,12 +45,10 @@
         <template slot-scope="scope">
           <span>{{scope.row.creationtime | timestampToTime}}</span>
         </template>
-      </el-table-column>
+      </el-table-column>s
       <el-table-column label="状态" prop="status">
         <template slot-scope="scope">
-          <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-
-          <!--          <span>{{getEnum('salesOrderStatuses', scope.row.status)}}</span>-->
+          <span>{{getEnum('ProductionState', scope.row.state)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
@@ -82,25 +80,24 @@
         this.$router.push('/sales/production/' + row.id);
       },
       onPageSizeChanged(val) {
-        // this._reset();
-        //
-        // if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
-        //   this.$emit('onAdvancedSearch', val);
-        //   return;
-        // }
-        //
-        // this.$emit('onSearch', 0, val);
+        this._reset();
+        
+        if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val);
+          return;
+        }        
+        this.$emit('onSearch', 0, val);
       },
       onCurrentPageChanged(val) {
-        // if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
-        //   this.$emit('onAdvancedSearch', val - 1);
-        //   return;
-        // }
-        //
-        // this.$emit('onSearch', val - 1);
-        // this.$nextTick(() => {
-        //   this.$refs.resultTable.bodyWrapper.scrollTop = 0
-        // });
+        if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val - 1);
+          return;
+        }
+        
+        this.$emit('onSearch', val - 1);
+        this.$nextTick(() => {
+          this.$refs.resultTable.bodyWrapper.scrollTop = 0
+        });
       },
     }
   }

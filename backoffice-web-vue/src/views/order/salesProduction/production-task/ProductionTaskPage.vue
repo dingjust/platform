@@ -11,7 +11,13 @@
       <div class="pt-2"></div>
       <production-task-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
         @createOutboundOrder="createOutboundOrder" />
-      <production-task-list :page="page" />
+      <el-tabs v-model="activeStatus" @tab-click="handleClick">
+        <template v-for="(item, index) in statues">
+          <el-tab-pane :name="item.code" :key="index" :label="item.name">
+            <production-task-list :page="page" @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"/>
+          </el-tab-pane>
+        </template>
+      </el-tabs>
     </el-card>
     <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -60,6 +66,15 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
+      handleClick(tab, event) {
+        if (tab.name == 'ALL') {
+          this.queryFormData.statuses = [];
+          this.onAdvancedSearch();
+        } else {
+          this.queryFormData.statuses = [tab.name];
+          this.onAdvancedSearch();
+        }
+      },
       onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
@@ -90,11 +105,19 @@
     },
     data() {
       return {
+        activeStatus: 'ALL',
         outboundOrderTypeSelect: false,
         formData: this.$store.state.OutboundOrderModule.formData,
+        statues: [{
+          code: 'ALL',
+          name: '全部'
+        }],
       }
     },
-    created(){
+    created() {
+      this.$store.state.EnumsModule.ProductionState.forEach(element => {
+        this.statues.push(element);
+      });
       this.onSearch();
     }
   }
