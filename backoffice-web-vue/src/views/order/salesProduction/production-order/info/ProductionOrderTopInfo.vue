@@ -1,13 +1,14 @@
 <template>
   <div class="animated fadeIn">
-    <el-row type="flex" :gutter="20">
+    <el-row class="info-basic-row" type="flex" :gutter="20">
       <el-col :span="14">
         <el-row type="flex" :gutter="20">
           <el-col :span="6">
             <!-- 商品图片 -->
-            <img class="purchase-formData-img"
-                 :src="slotData.product.thumbnail && slotData.product.thumbnail.length!=0 ?
-                 slotData.product.thumbnail.url : 'static/img/nopicture.png'">
+            <div>
+              <img class="purchase-product-img"
+                :src="slotData.product.thumbnail!=null?slotData.product.thumbnail.url:'static/img/nopicture.png'">
+            </div>
           </el-col>
           <el-col :span="18">
             <!-- 商品详情 -->
@@ -21,7 +22,9 @@
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col :span="12">
-                <h6>品&#12288;&#12288;类：{{slotData.product.category.name}}</h6>
+                <h6>
+                  品&#12288;&#12288;类：{{slotData.product.category!=null?slotData.product.category.name:''}}
+                </h6>
               </el-col>
               <el-col :span="12">
                 <h6>交货货期：{{slotData.expectedDeliveryDate | timestampToTime}}</h6>
@@ -40,17 +43,19 @@
                 <h6>生产数量：{{slotData.totalQuantity}}</h6>
               </el-col>
               <el-col :span="12">
-                <h6>订单来源：{{slotData.creator.name}}</h6>
+                <h6>订单来源：{{getEnum('SalesProductionOrderType', slotData.orderSource)}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col>
-                <h6>关联订单：{{slotData.relationOrder}}</h6>
+                <h6>关联订单：{{slotData.relationOrderCode}}</h6>
               </el-col>
             </el-row>
             <el-row class="info-basic-row" type="flex">
               <el-col>
-                <h6>收货地址：{{slotData.deliveryAddress.details}}</h6>
+                <h6>
+                  收货地址：{{slotData.deliveryAddress!=null?slotData.deliveryAddress.details:''}}
+                </h6>
               </el-col>
             </el-row>
           </el-col>
@@ -59,10 +64,10 @@
           <!-- 商品color/size表 -->
           <el-col>
             <el-row>
-              <el-table :data="showData" border>
-                <el-table-column label="颜色" prop="colorName"></el-table-column>
-                <template v-for="(item, index) in sizeList">
-                  <el-table-column :label="item.name" :prop="item.name"></el-table-column>
+              <el-table :data="showTable?dataTable:[dataTable[0]]" border>
+                <el-table-column label="颜色" prop="color.name"></el-table-column>
+                <template v-for="size in sizes">
+                  <el-table-column :key="size.code" :label="size.name" :prop="size.code"></el-table-column>
                 </template>
               </el-table>
             </el-row>
@@ -87,30 +92,30 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col>
-            <h6>合作商：{{slotData.cooperator.partner.name}}</h6>
+            <h6>客户：{{cooperatorName}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>联系人：{{slotData.cooperator.partner.contactPerson}}</h6>
+            <h6>联系人：{{contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{slotData.cooperator.partner.contactPhone}}</h6>
+            <h6>联系方式：{{contactPhone}}</h6>
           </el-col>
         </el-row>
-<!--        <el-row class="info-row-title_row">-->
-<!--          <el-col>-->
-<!--            <h6>工厂：</h6>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
-<!--        <el-row class="info-row-title_row">-->
-<!--          <el-col :span="12">-->
-<!--            <h6>联系人：{{slotData.partner.factory.contactsPerson}}</h6>-->
-<!--          </el-col>-->
-<!--          <el-col :span="12">-->
-<!--            <h6>联系方式：{{slotData.partner.factory.contactsPhone}}</h6>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
+        <!-- <el-row class="info-row-title_row">
+          <el-col>
+            <h6>工厂：</h6>
+          </el-col>
+        </el-row>
+        <el-row class="info-row-title_row">
+          <el-col :span="12">
+            <h6>联系人：{{product.partner.factory.contactsPerson}}</h6>
+          </el-col>
+          <el-col :span="12">
+            <h6>联系方式：{{product.partner.factory.contactsPhone}}</h6>
+          </el-col>
+        </el-row> -->
         <el-row type="flex">
           <el-col :span="6">
             <div class="info-row-title">
@@ -120,10 +125,10 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>生产负责人：{{isFactory() ? slotData.factoryOperator.name : slotData.brandOperator.name}}</h6>
+            <!-- <h6>生产负责人：{{slotData.productionLeader.name}}</h6> -->
           </el-col>
           <el-col :span="12">
-            <h6>审批人：{{isFactory() ? slotData.factoryOperator.name : slotData.brandOperator.name}}</h6>
+            <!-- <h6>审批人：{{slotData.approvers[0].name}}</h6> -->
           </el-col>
         </el-row>
         <el-row type="flex">
@@ -135,23 +140,7 @@
         </el-row>
         <el-row class="info-row-title_row" type="flex">
           <el-col>
-            <el-upload name="file" :action="mediaUploadUrl" list-type="picture-card" :data="uploadFormData"
-                       :before-upload="onBeforeUpload" :on-success="onSuccess" :headers="headers" :on-exceed="handleExceed"
-                       :file-list="fileList" :on-preview="handlePreview" multiple :limit="1" :on-remove="handleRemove">
-              <div slot="tip" class="el-upload__tip">只能上传PDF文件</div>
-              <i class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{file}">
-                <img class="el-upload-list__item-thumbnail" src="../../../../../../static/img/pdf.png" alt="">
-                <span class="el-upload-list__item-actions">
-                <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-                  <i class="el-icon-delete"></i>
-                </span>
-                <span v-if="!disabled" class="el-upload-list__item-file-name">
-                  {{file.name}}
-                </span>
-              </span>
-              </div>
-            </el-upload>
+            <PDFUpload :vFileList.sync="fileList" />
           </el-col>
         </el-row>
       </el-col>
@@ -160,84 +149,88 @@
 </template>
 
 <script>
+  import PDFUpload from '@/components/custom/upload/PDFUpload';
+
+
   export default {
     name: 'ProductionOrderTopInfo',
     props: ['slotData'],
+    components: {
+      PDFUpload
+    },
     computed: {
-      uploadFormData: function () {
-        return {
-          fileFormat: 'DefaultFileFormat',
-          conversionGroup: 'DefaultProductConversionGroup'
-        };
-      },
-      headers: function () {
-        return {
-          Authorization: this.$store.getters.token
+      cooperatorName: function () {
+        if (this.slotData.cooperator != null) {
+          if (this.slotData.cooperator.type == 'ONLINE') {
+            return this.slotData.cooperator.partner.name;
+          } else {
+            return this.slotData.cooperator.name;
+          }
         }
-      }
+      },
+      contactPerson: function () {
+        if (this.slotData.cooperator != null) {
+          if (this.slotData.cooperator.type == 'ONLINE') {
+            return this.slotData.cooperator.partner.contactPerson;
+          } else {
+            return this.slotData.cooperator.contactPerson;
+          }
+        }
+      },
+      contactPhone: function () {
+        if (this.slotData.cooperator != null) {
+          if (this.slotData.cooperator.type == 'ONLINE') {
+            return this.slotData.cooperator.partner.contactPhone;
+          } else {
+            return this.slotData.cooperator.contactPhone;
+          }
+        }
+      },
+      sizes: function () {
+        var sizes = [];
+        if (this.slotData.colorSizeEntries != null) {
+          this.slotData.colorSizeEntries.forEach(entry => {
+            let index = sizes.findIndex(size => size.code == entry.size.code);
+            if (index == -1) {
+              sizes.push(entry.size);
+            }
+          });
+        }
+        return sizes;
+      },
+      dataTable: function () {
+        var result = [];
+        if (this.slotData.colorSizeEntries != null) {
+          this.slotData.colorSizeEntries.forEach(entry => {
+            //找到颜色          
+            let index = result.findIndex(item => {
+              return item.color.code == entry.color.code;
+            });
+            if (index == -1) {
+              var obj = {
+                color: entry.color,
+              };
+              obj[entry.size.code] = entry.quantity;
+              result.push(obj);
+            } else {
+              var obj = result[index];
+              obj[entry.size.code] = entry.quantity;
+            }
+          });
+        }
+        return result;
+      },
     },
     methods: {
-      onBeforeUpload (file) {
-        if (file.type !== 'application/pdf') {
-          this.$message.error('选择的文件不是PDF文件');
-          return false;
-        }
-        return true;
-      },
-      onSuccess (response) {
-        this.pdfFile = response;
-      },
-      handleExceed (files, fileList) {
-        if (fileList > 1) {
-          this.$message.warning(`已达最大文件数`);
-          return false;
-        }
-      },
-      handlePreview (file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
-      handleRemove (file) {
-        this.fileList = [];
-        this.pdfFile = '';
-      },
-      // 构建color/size表数据
-      initColorSizeData () {
-        let row = {};
-        this.slotData.entries.forEach(item => {
-          let index = this.colorSizeData.findIndex(val => val.colorName == item.product.color.name);
-          if (index > -1) {
-            this.colorSizeData[index][item.product.size.name] = item.quantity;
-            this.colorSizeData[index].colorCount += item.quantity;
-          } else {
-            row.colorName = item.product.color.name;
-            row.colorCode = item.product.color.code;
-            row[item.product.size.name] = item.quantity;
-            row.colorCount = item.quantity;
-            this.colorSizeData.push(row);
-            row = {};
-          }
-          let indexS = this.sizeList.findIndex(val => val.name == item.product.size.name);
-          if (indexS < 0) {
-            this.sizeList.push(item.product.size);
-          }
-        })
-        this.showData = [this.colorSizeData[0]];
-      },
       // 展开/收起列表行
-      onClickShowTable () {
+      onClickShowTable() {
         this.showTable = !this.showTable;
-        if (this.showTable) {
-          this.showData = this.colorSizeData;
-          return;
-        }
-        this.showData = [this.colorSizeData[0]];
-      }
+      },
+
     },
-    data () {
+    data() {
       return {
         defaultDateValueFormat: 'yyyy-MM-dd"T"HH:mm:ssZ',
-        mediaUploadUrl: '/b2b/media/file/upload',
         VIEW_MODE_LIST: 'LIST',
         VIEW_MODE_TABS: 'TABS',
         fileList: [],
@@ -249,18 +242,20 @@
       }
     },
     watch: {
-      'slotData.entries': function (newVal, oldVal) {
-        if (newVal.length > 0) {
-          this.initColorSizeData();
-        }
-      }
+
     },
-    created () {
-    }
+    created() {}
   }
+
 </script>
 
 <style scoped>
+  .purchase-product-img {
+    width: 100%;
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+
   .purchase-formData-img {
     width: 120px;
     height: 120px;
@@ -287,15 +282,7 @@
     height: 100%;
   }
 
-  /deep/ .el-upload--picture-card {
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-  }
 
-  /deep/ .el-table--enable-row-hover .el-table__body tr:hover > td {
-    background-color: #FFFFFF !important;
-  }
 
   .icon_arrow {
     font-family: "iconfont" !important;
@@ -308,4 +295,10 @@
     -moz-osx-font-smoothing: grayscale;
     cursor: pointer;
   }
+
+
+  .info-basic-row h6 {
+    font-size: 10px;
+  }
+
 </style>

@@ -25,7 +25,9 @@ const state = {
     code: '',
     skuID: '',
     statuses: [],
-    keyword: '',
+    keywords: '',
+    productionLeaderName: '',
+    cooperator: '',
     categories: []
   },
   addressFormData: {

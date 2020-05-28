@@ -39,8 +39,7 @@ export default {
       children: [{
         name: '计划订单',
         url: '/sales/plan'
-      }
-      ]
+      }]
     },
     {
       name: '生产中心',
@@ -52,6 +51,9 @@ export default {
       }, {
         name: '外发订单',
         url: '/sales/outboundOrder'
+      }, {
+        name: '生产工单',
+        url: '/sales/productionOrder'
       }, {
         name: '生产进度工单',
         url: '/sales/progressOrder'
@@ -102,41 +104,41 @@ export default {
       url: '/account',
       icon: 'el-icon-office-building',
       children: [{
-        name: '主页',
-        url: '/account/index',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['ENT_INFO']
-        }
-      },
-      {
-        name: '认证中心',
-        url: '/account/Authentication',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['CERT']
-        }
-      },
-      {
-        name: '员工',
-        url: '/account/b2b-customer',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['COMPANY_B2BCUSTOMER']
-        }
-      },
-      {
-        name: '合作商',
-        url: '/account/cooperator',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['COMPANY_COOPERATOR']
-        }
-      },
+          name: '主页',
+          url: '/account/index',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['ENT_INFO']
+          }
+        },
+        {
+          name: '认证中心',
+          url: '/account/Authentication',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['CERT']
+          }
+        },
+        {
+          name: '员工',
+          url: '/account/b2b-customer',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['COMPANY_B2BCUSTOMER']
+          }
+        },
+        {
+          name: '合作商',
+          url: '/account/cooperator',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['COMPANY_COOPERATOR']
+          }
+        },
         {
           name: '组织架构',
           url: '/account/b2b-unit',
@@ -147,24 +149,24 @@ export default {
           url: '/account/role',
           icon: 'iconNone'
         },
-      {
-        name: '地址管理',
-        url: '/account/address',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['COMPANY_ADDRESS']
+        {
+          name: '地址管理',
+          url: '/account/address',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['COMPANY_ADDRESS']
+          }
+        },
+        {
+          name: '账务配置',
+          url: '/account/setting/payPlan',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['FACTORY_PAYPLAN']
+          }
         }
-      },
-      {
-        name: '账务配置',
-        url: '/account/setting/payPlan',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['FACTORY_PAYPLAN']
-        }
-      }
       ]
     },
     {
@@ -172,14 +174,14 @@ export default {
       url: '/report',
       icon: 'el-icon-s-data',
       children: [{
-        name: '生产进度',
-        url: '/report/production-progress',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['REPORT_PRODUCTION_PROGRESS']
+          name: '生产进度',
+          url: '/report/production-progress',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['REPORT_PRODUCTION_PROGRESS']
+          }
         }
-      }
         // {
         //   name: '收货单',
         //   url: 'receipt',
@@ -192,47 +194,47 @@ export default {
       url: '/order',
       icon: 'el-icon-s-order',
       children: [{
-        name: '需求订单',
-        url: '/order/requirement',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['REQUIREMENT_ORDER']
-        }
-      },
+          name: '需求订单',
+          url: '/order/requirement',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['REQUIREMENT_ORDER']
+          }
+        },
         // {
         //   name: '报价单',
         //   url: '/order/quote',
         //   icon: 'iconNone'
         // },
-      {
-        name: '打样订单',
-        url: '/order/proofing',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['PROOFING_ORDER']
+        {
+          name: '打样订单',
+          url: '/order/proofing',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['PROOFING_ORDER']
+          }
+        },
+        {
+          name: '生产订单',
+          url: '/order/purchase',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['PURCHASE_ORDER']
+          }
+        },
+        {
+          name: '销售订单',
+          url: '/order/sales',
+          icon: 'iconNone'
+        },
+        {
+          name: '销售计划',
+          url: '/order/salesProduction',
+          icon: 'iconNone'
         }
-      },
-      {
-        name: '生产订单',
-        url: '/order/purchase',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['PURCHASE_ORDER']
-        }
-      },
-      {
-        name: '销售订单',
-        url: '/order/sales',
-        icon: 'iconNone'
-      },
-      {
-        name: '销售计划',
-        url: '/order/salesProduction',
-        icon: 'iconNone'
-      }
       ]
     },
     {
@@ -240,32 +242,32 @@ export default {
       url: '/contract',
       icon: 'el-icon-s-marketing',
       children: [{
-        name: '合同管理',
-        url: '/contract/manage',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['AGREEMENT']
+          name: '合同管理',
+          url: '/contract/manage',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['AGREEMENT']
+          }
+        },
+        {
+          name: '合同模板',
+          url: '/contract/template',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['AGREEMENT_TMPL']
+          }
+        },
+        {
+          name: '签章管理',
+          url: '/contract/seal',
+          icon: 'iconNone',
+          meta: {
+            requiresAuth: true,
+            permissions: ['AGREEMENT_SEAL']
+          }
         }
-      },
-      {
-        name: '合同模板',
-        url: '/contract/template',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['AGREEMENT_TMPL']
-        }
-      },
-      {
-        name: '签章管理',
-        url: '/contract/seal',
-        icon: 'iconNone',
-        meta: {
-          requiresAuth: true,
-          permissions: ['AGREEMENT_SEAL']
-        }
-      }
         // {
         //   name: '下单',
         //   url: '/orderPurchase',
@@ -288,28 +290,28 @@ export default {
       url: '/product',
       icon: 'el-icon-goods',
       children: [{
-        name: '产品管理',
-        url: '/product/apparel',
-        meta: {
-          requiresAuth: true,
-          permissions: ['PRODUCT']
+          name: '产品管理',
+          url: '/product/apparel',
+          meta: {
+            requiresAuth: true,
+            permissions: ['PRODUCT']
+          }
+          // icon: 'iconNone',
+        },
+        {
+          name: '样衣管理',
+          url: '/product/sample',
+          icon: 'iconNone'
+          // meta: {
+          //   requiresAuth: true,
+          //   permissions: ['PRODUCT_SAMPLEPRODUCT']
+          // }
+        },
+        {
+          name: '物料管理',
+          url: '/product/material',
+          icon: 'iconNone'
         }
-        // icon: 'iconNone',
-      },
-      {
-        name: '样衣管理',
-        url: '/product/sample',
-        icon: 'iconNone'
-        // meta: {
-        //   requiresAuth: true,
-        //   permissions: ['PRODUCT_SAMPLEPRODUCT']
-        // }
-      },
-      {
-        name: '物料管理',
-        url: '/product/material',
-        icon: 'iconNone'
-      }
         // {
         //   name: '样衣借还记录',
         //   url: '/miscs/sample/sampleCheckoutHist',

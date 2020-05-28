@@ -1537,6 +1537,16 @@ const state = {
       code: 'AUDITED_FAILED',
       name: '审核失败'
     },
+  ],
+  //生产任务状态
+  ProductionState: [{
+      code: 'DISPATCHING',
+      name: '未外发'
+    },
+    {
+      code: 'DISPATCHED',
+      name: '已外发'
+    },
   ]
 };
 

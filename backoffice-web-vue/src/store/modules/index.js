@@ -40,12 +40,12 @@ import WalletModule from './miscs/wallet';
 import CashOutManagerModule from './miscs/cashOutManager';
 import PromoteProductModule from './miscs/promoteProduct';
 
-// sale-plan
-import OutboundOrderModule from './sale-plan/outbound-order'
-import ProductionTasksModule from './sale-plan/production-tasks'
+// sale-production
+import OutboundOrderModule from './sale-production/outbound-order'
+import ProductionTasksModule from './sale-production/production-tasks'
 
-import ProductionOrderModule from './sale-plan/production-orders.js'
-import ProgressOrderModule from './sale-plan/progress-orders.js'
+import ProductionOrderModule from './sale-production/production-orders.js'
+import ProgressOrderModule from './sale-production/progress-orders.js'
 
 // contract
 import ContractModule from './contract/contract';
@@ -101,7 +101,7 @@ export {
   WalletModule,
   CashOutManagerModule,
   PromoteProductModule,
-  // sale-plan
+  // sale-production
   OutboundOrderModule,
   ProductionOrderModule,
   ProgressOrderModule,
