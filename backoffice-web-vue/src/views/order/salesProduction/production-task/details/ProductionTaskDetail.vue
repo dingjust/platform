@@ -11,33 +11,28 @@
           <!-- <h6>任务单号:&#12288;{{formData.entries[0].productionTask.code}}</h6> -->
         </el-col>
         <el-col :span="6">
-          <h6>订单状态:&#12288;{{}}</h6>
+          <!-- <h6>订单状态:&#12288;{{getEnum('ProductionState', scope.row.state)}}</h6> -->
         </el-col>
       </el-row>
       <div class="pt-2"></div>
       <receiving-details-form :slotData="formData" />
-      <div style="margin-top: 50px">
+      <div style="margin-top: 50px" v-if="formData.entries[0]!=null">
         <el-row style="margin-top:20px;">
-          <sample-attach-orders-form v-if="formData.entries[0]!=null"
-            :entries.sync="formData.entries[0].materialsSpecEntries" :medias.sync="formData.entries[0].medias"
-            :isRead="true" :productionProcessContent.sync="formData.entries[0].productionProcessContent"
-            :productsColors="colors" />
+          <sample-attach-orders-form :entries.sync="formData.entries[0].materialsSpecEntries"
+            :medias.sync="formData.entries[0].medias" :isRead="true"
+            :productionProcessContent.sync="formData.entries[0].productionProcessContent" :productsColors="colors" />
         </el-row>
-        <!-- <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10"> -->
-        <!-- <el-col :span="2">
-            <h6 style="padding-top:8px">核算单：</h6>
-          </el-col>
-          <el-col :span="18">
-            <h6 class="account_sheet-btn" @click="onUpdateAccountingSheet(productIndex)"
-              v-if="entry.costOrder.isIncludeTax!=null">
-              {{entry.costOrder.id!=null?entry.costOrder.id:'成本核算单'}}
-            </h6>
-          </el-col> -->
         <accounting-sheet-btn :slotData="formData.entries[0].costOrder" :unitPrice="formData.entries[0].unitPrice" />
-        <!-- </el-row> -->
       </div>
       <production-task :slotData="formData.entries[0].productionTask" ref="taskComp"
         :productionLeader="formData.productionLeader" :readOnly="true" />
+      <div style="margin-top:40px">
+        <el-row>
+          <el-col :span="4">关联订单</el-col>
+        </el-row>
+        <context-info-tab style="margin-top:20px" :dispatchOrders="[]" :purchaseOrders="[]" :profitOrders="[]"
+          :logs="[]" />
+      </div>
     </el-card>
   </div>
 </template>
@@ -58,6 +53,7 @@
 
   import ReceivingDetailsForm from '../form/ReceivingDetailsForm';
   import ProductionTask from '../../components/ProductionTask';
+  import ContextInfoTab from '../../components/ContextInfoTab';
   import SampleAttachOrdersForm from '@/views/product/sample/form/SampleAttachOrdersForm';
   import AccountingSheetBtn from '@/views/product/sample/components/AccountingSheetBtn';
 
@@ -68,7 +64,8 @@
       ReceivingDetailsForm,
       ProductionTask,
       SampleAttachOrdersForm,
-      AccountingSheetBtn
+      AccountingSheetBtn,
+      ContextInfoTab
     },
     computed: {
       ...mapGetters({

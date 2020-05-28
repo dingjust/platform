@@ -94,6 +94,7 @@
           <el-row style="margin-top:20px;">
             <sample-attach-orders-form :entries.sync="entry.materialsSpecEntries" :medias.sync="entry.medias"
               :productionProcessContent.sync="entry.productionProcessContent"
+              @onSpecEntryUpdate="(ids)=>onSpecEntryUpdate(entry,ids)"
               :productsColors="getColorsByEntries(entry.colorSizeEntries)" />
           </el-row>
           <el-row style="margin-top:20px;" type="flex" align="center" :gutter="10">
@@ -222,7 +223,6 @@
         this.materialDialogVisible = true;
       },
       onSelectSample(data) {
-        console.log(data);
         //构建颜色尺码行
         var colorSizeEntries = [];
         data.colorSizes.forEach(color => {
@@ -441,6 +441,14 @@
             resolve(res);
           })
         })
+      },
+      //删除物料清单行
+      onSpecEntryUpdate(entry, ids) {
+        if (entry.costOrder != null && entry.costOrder.materialsEntries != null) {
+          var newEntries = entry.costOrder.materialsEntries.filter(element => ids.indexOf(element.materialsSpecEntry
+            .id) > -1);
+          this.$set(entry.costOrder, 'materialsEntries', newEntries);          
+        }
       }
     },
     created() {

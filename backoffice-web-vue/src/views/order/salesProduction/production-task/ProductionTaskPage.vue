@@ -11,7 +11,14 @@
       <div class="pt-2"></div>
       <production-task-toolbar @onSearch="onSearch" @onAdvancedSearch="onAdvancedSearch"
         @createOutboundOrder="createOutboundOrder" />
-      <production-task-list :page="page" @onSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"/>
+      <el-tabs v-model="activeStatus" @tab-click="handleClick">
+        <template v-for="(item, index) in statues">
+          <el-tab-pane :name="item.code" :key="index" :label="item.name">
+            <production-task-list :page="page" @onSearch="onSearch"
+                                  @onAdvancedSearch="onAdvancedSearch" @getSelectTaskList="getSelectTaskList"/>
+          </el-tab-pane>
+        </template>
+      </el-tabs>
     </el-card>
     <el-dialog :visible.sync="outboundOrderTypeSelect" width="60%" class="purchase-dialog" append-to-body
       :close-on-click-modal="false">
@@ -60,7 +67,16 @@
         setIsAdvancedSearch: 'isAdvancedSearch',
         setDetailData: 'detailData'
       }),
-      onSearch (page, size) {
+      handleClick(tab, event) {
+        if (tab.name == 'ALL') {
+          this.queryFormData.statuses = [];
+          this.onAdvancedSearch();
+        } else {
+          this.queryFormData.statuses = [tab.name];
+          this.onAdvancedSearch();
+        }
+      },
+      onSearch(page, size) {
         const keyword = this.keyword;
         const statuses = this.statuses;
         const url = this.apis().getProductionTaskList();
@@ -73,7 +89,7 @@
           size
         });
       },
-      onAdvancedSearch (page, size) {
+      onAdvancedSearch(page, size) {
         this.setIsAdvancedSearch(true);
         const query = this.queryFormData;
         const url = this.apis().getProductionTaskList();
@@ -112,15 +128,24 @@
     },
     data () {
       return {
+        activeStatus: 'ALL',
         outboundOrderTypeSelect: false,
         selectTaskList: [],
-        formData: this.$store.state.OutboundOrderModule.formData
+        formData: this.$store.state.OutboundOrderModule.formData,
+        statues: [{
+          code: 'ALL',
+          name: '全部'
+        }],
       }
     },
-    created () {
+    created() {
+      this.$store.state.EnumsModule.ProductionState.forEach(element => {
+        this.statues.push(element);
+      });
       this.onSearch();
     }
   }
+
 </script>
 
 <style scoped>

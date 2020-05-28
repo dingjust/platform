@@ -43,8 +43,8 @@
         <div class="form-block-content">
           <el-row type="flex">
             <el-col :span="18">
-              <MTAVAT :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.needVoice"
-                :tax.sync="form.tax" />
+              <MTAVAT :machiningTypes.sync="form.cooperationMode" :needVoice.sync="form.invoiceNeeded"
+                :tax.sync="form.invoiceTaxPoint" />
             </el-col>
           </el-row>
           <my-address-form :vAddress.sync="form.address" ref="addressComp" />
@@ -203,8 +203,8 @@
           salesDateStart: '',
           salesDateEnd: '',
           cooperationMode: 'LABOR_AND_MATERIAL',
-          needVoice: false,
-          tax: 0.03,
+          invoiceNeeded: false,
+          invoiceTaxPoint: 0.03,
           address: {
 
           },

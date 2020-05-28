@@ -12,7 +12,8 @@
         <el-col :span="8">
           <el-form-item label="外发目标价格" label-width="110px" prop='price'
             :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-            <el-input placeholder="请输入接单价格" size="mini" v-model="slotData.price"></el-input>
+            <el-input placeholder="请输入接单价格" size="mini" v-model="slotData.price"
+              v-number-input.float="{ min: 0 ,decimal:2}"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">

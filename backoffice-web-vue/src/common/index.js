@@ -689,15 +689,15 @@ const COMMON_APIS = {
     return '/b2b/progress/plan/' + id;
   },
   // 启用节点方案
-  enableProgressPlan (id) {
+  enableProgressPlan(id) {
     return '/b2b/progress/plan/enable/' + id;
   },
   // 禁用节点方案
-  disableProgressPlan (id) {
+  disableProgressPlan(id) {
     return '/b2b/progress/plan/disEnable/' + id;
   },
   // 删除节点方案
-  deleteProgressPlan (id) {
+  deleteProgressPlan(id) {
     return '/b2b/progress/plan/delete/' + id;
   },
   // 获取节点列表
@@ -1060,6 +1060,14 @@ let NONE_TENANT_APIS = {
   //生产任务详情
   getProductionTaskDetails(id) {
     return '/b2b/production/task/detail/' + id;
+  },
+  //生产工单
+  getProductionOrders() {
+    return '/b2b/orders/production/work';
+  },
+  //生产工单详情
+  getProductionOrderDetail(code) {
+    return '/b2b/orders/production/work/' + code;
   },
 };
 Object.assign(NONE_TENANT_APIS, COMMON_APIS);

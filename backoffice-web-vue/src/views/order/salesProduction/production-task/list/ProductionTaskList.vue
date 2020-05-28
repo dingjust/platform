@@ -50,9 +50,7 @@
       </el-table-column>
       <el-table-column label="状态" prop="status">
         <template slot-scope="scope">
-          <!-- <el-tag disable-transitions>{{getEnum('purchaseOrderStatuses', scope.row.status)}}</el-tag> -->
-
-          <!--          <span>{{getEnum('salesOrderStatuses', scope.row.status)}}</span>-->
+          <span>{{getEnum('ProductionState', scope.row.state)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="100">
@@ -87,13 +85,21 @@
         }
         this.$router.push('/sales/production/' + row.id);
       },
-      onPageSizeChanged (val) {
+      onPageSizeChanged(val) {
+        this._reset();
+
+        if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val);
+          return;
+        }
         this.$emit('onSearch', 0, val);
-        this.$nextTick(() => {
-          this.$refs.resultTable.bodyWrapper.scrollTop = 0
-        });
       },
-      onCurrentPageChanged (val) {
+      onCurrentPageChanged(val) {
+        if (this.$store.state.SalesOrdersModule.isAdvancedSearch) {
+          this.$emit('onAdvancedSearch', val - 1);
+          return;
+        }
+
         this.$emit('onSearch', val - 1);
         this.$nextTick(() => {
           this.$refs.resultTable.bodyWrapper.scrollTop = 0

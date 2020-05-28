@@ -6,7 +6,7 @@
           <el-input v-model="scope.row.name" />
         </template>
       </el-table-column>
-      <el-table-column prop="position" label="部件">
+      <el-table-column prop="position" label="部位">
         <template slot-scope="scope">
           <el-input v-model="scope.row.position"></el-input>
         </template>
