@@ -46,16 +46,12 @@
 
   import OutboundOrderTopInfo from '../form/OutboundOrderTopInfo';
   import OutboundOrderCenterTable from '../form/OutboundOrderCenterTable';
-  import OutboundOrderReceiptInfo from '../form/OutboundOrderReceiptInfo';
-  import OutboundOrderPaymentInfo from '../form/OutboundOrderPaymentInfo';
   import ProductionTaskDetails from "../../production-task/details/ProductionTaskDetail";
   export default {
     name: 'OutboundOrderDetail',
     props: ['code'],
     components: {
       ProductionTaskDetails,
-      OutboundOrderPaymentInfo,
-      OutboundOrderReceiptInfo,
       OutboundOrderCenterTable,
       OutboundOrderTopInfo
     },

@@ -60,8 +60,8 @@
             </el-row>
           </el-col>
         </el-row>
+        <!-- 商品color/size表 -->
         <el-row class="info-basic-row" type="flex">
-          <!-- 商品color/size表 -->
           <el-col>
             <el-row>
               <el-table :data="showTable?dataTable:[dataTable[0]]" border>
@@ -92,15 +92,15 @@
         </el-row>
         <el-row class="info-row-title_row">
           <el-col>
-            <h6>客户：{{cooperatorName}}</h6>
+            <h6>客户：{{cooperator.name}}</h6>
           </el-col>
         </el-row>
         <el-row class="info-row-title_row">
           <el-col :span="12">
-            <h6>联系人：{{contactPerson}}</h6>
+            <h6>联系人：{{cooperator.contactPerson}}</h6>
           </el-col>
           <el-col :span="12">
-            <h6>联系方式：{{contactPhone}}</h6>
+            <h6>联系方式：{{cooperator.contactPhone}}</h6>
           </el-col>
         </el-row>
         <!-- <el-row class="info-row-title_row">
@@ -123,6 +123,8 @@
             </div>
           </el-col>
         </el-row>
+        <!-- 查看单据 -->
+        <purchase-order-button-group :slotData="slotData" />
         <el-row class="info-row-title_row">
           <el-col :span="12">
             <!-- <h6>生产负责人：{{slotData.productionLeader.name}}</h6> -->
@@ -150,41 +152,28 @@
 
 <script>
   import PDFUpload from '@/components/custom/upload/PDFUpload';
+  import PurchaseOrderButtonGroup from '@/views/order/purchase/info/PurchaseOrderButtonGroup';
 
 
   export default {
     name: 'ProductionOrderTopInfo',
     props: ['slotData'],
     components: {
-      PDFUpload
+      PDFUpload,
+      PurchaseOrderButtonGroup
     },
     computed: {
-      cooperatorName: function () {
-        if (this.slotData.cooperator != null) {
-          if (this.slotData.cooperator.type == 'ONLINE') {
-            return this.slotData.cooperator.partner.name;
-          } else {
-            return this.slotData.cooperator.name;
-          }
+      cooperator: function () {
+        var cooperator = {
+          name: '',
+          contactPerson: '',
+          contactPhone: ''
+        };
+        let company = this.slotData.byAorB == "PARTYA" ? this.slotData.partyBCompany : this.slotData.partyACompany;
+        if (company != null) {
+          Object.assign(cooperator, company);
         }
-      },
-      contactPerson: function () {
-        if (this.slotData.cooperator != null) {
-          if (this.slotData.cooperator.type == 'ONLINE') {
-            return this.slotData.cooperator.partner.contactPerson;
-          } else {
-            return this.slotData.cooperator.contactPerson;
-          }
-        }
-      },
-      contactPhone: function () {
-        if (this.slotData.cooperator != null) {
-          if (this.slotData.cooperator.type == 'ONLINE') {
-            return this.slotData.cooperator.partner.contactPhone;
-          } else {
-            return this.slotData.cooperator.contactPhone;
-          }
-        }
+        return cooperator;
       },
       sizes: function () {
         var sizes = [];
@@ -250,6 +239,13 @@
 </script>
 
 <style scoped>
+  .info-title {
+    width: 100%;
+    border-left: 2px solid #FFD60C;
+    padding-left: 10px;
+    height: 14px;
+  }
+
   .purchase-product-img {
     width: 100%;
     border-radius: 10px;
@@ -281,8 +277,6 @@
   .el-divider--vertical {
     height: 100%;
   }
-
-
 
   .icon_arrow {
     font-family: "iconfont" !important;

@@ -39,7 +39,7 @@
             </el-col>
             <el-col :span="4">
               <h6 class="info-log-content" style="color: red" v-if="payPlanItem.remainingUnpaidAmount != 0">
-                剩余未付￥{{payPlanItem.remainingUnpaidAmount.toFixed(2)}}</h6>
+                剩余未付￥{{payPlanItem.remainingUnpaidAmount!=null?payPlanItem.remainingUnpaidAmount.toFixed(2):''}}</h6>
             </el-col>
             <el-col :span="8">
               <el-row type="flex" justify="end" align="middle" v-if="payPlanItem.isCurrentItem === true && !isTenant()">
@@ -55,13 +55,15 @@
       </el-timeline>
     </el-row>
 
-    <el-dialog :visible.sync="financePaymentFormVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="financePaymentFormVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-order-finance-payment-form :payPlanItem="itemData" :slotData="slotData" :form="formData"
         @close="onClose" @refreshItem="refreshItem" :paymentOrders="paymentOrders" @refreshData="refreshData"
         @clearFormData="clearFormData" />
     </el-dialog>
 
-    <el-dialog :visible.sync="financePaymentVisible" width="60%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="financePaymentVisible" width="60%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-order-info-payment :paymentOrders="paymentOrders" @refreshItem="refreshItem"
         @refreshData="refreshData" />
     </el-dialog>

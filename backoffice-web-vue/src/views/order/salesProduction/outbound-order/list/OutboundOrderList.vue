@@ -2,7 +2,7 @@
   <div class="animated fadeIn">
     <el-table ref="resultTable" stripe :data="page.content" :height="autoHeight">
       <el-table-column label="生产订单号" prop="code"></el-table-column>
-      <el-table-column label="工厂">
+      <el-table-column label="合作商">
         <template slot-scope="scope">
           <span>{{scope.row.cooperator.type == 'ONLINE' ?
             scope.row.cooperator.partner.name : scope.row.cooperator.name}}</span>
@@ -15,7 +15,7 @@
       </el-table-column>
       <el-table-column label="跟单员">
         <template slot-scope="scope">
-          <span>{{scope.row.byAorB == 'PARTYA' ? scope.row.partyAOperator.name : scope.row.partyBOperator.name}}</span>
+          <span>{{getOperatorName(scope.row)}}</span>
         </template>
       </el-table-column>
       <el-table-column label="审批状态" prop="status">
@@ -36,8 +36,8 @@
     <div class="pt-2"></div>
     <!-- <div class="float-right"> -->
     <el-pagination class="pagination-right" layout="total, sizes, prev, pager, next, jumper"
-                   @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
-                   :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
+      @size-change="onPageSizeChanged" @current-change="onCurrentPageChanged" :current-page="page.number + 1"
+      :page-size="page.size" :page-count="page.totalPages" :total="page.totalElements">
     </el-pagination>
     <!-- </div> -->
   </div>
@@ -48,20 +48,32 @@
     name: 'OutboundOrderList',
     props: ['page'],
     methods: {
-      onPageSizeChanged (val) {
+      getOperatorName(row) {
+        let aName = '';
+        let bName = '';
+        if (row.partyAOperator != null) {
+          aName = row.partyAOperator.name;
+        }
+        if (row.partyBOperator != null) {
+          bName = row.partyBOperator.name;
+        }
+        return row.byAorB == 'PARTYA' ? aName : bName;
+      },
+      onPageSizeChanged(val) {
         this.$emit('onAdvancedSearch', 0, val);
       },
-      onCurrentPageChanged (val) {
+      onCurrentPageChanged(val) {
         this.$emit('onAdvancedSearch', val - 1);
       },
-      onDetail (row) {
+      onDetail(row) {
         this.$router.push('/sales/outboundOrder/' + row.code);
       },
-      onModify (row) {
+      onModify(row) {
         this.$emit('onModify', row.code);
       }
     }
   }
+
 </script>
 
 <style scoped>

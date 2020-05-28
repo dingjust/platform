@@ -23,7 +23,7 @@
               :productionProcessContent.sync="formData.productionProcessContent" :productsColors="colors" />
           </el-row>
         </div>
-        <production-progress-order-info :slotData="formData" @refreshData="getDetail" />
+        <!-- <production-progress-order-info :slotData="formData" @refreshData="getDetail" /> -->
         <production-order-relation-info :slotData="formData" />
       </el-row>
     </el-card>

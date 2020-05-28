@@ -1,13 +1,13 @@
 <template>
   <div class="po-relation-box">
     <el-tabs type="border-card">
-<!--      <el-tab-pane label="采购订单">采购订单</el-tab-pane>-->
+      <!--      <el-tab-pane label="采购订单">采购订单</el-tab-pane>-->
       <el-tab-pane label="财务">
         <el-row v-if="isBrand()">
-          <production-order-payment-info :slotData="slotData"/>
+        <purchase-order-info-payment-finance :slotData="slotData" v-if="isBrand() && slotData.payPlan!= null" />
         </el-row>
         <el-row v-if="isFactory()">
-          <production-order-receipt-info :slotData="slotData"/>
+        <purchase-order-info-receipt-finance :slotData="slotData" v-if="isFactory() && slotData.payPlan!= null" />
         </el-row>
       </el-tab-pane>
     </el-tabs>
@@ -15,17 +15,22 @@
 </template>
 
 <script>
-  import ProductionOrderReceiptInfo from './ProductionOrderReceiptInfo';
-  import ProductionOrderPaymentInfo from './ProductionOrderPaymentInfo';
+  import PurchaseOrderInfoPaymentFinance from '@/views/order/purchase/info/PurchaseOrderInfoPaymentFinance';
+  import PurchaseOrderInfoReceiptFinance from '@/views/order/purchase/info/PurchaseOrderInfoReceiptFinance';
   export default {
     name: 'ProductionOrderRelationInfo',
     props: ['slotData'],
-    components: {ProductionOrderPaymentInfo, ProductionOrderReceiptInfo}
+    components: {
+      PurchaseOrderInfoPaymentFinance,
+      PurchaseOrderInfoReceiptFinance
+    }
   }
+
 </script>
 
 <style scoped>
   .po-relation-box {
     margin-top: 30px;
   }
+
 </style>

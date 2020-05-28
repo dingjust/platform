@@ -1,15 +1,19 @@
 <template>
   <div class="info-detail-staff-body">
-    <el-dialog :visible.sync="deliverViewsVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="deliverViewsVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-order-deliver-views :slotData="slotData" @createNewDeliver="onCreateNewDeliver" />
     </el-dialog>
-    <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="receiveFormVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-order-info-receive :slotData="slotData" />
     </el-dialog>
-    <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="deliverFormVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-order-info-deliver :slotData="slotData" @afterCreate="onAfterCreate" />
     </el-dialog>
-    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body :close-on-click-modal="false">
+    <el-dialog :visible.sync="reconciliatioFormVisible" width="80%" class="purchase-dialog" append-to-body
+      :close-on-click-modal="false">
       <purchase-order-info-reconciliation :slotData="slotData" />
     </el-dialog>
     <el-row type="flex" justify="space-between" align="middle" class="info-title-row">
@@ -106,6 +110,20 @@
     font-size: 10px;
     border-radius: 0px;
     border: 0px solid #FFD60C;
+  }
+
+  .info-title {
+    width: 100%;
+    border-left: 2px solid #FFD60C;
+    padding-left: 10px;
+    height: 14px;
+  }
+
+  .info-title_text {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 1);
+    opacity: 0.85;
   }
 
 </style>
